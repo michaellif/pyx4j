@@ -18,23 +18,25 @@ import com.pyx4j.entity.server.AbstractListServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IVersionData;
 
-import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.AbstractUser;
 
 public abstract class AbstractVistaVersionDataListServiceImpl<E extends IVersionData<?>> extends AbstractListServiceImpl<E> implements
         AbstractVersionDataListService<E> {
 
-    public AbstractVistaVersionDataListServiceImpl(Class<E> entityClass) {
+    protected Class<? extends AbstractUser> userClass;
+
+    public AbstractVistaVersionDataListServiceImpl(Class<E> entityClass, Class<? extends AbstractUser> userClass) {
         super(entityClass);
+        this.userClass = userClass;
     }
 
     @Override
     protected void enhanceListRetrieved(E entity, E dto) {
         if (!entity.createdByUserKey().isNull()) {
-            CrmUser user = Persistence.service().retrieve(CrmUser.class, entity.createdByUserKey().getValue());
+            AbstractUser user = Persistence.service().retrieve(userClass, entity.createdByUserKey().getValue());
             if (user != null) {
                 dto.createdByUser().setValue(user.getStringView());
             }
         }
     }
-
 }

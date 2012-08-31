@@ -17,12 +17,15 @@ import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IVersionedEntity;
 
-import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.AbstractUser;
 
 public abstract class AbstractVistaVersionedCrudServiceImpl<E extends IVersionedEntity<?>> extends AbstractVersionedCrudServiceImpl<E> {
 
-    public AbstractVistaVersionedCrudServiceImpl(Class<E> entityClass) {
+    protected Class<? extends AbstractUser> userClass;
+
+    public AbstractVistaVersionedCrudServiceImpl(Class<E> entityClass, Class<? extends AbstractUser> userClass) {
         super(entityClass);
+        this.userClass = userClass;
     }
 
     @Override
@@ -37,7 +40,7 @@ public abstract class AbstractVistaVersionedCrudServiceImpl<E extends IVersioned
 
     protected void setCreatedByUser(E dto) {
         if (!dto.version().createdByUserKey().isNull()) {
-            CrmUser user = Persistence.service().retrieve(CrmUser.class, dto.version().createdByUserKey().getValue());
+            AbstractUser user = Persistence.service().retrieve(userClass, dto.version().createdByUserKey().getValue());
             if (user != null) {
                 dto.version().createdByUser().setValue(user.getStringView());
             }

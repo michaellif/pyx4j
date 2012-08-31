@@ -15,12 +15,13 @@ package com.propertyvista.crm.server.services.selections.version;
 
 import com.propertyvista.crm.rpc.services.selections.version.FeatureVersionService;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.server.versioning.AbstractVistaVersionDataListServiceImpl;
 
 public class FeatureVersionServiceImpl extends AbstractVistaVersionDataListServiceImpl<Feature.FeatureV> implements FeatureVersionService {
 
     public FeatureVersionServiceImpl() {
-        super(Feature.FeatureV.class);
+        super(Feature.FeatureV.class, CrmUser.class);
     }
 
     @Override

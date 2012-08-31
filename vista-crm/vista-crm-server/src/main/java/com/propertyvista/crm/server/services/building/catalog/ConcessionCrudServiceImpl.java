@@ -15,12 +15,13 @@ package com.propertyvista.crm.server.services.building.catalog;
 
 import com.propertyvista.crm.rpc.services.building.catalog.ConcessionCrudService;
 import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.server.versioning.AbstractVistaVersionedCrudServiceImpl;
 
 public class ConcessionCrudServiceImpl extends AbstractVistaVersionedCrudServiceImpl<Concession> implements ConcessionCrudService {
 
     public ConcessionCrudServiceImpl() {
-        super(Concession.class);
+        super(Concession.class, CrmUser.class);
     }
 
     @Override
