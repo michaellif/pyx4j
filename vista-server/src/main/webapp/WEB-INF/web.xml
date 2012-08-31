@@ -181,6 +181,28 @@
         <url-pattern>/public/status</url-pattern>
     </servlet-mapping>
 
+
+    <servlet>
+        <servlet-name>ApplicationVersionServlet</servlet-name>
+        <servlet-class>com.pyx4j.config.server.ApplicationVersionServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ApplicationVersionServlet</servlet-name>
+        <url-pattern>/version</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ApplicationVersionServlet</servlet-name>
+        <url-pattern>/o/version</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ApplicationVersionServlet</servlet-name>
+        <url-pattern>/public/version</url-pattern>
+    </servlet-mapping>
+    
+    
     <servlet>
         <servlet-name>DebugServlet</servlet-name>
         <servlet-class>com.pyx4j.essentials.server.dev.DebugServlet</servlet-class>
