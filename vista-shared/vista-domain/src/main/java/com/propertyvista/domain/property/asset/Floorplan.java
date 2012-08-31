@@ -49,9 +49,11 @@ public interface Floorplan extends PolicyNode {
     @JoinColumn
     Building building();
 
+    @NotNull
     @ToString(index = 0)
     IPrimitive<String> name();
 
+    @NotNull
     IPrimitive<String> marketingName();
 
     @Editor(type = Editor.EditorType.textarea)
