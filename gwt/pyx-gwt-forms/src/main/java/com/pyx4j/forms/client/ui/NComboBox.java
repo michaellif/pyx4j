@@ -64,6 +64,7 @@ public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>, HTML
     @Override
     protected void onEditorCreate() {
         super.onEditorCreate();
+        refreshOptions();
         getEditor().addChangeHandler(new ChangeHandler() {
 
             @Override
