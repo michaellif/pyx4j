@@ -81,7 +81,7 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
             public ValidationError isValid(CComponent<String, ?> component, String value) {
                 if (CommonsStringUtils.isStringSet(value)) {
                     return ValidationUtils.isBranchTransitNumberValid(value) ? null : new ValidationError(component, i18n
-                            .tr("Number should consist of up to 5 digits"));
+                            .tr("Number should consist of 5 digits"));
                 } else {
                     return null;
                 }

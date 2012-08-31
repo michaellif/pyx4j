@@ -86,7 +86,7 @@ public class ValidationUtils extends com.pyx4j.commons.ValidationUtils {
 
     public static boolean isBranchTransitNumberValid(String num) {
         num = num.trim().replaceAll("\\s", "");
-        return num.matches("^\\d{1,5}$");
+        return num.matches("^\\d{5}$");
     }
 
     public static boolean isBankIdNumberValid(String num) {
