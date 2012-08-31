@@ -59,11 +59,11 @@ public class VistaDBReset {
         try {
             long start = System.currentTimeMillis();
             RDBUtils.resetDatabase();
+            SchedulerHelper.init();
             log.info("Generating new Data...");
 
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
             RDBUtils.ensureNamespace();
-            SchedulerHelper.dbReset();
 
             if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
                 RDBUtils.initNameSpaceSpecificEntityTables();
