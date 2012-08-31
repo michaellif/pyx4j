@@ -69,6 +69,7 @@ public interface PaymentMethod extends IEntity {
 
     /**
      * Indicates if this method is one-time usage only.
+     * TODO: rename to isProfiledMethod (inverse logic!)
      */
     IPrimitive<Boolean> isOneTimePayment();
 

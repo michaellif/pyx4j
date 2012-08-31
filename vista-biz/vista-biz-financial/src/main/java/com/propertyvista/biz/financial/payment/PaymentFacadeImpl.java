@@ -123,6 +123,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
     public void deletePaymentMethod(PaymentMethod paymentMethod) {
         Persistence.service().retrieve(paymentMethod);
         paymentMethod.isDeleted().setValue(Boolean.TRUE);
+        paymentMethod.isOneTimePayment().setValue(Boolean.TRUE);
         Persistence.service().merge(paymentMethod);
     }
 

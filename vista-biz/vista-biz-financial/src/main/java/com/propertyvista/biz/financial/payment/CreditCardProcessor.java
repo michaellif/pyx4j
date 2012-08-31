@@ -139,7 +139,7 @@ class CreditCardProcessor {
             if (VistaDeployment.isVistaProduction()) {
                 prefix = "";
             } else {
-                prefix = "TEST" + new SimpleDateFormat("MMddHH").format(new Date());
+                prefix = "TEST" + new SimpleDateFormat("MMddHHmm").format(new Date());
             }
             token.code().setValue(prefix + pmc.id().getStringView() + "V" + cc.id().getStringView());
         }
