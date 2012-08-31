@@ -16,6 +16,7 @@ package com.propertyvista.generator;
 import java.math.BigDecimal;
 import java.util.EnumSet;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -130,6 +131,15 @@ public class LeaseGenerator extends DataGenerator {
         }
     }
 
+    public static String paddZerro(int i, int lenght) {
+        String value = String.valueOf(i);
+        int len = value.length();
+        if (len > lenght) {
+            throw new IllegalArgumentException();
+        }
+        return CommonsStringUtils.padding(lenght - len, '0') + value;
+    }
+
     private void addPreathorisedPaymentMethod(Tenant tenant) {
         PaymentMethod m = EntityFactory.create(PaymentMethod.class);
         m.type().setValue(PaymentType.Echeck);
@@ -139,8 +149,8 @@ public class LeaseGenerator extends DataGenerator {
         // create new payment method details:
         EcheckInfo details = EntityFactory.create(EcheckInfo.class);
         details.nameOn().setValue(tenant.customer().person().name().getStringView());
-        details.bankId().setValue(Integer.toString(RandomUtil.randomInt(999)));
-        details.branchTransitNumber().setValue(Integer.toString(RandomUtil.randomInt(99999)));
+        details.bankId().setValue(paddZerro(RandomUtil.randomInt(999), 3));
+        details.branchTransitNumber().setValue(paddZerro(RandomUtil.randomInt(99999), 5));
         details.accountNo().number().setValue(Integer.toString(RandomUtil.randomInt(99999)) + Integer.toString(RandomUtil.randomInt(999999)));
         details.accountNo().reference().setValue(DomainUtil.last4Numbers(details.accountNo().number().getValue()));
         m.details().set(details);

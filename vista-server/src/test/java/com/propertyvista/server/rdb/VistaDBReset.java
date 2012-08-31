@@ -112,6 +112,7 @@ public class VistaDBReset {
             Persistence.service().commit();
             log.error("", t);
         } finally {
+            SchedulerHelper.shutdown();
             Persistence.service().endTransaction();
         }
     }
