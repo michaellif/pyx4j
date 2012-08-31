@@ -62,8 +62,8 @@ public class VistaNamespaceResolver implements NamespaceResolver {
             if ((servletPath.startsWith("/" + DeploymentConsts.ADMIN_URL) || servletPath.startsWith("/interfaces"))) {
                 return VistaNamespace.adminNamespace;
             }
-            if (servletPath.startsWith("/public/schema") || servletPath.startsWith("/static/") || servletPath.startsWith("/public/status")
-                    || servletPath.endsWith("/o/openid")) {
+            if (servletPath.startsWith("/public/schema") || servletPath.startsWith("/public/version") || servletPath.startsWith("/static/")
+                    || servletPath.startsWith("/public/status") || servletPath.endsWith("/o/openid")) {
                 return "_";
             }
         }
