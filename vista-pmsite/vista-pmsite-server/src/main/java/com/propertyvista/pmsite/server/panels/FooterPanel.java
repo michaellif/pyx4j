@@ -113,16 +113,14 @@ public class FooterPanel extends Panel {
         Label copy = new Label("footer_copyright", cm.getCopyrightInfo(siteLocale));
         add(copy);
 
-        ExternalLink poweredProd = new ExternalLink("powered_product", cm.poveredByUrl());
-        String title = i18n.tr("Property Management Software");
-        poweredProd.setBody(new Model<String>(title));
-        poweredProd.add(AttributeModifier.replace("title", title));
+        Label poweredProd = new Label("powered_product", i18n.tr("Property Management Software"));
         add(poweredProd);
-        Label poweredBy = new Label("powered_by", i18n.tr("powered by"));
+        Label poweredBy = new Label("powered_by", i18n.tr("by"));
         add(poweredBy);
         ExternalLink poweredLogo = new ExternalLink("powered_logo", cm.poveredByUrl());
-        title = "PropertyVista";
-        poweredLogo.add(AttributeModifier.replace("title", title));
+        String title = "Property Management Software by PropertyVista";
+        String alt = "PropertyVista Logo";
+        poweredLogo.add(AttributeModifier.replace("title", title), AttributeModifier.replace("alt", alt));
         add(poweredLogo);
 
         Label devTs = new Label("dev_ts");
