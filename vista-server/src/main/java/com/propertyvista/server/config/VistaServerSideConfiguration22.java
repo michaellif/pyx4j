@@ -20,7 +20,7 @@ public class VistaServerSideConfiguration22 extends VistaServerSideConfiguration
 
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
-        return new VistaConfigurationMySQL() {
+        return new VistaConfigurationPostgreSQL() {
             @Override
             public String dbName() {
                 return "vista22";
