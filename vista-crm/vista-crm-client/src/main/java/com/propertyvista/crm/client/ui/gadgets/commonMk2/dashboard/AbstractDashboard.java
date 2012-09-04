@@ -65,7 +65,7 @@ public abstract class AbstractDashboard extends Composite {
 
     private final IGadgetDirectory gadgetDirectory;
 
-    private final ICommonGadgetSettingsContainer commandGadgetSettingsContainer;
+    private final ICommonGadgetSettingsContainer commonGadgetSettingsContainer;
 
     private IBoard board;
 
@@ -74,7 +74,7 @@ public abstract class AbstractDashboard extends Composite {
     private HashMap<ILayoutManager, Image> layoutButtons;
 
     public AbstractDashboard(ICommonGadgetSettingsContainer container, IGadgetDirectory gadgetDirectory, List<ILayoutManager> layoutManagers) {
-        this.commandGadgetSettingsContainer = container;
+        this.commonGadgetSettingsContainer = container;
         this.gadgetDirectory = gadgetDirectory;
 
         this.dashboardPanel = new DockLayoutPanel(Unit.EM);
@@ -120,7 +120,7 @@ public abstract class AbstractDashboard extends Composite {
                 // TODO stupid way this stupid list is needed to separate layout from dashboard, but the implementation of segregation is not well done, review
                 if (gadget != null) {
                     gadgets.add(gadget);
-                    commandGadgetSettingsContainer.bindGadget(gadget);
+                    commonGadgetSettingsContainer.bindGadget(gadget);
                 } else {
                     throw new Error("gadget factory doesn't know how to instantiate gadget type '" + metadata.getInstanceValueClass().getName() + "'");
                 }
@@ -227,6 +227,7 @@ public abstract class AbstractDashboard extends Composite {
                 new GadgetDirectoryDialog(gadgetDirectory) {
                     @Override
                     protected void addGadget(IGadgetInstance gadget) {
+                        commonGadgetSettingsContainer.bindGadget(gadget);
                         board.addGadget(gadget);
                     }
                 }.show();
