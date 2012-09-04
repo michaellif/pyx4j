@@ -14,7 +14,9 @@
 package com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -26,6 +28,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -64,16 +67,15 @@ public abstract class AbstractDashboard extends Composite {
 
     private final ICommonGadgetSettingsContainer commandGadgetSettingsContainer;
 
-    private final ILayoutManager layoutManager;
-
     private IBoard board;
 
     private DashboardMetadata dashboardMetadata;
 
-    public AbstractDashboard(ICommonGadgetSettingsContainer container, IGadgetDirectory gadgetDirectory, ILayoutManager layoutManager) {
+    private HashMap<ILayoutManager, Image> layoutButtons;
+
+    public AbstractDashboard(ICommonGadgetSettingsContainer container, IGadgetDirectory gadgetDirectory, List<ILayoutManager> layoutManagers) {
         this.commandGadgetSettingsContainer = container;
         this.gadgetDirectory = gadgetDirectory;
-        this.layoutManager = layoutManager;
 
         this.dashboardPanel = new DockLayoutPanel(Unit.EM);
         this.dashboardPanel.setSize("100%", "100%");
@@ -83,7 +85,7 @@ public abstract class AbstractDashboard extends Composite {
         this.actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         this.actionsPanel.setWidth("100%");
         this.actionsPanel.add(new HTML()); // just for %-tage cells alignment...        
-        this.actionsPanel.add(createActionsWidget());
+        this.actionsPanel.add(createActionsWidget(layoutManagers));
 
         this.dashboardPanel.addNorth(actionsPanel, 2);
 
@@ -123,7 +125,15 @@ public abstract class AbstractDashboard extends Composite {
                     throw new Error("gadget factory doesn't know how to instantiate gadget type '" + metadata.getInstanceValueClass().getName() + "'");
                 }
             }
-            layoutManager.restoreLayout(dashboardMetadata, gadgets.iterator(), board);
+
+            for (ILayoutManager layoutManager : layoutButtons.keySet()) {
+                if (layoutManager.canHandle(dashboardMetadata)) {
+                    redrawLayoutButtons(layoutManager);
+                    layoutManager.restoreLayout(dashboardMetadata, gadgets.iterator(), board);
+                    break;
+                }
+            }
+
         } else {
             throw new Error("DashboardMetadata cannot be null");
         }
@@ -170,13 +180,31 @@ public abstract class AbstractDashboard extends Composite {
             // gadget settings were changed: IMHO not supposed to affect the dashboard metadata and be managed internally by the gadget
             break;
         }
-        layoutManager.saveLayout(dashboardMetadata, board);
 
         onDashboardMetadataChanged();
     }
 
-    private Widget createActionsWidget() {
+    private Widget createActionsWidget(List<ILayoutManager> layoutManagers) {
         HorizontalPanel actionsWidget = new HorizontalPanel();
+
+        layoutButtons = new HashMap<ILayoutManager, Image>();
+        for (final ILayoutManager layoutManager : layoutManagers) {
+            final Image layoutButton = new Image();
+            layoutButton.getElement().getStyle().setCursor(Cursor.POINTER);
+            layoutButton.setResource(layoutManager.getResources().layoutIcon());
+            layoutButton.addClickHandler(new ClickHandler() {
+
+                @Override
+                public void onClick(ClickEvent event) {
+                    redrawLayoutButtons(layoutManager);
+                    layoutManager.saveLayout(dashboardMetadata, board);
+                }
+
+            });
+
+            layoutButtons.put(layoutManager, layoutButton);
+            actionsWidget.add(layoutButton);
+        }
 
         final Image addGadget = new Image(CrmImages.INSTANCE.dashboardAddGadget());
         addGadget.getElement().getStyle().setCursor(Cursor.POINTER);
@@ -233,5 +261,13 @@ public abstract class AbstractDashboard extends Composite {
         actionsWidget.setSpacing(4);
 
         return actionsWidget;
+    }
+
+    private void redrawLayoutButtons(ILayoutManager layoutManager) {
+        for (Map.Entry<ILayoutManager, Image> entry : layoutButtons.entrySet()) {
+            ImageResource imageResource = entry.getKey().equals(layoutManager) ? entry.getKey().getResources().layoutIconSelected() : entry.getKey()
+                    .getResources().layoutIcon();
+            entry.getValue().setResource(imageResource);
+        }
     }
 }

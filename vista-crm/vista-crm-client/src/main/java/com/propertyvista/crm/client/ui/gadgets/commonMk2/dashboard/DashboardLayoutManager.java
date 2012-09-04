@@ -32,9 +32,31 @@ public class DashboardLayoutManager implements ILayoutManager {
 
     private final boolean TODO_PENDING_LAYOUT_STORAGE_IN_GADGET_METADATA = false;
 
+    private final LayoutType layoutType;
+
+    private final BoardLayout boardLayout;
+
+    private final Resources resources;
+
+    public DashboardLayoutManager(LayoutType layoutType, BoardLayout boardLayout, Resources resources) {
+        this.layoutType = layoutType;
+        this.boardLayout = boardLayout;
+        this.resources = resources;
+    }
+
+    @Override
+    public String getLayoutName() {
+        return this.layoutType.toString();
+    }
+
+    @Override
+    public boolean canHandle(DashboardMetadata dashboardMetadta) {
+        return dashboardMetadta.layoutType().getValue() == layoutType;
+    }
+
     @Override
     public void restoreLayout(DashboardMetadata dashboardMetadata, Iterator<IGadgetInstance> gadgetsIterator, IBoard board) {
-        board.setLayout(asBoardLayout(dashboardMetadata.layoutType().getValue()));
+        board.setLayout(boardLayout);
 
         Iterator<Integer> columnsIterator = getColumnsIterator(dashboardMetadata);
         while (gadgetsIterator.hasNext()) {
@@ -52,7 +74,8 @@ public class DashboardLayoutManager implements ILayoutManager {
     @Override
     public void saveLayout(DashboardMetadata dashboardMetadata, IBoard board) {
         if (dashboardMetadata != null) {
-            dashboardMetadata.layoutType().setValue(asDashboardLayoutType(board.getLayout()));
+            board.setLayout(boardLayout);
+            dashboardMetadata.layoutType().setValue(layoutType);
             dashboardMetadata.gadgets().clear();
 
             IGadgetIterator it = board.getGadgetIterator();
@@ -80,50 +103,6 @@ public class DashboardLayoutManager implements ILayoutManager {
         }
     }
 
-    private static BoardLayout asBoardLayout(LayoutType value) {
-        BoardLayout layout = null;
-        switch (value) {
-        case One:
-            layout = BoardLayout.One;
-            break;
-        case Two11:
-            layout = BoardLayout.Two11;
-            break;
-        case Two12:
-            layout = BoardLayout.Two12;
-            break;
-        case Two21:
-            layout = BoardLayout.Two21;
-            break;
-        case Three:
-            layout = BoardLayout.Three;
-            break;
-        }
-        return layout;
-    }
-
-    private static LayoutType asDashboardLayoutType(BoardLayout layout) {
-        LayoutType layoutType = null;
-        switch (layout) {
-        case One:
-            layoutType = LayoutType.One;
-            break;
-        case Two11:
-            layoutType = LayoutType.Two11;
-            break;
-        case Two12:
-            layoutType = LayoutType.Two12;
-            break;
-        case Two21:
-            layoutType = LayoutType.Two21;
-            break;
-        case Three:
-            layoutType = LayoutType.Three;
-            break;
-        }
-        return layoutType;
-    }
-
     private Iterator<Integer> getColumnsIterator(DashboardMetadata dashboardMetadata) {
         final String[] columns = (dashboardMetadata.encodedLayout().isNull() ? "" : dashboardMetadata.encodedLayout().getValue()).split(" ");
 
@@ -146,6 +125,11 @@ public class DashboardLayoutManager implements ILayoutManager {
                 throw new NotImplementedException();
             }
         };
+    }
+
+    @Override
+    public Resources getResources() {
+        return resources;
     }
 
 }
