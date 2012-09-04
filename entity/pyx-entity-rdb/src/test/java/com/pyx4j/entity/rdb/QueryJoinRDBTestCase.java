@@ -272,7 +272,7 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
     }
 
     //TODO Fix Me on Postgress
-    public void TODO_testOneToManyQueryCriteriaDistinctAndSort() {
+    public void testOneToManyQueryCriteriaDistinctAndSort() {
         String setId = uniqueString();
         String searchBy = uniqueString();
 

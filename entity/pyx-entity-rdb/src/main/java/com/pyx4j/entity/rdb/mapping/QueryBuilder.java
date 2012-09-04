@@ -27,7 +27,9 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -63,6 +65,8 @@ public class QueryBuilder<T extends IEntity> {
 
     private final StringBuilder sortsSql = new StringBuilder();
 
+    private final Set<String> selectColumnsSqlNames = new HashSet<String>();
+
     private final List<BindHolder> bindParams = new Vector<BindHolder>();
 
     private final String mainTableSqlAlias;
@@ -76,8 +80,6 @@ public class QueryBuilder<T extends IEntity> {
     }
 
     QueryJoinBuilder queryJoin;
-
-    private boolean sortByJoin = false;
 
     public QueryBuilder(PersistenceContext persistenceContext, Mappings mappings, String alias, EntityOperationsMeta operationsMeta,
             EntityQueryCriteria<T> criteria) {
@@ -145,6 +147,7 @@ public class QueryBuilder<T extends IEntity> {
                     throw new RuntimeException("Unknown member " + sort.getPropertyPath() + " in " + operationsMeta.entityMeta().getEntityClass().getName());
                 }
                 sortsSql.append(queryMember.memberSqlName);
+                selectColumnsSqlNames.add(queryMember.memberSqlName);
 
                 sortsSql.append(' ').append(sort.isDescending() ? "DESC" : "ASC");
                 // TODO Make it configurable in API
@@ -311,8 +314,19 @@ public class QueryBuilder<T extends IEntity> {
         List<Sort> result = new ArrayList<Sort>();
         for (Sort sort : sorts) {
             Path path = new Path(sort.getPropertyPath());
+
+            // Sort by collections is unsupported on postgresql
+            if (path.isUndefinedCollectionPath() || (sort.getPropertyPath().endsWith(Path.COLLECTION_SEPARATOR + Path.PATH_SEPARATOR))) {
+                throw new Error("Sort by collections is unsupported");
+            }
+
             MemberMeta memberMeta = queryJoin.operationsMeta.entityMeta().getMemberMeta(path);
             ObjectClassType type = memberMeta.getObjectClassType();
+
+            if ((type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
+                throw new Error("Sort by collections is unsupported");
+            }
+
             if ((type == ObjectClassType.Entity) || (type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
                 @SuppressWarnings("unchecked")
                 Class<? extends IEntity> targetEntityClass = (Class<? extends IEntity>) memberMeta.getValueClass();
@@ -325,12 +339,6 @@ public class QueryBuilder<T extends IEntity> {
             } else {
                 result.add(sort);
             }
-
-            // Removed for postgresql, Join will use sqlOrderColumnName = 0
-            if (path.isUndefinedCollectionPath() || (sort.getPropertyPath().endsWith(Path.COLLECTION_SEPARATOR + Path.PATH_SEPARATOR))) {
-                sortByJoin = true;
-            }
-
         }
         return result;
     }
@@ -357,11 +365,20 @@ public class QueryBuilder<T extends IEntity> {
     }
 
     boolean addDistinct() {
-        if (sortByJoin) {
-            return false;
-        } else {
-            return queryJoin.addDistinct;
+        return queryJoin.addDistinct;
+    }
+
+    String getColumnsSQL() {
+        StringBuilder sql = new StringBuilder();
+        for (String sqlName : selectColumnsSqlNames) {
+            if (!sqlName.startsWith(mainTableSqlAlias)) {
+                sql.append(", ");
+                sql.append(sqlName);
+                sql.append(" c_");
+                sql.append(sqlName.replace(".", "_"));
+            }
         }
+        return sql.toString();
     }
 
     String getSQL(String mainTableSqlName) {

@@ -799,7 +799,7 @@ public class TableModel {
         String sql = null;
         try {
             QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteria);
-            sql = "SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1.* FROM " + qb.getSQL(getFullTableName());
+            sql = "SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1.*" + qb.getColumnsSQL() + " FROM " + qb.getSQL(getFullTableName());
             //log.info("query {}", sql);
             int offset = 0;
             boolean addLimit = false;
@@ -874,7 +874,7 @@ public class TableModel {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            sql = "SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1.* FROM " + qb.getSQL(getFullTableName());
+            sql = "SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1.*" + qb.getColumnsSQL() + " FROM " + qb.getSQL(getFullTableName());
             //log.info("query {}", sql);
             int limit = -1;
             int offset = 0;
@@ -990,7 +990,7 @@ public class TableModel {
         String sql = null;
         try {
             QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteria);
-            sql = "SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1." + dialect.getNamingConvention().sqlIdColumnName() + " FROM "
+            sql = "SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1." + dialect.getNamingConvention().sqlIdColumnName() + qb.getColumnsSQL() + " FROM "
                     + qb.getSQL(getFullTableName());
             if (EntityPersistenceServiceRDB.traceSql) {
                 log.debug(Trace.id() + " {} ", sql);
@@ -1028,7 +1028,7 @@ public class TableModel {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            sql = "SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1." + dialect.getNamingConvention().sqlIdColumnName() + " FROM "
+            sql = "SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1." + dialect.getNamingConvention().sqlIdColumnName() + qb.getColumnsSQL() + " FROM "
                     + qb.getSQL(getFullTableName());
             int limit = -1;
             int offset = 0;
