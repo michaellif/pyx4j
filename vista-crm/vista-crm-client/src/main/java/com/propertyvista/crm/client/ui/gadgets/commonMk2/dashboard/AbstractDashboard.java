@@ -180,7 +180,7 @@ public abstract class AbstractDashboard extends Composite {
             // gadget settings were changed: IMHO not supposed to affect the dashboard metadata and be managed internally by the gadget
             break;
         }
-
+        fireResizeRequests();
         onDashboardMetadataChanged();
     }
 
@@ -271,4 +271,12 @@ public abstract class AbstractDashboard extends Composite {
             entry.getValue().setResource(imageResource);
         }
     }
+
+    private void fireResizeRequests() {
+        IGadgetIterator i = board.getGadgetIterator();
+        while (i.hasNext()) {
+            i.next().onResize();
+        }
+    }
+
 }
