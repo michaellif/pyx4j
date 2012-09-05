@@ -119,11 +119,22 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         actionsMenu.addItem(action);
     }
 
+    public void removeAction(MenuItem action) {
+        actionsMenu.removeItem(action);
+        actionsButton.setVisible(!actionsMenu.isMenuEmpty());
+    }
+
+    public void setActionVisible(MenuItem action, boolean visible) {
+        action.setVisible(visible);
+        actionsButton.setVisible(!actionsMenu.isMenuEmpty());
+    }
+
     @Override
     public void reset() {
         if (finalizeButton != null) {
             finalizeButton.setVisible(false);
         }
+        actionsButton.setVisible(false);
         super.reset();
     }
 

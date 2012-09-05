@@ -13,13 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
-import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.customer.screening.PersonScreeningLister;
@@ -33,7 +32,7 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
 
     private final IListerView<PersonScreening> screeningLister;
 
-    private final Button passwordAction;
+    private final MenuItem passwordAction;
 
     public GuarantorViewerViewImpl() {
         super(CrmSiteMap.Tenants.Guarantor.class);
@@ -43,14 +42,14 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
         //set main form here:
         setForm(new GuarantorForm(true));
 
-        passwordAction = new Button(i18n.tr("Change Password"), new ClickHandler() {
+        passwordAction = new MenuItem(i18n.tr("Change Password"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((GuarantorViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().customer().user().getPrimaryKey(), getForm()
                         .getValue().customer().person().getStringView());
             }
         });
-        addHeaderToolbarItem(passwordAction.asWidget());
+        addAction(passwordAction);
     }
 
     @Override
@@ -59,14 +58,20 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
     }
 
     @Override
+    public void reset() {
+        setActionVisible(passwordAction, false);
+        super.reset();
+    }
+
+    @Override
     public void populate(GuarantorDTO value) {
         super.populate(value);
 
         // Disable password change button for guarantors with no associated user principal
         if (value != null & !value.customer().user().isNull()) {
-            passwordAction.setVisible(true);
+            setActionVisible(passwordAction, true);
         } else {
-            passwordAction.setVisible(false);
+            setActionVisible(passwordAction, false);
         }
     }
 }

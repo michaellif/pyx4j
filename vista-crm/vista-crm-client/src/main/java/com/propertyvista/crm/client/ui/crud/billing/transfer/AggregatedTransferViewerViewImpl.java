@@ -13,14 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -39,7 +37,7 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
 
     private final IListerView<PaymentRecord> rejectedBatchPaymentsLister;
 
-    private final Button cancelAction;
+    private final MenuItem cancelAction;
 
     public AggregatedTransferViewerViewImpl() {
         super(CrmSiteMap.Finance.AggregatedTransfer.class, true);
@@ -51,10 +49,9 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
         setForm(new AggregatedTransferForm(true));
 
         // Actions:
-
-        cancelAction = new Button(i18n.tr("Cancel"), new ClickHandler() {
+        cancelAction = new MenuItem(i18n.tr("Cancel"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 MessageDialog.confirm(i18n.tr("Cancel"), i18n.tr("Do you really want to cancel the transaction?"), new Command() {
                     @Override
                     public void execute() {
@@ -63,12 +60,12 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
                 });
             }
         });
-        addHeaderToolbarItem(cancelAction.asWidget());
+        addAction(cancelAction);
     }
 
     @Override
     public void reset() {
-        cancelAction.setVisible(false);
+        setActionVisible(cancelAction, false);
         super.reset();
     }
 
@@ -76,7 +73,7 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
     public void populate(AggregatedTransfer value) {
         super.populate(value);
 
-        cancelAction.setVisible(value.status().getValue() == AggregatedTransferStatus.Rejected
+        setActionVisible(cancelAction, value.status().getValue() == AggregatedTransferStatus.Rejected
                 && value.status().getValue() != AggregatedTransferStatus.Canceled);
     }
 
@@ -94,5 +91,4 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
     public IListerView<PaymentRecord> getRejectedBatchPaymentsListerView() {
         return rejectedBatchPaymentsLister;
     }
-
 }

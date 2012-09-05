@@ -13,15 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.bill;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -39,37 +38,37 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> imple
 
     private static final String PRINT = i18n.tr("Print");
 
-    private final Button approveAction;
+    private final MenuItem approveAction;
 
-    private final Button rejectAction;
+    private final MenuItem rejectAction;
 
-    private final Button printAction;
+    private final MenuItem printAction;
 
     public BillViewerViewImpl() {
         super(CrmSiteMap.Finance.Bill.class, new BillDataForm(true), true);
 
         // Add actions:
 
-        printAction = new Button(PRINT, new ClickHandler() {
+        printAction = new MenuItem(PRINT, new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((BillViewerView.Presenter) getPresenter()).print();
             }
         });
-        addHeaderToolbarItem(printAction.asWidget());
+        addAction(printAction);
 
-        approveAction = new Button(APPROVE, new ClickHandler() {
+        approveAction = new MenuItem(APPROVE, new Command() {
 
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((BillViewerView.Presenter) getPresenter()).confirm();
             }
         });
-        addHeaderToolbarItem(approveAction.asWidget());
+        addAction(approveAction);
 
-        rejectAction = new Button(DECLINE, new ClickHandler() {
+        rejectAction = new MenuItem(DECLINE, new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 new ActionBox(DECLINE) {
                     @Override
                     public boolean onClickOk() {
@@ -79,14 +78,21 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> imple
                 }.show();
             }
         });
-        addHeaderToolbarItem(rejectAction.asWidget());
+        addAction(rejectAction);
 
     }
 
     @Override
+    public void reset() {
+        setActionVisible(approveAction, false);
+        setActionVisible(rejectAction, false);
+        super.reset();
+    }
+
+    @Override
     public void populate(BillDataDTO value) {
-        approveAction.setVisible(value.bill().billStatus().getValue() == BillStatus.Finished);
-        rejectAction.setVisible(value.bill().billStatus().getValue() == BillStatus.Finished);
+        setActionVisible(approveAction, value.bill().billStatus().getValue() == BillStatus.Finished);
+        setActionVisible(rejectAction, value.bill().billStatus().getValue() == BillStatus.Finished);
         super.populate(value);
     }
 

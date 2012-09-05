@@ -15,16 +15,14 @@ package com.propertyvista.crm.client.ui.crud.customer.lead;
 
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog.Formatter;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -40,18 +38,18 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
     private static final I18n i18n = I18n.get(LeadViewerViewImpl.class);
 
-    private final Button convertAction;
+    private final MenuItem convertAction;
 
-    private final Button closeAction;
+    private final MenuItem closeAction;
 
     private final AppointmentListerView appointmentLister = new AppointmentListerViewImpl();
 
     public LeadViewerViewImpl() {
         super(Marketing.Lead.class);
 
-        convertAction = new Button(i18n.tr("Convert to Lease"), new ClickHandler() {
+        convertAction = new MenuItem(i18n.tr("Convert to Lease"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((LeadViewerView.Presenter) getPresenter()).getInterestedUnits(new DefaultAsyncCallback<List<AptUnit>>() {
                     @Override
                     public void onSuccess(List<AptUnit> result) {
@@ -78,11 +76,11 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
             }
         });
-        addHeaderToolbarItem(convertAction);
+        addAction(convertAction);
 
-        closeAction = new Button(i18n.tr("Close"), new ClickHandler() {
+        closeAction = new MenuItem(i18n.tr("Close"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to close the Lead?"), new Command() {
                     @Override
                     public void execute() {
@@ -91,18 +89,25 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
                 });
             }
         });
-        addHeaderToolbarItem(closeAction.asWidget());
+        addAction(closeAction);
 
         // set main form here:
         setForm(new LeadForm(true));
     }
 
     @Override
+    public void reset() {
+        setActionVisible(convertAction, false);
+        setActionVisible(closeAction, false);
+        super.reset();
+    }
+
+    @Override
     public void populate(Lead value) {
         super.populate(value);
 
-        convertAction.setVisible(VistaFeatures.instance().leases() && value.status().getValue() != Status.closed && value.lease().isNull());
-        closeAction.setVisible(value.status().getValue() != Status.closed);
+        setActionVisible(convertAction, VistaFeatures.instance().leases() && value.status().getValue() != Status.closed && value.lease().isNull());
+        setActionVisible(closeAction, value.status().getValue() != Status.closed);
 
         getEditButton().setVisible(value.status().getValue() != Lead.Status.closed);
     }

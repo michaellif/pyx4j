@@ -13,17 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -39,20 +37,20 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
     private static final I18n i18n = I18n.get(MaintenanceRequestViewerViewImpl.class);
 
-    private final Button scheduleAction;
+    private final MenuItem scheduleAction;
 
-    private final Button resolveAction;
+    private final MenuItem resolveAction;
 
-    private final Button rateAction;
+    private final MenuItem rateAction;
 
-    private final Button cancelAction;
+    private final MenuItem cancelAction;
 
     public MaintenanceRequestViewerViewImpl() {
         super(CrmSiteMap.Tenants.MaintenanceRequest.class, new MaintenanceRequestForm(true));
 
-        scheduleAction = new Button(i18n.tr("Schedule..."), new ClickHandler() {
+        scheduleAction = new MenuItem(i18n.tr("Schedule..."), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 new ScheduleBox() {
                     @Override
                     public boolean onClickOk() {
@@ -62,19 +60,19 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 }.show();
             }
         });
-        addHeaderToolbarItem(scheduleAction.asWidget());
+        addAction(scheduleAction);
 
-        resolveAction = new Button(i18n.tr("Resolve"), new ClickHandler() {
+        resolveAction = new MenuItem(i18n.tr("Resolve"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((MaintenanceRequestViewerView.Presenter) getPresenter()).resolveAction();
             }
         });
-        addHeaderToolbarItem(resolveAction.asWidget());
+        addAction(resolveAction);
 
-        rateAction = new Button(i18n.tr("Rate..."), new ClickHandler() {
+        rateAction = new MenuItem(i18n.tr("Rate..."), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 new RateBox(getForm().getValue().surveyResponse()) {
                     @Override
                     public boolean onClickOk() {
@@ -84,11 +82,11 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 }.show();
             }
         });
-        addHeaderToolbarItem(rateAction.asWidget());
+        addAction(rateAction);
 
-        cancelAction = new Button(i18n.tr("Cancel"), new ClickHandler() {
+        cancelAction = new MenuItem(i18n.tr("Cancel"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 MessageDialog.confirm(i18n.tr("Cancel"), i18n.tr("Do you really want to cancel the request?"), new Command() {
                     @Override
                     public void execute() {
@@ -97,15 +95,15 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 });
             }
         });
-        addHeaderToolbarItem(cancelAction.asWidget());
+        addAction(cancelAction);
     }
 
     @Override
     public void reset() {
-        scheduleAction.setVisible(false);
-        resolveAction.setVisible(false);
-        rateAction.setVisible(false);
-        cancelAction.setVisible(false);
+        setActionVisible(scheduleAction, false);
+        setActionVisible(resolveAction, false);
+        setActionVisible(rateAction, false);
+        setActionVisible(cancelAction, false);
         super.reset();
     }
 
@@ -115,11 +113,11 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
         getEditButton().setVisible(value.status().getValue() == MaintenanceRequestStatus.Submitted);
 
-        scheduleAction.setVisible(value.status().getValue() == MaintenanceRequestStatus.Submitted
+        setActionVisible(scheduleAction, value.status().getValue() == MaintenanceRequestStatus.Submitted
                 || value.status().getValue() == MaintenanceRequestStatus.Scheduled);
-        resolveAction.setVisible(value.status().getValue() == MaintenanceRequestStatus.Scheduled);
-        rateAction.setVisible(value.status().getValue() == MaintenanceRequestStatus.Resolved);
-        cancelAction.setVisible(value.status().getValue() != MaintenanceRequestStatus.Cancelled
+        setActionVisible(resolveAction, value.status().getValue() == MaintenanceRequestStatus.Scheduled);
+        setActionVisible(rateAction, value.status().getValue() == MaintenanceRequestStatus.Resolved);
+        setActionVisible(cancelAction, value.status().getValue() != MaintenanceRequestStatus.Cancelled
                 && value.status().getValue() != MaintenanceRequestStatus.Resolved);
     }
 

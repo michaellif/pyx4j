@@ -16,10 +16,10 @@ package com.propertyvista.crm.client.ui.crud.lease;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -32,7 +32,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -63,19 +62,19 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final IListerView<LeaseAdjustment> adjustmentLister;
 
-    private final Button sendMail;
+    private final MenuItem sendMail;
 
-    private final Button runBill;
+    private final MenuItem runBill;
 
-    private final Button notice;
+    private final MenuItem notice;
 
-    private final Button cancelNotice;
+    private final MenuItem cancelNotice;
 
-    private final Button evict;
+    private final MenuItem evict;
 
-    private final Button cancelEvict;
+    private final MenuItem cancelEvict;
 
-    private final Button activate;
+    private final MenuItem activate;
 
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
@@ -90,9 +89,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setForm(new LeaseForm());
 
         // Add actions:
-        sendMail = new Button(i18n.tr("Send Mail..."), new ClickHandler() {
+        sendMail = new MenuItem(i18n.tr("Send Mail..."), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
                     @Override
                     public void onSuccess(List<LeaseParticipant> result) {
@@ -107,19 +106,19 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 });
             }
         });
-        addHeaderToolbarItem(sendMail.asWidget());
+        addAction(sendMail);
 
-        runBill = new Button(i18n.tr("Run Bill"), new ClickHandler() {
+        runBill = new MenuItem(i18n.tr("Run Bill"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).startBilling();
             }
         });
-        addHeaderToolbarItem(runBill.asWidget());
+        addAction(runBill);
 
-        notice = new Button(i18n.tr("Notice..."), new ClickHandler() {
+        notice = new MenuItem(i18n.tr("Notice..."), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 new TermLeaseBox(CompletionType.Notice) {
                     @Override
                     public boolean onClickOk() {
@@ -129,19 +128,19 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }.show();
             }
         });
-        addHeaderToolbarItem(notice.asWidget());
+        addAction(notice);
 
-        cancelNotice = new Button(i18n.tr("Cancel Notice"), new ClickHandler() {
+        cancelNotice = new MenuItem(i18n.tr("Cancel Notice"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).cancelNotice();
             }
         });
-        addHeaderToolbarItem(cancelNotice.asWidget());
+        addAction(cancelNotice);
 
-        evict = new Button(i18n.tr("Evict..."), new ClickHandler() {
+        evict = new MenuItem(i18n.tr("Evict..."), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 new TermLeaseBox(CompletionType.Eviction) {
                     @Override
                     public boolean onClickOk() {
@@ -151,34 +150,34 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }.show();
             }
         });
-        addHeaderToolbarItem(evict.asWidget());
+        addAction(evict);
 
-        cancelEvict = new Button(i18n.tr("Cancel Evict"), new ClickHandler() {
+        cancelEvict = new MenuItem(i18n.tr("Cancel Evict"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).cancelEvict();
             }
         });
-        addHeaderToolbarItem(cancelEvict.asWidget());
+        addAction(cancelEvict);
 
-        activate = new Button(i18n.tr("Activate Lease"), new ClickHandler() {
+        activate = new MenuItem(i18n.tr("Activate Lease"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).activate();
             }
         });
-        addHeaderToolbarItem(activate.asWidget());
+        addAction(activate);
     }
 
     @Override
     public void reset() {
-        sendMail.setVisible(false);
-        runBill.setVisible(false);
-        notice.setVisible(false);
-        cancelNotice.setVisible(false);
-        evict.setVisible(false);
-        cancelEvict.setVisible(false);
-        activate.setVisible(false);
+        setActionVisible(sendMail, false);
+        setActionVisible(runBill, false);
+        setActionVisible(notice, false);
+        setActionVisible(cancelNotice, false);
+        setActionVisible(evict, false);
+        setActionVisible(cancelEvict, false);
+        setActionVisible(activate, false);
         super.reset();
     }
 
@@ -192,13 +191,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         if (!value.unit().isNull()) {
             CompletionType completion = value.completion().getValue();
 
-            sendMail.setVisible(true);
-            runBill.setVisible(status.isActive());
-            notice.setVisible(status == Status.Active && completion == null);
-            cancelNotice.setVisible(completion == CompletionType.Notice && status != Status.Closed);
-            evict.setVisible(status == Status.Active && completion == null);
-            cancelEvict.setVisible(completion == CompletionType.Eviction && status != Status.Closed);
-            activate.setVisible(status == Status.ExistingLease);
+            setActionVisible(sendMail, true);
+            setActionVisible(runBill, status.isActive());
+            setActionVisible(notice, status == Status.Active && completion == null);
+            setActionVisible(cancelNotice, completion == CompletionType.Notice && status != Status.Closed);
+            setActionVisible(evict, status == Status.Active && completion == null);
+            setActionVisible(cancelEvict, completion == CompletionType.Eviction && status != Status.Closed);
+            setActionVisible(activate, status == Status.ExistingLease);
         }
     }
 

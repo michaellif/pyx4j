@@ -14,35 +14,23 @@
 package com.propertyvista.crm.client.ui.crud.building;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionLister;
@@ -206,65 +194,6 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
         @NotNull
         IPrimitive<LogicalDate> billingPeriodStartDate();
-    }
-
-    private abstract class RunBillDataBox extends OkCancelDialog {
-
-        private CEntityDecoratableForm<RunBillData> content;
-
-        public RunBillDataBox() {
-            super(i18n.tr("Please select"));
-
-            RunBillData data = EntityFactory.create(RunBillData.class);
-            data.paymentFrequency().setValue(PaymentFrequency.Monthly);
-            data.billingPeriodStartDate().setValue(new LogicalDate());
-
-            setBody(createBody(data));
-        }
-
-        protected Widget createBody(RunBillData data) {
-            getOkButton().setEnabled(true);
-
-            content = new CEntityDecoratableForm<RunBillData>(RunBillData.class) {
-
-                private final CComboBox<PaymentFrequency> paymentFrequency = new CComboBox<PaymentFrequency>();
-                {
-                    Collection<PaymentFrequency> opt = new ArrayList<PaymentFrequency>(EnumSet.allOf(PaymentFrequency.class));
-                    opt.removeAll(Arrays.asList(PaymentFrequency.SemiAnnyally, PaymentFrequency.Annually));
-                    paymentFrequency.setOptions(opt);
-                    paymentFrequency.addValueChangeHandler(new ValueChangeHandler<PaymentFrequency>() {
-                        @Override
-                        public void onValueChange(ValueChangeEvent<PaymentFrequency> event) {
-                            // TODO Auto-generated method stub
-                        }
-                    });
-                }
-
-                @Override
-                public IsWidget createContent() {
-                    FormFlexPanel main = new FormFlexPanel();
-
-                    main.setWidget(1, 0, new DecoratorBuilder(inject(proto().paymentFrequency(), paymentFrequency), 10).build());
-                    main.setWidget(2, 0, new DecoratorBuilder(inject(proto().billingPeriodStartDate()), 10).build());
-
-                    return main;
-                }
-
-                @Override
-                public void addValidations() {
-                    super.addValidations();
-
-                }
-            };
-
-            content.initContent();
-            content.populate(data);
-            return content.asWidget();
-        }
-
-        public RunBillData getValue() {
-            return content.getValue();
-        }
     }
 
     @Override

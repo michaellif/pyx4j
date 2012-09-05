@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.crud.lease.application;
 
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -26,7 +26,6 @@ import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -44,19 +43,19 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
     private static final I18n i18n = I18n.get(LeaseApplicationViewerViewImpl.class);
 
-    private final Button onlineApplication;
+    private final MenuItem onlineApplication;
 
-    private final Button inviteAction;
+    private final MenuItem inviteAction;
 
-    private final Button checkAction;
+    private final MenuItem checkAction;
 
-    private final Button approveAction;
+    private final MenuItem approveAction;
 
-    private final Button moreInfoAction;
+    private final MenuItem moreInfoAction;
 
-    private final Button declineAction;
+    private final MenuItem declineAction;
 
-    private final Button cancelAction;
+    private final MenuItem cancelAction;
 
     private static final String INVITE = i18n.tr("Invite");
 
@@ -76,19 +75,19 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         // Actions:
 
-        onlineApplication = new Button(i18n.tr("Start Online Application"), new ClickHandler() {
+        onlineApplication = new MenuItem(i18n.tr("Start Online Application"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((LeaseApplicationViewerView.Presenter) getPresenter()).startOnlineApplication();
             }
         });
         if (VistaFeatures.instance().onlineApplication()) {
-            addHeaderToolbarItem(onlineApplication.asWidget());
+            addAction(onlineApplication);
         }
 
-        inviteAction = new Button(INVITE, new ClickHandler() {
+        inviteAction = new MenuItem(INVITE, new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
                     @Override
                     public void onSuccess(List<LeaseParticipant> result) {
@@ -105,12 +104,12 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             }
         });
         if (VistaFeatures.instance().onlineApplication()) {
-            addHeaderToolbarItem(inviteAction.asWidget());
+            addAction(inviteAction);
         }
 
-        checkAction = new Button(i18n.tr("Credit Check"), new ClickHandler() {
+        checkAction = new MenuItem(i18n.tr("Credit Check"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
                     @Override
                     public void onSuccess(List<LeaseParticipant> result) {
@@ -127,14 +126,14 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             }
         });
 // TODO : credit check (Equifax) isn't implemented yet (see LeaseApplicationForm)!          
-//        addHeaderToolbarItem(checkAction.asWidget());
+//        addAction(checkAction.asWidget());
 
         // TODO Move Lease
         {
-            approveAction = new Button(APPROVE, new ClickHandler() {
+            approveAction = new MenuItem(APPROVE, new Command() {
 
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
                     new ActionBox(APPROVE) {
                         @Override
                         public boolean onClickOk() {
@@ -144,11 +143,11 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                     }.show();
                 }
             });
-            addHeaderToolbarItem(approveAction.asWidget());
+            addAction(approveAction);
 
-            moreInfoAction = new Button(MORE_INFO, new ClickHandler() {
+            moreInfoAction = new MenuItem(MORE_INFO, new Command() {
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
                     ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
                         @Override
                         public void onSuccess(List<LeaseParticipant> result) {
@@ -164,11 +163,11 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                     });
                 }
             });
-            addHeaderToolbarItem(moreInfoAction.asWidget());
+            addAction(moreInfoAction);
 
-            declineAction = new Button(DECLINE, new ClickHandler() {
+            declineAction = new MenuItem(DECLINE, new Command() {
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
                     new ActionBox(DECLINE) {
                         @Override
                         public boolean onClickOk() {
@@ -178,12 +177,12 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                     }.show();
                 }
             });
-            addHeaderToolbarItem(declineAction.asWidget());
+            addAction(declineAction);
         }
 
-        cancelAction = new Button(CANCEL, new ClickHandler() {
+        cancelAction = new MenuItem(CANCEL, new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 new ActionBox(CANCEL) {
                     @Override
                     public boolean onClickOk() {
@@ -193,18 +192,18 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 }.show();
             }
         });
-        addHeaderToolbarItem(cancelAction.asWidget());
+        addAction(cancelAction);
     }
 
     @Override
     public void reset() {
-        onlineApplication.setVisible(false);
-        inviteAction.setVisible(false);
-        checkAction.setVisible(false);
-        approveAction.setVisible(false);
-        moreInfoAction.setVisible(false);
-        declineAction.setVisible(false);
-        cancelAction.setVisible(false);
+        setActionVisible(onlineApplication, false);
+        setActionVisible(inviteAction, false);
+        setActionVisible(checkAction, false);
+        setActionVisible(approveAction, false);
+        setActionVisible(moreInfoAction, false);
+        setActionVisible(declineAction, false);
+        setActionVisible(cancelAction, false);
         super.reset();
     }
 
@@ -216,13 +215,13 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         // set buttons state:
         if (!value.unit().isNull()) {
-            onlineApplication.setVisible(status == Status.Created);
-            inviteAction.setVisible(status == Status.OnlineApplication);
-            checkAction.setVisible(status.isDraft());
-            approveAction.setVisible(status.isDraft());
-            moreInfoAction.setVisible(status.isDraft() && status != Status.Created);
-            declineAction.setVisible(status.isDraft());
-            cancelAction.setVisible(status != Status.Cancelled);
+            setActionVisible(onlineApplication, status == Status.Created);
+            setActionVisible(inviteAction, status == Status.OnlineApplication);
+            setActionVisible(checkAction, status.isDraft());
+            setActionVisible(approveAction, status.isDraft());
+            setActionVisible(moreInfoAction, status.isDraft() && status != Status.Created);
+            setActionVisible(declineAction, status.isDraft());
+            setActionVisible(cancelAction, status != Status.Cancelled);
         }
     }
 

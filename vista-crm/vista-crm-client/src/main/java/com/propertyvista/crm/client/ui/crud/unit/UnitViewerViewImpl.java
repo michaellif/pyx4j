@@ -13,15 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -42,11 +41,11 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     private final IListerView<AptUnitOccupancySegment> occupanciesLister;
 
-    private final Button leaseAction;
+    private final MenuItem leaseAction;
 
-    private Button scopeAction;
+    private final MenuItem scopeAction;
 
-    private Button makePendingAction;
+    private final MenuItem makePendingAction;
 
     private boolean canScopeOffMarket;
 
@@ -82,9 +81,9 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         canScopeOffMarket = false;
         minRenovationEndDate = null;
 
-        leaseAction = new Button(i18n.tr("Existing Lease..."), new ClickHandler() {
+        leaseAction = new MenuItem(i18n.tr("Existing Lease..."), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 if (getForm().getValue().isPresentInCatalog().isBooleanTrue()) {
                     new ExistingLeaseDataDialog(getForm().getValue()).show();
                 } else {
@@ -92,16 +91,43 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
                 }
             }
         });
-        addHeaderToolbarItem(leaseAction);
+        addAction(leaseAction);
 
-        initOccupancyActions();
+        scopeAction = new MenuItem(i18n.tr("Scope..."), new Command() {
+            @Override
+            public void execute() {
+                new ScopeDialog((UnitViewerView.Presenter) getPresenter(), canScopeAvailable, canScopeOffMarket, minRenovationEndDate) {
+                }.show();
+            }
+        });
+        scopeAction.ensureDebugId(DebugIds.unitViewerViewScopeAction.debugId());
+        addAction(scopeAction);
+
+        makePendingAction = new MenuItem(i18n.tr("Make Pending..."), new Command() {
+            @Override
+            public void execute() {
+                new MakePendingDialog((com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter) getPresenter(), minMakePendingStartDay,
+                        maxMakePendingStartDay) {
+                }.show();
+            }
+        });
+        makePendingAction.ensureDebugId(DebugIds.unitViewerViewMakeVacantAction.debugId());
+        addAction(makePendingAction);
+    }
+
+    @Override
+    public void reset() {
+        setActionVisible(leaseAction, false);
+        setActionVisible(scopeAction, false);
+        setActionVisible(makePendingAction, false);
+        super.reset();
     }
 
     @Override
     public void populate(AptUnitDTO value) {
         super.populate(value);
 
-        leaseAction.setVisible(value.isAvailableForExistingLease().isBooleanTrue());
+        setActionVisible(leaseAction, value.isAvailableForExistingLease().isBooleanTrue());
     }
 
     @Override
@@ -116,50 +142,25 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     @Override
     public void setCanScopeOffMarket(boolean canScopeOffMarket) {
-        scopeAction.setVisible(this.canScopeOffMarket = canScopeOffMarket);
+        setActionVisible(scopeAction, this.canScopeOffMarket = canScopeOffMarket);
     }
 
     @Override
     public void setCanScopeAvailable(boolean canScopeAvailable) {
-        scopeAction.setVisible(this.canScopeAvailable = canScopeAvailable);
+        setActionVisible(scopeAction, this.canScopeAvailable = canScopeAvailable);
     }
 
     @Override
     public void setMinRenovationEndDate(LogicalDate minRenovationEndDate) {
-        scopeAction.setVisible((this.minRenovationEndDate = minRenovationEndDate) != null);
+        setActionVisible(scopeAction, (this.minRenovationEndDate = minRenovationEndDate) != null);
     }
 
     @Override
     public void setMakeVacantConstraints(MakeVacantConstraintsDTO constraints) {
-        makePendingAction.setVisible(constraints != null);
+        setActionVisible(makePendingAction, constraints != null);
         if (constraints != null) {
             this.minMakePendingStartDay = constraints.minVacantFrom().getValue();
             this.maxMakePendingStartDay = constraints.maxVacantFrom().getValue();
         }
-    }
-
-    // internals:
-
-    private void initOccupancyActions() {
-        scopeAction = new Button(i18n.tr("Scope..."), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                new ScopeDialog((UnitViewerView.Presenter) getPresenter(), canScopeAvailable, canScopeOffMarket, minRenovationEndDate) {
-                }.show();
-            }
-        });
-        scopeAction.ensureDebugId(DebugIds.unitViewerViewScopeAction.debugId());
-        addHeaderToolbarItem(scopeAction);
-
-        makePendingAction = new Button(i18n.tr("Make Pending..."), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                new MakePendingDialog((com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter) getPresenter(), minMakePendingStartDay,
-                        maxMakePendingStartDay) {
-                }.show();
-            }
-        });
-        makePendingAction.ensureDebugId(DebugIds.unitViewerViewMakeVacantAction.debugId());
-        addHeaderToolbarItem(makePendingAction);
     }
 }

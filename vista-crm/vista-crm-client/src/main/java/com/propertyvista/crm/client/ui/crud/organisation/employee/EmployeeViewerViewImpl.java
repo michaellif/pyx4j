@@ -13,11 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.PasswordTextBox;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -29,49 +28,57 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
 
     private static final I18n i18n = I18n.get(EmployeeViewerViewImpl.class);
 
-    private final Button passwordAction;
+    private final MenuItem passwordAction;
 
-    private final Button viewLoginLogAction;
+    private final MenuItem viewLoginLogAction;
 
-    private final Button accountRecoveryOptionsAction;
+    private final MenuItem accountRecoveryOptionsAction;
 
     public EmployeeViewerViewImpl() {
         super(CrmSiteMap.Organization.Employee.class, new EmployeeForm(true));
 
         // Add actions:        
-        passwordAction = new Button(i18n.tr("Change Password"), new ClickHandler() {
+        passwordAction = new MenuItem(i18n.tr("Change Password"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((EmployeeViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().user().getPrimaryKey(), getForm().getValue().name()
                         .getStringView());
             }
         });
+        addAction(passwordAction);
 
-        viewLoginLogAction = new Button(i18n.tr("View Login History"), new ClickHandler() {
+        viewLoginLogAction = new MenuItem(i18n.tr("View Login History"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((EmployeeViewerView.Presenter) getPresenter()).goToLoginHistory(getForm().getValue().user());
             }
         });
+        addAction(viewLoginLogAction);
 
-        accountRecoveryOptionsAction = new Button(i18n.tr("Account Recovery Options"), new ClickHandler() {
+        accountRecoveryOptionsAction = new MenuItem(i18n.tr("Account Recovery Options"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 new GetPasswordDialog().show();
             }
         });
+        addAction(accountRecoveryOptionsAction);
+    }
 
-        addHeaderToolbarItem(passwordAction.asWidget());
-        addHeaderToolbarItem(accountRecoveryOptionsAction.asWidget());
-        addHeaderToolbarItem(viewLoginLogAction.asWidget());
+    @Override
+    public void reset() {
+        setActionVisible(passwordAction, false);
+        setActionVisible(viewLoginLogAction, false);
+        setActionVisible(accountRecoveryOptionsAction, false);
+        super.reset();
     }
 
     @Override
     public void populate(EmployeeDTO value) {
         super.populate(value);
-        passwordAction.setVisible((getPresenter()).canEdit());
-        viewLoginLogAction.setVisible((getPresenter()).canEdit());
-        accountRecoveryOptionsAction.setVisible(((EmployeeViewerView.Presenter) getPresenter()).canGoToAccountRecoveryOptions());
+
+        setActionVisible(passwordAction, getPresenter().canEdit());
+        setActionVisible(viewLoginLogAction, getPresenter().canEdit());
+        setActionVisible(accountRecoveryOptionsAction, ((EmployeeViewerView.Presenter) getPresenter()).canGoToAccountRecoveryOptions());
     }
 
     private class GetPasswordDialog extends OkCancelDialog {
@@ -94,7 +101,6 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
         public boolean onClickCancel() {
             return true;
         }
-
     }
 
     @Override

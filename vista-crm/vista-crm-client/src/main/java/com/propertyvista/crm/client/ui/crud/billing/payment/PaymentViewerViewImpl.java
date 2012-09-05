@@ -13,12 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
-import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -30,69 +29,69 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
 
     private static final I18n i18n = I18n.get(PaymentViewerViewImpl.class);
 
-    private final Button scheduleAction;
+    private final MenuItem scheduleAction;
 
-    private final Button processAction;
+    private final MenuItem processAction;
 
-    private final Button clearAction;
+    private final MenuItem clearAction;
 
-    private final Button rejectAction;
+    private final MenuItem rejectAction;
 
-    private final Button cancelAction;
+    private final MenuItem cancelAction;
 
     public PaymentViewerViewImpl() {
         super(CrmSiteMap.Finance.Payment.class, new PaymentForm(true));
 
-        cancelAction = new Button(i18n.tr("Cancel"), new ClickHandler() {
+        cancelAction = new MenuItem(i18n.tr("Cancel"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((PaymentViewerView.Presenter) getPresenter()).cancelPayment();
             }
         });
-        addHeaderToolbarItem(cancelAction.asWidget());
+        addAction(cancelAction);
 
-        rejectAction = new Button(i18n.tr("Reject"), new ClickHandler() {
+        rejectAction = new MenuItem(i18n.tr("Reject"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((PaymentViewerView.Presenter) getPresenter()).rejectPayment();
             }
         });
-        addHeaderToolbarItem(rejectAction.asWidget());
+        addAction(rejectAction);
 
-        clearAction = new Button(i18n.tr("Clear"), new ClickHandler() {
+        clearAction = new MenuItem(i18n.tr("Clear"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((PaymentViewerView.Presenter) getPresenter()).clearPayment();
             }
         });
-        addHeaderToolbarItem(clearAction.asWidget());
+        addAction(clearAction);
 
-        processAction = new Button(i18n.tr("Process"), new ClickHandler() {
+        processAction = new MenuItem(i18n.tr("Process"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((PaymentViewerView.Presenter) getPresenter()).processPayment();
             }
         });
         processAction.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
-        addHeaderToolbarItem(processAction.asWidget());
+        addAction(processAction);
 
-        scheduleAction = new Button(i18n.tr("Schedule"), new ClickHandler() {
+        scheduleAction = new MenuItem(i18n.tr("Schedule"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((PaymentViewerView.Presenter) getPresenter()).schedulePayment();
             }
         });
         scheduleAction.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
-        addHeaderToolbarItem(scheduleAction.asWidget());
+        addAction(scheduleAction);
     }
 
     @Override
     public void reset() {
-        scheduleAction.setVisible(false);
-        processAction.setVisible(false);
-        clearAction.setVisible(false);
-        rejectAction.setVisible(false);
-        cancelAction.setVisible(false);
+        setActionVisible(scheduleAction, false);
+        setActionVisible(processAction, false);
+        setActionVisible(clearAction, false);
+        setActionVisible(rejectAction, false);
+        setActionVisible(cancelAction, false);
         super.reset();
     }
 
@@ -102,25 +101,24 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
 
         // enable editing for submitted payments only:
         getEditButton().setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
-        cancelAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
+        setActionVisible(cancelAction, value.paymentStatus().getValue() == PaymentStatus.Submitted);
 
         if (value.paymentStatus().getValue() == PaymentStatus.Submitted) {
             if (!value.targetDate().isNull() && PaymentType.schedulable().contains(value.paymentMethod().type().getValue())) {
-                scheduleAction.setVisible(true);
+                setActionVisible(scheduleAction, true);
             } else {
-                processAction.setVisible(true);
+                setActionVisible(processAction, true);
             }
         }
 
         switch (value.paymentMethod().type().getValue()) {
         case Check:
-            clearAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Received);
-            rejectAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Received);
+            setActionVisible(clearAction, value.paymentStatus().getValue() == PaymentStatus.Received);
+            setActionVisible(rejectAction, value.paymentStatus().getValue() == PaymentStatus.Received);
             break;
         default:
             // No other special handling for payment types
         }
 
     }
-
 }

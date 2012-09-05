@@ -23,5 +23,4 @@ public class ARPolicyViewerViewImpl extends CrmViewerViewImplBase<ARPolicyDTO> i
         super(CrmSiteMap.Settings.Policies.AR.class);
         setForm(new ARPolicyForm(true));
     }
-
 }

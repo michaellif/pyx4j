@@ -13,15 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead.appointment;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -37,16 +36,16 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
 
     private final ShowingListerView showingsLister;
 
-    private final Button closeAction;
+    private final MenuItem closeAction;
 
     public AppointmentViewerViewImpl() {
         super(Marketing.Appointment.class);
 
         showingsLister = new ShowingListerViewImpl();
 
-        closeAction = new Button(i18n.tr("Close"), new ClickHandler() {
+        closeAction = new MenuItem(i18n.tr("Close"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 new ActionBox(i18n.tr("Close Appointment")) {
                     @Override
                     public boolean onClickOk() {
@@ -56,7 +55,7 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
                 }.show();
             }
         });
-        addHeaderToolbarItem(closeAction.asWidget());
+        addAction(closeAction);
 
         // set main form here:
         setForm(new AppointmentForm(true));
@@ -68,13 +67,19 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
     }
 
     @Override
+    public void reset() {
+        setActionVisible(closeAction, false);
+        super.reset();
+    }
+
+    @Override
     public void populate(Appointment value) {
         super.populate(value);
 
         getEditButton().setEnabled(value.status().getValue() != Appointment.Status.closed);
         getEditButton().setVisible(value.lead().status().getValue() != Lead.Status.closed);
 
-        closeAction.setVisible(value.status().getValue() != Appointment.Status.closed);
+        setActionVisible(closeAction, value.status().getValue() != Appointment.Status.closed);
     }
 
     private abstract class ActionBox extends OkCancelDialog {

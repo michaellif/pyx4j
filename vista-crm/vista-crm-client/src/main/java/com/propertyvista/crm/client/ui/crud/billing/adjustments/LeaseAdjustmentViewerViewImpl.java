@@ -13,11 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -28,23 +27,23 @@ public class LeaseAdjustmentViewerViewImpl extends CrmViewerViewImplBase<LeaseAd
 
     private static final I18n i18n = I18n.get(LeaseAdjustmentViewerViewImpl.class);
 
-    private final Button submitAction;
+    private final MenuItem submitAction;
 
     public LeaseAdjustmentViewerViewImpl() {
         super(CrmSiteMap.Finance.LeaseAdjustment.class, new LeaseAdjustmentForm(true));
 
-        submitAction = new Button(i18n.tr("Submit"), new ClickHandler() {
+        submitAction = new MenuItem(i18n.tr("Submit"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((LeaseAdjustmentViewerView.Presenter) getPresenter()).submitAdjustment();
             }
         });
-        addHeaderToolbarItem(submitAction.asWidget());
+        addAction(submitAction);
     }
 
     @Override
     public void reset() {
-        submitAction.setVisible(false);
+        setActionVisible(submitAction, false);
         super.reset();
     }
 
@@ -52,7 +51,7 @@ public class LeaseAdjustmentViewerViewImpl extends CrmViewerViewImplBase<LeaseAd
     public void populate(LeaseAdjustment value) {
         super.populate(value);
 
-        submitAction.setVisible(value.status().getValue() != Status.submited);
+        setActionVisible(submitAction, value.status().getValue() != Status.submited);
 
         // enable editing for draft items only:
         getEditButton().setVisible(value.status().getValue() == Status.draft);

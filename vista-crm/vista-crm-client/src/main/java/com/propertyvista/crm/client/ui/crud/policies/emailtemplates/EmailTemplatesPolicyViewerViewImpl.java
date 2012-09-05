@@ -23,5 +23,4 @@ public class EmailTemplatesPolicyViewerViewImpl extends CrmViewerViewImplBase<Em
         super(CrmSiteMap.Settings.Policies.EmailTemplates.class);
         setForm(new EmailTemplatesPolicyForm(true));
     }
-
 }
