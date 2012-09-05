@@ -13,19 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.complex;
 
-import java.util.List;
+import java.util.Iterator;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.client.visor.dashboard.DashboardSelectorDialog;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -35,63 +31,15 @@ public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> imp
 
     private static final I18n i18n = I18n.get(ComplexViewerViewImpl.class);
 
+    private final ButtonMenuBar dashboardsMenu;
+
     public ComplexViewerViewImpl() {
         super(CrmSiteMap.Properties.Complex.class);
 
-        Button button = new Button(i18n.tr("Test"));
-        Button.ButtonMenuBar menu = button.createMenu();
-        menu.addItem("aaa sdfgsdfg dsfgsdfgsdfg", new Command() {
-
-            @Override
-            public void execute() {
-                System.out.println("+++++++++++++++++aaa");
-            }
-        });
-        MenuItem aaa = menu.addItem("bbb", new Command() {
-
-            @Override
-            public void execute() {
-                System.out.println("+++++++++++++++++bbb");
-            }
-        });
-        aaa.setEnabled(false);
-
-        MenuBar secondaryMenu = button.createMenu();
-        secondaryMenu.addItem("ddd dfgsdfg fsdgsdf ", new Command() {
-
-            @Override
-            public void execute() {
-                System.out.println("+++++++++++++++++ddd");
-            }
-        });
-
-        menu.addItem("ccc", secondaryMenu);
-
-        button.setMenu(menu);
-        addHeaderToolbarItem(button);
-
-        addHeaderToolbarItem(new Button(i18n.tr("Dashboard"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                new DashboardSelectorDialog() {
-
-                    @Override
-                    public boolean onClickOk() {
-                        List<DashboardMetadata> dashboards = getSelectedItems();
-                        if (!dashboards.isEmpty()) {
-                            IDashboardVisorController controller = ((ComplexViewerView.Presenter) getPresenter()).getDashboardController(dashboards.get(0),
-                                    getForm().getValue().buildings());
-                            controller.show(ComplexViewerViewImpl.this);
-                            return true;
-                        } else {
-                            return false;
-                        }
-
-                    }
-
-                }.show();
-            }
-        }).asWidget());
+        Button dashboardButton = new Button(i18n.tr("Dashboard"));
+        dashboardsMenu = dashboardButton.createMenu();
+        dashboardButton.setMenu(dashboardsMenu);
+        addHeaderToolbarItem(dashboardButton);
 
         setForm(new ComplexForm(true));
     }
@@ -99,6 +47,25 @@ public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> imp
     @Override
     public void populate(ComplexDTO value) {
         super.populate(value);
+        populateDashboardsMenu(value.dashboards().iterator());
+
+    }
+
+    private void populateDashboardsMenu(Iterator<DashboardMetadata> dashboardsIterator) {
+        dashboardsMenu.clearItems();
+        while (dashboardsIterator.hasNext()) {
+            final DashboardMetadata dashboard = dashboardsIterator.next();
+            dashboardsMenu.addItem(dashboard.name().getValue(), new Command() {
+
+                @Override
+                public void execute() {
+                    IDashboardVisorController controller = ((ComplexViewerView.Presenter) getPresenter()).getDashboardController(dashboard, getForm()
+                            .getValue().buildings());
+                    controller.show(ComplexViewerViewImpl.this);
+                }
+
+            });
+        }
     }
 
 }

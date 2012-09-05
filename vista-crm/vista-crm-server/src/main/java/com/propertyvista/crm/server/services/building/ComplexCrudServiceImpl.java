@@ -13,10 +13,9 @@
  */
 package com.propertyvista.crm.server.services.building;
 
-import java.util.List;
-
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
@@ -59,18 +58,11 @@ public class ComplexCrudServiceImpl extends AbstractCrudServiceDtoImpl<Complex, 
 
     @Override
     protected void enhanceRetrieved(Complex entity, ComplexDTO dto) {
-        // set the dashboard
-        if (!entity.dashboard().isNull()) {
-            Persistence.service().retrieve(entity.dashboard());
-            dto.dashboard().set(entity.dashboard());
-        } else {
-            // load first building  dashboard by default:
+        // add dashboards
+        {
             EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.building));
-            List<DashboardMetadata> dashboards = Persistence.service().query(criteria);
-            if (!dashboards.isEmpty()) {
-                dto.dashboard().set(dashboards.get(0));
-            }
+            dto.dashboards().addAll(Persistence.service().query(criteria, AttachLevel.ToStringMembers));
         }
 
         {

@@ -15,8 +15,10 @@ package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -38,4 +40,6 @@ public interface ComplexDTO extends Complex {
     // TODO additional properties:
     // * propertyManager/anyOtherKindOfManager - fetch from primary building
     // * some kind of financial information
+
+    IList<DashboardMetadata> dashboards();
 }

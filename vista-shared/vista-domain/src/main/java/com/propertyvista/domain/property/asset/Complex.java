@@ -27,7 +27,6 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -43,9 +42,6 @@ public interface Complex extends PolicyNode {
     IPrimitive<String> name();
 
     IPrimitive<String> website();
-
-    @Detached
-    DashboardMetadata dashboard();
 
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = Building.class)
