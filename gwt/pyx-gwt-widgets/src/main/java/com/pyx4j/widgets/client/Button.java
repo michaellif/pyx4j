@@ -312,8 +312,15 @@ public class Button extends FocusPanel implements IFocusWidget {
         }
 
         public boolean isMenuEmpty() {
-            return getItems().isEmpty();
+            boolean empty = getItems().isEmpty();
+            if (!empty) {
+                for (MenuItem item : getItems()) {
+                    if (item.isVisible()) {
+                        empty = false;
+                    }
+                }
+            }
+            return empty;
         }
     }
-
 }
