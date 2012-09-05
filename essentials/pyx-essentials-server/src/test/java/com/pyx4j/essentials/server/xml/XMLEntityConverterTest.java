@@ -44,6 +44,9 @@ import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntity;
+import com.pyx4j.entity.xml.XMLEntityConverter;
+import com.pyx4j.entity.xml.XMLEntityWriter;
+import com.pyx4j.entity.xml.XMLStringWriter;
 
 public class XMLEntityConverterTest extends TestCase {
 

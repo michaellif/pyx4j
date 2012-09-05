@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.xml;
+package com.pyx4j.entity.xml;
 
 import java.io.File;
 import java.io.FileReader;
@@ -38,6 +38,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.xml.XMLEntityFactory;
+import com.pyx4j.entity.xml.XMLEntityFactoryDefault;
+import com.pyx4j.entity.xml.XMLEntityParser;
+import com.pyx4j.entity.xml.XMLEntityWriter;
+import com.pyx4j.entity.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.IOUtils;
 
 public class XMLEntityConverter {

@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.xml;
+package com.pyx4j.entity.xml;
 
 import java.text.DateFormat;
 import java.text.ParseException;

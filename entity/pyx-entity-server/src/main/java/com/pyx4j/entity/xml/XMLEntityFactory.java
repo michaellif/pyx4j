@@ -18,16 +18,12 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.xml;
+package com.pyx4j.entity.xml;
 
-import com.pyx4j.commons.EnglishGrammar;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IEntity;
 
-public class XMLEntityNamingConventionDefault implements XMLEntityNamingConvention {
+public interface XMLEntityFactory {
 
-    @Override
-    public String getXMLName(@SuppressWarnings("rawtypes") Class<? extends IObject> memberClass) {
-        return EnglishGrammar.deCapitalize(memberClass.getSimpleName());
-    }
+    <T extends IEntity> T createInstance(String xmlName, Class<T> objectClass);
 
 }

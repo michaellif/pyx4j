@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.xml;
+package com.pyx4j.entity.xml;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +32,8 @@ import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.xml.XMLEntityFactory;
+import com.pyx4j.entity.xml.XMLEntityFactoryDefault;
 
 public class XMLEntityFactoryDefault implements XMLEntityFactory {
 

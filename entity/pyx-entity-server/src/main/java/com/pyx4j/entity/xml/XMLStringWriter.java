@@ -18,13 +18,15 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.xml;
+package com.pyx4j.entity.xml;
 
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Stack;
 
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.xml.XMLEscape;
+import com.pyx4j.entity.xml.XMLStringWriter;
 
 public class XMLStringWriter {
 

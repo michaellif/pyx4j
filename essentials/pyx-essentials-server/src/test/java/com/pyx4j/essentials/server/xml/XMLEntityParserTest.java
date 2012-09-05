@@ -45,6 +45,8 @@ import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
 import com.pyx4j.entity.test.shared.domain.EmployeePhoto;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.temporal.Schedule;
+import com.pyx4j.entity.xml.XMLEntityConverter;
+import com.pyx4j.entity.xml.XMLStringWriter;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.server.DateUtils;
 

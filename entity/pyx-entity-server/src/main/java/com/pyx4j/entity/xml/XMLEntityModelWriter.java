@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.xml;
+package com.pyx4j.entity.xml;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,7 +40,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.geo.GeoPoint;
 
 public class XMLEntityModelWriter {
@@ -178,7 +177,7 @@ public class XMLEntityModelWriter {
     protected String getValueClassAsString(Class<?> valueClass) {
         if (valueClass.isEnum()) {
             if (isEmitExample()) {
-                return DataGenerator.randomEnum((Class<Enum>) valueClass).name();
+                return ((Enum<?>) EnumSet.allOf((Class<Enum>) valueClass).iterator().next()).name();
             } else {
                 return allEnums((Class<Enum>) valueClass);
             }

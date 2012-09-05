@@ -18,12 +18,12 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.xml;
+package com.pyx4j.entity.xml;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 
-public interface XMLEntityFactory {
+public interface XMLEntityNamingConvention {
 
-    <T extends IEntity> T createInstance(String xmlName, Class<T> objectClass);
+    public String getXMLName(@SuppressWarnings("rawtypes") Class<? extends IObject> memberClass);
 
 }
