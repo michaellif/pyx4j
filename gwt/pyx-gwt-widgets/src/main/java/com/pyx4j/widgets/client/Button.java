@@ -310,6 +310,10 @@ public class Button extends FocusPanel implements IFocusWidget {
             }
             return super.insertItem(item, beforeIndex);
         }
+
+        public boolean isMenuEmpty() {
+            return getItems().isEmpty();
+        }
     }
 
 }
