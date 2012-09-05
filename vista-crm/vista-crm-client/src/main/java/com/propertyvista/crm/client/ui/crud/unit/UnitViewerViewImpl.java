@@ -81,13 +81,13 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         canScopeOffMarket = false;
         minRenovationEndDate = null;
 
-        leaseAction = new MenuItem(i18n.tr("Existing Lease..."), new Command() {
+        leaseAction = new MenuItem(i18n.tr("Create Existing Lease..."), new Command() {
             @Override
             public void execute() {
                 if (getForm().getValue().isPresentInCatalog().isBooleanTrue()) {
                     new ExistingLeaseDataDialog(getForm().getValue()).show();
                 } else {
-                    MessageDialog.error(i18n.tr("Product Catalog"), i18n.tr("The unit should be added to the building Product Catalog!"));
+                    MessageDialog.error(i18n.tr("Product Catalog"), i18n.tr("The unit should be added to the building Product Catalog first!"));
                 }
             }
         });
