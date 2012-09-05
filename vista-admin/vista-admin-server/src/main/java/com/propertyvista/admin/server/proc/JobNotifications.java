@@ -35,6 +35,7 @@ public class JobNotifications {
         case Completed:
             event = TriggerNotificationEvent.Completed;
             break;
+        case PartiallyCompleted:
         case Failed:
             event = TriggerNotificationEvent.Error;
             break;

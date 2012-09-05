@@ -80,6 +80,12 @@ class PaymentUtils {
     }
 
     public static PaymentMethod retrievePreAuthorizedPaymentMethod(Tenant tenant) {
-        return tenant.preauthorizedPayment();
+        PaymentMethod method = tenant.preauthorizedPayment();
+        if (method.isNull()) {
+            return null;
+        } else {
+            Persistence.service().retrieve(method);
+            return method;
+        }
     }
 }

@@ -208,6 +208,9 @@ public class PmcProcessDispatcherJob implements Job {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
         try {
+
+            RunStatus runStatus = RunStatus.Completed;
+
             EntityQueryCriteria<RunData> criteria = EntityQueryCriteria.create(RunData.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().execution(), run));
             criteria.add(PropertyCriterion.eq(criteria.proto().status(), RunDataStatus.NeverRan));
@@ -225,6 +228,10 @@ public class PmcProcessDispatcherJob implements Job {
 
                 Persistence.service().persist(runData);
                 Persistence.service().commit();
+
+                if (runData.status().getValue() != RunDataStatus.Processed) {
+                    runStatus = RunStatus.PartiallyCompleted;
+                }
             }
 
             try {
@@ -235,7 +242,7 @@ public class PmcProcessDispatcherJob implements Job {
                 run.status().setValue(RunStatus.Failed);
                 return;
             }
-            run.status().setValue(RunStatus.Completed);
+            run.status().setValue(runStatus);
         } finally {
             executorService.shutdownNow();
         }

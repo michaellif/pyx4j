@@ -27,6 +27,8 @@ public enum RunStatus implements Serializable {
 
     Completed,
 
+    PartiallyCompleted,
+
     Failed;
 
     @Override
