@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -29,7 +28,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -61,7 +59,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
 
     @Override
     protected String getAddItemDialogCaption() {
-        return i18n.tr("Add New Tenant_2");
+        return i18n.tr("Add New Tenant");
     }
 
     @Override
@@ -77,7 +75,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
             newTenantInLease.customer().set(customer);
             if (!isApplicantPresent()) {
                 newTenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
-                newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
+                newTenantInLease.relationship().setValue(PersonRelationship.Other); // just do not leave it empty - it's mandatory field!
             }
             newTenantInLease.percentage().setValue(calcPercentage());
             addItem(newTenantInLease);
@@ -176,7 +174,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
 
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role(), new CComboBox<LeaseParticipant.Role>()), 15).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role()), 15).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().percentage()), 5).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().screening()), 9).customLabel(i18n.tr("Use Screening From")).build());
@@ -192,11 +190,11 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
                 get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseParticipant.Role>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<LeaseParticipant.Role> event) {
-                        get(proto().relationship()).setVisible(event.getValue() != LeaseParticipant.Role.Applicant);
                         if (event.getValue() == LeaseParticipant.Role.Dependent) {
                             get(proto().percentage()).setValue(BigDecimal.ZERO);
                         }
                         get(proto().percentage()).setEditable(event.getValue() != LeaseParticipant.Role.Dependent);
+                        get(proto().relationship()).setVisible(event.getValue() != LeaseParticipant.Role.Applicant);
                     }
                 });
 
@@ -236,18 +234,6 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
 
             if (isEditable()) {
                 ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().participantId()), getValue().getPrimaryKey());
-            }
-
-            boolean applicant = (getValue().role().getValue() == LeaseParticipant.Role.Applicant);
-            if (applicant) {
-                get(proto().role()).setViewable(true);
-                get(proto().relationship()).setVisible(false);
-            } else if (isEditable()) {
-                Collection<LeaseParticipant.Role> roles = LeaseParticipant.Role.tenantRelated();
-                if (getValue().role().getValue() != null) { // if not new entity creation...
-                    roles.remove(LeaseParticipant.Role.Applicant);
-                }
-                ((CComboBox<LeaseParticipant.Role>) get(proto().role())).setOptions(roles);
 
                 get(proto().percentage()).setEditable(getValue().role().getValue() != LeaseParticipant.Role.Dependent);
 
@@ -257,6 +243,8 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
                     }
                 }
             }
+
+            get(proto().relationship()).setVisible(getValue().role().getValue() != LeaseParticipant.Role.Applicant);
 
             if (get(proto().screening()) instanceof CEntityComboBox<?>) {
                 CEntityComboBox<PersonScreening> combo = (CEntityComboBox<PersonScreening>) get(proto().screening());
