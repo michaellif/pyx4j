@@ -473,6 +473,15 @@
         </profile>
 
         <profile>
+            <id>deploy-target-vista-sales-demo</id>
+            <properties>
+                <deployContext>vista-sales-demo</deployContext>
+                <vista-tomcat-url>http://prod-demo.birchwoodsoftwaregroup.com</vista-tomcat-url>
+                <vista-app-ping-url>http://prod-demo.birchwoodsoftwaregroup.com</vista-app-ping-url>
+            </properties>
+        </profile>
+
+        <profile>
             <id>deploy-target-st22</id>
             <properties>
                 <deployContext>vistast22</deployContext>

@@ -49,9 +49,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
-        if ("vista-star".equals(contextName)) {
-            return new VistaServerSideConfigurationProdStarlight();
-        } else if ("vista11".equals(contextName)) {
+        if ("vista11".equals(contextName)) {
             return new VistaServerSideConfiguration11();
         } else if ("vista22".equals(contextName)) {
             return new VistaServerSideConfiguration22();
@@ -61,6 +59,8 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
             return new VistaServerSideConfiguration44();
         } else if ("vista-demo".equals(contextName)) {
             return new VistaServerSideConfigurationDemoProd();
+        } else if ("vista-sales-demo".equals(contextName)) {
+            return new VistaServerSideConfigurationProdSalesDemo();
 
         } else if ("vistad11".equals(contextName)) {
             return new VistaServerSideConfigurationD11();
@@ -71,8 +71,6 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         } else if ("vistad44".equals(contextName)) {
             return new VistaServerSideConfigurationD44();
 
-        } else if ("vistast22".equals(contextName)) {
-            return new VistaServerSideConfigurationST22();
         } else if (servletContext.getServerInfo().contains("jetty")) {
             return new VistaServerSideConfigurationDev();
         } else if ("vista".equals(contextName)) {

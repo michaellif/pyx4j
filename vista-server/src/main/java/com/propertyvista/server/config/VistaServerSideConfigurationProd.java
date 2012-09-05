@@ -27,16 +27,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
 
     @Override
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
-        // This environment selector defined in tomcatX.wrapper.conf -Dcom.pyx4j.appConfig=Prod
-        if ("vista".equals(contextName)) {
-            return this;
-        } else if ("vista-pangroup".equals(contextName)) {
-            return new VistaServerSideConfigurationProdPangroup();
-        } else if ("vista-main".equals(contextName)) {
-            return new VistaServerSideConfigurationProdMain();
-        } else {
-            return new VistaServerSideConfigurationCustom();
-        }
+        return this;
     }
 
     @Override

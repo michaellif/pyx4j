@@ -16,12 +16,9 @@ package com.propertyvista.server.config;
 import javax.servlet.ServletContext;
 
 import com.pyx4j.config.server.IPersistenceConfiguration;
-import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 
 public class VistaServerSideConfigurationCustom extends VistaServerSideConfiguration {
-
-    private PropertiesConfiguration configProperties;
 
     @Override
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {

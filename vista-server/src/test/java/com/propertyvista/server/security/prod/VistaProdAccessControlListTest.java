@@ -35,7 +35,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudSer
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.SummaryService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantInfoService;
-import com.propertyvista.server.config.VistaServerSideConfigurationProdMain;
+import com.propertyvista.server.config.VistaServerSideConfigurationProd;
 
 public class VistaProdAccessControlListTest {
 
@@ -43,7 +43,7 @@ public class VistaProdAccessControlListTest {
 
     @BeforeClass
     public static void init() throws Exception {
-        ServerSideConfiguration.setInstance(new VistaServerSideConfigurationProdMain() {
+        ServerSideConfiguration.setInstance(new VistaServerSideConfigurationProd() {
             @Override
             public IPersistenceConfiguration getPersistenceConfiguration() {
                 return new VistaTestsDBConfigurationHSQLMemory();
