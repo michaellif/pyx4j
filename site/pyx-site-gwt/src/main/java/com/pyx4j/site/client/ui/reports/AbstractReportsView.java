@@ -59,7 +59,7 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
 
     private final ScrollPanel reportPanel;
 
-    private final ReportSettingsFormControlPanel reportSettingsControls;
+    private final ReportSettingsFormControlBar reportSettingsFormControlBar;
 
     private Report report;
 
@@ -77,7 +77,7 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
         settingsFormPanel.setStylePrimaryName(Styles.SettingsFormPanel.name());
         viewPanel.add(settingsFormPanel);
 
-        reportSettingsControls = new ReportSettingsFormControlPanel() {
+        reportSettingsFormControlBar = new ReportSettingsFormControlBar() {
             @Override
             public void onApply() {
                 if (presenter != null & settingsForm != null) {
@@ -91,11 +91,11 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
 
             @Override
             public void onSettingsModeToggled(boolean isAdvanced) {
-                updateSettingsMode(isAdvanced);
+                setSettingsMode(isAdvanced);
             }
 
         };
-        viewPanel.add(reportSettingsControls);
+        viewPanel.add(reportSettingsFormControlBar);
 
         reportPanel = new ScrollPanel();
         reportPanel.setSize("100%", "100%");
@@ -113,8 +113,7 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
 
             @Override
             public void onClick(ClickEvent event) {
-                showVisor(createLoadPanel(), i18n.tr(""));
-
+                showVisor(createLoadReportSettingsPanel(), i18n.tr(""));
             }
         }));
 
@@ -136,8 +135,9 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
         if (reportSettings == null) {
             reportPanel.setWidget(null);
         } else {
-            updateSettingsForm(reportSettings);
             setCaption(reportSettings.getEntityMeta().getCaption());
+
+            populateSettingsForm(reportSettings);
 
             ReportFactory<?> factory = reportFactoryMap.get(reportSettings.getInstanceValueClass());
             report = factory.getReport();
@@ -152,35 +152,35 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
         }
     }
 
-    private void updateSettingsMode(boolean isAdvanced) {
+    private void setSettingsMode(boolean isAdvanced) {
         if (settingsForm != null) {
             ((HasAdvancedSettings) settingsForm.getValue()).isInAdvancedMode().setValue(isAdvanced);
-            updateSettingsForm(settingsForm.getValue());
+            populateSettingsForm(settingsForm.getValue());
         }
     }
 
-    private void updateSettingsForm(ReportMetadata reportSettings) {
+    private void populateSettingsForm(ReportMetadata reportSettings) {
         ReportFactory<?> factory = reportFactoryMap.get(reportSettings.getInstanceValueClass());
         if (factory == null) {
             throw new Error("factory not found for report: " + reportSettings.getInstanceValueClass().getName());
         } else if (factory instanceof HasAdvancedModeReportFactory) {
             boolean isAdvancedMode = ((HasAdvancedSettings) reportSettings).isInAdvancedMode().isBooleanTrue();
             settingsForm = isAdvancedMode ? ((HasAdvancedModeReportFactory) factory).getAdvancedReportSettingsForm() : factory.getReportSettingsForm();
-            reportSettingsControls.enableSettingsModeToggle(isAdvancedMode);
+            reportSettingsFormControlBar.enableSettingsModeToggle(isAdvancedMode);
         } else {
             settingsForm = (CEntityForm<ReportMetadata>) factory.getReportSettingsForm();
-            reportSettingsControls.disableModeToggle();
+            reportSettingsFormControlBar.disableModeToggle();
         }
         settingsFormPanel.setWidget(settingsForm);
         settingsForm.populate(reportSettings);
     }
 
-    private Widget createLoadPanel() {
+    private Widget createLoadReportSettingsPanel() {
         LayoutPanel panel = new LayoutPanel();
         panel.setSize("100%", "100%");
 
-        Button loadButton;
-        panel.add(loadButton = new Button(i18n.tr("Load")));
+        Button loadButton = new Button(i18n.tr("Load"));
+        panel.add(loadButton);
         panel.setWidgetTopHeight(loadButton, 80, Unit.PCT, 1.5, Unit.EM);
         panel.setWidgetLeftWidth(loadButton, 10, Unit.PCT, 5, Unit.EM);
         return panel;

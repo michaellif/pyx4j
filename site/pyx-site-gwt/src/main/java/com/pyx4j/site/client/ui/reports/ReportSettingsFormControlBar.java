@@ -33,26 +33,24 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-public abstract class ReportSettingsFormControlPanel extends Composite {
+public abstract class ReportSettingsFormControlBar extends Composite {
 
-    private static final I18n i18n = I18n.get(ReportSettingsFormControlPanel.class);
+    private static final I18n i18n = I18n.get(ReportSettingsFormControlBar.class);
 
     private Button apply;
 
     private Anchor modeToggle;
 
-    private final Toolbar controlPanel;
+    private final Toolbar controlPanelToolbar;
 
     private boolean isAdvanced;
 
-    public ReportSettingsFormControlPanel() {
+    public ReportSettingsFormControlBar() {
 
         isAdvanced = false;
 
-        controlPanel = new Toolbar();
-        controlPanel.setSize("100%", "100%");
-
-        controlPanel.addItem(modeToggle = new Anchor(i18n.tr("advanced"), new ClickHandler() {
+        controlPanelToolbar = new Toolbar();
+        controlPanelToolbar.addItem(modeToggle = new Anchor(i18n.tr("advanced"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 isAdvanced = !isAdvanced;
@@ -62,17 +60,17 @@ public abstract class ReportSettingsFormControlPanel extends Composite {
         }));
         modeToggle.getElement().getStyle().setMarginRight(2, Unit.EM);
 
-        controlPanel.addItem(apply = new Button(i18n.tr("Apply"), new ClickHandler() {
+        controlPanelToolbar.addItem(apply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 onApply();
             }
         }));
 
-        SimplePanel p = new SimplePanel();
-        p.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.FooterToolbar.name());
-        p.setWidget(controlPanel);
-        initWidget(p);
+        SimplePanel toolbarHolder = new SimplePanel();
+        toolbarHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.FooterToolbar.name());
+        toolbarHolder.setWidget(controlPanelToolbar);
+        initWidget(toolbarHolder);
     }
 
     public final void enableSettingsModeToggle(boolean isAdvanced) {

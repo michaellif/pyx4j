@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.entity.shared.reports.ReportMetadata;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.rpc.services.reports.IReportsService;
 
 public abstract class AbstractReportsActivity extends AbstractActivity implements IReportsView.Presenter {
@@ -64,6 +65,12 @@ public abstract class AbstractReportsActivity extends AbstractActivity implement
         }, settings);
     }
 
-    protected abstract ReportMetadata retrieveReportSettings(AppPlace place);
+    protected ReportMetadata retrieveReportSettings(AppPlace place) {
+        if (place instanceof ReportsAppPlace) {
+            return ((ReportsAppPlace) place).getReportMetadata();
+        } else {
+            return null;
+        }
+    }
 
 }
