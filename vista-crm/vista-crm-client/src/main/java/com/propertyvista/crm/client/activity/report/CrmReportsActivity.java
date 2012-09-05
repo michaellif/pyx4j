@@ -35,8 +35,12 @@ public class CrmReportsActivity extends AbstractReportsActivity {
 
     @Override
     protected ReportMetadata retrieveReportSettings(AppPlace place) {
-        AvailabilityReportMetadata metadata = EntityFactory.create(AvailabilityReportMetadata.class);
-        metadata.asOf().setValue(new LogicalDate());
+        ReportMetadata metadata = super.retrieveReportSettings(place);
+        if (metadata == null) {
+            AvailabilityReportMetadata availabilityReportMetadata = EntityFactory.create(AvailabilityReportMetadata.class);
+            availabilityReportMetadata.asOf().setValue(new LogicalDate());
+            metadata = availabilityReportMetadata;
+        }
         return metadata;
     }
 

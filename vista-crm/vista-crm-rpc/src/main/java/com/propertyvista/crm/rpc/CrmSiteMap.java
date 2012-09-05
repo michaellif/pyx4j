@@ -15,6 +15,7 @@ package com.propertyvista.crm.rpc;
 
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
@@ -334,7 +335,7 @@ public class CrmSiteMap implements SiteMap {
         }
     }
 
-    public static class Reports extends AppPlace {
+    public static class Reports extends ReportsAppPlace {
 
     }
 
