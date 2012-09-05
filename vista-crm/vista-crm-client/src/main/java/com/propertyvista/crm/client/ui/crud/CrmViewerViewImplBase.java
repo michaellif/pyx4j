@@ -82,6 +82,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         actionsMenu = actionsButton.createMenu();
         actionsButton.setMenu(actionsMenu);
         addHeaderToolbarItem(actionsButton);
+        actionsButton.setVisible(false);
 
         // Breadcrumb stuff:
         breadcumbsService = GWT.<BreadcrumbsService> create(BreadcrumbsService.class);
