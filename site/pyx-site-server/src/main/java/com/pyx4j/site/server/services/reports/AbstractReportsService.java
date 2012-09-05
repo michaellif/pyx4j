@@ -26,7 +26,7 @@ import java.util.Map;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.reports.ReportMetadata;
-import com.pyx4j.site.rpc.services.reports.IReportsService;
+import com.pyx4j.site.rpc.reports.IReportsService;
 
 public class AbstractReportsService implements IReportsService {
 

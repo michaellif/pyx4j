@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.reports.ReportMetadata;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.ReportsAppPlace;
-import com.pyx4j.site.rpc.services.reports.IReportsService;
+import com.pyx4j.site.rpc.reports.IReportsService;
 
 public abstract class AbstractReportsActivity extends AbstractActivity implements IReportsView.Presenter {
 

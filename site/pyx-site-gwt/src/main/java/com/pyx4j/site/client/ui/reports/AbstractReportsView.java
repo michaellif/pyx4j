@@ -102,22 +102,20 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
         reportPanel.setStylePrimaryName(Styles.ReportPanel.name());
         viewPanel.add(reportPanel);
 
-        addHeaderToolbarItem(new Button(i18n.tr("Export")));
-
-        addHeaderToolbarItem(new Button(i18n.tr("Print")));
-
-        addHeaderToolbarItem(new Button(i18n.tr("Save As...")));
-        addHeaderToolbarItem(new Button(i18n.tr("Save")));
+        addHeaderToolbarItem(new Button(i18n.tr("Refresh")));
 
         addHeaderToolbarItem(new Button(i18n.tr("Load..."), new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
                 showVisor(createLoadReportSettingsPanel(), i18n.tr(""));
             }
         }));
 
-        addHeaderToolbarItem(new Button(i18n.tr("Refresh")));
+        addHeaderToolbarItem(new Button(i18n.tr("Save As...")));
+        addHeaderToolbarItem(new Button(i18n.tr("Save")));
+
+        addHeaderToolbarItem(new Button(i18n.tr("Print")));
+        addHeaderToolbarItem(new Button(i18n.tr("Export")));
 
         setCaption(i18n.tr("Reports"));
         setContentPane(new ScrollPanel(viewPanel));

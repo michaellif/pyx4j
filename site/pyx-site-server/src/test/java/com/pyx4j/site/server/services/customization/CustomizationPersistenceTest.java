@@ -20,9 +20,23 @@
  */
 package com.pyx4j.site.server.services.customization;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+
+import junit.framework.Assert;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.cusomization.CustomizationHolderEntity;
 
 public class CustomizationPersistenceTest {
 
@@ -30,18 +44,108 @@ public class CustomizationPersistenceTest {
         TestWithDB.setUp();
     }
 
-    @Test
-    public void test1() {
+    @Before
+    public void setUp() {
         Persistence.service().startTransaction();
+        Persistence.service().delete(EntityQueryCriteria.create(CustomizationHolderEntity.class));
+    }
 
+    @After
+    public void tearDown() {
         Persistence.service().commit();
     }
 
     @Test
-    public void test2() {
-        Persistence.service().startTransaction();
+    public void testSave() {
 
-        Persistence.service().commit();
+        // setup
+        CustomizationTestEntity entity = EntityFactory.create(CustomizationTestEntity.class);
+        entity.valueStr().setValue("strValue");
+
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.set(2000, 1, 1);
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        entity.valueDate().setValue(new LogicalDate(cal.getTime()));
+
+        // save
+        serviceHelper().save("foo", entity);
+        serviceHelper().save("bar", entity);
+
+        // test
+        {
+            EntityQueryCriteria<CustomizationHolderEntity> criteriaFoo = EntityQueryCriteria.create(CustomizationHolderEntity.class);
+            criteriaFoo.add(PropertyCriterion.eq(criteriaFoo.proto().customizationClassName(), CustomizationTestEntity.class.getName()));
+            criteriaFoo.add(PropertyCriterion.eq(criteriaFoo.proto().identifierKey(), "foo"));
+            CustomizationHolderEntity holder = Persistence.service().retrieve(criteriaFoo);
+
+            Assert.assertNotNull(holder);
+        }
+
+        {
+            EntityQueryCriteria<CustomizationHolderEntity> criteriaBar = EntityQueryCriteria.create(CustomizationHolderEntity.class);
+            criteriaBar.add(PropertyCriterion.eq(criteriaBar.proto().customizationClassName(), CustomizationTestEntity.class.getName()));
+            criteriaBar.add(PropertyCriterion.eq(criteriaBar.proto().identifierKey(), "bar"));
+            CustomizationHolderEntity holder = Persistence.service().retrieve(criteriaBar);
+
+            Assert.assertNotNull(holder);
+        }
+
+    }
+
+    @Test
+    @Ignore
+    public void testLoad() {
+        // setup
+        CustomizationTestEntity entity = EntityFactory.create(CustomizationTestEntity.class);
+
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.set(2000, 1, 1);
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        entity.valueDate().setValue(new LogicalDate(cal.getTime()));
+
+        // save
+        entity.valueStr().setValue("foo value");
+        serviceHelper().save("foo", entity);
+
+        entity.valueStr().setValue("bar value");
+        serviceHelper().save("bar", entity);
+
+        // load
+        CustomizationTestEntity testEntity = serviceHelper().load("bar", EntityFactory.getEntityPrototype(CustomizationTestEntity.class));
+
+        // test
+        Assert.assertEquals("bar value", testEntity.valueStr().getValue());
+
+    }
+
+    @Test
+    public void testList() {
+
+        // prepare data
+        for (int i = 0; i < 10; ++i) {
+            CustomizationTestEntity entity = EntityFactory.create(CustomizationTestEntity.class);
+            entity.valueStr().setValue("strValue" + i);
+
+            GregorianCalendar cal = new GregorianCalendar();
+            cal.set(2000, 1, 1);
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+            entity.valueDate().setValue(new LogicalDate(cal.getTime()));
+
+            serviceHelper().save("" + i, entity);
+        }
+
+        // test List
+        int num = 0;
+        Iterator<String> listIterator = serviceHelper().list(EntityFactory.getEntityPrototype(CustomizationTestEntity.class)).iterator();
+        while (listIterator.hasNext()) {
+            listIterator.next();
+            ++num;
+        }
+        Assert.assertEquals(10, num);
+    }
+
+    private CustomizationPersistenceHelper<CustomizationTestEntity> serviceHelper() {
+        return new CustomizationPersistenceHelper<CustomizationTestEntity>();
     }
 
 }
