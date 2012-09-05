@@ -26,8 +26,8 @@ import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.server.xml.XMLEntityWriter;
-import com.pyx4j.essentials.server.xml.XMLStringWriter;
+import com.pyx4j.entity.xml.XMLEntityWriter;
+import com.pyx4j.entity.xml.XMLStringWriter;
 
 import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
 import com.propertyvista.admin.server.onboarding.rh.OnboardingRequestHandlerFactory;

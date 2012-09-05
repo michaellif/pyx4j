@@ -35,10 +35,10 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.server.xml.XMLEntityModelWriter;
-import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
-import com.pyx4j.essentials.server.xml.XMLEntityWriter;
-import com.pyx4j.essentials.server.xml.XMLStringWriter;
+import com.pyx4j.entity.xml.XMLEntityModelWriter;
+import com.pyx4j.entity.xml.XMLEntitySchemaWriter;
+import com.pyx4j.entity.xml.XMLEntityWriter;
+import com.pyx4j.entity.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 

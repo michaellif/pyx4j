@@ -13,7 +13,7 @@
  */
 package com.propertyvista.admin.server.onboarding;
 
-import com.pyx4j.essentials.server.xml.XMLEntityFactoryStrict;
+import com.pyx4j.entity.xml.XMLEntityFactoryStrict;
 
 import com.propertyvista.interfaces.importer.model.AddressIO;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;

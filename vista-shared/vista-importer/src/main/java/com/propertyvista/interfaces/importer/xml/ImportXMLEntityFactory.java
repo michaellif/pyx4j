@@ -13,7 +13,7 @@
  */
 package com.propertyvista.interfaces.importer.xml;
 
-import com.pyx4j.essentials.server.xml.XMLEntityFactoryStrict;
+import com.pyx4j.entity.xml.XMLEntityFactoryStrict;
 
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Elevator;

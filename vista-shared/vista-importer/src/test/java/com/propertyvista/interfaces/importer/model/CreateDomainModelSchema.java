@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
+import com.pyx4j.entity.xml.XMLEntitySchemaWriter;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;

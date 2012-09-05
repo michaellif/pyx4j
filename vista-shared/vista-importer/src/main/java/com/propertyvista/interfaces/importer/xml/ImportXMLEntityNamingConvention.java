@@ -14,7 +14,7 @@
 package com.propertyvista.interfaces.importer.xml;
 
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.essentials.server.xml.XMLEntityNamingConventionDefault;
+import com.pyx4j.entity.xml.XMLEntityNamingConventionDefault;
 
 public class ImportXMLEntityNamingConvention extends XMLEntityNamingConventionDefault {
 

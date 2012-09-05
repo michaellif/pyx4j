@@ -19,7 +19,7 @@ import java.io.FileOutputStream;
 
 import org.junit.experimental.categories.Category;
 
-import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
+import com.pyx4j.entity.xml.XMLEntitySchemaWriter;
 
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.config.tests.VistaDBTestBase;

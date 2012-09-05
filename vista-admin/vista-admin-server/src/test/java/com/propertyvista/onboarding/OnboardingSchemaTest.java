@@ -19,7 +19,7 @@ import java.io.FileOutputStream;
 
 import org.junit.Test;
 
-import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
+import com.pyx4j.entity.xml.XMLEntitySchemaWriter;
 
 public class OnboardingSchemaTest {
 

@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
+import com.pyx4j.entity.xml.XMLEntitySchemaWriter;
 
 import com.propertyvista.onboarding.RequestMessageIO;
 import com.propertyvista.onboarding.ResponseMessageIO;

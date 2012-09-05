@@ -25,13 +25,13 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.xml.XMLEntityWriter;
+import com.pyx4j.entity.xml.XMLStringWriter;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.essentials.server.download.Downloadable;
-import com.pyx4j.essentials.server.xml.XMLEntityWriter;
-import com.pyx4j.essentials.server.xml.XMLStringWriter;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;

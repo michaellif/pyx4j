@@ -24,7 +24,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.server.xml.XMLEntityParser;
+import com.pyx4j.entity.xml.XMLEntityParser;
 
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.onboarding.OnboardingRole;

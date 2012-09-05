@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
+import com.pyx4j.entity.xml.XMLEntitySchemaWriter;
 
 import com.propertyvista.biz.communication.mail.template.model.EmailTemplateRoot;
 
