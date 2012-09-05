@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
@@ -35,26 +35,27 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     protected final IListerView<DepositLifecycleDTO> depositLister;
 
-    private final Button viewCurrentTerm;
-
-    private final Button viewHistoricTerm;
-
     public LeaseViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         super(placeClass, true);
 
         depositLister = new ListerInternalViewImplBase<DepositLifecycleDTO>(new DepositLifecycleLister());
 
-        viewCurrentTerm = new Button(i18n.tr("View Current Term"), new ClickHandler() {
+        Button viewsButton = new Button(i18n.tr("View Term"));
+        Button.ButtonMenuBar viewsMenu = viewsButton.createMenu();
+        viewsButton.setMenu(viewsMenu);
+        addHeaderToolbarItem(viewsButton.asWidget());
+
+        MenuItem viewCurrentTerm = new MenuItem(i18n.tr("Current"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getForm().getValue().currentTerm());
             }
         });
-        addHeaderToolbarItem(viewCurrentTerm.asWidget());
+        viewsMenu.addItem(viewCurrentTerm);
 
-        viewHistoricTerm = new Button(i18n.tr("View Historic Term"), new ClickHandler() {
+        MenuItem viewHistoricTerm = new MenuItem(i18n.tr("Historic..."), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 new LeaseTermSelectorDialog() {
                     {
                         setParentFiltering(getForm().getValue().getPrimaryKey());
@@ -70,7 +71,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
                 }.show();
             }
         });
-        addHeaderToolbarItem(viewHistoricTerm.asWidget());
+        viewsMenu.addItem(viewHistoricTerm);
     }
 
     @Override
