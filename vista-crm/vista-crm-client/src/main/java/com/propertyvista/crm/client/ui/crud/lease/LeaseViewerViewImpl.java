@@ -62,19 +62,19 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final IListerView<LeaseAdjustment> adjustmentLister;
 
-    private final MenuItem sendMail;
+    private final MenuItem sendMailAction;
 
-    private final MenuItem runBill;
+    private final MenuItem runBillAction;
 
-    private final MenuItem notice;
+    private final MenuItem noticeAction;
 
-    private final MenuItem cancelNotice;
+    private final MenuItem cancelNoticeAction;
 
-    private final MenuItem evict;
+    private final MenuItem evictAction;
 
-    private final MenuItem cancelEvict;
+    private final MenuItem cancelEvictAction;
 
-    private final MenuItem activate;
+    private final MenuItem activateAction;
 
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
@@ -89,7 +89,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setForm(new LeaseForm());
 
         // Add actions:
-        sendMail = new MenuItem(i18n.tr("Send Mail..."), new Command() {
+        sendMailAction = new MenuItem(i18n.tr("Send Mail..."), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
@@ -106,17 +106,17 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 });
             }
         });
-        addAction(sendMail);
+        addAction(sendMailAction);
 
-        runBill = new MenuItem(i18n.tr("Run Bill"), new Command() {
+        runBillAction = new MenuItem(i18n.tr("Run Bill"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).startBilling();
             }
         });
-        addAction(runBill);
+        addAction(runBillAction);
 
-        notice = new MenuItem(i18n.tr("Notice..."), new Command() {
+        noticeAction = new MenuItem(i18n.tr("Notice..."), new Command() {
             @Override
             public void execute() {
                 new TermLeaseBox(CompletionType.Notice) {
@@ -128,17 +128,17 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }.show();
             }
         });
-        addAction(notice);
+        addAction(noticeAction);
 
-        cancelNotice = new MenuItem(i18n.tr("Cancel Notice"), new Command() {
+        cancelNoticeAction = new MenuItem(i18n.tr("Cancel Notice"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).cancelNotice();
             }
         });
-        addAction(cancelNotice);
+        addAction(cancelNoticeAction);
 
-        evict = new MenuItem(i18n.tr("Evict..."), new Command() {
+        evictAction = new MenuItem(i18n.tr("Evict..."), new Command() {
             @Override
             public void execute() {
                 new TermLeaseBox(CompletionType.Eviction) {
@@ -150,34 +150,34 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }.show();
             }
         });
-        addAction(evict);
+        addAction(evictAction);
 
-        cancelEvict = new MenuItem(i18n.tr("Cancel Evict"), new Command() {
+        cancelEvictAction = new MenuItem(i18n.tr("Cancel Evict"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).cancelEvict();
             }
         });
-        addAction(cancelEvict);
+        addAction(cancelEvictAction);
 
-        activate = new MenuItem(i18n.tr("Activate Lease"), new Command() {
+        activateAction = new MenuItem(i18n.tr("Activate Lease"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).activate();
             }
         });
-        addAction(activate);
+        addAction(activateAction);
     }
 
     @Override
     public void reset() {
-        setActionVisible(sendMail, false);
-        setActionVisible(runBill, false);
-        setActionVisible(notice, false);
-        setActionVisible(cancelNotice, false);
-        setActionVisible(evict, false);
-        setActionVisible(cancelEvict, false);
-        setActionVisible(activate, false);
+        setActionVisible(sendMailAction, false);
+        setActionVisible(runBillAction, false);
+        setActionVisible(noticeAction, false);
+        setActionVisible(cancelNoticeAction, false);
+        setActionVisible(evictAction, false);
+        setActionVisible(cancelEvictAction, false);
+        setActionVisible(activateAction, false);
         super.reset();
     }
 
@@ -191,13 +191,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         if (!value.unit().isNull()) {
             CompletionType completion = value.completion().getValue();
 
-            setActionVisible(sendMail, true);
-            setActionVisible(runBill, status.isActive());
-            setActionVisible(notice, status == Status.Active && completion == null);
-            setActionVisible(cancelNotice, completion == CompletionType.Notice && status != Status.Closed);
-            setActionVisible(evict, status == Status.Active && completion == null);
-            setActionVisible(cancelEvict, completion == CompletionType.Eviction && status != Status.Closed);
-            setActionVisible(activate, status == Status.ExistingLease);
+            setActionVisible(sendMailAction, true);
+            setActionVisible(runBillAction, status.isActive());
+            setActionVisible(noticeAction, status == Status.Active && completion == null);
+            setActionVisible(cancelNoticeAction, completion == CompletionType.Notice && status != Status.Closed);
+            setActionVisible(evictAction, status == Status.Active && completion == null);
+            setActionVisible(cancelEvictAction, completion == CompletionType.Eviction && status != Status.Closed);
+            setActionVisible(activateAction, status == Status.ExistingLease);
         }
     }
 
