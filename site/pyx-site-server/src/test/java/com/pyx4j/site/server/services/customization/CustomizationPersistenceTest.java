@@ -28,7 +28,6 @@ import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.pyx4j.commons.LogicalDate;
@@ -93,7 +92,6 @@ public class CustomizationPersistenceTest {
     }
 
     @Test
-    @Ignore
     public void testLoad() {
         // setup
         CustomizationTestEntity entity = EntityFactory.create(CustomizationTestEntity.class);
