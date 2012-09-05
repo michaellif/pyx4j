@@ -53,6 +53,10 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         prodSystemDnsBase.add("prospectportalsite.ca");
         prodSystemDnsBase.add("propertyvista.com");
         prodSystemDnsBase.add("propertyvista.ca");
+
+        prodSystemDnsBase.add("propertyvista.biz");
+        prodSystemDnsBase.add("residentportal.info");
+        prodSystemDnsBase.add("prospectportal.info");
     }
 
     @Override
@@ -63,14 +67,18 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                 return VistaNamespace.adminNamespace;
             }
             if (servletPath.startsWith("/public/schema") || servletPath.startsWith("/public/version") || servletPath.startsWith("/static/")
-                    || servletPath.startsWith("/public/status") || servletPath.endsWith("/o/openid")) {
+                    || servletPath.startsWith("/public/status") || servletPath.endsWith("/o/")) {
                 return "_";
             }
         }
 
         // Dev: Get the 4th part of URL.
         // www.ABC.22.birchwoodsoftwaregroup.com
-        // www.ABC.dev.birchwoodsoftwaregroup.com 
+        // www.ABC.dev.birchwoodsoftwaregroup.com
+
+        // Support wildcard HTTPS on dev
+        // crm-vista-22.birchwoodsoftwaregroup.com
+        // vista-22.birchwoodsoftwaregroup.com
 
         // Prod: Get the 3rd part of URL.
         // www.ABC.propertyvista.com 
@@ -88,12 +96,18 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         String namespaceProposal = null;
         if (parts.length >= 3) {
             String dnsBase = parts[parts.length - 2] + "." + parts[parts.length - 1];
-            if (dnsBase.equals("birchwoodsoftwaregroup.com")) {
+            if (prodSystemDnsBase.contains(dnsBase)) {
+                namespaceProposal = parts[parts.length - 3];
+            } else if (dnsBase.equals("birchwoodsoftwaregroup.com")) {
                 if (parts.length >= 4) {
                     namespaceProposal = parts[parts.length - 4];
+                } else if (parts.length == 3) {
+                    String finalHostName = parts[parts.length - 3];
+                    String[] finalHostNameParts = finalHostName.split("\\-");
+                    if (finalHostNameParts.length >= 2) {
+                        namespaceProposal = finalHostNameParts[finalHostNameParts.length - 2];
+                    }
                 }
-            } else if (prodSystemDnsBase.contains(dnsBase)) {
-                namespaceProposal = parts[parts.length - 3];
             }
         }
 
@@ -134,11 +148,6 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         }
 
         if ((pmcNamespace == null) || ("_".equals(pmcNamespace))) {
-            if (httprequest.getServletPath() != null) {
-                if (httprequest.getServletPath().startsWith("/o/db-reset")) {
-                    return VistaNamespace.demoNamespace;
-                }
-            }
             log.warn("accessing host {}, path {}", host, httprequest.getServletPath());
             throw new SiteWasNotActivatedUserRuntimeException(i18n.tr("This property management site was not activated yet"));
         } else {
