@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.GeoLocation;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -33,4 +34,6 @@ public interface BuildingDTO extends Building {
     GeoLocation geoLocation();
 
     MerchantAccount merchantAccount();
+
+    IList<DashboardMetadata> dashboards();
 }

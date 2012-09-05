@@ -38,7 +38,6 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoverStats;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -113,9 +112,6 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
     @Detached
     @Owned(forceCreation = true)
     ProductCatalog productCatalog();
-
-    @Detached
-    DashboardMetadata dashboard();
 
     @RpcTransient
     @Detached(level = AttachLevel.Detached)

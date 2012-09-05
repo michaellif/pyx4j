@@ -17,12 +17,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -37,6 +39,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -52,7 +55,6 @@ import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
-import com.propertyvista.crm.client.visor.dashboard.DashboardSelectorDialog;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -98,6 +100,8 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private final IListerView<BillingCycleDTO> billingCycleLister;
 
+    private final ButtonMenuBar dashboardsMenu;
+
     public BuildingViewerViewImpl() {
         super(CrmSiteMap.Properties.Building.class);
 
@@ -132,31 +136,11 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
             }
         }).asWidget());
 
-        addHeaderToolbarItem(new Button(i18n.tr("Dashboard"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                new DashboardSelectorDialog() {
+        Button dashboardButton = new Button(i18n.tr("Dashboard"));
+        dashboardsMenu = dashboardButton.createMenu();
+        dashboardButton.setMenu(dashboardsMenu);
+        addHeaderToolbarItem(dashboardButton);
 
-                    @Override
-                    public boolean onClickOk() {
-
-                        List<DashboardMetadata> metadata = getSelectedItems();
-                        if (!metadata.isEmpty()) {
-                            List<Building> buildings = new ArrayList<Building>();
-                            buildings.add(BuildingViewerViewImpl.this.getForm().getValue());
-                            IDashboardVisorController controller = ((BuildingViewerView.Presenter) getPresenter()).getDashboardController(metadata.get(0),
-                                    buildings);
-                            controller.show(BuildingViewerViewImpl.this);
-                            return true;
-                        } else {
-                            return false;
-                        }
-
-                    }
-
-                }.show();
-            }
-        }).asWidget());
     }
 
     @Override
@@ -288,6 +272,25 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     public void populate(BuildingDTO value) {
         value.getPrimaryKey();
         super.populate(value);
+        populateDashboardsMenu(value.dashboards().iterator());
+    }
+
+    private void populateDashboardsMenu(Iterator<DashboardMetadata> dashboardsIterator) {
+        dashboardsMenu.clearItems();
+        while (dashboardsIterator.hasNext()) {
+            final DashboardMetadata dashboard = dashboardsIterator.next();
+            dashboardsMenu.addItem(dashboard.name().getValue(), new Command() {
+
+                @Override
+                public void execute() {
+                    List<Building> buildingsFilter = new ArrayList<Building>();
+                    buildingsFilter.add(getForm().getValue());
+                    IDashboardVisorController controller = ((BuildingViewerView.Presenter) getPresenter()).getDashboardController(dashboard, buildingsFilter);
+                    controller.show(BuildingViewerViewImpl.this);
+                }
+
+            });
+        }
     }
 
 }

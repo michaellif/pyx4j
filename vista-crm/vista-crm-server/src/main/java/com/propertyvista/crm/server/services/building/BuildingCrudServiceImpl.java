@@ -13,11 +13,10 @@
  */
 package com.propertyvista.crm.server.services.building;
 
-import java.util.List;
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -67,17 +66,8 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         Persistence.service().retrieve(dto.contacts().propertyContacts());
         Persistence.service().retrieve(dto.contacts().organizationContacts());
         Persistence.service().retrieve(dto.marketing().adBlurbs());
-        Persistence.service().retrieve(dto.dashboard());
 
-        if (dto.dashboard().isEmpty()) {
-            // load first building  dashoard by default:
-            EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.building));
-            List<DashboardMetadata> dashboards = Persistence.service().query(criteria);
-            if (!dashboards.isEmpty()) {
-                dto.dashboard().set(dashboards.get(0));
-            }
-        }
+        retrieveDashboards(dto);
 
         EntityQueryCriteria<FeatureItemType> featureItemCriteria = EntityQueryCriteria.create(FeatureItemType.class);
         featureItemCriteria.add(PropertyCriterion.in(featureItemCriteria.proto().featureType(), Feature.Type.addOn, Feature.Type.utility));
@@ -159,4 +149,11 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         Persistence.service().merge(dbo);
         PublicDataUpdater.updateIndexData(dbo);
     }
+
+    private void retrieveDashboards(BuildingDTO dto) {
+        EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.building));
+        dto.dashboards().addAll(Persistence.service().query(criteria, AttachLevel.Attached));
+    }
+
 }
