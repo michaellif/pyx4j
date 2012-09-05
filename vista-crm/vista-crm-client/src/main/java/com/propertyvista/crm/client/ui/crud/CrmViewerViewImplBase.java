@@ -19,6 +19,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.AbstractVersionDataListService;
@@ -51,6 +52,10 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     private Button finalizeButton;
 
+    private Button actionsButton;
+
+    private Button.ButtonMenuBar actionsMenu;
+
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         this(placeClass, false);
     }
@@ -61,6 +66,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
         setCaption(defaultCaption);
 
+        // Edit button:
         if (!viewOnly) {
             editButton = new Button(i18n.tr("Edit"), new ClickHandler() {
                 @Override
@@ -71,8 +77,14 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
             addHeaderToolbarItem(editButton);
         }
 
-        this.breadcumbsService = GWT.<BreadcrumbsService> create(BreadcrumbsService.class);
+        // Actions button:
+        actionsButton = new Button(i18n.tr("Actions"));
+        actionsMenu = actionsButton.createMenu();
+        actionsButton.setMenu(actionsMenu);
+        addHeaderToolbarItem(actionsButton);
 
+        // Breadcrumb stuff:
+        breadcumbsService = GWT.<BreadcrumbsService> create(BreadcrumbsService.class);
         breadcrumbsBar = new BreadcrumbsBar();
         setBreadcrumbsBar(breadcrumbsBar);
     }
@@ -97,6 +109,14 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     public Button getFinalizeButton() {
         return finalizeButton;
+    }
+
+    public Button getActionsButton() {
+        return actionsButton;
+    }
+
+    public void addAction(MenuItem action) {
+        actionsMenu.addItem(action);
     }
 
     @Override
@@ -130,6 +150,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
             finalizeButton.setVisible(((IVersionedEntity<?>) value).version().versionNumber().isNull());
         }
 
+        actionsButton.setVisible(!actionsMenu.isMenuEmpty());
         populateBreadcrumbs(value, caption);
     }
 

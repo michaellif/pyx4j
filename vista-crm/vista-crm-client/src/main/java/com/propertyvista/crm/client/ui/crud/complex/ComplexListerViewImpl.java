@@ -23,5 +23,4 @@ public class ComplexListerViewImpl extends CrmListerViewImplBase<ComplexDTO> imp
         super(CrmSiteMap.Properties.Complex.class);
         setLister(new ComplexLister());
     }
-
 }

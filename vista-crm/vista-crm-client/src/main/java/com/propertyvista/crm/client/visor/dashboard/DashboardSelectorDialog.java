@@ -47,7 +47,11 @@ public abstract class DashboardSelectorDialog extends EntitySelectorTableDialog<
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().name()).build()
+                new MemberColumnDescriptor.Builder(proto().name()).build(),
+                new MemberColumnDescriptor.Builder(proto().description()).build(),
+                new MemberColumnDescriptor.Builder(proto().type()).build(),
+                new MemberColumnDescriptor.Builder(proto().isFavorite()).build(),
+                new MemberColumnDescriptor.Builder(proto().isShared()).build()
         );//@formatter:on
     }
 }

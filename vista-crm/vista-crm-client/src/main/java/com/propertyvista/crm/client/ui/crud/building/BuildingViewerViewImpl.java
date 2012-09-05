@@ -125,6 +125,11 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         // set main form here:
         setForm(new BuildingForm(true));
 
+        Button dashboardButton = new Button(i18n.tr("Dashboard"));
+        dashboardsMenu = dashboardButton.createMenu();
+        dashboardButton.setMenu(dashboardsMenu);
+        addHeaderToolbarItem(dashboardButton);
+
         addHeaderToolbarItem(new Button(i18n.tr("Notes & Attachments"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -135,12 +140,6 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
             }
         }).asWidget());
-
-        Button dashboardButton = new Button(i18n.tr("Dashboard"));
-        dashboardsMenu = dashboardButton.createMenu();
-        dashboardButton.setMenu(dashboardsMenu);
-        addHeaderToolbarItem(dashboardButton);
-
     }
 
     @Override
