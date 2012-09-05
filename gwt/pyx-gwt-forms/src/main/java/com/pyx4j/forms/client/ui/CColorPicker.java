@@ -24,7 +24,14 @@ public class CColorPicker extends CFocusComponent<Integer, NColorPicker> {
 
     private Integer color;
 
+    private boolean hueOnly = false;
+
     public CColorPicker() {
+        this(false);
+    }
+
+    public CColorPicker(boolean hueOnly) {
+        this.hueOnly = hueOnly;
     }
 
     @Override
@@ -32,37 +39,8 @@ public class CColorPicker extends CFocusComponent<Integer, NColorPicker> {
         return new NColorPicker(this);
     }
 
-    public void setColor(int r, int g, int b, int a) {
-        testColorValueRange(r, g, b, a);
-        color = ((a & 0xFF) << 24) | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF) << 0);
+    public boolean isHueOnly() {
+        return hueOnly;
     }
 
-    public Integer getColor() {
-        return color;
-    }
-
-    private static void testColorValueRange(int r, int g, int b, int a) {
-        boolean rangeError = false;
-        StringBuilder badComponents = new StringBuilder();
-
-        if (a < 0 || a > 255) {
-            rangeError = true;
-            badComponents.append(" Alpha");
-        }
-        if (r < 0 || r > 255) {
-            rangeError = true;
-            badComponents.append(" Red");
-        }
-        if (g < 0 || g > 255) {
-            rangeError = true;
-            badComponents.append(" Green");
-        }
-        if (b < 0 || b > 255) {
-            rangeError = true;
-            badComponents.append(" Blue");
-        }
-        if (rangeError == true) {
-            throw new IllegalArgumentException("Color parameter outside of expected range:" + badComponents);
-        }
-    }
 }

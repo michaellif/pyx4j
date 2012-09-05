@@ -140,6 +140,10 @@ public class Button extends FocusPanel implements IFocusWidget {
         textLabel.setHTML(label);
     }
 
+    protected HTML getTextLabelComponent() {
+        return textLabel;
+    }
+
     @Override
     public void onBrowserEvent(Event event) {
         if (isEnabled()) {
