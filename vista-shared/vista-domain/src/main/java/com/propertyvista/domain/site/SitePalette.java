@@ -13,21 +13,29 @@
  */
 package com.propertyvista.domain.site;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface SitePalette extends IEntity {
 
+    @Editor(type = EditorType.hue)
     IPrimitive<Integer> object1();
 
+    @Editor(type = EditorType.hue)
     IPrimitive<Integer> object2();
 
+    @Editor(type = EditorType.hue)
     IPrimitive<Integer> contrast1();
 
+    @Editor(type = EditorType.hue)
     IPrimitive<Integer> contrast2();
 
+    @Editor(type = EditorType.hue)
     IPrimitive<Integer> background();
 
+    @Editor(type = EditorType.hue)
     IPrimitive<Integer> foreground();
 
 }
