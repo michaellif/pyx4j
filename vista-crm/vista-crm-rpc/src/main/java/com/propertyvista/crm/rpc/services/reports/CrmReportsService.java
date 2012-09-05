@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.rpc.services.reports;
 
-import com.pyx4j.site.rpc.services.reports.IReportsService;
+import com.pyx4j.site.rpc.reports.IReportsService;
 
 public interface CrmReportsService extends IReportsService {
 

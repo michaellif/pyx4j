@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.reports.ReportMetadata;
 import com.pyx4j.site.client.ui.reports.AbstractReportsActivity;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.services.reports.IReportsService;
+import com.pyx4j.site.rpc.reports.IReportsService;
 
 import com.propertyvista.crm.client.ui.reports.CrmReportsView;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
