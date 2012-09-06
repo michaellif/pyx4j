@@ -30,14 +30,11 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.server.NamespaceNotFoundException;
 import com.pyx4j.gwt.server.DateUtils;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 public class PersistenceContext {
 
@@ -151,43 +148,8 @@ public class PersistenceContext {
                     openSessions.add(this);
                 }
             }
-
-            if (connectionProvider.getDialect().isMultitenantSeparateSchemas()) {
-                setConnectionNamespace(NamespaceManager.getNamespace());
-            }
-        }
-        if (connectionProvider.getDialect().isMultitenantSeparateSchemas()
-                && (!CommonsStringUtils.equals(NamespaceManager.getNamespace(), connectionNamespace))) {
-            setConnectionNamespace(NamespaceManager.getNamespace());
-            log.info("Namespace changed to {}", connectionNamespace);
         }
         return connection;
-    }
-
-    private void setConnectionNamespace(String namespace) {
-        try {
-            String sql = connectionProvider.getDialect().sqlChangeConnectionNamespace(namespace);
-            if (sql == null) {
-                connection.setCatalog(namespace);
-            } else {
-                SQLUtils.execute(connection, sql);
-            }
-            connectionNamespace = namespace;
-        } catch (SQLException e) {
-            SQLUtils.closeQuietly(connection);
-            if (traceOpenSession) {
-                synchronized (openSessionLock) {
-                    openSessionCount--;
-                    openSessions.remove(this);
-                }
-            }
-            connection = null;
-            if (e.getMessage() != null && e.getMessage().contains("does not exist")) {
-                throw new NamespaceNotFoundException(namespace);
-            } else {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     public boolean isUncommittedChanges() {
@@ -258,14 +220,6 @@ public class PersistenceContext {
         if (connection != null) {
             if (isExplicitTransaction() && uncommittedChanges) {
                 log.error("There are uncommitted changes in Database. {}", uncommittedChangesFrom);
-            }
-            try {
-                // Correction for connection validation infrastructure in C3P0
-                if (connectionProvider.getDialect().isMultitenantSeparateSchemas()) {
-                    setConnectionNamespace(null);
-                }
-            } catch (Throwable e) {
-                log.error("Error reseting connection namespace", e);
             }
             SQLUtils.closeQuietly(connection);
             if (traceOpenSession) {

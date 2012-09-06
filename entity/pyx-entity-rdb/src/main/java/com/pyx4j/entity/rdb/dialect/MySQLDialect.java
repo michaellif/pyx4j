@@ -81,11 +81,6 @@ public class MySQLDialect extends Dialect {
     }
 
     @Override
-    public String sqlChangeConnectionNamespace(String namespace) {
-        return "USE DTABASE " + namespace;
-    }
-
-    @Override
     public boolean isUniqueConstraintException(SQLException e) {
         if (e instanceof SQLIntegrityConstraintViolationException) {
             return true;

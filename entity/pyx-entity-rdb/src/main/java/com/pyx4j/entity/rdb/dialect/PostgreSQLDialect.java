@@ -135,15 +135,6 @@ public class PostgreSQLDialect extends Dialect {
     }
 
     @Override
-    public String sqlChangeConnectionNamespace(String namespace) {
-        if (namespace == null) {
-            return "SET search_path TO " + "public";
-        } else {
-            return "SET search_path TO " + namespace + ",public";
-        }
-    }
-
-    @Override
     public boolean isUniqueConstraintException(SQLException e) {
         String message = e.getMessage();
         if (message == null) {

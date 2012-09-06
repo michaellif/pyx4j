@@ -63,37 +63,12 @@ public class RDBUtils implements Closeable {
     private Connection connection() {
         if (connection == null) {
             connection = ((EntityPersistenceServiceRDB) Persistence.service()).getAministrationConnection();
-            if (connectionNamespace != null) {
-                setConnectionNamespace(connectionNamespace);
-            }
         }
         return connection;
     }
 
-    public void setConnectionNamespace(String connectionNamespace) {
-        this.connectionNamespace = connectionNamespace;
-        if ((connection != null) && ((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
-            String sql = ((EntityPersistenceServiceRDB) Persistence.service()).getDialect().sqlChangeConnectionNamespace(connectionNamespace);
-            try {
-                if (sql == null) {
-                    connection.setCatalog(connectionNamespace);
-                } else {
-                    SQLUtils.execute(connection, sql);
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
     @Override
     public void close() {
-        try {
-            // Correction for connection validation infrastructure in C3P0
-            setConnectionNamespace(null);
-        } catch (Throwable e) {
-            log.error("Error reseting connection namespace", e);
-        }
         SQLUtils.closeQuietly(connection);
         connection = null;
     }

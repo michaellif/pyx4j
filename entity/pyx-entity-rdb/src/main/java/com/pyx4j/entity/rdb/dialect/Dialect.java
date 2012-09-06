@@ -249,13 +249,6 @@ public abstract class Dialect {
         return "";
     }
 
-    /**
-     * return null to use Connection.setCatalog
-     */
-    public String sqlChangeConnectionNamespace(String namespace) {
-        throw new Error("Dialect does not support SeparateSchemas Multitenancy");
-    }
-
     public abstract boolean isUniqueConstraintException(SQLException e);
 
     public boolean isIntegrityConstraintException(SQLException e) {

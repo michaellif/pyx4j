@@ -145,14 +145,6 @@ public class OracleDialect extends Dialect {
         }
     }
 
-    /**
-     * return null to use Connection.setCatalog
-     */
-    @Override
-    public String sqlChangeConnectionNamespace(String namespace) {
-        return null;
-    }
-
     @Override
     public boolean isUniqueConstraintException(SQLException e) {
         if (e instanceof SQLIntegrityConstraintViolationException) {
