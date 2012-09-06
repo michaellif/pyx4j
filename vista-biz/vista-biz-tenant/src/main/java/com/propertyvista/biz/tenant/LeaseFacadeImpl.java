@@ -212,6 +212,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public LeaseTerm persist(LeaseTerm leaseTerm) {
         persistCustomers(leaseTerm);
+        leaseTerm.lease().detach();
         Persistence.secureSave(leaseTerm);
 
         return leaseTerm;

@@ -35,10 +35,8 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -55,8 +53,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
     protected static final I18n i18n = I18n.get(LeaseTermForm.class);
 
-    private Tab chargesTab;
-
     protected LeaseTermForm() {
         this(false);
     }
@@ -68,20 +64,14 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
     @Override
     protected void createTabs() {
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
-
         addTab(createTenantsTab(i18n.tr("Tenants")));
         addTab(createGuarantorsTab(i18n.tr("Guarantors")));
         addTab(createProductsTab(i18n.tr("Products")));
-
-        chargesTab = addTab(createChargesTab(i18n.tr("Charges")));
-        setTabEnabled(chargesTab, !isEditable());
     }
 
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-
-//        setTabVisible(chargesTab, getValue().lease().status().getValue().isDraft());
 
         get(proto().lease().completion()).setVisible(!getValue().lease().completion().isNull());
         get(proto().approvalDate()).setVisible(!getValue().approvalDate().isNull());
@@ -226,14 +216,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             main.setH1(++row, 0, 2, proto().version().leaseProducts().concessions().getMeta().getCaption());
             main.setWidget(++row, 0, inject(proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
         }
-
-        return main;
-    }
-
-    private FormFlexPanel createChargesTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
-
-        main.setWidget(0, 0, inject(proto().billingPreview(), new BillForm(true)));
 
         return main;
     }

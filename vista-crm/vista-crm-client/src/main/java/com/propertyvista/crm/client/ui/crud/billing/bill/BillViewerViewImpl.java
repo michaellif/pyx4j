@@ -45,7 +45,7 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> imple
     private final MenuItem printAction;
 
     public BillViewerViewImpl() {
-        super(CrmSiteMap.Finance.Bill.class, new BillDataForm(true), true);
+        super(CrmSiteMap.Finance.Bill.class, new BillDataForm(false), true);
 
         // Add actions:
 

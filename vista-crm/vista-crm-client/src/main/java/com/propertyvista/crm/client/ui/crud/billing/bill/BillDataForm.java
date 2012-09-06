@@ -24,18 +24,18 @@ public class BillDataForm extends CrmEntityForm<BillDataDTO> {
 
     private static final I18n i18n = I18n.get(BillDataForm.class);
 
-    public BillDataForm() {
-        this(false);
-    }
+    private final boolean justPreviewBill;
 
-    public BillDataForm(boolean viewMode) {
-        super(BillDataDTO.class, viewMode);
+    public BillDataForm(boolean justCurrentBill) {
+        super(BillDataDTO.class, true);
+        this.justPreviewBill = justCurrentBill;
     }
 
     @Override
     public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
-        content.setWidget(0, 0, inject(proto().bill(), new BillForm()));
+
+        content.setWidget(0, 0, inject(proto().bill(), new BillForm(justPreviewBill)));
 
         selectTab(addTab(content));
     }

@@ -81,9 +81,8 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
         return view;
     }
 
-    @SuppressWarnings("unchecked")
     public AbstractCrudService<NotesAndAttachments> getService() {
-        return (AbstractCrudService<NotesAndAttachments>) GWT.create(NotesAndAttachmentsCrudService.class);
+        return GWT.<NotesAndAttachmentsCrudService> create(NotesAndAttachmentsCrudService.class);
     }
 
     public void save(NotesAndAttachments item, DefaultAsyncCallback<Key> callback) {

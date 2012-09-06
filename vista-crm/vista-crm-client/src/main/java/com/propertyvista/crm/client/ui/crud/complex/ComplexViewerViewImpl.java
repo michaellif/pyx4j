@@ -48,7 +48,6 @@ public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> imp
     public void populate(ComplexDTO value) {
         super.populate(value);
         populateDashboardsMenu(value.dashboards().iterator());
-
     }
 
     private void populateDashboardsMenu(Iterator<DashboardMetadata> dashboardsIterator) {

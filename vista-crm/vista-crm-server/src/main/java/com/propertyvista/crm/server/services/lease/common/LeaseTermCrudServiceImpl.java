@@ -21,8 +21,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
@@ -111,11 +109,6 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             // fill runtime editor data:
             fillServiceEligibilityData(dto);
             fillserviceItems(dto);
-        }
-
-        // create bill preview for draft leases/applications:
-        if (dto.lease().status().getValue().isDraft()) {
-            dto.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(dto.lease())));
         }
     }
 

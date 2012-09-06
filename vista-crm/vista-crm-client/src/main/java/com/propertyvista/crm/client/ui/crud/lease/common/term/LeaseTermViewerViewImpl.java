@@ -14,6 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -23,9 +28,18 @@ import com.propertyvista.dto.LeaseTermDTO;
 
 public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO> implements LeaseTermViewerView {
 
+    protected static final I18n i18n = I18n.get(LeaseTermViewerViewImpl.class);
+
     public LeaseTermViewerViewImpl() {
         super(CrmSiteMap.Tenants.LeaseTerm.class, new LeaseTermForm(true));
         enableVersioning(LeaseTerm.LeaseTermV.class, GWT.<LeaseTermVersionService> create(LeaseTermVersionService.class));
+
+        addHeaderToolbarItem(new Button(i18n.tr("Charges"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                ((LeaseTermViewerView.Presenter) getPresenter()).getChargesVisorController().show(LeaseTermViewerViewImpl.this);
+            }
+        }).asWidget());
     }
 
     @Override

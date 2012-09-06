@@ -44,7 +44,6 @@ import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
-import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -121,11 +120,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         addHeaderToolbarItem(new Button(i18n.tr("Notes & Attachments"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-
-                NotesAndAttachmentsVisorController controller = ((BuildingViewerView.Presenter) getPresenter()).getNotesAndAttachmentsController();
-
-                controller.show(BuildingViewerViewImpl.this);
-
+                ((BuildingViewerView.Presenter) getPresenter()).getNotesAndAttachmentsController().show(BuildingViewerViewImpl.this);
             }
         }).asWidget());
     }

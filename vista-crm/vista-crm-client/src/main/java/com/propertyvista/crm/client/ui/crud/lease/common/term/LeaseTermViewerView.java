@@ -15,10 +15,13 @@ package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
+import com.propertyvista.crm.client.visor.charges.ChargesVisorController;
 import com.propertyvista.dto.LeaseTermDTO;
 
 public interface LeaseTermViewerView extends IViewerView<LeaseTermDTO> {
 
     interface Presenter extends IViewerView.Presenter {
+
+        ChargesVisorController getChargesVisorController();
     }
 }

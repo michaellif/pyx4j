@@ -67,14 +67,10 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
     public NotesAndAttachmentsVisorView(NotesAndAttachmentsVisorController controller) {
         super();
         this.controller = controller;
+
         form = new NotesAndAttachmentsForm();
         form.initContent();
-        FormFlexPanel contentPanel = new FormFlexPanel();
-
-        setWidget(contentPanel);
-
-        contentPanel.setWidget(0, 0, form.asWidget());
-
+        setWidget(form.asWidget());
         getElement().getStyle().setProperty("padding", "6px");
     }
 
@@ -105,7 +101,11 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
 
         @Override
         public IsWidget createContent() {
-            return inject(proto().notes(), new NotesAndAttachmentsFolder());
+            FormFlexPanel content = new FormFlexPanel();
+
+            content.setWidget(0, 0, inject(proto().notes(), new NotesAndAttachmentsFolder()));
+
+            return content;
         }
 
         public class NotesAndAttachmentsFolder extends VistaBoxFolder<NotesAndAttachments> {
