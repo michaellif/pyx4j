@@ -112,6 +112,8 @@ public class DevSession {
         String[] hostParts = host.split("\\.");
         if (hostParts.length == 4) {
             sessionCookie.setDomain("." + hostParts[hostParts.length - 3] + "." + hostParts[hostParts.length - 2] + "." + hostParts[hostParts.length - 1]);
+        } else if (hostParts.length == 3) {
+            sessionCookie.setDomain("." + hostParts[hostParts.length - 2] + "." + hostParts[hostParts.length - 1]);
         }
 
         Context.getResponse().addCookie(sessionCookie);
