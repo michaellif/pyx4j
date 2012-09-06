@@ -79,6 +79,11 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     }
 
     @Override
+    protected String getAppUrlSeparator() {
+        return ".";
+    }
+
+    @Override
     public String getApplicationURLNamespace() {
         return ".dev.birchwoodsoftwaregroup.com:8888/vista/";
     }

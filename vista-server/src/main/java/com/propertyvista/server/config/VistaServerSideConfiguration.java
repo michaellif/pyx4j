@@ -100,26 +100,32 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     public String getApplicationURLNamespace() {
-        return ".22.birchwoodsoftwaregroup.com/";
+        return "-22.birchwoodsoftwaregroup.com/";
+    }
+
+    protected String getAppUrlSeparator() {
+        return "-";
     }
 
     @Override
     public String getDefaultBaseURLresidentPortal(String pmcDnsName, boolean secure) {
         if (secure) {
-            return getApplicationDeploymentProtocol() + "://" + "portal." + pmcDnsName + getApplicationURLNamespace() + DeploymentConsts.PORTAL_URL;
+            return getApplicationDeploymentProtocol() + "://" + "portal" + getAppUrlSeparator() + pmcDnsName + getApplicationURLNamespace()
+                    + DeploymentConsts.PORTAL_URL;
         } else {
-            return "http" + "://" + "portal." + pmcDnsName + getApplicationURLNamespace() + DeploymentConsts.PORTAL_URL;
+            return "http" + "://" + "portal" + getAppUrlSeparator() + pmcDnsName + getApplicationURLNamespace() + DeploymentConsts.PORTAL_URL;
         }
     }
 
     @Override
     public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
-        return getApplicationDeploymentProtocol() + "://" + "crm." + pmcDnsName + getApplicationURLNamespace() + DeploymentConsts.CRM_URL;
+        return getApplicationDeploymentProtocol() + "://" + "crm" + getAppUrlSeparator() + pmcDnsName + getApplicationURLNamespace() + DeploymentConsts.CRM_URL;
     }
 
     @Override
     public String getDefaultBaseURLprospectPortal(String pmcDnsName) {
-        return getApplicationDeploymentProtocol() + "://" + "pt." + pmcDnsName + getApplicationURLNamespace() + DeploymentConsts.PTAPP_URL;
+        return getApplicationDeploymentProtocol() + "://" + "pt" + getAppUrlSeparator() + pmcDnsName + getApplicationURLNamespace()
+                + DeploymentConsts.PTAPP_URL;
     }
 
     @Override

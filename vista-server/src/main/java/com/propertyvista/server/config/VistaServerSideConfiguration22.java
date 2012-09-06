@@ -50,7 +50,7 @@ public class VistaServerSideConfiguration22 extends VistaServerSideConfiguration
 
     @Override
     public String getApplicationURLNamespace() {
-        return ".22.birchwoodsoftwaregroup.com/";
+        return "-22.birchwoodsoftwaregroup.com/";
     }
 
     @Override
