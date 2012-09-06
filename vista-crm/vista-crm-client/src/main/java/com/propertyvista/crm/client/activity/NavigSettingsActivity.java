@@ -64,7 +64,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         folder.addNavigItem(new CrmSiteMap.Settings.LeaseAdjustmentReason());
         list.add(folder);
 
-        folder = new NavigFolder(i18n.tr("Portal"));
+        folder = new NavigFolder(i18n.tr("Website"));
         folder.addNavigItem(new CrmSiteMap.Settings.Content());
         list.add(folder);
 
