@@ -17,7 +17,12 @@ import com.pyx4j.site.server.services.customization.CustomizationPersistenceServ
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.crm.rpc.services.reports.CrmReportsSettingsPersistenceService;
+import com.propertyvista.domain.customizations.ReportsSettingsHolder;
 
 public class CrmReportsSettingsPersistenceServiceImpl extends CustomizationPersistenceService<ReportMetadata> implements CrmReportsSettingsPersistenceService {
+
+    public CrmReportsSettingsPersistenceServiceImpl() {
+        super(ReportsSettingsHolder.class);
+    }
 
 }
