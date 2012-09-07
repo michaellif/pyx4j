@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
+import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
@@ -39,7 +40,14 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
             public void onClick(ClickEvent event) {
                 ((LeaseTermViewerView.Presenter) getPresenter()).getChargesVisorController().show(LeaseTermViewerViewImpl.this);
             }
-        }).asWidget());
+        }));
+
+        addHeaderToolbarItem(new Button(i18n.tr("Print"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                Print.it(getForm().toStringForPrint());
+            }
+        }));
     }
 
     @Override
