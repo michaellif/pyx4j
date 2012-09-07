@@ -39,7 +39,7 @@ public class Directory {
 
     public enum Categories {
 
-        Availability, Arrears, Chart, Buildings, Payments, Demo;
+        Availability, Arrears, Chart, Buildings, Payments, Leases, Demo;
 
         @Override
         public String toString() {
