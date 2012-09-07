@@ -19,6 +19,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.download.MimeMap;
@@ -32,6 +33,7 @@ import com.propertyvista.crm.rpc.services.MediaUploadService;
 import com.propertyvista.domain.File;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
+import com.propertyvista.server.domain.FileBlob;
 
 public class MediaUploadServiceImpl extends UploadServiceImpl<MediaUploadDTO, File> implements MediaUploadService {
 
@@ -39,7 +41,7 @@ public class MediaUploadServiceImpl extends UploadServiceImpl<MediaUploadDTO, Fi
 
     @Override
     public long getMaxSize() {
-        return 5 * 1024 * 1024;
+        return EntityFactory.getEntityPrototype(FileBlob.class).content().getMeta().getLength();
     }
 
     @Override

@@ -32,7 +32,7 @@ public interface ApplicationDocumentBlob extends IEntity {
      * This is actual BLOB of the Image or PDF stored on server
      */
     @RpcTransient
-    @Length(5 * 1024 * 1024)
+    @Length(15 * 1024 * 1024)
     IPrimitive<byte[]> data();
 
     @Timestamp(Timestamp.Update.Created)

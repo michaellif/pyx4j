@@ -34,7 +34,7 @@ public interface FileBlob extends IEntity {
 
     IPrimitive<String> name();
 
-    @Length(5 * 1024 * 1024)
+    @Length(15 * 1024 * 1024)
     IPrimitive<byte[]> content();
 
     IPrimitive<String> contentType();

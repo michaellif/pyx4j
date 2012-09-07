@@ -32,6 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.server.common.blob.BlobService;
+import com.propertyvista.server.domain.FileBlob;
 
 /**
  * @see com.propertyvista.portal.rpc.DeploymentConsts#mediaImagesServletMapping
@@ -43,7 +44,7 @@ public class SiteImageResourceUploadServiceImpl extends UploadServiceImpl<IEntit
 
     @Override
     public long getMaxSize() {
-        return 5 * 1024 * 1024;
+        return EntityFactory.getEntityPrototype(FileBlob.class).content().getMeta().getLength();
     }
 
     @Override
