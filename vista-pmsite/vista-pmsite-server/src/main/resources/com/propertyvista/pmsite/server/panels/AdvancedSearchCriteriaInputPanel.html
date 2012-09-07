@@ -33,7 +33,7 @@
 	</script>
 	<script wicket:id="jsCityList"></script>
 
-	<div class="searchTypeSelBox">
+	<div class="searchTypeSelBox" wicket:enclosure="searchType">
 		<div wicket:id="searchType">
 		    <div class="searchTypeSelButton" name="search_bycity_box">
 		    	<input name="searchType" wicket:id="searchByCity" type="radio"/>
@@ -56,7 +56,7 @@
 		</div>
     </div>
 
-    <div class="searchTypeBox inputBlockFrame" name="search_byprox_box_input">
+    <div class="searchTypeBox inputBlockFrame" name="search_byprox_box_input" wicket:enclosure="location">
 		<div class="searchField">
 			<label><wicket:i18n>Address / Postal Code</wicket:i18n></label>
 			<input wicket:id="location" type="text" jsparam="location" />
@@ -83,7 +83,7 @@
 		</div>
 		<div wicket:id="inputErrors"/>
 	</div>
-	<div class="searchAmenityBox inputBlockFrame">
+	<div class="searchAmenityBox inputBlockFrame" wicket:enclosure="amenities">
 	    <div class="searchField">
 			<label><wicket:i18n>Amenities</wicket:i18n></label> 
 			<div wicket:id="amenities" class="amenityList"></div>

@@ -9,7 +9,9 @@
 }
 
 .infobox_body {
-		padding: 20px 20px;
+	padding: 20px 20px;
+	float:left;
+	border-left: solid 1px ${object2_20};
 }
 
 .banner {
@@ -31,6 +33,9 @@
 	background-color:${object2_10};	
 }
 
+.quickSearchPanel .infobox_body {
+	float:none;
+}
 .quickSearchPanel h3 {
 	color: #555555;
 	font-size: 16px;
@@ -111,10 +116,6 @@
 	padding: 0 0 0 20px;
 }
 
-.testimBox .infobox_body {
-	border-left: solid 1px ${object2_20};
-}
-
 .testimBox .infobox_decor {
 	position: relative;
 	display:inline-block;
@@ -162,7 +163,7 @@
 }
 
 .newsBox .infobox_header {
-	padding: 0 0 0 20px;
+	background: ${object2_90};
 }
 
 
@@ -201,7 +202,7 @@
 
 .infobox_header {
 	background: ${object2_100};
-	padding: 20px 0 5px 20px;
+	padding: 0 0 0 20px;
 }
 
 .infobox_header_title {
@@ -220,10 +221,6 @@
 	width: 100%;
 }
 
-.promoBox .infobox_body {
-	float:left;
-	border-left: solid 1px ${object2_50};
-}
 .promoBox .infobox_content {
 	width:139px;
 	height:300px;
@@ -252,8 +249,13 @@
 }
 
 .wideGadgetBox {
-	padding: 20px 10px;
+	float:left;
+	overflow:hidden;
+	width: 100%;
 }
 .narrowGadgetBox {
 	padding: 20px 30px;
+}
+.narrowGadgetBox .infobox_header {
+	background: ${object2_90};
 }

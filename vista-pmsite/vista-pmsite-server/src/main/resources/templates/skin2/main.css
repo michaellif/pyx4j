@@ -51,6 +51,7 @@ body {
 	background: no-repeat  -ms-linear-gradient(top, ${object1_60} 0,#ffffff 400px); /* IE10+ */
 	background: no-repeat  linear-gradient(top, ${object1_60} 0,#ffffff 400px); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='${object1_60}', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+	color: ${foreground_100};
 }
 
 input,select,textarea {
@@ -113,6 +114,7 @@ select {
 	font-size:40px;
 	line-height:80px;
 	margin-right:20px;
+	color: ${foreground_10};
 }
 
 #siteAuth {

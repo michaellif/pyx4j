@@ -22,9 +22,9 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextField;
@@ -41,6 +41,7 @@ import com.propertyvista.pmsite.server.model.WicketUtils;
 import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleRadio;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class AdvancedSearchCriteriaInputPanel extends Panel {
 
@@ -52,6 +53,61 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         super(id, model);
 
         PropertySearchCriteria criteria = model.getObject().getEntityValue();
+
+        // add Province drop-down
+        final Map<String, List<String>> provCityMap = ((PMSiteWebRequest) getRequest()).getContentManager().getProvinceCityMap();
+        List<String> provinces = new ArrayList<String>(provCityMap.keySet());
+        Collections.sort(provinces);
+        Component provChoice;
+        if (provinces.size() == 1) {
+            model.getObject().getEntityValue().province().setValue(provinces.get(0));
+            provChoice = new WicketUtils.DropDownList<String>("province", provinces, false, false);
+            provChoice.add(AttributeModifier.replace("disabled", "true"));
+        } else {
+            provChoice = new WicketUtils.DropDownList<String>("province", model.bind(criteria.province()), provinces, false, i18n.tr("Select Province"));
+            provChoice.add(AttributeModifier.replace("onChange",
+                    "setSelectionOptions('citySelect', provCity[this.options[this.selectedIndex].text], '" + i18n.tr("Select City") + "')"));
+        }
+        add(provChoice);
+
+        // add City drop-down
+        List<String> cities;
+        String selProv = model.getObject().getEntityValue().province().getValue();
+        boolean singleCity = false;
+        if (selProv != null) {
+            cities = provCityMap.get(selProv);
+            Collections.sort(cities);
+            singleCity = (cities.size() == 1);
+        } else {
+            cities = Arrays.asList("- Select Province -");
+        }
+        if (singleCity) {
+            model.getObject().getEntityValue().city().setValue(cities.get(0));
+            Component cityChoice = new WicketUtils.DropDownList<String>("city", cities, false, false);
+            cityChoice.add(AttributeModifier.replace("disabled", "true"));
+            add(cityChoice);
+        } else {
+            add(new WicketUtils.DropDownList<String>("city", model.bind(criteria.city()), cities, false, i18n.tr("Select City")));
+
+            // add JS city list
+            String jsCityList =
+            // set City for selected province
+            "$(function() {\n" + "var sel = document.getElementById('provSelect');\n" + "if (! sel) return;\n"
+                    + "setSelectionOptions('citySelect', provCity[sel.options[sel.selectedIndex].text], '" + i18n.tr("Select City") + "', selCity);\n"
+                    + "});\n\n" + "var provCity = {};\n";
+            for (String _prov : provCityMap.keySet()) {
+                String _list = "";
+                List<String> _cityList = provCityMap.get(_prov);
+                Collections.sort(_cityList);
+                for (String _city : _cityList) {
+                    _list += ("".equals(_list) ? "" : ",") + "'" + StringEscapeUtils.escapeJavaScript(_city) + "'";
+                }
+                jsCityList += "provCity['" + StringEscapeUtils.escapeJavaScript(_prov) + "'] = [" + _list + "];\n";
+            }
+            String selCity = model.getObject().getEntityValue().city().getValue();
+            jsCityList += "var selCity = '" + (selCity == null ? "" : StringEscapeUtils.escapeJavaScript(selCity)) + "';\n";
+            add(new Label("jsCityList", jsCityList).setEscapeModelStrings(false));
+        }
         // add searchType radio selectors
         RadioGroup<PropertySearchCriteria.SearchType> searchTypeRadio = new RadioGroup<PropertySearchCriteria.SearchType>("searchType", model.bind(criteria
                 .searchType()));
@@ -59,50 +115,10 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
                 PropertySearchCriteria.SearchType.city)));
         searchTypeRadio.add(new SimpleRadio<PropertySearchCriteria.SearchType>("searchByProx", new Model<PropertySearchCriteria.SearchType>(
                 PropertySearchCriteria.SearchType.proximity)));
-        add(searchTypeRadio.setRequired(true));
-
-        // add Province drop-down
-        final Map<String, List<String>> provCityMap = ((PMSiteWebRequest) getRequest()).getContentManager().getProvinceCityMap();
-        List<String> provinces = new ArrayList<String>(provCityMap.keySet());
-        Collections.sort(provinces);
-        DropDownChoice<String> provChoice = new WicketUtils.DropDownList<String>("province", model.bind(criteria.province()), provinces, false,
-                i18n.tr("Select Province"));
-        provChoice.add(AttributeModifier.replace("onChange",
-                "setSelectionOptions('citySelect', provCity[this.options[this.selectedIndex].text], '" + i18n.tr("Select City") + "')"));
-        add(provChoice);
-
-        // add City drop-down
-        List<String> cities;
-        String selProv = model.getObject().getEntityValue().province().getValue();
-        if (selProv != null) {
-            cities = provCityMap.get(selProv);
-            Collections.sort(cities);
-        } else {
-            cities = Arrays.asList("- Select Province -");
-        }
-        add(new WicketUtils.DropDownList<String>("city", model.bind(criteria.city()), cities, false, i18n.tr("Select City")));
-
-        // add JS city list
-        String jsCityList =
-        // set City for selected province
-        "$(function() {\n" + "var sel = document.getElementById('provSelect');\n" + "if (! sel) return;\n"
-                + "setSelectionOptions('citySelect', provCity[sel.options[sel.selectedIndex].text], '" + i18n.tr("Select City") + "', selCity);\n" + "});\n\n"
-                + "var provCity = {};\n";
-        for (String _prov : provCityMap.keySet()) {
-            String _list = "";
-            List<String> _cityList = provCityMap.get(_prov);
-            Collections.sort(_cityList);
-            for (String _city : _cityList) {
-                _list += ("".equals(_list) ? "" : ",") + "'" + StringEscapeUtils.escapeJavaScript(_city) + "'";
-            }
-            jsCityList += "provCity['" + StringEscapeUtils.escapeJavaScript(_prov) + "'] = [" + _list + "];\n";
-        }
-        String selCity = model.getObject().getEntityValue().city().getValue();
-        jsCityList += "var selCity = '" + (selCity == null ? "" : StringEscapeUtils.escapeJavaScript(selCity)) + "';\n";
-        add(new Label("jsCityList", jsCityList).setEscapeModelStrings(false));
+        add(searchTypeRadio.setRequired(true).setVisible(!singleCity));
 
         // add location input
-        add(new TextField<String>("location", model.bind(criteria.location())));
+        add(new TextField<String>("location", model.bind(criteria.location())).setVisible(!singleCity));
         add(new HiddenField<GeoPoint>("geolocation", model.bind(criteria.geolocation())) {
             private static final long serialVersionUID = 1L;
 
@@ -131,7 +147,7 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         });
 
         // add distance input
-        add(new TextField<Integer>("distance"));
+        add(new TextField<Integer>("distance").setVisible(!singleCity));
 
         // add common fields
         // bedrooms
@@ -151,8 +167,9 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         add(new FormErrorPanel("inputErrors", "minPrice", "maxPrice"));
 
         // amenities
+        boolean singleBuilding = singleCity && (PropertyFinder.getPropertyList(null).size() == 1);
         CheckBoxMultipleChoice<BuildingAmenity.Type> checkBoxMultipleChoice = new CheckBoxMultipleChoice<BuildingAmenity.Type>("amenities", model.bind(criteria
                 .amenities()), Arrays.asList(PropertySearchCriteria.AmenityChoice));
-        add(checkBoxMultipleChoice);
+        add(checkBoxMultipleChoice.setVisible(!singleBuilding));
     }
 }
