@@ -24,6 +24,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebResponse;
 
 import com.pyx4j.entity.cache.CacheService;
+import com.pyx4j.i18n.server.CookieLocaleResolver;
 import com.pyx4j.i18n.server.I18nManager;
 
 import com.propertyvista.domain.site.AvailableLocale;
@@ -84,7 +85,9 @@ public class PMSiteWebRequest extends ServletWebRequest {
         I18nManager.setThreadLocale(getLocale(locale.lang().getValue()));
         siteLocale = locale;
         // need locale on the client for GWT modules ?
-        ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("locale", siteLocale.lang().getValue().name()));
+        Cookie localeCookie = new Cookie(CookieLocaleResolver.COOKIE_NAME, siteLocale.lang().getValue().name());
+        localeCookie.setPath("/");
+        ((WebResponse) RequestCycle.get().getResponse()).addCookie(localeCookie);
     }
 
     public AvailableLocale getSiteLocale() {
