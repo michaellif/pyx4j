@@ -29,6 +29,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-site-shared</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
             <scope>provided</scope>
