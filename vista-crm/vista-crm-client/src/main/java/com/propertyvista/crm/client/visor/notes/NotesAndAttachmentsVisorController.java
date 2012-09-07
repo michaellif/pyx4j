@@ -18,7 +18,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -33,15 +32,19 @@ import com.propertyvista.domain.note.NotesAndAttachments;
 
 public class NotesAndAttachmentsVisorController implements IVisorController {
 
-    private final NotesAndAttachmentsVisorView view;
+    private final NotesAndAttachmentsCrudService service;
 
-    private final Key parentId;
+    private final NotesAndAttachmentsVisorView view;
 
     private final Class<? extends IEntity> parentClass;
 
-    public NotesAndAttachmentsVisorController(Class<? extends IEntity> parentClass, Key parentId) {
+    private final Key parentKey;
+
+    public NotesAndAttachmentsVisorController(Class<? extends IEntity> parentClass, Key parentKey) {
         this.parentClass = parentClass;
-        this.parentId = parentId;
+        this.parentKey = parentKey;
+
+        service = GWT.<NotesAndAttachmentsCrudService> create(NotesAndAttachmentsCrudService.class);
         view = new NotesAndAttachmentsVisorView(this);
     }
 
@@ -56,24 +59,13 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
         });
     }
 
-    public Key getParentId() {
-        return parentId;
-    }
-
-    public Class<? extends IEntity> getParentClass() {
-        return parentClass;
-    }
-
     /*
      * the methods below have been mainly copied from com.pyx4j.site.client.activity.crud.EditorActivityBase
      */
     public void populate(DefaultAsyncCallback<EntitySearchResult<NotesAndAttachments>> callback) {
         EntityListCriteria<NotesAndAttachments> crit = new EntityListCriteria<NotesAndAttachments>(NotesAndAttachments.class);
-        IEntity parent = EntityFactory.create(getParentClass());
-        parent.setPrimaryKey(getParentId());
-        crit.add(PropertyCriterion.eq(crit.proto().parent(), parent));
-
-        getService().list(callback, crit);
+        crit.add(PropertyCriterion.eq(crit.proto().parent(), EntityFactory.createIdentityStub(parentClass, parentKey)));
+        service.list(callback, crit);
     }
 
     @Override
@@ -81,21 +73,17 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
         return view;
     }
 
-    public AbstractCrudService<NotesAndAttachments> getService() {
-        return GWT.<NotesAndAttachmentsCrudService> create(NotesAndAttachmentsCrudService.class);
-    }
-
     public void save(NotesAndAttachments item, DefaultAsyncCallback<Key> callback) {
         if (item.parent().isNull()) {
             IEntity parent = EntityFactory.create(parentClass);
-            parent.setPrimaryKey(parentId);
+            parent.setPrimaryKey(parentKey);
             item.parent().set(parent);
         }
-        item.parent().setPrimaryKey(parentId);
+        item.parent().setPrimaryKey(parentKey);
         if (item.getPrimaryKey() == null) {
-            getService().create(callback, item);
+            service.create(callback, item);
         } else {
-            getService().save(callback, item);
+            service.save(callback, item);
         }
     }
 
@@ -103,7 +91,7 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
         if (item.isNull() || item.getPrimaryKey() == null) {
             callback.onSuccess(true);
         } else {
-            getService().delete(callback, item.getPrimaryKey());
+            service.delete(callback, item.getPrimaryKey());
         }
     }
 }

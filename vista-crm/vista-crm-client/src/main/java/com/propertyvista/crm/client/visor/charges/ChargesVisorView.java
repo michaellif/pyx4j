@@ -58,10 +58,6 @@ public class ChargesVisorView extends ScrollPanel {
         });
     }
 
-    public ChargesVisorController getController() {
-        return controller;
-    }
-
     private class ChargesForm extends CrmEntityForm<BillDataDTO> {
 
         public ChargesForm() {

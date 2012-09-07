@@ -96,7 +96,6 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
 
         public NotesAndAttachmentsForm() {
             super(NotesAndAttachmentsDTO.class);
-
         }
 
         @Override
@@ -108,7 +107,7 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
             return content;
         }
 
-        public class NotesAndAttachmentsFolder extends VistaBoxFolder<NotesAndAttachments> {
+        private class NotesAndAttachmentsFolder extends VistaBoxFolder<NotesAndAttachments> {
 
             public NotesAndAttachmentsFolder() {
                 super(NotesAndAttachments.class);
@@ -370,7 +369,5 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
         protected void createTabs() {
             // TODO Auto-generated method stub
         }
-
     }
-
 }
