@@ -121,8 +121,11 @@ public class AvailabilityReportFactory implements HasAdvancedModeReportFactory<A
                 int row = -1;
                 FormFlexPanel panel = new FormFlexPanel();
                 panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).labelWidth(10).componentWidth(10).build());
-                panel.setWidget(++row, 0,
-                        inject(proto().availbilityTableCriteria(), new PropertyCriteriaFolder(VistaImages.INSTANCE, Arrays.asList(AVAILABILITY_TABLE_COLUMNS))));
+                panel.setWidget(
+                        ++row,
+                        0,
+                        inject(proto().availbilityTableCriteria(),
+                                new PropertyCriteriaFolder(VistaImages.INSTANCE, UnitAvailabilityStatus.class, Arrays.asList(AVAILABILITY_TABLE_COLUMNS))));
                 return panel;
             }
         };
