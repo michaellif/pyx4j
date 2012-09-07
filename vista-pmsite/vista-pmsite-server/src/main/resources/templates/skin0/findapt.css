@@ -59,6 +59,7 @@
     text-shadow: 0 1px 0 #CCCCCC;
     text-transform: uppercase;
     cursor: pointer;
+    margin-top:30px;
 }
 
 .advancedSearchWideWrap label {
@@ -150,7 +151,6 @@
 	border-top:1px dotted #5d5e63;
 	padding-top:20px;
 	margin-top:30px;
-	margin-bottom:40px;
 }
 .advancedSearchWideWrap .searchAmenityBox .searchField > label {
 	float:left;
