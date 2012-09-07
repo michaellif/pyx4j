@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
@@ -69,6 +70,7 @@ public interface CreditCardInfo extends PaymentDetails {
     @Caption(name = "Card Number")
     TokenizedCreditCardNumber card();
 
+    @ReadOnly(allowOverrideNull = true)
     IPrimitive<String> token();
 
     @NotNull
