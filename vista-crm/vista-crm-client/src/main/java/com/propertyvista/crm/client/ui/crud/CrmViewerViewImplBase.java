@@ -34,6 +34,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionSelectorDialog;
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.rpc.services.breadcrumbs.BreadcrumbsService;
 
 public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
@@ -65,6 +66,15 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
         setCaption(defaultCaption);
+
+        // Notes button:
+        addHeaderToolbarItem(new Button(i18n.tr("Notes"), new ClickHandler() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onClick(ClickEvent event) {
+                ((CrmViewerActivity<E>) getPresenter()).getNotesAndAttachmentsController().show(CrmViewerViewImplBase.this);
+            }
+        }).asWidget());
 
         // Edit button:
         if (!viewOnly) {

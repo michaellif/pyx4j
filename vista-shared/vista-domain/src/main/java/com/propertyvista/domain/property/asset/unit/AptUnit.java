@@ -38,7 +38,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.marketing.Marketing;
-import com.propertyvista.domain.note.NotesAndAttachmentsNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -48,7 +47,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.shared.adapters.FloorplanCountersUpdateAdapter;
 
 @DiscriminatorValue("Unit_BuildingElement")
-public interface AptUnit extends BuildingElement, PolicyNode, NotesAndAttachmentsNode {
+public interface AptUnit extends BuildingElement, PolicyNode {
 
     @Override
     @Owner

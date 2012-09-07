@@ -45,7 +45,6 @@ import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.media.Media;
-import com.propertyvista.domain.note.NotesAndAttachmentsNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.PropertyManagerReferenceAdapter;
@@ -64,7 +63,7 @@ import com.propertyvista.domain.security.CrmUserBuildings;
 //TODO rename to Property?!
 @ToStringFormat("{0}{1,choice,null#|!null#, {1}}")
 @DiscriminatorValue("Disc_Building")
-public interface Building extends PolicyNode, NotesAndAttachmentsNode {
+public interface Building extends PolicyNode {
 
     interface OrderInComplexId extends ColumnId {
     }

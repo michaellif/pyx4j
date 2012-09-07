@@ -17,9 +17,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -36,16 +36,12 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
 
     private final NotesAndAttachmentsVisorView view;
 
-    private final Class<? extends IEntity> parentClass;
-
-    private final Key parentKey;
+    private final String notesParentId;
 
     public NotesAndAttachmentsVisorController(Class<? extends IEntity> parentClass, Key parentKey) {
-        this.parentClass = parentClass;
-        this.parentKey = parentKey;
-
         service = GWT.<NotesAndAttachmentsCrudService> create(NotesAndAttachmentsCrudService.class);
         view = new NotesAndAttachmentsVisorView(this);
+        notesParentId = createNotesParentId(parentClass, parentKey);
     }
 
     @Override
@@ -59,27 +55,21 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
         });
     }
 
-    /*
-     * the methods below have been mainly copied from com.pyx4j.site.client.activity.crud.EditorActivityBase
-     */
-    public void populate(DefaultAsyncCallback<EntitySearchResult<NotesAndAttachments>> callback) {
-        EntityListCriteria<NotesAndAttachments> crit = new EntityListCriteria<NotesAndAttachments>(NotesAndAttachments.class);
-        crit.add(PropertyCriterion.eq(crit.proto().parent(), EntityFactory.createIdentityStub(parentClass, parentKey)));
-        service.list(callback, crit);
-    }
-
     @Override
     public IsWidget getView() {
         return view;
     }
 
+    public void populate(DefaultAsyncCallback<EntitySearchResult<NotesAndAttachments>> callback) {
+        EntityListCriteria<NotesAndAttachments> criteria = new EntityListCriteria<NotesAndAttachments>(NotesAndAttachments.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().noteeId(), notesParentId));
+        service.list(callback, criteria);
+    }
+
     public void save(NotesAndAttachments item, DefaultAsyncCallback<Key> callback) {
-        if (item.parent().isNull()) {
-            IEntity parent = EntityFactory.create(parentClass);
-            parent.setPrimaryKey(parentKey);
-            item.parent().set(parent);
+        if (item.noteeId().isNull()) {
+            item.noteeId().setValue(notesParentId);
         }
-        item.parent().setPrimaryKey(parentKey);
         if (item.getPrimaryKey() == null) {
             service.create(callback, item);
         } else {
@@ -93,5 +83,10 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
         } else {
             service.delete(callback, item.getPrimaryKey());
         }
+    }
+
+    // Note : this algorithm should be revised 
+    private String createNotesParentId(Class<? extends IEntity> parentClass, Key parentKey) {
+        return GWTJava5Helper.getSimpleName(parentClass) + ':' + parentKey.toString();
     }
 }

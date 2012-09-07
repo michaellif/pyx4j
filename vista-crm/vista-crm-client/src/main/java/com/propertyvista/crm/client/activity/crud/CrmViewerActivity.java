@@ -21,10 +21,15 @@ import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.event.CrudNavigateEvent;
+import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorController;
 
 public class CrmViewerActivity<E extends IEntity> extends ViewerActivityBase<E> {
 
     private final CrudAppPlace place;
+
+    private Class<? extends IEntity> entityClass;
+
+    private NotesAndAttachmentsVisorController notesAndAttachmentsController;
 
     public CrmViewerActivity(CrudAppPlace place, IViewerView<E> view, AbstractCrudService<E> service) {
         super(place, view, service);
@@ -36,7 +41,17 @@ public class CrmViewerActivity<E extends IEntity> extends ViewerActivityBase<E> 
     @Override
     protected void onPopulateSuccess(E result) {
         super.onPopulateSuccess(result);
+
+        entityClass = result.getEntityMeta().getDBOClass();
+
         AppSite.instance();
         AppSite.getEventBus().fireEvent(new CrudNavigateEvent(place, result));
+    }
+
+    public NotesAndAttachmentsVisorController getNotesAndAttachmentsController() {
+        if (notesAndAttachmentsController == null) {
+            notesAndAttachmentsController = new NotesAndAttachmentsVisorController(entityClass, getEntityId());
+        }
+        return notesAndAttachmentsController;
     }
 }

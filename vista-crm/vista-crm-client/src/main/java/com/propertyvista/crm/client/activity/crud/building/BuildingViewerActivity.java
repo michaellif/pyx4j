@@ -32,7 +32,6 @@ import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.client.visor.dashboard.DashboardVisorController;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
-import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorController;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
@@ -84,8 +83,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     private final Presenter<Concession> concessionLister;
 
     private final Presenter<BillingCycleDTO> billingCycleLister;
-
-    private NotesAndAttachmentsVisorController notesAndAttachmentsController;
 
     @SuppressWarnings("unchecked")
     public BuildingViewerActivity(CrudAppPlace place) {
@@ -192,16 +189,7 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     }
 
     @Override
-    public NotesAndAttachmentsVisorController getNotesAndAttachmentsController() {
-        if (notesAndAttachmentsController == null) {
-            notesAndAttachmentsController = new NotesAndAttachmentsVisorController(Building.class, getEntityId());
-        }
-        return notesAndAttachmentsController;
-    }
-
-    @Override
     public IDashboardVisorController getDashboardController(DashboardMetadata dashboardMetadata, List<Building> buildings) {
         return new DashboardVisorController(dashboardMetadata, buildings);
     }
-
 }

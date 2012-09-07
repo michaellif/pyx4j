@@ -33,7 +33,7 @@ import com.propertyvista.domain.security.CrmUser;
 @ToStringFormat("\"{0}\", by {1}; last modified {2}")
 public interface NotesAndAttachments extends IEntity {
 
-    NotesAndAttachmentsNode parent();
+    IPrimitive<String> noteeId();
 
     @NotNull
     @Length(128)
