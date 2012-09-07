@@ -13,7 +13,10 @@
  */
 package com.propertyvista.biz.system;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.NamespaceManager;
 
@@ -33,7 +37,10 @@ import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.AbstractUserCredential;
+import com.propertyvista.domain.security.CrmRole;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.common.security.VistaPasswordResetServiceImpl;
@@ -149,6 +156,35 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
         Persistence.service().commit();
 
         log.info("password changed by user {} for {}", Context.getVisit().getUserVisit().getEmail(), request.userPk());
+    }
+
+    @Override
+    public Set<Behavior> getBehaviors(CrmUserCredential userCredentialId) {
+        CrmUserCredential credential = Persistence.service().retrieve(CrmUserCredential.class, userCredentialId.getPrimaryKey());
+        Set<Behavior> behaviors = new HashSet<Behavior>();
+        addAllBehaviors(behaviors, credential.roles(), new HashSet<CrmRole>());
+
+        if (credential.accessAllBuildings().isBooleanTrue()) {
+            behaviors.add(VistaDataAccessBehavior.BuildingsAll);
+        } else {
+            behaviors.add(VistaDataAccessBehavior.BuildingsAssigned);
+        }
+
+        return behaviors;
+    }
+
+    private void addAllBehaviors(Set<Behavior> behaviors, Collection<CrmRole> roles, Set<CrmRole> processed) {
+        for (CrmRole role : roles) {
+            if (!processed.contains(role)) {
+                Persistence.service().retrieve(role);
+                processed.add(role);
+                behaviors.addAll(role.behaviors());
+                addAllBehaviors(behaviors, role.roles(), processed);
+            }
+            if (role.requireSecurityQuestionForPasswordReset().isBooleanTrue()) {
+                behaviors.add(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion);
+            }
+        }
     }
 
 }

@@ -13,23 +13,20 @@
  */
 package com.propertyvista.crm.server.services.pub;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.crm.server.security.BuildingDatasetAccessBuilder;
-import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
-import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
@@ -74,31 +71,11 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
 
     @Override
     protected Set<Behavior> getBehaviors(CrmUserCredential userCredential) {
-        Set<Behavior> behaviors = new HashSet<Behavior>();
-        addAllBehaviors(behaviors, userCredential.roles(), new HashSet<CrmRole>());
-
+        Set<Behavior> behaviors = ServerSideFactory.create(UserManagementFacade.class).getBehaviors(userCredential);
         if (userCredential.accessAllBuildings().isBooleanTrue()) {
-            behaviors.add(VistaDataAccessBehavior.BuildingsAll);
-        } else {
-            behaviors.add(VistaDataAccessBehavior.BuildingsAssigned);
             BuildingDatasetAccessBuilder.updateAccessList(userCredential.user());
         }
-
         return behaviors;
-    }
-
-    private void addAllBehaviors(Set<Behavior> behaviors, Collection<CrmRole> roles, Set<CrmRole> processed) {
-        for (CrmRole role : roles) {
-            if (!processed.contains(role)) {
-                Persistence.service().retrieve(role);
-                processed.add(role);
-                behaviors.addAll(role.behaviors());
-                addAllBehaviors(behaviors, role.roles(), processed);
-            }
-            if (role.requireSecurityQuestionForPasswordReset().isBooleanTrue()) {
-                behaviors.add(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion);
-            }
-        }
     }
 
     @Override

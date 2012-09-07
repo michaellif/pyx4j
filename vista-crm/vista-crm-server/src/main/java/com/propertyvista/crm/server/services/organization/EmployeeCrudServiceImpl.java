@@ -13,14 +13,18 @@
  */
 package com.propertyvista.crm.server.services.organization;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -29,10 +33,11 @@ import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.security.CrmRole;
+import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
@@ -106,24 +111,13 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 Persistence.service().persist(dbo);
             }
 
-            boolean isPropVistaAccOwner = false;
+            Set<Behavior> behaviorsOriginal = Collections.emptySet();
             CrmUserCredential credential;
             if (!isNew) {
                 credential = Persistence.service().retrieve(CrmUserCredential.class, in.user().getPrimaryKey());
-
-                for (CrmRole role : credential.roles()) {
-                    for (VistaCrmBehavior vcb : role.behaviors()) {
-                        if (vcb == VistaCrmBehavior.PropertyVistaAccountOwner) {
-                            isPropVistaAccOwner = true;
-                            break;
-                        }
-                    }
-
-                    if (isPropVistaAccOwner) { // If ther a need to create onborading user
-                        break;
-                    }
-                }
+                behaviorsOriginal = ServerSideFactory.create(UserManagementFacade.class).getBehaviors(credential);
             } else {
+                ServerSideFactory.create(AuditFacade.class).created(user);
                 credential = EntityFactory.create(CrmUserCredential.class);
                 credential.setPrimaryKey(user.getPrimaryKey());
                 credential.user().set(user);
@@ -139,18 +133,11 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             credential.interfaceUid().setValue(UserAccessUtils.getCrmUserInterfaceUid(credential));
             Persistence.service().persist(credential);
 
-            boolean isPropVistaAccOwnerSet = false;
-            for (CrmRole role : in.roles()) {
-                for (VistaCrmBehavior vcb : role.behaviors()) {
-                    if (vcb == VistaCrmBehavior.PropertyVistaAccountOwner) {
-                        isPropVistaAccOwnerSet = true;
-                        break;
-                    }
-                }
+            Set<Behavior> behaviorsUpdated = ServerSideFactory.create(UserManagementFacade.class).getBehaviors(credential);
 
-                if (isPropVistaAccOwnerSet) { // If ther a need to create onborading user
-                    break;
-                }
+            if (!EqualsHelper.equals(behaviorsOriginal, behaviorsUpdated)) {
+                ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.PermitionsUpdate, credential.user(),
+                        "{0}, behaviors {1} updated to {2} ", user.email(), behaviorsOriginal, behaviorsUpdated);
             }
 
             final String namespace = NamespaceManager.getNamespace();
@@ -166,6 +153,9 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
             final OnboardingUser onbUser;
             final OnboardingUserCredential onbUserCred;
+
+            boolean isPropVistaAccOwner = behaviorsOriginal.contains(VistaCrmBehavior.PropertyVistaAccountOwner);
+            boolean isPropVistaAccOwnerSet = behaviorsUpdated.contains(VistaCrmBehavior.PropertyVistaAccountOwner);
 
             if (isNew || !isPropVistaAccOwner) {
                 onbUser = EntityFactory.create(OnboardingUser.class);

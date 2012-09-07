@@ -103,6 +103,11 @@ public class AuditFacadeImpl implements AuditFacade {
 
     @Override
     public void info(String format, Object... args) {
+        record(AuditRecordEventType.Info, null, format, args);
+    }
+
+    @Override
+    public void record(final AuditRecordEventType eventType, final IEntity entity, String format, Object... args) {
         final String namespace = NamespaceManager.getNamespace();
         final String ip = getRequestRemoteAddr();
         final String details = SimpleMessageFormat.format(format, args);
@@ -112,15 +117,18 @@ public class AuditFacadeImpl implements AuditFacade {
                 AuditRecord record = EntityFactory.create(AuditRecord.class);
                 record.namespace().setValue(namespace);
                 record.remoteAddr().setValue(ip);
-                record.event().setValue(AuditRecordEventType.Info);
+                record.event().setValue(eventType);
                 record.details().setValue(details);
+                if (entity != null) {
+                    record.entityId().setValue(entity.getPrimaryKey());
+                    record.entityClass().setValue(entity.getEntityMeta().getEntityClass().getSimpleName());
+                }
                 record.user().setValue(getPrincipalPrimaryKey());
                 Persistence.service().persist(record);
                 Persistence.service().commit();
                 return null;
             }
         });
-
     }
 
     private Key getPrincipalPrimaryKey() {

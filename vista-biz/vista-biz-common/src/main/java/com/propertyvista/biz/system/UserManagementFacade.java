@@ -13,10 +13,14 @@
  */
 package com.propertyvista.biz.system;
 
+import java.util.Set;
+
 import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.AbstractUserCredential;
+import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public interface UserManagementFacade {
 
@@ -24,4 +28,5 @@ public interface UserManagementFacade {
 
     <E extends AbstractUserCredential<? extends AbstractUser>> void managedSetPassword(Class<E> credentialClass, PasswordChangeRequest request);
 
+    Set<Behavior> getBehaviors(CrmUserCredential userCredentialId);
 }

@@ -16,6 +16,7 @@ package com.propertyvista.biz.system;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.security.AbstractUser;
+import com.propertyvista.domain.security.AuditRecordEventType;
 
 public interface AuditFacade {
 
@@ -32,5 +33,7 @@ public interface AuditFacade {
     public void read(IEntity entity);
 
     public void info(String format, Object... args);
+
+    public void record(AuditRecordEventType eventType, IEntity entity, String format, Object... args);
 
 }

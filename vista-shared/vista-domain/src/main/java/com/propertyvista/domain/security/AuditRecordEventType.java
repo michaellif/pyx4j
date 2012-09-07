@@ -25,6 +25,8 @@ public enum AuditRecordEventType {
 
     CredentialUpdate,
 
+    PermitionsUpdate,
+
     Create,
 
     Read,
