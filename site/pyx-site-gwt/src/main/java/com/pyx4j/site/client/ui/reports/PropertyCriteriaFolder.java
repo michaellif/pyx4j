@@ -32,6 +32,7 @@ import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
@@ -46,16 +47,19 @@ public class PropertyCriteriaFolder extends CEntityFolder<PropertyCriterionEntit
 
     private final List<ColumnDescriptor> availableCriteriaColumns;
 
-    public PropertyCriteriaFolder(EntityFolderImages images, List<ColumnDescriptor> availableCriteriaColumns) {
+    private final Class<? extends IEntity> tableEntityClass;
+
+    public PropertyCriteriaFolder(EntityFolderImages images, Class<? extends IEntity> tableEntityClass, List<ColumnDescriptor> availableCriteriaColumns) {
         super(PropertyCriterionEntity.class);
         this.images = images;
         this.availableCriteriaColumns = availableCriteriaColumns;
+        this.tableEntityClass = tableEntityClass;
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PropertyCriterionEntity) {
-            return new PropertyCriterionEditor();
+            return new PropertyCriterionEditor(EntityFactory.getEntityPrototype(tableEntityClass));
         } else {
             return super.create(member);
         }
