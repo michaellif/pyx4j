@@ -20,7 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
@@ -131,14 +130,13 @@ public class NColorPicker extends NFocusComponent<Integer, ColorButton, CColorPi
             super("");
 
             //TODO move to style
-            getElement().getStyle().setCursor(Style.Cursor.POINTER);
             getTextLabelComponent().getElement().getStyle().setProperty("margin", "2px 5px");
             getTextLabelComponent().getElement().getStyle().setProperty("padding", "0 2px");
             getTextLabelComponent().getElement().getStyle().setProperty("textAlign", "center");
             getTextLabelComponent().getElement().getStyle().setProperty("width", "60px");
             getTextLabelComponent().getElement().getStyle().setProperty("height", "1.5em");
             getTextLabelComponent().getElement().getStyle().setProperty("border", "1px inset #C2C2C2");
-            getTextLabelComponent().getElement().getStyle().setProperty("opacity", "1");
+            getElement().getStyle().setProperty("opacity", "1");
 
             addClickHandler(new ClickHandler() {
 
