@@ -15,17 +15,27 @@ package com.propertyvista.portal.server.preloader.site.prod;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.portal.server.preloader.site.AbstractSitePreloader;
+import com.propertyvista.shared.CompiledLocale;
 
 public class ProdSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected String pmcName() {
         return (String) getParameter(VistaDataPreloaderParameter.pmcName);
+    }
+
+    @Override
+    protected List<CompiledLocale> getLocale() {
+        List<CompiledLocale> l = new Vector<CompiledLocale>();
+        l.add(CompiledLocale.en);
+        l.add(CompiledLocale.fr);
+        return l;
     }
 
     @Override
