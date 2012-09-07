@@ -22,7 +22,7 @@ package com.pyx4j.site.client.ui.reports;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.shared.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 public interface IReportSettingsForm<E extends ReportMetadata> extends IsWidget {
 

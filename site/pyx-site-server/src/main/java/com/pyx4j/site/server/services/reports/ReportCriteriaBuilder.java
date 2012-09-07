@@ -31,8 +31,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.reports.PropertyCriterionEntity;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.site.shared.domain.reports.PropertyCriterionEntity;
 
 public class ReportCriteriaBuilder {
 

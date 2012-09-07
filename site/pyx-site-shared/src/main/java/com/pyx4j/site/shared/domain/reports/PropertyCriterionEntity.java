@@ -14,16 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jul 27, 2012
+ * Created on Aug 9, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.pyx4j.entity.shared.reports;
+package com.pyx4j.site.shared.domain.reports;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-@AbstractEntity
-public interface ReportMetadata extends IEntity {
+@Transient
+public interface PropertyCriterionEntity extends IEntity {
 
+    @Transient
+    IPrimitive<String> criterionName();
+
+    IPrimitive<String> path();
+
+    IPrimitive<PropertyCriterion.Restriction> restriction();
+
+    IPrimitive<String> value();
 }

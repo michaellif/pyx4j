@@ -35,7 +35,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.cusomization.CustomizationHolderEntity;
+import com.pyx4j.site.rpc.customization.CustomizationOverwriteAttemptException;
+import com.pyx4j.site.shared.domain.cusomization.CustomizationHolderEntity;
 
 public class CustomizationPersistenceTest {
 
@@ -67,8 +68,8 @@ public class CustomizationPersistenceTest {
         entity.valueDate().setValue(new LogicalDate(cal.getTime()));
 
         // save
-        serviceHelper().save("foo", entity);
-        serviceHelper().save("bar", entity);
+        serviceHelper().save("foo", entity, true);
+        serviceHelper().save("bar", entity, true);
 
         // test
         {
@@ -91,6 +92,25 @@ public class CustomizationPersistenceTest {
 
     }
 
+    @Test(expected = CustomizationOverwriteAttemptException.class)
+    public void testSaveOverwrite() {
+        // setup
+        CustomizationTestEntity entity = EntityFactory.create(CustomizationTestEntity.class);
+        entity.valueStr().setValue("strValue");
+
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.set(2000, 1, 1);
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        entity.valueDate().setValue(new LogicalDate(cal.getTime()));
+
+        // save
+        serviceHelper().save("foo", entity, true);
+
+        // try to save with the same name, an exception must be thrown in the process
+        serviceHelper().save("foo", entity, false);
+
+    }
+
     @Test
     public void testLoad() {
         // setup
@@ -103,16 +123,42 @@ public class CustomizationPersistenceTest {
 
         // save
         entity.valueStr().setValue("foo value");
-        serviceHelper().save("foo", entity);
+        serviceHelper().save("foo", entity, true);
 
         entity.valueStr().setValue("bar value");
-        serviceHelper().save("bar", entity);
+        serviceHelper().save("bar", entity, true);
 
         // load
         CustomizationTestEntity testEntity = serviceHelper().load("bar", EntityFactory.getEntityPrototype(CustomizationTestEntity.class));
 
         // test
         Assert.assertEquals("bar value", testEntity.valueStr().getValue());
+
+    }
+
+    @Test
+    public void testDelete() {
+
+        // setup
+        CustomizationTestEntity entity = EntityFactory.create(CustomizationTestEntity.class);
+        entity.valueStr().setValue("strValue");
+
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.set(2000, 1, 1);
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        entity.valueDate().setValue(new LogicalDate(cal.getTime()));
+
+        serviceHelper().save("foo", entity, true);
+
+        CustomizationTestEntity loadedEntity;
+        loadedEntity = serviceHelper().load("foo", (CustomizationTestEntity) EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
+        Assert.assertNotNull(loadedEntity);
+
+        // perform 'delete', and check that the customization was actually deleted
+        serviceHelper().delete("foo", (CustomizationTestEntity) EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
+
+        loadedEntity = serviceHelper().load("foo", (CustomizationTestEntity) EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
+        Assert.assertNull(loadedEntity);
 
     }
 
@@ -129,7 +175,7 @@ public class CustomizationPersistenceTest {
             cal.add(Calendar.DAY_OF_MONTH, 1);
             entity.valueDate().setValue(new LogicalDate(cal.getTime()));
 
-            serviceHelper().save("" + i, entity);
+            serviceHelper().save("" + i, entity, true);
         }
 
         // test List

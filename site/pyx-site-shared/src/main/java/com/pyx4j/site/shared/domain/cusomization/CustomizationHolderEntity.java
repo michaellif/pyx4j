@@ -14,26 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Aug 9, 2012
+ * Created on Sep 5, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.pyx4j.entity.shared.reports;
+package com.pyx4j.site.shared.domain.cusomization;
 
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-@Transient
-public interface PropertyCriterionEntity extends IEntity {
+@ToStringFormat("{0}")
+public interface CustomizationHolderEntity extends IEntity {
 
-    @Transient
-    IPrimitive<String> criterionName();
+    @Length(255)
+    IPrimitive<String> customizationClassName();
 
-    IPrimitive<String> path();
+    @ToString(index = 0)
+    @Length(255)
+    IPrimitive<String> identifierKey();
 
-    IPrimitive<PropertyCriterion.Restriction> restriction();
+    @Length(2000)
+    IPrimitive<String> serializedForm();
 
-    IPrimitive<String> value();
 }

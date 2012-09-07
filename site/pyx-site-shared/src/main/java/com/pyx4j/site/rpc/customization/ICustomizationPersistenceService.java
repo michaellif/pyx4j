@@ -18,23 +18,24 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.pyx4j.entity.shared.cusomization;
+package com.pyx4j.site.rpc.customization;
 
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
+import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
-@ToStringFormat("{0}")
-public interface CustomizationHolderEntity extends IEntity {
+public interface ICustomizationPersistenceService<E extends IEntity> extends IService {
 
-    IPrimitive<String> customizationClassName();
+    void list(AsyncCallback<Vector<String>> callback, E proto);
 
-    @ToString(index = 0)
-    IPrimitive<String> identifierKey();
+    void save(AsyncCallback<VoidSerializable> callback, String id, E entity, boolean allowOverwrite);
 
-    @Length(5 * 1024 * 1024)
-    IPrimitive<String> serializedForm();
+    void load(AsyncCallback<E> callback, String id, E proto);
+
+    void delete(AsyncCallback<VoidSerializable> callback, String id, E proto);
 
 }

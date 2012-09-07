@@ -26,8 +26,8 @@ import java.util.List;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.reports.PropertyCriterionEntity;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.site.shared.domain.reports.PropertyCriterionEntity;
 
 public class PropertyCriterionEditor extends CEntityFolderRowEditor<PropertyCriterionEntity> {
 

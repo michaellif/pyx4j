@@ -18,7 +18,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.pyx4j.entity.shared.reports;
+package com.pyx4j.site.shared.domain.reports;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.shared.IEntity;

@@ -21,27 +21,40 @@
 package com.pyx4j.site.client.ui.reports;
 
 import java.io.Serializable;
+import java.util.Vector;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.entity.shared.reports.ReportMetadata;
+import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.ReportsAppPlace;
+import com.pyx4j.site.rpc.customization.CustomizationOverwriteAttemptException;
+import com.pyx4j.site.rpc.customization.ICustomizationPersistenceService;
 import com.pyx4j.site.rpc.reports.IReportsService;
+import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 public abstract class AbstractReportsActivity extends AbstractActivity implements IReportsView.Presenter {
+
+    private static final I18n i18n = I18n.get(AbstractReportsActivity.class);
 
     protected final IReportsView view;
 
     private final IReportsService reportsService;
 
-    private final AppPlace place;
+    private final ReportsAppPlace place;
 
-    public AbstractReportsActivity(IReportsService reportsService, IReportsView view, AppPlace place) {
+    private final ICustomizationPersistenceService<ReportMetadata> reportsSettingsPersistenceService;
+
+    public AbstractReportsActivity(IReportsService reportsService, ICustomizationPersistenceService<ReportMetadata> reportsSettingsPersistenceService,
+            IReportsView view, ReportsAppPlace place) {
         this.reportsService = reportsService;
+        this.reportsSettingsPersistenceService = reportsSettingsPersistenceService;
         this.view = view;
         this.view.setPresenter(this);
         this.place = place;
@@ -50,7 +63,7 @@ public abstract class AbstractReportsActivity extends AbstractActivity implement
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        view.setReportSettings(retrieveReportSettings(place));
+        view.setReportSettings(retrieveReportSettings(place), null);
     }
 
     @Override
@@ -73,4 +86,65 @@ public abstract class AbstractReportsActivity extends AbstractActivity implement
         }
     }
 
+    @Override
+    public void loadSettings(final String id) {
+        reportsSettingsPersistenceService.load(new DefaultAsyncCallback<ReportMetadata>() {
+
+            @Override
+            public void onSuccess(ReportMetadata result) {
+                view.setReportSettings(result, id);
+            }
+
+        }, id, (ReportMetadata) EntityFactory.getEntityPrototype(retrieveReportSettings(place).getInstanceValueClass()));
+    }
+
+    @Override
+    public void saveSettings(ReportMetadata settings, final String reportSettingsId, boolean allowOverwrite) {
+        reportsSettingsPersistenceService.save(new DefaultAsyncCallback<VoidSerializable>() {
+
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                view.onReportSettingsSaveSucceed(reportSettingsId);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof CustomizationOverwriteAttemptException) {
+                    view.onReportSettingsSaveFailed(i18n.tr("Please choose a different name: a report settings preset named \"{0}\" already exists",
+                            reportSettingsId));
+                } else if (caught instanceof UserRuntimeException) {
+                    view.onReportSettingsSaveFailed(((UserRuntimeException) caught).getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
+            }
+        }, reportSettingsId, settings, allowOverwrite);
+
+    }
+
+    @Override
+    public void deleteSettings(String settings) {
+
+        reportsSettingsPersistenceService.delete(new DefaultAsyncCallback<VoidSerializable>() {
+
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populateAvailableReportSettings();
+            }
+
+        }, settings, (ReportMetadata) EntityFactory.getEntityPrototype(retrieveReportSettings(place).getInstanceValueClass()));
+    }
+
+    @Override
+    public void populateAvailableReportSettings() {
+        reportsSettingsPersistenceService.list(new DefaultAsyncCallback<Vector<String>>() {
+
+            @Override
+            public void onSuccess(Vector<String> result) {
+                view.setAvailableReportSettings(result);
+            }
+
+        }, (ReportMetadata) EntityFactory.getEntityPrototype(retrieveReportSettings(place).getInstanceValueClass()));
+
+    }
 }

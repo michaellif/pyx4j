@@ -20,8 +20,10 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
-import com.pyx4j.entity.shared.reports.ReportMetadata;
+import java.util.List;
+
 import com.pyx4j.site.client.ui.crud.IView;
+import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 public interface IReportsView extends IView {
 
@@ -29,12 +31,26 @@ public interface IReportsView extends IView {
 
         void apply(ReportMetadata settings);
 
+        void loadSettings(String reportSettingsId);
+
+        void saveSettings(ReportMetadata settings, String reportSettingsId, boolean allowOverwrite);
+
+        void deleteSettings(String settings);
+
+        void populateAvailableReportSettings();
+
     }
 
     void setPresenter(Presenter presenter);
 
-    <E extends ReportMetadata> void setReportSettings(E reportSettings);
+    <E extends ReportMetadata> void setReportSettings(E reportSettings, String settingsId);
 
     void setReportData(Object data);
+
+    void setAvailableReportSettings(List<String> reportSettingsIds);
+
+    void onReportSettingsSaveSucceed(String reportSettingsId);
+
+    void onReportSettingsSaveFailed(String reason);
 
 }

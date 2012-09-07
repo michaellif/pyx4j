@@ -14,18 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Aug 1, 2012
+ * Created on Sep 6, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.reports;
+package com.pyx4j.site.rpc.customization;
 
-import com.pyx4j.entity.client.CEntityForm;
-import com.pyx4j.site.shared.domain.reports.HasAdvancedSettings;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import java.io.Serializable;
 
-public interface HasAdvancedModeReportFactory<S extends ReportMetadata & HasAdvancedSettings> extends ReportFactory<S> {
+import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.i18n.shared.I18n;
 
-    CEntityForm<S> getAdvancedReportSettingsForm();
+public class CustomizationOverwriteAttemptException extends UserRuntimeException implements Serializable {
+
+    private static final I18n i18n = I18n.get(CustomizationOverwriteAttemptException.class);
+
+    private static final long serialVersionUID = -5195090453948805463L;
+
+    public CustomizationOverwriteAttemptException() {
+        super(i18n.tr("Failed to save customization info because a customization info with the same name already exists"));
+    }
 
 }

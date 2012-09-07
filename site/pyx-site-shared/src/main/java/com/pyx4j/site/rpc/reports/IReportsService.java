@@ -24,8 +24,8 @@ import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.reports.ReportMetadata;
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 public interface IReportsService extends IService {
 

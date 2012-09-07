@@ -33,9 +33,9 @@ import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.reports.PropertyCriterionEntity;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.shared.domain.reports.PropertyCriterionEntity;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public class PropertyCriteriaFolder extends CEntityFolder<PropertyCriterionEntity> {

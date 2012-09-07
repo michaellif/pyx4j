@@ -20,23 +20,25 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
+import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.client.CEntityForm;
-import com.pyx4j.entity.shared.reports.HasAdvancedSettings;
-import com.pyx4j.entity.shared.reports.ReportMetadata;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.ViewImplBase;
+import com.pyx4j.site.shared.domain.reports.HasAdvancedSettings;
+import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.TextBox;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public abstract class AbstractReportsView extends ViewImplBase implements IReportsView {
 
@@ -63,11 +65,28 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
 
     private Report report;
 
+    private String settingsId;
+
+    private final ReportSettingsManagementPanel reportSettingsManagementPanel;
+
     public AbstractReportsView(Map<Class<? extends ReportMetadata>, ReportFactory<?>> reportFactoryMap) {
         setSize("100%", "100%");
         this.reportFactoryMap = reportFactoryMap;
         this.settingsForm = null;
         this.presenter = null;
+
+        reportSettingsManagementPanel = new ReportSettingsManagementPanel() {
+
+            @Override
+            public void onLoadRequest(String selectedReportSettingsId) {
+                presenter.loadSettings(selectedReportSettingsId);
+            }
+
+            @Override
+            public void onDeleteRequest(String selectedReportSettingsId) {
+                presenter.deleteSettings(selectedReportSettingsId);
+            }
+        };
 
         viewPanel = new FlowPanel();
         viewPanel.setWidth("100%");
@@ -78,6 +97,7 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
         viewPanel.add(settingsFormPanel);
 
         reportSettingsFormControlBar = new ReportSettingsFormControlBar() {
+
             @Override
             public void onApply() {
                 if (presenter != null & settingsForm != null) {
@@ -107,17 +127,28 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
         addHeaderToolbarItem(new Button(i18n.tr("Load..."), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                showVisor(createLoadReportSettingsPanel(), i18n.tr(""));
+                onLoadSettingsClicked();
             }
         }));
 
-        addHeaderToolbarItem(new Button(i18n.tr("Save As...")));
-        addHeaderToolbarItem(new Button(i18n.tr("Save")));
+        addHeaderToolbarItem(new Button(i18n.tr("Save As..."), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                onSaveSettingsAsClicked();
+            }
+        }));
+        addHeaderToolbarItem(new Button(i18n.tr("Save"), new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                onSaveSettingsClicked();
+            }
+        }));
 
         addHeaderToolbarItem(new Button(i18n.tr("Print")));
         addHeaderToolbarItem(new Button(i18n.tr("Export")));
 
-        setCaption(i18n.tr("Reports"));
+        resetCaption();
         setContentPane(new ScrollPanel(viewPanel));
     }
 
@@ -127,13 +158,15 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
     }
 
     @Override
-    public void setReportSettings(ReportMetadata reportSettings) {
-        settingsFormPanel.setWidget(null);
+    public void setReportSettings(ReportMetadata reportSettings, String settingsId) {
+        hideVisor();
+        this.settingsId = settingsId;
+        this.settingsForm = null;
+        this.settingsFormPanel.setWidget(null);
 
         if (reportSettings == null) {
             reportPanel.setWidget(null);
         } else {
-            setCaption(reportSettings.getEntityMeta().getCaption());
 
             populateSettingsForm(reportSettings);
 
@@ -141,6 +174,7 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
             report = factory.getReport();
             reportPanel.setWidget(report);
         }
+        resetCaption();
     }
 
     @Override
@@ -148,6 +182,23 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
         if (report != null) {
             report.setData(data);
         }
+    }
+
+    @Override
+    public void setAvailableReportSettings(List<String> reportSettingsIds) {
+        reportSettingsManagementPanel.setAvailableReportSettingsIds(reportSettingsIds);
+    }
+
+    @Override
+    public void onReportSettingsSaveFailed(String reason) {
+        MessageDialog.error(i18n.tr("Save Failed"), reason);
+    }
+
+    @Override
+    public void onReportSettingsSaveSucceed(String reportSettingsId) {
+        MessageDialog.info(i18n.tr("Report settings were saved successfuly!"));
+        settingsId = reportSettingsId;
+        resetCaption();
     }
 
     private void setSettingsMode(boolean isAdvanced) {
@@ -173,14 +224,50 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
         settingsForm.populate(reportSettings);
     }
 
-    private Widget createLoadReportSettingsPanel() {
-        LayoutPanel panel = new LayoutPanel();
-        panel.setSize("100%", "100%");
+    private void onLoadSettingsClicked() {
+        reportSettingsManagementPanel.setAvailableReportSettingsIds(null);
 
-        Button loadButton = new Button(i18n.tr("Load"));
-        panel.add(loadButton);
-        panel.setWidgetTopHeight(loadButton, 80, Unit.PCT, 1.5, Unit.EM);
-        panel.setWidgetLeftWidth(loadButton, 10, Unit.PCT, 5, Unit.EM);
-        return panel;
+        showVisor(reportSettingsManagementPanel, i18n.tr("Load report configuration preset"));
+
+        presenter.populateAvailableReportSettings();
+
+    }
+
+    private void onSaveSettingsAsClicked() {
+        new OkCancelDialog(i18n.tr("Save current report settings as:")) {
+            private TextBox settingsId;
+
+            {
+                setBody(settingsId = new TextBox());
+            }
+
+            @Override
+            public boolean onClickOk() {
+                if (!settingsId.getText().isEmpty()) {
+                    presenter.saveSettings(settingsForm.getValue(), settingsId.getText(), false);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }.show();
+    }
+
+    private void onSaveSettingsClicked() {
+        if (settingsId == null) {
+            onSaveSettingsAsClicked();
+        } else {
+            presenter.saveSettings(settingsForm.getValue(), settingsId, true);
+        }
+    }
+
+    private void resetCaption() {
+        ReportMetadata reportSettings = settingsForm != null ? settingsForm.getValue() : null;
+        if (reportSettings == null) {
+            setCaption(i18n.tr("Reports"));
+        } else {
+            setCaption(SimpleMessageFormat.format("{0} - {1}", reportSettings.getEntityMeta().getCaption(), settingsId == null ? i18n.tr("Untitled")
+                    : settingsId));
+        }
     }
 }

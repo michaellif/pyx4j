@@ -14,26 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Sep 5, 2012
+ * Created on Jul 27, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.pyx4j.site.rpc.customization;
+package com.pyx4j.site.shared.domain.reports;
 
-import java.util.Vector;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
-public interface ISettingsPersistenceService<E extends IEntity> extends IService {
-
-    void list(AsyncCallback<Vector<String>> callback, E proto);
-
-    void save(AsyncCallback<VoidSerializable> callback, String id, E entity);
-
-    void load(AsyncCallback<IEntity> callback, String id, E proto);
+@AbstractEntity
+public interface ReportMetadata extends IEntity {
 
 }

@@ -25,11 +25,12 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.rpc.customization.ISettingsPersistenceService;
+import com.pyx4j.site.rpc.customization.ICustomizationPersistenceService;
 
-public abstract class SettingsPersistenceService<E extends IEntity> implements ISettingsPersistenceService<E> {
+public abstract class CustomizationPersistenceService<E extends IEntity> implements ICustomizationPersistenceService<E> {
 
     @Override
     public void list(AsyncCallback<Vector<String>> callback, E proto) {
@@ -42,15 +43,22 @@ public abstract class SettingsPersistenceService<E extends IEntity> implements I
     }
 
     @Override
-    public void save(AsyncCallback<VoidSerializable> callback, String id, E entity) {
-
-        new CustomizationPersistenceHelper<E>().save(id, entity);
+    public void save(AsyncCallback<VoidSerializable> callback, String id, E entity, boolean allowOverwrite) {
+        new CustomizationPersistenceHelper<E>().save(id, entity, allowOverwrite);
+        Persistence.service().commit();
         callback.onSuccess(null);
     }
 
     @Override
-    public void load(AsyncCallback<IEntity> callback, String id, E proto) {
+    public void load(AsyncCallback<E> callback, String id, E proto) {
         callback.onSuccess(new CustomizationPersistenceHelper<E>().load(id, proto));
+    }
+
+    @Override
+    public void delete(com.google.gwt.user.client.rpc.AsyncCallback<VoidSerializable> callback, String id, E proto) {
+        new CustomizationPersistenceHelper<E>().delete(id, proto);
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
 }

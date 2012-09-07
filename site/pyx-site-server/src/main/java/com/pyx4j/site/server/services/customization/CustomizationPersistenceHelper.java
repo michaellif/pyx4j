@@ -36,11 +36,12 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.cusomization.CustomizationHolderEntity;
 import com.pyx4j.entity.xml.XMLEntityNamingConventionDefault;
 import com.pyx4j.entity.xml.XMLEntityParser;
 import com.pyx4j.entity.xml.XMLEntityWriter;
 import com.pyx4j.entity.xml.XMLStringWriter;
+import com.pyx4j.site.rpc.customization.CustomizationOverwriteAttemptException;
+import com.pyx4j.site.shared.domain.cusomization.CustomizationHolderEntity;
 
 public class CustomizationPersistenceHelper<E extends IEntity> {
 
@@ -57,11 +58,16 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
         return result;
     }
 
-    public void save(String id, E entity) {
-        // delete the old version
+    public void save(String id, E entity, boolean allowOverwrite) {
         EntityQueryCriteria<CustomizationHolderEntity> criteria = EntityQueryCriteria.create(CustomizationHolderEntity.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().customizationClassName(), entity.getInstanceValueClass().getName()));
         criteria.add(PropertyCriterion.eq(criteria.proto().identifierKey(), id));
+
+        if (!allowOverwrite && Persistence.service().count(criteria) != 0) {
+            throw new CustomizationOverwriteAttemptException();
+        }
+
+        // delete the old version
         Persistence.service().delete(criteria);
 
         // save new
@@ -103,5 +109,14 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
             return entity;
         }
 
+    }
+
+    public void delete(String id, E proto) {
+        EntityQueryCriteria<CustomizationHolderEntity> criteria = EntityQueryCriteria.create(CustomizationHolderEntity.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().customizationClassName(), proto.getInstanceValueClass().getName()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().identifierKey(), id));
+
+        // delete the old version
+        Persistence.service().delete(criteria);
     }
 }

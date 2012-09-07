@@ -21,7 +21,7 @@
 package com.pyx4j.site.client.ui.reports;
 
 import com.pyx4j.entity.client.CEntityForm;
-import com.pyx4j.entity.shared.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 public interface ReportFactory<S extends ReportMetadata> {
 
