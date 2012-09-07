@@ -17,9 +17,9 @@ import java.util.Map;
 
 import net.sf.ehcache.store.chm.ConcurrentHashMap;
 
-import com.pyx4j.entity.shared.reports.ReportMetadata;
 import com.pyx4j.site.server.services.reports.AbstractReportsService;
 import com.pyx4j.site.server.services.reports.ReportGenerator;
+import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
 import com.propertyvista.crm.server.services.reports.generators.AvailabilityReportsGenerator;

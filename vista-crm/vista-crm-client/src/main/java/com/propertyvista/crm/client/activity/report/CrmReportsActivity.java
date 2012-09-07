@@ -17,20 +17,25 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.reports.ReportMetadata;
 import com.pyx4j.site.client.ui.reports.AbstractReportsActivity;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.ReportsAppPlace;
+import com.pyx4j.site.rpc.customization.ICustomizationPersistenceService;
 import com.pyx4j.site.rpc.reports.IReportsService;
+import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.crm.client.ui.reports.CrmReportsView;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
+import com.propertyvista.crm.rpc.services.reports.CrmReportsSettingsPersistenceService;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
 public class CrmReportsActivity extends AbstractReportsActivity {
 
-    public CrmReportsActivity(AppPlace place) {
-        super(GWT.<IReportsService> create(CrmReportsService.class), DashboardViewFactory.instance(CrmReportsView.class), place);
+    public CrmReportsActivity(ReportsAppPlace place) {
+        super(GWT.<IReportsService> create(CrmReportsService.class), GWT
+                .<ICustomizationPersistenceService<ReportMetadata>> create(CrmReportsSettingsPersistenceService.class), DashboardViewFactory
+                .instance(CrmReportsView.class), place);
     }
 
     @Override

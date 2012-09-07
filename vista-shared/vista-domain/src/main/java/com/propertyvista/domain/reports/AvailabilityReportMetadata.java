@@ -19,9 +19,9 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.entity.shared.reports.HasAdvancedSettings;
-import com.pyx4j.entity.shared.reports.PropertyCriterionEntity;
-import com.pyx4j.entity.shared.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.HasAdvancedSettings;
+import com.pyx4j.site.shared.domain.reports.PropertyCriterionEntity;
+import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 

@@ -18,10 +18,10 @@ import java.util.Map;
 
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.shared.reports.ReportMetadata;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.reports.AbstractReportsView;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
+import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.crm.client.ui.reports.factories.AvailabilityReportFactory;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;

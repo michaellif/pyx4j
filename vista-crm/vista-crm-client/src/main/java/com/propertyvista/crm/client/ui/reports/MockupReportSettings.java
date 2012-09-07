@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.reports;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.reports.HasAdvancedSettings;
-import com.pyx4j.entity.shared.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.HasAdvancedSettings;
+import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 @Transient
 public interface MockupReportSettings extends ReportMetadata, HasAdvancedSettings {
