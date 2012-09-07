@@ -97,7 +97,6 @@ public class Button extends FocusPanel implements IFocusWidget {
         textLabel.setStyleName(DefaultWidgetsTheme.StyleName.ButtonText.name());
 
         imageHolder = new SimplePanel();
-        imageHolder.getElement().getStyle().setProperty("display", "inline");
 
         imageHolder.setWidget(textLabel);
 

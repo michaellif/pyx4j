@@ -120,7 +120,6 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("position", "relative");
         style.addProperty("text-indent", "0");
         style.addProperty("height", "100%");
-        style.addProperty("float", "right");
         addStyle(style);
 
         style = new Style(".", StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
