@@ -153,4 +153,13 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
     public int getActiveTab() {
         return tabPanel.getSelectedIndex();
     }
+
+    public String toStringForPrint() {
+
+        //Traverse tabs of TabPanel
+        //for enabled - create Caption + body
+        //Expand all collapsed containers and folder items
+        //add html+body tags and generate styles
+        return asWidget().toString();
+    }
 }
