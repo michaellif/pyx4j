@@ -245,6 +245,14 @@ public class ServerSideConfiguration {
         }
     }
 
+    public String getDevelopmentSessionCookieName() {
+        return "pyx_dev_access";
+    }
+
+    public String getDevelopmentSessionCookieDomain() {
+        return null;
+    }
+
     public static String getSystemProperties() {
         StringBuffer sysProperties = new StringBuffer();
         Properties properties = System.getProperties();

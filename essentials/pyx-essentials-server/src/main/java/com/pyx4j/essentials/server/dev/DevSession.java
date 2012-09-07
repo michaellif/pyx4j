@@ -28,15 +28,15 @@ import javax.servlet.http.Cookie;
 
 import com.google.gwt.user.server.Util;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.server.contexts.Context;
 
 /**
  * This is session using for development of applications, it is detached from container session.
  */
 public class DevSession {
-
-    public static String DEV_SESSION_COOKIE_NAME = "pyx_dev_access2";
 
     public static String DEV_SESSION_REQUEST_ATTRIBUTE = "com.pyx.pyx_dev_access";
 
@@ -65,7 +65,7 @@ public class DevSession {
             session = singleSession;
         }
         if (session == null) {
-            Cookie sessionCookie = Util.getCookie(Context.getRequest(), DEV_SESSION_COOKIE_NAME, true);
+            Cookie sessionCookie = Util.getCookie(Context.getRequest(), ServerSideConfiguration.instance().getDevelopmentSessionCookieName(), true);
             if (sessionCookie != null) {
                 session = sessions.get(sessionCookie.getValue());
                 if ((session != null && session.eol <= System.currentTimeMillis())) {
@@ -104,17 +104,21 @@ public class DevSession {
         SecureRandom random = new SecureRandom();
         session.id = Long.toHexString(random.nextLong()) + Long.toHexString(random.nextLong());
 
-        Cookie sessionCookie = new Cookie(DEV_SESSION_COOKIE_NAME, session.id);
+        Cookie sessionCookie = new Cookie(ServerSideConfiguration.instance().getDevelopmentSessionCookieName(), session.id);
         sessionCookie.setPath("/");
         sessionCookie.setMaxAge(sessionDuration);
 
-        String host = Context.getRequestServerName();
-        String[] hostParts = host.split("\\.");
-        if (hostParts.length == 4) {
-            sessionCookie.setDomain("." + hostParts[hostParts.length - 3] + "." + hostParts[hostParts.length - 2] + "." + hostParts[hostParts.length - 1]);
-        } else if (hostParts.length == 3) {
-            sessionCookie.setDomain("." + hostParts[hostParts.length - 2] + "." + hostParts[hostParts.length - 1]);
+        String domain = ServerSideConfiguration.instance().getDevelopmentSessionCookieDomain();
+        if (CommonsStringUtils.isEmpty(domain)) {
+            String host = Context.getRequestServerName();
+            String[] hostParts = host.split("\\.");
+            if (hostParts.length == 4) {
+                domain = "." + hostParts[hostParts.length - 3] + "." + hostParts[hostParts.length - 2] + "." + hostParts[hostParts.length - 1];
+            } else if (hostParts.length == 3) {
+                domain = "." + hostParts[hostParts.length - 2] + "." + hostParts[hostParts.length - 1];
+            }
         }
+        sessionCookie.setDomain(domain);
 
         Context.getResponse().addCookie(sessionCookie);
         session.eol = System.currentTimeMillis() + sessionDuration * Consts.SEC2MILLISECONDS;
@@ -131,7 +135,7 @@ public class DevSession {
             sessions.remove(session.id);
 
             // Remove Session Cookie 
-            Cookie sessionCookie = new Cookie(DEV_SESSION_COOKIE_NAME, "");
+            Cookie sessionCookie = new Cookie(ServerSideConfiguration.instance().getDevelopmentSessionCookieName(), "");
             sessionCookie.setPath("/");
             sessionCookie.setMaxAge(0);
             Context.getResponse().addCookie(sessionCookie);
