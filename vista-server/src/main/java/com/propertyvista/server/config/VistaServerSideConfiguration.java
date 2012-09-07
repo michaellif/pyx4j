@@ -99,6 +99,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         return "http";
     }
 
+    @Override
+    public String getDevelopmentSessionCookieName() {
+        return "dev_access" + getApplicationURLNamespace().replaceAll("[\\-\\./:]", "_");
+    }
+
     public String getApplicationURLNamespace() {
         return "-22.birchwoodsoftwaregroup.com/";
     }
