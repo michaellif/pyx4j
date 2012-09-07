@@ -32,6 +32,8 @@ public class CookieLocaleResolver implements LocaleResolver {
 
     static public final Locale RU = new Locale("ru", "RU");
 
+    public static String COOKIE_NAME = "locale";
+
     protected Iterable<Locale> getAvailableLocale() {
         return Arrays.asList(Locale.ENGLISH, Locale.FRENCH, RU);
     }
@@ -48,7 +50,7 @@ public class CookieLocaleResolver implements LocaleResolver {
             return getDefaultLocale();
         }
         for (Cookie cookie : cookies) {
-            if ("locale".equals(cookie.getName())) {
+            if (COOKIE_NAME.equals(cookie.getName())) {
                 localeCookie = cookie.getValue();
                 break;
             }
