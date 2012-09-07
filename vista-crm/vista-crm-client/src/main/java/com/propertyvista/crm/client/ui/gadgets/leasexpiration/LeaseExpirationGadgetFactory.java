@@ -39,13 +39,13 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpirationGadgetMeta> {
 
-    public class LeaseExpriationGadget extends GadgetInstanceBase<LeaseExpirationGadgetMeta> {
+    public class LeaseExpirationGadget extends GadgetInstanceBase<LeaseExpirationGadgetMeta> {
 
         private CEntityDecoratableForm<LeaseExpirationGadgetDataDTO> form;
 
         private IBuildingFilterContainer board;
 
-        public LeaseExpriationGadget(GadgetMetadata metadata) {
+        public LeaseExpirationGadget(GadgetMetadata metadata) {
             super(metadata, LeaseExpirationGadgetMeta.class);
             final LeaseExpirationGadgetService service = GWT.<LeaseExpirationGadgetService> create(LeaseExpirationGadgetService.class);
 
@@ -121,7 +121,7 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
 
     @Override
     protected GadgetInstanceBase<LeaseExpirationGadgetMeta> createInstance(GadgetMetadata gadgetMetadata) throws Error {
-        return new LeaseExpriationGadget(gadgetMetadata);
+        return new LeaseExpirationGadget(gadgetMetadata);
     }
 
 }
