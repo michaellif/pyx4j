@@ -29,13 +29,20 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.customization.ICustomizationPersistenceService;
+import com.pyx4j.site.shared.domain.cusomization.CustomizationHolder;
 
 public abstract class CustomizationPersistenceService<E extends IEntity> implements ICustomizationPersistenceService<E> {
+
+    private final Class<? extends CustomizationHolder> customizationHolderTableClass;
+
+    public <H extends CustomizationHolder> CustomizationPersistenceService(Class<H> customizationHolderTableClass) {
+        this.customizationHolderTableClass = customizationHolderTableClass;
+    }
 
     @Override
     public void list(AsyncCallback<Vector<String>> callback, E proto) {
         Vector<String> result = new Vector<String>();
-        Iterator<String> i = new CustomizationPersistenceHelper<E>().list(proto).iterator();
+        Iterator<String> i = new CustomizationPersistenceHelper<E>(customizationHolderTableClass).list(proto).iterator();
         while (i.hasNext()) {
             result.add(i.next());
         }
@@ -44,19 +51,19 @@ public abstract class CustomizationPersistenceService<E extends IEntity> impleme
 
     @Override
     public void save(AsyncCallback<VoidSerializable> callback, String id, E entity, boolean allowOverwrite) {
-        new CustomizationPersistenceHelper<E>().save(id, entity, allowOverwrite);
+        new CustomizationPersistenceHelper<E>(customizationHolderTableClass).save(id, entity, allowOverwrite);
         Persistence.service().commit();
         callback.onSuccess(null);
     }
 
     @Override
     public void load(AsyncCallback<E> callback, String id, E proto) {
-        callback.onSuccess(new CustomizationPersistenceHelper<E>().load(id, proto));
+        callback.onSuccess(new CustomizationPersistenceHelper<E>(customizationHolderTableClass).load(id, proto));
     }
 
     @Override
     public void delete(com.google.gwt.user.client.rpc.AsyncCallback<VoidSerializable> callback, String id, E proto) {
-        new CustomizationPersistenceHelper<E>().delete(id, proto);
+        new CustomizationPersistenceHelper<E>(customizationHolderTableClass).delete(id, proto);
         Persistence.service().commit();
         callback.onSuccess(null);
     }

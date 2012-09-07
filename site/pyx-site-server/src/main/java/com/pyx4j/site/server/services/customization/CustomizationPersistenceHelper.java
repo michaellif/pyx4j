@@ -41,15 +41,21 @@ import com.pyx4j.entity.xml.XMLEntityParser;
 import com.pyx4j.entity.xml.XMLEntityWriter;
 import com.pyx4j.entity.xml.XMLStringWriter;
 import com.pyx4j.site.rpc.customization.CustomizationOverwriteAttemptException;
-import com.pyx4j.site.shared.domain.cusomization.CustomizationHolderEntity;
+import com.pyx4j.site.shared.domain.cusomization.CustomizationHolder;
 
 public class CustomizationPersistenceHelper<E extends IEntity> {
 
-    public Iterable<String> list(E proto) {
-        EntityQueryCriteria<CustomizationHolderEntity> criteria = EntityQueryCriteria.create(CustomizationHolderEntity.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().customizationClassName(), proto.getInstanceValueClass().getName()));
+    private final Class<? extends CustomizationHolder> customizationHolderEntityClass;
 
-        Iterator<CustomizationHolderEntity> i = Persistence.service().query(null, criteria, AttachLevel.ToStringMembers);
+    public <H extends CustomizationHolder> CustomizationPersistenceHelper(Class<H> customizationHolderEntityClass) {
+        this.customizationHolderEntityClass = customizationHolderEntityClass;
+    }
+
+    public Iterable<String> list(E proto) {
+        EntityQueryCriteria<? extends CustomizationHolder> criteria = EntityQueryCriteria.create(customizationHolderEntityClass);
+        criteria.add(PropertyCriterion.eq(criteria.proto().className(), proto.getInstanceValueClass().getName()));
+
+        Iterator<? extends CustomizationHolder> i = Persistence.service().query(null, criteria, AttachLevel.ToStringMembers);
 
         Vector<String> result = new Vector<String>();
         while (i.hasNext()) {
@@ -59,8 +65,8 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
     }
 
     public void save(String id, E entity, boolean allowOverwrite) {
-        EntityQueryCriteria<CustomizationHolderEntity> criteria = EntityQueryCriteria.create(CustomizationHolderEntity.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().customizationClassName(), entity.getInstanceValueClass().getName()));
+        EntityQueryCriteria<? extends CustomizationHolder> criteria = EntityQueryCriteria.create(customizationHolderEntityClass);
+        criteria.add(PropertyCriterion.eq(criteria.proto().className(), entity.getInstanceValueClass().getName()));
         criteria.add(PropertyCriterion.eq(criteria.proto().identifierKey(), id));
 
         if (!allowOverwrite && Persistence.service().count(criteria) != 0) {
@@ -75,9 +81,9 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
         XMLEntityWriter entityWriter = new XMLEntityWriter(stringWriter, new XMLEntityNamingConventionDefault());
         entityWriter.write(entity);
 
-        CustomizationHolderEntity settingsHolder = EntityFactory.create(CustomizationHolderEntity.class);
+        CustomizationHolder settingsHolder = EntityFactory.create(customizationHolderEntityClass);
         settingsHolder.identifierKey().setValue(id);
-        settingsHolder.customizationClassName().setValue(entity.getInstanceValueClass().getName());
+        settingsHolder.className().setValue(entity.getInstanceValueClass().getName());
         settingsHolder.serializedForm().setValue(stringWriter.toString());
 
         Persistence.service().persist(settingsHolder);
@@ -85,10 +91,10 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
     }
 
     public E load(String id, E proto) {
-        EntityQueryCriteria<CustomizationHolderEntity> criteria = EntityQueryCriteria.create(CustomizationHolderEntity.class);
+        EntityQueryCriteria<? extends CustomizationHolder> criteria = EntityQueryCriteria.create(customizationHolderEntityClass);
         criteria.add(PropertyCriterion.eq(criteria.proto().identifierKey(), id));
-        criteria.add(PropertyCriterion.eq(criteria.proto().customizationClassName(), proto.getInstanceValueClass().getName()));
-        CustomizationHolderEntity holder = Persistence.service().retrieve(criteria);
+        criteria.add(PropertyCriterion.eq(criteria.proto().className(), proto.getInstanceValueClass().getName()));
+        CustomizationHolder holder = Persistence.service().retrieve(criteria);
 
         if (holder == null) {
             return null;
@@ -112,8 +118,8 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
     }
 
     public void delete(String id, E proto) {
-        EntityQueryCriteria<CustomizationHolderEntity> criteria = EntityQueryCriteria.create(CustomizationHolderEntity.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().customizationClassName(), proto.getInstanceValueClass().getName()));
+        EntityQueryCriteria<? extends CustomizationHolder> criteria = EntityQueryCriteria.create(customizationHolderEntityClass);
+        criteria.add(PropertyCriterion.eq(criteria.proto().className(), proto.getInstanceValueClass().getName()));
         criteria.add(PropertyCriterion.eq(criteria.proto().identifierKey(), id));
 
         // delete the old version

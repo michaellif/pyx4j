@@ -116,6 +116,7 @@ public class PropertyCriterionEditor extends CEntityFolderRowEditor<PropertyCrit
         } else {
             return super.createCell(column);
         }
+        
     }
 
     @Override

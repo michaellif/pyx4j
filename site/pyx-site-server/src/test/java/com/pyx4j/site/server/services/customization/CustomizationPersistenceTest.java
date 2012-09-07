@@ -36,7 +36,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.rpc.customization.CustomizationOverwriteAttemptException;
-import com.pyx4j.site.shared.domain.cusomization.CustomizationHolderEntity;
 
 public class CustomizationPersistenceTest {
 
@@ -47,7 +46,7 @@ public class CustomizationPersistenceTest {
     @Before
     public void setUp() {
         Persistence.service().startTransaction();
-        Persistence.service().delete(EntityQueryCriteria.create(CustomizationHolderEntity.class));
+        Persistence.service().delete(EntityQueryCriteria.create(CustomizationHolderTable.class));
     }
 
     @After
@@ -73,19 +72,19 @@ public class CustomizationPersistenceTest {
 
         // test
         {
-            EntityQueryCriteria<CustomizationHolderEntity> criteriaFoo = EntityQueryCriteria.create(CustomizationHolderEntity.class);
-            criteriaFoo.add(PropertyCriterion.eq(criteriaFoo.proto().customizationClassName(), CustomizationTestEntity.class.getName()));
+            EntityQueryCriteria<CustomizationHolderTable> criteriaFoo = EntityQueryCriteria.create(CustomizationHolderTable.class);
+            criteriaFoo.add(PropertyCriterion.eq(criteriaFoo.proto().className(), CustomizationTestEntity.class.getName()));
             criteriaFoo.add(PropertyCriterion.eq(criteriaFoo.proto().identifierKey(), "foo"));
-            CustomizationHolderEntity holder = Persistence.service().retrieve(criteriaFoo);
+            CustomizationHolderTable holder = Persistence.service().retrieve(criteriaFoo);
 
             Assert.assertNotNull(holder);
         }
 
         {
-            EntityQueryCriteria<CustomizationHolderEntity> criteriaBar = EntityQueryCriteria.create(CustomizationHolderEntity.class);
-            criteriaBar.add(PropertyCriterion.eq(criteriaBar.proto().customizationClassName(), CustomizationTestEntity.class.getName()));
+            EntityQueryCriteria<CustomizationHolderTable> criteriaBar = EntityQueryCriteria.create(CustomizationHolderTable.class);
+            criteriaBar.add(PropertyCriterion.eq(criteriaBar.proto().className(), CustomizationTestEntity.class.getName()));
             criteriaBar.add(PropertyCriterion.eq(criteriaBar.proto().identifierKey(), "bar"));
-            CustomizationHolderEntity holder = Persistence.service().retrieve(criteriaBar);
+            CustomizationHolderTable holder = Persistence.service().retrieve(criteriaBar);
 
             Assert.assertNotNull(holder);
         }
@@ -189,7 +188,7 @@ public class CustomizationPersistenceTest {
     }
 
     private CustomizationPersistenceHelper<CustomizationTestEntity> serviceHelper() {
-        return new CustomizationPersistenceHelper<CustomizationTestEntity>();
+        return new CustomizationPersistenceHelper<CustomizationTestEntity>(CustomizationHolderTable.class);
     }
 
 }

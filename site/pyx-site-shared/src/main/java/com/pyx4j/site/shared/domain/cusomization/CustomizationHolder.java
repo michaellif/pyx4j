@@ -20,6 +20,7 @@
  */
 package com.pyx4j.site.shared.domain.cusomization;
 
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -27,16 +28,18 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @ToStringFormat("{0}")
-public interface CustomizationHolderEntity extends IEntity {
+public abstract interface CustomizationHolder extends IEntity {
 
     @Length(255)
-    IPrimitive<String> customizationClassName();
+    @Indexed(group = "a,1")
+    IPrimitive<String> className();
 
     @ToString(index = 0)
     @Length(255)
+    @Indexed(group = "a,2")
     IPrimitive<String> identifierKey();
 
-    @Length(2000)
+    @Length(20845)
     IPrimitive<String> serializedForm();
 
 }
