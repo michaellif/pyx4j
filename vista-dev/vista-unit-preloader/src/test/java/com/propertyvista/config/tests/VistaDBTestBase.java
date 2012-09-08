@@ -23,6 +23,8 @@ public abstract class VistaDBTestBase extends TestCase {
 
     private static int uniqueCount = 0;
 
+    private static int uniqueIntCount = 0;
+
     private static int runningTestsCount = 0;
 
     @Override
@@ -43,5 +45,9 @@ public abstract class VistaDBTestBase extends TestCase {
 
     public synchronized long uniqueLong() {
         return initializationTime + (++uniqueCount);
+    }
+
+    public synchronized int uniqueForTestInt() {
+        return (++uniqueIntCount);
     }
 }
