@@ -154,9 +154,16 @@
 	padding: 10px 0 0 0;
 }
 
+#narrowSpacer {
+	float: left;
+	padding-top: 400px;
+	width: 300px;
+	display: inline-block;
+	background: ${object2_10};
+}
+
 .newsBox {
 	width: 300px;
-	padding-top: 400px;
 	display: inline-block;
 	min-height: 520px;
 	float: left;
@@ -254,8 +261,14 @@
 	width: 100%;
 }
 .narrowGadgetBox {
-	padding: 20px 30px;
+    float:left;
+	display:inline-block;
+	width:300px;
 }
 .narrowGadgetBox .infobox_header {
 	background: ${object2_90};
 }
+.narrowGadgetBox .infobox_body {
+	border:0;
+}
+

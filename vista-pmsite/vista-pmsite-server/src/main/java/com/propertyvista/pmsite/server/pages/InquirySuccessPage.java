@@ -60,12 +60,12 @@ public class InquirySuccessPage extends BasePage {
             fp = PropertyFinder.getFloorplanDetails(planId);
             add(new FloorplanInfoPanel("infoPanel", fp));
             backLink = new BookmarkablePageLink<Void>("backLink", UnitDetailsPage.class, params);
-            backLink.setBody(new Model<String>(i18n.tr("Back to") + " " + UnitDetailsPage.LocalizedPageTitle));
+            backLink.setBody(new Model<String>(i18n.tr("Back to") + " " + i18n.tr(UnitDetailsPage.pageTitle)));
         } else if (propCode != null) {
             bld = PropertyFinder.getBuildingDetails(propCode);
             add(new BuildingInfoPanel("infoPanel", bld));
             backLink = new BookmarkablePageLink<Void>("backLink", AptDetailsPage.class, params);
-            backLink.setBody(new Model<String>(i18n.tr("Back to") + " " + AptDetailsPage.LocalizedPageTitle));
+            backLink.setBody(new Model<String>(i18n.tr("Back to") + " " + i18n.tr(AptDetailsPage.pageTitle)));
         } else {
 //          throw new RuntimeException();
             throw new RestartResponseException(FindAptPage.class);

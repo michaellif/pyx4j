@@ -12,7 +12,7 @@
 .infobox_body {
 	padding: 20px 20px;
 	float:left;
-	border-left: solid 1px ${object2_50};
+//	border-left: solid 1px ${object2_50};
 }
 
 .banner {
@@ -158,9 +158,16 @@
 	padding: 10px 0 0 0;
 }
 
+#narrowSpacer {
+	float: left;
+	padding-top: 400px;
+	width: 300px;
+	display: inline-block;
+	background: ${object2_10};
+}
+
 .newsBox {
 	width: 300px;
-	padding-top: 400px;
 	display: inline-block;
 	min-height: 520px;
 	float: left;
@@ -260,9 +267,17 @@
 	overflow:hidden;
 	width: 100%;
 }
+
 .narrowGadgetBox {
-	padding: 20px 30px;
+    float:left;
+	display:inline-block;
+	width:300px;
+	background: ${object2_10};
 }
 .narrowGadgetBox .infobox_header {
 	background: ${object2_90};
 }
+.narrowGadgetBox .infobox_body {
+	border:0;
+}
+

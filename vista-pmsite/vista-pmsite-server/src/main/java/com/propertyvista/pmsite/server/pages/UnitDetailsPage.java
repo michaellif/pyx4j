@@ -45,7 +45,7 @@ public class UnitDetailsPage extends BasePage {
 
     private static final I18n i18n = I18n.get(UnitDetailsPage.class);
 
-    public static final String LocalizedPageTitle = i18n.tr("Unit Details");
+    public static final String pageTitle = "Unit Details";
 
     public UnitDetailsPage(PageParameters params) {
         super(params);
@@ -96,7 +96,7 @@ public class UnitDetailsPage extends BasePage {
 
     @Override
     public String getLocalizedPageTitle() {
-        return LocalizedPageTitle;
+        return i18n.tr(pageTitle);
     }
 
     @Override

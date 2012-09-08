@@ -28,6 +28,7 @@ import templates.TemplateResources;
 
 import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
@@ -47,6 +48,10 @@ import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class BuildingInfoPanel extends Panel {
     private static final long serialVersionUID = 1L;
+
+    private static final I18n i18n = I18n.get(BuildingInfoPanel.class);
+
+    private static final String NAString = "Not Available";
 
     public BuildingInfoPanel(String id, Building bld) {
         super(id);
@@ -78,13 +83,13 @@ public class BuildingInfoPanel extends Panel {
         for (Floorplan fp : fpUnits.keySet()) {
             minMaxMarketRent = DomainUtil.minMaxPair(minMaxMarketRent, PropertyFinder.getMinMaxMarketRent(fpUnits.get(fp)));
         }
-        String priceFmt = "Not available";
+        String priceFmt = i18n.tr(NAString);
         if (minMaxMarketRent.getMin() != null && minMaxMarketRent.getMax() != null) {
             priceFmt = "$" + DomainUtil.roundMoney(minMaxMarketRent.getMin()) + " - $" + DomainUtil.roundMoney(minMaxMarketRent.getMax());
         }
         add(new Label("priceRange", priceFmt));
         // phone
-        String phone = "Not Available";
+        String phone = i18n.tr(NAString);
         String email = null;
         for (PropertyContact contact : bld.contacts().propertyContacts()) {
             if (contact.visibility().getValue() == PublicVisibilityType.global && !contact.phone().isNull()) {

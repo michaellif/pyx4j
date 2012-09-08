@@ -62,7 +62,7 @@ public class AptListPage extends BasePage {
 
     private static final I18n i18n = I18n.get(AptListPage.class);
 
-    public static final String LocalizedPageTitle = i18n.tr("Property List");
+    public static final String pageTitle = "Property List";
 
     @com.pyx4j.i18n.annotations.I18n
     public enum ViewMode {
@@ -192,7 +192,7 @@ public class AptListPage extends BasePage {
 
     @Override
     public String getLocalizedPageTitle() {
-        return LocalizedPageTitle;
+        return i18n.tr(pageTitle);
     }
 
     @Override

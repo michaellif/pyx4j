@@ -20,12 +20,15 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import com.propertyvista.domain.site.gadgets.CustomGadgetContent;
 import com.propertyvista.domain.site.gadgets.GadgetContent;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
+import com.propertyvista.domain.site.gadgets.HomePageGadget.GadgetArea;
 import com.propertyvista.domain.site.gadgets.HomePageGadget.GadgetStatus;
 import com.propertyvista.domain.site.gadgets.HomePageGadget.GadgetType;
 
@@ -39,9 +42,12 @@ public class CustomGadgetPanel extends Panel {
         @SuppressWarnings("unchecked")
         GadgetType type = GadgetType.getGadgetType((Class<? extends GadgetContent>) gadget.content().getInstanceValueClass());
         if (GadgetType.custom.equals(type) && GadgetStatus.published.equals(gadget.status().getValue())) {
-            add(new Label("moduleTitle", gadget.name().getValue()));
+            WebMarkupContainer gadgetBox = new WebMarkupContainer("gadgetBox");
+            gadgetBox.add(new Label("moduleTitle", gadget.name().getValue()));
             CustomGadgetContent content = gadget.content().cast();
-            add(new Label("moduleContent", content.htmlContent().html().getValue()).setEscapeModelStrings(false));
+            gadgetBox.add(new Label("moduleContent", content.htmlContent().html().getValue()).setEscapeModelStrings(false));
+            String cssClass = GadgetArea.wide.equals(gadget.area().getValue()) ? "wideGadgetBox" : "narrowGadgetBox";
+            add(gadgetBox.add(AttributeModifier.replace("class", cssClass)));
         } else {
             setVisible(false);
         }

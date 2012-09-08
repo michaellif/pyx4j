@@ -53,9 +53,7 @@ public class AptDetailsPage extends BasePage {
 
     private static final I18n i18n = I18n.get(AptDetailsPage.class);
 
-    public static final String LocalizedPageTitle = i18n.tr("Apartment Details");
-
-    static final String NAString = i18n.tr("Not Available");
+    public static final String pageTitle = "Apartment Details";
 
     public AptDetailsPage(PageParameters params) {
         super(params);
@@ -106,13 +104,13 @@ public class AptDetailsPage extends BasePage {
                 MinMaxPair<Integer> minMaxArea = PropertyFinder.getMinMaxAreaInSqFeet(fpUnits.get(floorPlan));
 
                 // price
-                String price = NAString;
+                String price = i18n.tr("Not Available");
                 if (minMaxMarketRent.getMin() != null) {
                     price = "$" + DomainUtil.roundMoney(minMaxMarketRent.getMin()) + " - $" + DomainUtil.roundMoney(minMaxMarketRent.getMax());
                 }
                 item.add(new Label("price", price));
                 // area
-                String area = NAString;
+                String area = i18n.tr("Not Available");
                 if (minMaxArea.getMin() != null) {
                     area = minMaxArea.getMin() + " - " + minMaxArea.getMax() + " " + areaUnits;
                 }
@@ -136,7 +134,7 @@ public class AptDetailsPage extends BasePage {
 
     @Override
     public String getLocalizedPageTitle() {
-        return LocalizedPageTitle;
+        return i18n.tr(pageTitle);
     }
 
     @Override

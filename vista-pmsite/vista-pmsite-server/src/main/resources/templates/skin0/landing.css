@@ -77,12 +77,12 @@
 	width: 280px;
 	display:inline-block;
 	vertical-align:top;
+	background: url("images/bg_sidebar.gif") repeat-x #34363C;
+	background-size:100% 100%;
 }
 .newsBox {
 	padding: 20px 30px;
-	min-height: 614px;
-	background: url("images/bg_sidebar.gif") repeat-x #34363C;
-	background-size:100% 100%;
+	min-height: 380px;
 }
 
 .newsBox .date {
