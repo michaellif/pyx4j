@@ -623,7 +623,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         Customer customer = EntityFactory.create(Customer.class);
         customer.person().name().firstName().setValue(TestLoaderRandomGen.getFirstName());
         customer.person().name().lastName().setValue(TestLoaderRandomGen.getLastName());
-        customer.person().email().setValue(customer.person().name().lastName() + "@" + customer.person().name().firstName().getValue() + ".com");
+        customer.person().email()
+                .setValue(customer.person().name().lastName() + String.valueOf(uniqueLong()) + "@" + customer.person().name().firstName().getValue() + ".com");
 
         mainAplt = EntityFactory.create(Tenant.class);
         mainAplt.customer().set(customer);
@@ -634,7 +635,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         customer = EntityFactory.create(Customer.class);
         customer.person().name().firstName().setValue(TestLoaderRandomGen.getFirstName());
         customer.person().name().lastName().setValue(TestLoaderRandomGen.getLastName());
-        customer.person().email().setValue(customer.person().name().lastName() + "@" + customer.person().name().firstName().getValue() + ".com");
+        customer.person().email()
+                .setValue(customer.person().name().lastName() + String.valueOf(uniqueLong()) + "@" + customer.person().name().firstName().getValue() + ".com");
 
         coAplt = EntityFactory.create(Tenant.class);
         coAplt.customer().set(customer);
