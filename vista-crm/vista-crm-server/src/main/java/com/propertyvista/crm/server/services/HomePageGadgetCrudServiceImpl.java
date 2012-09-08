@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services;
 
-import java.util.Date;
-
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -24,6 +22,7 @@ import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.gadgets.GadgetContent;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 import com.propertyvista.domain.site.gadgets.HomePageGadget.GadgetType;
+import com.propertyvista.server.common.reference.PMSiteContentCache;
 
 public class HomePageGadgetCrudServiceImpl extends AbstractCrudServiceImpl<HomePageGadget> implements HomePageGadgetCrudService {
 
@@ -62,7 +61,6 @@ public class HomePageGadgetCrudServiceImpl extends AbstractCrudServiceImpl<HomeP
         } else {
             super.persist(entity, dto);
         }
-        site._updateFlag().updated().setValue(new Date());
-        Persistence.service().merge(site._updateFlag());
+        PMSiteContentCache.siteDescriptorUpdated();
     }
 }

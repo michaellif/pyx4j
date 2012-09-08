@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.site;
 
-import com.pyx4j.entity.annotations.Cached;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -27,7 +26,6 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 
-@Cached
 @DiscriminatorValue("SiteDescriptor")
 public interface SiteDescriptor extends Descriptor {
 

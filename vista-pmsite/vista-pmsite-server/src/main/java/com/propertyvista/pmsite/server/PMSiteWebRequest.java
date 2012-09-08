@@ -29,6 +29,7 @@ import com.pyx4j.i18n.server.I18nManager;
 
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
+import com.propertyvista.server.common.reference.PMSiteContentCache;
 import com.propertyvista.shared.CompiledLocale;
 
 public class PMSiteWebRequest extends ServletWebRequest {
@@ -44,16 +45,14 @@ public class PMSiteWebRequest extends ServletWebRequest {
 
         // get PMContentManager with site descr separate (if changed update it)
 
-        final String cacheKey = "pm-site";
-
-        PMSiteContentManager cm = (PMSiteContentManager) CacheService.get(cacheKey);
+        PMSiteContentManager cm = (PMSiteContentManager) CacheService.get(PMSiteContentCache.cacheKey);
         if (cm == null) {
             cm = new PMSiteContentManager();
-            CacheService.put(cacheKey, cm);
+            CacheService.put(PMSiteContentCache.cacheKey, cm);
         } else {
             if (cm.refreshRequired()) {
                 cm = new PMSiteContentManager();
-                CacheService.put(cacheKey, cm);
+                CacheService.put(PMSiteContentCache.cacheKey, cm);
             }
         }
         contentManager = cm;

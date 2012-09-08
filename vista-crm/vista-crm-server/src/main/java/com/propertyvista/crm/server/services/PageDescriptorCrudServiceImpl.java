@@ -13,17 +13,14 @@
  */
 package com.propertyvista.crm.server.services;
 
-import java.util.Date;
-
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
-import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.server.common.reference.PMSiteContentCache;
 
 public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageDescriptor> implements PageDescriptorCrudService {
 
@@ -82,9 +79,6 @@ public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageD
         super.persist(dbo, dto);
 
         // set update flag
-        EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
-        SiteDescriptor siteDescriptor = Persistence.service().retrieve(criteria);
-        siteDescriptor._updateFlag().updated().setValue(new Date());
-        Persistence.service().persist(siteDescriptor);
+        PMSiteContentCache.siteDescriptorUpdated();
     }
 }
