@@ -41,6 +41,7 @@ import com.pyx4j.svg.chart.BarChart2D;
 import com.pyx4j.svg.chart.BarChartModel;
 import com.pyx4j.svg.chart.BarChartModel.BarChartItem;
 import com.pyx4j.svg.chart.ChartTheme;
+import com.pyx4j.svg.chart.ColorPicker;
 import com.pyx4j.svg.chart.DataSource;
 import com.pyx4j.svg.chart.Gauge;
 import com.pyx4j.svg.chart.GridBasedChart;
@@ -347,4 +348,13 @@ public class SvgTestFactory {
         return svgroot;
     }
 
+    public static SvgRoot createColorPickerTest(SvgFactory factory, int x, int y) {
+        SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
+        ColorPicker colorPicker = new ColorPicker(factory, 115, 115, 90, 90);
+        g.add(colorPicker);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
+        return svgroot;
+    }
 }

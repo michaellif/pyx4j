@@ -22,14 +22,17 @@ package com.pyx4j.svg.gwt;
 
 import com.pyx4j.svg.basic.Circle;
 import com.pyx4j.svg.basic.ClipPath;
+import com.pyx4j.svg.basic.Defs;
 import com.pyx4j.svg.basic.Ellipse;
 import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.Image;
 import com.pyx4j.svg.basic.Line;
+import com.pyx4j.svg.basic.LinearGradient;
 import com.pyx4j.svg.basic.Path;
 import com.pyx4j.svg.basic.Polygon;
 import com.pyx4j.svg.basic.Polyline;
 import com.pyx4j.svg.basic.Rect;
+import com.pyx4j.svg.basic.Stop;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.basic.Text;
@@ -47,6 +50,27 @@ public class SvgFactoryForGwt implements SvgFactory {
         return new GroupImpl();
     }
 
+    @Override
+    public Stop createStop() {
+        return new StopImpl();
+    }
+
+    @Override
+    public Defs createDefs() {
+        return new DefsImpl();
+    }
+
+    @Override
+    public LinearGradient createLinearGradient(float x1, float y1, float x2, float y2) {
+        return new LinearGradientImpl(x1, y1, x2, y2);
+    }
+
+    /**
+     * @Override
+     *           public RadialGradient createRadialGradient() {
+     *           return new RadialGradientImpl();
+     *           }
+     */
     @Override
     public Path createPath(String d) {
         return new PathImpl(d);

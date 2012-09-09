@@ -135,5 +135,12 @@ public class SVGDemo implements EntryPoint {
         ((Widget) svgPanel).setSize("352px", "800px");
         content.add((Widget) svgPanel);
 
+        //=========================================//
+
+        content.add(new HTML("Color Picker"));
+        svgPanel = SvgTestFactory.createColorPickerTest(svgFactory, 0, 0);
+        ((Widget) svgPanel).setSize("352px", "400px");
+        content.add((Widget) svgPanel);
+
     }
 }

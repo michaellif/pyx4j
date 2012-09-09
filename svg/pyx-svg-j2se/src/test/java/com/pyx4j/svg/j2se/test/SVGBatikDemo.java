@@ -40,7 +40,7 @@ import com.pyx4j.svg.j2se.SvgRootImpl;
 import com.pyx4j.svg.test.SvgTestFactory;
 
 public class SVGBatikDemo {
-    private static final int HEIGHT = 3500;
+    private static final int HEIGHT = 4000;
 
     public static void main(String[] args) throws IOException {
         // Create an SVG document.
@@ -65,6 +65,7 @@ public class SVGBatikDemo {
         SvgTestFactory.createBarChart2DTest(factory, 10, 1350);
         SvgTestFactory.createPieChart2DTest(factory, 10, 1800);
         SvgTestFactory.createGaugeTest(factory, 20, 2600);
+        SvgTestFactory.createColorPickerTest(factory, 20, 3400);
 
         SVGGraphics2D g = new SVGGraphics2D(doc);
         g.setSVGCanvasSize(new Dimension(800, HEIGHT));

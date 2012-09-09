@@ -28,6 +28,12 @@ public interface SvgFactory {
 
     Group createGroup();
 
+    Defs createDefs();
+
+    Stop createStop();
+
+    LinearGradient createLinearGradient(float x1, float y1, float x2, float y2);
+
     Path createPath(String d);
 
     Path createPath(String d, Animator animator);
