@@ -221,7 +221,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public final boolean isEnabled() {
         for (IAccessAdapter adapter : accessAdapters) {
-            Boolean enabled = adapter.isEnabled(this);
+            Boolean enabled = adapter.isEnabled();
             if (enabled != null && !enabled) {
                 return false;
             }
@@ -230,13 +230,11 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     }
 
     public final void setEnabled(boolean enabled) {
-        if (enabled != isEnabled()) {
-            componentAccessAdapter.setEnabled(enabled);
+        boolean before = isEnabled();
+        componentAccessAdapter.setEnabled(enabled);
+        if (before != isEnabled()) {
             applyEnablingRules();
             revalidate();
-            if (!enabled) {
-                setVisited(false);
-            }
         }
     }
 
@@ -247,7 +245,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public final boolean isVisible() {
         for (IAccessAdapter adapter : accessAdapters) {
-            Boolean visible = adapter.isVisible(this);
+            Boolean visible = adapter.isVisible();
             if (visible != null && !visible) {
                 return false;
             }
@@ -256,13 +254,11 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     }
 
     public final void setVisible(boolean visible) {
-        if (visible != isVisible()) {
-            componentAccessAdapter.setVisible(visible);
+        boolean before = isVisible();
+        componentAccessAdapter.setVisible(visible);
+        if (before != isVisible()) {
             applyVisibilityRules();
             revalidate();
-            if (!visible) {
-                setVisited(false);
-            }
         }
     }
 
@@ -273,7 +269,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public final boolean isEditable() {
         for (IAccessAdapter adapter : accessAdapters) {
-            Boolean editable = adapter.isEditable(this);
+            Boolean editable = adapter.isEditable();
             if (editable != null && !editable) {
                 return false;
             }
@@ -282,13 +278,11 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     }
 
     public final void setEditable(boolean editable) {
-        if (editable != isEditable()) {
-            componentAccessAdapter.setEditable(editable);
+        boolean before = isEditable();
+        componentAccessAdapter.setEditable(editable);
+        if (before != isEditable()) {
             applyEditabilityRules();
             revalidate();
-            if (!editable) {
-                setVisited(false);
-            }
         }
     }
 
@@ -299,8 +293,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public final boolean isViewable() {
         for (IAccessAdapter adapter : accessAdapters) {
-            Boolean viewable = adapter.isViewable(this);
-            if (viewable != null && adapter.isViewable(this)) {
+            Boolean viewable = adapter.isViewable();
+            if (viewable != null && adapter.isViewable()) {
                 return true;
             }
         }
@@ -308,13 +302,11 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     }
 
     public final void setViewable(boolean viewable) {
-        if (viewable != isViewable()) {
-            componentAccessAdapter.setViewable(viewable);
+        boolean before = isViewable();
+        componentAccessAdapter.setViewable(viewable);
+        if (before != isViewable()) {
             applyViewabilityRules();
             revalidate();
-            if (!viewable) {
-                setVisited(false);
-            }
         }
     }
 
@@ -683,8 +675,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         StringBuilder adaptersReport = new StringBuilder();
         for (IAccessAdapter adapter : accessAdapters) {
             adaptersReport.append(adapter.getClass().getName()).append(" ");
-            adaptersReport.append("isEnabled ").append(adapter.isEnabled(this)).append(" ");
-            adaptersReport.append("isEditable ").append(adapter.isEditable(this)).append(" ");
+            adaptersReport.append("isEnabled ").append(adapter.isEnabled()).append(" ");
+            adaptersReport.append("isEditable ").append(adapter.isEditable()).append(" ");
         }
 
         return "Type:" + this.getClass() + ";\n Title: " + getTitle() + ";\n value:" + getValue() + "; isMandatory=" + isMandatory() + ";\n isEnabled="

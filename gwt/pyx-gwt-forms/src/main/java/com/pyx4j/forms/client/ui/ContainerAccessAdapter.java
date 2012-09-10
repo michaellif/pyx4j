@@ -40,7 +40,7 @@ public class ContainerAccessAdapter implements IAccessAdapter {
     }
 
     @Override
-    public Boolean isEnabled(CComponent<?, ?> component) {
+    public Boolean isEnabled() {
         if (!inheritEnabled || container == null) {
             return null;
         } else {
@@ -49,7 +49,7 @@ public class ContainerAccessAdapter implements IAccessAdapter {
     }
 
     @Override
-    public Boolean isEditable(CComponent<?, ?> component) {
+    public Boolean isEditable() {
         if (!inheritEditable || container == null) {
             return null;
         } else {
@@ -58,7 +58,7 @@ public class ContainerAccessAdapter implements IAccessAdapter {
     }
 
     @Override
-    public Boolean isVisible(CComponent<?, ?> component) {
+    public Boolean isVisible() {
         if (!inheritVisible || container == null) {
             return null;
         } else {
@@ -67,7 +67,7 @@ public class ContainerAccessAdapter implements IAccessAdapter {
     }
 
     @Override
-    public Boolean isViewable(CComponent<?, ?> component) {
+    public Boolean isViewable() {
         if (!inheritViewable || container == null) {
             return null;
         } else {
