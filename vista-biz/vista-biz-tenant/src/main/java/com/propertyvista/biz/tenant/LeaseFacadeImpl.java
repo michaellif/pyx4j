@@ -71,8 +71,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     private static final I18n i18n = I18n.get(LeaseFacadeImpl.class);
 
-    final boolean bugNo1549 = true;
-
     @Override
     public Lease create(Status status) {
         Lease lease = EntityFactory.create(Lease.class);
@@ -162,8 +160,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
 //        Persistence.service().retrieve(lease.currentTerm().version().guarantors());
 
         // calculate lease dates: 
+        Persistence.service().retrieveMember(lease.leaseTerms());
         assert !lease.leaseTerms().isEmpty();
-        Persistence.service().retrieve(lease.leaseTerms());
         lease.leaseFrom().set(lease.leaseTerms().get(0).termFrom());
         lease.leaseTo().set(lease.leaseTerms().get(lease.leaseTerms().size() - 1).termTo());
 
@@ -212,9 +210,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public LeaseTerm persist(LeaseTerm leaseTerm) {
         persistCustomers(leaseTerm);
-        leaseTerm.lease().detach();
         Persistence.secureSave(leaseTerm);
-
         return leaseTerm;
     }
 
@@ -510,10 +506,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         if (!succeeded) {
-            if (bugNo1549) {
-                DataDump.dumpToDirectory("lease-bug", "error", lease);
-                DataDump.dumpToDirectory("lease-bug", "error", unit);
-            }
             throw new UserRuntimeException(i18n.tr("There no service ''{0}'' for selected unit: {1} from Building: {2}", lease.type().getStringView(),
                     unit.getStringView(), unit.building().getStringView()));
         }
@@ -558,10 +550,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Persistence.service().retrieve(lease.billingAccount().deposits());
         lease.billingAccount().deposits().clear();
 
-        if (bugNo1549) {
-            DataDump.dumpToDirectory("lease-bug", "serviceItem", leaseTerm);
-        }
-
         // Service by Service item:
         Service.ServiceV service = null;
         Persistence.service().retrieve(serviceItem.product());
@@ -591,6 +579,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     private Lease persist(Lease lease, boolean finalize) {
+        DataDump.dump("save1", lease.currentTerm());
+
         boolean doReserve = false;
         boolean doUnreserve = false;
         Lease previousLeaseEdition = null;

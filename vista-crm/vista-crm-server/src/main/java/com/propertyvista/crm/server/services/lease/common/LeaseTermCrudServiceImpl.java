@@ -71,6 +71,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     @Override
     protected void save(LeaseTerm dbo, LeaseTermDTO in) {
         updateAdjustments(dbo);
+        dbo.lease().currentTerm().set(dbo);
         ServerSideFactory.create(LeaseFacade.class).persist(dbo.lease());
     }
 

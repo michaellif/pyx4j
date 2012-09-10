@@ -36,6 +36,7 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -251,6 +252,7 @@ public interface Lease extends IEntity {
     LeaseApplication leaseApplication();
 
     @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
     IList<LeaseTerm> leaseTerms();
 
     LeaseTerm currentTerm();
