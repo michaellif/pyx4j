@@ -106,6 +106,8 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
                         ValidationResults validationResults = folder.getValidationResults();
                         ValidationResults results = validationResults.getValidationResultsByOriginator(folder);
                         validationMessageHolder.setHTML(results.getMessagesText(true, false));
+                    } else {
+                        validationMessageHolder.setHTML("");
                     }
                 }
             }

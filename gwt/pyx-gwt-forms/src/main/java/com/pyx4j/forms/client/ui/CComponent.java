@@ -437,6 +437,9 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public void applyVisibilityRules() {
         boolean visible = isVisible();
+        if (!visible) {
+            setVisited(false);
+        }
         if (isWidgetCreated() && asWidget().isVisible() != visible) {
             asWidget().setVisible(visible);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visible);
@@ -445,6 +448,9 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public void applyEnablingRules() {
         boolean enabled = isEnabled();
+        if (!enabled) {
+            setVisited(false);
+        }
         if (isWidgetCreated() && widget.isEnabled() != enabled) {
             widget.setEnabled(enabled);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.enabled);
@@ -453,6 +459,9 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public void applyEditabilityRules() {
         boolean editable = isEditable();
+        if (!editable) {
+            setVisited(false);
+        }
         if (isWidgetCreated() && widget.isEditable() != editable) {
             widget.setEditable(editable);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editable);
@@ -462,6 +471,9 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public void applyViewabilityRules() {
         boolean viewable = isViewable();
+        if (!viewable) {
+            setVisited(false);
+        }
         if (isWidgetCreated() && widget.isViewable() != viewable) {
             widget.setViewable(viewable);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.viewable);
