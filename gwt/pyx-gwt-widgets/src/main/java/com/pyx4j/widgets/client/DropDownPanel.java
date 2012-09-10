@@ -20,34 +20,12 @@
  */
 package com.pyx4j.widgets.client;
 
-import java.util.ArrayList;
-
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class DropDownPanel extends PopupPanel {
-
-    // Set of open panels so we can close them on window resize, because resizing
-    // the window is equivalent to the user clicking outside the widget.
-    private static ArrayList<DropDownPanel> openPanels;
-
-    private static ResizeHandler resizeHandler = new ResizeHandler() {
-
-        @Override
-        public void onResize(ResizeEvent event) {
-            if (openPanels != null) {
-                for (DropDownPanel panel : openPanels) {
-                    assert (panel.isShowing());
-                    if (panel.currentAnchor != null) {
-                        panel.showRelativeTo(panel.currentAnchor);
-                    }
-                }
-            }
-        }
-    };
 
     private Widget currentAnchor;
 
@@ -55,49 +33,26 @@ public class DropDownPanel extends PopupPanel {
      * Creates a new drop down panel.
      */
     public DropDownPanel() {
-        super(true);
+        super(true, false);
         setStyleName("gwt-DropDownPanel");
         setPreviewingAllNativeEvents(true);
-    }
+        Window.addResizeHandler(new ResizeHandler() {
+            @Override
+            public void onResize(ResizeEvent event) {
+                if (PopupPanel.getOpenPopups() != null) {
+                    for (PopupPanel panel : PopupPanel.getOpenPopups()) {
+                        assert (panel.isShowing());
 
-    @Override
-    public final void hide() {
-        hide(false);
-    }
-
-    @Override
-    public void hide(boolean autohide) {
-        if (!isShowing()) {
-            return;
-        }
-        super.hide(autohide);
-
-        // Removes this from the list of open panels.
-        if (openPanels != null) {
-            openPanels.remove(this);
-        }
-    }
-
-    @Override
-    public void show() {
-        if (isShowing()) {
-            return;
-        }
-        // Add this to the set of open panels.
-        if (openPanels == null) {
-            openPanels = new ArrayList<DropDownPanel>();
-            Window.addResizeHandler(resizeHandler);
-        }
-        openPanels.add(this);
-        super.show();
+                        if (panel instanceof DropDownPanel && ((DropDownPanel) panel).currentAnchor != null) {
+                            panel.showRelativeTo(((DropDownPanel) panel).currentAnchor);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     public void showRelativeTo(Widget anchor) {
-        setCurrentAnchor(anchor);
-        super.showRelativeTo(anchor);
-    }
-
-    private void setCurrentAnchor(Widget anchor) {
         if (currentAnchor != null) {
             this.removeAutoHidePartner(currentAnchor.getElement());
         }
@@ -105,6 +60,7 @@ public class DropDownPanel extends PopupPanel {
             this.addAutoHidePartner(anchor.getElement());
         }
         currentAnchor = anchor;
+        super.showRelativeTo(anchor);
     }
 
 }

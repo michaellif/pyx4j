@@ -35,6 +35,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.PopupPanel;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 
 public final class AppPlaceContorller extends PlaceController {
@@ -134,6 +135,7 @@ public final class AppPlaceContorller extends PlaceController {
     }
 
     private void sureGoTo(AppPlace newPlace) {
+        PopupPanel.hideAll();
         forwardedFrom = where;
         where = newPlace;
         log.debug("forwarded to: {} from {}", where, forwardedFrom);

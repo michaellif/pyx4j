@@ -498,9 +498,9 @@ public class Dialog extends DialogPanel {
     }
 
     @Override
-    public void hide() {
+    public void hide(boolean autoClosed) {
         openDialogs.remove(this);
-        super.hide();
+        super.hide(autoClosed);
 
         // Set proper focus in the Dialog blow just closed one.
         if (openDialogs.size() > 0) {
