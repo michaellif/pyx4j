@@ -464,6 +464,15 @@
         </profile>
 
         <profile>
+            <id>deploy-target-www55</id>
+            <properties>
+                <deployContext>vista55</deployContext>
+                <vista-tomcat-url>http://qa.birchwoodsoftwaregroup.com</vista-tomcat-url>
+                <vista-app-ping-url>http://www55.birchwoodsoftwaregroup.com</vista-app-ping-url>
+            </properties>
+        </profile>
+
+        <profile>
             <id>deploy-target-vista-demo</id>
             <properties>
                 <deployContext>vista-demo</deployContext>
