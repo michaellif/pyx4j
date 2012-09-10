@@ -55,15 +55,6 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusComponent<
         return watermark;
     }
 
-    @Override
-    protected void onWidgetCreated() {
-        super.onWidgetCreated();
-        if (isWidgetCreated() && asWidget() instanceof WatermarkComponent) {
-            ((WatermarkComponent) asWidget()).setWatermark(watermark);
-        }
-
-    }
-
     class TextComponentLengthValidator implements EditableValueValidator<DATA> {
 
         private final String validationMessage;

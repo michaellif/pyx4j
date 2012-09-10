@@ -29,9 +29,10 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.widgets.client.ITextWidget;
+import com.pyx4j.widgets.client.WatermarkComponent;
 
 public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP extends CTextComponent<DATA, ?>> extends
-        NFocusComponent<DATA, WIDGET, CCOMP, HTML> implements INativeTextComponent<DATA> {
+        NFocusComponent<DATA, WIDGET, CCOMP, HTML> implements INativeTextComponent<DATA>, WatermarkComponent {
 
     public NTextComponent(CCOMP cComponent) {
         this(cComponent, null);
@@ -58,7 +59,7 @@ public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP ext
                 }
             }
         });
-
+        setWatermark(getCComponent().getWatermark());
     }
 
     @Override
@@ -81,4 +82,10 @@ public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP ext
         return getEditor().addChangeHandler(handler);
     }
 
+    @Override
+    public void setWatermark(String watermark) {
+        if (getEditor() instanceof WatermarkComponent) {
+            ((WatermarkComponent) getEditor()).setWatermark(watermark);
+        }
+    }
 }

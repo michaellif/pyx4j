@@ -29,10 +29,9 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.widgets.client.ITextWidget;
-import com.pyx4j.widgets.client.WatermarkComponent;
 
 public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP extends CTextFieldBase<DATA, ?>> extends NTextComponent<DATA, WIDGET, CCOMP>
-        implements INativeTextComponent<DATA>, WatermarkComponent {
+        implements INativeTextComponent<DATA> {
 
     public NTextFieldBase(CCOMP cComponent) {
         this(cComponent, null);
@@ -85,13 +84,6 @@ public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP ext
         } else {
             assert false : "getNativeValue() shouldn't be called in viewable mode";
             return null;
-        }
-    }
-
-    @Override
-    public void setWatermark(String watermark) {
-        if (getEditor() instanceof WatermarkComponent) {
-            ((WatermarkComponent) getEditor()).setWatermark(watermark);
         }
     }
 
