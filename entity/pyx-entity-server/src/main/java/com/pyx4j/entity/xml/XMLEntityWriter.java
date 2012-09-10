@@ -49,6 +49,8 @@ public class XMLEntityWriter {
 
     private boolean emitId = true;
 
+    private boolean emitIdentityHashCode = false;
+
     private boolean emitOnlyOwnedReferences = false;
 
     private boolean emitAttachLevel = false;
@@ -132,6 +134,14 @@ public class XMLEntityWriter {
         this.emitId = emitId;
     }
 
+    public boolean isEmitIdentityHashCode() {
+        return emitIdentityHashCode;
+    }
+
+    public void setEmitIdentityHashCode(boolean emitIdentityHashCode) {
+        this.emitIdentityHashCode = emitIdentityHashCode;
+    }
+
     public void setEmitOnlyOwnedReferences(boolean emitOnlyOwnedReferences) {
         this.emitOnlyOwnedReferences = emitOnlyOwnedReferences;
     }
@@ -212,10 +222,16 @@ public class XMLEntityWriter {
             }
         } else if (emitted && graph.isEmittedVerticaly(entity)) {
             // Avoid cyclic references even if not writing id
+            if (isEmitIdentityHashCode()) {
+                entityAttributes.put("identity", Integer.toHexString(System.identityHashCode(entity.getValue())));
+            }
             return;
         }
         if (!isEmitId() && entity.isValueDetached()) {
             throw new Error("Writing detached entity " + entity.getDebugExceptionInfoString());
+        }
+        if (isEmitIdentityHashCode()) {
+            entityAttributes.put("identity", Integer.toHexString(System.identityHashCode(entity.getValue())));
         }
         if ((declaredObjectClass != null) && (!entity.getObjectClass().equals(declaredObjectClass))) {
             String typeName = namingConvention.getXMLName(entity.getObjectClass());

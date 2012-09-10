@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.server;
 
+import org.apache.commons.lang.Validate;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -51,6 +53,19 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
             entity = super.retrieve(primaryKey.asCurrentKey(), retrieveTraget);
         } else if (primaryKey.getVersion() == Key.VERSION_CURRENT && entity.version().isNull()) {
             entity = super.retrieve(primaryKey.asDraftKey(), retrieveTraget);
+        }
+        return entity;
+    }
+
+    @Override
+    protected E retrieveForSave(DTO dto) {
+        Validate.isTrue(dto.getPrimaryKey().getVersion() == Key.VERSION_DRAFT);
+        E entity = super.retrieveForSave(dto);
+        if (entity.version().isNull()) {
+            dto.setPrimaryKey(dto.getPrimaryKey().asCurrentKey());
+            entity = super.retrieveForSave(dto);
+            entity.version().set(EntityGraph.businessDuplicate(entity.version()));
+            VersionedEntityUtils.setAsDraft(entity.version());
         }
         return entity;
     }

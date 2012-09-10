@@ -163,6 +163,7 @@ public class DataDump {
                 xmlWriter.setEmitAttachLevel(true);
                 xmlWriter.setEmitLogTransient(false);
                 xmlWriter.setEmitXmlTransient(true);
+                xmlWriter.setEmitIdentityHashCode(true);
                 if (item instanceof List) {
                     xml.start("list");
                     for (IEntity ent : (List<IEntity>) item) {
