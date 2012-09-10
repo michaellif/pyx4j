@@ -29,12 +29,14 @@ import com.propertyvista.crm.client.ui.gadgets.demo.DemoGadget;
 import com.propertyvista.crm.client.ui.gadgets.demo.GaugeGadget;
 import com.propertyvista.crm.client.ui.gadgets.demo.LineChartGadget;
 import com.propertyvista.crm.client.ui.gadgets.demo.PieChart2DGadget;
+import com.propertyvista.crm.client.ui.gadgets.leasexpiration.LeaseExpirationGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.other.BuildingListerGadget;
 import com.propertyvista.crm.client.ui.gadgets.payments.PaymentRecordsGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.payments.PaymentsSummaryGadgetFactory;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 /** Global container of all possible gadgets. */
+@Deprecated
 public class Directory {
 
     public enum Categories {
@@ -61,6 +63,8 @@ public class Directory {
         
         new PaymentRecordsGadgetFactory(),
         new PaymentsSummaryGadgetFactory(),
+        
+        new LeaseExpirationGadgetFactory(),
         
         new BarChart2DGadget(),
         new DemoGadget(),

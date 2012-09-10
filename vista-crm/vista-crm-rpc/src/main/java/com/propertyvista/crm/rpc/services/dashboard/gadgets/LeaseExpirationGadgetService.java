@@ -17,13 +17,18 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
+import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseExpirationGadgetService extends IService {
 
     void leaseExpriation(AsyncCallback<LeaseExpirationGadgetDataDTO> callback, Vector<Building> buildings);
+
+    void listCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, Vector<Building> buildingsFilter, LeaseExpirationGadgetMeta.GadgetView activeView);
 
 }

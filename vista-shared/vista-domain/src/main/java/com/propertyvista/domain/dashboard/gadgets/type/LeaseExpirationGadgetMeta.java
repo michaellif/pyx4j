@@ -15,9 +15,21 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 
 @DiscriminatorValue("Lease Expiration Gadget")
 @Caption(name = "Lease Expiration", description = "TBD")
 public interface LeaseExpirationGadgetMeta extends GadgetMetadata {
+
+    @I18n(strategy = I18nStrategy.IgnoreThis)
+    enum GadgetView {
+
+        SUMMARY, LEASES_ENDING_THIS_MONTH, LEASES_ENDING_NEXT_MONTH, LEASES_ENDING_90_DAYS, LEASES_ON_MONTH_TO_MONTH, UNIT_OCCUPANCY_PCT, UNIT_OCCUPANCY_NUM
+
+    }
+
+    IPrimitive<GadgetView> activeView();
 
 }

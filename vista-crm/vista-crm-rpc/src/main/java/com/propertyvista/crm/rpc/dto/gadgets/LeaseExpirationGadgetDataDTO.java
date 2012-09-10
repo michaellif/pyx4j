@@ -27,12 +27,16 @@ public interface LeaseExpirationGadgetDataDTO extends IEntity {
     @Caption(name = "# Units Occupied")
     IPrimitive<Integer> unitsOccupied();
 
+    @Caption(name = "# Leases Ending This Month")
     IPrimitive<Integer> numOfLeasesEndingThisMonth();
 
+    @Caption(name = "# Leases Ending Next Month")
     IPrimitive<Integer> numOfLeasesEndingNextMonth();
 
+    @Caption(name = "# Leases Ending 90+ Days")
     IPrimitive<Integer> numOfLeasesEndingOver90Days();
 
+    @Caption(name = "# Leases on Month to Month")
     IPrimitive<Integer> numOfLeasesOnMonthToMonth();
 
 }
