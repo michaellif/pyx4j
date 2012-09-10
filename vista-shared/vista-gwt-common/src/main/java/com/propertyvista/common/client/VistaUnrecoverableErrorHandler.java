@@ -122,7 +122,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
     }
 
     protected void showMessage(String userMessage, String debugMessage, UserMessageType messageType) {
-        AppSite.instance().getEventBus().fireEvent(new UserMessageEvent(userMessage, debugMessage, messageType));
+        AppSite.getEventBus().fireEvent(new UserMessageEvent(userMessage, debugMessage, messageType));
 
     }
 
