@@ -300,6 +300,17 @@ public class EntityGraph {
         return update(src, dst, new HashSet<IEntity>());
     }
 
+    public static boolean updateMemebers(IEntity src, IEntity dst, IPrimitive<?>... protoValues) {
+        boolean updated = false;
+        for (IPrimitive<?> member : protoValues) {
+            if (!src.getMember(member.getFieldName()).equals(dst.getMember(member.getFieldName()))) {
+                dst.setMemberValue(member.getFieldName(), src.getMemberValue(member.getFieldName()));
+                updated = true;
+            }
+        }
+        return updated;
+    }
+
     @SuppressWarnings("unchecked")
     public static boolean update(IEntity src, IEntity dst, Set<IEntity> processed) {
         if ((src == dst) || (processed.contains(src))) {

@@ -116,6 +116,8 @@ public class DevSession {
                 domain = "." + hostParts[hostParts.length - 3] + "." + hostParts[hostParts.length - 2] + "." + hostParts[hostParts.length - 1];
             } else if (hostParts.length == 3) {
                 domain = "." + hostParts[hostParts.length - 2] + "." + hostParts[hostParts.length - 1];
+            } else {
+                domain = host;
             }
         }
         sessionCookie.setDomain(domain);
