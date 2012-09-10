@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -29,13 +30,14 @@ import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserBuildings;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class BuildingDatasetAccessBuilder {
 
     public static void updateAccessList(CrmUser user) {
         EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
-        Employee employee = Persistence.service().retrieve(criteria);
+        final Employee employee = Persistence.service().retrieve(criteria);
         if (employee == null) {
             throw new Error("Employee not found for CrmUser " + user.getPrimaryKey());
         }
@@ -45,30 +47,35 @@ public class BuildingDatasetAccessBuilder {
         EntityQueryCriteria<CrmUserBuildings> userBuildingCriteria = EntityQueryCriteria.create(CrmUserBuildings.class);
         userBuildingCriteria.add(PropertyCriterion.eq(userBuildingCriteria.proto().user(), employee.user()));
         List<CrmUserBuildings> ubl = Persistence.service().query(userBuildingCriteria);
-        Map<Building, CrmUserBuildings> userBuildingMap = new HashMap<Building, CrmUserBuildings>();
-        Set<Building> unConfirmed = new HashSet<Building>();
+        final Map<Building, CrmUserBuildings> userBuildingMap = new HashMap<Building, CrmUserBuildings>();
+        final Set<Building> unConfirmed = new HashSet<Building>();
         for (CrmUserBuildings ub : ubl) {
             userBuildingMap.put(ub.building(), ub);
             unConfirmed.add(ub.building());
         }
-
-        for (Portfolio portfolio : employee.portfolios()) {
-            for (Building b : portfolio.buildings()) {
-                if (userBuildingMap.containsKey(b)) {
-                    unConfirmed.remove(b);
-                } else {
-                    CrmUserBuildings ub = EntityFactory.create(CrmUserBuildings.class);
-                    ub.building().set(b);
-                    ub.user().set(employee.user());
-                    Persistence.service().persist(ub);
-                    userBuildingMap.put(ub.building(), ub);
+        TaskRunner.runAutonomousTransation(new Callable<Void>() {
+            @Override
+            public Void call() {
+                for (Portfolio portfolio : employee.portfolios()) {
+                    for (Building b : portfolio.buildings()) {
+                        if (userBuildingMap.containsKey(b)) {
+                            unConfirmed.remove(b);
+                        } else {
+                            CrmUserBuildings ub = EntityFactory.create(CrmUserBuildings.class);
+                            ub.building().set(b);
+                            ub.user().set(employee.user());
+                            Persistence.service().persist(ub);
+                            userBuildingMap.put(ub.building(), ub);
+                        }
+                    }
                 }
+                for (Building b : unConfirmed) {
+                    Persistence.service().delete(userBuildingMap.get(b));
+                }
+                Persistence.service().commit();
+                return null;
             }
-        }
+        });
 
-        for (Building b : unConfirmed) {
-            Persistence.service().delete(userBuildingMap.get(b));
-        }
-        Persistence.service().commit();
     }
 }
