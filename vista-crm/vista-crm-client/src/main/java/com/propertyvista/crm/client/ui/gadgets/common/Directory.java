@@ -34,7 +34,7 @@ import com.propertyvista.crm.client.ui.gadgets.payments.PaymentRecordsGadgetFact
 import com.propertyvista.crm.client.ui.gadgets.payments.PaymentsSummaryGadgetFactory;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
-/** Global container of all possible gadgets */
+/** Global container of all possible gadgets. */
 public class Directory {
 
     public enum Categories {
