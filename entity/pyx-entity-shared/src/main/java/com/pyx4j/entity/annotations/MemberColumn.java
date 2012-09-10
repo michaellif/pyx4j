@@ -25,6 +25,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
 
 @Target({ ElementType.METHOD })
@@ -34,5 +35,8 @@ public @interface MemberColumn {
     String name() default "";
 
     Class<? extends MemberModificationAdapter<?>>[] modificationAdapters() default {};
+
+    @SuppressWarnings("rawtypes")
+    Class<? extends IndexAdapter> sortAdapter() default IndexAdapter.class;
 
 }
