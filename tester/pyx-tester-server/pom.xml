@@ -161,20 +161,16 @@
                                     <cargo.remote.password>${pyx-tomcat-pwd}</cargo.remote.password>
                                 </properties>
                             </configuration>
-                            <deployer>
-                                <type>remote</type>
-                                <deployables>
-                                    <deployable>
-                                        <groupId>${project.groupId}</groupId>
-                                        <artifactId>${project.artifactId}</artifactId>
-                                        <type>war</type>
-                                        <properties>
-                                            <context>${deployContext}</context>
-                                        </properties>
-                                    </deployable>
-                                </deployables>
-                            </deployer>
-
+                            <deployables>
+                                <deployable>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <type>war</type>
+                                    <properties>
+                                        <context>${deployContext}</context>
+                                    </properties>
+                                </deployable>
+                            </deployables>
                         </configuration>
                     </plugin>
 
