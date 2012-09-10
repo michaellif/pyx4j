@@ -97,6 +97,7 @@ public class ExistingLeaseDataDialog extends SelectEnumDialog<Service.ServiceTyp
             termDto.newParentLease().currentTerm().set(termDto);
 
             termDto.type().setValue(LeaseTerm.Type.FixedEx);
+            termDto.status().setValue(LeaseTerm.Status.Working);
             termDto.lease().set(termDto.newParentLease());
 
             AppSite.getPlaceController().goTo(

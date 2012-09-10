@@ -54,25 +54,34 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     @Override
     protected void create(LeaseTerm dbo, LeaseTermDTO dto) {
+        updateAdjustments(dbo);
+
+        // check for newly created parent (lease/application):
         if (!dto.newParentLease().isNull()) {
+            ServerSideFactory.create(LeaseFacade.class).init(dto.newParentLease());
+
             // persist newly created lease first:
             dbo.lease().set(dto.newParentLease());
             dbo.lease().currentTerm().set(null);
             Persistence.secureSave(dbo.lease());
             // set this term as current for the lease:
             dbo.lease().currentTerm().set(dbo);
-        }
 
-        updateAdjustments(dbo);
-        ServerSideFactory.create(LeaseFacade.class).init(dbo.lease());
-        ServerSideFactory.create(LeaseFacade.class).persist(dbo.lease());
+            ServerSideFactory.create(LeaseFacade.class).persist(dbo.lease());
+        } else {
+            ServerSideFactory.create(LeaseFacade.class).persist(dbo);
+        }
     }
 
     @Override
     protected void save(LeaseTerm dbo, LeaseTermDTO in) {
         updateAdjustments(dbo);
-        dbo.lease().currentTerm().set(dbo);
-        ServerSideFactory.create(LeaseFacade.class).persist(dbo.lease());
+
+        if (dbo.lease().equals(dbo.lease().currentTerm())) {
+            ServerSideFactory.create(LeaseFacade.class).persist(dbo.lease());
+        } else {
+            ServerSideFactory.create(LeaseFacade.class).persist(dbo);
+        }
     }
 
     @Override
@@ -201,7 +210,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         Persistence.service().retrieve(currentValue.lease().unit().building());
         EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), currentValue.lease().unit().building().productCatalog()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), currentValue.type()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), currentValue.lease().type()));
         servicesLoop: for (Service service : Persistence.service().query(criteria)) {
             EntityQueryCriteria<ProductItem> serviceCriteria = EntityQueryCriteria.create(ProductItem.class);
             serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ServiceItemType.class));

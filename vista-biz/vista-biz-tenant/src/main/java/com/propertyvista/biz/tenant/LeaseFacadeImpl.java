@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -32,8 +33,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
@@ -100,6 +101,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (lease.currentTerm().isNull()) {
             lease.currentTerm().set(EntityFactory.create(LeaseTerm.class));
             lease.currentTerm().type().setValue(LeaseTerm.Type.FixedEx);
+            lease.currentTerm().status().setValue(LeaseTerm.Status.Working);
         }
         lease.currentTerm().lease().set(lease);
 
@@ -204,7 +206,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public LeaseTerm persist(LeaseTerm leaseTerm) {
         persistCustomers(leaseTerm);
+
         Persistence.secureSave(leaseTerm);
+
         return leaseTerm;
     }
 
@@ -225,6 +229,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     public void setCurrentTerm(Lease leaseId, LeaseTerm leaseTermId) {
         Lease lease = load(leaseId, false);
 
+        Persistence.service().retrieveMember(lease.leaseTerms());
         if (lease.leaseTerms().contains(leaseTermId)) {
             lease.currentTerm().set(leaseTermId);
             Persistence.secureSave(lease);
@@ -573,7 +578,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     private Lease persist(Lease lease, boolean finalize) {
-        DataDump.dump("save1", lease.currentTerm());
 
         boolean doReserve = false;
         boolean doUnreserve = false;
@@ -699,9 +703,33 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     private void updateLeaseDates(Lease lease) {
-        Persistence.service().retrieveMember(lease.leaseTerms());
-        assert !lease.leaseTerms().isEmpty();
-        lease.leaseFrom().set(lease.leaseTerms().get(0).termFrom());
-        lease.leaseTo().set(lease.leaseTerms().get(lease.leaseTerms().size() - 1).termTo());
+        if (lease.status().getValue().isDraft()) {
+            assert (!lease.currentTerm().isEmpty());
+
+            lease.leaseFrom().set(lease.currentTerm().termFrom());
+            lease.leaseTo().set(lease.currentTerm().termTo());
+        } else {
+            EntityQueryCriteria<LeaseTerm> criteria = new EntityQueryCriteria<LeaseTerm>(LeaseTerm.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
+            criteria.add(PropertyCriterion.ne(criteria.proto().status(), LeaseTerm.Status.Offer));
+
+            // set sorting by 'from date':
+            Vector<Sort> sorts = new Vector<Sort>();
+            sorts.add(new Sort(criteria.proto().termFrom().getPath().toString(), true));
+            criteria.setSorts(sorts);
+
+            List<LeaseTerm> terms = Persistence.service().query(criteria);
+            if (terms.isEmpty()) {
+                assert (!terms.isEmpty());
+            }
+
+            lease.leaseFrom().set(terms.get(0).termFrom());
+            lease.leaseTo().set(terms.get(terms.size() - 1).termTo());
+        }
+
+        // special case of automatically renewed leases:
+        if (lease.currentTerm().type().getValue() == LeaseTerm.Type.FixedEx) {
+            lease.leaseTo().set(null);
+        }
     }
 }

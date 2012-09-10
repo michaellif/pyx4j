@@ -26,7 +26,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 @ExtendsDBO
 public interface LeaseTermDTO extends LeaseTerm {
 
-    // newly created parent:
+    // newly created parent (lease/application):
     Lease newParentLease();
 
     // -----------------------------------------------------

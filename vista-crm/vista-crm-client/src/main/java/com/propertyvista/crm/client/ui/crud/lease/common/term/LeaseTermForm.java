@@ -101,6 +101,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().completion(), new CEnumLabel())).customLabel(i18n.tr("Lease Completion")).build());
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel())).customLabel(i18n.tr("Term Type")).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel())).customLabel(i18n.tr("Term Status")).build());
 
         // Lease dates:
         FormFlexPanel datesPanel = new FormFlexPanel();

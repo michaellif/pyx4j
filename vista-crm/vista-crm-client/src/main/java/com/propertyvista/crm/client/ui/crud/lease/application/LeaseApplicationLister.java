@@ -68,7 +68,7 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
 
     @Override
     protected EntityListCriteria<LeaseApplicationDTO> updateCriteria(EntityListCriteria<LeaseApplicationDTO> criteria) {
-        // TODO : set all that stuff in CRUD service:
+        // TODO : set all that stuff in CRUD service ?
         criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
         criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Application));
         return super.updateCriteria(criteria);

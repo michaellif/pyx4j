@@ -65,11 +65,9 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
     @XmlType(name = "LeaseTermStatus")
     public enum Status {
 
-        Offer,
+        Working,
 
-        FixedEx,
-
-        Periodic;
+        Offer;
 
         @Override
         public String toString() {
@@ -84,6 +82,12 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
     @ToString(index = 2)
     @MemberColumn(name = "leaseTermType")
     IPrimitive<Type> type();
+
+    @NotNull
+    @ReadOnly
+    @ToString(index = 3)
+    @MemberColumn(name = "leaseTermStatus")
+    IPrimitive<Status> status();
 
     @NotNull
     @Format("MM/dd/yyyy")
