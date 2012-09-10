@@ -622,7 +622,8 @@
                             </execution>
                             <execution>
                                 <id>deploy.verify-deploy</id>
-                                <phase>pre-integration-test</phase>
+                                <!--phase>pre-integration-test</phase-->
+                                <phase>install</phase>
                                 <goals>
                                     <goal>deployer-deploy</goal>
                                 </goals>
