@@ -52,7 +52,7 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
             
             new Builder(proto().creationDate(), false).build(),
             
-            new Builder(proto().mainApplicant()).sortable(!VistaTODO.complextQueryCriteria).build(),
+            new Builder(proto().mainApplicant()).sortable(!VistaTODO.complextQueryCriteria).searchable(!VistaTODO.complextQueryCriteria).build(),
             
 
             new Builder(proto().leaseApplication().equifaxApproval().percenrtageApproved(), false).build(),

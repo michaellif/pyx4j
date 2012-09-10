@@ -33,7 +33,8 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
             new Builder(proto().type()).build(),
             
             new Builder(proto().unit().building().propertyCode()).build(),
-            new Builder(proto().unit()).build(),
+            new Builder(proto().unit()).searchable(false).build(),
+            new Builder(proto().unit().info().number()).columnTitle(proto().unit().getMeta().getCaption()).searchableOnly().build(),
             
             new Builder(proto().status()).build(),
             new Builder(proto().completion()).build(),

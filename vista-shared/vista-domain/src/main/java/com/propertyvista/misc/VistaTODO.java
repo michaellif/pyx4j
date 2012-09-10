@@ -33,9 +33,6 @@ public interface VistaTODO {
 
     public static boolean vladsLeaseMigration = true;
 
-    // e.g. person().name()
-    public final boolean entityAsStringQueryCriteria = true;
-
     /** joins with conditions */
     public final boolean complextQueryCriteria = true;
 
