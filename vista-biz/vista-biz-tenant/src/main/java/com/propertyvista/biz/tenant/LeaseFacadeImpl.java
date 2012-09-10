@@ -159,12 +159,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
 //        Persistence.service().retrieve(lease.currentTerm().version().tenants());
 //        Persistence.service().retrieve(lease.currentTerm().version().guarantors());
 
-        // calculate lease dates: 
-        Persistence.service().retrieveMember(lease.leaseTerms());
-        assert !lease.leaseTerms().isEmpty();
-        lease.leaseFrom().set(lease.leaseTerms().get(0).termFrom());
-        lease.leaseTo().set(lease.leaseTerms().get(lease.leaseTerms().size() - 1).termTo());
-
         return lease;
     }
 
@@ -614,6 +608,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
             persist(lease.currentTerm());
         }
 
+        updateLeaseDates(lease);
+
         Persistence.secureSave(lease);
 
         // update reservation if necessary:
@@ -700,5 +696,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
     private void updateApplicationReferencesToFinalVersionOfLease(Lease lease) {
         lease.leaseApplication().leaseOnApplication().set(lease);
         Persistence.service().persist(lease.leaseApplication());
+    }
+
+    private void updateLeaseDates(Lease lease) {
+        Persistence.service().retrieveMember(lease.leaseTerms());
+        assert !lease.leaseTerms().isEmpty();
+        lease.leaseFrom().set(lease.leaseTerms().get(0).termFrom());
+        lease.leaseTo().set(lease.leaseTerms().get(lease.leaseTerms().size() - 1).termTo());
     }
 }
