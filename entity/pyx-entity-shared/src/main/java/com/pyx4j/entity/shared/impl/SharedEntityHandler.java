@@ -637,11 +637,14 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         //assertPath(path);
         IObject<?> obj = this;
         for (String memberName : path.getPathMembers()) {
-            //TODO ICollection support
-            if (!(obj instanceof IEntity)) {
-                throw new RuntimeException("Invalid member in path " + memberName + " in " + getObjectClass().getName());
+            if ((obj instanceof IEntity)) {
+                obj = ((IEntity) obj).getMember(memberName);
+            } else if (Path.COLLECTION_SEPARATOR.equals(memberName)) {
+                obj = ((ICollection<?, ?>) obj).$();
+            } else {
+                throw new RuntimeException("Invalid member '" + memberName + "' in path " + path + " in " + getObjectClass().getName());
             }
-            obj = ((IEntity) obj).getMember(memberName);
+
         }
         return obj;
     }

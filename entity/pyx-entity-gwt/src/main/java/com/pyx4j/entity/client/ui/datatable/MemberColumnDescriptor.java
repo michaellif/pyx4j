@@ -20,12 +20,15 @@
  */
 package com.pyx4j.entity.client.ui.datatable;
 
+import java.util.EnumSet;
+
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
@@ -60,6 +63,9 @@ public class MemberColumnDescriptor extends ColumnDescriptor {
         public Builder(IObject<?> member) {
             super(member.getPath().toString(), member.getMeta().getCaption());
             this.member = member;
+            if (EnumSet.of(ObjectClassType.EntityList).contains(member.getMeta().getObjectClassType())) {
+                this.sortable(false).searchable(false);
+            }
         }
 
         public Builder(IObject<?> member, boolean visible) {
