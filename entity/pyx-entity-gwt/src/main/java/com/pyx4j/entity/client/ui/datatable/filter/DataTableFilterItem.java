@@ -288,7 +288,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
             options = EnumSet.of(Operator.is, Operator.isNot);
         } else if (isDate(valueClass)) {
             options = EnumSet.of(Operator.is, Operator.isNot, Operator.earlierThan, Operator.laterThan, Operator.earlierOrEqualThan, Operator.laterOrEqualThan);
-        } else if (valueClass.equals(BigDecimal.class)) {
+        } else if (valueClass.equals(BigDecimal.class) || member.getMeta().isNumberValueClass()) {
             options = EnumSet.of(Operator.is, Operator.greaterThan, Operator.greaterOrEqualThan, Operator.lessThan, Operator.lessOrEqualThan);
         } else {
             options = EnumSet.allOf(Operator.class);
