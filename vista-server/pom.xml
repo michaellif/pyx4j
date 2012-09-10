@@ -622,8 +622,7 @@
                             </execution>
                             <execution>
                                 <id>deploy.verify-deploy</id>
-                                <!--phase>pre-integration-test</phase-->
-                                <phase>install</phase>
+                                <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>deployer-deploy</goal>
                                 </goals>
@@ -643,23 +642,19 @@
                                     <cargo.remote.password>${vista-tomcat-pwd}</cargo.remote.password>
                                 </properties>
                             </configuration>
-                            <deployer>
-                                <type>remote</type>
-                                <deployables>
-                                    <deployable>
-                                        <groupId>${project.groupId}</groupId>
-                                        <artifactId>${project.artifactId}</artifactId>
-                                        <type>war</type>
-                                        <pingURL>${vista-app-ping-url}/public/status</pingURL>
-                                        <!-- 5 min -->
-                                        <pingTimeout>300000</pingTimeout>
-                                        <properties>
-                                            <context>${deployContext}</context>
-                                        </properties>
-                                    </deployable>
-                                </deployables>
-                            </deployer>
-
+                            <deployables>
+                                <deployable>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <type>war</type>
+                                    <pingURL>${vista-app-ping-url}/public/status</pingURL>
+                                    <!-- 5 min -->
+                                    <pingTimeout>300000</pingTimeout>
+                                    <properties>
+                                        <context>${deployContext}</context>
+                                    </properties>
+                                </deployable>
+                            </deployables>
                         </configuration>
                     </plugin>
 
