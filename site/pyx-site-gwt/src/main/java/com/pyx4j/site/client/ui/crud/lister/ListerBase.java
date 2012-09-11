@@ -66,10 +66,12 @@ public abstract class ListerBase<E extends IEntity> extends BasicLister<E> imple
      */
     @Override
     protected void onItemSelect(E item) {
-        if (itemOpenPlaceClass != null && openEditor) {
-            getPresenter().edit(itemOpenPlaceClass, item.getPrimaryKey());
-        } else {
-            getPresenter().view(itemOpenPlaceClass, item.getPrimaryKey());
+        if (itemOpenPlaceClass != null) {
+            if (openEditor) {
+                getPresenter().edit(itemOpenPlaceClass, item.getPrimaryKey());
+            } else {
+                getPresenter().view(itemOpenPlaceClass, item.getPrimaryKey());
+            }
         }
     }
 
