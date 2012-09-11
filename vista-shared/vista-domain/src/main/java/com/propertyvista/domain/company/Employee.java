@@ -15,6 +15,7 @@ package com.propertyvista.domain.company;
 
 import java.util.Date;
 
+import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
@@ -40,6 +41,7 @@ public interface Employee extends Person {
     @Caption(name = "Id")
     @Length(14)
     @Indexed(uniqueConstraint = true, ignoreCase = true)
+    @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> employeeId();
 
     @ToString(index = 64)

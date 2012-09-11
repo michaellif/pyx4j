@@ -19,6 +19,7 @@ import java.util.EnumSet;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
@@ -76,6 +77,7 @@ public interface LeaseParticipant extends IEntity {
     @Length(14)
     //TODO
     //@Indexed(uniqueConstraint = true)
+    @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> participantId();
 
     @NotNull

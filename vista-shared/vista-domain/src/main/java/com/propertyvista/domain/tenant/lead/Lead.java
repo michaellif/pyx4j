@@ -14,11 +14,13 @@
 package com.propertyvista.domain.tenant.lead;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
@@ -104,6 +106,7 @@ public interface Lead extends IEntity {
     @ToString(index = 0)
     @Length(14)
     @Indexed(uniqueConstraint = true, ignoreCase = true)
+    @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> leadId();
 
     @ToString(index = 1)

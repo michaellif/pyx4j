@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.property.asset.unit;
 
+import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
@@ -58,7 +59,7 @@ public interface AptUnitInfo extends IEntity {
     IPrimitive<Integer> floor();
 
     @ToString(index = 0)
-    @MemberColumn(name = "unitNumber")
+    @MemberColumn(name = "unitNumber", sortAdapter = AlphanumIndexAdapter.class)
     @Indexed(group = "BuildingUnitNumber,11", uniqueConstraint = true, ignoreCase = true)
     @NotNull
     @Length(20)

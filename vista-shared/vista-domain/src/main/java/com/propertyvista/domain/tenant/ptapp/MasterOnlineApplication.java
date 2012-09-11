@@ -16,9 +16,11 @@ package com.propertyvista.domain.tenant.ptapp;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -63,6 +65,7 @@ public interface MasterOnlineApplication extends IEntity {
     @ToString
     @Length(14)
     @Indexed(uniqueConstraint = true, ignoreCase = true)
+    @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> onlineApplicationId();
 
     IPrimitive<Status> status();

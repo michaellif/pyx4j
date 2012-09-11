@@ -15,6 +15,7 @@ package com.propertyvista.domain.tenant;
 
 import java.util.Date;
 
+import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
@@ -42,6 +43,7 @@ public interface Customer extends IEntity {
     @NotNull
     @Length(14)
     @Indexed(uniqueConstraint = true, ignoreCase = true)
+    @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> customerId();
 
     @NotNull

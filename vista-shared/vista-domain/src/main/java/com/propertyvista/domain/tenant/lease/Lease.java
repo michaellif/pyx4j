@@ -21,6 +21,7 @@ import java.util.Vector;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
@@ -169,6 +170,7 @@ public interface Lease extends IEntity {
     @Caption(name = "Id")
     @Length(14)
     @Indexed(uniqueConstraint = true, ignoreCase = true)
+    @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> leaseId();
 
     @NotNull
