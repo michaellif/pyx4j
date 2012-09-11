@@ -40,7 +40,7 @@ import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
-import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta.GadgetMode;
+import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta.LeaseExpirationGadgetMode;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -65,12 +65,12 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
 
                 @Override
                 public void populate() {
-                    GadgetMode activeMode = getMetadata().activeMode().getValue();
-                    activeMode = activeMode != null ? activeMode : GadgetMode.SUMMARY;
+                    LeaseExpirationGadgetMode activeMode = getMetadata().activeMode().getValue();
+                    activeMode = activeMode != null ? activeMode : LeaseExpirationGadgetMode.SUMMARY;
 
-                    expirationSummaryForm.setVisible(activeMode == GadgetMode.SUMMARY);
-                    leaseExpirationDetailsLister.setVisible(activeMode == GadgetMode.LEASES_DETAILS);
-                    occupiedUnitsDetailsLister.setVisible(activeMode == GadgetMode.OCCUPIED_UNITS_DETAILS);
+                    expirationSummaryForm.setVisible(activeMode == LeaseExpirationGadgetMode.SUMMARY);
+                    leaseExpirationDetailsLister.setVisible(activeMode == LeaseExpirationGadgetMode.LEASES_DETAILS);
+                    occupiedUnitsDetailsLister.setVisible(activeMode == LeaseExpirationGadgetMode.OCCUPIED_UNITS_DETAILS);
 
                     switch (activeMode) {
                     case SUMMARY:
@@ -155,7 +155,7 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
             return new Command() {
                 @Override
                 public void execute() {
-                    getMetadata().activeMode().setValue(LeaseExpirationGadgetMeta.GadgetMode.LEASES_DETAILS);
+                    getMetadata().activeMode().setValue(LeaseExpirationGadgetMeta.LeaseExpirationGadgetMode.LEASES_DETAILS);
                     getMetadata().activeLeaseFilterCriteria().setValue(leaseFilter);
                     saveMetadata();
                     populate();
@@ -167,7 +167,7 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
             return new Command() {
                 @Override
                 public void execute() {
-                    getMetadata().activeMode().setValue(LeaseExpirationGadgetMeta.GadgetMode.OCCUPIED_UNITS_DETAILS);
+                    getMetadata().activeMode().setValue(LeaseExpirationGadgetMeta.LeaseExpirationGadgetMode.OCCUPIED_UNITS_DETAILS);
                     saveMetadata();
                     populate();
                 }
@@ -179,7 +179,7 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
 
                 @Override
                 public void execute() {
-                    getMetadata().activeMode().setValue(LeaseExpirationGadgetMeta.GadgetMode.SUMMARY);
+                    getMetadata().activeMode().setValue(LeaseExpirationGadgetMeta.LeaseExpirationGadgetMode.SUMMARY);
                     saveMetadata();
                     populate();
                 }

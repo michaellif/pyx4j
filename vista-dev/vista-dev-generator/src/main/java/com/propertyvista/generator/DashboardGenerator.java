@@ -39,6 +39,8 @@ import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMe
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
 import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata.NoticesGadgetMode;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
@@ -94,10 +96,17 @@ public class DashboardGenerator extends Dashboards {
         LeaseExpirationGadgetMeta leaseExpirationGadget = EntityFactory.create(LeaseExpirationGadgetMeta.class);
         leaseExpirationGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
         leaseExpirationGadget.refreshInterval().setValue(RefreshInterval.Never);
-        leaseExpirationGadget.activeMode().setValue(LeaseExpirationGadgetMeta.GadgetMode.SUMMARY);
+        leaseExpirationGadget.activeMode().setValue(LeaseExpirationGadgetMeta.LeaseExpirationGadgetMode.SUMMARY);
         leaseExpirationGadget.docking().column().setValue(0);
-
         dmd.gadgets().add(leaseExpirationGadget);
+
+        NoticesGadgetMetadata noticesGadget = EntityFactory.create(NoticesGadgetMetadata.class);
+        noticesGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
+        noticesGadget.refreshInterval().setValue(RefreshInterval.Never);
+        noticesGadget.activeMode().setValue(NoticesGadgetMode.SUMMARY);
+        noticesGadget.docking().column().setValue(0);
+        dmd.gadgets().add(noticesGadget);
+
         return dmd;
     }
 

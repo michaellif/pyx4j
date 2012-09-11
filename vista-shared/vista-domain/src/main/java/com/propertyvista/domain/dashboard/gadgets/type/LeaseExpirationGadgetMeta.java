@@ -24,7 +24,7 @@ import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 public interface LeaseExpirationGadgetMeta extends GadgetMetadata {
 
     @I18n(strategy = I18nStrategy.IgnoreThis)
-    enum GadgetMode {
+    enum LeaseExpirationGadgetMode {
 
         SUMMARY, LEASES_DETAILS, OCCUPIED_UNITS_DETAILS;
 
@@ -36,7 +36,7 @@ public interface LeaseExpirationGadgetMeta extends GadgetMetadata {
 
     }
 
-    IPrimitive<GadgetMode> activeMode();
+    IPrimitive<LeaseExpirationGadgetMode> activeMode();
 
     IPrimitive<LeaseFilter> activeLeaseFilterCriteria();
 

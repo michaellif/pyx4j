@@ -41,7 +41,7 @@ import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata.GadgetMode;
+import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata.NoticesGadgetMode;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -67,12 +67,12 @@ public class NoticesGadgetFactory extends AbstractGadget<NoticesGadgetMetadata> 
 
                 @Override
                 public void populate() {
-                    NoticesGadgetMetadata.GadgetMode gadgetMode = getMetadata().activeMode().getValue();
-                    gadgetMode = gadgetMode != null ? gadgetMode : GadgetMode.SUMMARY;
+                    NoticesGadgetMetadata.NoticesGadgetMode gadgetMode = getMetadata().activeMode().getValue();
+                    gadgetMode = gadgetMode != null ? gadgetMode : NoticesGadgetMode.SUMMARY;
 
-                    summaryForm.setVisible(gadgetMode == GadgetMode.SUMMARY);
+                    summaryForm.setVisible(gadgetMode == NoticesGadgetMode.SUMMARY);
                     leasesDetailsLister.setVisible(gadgetMode == gadgetMode.NOTICES_DETAILS);
-                    unitsDetailsLister.setVisible(gadgetMode == GadgetMode.VACANT_UNITS_DETAILS);
+                    unitsDetailsLister.setVisible(gadgetMode == NoticesGadgetMode.VACANT_UNITS_DETAILS);
 
                     switch (gadgetMode) {
                     case SUMMARY:
@@ -156,7 +156,7 @@ public class NoticesGadgetFactory extends AbstractGadget<NoticesGadgetMetadata> 
             return new Command() {
                 @Override
                 public void execute() {
-                    getMetadata().activeMode().setValue(NoticesGadgetMetadata.GadgetMode.NOTICES_DETAILS);
+                    getMetadata().activeMode().setValue(NoticesGadgetMetadata.NoticesGadgetMode.NOTICES_DETAILS);
                     getMetadata().activeNoticesFilter().setValue(filter);
                     saveMetadata();
                     populate();
@@ -168,7 +168,7 @@ public class NoticesGadgetFactory extends AbstractGadget<NoticesGadgetMetadata> 
             return new Command() {
                 @Override
                 public void execute() {
-                    getMetadata().activeMode().setValue(GadgetMode.VACANT_UNITS_DETAILS);
+                    getMetadata().activeMode().setValue(NoticesGadgetMode.VACANT_UNITS_DETAILS);
                     saveMetadata();
                     populate();
                 }
@@ -179,7 +179,7 @@ public class NoticesGadgetFactory extends AbstractGadget<NoticesGadgetMetadata> 
             return new Command() {
                 @Override
                 public void execute() {
-                    getMetadata().activeMode().setValue(GadgetMode.SUMMARY);
+                    getMetadata().activeMode().setValue(NoticesGadgetMode.SUMMARY);
                     saveMetadata();
                     populate();
                 }

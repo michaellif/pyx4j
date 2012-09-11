@@ -28,12 +28,12 @@ public interface NoticesGadgetMetadata extends GadgetMetadata {
         THIS_MONTH, NEXT_MONTH, OVER_90_DAYS
     }
 
-    enum GadgetMode {
+    enum NoticesGadgetMode {
         SUMMARY, NOTICES_DETAILS, VACANT_UNITS_DETAILS
     }
 
     IPrimitive<NoticesFilter> activeNoticesFilter();
 
-    IPrimitive<GadgetMode> activeMode();
+    IPrimitive<NoticesGadgetMode> activeMode();
 
 }
