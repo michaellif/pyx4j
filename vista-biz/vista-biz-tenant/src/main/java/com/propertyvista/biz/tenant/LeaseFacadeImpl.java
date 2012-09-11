@@ -51,6 +51,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.Service.ServiceType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -65,6 +66,7 @@ import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 
 public class LeaseFacadeImpl implements LeaseFacade {
 
@@ -409,6 +411,37 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
+    public LeaseTerm renew(Lease leaseId, Type type) {
+        Lease lease = load(leaseId, false);
+
+        LeaseTerm term = EntityFactory.create(LeaseTerm.class);
+        term.status().setValue(LeaseTerm.Status.Offer);
+
+        term.type().setValue(type);
+        term.lease().set(lease);
+
+        term.termFrom().setValue(lease.currentTerm().termTo().getValue());
+
+        updateTermWithUnit(term, lease.unit(), lease.type().getValue());
+
+        // migrate participants:
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+        for (Tenant tenant : lease.currentTerm().version().tenants()) {
+            Tenant copy = (Tenant) tenant.duplicate();
+            copy.id().setValue(null);
+            term.version().tenants().add(copy);
+        }
+        Persistence.service().retrieve(lease.currentTerm().version().guarantors());
+        for (Guarantor guarantor : lease.currentTerm().version().guarantors()) {
+            Guarantor copy = (Guarantor) guarantor.duplicate();
+            copy.id().setValue(null);
+            term.version().guarantors().add(copy);
+        }
+
+        return term;
+    }
+
+    @Override
     public void createCompletionEvent(Key leaseId, CompletionType completionType, LogicalDate noticeDay, LogicalDate moveOutDay) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
         if (lease == null) {
@@ -475,29 +508,42 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     private Lease setUnit(Lease lease, LeaseTerm leaseTerm, AptUnit unitId) {
         assert !lease.isValueDetached();
-        if (!Lease.Status.draft().contains(lease.status().getValue())) {
-            throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
-        }
 
         AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitId.getPrimaryKey());
         if (unit.building().isValueDetached()) {
             Persistence.service().retrieve(unit.building());
         }
 
+        if (leaseTerm.equals(lease.currentTerm())) {
+            if (!Lease.Status.draft().contains(lease.status().getValue())) {
+                throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
+            }
+            lease.unit().set(unit);
+        }
+
+        updateTermWithUnit(leaseTerm, lease.unit(), lease.type().getValue());
+
+        return lease;
+    }
+
+    private LeaseTerm updateTermWithUnit(LeaseTerm leaseTerm, AptUnit unit, ServiceType leaseType) {
+        assert !unit.isValueDetached();
+        if (unit.building().isValueDetached()) {
+            Persistence.service().retrieve(unit.building());
+        }
+
         boolean succeeded = false;
-        lease.unit().set(unit);
 
         EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), unit.building().productCatalog()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), lease.type()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), leaseType));
         servicesLoop: for (Service service : Persistence.service().query(criteria)) {
             EntityQueryCriteria<ProductItem> serviceCriteria = EntityQueryCriteria.create(ProductItem.class);
             serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ServiceItemType.class));
             serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().product(), service.version()));
-            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), lease.unit()));
+            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), unit));
             ProductItem serviceItem = Persistence.service().retrieve(serviceCriteria);
             if (serviceItem != null) {
-                assert (!leaseTerm.isNull());
                 setService(leaseTerm, serviceItem);
                 succeeded = true;
                 break servicesLoop;
@@ -505,19 +551,15 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         if (!succeeded) {
-            throw new UserRuntimeException(i18n.tr("There no service ''{0}'' for selected unit: {1} from Building: {2}", lease.type().getStringView(),
+            throw new UserRuntimeException(i18n.tr("There no service ''{0}'' for selected unit: {1} from Building: {2}", leaseType.toString(),
                     unit.getStringView(), unit.building().getStringView()));
         }
 
-        return lease;
+        return leaseTerm;
     }
 
     private LeaseTerm setService(Lease lease, LeaseTerm leaseTerm, ProductItem serviceId) {
         assert !leaseTerm.isValueDetached();
-
-        if (!Lease.Status.draft().contains(lease.status().getValue())) {
-            throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
-        }
 
         // find/load all necessary ingredients:
         assert !lease.unit().isNull();
@@ -546,8 +588,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
         BillableItem billableItem = createBillableItem(serviceItem, node);
         leaseTerm.version().leaseProducts().serviceItem().set(billableItem);
 
-        Persistence.service().retrieve(lease.billingAccount().deposits());
-        lease.billingAccount().deposits().clear();
+        if (leaseTerm.equals(lease.currentTerm())) {
+            if (!Lease.Status.draft().contains(lease.status().getValue())) {
+                throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
+            }
+            Persistence.service().retrieve(lease.billingAccount().deposits());
+            lease.billingAccount().deposits().clear();
+        }
 
         // Service by Service item:
         Service.ServiceV service = null;
@@ -719,9 +766,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             criteria.setSorts(sorts);
 
             List<LeaseTerm> terms = Persistence.service().query(criteria);
-            if (terms.isEmpty()) {
-                assert (!terms.isEmpty());
-            }
+            assert (!terms.isEmpty());
 
             lease.leaseFrom().set(terms.get(0).termFrom());
             lease.leaseTo().set(terms.get(terms.size() - 1).termTo());

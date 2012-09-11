@@ -29,13 +29,16 @@ import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
@@ -46,7 +49,9 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> implements LeaseViewerView.Presenter {
@@ -173,6 +178,17 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
+    public void sendMail(List<LeaseParticipant> users, EmailTemplateType emailType) {
+        ((LeaseViewerCrudService) getService()).sendMail(new DefaultAsyncCallback<String>() {
+            @Override
+            public void onSuccess(String message) {
+                populate();
+                ((LeaseViewerView) getView()).reportSendMailActionResult(message);
+            }
+        }, getEntityId(), new Vector<LeaseParticipant>(users), emailType);
+    }
+
+    @Override
     public void activate() {
         ((LeaseViewerCrudService) getService()).activate(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
@@ -184,13 +200,14 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
-    public void sendMail(List<LeaseParticipant> users, EmailTemplateType emailType) {
-        ((LeaseViewerCrudService) getService()).sendMail(new DefaultAsyncCallback<String>() {
+    public void renew(Type type) {
+        ((LeaseViewerCrudService) getService()).renew(new DefaultAsyncCallback<LeaseTermDTO>() {
             @Override
-            public void onSuccess(String message) {
-                populate();
-                ((LeaseViewerView) getView()).reportSendMailActionResult(message);
+            public void onSuccess(LeaseTermDTO result) {
+                AppSite.getPlaceController().goTo(
+                        new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(result).queryArg(LeaseTermEditorActivity.ARG_NAME_RETURN_BH,
+                                LeaseTermEditorActivity.ReturnBehaviour.Lease.name()));
             }
-        }, getEntityId(), new Vector<LeaseParticipant>(users), emailType);
+        }, getEntityId(), type);
     }
 }

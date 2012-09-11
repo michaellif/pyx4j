@@ -46,6 +46,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.Status;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.misc.VistaTODO;
 
@@ -86,8 +87,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
             boolean isCurrent = getValue().getPrimaryKey() == null
                     || getValue().getPrimaryKey().asCurrentKey().equals(getValue().lease().currentTerm().getPrimaryKey());
-            get(proto().termFrom()).setEditable(isDraft || !isCurrent);
-            get(proto().termTo()).setEditable(isDraft || !isCurrent);
+            get(proto().termFrom()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
+            get(proto().termTo()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
         }
     }
 

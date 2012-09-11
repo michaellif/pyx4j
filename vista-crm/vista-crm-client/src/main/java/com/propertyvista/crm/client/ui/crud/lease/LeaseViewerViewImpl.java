@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.lease;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
@@ -32,6 +33,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
+import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -49,6 +51,7 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -75,6 +78,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     private final MenuItem cancelEvictAction;
 
     private final MenuItem activateAction;
+
+    private final MenuItem renewAction;
 
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
@@ -160,13 +165,27 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addAction(cancelEvictAction);
 
-        activateAction = new MenuItem(i18n.tr("Activate Lease"), new Command() {
+        activateAction = new MenuItem(i18n.tr("Activate"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).activate();
             }
         });
         addAction(activateAction);
+
+        renewAction = new MenuItem(i18n.tr("Renew..."), new Command() {
+            @Override
+            public void execute() {
+                new SelectEnumDialog<LeaseTerm.Type>(i18n.tr("Select Term Type"), EnumSet.allOf(LeaseTerm.Type.class)) {
+                    @Override
+                    public boolean onClickOk() {
+                        ((LeaseViewerView.Presenter) getPresenter()).renew(getSelectedType());
+                        return true;
+                    }
+                }.show();
+            }
+        });
+        addAction(renewAction);
     }
 
     @Override
@@ -178,6 +197,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(evictAction, false);
         setActionVisible(cancelEvictAction, false);
         setActionVisible(activateAction, false);
+        setActionVisible(renewAction, false);
         super.reset();
     }
 
@@ -198,6 +218,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             setActionVisible(evictAction, status == Status.Active && completion == null);
             setActionVisible(cancelEvictAction, completion == CompletionType.Eviction && status != Status.Closed);
             setActionVisible(activateAction, status == Status.ExistingLease);
+            setActionVisible(renewAction, status == Status.Active && completion == null);
         }
     }
 

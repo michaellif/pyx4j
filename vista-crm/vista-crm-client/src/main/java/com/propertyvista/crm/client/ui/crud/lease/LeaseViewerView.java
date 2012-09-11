@@ -23,6 +23,7 @@ import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -40,9 +41,12 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void cancelEvict();
 
+        void sendMail(List<LeaseParticipant> users, EmailTemplateType emailType);
+
         void activate();
 
-        void sendMail(List<LeaseParticipant> users, EmailTemplateType emailType);
+        void renew(LeaseTerm.Type type);
+
     }
 
     IListerView<BillDataDTO> getBillListerView();

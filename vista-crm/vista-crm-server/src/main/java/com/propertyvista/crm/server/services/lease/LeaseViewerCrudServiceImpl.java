@@ -30,6 +30,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
+import com.propertyvista.crm.server.services.lease.common.LeaseTermCrudServiceImpl;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.Guarantor;
@@ -37,8 +38,11 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.LeaseTermDTO;
 
 public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<LeaseDTO> implements LeaseViewerCrudService {
 
@@ -80,15 +84,6 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     @Override
     public void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId) {
         ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(entityId);
-        Persistence.service().commit();
-        callback.onSuccess(null);
-    }
-
-    @Override
-    public void activate(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
-        ServerSideFactory.create(LeaseFacade.class).approveExistingLease(leaseId);
-        ServerSideFactory.create(LeaseFacade.class).activate(leaseId);
         Persistence.service().commit();
         callback.onSuccess(null);
     }
@@ -144,5 +139,26 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         String message = users.size() > 1 ? i18n.tr("Emails were sent successfully") : i18n.tr("Email was sent successfully");
 
         callback.onSuccess(message);
+    }
+
+    @Override
+    public void activate(AsyncCallback<VoidSerializable> callback, Key entityId) {
+        Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
+        ServerSideFactory.create(LeaseFacade.class).approveExistingLease(leaseId);
+        ServerSideFactory.create(LeaseFacade.class).activate(leaseId);
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void renew(AsyncCallback<LeaseTermDTO> callback, Key entityId, Type type) {
+        Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
+        LeaseTerm term = ServerSideFactory.create(LeaseFacade.class).renew(leaseId, type);
+
+        LeaseTermDTO termDto = EntityFactory.create(LeaseTermDTO.class);
+        termDto.setValue(term.getValue());
+        new LeaseTermCrudServiceImpl().update(term, termDto);
+
+        callback.onSuccess(termDto);
     }
 }

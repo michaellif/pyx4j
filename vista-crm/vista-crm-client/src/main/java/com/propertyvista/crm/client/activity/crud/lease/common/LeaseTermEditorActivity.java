@@ -64,8 +64,8 @@ public class LeaseTermEditorActivity extends EditorActivityBase<LeaseTermDTO> im
         super.start(panel, eventBus);
 
         // if new Entity - set pre-selected unit if supplied: 
-        if (isNewEntity() && getPlace().getNewItem() != null) {
-            AptUnit unit = ((LeaseTermDTO) getPlace().getNewItem()).lease().unit();
+        if (isNewEntity() && getPlace().getNewItem() != null && !((LeaseTermDTO) getPlace().getNewItem()).newParentLease().isNull()) {
+            AptUnit unit = ((LeaseTermDTO) getPlace().getNewItem()).newParentLease().unit();
             if (!unit.isNull()) {
                 setSelectedUnit(unit);
             }

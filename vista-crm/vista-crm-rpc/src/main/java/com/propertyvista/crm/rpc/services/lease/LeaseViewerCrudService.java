@@ -24,7 +24,9 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.LeaseTermDTO;
 
 public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<LeaseDTO> {
 
@@ -44,4 +46,6 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
     void sendMail(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant> users, EmailTemplateType emailType);
 
     void activate(AsyncCallback<VoidSerializable> callback, Key entityId);
+
+    void renew(AsyncCallback<LeaseTermDTO> callback, Key entityId, LeaseTerm.Type type);
 }

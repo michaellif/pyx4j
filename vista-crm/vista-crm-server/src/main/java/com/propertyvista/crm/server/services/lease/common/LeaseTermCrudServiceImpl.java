@@ -104,12 +104,16 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             Persistence.service().retrieve(item.item().product());
         }
 
-        Persistence.service().retrieve(dto.version().tenants());
+        if (in.getPrimaryKey() != null) {
+            Persistence.service().retrieve(dto.version().tenants());
+        }
         for (Tenant item : dto.version().tenants()) {
             Persistence.service().retrieve(item.screening());
         }
 
-        Persistence.service().retrieve(dto.version().guarantors());
+        if (in.getPrimaryKey() != null) {
+            Persistence.service().retrieve(dto.version().guarantors());
+        }
         for (Guarantor item : dto.version().guarantors()) {
             Persistence.service().retrieve(item.screening());
         }
@@ -242,5 +246,9 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
                 adj.createdBy().set(CrmAppContext.getCurrentUserEmployee());
             }
         }
+    }
+
+    public void update(LeaseTerm dbo, LeaseTermDTO dto) {
+        enhanceRetrieved(dbo, dto);
     }
 }
