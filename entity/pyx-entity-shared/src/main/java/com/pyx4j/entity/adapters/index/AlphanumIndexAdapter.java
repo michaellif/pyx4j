@@ -41,14 +41,28 @@ public class AlphanumIndexAdapter extends AbstractIndexAdapter<String> {
 
     public static String alphanum(String value) {
         StringBuilder b = new StringBuilder();
-        int valN = 0;
+        StringBuilder n = new StringBuilder();
         for (char c : value.toCharArray()) {
             if (Character.isDigit(c)) {
-                valN = valN * 10 + (c - '0');
+                n.append(c);
             } else {
-                b.append(c);
+                if (n.length() != 0) {
+                    normalizenum(b,n);
+                    n = new StringBuilder();
+                }
+                b.append(Character.toLowerCase(c));
             }
         }
+        if (n.length() != 0) {
+            normalizenum(b,n);
+        }
         return b.toString();
+    }
+    
+    public static void normalizenum( StringBuilder b,StringBuilder value) {
+        for(int i = 0; i <= 6 - value.length(); i ++) {
+            b.append('0');
+        }
+        b.append(value);
     }
 }
