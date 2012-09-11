@@ -477,7 +477,7 @@
             <properties>
                 <deployContext>vista-prod-demo</deployContext>
                 <vista-tomcat-url>http://prod-demo.birchwoodsoftwaregroup.com</vista-tomcat-url>
-                <vista-app-ping-url>http://prod-demo.birchwoodsoftwaregroup.com/${deployContext}</vista-app-ping-url>
+                <vista-app-ping-url>http://demo.residentportalsite.com</vista-app-ping-url>
             </properties>
         </profile>
 
@@ -486,7 +486,7 @@
             <properties>
                 <deployContext>vista-sales-demo</deployContext>
                 <vista-tomcat-url>http://prod-demo.birchwoodsoftwaregroup.com</vista-tomcat-url>
-                <vista-app-ping-url>http://prod-demo.birchwoodsoftwaregroup.com/${deployContext}</vista-app-ping-url>
+                <vista-app-ping-url>http://demo.residentportal.info</vista-app-ping-url>
             </properties>
         </profile>
 
