@@ -22,7 +22,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @EmbeddedEntity
-@ToStringFormat(value = "{0,choice,null#XXXX XXXX XXXX XXX|!null#XXXX XXXX XXXX {0}}", nil = "XXXX XXXX XXXX XXXX")
+@ToStringFormat(value = "{0,choice,null#XXXX XXXX XXXX XXXX|!null#XXXX XXXX XXXX {0}}", nil = "XXXX XXXX XXXX XXXX")
 public interface TokenizedCreditCardNumber extends TokenizedNumber {
 
     @Override

@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-@ToStringFormat(value = "{0,choice,null#XXXX XXXX XXX|!null#XXXX XXXX {0}}", nil = "XXXX XXXX XXXX")
+@ToStringFormat(value = "{0,choice,null#XXXX XXXX XXXX|!null#XXXX XXXX {0}}", nil = "XXXX XXXX XXXX")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @EmbeddedEntity
 public interface TokenizedNumber extends IEntity {

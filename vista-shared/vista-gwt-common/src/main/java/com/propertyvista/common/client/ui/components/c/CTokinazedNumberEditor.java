@@ -47,7 +47,6 @@ public class CTokinazedNumberEditor<E extends TokenizedNumber> extends CTextFiel
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-
         setWatermark(getValue().getStringView());
     }
 
