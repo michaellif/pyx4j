@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -122,170 +122,185 @@ public class DBResetServlet extends HttpServlet {
         }
     }
 
+    private void o(OutputStream out, String... messages) throws IOException {
+        out.write("<pre>".getBytes());
+        for (String message : messages) {
+            out.write(message.getBytes());
+        }
+
+        out.write("</pre>".getBytes());
+        out.flush();
+    }
+
+    private void h(OutputStream out, String... messages) throws IOException {
+        for (String message : messages) {
+            out.write(message.getBytes());
+        }
+        out.flush();
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
         log.debug("DBReset requested");
-        synchronized (DBResetServlet.class) {
-            long start = System.currentTimeMillis();
-            StringBuilder buf = new StringBuilder();
-            String contentType = "text/plain";
-            try {
-                AbstractVistaServerSideConfiguration conf = (AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance();
-                if (!conf.openDBReset()) {
-                    if (!SecurityController.checkBehavior(VistaBasicBehavior.Admin)) {
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                        return;
-                    }
-                }
-                log.debug("DBReset started");
-                ResetType type = null;
-                String tp = req.getParameter("type");
-                if (CommonsStringUtils.isStringSet(tp)) {
-                    try {
-                        type = ResetType.valueOf(tp);
-                    } catch (IllegalArgumentException e) {
-                        buf.append("Invalid requests type=").append(tp).append("\n");
-                    }
-                }
-                final String requestNamespace = NamespaceManager.getNamespace();
-                if ((req.getParameter("help") != null) || (type == null)) {
-                    contentType = "text/html";
-                    buf.append("Current PMC is '").append(requestNamespace).append("'<br/>");
-                    buf.append("Usage:<br/><table>");
-                    for (ResetType t : EnumSet.allOf(ResetType.class)) {
-                        buf.append("<tr><td><a href=\"");
-                        buf.append("?type=").append(t.name()).append("\">");
-                        buf.append("?type=").append(t.name());
-                        buf.append("</a></td><td>").append(t.toString());
-                        buf.append("</td></tr>");
-                    }
-                    buf.append("</table>");
-                } else {
-                    buf.append("Requested : '" + type.name() + "' " + type.toString());
-                    if (type == ResetType.resetPmcCache) {
-                        CacheService.reset();
-                        buf.append("\nCacheService.reset Ok");
-                    } else if (type == ResetType.resetAllCache) {
-                        CacheService.resetAll();
-                        buf.append("\nCacheService.resetAll Ok");
-                    } else {
-                        Persistence.service().startBackgroundProcessTransaction();
-                        Lifecycle.startElevatedUserContext();
-                        Mail.getMailService().setDisabled(true);
-                        ServerSideFactory.create(CommunicationFacade.class).setDisabled(true);
-                        try {
-                            if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
-                                SchedulerHelper.shutdown();
-                                RDBUtils.resetDatabase();
-                                SchedulerHelper.dbReset();
-                                Thread.sleep(150);
-                                SchedulerHelper.init();
-                                log.debug("Initialize Admin");
-                                NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
-                                try {
-                                    RDBUtils.ensureNamespace();
-                                    if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
-                                        RDBUtils.initNameSpaceSpecificEntityTables();
-                                    } else {
-                                        RDBUtils.initAllEntityTables();
-                                    }
-                                    if (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.PostgreSQL) {
-                                        Persistence.service().commit();
-                                    }
-
-                                    CacheService.resetAll();
-
-                                    new VistaAdminDataPreloaders().preloadAll();
-                                    Persistence.service().commit();
-                                } finally {
-                                    NamespaceManager.setNamespace(requestNamespace);
-                                }
-                            }
-
-                            switch (type) {
-                            case all:
-                            case allWithMockup:
-                            case allAddMockup:
-                            case allMini:
-                                if (VistaDemo.isDemo()) {
-                                    preloadPmc(req, buf, prodPmcNameCorrections("demo"), type);
-                                } else {
-                                    for (DemoPmc demoPmc : EnumSet.allOf(DemoPmc.class)) {
-                                        preloadPmc(req, buf, prodPmcNameCorrections(demoPmc.name()), type);
-                                    }
-                                }
-                                break;
-                            case addPmcMockup:
-                            case addPmcMockupTest1:
-                            case preloadPmcWithMockup:
-                            case preloadPmc: {
-                                String pmc = req.getParameter("pmc");
-                                if (pmc == null) {
-                                    pmc = NamespaceManager.getNamespace();
-                                }
-                                preloadPmc(req, buf, pmc, type);
-
-                                break;
-                            }
-                            case clearPmc: {
-                                String pmc = req.getParameter("pmc");
-                                if (pmc == null) {
-                                    pmc = NamespaceManager.getNamespace();
-                                }
-                                buf.append("\n--- PMC  '" + pmc + "' ---\n");
-                                RDBUtils.deleteFromAllEntityTables();
-                                NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
-                                EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-                                criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), pmc));
-                                Persistence.service().delete(criteria);
-                                Persistence.service().commit();
-                            }
-                                break;
-                            case dropForeignKeys:
-                                RDBUtils.dropAllForeignKeys();
-                                break;
-                            case prodReset:
-                                break;
-                            default:
-                                throw new Error("unimplemented: " + type);
-                            }
-
-                            buf.append("\nTotal time: " + TimeUtils.secSince(start));
-                            log.info("DB reset {} {}", type, TimeUtils.secSince(start));
-                            buf.insert(0, "Processing total time: " + TimeUtils.secSince(start) + "\n");
-                        } catch (Throwable t) {
-                            log.error("", t);
-                            Persistence.service().rollback();
-                            throw new Error(t);
-                        } finally {
-                            ServerSideFactory.create(CommunicationFacade.class).setDisabled(false);
-                            Mail.getMailService().setDisabled(false);
-                            Lifecycle.endElevatedUserContext();
-                            Persistence.service().endTransaction();
+        response.setDateHeader("Expires", System.currentTimeMillis());
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-control", "no-cache, no-store, must-revalidate");
+        response.setContentType("text/html");
+        OutputStream out = response.getOutputStream();
+        h(out, "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"></head><body>");
+        try {
+            synchronized (DBResetServlet.class) {
+                long start = System.currentTimeMillis();
+                try {
+                    AbstractVistaServerSideConfiguration conf = (AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance();
+                    if (!conf.openDBReset()) {
+                        if (!SecurityController.checkBehavior(VistaBasicBehavior.Admin)) {
+                            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                            return;
                         }
                     }
-                }
+                    log.debug("DBReset started");
+                    ResetType type = null;
+                    String tp = req.getParameter("type");
+                    if (CommonsStringUtils.isStringSet(tp)) {
+                        try {
+                            type = ResetType.valueOf(tp);
+                        } catch (IllegalArgumentException e) {
+                            o(out, "Invalid requests type=", tp, "\n");
+                        }
+                    }
+                    final String requestNamespace = NamespaceManager.getNamespace();
+                    if ((req.getParameter("help") != null) || (type == null)) {
+                        o(out, "Current PMC is '", requestNamespace, "'<br/>");
+                        h(out, "Usage:<br/><table>");
+                        for (ResetType t : EnumSet.allOf(ResetType.class)) {
+                            h(out, "<tr><td><a href=\"");
+                            h(out, "?type=", t.name(), "\">");
+                            h(out, "?type=", t.name());
+                            h(out, "</a></td><td>", t.toString());
+                            h(out, "</td></tr>");
+                        }
+                        h(out, "</table>");
+                    } else {
+                        o(out, "Requested : '" + type.name() + "' " + type.toString());
+                        if (type == ResetType.resetPmcCache) {
+                            CacheService.reset();
+                            o(out, "\nCacheService.reset Ok");
+                        } else if (type == ResetType.resetAllCache) {
+                            CacheService.resetAll();
+                            o(out, "\nCacheService.resetAll Ok");
+                        } else {
+                            Persistence.service().startBackgroundProcessTransaction();
+                            Lifecycle.startElevatedUserContext();
+                            Mail.getMailService().setDisabled(true);
+                            ServerSideFactory.create(CommunicationFacade.class).setDisabled(true);
+                            try {
+                                if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
+                                    SchedulerHelper.shutdown();
+                                    RDBUtils.resetDatabase();
+                                    SchedulerHelper.dbReset();
+                                    Thread.sleep(150);
+                                    SchedulerHelper.init();
+                                    log.debug("Initialize Admin");
+                                    NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+                                    try {
+                                        RDBUtils.ensureNamespace();
+                                        if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+                                            RDBUtils.initNameSpaceSpecificEntityTables();
+                                        } else {
+                                            RDBUtils.initAllEntityTables();
+                                        }
+                                        if (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.PostgreSQL) {
+                                            Persistence.service().commit();
+                                        }
 
-            } catch (Throwable t) {
-                log.error("DB reset error", t);
-                buf.append("\nError:");
-                buf.append(t.getMessage());
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            } finally {
-                DataGenerator.cleanup();
-                CacheService.reset();
+                                        CacheService.resetAll();
+
+                                        new VistaAdminDataPreloaders().preloadAll();
+                                        Persistence.service().commit();
+                                    } finally {
+                                        NamespaceManager.setNamespace(requestNamespace);
+                                    }
+                                }
+
+                                switch (type) {
+                                case all:
+                                case allWithMockup:
+                                case allAddMockup:
+                                case allMini:
+                                    if (VistaDemo.isDemo()) {
+                                        preloadPmc(req, out, prodPmcNameCorrections("demo"), type);
+                                    } else {
+                                        for (DemoPmc demoPmc : EnumSet.allOf(DemoPmc.class)) {
+                                            preloadPmc(req, out, prodPmcNameCorrections(demoPmc.name()), type);
+                                        }
+                                    }
+                                    break;
+                                case addPmcMockup:
+                                case addPmcMockupTest1:
+                                case preloadPmcWithMockup:
+                                case preloadPmc: {
+                                    String pmc = req.getParameter("pmc");
+                                    if (pmc == null) {
+                                        pmc = NamespaceManager.getNamespace();
+                                    }
+                                    preloadPmc(req, out, pmc, type);
+
+                                    break;
+                                }
+                                case clearPmc: {
+                                    String pmc = req.getParameter("pmc");
+                                    if (pmc == null) {
+                                        pmc = NamespaceManager.getNamespace();
+                                    }
+                                    o(out, "\n--- PMC  '" + pmc + "' ---\n");
+                                    RDBUtils.deleteFromAllEntityTables();
+                                    NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+                                    EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+                                    criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), pmc));
+                                    Persistence.service().delete(criteria);
+                                    Persistence.service().commit();
+                                }
+                                    break;
+                                case dropForeignKeys:
+                                    RDBUtils.dropAllForeignKeys();
+                                    break;
+                                case prodReset:
+                                    break;
+                                default:
+                                    throw new Error("unimplemented: " + type);
+                                }
+
+                                o(out, "\nTotal time: " + TimeUtils.secSince(start));
+                                log.info("DB reset {} {}", type, TimeUtils.secSince(start));
+                                o(out, "Processing total time: " + TimeUtils.secSince(start) + "\n");
+                            } catch (Throwable t) {
+                                log.error("", t);
+                                Persistence.service().rollback();
+                                throw new Error(t);
+                            } finally {
+                                ServerSideFactory.create(CommunicationFacade.class).setDisabled(false);
+                                Mail.getMailService().setDisabled(false);
+                                Lifecycle.endElevatedUserContext();
+                                Persistence.service().endTransaction();
+                            }
+                        }
+                    }
+                    h(out, "</body></html>");
+                } catch (Throwable t) {
+                    log.error("DB reset error", t);
+                    o(out, "\nError:");
+                    o(out, t.getMessage());
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                } finally {
+                    DataGenerator.cleanup();
+                    CacheService.reset();
+                }
             }
-            response.setDateHeader("Expires", System.currentTimeMillis());
-            response.setHeader("Pragma", "no-cache");
-            response.setHeader("Cache-control", "no-cache, no-store, must-revalidate");
-            response.setContentType(contentType);
-            OutputStream output = response.getOutputStream();
-            try {
-                output.write(buf.toString().getBytes());
-            } finally {
-                IOUtils.closeQuietly(output);
-            }
+        } finally {
+            IOUtils.closeQuietly(out);
         }
+
     }
 
     private String prodPmcNameCorrections(String name) {
@@ -296,7 +311,7 @@ public class DBResetServlet extends HttpServlet {
         }
     }
 
-    private void preloadPmc(HttpServletRequest req, StringBuilder buf, String pmcDnsName, ResetType type) {
+    private void preloadPmc(HttpServletRequest req, OutputStream out, String pmcDnsName, ResetType type) throws IOException {
         long pmcStart = System.currentTimeMillis();
         NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
         log.debug("Preload PMC '{}'", pmcDnsName);
@@ -309,13 +324,14 @@ public class DBResetServlet extends HttpServlet {
         Persistence.service().commit();
 
         NamespaceManager.setNamespace(pmc.namespace().getValue());
-        buf.append("\n--- Preload  " + pmcDnsName + " ---\n");
+        o(out, "\n--- Preload  " + pmcDnsName + " ---\n");
         if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
             RDBUtils.ensureNamespace();
             RDBUtils.initAllEntityTables();
             if (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.PostgreSQL) {
                 Persistence.service().commit();
             }
+            o(out, "Tables created");
         }
 
         if (!EnumSet.of(ResetType.all, ResetType.allMini, ResetType.addPmcMockup, ResetType.allAddMockup, ResetType.addPmcMockupTest1).contains(type)) {
@@ -365,14 +381,14 @@ public class DBResetServlet extends HttpServlet {
                 }
             }
 
-            buf.append(preloaders.exectutePreloadersCreate(dpisRun));
+            o(out, preloaders.exectutePreloadersCreate(dpisRun));
         } else {
-            buf.append(preloaders.preloadAll());
+            o(out, preloaders.preloadAll());
         }
         CacheService.reset();
 
         log.info("Preloaded PMC '{}' {}", pmcDnsName, TimeUtils.secSince(pmcStart));
-        buf.append("Preloaded PMC '" + pmcDnsName + "' " + TimeUtils.secSince(pmcStart));
+        o(out, "Preloaded PMC '" + pmcDnsName + "' " + TimeUtils.secSince(pmcStart));
     }
 
     private void setPreloadConfigParameter(HttpServletRequest req, VistaDevPreloadConfig cfg) {
