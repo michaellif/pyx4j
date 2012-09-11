@@ -35,21 +35,22 @@ public class NoticesSummaryForm extends CEntityDecoratableForm<NoticesGadgetData
 
     @Override
     public IsWidget createContent() {
-        final double NUMBER_WIDTH = 5d;
+        final double NUMBER_WIDTH = 10d;
+        final double LABEL_WIDTH = 18d;
         FlowPanel content = new FlowPanel();
 
         content.add(new DecoratorBuilder(inject(proto().unitsVacant(), new CHyperlink(noticesGadget.displayVacantUnits()))).componentWidth(NUMBER_WIDTH)
-                .build());
+                .labelWidth(LABEL_WIDTH).build());
         content.add(new DecoratorBuilder(inject(proto().unitVacancy(), new CHyperlink(noticesGadget.displayVacantUnits()))).componentWidth(NUMBER_WIDTH)
-                .build());
+                .labelWidth(LABEL_WIDTH).build());
+
         content.add(new DecoratorBuilder(inject(proto().noticesLeavingThisMonth(), new CHyperlink(noticesGadget.displayNotices(NoticesFilter.THIS_MONTH))))
-                .componentWidth(NUMBER_WIDTH).build());
+                .componentWidth(NUMBER_WIDTH).labelWidth(LABEL_WIDTH).build());
         content.add(new DecoratorBuilder(inject(proto().noticesLeavingNextMonth(), new CHyperlink(noticesGadget.displayNotices(NoticesFilter.NEXT_MONTH))))
-                .componentWidth(NUMBER_WIDTH).build());
+                .componentWidth(NUMBER_WIDTH).labelWidth(LABEL_WIDTH).build());
         content.add(new DecoratorBuilder(inject(proto().noticesLeavingOver90Days(), new CHyperlink(noticesGadget.displayNotices(NoticesFilter.OVER_90_DAYS))))
-                .componentWidth(NUMBER_WIDTH).build());
+                .componentWidth(NUMBER_WIDTH).labelWidth(LABEL_WIDTH).build());
 
         return content;
     }
-
 }
