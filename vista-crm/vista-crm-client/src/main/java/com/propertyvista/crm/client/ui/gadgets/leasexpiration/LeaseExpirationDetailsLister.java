@@ -13,15 +13,25 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.leasexpiration;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.BasicLister;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseExpirationDetailsLister extends BasicLister<LeaseDTO> {
 
-    public LeaseExpirationDetailsLister() {
-        super(LeaseDTO.class);
+    private static final I18n i18n = I18n.get(LeaseExpirationDetailsLister.class);
+
+    public LeaseExpirationDetailsLister(final Command backCommandHandler) {
+        super(LeaseDTO.class, true, false);
         setColumnDescriptors(//@formatter:off
                 new Builder(proto().leaseId()).build(),
                 new Builder(proto().type()).build(),
@@ -46,5 +56,17 @@ public class LeaseExpirationDetailsLister extends BasicLister<LeaseDTO> {
                 new Builder(proto().approvalDate(), false).build(),
                 new Builder(proto().creationDate(), false).build()
         );//@formatter:on
+
+        addActionItem(new Button(i18n.tr("Back to Summary"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                backCommandHandler.execute();
+            }
+        }));
+    }
+
+    @Override
+    protected void onItemSelect(LeaseDTO item) {
+        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(proto().getInstanceValueClass()).formViewerPlace(item.getPrimaryKey()));
     }
 }

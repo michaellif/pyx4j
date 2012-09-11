@@ -13,13 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.leasexpiration;
 
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
+import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
 
 final class LeaseExpirationSummaryForm extends CEntityDecoratableForm<LeaseExpirationGadgetDataDTO> {
 
@@ -27,26 +28,25 @@ final class LeaseExpirationSummaryForm extends CEntityDecoratableForm<LeaseExpir
 
     LeaseExpirationSummaryForm(LeaseExpirationGadgetFactory.LeaseExpirationGadget leaseExpirationGadget, Class<LeaseExpirationGadgetDataDTO> clazz) {
         super(clazz);
+        this.setEditable(false);
         this.leaseExpirationGadget = leaseExpirationGadget;
     }
 
     @Override
     public IsWidget createContent() {
-        int row = 0;
 
-        FormFlexPanel panel = new FormFlexPanel();
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitOccupancyPct(), new CHyperlink(this.leaseExpirationGadget.openListCmd())))
-                .componentWidth(5).build());
-        panel.setWidget(row, 1,
-                new DecoratorBuilder(inject(proto().unitsOccupied(), new CHyperlink(this.leaseExpirationGadget.openListCmd()))).componentWidth(5).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesEndingThisMonth(), new CHyperlink(this.leaseExpirationGadget.openListCmd())))
-                .componentWidth(5).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesEndingNextMonth(), new CHyperlink(this.leaseExpirationGadget.openListCmd())))
-                .componentWidth(5).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesEndingOver90Days(), new CHyperlink(this.leaseExpirationGadget.openListCmd())))
-                .componentWidth(5).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesOnMonthToMonth(), new CHyperlink(this.leaseExpirationGadget.openListCmd())))
-                .componentWidth(5).build());
+        FlowPanel panel = new FlowPanel();
+        panel.add(new DecoratorBuilder(inject(proto().unitsOccupied(), new CHyperlink(this.leaseExpirationGadget.openUnitDetals()))).componentWidth(5).build());
+        panel.add(new DecoratorBuilder(inject(proto().unitOccupancyPct(), new CHyperlink(this.leaseExpirationGadget.openUnitDetals()))).componentWidth(5)
+                .build());
+        panel.add(new DecoratorBuilder(inject(proto().numOfLeasesEndingThisMonth(),
+                new CHyperlink(this.leaseExpirationGadget.openLeaseDetails(LeaseExpirationGadgetMeta.LeaseFilter.THIS_MONTH)))).componentWidth(5).build());
+        panel.add(new DecoratorBuilder(inject(proto().numOfLeasesEndingNextMonth(),
+                new CHyperlink(this.leaseExpirationGadget.openLeaseDetails(LeaseExpirationGadgetMeta.LeaseFilter.NEXT_MONTH)))).componentWidth(5).build());
+        panel.add(new DecoratorBuilder(inject(proto().numOfLeasesEndingOver90Days(),
+                new CHyperlink(this.leaseExpirationGadget.openLeaseDetails(LeaseExpirationGadgetMeta.LeaseFilter.OVER_90_DAYS)))).componentWidth(5).build());
+        panel.add(new DecoratorBuilder(inject(proto().numOfLeasesOnMonthToMonth(),
+                new CHyperlink(this.leaseExpirationGadget.openLeaseDetails(LeaseExpirationGadgetMeta.LeaseFilter.MONTH_ON_MONTH)))).componentWidth(5).build());
 
         return panel;
     }

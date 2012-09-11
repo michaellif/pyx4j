@@ -24,12 +24,20 @@ import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 public interface LeaseExpirationGadgetMeta extends GadgetMetadata {
 
     @I18n(strategy = I18nStrategy.IgnoreThis)
-    enum GadgetView {
+    enum GadgetMode {
 
-        SUMMARY, LEASES_ENDING_THIS_MONTH, LEASES_ENDING_NEXT_MONTH, LEASES_ENDING_90_DAYS, LEASES_ON_MONTH_TO_MONTH, UNIT_OCCUPANCY_PCT, UNIT_OCCUPANCY_NUM
+        SUMMARY, LEASES_DETAILS, OCCUPIED_UNITS_DETAILS;
 
     }
 
-    IPrimitive<GadgetView> activeView();
+    enum LeaseFilter {
+
+        THIS_MONTH, NEXT_MONTH, OVER_90_DAYS, MONTH_ON_MONTH
+
+    }
+
+    IPrimitive<GadgetMode> activeMode();
+
+    IPrimitive<LeaseFilter> activeLeaseFilterCriteria();
 
 }

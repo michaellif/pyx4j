@@ -24,7 +24,7 @@ public interface LeaseExpirationGadgetDataDTO extends IEntity {
     @Caption(name = "% Unit Occupancy")
     IPrimitive<Double> unitOccupancyPct();
 
-    @Caption(name = "# Units Occupied")
+    @Caption(name = "# Unit Occupancy")
     IPrimitive<Integer> unitsOccupied();
 
     @Caption(name = "# Leases Ending This Month")
