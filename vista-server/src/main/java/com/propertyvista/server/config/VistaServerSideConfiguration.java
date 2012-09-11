@@ -14,6 +14,8 @@
 package com.propertyvista.server.config;
 
 import java.io.File;
+import java.util.EnumSet;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 
@@ -36,6 +38,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
@@ -104,7 +107,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getDevelopmentSessionCookieName() {
-        return "dev_access" + getApplicationURLNamespace().replaceAll("[\\-\\./:]", "_");
+        if (getApplicationURLNamespace() == null) {
+            return "dev_access";
+        } else {
+            return "dev_access" + getApplicationURLNamespace().replaceAll("[\\-\\./:]", "_");
+        }
     }
 
     public String getApplicationURLNamespace() {
@@ -225,6 +232,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     @Override
     public boolean openDBReset() {
         return true;
+    }
+
+    @Override
+    public Set<DemoPmc> dbResetPreloadPmc() {
+        return EnumSet.of(DemoPmc.vista, DemoPmc.star, DemoPmc.redridge, DemoPmc.rockville);
     }
 
     @Override

@@ -70,8 +70,6 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         if (demoPmc == null) {
             if (NamespaceManager.getNamespace().equals("starlight")) {
                 add(new StarlightSitePreloader());
-            } else if (NamespaceManager.getNamespace().equals("demo")) {
-                add(new DemoSitePreloader());
             } else {
                 add(new ProdSitePreloader());
             }
@@ -89,6 +87,8 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             case rockville:
                 add(new RockvilleSitePreloader());
                 break;
+            case demo:
+                add(new DemoSitePreloader());
             default:
                 add(new ProdSitePreloader());
             }

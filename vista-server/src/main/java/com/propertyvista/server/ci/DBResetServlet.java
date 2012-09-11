@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +60,7 @@ import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.server.preloader.VistaAdminDataPreloaders;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.VistaBasicBehavior;
@@ -196,6 +198,7 @@ public class DBResetServlet extends HttpServlet {
                             ServerSideFactory.create(CommunicationFacade.class).setDisabled(true);
                             try {
                                 if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
+                                    Validate.isTrue(!VistaDeployment.isVistaProduction(), "Destruction is disabled");
                                     SchedulerHelper.shutdown();
                                     RDBUtils.resetDatabase();
                                     SchedulerHelper.dbReset();
@@ -232,12 +235,8 @@ public class DBResetServlet extends HttpServlet {
                                 case allWithMockup:
                                 case allAddMockup:
                                 case allMini:
-                                    if (VistaDemo.isDemo()) {
-                                        preloadPmc(req, out, prodPmcNameCorrections("demo"), type);
-                                    } else {
-                                        for (DemoPmc demoPmc : EnumSet.allOf(DemoPmc.class)) {
-                                            preloadPmc(req, out, prodPmcNameCorrections(demoPmc.name()), type);
-                                        }
+                                    for (DemoPmc demoPmc : conf.dbResetPreloadPmc()) {
+                                        preloadPmc(req, out, prodPmcNameCorrections(demoPmc.name()), type);
                                     }
                                     break;
                                 case addPmcMockup:

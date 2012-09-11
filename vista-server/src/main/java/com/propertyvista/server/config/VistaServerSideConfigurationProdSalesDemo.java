@@ -13,8 +13,12 @@
  */
 package com.propertyvista.server.config;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import com.pyx4j.log4j.LoggerConfig;
 
+import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideConfigurationCustom {
@@ -22,6 +26,11 @@ public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideCo
     @Override
     public boolean isVistaDemo() {
         return true;
+    }
+
+    @Override
+    public Set<DemoPmc> dbResetPreloadPmc() {
+        return EnumSet.of(DemoPmc.star, DemoPmc.redridge, DemoPmc.rockville);
     }
 
     @Override

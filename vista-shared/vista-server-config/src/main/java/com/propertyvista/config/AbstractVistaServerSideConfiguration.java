@@ -15,10 +15,12 @@ package com.propertyvista.config;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
 import com.pyx4j.config.server.LifecycleListener;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 
+import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.server.config.VistaFeaturesLifecycleListener;
 
 public abstract class AbstractVistaServerSideConfiguration extends EssentialsServerSideConfiguration {
@@ -33,6 +35,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
     public abstract boolean isVistaDemo();
 
     public abstract boolean openDBReset();
+
+    public abstract Set<DemoPmc> dbResetPreloadPmc();
 
     public abstract boolean openIdrequired();
 

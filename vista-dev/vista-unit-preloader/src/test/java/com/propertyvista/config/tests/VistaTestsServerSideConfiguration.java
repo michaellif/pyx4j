@@ -13,6 +13,8 @@
  */
 package com.propertyvista.config.tests;
 
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +28,7 @@ import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.security.shared.AclCreator;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.domain.DemoData.DemoPmc;
 
 public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideConfiguration {
 
@@ -156,6 +159,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
 
     @Override
     public String openIdProviderDomain() {
+        return null;
+    }
+
+    @Override
+    public Set<DemoPmc> dbResetPreloadPmc() {
         return null;
     }
 
