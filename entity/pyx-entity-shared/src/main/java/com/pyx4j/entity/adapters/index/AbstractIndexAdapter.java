@@ -29,7 +29,7 @@ public abstract class AbstractIndexAdapter<E> implements IndexAdapter<E> {
     @Override
     public String getIndexedColumnName(String embeddedPath, MemberMeta memberMeta) {
         Indexed index = memberMeta.getAnnotation(Indexed.class);
-        if (index.global() != 0) {
+        if (index != null && index.global() != 0) {
             return ENTITY_KEYWORD_PRROPERTY;
         } else {
             if ((embeddedPath != null) && (embeddedPath.length() > 0)) {

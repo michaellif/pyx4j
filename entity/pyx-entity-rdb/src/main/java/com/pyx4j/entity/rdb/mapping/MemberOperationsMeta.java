@@ -50,6 +50,8 @@ public class MemberOperationsMeta implements EntityMemberAccess {
 
     private final GeneratedValue generatedValue;
 
+    private MemberOperationsMeta sortMemberOperationsMeta;
+
     public MemberOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta, String memberPath) {
         this(memberAccess, valueAdapter, sqlName, memberMeta, memberPath, null, null, false);
     }
@@ -70,6 +72,14 @@ public class MemberOperationsMeta implements EntityMemberAccess {
         this.indexValueClass = indexValueClass;
         this.ownerColumn = ownerColumn;
         this.generatedValue = memberMeta.getAnnotation(GeneratedValue.class);
+    }
+
+    public MemberOperationsMeta getSortMemberOperationsMeta() {
+        return sortMemberOperationsMeta;
+    }
+
+    public void setSortMemberOperationsMeta(MemberOperationsMeta sortMemberOperationsMeta) {
+        this.sortMemberOperationsMeta = sortMemberOperationsMeta;
     }
 
     public boolean isOwnerColumn() {

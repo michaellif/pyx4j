@@ -20,7 +20,9 @@
  */
 package com.pyx4j.entity.test.shared.domain.sort;
 
+import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -38,4 +40,7 @@ public interface SortBy extends IEntity {
     @ToString
     @Indexed
     IPrimitive<String> amount();
+
+    @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
+    IPrimitive<String> alphanum();
 }

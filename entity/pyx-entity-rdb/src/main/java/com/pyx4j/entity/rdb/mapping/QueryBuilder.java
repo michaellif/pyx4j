@@ -146,8 +146,16 @@ public class QueryBuilder<T extends IEntity> {
                 if (queryMember == null) {
                     throw new RuntimeException("Unknown member " + sort.getPropertyPath() + " in " + operationsMeta.entityMeta().getEntityClass().getName());
                 }
-                sortsSql.append(queryMember.memberSqlName);
-                selectColumnsSqlNames.add(queryMember.memberSqlName);
+                String sqlName = queryMember.memberSqlName;
+                if (queryMember.memberOper.getSortMemberOperationsMeta() != null) {
+                    sqlName = queryMember.joinAlias + "." + queryMember.memberOper.getSortMemberOperationsMeta().sqlName();
+                }
+
+                sortsSql.append(sqlName);
+
+                if (!queryMember.joinAlias.startsWith(mainTableSqlAlias)) {
+                    selectColumnsSqlNames.add(sqlName);
+                }
 
                 sortsSql.append(' ').append(sort.isDescending() ? "DESC" : "ASC");
                 // TODO Make it configurable in API
@@ -371,12 +379,10 @@ public class QueryBuilder<T extends IEntity> {
     String getColumnsSQL() {
         StringBuilder sql = new StringBuilder();
         for (String sqlName : selectColumnsSqlNames) {
-            if (!sqlName.startsWith(mainTableSqlAlias)) {
-                sql.append(", ");
-                sql.append(sqlName);
-                sql.append(" c_");
-                sql.append(sqlName.replace(".", "_"));
-            }
+            sql.append(", ");
+            sql.append(sqlName);
+            sql.append(" c_");
+            sql.append(sqlName.replace(".", "_"));
         }
         return sql.toString();
     }

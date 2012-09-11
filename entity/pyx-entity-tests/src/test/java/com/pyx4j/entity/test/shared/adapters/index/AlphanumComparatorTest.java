@@ -21,32 +21,48 @@
 package com.pyx4j.entity.test.shared.adapters.index;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-
-import junit.framework.Assert;
 import junit.framework.TestCase;
+
+import com.pyx4j.commons.EqualsHelper;
 
 public class AlphanumComparatorTest extends TestCase {
 
+    private static void add(List<String> anum, String... values) {
+        anum.addAll(Arrays.asList(values));
+    }
+
+    private static void assertEquals(List<String> anum, String... expected) {
+        List<String> expectedList = new ArrayList<String>();
+        expectedList.addAll(Arrays.asList(expected));
+        if (!EqualsHelper.equals(anum, expectedList)) {
+            fail("Unexpected Order" + anum + " != " + expectedList);
+        }
+    }
+
     public void testSort() {
         List<String> anum = new ArrayList<String>();
-        anum.add("A1");
-        anum.add("A2");
-        anum.add("A20");
-        anum.add("A10");
-        
+        add(anum, "A1", "A2", "A20", "A10");
+
         Collections.sort(anum);
-        Assert.assertEquals("A1", anum.get(0));
-        Assert.assertEquals("A10", anum.get(1));
-        Assert.assertEquals("A2", anum.get(2));
-        
+        assertEquals(anum, "A1", "A10", "A2", "A20");
+
         Collections.sort(anum, new AlphanumComparator());
-        
-        Assert.assertEquals("A1", anum.get(0));
-        Assert.assertEquals("A2", anum.get(1));
-        Assert.assertEquals("A20", anum.get(3));
-        
+        assertEquals(anum, "A1", "A2", "A10", "A20");
+
+    }
+
+    public void testSortSufiexed() {
+        List<String> anum = new ArrayList<String>();
+        add(anum, "1", "1A", "2", "2A");
+
+        Collections.sort(anum);
+        assertEquals(anum, "1", "1A", "2", "2A");
+
+        Collections.sort(anum, new AlphanumComparator());
+        assertEquals(anum, "1", "1A", "2", "2A");
     }
 }

@@ -22,11 +22,14 @@ package com.pyx4j.entity.rdb.mapping;
 
 class QueryMember {
 
+    final String joinAlias;
+
     final String memberSqlName;
 
     final MemberOperationsMeta memberOper;
 
     QueryMember(String joinAlias, MemberOperationsMeta memberOper) {
+        this.joinAlias = joinAlias;
         this.memberOper = memberOper;
         if (memberOper instanceof MemberExternalOperationsMeta) {
             memberSqlName = joinAlias + "." + ((MemberExternalOperationsMeta) memberOper).sqlValueName();

@@ -364,10 +364,38 @@ public class EntityOperationsMeta {
                 if ((index != null) && (index.adapters() != null) && (index.adapters().length > 0)) {
                     for (Class<? extends IndexAdapter<?>> adapterClass : index.adapters()) {
                         IndexAdapter<?> adapter = AdapterFactory.getIndexAdapter(adapterClass);
-                        String indexedPropertyName = namingConvention.sqlFieldName(adapter.getIndexedColumnName(null, memberMeta));
-                        indexMembers.add(new MemberOperationsMeta(memberAccess, null, indexedPropertyName, memberMeta, null, adapterClass, adapter
-                                .getIndexValueClass(), false));
+
+                        String indexedPropertyName = adapter.getIndexedColumnName(null, memberMeta);
+                        String sqlName;
+                        if (namesPath != null) {
+                            sqlName = namingConvention.sqlEmbededFieldName(namesPath, indexedPropertyName);
+                        } else {
+                            sqlName = namingConvention.sqlFieldName(indexedPropertyName);
+                        }
+
+                        indexMembers.add(new MemberOperationsMeta(memberAccess, null, sqlName, memberMeta, null, adapterClass, adapter.getIndexValueClass(),
+                                false));
                     }
+                }
+
+                MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
+                if ((memberColumn != null) && (memberColumn.sortAdapter() != null) && (memberColumn.sortAdapter() != IndexAdapter.class)) {
+                    @SuppressWarnings("unchecked")
+                    Class<? extends IndexAdapter<?>> adapterClass = (Class<? extends IndexAdapter<?>>) memberColumn.sortAdapter();
+                    IndexAdapter<?> adapter = AdapterFactory.getIndexAdapter(adapterClass);
+
+                    String indexedPropertyName = adapter.getIndexedColumnName(null, memberMeta);
+                    String sqlName;
+                    if (namesPath != null) {
+                        sqlName = namingConvention.sqlEmbededFieldName(namesPath, indexedPropertyName);
+                    } else {
+                        sqlName = namingConvention.sqlFieldName(indexedPropertyName);
+                    }
+
+                    MemberOperationsMeta sortMemberOperationsMeta = new MemberOperationsMeta(memberAccess, null, sqlName, memberMeta, null, adapterClass,
+                            adapter.getIndexValueClass(), false);
+                    indexMembers.add(sortMemberOperationsMeta);
+                    membersByPath.get(memberPath).setSortMemberOperationsMeta(sortMemberOperationsMeta);
                 }
             }
         }

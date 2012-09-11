@@ -389,4 +389,62 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
             }
         }
     }
+
+    public void testSotrByAlphanum() {
+        String testId = uniqueString();
+        {
+            SortSortable item = EntityFactory.create(SortSortable.class);
+            item.testId().setValue(testId);
+            item.alphanum().setValue("A2");
+            srv.persist(item);
+        }
+        {
+            SortSortable item = EntityFactory.create(SortSortable.class);
+            item.testId().setValue(testId);
+            item.alphanum().setValue("A10");
+            srv.persist(item);
+        }
+
+        // Created sort by alphanum member
+        {
+            EntityQueryCriteria<SortSortable> criteria = EntityQueryCriteria.create(SortSortable.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.asc(criteria.proto().alphanum());
+
+            List<SortSortable> r = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, r.size());
+
+            Assert.assertEquals("sort Ok", "A2", r.get(0).alphanum().getValue());
+            Assert.assertEquals("sort Ok", "A10", r.get(1).alphanum().getValue());
+        }
+    }
+
+    public void testSotrByEmbeddedAlphanum() {
+        String testId = uniqueString();
+        {
+            SortSortable item = EntityFactory.create(SortSortable.class);
+            item.testId().setValue(testId);
+            item.sortByEmbedded().alphanum().setValue("A2");
+            srv.persist(item);
+        }
+        {
+            SortSortable item = EntityFactory.create(SortSortable.class);
+            item.testId().setValue(testId);
+            item.sortByEmbedded().alphanum().setValue("A10");
+            srv.persist(item);
+        }
+
+        // Created sort by alphanum member
+        {
+            EntityQueryCriteria<SortSortable> criteria = EntityQueryCriteria.create(SortSortable.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.asc(criteria.proto().sortByEmbedded().alphanum());
+
+            List<SortSortable> r = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, r.size());
+
+            Assert.assertEquals("sort Ok", "A2", r.get(0).sortByEmbedded().alphanum().getValue());
+            Assert.assertEquals("sort Ok", "A10", r.get(1).sortByEmbedded().alphanum().getValue());
+        }
+    }
 }

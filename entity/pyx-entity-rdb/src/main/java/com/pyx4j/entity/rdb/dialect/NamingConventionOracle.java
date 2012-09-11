@@ -207,7 +207,7 @@ public class NamingConventionOracle implements NamingConvention {
             sql.append(makeName(pathPart));
             sql.append('_');
         }
-        sql.append(makeName(javaPersistenceFieldName));
+        sql.append(sqlFieldName(javaPersistenceFieldName));
         return makeName(sql.toString());
     }
 

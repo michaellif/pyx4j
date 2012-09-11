@@ -100,7 +100,7 @@ public class NamingConventionModern implements NamingConvention {
             sql.append(pathPart);
             sql.append('_');
         }
-        sql.append(javaPersistenceFieldName);
+        sql.append(sqlFieldName(javaPersistenceFieldName));
         return sql.toString();
     }
 
