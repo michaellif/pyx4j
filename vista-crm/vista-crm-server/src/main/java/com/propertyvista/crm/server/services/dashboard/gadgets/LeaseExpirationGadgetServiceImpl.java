@@ -41,34 +41,21 @@ import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetService {
 
-    @Deprecated
-    private static final boolean UI_MOCKUP = false;
-
     @Override
     public void leaseExpriation(AsyncCallback<LeaseExpirationGadgetDataDTO> callback, Vector<Building> buildings) {
 
         LeaseExpirationGadgetDataDTO gadgetData = EntityFactory.create(LeaseExpirationGadgetDataDTO.class);
 
-        if (UI_MOCKUP) {
-            gadgetData.numOfLeasesEndingThisMonth().setValue(5);
-            gadgetData.numOfLeasesEndingNextMonth().setValue(6);
-            gadgetData.numOfLeasesEndingOver90Days().setValue(15);
-            gadgetData.numOfLeasesOnMonthToMonth().setValue(55);
-            gadgetData.unitsOccupied().setValue(5);
-            gadgetData.unitOccupancyPct().setValue(5d);
-        } else {
+        gadgetData.numOfLeasesEndingThisMonth().setValue(Persistence.service().count(leaseFilterCriteria(buildings, LeaseFilter.THIS_MONTH)));
+        gadgetData.numOfLeasesEndingNextMonth().setValue(Persistence.service().count(leaseFilterCriteria(buildings, LeaseFilter.NEXT_MONTH)));
+        gadgetData.numOfLeasesEndingOver90Days().setValue(Persistence.service().count(leaseFilterCriteria(buildings, LeaseFilter.OVER_90_DAYS)));
+        // TODO : set gadgetData.numOfLeasesOnMonthToMonth();
 
-            gadgetData.numOfLeasesEndingThisMonth().setValue(Persistence.service().count(leaseFilterCriteria(buildings, LeaseFilter.THIS_MONTH)));
-            gadgetData.numOfLeasesEndingNextMonth().setValue(Persistence.service().count(leaseFilterCriteria(buildings, LeaseFilter.NEXT_MONTH)));
-            gadgetData.numOfLeasesEndingOver90Days().setValue(Persistence.service().count(leaseFilterCriteria(buildings, LeaseFilter.OVER_90_DAYS)));
-            // TODO : set gadgetData.numOfLeasesOnMonthToMonth();
+        gadgetData.unitsOccupied().setValue(numOfOccupiedUnits(buildings));
 
-            gadgetData.unitsOccupied().setValue(numOfOccupiedUnits(buildings));
-
-            int numOfUnits = numOfUnits(buildings);
-            if (numOfUnits != 0) {
-                gadgetData.unitOccupancyPct().setValue(100d * gadgetData.unitsOccupied().getValue() / numOfUnits);
-            }
+        int numOfUnits = numOfUnits(buildings);
+        if (numOfUnits != 0) {
+            gadgetData.unitOccupancyPct().setValue(100d * gadgetData.unitsOccupied().getValue() / numOfUnits);
         }
 
         callback.onSuccess(gadgetData);
@@ -77,9 +64,7 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
     @Override
     public void makeLeaseFilterCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, Vector<Building> buildingsFilter,
             LeaseExpirationGadgetMeta.LeaseFilter leaseFilter) {
-
         callback.onSuccess(toDtoLeaseCriteria(leaseFilterCriteria(buildingsFilter, leaseFilter)));
-
     }
 
     @Override
@@ -198,6 +183,9 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
             @Override
             protected void bind() {
                 bind(dtoProto.building().propertyCode(), dboProto.buildingCode());
+                bind(dtoProto.unitOccupancySegments().$().dateFrom(), dboProto.unitOccupancySegments().$().dateFrom());
+                bind(dtoProto.unitOccupancySegments().$().dateTo(), dboProto.unitOccupancySegments().$().dateTo());
+                bind(dtoProto.unitOccupancySegments().$().status(), dboProto.unitOccupancySegments().$().status());
                 bind((Class<IEntity>) dtoProto.getValueClass(), dboProto, dtoProto);
             }
         };

@@ -26,6 +26,12 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.LeaseDTO;
 
+/**
+ * Although the filtering criteria could be produced on client side, it's better to make it on server side (easier to calculate dates via Java's
+ * <code>Calendar</code> which is not available on GWT.
+ * 
+ * @author ArtyomB
+ */
 public interface LeaseExpirationGadgetService extends IService {
 
     void leaseExpriation(AsyncCallback<LeaseExpirationGadgetDataDTO> callback, Vector<Building> buildings);

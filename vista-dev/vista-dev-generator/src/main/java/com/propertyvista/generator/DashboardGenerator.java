@@ -38,6 +38,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetad
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
+import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
@@ -54,6 +55,7 @@ public class DashboardGenerator extends Dashboards {
     private final static I18n i18n = I18n.get(DashboardGenerator.class);
 
     public DashboardGenerator() {
+        systemDashboards.add(makeDefaultMiscDashboard());
         systemDashboards.add(makeDefaultSystemDashboard());
         systemDashboards.add(makeDefaultUnitAvailabilityDashboard());
         systemDashboards.add(makeDefaultArrearsDashboard());
@@ -78,6 +80,24 @@ public class DashboardGenerator extends Dashboards {
 
         dmd.gadgets().add(buildingLister);
 
+        return dmd;
+    }
+
+    private DashboardMetadata makeDefaultMiscDashboard() {
+        DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
+        dmd.type().setValue(DashboardType.building);
+        dmd.isShared().setValue(true);
+        dmd.name().setValue(i18n.tr("Misc"));
+        dmd.description().setValue(i18n.tr("Contains various gadgets"));
+        dmd.layoutType().setValue(LayoutType.One);
+
+        LeaseExpirationGadgetMeta leaseExpirationGadget = EntityFactory.create(LeaseExpirationGadgetMeta.class);
+        leaseExpirationGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
+        leaseExpirationGadget.refreshInterval().setValue(RefreshInterval.Never);
+        leaseExpirationGadget.activeMode().setValue(LeaseExpirationGadgetMeta.GadgetMode.SUMMARY);
+        leaseExpirationGadget.docking().column().setValue(0);
+
+        dmd.gadgets().add(leaseExpirationGadget);
         return dmd;
     }
 

@@ -22,11 +22,8 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 
@@ -45,7 +42,6 @@ import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta.GadgetMode;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -55,7 +51,7 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
 
         private CEntityDecoratableForm<LeaseExpirationGadgetDataDTO> expirationSummaryForm;
 
-        private IBuildingFilterContainer board;
+        private IBuildingFilterContainer buildingsFilterContainer;
 
         private LeaseExpirationDetailsLister leaseExpirationDetailsLister;
 
@@ -86,13 +82,11 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
                                 populateSucceded();
                             }
 
-                        }, new Vector<Building>(board.getSelectedBuildingsStubs()));
-
+                        }, new Vector<Building>(buildingsFilterContainer.getSelectedBuildingsStubs()));
                         break;
 
                     case LEASES_DETAILS:
                         service.makeLeaseFilterCriteria(new DefaultAsyncCallback<EntityListCriteria<LeaseDTO>>() {
-
                             @Override
                             public void onSuccess(EntityListCriteria<LeaseDTO> result) {
                                 ListerDataSource<LeaseDTO> listerDataSource = new ListerDataSource<LeaseDTO>(LeaseDTO.class, GWT
@@ -102,31 +96,24 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
                                 leaseExpirationDetailsLister.obtain(0);
                                 populateSucceded();
                             }
-                        }, new Vector<Building>(board.getSelectedBuildingsStubs()), getMetadata().activeLeaseFilterCriteria().getValue());
+                        }, new Vector<Building>(buildingsFilterContainer.getSelectedBuildingsStubs()), getMetadata().activeLeaseFilterCriteria().getValue());
                         break;
 
                     case OCCUPIED_UNITS_DETAILS:
-                        ListerDataSource<AptUnitDTO> occupiedUnitsDataSource = new ListerDataSource<AptUnitDTO>(AptUnitDTO.class,
-                                GWT.<AbstractListService<AptUnitDTO>> create(UnitCrudService.class));
-                        AptUnitDTO proto = EntityFactory.getEntityPrototype(AptUnitDTO.class);
-
-                        // TODO move criteria preparation to server side
-                        if (board.getSelectedBuildingsStubs() != null && !board.getSelectedBuildingsStubs().isEmpty()) {
-                            occupiedUnitsDataSource.addPreDefinedFilter(PropertyCriterion.in(proto.building(),
-                                    new Vector<Building>(board.getSelectedBuildingsStubs())));
-                        }
-
-                        LogicalDate now = new LogicalDate();
-                        occupiedUnitsDataSource.addPreDefinedFilter(PropertyCriterion.le(proto.unitOccupancySegments().$().dateFrom(), now));
-                        occupiedUnitsDataSource.addPreDefinedFilter(PropertyCriterion.ge(proto.unitOccupancySegments().$().dateTo(), now));
-
-                        occupiedUnitsDataSource.addPreDefinedFilter(PropertyCriterion.eq(proto.unitOccupancySegments().$().status(),
-                                AptUnitOccupancySegment.Status.leased));
-                        occupiedUnitsDetailsLister.setDataSource(occupiedUnitsDataSource);
-                        occupiedUnitsDetailsLister.obtain(0);
-                        populateSucceded();
-
+                        service.makeOccupiedUnitsFilterCriteria(new DefaultAsyncCallback<EntityListCriteria<AptUnitDTO>>() {
+                            @Override
+                            public void onSuccess(EntityListCriteria<AptUnitDTO> result) {
+                                ListerDataSource<AptUnitDTO> occupiedUnitsDataSource = new ListerDataSource<AptUnitDTO>(AptUnitDTO.class, GWT
+                                        .<AbstractListService<AptUnitDTO>> create(UnitCrudService.class));
+                                occupiedUnitsDataSource.setPreDefinedFilters(result.getFilters());
+                                occupiedUnitsDetailsLister.setDataSource(occupiedUnitsDataSource);
+                                occupiedUnitsDetailsLister.obtain(0);
+                                populateSucceded();
+                            }
+                        }, new Vector<Building>(buildingsFilterContainer.getSelectedBuildingsStubs()));
+                        break;
                     }
+
                 }
 
             });
@@ -134,8 +121,8 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
 
         @Override
         public void setContainerBoard(IBuildingFilterContainer board) {
-            this.board = board;
-            this.board.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
+            this.buildingsFilterContainer = board;
+            this.buildingsFilterContainer.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
 
                 @Override
                 public void onBuildingSelectionChanged(BuildingSelectionChangedEvent event) {
@@ -170,6 +157,7 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
                 public void execute() {
                     getMetadata().activeMode().setValue(LeaseExpirationGadgetMeta.GadgetMode.LEASES_DETAILS);
                     getMetadata().activeLeaseFilterCriteria().setValue(leaseFilter);
+                    saveMetadata();
                     populate();
                 }
             };
@@ -180,6 +168,7 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
                 @Override
                 public void execute() {
                     getMetadata().activeMode().setValue(LeaseExpirationGadgetMeta.GadgetMode.OCCUPIED_UNITS_DETAILS);
+                    saveMetadata();
                     populate();
                 }
             };
@@ -191,6 +180,7 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
                 @Override
                 public void execute() {
                     getMetadata().activeMode().setValue(LeaseExpirationGadgetMeta.GadgetMode.SUMMARY);
+                    saveMetadata();
                     populate();
                 }
 
