@@ -477,7 +477,7 @@
             <properties>
                 <deployContext>vista-prod-demo</deployContext>
                 <vista-tomcat-url>http://prod-demo.birchwoodsoftwaregroup.com</vista-tomcat-url>
-                <vista-app-ping-url>http://demo.birchwoodsoftwaregroup.com</vista-app-ping-url>
+                <vista-app-ping-url>http://prod-demo.birchwoodsoftwaregroup.com/${deployContext}</vista-app-ping-url>
             </properties>
         </profile>
 
@@ -486,15 +486,7 @@
             <properties>
                 <deployContext>vista-sales-demo</deployContext>
                 <vista-tomcat-url>http://prod-demo.birchwoodsoftwaregroup.com</vista-tomcat-url>
-                <vista-app-ping-url>http://prod-demo.birchwoodsoftwaregroup.com</vista-app-ping-url>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>deploy-target-st22</id>
-            <properties>
-                <deployContext>vistast22</deployContext>
-                <vista-app-ping-url>http://star.st22.birchwoodsoftwaregroup.com</vista-app-ping-url>
+                <vista-app-ping-url>http://prod-demo.birchwoodsoftwaregroup.com/${deployContext}</vista-app-ping-url>
             </properties>
         </profile>
 
@@ -562,15 +554,6 @@
                 <tomcatDeployServerId>tomcat.demo.localhost</tomcatDeployServerId>
                 <vista-app-ping-url>http://localhost:8380/${deployContext}</vista-app-ping-url>
                 <vista-tomcat-url>http://localhost:8380</vista-tomcat-url>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>deploy-target-prod02pg</id>
-            <properties>
-                <deployContext>vista-pangroup</deployContext>
-                <vista-tomcat-url>http://staging02.birchwoodsoftwaregroup.com</vista-tomcat-url>
-                <vista-app-ping-url>${vista-tomcat-url}/${deployContext}</vista-app-ping-url>
             </properties>
         </profile>
 
