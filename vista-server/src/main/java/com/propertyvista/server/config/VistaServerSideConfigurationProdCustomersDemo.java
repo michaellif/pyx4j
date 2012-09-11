@@ -18,7 +18,7 @@ import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class VistaServerSideConfigurationDemoProd extends VistaServerSideConfigurationDevCustom {
+public class VistaServerSideConfigurationProdCustomersDemo extends VistaServerSideConfigurationDevCustom {
 
     @Override
     public boolean isVistaDemo() {

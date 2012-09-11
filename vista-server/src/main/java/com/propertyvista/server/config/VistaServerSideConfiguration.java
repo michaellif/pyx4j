@@ -59,8 +59,9 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
             return new VistaServerSideConfiguration44();
         } else if ("vista55".equals(contextName)) {
             return new VistaServerSideConfiguration55();
-        } else if ("vista-demo".equals(contextName)) {
-            return new VistaServerSideConfigurationDemoProd();
+
+        } else if ("vista-prod-demo".equals(contextName)) {
+            return new VistaServerSideConfigurationProdCustomersDemo();
         } else if ("vista-sales-demo".equals(contextName)) {
             return new VistaServerSideConfigurationProdSalesDemo();
 
