@@ -25,6 +25,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -36,9 +38,15 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.ui.CRadioGroupEnum;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.widgets.client.RadioGroup.Layout;
 
 public abstract class EntitySelectorTableDialog<E extends IEntity> extends AbstractEntitySelectorDialog<E> {
 
@@ -53,11 +61,15 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
     private final List<E> alreadySelected;
 
     public EntitySelectorTableDialog(Class<E> entityClass, boolean isMultiselect, List<E> alreadySelected, String caption) {
+        this(entityClass, false, isMultiselect, alreadySelected, caption);
+    }
+
+    public EntitySelectorTableDialog(Class<E> entityClass, boolean isVersioned, boolean isMultiselect, List<E> alreadySelected, String caption) {
         super(caption);
         this.entityClass = entityClass;
         this.isMultiselect = isMultiselect;
         this.alreadySelected = new ArrayList<E>(alreadySelected);
-        this.lister = new SelectEntityLister(this.entityClass) {
+        this.lister = new SelectEntityLister(this.entityClass, isVersioned) {
             @Override
             protected void onObtainSuccess() {
                 super.onObtainSuccess();
@@ -89,7 +101,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
     @Override
     public void show() {
         lister.obtain(0); // populate lister...
-        // super.show() will be called in lister.onObtainSuccess() 
+        // super.show(); will be called in lister.onObtainSuccess() 
     }
 
     protected abstract List<ColumnDescriptor> defineColumnDescriptors();
@@ -161,10 +173,35 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         dataSource.setPreDefinedFilters(filters);
     }
 
+    @I18n(context = "Version Display Mode")
+    public enum VersionDisplayMode {
+        displayDraft, displayFinal;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
     protected class SelectEntityLister extends BasicLister<E> {
 
-        public SelectEntityLister(Class<E> clazz) {
+        private VersionDisplayMode versionDisplayMode = VersionDisplayMode.displayFinal;
+
+        private final CRadioGroupEnum<VersionDisplayMode> displayModeButton = new CRadioGroupEnum<VersionDisplayMode>(VersionDisplayMode.class,
+                Layout.HORISONTAL);
+        {
+            displayModeButton.setValue(versionDisplayMode);
+            displayModeButton.addValueChangeHandler(new ValueChangeHandler<VersionDisplayMode>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<VersionDisplayMode> event) {
+                    onVersionDisplayModeChange(event.getValue());
+                }
+            });
+        }
+
+        public SelectEntityLister(Class<E> clazz, boolean isVersioned) {
             super(clazz);
+
             if (EntitySelectorTableDialog.this.isMultiselect) {
                 setHasCheckboxColumn(true);
             } else {
@@ -173,10 +210,33 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
 
             getDataTablePanel().setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM }));
             getDataTablePanel().setPageSize(PAGESIZE_SMALL);
+            if (isVersioned) {
+                getDataTablePanel().addUpperActionItem(displayModeButton.asWidget());
+            }
 
             setColumnDescriptors(EntitySelectorTableDialog.this.defineColumnDescriptors());
         }
 
-    }
+        public VersionDisplayMode getVersionDisplayMode() {
+            return versionDisplayMode;
+        }
 
+        protected void onVersionDisplayModeChange(VersionDisplayMode mode) {
+            versionDisplayMode = mode;
+            obtain(0);
+        }
+
+        @Override
+        protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
+            switch (getVersionDisplayMode()) {
+            case displayDraft:
+                criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
+                break;
+            case displayFinal:
+                criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
+                break;
+            }
+            return super.updateCriteria(criteria);
+        }
+    }
 }
