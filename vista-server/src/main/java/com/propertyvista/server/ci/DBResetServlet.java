@@ -199,16 +199,20 @@ public class DBResetServlet extends HttpServlet {
                                     SchedulerHelper.shutdown();
                                     RDBUtils.resetDatabase();
                                     SchedulerHelper.dbReset();
+                                    o(out, "DB Dropped: " + TimeUtils.secSince(start));
                                     Thread.sleep(150);
                                     SchedulerHelper.init();
                                     log.debug("Initialize Admin");
                                     NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
                                     try {
                                         RDBUtils.ensureNamespace();
+                                        long astart = System.currentTimeMillis();
                                         if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
                                             RDBUtils.initNameSpaceSpecificEntityTables();
+                                            o(out, "Admin tables created: " + TimeUtils.secSince(astart));
                                         } else {
                                             RDBUtils.initAllEntityTables();
+                                            o(out, "All tables created: " + TimeUtils.secSince(astart));
                                         }
                                         if (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.PostgreSQL) {
                                             Persistence.service().commit();
@@ -284,9 +288,9 @@ public class DBResetServlet extends HttpServlet {
                                 Lifecycle.endElevatedUserContext();
                                 Persistence.service().endTransaction();
                             }
+                            h(out, "<p style=\"background-color:33FF33\">DONE</p>");
                         }
                     }
-                    h(out, "<p style=\"background-color:33FF33\">DONE</p>");
                     h(out, "</body></html>");
                 } catch (Throwable t) {
                     log.error("DB reset error", t);
@@ -332,7 +336,7 @@ public class DBResetServlet extends HttpServlet {
             if (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.PostgreSQL) {
                 Persistence.service().commit();
             }
-            o(out, "Tables created");
+            o(out, "PMC Tables created ", TimeUtils.secSince(pmcStart));
         }
 
         if (!EnumSet.of(ResetType.all, ResetType.allMini, ResetType.addPmcMockup, ResetType.allAddMockup, ResetType.addPmcMockupTest1).contains(type)) {
