@@ -19,7 +19,6 @@ import java.util.List;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -28,6 +27,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.board.BoardBase.StyleSuffix;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
@@ -118,6 +118,13 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
 
             HorizontalPanel buttons = new HorizontalPanel();
             buttons.setSpacing(5);
+            buttons.add(new Button(i18n.tr("Select Buildings..."), new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    selectBuildings();
+                }
+            }));
+
             buttons.add(new Button(i18n.tr("Clear Selected"), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -125,12 +132,6 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
                 }
             }));
 
-            buttons.add(new Button(i18n.tr("Select Buildings..."), new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    selectBuildings();
-                }
-            }));
             bar.add(buildingsStringView);
             bar.add(buttons);
         }
