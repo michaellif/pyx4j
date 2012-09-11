@@ -26,11 +26,11 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.dto.AptUnitDTO;
 
-public class OccupiedUnitsDetailsLister extends BasicLister<AptUnitDTO> {
+public class UnitsDetailsLister extends BasicLister<AptUnitDTO> {
 
-    private static final I18n i18n = I18n.get(OccupiedUnitsDetailsLister.class);
+    private static final I18n i18n = I18n.get(UnitsDetailsLister.class);
 
-    public OccupiedUnitsDetailsLister(final Command backToSummaryCommand) {
+    public UnitsDetailsLister(final Command backToSummaryCommand) {
         super(AptUnitDTO.class, true, false);
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().buildingCode()).build(),

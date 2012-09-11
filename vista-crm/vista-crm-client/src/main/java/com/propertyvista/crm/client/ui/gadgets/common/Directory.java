@@ -30,6 +30,7 @@ import com.propertyvista.crm.client.ui.gadgets.demo.GaugeGadget;
 import com.propertyvista.crm.client.ui.gadgets.demo.LineChartGadget;
 import com.propertyvista.crm.client.ui.gadgets.demo.PieChart2DGadget;
 import com.propertyvista.crm.client.ui.gadgets.leasexpiration.LeaseExpirationGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.notices.NoticesGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.other.BuildingListerGadget;
 import com.propertyvista.crm.client.ui.gadgets.payments.PaymentRecordsGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.payments.PaymentsSummaryGadgetFactory;
@@ -41,7 +42,7 @@ public class Directory {
 
     public enum Categories {
 
-        Availability, Arrears, Chart, Buildings, Payments, Leases, Demo;
+        Availability, Arrears, Chart, Buildings, Payments, Leases, Notices, Demo;
 
         @Override
         public String toString() {
@@ -65,6 +66,7 @@ public class Directory {
         new PaymentsSummaryGadgetFactory(),
         
         new LeaseExpirationGadgetFactory(),
+        new NoticesGadgetFactory(),
         
         new BarChart2DGadget(),
         new DemoGadget(),

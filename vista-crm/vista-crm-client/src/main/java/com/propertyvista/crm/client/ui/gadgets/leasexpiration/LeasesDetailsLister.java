@@ -26,11 +26,11 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.dto.LeaseDTO;
 
-public class LeaseExpirationDetailsLister extends BasicLister<LeaseDTO> {
+public class LeasesDetailsLister extends BasicLister<LeaseDTO> {
 
-    private static final I18n i18n = I18n.get(LeaseExpirationDetailsLister.class);
+    private static final I18n i18n = I18n.get(LeasesDetailsLister.class);
 
-    public LeaseExpirationDetailsLister(final Command backCommandHandler) {
+    public LeasesDetailsLister(final Command backCommandHandler) {
         super(LeaseDTO.class, true, false);
         setColumnDescriptors(//@formatter:off
                 new Builder(proto().leaseId()).build(),
@@ -48,10 +48,10 @@ public class LeaseExpirationDetailsLister extends BasicLister<LeaseDTO> {
                 new Builder(proto().leaseTo()).build(),
                 
                 new Builder(proto().expectedMoveIn()).build(),
-                new Builder(proto().expectedMoveOut(), false).build(),
+                new Builder(proto().expectedMoveOut()).build(),
                 new Builder(proto().actualMoveIn(), false).build(),
                 new Builder(proto().actualMoveOut(), false).build(),
-                new Builder(proto().moveOutNotice(), false).build(),
+                new Builder(proto().moveOutNotice()).build(),
                 
                 new Builder(proto().approvalDate(), false).build(),
                 new Builder(proto().creationDate(), false).build()

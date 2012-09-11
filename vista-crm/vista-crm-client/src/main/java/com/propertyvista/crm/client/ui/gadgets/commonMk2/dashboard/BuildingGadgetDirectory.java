@@ -31,6 +31,7 @@ import com.propertyvista.crm.client.ui.gadgets.demo.GaugeGadget;
 import com.propertyvista.crm.client.ui.gadgets.demo.LineChartGadget;
 import com.propertyvista.crm.client.ui.gadgets.demo.PieChart2DGadget;
 import com.propertyvista.crm.client.ui.gadgets.leasexpiration.LeaseExpirationGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.notices.NoticesGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.payments.PaymentRecordsGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.payments.PaymentsSummaryGadgetFactory;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -50,6 +51,7 @@ public class BuildingGadgetDirectory implements IGadgetDirectory {
             new PaymentsSummaryGadgetFactory(),
             
             new LeaseExpirationGadgetFactory(),
+            new NoticesGadgetFactory(),
             
             // DEMO GADGETS
             new BarChart2DGadget(),

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
-import java.util.GregorianCalendar;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -21,15 +20,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeaseExpirationGadgetService;
-import com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter;
 import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta.LeaseFilter;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -53,9 +49,9 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
 
         gadgetData.unitsOccupied().setValue(numOfOccupiedUnits(buildings));
 
-        int numOfUnits = numOfUnits(buildings);
+        int numOfUnits = CommonQueries.numOfUnits(buildings);
         if (numOfUnits != 0) {
-            gadgetData.unitOccupancyPct().setValue(100d * gadgetData.unitsOccupied().getValue() / numOfUnits);
+            gadgetData.unitOccupancy().setValue((double) gadgetData.unitsOccupied().getValue() / numOfUnits);
         }
 
         callback.onSuccess(gadgetData);
@@ -64,12 +60,12 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
     @Override
     public void makeLeaseFilterCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, Vector<Building> buildingsFilter,
             LeaseExpirationGadgetMeta.LeaseFilter leaseFilter) {
-        callback.onSuccess(toDtoLeaseCriteria(leaseFilterCriteria(buildingsFilter, leaseFilter)));
+        callback.onSuccess(Utils.toDtoLeaseCriteria(leaseFilterCriteria(buildingsFilter, leaseFilter)));
     }
 
     @Override
     public void makeOccupiedUnitsFilterCriteria(AsyncCallback<EntityListCriteria<AptUnitDTO>> callback, Vector<Building> buildingsFilter) {
-        callback.onSuccess(toDtoOccuiedUnitsCriteria(occupiedUnitsCriteria(buildingsFilter)));
+        callback.onSuccess(Utils.toDtoUnitsCriteria(occupiedUnitsCriteria(buildingsFilter)));
     }
 
     private EntityListCriteria<Lease> leaseFilterCriteria(Vector<Building> buildings, LeaseExpirationGadgetMeta.LeaseFilter leaseFilter) {
@@ -80,15 +76,16 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
 
         switch (leaseFilter) {
         case THIS_MONTH:
-            leaseToLowerBound = beginningOfMonth(today);
-            leaseToUpperBound = endOfMonth(today);
+            leaseToLowerBound = Utils.beginningOfMonth(today);
+            leaseToUpperBound = Utils.endOfMonth(today);
             break;
         case NEXT_MONTH:
-            leaseToLowerBound = beginningOfNextMonth(today);
-            leaseToUpperBound = endOfMonth(leaseToLowerBound);
+            leaseToLowerBound = Utils.beginningOfNextMonth(today);
+            leaseToUpperBound = Utils.endOfMonth(leaseToLowerBound);
             break;
         case OVER_90_DAYS:
-            leaseToLowerBound = beginningOfNextMonth(beginningOfNextMonth(beginningOfNextMonth(today)));
+            // TODO this is not correct
+            leaseToLowerBound = Utils.beginningOfNextMonth(Utils.beginningOfNextMonth(Utils.beginningOfNextMonth(today)));
             leaseToUpperBound = null;
             break;
         case MONTH_ON_MONTH:
@@ -106,27 +103,6 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
             leaseCriteria.add(PropertyCriterion.le(leaseCriteria.proto().leaseTo(), leaseToUpperBound));
         }
         return leaseCriteria;
-    }
-
-    private LogicalDate beginningOfMonth(LogicalDate dayOfMonth) {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(dayOfMonth);
-        cal.set(GregorianCalendar.DAY_OF_MONTH, cal.getActualMinimum(GregorianCalendar.DAY_OF_MONTH));
-        return new LogicalDate(cal.getTime());
-    }
-
-    private LogicalDate endOfMonth(LogicalDate dayOfMonth) {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(dayOfMonth);
-        cal.set(GregorianCalendar.DAY_OF_MONTH, cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
-        return new LogicalDate(cal.getTime());
-    }
-
-    private LogicalDate beginningOfNextMonth(LogicalDate dayInMonth) {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(beginningOfMonth(dayInMonth));
-        cal.add(GregorianCalendar.MONTH, 1);
-        return new LogicalDate(cal.getTime());
     }
 
     private int numOfOccupiedUnits(Vector<Building> buildings) {
@@ -150,50 +126,4 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
         return criteria;
     }
 
-    private int numOfUnits(Vector<Building> buildings) {
-        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        if (buildings != null && !buildings.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
-        }
-        return Persistence.service().count(criteria);
-    }
-
-    private EntityListCriteria<LeaseDTO> toDtoLeaseCriteria(EntityQueryCriteria<Lease> criteria) {
-        // WARNING: this binder is used in the REVERSE WAY
-        EntityDtoBinder<LeaseDTO, Lease> binder = new EntityDtoBinder<LeaseDTO, Lease>(LeaseDTO.class, Lease.class) {
-            @Override
-            protected void bind() {
-                bind((Class<IEntity>) dtoProto.getInstanceValueClass(), dboProto, dtoProto);
-                // TODO investigate wtf is going on here and why 'leaseTo' is not binded by the previous line
-                bind(dtoProto.leaseTo(), dboProto.leaseTo());
-            }
-        };
-        EntityDto2DboCriteriaConverter<LeaseDTO, Lease> converter = new EntityDto2DboCriteriaConverter<LeaseDTO, Lease>(LeaseDTO.class, Lease.class,
-                EntityDto2DboCriteriaConverter.makeMapper(binder));
-
-        EntityListCriteria<LeaseDTO> criteriaDto = EntityListCriteria.create(LeaseDTO.class);
-        criteriaDto.addAll(converter.convertDTOSearchCriteria(criteria.getFilters()));
-
-        return criteriaDto;
-    }
-
-    private EntityListCriteria<AptUnitDTO> toDtoOccuiedUnitsCriteria(EntityQueryCriteria<AptUnit> criteria) {
-        // WARNING: this binder is used in the REVERSE WAY: it binds DBO to DTO
-        EntityDtoBinder<AptUnitDTO, AptUnit> binder = new EntityDtoBinder<AptUnitDTO, AptUnit>(AptUnitDTO.class, AptUnit.class) {
-            @Override
-            protected void bind() {
-                bind(dtoProto.building().propertyCode(), dboProto.buildingCode());
-                bind(dtoProto.unitOccupancySegments().$().dateFrom(), dboProto.unitOccupancySegments().$().dateFrom());
-                bind(dtoProto.unitOccupancySegments().$().dateTo(), dboProto.unitOccupancySegments().$().dateTo());
-                bind(dtoProto.unitOccupancySegments().$().status(), dboProto.unitOccupancySegments().$().status());
-                bind((Class<IEntity>) dtoProto.getValueClass(), dboProto, dtoProto);
-            }
-        };
-        EntityDto2DboCriteriaConverter<AptUnitDTO, AptUnit> converter = new EntityDto2DboCriteriaConverter<AptUnitDTO, AptUnit>(AptUnitDTO.class,
-                AptUnit.class, EntityDto2DboCriteriaConverter.makeMapper(binder));
-
-        EntityListCriteria<AptUnitDTO> criteriaDto = EntityListCriteria.create(AptUnitDTO.class);
-        criteriaDto.addAll(converter.convertDTOSearchCriteria(criteria.getFilters()));
-        return criteriaDto;
-    }
 }

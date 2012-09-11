@@ -37,7 +37,7 @@ final class LeaseExpirationSummaryForm extends CEntityDecoratableForm<LeaseExpir
 
         FlowPanel panel = new FlowPanel();
         panel.add(new DecoratorBuilder(inject(proto().unitsOccupied(), new CHyperlink(this.leaseExpirationGadget.openUnitDetals()))).componentWidth(5).build());
-        panel.add(new DecoratorBuilder(inject(proto().unitOccupancyPct(), new CHyperlink(this.leaseExpirationGadget.openUnitDetals()))).componentWidth(5)
+        panel.add(new DecoratorBuilder(inject(proto().unitOccupancy(), new CHyperlink(this.leaseExpirationGadget.openUnitDetals()))).componentWidth(5)
                 .build());
         panel.add(new DecoratorBuilder(inject(proto().numOfLeasesEndingThisMonth(),
                 new CHyperlink(this.leaseExpirationGadget.openLeaseDetails(LeaseExpirationGadgetMeta.LeaseFilter.THIS_MONTH)))).componentWidth(5).build());

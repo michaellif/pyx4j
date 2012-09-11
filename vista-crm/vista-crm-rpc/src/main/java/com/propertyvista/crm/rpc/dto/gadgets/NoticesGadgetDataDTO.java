@@ -7,36 +7,34 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 7, 2012
+ * Created on Sep 11, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.rpc.dto.gadgets;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface LeaseExpirationGadgetDataDTO extends IEntity {
+public interface NoticesGadgetDataDTO extends IEntity {
 
-    @Caption(name = "% Unit Occupancy")
-    IPrimitive<Double> unitOccupancy();
+    @Caption(name = "# Units Vacant")
+    IPrimitive<Integer> unitsVacant();
 
-    @Caption(name = "# Units Occupied")
-    IPrimitive<Integer> unitsOccupied();
+    @Caption(name = "% Unit Vacancy")
+    @Format("#.##%")
+    IPrimitive<Double> unitVacancy();
 
-    @Caption(name = "# Leases Ending This Month")
-    IPrimitive<Integer> numOfLeasesEndingThisMonth();
+    @Caption(name = "# Notices Leaving This Month")
+    IPrimitive<Integer> noticesLeavingThisMonth();
 
-    @Caption(name = "# Leases Ending Next Month")
-    IPrimitive<Integer> numOfLeasesEndingNextMonth();
+    @Caption(name = "# Notices Leaving Next Month")
+    IPrimitive<Integer> noticesLeavingNextMonth();
 
-    @Caption(name = "# Leases Ending 90+ Days")
-    IPrimitive<Integer> numOfLeasesEndingOver90Days();
-
-    @Caption(name = "# Leases on Month to Month")
-    IPrimitive<Integer> numOfLeasesOnMonthToMonth();
-
+    @Caption(name = "# Notices Leaving 90+ Days")
+    IPrimitive<Integer> noticesLeavingOver90Days();
 }

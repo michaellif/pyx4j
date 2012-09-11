@@ -53,9 +53,9 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
 
         private IBuildingFilterContainer buildingsFilterContainer;
 
-        private LeaseExpirationDetailsLister leaseExpirationDetailsLister;
+        private LeasesDetailsLister leaseExpirationDetailsLister;
 
-        private OccupiedUnitsDetailsLister occupiedUnitsDetailsLister;
+        private UnitsDetailsLister occupiedUnitsDetailsLister;
 
         public LeaseExpirationGadget(GadgetMetadata metadata) {
             super(metadata, LeaseExpirationGadgetMeta.class);
@@ -139,10 +139,10 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
             expirationSummaryForm.initContent();
             contentPanel.add(expirationSummaryForm);
 
-            leaseExpirationDetailsLister = new LeaseExpirationDetailsLister(backToSummary());
+            leaseExpirationDetailsLister = new LeasesDetailsLister(backToSummary());
             contentPanel.add(leaseExpirationDetailsLister);
 
-            occupiedUnitsDetailsLister = new OccupiedUnitsDetailsLister(backToSummary());
+            occupiedUnitsDetailsLister = new UnitsDetailsLister(backToSummary());
             contentPanel.add(occupiedUnitsDetailsLister);
 
             expirationSummaryForm.setVisible(true);
