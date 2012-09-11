@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
@@ -56,18 +57,20 @@ public class TestTimeoutServlet extends HttpServlet {
         long start = System.currentTimeMillis();
 
         int sec = 60 * 7;
+        String secParm = request.getParameter("sec");
+        if (CommonsStringUtils.isStringSet(secParm)) {
+            sec = Integer.valueOf(secParm);
+        }
         while (sec > 0) {
-
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
             }
 
             o(out, "time: ", TimeUtils.secSince(start));
-
             sec--;
         }
-
+        h(out, "<p style=\"background-color:33FF33\">DONE</p>");
         h(out, "</body></html>");
         IOUtils.closeQuietly(out);
     }

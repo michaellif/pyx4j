@@ -286,6 +286,7 @@ public class DBResetServlet extends HttpServlet {
                             }
                         }
                     }
+                    h(out, "<p style=\"background-color:33FF33\">DONE</p>");
                     h(out, "</body></html>");
                 } catch (Throwable t) {
                     log.error("DB reset error", t);
