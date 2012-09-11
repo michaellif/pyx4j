@@ -23,5 +23,7 @@ public interface LeaseTermViewerView extends IViewerView<LeaseTermDTO> {
     interface Presenter extends IViewerView.Presenter {
 
         ChargesVisorController getChargesVisorController();
+
+        void accept();
     }
 }

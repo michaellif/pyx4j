@@ -15,11 +15,13 @@ package com.propertyvista.crm.server.services.lease.common;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
@@ -152,6 +154,13 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item, LeaseTermDTO currentValue) {
         assert !currentValue.lease().unit().isNull();
         callback.onSuccess(ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, item, currentValue.lease().unit().building()));
+    }
+
+    @Override
+    public void acceptOffer(AsyncCallback<VoidSerializable> callback, Key entityId) {
+        LeaseTerm offer = Persistence.secureRetrieve(LeaseTerm.class, entityId);
+        ServerSideFactory.create(LeaseFacade.class).setCurrentTerm(offer.lease(), offer);
+        callback.onSuccess(null);
     }
 
     // Internals:

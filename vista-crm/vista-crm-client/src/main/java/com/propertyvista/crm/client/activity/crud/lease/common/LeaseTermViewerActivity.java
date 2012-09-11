@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.activity.crud.lease.common;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
@@ -47,5 +49,15 @@ public class LeaseTermViewerActivity extends CrmViewerActivity<LeaseTermDTO> imp
     protected void onPopulateSuccess(LeaseTermDTO result) {
         currentLeaseId = result.lease().getPrimaryKey();
         super.onPopulateSuccess(result);
+    }
+
+    @Override
+    public void accept() {
+        ((LeaseTermCrudService) getService()).acceptOffer(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, getEntityId());
     }
 }

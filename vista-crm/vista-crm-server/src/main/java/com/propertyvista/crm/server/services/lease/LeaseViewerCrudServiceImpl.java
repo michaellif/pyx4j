@@ -144,8 +144,10 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     @Override
     public void activate(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
+
         ServerSideFactory.create(LeaseFacade.class).approveExistingLease(leaseId);
         ServerSideFactory.create(LeaseFacade.class).activate(leaseId);
+
         Persistence.service().commit();
         callback.onSuccess(null);
     }
