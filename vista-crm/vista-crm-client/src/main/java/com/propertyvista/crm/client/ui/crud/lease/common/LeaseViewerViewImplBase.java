@@ -78,16 +78,6 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
     }
 
     @Override
-    public void reset() {
-        super.reset();
-    }
-
-    @Override
-    public void populate(DTO value) {
-        super.populate(value);
-    }
-
-    @Override
     public IListerView<DepositLifecycleDTO> getDepositListerView() {
         return depositLister;
     }

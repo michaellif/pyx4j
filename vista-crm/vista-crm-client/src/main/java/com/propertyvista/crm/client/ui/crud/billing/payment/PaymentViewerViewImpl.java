@@ -100,7 +100,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         super.populate(value);
 
         // enable editing for submitted payments only:
-        getEditButton().setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
+        setEditingVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
         setActionVisible(cancelAction, value.paymentStatus().getValue() == PaymentStatus.Submitted);
 
         if (value.paymentStatus().getValue() == PaymentStatus.Submitted) {

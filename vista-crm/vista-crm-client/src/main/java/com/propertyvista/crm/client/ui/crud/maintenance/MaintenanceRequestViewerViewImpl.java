@@ -111,7 +111,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
     public void populate(MaintenanceRequestDTO value) {
         super.populate(value);
 
-        getEditButton().setVisible(value.status().getValue() == MaintenanceRequestStatus.Submitted);
+        setEditingVisible(value.status().getValue() == MaintenanceRequestStatus.Submitted);
 
         setActionVisible(scheduleAction, value.status().getValue() == MaintenanceRequestStatus.Submitted
                 || value.status().getValue() == MaintenanceRequestStatus.Scheduled);

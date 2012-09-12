@@ -109,7 +109,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
         setActionVisible(convertAction, VistaFeatures.instance().leases() && value.status().getValue() != Status.closed && value.lease().isNull());
         setActionVisible(closeAction, value.status().getValue() != Status.closed);
 
-        getEditButton().setVisible(value.status().getValue() != Lead.Status.closed);
+        setEditingVisible(value.status().getValue() != Lead.Status.closed);
     }
 
     @Override

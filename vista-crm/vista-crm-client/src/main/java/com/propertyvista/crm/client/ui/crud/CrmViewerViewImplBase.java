@@ -18,6 +18,7 @@ import java.util.Vector;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.MenuItem;
 
@@ -41,6 +42,8 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     private static final I18n i18n = I18n.get(CrmViewerViewImplBase.class);
 
+    private final boolean viewOnly;
+
     private BreadcrumbsBar breadcrumbsBar;
 
     private BreadcrumbsService breadcumbsService;
@@ -49,9 +52,13 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     private Button editButton;
 
-    private Button selectVersion;
+    private Button versioningButton;
 
-    private Button finalizeButton;
+    private MenuItem editDraft;
+
+    private MenuItem selectVersion;
+
+    private MenuItem finalizeMenu;
 
     private Button actionsButton;
 
@@ -62,7 +69,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     }
 
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, boolean viewOnly) {
-        super();
+        this.viewOnly = viewOnly;
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
         setCaption(defaultCaption);
@@ -110,22 +117,6 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         setForm(form);
     }
 
-    public Button getEditButton() {
-        return editButton;
-    }
-
-    public Button getSelectVersion() {
-        return selectVersion;
-    }
-
-    public Button getFinalizeButton() {
-        return finalizeButton;
-    }
-
-    public Button getActionsButton() {
-        return actionsButton;
-    }
-
     public void addAction(MenuItem action) {
         actionsMenu.addItem(action);
     }
@@ -140,11 +131,31 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         actionsButton.setVisible(!actionsMenu.isMenuEmpty());
     }
 
+    public void setEditingVisible(boolean visible) {
+        if (editButton != null) {
+            editButton.setVisible(visible);
+        } else if (editDraft != null) {
+            editDraft.setVisible(visible);
+        }
+    }
+
+    public void setEditingEnabled(boolean enabled) {
+        if (editButton != null) {
+            editButton.setEnabled(enabled);
+        } else if (editDraft != null) {
+            editDraft.setEnabled(enabled);
+        }
+    }
+
+    protected void setFinalizationVisible(boolean visible) {
+        if (finalizeMenu != null) {
+            finalizeMenu.setVisible(visible);
+        }
+    }
+
     @Override
     public void reset() {
-        if (finalizeButton != null) {
-            finalizeButton.setVisible(false);
-        }
+        setFinalizationVisible(false);
         actionsButton.setVisible(false);
         super.reset();
     }
@@ -154,23 +165,18 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         super.populate(value);
 
         String caption = (defaultCaption + " " + value.getStringView());
-        if (selectVersion != null) {
+        if (value instanceof IVersionedEntity) {
             if (((IVersionedEntity<?>) value).version().versionNumber().isNull()) {
                 caption = caption + " (" + ((IVersionedEntity<?>) value).version().versionNumber().getStringView() + ")";
             } else {
                 caption = caption + ", " + i18n.tr("version") + " #" + ((IVersionedEntity<?>) value).version().versionNumber().getStringView() + " ("
                         + ((IVersionedEntity<?>) value).version().fromDate().getStringView() + ")";
             }
+            setFinalizationVisible(((IVersionedEntity<?>) value).version().versionNumber().isNull());
         }
         setCaption(caption);
 
-        if (editButton != null) {
-            editButton.setEnabled(super.getPresenter().canEdit());
-        }
-
-        if (finalizeButton != null) {
-            finalizeButton.setVisible(((IVersionedEntity<?>) value).version().versionNumber().isNull());
-        }
+        setEditingEnabled(super.getPresenter().canEdit());
 
         actionsButton.setVisible(!actionsMenu.isMenuEmpty());
         populateBreadcrumbs(value, caption);
@@ -194,10 +200,37 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     }
 
     protected <V extends IVersionData<?>> void enableVersioning(final Class<V> entityVersionClass, final AbstractVersionDataListService<V> entityVersionService) {
+        if (editButton != null) {
+            editButton.removeFromParent();
+            editButton = null;
+        }
 
-        selectVersion = new Button(i18n.tr("Select Version"), new ClickHandler() {
+        versioningButton = new Button(i18n.tr("Versioning"));
+        Button.ButtonMenuBar versioningMenu = versioningButton.createMenu();
+        versioningButton.setMenu(versioningMenu);
+        addHeaderToolbarItem(versioningButton);
+
+        if (!viewOnly) {
+            editDraft = new MenuItem(i18n.tr("Edit Draft"), new Command() {
+                @Override
+                public void execute() {
+                    getPresenter().edit();
+                }
+            });
+            versioningMenu.addItem(editDraft);
+        }
+
+        finalizeMenu = new MenuItem(i18n.tr("Finalize"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
+                getPresenter().approveFinal();
+            }
+        });
+        versioningMenu.addItem(finalizeMenu);
+
+        selectVersion = new MenuItem(i18n.tr("Select Version"), new Command() {
+            @Override
+            public void execute() {
                 new VersionSelectorDialog<V>(entityVersionClass, getForm().getValue().getPrimaryKey()) {
                     @Override
                     public boolean onClickOk() {
@@ -212,18 +245,6 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
                 }.show();
             }
         });
-        addHeaderToolbarItem(selectVersion.asWidget());
-
-        finalizeButton = new Button(i18n.tr("Finalize"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                getPresenter().approveFinal();
-            }
-        });
-        addHeaderToolbarItem(finalizeButton.asWidget());
-
-        if (editButton != null) {
-            editButton.setCaption(i18n.tr("Edit Draft"));
-        }
+        versioningMenu.addItem(selectVersion);
     }
 }

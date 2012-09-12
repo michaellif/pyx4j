@@ -76,8 +76,8 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
     public void populate(Appointment value) {
         super.populate(value);
 
-        getEditButton().setEnabled(value.status().getValue() != Appointment.Status.closed);
-        getEditButton().setVisible(value.lead().status().getValue() != Lead.Status.closed);
+        setEditingEnabled(value.status().getValue() != Appointment.Status.closed);
+        setEditingVisible(value.lead().status().getValue() != Lead.Status.closed);
 
         setActionVisible(closeAction, value.status().getValue() != Appointment.Status.closed);
     }
