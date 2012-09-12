@@ -20,12 +20,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.gadgets.NoticesGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.NoticesGadgetService;
-import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata.NoticesFilter;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -35,14 +37,23 @@ import com.propertyvista.dto.LeaseDTO;
 public class NoticesGadgetServiceImpl implements NoticesGadgetService {
 
     @Override
-    public void notices(AsyncCallback<NoticesGadgetDataDTO> callback, Vector<Building> buildingsFilter) {
+    public void countData(AsyncCallback<NoticesGadgetDataDTO> callback, Vector<Building> buildingsFilter) {
         NoticesGadgetDataDTO gadgetData = EntityFactory.create(NoticesGadgetDataDTO.class);
 
-        gadgetData.noticesLeavingThisMonth().setValue(Persistence.service().count(noticesCriteria(NoticesFilter.THIS_MONTH, buildingsFilter)));
-        gadgetData.noticesLeavingNextMonth().setValue(Persistence.service().count(noticesCriteria(NoticesFilter.NEXT_MONTH, buildingsFilter)));
-        gadgetData.noticesLeavingOver90Days().setValue(Persistence.service().count(noticesCriteria(NoticesFilter.OVER_90_DAYS, buildingsFilter)));
+        gadgetData.noticesLeavingThisMonth().setValue(
+                Persistence.service().count(
+                        fillNoticesCriteria(EntityListCriteria.create(Lease.class), EntityFactory.getEntityPrototype(NoticesGadgetDataDTO.class)
+                                .noticesLeavingThisMonth(), buildingsFilter)));
+        gadgetData.noticesLeavingNextMonth().setValue(
+                Persistence.service().count(
+                        fillNoticesCriteria(EntityListCriteria.create(Lease.class), EntityFactory.getEntityPrototype(NoticesGadgetDataDTO.class)
+                                .noticesLeavingNextMonth(), buildingsFilter)));
+        gadgetData.noticesLeavingOver90Days().setValue(
+                Persistence.service().count(
+                        fillNoticesCriteria(EntityListCriteria.create(Lease.class), EntityFactory.getEntityPrototype(NoticesGadgetDataDTO.class)
+                                .noticesLeavingOver90Days(), buildingsFilter)));
 
-        gadgetData.unitsVacant().setValue(Persistence.service().count(vacantUnitsCriteria(buildingsFilter)));
+        gadgetData.unitsVacant().setValue(Persistence.service().count(vacantUnitsCriteria(EntityQueryCriteria.create(AptUnit.class), buildingsFilter)));
 
         int numOfUnits = CommonQueries.numOfUnits(buildingsFilter);
         if (numOfUnits != 0) {
@@ -53,37 +64,35 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
     }
 
     @Override
-    public void makeNoticesFilterCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, NoticesFilter noticesFilter, Vector<Building> buildingsFilter) {
-        callback.onSuccess(Utils.toDtoLeaseCriteria(noticesCriteria(noticesFilter, buildingsFilter)));
+    public void makeUnitFilterCriteria(AsyncCallback<EntityListCriteria<AptUnitDTO>> callback, Vector<Building> buildingsFilter, String unitsFilter) {
+        callback.onSuccess(vacantUnitsCriteria(EntityListCriteria.create(AptUnitDTO.class), buildingsFilter));
     }
 
     @Override
-    public void makeVacantUnitsFilterCriteria(AsyncCallback<EntityListCriteria<AptUnitDTO>> callback, Vector<Building> buildingsFilter) {
-        callback.onSuccess(Utils.toDtoUnitsCriteria(vacantUnitsCriteria(buildingsFilter)));
+    public void makeLeaseFilterCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, Vector<Building> buildingsFilter, String leaseFilter) {
+        callback.onSuccess(fillNoticesCriteria(EntityListCriteria.create(LeaseDTO.class), EntityFactory.getEntityPrototype(NoticesGadgetDataDTO.class)
+                .getMember(new Path(leaseFilter)), buildingsFilter));
     }
 
-    private EntityListCriteria<Lease> noticesCriteria(NoticesFilter noticesFilter, Vector<Building> buildingsFilter) {
+    private <Criteria extends EntityQueryCriteria<? extends Lease>> Criteria fillNoticesCriteria(Criteria criteria, IObject<?> noticesFilter,
+            Vector<Building> buildingsFilter) {
 
         LogicalDate lowerLeavingBound = null;
         LogicalDate upperLeavingBound = null;
         LogicalDate today = new LogicalDate(Persistence.service().getTransactionSystemTime());
 
-        switch (noticesFilter) {
-        case THIS_MONTH:
+        NoticesGadgetDataDTO proto = EntityFactory.getEntityPrototype(NoticesGadgetDataDTO.class);
+
+        if (proto.noticesLeavingThisMonth() == noticesFilter) {
             lowerLeavingBound = Utils.beginningOfMonth(today);
             upperLeavingBound = Utils.endOfMonth(today);
-            break;
-        case NEXT_MONTH:
+        } else if (proto.noticesLeavingNextMonth() == noticesFilter) {
             lowerLeavingBound = Utils.beginningOfNextMonth(today);
             upperLeavingBound = Utils.endOfMonth(lowerLeavingBound);
-            break;
-        case OVER_90_DAYS:
+        } else if (proto.noticesLeavingOver90Days() == noticesFilter) {
             lowerLeavingBound = Utils.addDays(today, 90);
             upperLeavingBound = null;
-            break;
         }
-
-        EntityListCriteria<Lease> criteria = EntityListCriteria.create(Lease.class);
 
         if (lowerLeavingBound != null) {
             criteria.add(PropertyCriterion.ge(criteria.proto().expectedMoveOut(), lowerLeavingBound));
@@ -98,9 +107,8 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
         return criteria;
     }
 
-    private EntityListCriteria<AptUnit> vacantUnitsCriteria(Vector<Building> buildingsFilter) {
+    private <Criteria extends EntityQueryCriteria<? extends AptUnit>> Criteria vacantUnitsCriteria(Criteria criteria, Vector<Building> buildingsFilter) {
 
-        EntityListCriteria<AptUnit> criteria = EntityListCriteria.create(AptUnit.class);
         if (buildingsFilter != null && !buildingsFilter.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().building(), buildingsFilter));
         }

@@ -26,6 +26,7 @@ import com.propertyvista.crm.client.ui.gadgets.availability.UnitAvailabilitySumm
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.demo.BarChart2DGadget;
+import com.propertyvista.crm.client.ui.gadgets.demo.CounterGadgetDemoFactory;
 import com.propertyvista.crm.client.ui.gadgets.demo.DemoGadget;
 import com.propertyvista.crm.client.ui.gadgets.demo.GaugeGadget;
 import com.propertyvista.crm.client.ui.gadgets.demo.LineChartGadget;
@@ -58,7 +59,8 @@ public class BuildingGadgetDirectory implements IGadgetDirectory {
             new DemoGadget(),
             new GaugeGadget(),
             new LineChartGadget(),
-            new PieChart2DGadget()
+            new PieChart2DGadget(),
+            new CounterGadgetDemoFactory()
     );//@formatter:on
 
     @Override

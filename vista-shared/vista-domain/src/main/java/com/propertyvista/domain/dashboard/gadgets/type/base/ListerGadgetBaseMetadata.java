@@ -11,9 +11,9 @@
  * @author Artyom
  * @version $Id$
  */
-package com.propertyvista.domain.dashboard.gadgets.type;
+package com.propertyvista.domain.dashboard.gadgets.type.base;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -21,9 +21,10 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
+import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
+import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
-@DiscriminatorValue("ListerGadgetBaseSettings")
+@AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface ListerGadgetBaseMetadata extends GadgetMetadata {
 

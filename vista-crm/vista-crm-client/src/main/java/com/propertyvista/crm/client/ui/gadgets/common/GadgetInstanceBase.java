@@ -139,7 +139,6 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
             @Override
             public void onSuccess(GadgetMetadata result) {
                 getMetadata().set(result);
-
             }
 
         }, getMetadata());

@@ -7,36 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 7, 2012
+ * Created on Sep 12, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.rpc.dto.gadgets;
 
-import com.pyx4j.entity.annotations.Caption;
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface LeaseExpirationGadgetDataDTO extends IEntity {
+public interface CounterGadgetDemoDTO extends IEntity {
 
-    @Caption(name = "Occupied Units")
-    IPrimitive<Double> unitOccupancy();
+    IPrimitive<String> strValue();
 
-    @Caption(name = "Occupied Units")
-    IPrimitive<Integer> unitsOccupied();
+    IPrimitive<Integer> counterValue();
 
-    @Caption(name = "Leases Ending This Month")
-    IPrimitive<Integer> numOfLeasesEndingThisMonth();
+    IPrimitive<BigDecimal> moneyValue();
 
-    @Caption(name = "Leases Ending Next Month")
-    IPrimitive<Integer> numOfLeasesEndingNextMonth();
-
-    @Caption(name = "Leases Ending 90+ Days")
-    IPrimitive<Integer> numOfLeasesEndingOver90Days();
-
-    @Caption(name = "Leases on Month to Month")
-    IPrimitive<Integer> numOfLeasesOnMonthToMonth();
+    IPrimitive<Double> doubleValue();
 
 }

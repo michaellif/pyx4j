@@ -16,21 +16,13 @@ package com.propertyvista.crm.client.ui.gadgets.notices;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CHyperlink;
-
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.crm.client.ui.gadgets.notices.NoticesGadgetFactory.NoticesGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetSummaryForm;
 import com.propertyvista.crm.rpc.dto.gadgets.NoticesGadgetDataDTO;
-import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata.NoticesFilter;
 
-public class NoticesSummaryForm extends CEntityDecoratableForm<NoticesGadgetDataDTO> {
+public class NoticesSummaryForm extends CounterGadgetSummaryForm<NoticesGadgetDataDTO> {
 
-    private final NoticesGadget noticesGadget;
-
-    public NoticesSummaryForm(NoticesGadget noticesGadget) {
+    public NoticesSummaryForm() {
         super(NoticesGadgetDataDTO.class);
-        setEditable(false);
-        this.noticesGadget = noticesGadget;
     }
 
     @Override
@@ -39,17 +31,12 @@ public class NoticesSummaryForm extends CEntityDecoratableForm<NoticesGadgetData
         final double LABEL_WIDTH = 18d;
         FlowPanel content = new FlowPanel();
 
-        content.add(new DecoratorBuilder(inject(proto().unitsVacant(), new CHyperlink(noticesGadget.displayVacantUnits()))).componentWidth(NUMBER_WIDTH)
-                .labelWidth(LABEL_WIDTH).build());
-        content.add(new DecoratorBuilder(inject(proto().unitVacancy(), new CHyperlink(noticesGadget.displayVacantUnits()))).componentWidth(NUMBER_WIDTH)
-                .labelWidth(LABEL_WIDTH).build());
+        content.add(new DecoratorBuilder(inject(proto().unitsVacant())).componentWidth(NUMBER_WIDTH).labelWidth(LABEL_WIDTH).build());
+        content.add(new DecoratorBuilder(inject(proto().unitVacancy())).componentWidth(NUMBER_WIDTH).labelWidth(LABEL_WIDTH).build());
 
-        content.add(new DecoratorBuilder(inject(proto().noticesLeavingThisMonth(), new CHyperlink(noticesGadget.displayNotices(NoticesFilter.THIS_MONTH))))
-                .componentWidth(NUMBER_WIDTH).labelWidth(LABEL_WIDTH).build());
-        content.add(new DecoratorBuilder(inject(proto().noticesLeavingNextMonth(), new CHyperlink(noticesGadget.displayNotices(NoticesFilter.NEXT_MONTH))))
-                .componentWidth(NUMBER_WIDTH).labelWidth(LABEL_WIDTH).build());
-        content.add(new DecoratorBuilder(inject(proto().noticesLeavingOver90Days(), new CHyperlink(noticesGadget.displayNotices(NoticesFilter.OVER_90_DAYS))))
-                .componentWidth(NUMBER_WIDTH).labelWidth(LABEL_WIDTH).build());
+        content.add(new DecoratorBuilder(inject(proto().noticesLeavingThisMonth())).componentWidth(NUMBER_WIDTH).labelWidth(LABEL_WIDTH).build());
+        content.add(new DecoratorBuilder(inject(proto().noticesLeavingNextMonth())).componentWidth(NUMBER_WIDTH).labelWidth(LABEL_WIDTH).build());
+        content.add(new DecoratorBuilder(inject(proto().noticesLeavingOver90Days())).componentWidth(NUMBER_WIDTH).labelWidth(LABEL_WIDTH).build());
 
         return content;
     }

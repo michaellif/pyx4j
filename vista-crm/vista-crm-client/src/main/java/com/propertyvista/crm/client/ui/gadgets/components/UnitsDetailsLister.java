@@ -11,18 +11,13 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets.leasexpiration;
-
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
+package com.propertyvista.crm.client.ui.gadgets.components;
 
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.BasicLister;
-import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.dto.AptUnitDTO;
 
@@ -30,7 +25,7 @@ public class UnitsDetailsLister extends BasicLister<AptUnitDTO> {
 
     private static final I18n i18n = I18n.get(UnitsDetailsLister.class);
 
-    public UnitsDetailsLister(final Command backToSummaryCommand) {
+    public UnitsDetailsLister() {
         super(AptUnitDTO.class, true, false);
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().buildingCode()).build(),
@@ -47,15 +42,6 @@ public class UnitsDetailsLister extends BasicLister<AptUnitDTO> {
                 new MemberColumnDescriptor.Builder(proto().financial()._marketRent()).build(),
                 new MemberColumnDescriptor.Builder(proto()._availableForRent()).build()
         );//@formatter:on
-
-        addActionItem(new Button(i18n.tr("Back to Summary"), new ClickHandler() {
-
-            @Override
-            public void onClick(ClickEvent event) {
-                backToSummaryCommand.execute();
-            }
-
-        }));
 
     }
 

@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
-import com.propertyvista.domain.dashboard.gadgets.type.ListerGadgetBaseMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class Util {

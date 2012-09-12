@@ -16,8 +16,8 @@ package com.propertyvista.crm.server.services.reports.util;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 
-import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
-import com.propertyvista.domain.dashboard.gadgets.type.ListerGadgetBaseMetadata;
+import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
+import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 
 /**
  * This is not a JUnit test, just a file that has to be manually run to see the results

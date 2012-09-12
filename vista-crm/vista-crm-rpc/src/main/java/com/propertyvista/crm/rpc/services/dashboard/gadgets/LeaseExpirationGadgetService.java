@@ -18,10 +18,8 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
-import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -32,13 +30,16 @@ import com.propertyvista.dto.LeaseDTO;
  * 
  * @author ArtyomB
  */
-public interface LeaseExpirationGadgetService extends IService {
+public interface LeaseExpirationGadgetService extends AbstractCounterGadgetBaseService<LeaseExpirationGadgetDataDTO, Vector<Building>>, LeaseCriteriaProvider,
+        UnitCriteriaProvider {
 
-    void leaseExpriation(AsyncCallback<LeaseExpirationGadgetDataDTO> callback, Vector<Building> buildings);
+    @Override
+    void countData(AsyncCallback<LeaseExpirationGadgetDataDTO> callback, Vector<Building> buildings);
 
-    void makeLeaseFilterCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, Vector<Building> buildingsFilter,
-            LeaseExpirationGadgetMeta.LeaseFilter leaseFilter);
+    @Override
+    void makeLeaseFilterCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, Vector<Building> buildingsFilter, String leaseFilter);
 
-    void makeOccupiedUnitsFilterCriteria(AsyncCallback<EntityListCriteria<AptUnitDTO>> callback, Vector<Building> buildingsFilter);
+    @Override
+    void makeUnitFilterCriteria(AsyncCallback<EntityListCriteria<AptUnitDTO>> callback, Vector<Building> buildingsFilter, String unitsFilter);
 
 }

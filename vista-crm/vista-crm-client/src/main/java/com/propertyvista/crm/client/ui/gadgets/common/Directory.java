@@ -25,6 +25,7 @@ import com.propertyvista.crm.client.ui.gadgets.availability.TurnoverAnalysisGrap
 import com.propertyvista.crm.client.ui.gadgets.availability.UnitAvailabilityReportGadget;
 import com.propertyvista.crm.client.ui.gadgets.availability.UnitAvailabilitySummaryGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.demo.BarChart2DGadget;
+import com.propertyvista.crm.client.ui.gadgets.demo.CounterGadgetDemoFactory;
 import com.propertyvista.crm.client.ui.gadgets.demo.DemoGadget;
 import com.propertyvista.crm.client.ui.gadgets.demo.GaugeGadget;
 import com.propertyvista.crm.client.ui.gadgets.demo.LineChartGadget;
@@ -72,7 +73,8 @@ public class Directory {
         new DemoGadget(),
         new GaugeGadget(),
         new LineChartGadget(),
-        new PieChart2DGadget()
+        new PieChart2DGadget(),
+        new CounterGadgetDemoFactory()
     );//@formatter:on
 
     public static IGadgetInstance createGadget(GadgetMetadata gadgetMetadata) {

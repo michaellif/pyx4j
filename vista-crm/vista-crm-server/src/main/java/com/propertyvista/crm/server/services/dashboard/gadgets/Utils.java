@@ -65,9 +65,9 @@ public class Utils {
                 bind((Class<IEntity>) dtoProto.getInstanceValueClass(), dboProto, dtoProto);
                 // TODO investigate wtf is going on here and why 'leaseTo' is not binded by the previous line
                 bind(dtoProto.leaseTo(), dboProto.leaseTo());
-
                 // TODO same "wtf" that applies to the previous line
                 bind(dtoProto.expectedMoveOut(), dboProto.expectedMoveOut());
+                bind(dtoProto.unit().building(), dboProto.unit().building());
             }
         };
         EntityDto2DboCriteriaConverter<LeaseDTO, Lease> converter = new EntityDto2DboCriteriaConverter<LeaseDTO, Lease>(LeaseDTO.class, Lease.class,

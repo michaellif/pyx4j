@@ -16,7 +16,7 @@ package com.propertyvista.generator.util;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 
-import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
+import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
 
 public class ColumnDescriptorEntityBuilder {
 

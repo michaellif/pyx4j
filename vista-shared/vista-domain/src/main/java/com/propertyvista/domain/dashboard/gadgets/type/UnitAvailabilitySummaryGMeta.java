@@ -16,7 +16,8 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-import com.propertyvista.domain.dashboard.gadgets.HasCustomizableDateGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.HasCustomizableDateGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 
 @DiscriminatorValue("UnitAvailbilitySummaryGadgetMetadata")
 @Caption(name = "Unit Availability Summary", description = "Shows a summary of information about all units, including the total number of units, vacancy, notice and net exposure information in both percentages and quantity")

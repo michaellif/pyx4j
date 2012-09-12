@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 
-import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
+import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
 
 public class ColumnDescriptorConverter {
 

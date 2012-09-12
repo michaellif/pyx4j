@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 11, 2012
+ * Created on Sep 12, 2012
  * @author ArtyomB
  * @version $Id$
  */
@@ -19,21 +19,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
-import com.propertyvista.crm.rpc.dto.gadgets.NoticesGadgetDataDTO;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.LeaseDTO;
 
-public interface NoticesGadgetService extends AbstractCounterGadgetBaseService<NoticesGadgetDataDTO, Vector<Building>>, LeaseCriteriaProvider,
-        UnitCriteriaProvider {
+public interface LeaseCriteriaProvider {
 
-    @Override
-    public void countData(AsyncCallback<NoticesGadgetDataDTO> callback, Vector<Building> queryParams);
-
-    @Override
-    public void makeLeaseFilterCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, Vector<Building> buildingsFilter, String leaseFilter);
-
-    @Override
-    public void makeUnitFilterCriteria(AsyncCallback<EntityListCriteria<AptUnitDTO>> callback, Vector<Building> buildingsFilter, String unitsFilter);
+    void makeLeaseFilterCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, Vector<Building> buildingsFilter, String leaseFilter);
 
 }

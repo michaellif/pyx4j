@@ -15,29 +15,11 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
+
+import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 
 @DiscriminatorValue("Lease Expiration Gadget")
 @Caption(name = "Lease Expiration", description = "TBD")
-public interface LeaseExpirationGadgetMeta extends GadgetMetadata {
-
-    @I18n(strategy = I18nStrategy.IgnoreThis)
-    enum LeaseExpirationGadgetMode {
-
-        SUMMARY, LEASES_DETAILS, OCCUPIED_UNITS_DETAILS;
-
-    }
-
-    enum LeaseFilter {
-
-        THIS_MONTH, NEXT_MONTH, OVER_90_DAYS, MONTH_ON_MONTH
-
-    }
-
-    IPrimitive<LeaseExpirationGadgetMode> activeMode();
-
-    IPrimitive<LeaseFilter> activeLeaseFilterCriteria();
+public interface LeaseExpirationGadgetMeta extends CounterGadgetBaseMetadata {
 
 }

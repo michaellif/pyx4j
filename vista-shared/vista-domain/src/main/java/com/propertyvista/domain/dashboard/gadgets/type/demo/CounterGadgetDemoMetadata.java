@@ -7,19 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 11, 2012
+ * Created on Sep 12, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.dashboard.gadgets.type;
+package com.propertyvista.domain.dashboard.gadgets.type.demo;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 
-@DiscriminatorValue("Notices Gadget")
-@Caption(name = "Notices Gadget", description = "TBD")
-public interface NoticesGadgetMetadata extends CounterGadgetBaseMetadata {
+@DiscriminatorValue("DemoCounterGadget")
+@Caption(name = "Counter Gadget Demo", description = "A gadgets that displays counters and allows to zoom-in into details")
+public interface CounterGadgetDemoMetadata extends CounterGadgetBaseMetadata {
 
 }

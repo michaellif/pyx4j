@@ -27,10 +27,10 @@ import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
-import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatusSummaryLineDTO;
+import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
@@ -40,7 +40,6 @@ import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
 import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata.NoticesGadgetMode;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
@@ -96,14 +95,13 @@ public class DashboardGenerator extends Dashboards {
         LeaseExpirationGadgetMeta leaseExpirationGadget = EntityFactory.create(LeaseExpirationGadgetMeta.class);
         leaseExpirationGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
         leaseExpirationGadget.refreshInterval().setValue(RefreshInterval.Never);
-        leaseExpirationGadget.activeMode().setValue(LeaseExpirationGadgetMeta.LeaseExpirationGadgetMode.SUMMARY);
+        leaseExpirationGadget.activeDetails().setValue(null);
         leaseExpirationGadget.docking().column().setValue(0);
         dmd.gadgets().add(leaseExpirationGadget);
 
         NoticesGadgetMetadata noticesGadget = EntityFactory.create(NoticesGadgetMetadata.class);
         noticesGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
         noticesGadget.refreshInterval().setValue(RefreshInterval.Never);
-        noticesGadget.activeMode().setValue(NoticesGadgetMode.SUMMARY);
         noticesGadget.docking().column().setValue(0);
         dmd.gadgets().add(noticesGadget);
 

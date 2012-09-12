@@ -19,6 +19,8 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
+
 @DiscriminatorValue("ArrearsSummaryGadgetMetadata")
 @Caption(name = "Arrears Summary", description = "Shows a short summary of the total arrears")
 public interface ArrearsSummaryGadgetMetadata extends ListerGadgetBaseMetadata {

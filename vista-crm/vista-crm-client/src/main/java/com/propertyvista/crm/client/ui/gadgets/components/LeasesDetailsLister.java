@@ -11,18 +11,13 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets.leasexpiration;
-
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
+package com.propertyvista.crm.client.ui.gadgets.components;
 
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.BasicLister;
-import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.dto.LeaseDTO;
 
@@ -30,7 +25,7 @@ public class LeasesDetailsLister extends BasicLister<LeaseDTO> {
 
     private static final I18n i18n = I18n.get(LeasesDetailsLister.class);
 
-    public LeasesDetailsLister(final Command backCommandHandler) {
+    public LeasesDetailsLister() {
         super(LeaseDTO.class, true, false);
         setColumnDescriptors(//@formatter:off
                 new Builder(proto().leaseId()).build(),
@@ -57,12 +52,6 @@ public class LeasesDetailsLister extends BasicLister<LeaseDTO> {
                 new Builder(proto().creationDate(), false).build()
         );//@formatter:on
 
-        addActionItem(new Button(i18n.tr("Back to Summary"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                backCommandHandler.execute();
-            }
-        }));
     }
 
     @Override

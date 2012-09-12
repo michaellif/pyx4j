@@ -7,19 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 11, 2012
+ * Created on Sep 12, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.dashboard.gadgets.type;
+package com.propertyvista.crm.rpc.services.dashboard.gadgets;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.rpc.shared.IService;
 
-@DiscriminatorValue("Notices Gadget")
-@Caption(name = "Notices Gadget", description = "TBD")
-public interface NoticesGadgetMetadata extends CounterGadgetBaseMetadata {
+public interface AbstractCounterGadgetBaseService<GadgetData extends IEntity, QueryParams> extends IService {
+
+    void countData(AsyncCallback<GadgetData> callback, QueryParams queryParams);
 
 }

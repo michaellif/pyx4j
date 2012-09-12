@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
-import com.propertyvista.domain.dashboard.gadgets.type.ListerGadgetBaseMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 
 public class GadgetMetadataHelper {
 

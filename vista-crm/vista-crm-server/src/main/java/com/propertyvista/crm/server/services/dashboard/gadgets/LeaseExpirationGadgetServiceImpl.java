@@ -20,14 +20,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeaseExpirationGadgetService;
-import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
-import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta.LeaseFilter;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
@@ -38,14 +38,17 @@ import com.propertyvista.dto.LeaseDTO;
 public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetService {
 
     @Override
-    public void leaseExpriation(AsyncCallback<LeaseExpirationGadgetDataDTO> callback, Vector<Building> buildings) {
+    public void countData(AsyncCallback<LeaseExpirationGadgetDataDTO> callback, Vector<Building> buildings) {
+        LeaseExpirationGadgetDataDTO proto = EntityFactory.getEntityPrototype(LeaseExpirationGadgetDataDTO.class);
 
         LeaseExpirationGadgetDataDTO gadgetData = EntityFactory.create(LeaseExpirationGadgetDataDTO.class);
 
-        gadgetData.numOfLeasesEndingThisMonth().setValue(Persistence.service().count(leaseFilterCriteria(buildings, LeaseFilter.THIS_MONTH)));
-        gadgetData.numOfLeasesEndingNextMonth().setValue(Persistence.service().count(leaseFilterCriteria(buildings, LeaseFilter.NEXT_MONTH)));
-        gadgetData.numOfLeasesEndingOver90Days().setValue(Persistence.service().count(leaseFilterCriteria(buildings, LeaseFilter.OVER_90_DAYS)));
-        // TODO : set gadgetData.numOfLeasesOnMonthToMonth();
+        gadgetData.numOfLeasesEndingThisMonth().setValue(
+                Persistence.service().count(fillLeaseFilterCriteria(EntityQueryCriteria.create(Lease.class), buildings, proto.numOfLeasesEndingThisMonth())));
+        gadgetData.numOfLeasesEndingNextMonth().setValue(
+                Persistence.service().count(fillLeaseFilterCriteria(EntityQueryCriteria.create(Lease.class), buildings, proto.numOfLeasesEndingNextMonth())));
+        gadgetData.numOfLeasesEndingOver90Days().setValue(
+                Persistence.service().count(fillLeaseFilterCriteria(EntityQueryCriteria.create(Lease.class), buildings, proto.numOfLeasesEndingOver90Days())));
 
         gadgetData.unitsOccupied().setValue(numOfOccupiedUnits(buildings));
 
@@ -58,41 +61,38 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
     }
 
     @Override
-    public void makeLeaseFilterCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, Vector<Building> buildingsFilter,
-            LeaseExpirationGadgetMeta.LeaseFilter leaseFilter) {
-        callback.onSuccess(Utils.toDtoLeaseCriteria(leaseFilterCriteria(buildingsFilter, leaseFilter)));
+    public void makeLeaseFilterCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, Vector<Building> buildingsFilter, String path) {
+        callback.onSuccess(fillLeaseFilterCriteria(EntityListCriteria.create(LeaseDTO.class), buildingsFilter,
+                EntityFactory.getEntityPrototype(LeaseExpirationGadgetDataDTO.class).getMember(new Path(path))));
     }
 
     @Override
-    public void makeOccupiedUnitsFilterCriteria(AsyncCallback<EntityListCriteria<AptUnitDTO>> callback, Vector<Building> buildingsFilter) {
-        callback.onSuccess(Utils.toDtoUnitsCriteria(occupiedUnitsCriteria(buildingsFilter)));
+    public void makeUnitFilterCriteria(AsyncCallback<EntityListCriteria<AptUnitDTO>> callback, Vector<Building> buildingsFilter, String unitsFilter) {
+        callback.onSuccess(fillOccupiedUnitsCriteria(EntityListCriteria.create(AptUnitDTO.class), buildingsFilter));
     }
 
-    private EntityListCriteria<Lease> leaseFilterCriteria(Vector<Building> buildings, LeaseExpirationGadgetMeta.LeaseFilter leaseFilter) {
+    private <Criteria extends EntityQueryCriteria<? extends Lease>> Criteria fillLeaseFilterCriteria(Criteria leaseCriteria, Vector<Building> buildings,
+            IObject<?> leaseFilter) {
 
         LogicalDate leaseToLowerBound = null;
         LogicalDate leaseToUpperBound = null;
         LogicalDate today = new LogicalDate(Persistence.service().getTransactionSystemTime());
 
-        switch (leaseFilter) {
-        case THIS_MONTH:
+        LeaseExpirationGadgetDataDTO proto = EntityFactory.getEntityPrototype(LeaseExpirationGadgetDataDTO.class);
+        if (proto.numOfLeasesEndingThisMonth() == leaseFilter) {
+
             leaseToLowerBound = Utils.beginningOfMonth(today);
             leaseToUpperBound = Utils.endOfMonth(today);
-            break;
-        case NEXT_MONTH:
+        } else if (proto.numOfLeasesEndingNextMonth() == leaseFilter) {
+
             leaseToLowerBound = Utils.beginningOfNextMonth(today);
             leaseToUpperBound = Utils.endOfMonth(leaseToLowerBound);
-            break;
-        case OVER_90_DAYS:
+        } else if (proto.numOfLeasesEndingOver90Days() == leaseFilter) {
             // TODO this is not correct
             leaseToLowerBound = Utils.beginningOfNextMonth(Utils.beginningOfNextMonth(Utils.beginningOfNextMonth(today)));
             leaseToUpperBound = null;
-            break;
-        case MONTH_ON_MONTH:
-            break;
         }
 
-        EntityListCriteria<Lease> leaseCriteria = EntityListCriteria.create(Lease.class);
         if (buildings != null && !buildings.isEmpty()) {
             leaseCriteria.add(PropertyCriterion.in(leaseCriteria.proto().unit().building(), buildings));
         }
@@ -106,13 +106,11 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
     }
 
     private int numOfOccupiedUnits(Vector<Building> buildings) {
-        return Persistence.service().count(occupiedUnitsCriteria(buildings));
+        return Persistence.service().count(fillOccupiedUnitsCriteria(EntityQueryCriteria.create(AptUnit.class), buildings));
     }
 
-    private EntityQueryCriteria<AptUnit> occupiedUnitsCriteria(Vector<Building> buildings) {
+    private <Criteria extends EntityQueryCriteria<? extends AptUnit>> Criteria fillOccupiedUnitsCriteria(Criteria criteria, Vector<Building> buildings) {
         LogicalDate when = new LogicalDate(Persistence.service().getTransactionSystemTime());
-
-        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
 
         if (buildings != null && !buildings.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));

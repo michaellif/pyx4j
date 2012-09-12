@@ -25,8 +25,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 
 import com.propertyvista.crm.server.services.reports.util.XMLBuilder.ElementBuilder;
-import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
-import com.propertyvista.domain.dashboard.gadgets.type.ListerGadgetBaseMetadata;
+import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
+import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 
 public class DynamicColumnWidthReportTableTemplateBuilder {
 
