@@ -26,6 +26,8 @@ public class GoogleAPI {
 
     private static String apiKey;
 
+    private static String mapApiVersion = "2";
+
     /**
      * Delegate map key configuration to the main entry and configuration point. You still
      * need to call GoogleAPI.ensureInitialized() before using Google Maps.
@@ -34,6 +36,14 @@ public class GoogleAPI {
      */
     public static void setGoogleAPIKey(String apiKey) {
         GoogleAPI.apiKey = apiKey;
+    }
+
+    public static String getMapApiVersion() {
+        return mapApiVersion;
+    }
+
+    public static void setMapApiVersion(String mapApiVersion) {
+        GoogleAPI.mapApiVersion = mapApiVersion;
     }
 
     public static void ensureInitialized() {
