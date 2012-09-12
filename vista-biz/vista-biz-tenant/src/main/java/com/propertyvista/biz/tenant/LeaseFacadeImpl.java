@@ -237,7 +237,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
             Persistence.service().retrieve(lease.currentTerm());
             lease.currentTerm().status().setValue(LeaseTerm.Status.Working);
-
+            lease.currentTerm().version().setValueDetached();
             persist(lease);
         } else {
             throw new UserRuntimeException(i18n.tr("Invalid LeaseTerm supplied"));
