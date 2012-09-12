@@ -21,6 +21,7 @@ import com.pyx4j.gwt.geo.GoogleAPI;
 
 import com.propertyvista.portal.client.ui.maps.PropertyMapController;
 import com.propertyvista.portal.client.ui.maps.PropertyMapWidget;
+import com.propertyvista.shared.config.VistaSettings;
 
 public class PortalEntryPoint implements EntryPoint {
 
@@ -34,8 +35,9 @@ public class PortalEntryPoint implements EntryPoint {
         if ((customKey != null) && (customKey.length() > 0)) {
             GoogleAPI.setGoogleAPIKey(customKey);
         } else {
-            GoogleAPI.setGoogleAPIKey("AIzaSyAa7EDFOm17VLX7tLJqCZfn2SX8qT5kYcE");
+            GoogleAPI.setGoogleAPIKey(VistaSettings.googleAPIKey);
         }
+        GoogleAPI.setMapApiVersion(VistaSettings.googleMapApiVersion);
 
         if (RootPanel.get(APTLIST_MAP_INSERTION_ID) != null) {
             RootPanel.get(APTLIST_MAP_INSERTION_ID).add(PropertyMapController.getMapWidget());

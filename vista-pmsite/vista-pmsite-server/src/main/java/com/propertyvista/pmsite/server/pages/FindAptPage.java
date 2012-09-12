@@ -26,6 +26,7 @@ import com.propertyvista.pmsite.server.PMSiteClientPreferences;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaPanel;
+import com.propertyvista.shared.config.VistaSettings;
 
 public class FindAptPage extends BasePage {
 
@@ -55,8 +56,15 @@ public class FindAptPage extends BasePage {
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
                 ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
         response.renderCSSReference(refCSS);
-        response.renderJavaScriptReference(ServletUtils.getRequestProtocol(Context.getRequest()) + "://maps.google.com/maps?file=api&v=2&sensor=false&key="
-                + VistaDeployment.getPortalGoogleAPIKey());
+
+        if (VistaSettings.googleMapApiVersion.equals("2")) {
+            response.renderJavaScriptReference(ServletUtils.getRequestProtocol(Context.getRequest()) + "://maps.google.com/maps?file=api&v="
+                    + VistaSettings.googleMapApiVersion + "&sensor=false&key=" + VistaDeployment.getPortalGoogleAPIKey());
+        } else {
+            response.renderJavaScriptReference(ServletUtils.getRequestProtocol(Context.getRequest()) + "://maps.googleapis.com/maps/api/js?key="
+                    + VistaDeployment.getPortalGoogleAPIKey() + "&sensor=false");
+        }
+
         super.renderHead(response);
 
     }

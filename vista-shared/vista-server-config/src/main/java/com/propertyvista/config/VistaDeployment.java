@@ -30,6 +30,7 @@ import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.server.config.VistaFeatures;
 import com.propertyvista.shared.VistaSystemIdentification;
 import com.propertyvista.shared.config.VistaDemo;
+import com.propertyvista.shared.config.VistaSettings;
 
 public class VistaDeployment {
 
@@ -132,10 +133,10 @@ public class VistaDeployment {
                 if (!alias.googleAPIKey().isNull()) {
                     return alias.googleAPIKey().getValue();
                 } else {
-                    return "";
+                    return VistaSettings.googleAPIKey;
                 }
             }
         }
-        return "";
+        return VistaSettings.googleAPIKey;
     }
 }

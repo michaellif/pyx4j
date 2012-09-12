@@ -49,13 +49,15 @@ public abstract class AbstractMapWidget extends SimplePanel {
     public void loadMap() {
         log.info("loadMap() called, mapLoadComplete=" + mapLoadComplete);
         if (!mapLoadComplete) {
-            AjaxLoader.loadApi("maps", "2", new Runnable() {
+            AjaxLoader.AjaxLoaderOptions settings = AjaxLoader.AjaxLoaderOptions.newInstance();
+            settings.setOtherParms("sensor=false");
+            AjaxLoader.loadApi("maps", GoogleAPI.getMapApiVersion(), new Runnable() {
                 @Override
                 public void run() {
                     mapLoadComplete = true;
                     onMapLoaded();
                 }
-            }, null);
+            }, settings);
             Timer t = new Timer() {
                 @Override
                 public void run() {
