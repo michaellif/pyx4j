@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -34,15 +35,18 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
+import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentLister;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillLister;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
+import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
@@ -79,7 +83,11 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem activateAction;
 
+    private final Button renewButton;
+
     private final MenuItem renewAction;
+
+    private final MenuItem viewOfferedTerms;
 
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
@@ -93,7 +101,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         // set main form here:
         setForm(new LeaseForm());
 
-        // Add actions:
+        // Actions: -----------------------------------------------------------------------------------------------------------
+
         sendMailAction = new MenuItem(i18n.tr("Send Mail..."), new Command() {
             @Override
             public void execute() {
@@ -173,19 +182,47 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addAction(activateAction);
 
-        renewAction = new MenuItem(i18n.tr("Renew..."), new Command() {
+        // Renewing stuff : ---------------------------------------------------------------------------------------------------
+
+        renewButton = new Button(i18n.tr("Renew"));
+        Button.ButtonMenuBar renewMenu = renewButton.createMenu();
+        renewButton.setMenu(renewMenu);
+        addHeaderToolbarItem(renewButton.asWidget());
+
+        renewAction = new MenuItem(i18n.tr("Create Offer"), new Command() {
             @Override
             public void execute() {
                 new SelectEnumDialog<LeaseTerm.Type>(i18n.tr("Select Term Type"), EnumSet.allOf(LeaseTerm.Type.class)) {
                     @Override
                     public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) getPresenter()).renew(getSelectedType());
+                        ((LeaseViewerView.Presenter) getPresenter()).createOffer(getSelectedType());
                         return true;
                     }
                 }.show();
             }
         });
-        addAction(renewAction);
+        renewMenu.addItem(renewAction);
+
+        viewOfferedTerms = new MenuItem(i18n.tr("View Offers..."), new Command() {
+            @Override
+            public void execute() {
+                new LeaseTermSelectorDialog() {
+                    {
+                        setParentFiltering(getForm().getValue().getPrimaryKey());
+                        addFilter(PropertyCriterion.eq(proto().status(), LeaseTerm.Status.Offer));
+                    }
+
+                    @Override
+                    public boolean onClickOk() {
+                        if (!getSelectedItems().isEmpty()) {
+                            ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getSelectedItems().get(0));
+                        }
+                        return !getSelectedItems().isEmpty();
+                    }
+                }.show();
+            }
+        });
+        renewMenu.addItem(viewOfferedTerms);
     }
 
     @Override
@@ -197,7 +234,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(evictAction, false);
         setActionVisible(cancelEvictAction, false);
         setActionVisible(activateAction, false);
-        setActionVisible(renewAction, false);
         super.reset();
     }
 
@@ -218,7 +254,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             setActionVisible(evictAction, status == Status.Active && completion == null);
             setActionVisible(cancelEvictAction, completion == CompletionType.Eviction && status != Status.Closed);
             setActionVisible(activateAction, status == Status.ExistingLease);
-            setActionVisible(renewAction, status == Status.Active && completion == null);
+
+            renewButton.setVisible(status == Status.Active && completion == null);
         }
     }
 

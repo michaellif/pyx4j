@@ -238,7 +238,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             Persistence.service().retrieve(lease.currentTerm());
             lease.currentTerm().status().setValue(LeaseTerm.Status.Working);
 
-            Persistence.secureSave(lease);
+            persist(lease);
         } else {
             throw new UserRuntimeException(i18n.tr("Invalid LeaseTerm supplied"));
         }
@@ -415,7 +415,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public LeaseTerm renew(Lease leaseId, Type type) {
+    public LeaseTerm createOffer(Lease leaseId, Type type) {
         Lease lease = load(leaseId, false);
 
         LeaseTerm term = EntityFactory.create(LeaseTerm.class);

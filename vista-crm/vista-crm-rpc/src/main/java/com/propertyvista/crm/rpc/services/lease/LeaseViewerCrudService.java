@@ -47,5 +47,5 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
 
     void activate(AsyncCallback<VoidSerializable> callback, Key entityId);
 
-    void renew(AsyncCallback<LeaseTermDTO> callback, Key entityId, LeaseTerm.Type type);
+    void createOffer(AsyncCallback<LeaseTermDTO> callback, Key entityId, LeaseTerm.Type type);
 }

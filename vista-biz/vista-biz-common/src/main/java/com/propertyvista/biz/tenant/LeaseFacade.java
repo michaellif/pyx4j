@@ -69,7 +69,7 @@ public interface LeaseFacade {
 
     void activate(Lease leaseId);
 
-    LeaseTerm renew(Lease leaseId, LeaseTerm.Type type);
+    LeaseTerm createOffer(Lease leaseId, LeaseTerm.Type type);
 
     // Start notice/evict...
 

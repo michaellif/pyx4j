@@ -45,7 +45,7 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void activate();
 
-        void renew(LeaseTerm.Type type);
+        void createOffer(LeaseTerm.Type type);
 
     }
 

@@ -200,8 +200,8 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
-    public void renew(Type type) {
-        ((LeaseViewerCrudService) getService()).renew(new DefaultAsyncCallback<LeaseTermDTO>() {
+    public void createOffer(Type type) {
+        ((LeaseViewerCrudService) getService()).createOffer(new DefaultAsyncCallback<LeaseTermDTO>() {
             @Override
             public void onSuccess(LeaseTermDTO result) {
                 AppSite.getPlaceController().goTo(

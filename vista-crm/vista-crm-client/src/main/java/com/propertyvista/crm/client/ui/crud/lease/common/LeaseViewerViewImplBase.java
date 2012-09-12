@@ -37,8 +37,6 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     protected final IListerView<DepositLifecycleDTO> depositLister;
 
-    private MenuItem viewOfferedTerms;
-
     public LeaseViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         super(placeClass, true);
 
@@ -77,27 +75,6 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
             }
         });
         viewsMenu.addItem(viewHistoricTerms);
-
-        viewOfferedTerms = new MenuItem(i18n.tr("Offers..."), new Command() {
-            @Override
-            public void execute() {
-                new LeaseTermSelectorDialog() {
-                    {
-                        setParentFiltering(getForm().getValue().getPrimaryKey());
-                        addFilter(PropertyCriterion.eq(proto().status(), LeaseTerm.Status.Offer));
-                    }
-
-                    @Override
-                    public boolean onClickOk() {
-                        if (!getSelectedItems().isEmpty()) {
-                            ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getSelectedItems().get(0));
-                        }
-                        return !getSelectedItems().isEmpty();
-                    }
-                }.show();
-            }
-        });
-        viewsMenu.addItem(viewOfferedTerms);
     }
 
     @Override

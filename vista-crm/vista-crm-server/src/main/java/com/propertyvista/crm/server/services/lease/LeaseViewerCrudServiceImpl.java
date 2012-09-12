@@ -153,9 +153,9 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     @Override
-    public void renew(AsyncCallback<LeaseTermDTO> callback, Key entityId, Type type) {
+    public void createOffer(AsyncCallback<LeaseTermDTO> callback, Key entityId, Type type) {
         Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
-        LeaseTerm term = ServerSideFactory.create(LeaseFacade.class).renew(leaseId, type);
+        LeaseTerm term = ServerSideFactory.create(LeaseFacade.class).createOffer(leaseId, type);
 
         LeaseTermDTO termDto = EntityFactory.create(LeaseTermDTO.class);
         termDto.setValue(term.getValue());

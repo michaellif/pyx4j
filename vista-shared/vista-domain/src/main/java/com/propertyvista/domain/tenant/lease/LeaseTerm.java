@@ -84,7 +84,6 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
     IPrimitive<Type> type();
 
     @NotNull
-    @ReadOnly
     @ToString(index = 3)
     @MemberColumn(name = "leaseTermStatus")
     IPrimitive<Status> status();
