@@ -1008,7 +1008,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         if (ApplicationMode.isDevelopment()) {
                             throw new SecurityViolationException(ApplicationMode.DEV
                                     + "Child object already persisted; owned entity should not be attached to different entity graph, "
-                                    + childEntity.getDebugExceptionInfoString());
+                                    + childEntity.getDebugExceptionInfoString() + "; Original object key " + baseChildEntity.getPrimaryKey());
                         } else {
                             throw new SecurityViolationException("Permission denied");
                         }
