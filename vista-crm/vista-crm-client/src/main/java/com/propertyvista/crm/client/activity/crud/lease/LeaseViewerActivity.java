@@ -34,7 +34,6 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
@@ -204,9 +203,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
         ((LeaseViewerCrudService) getService()).createOffer(new DefaultAsyncCallback<LeaseTermDTO>() {
             @Override
             public void onSuccess(LeaseTermDTO result) {
-                AppSite.getPlaceController().goTo(
-                        new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(result).queryArg(LeaseTermEditorActivity.ARG_NAME_RETURN_BH,
-                                LeaseTermEditorActivity.ReturnBehaviour.Lease.name()));
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(result));
             }
         }, getEntityId(), type);
     }

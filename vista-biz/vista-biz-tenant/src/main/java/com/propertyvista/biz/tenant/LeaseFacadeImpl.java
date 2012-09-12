@@ -74,6 +74,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     private static final I18n i18n = I18n.get(LeaseFacadeImpl.class);
 
+    private static final long ONE_DAY_IN_MSEC = 1000L * 60L * 60L * 24L;
+
     @Override
     public Lease create(Status status) {
         Lease lease = EntityFactory.create(Lease.class);
@@ -221,9 +223,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         leaseTerm.saveAction().setValue(SaveAction.saveAsFinal);
         leaseTerm = persist(leaseTerm);
 
-        // update deposit mechanics:
-        finalizeDeposits(leaseTerm);
-
         return leaseTerm;
     }
 
@@ -237,7 +236,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
             Persistence.service().retrieve(lease.currentTerm());
             lease.currentTerm().status().setValue(LeaseTerm.Status.Working);
-            lease.currentTerm().version().setValueDetached();
+            finalizeDeposits(lease.currentTerm()); // update lease deposits
+
+            lease.currentTerm().version().setValueDetached(); // TRICK!..
             persist(lease);
         } else {
             throw new UserRuntimeException(i18n.tr("Invalid LeaseTerm supplied"));
@@ -424,7 +425,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         term.type().setValue(type);
         term.lease().set(lease);
 
-        term.termFrom().setValue(lease.currentTerm().termTo().getValue());
+        term.termFrom().setValue(new LogicalDate(lease.currentTerm().termTo().getValue().getTime() + ONE_DAY_IN_MSEC));
 
         updateTermWithUnit(term, lease.unit(), lease.type().getValue());
 
@@ -659,6 +660,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         if (finalize) {
             finalize(lease.currentTerm());
+            // update deposit mechanics:
+            finalizeDeposits(lease.currentTerm());
         } else {
             persist(lease.currentTerm());
         }
