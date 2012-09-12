@@ -15,10 +15,21 @@ package com.propertyvista.server.config;
 
 import com.pyx4j.config.server.IPersistenceConfiguration;
 
+import com.propertyvista.misc.VistaTODO;
+
 public class VistaServerSideConfigurationDevPostgreSQL extends VistaServerSideConfigurationDev {
 
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
-        return new VistaConfigurationPostgreSQL();
+        return new VistaConfigurationPostgreSQL() {
+            @Override
+            public String dbName() {
+                if (VistaTODO.codeBaseIsProdBranch) {
+                    return super.dbName() + "_prod";
+                } else {
+                    return super.dbName();
+                }
+            }
+        };
     }
 }

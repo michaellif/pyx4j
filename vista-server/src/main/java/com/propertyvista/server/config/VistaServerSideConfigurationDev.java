@@ -20,6 +20,8 @@ import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.security.server.ThrottleConfig;
 
+import com.propertyvista.misc.VistaTODO;
+
 public class VistaServerSideConfigurationDev extends VistaServerSideConfiguration {
 
     @Override
@@ -31,6 +33,16 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
         return new VistaConfigurationMySQL() {
+
+            @Override
+            public String dbName() {
+                if (VistaTODO.codeBaseIsProdBranch) {
+                    return super.dbName() + "_prod";
+                } else {
+                    return super.dbName();
+                }
+            }
+
             @Override
             public int minPoolSize() {
                 return 1;

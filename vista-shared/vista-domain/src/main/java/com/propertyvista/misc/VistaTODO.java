@@ -15,6 +15,12 @@ package com.propertyvista.misc;
 
 public interface VistaTODO {
 
+    /*
+     * This is changed by BuildMaster when creating Branch.
+     * Used by configurations to enable dual development environments.
+     */
+    public static final boolean codeBaseIsProdBranch = false;
+
     /**
      * Set <code>true</code> to let PtApp show a demo wizard for approved tenants
      */

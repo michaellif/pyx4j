@@ -15,6 +15,8 @@ DROP DATABASE vista;
 CREATE DATABASE vista DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 GRANT ALL PRIVILEGES ON vista.* TO 'vista'@'%';
 
+CREATE DATABASE vista_prod DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL PRIVILEGES ON vista_prod.* TO 'vista'@'%';
 
 --  if you get error:
 --  ERROR 1396 (HY000) at line 3: Operation CREATE USER failed for 'vista'@'%'
