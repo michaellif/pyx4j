@@ -29,19 +29,30 @@ import com.pyx4j.i18n.annotations.I18n;
 @EmbeddedEntity
 public interface TokenizedNumber extends IEntity {
 
-    //TODO for pyx merge number @UpdatedBy(NumberUpdateValue.class)
+    //TODO for pyx merge number @UpdatedBy(column = NumberUpdateValue.class)
     @RpcTransient
     IPrimitive<String> number();
 
     interface NumberUpdateValue extends ColumnId {
     }
 
-    //TODO for pyx @UpdateValueColumn(NumberUpdateValue.class)
+    /**
+     * Indicator for Server to update number() base on obfuscatedNumber().
+     */
+    //TODO for pyx @ColumnIdentificator(NumberUpdateValue.class)
+    // TODO rename to newNumber
     @Transient(logTransient = true)
     IPrimitive<String> newNumberValue();
 
     // Number fragment presented to user
     @ToString
     @Length(4)
+    @Deprecated
     IPrimitive<String> reference();
+
+    // -- New implementation
+    //TODO for pyx merge number @UpdatedBy(adapter = TokinezedAdapterClass.class)
+    @ToString
+    IPrimitive<String> obfuscatedNumber();
+
 }

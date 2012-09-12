@@ -15,6 +15,7 @@ package com.propertyvista.domain.payment;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -27,10 +28,16 @@ public interface TokenizedCreditCardNumber extends TokenizedNumber {
 
     @Override
     @Transient(logTransient = true)
+    @Length(16)
     IPrimitive<String> number();
 
     @Override
     @Transient(logTransient = true)
     @Length(16)
     IPrimitive<String> newNumberValue();
+
+    @Override
+    @ToString
+    @Length(16)
+    IPrimitive<String> obfuscatedNumber();
 }

@@ -15,6 +15,7 @@ package com.propertyvista.domain.payment;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -37,4 +38,8 @@ public interface TokenizedAccountNumber extends TokenizedNumber {
     @Length(12)
     IPrimitive<String> newNumberValue();
 
+    @Override
+    @ToString
+    @Length(12)
+    IPrimitive<String> obfuscatedNumber();
 }
