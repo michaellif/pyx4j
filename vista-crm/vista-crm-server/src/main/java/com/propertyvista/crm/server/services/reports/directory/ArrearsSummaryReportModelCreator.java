@@ -33,7 +33,7 @@ import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportM
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
 import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 
 public class ArrearsSummaryReportModelCreator implements GadgetReportModelCreator {

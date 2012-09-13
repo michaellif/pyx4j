@@ -20,7 +20,7 @@ import java.util.List;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.other.BuildingListerGadget;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public class SystemGadgetDirectory implements IGadgetDirectory {
 

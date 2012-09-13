@@ -38,7 +38,7 @@ import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 
@@ -127,11 +127,6 @@ public class BuildingListerGadget extends AbstractGadget<BuildingLister> {
     @Override
     public List<String> getCategories() {
         return Arrays.asList(Directory.Categories.Buildings.toString());
-    }
-
-    @Override
-    public boolean isBuildingGadget() {
-        return false;
     }
 
     @Override

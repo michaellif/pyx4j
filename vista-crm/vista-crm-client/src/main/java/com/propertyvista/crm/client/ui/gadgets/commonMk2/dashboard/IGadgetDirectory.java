@@ -17,7 +17,7 @@ import java.util.Collection;
 
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public interface IGadgetDirectory {
 

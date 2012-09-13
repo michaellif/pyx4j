@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.gadgets.common;
 import java.util.List;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public interface IGadgetFactory {
 

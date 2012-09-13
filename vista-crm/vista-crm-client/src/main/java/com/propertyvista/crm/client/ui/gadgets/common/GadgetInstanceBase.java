@@ -39,8 +39,8 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata.RefreshInterval;
 
 public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IGadgetInstance {
 

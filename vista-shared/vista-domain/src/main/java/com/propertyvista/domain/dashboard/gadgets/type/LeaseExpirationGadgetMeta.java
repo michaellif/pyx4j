@@ -16,10 +16,11 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
+import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 
 @DiscriminatorValue("Lease Expiration Gadget")
 @Caption(name = "Lease Expiration", description = "TBD")
-public interface LeaseExpirationGadgetMeta extends CounterGadgetBaseMetadata {
+public interface LeaseExpirationGadgetMeta extends CounterGadgetBaseMetadata, BuildingGadget {
 
 }

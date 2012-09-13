@@ -30,8 +30,8 @@ import com.propertyvista.crm.client.ui.gadgets.components.UnitDetailsFactory;
 import com.propertyvista.crm.rpc.dto.gadgets.NoticesGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeaseExpirationGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.NoticesGadgetService;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class NoticesGadgetFactory extends AbstractGadget<NoticesGadgetMetadata> {
@@ -221,11 +221,6 @@ public class NoticesGadgetFactory extends AbstractGadget<NoticesGadgetMetadata> 
     @Override
     public List<String> getCategories() {
         return Arrays.asList(Directory.Categories.Leases.toString());
-    }
-
-    @Override
-    public boolean isBuildingGadget() {
-        return true;
     }
 
     @Override

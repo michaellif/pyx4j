@@ -32,8 +32,8 @@ import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
 import com.propertyvista.crm.server.services.reports.ReportsCommon;
 import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public class UnitAvailabilityStatusReportCreator implements GadgetReportModelCreator {
 

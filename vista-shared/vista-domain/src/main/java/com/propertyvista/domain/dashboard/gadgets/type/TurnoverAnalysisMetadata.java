@@ -20,11 +20,13 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO.AnalysisResolution;
+import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 @DiscriminatorValue("TurnoverAnalysisSettings")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Caption(name = "Turnover Analysis")
-public interface TurnoverAnalysisMetadata extends GadgetMetadata {
+public interface TurnoverAnalysisMetadata extends GadgetMetadata, BuildingGadget {
 
     IPrimitive<Boolean> isTurnoverMeasuredByPercent();
 

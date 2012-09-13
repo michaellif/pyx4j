@@ -27,7 +27,7 @@ import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.ISharedUserEntity;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 // FIXME i guess some refactoring is needed to create polymorphic metadata for each type of dashboard: system, building, report
 @Caption(name = "Dashboard")

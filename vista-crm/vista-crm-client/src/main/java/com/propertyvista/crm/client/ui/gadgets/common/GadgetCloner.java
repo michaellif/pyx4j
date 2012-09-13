@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.gadgets.common;
 import java.util.List;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 /**
  * Basically this is used to wrap another Gadget in order to have object with different address so it could be used as a duplicate in collections.

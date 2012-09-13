@@ -38,7 +38,7 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilt
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsYOYComparisonDataDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.svg.gadgets.ArrearsYoyAnalysisChartFactory;
 
@@ -186,11 +186,6 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
     public java.util.List<String> getCategories() {
         return Arrays.asList(Directory.Categories.Arrears.toString(), Directory.Categories.Chart.toString());
     };
-
-    @Override
-    public boolean isBuildingGadget() {
-        return true;
-    }
 
     @Override
     protected GadgetInstanceBase<ArrearsYOYAnalysisChartMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {

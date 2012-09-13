@@ -42,8 +42,8 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilt
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatusSummaryLineDTO;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class UnitAvailabilitySummaryGadgetFactory extends AbstractGadget<UnitAvailabilitySummaryGMeta> {
@@ -161,11 +161,6 @@ public class UnitAvailabilitySummaryGadgetFactory extends AbstractGadget<UnitAva
     @Override
     public List<String> getCategories() {
         return Arrays.asList(Directory.Categories.Availability.toString());
-    }
-
-    @Override
-    public boolean isBuildingGadget() {
-        return true;
     }
 
     @Override

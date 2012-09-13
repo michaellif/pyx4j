@@ -18,7 +18,8 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public abstract class AbstractGadget<GADGET_TYPE extends GadgetMetadata> implements IGadgetFactory, Cloneable {
 
@@ -26,15 +27,13 @@ public abstract class AbstractGadget<GADGET_TYPE extends GadgetMetadata> impleme
 
     protected final String name;
 
-    private String description;
+    private final String description;
 
-    protected AbstractGadget(String type, String name) {
-        this.type = type;
-        this.name = name;
-    }
+    private final boolean isBuildingGadget;
 
     protected AbstractGadget(Class<GADGET_TYPE> gadgetMetadataClassLiteral) {
         GADGET_TYPE gadgetMetadataProto = EntityFactory.getEntityPrototype(gadgetMetadataClassLiteral);
+        isBuildingGadget = gadgetMetadataProto instanceof BuildingGadget;
         type = gadgetMetadataProto.getValueClass().getName();
         name = gadgetMetadataProto.getEntityMeta().getCaption();
         description = gadgetMetadataProto.getEntityMeta().getDescription();
@@ -69,6 +68,11 @@ public abstract class AbstractGadget<GADGET_TYPE extends GadgetMetadata> impleme
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public final boolean isBuildingGadget() {
+        return isBuildingGadget;
     }
 
     @Override

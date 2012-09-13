@@ -18,7 +18,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 /**
  * Base for gadgets that display various counters

@@ -36,12 +36,12 @@ import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetada
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
 

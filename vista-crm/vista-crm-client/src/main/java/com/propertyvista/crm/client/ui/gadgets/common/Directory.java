@@ -35,7 +35,7 @@ import com.propertyvista.crm.client.ui.gadgets.notices.NoticesGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.other.BuildingListerGadget;
 import com.propertyvista.crm.client.ui.gadgets.payments.PaymentRecordsGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.payments.PaymentsSummaryGadgetFactory;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 /** Global container of all possible gadgets. */
 @Deprecated

@@ -35,7 +35,7 @@ import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public class BarChart2DGadget extends AbstractGadget<com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2D> {
     private static final I18n i18n = I18n.get(BarChart2DGadget.class);
@@ -134,11 +134,6 @@ public class BarChart2DGadget extends AbstractGadget<com.propertyvista.domain.da
     @Override
     public String getDescription() {
         return i18n.tr("Demo that displays a 2D Bar Chart");
-    }
-
-    @Override
-    public boolean isBuildingGadget() {
-        return false;
     }
 
     @Override

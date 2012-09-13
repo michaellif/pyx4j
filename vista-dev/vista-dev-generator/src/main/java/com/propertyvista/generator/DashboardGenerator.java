@@ -37,7 +37,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetada
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata.RefreshInterval;
 import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;

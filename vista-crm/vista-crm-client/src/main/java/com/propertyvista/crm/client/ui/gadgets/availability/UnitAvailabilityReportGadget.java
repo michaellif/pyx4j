@@ -45,9 +45,9 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilt
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMeta.FilterPreset;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilityGadgetMeta> {
@@ -198,11 +198,6 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
     @Override
     public List<String> getCategories() {
         return Arrays.asList(Directory.Categories.Availability.toString());
-    }
-
-    @Override
-    public boolean isBuildingGadget() {
-        return true;
     }
 
     @Override

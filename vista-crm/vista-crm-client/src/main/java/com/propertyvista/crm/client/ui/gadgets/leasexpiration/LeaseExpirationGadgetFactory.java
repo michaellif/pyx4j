@@ -30,8 +30,8 @@ import com.propertyvista.crm.client.ui.gadgets.components.LeaseDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.UnitDetailsFactory;
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeaseExpirationGadgetService;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpirationGadgetMeta> {
@@ -78,11 +78,6 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
     @Override
     public List<String> getCategories() {
         return Arrays.asList(Directory.Categories.Leases.toString());
-    }
-
-    @Override
-    public boolean isBuildingGadget() {
-        return true;
     }
 
     @Override

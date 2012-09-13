@@ -35,7 +35,7 @@ import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public class LineChartGadget extends AbstractGadget<com.propertyvista.domain.dashboard.gadgets.type.demo.LineChart> {
     private static final I18n i18n = I18n.get(LineChartGadget.class);
@@ -136,11 +136,6 @@ public class LineChartGadget extends AbstractGadget<com.propertyvista.domain.das
     @Override
     public String getDescription() {
         return i18n.tr("Demo of a Line Chart gadget.");
-    }
-
-    @Override
-    public boolean isBuildingGadget() {
-        return false;
     }
 
     @Override

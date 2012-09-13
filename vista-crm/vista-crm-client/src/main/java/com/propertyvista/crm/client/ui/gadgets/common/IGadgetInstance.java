@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.gadgets.common;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public interface IGadgetInstance extends IGadget {
 

@@ -31,7 +31,7 @@ import com.propertyvista.crm.server.services.reports.util.SvgRasterizer;
 import com.propertyvista.crm.server.services.reports.util.SvgRasterizerImpl;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsYOYComparisonDataDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.svg.gadgets.ArrearsYoyAnalysisChartFactory;
 

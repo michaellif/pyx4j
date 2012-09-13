@@ -22,11 +22,12 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 
 @DiscriminatorValue("UnitAvailability")
 @Caption(name = "Unit Availability", description = "Shows the information about units, whether they are available or rented, how long they have been vacant for and revenue lost as a result. Can be customized to show various information about buildings and units, for example their physical condition.")
-public interface UnitAvailabilityGadgetMeta extends ListerGadgetBaseMetadata {
+public interface UnitAvailabilityGadgetMeta extends ListerGadgetBaseMetadata, BuildingGadget {
 
     @I18n
     enum FilterPreset {

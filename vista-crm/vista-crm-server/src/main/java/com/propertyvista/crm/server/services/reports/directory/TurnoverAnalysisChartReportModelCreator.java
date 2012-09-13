@@ -32,8 +32,8 @@ import com.propertyvista.crm.server.services.reports.StaticTemplateReportModelBu
 import com.propertyvista.crm.server.services.reports.util.SvgRasterizer;
 import com.propertyvista.crm.server.services.reports.util.SvgRasterizerImpl;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.svg.gadgets.TurnoverAnalysisChartFactory;
 
 public class TurnoverAnalysisChartReportModelCreator implements GadgetReportModelCreator {

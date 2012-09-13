@@ -51,8 +51,8 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilt
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO.AnalysisResolution;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.svg.gadgets.TurnoverAnalysisChartFactory;
 
@@ -336,11 +336,6 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
     @Override
     public List<String> getCategories() {
         return Arrays.asList(i18n.tr("Availability"), i18n.tr("Chart"));
-    }
-
-    @Override
-    public boolean isBuildingGadget() {
-        return true;
     }
 
     @Override

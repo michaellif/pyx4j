@@ -42,8 +42,8 @@ import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEven
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.BuildingGadgetBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AbstractCounterGadgetBaseService;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, GadgetType extends CounterGadgetBaseMetadata> extends
@@ -119,10 +119,14 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
     // TODO think what to do with building change selection events propagation, this implementation is not nice
     @Override
     public HandlerRegistration addBuildingSelectionChangedEventHandler(BuildingSelectionChangedEventHandler handler) {
-        if (eventBus == null) {
-            eventBus = new SimpleEventBus();
+        if (false) {
+            if (eventBus == null) {
+                eventBus = new SimpleEventBus();
+            }
+            return eventBus.addHandler(BuildingSelectionChangedEvent.TYPE, handler);
         }
-        return eventBus.addHandler(BuildingSelectionChangedEvent.TYPE, handler);
+        return null;
+
     }
 
     @Override

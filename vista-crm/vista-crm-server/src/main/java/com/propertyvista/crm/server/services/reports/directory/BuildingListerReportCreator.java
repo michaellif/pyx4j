@@ -30,7 +30,7 @@ import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportM
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
 import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerReportCreator implements GadgetReportModelCreator {

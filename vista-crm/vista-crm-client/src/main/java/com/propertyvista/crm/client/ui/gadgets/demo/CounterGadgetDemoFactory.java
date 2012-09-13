@@ -33,7 +33,7 @@ import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.rpc.dto.gadgets.CounterGadgetDemoDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AbstractCounterGadgetBaseService;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.demo.CounterGadgetDemoMetadata;
 
 public class CounterGadgetDemoFactory extends AbstractGadget<CounterGadgetDemoMetadata> {
@@ -90,11 +90,6 @@ public class CounterGadgetDemoFactory extends AbstractGadget<CounterGadgetDemoMe
     @Override
     public List<String> getCategories() {
         return Arrays.asList(Directory.Categories.Demo.toString());
-    }
-
-    @Override
-    public boolean isBuildingGadget() {
-        return true;
     }
 
     @Override

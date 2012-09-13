@@ -22,7 +22,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)

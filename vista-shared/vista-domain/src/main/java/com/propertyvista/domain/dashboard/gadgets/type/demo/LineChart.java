@@ -16,7 +16,7 @@ package com.propertyvista.domain.dashboard.gadgets.type.demo;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Table;
 
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 @DiscriminatorValue("LineChart")
 @Table(prefix = "demo")

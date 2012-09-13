@@ -29,7 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.demo.Demo;
 
 public class DemoGadget extends AbstractGadget<Demo> {
@@ -132,11 +132,6 @@ public class DemoGadget extends AbstractGadget<Demo> {
     @Override
     public String getDescription() {
         return i18n.tr("Demo of a gadget");
-    }
-
-    @Override
-    public boolean isBuildingGadget() {
-        return false;
     }
 
     @Override

@@ -15,9 +15,10 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
+import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 
 @DiscriminatorValue("BuildingLister")
-public interface BuildingLister extends ListerGadgetBaseMetadata {
+public interface BuildingLister extends ListerGadgetBaseMetadata, BuildingGadget {
 
 }

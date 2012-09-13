@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public abstract class BuildingGadgetBase<G extends GadgetMetadata> extends GadgetInstanceBase<G> {
 

@@ -50,8 +50,8 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilt
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -256,11 +256,6 @@ public class PaymentsSummaryGadgetFactory extends AbstractGadget<PaymentsSummary
     @Override
     public List<String> getCategories() {
         return Arrays.asList(Directory.Categories.Payments.toString());
-    }
-
-    @Override
-    public boolean isBuildingGadget() {
-        return true;
     }
 
     @Override

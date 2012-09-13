@@ -20,13 +20,14 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
+import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
 
 @Caption(name = "Payment Records", description = "TBD")
 @DiscriminatorValue("PaymentRecordsGadgetMetadata")
-public interface PaymentRecordsGadgetMetadata extends ListerGadgetBaseMetadata {
+public interface PaymentRecordsGadgetMetadata extends ListerGadgetBaseMetadata, BuildingGadget {
 
     /**
      * Payment type filter.
