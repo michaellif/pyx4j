@@ -231,8 +231,8 @@ public class LeaseLifecycleSimulator {
         public void exec() {
             leaseFacade().activate(lease);
             if (isDebugged) {
-                System.out.println("" + now() + " activated lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue()
-                        + " - " + lease.currentTerm().termTo().getValue());
+                System.out.println("" + now() + " activated lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
+                        + lease.currentTerm().termTo().getValue());
                 System.out.println("***");
             }
 
@@ -415,7 +415,7 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            leaseFacade().createCompletionEvent(lease.getPrimaryKey(), CompletionType.Notice, now(), lease.currentTerm().termTo().getValue());
+            leaseFacade().createCompletionEvent(lease, CompletionType.Notice, now(), lease.currentTerm().termTo().getValue());
         }
     }
 
@@ -427,7 +427,7 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            leaseFacade().complete(lease.getPrimaryKey());
+            leaseFacade().complete(lease);
         }
     }
 

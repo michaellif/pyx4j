@@ -61,14 +61,15 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
     @Override
     public void notice(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut) {
-        ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(entityId, CompletionType.Notice, date, moveOut);
+        ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId), CompletionType.Notice, date,
+                moveOut);
         Persistence.service().commit();
         callback.onSuccess(null);
     }
 
     @Override
     public void cancelNotice(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(entityId);
+        ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId));
         Persistence.service().commit();
         callback.onSuccess(null);
 
@@ -76,14 +77,15 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
     @Override
     public void evict(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut) {
-        ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(entityId, CompletionType.Eviction, date, moveOut);
+        ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId), CompletionType.Eviction,
+                date, moveOut);
         Persistence.service().commit();
         callback.onSuccess(null);
     }
 
     @Override
     public void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(entityId);
+        ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId));
         Persistence.service().commit();
         callback.onSuccess(null);
     }

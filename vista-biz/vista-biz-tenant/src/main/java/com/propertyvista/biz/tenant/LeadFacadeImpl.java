@@ -26,6 +26,8 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -130,5 +132,16 @@ public class LeadFacadeImpl implements LeadFacade {
         Lead lead = Persistence.service().retrieve(Lead.class, leadId);
         lead.status().setValue(Status.closed);
         Persistence.secureSave(lead);
+    }
+
+    @Override
+    public void setLeadRentedState(Lease leaseId) {
+        EntityQueryCriteria<Lead> criteria = new EntityQueryCriteria<Lead>(Lead.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), leaseId));
+        Lead lead = Persistence.secureRetrieve(criteria);
+        if (lead != null) {
+            lead.status().setValue(Lead.Status.rented);
+            Persistence.secureSave(lead);
+        }
     }
 }

@@ -355,11 +355,11 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void completeLease() {
-        ServerSideFactory.create(LeaseFacade.class).complete(retrieveLease().getPrimaryKey());
+        ServerSideFactory.create(LeaseFacade.class).complete(retrieveLease());
     }
 
     protected void closeLease() {
-        ServerSideFactory.create(LeaseFacade.class).close(retrieveLease().getPrimaryKey());
+        ServerSideFactory.create(LeaseFacade.class).close(retrieveLease());
     }
 
     protected Lease retrieveLease() {

@@ -17,6 +17,7 @@ import com.pyx4j.commons.Key;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface LeadFacade {
 
@@ -31,4 +32,7 @@ public interface LeadFacade {
     void convertToApplication(Key leadId, AptUnit unitId);
 
     void close(Key leadId);
+
+    // Utils:
+    void setLeadRentedState(Lease leaseId);
 }

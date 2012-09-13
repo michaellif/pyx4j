@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.tenant;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.company.Employee;
@@ -47,8 +46,6 @@ public interface LeaseFacade {
 
     LeaseTerm setService(LeaseTerm leaseTerm, ProductItem serviceId);
 
-    BillableItem createBillableItem(ProductItem itemId, PolicyNode node);
-
     LeaseTerm persist(LeaseTerm leaseTerm);
 
     LeaseTerm finalize(LeaseTerm leaseTerm);
@@ -73,15 +70,17 @@ public interface LeaseFacade {
 
     // Start notice/evict...
 
-    void createCompletionEvent(Key leaseId, Lease.CompletionType completionType, LogicalDate noticeDay, LogicalDate moveOutDay);
+    void createCompletionEvent(Lease leaseId, Lease.CompletionType completionType, LogicalDate noticeDay, LogicalDate moveOutDay);
 
-    void cancelCompletionEvent(Key leaseId);
+    void cancelCompletionEvent(Lease leaseId);
 
-    void complete(Key leaseId);
+    void complete(Lease leaseId);
 
-    void close(Key leaseId);
+    void close(Lease leaseId);
 
-    // General:
+    // Utils:
 
-    Lease load(Lease lease, boolean forEdit);
+    Lease load(Lease leaseId, boolean forEdit);
+
+    BillableItem createBillableItem(ProductItem itemId, PolicyNode node);
 }

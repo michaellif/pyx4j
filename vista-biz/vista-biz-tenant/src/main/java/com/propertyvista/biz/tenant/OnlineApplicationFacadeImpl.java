@@ -167,16 +167,16 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
             MasterOnlineApplication ma = application.masterOnlineApplication();
             Persistence.service().retrieve(ma);
-            Persistence.service().retrieve(ma.leaseApplication().leaseOnApplication());
+            Persistence.service().retrieve(ma.leaseApplication().lease());
 
             // Invite customers:
             switch (application.role().getValue()) {
             case Applicant:
-                inviteCoApplicants(ma.leaseApplication().leaseOnApplication());
-                inviteGuarantors(ma.leaseApplication().leaseOnApplication(), application.customer());
+                inviteCoApplicants(ma.leaseApplication().lease());
+                inviteGuarantors(ma.leaseApplication().lease(), application.customer());
                 break;
             case CoApplicant:
-                inviteGuarantors(ma.leaseApplication().leaseOnApplication(), application.customer());
+                inviteGuarantors(ma.leaseApplication().lease(), application.customer());
                 break;
             case Guarantor:
                 break;

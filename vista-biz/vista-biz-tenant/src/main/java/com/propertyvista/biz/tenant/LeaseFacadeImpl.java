@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.EqualsHelper;
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
@@ -57,7 +56,6 @@ import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -98,6 +96,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
             }
         }
 
+        ServerSideFactory.create(IdAssignmentFacade.class).assignId(lease);
+
         // TODO could be more variants in the future:
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
         lease.type().setValue(Service.ServiceType.residentialUnit);
@@ -109,12 +109,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
         lease.currentTerm().lease().set(lease);
 
-        // Create Application by default
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Created);
-        lease.leaseApplication().leaseOnApplication().set(lease);
-
-        ServerSideFactory.create(IdAssignmentFacade.class).assignId(lease);
-
         lease.billingAccount().accountNumber().setValue(ServerSideFactory.create(IdAssignmentFacade.class).createAccountNumber());
         lease.billingAccount().billCounter().setValue(0);
 
@@ -145,13 +140,10 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public Lease load(Lease lease, boolean editingTerm) {
-        if (lease.isValueDetached()) {
-            Key leaseKey = lease.getPrimaryKey();
-            lease = Persistence.secureRetrieve(Lease.class, leaseKey);
-            if (lease == null) {
-                throw new IllegalArgumentException("lease " + leaseKey + " was not found");
-            }
+    public Lease load(Lease leaseId, boolean editingTerm) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+        if (lease == null) {
+            throw new IllegalArgumentException("lease " + leaseId.getPrimaryKey() + " was not found");
         }
 
         // load current Term
@@ -173,9 +165,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public LeaseTerm setUnit(LeaseTerm leaseTerm, AptUnit unitId) {
         assert !leaseTerm.lease().isNull();
-        if (leaseTerm.lease().isValueDetached()) {
-            Persistence.service().retrieve(leaseTerm.lease());
-        }
         setUnit(leaseTerm.lease(), leaseTerm, unitId);
         return leaseTerm;
     }
@@ -183,10 +172,53 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public LeaseTerm setService(LeaseTerm leaseTerm, ProductItem serviceId) {
         assert !leaseTerm.lease().isNull();
+        return setService(leaseTerm.lease(), leaseTerm, serviceId);
+    }
+
+    @Override
+    public LeaseTerm persist(LeaseTerm leaseTerm) {
+        persistCustomers(leaseTerm);
+
+        Persistence.secureSave(leaseTerm);
+
+        return leaseTerm;
+    }
+
+    @Override
+    public LeaseTerm finalize(LeaseTerm leaseTerm) {
+        finalizeBillableItems(leaseTerm);
+
+        leaseTerm.saveAction().setValue(SaveAction.saveAsFinal);
+        leaseTerm = persist(leaseTerm);
+
+        // update lease deposits if current term:
         if (leaseTerm.lease().isValueDetached()) {
             Persistence.service().retrieve(leaseTerm.lease());
         }
-        return setService(leaseTerm.lease(), leaseTerm, serviceId);
+        if (leaseTerm.equals(leaseTerm.lease().currentTerm())) {
+            updateLeaseDeposits(leaseTerm.lease());
+        }
+
+        return leaseTerm;
+    }
+
+    @Override
+    public void setCurrentTerm(Lease leaseId, LeaseTerm leaseTermId) {
+        Lease lease = load(leaseId, false);
+
+        Persistence.service().retrieveMember(lease.leaseTerms());
+        if (lease.leaseTerms().contains(leaseTermId)) {
+            lease.currentTerm().set(leaseTermId);
+
+            Persistence.service().retrieve(lease.currentTerm());
+            lease.currentTerm().status().setValue(LeaseTerm.Status.Working);
+            updateLeaseDeposits(lease);
+
+            lease.currentTerm().version().setValueDetached(); // TRICK!..
+            persist(lease);
+        } else {
+            throw new IllegalArgumentException(i18n.tr("Invalid LeaseTerm supplied"));
+        }
     }
 
     @Override
@@ -207,43 +239,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         return newItem;
     }
 
-    @Override
-    public LeaseTerm persist(LeaseTerm leaseTerm) {
-        persistCustomers(leaseTerm);
-
-        Persistence.secureSave(leaseTerm);
-
-        return leaseTerm;
-    }
-
-    @Override
-    public LeaseTerm finalize(LeaseTerm leaseTerm) {
-        finalizeBillableItems(leaseTerm);
-
-        leaseTerm.saveAction().setValue(SaveAction.saveAsFinal);
-        leaseTerm = persist(leaseTerm);
-
-        return leaseTerm;
-    }
-
-    @Override
-    public void setCurrentTerm(Lease leaseId, LeaseTerm leaseTermId) {
-        Lease lease = load(leaseId, false);
-
-        Persistence.service().retrieveMember(lease.leaseTerms());
-        if (lease.leaseTerms().contains(leaseTermId)) {
-            lease.currentTerm().set(leaseTermId);
-
-            Persistence.service().retrieve(lease.currentTerm());
-            lease.currentTerm().status().setValue(LeaseTerm.Status.Working);
-            finalizeDeposits(lease.currentTerm()); // update lease deposits
-
-            lease.currentTerm().version().setValueDetached(); // TRICK!..
-            persist(lease);
-        } else {
-            throw new UserRuntimeException(i18n.tr("Invalid LeaseTerm supplied"));
-        }
-    }
+    // Operations:
 
     @Override
     public void createMasterOnlineApplication(Lease leaseId) {
@@ -251,10 +247,10 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         // Verify the status
         if (!Lease.Status.draft().contains(lease.status().getValue())) {
-            throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
+            throw new IllegalStateException(i18n.tr("Invalid Lease State"));
         }
         if (LeaseApplication.Status.Created != lease.leaseApplication().status().getValue()) {
-            throw new UserRuntimeException(i18n.tr("Invalid Application State"));
+            throw new IllegalStateException(i18n.tr("Invalid Application State"));
         }
 
         ServerSideFactory.create(OnlineApplicationFacade.class).createMasterOnlineApplication(lease.leaseApplication().onlineApplication());
@@ -286,8 +282,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
 
         finalize(lease);
-
-        updateApplicationReferencesToFinalVersionOfLease(lease);
 
         ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
@@ -322,8 +316,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         Persistence.secureSave(lease);
 
-        updateApplicationReferencesToFinalVersionOfLease(lease);
-
         ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
 
         if (!lease.leaseApplication().onlineApplication().isNull()) {
@@ -347,8 +339,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
 
         Persistence.secureSave(lease);
-
-        updateApplicationReferencesToFinalVersionOfLease(lease);
 
         ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
     }
@@ -387,32 +377,23 @@ public class LeaseFacadeImpl implements LeaseFacade {
     public void activate(Lease leaseId) {
         Lease lease = load(leaseId, false);
 
-        // set lease status to active ONLY if first (latest till now) bill is
-        // confirmed:
-        // TODO
+        if (!EnumSet.of(Lease.Status.ExistingLease, Lease.Status.Approved).contains(lease.status().getValue())) {
+            throw new IllegalStateException(i18n.tr("Can't activate lease with status: {0}", lease.status().getStringView()));
+        }
+
+        // set lease status to active ONLY if first (latest till now) bill is confirmed:
+// TODO
 //        if (lease.billingAccount().carryforwardBalance().isNull()
 //                && ServerSideFactory.create(BillingFacade.class).getLatestBill(lease).billStatus().getValue() != Bill.BillStatus.Confirmed) {
 //            throw new UserRuntimeException(i18n.tr("Please run and confirm first bill in order to activate the lease."));
 //        }
-        if (!EnumSet.of(Lease.Status.ExistingLease, Lease.Status.Approved).contains(lease.status().getValue())) {
-            throw new UserRuntimeException(i18n.tr("Impossible to activate lease with status: {0}", lease.status().getStringView()));
-        }
 
         lease.status().setValue(Status.Active);
         lease.activationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         Persistence.secureSave(lease);
 
         ServerSideFactory.create(UnitTurnoverAnalysisFacade.class).propagateLeaseActivationToTurnoverReport(lease);
-
-        // TODO move to LeadFacad
-        // update Lead state (if present)
-        EntityQueryCriteria<Lead> criteria = new EntityQueryCriteria<Lead>(Lead.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), leaseId));
-        Lead lead = Persistence.service().retrieve(criteria);
-        if (lead != null) {
-            lead.status().setValue(Lead.Status.rented);
-            Persistence.service().persist(lead);
-        }
+        ServerSideFactory.create(LeadFacade.class).setLeadRentedState(lease);
     }
 
     @Override
@@ -425,9 +406,10 @@ public class LeaseFacadeImpl implements LeaseFacade {
         term.type().setValue(type);
         term.lease().set(lease);
 
+        // set from date to next day after current term:
         term.termFrom().setValue(new LogicalDate(lease.currentTerm().termTo().getValue().getTime() + ONE_DAY_IN_MSEC));
 
-        updateTermWithUnit(term, lease.unit(), lease.type().getValue());
+        updateTermUnitRelatedData(term, lease.unit(), lease.type().getValue());
 
         // migrate participants:
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
@@ -447,13 +429,10 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public void createCompletionEvent(Key leaseId, CompletionType completionType, LogicalDate noticeDay, LogicalDate moveOutDay) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        if (lease == null) {
-            throw new IllegalArgumentException("lease " + leaseId + " was not found");
-        }
+    public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate noticeDay, LogicalDate moveOutDay) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
         if (lease.status().getValue() != Status.Active) {
-            throw new IllegalStateException("lease " + leaseId + " must be " + Status.Active + " in order to perform Completion");
+            throw new IllegalStateException("lease " + leaseId.getPrimaryKey() + " must be " + Status.Active + " in order to perform Completion");
         }
 
         lease.completion().setValue(completionType);
@@ -466,13 +445,10 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public void cancelCompletionEvent(Key leaseId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        if (lease == null) {
-            throw new IllegalArgumentException("lease " + leaseId + " was not found");
-        }
+    public void cancelCompletionEvent(Lease leaseId) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
         if (lease.completion().isNull()) {
-            throw new IllegalStateException("lease " + leaseId + " must have notice in order to perform 'cancelNotice'");
+            throw new IllegalStateException("lease " + leaseId.getPrimaryKey() + " must have notice in order to perform 'cancelNotice'");
         }
 
         lease.completion().setValue(null);
@@ -485,11 +461,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public void complete(Key leaseId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        if (lease == null) {
-            throw new IllegalArgumentException("lease " + leaseId + " was not found");
-        }
+    public void complete(Lease leaseId) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
 
         lease.actualLeaseTo().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         lease.status().setValue(Status.Completed);
@@ -498,11 +471,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public void close(Key leaseId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId);
-        if (lease == null) {
-            throw new IllegalArgumentException("lease " + leaseId + " was not found");
-        }
+    public void close(Lease leaseId) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
 
         lease.status().setValue(Status.Closed);
 
@@ -512,59 +482,34 @@ public class LeaseFacadeImpl implements LeaseFacade {
     // internals:
 
     private Lease setUnit(Lease lease, LeaseTerm leaseTerm, AptUnit unitId) {
-        assert !lease.isValueDetached();
+        if (lease.isValueDetached()) {
+            Persistence.service().retrieve(lease);
+        }
 
         AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitId.getPrimaryKey());
         if (unit.building().isValueDetached()) {
             Persistence.service().retrieve(unit.building());
         }
 
-        if (leaseTerm.equals(lease.currentTerm())) {
+        if (lease.currentTerm().equals(leaseTerm)) {
             if (!Lease.Status.draft().contains(lease.status().getValue())) {
-                throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
+                throw new IllegalStateException(i18n.tr("Invalid Lease State"));
             }
             lease.unit().set(unit);
         }
 
-        updateTermWithUnit(leaseTerm, lease.unit(), lease.type().getValue());
+        updateTermUnitRelatedData(leaseTerm, lease.unit(), lease.type().getValue());
 
         return lease;
     }
 
-    private LeaseTerm updateTermWithUnit(LeaseTerm leaseTerm, AptUnit unit, ServiceType leaseType) {
-        assert !unit.isValueDetached();
-        if (unit.building().isValueDetached()) {
-            Persistence.service().retrieve(unit.building());
-        }
-
-        boolean succeeded = false;
-
-        EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), unit.building().productCatalog()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), leaseType));
-        servicesLoop: for (Service service : Persistence.service().query(criteria)) {
-            EntityQueryCriteria<ProductItem> serviceCriteria = EntityQueryCriteria.create(ProductItem.class);
-            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ServiceItemType.class));
-            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().product(), service.version()));
-            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), unit));
-            ProductItem serviceItem = Persistence.service().retrieve(serviceCriteria);
-            if (serviceItem != null) {
-                setService(leaseTerm, serviceItem);
-                succeeded = true;
-                break servicesLoop;
-            }
-        }
-
-        if (!succeeded) {
-            throw new UserRuntimeException(i18n.tr("There no service ''{0}'' for selected unit: {1} from Building: {2}", leaseType.toString(),
-                    unit.getStringView(), unit.building().getStringView()));
-        }
-
-        return leaseTerm;
-    }
-
     private LeaseTerm setService(Lease lease, LeaseTerm leaseTerm, ProductItem serviceId) {
-        assert !leaseTerm.isValueDetached();
+        if (lease.isValueDetached()) {
+            Persistence.service().retrieve(lease);
+        }
+        if (leaseTerm.isValueDetached()) {
+            Persistence.service().retrieve(leaseTerm);
+        }
 
         // find/load all necessary ingredients:
         assert !lease.unit().isNull();
@@ -584,7 +529,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         // double check:
         if (!lease.unit().equals(serviceItem.element())) {
-            throw new UserRuntimeException(i18n.tr("Invalid Unit/Service combination"));
+            throw new IllegalArgumentException(i18n.tr("Invalid Unit/Service combination"));
         }
 
         PolicyNode node = lease.unit().building();
@@ -595,7 +540,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         if (leaseTerm.equals(lease.currentTerm())) {
             if (!Lease.Status.draft().contains(lease.status().getValue())) {
-                throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
+                throw new IllegalStateException(i18n.tr("Invalid Lease State"));
             }
             Persistence.service().retrieve(lease.billingAccount().deposits());
             lease.billingAccount().deposits().clear();
@@ -630,7 +575,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     private Lease persist(Lease lease, boolean finalize) {
-
         boolean doReserve = false;
         boolean doUnreserve = false;
         Lease previousLeaseEdition = null;
@@ -660,8 +604,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         if (finalize) {
             finalize(lease.currentTerm());
-            // update deposit mechanics:
-            finalizeDeposits(lease.currentTerm());
         } else {
             persist(lease.currentTerm());
         }
@@ -731,29 +673,24 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
     }
 
-    private void finalizeDeposits(LeaseTerm leaseTerm) {
+    private void updateLeaseDeposits(Lease lease) {
+        if (lease.currentTerm().isValueDetached()) {
+            Persistence.service().retrieve(lease.currentTerm());
+        }
+
         List<Deposit> currentDeposits = new ArrayList<Deposit>();
-        currentDeposits.addAll(leaseTerm.version().leaseProducts().serviceItem().deposits());
-        for (BillableItem item : leaseTerm.version().leaseProducts().featureItems()) {
+        currentDeposits.addAll(lease.currentTerm().version().leaseProducts().serviceItem().deposits());
+        for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
             currentDeposits.addAll(item.deposits());
         }
 
         // wrap newly added deposits in DepositLifecycle:
-        if (leaseTerm.lease().isValueDetached()) {
-            Persistence.service().retrieve(leaseTerm.lease());
-        }
         for (Deposit deposit : currentDeposits) {
             if (deposit.lifecycle().isNull()) {
-                Persistence.service()
-                        .persist(ServerSideFactory.create(DepositFacade.class).createDepositLifecycle(deposit, leaseTerm.lease().billingAccount()));
+                Persistence.service().persist(ServerSideFactory.create(DepositFacade.class).createDepositLifecycle(deposit, lease.billingAccount()));
                 Persistence.service().merge(deposit);
             }
         }
-    }
-
-    private void updateApplicationReferencesToFinalVersionOfLease(Lease lease) {
-        lease.leaseApplication().leaseOnApplication().set(lease);
-        Persistence.service().persist(lease.leaseApplication());
     }
 
     private void updateLeaseDates(Lease lease) {
@@ -783,5 +720,39 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (lease.currentTerm().type().getValue() == LeaseTerm.Type.FixedEx) {
             lease.leaseTo().set(null);
         }
+    }
+
+    private LeaseTerm updateTermUnitRelatedData(LeaseTerm leaseTerm, AptUnit unit, ServiceType leaseType) {
+        if (unit.isValueDetached()) {
+            Persistence.service().retrieve(unit);
+        }
+        if (unit.building().isValueDetached()) {
+            Persistence.service().retrieve(unit.building());
+        }
+
+        boolean succeeded = false;
+
+        EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), unit.building().productCatalog()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), leaseType));
+        servicesLoop: for (Service service : Persistence.service().query(criteria)) {
+            EntityQueryCriteria<ProductItem> serviceCriteria = EntityQueryCriteria.create(ProductItem.class);
+            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ServiceItemType.class));
+            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().product(), service.version()));
+            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), unit));
+            ProductItem serviceItem = Persistence.service().retrieve(serviceCriteria);
+            if (serviceItem != null) {
+                setService(leaseTerm, serviceItem);
+                succeeded = true;
+                break servicesLoop;
+            }
+        }
+
+        if (!succeeded) {
+            throw new UserRuntimeException(i18n.tr("There no service ''{0}'' for selected unit: {1} from Building: {2}", leaseType.toString(),
+                    unit.getStringView(), unit.building().getStringView()));
+        }
+
+        return leaseTerm;
     }
 }

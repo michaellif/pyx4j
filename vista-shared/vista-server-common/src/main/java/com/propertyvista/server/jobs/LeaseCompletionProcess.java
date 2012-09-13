@@ -53,7 +53,7 @@ public class LeaseCompletionProcess implements PmcProcess {
 
             Lease lease = i.next();
             try {
-                leaseFacade.complete(lease.getPrimaryKey());
+                leaseFacade.complete(lease);
                 Persistence.service().commit();
 
                 StatisticsUtils.addProcessed(context.getRunStats(), 1);
