@@ -17,11 +17,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;

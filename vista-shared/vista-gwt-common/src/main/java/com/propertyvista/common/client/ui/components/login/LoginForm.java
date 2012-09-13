@@ -38,9 +38,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CCaptcha;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;

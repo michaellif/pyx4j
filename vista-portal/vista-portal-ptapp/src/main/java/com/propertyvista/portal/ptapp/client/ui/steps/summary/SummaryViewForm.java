@@ -28,13 +28,13 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.entity.client.ui.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.DownloadFrame;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.CEntityFolder;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;

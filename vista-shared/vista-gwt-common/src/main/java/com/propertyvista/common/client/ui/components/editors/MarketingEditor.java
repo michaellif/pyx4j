@@ -18,9 +18,9 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.folder.TableFolderDecorator;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
+import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;

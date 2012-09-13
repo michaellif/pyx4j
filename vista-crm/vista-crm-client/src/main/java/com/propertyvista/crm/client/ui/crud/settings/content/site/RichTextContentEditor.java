@@ -15,11 +15,11 @@ package com.propertyvista.crm.client.ui.crud.settings.content.site;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.CEntityComboBox;
-import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.CEntityComboBox;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRichTextArea;
+import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 

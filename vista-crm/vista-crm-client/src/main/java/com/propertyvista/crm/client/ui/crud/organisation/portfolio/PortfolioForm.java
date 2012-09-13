@@ -16,11 +16,11 @@ package com.propertyvista.crm.client.ui.crud.organisation.portfolio;
 import java.util.Arrays;
 import java.util.List;
 
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 

@@ -15,10 +15,10 @@ package com.propertyvista.crm.client.ui.crud.lease.application;
 
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.folder.CEntityFolder;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 

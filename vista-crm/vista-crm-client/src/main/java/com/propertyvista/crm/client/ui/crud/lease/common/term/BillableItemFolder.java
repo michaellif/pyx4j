@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
-import com.pyx4j.entity.client.CEntityForm;
-import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;

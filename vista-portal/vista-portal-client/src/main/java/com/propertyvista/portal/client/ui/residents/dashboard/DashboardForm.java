@@ -23,8 +23,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.client.CEntityViewer;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;

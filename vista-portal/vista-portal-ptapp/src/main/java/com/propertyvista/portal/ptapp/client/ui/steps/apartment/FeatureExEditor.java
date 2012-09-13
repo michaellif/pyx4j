@@ -17,8 +17,8 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;

@@ -19,9 +19,9 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;

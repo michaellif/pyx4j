@@ -16,14 +16,14 @@ package com.propertyvista.portal.ptapp.client.ui.components;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
+import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.financial.offering.ProductItemType;

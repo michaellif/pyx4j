@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.domain.maintenance.IssueClassification;

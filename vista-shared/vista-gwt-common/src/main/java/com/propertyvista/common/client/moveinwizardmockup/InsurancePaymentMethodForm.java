@@ -23,9 +23,9 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.view.client.Range;
 
-import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;

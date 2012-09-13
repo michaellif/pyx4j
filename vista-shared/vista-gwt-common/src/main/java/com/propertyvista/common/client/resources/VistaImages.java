@@ -18,8 +18,8 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
-import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ImageFactory.FormsImageBundle;
+import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
 public interface VistaImages extends FormsImageBundle, EntityFolderImages, WidgetsImages {

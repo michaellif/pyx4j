@@ -18,11 +18,11 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;

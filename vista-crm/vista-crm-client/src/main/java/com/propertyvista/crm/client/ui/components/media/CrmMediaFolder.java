@@ -27,10 +27,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.ValidationUtils;
-import com.pyx4j.entity.client.ui.CEntityHyperlink;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;

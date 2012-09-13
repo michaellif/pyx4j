@@ -15,11 +15,11 @@ package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
 import java.util.List;
 
-import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;

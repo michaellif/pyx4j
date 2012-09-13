@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.ui.crud.lease.application;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;

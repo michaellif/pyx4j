@@ -20,10 +20,10 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.CEntityForm;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.reports.HasAdvancedModeReportFactory;

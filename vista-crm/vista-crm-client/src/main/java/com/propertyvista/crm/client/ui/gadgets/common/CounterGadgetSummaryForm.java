@@ -15,12 +15,12 @@ package com.propertyvista.crm.client.ui.gadgets.common;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.client.EntityFormComponentFactory;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.forms.client.ui.EntityFormComponentFactory;
+import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 

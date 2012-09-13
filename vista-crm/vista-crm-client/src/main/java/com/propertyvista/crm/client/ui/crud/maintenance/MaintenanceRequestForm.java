@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.crud.maintenance;
 
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
-import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;

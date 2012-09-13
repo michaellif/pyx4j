@@ -32,9 +32,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.client.CEntityViewer;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CDatePicker;
+import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.forms.client.ui.CTimeField;
 import com.pyx4j.i18n.shared.I18n;
 

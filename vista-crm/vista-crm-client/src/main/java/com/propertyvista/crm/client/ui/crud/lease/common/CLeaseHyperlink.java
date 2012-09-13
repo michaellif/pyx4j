@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.client.ui.CEntityHyperlink;
+import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;

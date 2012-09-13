@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.CEntityForm;
+import com.pyx4j.forms.client.ui.CEntityForm;
 
 import com.propertyvista.domain.person.Person;
 

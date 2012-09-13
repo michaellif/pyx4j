@@ -16,7 +16,7 @@ package com.propertyvista.admin.client.ui.crud.pmc;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 
 import com.propertyvista.admin.domain.pmc.PmcDnsName;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;

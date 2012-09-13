@@ -18,7 +18,7 @@ import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
+import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;

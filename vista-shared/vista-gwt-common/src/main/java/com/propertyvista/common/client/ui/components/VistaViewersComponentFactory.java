@@ -17,18 +17,18 @@ import java.sql.Time;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.EntityFormComponentFactory;
-import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
+import com.pyx4j.forms.client.ui.EntityFormComponentFactory;
 
 import com.propertyvista.common.client.ui.components.c.CEmailLabel;
 import com.propertyvista.common.client.ui.components.c.CGeoLocationLabel;

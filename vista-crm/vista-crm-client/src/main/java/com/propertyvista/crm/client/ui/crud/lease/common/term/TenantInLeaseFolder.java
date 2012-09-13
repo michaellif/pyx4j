@@ -22,13 +22,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.CEntityForm;
-import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityComboBox;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;

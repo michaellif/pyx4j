@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
-import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;

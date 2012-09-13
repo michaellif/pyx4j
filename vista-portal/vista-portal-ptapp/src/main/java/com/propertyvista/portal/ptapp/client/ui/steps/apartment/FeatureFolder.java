@@ -18,10 +18,10 @@ import java.util.List;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 

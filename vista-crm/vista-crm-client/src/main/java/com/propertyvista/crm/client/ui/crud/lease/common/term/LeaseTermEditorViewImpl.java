@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
-import com.pyx4j.entity.client.CEntityForm;
+import com.pyx4j.forms.client.ui.CEntityForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;

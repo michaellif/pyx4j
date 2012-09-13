@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.components;
 
-import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;

@@ -27,8 +27,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.security.shared.SecurityController;
 

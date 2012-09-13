@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.ui.CEntityCollapsableViewer;
+import com.pyx4j.forms.client.ui.CEntityCollapsableViewer;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.BillingTheme;

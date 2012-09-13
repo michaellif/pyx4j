@@ -19,12 +19,12 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 
 public abstract class IssueClassificationChoice<E extends IEntity> extends CEntityComboBox<E> {

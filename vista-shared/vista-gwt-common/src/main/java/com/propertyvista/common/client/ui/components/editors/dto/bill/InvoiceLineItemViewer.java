@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.client.CEntityViewer;
+import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.theme.BillingTheme;

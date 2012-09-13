@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease;
 
-import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 

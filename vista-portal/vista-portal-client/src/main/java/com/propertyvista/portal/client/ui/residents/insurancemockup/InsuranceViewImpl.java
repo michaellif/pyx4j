@@ -16,7 +16,7 @@ package com.propertyvista.portal.client.ui.residents.insurancemockup;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.CEntityForm;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.domain.moveinwizardmockup.InsuranceDTO;

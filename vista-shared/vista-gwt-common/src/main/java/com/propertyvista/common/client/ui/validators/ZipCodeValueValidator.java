@@ -14,9 +14,9 @@
 package com.propertyvista.common.client.ui.validators;
 
 import com.pyx4j.commons.ValidationUtils;
-import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;

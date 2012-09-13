@@ -16,12 +16,12 @@ package com.propertyvista.crm.client.ui.gadgets.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
 

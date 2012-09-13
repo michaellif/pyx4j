@@ -22,11 +22,11 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.commons.CompareHelper;
 import com.pyx4j.commons.EqualsHelper;
-import com.pyx4j.entity.client.ui.CEntityComboBox;
-import com.pyx4j.entity.client.ui.CEntitySuggestBox;
-import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityComboBox;
+import com.pyx4j.forms.client.ui.CEntitySuggestBox;
 import com.pyx4j.forms.client.ui.IAcceptText;
+import com.pyx4j.forms.client.ui.OptionsFilter;
 
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;

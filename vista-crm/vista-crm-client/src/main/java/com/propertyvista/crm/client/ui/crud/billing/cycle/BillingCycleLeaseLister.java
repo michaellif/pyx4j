@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
-import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.domain.tenant.lease.Lease;

@@ -19,8 +19,8 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.EqualsHelper;
-import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 

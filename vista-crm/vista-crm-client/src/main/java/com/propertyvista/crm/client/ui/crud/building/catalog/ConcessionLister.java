@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.ui.crud.building.catalog;
 
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionedLister;
 import com.propertyvista.domain.financial.offering.Concession;

@@ -29,14 +29,14 @@ import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
+import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;

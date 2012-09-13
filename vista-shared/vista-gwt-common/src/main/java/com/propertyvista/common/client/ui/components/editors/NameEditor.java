@@ -18,10 +18,10 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.client.ui.CEntityHyperlink;
-import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityHyperlink;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;

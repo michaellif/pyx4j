@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease.common.deposit;
 import java.util.Arrays;
 import java.util.List;
 
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.tenant.lease.DepositInterestAdjustment;

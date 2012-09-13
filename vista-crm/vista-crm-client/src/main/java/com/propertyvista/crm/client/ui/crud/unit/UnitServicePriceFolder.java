@@ -18,14 +18,14 @@ import java.util.List;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
+import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 

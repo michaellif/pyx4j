@@ -21,8 +21,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.client.ui.CEntityComboBox;
-import com.pyx4j.entity.client.ui.OptionsFilter;
+import com.pyx4j.forms.client.ui.CEntityComboBox;
+import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
 

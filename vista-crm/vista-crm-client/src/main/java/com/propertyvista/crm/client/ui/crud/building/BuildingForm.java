@@ -25,10 +25,10 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.commons.ValidationUtils;
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;

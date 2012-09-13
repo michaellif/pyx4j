@@ -13,10 +13,10 @@
  */
 package com.propertyvista.common.client.ui.components.folders;
 
-import com.pyx4j.entity.client.ui.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.folder.CEntityFolder;
+import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;

@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.components.folders;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 
 import com.propertyvista.domain.charges.ChargeLine;
 

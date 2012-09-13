@@ -21,14 +21,14 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.CEntityContainer;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.DataTable;
-import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
-import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.CEntityContainer;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTable;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;

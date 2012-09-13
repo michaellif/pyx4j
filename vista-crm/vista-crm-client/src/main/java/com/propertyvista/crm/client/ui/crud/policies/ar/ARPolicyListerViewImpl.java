@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.ar;
 
-import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;

@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.settings.financial.glcode;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
