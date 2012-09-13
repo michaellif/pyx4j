@@ -60,15 +60,10 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         // check for newly created parent (lease/application):
         if (!dto.newParentLease().isNull()) {
-            ServerSideFactory.create(LeaseFacade.class).init(dto.newParentLease());
-
-            // persist newly created lease first:
             dbo.lease().set(dto.newParentLease());
-            dbo.lease().currentTerm().set(null);
-            Persistence.secureSave(dbo.lease());
-            // set this term as current for the lease:
             dbo.lease().currentTerm().set(dbo);
 
+            ServerSideFactory.create(LeaseFacade.class).init(dto.newParentLease());
             ServerSideFactory.create(LeaseFacade.class).persist(dbo.lease());
         } else {
             ServerSideFactory.create(LeaseFacade.class).persist(dbo);
