@@ -13,13 +13,21 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.notices;
 
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetSummaryForm;
+import com.propertyvista.crm.client.ui.gadgets.util.Utils;
 import com.propertyvista.crm.rpc.dto.gadgets.NoticesGadgetDataDTO;
 
 public class NoticesSummaryForm extends CounterGadgetSummaryForm<NoticesGadgetDataDTO> {
+
+    private static final I18n i18n = I18n.get(NoticesSummaryForm.class);
 
     public NoticesSummaryForm() {
         super(NoticesGadgetDataDTO.class);
@@ -27,17 +35,37 @@ public class NoticesSummaryForm extends CounterGadgetSummaryForm<NoticesGadgetDa
 
     @Override
     public IsWidget createContent() {
-        final double NUMBER_WIDTH = 10d;
-        final double LABEL_WIDTH = 18d;
-        FlowPanel content = new FlowPanel();
+        final double MARGIN = 1.5;
 
-        content.add(new DecoratorBuilder(inject(proto().unitsVacant())).componentWidth(NUMBER_WIDTH).labelWidth(LABEL_WIDTH).build());
-        content.add(new DecoratorBuilder(inject(proto().unitVacancy())).componentWidth(NUMBER_WIDTH).labelWidth(LABEL_WIDTH).build());
+        VerticalPanel content = new VerticalPanel();
+        content.setWidth("100%");
+        content.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+        content.getElement().getStyle().setPaddingBottom(1, Unit.EM);
 
-        content.add(new DecoratorBuilder(inject(proto().noticesLeavingThisMonth())).componentWidth(NUMBER_WIDTH).labelWidth(LABEL_WIDTH).build());
-        content.add(new DecoratorBuilder(inject(proto().noticesLeavingNextMonth())).componentWidth(NUMBER_WIDTH).labelWidth(LABEL_WIDTH).build());
-        content.add(new DecoratorBuilder(inject(proto().noticesLeavingOver90Days())).componentWidth(NUMBER_WIDTH).labelWidth(LABEL_WIDTH).build());
+        FlexTable vacancy = Utils.createTable(//@formatter:off
+                new String[] {"", "#", "%"},
+                new String[] {"100", "100", "100"},
+                new String[] {i18n.tr("Unit Vacancy:")},
+                new Widget[][] {{
+                    inject(proto().unitsVacant()).asWidget(),
+                    inject(proto().unitVacancy()).asWidget()
+                }}
+        );//@formatter:on
+        vacancy.getElement().getStyle().setMarginBottom(MARGIN, Unit.EM);
+        content.add(vacancy);
 
+        FlexTable notices = Utils.createTable(//@formatter:off
+                new String[] {"", i18n.tr("This Month"), i18n.tr("Next Month"), i18n.tr("90+")},
+                new String[] {"100", "100", "100", "100"},
+                new String[] {i18n.tr("Notices Leaving:")},
+                new Widget[][] {{
+                    inject(proto().noticesLeavingThisMonth()).asWidget(),
+                    inject(proto().noticesLeavingNextMonth()).asWidget(),
+                    inject(proto().noticesLeavingOver90Days()).asWidget()
+                }}
+        );//@formatter:off        
+        content.add(notices);
+        
         return content;
     }
 }

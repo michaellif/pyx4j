@@ -40,15 +40,12 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
     @Override
     public void countData(AsyncCallback<LeaseExpirationGadgetDataDTO> callback, Vector<Building> buildings) {
         LeaseExpirationGadgetDataDTO proto = EntityFactory.getEntityPrototype(LeaseExpirationGadgetDataDTO.class);
-
         LeaseExpirationGadgetDataDTO gadgetData = EntityFactory.create(LeaseExpirationGadgetDataDTO.class);
 
-        gadgetData.numOfLeasesEndingThisMonth().setValue(
-                Persistence.service().count(fillLeaseFilterCriteria(EntityQueryCriteria.create(Lease.class), buildings, proto.numOfLeasesEndingThisMonth())));
-        gadgetData.numOfLeasesEndingNextMonth().setValue(
-                Persistence.service().count(fillLeaseFilterCriteria(EntityQueryCriteria.create(Lease.class), buildings, proto.numOfLeasesEndingNextMonth())));
-        gadgetData.numOfLeasesEndingOver90Days().setValue(
-                Persistence.service().count(fillLeaseFilterCriteria(EntityQueryCriteria.create(Lease.class), buildings, proto.numOfLeasesEndingOver90Days())));
+        gadgetData.numOfLeasesEndingThisMonth().setValue(count(proto.numOfLeasesEndingThisMonth(), buildings));
+        gadgetData.numOfLeasesEndingNextMonth().setValue(count(proto.numOfLeasesEndingNextMonth(), buildings));
+        gadgetData.numOfLeasesEndingOver90Days().setValue(count(proto.numOfLeasesEndingOver90Days(), buildings));
+        gadgetData.numOfLeasesOnMonthToMonth().setValue(count(proto.numOfLeasesOnMonthToMonth(), buildings));
 
         gadgetData.unitsOccupied().setValue(numOfOccupiedUnits(buildings));
 
@@ -71,6 +68,10 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
         callback.onSuccess(fillOccupiedUnitsCriteria(EntityListCriteria.create(AptUnitDTO.class), buildingsFilter));
     }
 
+    private int count(IObject<?> category, Vector<Building> buildings) {
+        return Persistence.service().count(fillLeaseFilterCriteria(EntityQueryCriteria.create(Lease.class), buildings, category));
+    }
+
     private <Criteria extends EntityQueryCriteria<? extends Lease>> Criteria fillLeaseFilterCriteria(Criteria leaseCriteria, Vector<Building> buildings,
             IObject<?> leaseFilter) {
 
@@ -91,6 +92,10 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
             // TODO this is not correct
             leaseToLowerBound = Utils.beginningOfNextMonth(Utils.beginningOfNextMonth(Utils.beginningOfNextMonth(today)));
             leaseToUpperBound = null;
+        } else if (proto.numOfLeasesOnMonthToMonth() == leaseFilter) {
+
+        } else {
+            throw new RuntimeException("it's unknown to to iterpret the lease filter '" + leaseFilter.getPath().toString() + "'");
         }
 
         if (buildings != null && !buildings.isEmpty()) {

@@ -19,7 +19,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 
 @DiscriminatorValue("Notices Gadget")
-@Caption(name = "Notices Gadget", description = "TBD")
+@Caption(name = "Notices", description = "TBD")
 public interface NoticesGadgetMetadata extends CounterGadgetBaseMetadata {
 
 }

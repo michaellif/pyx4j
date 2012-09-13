@@ -13,19 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.leasexpiration;
 
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel;
-
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetSummaryForm;
+import com.propertyvista.crm.client.ui.gadgets.util.Utils;
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
 
 final class LeaseExpirationSummaryForm extends CounterGadgetSummaryForm<LeaseExpirationGadgetDataDTO> {
@@ -41,44 +38,46 @@ final class LeaseExpirationSummaryForm extends CounterGadgetSummaryForm<LeaseExp
         VerticalPanel panel = new VerticalPanel();
         panel.setWidth("100%");
         panel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+        panel.getElement().getStyle().setPaddingBottom(1, Unit.EM);
 
-        Grid occupancyTable = new Grid(2, 3);
-        panel.add(occupancyTable);
+        final String FIRST_COL_WIDTH = "100";
+        final double MARGIN = 1.5;
 
-        occupancyTable.setWidget(0, 1, label("#"));
-        occupancyTable.setWidget(0, 2, label("%"));
-        occupancyTable.setWidget(1, 0, label(i18n.tr("Unit Occupancy")));
-        occupancyTable.setWidget(1, 1, inject(proto().unitsOccupied()));
-        occupancyTable.setWidget(1, 2, inject(proto().unitOccupancy()));
+        FlexTable unitOccupancy = Utils.createTable(//@formatter:off
+                new String[] {"", "#", "%"},
+                new String[] {FIRST_COL_WIDTH, "100", "100"},
+                new String[] {i18n.tr("Unit Occupancy:")},
+                new Widget[][] {{
+                    inject(proto().unitsOccupied()).asWidget(),
+                    inject(proto().unitOccupancy()).asWidget()
+                }}
+        );//@formatter:on
+        unitOccupancy.getElement().getStyle().setMarginBottom(MARGIN, Unit.EM);
+        panel.add(unitOccupancy);
 
-        Grid leaseExpriationTable = new Grid(2, 4);
-        leaseExpriationTable.getElement().getStyle().setMarginTop(1, Unit.EM);
-
-        leaseExpriationTable.setWidget(0, 1, label(i18n.tr("This Month")));
-        leaseExpriationTable.setWidget(0, 2, label(i18n.tr("Next Month")));
-        leaseExpriationTable.setWidget(0, 3, label(i18n.tr("90+")));
-        leaseExpriationTable.setWidget(1, 0, label(i18n.tr("Leases Ending")));
-        leaseExpriationTable.setWidget(1, 1, inject(proto().numOfLeasesEndingThisMonth()));
-        leaseExpriationTable.setWidget(1, 2, inject(proto().numOfLeasesEndingNextMonth()));
-        leaseExpriationTable.setWidget(1, 3, inject(proto().numOfLeasesEndingOver90Days()));
-
-        panel.add(leaseExpriationTable);
-
-        Grid leasesOnMonthToMonth = new Grid(1, 2);
-        leasesOnMonthToMonth.getElement().getStyle().setMarginTop(1, Unit.EM);
-        leasesOnMonthToMonth.setWidget(0, 0, label(i18n.tr("Leases on Month to Month")));
-        leasesOnMonthToMonth.setWidget(0, 1, inject(proto().numOfLeasesOnMonthToMonth()));
-
+        FlexTable leasesOnMonthToMonth = Utils.createTable(//@formatter:off
+                new String[] {"", ""},
+                new String[] {FIRST_COL_WIDTH, "100"},
+                new String[] {i18n.tr("Leases on Month to Month:")},
+                new Widget[][] {{
+                    inject(proto().numOfLeasesOnMonthToMonth()).asWidget()
+                }}
+        );//@formatter:on
+        leasesOnMonthToMonth.getElement().getStyle().setMarginBottom(MARGIN, Unit.EM);
         panel.add(leasesOnMonthToMonth);
 
+        FlexTable leaseExpiration = Utils.createTable(//@formatter:off
+                new String[] {"", i18n.tr("This Month"), i18n.tr("Next Month"), i18n.tr("90+")},
+                new String[] {FIRST_COL_WIDTH, "100", "100", "100"},
+                new String[] {i18n.tr("Leases Ending:")},
+                new Widget[][] {{
+                    inject(proto().numOfLeasesEndingThisMonth()).asWidget(),
+                    inject(proto().numOfLeasesEndingNextMonth()).asWidget(),
+                    inject(proto().numOfLeasesEndingOver90Days()).asWidget()
+                }}
+        );//formatter:on
+        panel.add(leaseExpiration);
+
         return panel;
-    }
-
-    private static HTML label(String caption) {
-        HTML label = new HTML(new SafeHtmlBuilder().appendEscaped(caption).toSafeHtml());
-        label.setStyleName(WidgetDecoratorLabel.name());
-
-        Cursor.setDefault(label.getElement());
-        return label;
     }
 }

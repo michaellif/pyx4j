@@ -58,6 +58,7 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
             bindDetailsFactory(proto().numOfLeasesEndingThisMonth(), leaseDetailsFactory(proto().numOfLeasesEndingThisMonth()));
             bindDetailsFactory(proto().numOfLeasesEndingNextMonth(), leaseDetailsFactory(proto().numOfLeasesEndingNextMonth()));
             bindDetailsFactory(proto().numOfLeasesEndingOver90Days(), leaseDetailsFactory(proto().numOfLeasesEndingOver90Days()));
+            bindDetailsFactory(proto().numOfLeasesOnMonthToMonth(), leaseDetailsFactory(proto().numOfLeasesOnMonthToMonth()));
         }
 
         private LeaseDetailsFactory leaseDetailsFactory(IObject<?> category) {
