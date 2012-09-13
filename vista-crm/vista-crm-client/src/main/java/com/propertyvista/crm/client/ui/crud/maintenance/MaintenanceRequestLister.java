@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -26,8 +27,14 @@ public class MaintenanceRequestLister extends ListerBase<MaintenanceRequestDTO> 
     public MaintenanceRequestLister() {
         super(MaintenanceRequestDTO.class, true);
 
-        setColumnDescriptors( // @formatter:off
-                new ColumnDescriptor(proto().issueClassification().issue().getPath().toString(), proto().issueClassification().issue().getMeta().getCaption()) {
+        setColumnDescriptors(createColumnDescriptors());
+    }
+
+    public static ColumnDescriptor[] createColumnDescriptors() {
+        MaintenanceRequestDTO proto = EntityFactory.getEntityPrototype(MaintenanceRequestDTO.class);
+
+        return new ColumnDescriptor[] {// @formatter:off
+                new ColumnDescriptor(proto.issueClassification().issue().getPath().toString(), proto.issueClassification().issue().getMeta().getCaption()) {
                     @Override
                     public String convert(IEntity entity) {
                         if (entity instanceof MaintenanceRequestDTO) {
@@ -46,16 +53,17 @@ public class MaintenanceRequestLister extends ListerBase<MaintenanceRequestDTO> 
                         return super.convert(entity);
                     }
                 },
-                new MemberColumnDescriptor.Builder(proto().issueClassification().priority()).build(),
-                new MemberColumnDescriptor.Builder(proto().description()).build(),
-                new MemberColumnDescriptor.Builder(proto().tenant().customer().person().name()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().tenant().customer().person().name().firstName(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().tenant().customer().person().name().lastName(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().submitted()).build(),
-                new MemberColumnDescriptor.Builder(proto().status()).build(),
-                new MemberColumnDescriptor.Builder(proto().updated()).build(),
-                new MemberColumnDescriptor.Builder(proto().surveyResponse().rating()).build(),
-                new MemberColumnDescriptor.Builder(proto().surveyResponse().description(), false).columnTitle(proto().surveyResponse().getMeta().getCaption()).build()
-            ); // @formatter:on
+                new MemberColumnDescriptor.Builder(proto.issueClassification().priority()).build(),
+                new MemberColumnDescriptor.Builder(proto.description()).build(),
+                new MemberColumnDescriptor.Builder(proto.tenant().customer().person().name()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto.tenant().customer().person().name().firstName(), false).build(),
+                new MemberColumnDescriptor.Builder(proto.tenant().customer().person().name().lastName(), false).build(),
+                new MemberColumnDescriptor.Builder(proto.submitted()).build(),
+                new MemberColumnDescriptor.Builder(proto.status()).build(),
+                new MemberColumnDescriptor.Builder(proto.updated()).build(),
+                new MemberColumnDescriptor.Builder(proto.surveyResponse().rating()).build(),
+                new MemberColumnDescriptor.Builder(proto.surveyResponse().description(), false).columnTitle(proto.surveyResponse().getMeta().getCaption()).build()
+        }; // @formatter:on
     }
+
 }

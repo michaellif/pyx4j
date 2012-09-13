@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.gadgets.util;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
@@ -30,7 +30,7 @@ public class Utils {
         return label;
     }
 
-    public static FlexTable createTable(String[] columnNames, String[] columnWidths, String[] rowNames, Widget[][] widgets) {
+    public static FlexTable createTable(String[] columnNames, String[] columnWidths, String[] rowNames, IsWidget[][] widgets) {
         FlexTable table = new FlexTable();
 
         int col = 0;
@@ -50,7 +50,7 @@ public class Utils {
         for (String rowName : rowNames) {
             col = 1;
             table.setWidget(row, 0, label(rowName));
-            for (Widget widget : widgets[row - 1]) {
+            for (IsWidget widget : widgets[row - 1]) {
                 table.setWidget(row, col++, widget);
             }
             table.getRowFormatter().getElement(row).getStyle().setProperty("textAlign", "right");

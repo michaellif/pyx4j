@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.dashboard.gadgets;
+package com.propertyvista.crm.rpc.services.dashboard.gadgets.filters;
 
 import java.util.Vector;
 

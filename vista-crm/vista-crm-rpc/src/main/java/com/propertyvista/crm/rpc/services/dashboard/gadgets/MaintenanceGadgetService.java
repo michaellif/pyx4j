@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 12, 2012
+ * Created on Sep 13, 2012
  * @author ArtyomB
  * @version $Id$
  */
@@ -19,11 +19,17 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
+import com.propertyvista.crm.rpc.dto.gadgets.MaintenanceGadgetDataDTO;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.MaintenanceRequestCriteriaProvider;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public interface UnitCriteriaProvider {
+public interface MaintenanceGadgetService extends AbstractCounterGadgetBaseService<MaintenanceGadgetDataDTO, Vector<Building>>,
+        MaintenanceRequestCriteriaProvider {
 
-    void makeUnitFilterCriteria(AsyncCallback<EntityListCriteria<AptUnitDTO>> callback, Vector<Building> buildingsFilter, String unitsFilter);
+    @Override
+    public void countData(AsyncCallback<MaintenanceGadgetDataDTO> callback, Vector<Building> buildingsFilter);
 
+    @Override
+    public void makeMaintenaceRequestCriteria(AsyncCallback<EntityListCriteria<MaintenanceRequestDTO>> callback, Vector<Building> buildingsFilter, String preset);
 }

@@ -28,7 +28,7 @@ import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEven
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeaseCriteriaProvider;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.LeaseCriteriaProvider;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.LeaseDTO;

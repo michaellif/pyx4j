@@ -20,6 +20,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.LeaseCriteriaProvider;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.UnitCriteriaProvider;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.LeaseDTO;

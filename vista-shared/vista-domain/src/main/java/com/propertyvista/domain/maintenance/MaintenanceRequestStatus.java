@@ -13,6 +13,9 @@
  */
 package com.propertyvista.domain.maintenance;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -20,6 +23,10 @@ import com.pyx4j.i18n.shared.I18nEnum;
 public enum MaintenanceRequestStatus {
 
     Submitted, Scheduled, Resolved, Cancelled;
+
+    public static Set<MaintenanceRequestStatus> opened() {
+        return EnumSet.of(Submitted, Scheduled);
+    }
 
     @Override
     public String toString() {
