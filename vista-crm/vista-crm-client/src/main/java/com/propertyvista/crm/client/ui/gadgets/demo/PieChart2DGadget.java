@@ -29,7 +29,7 @@ import com.pyx4j.svg.chart.ArcBasedChartConfigurator;
 import com.pyx4j.svg.chart.ChartTheme;
 import com.pyx4j.svg.chart.DataSource;
 import com.pyx4j.svg.chart.PieChart2D;
-import com.pyx4j.svg.gwt.SvgFactoryForGwt;
+import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
 
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;

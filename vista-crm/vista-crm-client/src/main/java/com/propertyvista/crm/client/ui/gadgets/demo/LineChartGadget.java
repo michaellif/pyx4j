@@ -30,7 +30,7 @@ import com.pyx4j.svg.chart.DataSource;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.chart.LineChart;
-import com.pyx4j.svg.gwt.SvgFactoryForGwt;
+import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
 
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;

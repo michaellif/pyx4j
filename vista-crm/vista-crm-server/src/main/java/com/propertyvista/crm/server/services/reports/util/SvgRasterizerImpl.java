@@ -24,7 +24,7 @@ import org.apache.batik.bridge.UserAgentAdapter;
 import org.apache.batik.gvt.GraphicsNode;
 
 import com.pyx4j.svg.basic.SvgRoot;
-import com.pyx4j.svg.j2se.SvgRootImpl;
+import com.pyx4j.svg.j2se.basic.SvgRootImpl;
 
 public class SvgRasterizerImpl implements SvgRasterizer {
 

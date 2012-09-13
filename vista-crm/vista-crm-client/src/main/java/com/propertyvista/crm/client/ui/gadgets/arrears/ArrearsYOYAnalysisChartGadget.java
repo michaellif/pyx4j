@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.svg.gwt.SvgFactoryForGwt;
+import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;

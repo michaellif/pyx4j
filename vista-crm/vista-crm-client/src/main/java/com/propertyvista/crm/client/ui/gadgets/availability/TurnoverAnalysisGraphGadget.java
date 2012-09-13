@@ -39,7 +39,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.svg.gwt.SvgFactoryForGwt;
+import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;

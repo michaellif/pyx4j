@@ -22,7 +22,7 @@ import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 
 import com.pyx4j.svg.basic.SvgRoot;
-import com.pyx4j.svg.j2se.SvgRootImpl;
+import com.pyx4j.svg.j2se.basic.SvgRootImpl;
 
 public class SvgRasterizerOtherMethodImpl implements SvgRasterizer {
 
