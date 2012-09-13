@@ -36,7 +36,7 @@ import org.w3c.dom.svg.SVGDocument;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.j2se.SvgFactoryForBatik;
-import com.pyx4j.svg.j2se.SvgRootImpl;
+import com.pyx4j.svg.j2se.basic.SvgRootImpl;
 import com.pyx4j.svg.test.SvgTestFactory;
 
 public class SVGBatikDemo {
@@ -65,7 +65,6 @@ public class SVGBatikDemo {
         SvgTestFactory.createBarChart2DTest(factory, 10, 1350);
         SvgTestFactory.createPieChart2DTest(factory, 10, 1800);
         SvgTestFactory.createGaugeTest(factory, 20, 2600);
-        SvgTestFactory.createColorPickerTest(factory, 20, 3400);
 
         SVGGraphics2D g = new SVGGraphics2D(doc);
         g.setSVGCanvasSize(new Dimension(800, HEIGHT));

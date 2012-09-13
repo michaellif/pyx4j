@@ -26,9 +26,11 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
-import com.pyx4j.svg.gwt.SvgFactoryForGwt;
+import com.pyx4j.svg.gwt.ColorPicker;
+import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
 import com.pyx4j.svg.test.SvgTestFactory;
 
 public class SVGDemo implements EntryPoint {
@@ -138,9 +140,14 @@ public class SVGDemo implements EntryPoint {
         //=========================================//
 
         content.add(new HTML("Color Picker"));
-        svgPanel = SvgTestFactory.createColorPickerTest(svgFactory, 0, 0);
-        ((Widget) svgPanel).setSize("352px", "400px");
-        content.add((Widget) svgPanel);
+        SvgRoot svgroot = svgFactory.getSvgRoot();
+        Group g = svgFactory.createGroup();
+        ColorPicker colorPicker = new ColorPicker(svgFactory, 115, 115, 90, 90);
+        g.add(colorPicker);
+        svgroot.add(g);
+
+        ((Widget) svgroot).setSize("352px", "400px");
+        content.add((Widget) svgroot);
 
     }
 }
