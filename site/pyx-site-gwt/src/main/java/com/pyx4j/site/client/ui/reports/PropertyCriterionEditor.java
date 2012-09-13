@@ -30,8 +30,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -39,6 +37,8 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.site.shared.domain.reports.PropertyCriterionEntity;
 
 public class PropertyCriterionEditor extends CEntityFolderRowEditor<PropertyCriterionEntity> {

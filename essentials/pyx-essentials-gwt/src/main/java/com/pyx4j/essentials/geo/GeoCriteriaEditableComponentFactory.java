@@ -20,10 +20,10 @@
  */
 package com.pyx4j.essentials.geo;
 
-import com.pyx4j.entity.client.CriteriaEditableComponentFactory;
 import com.pyx4j.entity.rpc.GeoCriteria;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.datatable.filter.CriteriaEditableComponentFactory;
 
 public class GeoCriteriaEditableComponentFactory extends CriteriaEditableComponentFactory {
 

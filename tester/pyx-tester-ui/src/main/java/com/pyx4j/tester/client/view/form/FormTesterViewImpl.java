@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.client.CEntityForm;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.view.form.folder.EntityIForm;
 import com.pyx4j.widgets.client.Button;

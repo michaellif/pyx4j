@@ -24,17 +24,17 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.ListBox;
 
-import com.pyx4j.entity.client.images.EntityFolderImages;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.folder.BoxFolderDecorator;
-import com.pyx4j.entity.client.ui.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.entity.client.ui.folder.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
+import com.pyx4j.forms.client.ui.folder.CEntityFolder;
+import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.TableFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.shared.domain.reports.PropertyCriterionEntity;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;

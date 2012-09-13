@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.entity.client.CEntityForm;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.ViewImplBase;
 import com.pyx4j.site.shared.domain.reports.HasAdvancedSettings;
