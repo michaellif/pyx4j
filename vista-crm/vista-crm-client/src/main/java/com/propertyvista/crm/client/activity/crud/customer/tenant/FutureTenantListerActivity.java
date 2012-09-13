@@ -31,12 +31,9 @@ public class FutureTenantListerActivity extends ListerActivityBase<TenantDTO> {
     public FutureTenantListerActivity(Place place) {
         super(place, MarketingViewFactory.instance(FutureTenantListerView.class), GWT.<TenantCrudService> create(TenantCrudService.class), TenantDTO.class);
 
-        // filter out just current tenants:
+        // filter out just potential tenants:
         TenantDTO proto = EntityFactory.getEntityPrototype(TenantDTO.class);
         addPreDefinedFilter(PropertyCriterion.in(proto.leaseTermV().holder().lease().status(), Lease.Status.draft()));
-        // restrict to draft lease version only        
-        addPreDefinedFilter(PropertyCriterion.isNull(proto.leaseTermV().fromDate()));
-        addPreDefinedFilter(PropertyCriterion.isNull(proto.leaseTermV().toDate()));
     }
 
     @Override

@@ -14,9 +14,12 @@
 package com.propertyvista.crm.client.ui.crud.lease;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 
 public class PastLeaseLister extends ListerBase<LeaseDTO> {
@@ -50,5 +53,12 @@ public class PastLeaseLister extends ListerBase<LeaseDTO> {
             
             new Builder(proto().currentTerm().version().tenants()).build()
         );//@formatter:on
+    }
+
+    @Override
+    protected EntityListCriteria<LeaseDTO> updateCriteria(EntityListCriteria<LeaseDTO> criteria) {
+        // TODO : set all that stuff in Activity (like TenantListers) or CRUD service ?
+        criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.former()));
+        return super.updateCriteria(criteria);
     }
 }

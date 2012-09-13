@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
@@ -68,8 +67,7 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
 
     @Override
     protected EntityListCriteria<LeaseApplicationDTO> updateCriteria(EntityListCriteria<LeaseApplicationDTO> criteria) {
-        // TODO : set all that stuff in CRUD service ?
-        criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
+        // TODO : set all that stuff in Activity (like TenantListers) or CRUD service ?
         criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Application));
         return super.updateCriteria(criteria);
     }
