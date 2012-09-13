@@ -35,11 +35,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.appengine.api.labs.taskqueue.Queue;
-import com.google.appengine.api.labs.taskqueue.QueueFactory;
-import com.google.appengine.api.labs.taskqueue.TaskHandle;
-import com.google.appengine.api.labs.taskqueue.TaskOptions;
-import com.google.appengine.api.labs.taskqueue.TaskOptions.Method;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskHandle;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.TaskOptions.Method;
 
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -96,8 +96,8 @@ public class DeferredProcessTaskWorkerServlet extends HttpServlet {
         byte[] payload = serialize(process);
 
         Queue queue = QueueFactory.getQueue("internal");
-        TaskHandle handle = queue.add(TaskOptions.Builder.url("/internal/worker").method(Method.POST).payload(payload,
-                Downloadable.getContentType(DownloadFormat.JAVA_SERIALIZED)));
+        TaskHandle handle = queue.add(TaskOptions.Builder.withUrl("/internal/worker").method(Method.POST)
+                .payload(payload, Downloadable.getContentType(DownloadFormat.JAVA_SERIALIZED)));
 
         log.debug("task {} deferred; eta {}", process.getClass().getName(), System.currentTimeMillis() - handle.getEtaMillis());
     }
