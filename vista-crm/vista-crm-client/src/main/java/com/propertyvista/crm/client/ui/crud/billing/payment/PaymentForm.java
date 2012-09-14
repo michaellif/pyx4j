@@ -38,7 +38,6 @@ import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.RadioGroup;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -119,7 +118,6 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {
                 setupAddThisPaymentMethodToProfile(event.getValue());
-                verifyElectronicPayments();
             }
         });
 
@@ -206,9 +204,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
                 paymentMethodEditor.reset();
-                if (!getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE)) {
-                    paymentMethodEditor.setPaymentOptionsEnabled(PaymentType.electronicPayments(), false);
-                }
+                paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
 
                 if (event.getValue() != null) {
                     switch (event.getValue()) {
@@ -236,7 +232,6 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                         setProfiledPaymentMethodsVisible(true);
                         break;
                     }
-                    verifyElectronicPayments();
                 }
             }
         });
@@ -289,10 +284,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 profiledPaymentMethodsCombo.setValue(getValue().paymentMethod());
                 loadProfiledPaymentMethods(null);
             }
-            if (isEditable() && getValue().paymentMethod().isOneTimePayment().isBooleanTrue()) {
-                get(proto().addThisPaymentMethodToProfile()).setVisible(PaymentType.avalableInProfile().contains(getValue().paymentMethod().type().getValue()));
-                get(proto().addThisPaymentMethodToProfile()).setEnabled(true);
-            }
+            get(proto().addThisPaymentMethodToProfile()).setVisible(false);
 
             paymentMethodEditor.setVisible(true);
             // Allow to Edit one time payment method
@@ -303,12 +295,9 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             // TODO : this is the HACK - check CComponent.setVisible implementation!!!
             paymentMethodEditor.setBillingAddressVisible(getValue().paymentMethod().type().getValue() != PaymentType.Cash);
 
-            verifyElectronicPayments();
         }
 
-        if (!getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE)) {
-            paymentMethodEditor.setPaymentOptionsEnabled(PaymentType.electronicPayments(), false);
-        }
+        paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
 
         if (isEditable()) {
             get(proto().transactionAuthorizationNumber()).setVisible(false);
@@ -357,9 +346,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     private void chageLeaseParticipant() {
         paymentMethodEditor.reset();
         paymentMethodEditor.setBillingAddressAsCurrentEnabled(true);
-        if (!getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE)) {
-            paymentMethodEditor.setPaymentOptionsEnabled(PaymentType.electronicPayments(), false);
-        }
+        paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
         loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
             @Override
             public void onSuccess(Void result) {
@@ -397,11 +384,4 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         }
     }
 
-    private void verifyElectronicPayments() {
-        if (!getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE)
-                && PaymentType.electronicPayments().contains(getValue().paymentMethod().type().getValue())) {
-            MessageDialog.warn(i18n.tr("Warning"),
-                    i18n.tr("Merchant account is not setup to receive Electronic Payments\nThe payment would be processes once account is activated"));
-        }
-    }
 }

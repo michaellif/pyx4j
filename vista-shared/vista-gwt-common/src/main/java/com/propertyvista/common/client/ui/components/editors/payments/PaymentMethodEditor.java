@@ -113,6 +113,7 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
     public void onReset() {
         super.onReset();
         ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(getPaymentOptions(), true);
+        (get(proto().type())).setNote(null);
     }
 
     @Override
@@ -267,6 +268,13 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
 
     public List<PaymentType> getPaymentOptions() {
         return new ArrayList<PaymentType>(EnumSet.allOf(PaymentType.class));
+    }
+
+    public void setElectronicPaymentsEnabled(Boolean electronicPaymentsEnabled) {
+        if (electronicPaymentsEnabled != Boolean.TRUE) {
+            this.setPaymentOptionsEnabled(PaymentType.electronicPayments(), false);
+            (get(proto().type())).setNote(i18n.tr("Merchant account is not setup to receive Electronic Payments"));
+        }
     }
 
     @SuppressWarnings("unchecked")
