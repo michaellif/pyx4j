@@ -30,6 +30,8 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
 
         tooltip,
 
+        note,
+
         title,
 
         locationHint,
