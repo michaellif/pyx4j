@@ -89,15 +89,18 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     protected void persist(PaymentRecord entity, PaymentRecordDTO dto) {
         entity.paymentMethod().customer().set(dto.leaseParticipant().customer());
 
-        if (dto.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(dto.paymentMethod().type().getValue())) {
-            entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
-        } else {
-            entity.paymentMethod().isOneTimePayment().setValue(Boolean.TRUE);
-        }
+        // Do not change profile methods
+        if (entity.paymentMethod().id().isNull()) {
+            if (dto.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(dto.paymentMethod().type().getValue())) {
+                entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
+            } else {
+                entity.paymentMethod().isOneTimePayment().setValue(Boolean.TRUE);
+            }
 
-        // some corrections for particular method types: 
-        if (dto.paymentMethod().type().getValue() == PaymentType.Echeck) {
-            entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
+            // some corrections for particular method types: 
+            if (dto.paymentMethod().type().getValue() == PaymentType.Echeck) {
+                entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
+            }
         }
 
         ServerSideFactory.create(PaymentFacade.class).persistPayment(entity);

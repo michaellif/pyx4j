@@ -80,6 +80,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.leaseStatus().set(dto.billingAccount().lease().status());
         dto.propertyCode().set(dto.billingAccount().lease().unit().building().propertyCode());
         dto.unitNumber().set(dto.billingAccount().lease().unit().info().number());
+        dto.addThisPaymentMethodToProfile().setValue(!entity.paymentMethod().isOneTimePayment().getValue());
 
         Persistence.service().retrieve(dto.paymentMethod());
 

@@ -372,14 +372,6 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         });
     }
 
-    private void setAddThisPaymentMethodToProfileVisibility() {
-        if (isViewable() || get(proto().selectPaymentMethod()).getValue() == PaymentSelect.Profiled) {
-            get(proto().addThisPaymentMethodToProfile()).setVisible(false);
-        } else if (get(proto().selectPaymentMethod()).getValue() == PaymentSelect.New) {
-            get(proto().addThisPaymentMethodToProfile()).setVisible(true);
-        }
-    }
-
     private void setProfiledPaymentMethodsVisible(boolean visible) {
         profiledPaymentMethodsCombo.setVisible(visible && !isViewable());
         get(proto().addThisPaymentMethodToProfile()).setVisible(!visible && !isViewable() && !getValue().paymentMethod().type().isNull());
