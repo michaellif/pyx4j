@@ -69,12 +69,12 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         FormFlexPanel detailsPanel = new FormFlexPanel();
 
         int detailsRow = -1; // first column:
-        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().leaseId()), 15).build());
-        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel())).build());
-        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().paymentFrequency(), new CEnumLabel())).build());
-        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel())).build());
-        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().completion(), new CEnumLabel())).build());
-        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber())).build());
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().leaseId()), 10).build());
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().paymentFrequency(), new CEnumLabel()), 15).build());
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().completion(), new CEnumLabel()), 15).build());
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber()), 15).build());
 
         detailsRow = -1; // second column:
         detailsPanel.setBR(++detailsRow, 1, 1);
