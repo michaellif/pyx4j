@@ -20,7 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.util.Collection;
 import java.util.Map;
 
 import com.pyx4j.widgets.client.RadioGroup;
@@ -44,11 +43,7 @@ public class CRadioGroupInteger extends CRadioGroup<Integer> {
                 return null;
             }
         });
-    }
-
-    @Override
-    public Collection<Integer> getOptions() {
-        return options.keySet();
+        super.setOptions(options.keySet());
     }
 
 }

@@ -20,15 +20,27 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
+import com.google.gwt.event.shared.HandlerRegistration;
+
+import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
+import com.pyx4j.forms.client.events.OptionsChangeEvent;
+import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.widgets.client.RadioGroup;
 
-public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> {
+public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> implements HasOptionsChangeHandlers<List<E>> {
 
     private final RadioGroup.Layout layout;
 
     private IFormat<E> format;
+
+    private List<E> options;
+
+    private Collection<E> optionsEnabled;
 
     public CRadioGroup(RadioGroup.Layout layout) {
         this(null, layout);
@@ -43,7 +55,77 @@ public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> 
         return layout;
     }
 
-    public abstract Collection<E> getOptions();
+    @SuppressWarnings("serial")
+    private List<E> createOptionsImpl() {
+        return new ArrayList<E>() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public int indexOf(Object o) {
+                for (int i = 0; i < this.size(); i++) {
+                    if (isValuesEquals(this.get(i), (E) o)) {
+                        return i;
+                    }
+                }
+                return -1;
+            }
+        };
+    }
+
+    public List<E> getOptions() {
+        if (options == null) {
+            options = createOptionsImpl();
+        }
+        return options;
+    }
+
+    public void setOptions(Collection<E> opt) {
+        if (options == null) {
+            options = createOptionsImpl();
+        }
+        options.clear();
+        if (opt != null) {
+            options.addAll(opt);
+        }
+        if (isWidgetCreated()) {
+            getWidget().setOptions(getOptions());
+        }
+        this.optionsEnabled = new HashSet<E>(getOptions());
+        OptionsChangeEvent.fire(this, getOptions());
+    }
+
+    public Collection<E> getOptionsEnabled() {
+        if (optionsEnabled == null) {
+            this.optionsEnabled = new HashSet<E>(getOptions());
+        }
+        return optionsEnabled;
+    }
+
+    public void setOptionEnabled(E optionValue, boolean enabled) {
+        if (isWidgetCreated()) {
+            getWidget().setOptionEnabled(optionValue, enabled);
+        }
+        if (optionsEnabled == null) {
+            this.optionsEnabled = new HashSet<E>(getOptions());
+        }
+        if (enabled) {
+            if (!optionsEnabled.contains(optionValue)) {
+                optionsEnabled.add(optionValue);
+            }
+        } else {
+            optionsEnabled.remove(optionValue);
+        }
+    }
+
+    public void setOptionsEnabled(Collection<E> opt, boolean enabled) {
+        for (E optionValue : opt) {
+            setOptionEnabled(optionValue, enabled);
+        }
+    }
+
+    @Override
+    public HandlerRegistration addOptionsChangeHandler(OptionsChangeHandler<List<E>> handler) {
+        return addHandler(handler, OptionsChangeEvent.getType());
+    }
 
     public IFormat<E> getFormat() {
         return format;

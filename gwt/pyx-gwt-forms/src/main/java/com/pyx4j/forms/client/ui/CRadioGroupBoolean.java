@@ -21,7 +21,6 @@
 package com.pyx4j.forms.client.ui;
 
 import java.util.Arrays;
-import java.util.Collection;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.RadioGroup;
@@ -50,11 +49,7 @@ public class CRadioGroupBoolean extends CRadioGroup<Boolean> {
                 return null;
             }
         });
-    }
-
-    @Override
-    public Collection<Boolean> getOptions() {
-        return Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE });
+        super.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
     }
 
 }

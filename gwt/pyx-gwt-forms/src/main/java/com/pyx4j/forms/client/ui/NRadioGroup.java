@@ -20,6 +20,9 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
@@ -34,7 +37,7 @@ public class NRadioGroup<E> extends NFocusComponent<E, RadioGroup<E>, CRadioGrou
 
     @Override
     protected RadioGroup<E> createEditor() {
-        return new RadioGroup<E>(getCComponent().getLayout(), getCComponent().getOptions()) {
+        return new RadioGroup<E>(getCComponent().getLayout()) {
             @Override
             protected String format(E value) {
                 return getCComponent().getFormat().format(value);
@@ -59,6 +62,19 @@ public class NRadioGroup<E> extends NFocusComponent<E, RadioGroup<E>, CRadioGrou
     }
 
     @Override
+    protected void onEditorInit() {
+        super.onEditorInit();
+        List<E> options = getCComponent().getOptions();
+        getEditor().setOptions(options);
+
+        List<E> disabeldOptions = new ArrayList<E>(options);
+        disabeldOptions.removeAll(getCComponent().getOptionsEnabled());
+        for (E opt : disabeldOptions) {
+            getEditor().setOptionEnabled(opt, false);
+        }
+    }
+
+    @Override
     public void setNativeValue(E value) {
         if (isViewable()) {
             getViewer().setHTML(value == null ? "" : getCComponent().getFormat().format(value));
@@ -74,6 +90,18 @@ public class NRadioGroup<E> extends NFocusComponent<E, RadioGroup<E>, CRadioGrou
         } else {
             assert false : "getNativeValue() shouldn't be called in viewable mode";
             return null;
+        }
+    }
+
+    public void setOptions(List<E> options) {
+        if (!isViewable()) {
+            getEditor().setOptions(options);
+        }
+    }
+
+    public void setOptionEnabled(E optionValue, boolean enabled) {
+        if (!isViewable()) {
+            getEditor().setOptionEnabled(optionValue, enabled);
         }
     }
 

@@ -20,8 +20,8 @@
  */
 package com.pyx4j.widgets.client;
 
-import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.dom.client.Style.Display;
@@ -64,12 +64,26 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
 
     private boolean editable = true;
 
-    private final Map<E, RadioButton> buttons = new LinkedHashMap<E, RadioButton>();
+    private static class OptionRadioButton extends RadioButton {
+
+        boolean optionEnabled;
+
+        public OptionRadioButton(String name, String label) {
+            super(name, label);
+            optionEnabled = true;
+        }
+
+    }
+
+    private final Map<E, OptionRadioButton> buttons = new LinkedHashMap<E, OptionRadioButton>();
 
     private final GroupFocusHandler focusHandlerManager;
 
-    public RadioGroup(Layout layout, Collection<E> options) {
-        Panel panel;
+    private final Panel panel;
+
+    private final String groupName;
+
+    public RadioGroup(Layout layout) {
         if (layout == Layout.HORISONTAL) {
             panel = new HorizontalPanel();
         } else {
@@ -78,12 +92,19 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
 
         this.setWidget(panel);
 
-        String groupName = "rb" + (uniqueGroupId++);
+        groupName = "rb" + (uniqueGroupId++);
 
         focusHandlerManager = new GroupFocusHandler(this);
 
+        setStyleName(StyleName.RadioGroup.name());
+    }
+
+    public void setOptions(List<E> options) {
+        panel.clear();
+        buttons.clear();
+
         for (final E option : options) {
-            RadioButton button = new RadioButton(groupName, format(option));
+            OptionRadioButton button = new OptionRadioButton(groupName, format(option));
             buttons.put(option, button);
             button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
@@ -105,7 +126,6 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
                 ((VerticalPanel) panel).setCellWidth(button, "100%");
             }
         }
-        setStyleName(StyleName.RadioGroup.name());
         for (RadioButton button : buttons.values()) {
             button.setStyleName(StyleName.RadioGroupItem.name());
         }
@@ -134,8 +154,8 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
     }
 
     private void setButtonsEnabled(boolean enabled) {
-        for (RadioButton b : buttons.values()) {
-            b.setEnabled(enabled);
+        for (OptionRadioButton b : buttons.values()) {
+            b.setEnabled(b.optionEnabled && enabled);
         }
     }
 
@@ -150,6 +170,14 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
         }
 
         applyDependentStyles();
+    }
+
+    public void setOptionEnabled(E optionValue, boolean enabled) {
+        OptionRadioButton selectedButton = buttons.get(optionValue);
+        if (selectedButton != null) {
+            selectedButton.optionEnabled = enabled;
+            selectedButton.setEnabled(enabled);
+        }
     }
 
     private void applyDependentStyles() {
@@ -187,7 +215,7 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
 
-        for (Map.Entry<E, RadioButton> me : buttons.entrySet()) {
+        for (Map.Entry<E, OptionRadioButton> me : buttons.entrySet()) {
             me.getValue().ensureDebugId(baseID + "_" + getOptionDebugId(me.getKey()));
         }
     }
