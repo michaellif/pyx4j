@@ -40,22 +40,10 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.commons.css.IStyleDependent;
-import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.commons.css.Selector;
-
 public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValueChangeHandlers<E> {
 
     public enum Layout {
         VERTICAL, HORISONTAL;
-    }
-
-    public static enum StyleName implements IStyleName {
-        RadioGroup, RadioGroupItem
-    }
-
-    public static enum StyleDependent implements IStyleDependent {
-        selected, disabled, hover
     }
 
     private static int uniqueGroupId = 0;
@@ -96,7 +84,7 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
 
         focusHandlerManager = new GroupFocusHandler(this);
 
-        setStyleName(StyleName.RadioGroup.name());
+        setStyleName(DefaultWidgetsTheme.StyleName.RadioGroup.name());
     }
 
     public void setOptions(List<E> options) {
@@ -111,7 +99,7 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     if (event.getValue()) {
-                        applyDependentStyles();
+                        applySelectionStyles();
                         RadioGroup.this.fireEvent(event);
                     }
                 }
@@ -127,7 +115,7 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
             }
         }
         for (RadioButton button : buttons.values()) {
-            button.setStyleName(StyleName.RadioGroupItem.name());
+            button.setStyleName(DefaultWidgetsTheme.StyleName.RadioGroupItem.name());
         }
     }
 
@@ -139,7 +127,7 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        setButtonsEnabled(this.isEnabled() && this.isEditable());
+        setGroupEnabled(this.isEnabled() && this.isEditable());
     }
 
     @Override
@@ -150,10 +138,10 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
     @Override
     public void setEditable(boolean editable) {
         this.editable = editable;
-        setButtonsEnabled(this.isEnabled() && this.isEditable());
+        setGroupEnabled(this.isEnabled() && this.isEditable());
     }
 
-    private void setButtonsEnabled(boolean enabled) {
+    private void setGroupEnabled(boolean enabled) {
         for (OptionRadioButton b : buttons.values()) {
             b.setEnabled(b.optionEnabled && enabled);
         }
@@ -169,24 +157,28 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
             }
         }
 
-        applyDependentStyles();
+        applySelectionStyles();
     }
 
     public void setOptionEnabled(E optionValue, boolean enabled) {
-        OptionRadioButton selectedButton = buttons.get(optionValue);
-        if (selectedButton != null) {
-            selectedButton.optionEnabled = enabled;
-            selectedButton.setEnabled(enabled);
+        OptionRadioButton button = buttons.get(optionValue);
+        if (button != null) {
+            button.optionEnabled = enabled;
+            button.setEnabled(enabled);
+            if (enabled) {
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
+            } else {
+                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
+            }
         }
     }
 
-    private void applyDependentStyles() {
-        String selectedSuffix = Selector.getDependentName(StyleDependent.selected);
+    private void applySelectionStyles() {
         for (RadioButton button : buttons.values()) {
             if (button.getValue()) {
-                button.addStyleDependentName(selectedSuffix);
+                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
             } else {
-                button.removeStyleDependentName(selectedSuffix);
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
             }
         }
     }

@@ -38,7 +38,9 @@ public class DefaultWidgetsTheme extends Theme {
 
         RateIt, RateItBar,
 
-        ImageGallery
+        ImageGallery,
+
+        RadioGroup, RadioGroupItem
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -56,6 +58,7 @@ public class DefaultWidgetsTheme extends Theme {
         initToolbarStyle();
         initRateItStyle();
         initImageGalleryStyle();
+        initRadioGroupStyle();
     }
 
     protected void initTextBoxStyle() {
@@ -180,6 +183,22 @@ public class DefaultWidgetsTheme extends Theme {
         style = new Style("." + imgGallery + "-" + imgFrame + ":hover");
         style.addProperty("border", "2px solid #ccc");
         addStyle(style);
+    }
+
+    protected void initRadioGroupStyle() {
+        Style style = new Style(".", StyleName.RadioGroup);
+        addStyle(style);
+
+        style = new Style(".", StyleName.RadioGroupItem);
+        addStyle(style);
+
+        style = new Style(".", StyleName.RadioGroupItem, "-", DefaultWidgetsTheme.StyleDependent.pushed);
+        addStyle(style);
+
+        style = new Style(".", StyleName.RadioGroupItem, "-", DefaultWidgetsTheme.StyleDependent.disabled);
+        style.addProperty("color", ThemeColor.foreground, 0.3);
+        addStyle(style);
+
     }
 
 }
