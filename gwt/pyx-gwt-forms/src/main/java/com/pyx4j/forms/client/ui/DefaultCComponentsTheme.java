@@ -99,7 +99,7 @@ public class DefaultCComponentsTheme extends Theme {
 
     protected void initNoteStyle() {
         Style style = new Style(".", StyleName.NoteLabel);
-        style.addProperty("color", ThemeColors.foreground, 0.7);
+        style.addProperty("color", ThemeColor.foreground, 0.7);
         style.addProperty("font-weight", "normal");
         style.addProperty("font-style", "italic");
         addStyle(style);
