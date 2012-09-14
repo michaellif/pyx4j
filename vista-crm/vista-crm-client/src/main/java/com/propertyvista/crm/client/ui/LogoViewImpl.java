@@ -24,9 +24,13 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.common.client.ui.components.MediaUtils;
 
 public class LogoViewImpl extends SimplePanel implements LogoView {
+
+    private static final I18n i18n = I18n.get(LogoViewImpl.class);
 
     private Presenter presenter;
 
@@ -52,6 +56,7 @@ public class LogoViewImpl extends SimplePanel implements LogoView {
             logoImage.getElement().getStyle().setCursor(Cursor.POINTER);
             logoElement = logoImage;
             setWidget(logoImage);
+            logoImage.setTitle(i18n.tr("Home"));
         } else {
             HTML logo = new HTML("<h1>" + (brandedHeader != null ? new SafeHtmlBuilder().appendEscaped(brandedHeader).toSafeHtml().asString() : "") + "</h1>");
             logo.getElement().getStyle().setCursor(Cursor.POINTER);
