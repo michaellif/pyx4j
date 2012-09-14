@@ -40,7 +40,7 @@ public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> 
 
     private List<E> options;
 
-    private Collection<E> optionsEnabled;
+    private Collection<E> enabledOptions;
 
     public CRadioGroup(RadioGroup.Layout layout) {
         this(null, layout);
@@ -89,30 +89,30 @@ public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> 
         if (isWidgetCreated()) {
             getWidget().setOptions(getOptions());
         }
-        this.optionsEnabled = new HashSet<E>(getOptions());
+        this.enabledOptions = new HashSet<E>(getOptions());
         OptionsChangeEvent.fire(this, getOptions());
     }
 
     public Collection<E> getOptionsEnabled() {
-        if (optionsEnabled == null) {
-            this.optionsEnabled = new HashSet<E>(getOptions());
+        if (enabledOptions == null) {
+            this.enabledOptions = new HashSet<E>(getOptions());
         }
-        return optionsEnabled;
+        return enabledOptions;
     }
 
     public void setOptionEnabled(E optionValue, boolean enabled) {
         if (isWidgetCreated()) {
             getWidget().setOptionEnabled(optionValue, enabled);
         }
-        if (optionsEnabled == null) {
-            this.optionsEnabled = new HashSet<E>(getOptions());
+        if (enabledOptions == null) {
+            this.enabledOptions = new HashSet<E>(getOptions());
         }
         if (enabled) {
-            if (!optionsEnabled.contains(optionValue)) {
-                optionsEnabled.add(optionValue);
+            if (!enabledOptions.contains(optionValue)) {
+                enabledOptions.add(optionValue);
             }
         } else {
-            optionsEnabled.remove(optionValue);
+            enabledOptions.remove(optionValue);
         }
     }
 

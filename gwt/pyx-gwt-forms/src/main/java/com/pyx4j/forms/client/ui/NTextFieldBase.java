@@ -50,9 +50,7 @@ public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP ext
     @Override
     protected void onEditorCreate() {
         super.onEditorCreate();
-        setWatermark(getCComponent().getWatermark());
         getEditor().addKeyUpHandler(new KeyUpHandler() {
-
             @Override
             public void onKeyUp(KeyUpEvent event) {
                 NValueChangeEvent.fire(getCComponent(), getEditor().getText());

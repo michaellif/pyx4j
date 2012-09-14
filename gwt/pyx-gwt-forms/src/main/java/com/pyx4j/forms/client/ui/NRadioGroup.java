@@ -53,17 +53,6 @@ public class NRadioGroup<E> extends NFocusComponent<E, RadioGroup<E>, CRadioGrou
     @Override
     protected void onEditorCreate() {
         super.onEditorCreate();
-        getEditor().addValueChangeHandler(new ValueChangeHandler<E>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<E> event) {
-                getCComponent().onEditingStop();
-            }
-        });
-    }
-
-    @Override
-    protected void onEditorInit() {
-        super.onEditorInit();
         List<E> options = getCComponent().getOptions();
         getEditor().setOptions(options);
 
@@ -72,6 +61,12 @@ public class NRadioGroup<E> extends NFocusComponent<E, RadioGroup<E>, CRadioGrou
         for (E opt : disabeldOptions) {
             getEditor().setOptionEnabled(opt, false);
         }
+        getEditor().addValueChangeHandler(new ValueChangeHandler<E>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<E> event) {
+                getCComponent().onEditingStop();
+            }
+        });
     }
 
     @Override
@@ -94,13 +89,13 @@ public class NRadioGroup<E> extends NFocusComponent<E, RadioGroup<E>, CRadioGrou
     }
 
     public void setOptions(List<E> options) {
-        if (!isViewable()) {
+        if (getEditor() != null) {
             getEditor().setOptions(options);
         }
     }
 
     public void setOptionEnabled(E optionValue, boolean enabled) {
-        if (!isViewable()) {
+        if (getEditor() != null) {
             getEditor().setOptionEnabled(optionValue, enabled);
         }
     }

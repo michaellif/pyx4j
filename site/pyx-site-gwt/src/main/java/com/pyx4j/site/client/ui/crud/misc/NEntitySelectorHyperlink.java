@@ -20,10 +20,8 @@
  */
 package com.pyx4j.site.client.ui.crud.misc;
 
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ImageFactory;
@@ -102,11 +100,6 @@ class NEntitySelectorHyperlink<E extends IEntity> extends NFocusComponent<E, Tex
     public String getNativeText() {
         E value = getNativeValue();
         return (value == null ? "" : value.getStringView());
-    }
-
-    @Override
-    public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-        return getEditor().addChangeHandler(handler);
     }
 
     @Override

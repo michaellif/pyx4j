@@ -20,11 +20,9 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.HTML;
 
@@ -75,11 +73,6 @@ public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP ext
         } else {
             return null;
         }
-    }
-
-    @Override
-    public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-        return getEditor().addChangeHandler(handler);
     }
 
     @Override

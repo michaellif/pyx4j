@@ -20,15 +20,11 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 
 public interface INativeTextComponent<DATA> extends INativeFocusComponent<DATA> {
 
     public void setNativeText(String newValue);
 
     public String getNativeText();
-
-    public HandlerRegistration addChangeHandler(ChangeHandler handler);
 
 }
