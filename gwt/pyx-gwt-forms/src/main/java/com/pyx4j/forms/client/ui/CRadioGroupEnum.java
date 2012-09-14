@@ -20,7 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.util.Collection;
 import java.util.EnumSet;
 
 import com.pyx4j.widgets.client.RadioGroup;
@@ -48,11 +47,7 @@ public class CRadioGroupEnum<E extends Enum<E>> extends CRadioGroup<E> {
                 return null;
             }
         });
-    }
-
-    @Override
-    public Collection<E> getOptions() {
-        return EnumSet.allOf(optionsClass);
+        super.setOptions(EnumSet.allOf(optionsClass));
     }
 
 }

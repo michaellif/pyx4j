@@ -235,11 +235,28 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
         {
             main.setHR(++row, 0, 1);
 
-            RadioGroup rg = new RadioGroup<String>(RadioGroup.Layout.VERTICAL, Arrays.asList("String1", "String2", "String3"));
+            final RadioGroup<String> rg = new RadioGroup<String>(RadioGroup.Layout.VERTICAL);
+            rg.setOptions(Arrays.asList("String1", "String2", "String3"));
             main.setWidget(++row, 0, rg);
+
+            final Button button1 = new Button("Set new Options");
+            button1.addClickHandler(new ClickHandler() {
+
+                int setCount = 1;
+
+                @Override
+                public void onClick(ClickEvent event) {
+                    List<String> opts = new ArrayList<String>();
+                    setCount++;
+                    for (int i = 0; i <= 4; i++) {
+                        opts.add("String" + (i + setCount));
+                    }
+                    rg.setOptions(opts);
+                }
+            });
+            main.setWidget(++row, 0, button1);
         }
 
         add(main);
     }
-
 }
