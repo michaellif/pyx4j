@@ -6,6 +6,7 @@
     <version>2</version>
 
     <precompilation-enabled>true</precompilation-enabled>
+    <threadsafe>true</threadsafe>
     <sessions-enabled>true</sessions-enabled>
 
     <static-files>
