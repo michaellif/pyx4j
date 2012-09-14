@@ -56,7 +56,6 @@ public class NoticesGadgetFactory extends AbstractGadget<NoticesGadgetMetadata> 
         @Override
         protected void bindDetailsFactories() {
             bindDetailsFactory(proto().unitsVacant(), unitDetailsFactory(proto().unitsVacant()));
-            bindDetailsFactory(proto().unitVacancy(), unitDetailsFactory(proto().unitVacancy()));
 
             bindDetailsFactory(proto().noticesLeavingThisMonth(), leaseDetailsFactory(proto().noticesLeavingThisMonth()));
             bindDetailsFactory(proto().noticesLeavingNextMonth(), leaseDetailsFactory(proto().noticesLeavingNextMonth()));

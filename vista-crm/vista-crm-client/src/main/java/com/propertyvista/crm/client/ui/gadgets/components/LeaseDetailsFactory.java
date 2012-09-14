@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.components;
 
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -20,6 +21,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
@@ -64,9 +66,15 @@ public class LeaseDetailsFactory implements CounterGadgetInstanceBase.CounterDet
             public void onSuccess(EntityListCriteria<LeaseDTO> result) {
                 ListerDataSource<LeaseDTO> listerDataSource = new ListerDataSource<LeaseDTO>(LeaseDTO.class, GWT
                         .<AbstractListService<LeaseDTO>> create(LeaseViewerCrudService.class));
-                listerDataSource.setPreDefinedFilters(result.getFilters());
+                List<Criterion> criteria = result.getFilters();
+                if (criteria != null) {
+                    listerDataSource.setPreDefinedFilters(criteria);
+                } else {
+                    listerDataSource.clearPreDefinedFilters();
+                }
                 lister.setDataSource(listerDataSource);
                 lister.obtain(0);
+
             }
 
         }, new Vector<Building>(buildingFilterContainer.getSelectedBuildingsStubs()), leaseFilter);

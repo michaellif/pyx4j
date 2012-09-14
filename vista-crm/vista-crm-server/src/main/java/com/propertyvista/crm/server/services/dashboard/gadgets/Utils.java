@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
+import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
@@ -28,6 +30,10 @@ import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.LeaseDTO;
 
 public class Utils {
+
+    public static String countAndPercentLabel(int count, double percent) {
+        return MessageFormat.format("{0,number,integer} ({1,number,percent})", count, percent);
+    }
 
     public static LogicalDate beginningOfMonth(LogicalDate dayOfMonth) {
         GregorianCalendar cal = new GregorianCalendar();
@@ -99,6 +105,10 @@ public class Utils {
         EntityListCriteria<AptUnitDTO> criteriaDto = EntityListCriteria.create(AptUnitDTO.class);
         criteriaDto.addAll(converter.convertDTOSearchCriteria(criteria.getFilters()));
         return criteriaDto;
+    }
+
+    public static String asMoney(BigDecimal amount) {
+        return MessageFormat.format("{0,number,currency}", amount);
     }
 
 }

@@ -47,11 +47,13 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
         gadgetData.numOfLeasesEndingOver90Days().setValue(count(proto.numOfLeasesEndingOver90Days(), buildings));
         gadgetData.numOfLeasesOnMonthToMonth().setValue(count(proto.numOfLeasesOnMonthToMonth(), buildings));
 
-        gadgetData.unitsOccupied().setValue(numOfOccupiedUnits(buildings));
-
-        int numOfUnits = CommonQueries.numOfUnits(buildings);
-        if (numOfUnits != 0) {
-            gadgetData.unitOccupancy().setValue((double) gadgetData.unitsOccupied().getValue() / numOfUnits);
+        int unitsCount = CommonQueries.numOfUnits(buildings);
+        int occupiedUnitsCount = numOfOccupiedUnits(buildings);
+        if (unitsCount != 0) {
+            double occupiedUnitsPercent = (double) occupiedUnitsCount / unitsCount;
+            gadgetData.unitOccupancy().setValue(Utils.countAndPercentLabel(occupiedUnitsCount, occupiedUnitsPercent));
+        } else {
+            gadgetData.unitOccupancy().setValue("0");
         }
 
         callback.onSuccess(gadgetData);

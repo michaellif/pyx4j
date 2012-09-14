@@ -53,11 +53,13 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
                         fillNoticesCriteria(EntityListCriteria.create(Lease.class), EntityFactory.getEntityPrototype(NoticesGadgetDataDTO.class)
                                 .noticesLeavingOver90Days(), buildingsFilter)));
 
-        gadgetData.unitsVacant().setValue(Persistence.service().count(vacantUnitsCriteria(EntityQueryCriteria.create(AptUnit.class), buildingsFilter)));
-
         int numOfUnits = CommonQueries.numOfUnits(buildingsFilter);
         if (numOfUnits != 0) {
-            gadgetData.unitVacancy().setValue((double) gadgetData.unitsVacant().getValue() / numOfUnits);
+            int numOfVacantUnits = Persistence.service().count(vacantUnitsCriteria(EntityQueryCriteria.create(AptUnit.class), buildingsFilter));
+            double pctOfVacantUnits = (double) numOfVacantUnits / numOfUnits;
+            gadgetData.unitsVacant().setValue(Utils.countAndPercentLabel(numOfVacantUnits, pctOfVacantUnits));
+        } else {
+            gadgetData.unitsVacant().setValue("0");
         }
 
         callback.onSuccess(gadgetData);

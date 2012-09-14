@@ -24,6 +24,7 @@ import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsYOYAnalysisChartGa
 import com.propertyvista.crm.client.ui.gadgets.availability.TurnoverAnalysisGraphGadget;
 import com.propertyvista.crm.client.ui.gadgets.availability.UnitAvailabilityReportGadget;
 import com.propertyvista.crm.client.ui.gadgets.availability.UnitAvailabilitySummaryGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.collections.CollectionsGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.demo.BarChart2DGadget;
 import com.propertyvista.crm.client.ui.gadgets.demo.CounterGadgetDemoFactory;
 import com.propertyvista.crm.client.ui.gadgets.demo.DemoGadget;
@@ -70,6 +71,7 @@ public class Directory {
         new LeaseExpirationGadgetFactory(),
         new NoticesGadgetFactory(),
         new MaintenanceGadgetFactory(),
+        new CollectionsGadgetFactory(), 
         
         new BarChart2DGadget(),
         new DemoGadget(),

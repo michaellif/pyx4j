@@ -15,19 +15,28 @@ package com.propertyvista.crm.client.ui.gadgets.util;
 
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 
 public class Utils {
 
-    public static HTML label(String caption) {
+    public static Widget label(String caption) {
+
         HTML label = new HTML(new SafeHtmlBuilder().appendEscaped(caption).toSafeHtml());
         label.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
+
+        FlowPanel labelHolder = new FlowPanel();
+        labelHolder.add(label);
+        labelHolder.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecorator.name());
+        labelHolder.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.readOnly.name());
         Cursor.setDefault(label.getElement());
-        return label;
+
+        return labelHolder;
     }
 
     public static FlexTable createTable(String[] columnNames, String[] columnWidths, String[] rowNames, IsWidget[][] widgets) {

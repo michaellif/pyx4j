@@ -43,12 +43,11 @@ public class NoticesSummaryForm extends CounterGadgetSummaryForm<NoticesGadgetDa
         content.getElement().getStyle().setPaddingBottom(1, Unit.EM);
 
         FlexTable vacancy = Utils.createTable(//@formatter:off
-                new String[] {"", "#", "%"},
-                new String[] {"100", "100", "100"},
-                new String[] {i18n.tr("Unit Vacancy:")},
+                new String[] {"", ""},
+                new String[] {"100", "100"},
+                new String[] {i18n.tr("Units Vacant:")},
                 new Widget[][] {{
                     inject(proto().unitsVacant()).asWidget(),
-                    inject(proto().unitVacancy()).asWidget()
                 }}
         );//@formatter:on
         vacancy.getElement().getStyle().setMarginBottom(MARGIN, Unit.EM);

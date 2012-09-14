@@ -7,29 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 11, 2012
+ * Created on Sep 14, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.rpc.dto.gadgets;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface NoticesGadgetDataDTO extends IEntity {
+public interface CollectionsGadgetDataDTO extends IEntity {
 
-    @Caption(name = "Vacant Units")
-    IPrimitive<String> unitsVacant();
+    IPrimitive<Integer> tenantsPaidThisMonth();
 
-    @Caption(name = "Notices Leaving This Month")
-    IPrimitive<Integer> noticesLeavingThisMonth();
+    IPrimitive<String> fundsCollectedThisMonth();
 
-    @Caption(name = "Notices Leaving Next Month")
-    IPrimitive<Integer> noticesLeavingNextMonth();
+    IPrimitive<String> fundsInProcessing();
 
-    @Caption(name = "Notices Leaving 90+ Days")
-    IPrimitive<Integer> noticesLeavingOver90Days();
 }

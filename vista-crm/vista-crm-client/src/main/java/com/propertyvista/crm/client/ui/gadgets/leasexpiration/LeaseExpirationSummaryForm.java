@@ -44,11 +44,10 @@ final class LeaseExpirationSummaryForm extends CounterGadgetSummaryForm<LeaseExp
         final double MARGIN = 1.5;
 
         FlexTable unitOccupancy = Utils.createTable(//@formatter:off
-                new String[] {"", "#", "%"},
+                new String[] {"", ""},
                 new String[] {FIRST_COL_WIDTH, "100", "100"},
-                new String[] {i18n.tr("Unit Occupancy:")},
+                new String[] {i18n.tr("Units Occupied:")},
                 new Widget[][] {{
-                    inject(proto().unitsOccupied()).asWidget(),
                     inject(proto().unitOccupancy()).asWidget()
                 }}
         );//@formatter:on

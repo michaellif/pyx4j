@@ -22,10 +22,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface LeaseExpirationGadgetDataDTO extends IEntity {
 
     @Caption(name = "Occupied Units")
-    IPrimitive<Double> unitOccupancy();
-
-    @Caption(name = "Occupied Units")
-    IPrimitive<Integer> unitsOccupied();
+    IPrimitive<String> unitOccupancy();
 
     @Caption(name = "Leases Ending This Month")
     IPrimitive<Integer> numOfLeasesEndingThisMonth();
