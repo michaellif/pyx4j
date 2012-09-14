@@ -30,7 +30,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultCComponentsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        TriggerPannel, ValidationLabel
+        TriggerPannel, ValidationLabel, NoteLabel
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -46,6 +46,7 @@ public class DefaultCComponentsTheme extends Theme {
         initListBoxStyle();
         initTriggerButtonStyle();
         initValidationLabelStyle();
+        initNoteStyle();
     }
 
     protected void initTextBoxStyle() {
@@ -93,6 +94,14 @@ public class DefaultCComponentsTheme extends Theme {
     protected void initValidationLabelStyle() {
         Style style = new Style(".", StyleName.ValidationLabel);
         style.addProperty("color", "red");
+        addStyle(style);
+    }
+
+    protected void initNoteStyle() {
+        Style style = new Style(".", StyleName.NoteLabel);
+        style.addProperty("color", ThemeColors.foreground, 0.7);
+        style.addProperty("font-weight", "normal");
+        style.addProperty("font-style", "italic");
         addStyle(style);
     }
 }

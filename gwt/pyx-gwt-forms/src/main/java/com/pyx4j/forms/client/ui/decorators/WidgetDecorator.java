@@ -77,6 +77,8 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
     private final Label validationLabel;
 
+    private final Label noteLabel;
+
     private final FlowPanel labelHolder;
 
     private final HorizontalPanel contentPanel;
@@ -141,6 +143,8 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
                     label.setText(component.getTitle() + ":");
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.tooltip) {
                     renderTooltip();
+                } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.note) {
+                    renderNote();
                 } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.showErrorsUnconditional, PropertyName.repopulated,
                         PropertyName.enabled, PropertyName.editable)) {
                     renderValidationMessage();
@@ -166,6 +170,11 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         validationLabel = new Label();
         validationLabel.setStyleName(DefaultCComponentsTheme.StyleName.ValidationLabel.name());
 
+        noteLabel = new Label();
+        noteLabel.setStyleName(DefaultCComponentsTheme.StyleName.NoteLabel.name());
+
+        renderNote();
+
         assistantWidgetHolder = new SimplePanel();
         assistantWidgetHolder.setWidget(builder.assistantWidget);
 
@@ -190,21 +199,10 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
     }
 
     protected void layout() {
-        setWidget(0, 0, getLabelHolder());
-        setWidget(0, 1, getContentPanel());
-        setWidget(1, 1, getValidationLabel());
-    }
-
-    protected FlowPanel getLabelHolder() {
-        return labelHolder;
-    }
-
-    protected HorizontalPanel getContentPanel() {
-        return contentPanel;
-    }
-
-    protected Label getValidationLabel() {
-        return validationLabel;
+        setWidget(0, 0, labelHolder);
+        setWidget(0, 1, contentPanel);
+        setWidget(1, 1, validationLabel);
+        setWidget(2, 1, noteLabel);
     }
 
     protected void renderMandatoryStar() {
@@ -250,6 +248,14 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
             infoImageHolder.getWidget().setStyleName(WidgetDecoratorInfoImage.name());
         } else {
             infoImageHolder.clear();
+        }
+    }
+
+    protected void renderNote() {
+        if (component.getNote() != null && component.getNote().trim().length() > 0) {
+            noteLabel.setText(component.getNote());
+        } else {
+            noteLabel.setText(null);
         }
     }
 
@@ -327,6 +333,10 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
         public void setTooltip(String tooltip) {
             this.component.setTooltip(tooltip);
+        }
+
+        public void setNote(String note) {
+            this.component.setNote(note);
         }
     }
 

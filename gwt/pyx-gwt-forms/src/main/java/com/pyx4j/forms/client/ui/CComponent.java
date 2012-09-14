@@ -69,6 +69,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     private String tooltip;
 
+    private String note;
+
     private CContainer<?, ?> parent;
 
     private CLayoutConstraints constraints;
@@ -383,6 +385,15 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     public void setTooltip(String tooltip) {
         this.tooltip = tooltip;
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.tooltip);
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.note);
     }
 
     protected abstract WIDGET_TYPE createWidget();
