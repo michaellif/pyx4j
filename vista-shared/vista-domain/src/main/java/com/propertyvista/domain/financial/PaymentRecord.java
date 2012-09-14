@@ -132,8 +132,10 @@ public interface PaymentRecord extends IEntity {
 
     IPrimitive<PaymentStatus> paymentStatus();
 
+    public static boolean merchantAccountIsRequedForPayments = false;
+
     /**
-     * This value set when record we Processing record. e.g. wehn we set status to Processing or Received
+     * This value set when record we Processing record. e.g. when we set status to Processing or Received
      */
     @Detached
     MerchantAccount merchantAccount();

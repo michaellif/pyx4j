@@ -39,6 +39,7 @@ import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.util.DomainUtil;
 
@@ -54,6 +55,11 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public boolean isElectronicPaymentsAllowed(BillingAccount billingAccountId) {
         return PaymentUtils.isElectronicPaymentsAllowed(billingAccountId);
+    }
+
+    @Override
+    public boolean isElectronicPaymentsAllowed(Lease leaseId) {
+        return PaymentUtils.isElectronicPaymentsAllowed(leaseId);
     }
 
     @Override
@@ -186,7 +192,9 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         paymentRecord.merchantAccount().set(PaymentUtils.retrieveMerchantAccount(paymentRecord));
-        if (paymentRecord.merchantAccount().isNull()) {
+        if (paymentRecord.merchantAccount().isNull()
+                && (PaymentRecord.merchantAccountIsRequedForPayments || PaymentType.electronicPayments().contains(
+                        paymentRecord.paymentMethod().type().getValue()))) {
             throw new UserRuntimeException(i18n.tr("No merchantAccount found to process the payment"));
         }
 

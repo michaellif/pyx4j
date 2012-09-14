@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -77,8 +77,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private final PaymentMethodEditor paymentMethodEditor = new PaymentMethodEditor() {
         @Override
-        public Collection<PaymentType> getPaymentOptions() {
-            return PaymentType.avalableInCrm();
+        public List<PaymentType> getPaymentOptions() {
+            return new ArrayList<PaymentType>(PaymentType.avalableInCrm());
         }
 
         @Override
@@ -206,12 +206,19 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
                 paymentMethodEditor.reset();
+                if (!getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE)) {
+                    paymentMethodEditor.setPaymentOptionsEnabled(PaymentType.electronicPayments(), false);
+                }
 
                 if (event.getValue() != null) {
                     switch (event.getValue()) {
                     case New:
                         paymentMethodEditor.setViewable(false);
-                        paymentMethodEditor.initNew(PaymentType.Echeck);
+                        if (getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE)) {
+                            paymentMethodEditor.initNew(PaymentType.Echeck);
+                        } else {
+                            paymentMethodEditor.initNew(PaymentType.Cash);
+                        }
                         paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
                         paymentMethodEditorSeparator.setVisible(!getValue().leaseParticipant().isNull());
 
@@ -299,6 +306,10 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             verifyElectronicPayments();
         }
 
+        if (!getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE)) {
+            paymentMethodEditor.setPaymentOptionsEnabled(PaymentType.electronicPayments(), false);
+        }
+
         if (isEditable()) {
             get(proto().transactionAuthorizationNumber()).setVisible(false);
             get(proto().transactionErrorMessage()).setVisible(false);
@@ -346,6 +357,9 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     private void chageLeaseParticipant() {
         paymentMethodEditor.reset();
         paymentMethodEditor.setBillingAddressAsCurrentEnabled(true);
+        if (!getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE)) {
+            paymentMethodEditor.setPaymentOptionsEnabled(PaymentType.electronicPayments(), false);
+        }
         loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
             @Override
             public void onSuccess(Void result) {

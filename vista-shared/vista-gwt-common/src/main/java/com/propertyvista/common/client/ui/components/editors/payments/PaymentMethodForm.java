@@ -13,7 +13,7 @@
  */
 package com.propertyvista.common.client.ui.components.editors.payments;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -91,7 +91,7 @@ public class PaymentMethodForm extends PaymentMethodEditor {
         container.setWidget(++row, 0, paymentTypeImagesPanel);
         container.setWidget(row, 1, inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.VERTICAL) {
             @Override
-            public Collection<PaymentType> getOptions() {
+            public List<PaymentType> getOptions() {
                 return getPaymentOptions();
             }
         }));

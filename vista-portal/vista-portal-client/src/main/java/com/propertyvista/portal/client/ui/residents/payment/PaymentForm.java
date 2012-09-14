@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents.payment;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -63,8 +63,8 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 
     private final PaymentMethodForm paymentMethodEditor = new PaymentMethodForm() {
         @Override
-        public Collection<PaymentType> getPaymentOptions() {
-            return PaymentType.avalableInPortal();
+        public List<PaymentType> getPaymentOptions() {
+            return new ArrayList<PaymentType>(PaymentType.avalableInPortal());
         }
 
         @Override
@@ -135,8 +135,8 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         panel.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), 20)
-                        .build());
+                new DecoratorBuilder(inject(proto().selectPaymentMethod(),
+                        new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), 20).build());
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 25).build());
         profiledPaymentMethodsCombo.setMandatory(true);

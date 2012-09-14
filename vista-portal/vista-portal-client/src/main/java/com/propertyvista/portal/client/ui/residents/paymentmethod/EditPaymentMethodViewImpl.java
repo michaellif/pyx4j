@@ -13,7 +13,8 @@
  */
 package com.propertyvista.portal.client.ui.residents.paymentmethod;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -29,9 +30,10 @@ public class EditPaymentMethodViewImpl extends BasicViewImpl<PaymentMethod> impl
 
     public EditPaymentMethodViewImpl() {
         setForm(new PaymentMethodForm() {
+
             @Override
-            public Collection<PaymentType> getPaymentOptions() {
-                return PaymentType.avalableInProfile();
+            public List<PaymentType> getPaymentOptions() {
+                return new ArrayList<PaymentType>(PaymentType.avalableInProfile());
             }
 
             @Override

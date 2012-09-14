@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -128,6 +129,15 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
                             });
                 } else {
                     comp.setValue(EntityFactory.create(AddressStructured.class), false);
+                }
+            }
+
+            @Override
+            protected void addItem() {
+                if (TenantForm.this.getValue().electronicPaymentsAllowed().isBooleanTrue()) {
+                    super.addItem();
+                } else {
+                    MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Merchant account is not setup to receive Electronic Payments"));
                 }
             }
         }));

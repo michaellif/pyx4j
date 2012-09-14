@@ -25,6 +25,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 class PaymentUtils {
 
@@ -39,14 +40,24 @@ class PaymentUtils {
     }
 
     public static boolean isPaymentsAllowed(BillingAccount billingAccountId) {
-        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$()._Units().$()._Leases().$().billingAccount(), billingAccountId));
-        return Persistence.service().retrieve(criteria) != null;
+        if (PaymentRecord.merchantAccountIsRequedForPayments) {
+            EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$()._Units().$()._Leases().$().billingAccount(), billingAccountId));
+            return Persistence.service().retrieve(criteria) != null;
+        } else {
+            return true;
+        }
     }
 
     public static boolean isElectronicPaymentsAllowed(BillingAccount billingAccountId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
         criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$()._Units().$()._Leases().$().billingAccount(), billingAccountId));
+        return isElectronicPaymentsAllowed(Persistence.service().retrieve(criteria));
+    }
+
+    public static boolean isElectronicPaymentsAllowed(Lease leaseId) {
+        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$()._Units().$()._Leases(), leaseId));
         return isElectronicPaymentsAllowed(Persistence.service().retrieve(criteria));
     }
 

@@ -13,8 +13,10 @@
  */
 package com.propertyvista.common.client.ui.components.editors.payments;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -25,6 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -66,7 +69,7 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL) {
             @Override
-            public Collection<PaymentType> getOptions() {
+            public List<PaymentType> getOptions() {
                 return getPaymentOptions();
             }
         }), 25).build());
@@ -103,6 +106,13 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
         });
 
         return main;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void onReset() {
+        super.onReset();
+        ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(getPaymentOptions(), true);
     }
 
     @Override
@@ -255,8 +265,13 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
         return get(proto().isPreauthorized()).isVisible();
     }
 
-    public Collection<PaymentType> getPaymentOptions() {
-        return EnumSet.allOf(PaymentType.class);
+    public List<PaymentType> getPaymentOptions() {
+        return new ArrayList<PaymentType>(EnumSet.allOf(PaymentType.class));
+    }
+
+    @SuppressWarnings("unchecked")
+    public void setPaymentOptionsEnabled(Collection<PaymentType> opt, boolean enabled) {
+        ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(opt, enabled);
     }
 
     protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
