@@ -25,9 +25,9 @@ import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
-import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.admin.rpc.OnboardingMerchantAccountDTO;
 import com.propertyvista.admin.rpc.PmcDTO;
 
 public class PmcForm extends AdminEntityForm<PmcDTO> {
@@ -36,7 +36,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
 
     private OnboardingMerchantAccountsLister onboardingMerchantAccountsLister;
 
-    private ListerDataSource<OnboardingMerchantAccount> onboardingMerchantAccountsSource;
+    private ListerDataSource<OnboardingMerchantAccountDTO> onboardingMerchantAccountsSource;
 
     public PmcForm() {
         this(false);
@@ -53,7 +53,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
         setTabEnabled(tab, !isEditable());
     }
 
-    public void setOnboardingMerchantAccountsSource(ListerDataSource<OnboardingMerchantAccount> onboardingMerchantAccountsSource) {
+    public void setOnboardingMerchantAccountsSource(ListerDataSource<OnboardingMerchantAccountDTO> onboardingMerchantAccountsSource) {
         this.onboardingMerchantAccountsSource = onboardingMerchantAccountsSource;
         this.onboardingMerchantAccountsLister.setDataSource(onboardingMerchantAccountsSource);
     }

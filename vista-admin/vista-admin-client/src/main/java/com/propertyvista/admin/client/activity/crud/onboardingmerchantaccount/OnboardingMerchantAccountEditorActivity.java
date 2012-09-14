@@ -20,17 +20,17 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.ui.crud.pmc.OnboardingMerchantAccountEditorView;
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
-import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
+import com.propertyvista.admin.rpc.OnboardingMerchantAccountDTO;
 import com.propertyvista.admin.rpc.services.OnboardingMerchantAccountCrudService;
 
-public class OnboardingMerchantAccountEditorActivity extends EditorActivityBase<OnboardingMerchantAccount> {
+public class OnboardingMerchantAccountEditorActivity extends EditorActivityBase<OnboardingMerchantAccountDTO> {
 
     public OnboardingMerchantAccountEditorActivity(CrudAppPlace place) {
         super(//@formatter:off
                 place,
                 ManagementVeiwFactory.instance(OnboardingMerchantAccountEditorView.class),
                 GWT.<OnboardingMerchantAccountCrudService> create(OnboardingMerchantAccountCrudService.class),
-                OnboardingMerchantAccount.class
+                OnboardingMerchantAccountDTO.class
         );//@formatter:on
     }
 

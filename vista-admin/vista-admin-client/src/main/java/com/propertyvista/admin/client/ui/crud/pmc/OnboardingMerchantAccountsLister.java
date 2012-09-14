@@ -17,19 +17,20 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 
-import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.rpc.AdminSiteMap;
+import com.propertyvista.admin.rpc.OnboardingMerchantAccountDTO;
 
-public class OnboardingMerchantAccountsLister extends BasicLister<OnboardingMerchantAccount> {
+public class OnboardingMerchantAccountsLister extends BasicLister<OnboardingMerchantAccountDTO> {
 
     private Pmc parentPmc;
 
     public OnboardingMerchantAccountsLister() {
-        super(OnboardingMerchantAccount.class, true, true);
+        super(OnboardingMerchantAccountDTO.class, true, true);
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().onboardingAccountId()).build(),
-                new MemberColumnDescriptor.Builder(proto().onboardingBankAccountId()).build()
+                new MemberColumnDescriptor.Builder(proto().onboardingBankAccountId()).build(),
+                new MemberColumnDescriptor.Builder(proto().status()).searchable(false).sortable(false).build()
         );//@formatter:on
     }
 
@@ -46,7 +47,7 @@ public class OnboardingMerchantAccountsLister extends BasicLister<OnboardingMerc
     }
 
     @Override
-    protected void onItemSelect(OnboardingMerchantAccount item) {
+    protected void onItemSelect(OnboardingMerchantAccountDTO item) {
         AppSite.getPlaceController().goTo(new AdminSiteMap.Management.OnboardingMerchantAccounts().formViewerPlace(item.getPrimaryKey()));
     }
 

@@ -15,8 +15,8 @@ package com.propertyvista.admin.client.ui.crud.pmc;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
+import com.propertyvista.admin.rpc.OnboardingMerchantAccountDTO;
 
-public interface OnboardingMerchantAccountEditorView extends IEditorView<OnboardingMerchantAccount> {
+public interface OnboardingMerchantAccountEditorView extends IEditorView<OnboardingMerchantAccountDTO> {
 
 }

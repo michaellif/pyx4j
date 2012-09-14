@@ -14,10 +14,11 @@
 package com.propertyvista.admin.client.ui.crud.pmc;
 
 import com.propertyvista.admin.client.ui.crud.AdminEditorViewImplBase;
-import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.rpc.AdminSiteMap;
+import com.propertyvista.admin.rpc.OnboardingMerchantAccountDTO;
 
-public class OnboardingMerchantAccountEditorViewImpl extends AdminEditorViewImplBase<OnboardingMerchantAccount> implements OnboardingMerchantAccountEditorView {
+public class OnboardingMerchantAccountEditorViewImpl extends AdminEditorViewImplBase<OnboardingMerchantAccountDTO> implements
+        OnboardingMerchantAccountEditorView {
 
     public OnboardingMerchantAccountEditorViewImpl() {
         super(AdminSiteMap.Management.OnboardingMerchantAccounts.class);

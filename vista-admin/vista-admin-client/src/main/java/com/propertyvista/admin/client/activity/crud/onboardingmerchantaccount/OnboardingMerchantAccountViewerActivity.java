@@ -20,10 +20,10 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.ui.crud.pmc.OnboardingMerchantAccountViewerView;
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
-import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
+import com.propertyvista.admin.rpc.OnboardingMerchantAccountDTO;
 import com.propertyvista.admin.rpc.services.OnboardingMerchantAccountCrudService;
 
-public class OnboardingMerchantAccountViewerActivity extends ViewerActivityBase<OnboardingMerchantAccount> {
+public class OnboardingMerchantAccountViewerActivity extends ViewerActivityBase<OnboardingMerchantAccountDTO> {
 
     public OnboardingMerchantAccountViewerActivity(CrudAppPlace place) {
         super(place, ManagementVeiwFactory.instance(OnboardingMerchantAccountViewerView.class), GWT

@@ -17,14 +17,14 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
-import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
+import com.propertyvista.admin.rpc.OnboardingMerchantAccountDTO;
 
-public class OnboardingMerchantAccountForm extends AdminEntityForm<OnboardingMerchantAccount> {
+public class OnboardingMerchantAccountForm extends AdminEntityForm<OnboardingMerchantAccountDTO> {
 
     private static final I18n i18n = I18n.get(OnboardingMerchantAccountForm.class);
 
     public OnboardingMerchantAccountForm(boolean viewMode) {
-        super(OnboardingMerchantAccount.class, viewMode);
+        super(OnboardingMerchantAccountDTO.class, viewMode);
     }
 
     public OnboardingMerchantAccountForm() {
@@ -35,8 +35,15 @@ public class OnboardingMerchantAccountForm extends AdminEntityForm<OnboardingMer
     protected void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
-        content.setWidget(0, ++row, new DecoratorBuilder(inject(proto().onboardingAccountId())).build());
-        content.setWidget(0, ++row, new DecoratorBuilder(inject(proto().onboardingBankAccountId())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingAccountId())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingBankAccountId())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 25).readOnlyMode(true).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantTerminalId()), 25).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankId()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNumber()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeDescription()), 30).build());
 
         selectTab(addTab(content));
     }

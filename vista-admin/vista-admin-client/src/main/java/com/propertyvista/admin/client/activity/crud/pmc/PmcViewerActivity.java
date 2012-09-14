@@ -29,7 +29,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.admin.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcViewerView;
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
-import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
+import com.propertyvista.admin.rpc.OnboardingMerchantAccountDTO;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.OnboardingMerchantAccountCrudService;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
@@ -102,8 +102,8 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
     }
 
     @Override
-    public ListerDataSource<OnboardingMerchantAccount> getOnboardingMerchantAccountsSource() {
-        return new ListerDataSource<OnboardingMerchantAccount>(OnboardingMerchantAccount.class,
-                GWT.<AbstractListService<OnboardingMerchantAccount>> create(OnboardingMerchantAccountCrudService.class));
+    public ListerDataSource<OnboardingMerchantAccountDTO> getOnboardingMerchantAccountsSource() {
+        return new ListerDataSource<OnboardingMerchantAccountDTO>(OnboardingMerchantAccountDTO.class,
+                GWT.<AbstractListService<OnboardingMerchantAccountDTO>> create(OnboardingMerchantAccountCrudService.class));
     }
 }

@@ -15,8 +15,8 @@ package com.propertyvista.admin.rpc.services;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
+import com.propertyvista.admin.rpc.OnboardingMerchantAccountDTO;
 
-public interface OnboardingMerchantAccountCrudService extends AbstractCrudService<OnboardingMerchantAccount> {
+public interface OnboardingMerchantAccountCrudService extends AbstractCrudService<OnboardingMerchantAccountDTO> {
 
 }
