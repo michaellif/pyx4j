@@ -74,6 +74,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
+        get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
         get(proto().lease().completion()).setVisible(!getValue().lease().completion().isNull());
 
         // disable some editing on signed lease:
