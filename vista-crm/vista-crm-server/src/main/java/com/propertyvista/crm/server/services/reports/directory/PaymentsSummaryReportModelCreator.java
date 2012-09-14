@@ -31,9 +31,10 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.server.LocalService;
 
 import com.propertyvista.biz.financial.SysDateManager;
-import com.propertyvista.crm.server.services.dashboard.gadgets.PaymentReportServiceImpl;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
 import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
 import com.propertyvista.crm.server.services.reports.ReportsCommon;
@@ -63,15 +64,14 @@ public class PaymentsSummaryReportModelCreator implements GadgetReportModelCreat
                 : new LogicalDate(SysDateManager.getSysDate());
         final Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria = new Vector<PaymentRecord.PaymentStatus>(paymentsSummaryGadgetMetadata.paymentStatus()
                 .getValue());
-        final PaymentFeesDTO[] paymentFees = new PaymentFeesDTO[2];
+        final Vector<PaymentFeesDTO> paymentFees = new Vector<PaymentFeesDTO>();
 
-        new PaymentReportServiceImpl().paymentsFees(//@formatter:off
+        LocalService.create(PaymentReportService.class).paymentsFees(//@formatter:off
                 new AsyncCallback<Vector<PaymentFeesDTO>>() {
                     
                     @Override
                     public void onSuccess(Vector<PaymentFeesDTO> result) {
-                        paymentFees[0] = result.get(0);
-                        paymentFees[1] = result.get(1);
+                            paymentFees.addAll(result);
                     }
                     
                     @Override
@@ -82,7 +82,7 @@ public class PaymentsSummaryReportModelCreator implements GadgetReportModelCreat
                 }
         );//@formatter:on
 
-        new PaymentReportServiceImpl().paymentsSummary(//@formatter:off                
+        LocalService.create(PaymentReportService.class).paymentsSummary(//@formatter:off                
                 new AsyncCallback<EntitySearchResult<PaymentsSummary>>() {
 
                     @Override
@@ -93,14 +93,20 @@ public class PaymentsSummaryReportModelCreator implements GadgetReportModelCreat
                                 .defSubTitle(Params.PAYMENT_FEES.name())
                                 .build();
                         
-                        JasperReportModel model = new DynamicTableTemplateReportModelBuilder()
+                        DynamicTableTemplateReportModelBuilder builder = new DynamicTableTemplateReportModelBuilder()
                                 .template(template)
                                 .data(result.getData().iterator())
                                 .param(Params.TITLE.name(), paymentsSummaryGadgetMetadata.getEntityMeta().getCaption())
                                 .param(Params.AS_OF.name(), i18n.tr("As of Date: {0}", ReportsCommon.instance().getAsOfDateFormat().format(targetDate)))
-                                .param(Params.PAYMENT_STATUS_FILTER.name(), i18n.tr("Payment Status Filter: {0}", LabelHelper.makeListView(paymentStatusCriteria)))
-                                .param(Params.PAYMENT_FEES.name(), i18n.tr("The following payment fees are applied (per transaction): {0}", makePaymentFeesLabel(paymentFees)))
-                                .build();
+                                .param(Params.PAYMENT_STATUS_FILTER.name(), i18n.tr("Payment Status Filter: {0}", LabelHelper.makeListView(paymentStatusCriteria)));
+                        
+                        if (!paymentFees.isEmpty()) {
+                            builder.param(Params.PAYMENT_FEES.name(), i18n.tr("The following payment fees are applied (per transaction): {0}", makePaymentFeesLabel(paymentFees)));
+                        } else {
+                            builder.param(Params.PAYMENT_FEES.name(), "");
+                        }
+                        
+                        JasperReportModel model = builder.build();
                         callback.onSuccess(model);
                     }
                     
@@ -113,17 +119,17 @@ public class PaymentsSummaryReportModelCreator implements GadgetReportModelCreat
                 targetDate,
                 paymentStatusCriteria,
                 0,
-                0,
+                -1,
                 getSortingCriteria(paymentsSummaryGadgetMetadata)
         );//@formatter:on
 
     }
 
-    private String makePaymentFeesLabel(PaymentFeesDTO[] paymentFees) {
+    private String makePaymentFeesLabel(Vector<PaymentFeesDTO> paymentFees) {
 
         Vector<String> labels = new Vector<String>();
-        labels.addAll(makePaymentFeeLabelList(paymentFees[0]));
-        labels.addAll(makePaymentFeeLabelList(paymentFees[1]));
+        labels.addAll(makePaymentFeeLabelList(paymentFees.get(0)));
+        labels.addAll(makePaymentFeeLabelList(paymentFees.get(1)));
         if (!labels.isEmpty()) {
             return StringUtils.join(labels, ", ");
         } else {

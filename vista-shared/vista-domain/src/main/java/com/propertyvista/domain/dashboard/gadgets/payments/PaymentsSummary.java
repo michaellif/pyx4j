@@ -22,14 +22,19 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public interface PaymentsSummary extends IEntity {
+
+    public final static boolean summaryByBuilding = true;
 
     /** The date for which a summary is applied to */
     IPrimitive<LogicalDate> snapshotDay();
 
     /** This one is for holding a merchant account */
     MerchantAccount merchantAccount();
+
+    Building building();
 
     IPrimitive<PaymentRecord.PaymentStatus> status();
 

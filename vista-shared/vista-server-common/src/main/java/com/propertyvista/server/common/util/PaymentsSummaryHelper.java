@@ -32,6 +32,7 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public final class PaymentsSummaryHelper {
 
@@ -98,6 +99,38 @@ public final class PaymentsSummaryHelper {
      * 
      * @return
      */
+    public PaymentsSummary calculateSummary(Building building, PaymentRecord.PaymentStatus paymentStatus, LogicalDate snapshotDay) {
+        if (building == null || building.isNull()) {
+            throw new IllegalArgumentException("building is a mandatory argument");
+        }
+        if (paymentStatus == null) {
+            throw new IllegalArgumentException("paymentStatus is a mandatory argument");
+        }
+        if (snapshotDay == null) {
+            throw new IllegalArgumentException("snapshotDay is a amandatory argument");
+        }
+
+        PaymentsSummary summary = initPaymentsSummary(snapshotDay);
+
+        EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount().lease().unit().building(), building));
+        criteria.add(PropertyCriterion.eq(criteria.proto().lastStatusChangeDate(), snapshotDay));
+        criteria.add(PropertyCriterion.eq(criteria.proto().paymentStatus(), paymentStatus));
+
+        ICursorIterator<PaymentRecord> i = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        while (i.hasNext()) {
+            PaymentRecord r = i.next();
+            Persistence.service().retrieve(r.merchantAccount());
+            PaymentType paymentType = r.paymentMethod().type().getValue();
+            IPrimitive<BigDecimal> amountMember = paymentTypeMapper.getMember(summary, paymentType);
+            amountMember.setValue(amountMember.getValue().add(r.amount().getValue()));
+        }
+
+        summary.status().setValue(paymentStatus);
+        summary.building().set(building);
+        return summary;
+    }
+
     public PaymentsSummary calculateSummary(MerchantAccount merchantAccount, PaymentRecord.PaymentStatus paymentStatus, LogicalDate snapshotDay) {
         if (merchantAccount == null || merchantAccount.isNull()) {
             throw new IllegalArgumentException("merchantAccount is a mandatory argument");

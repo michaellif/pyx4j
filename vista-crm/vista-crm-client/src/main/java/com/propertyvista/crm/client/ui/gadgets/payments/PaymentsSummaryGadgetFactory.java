@@ -93,6 +93,8 @@ public class PaymentsSummaryGadgetFactory extends AbstractGadget<PaymentsSummary
 
             PaymentsSummary proto = EntityFactory.create(PaymentsSummary.class);
             settings.columnDescriptors().addAll(asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
+                    (PaymentsSummary.summaryByBuilding)?
+                    new MemberColumnDescriptor.Builder(proto.building()).build():
                     new MemberColumnDescriptor.Builder(proto.merchantAccount().accountNumber()).title(i18n.tr("Merchant Account")).build(),
                     new MemberColumnDescriptor.Builder(proto.status()).build(),
                     new MemberColumnDescriptor.Builder(proto.cash()).build(),
@@ -233,10 +235,14 @@ public class PaymentsSummaryGadgetFactory extends AbstractGadget<PaymentsSummary
 
                 @Override
                 public void onSuccess(Vector<PaymentFeesDTO> result) {
-                    List<DataItem<PaymentFeesDTO>> dataItems = new ArrayList<DataItem<PaymentFeesDTO>>(2);
-                    dataItems.add(new DataItem<PaymentFeesDTO>(result.get(0)));
-                    dataItems.add(new DataItem<PaymentFeesDTO>(result.get(1)));
-                    feesTableModel.populateData(dataItems, 0, false, 2);
+                    if (!result.isEmpty()) {
+                        List<DataItem<PaymentFeesDTO>> dataItems = new ArrayList<DataItem<PaymentFeesDTO>>(2);
+                        dataItems.add(new DataItem<PaymentFeesDTO>(result.get(0)));
+                        dataItems.add(new DataItem<PaymentFeesDTO>(result.get(1)));
+                        feesTableModel.populateData(dataItems, 0, false, 2);
+                    } else {
+                        feesTableModel.clearData();
+                    }
                     redrawSummaryCaption();
                     populateSucceded();
                 }

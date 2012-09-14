@@ -131,25 +131,38 @@ public class PaymentReportServiceImpl implements PaymentReportService {
 
         Vector<PaymentsSummary> summariesVector = new Vector<PaymentsSummary>();
 
-        Iterator<Building> buildingIterator = !buildings.isEmpty() ? buildings.iterator() : Persistence.service().query(null,
-                EntityQueryCriteria.create(Building.class), AttachLevel.Detached);
-        Iterator<MerchantAccount> merchantAccounts = merchantAccountIterator(buildingIterator);
-
         PaymentsSummaryHelper summaryHelper = new PaymentsSummaryHelper();
 
-        while (merchantAccounts.hasNext()) {
-            MerchantAccount merchantAccount = merchantAccounts.next();
-            for (PaymentStatus paymentStatus : paymentStatusCriteria) {
-                PaymentsSummary summary = summaryHelper.calculateSummary(merchantAccount, paymentStatus, targetDate);
-                if (summaryHelper.hasPayments(summary)) {
-                    summariesVector.add(summary);
+        Iterator<Building> buildingIterator = !buildings.isEmpty() ? buildings.iterator() : Persistence.service().query(null,
+                EntityQueryCriteria.create(Building.class), AttachLevel.Detached);
+
+        if (PaymentsSummary.summaryByBuilding) {
+            while (buildingIterator.hasNext()) {
+                Building building = buildingIterator.next();
+                for (PaymentStatus paymentStatus : paymentStatusCriteria) {
+                    PaymentsSummary summary = summaryHelper.calculateSummary(building, paymentStatus, targetDate);
+                    if (summaryHelper.hasPayments(summary)) {
+                        summariesVector.add(summary);
+                    }
                 }
             }
+        } else {
+            Iterator<MerchantAccount> merchantAccounts = merchantAccountIterator(buildingIterator);
+            while (merchantAccounts.hasNext()) {
+                MerchantAccount merchantAccount = merchantAccounts.next();
+                for (PaymentStatus paymentStatus : paymentStatusCriteria) {
+                    PaymentsSummary summary = summaryHelper.calculateSummary(merchantAccount, paymentStatus, targetDate);
+                    if (summaryHelper.hasPayments(summary)) {
+                        summariesVector.add(summary);
+                    }
+                }
+            }
+            // load detached merchant accounts
+            for (PaymentsSummary paymentsSummary : summariesVector) {
+                paymentsSummary.merchantAccount().set(Persistence.service().retrieve(MerchantAccount.class, paymentsSummary.merchantAccount().getPrimaryKey()));
+            }
         }
-        // load detached merchant accounts
-        for (PaymentsSummary paymentsSummary : summariesVector) {
-            paymentsSummary.merchantAccount().set(Persistence.service().retrieve(MerchantAccount.class, paymentsSummary.merchantAccount().getPrimaryKey()));
-        }
+
         EntityListCriteria<PaymentsSummary> criteria = EntityListCriteria.create(PaymentsSummary.class);
         criteria.setSorts(sortingCriteria);
         criteria.setPageNumber(pageNumber);
@@ -174,11 +187,11 @@ public class PaymentReportServiceImpl implements PaymentReportService {
         });
 
         Vector<PaymentFeesDTO> paymentFees = new Vector<PaymentFeesDTO>();
-        paymentFees.add(PaymentFeesHelper.extractFees(paymentTypeInfo, PaymentFeeMeasure.absolute));
-        paymentFees.add(PaymentFeesHelper.extractFees(paymentTypeInfo, PaymentFeeMeasure.relative));
-
+        if (paymentTypeInfo != null) {
+            paymentFees.add(PaymentFeesHelper.extractFees(paymentTypeInfo, PaymentFeeMeasure.absolute));
+            paymentFees.add(PaymentFeesHelper.extractFees(paymentTypeInfo, PaymentFeeMeasure.relative));
+        }
         callback.onSuccess(paymentFees);
-
     }
 
     private PaymentRecordForReportDTO makeDTO(PaymentRecord paymentRecordDBO) {

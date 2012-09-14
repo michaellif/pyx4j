@@ -259,7 +259,9 @@ public class DashboardGenerator extends Dashboards {
     private Collection<? extends ColumnDescriptorEntity> definePaymentsSummaryListerColumns() {
         PaymentsSummary proto = EntityFactory.create(PaymentsSummary.class);
         return Arrays.asList(//@formatter:off
-                defColumn(proto.merchantAccount().accountNumber()).title(i18n.tr("Merchant Account")).build(),
+                (PaymentsSummary.summaryByBuilding)?
+                        defColumn(proto.building()).build():
+                        defColumn(proto.merchantAccount().accountNumber()).title(i18n.tr("Merchant Account")).build(),
                 defColumn(proto.status()).build(),
                 defColumn(proto.cash()).build(),
                 defColumn(proto.cheque()).build(),
