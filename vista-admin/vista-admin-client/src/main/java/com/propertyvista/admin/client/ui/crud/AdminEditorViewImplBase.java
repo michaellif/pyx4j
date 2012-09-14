@@ -48,13 +48,17 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
 
         setCaption(defaultCaption);
 
-        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
+        btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                getPresenter().cancel();
+                if (!getForm().isValid()) {
+                    getForm().setUnconditionalValidationErrorRendering(true);
+                    throw new UserRuntimeException(getForm().getValidationResults().getMessagesText(true, false));
+                }
+                getPresenter().save();
             }
         });
-        addFooterToolbarItem(btnCancel);
+        addFooterToolbarItem(btnSave);
 
         btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
@@ -68,17 +72,13 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
         });
         addFooterToolbarItem(btnApply);
 
-        btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
+        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (!getForm().isValid()) {
-                    getForm().setUnconditionalValidationErrorRendering(true);
-                    throw new UserRuntimeException(getForm().getValidationResults().getMessagesText(true, false));
-                }
-                getPresenter().save();
+                getPresenter().cancel();
             }
         });
-        addFooterToolbarItem(btnSave);
+        addFooterToolbarItem(btnCancel);
 
         enableButtons(false);
     }
