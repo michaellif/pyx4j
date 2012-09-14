@@ -22,6 +22,7 @@ import com.propertyvista.admin.domain.legal.LegalDocument;
 import com.propertyvista.admin.domain.legal.VistaTerms;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
+import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.scheduler.Run;
 import com.propertyvista.admin.domain.scheduler.RunData;
@@ -38,6 +39,7 @@ import com.propertyvista.admin.rpc.services.DBIntegrityCheckService;
 import com.propertyvista.admin.rpc.services.ExportDownloadService;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
 import com.propertyvista.admin.rpc.services.MaintenanceCrudService;
+import com.propertyvista.admin.rpc.services.OnboardingMerchantAccountCrudService;
 import com.propertyvista.admin.rpc.services.OnboardingUserCrudService;
 import com.propertyvista.admin.rpc.services.OnboardingUserPasswordChangeManagedService;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
@@ -105,6 +107,9 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(VistaTerms.class, EntityPermission.ALL));
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(VistaTerms.VistaTermsV.class, EntityPermission.ALL));
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(LegalDocument.class, EntityPermission.ALL));
+
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(OnboardingMerchantAccountCrudService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(OnboardingMerchantAccount.class, EntityPermission.ALL));
 
         if (com.pyx4j.config.shared.ApplicationMode.isDevelopment()) {
             grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(SimulatedDataPreloadService.class));

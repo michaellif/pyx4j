@@ -62,6 +62,10 @@ public class AdminSiteMap implements SiteMap {
         public static class OnboardingUsers extends CrudAppPlace {
         }
 
+        public static class OnboardingMerchantAccounts extends CrudAppPlace {
+
+        }
+
         @PlaceProperties(caption = "Trigger")
         @NavigationItem(navigLabel = "Triggers")
         public static class Trigger extends CrudAppPlace {

@@ -22,6 +22,10 @@ import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserList
 import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserListerViewImpl;
 import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserViewerView;
 import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserViewerViewImpl;
+import com.propertyvista.admin.client.ui.crud.pmc.OnboardingMerchantAccountEditorView;
+import com.propertyvista.admin.client.ui.crud.pmc.OnboardingMerchantAccountEditorViewImpl;
+import com.propertyvista.admin.client.ui.crud.pmc.OnboardingMerchantAccountViewerView;
+import com.propertyvista.admin.client.ui.crud.pmc.OnboardingMerchantAccountViewerViewImpl;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcEditorView;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcEditorViewImpl;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcListerView;
@@ -68,7 +72,13 @@ public class ManagementVeiwFactory extends ViewFactoryBase {
                 map.put(type, new RunViewerViewImpl());
             } else if (RunListerView.class.equals(type)) {
                 map.put(type, new RunListerViewImpl());
+
+            } else if (OnboardingMerchantAccountEditorView.class.equals(type)) {
+                map.put(type, new OnboardingMerchantAccountEditorViewImpl());
+            } else if (OnboardingMerchantAccountViewerView.class.equals(type)) {
+                map.put(type, new OnboardingMerchantAccountViewerViewImpl());
             }
+
         }
 
         @SuppressWarnings("unchecked")

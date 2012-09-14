@@ -17,17 +17,26 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 
 import com.pyx4j.commons.ValidationUtils;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
+import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.rpc.PmcDTO;
 
 public class PmcForm extends AdminEntityForm<PmcDTO> {
 
     private static final I18n i18n = I18n.get(PmcForm.class);
+
+    private OnboardingMerchantAccountsLister onboardingMerchantAccountsLister;
+
+    private ListerDataSource<OnboardingMerchantAccount> onboardingMerchantAccountsSource;
 
     public PmcForm() {
         this(false);
@@ -39,6 +48,34 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
 
     @Override
     public void createTabs() {
+        selectTab(addTab(createGeneralTab()));
+        Tab tab = addTab(createOnboardingMerchantAccountsTab());
+        setTabEnabled(tab, !isEditable());
+    }
+
+    public void setOnboardingMerchantAccountsSource(ListerDataSource<OnboardingMerchantAccount> onboardingMerchantAccountsSource) {
+        this.onboardingMerchantAccountsSource = onboardingMerchantAccountsSource;
+        this.onboardingMerchantAccountsLister.setDataSource(onboardingMerchantAccountsSource);
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        get(proto().status()).setViewable(true);
+
+        boolean isVisible = get(proto().status()).getValue() != PmcStatus.Created;
+        get(proto().vistaCrmUrl()).setVisible(isVisible);
+        get(proto().residentPortalUrl()).setVisible(isVisible);
+        get(proto().prospectPortalUrl()).setVisible(isVisible);
+
+        if (!isEditable() & getValue().getPrimaryKey() != null) {
+            onboardingMerchantAccountsLister.setParentPmc(EntityFactory.createIdentityStub(Pmc.class, getValue().getPrimaryKey()));
+            onboardingMerchantAccountsLister.obtain(0);
+        }
+    }
+
+    private FormFlexPanel createGeneralTab() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
@@ -107,19 +144,12 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
         content.setH1(++row, 0, 2, proto().dnsNameAliases().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable())));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
-
-        selectTab(addTab(content));
+        return content;
     }
 
-    @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-
-        get(proto().status()).setViewable(true);
-
-        boolean isVisible = get(proto().status()).getValue() != PmcStatus.Created;
-        get(proto().vistaCrmUrl()).setVisible(isVisible);
-        get(proto().residentPortalUrl()).setVisible(isVisible);
-        get(proto().prospectPortalUrl()).setVisible(isVisible);
+    private FormFlexPanel createOnboardingMerchantAccountsTab() {
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Onboarding Merchant Accounts"));
+        panel.setWidget(0, 0, onboardingMerchantAccountsLister = new OnboardingMerchantAccountsLister());
+        return panel;
     }
 }

@@ -122,6 +122,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
 
             }
         });
+
         addHeaderToolbarItem(activateBtn);
 
     }
@@ -133,6 +134,14 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
         suspendBtn.setVisible(value.status().getValue() == PmcStatus.Active);
         activateBtn.setVisible(value.status().getValue() != PmcStatus.Active);
         cancelBtn.setVisible(value.status().getValue() != PmcStatus.Cancelled);
+    }
+
+    @Override
+    public void setPresenter(com.pyx4j.site.client.ui.crud.form.IViewerView.Presenter presenter) {
+        super.setPresenter(presenter);
+        if (presenter != null) {
+            ((PmcForm) getForm()).setOnboardingMerchantAccountsSource(((PmcViewerView.Presenter) presenter).getOnboardingMerchantAccountsSource());
+        }
     }
 
 }

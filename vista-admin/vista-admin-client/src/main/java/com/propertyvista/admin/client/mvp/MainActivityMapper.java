@@ -35,6 +35,8 @@ import com.propertyvista.admin.client.activity.crud.legal.VistaTermsEditorActivi
 import com.propertyvista.admin.client.activity.crud.legal.VistaTermsViewerActivity;
 import com.propertyvista.admin.client.activity.crud.maintenance.MaintenanceEditorActivity;
 import com.propertyvista.admin.client.activity.crud.maintenance.MaintenanceViewerActivity;
+import com.propertyvista.admin.client.activity.crud.onboardingmerchantaccount.OnboardingMerchantAccountEditorActivity;
+import com.propertyvista.admin.client.activity.crud.onboardingmerchantaccount.OnboardingMerchantAccountViewerActivity;
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnBoardingUserViewerActivity;
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnboardingUserEditorActivity;
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnboardingUserListerActivity;
@@ -197,6 +199,15 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new VistaTermsViewerActivity(crudPlace);
+                            break;
+                        }
+                    } else if (place instanceof AdminSiteMap.Management.OnboardingMerchantAccounts) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new OnboardingMerchantAccountEditorActivity((CrudAppPlace) place);
+                            break;
+                        case viewer:
+                            activity = new OnboardingMerchantAccountViewerActivity((CrudAppPlace) place);
                             break;
                         }
                     }

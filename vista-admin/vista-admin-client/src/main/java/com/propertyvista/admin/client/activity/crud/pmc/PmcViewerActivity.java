@@ -17,17 +17,21 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.essentials.client.DeferredProcessDialog;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcViewerView;
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
+import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.rpc.PmcDTO;
+import com.propertyvista.admin.rpc.services.OnboardingMerchantAccountCrudService;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 
 public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements PmcViewerView.Presenter {
@@ -62,7 +66,7 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
                     public void onDeferredSuccess(DeferredProcessProgressResponse result) {
                         super.onDeferredSuccess(result);
                         PmcViewerActivity.this.refresh();
-            }
+                    }
                 };
                 d.show();
                 d.startProgress(deferredCorrelationId);
@@ -97,4 +101,9 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
         }, getEntityId());
     }
 
+    @Override
+    public ListerDataSource<OnboardingMerchantAccount> getOnboardingMerchantAccountsSource() {
+        return new ListerDataSource<OnboardingMerchantAccount>(OnboardingMerchantAccount.class,
+                GWT.<AbstractListService<OnboardingMerchantAccount>> create(OnboardingMerchantAccountCrudService.class));
+    }
 }
