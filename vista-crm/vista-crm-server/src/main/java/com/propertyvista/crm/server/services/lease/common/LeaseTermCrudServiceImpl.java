@@ -154,7 +154,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     @Override
     public void acceptOffer(AsyncCallback<VoidSerializable> callback, Key entityId) {
         LeaseTerm offer = Persistence.secureRetrieve(LeaseTerm.class, entityId);
-        ServerSideFactory.create(LeaseFacade.class).setCurrentTerm(offer.lease(), offer);
+        ServerSideFactory.create(LeaseFacade.class).acceptOffer(offer.lease(), offer);
         Persistence.service().commit();
         callback.onSuccess(null);
     }

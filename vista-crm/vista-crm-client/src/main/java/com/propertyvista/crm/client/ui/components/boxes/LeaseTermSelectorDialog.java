@@ -61,7 +61,7 @@ public abstract class LeaseTermSelectorDialog extends EntitySelectorTableDialog<
                 
                 new MemberColumnDescriptor.Builder(proto().type()).build(),
                 new MemberColumnDescriptor.Builder(proto().status()).build(),
-                new MemberColumnDescriptor.Builder(proto().approvalDate()).build()
+                new MemberColumnDescriptor.Builder(proto().creationDate()).build()
         );//@formatter:on
     }
 

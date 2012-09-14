@@ -75,7 +75,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         super.onValueSet(populate);
 
         get(proto().lease().completion()).setVisible(!getValue().lease().completion().isNull());
-        get(proto().approvalDate()).setVisible(!getValue().approvalDate().isNull());
 
         // disable some editing on signed lease:
         if (isEditable()) {
@@ -180,8 +179,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         // other dates:
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
-        get(proto().approvalDate()).setViewable(true);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creationDate()), 9).build());
+        get(proto().creationDate()).setViewable(true);
 
         return main;
     }

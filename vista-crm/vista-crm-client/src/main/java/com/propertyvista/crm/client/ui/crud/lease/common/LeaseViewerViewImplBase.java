@@ -37,6 +37,8 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     protected final IListerView<DepositLifecycleDTO> depositLister;
 
+    protected final MenuItem viewFutureTerm;
+
     public LeaseViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         super(placeClass, true);
 
@@ -54,6 +56,14 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
             }
         });
         viewsMenu.addItem(viewCurrentTerm);
+
+        viewFutureTerm = new MenuItem(i18n.tr("Future"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getForm().getValue().futureTerm());
+            }
+        });
+        viewsMenu.addItem(viewFutureTerm);
 
         MenuItem viewHistoricTerms = new MenuItem(i18n.tr("Historic..."), new Command() {
             @Override
@@ -80,5 +90,19 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
     @Override
     public IListerView<DepositLifecycleDTO> getDepositListerView() {
         return depositLister;
+    }
+
+    @Override
+    public void reset() {
+        viewFutureTerm.setVisible(false);
+
+        super.reset();
+    }
+
+    @Override
+    public void populate(DTO value) {
+        super.populate(value);
+
+        viewFutureTerm.setVisible(!value.futureTerm().isNull());
     }
 }

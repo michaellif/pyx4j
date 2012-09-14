@@ -85,7 +85,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final Button renewButton;
 
-    private final MenuItem renewAction;
+    private final MenuItem offerAction;
 
     private final MenuItem viewOfferedTerms;
 
@@ -189,7 +189,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         renewButton.setMenu(renewMenu);
         addHeaderToolbarItem(renewButton.asWidget());
 
-        renewAction = new MenuItem(i18n.tr("Create Offer"), new Command() {
+        offerAction = new MenuItem(i18n.tr("Create Offer"), new Command() {
             @Override
             public void execute() {
                 new SelectEnumDialog<LeaseTerm.Type>(i18n.tr("Select Term Type"), EnumSet.allOf(LeaseTerm.Type.class)) {
@@ -201,7 +201,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }.show();
             }
         });
-        renewMenu.addItem(renewAction);
+        renewMenu.addItem(offerAction);
 
         viewOfferedTerms = new MenuItem(i18n.tr("View Offers..."), new Command() {
             @Override
@@ -255,7 +255,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             setActionVisible(cancelEvictAction, completion == CompletionType.Eviction && status != Status.Closed);
             setActionVisible(activateAction, status == Status.ExistingLease);
 
-            renewButton.setVisible(status == Status.Active && completion == null);
+            renewButton.setVisible(status == Status.Active && completion == null && value.futureTerm().isNull());
         }
     }
 

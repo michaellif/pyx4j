@@ -36,9 +36,9 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
 
     private final LeaseTermEditorView leaseTermEditorView;
 
-    public BillableItemFolder(boolean modifyable, CEntityForm<LeaseTermDTO> lease, LeaseTermEditorView leaseTermEditorView) {
+    public BillableItemFolder(boolean modifyable, CEntityForm<LeaseTermDTO> leaseTerm, LeaseTermEditorView leaseTermEditorView) {
         super(BillableItem.class, modifyable);
-        this.leaseTerm = lease;
+        this.leaseTerm = leaseTerm;
         this.leaseTermEditorView = leaseTermEditorView;
     }
 

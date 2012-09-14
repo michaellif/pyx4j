@@ -52,8 +52,6 @@ public interface LeaseFacade {
 
     // DB-data Lease state interfaces:
 
-    void setCurrentTerm(Lease leaseId, LeaseTerm leaseTermId);
-
     void createMasterOnlineApplication(Lease leaseId);
 
     void approveApplication(Lease leaseId, Employee decidedBy, String decisionReason);
@@ -66,7 +64,13 @@ public interface LeaseFacade {
 
     void activate(Lease leaseId);
 
+    void renew(Lease leaseId);
+
+    // DB-data LeaseTerm state interfaces:
+
     LeaseTerm createOffer(Lease leaseId, LeaseTerm.Type type);
+
+    void acceptOffer(Lease leaseId, LeaseTerm leaseTermId);
 
     // Start notice/evict...
 

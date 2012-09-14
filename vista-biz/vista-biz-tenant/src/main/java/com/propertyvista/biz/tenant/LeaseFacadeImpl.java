@@ -33,6 +33,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -105,7 +106,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (lease.currentTerm().isNull()) {
             lease.currentTerm().set(EntityFactory.create(LeaseTerm.class));
             lease.currentTerm().type().setValue(LeaseTerm.Type.FixedEx);
-            lease.currentTerm().status().setValue(LeaseTerm.Status.Working);
+            lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
         }
         lease.currentTerm().lease().set(lease);
 
@@ -203,19 +204,43 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public void setCurrentTerm(Lease leaseId, LeaseTerm leaseTermId) {
+    public void renew(Lease leaseId) {
         Lease lease = load(leaseId, false);
 
-        Persistence.service().retrieveMember(lease.leaseTerms());
-        if (lease.leaseTerms().contains(leaseTermId)) {
-            lease.currentTerm().set(leaseTermId);
+        if (!lease.futureTerm().isNull()) {
+            // update old:
+            lease.currentTerm().status().setValue(LeaseTerm.Status.Historic);
+            lease.currentTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
+            persist(lease.currentTerm());
 
+            // set new:
+            lease.currentTerm().set(lease.futureTerm());
             Persistence.service().retrieve(lease.currentTerm());
-            lease.currentTerm().status().setValue(LeaseTerm.Status.Working);
+            lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
             updateLeaseDeposits(lease);
 
-            lease.currentTerm().version().setValueDetached(); // TRICK!..
+            // save lease with new current term:
+            lease.currentTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
             persist(lease);
+        } else {
+            throw new IllegalArgumentException(i18n.tr("There is no term for renewal"));
+        }
+    }
+
+    @Override
+    public void acceptOffer(Lease leaseId, LeaseTerm leaseTermId) {
+        Lease lease = load(leaseId, false);
+        LeaseTerm leaseTerm = Persistence.secureRetrieve(LeaseTerm.class, leaseTermId.getPrimaryKey());
+
+        Persistence.service().retrieveMember(lease.leaseTerms());
+        if (leaseTerm.status().getValue() == LeaseTerm.Status.Offer && lease.leaseTerms().contains(leaseTermId)) {
+            lease.futureTerm().set(leaseTerm);
+            lease.futureTerm().status().setValue(LeaseTerm.Status.AcceptedOffer);
+            lease.futureTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
+            persist(lease.futureTerm());
+
+            // save lease:
+            Persistence.secureSave(lease);
         } else {
             throw new IllegalArgumentException(i18n.tr("Invalid LeaseTerm supplied"));
         }
@@ -732,19 +757,20 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         boolean succeeded = false;
 
-        EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), unit.building().productCatalog()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), leaseType));
-        servicesLoop: for (Service service : Persistence.service().query(criteria)) {
-            EntityQueryCriteria<ProductItem> serviceCriteria = EntityQueryCriteria.create(ProductItem.class);
-            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ServiceItemType.class));
-            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().product(), service.version()));
-            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), unit));
-            ProductItem serviceItem = Persistence.service().retrieve(serviceCriteria);
+        EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
+        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), unit.building().productCatalog()));
+        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().version().type(), leaseType));
+        serviceCriteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
+        for (Service service : Persistence.service().query(serviceCriteria)) {
+            EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);
+            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().type(), ServiceItemType.class));
+            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().product(), service.version()));
+            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().element(), unit));
+            ProductItem serviceItem = Persistence.service().retrieve(productCriteria);
             if (serviceItem != null) {
                 setService(leaseTerm, serviceItem);
                 succeeded = true;
-                break servicesLoop;
+                break;
             }
         }
 

@@ -65,9 +65,13 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
     @XmlType(name = "LeaseTermStatus")
     public enum Status {
 
-        Working,
+        Current,
 
-        Offer;
+        Historic,
+
+        Offer,
+
+        AcceptedOffer;
 
         @Override
         public String toString() {
@@ -105,12 +109,6 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
     @ReadOnly
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> creationDate();
-
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> approvalDate();
-
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> activationDate();
 
     public interface LeaseTermV extends IVersionData<LeaseTerm> {
 

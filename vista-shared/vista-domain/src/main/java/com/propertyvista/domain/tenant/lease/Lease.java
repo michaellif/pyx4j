@@ -255,4 +255,6 @@ public interface Lease extends IEntity {
     IList<LeaseTerm> leaseTerms();
 
     LeaseTerm currentTerm();
+
+    LeaseTerm futureTerm();
 }
