@@ -16,19 +16,19 @@ package com.propertyvista.admin.server.services;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.rpc.OnboardingMerchantAccountDTO;
-import com.propertyvista.admin.server.onboarding.rh.ApproveBankAccountInfoRequestHandler;
-import com.propertyvista.admin.server.onboarding.rh.UpdateBankAccountInfoRequestHandler;
+import com.propertyvista.biz.system.OnboardingPaymentFacade;
 import com.propertyvista.domain.financial.MerchantAccount;
-import com.propertyvista.onboarding.ApproveBankAccountInfoRequestIO;
 import com.propertyvista.onboarding.BankAccountInfo;
 import com.propertyvista.onboarding.BankAccountInfoApproval;
-import com.propertyvista.onboarding.UpdateBankAccountInfoRequestIO;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class OnboardingMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImpl<OnboardingMerchantAccount, OnboardingMerchantAccountDTO> implements
@@ -74,16 +74,7 @@ public class OnboardingMerchantAccountCrudServiceImpl extends AbstractCrudServic
 
     @Override
     protected void persist(OnboardingMerchantAccount entity, OnboardingMerchantAccountDTO dto) {
-        UpdateBankAccountInfoRequestIO updateRequest = EntityFactory.create(UpdateBankAccountInfoRequestIO.class);
-
-        updateRequest.onboardingAccountId().setValue(dto.onboardingAccountId().getValue());
-        if (updateRequest.onboardingAccountId().isNull()) {
-            Persistence.service().retrieve(dto.pmc());
-            updateRequest.onboardingAccountId().setValue(dto.pmc().onboardingAccountId().getValue());
-        }
-
-        BankAccountInfo requestAcc = updateRequest.accounts().$();
-        updateRequest.accounts().add(requestAcc);
+        BankAccountInfo requestAcc = EntityFactory.create(BankAccountInfo.class);
 
         requestAcc.onboardingBankAccountId().setValue(dto.onboardingBankAccountId().getValue());
         requestAcc.bankId().setValue(dto.bankId().getValue());
@@ -94,14 +85,10 @@ public class OnboardingMerchantAccountCrudServiceImpl extends AbstractCrudServic
         if (requestAcc.onboardingBankAccountId().isNull()) {
             requestAcc.onboardingBankAccountId().setValue(UUID.randomUUID().toString());
         }
-
-        new UpdateBankAccountInfoRequestHandler().execute(updateRequest);
+        ServerSideFactory.create(OnboardingPaymentFacade.class).updateBankAccountInfo(dto.onboardingAccountId().getValue(), requestAcc);
 
         if (!dto.merchantTerminalId().isNull()) {
-            ApproveBankAccountInfoRequestIO apporveRequest = EntityFactory.create(ApproveBankAccountInfoRequestIO.class);
-            apporveRequest.onboardingAccountId().setValue(updateRequest.onboardingAccountId().getValue());
-            BankAccountInfoApproval account = apporveRequest.accounts().$();
-            apporveRequest.accounts().add(account);
+            BankAccountInfoApproval account = EntityFactory.create(BankAccountInfoApproval.class);
 
             account.terminalId().setValue(dto.merchantTerminalId().getValue());
             account.onboardingBankAccountId().setValue(requestAcc.onboardingBankAccountId().getValue());
@@ -109,7 +96,15 @@ public class OnboardingMerchantAccountCrudServiceImpl extends AbstractCrudServic
             account.branchTransitNumber().setValue(requestAcc.branchTransitNumber().getValue());
             account.accountNumber().setValue(requestAcc.accountNumber().getValue());
 
-            new ApproveBankAccountInfoRequestHandler().execute(apporveRequest);
+            ServerSideFactory.create(OnboardingPaymentFacade.class).approveBankAccountInfo(dto.onboardingAccountId().getValue(), account);
+        }
+
+        // Find created item
+        {
+            EntityQueryCriteria<OnboardingMerchantAccount> criteria = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().onboardingAccountId(), dto.onboardingAccountId().getValue()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().onboardingBankAccountId(), requestAcc.onboardingBankAccountId().getValue()));
+            entity.set(Persistence.service().retrieve(criteria));
         }
     }
 }

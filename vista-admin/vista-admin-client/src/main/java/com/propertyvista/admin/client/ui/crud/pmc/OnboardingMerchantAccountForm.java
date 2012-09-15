@@ -15,9 +15,13 @@ package com.propertyvista.admin.client.ui.crud.pmc;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.rpc.OnboardingMerchantAccountDTO;
+import com.propertyvista.admin.rpc.PmcDTO;
 
 public class OnboardingMerchantAccountForm extends AdminEntityForm<OnboardingMerchantAccountDTO> {
 
@@ -35,6 +39,8 @@ public class OnboardingMerchantAccountForm extends AdminEntityForm<OnboardingMer
     protected void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class))),
+                10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingBankAccountId())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 25).readOnlyMode(true).build());
 
@@ -45,6 +51,13 @@ public class OnboardingMerchantAccountForm extends AdminEntityForm<OnboardingMer
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeDescription()), 30).build());
 
         selectTab(addTab(content));
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        get(proto().pmc()).setVisible(!getValue().pmc().isEmpty());
+        get(proto().status()).setVisible(!getValue().id().isNull());
     }
 
 }
