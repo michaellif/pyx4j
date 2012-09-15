@@ -28,6 +28,9 @@ public interface OnboardingMerchantAccountDTO extends OnboardingMerchantAccount 
     @Length(8)
     IPrimitive<String> merchantTerminalId();
 
+    @Override
+    IPrimitive<String> onboardingAccountId();
+
     /**
      * Calculated base on terminal_id before sending it to GWT
      */

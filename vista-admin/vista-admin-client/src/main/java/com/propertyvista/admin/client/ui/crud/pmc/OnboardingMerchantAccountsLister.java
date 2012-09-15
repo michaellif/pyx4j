@@ -28,8 +28,8 @@ public class OnboardingMerchantAccountsLister extends BasicLister<OnboardingMerc
     public OnboardingMerchantAccountsLister() {
         super(OnboardingMerchantAccountDTO.class, true, true);
         setColumnDescriptors(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().onboardingAccountId()).build(),
                 new MemberColumnDescriptor.Builder(proto().onboardingBankAccountId()).build(),
+                new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(),
                 new MemberColumnDescriptor.Builder(proto().status()).searchable(false).sortable(false).build()
         );//@formatter:on
     }

@@ -27,10 +27,6 @@ public interface BankAccountInfo extends IEntity {
     @NotNull
     IPrimitive<String> onboardingBankAccountId();
 
-    @Length(8)
-    @Deprecated
-    IPrimitive<String> terminalId();
-
     @Length(3)
     @NotNull
     IPrimitive<String> bankId();

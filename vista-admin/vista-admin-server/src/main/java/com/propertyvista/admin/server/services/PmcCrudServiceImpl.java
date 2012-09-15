@@ -14,6 +14,7 @@
 package com.propertyvista.admin.server.services;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -87,6 +88,11 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         }
         entity.dnsName().setValue(entity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         entity.namespace().setValue(entity.namespace().getValue().toLowerCase(Locale.ENGLISH).replace('-', '_'));
+
+        if (entity.onboardingAccountId().isNull()) {
+            entity.onboardingAccountId().setValue(UUID.randomUUID().toString());
+        }
+
         for (PmcDnsName alias : entity.dnsNameAliases()) {
             alias.dnsName().setValue(alias.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         }
@@ -121,13 +127,13 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
                     .email().getValue(), dto.password().getValue(), VistaOnboardingBehavior.ProspectiveClient, null);
 
         } else {
-        	EntityQueryCriteria<OnboardingUserCredential> criteria = EntityQueryCriteria.create(OnboardingUserCredential.class);
+            EntityQueryCriteria<OnboardingUserCredential> criteria = EntityQueryCriteria.create(OnboardingUserCredential.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), dto.createPmcForExistingOnboardingUserRequest()));
-        	cred = Persistence.service().retrieve(criteria);
-        	if (cred == null) {
+            cred = Persistence.service().retrieve(criteria);
+            if (cred == null) {
                 throw new UserRuntimeException("failed to create PMC because existing onboarding user with key = '"
                         + dto.createPmcForExistingOnboardingUserRequest().getPrimaryKey() + "' was not found");
-        	}
+            }
         }
         cred.pmc().set(entity);
         Persistence.service().persist(cred);
@@ -151,7 +157,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         SecurityController.assertPermission(EntityPermission.permissionUpdate(Pmc.class));
         callback.onSuccess(DeferredProcessRegistry.fork(new PmcActivationDeferredProcess(EntityFactory.createIdentityStub(Pmc.class, entityId)),
                 ThreadPoolNames.IMPORTS));
-            }
+    }
 
     @Override
     public void suspend(AsyncCallback<PmcDTO> callback, Key entityId) {

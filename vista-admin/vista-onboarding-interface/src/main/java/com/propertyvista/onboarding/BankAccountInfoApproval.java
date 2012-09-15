@@ -19,7 +19,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface BankAccountInfoApproval extends BankAccountInfo {
 
-    @Override
     @Length(8)
     @NotNull
     IPrimitive<String> terminalId();
