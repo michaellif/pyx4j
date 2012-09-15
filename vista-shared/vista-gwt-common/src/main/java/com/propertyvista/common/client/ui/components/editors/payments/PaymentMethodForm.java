@@ -28,6 +28,7 @@ import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.RadioGroup;
 
 import com.propertyvista.common.client.resources.VistaImages;
@@ -38,6 +39,8 @@ import com.propertyvista.common.client.ui.components.editors.AddressStructuredEd
 import com.propertyvista.domain.payment.PaymentType;
 
 public class PaymentMethodForm extends PaymentMethodEditor {
+
+    private static final I18n i18n = I18n.get(PaymentMethodForm.class);
 
     private final FlowPanel paymentTypeImagesPanel = new FlowPanel();
 

@@ -48,7 +48,7 @@ import com.propertyvista.domain.payment.PaymentType;
 
 public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
 
-    protected static final I18n i18n = I18n.get(PaymentMethodEditor.class);
+    private static final I18n i18n = I18n.get(PaymentMethodEditor.class);
 
     protected final SimplePanel paymentDetailsHolder = new SimplePanel();
 
@@ -273,7 +273,7 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
     public void setElectronicPaymentsEnabled(Boolean electronicPaymentsEnabled) {
         if (electronicPaymentsEnabled != Boolean.TRUE) {
             this.setPaymentOptionsEnabled(PaymentType.electronicPayments(), false);
-            (get(proto().type())).setNote(i18n.tr("Merchant account is not setup to receive Electronic Payments"));
+            (get(proto().type())).setNote(i18n.tr("Warning: Building has not been set up to process electronic payments yet"));
         }
     }
 
