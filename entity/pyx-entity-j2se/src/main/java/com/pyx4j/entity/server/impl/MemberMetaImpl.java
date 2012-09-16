@@ -111,33 +111,37 @@ public class MemberMetaImpl implements MemberMeta {
         this.method = method;
         @SuppressWarnings("rawtypes")
         Class<? extends IObject> methodReturnType = (Class<? extends IObject<?>>) method.getReturnType();
-        if (IPrimitive.class.equals(methodReturnType)) {
-            valueClass = EntityImplReflectionHelper.primitiveValueClass(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0],
-                    interfaceClass);
-            objectClassType = ObjectClassType.Primitive;
-        } else if (IEntity.class.isAssignableFrom(methodReturnType)) {
-            Class<?> genericClass = EntityImplReflectionHelper.resolveGenericType(method.getGenericReturnType(), interfaceClass);
-            if (genericClass != null) {
-                valueClass = genericClass;
-                methodReturnType = (Class<? extends IObject<?>>) genericClass;
+        try {
+            if (IPrimitive.class.equals(methodReturnType)) {
+                valueClass = EntityImplReflectionHelper.primitiveValueClass(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0],
+                        interfaceClass);
+                objectClassType = ObjectClassType.Primitive;
+            } else if (IEntity.class.isAssignableFrom(methodReturnType)) {
+                Class<?> genericClass = EntityImplReflectionHelper.resolveGenericType(method.getGenericReturnType(), interfaceClass);
+                if (genericClass != null) {
+                    valueClass = genericClass;
+                    methodReturnType = (Class<? extends IObject<?>>) genericClass;
+                } else {
+                    valueClass = methodReturnType;
+                }
+                objectClassType = ObjectClassType.Entity;
+            } else if (ISet.class.equals(methodReturnType)) {
+                valueClass = EntityImplReflectionHelper.resolveType(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0],
+                        interfaceClass);
+                objectClassType = ObjectClassType.EntitySet;
+            } else if (IList.class.equals(methodReturnType)) {
+                valueClass = EntityImplReflectionHelper.resolveType(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0],
+                        interfaceClass);
+                objectClassType = ObjectClassType.EntityList;
+            } else if (IPrimitiveSet.class.equals(methodReturnType)) {
+                valueClass = EntityImplReflectionHelper.resolveType(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0],
+                        interfaceClass);
+                objectClassType = ObjectClassType.PrimitiveSet;
             } else {
-                valueClass = methodReturnType;
+                throw new RuntimeException("Unknown member type " + methodReturnType);
             }
-            objectClassType = ObjectClassType.Entity;
-        } else if (ISet.class.equals(methodReturnType)) {
-            valueClass = EntityImplReflectionHelper
-                    .resolveType(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0], interfaceClass);
-            objectClassType = ObjectClassType.EntitySet;
-        } else if (IList.class.equals(methodReturnType)) {
-            valueClass = EntityImplReflectionHelper
-                    .resolveType(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0], interfaceClass);
-            objectClassType = ObjectClassType.EntityList;
-        } else if (IPrimitiveSet.class.equals(methodReturnType)) {
-            valueClass = EntityImplReflectionHelper
-                    .resolveType(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0], interfaceClass);
-            objectClassType = ObjectClassType.PrimitiveSet;
-        } else {
-            throw new RuntimeException("Unknown member type " + methodReturnType);
+        } catch (Throwable e) {
+            throw new RuntimeException("Unresolved member '" + method.getName() + "' of " + interfaceClass.getSimpleName(), e);
         }
         objectClass = methodReturnType;
         fieldName = method.getName();
