@@ -25,15 +25,16 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IVersionData;
+import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Inheritance
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface Product extends IEntity {
+public interface Product<V extends IVersionData<?>> extends IVersionedEntity<V> {
 
     @Owner
     @NotNull
@@ -48,7 +49,7 @@ public interface Product extends IEntity {
     @Inheritance
     @AbstractEntity
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-    public interface ProductV extends IEntity {
+    public interface ProductV<P extends Product<?>> extends IVersionData<P> {
 
         @Owned
         @Detached

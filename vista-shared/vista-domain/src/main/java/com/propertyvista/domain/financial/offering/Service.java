@@ -26,15 +26,13 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IVersionData;
-import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.offering.Service.ServiceV;
 
 @DiscriminatorValue("service")
-public interface Service extends Product, IVersionedEntity<ServiceV> {
+public interface Service extends Product<ServiceV> {
 
     @I18n
     @XmlType(name = "ServiceType")
@@ -68,7 +66,7 @@ public interface Service extends Product, IVersionedEntity<ServiceV> {
 
     @ToStringFormat("{0}, {1}")
     @DiscriminatorValue("service")
-    public interface ServiceV extends Product.ProductV, IVersionData<Service> {
+    public interface ServiceV extends Product.ProductV<Service> {
 
         @NotNull
         @ToString(index = 0)
@@ -84,4 +82,5 @@ public interface Service extends Product, IVersionedEntity<ServiceV> {
         @Detached
         IList<Concession> concessions();
     }
+
 }

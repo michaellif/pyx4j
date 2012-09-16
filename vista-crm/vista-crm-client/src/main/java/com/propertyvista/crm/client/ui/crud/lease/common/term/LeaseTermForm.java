@@ -162,6 +162,14 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             assert false : "Incorrect situation! Value shouln'd be edited in this lease status!";
                         }
 
+                        if (VistaTODO.queryByProductCatalog_VISTA_1997) {
+                            filters.add(PropertyCriterion.isNotNull(proto().productItems().$().product()));
+                        } else {
+                            // and finalized current Product only:
+                            filters.add(PropertyCriterion.isNotNull(proto().productItems().$().product().fromDate()));
+                            filters.add(PropertyCriterion.isNull(proto().productItems().$().product().toDate()));
+                        }
+
                         super.setFilters(filters);
                     };
 

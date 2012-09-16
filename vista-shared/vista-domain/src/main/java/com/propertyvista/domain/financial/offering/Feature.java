@@ -26,8 +26,6 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IVersionData;
-import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -35,7 +33,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.financial.offering.Feature.FeatureV;
 
 @DiscriminatorValue("feature")
-public interface Feature extends Product, IVersionedEntity<FeatureV> {
+public interface Feature extends Product<FeatureV> {
 
     @I18n
     @XmlType(name = "FeatureType")
@@ -83,7 +81,7 @@ public interface Feature extends Product, IVersionedEntity<FeatureV> {
 
     @ToStringFormat("{0}, {1}")
     @DiscriminatorValue("feature")
-    public interface FeatureV extends Product.ProductV, IVersionData<Feature> {
+    public interface FeatureV extends Product.ProductV<Feature> {
 
         @NotNull
         @ToString(index = 0)
@@ -94,4 +92,5 @@ public interface Feature extends Product, IVersionedEntity<FeatureV> {
 
         IPrimitive<Boolean> mandatory();
     }
+
 }

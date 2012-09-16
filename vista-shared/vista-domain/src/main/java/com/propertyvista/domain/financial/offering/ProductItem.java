@@ -16,6 +16,7 @@ package com.propertyvista.domain.financial.offering;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -42,7 +43,7 @@ public interface ProductItem extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
-    Product.ProductV product();
+    Product.ProductV<?> product();
 
     @OrderColumn
     IPrimitive<Integer> _orderColumn();
@@ -62,6 +63,10 @@ public interface ProductItem extends IEntity {
     @Length(250)
     IPrimitive<String> description();
 
+    interface BuildingElementColumnId extends ColumnId {
+    }
+
+    @JoinColumn(BuildingElementColumnId.class)
     @Detached
     BuildingElement element();
 

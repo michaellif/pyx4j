@@ -37,6 +37,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.BuildingElement;
@@ -110,4 +111,8 @@ public interface AptUnit extends BuildingElement, PolicyNode {
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = Lease.class)
     ISet<Lease> _Leases();
+
+    @Detached(level = AttachLevel.Detached)
+    @JoinTable(value = ProductItem.class, mappedBy = ProductItem.BuildingElementColumnId.class)
+    ISet<ProductItem> productItems();
 }

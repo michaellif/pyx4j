@@ -41,6 +41,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lead.Showing.Result;
+import com.propertyvista.misc.VistaTODO;
 
 public class ShowingForm extends CrmEntityForm<ShowingDTO> {
 
@@ -127,6 +128,15 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
                         } else {
                             filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
                         }
+
+                        if (VistaTODO.queryByProductCatalog_VISTA_1997) {
+                            filters.add(PropertyCriterion.isNotNull(proto().productItems().$().product()));
+                        } else {
+                            // and finalized current Product only:
+                            filters.add(PropertyCriterion.isNotNull(proto().productItems().$().product().fromDate()));
+                            filters.add(PropertyCriterion.isNull(proto().productItems().$().product().toDate()));
+                        }
+
                         super.setFilters(filters);
                     }
                 };
