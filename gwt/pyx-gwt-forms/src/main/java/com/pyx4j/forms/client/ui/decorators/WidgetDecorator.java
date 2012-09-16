@@ -291,6 +291,10 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
             return new WidgetDecorator(this);
         }
 
+        public CComponent<?, ?> getComponent() {
+            return component;
+        }
+
         public Builder labelWidth(double labelWidth) {
             this.labelWidth = labelWidth;
             return this;

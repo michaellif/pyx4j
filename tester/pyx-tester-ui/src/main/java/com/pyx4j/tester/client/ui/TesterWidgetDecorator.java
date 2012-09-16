@@ -30,16 +30,32 @@ import com.pyx4j.tester.client.ui.event.CComponentBrowserEvent;
 
 public class TesterWidgetDecorator extends WidgetDecorator {
 
-    public TesterWidgetDecorator(final CComponent<?, ?> component) {
-        super(component);
+    public TesterWidgetDecorator(CComponent<?, ?> component) {
+        this(new Builder(component));
+    }
 
-        getLabel().addClickHandler(new ClickHandler() {
+    public TesterWidgetDecorator(final Builder builder) {
+        super(builder);
+
+        addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
-                TesterSite.getEventBus().fireEvent(new CComponentBrowserEvent(component));
+                TesterSite.getEventBus().fireEvent(new CComponentBrowserEvent(builder.getComponent()));
             }
         });
 
+    }
+
+    public static class Builder extends WidgetDecorator.Builder {
+
+        public Builder(CComponent<?, ?> component) {
+            super(component);
+        }
+
+        @Override
+        public TesterWidgetDecorator build() {
+            return new TesterWidgetDecorator(this);
+        }
     }
 }

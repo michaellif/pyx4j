@@ -79,7 +79,7 @@ public class TesterPanel extends LayoutPanel {
         DisplayPanel consoleDisplay = new DisplayPanel();
         navigDisplay.setSize("100%", "100%");
 
-        splitPanel.addSouth(consoleDisplay, 250);
+        splitPanel.addEast(consoleDisplay, 500);
         splitPanel.setWidgetMinSize(consoleDisplay, 150);
 
         DisplayPanel mainDisplay = new DisplayPanel();
