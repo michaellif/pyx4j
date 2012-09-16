@@ -126,16 +126,13 @@ public class MemberMetaImpl implements MemberMeta {
                 }
                 objectClassType = ObjectClassType.Entity;
             } else if (ISet.class.equals(methodReturnType)) {
-                valueClass = EntityImplReflectionHelper.resolveType(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0],
-                        interfaceClass);
+                valueClass = EntityImplReflectionHelper.resolveTypeGenericArgumentType(method.getGenericReturnType(), interfaceClass);
                 objectClassType = ObjectClassType.EntitySet;
             } else if (IList.class.equals(methodReturnType)) {
-                valueClass = EntityImplReflectionHelper.resolveType(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0],
-                        interfaceClass);
+                valueClass = EntityImplReflectionHelper.resolveTypeGenericArgumentType(method.getGenericReturnType(), interfaceClass);
                 objectClassType = ObjectClassType.EntityList;
             } else if (IPrimitiveSet.class.equals(methodReturnType)) {
-                valueClass = EntityImplReflectionHelper.resolveType(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0],
-                        interfaceClass);
+                valueClass = EntityImplReflectionHelper.resolveTypeGenericArgumentType(method.getGenericReturnType(), interfaceClass);
                 objectClassType = ObjectClassType.PrimitiveSet;
             } else {
                 throw new RuntimeException("Unknown member type " + methodReturnType);

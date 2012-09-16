@@ -21,6 +21,7 @@
 package com.pyx4j.entity.server.impl;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -76,5 +77,39 @@ public class ResolveGenericTest extends TestCase {
         Class<?> interfaceClass = D2.class;
         Method method = interfaceClass.getMethod("getCE", (Class[]) null);
         Assert.assertEquals(Integer.class, EntityImplReflectionHelper.resolveGenericType(method.getGenericReturnType(), interfaceClass));
+    }
+
+    private static interface S1<EofS1 extends Number> {
+
+        EofS1 getS1();
+
+        List<EofS1> getListS1();
+
+    }
+
+    private static interface S2<EofS2 extends Number> extends S1<EofS2> {
+
+    }
+
+    private static interface S3 extends S2<Integer> {
+
+    }
+
+    public void testInheritance2LevelMethodUnresolvedReturnType() throws NoSuchMethodException, SecurityException {
+        Class<?> interfaceClass = S2.class;
+        Method method = interfaceClass.getMethod("getS1", (Class[]) null);
+        Assert.assertEquals(Number.class, EntityImplReflectionHelper.resolveGenericType(method.getGenericReturnType(), interfaceClass));
+
+        Method collectionMethod = interfaceClass.getMethod("getListS1", (Class[]) null);
+        Assert.assertEquals(Number.class, EntityImplReflectionHelper.resolveTypeGenericArgumentType(collectionMethod.getGenericReturnType(), interfaceClass));
+    }
+
+    public void testInheritance2LevelMethodReturnType() throws NoSuchMethodException, SecurityException {
+        Class<?> interfaceClass = S3.class;
+        Method method = interfaceClass.getMethod("getS1", (Class[]) null);
+        Assert.assertEquals(Integer.class, EntityImplReflectionHelper.resolveGenericType(method.getGenericReturnType(), interfaceClass));
+
+        Method collectionMethod = interfaceClass.getMethod("getListS1", (Class[]) null);
+        Assert.assertEquals(Integer.class, EntityImplReflectionHelper.resolveTypeGenericArgumentType(collectionMethod.getGenericReturnType(), interfaceClass));
     }
 }

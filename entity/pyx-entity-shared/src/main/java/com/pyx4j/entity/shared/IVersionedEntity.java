@@ -27,7 +27,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.i18n.annotations.I18n;
 
-@AbstractEntity(generateMetadata = false)
+@AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface IVersionedEntity<VERSIONED_ITEM extends IVersionData<?>> extends IEntity {
 

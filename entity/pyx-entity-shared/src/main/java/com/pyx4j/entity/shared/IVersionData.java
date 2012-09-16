@@ -34,7 +34,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.i18n.annotations.I18n;
 
-@AbstractEntity(generateMetadata = false)
+@AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface IVersionData<VERSIONED_ENTITY extends IVersionedEntity<?>> extends IEntity {
 

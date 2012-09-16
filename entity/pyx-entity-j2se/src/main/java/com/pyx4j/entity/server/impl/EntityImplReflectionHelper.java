@@ -67,6 +67,10 @@ public class EntityImplReflectionHelper {
     }
 
     public static Class<?> resolveGenericType(Type genericType, Class<?> interfaceClass) {
+        return resolveGenericType(genericType, interfaceClass, interfaceClass);
+    }
+
+    public static Class<?> resolveGenericType(Type genericType, Class<?> interfaceClass, Class<?> topInterfaceClass) {
         if (genericType instanceof TypeVariable) {
             TypeVariable<?> typeVariable = (TypeVariable<?>) genericType;
             for (Type extendedInterfaceType : interfaceClass.getGenericInterfaces()) {
@@ -79,7 +83,14 @@ public class EntityImplReflectionHelper {
                         for (int i = 0; i < actualTypeArguments.length; i++) {
                             //System.out.println("Actual Type:" + typeParameters[i] + "->" + actualTypeArguments[i]);
                             if (typeVariable == typeParameters[i]) {
-                                return (Class<?>) actualTypeArguments[i];
+                                if (actualTypeArguments[i] instanceof TypeVariable) {
+                                    Class<?> resolved = resolveGenericType(actualTypeArguments[i], topInterfaceClass);
+                                    if (resolved != null) {
+                                        return resolved;
+                                    }
+                                } else {
+                                    return (Class<?>) actualTypeArguments[i];
+                                }
                             }
                         }
                     }
@@ -87,7 +98,7 @@ public class EntityImplReflectionHelper {
             }
             // if not found try super class
             for (Class<?> superInterfaceClass : interfaceClass.getInterfaces()) {
-                Class<?> resolved = resolveGenericType(genericType, superInterfaceClass);
+                Class<?> resolved = resolveGenericType(genericType, superInterfaceClass, topInterfaceClass);
                 if (resolved != null) {
                     return resolved;
                 }
@@ -97,10 +108,16 @@ public class EntityImplReflectionHelper {
             for (Type boundType : typeVariable.getBounds()) {
                 if (boundType instanceof Class<?>) {
                     return (Class<?>) boundType;
+                } else if (boundType instanceof ParameterizedType) {
+                    return (Class<?>) ((ParameterizedType) boundType).getRawType();
                 }
             }
         }
         return null;
+    }
+
+    public static Class<?> resolveTypeGenericArgumentType(Type genericType, Class<?> interfaceClass) {
+        return resolveType(((ParameterizedType) genericType).getActualTypeArguments()[0], interfaceClass);
     }
 
     public static Class<?> resolveType(Type genericType, Class<?> interfaceClass) {

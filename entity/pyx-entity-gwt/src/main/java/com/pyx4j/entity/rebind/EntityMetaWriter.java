@@ -323,7 +323,7 @@ public class EntityMetaWriter {
             JClassType type = (JClassType) method.getReturnType();
 
             MemberMetaDataGeneration data = new MemberMetaDataGeneration();
-            data.objectClassSourceName = type.getQualifiedSourceName();
+            data.objectClassSourceName = type.getErasedType().getQualifiedSourceName();
 
             JClassType valueClass;
             // Class<?> valueClass, Class<? extends IObject<?>> objectClass,
