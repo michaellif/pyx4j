@@ -19,7 +19,6 @@ import java.util.EnumSet;
 import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
@@ -118,7 +117,6 @@ public class ProductCatalogGenerator {
         item.version().description().setValue("Service description");
 
         item.version().items().addAll(createServiceItems(type));
-        item.saveAction().setValue(SaveAction.saveAsFinal);
         return item;
     }
 
@@ -184,8 +182,6 @@ public class ProductCatalogGenerator {
             ProductItem fi = RandomUtil.random(item.version().items());
             fi.isDefault().setValue(Boolean.TRUE);
         }
-
-        item.saveAction().setValue(SaveAction.saveAsFinal);
         return item;
     }
 
@@ -265,8 +261,6 @@ public class ProductCatalogGenerator {
 
         item.version().effectiveDate().setValue(DataGenerator.randomDate(2));
         item.version().expirationDate().setValue(DataGenerator.randomDate(4));
-
-        item.saveAction().setValue(SaveAction.saveAsFinal);
         return item;
     }
 
