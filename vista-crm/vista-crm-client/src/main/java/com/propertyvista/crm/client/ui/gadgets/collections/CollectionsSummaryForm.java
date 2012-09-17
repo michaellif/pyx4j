@@ -14,7 +14,8 @@
 package com.propertyvista.crm.client.ui.gadgets.collections;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
+
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetSummaryForm;
 import com.propertyvista.crm.rpc.dto.gadgets.CollectionsGadgetDataDTO;
@@ -27,10 +28,11 @@ public class CollectionsSummaryForm extends CounterGadgetSummaryForm<Collections
 
     @Override
     public IsWidget createContent() {
-        VerticalPanel content = new VerticalPanel();
-        content.add(new DecoratorBuilder(inject(proto().tenantsPaidThisMonth())).build());
-        content.add(new DecoratorBuilder(inject(proto().fundsCollectedThisMonth())).build());
-        content.add(new DecoratorBuilder(inject(proto().fundsInProcessing())).build());
+        FormFlexPanel content = new FormFlexPanel();
+        int row = -1;
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenantsPaidThisMonth())).componentWidth(10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fundsCollectedThisMonth())).componentWidth(10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fundsInProcessing())).componentWidth(10).build());
         return content;
     }
 

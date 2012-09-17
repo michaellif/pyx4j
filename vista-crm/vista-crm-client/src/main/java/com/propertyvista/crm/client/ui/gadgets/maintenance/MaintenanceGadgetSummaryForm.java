@@ -13,15 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.maintenance;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetSummaryForm;
-import com.propertyvista.crm.client.ui.gadgets.util.Utils;
 import com.propertyvista.crm.rpc.dto.gadgets.MaintenanceGadgetDataDTO;
 
 public class MaintenanceGadgetSummaryForm extends CounterGadgetSummaryForm<MaintenanceGadgetDataDTO> {
@@ -34,32 +31,22 @@ public class MaintenanceGadgetSummaryForm extends CounterGadgetSummaryForm<Maint
 
     @Override
     public IsWidget createContent() {
-        VerticalPanel content = new VerticalPanel();
-        content.setWidth("100%");
-        content.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        content.getElement().getStyle().setPaddingBottom(1, Unit.EM);
 
-        FlexTable workOrders = Utils.createTable(//@formatter:off
-                new String[]{
-                        "",
-                        i18n.tr("Open"),
-                        i18n.tr("Urgent"),
-                        i18n.tr("Outstanding 1 to 2 days"),
-                        i18n.tr("Outstanding 2 to 3 days"),
-                        i18n.tr("Outstanding 3 and more days")},
-                new String[]{"200", "100", "100", "100", "100", "100"},
-                new String[]{i18n.tr("# of Work Orders:")},
-                new IsWidget[][] {{
-                        inject(proto().openWorkOrders()),
-                        inject(proto().urgentWorkOrders()),
-                        inject(proto().outstandingWorkOrders1to2days()),
-                        inject(proto().outstandingWorkOrders2to3days()),
-                        inject(proto().outstandingWorkOrdersMoreThan3days())
-                }}
-        );//@formatter:on
-        content.add(workOrders);
+        FormFlexPanel content = new FormFlexPanel();
+        int row = -1;
+        content.setH2(++row, 0, 1, i18n.tr("Open:"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().openWorkOrders())).customLabel("").useLabelSemicolon(false).componentWidth(5).build());
 
+        content.setH2(++row, 0, 1, i18n.tr("Urgent:"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().urgentWorkOrders())).customLabel("").useLabelSemicolon(false).componentWidth(5).build());
+
+        content.setH2(++row, 0, 1, i18n.tr("Outstanding:"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingWorkOrders1to2days())).customLabel("1 to 2 days").componentWidth(5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingWorkOrders2to3days())).customLabel("2 to 3 days").componentWidth(5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingWorkOrdersMoreThan3days())).customLabel("3 and more").componentWidth(5)
+                .build());
         return content;
+
     }
 
 }
