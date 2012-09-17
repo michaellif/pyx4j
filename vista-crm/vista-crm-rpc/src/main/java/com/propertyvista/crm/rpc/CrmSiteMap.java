@@ -371,6 +371,18 @@ public class CrmSiteMap implements SiteMap {
     @NavigationItem(navigLabel = "Administration")
     public static class Settings extends AppPlace {
 
+        @PlaceProperties(caption = "Security")
+        @NavigationItem(navigLabel = "Security")
+        public static class Security extends AppPlace {
+
+            @PlaceProperties(caption = "Audit Records")
+            @NavigationItem(navigLabel = "Audit Records")
+            public static class AuditRecords extends CrmCrudAppPlace {
+
+            }
+
+        }
+
         @NavigationItem(navigLabel = "Policies")
         public static class Policies extends AppPlace {
 

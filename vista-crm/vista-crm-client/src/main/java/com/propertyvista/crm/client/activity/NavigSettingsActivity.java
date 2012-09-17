@@ -22,10 +22,12 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class NavigSettingsActivity extends AbstractActivity implements NavigView.MainNavigPresenter {
     private static final I18n i18n = I18n.get(NavigSettingsActivity.class);
@@ -52,7 +54,15 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
     public List<NavigFolder> createNavigFolders() {
         ArrayList<NavigFolder> list = new ArrayList<NavigFolder>();
 
-        NavigFolder folder = new NavigFolder(i18n.tr("Settings"));
+        NavigFolder folder = null;
+
+        if (SecurityController.checkBehavior(VistaCrmBehavior.Organization)) {
+            folder = new NavigFolder(i18n.tr("Security"));
+            folder.addNavigItem(new CrmSiteMap.Settings.Security.AuditRecords());
+            list.add(folder);
+        }
+
+        folder = new NavigFolder(i18n.tr("Settings"));
         folder.addNavigItem(new CrmSiteMap.Settings.UserRole());
         folder.addNavigItem(new CrmSiteMap.Settings.MerchantAccount());
         list.add(folder);

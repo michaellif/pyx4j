@@ -26,6 +26,8 @@ import com.propertyvista.common.client.ui.components.security.PasswordChangeView
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 import com.propertyvista.common.client.ui.components.security.PasswordResetViewImpl;
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
+import com.propertyvista.crm.client.ui.crud.auditrecord.CrmAuditRecordListerView;
+import com.propertyvista.crm.client.ui.crud.auditrecord.CrmAuditRecordListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.LoginAttemptsListerView;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.LoginAttemptsListerViewImpl;
 
@@ -47,6 +49,8 @@ public class SecurityViewFactory extends ViewFactoryBase {
                 map.put(type, new AccountRecoveryOptionsEditorViewImpl());
             } else if (LoginAttemptsListerView.class.equals(type)) {
                 map.put(type, new LoginAttemptsListerViewImpl());
+            } else if (CrmAuditRecordListerView.class.equals(type)) {
+                map.put(type, new CrmAuditRecordListerViewImpl());
             }
         }
 
