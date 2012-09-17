@@ -18,6 +18,7 @@ import java.text.MessageFormat;
 import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -33,6 +34,10 @@ public class Utils {
 
     public static String countAndPercentLabel(int count, double percent) {
         return MessageFormat.format("{0,number,integer} ({1,number,percent})", count, percent);
+    }
+
+    public static LogicalDate dayOfCurrentTransaction() {
+        return new LogicalDate(Persistence.service().getTransactionSystemTime());
     }
 
     public static LogicalDate beginningOfMonth(LogicalDate dayOfMonth) {

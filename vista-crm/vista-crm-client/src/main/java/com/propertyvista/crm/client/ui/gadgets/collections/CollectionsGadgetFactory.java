@@ -26,6 +26,7 @@ import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.PaymentDetailsFactory;
+import com.propertyvista.crm.client.ui.gadgets.components.TenantsDetailsFactory;
 import com.propertyvista.crm.rpc.dto.gadgets.CollectionsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.CollectionsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.CollectionsGadgetMetadata;
@@ -42,14 +43,20 @@ public class CollectionsGadgetFactory extends AbstractGadget<CollectionsGadgetMe
         }
 
         @Override
+        protected void bindDetailsFactories() {
+            bindTenantsDetailsFactory(proto().tenantsPaidThisMonth());
+            bindPaymentDetailsFactory(proto().fundsCollectedThisMonth());
+            bindPaymentDetailsFactory(proto().fundsInProcessing());
+        }
+
+        @Override
         protected Vector<Building> prepareSummaryQuery() {
             return new Vector<Building>(buildingsFilterContainer.getSelectedBuildingsStubs());
         }
 
-        @Override
-        protected void bindDetailsFactories() {
-            bindPaymentDetailsFactory(proto().fundsCollectedThisMonth());
-            bindPaymentDetailsFactory(proto().fundsInProcessing());
+        private void bindTenantsDetailsFactory(IObject<?> member) {
+            bindDetailsFactory(proto().tenantsPaidThisMonth(), new TenantsDetailsFactory(GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class),
+                    this, member.getPath().toString()));
         }
 
         private void bindPaymentDetailsFactory(IObject<?> member) {

@@ -21,14 +21,20 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.dto.gadgets.CollectionsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.PaymentCriteriaProvider;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.TenantCriteriaProvider;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.dto.TenantDTO;
 
-public interface CollectionsGadgetService extends AbstractCounterGadgetBaseService<CollectionsGadgetDataDTO, Vector<Building>>, PaymentCriteriaProvider {
+public interface CollectionsGadgetService extends AbstractCounterGadgetBaseService<CollectionsGadgetDataDTO, Vector<Building>>, PaymentCriteriaProvider,
+        TenantCriteriaProvider {
 
     @Override
     public void countData(AsyncCallback<CollectionsGadgetDataDTO> callback, Vector<Building> queryParams);
 
     @Override
     public void makePaymentCriteria(AsyncCallback<EntityListCriteria<PaymentRecordDTO>> callback, Vector<Building> buildingsFilter, String filter);
+
+    @Override
+    public void makeTenantCriteria(AsyncCallback<EntityListCriteria<TenantDTO>> callback, Vector<Building> buildingsFilter, String criteriaPreset);
 }
