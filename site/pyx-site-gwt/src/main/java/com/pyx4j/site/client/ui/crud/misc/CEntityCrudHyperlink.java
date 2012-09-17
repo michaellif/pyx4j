@@ -23,12 +23,11 @@ package com.pyx4j.site.client.ui.crud.misc;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.CAbstractHyperlink;
-import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public class CEntityCrudHyperlink<E extends IEntity> extends CAbstractHyperlink<IEntity> {
+public class CEntityCrudHyperlink<E extends IEntity> extends CEntityHyperlink<E> {
 
     private String caption;
 
@@ -39,23 +38,6 @@ public class CEntityCrudHyperlink<E extends IEntity> extends CAbstractHyperlink<
     public CEntityCrudHyperlink(String caption, final CrudAppPlace place) {
         super((String) null);
         this.caption = caption;
-
-        setFormat(new IFormat<IEntity>() {
-            @Override
-            public String format(IEntity value) {
-                if (value != null) {
-                    return value.getStringView();
-                } else {
-                    return null;
-                }
-            }
-
-            @Override
-            public IEntity parse(String string) {
-                return null;
-            }
-        });
-
         setCommand(new Command() {
             @Override
             public void execute() {
@@ -78,7 +60,7 @@ public class CEntityCrudHyperlink<E extends IEntity> extends CAbstractHyperlink<
     }
 
     @Override
-    protected void setNativeValue(IEntity value) {
+    protected void setNativeValue(E value) {
         if (caption != null) {
             setCaption();
         } else {

@@ -21,18 +21,15 @@
 package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.History;
 
 import com.pyx4j.entity.shared.IEntity;
 
 public class CEntityHyperlink<E extends IEntity> extends CAbstractHyperlink<E> {
 
-    private final String uriPrefix;
-
-    // set default formatting (kind of common constructor):
-    {
+    protected CEntityHyperlink(String title) {
+        super(title);
         setWordWrap(true);
-        this.setFormat(new IFormat<E>() {
+        setFormat(new IFormat<E>() {
             @Override
             public String format(E value) {
                 if (value != null) {
@@ -47,30 +44,12 @@ public class CEntityHyperlink<E extends IEntity> extends CAbstractHyperlink<E> {
                 return null;
             }
         });
-    }
 
-    public CEntityHyperlink(Command command) {
-        this(null, command);
     }
 
     public CEntityHyperlink(String title, Command command) {
-        super(title, command);
-        this.uriPrefix = null;
-    }
-
-    public CEntityHyperlink(String title, String uriPrefix) {
-        super(title);
-        this.uriPrefix = uriPrefix;
-        setCommand(new Command() {
-            @Override
-            public void execute() {
-                History.newItem(getEntityHistoryToken(getValue()));
-            }
-        });
-    }
-
-    protected String getEntityHistoryToken(IEntity value) {
-        return uriPrefix + value.getPrimaryKey();
+        this(title);
+        setCommand(command);
     }
 
     /**
