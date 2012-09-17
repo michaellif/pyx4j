@@ -72,6 +72,8 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
 
         criteria.add(PropertyCriterion.ne(criteria.proto().leaseTermV().holder().lease().billingAccount().payments().$().paymentStatus(),
                 PaymentRecord.PaymentStatus.Submitted));
+        criteria.add(PropertyCriterion.ne(criteria.proto().leaseTermV().holder().lease().billingAccount().payments().$().paymentStatus(),
+                PaymentRecord.PaymentStatus.Canceled));
         criteria.add(PropertyCriterion.ge(criteria.proto().leaseTermV().holder().lease().billingAccount().payments().$().createdDate(), thisMonthStartDay));
         criteria.add(PropertyCriterion.le(criteria.proto().leaseTermV().holder().lease().billingAccount().payments().$().createdDate(), today));
 
@@ -100,6 +102,7 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
 
         // TODO not sure about submitted status, but this since it's just a draft of a record, it shouldn't appear in the report at all
         criteria.add(PropertyCriterion.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Submitted));
+        criteria.add(PropertyCriterion.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Canceled));
         if (proto.fundsCollectedThisMonth() == fundsFilterProto) {
 
         } else if (proto.fundsInProcessing() == fundsFilterProto) {
