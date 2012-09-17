@@ -78,7 +78,7 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
                         if (isEditable()) {
                             comp = inject(column.getObject(), new CEntityLabel<Name>());
                         } else {
-                            comp = inject(column.getObject(), new CEntityHyperlink<Name>(new Command() {
+                            comp = inject(column.getObject(), new CEntityHyperlink<Name>(null, new Command() {
                                 @Override
                                 public void execute() {
                                     AppSite.getPlaceController().goTo(new CrmSiteMap.Organization.Employee().formViewerPlace(getValue().id().getValue()));

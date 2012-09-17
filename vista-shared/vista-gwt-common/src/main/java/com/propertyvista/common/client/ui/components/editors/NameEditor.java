@@ -52,7 +52,7 @@ public class NameEditor extends CEntityDecoratableForm<Name> {
 
         linkPlace = (linkType != null ? AppPlaceEntityMapper.resolvePlace(linkType) : null);
         if (linkPlace != null) {
-            viewComp = new CEntityHyperlink<Name>(new Command() {
+            viewComp = new CEntityHyperlink<Name>(null, new Command() {
                 @Override
                 public void execute() {
                     if (getLinkKey() != null) {

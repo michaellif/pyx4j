@@ -70,7 +70,7 @@ public class TenantInLeaseFolder extends VistaTableFolder<Tenant> {
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (proto().customer().person().name() == column.getObject()) {
-                return inject(proto().customer().person().name(), new CEntityHyperlink<Name>(new Command() {
+                return inject(proto().customer().person().name(), new CEntityHyperlink<Name>(null, new Command() {
                     @Override
                     public void execute() {
                         AppSite.getPlaceController().goTo(

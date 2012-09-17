@@ -71,7 +71,7 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item(), new CEntityHyperlink<ProductItem>(new Command() {
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item(), new CEntityHyperlink<ProductItem>(null, new Command() {
             @Override
             public void execute() {
                 AppSite.getPlaceController().goTo(getTargetPlace());

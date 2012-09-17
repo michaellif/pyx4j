@@ -113,7 +113,7 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResourc
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale(), locale), 10).build());
             if (PortalImageResourceFolder.this.isEditable()) {
 
-                CEntityHyperlink<File> link = new CEntityHyperlink<File>(new Command() {
+                CEntityHyperlink<File> link = new CEntityHyperlink<File>(null, new Command() {
                     @Override
                     public void execute() {
                         SiteImageResourceProvider provider = new SiteImageResourceProvider();
@@ -148,7 +148,7 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResourc
                 });
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().imageResource(), link), 10).build());
             } else {
-                CEntityHyperlink<File> link = new CEntityHyperlink<File>(new Command() {
+                CEntityHyperlink<File> link = new CEntityHyperlink<File>(null, new Command() {
                     @Override
                     public void execute() {
                         OkDialog dialog = new OkDialog(getValue().imageResource().fileName().getValue()) {

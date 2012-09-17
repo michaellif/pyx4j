@@ -102,7 +102,7 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
                 };
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().youTubeVideoID(), new CHyperlink(showMediaCommand)), 25, 10).build());
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().url(), new CHyperlink(showMediaCommand)), 25, 10).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file(), new CEntityHyperlink(showMediaCommand)), 25, 10).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file(), new CEntityHyperlink(null, showMediaCommand)), 25, 10).build());
             }
 
             row = -1;
