@@ -65,6 +65,13 @@ public class Print {
                                    $wnd.print();
                                    }-*/;
 
+    public static native void preview(String html) /*-{
+                                                   var child = $wnd.open();
+                                                   child.document.writeln('<!doctype html>');
+                                                   child.document.writeln(html);
+                                                   child.document.close();
+                                                   }-*/;
+
     public static native void buildFrame(String html) /*-{
                                                       var frame = $doc.getElementById('__printingFrame');
                                                       if (!frame) {

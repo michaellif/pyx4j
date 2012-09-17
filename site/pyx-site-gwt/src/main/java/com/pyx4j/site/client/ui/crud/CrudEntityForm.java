@@ -22,9 +22,12 @@ package com.pyx4j.site.client.ui.crud;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
@@ -155,11 +158,24 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
     }
 
     public String toStringForPrint() {
-
         //Traverse tabs of TabPanel
         //for enabled - create Caption + body
         //Expand all collapsed containers and folder items
-        //add html+body tags and generate styles
-        return asWidget().toString();
+        //add html+body tags
+        VerticalPanel printWidget = new VerticalPanel();
+        printWidget.setWidth("100%");
+        for (final Tab tab : tabPanel.getTabs()) {
+            if (!tab.isTabEnabled()) {
+                continue;
+            }
+            tab.setTabVisible(true);
+            printWidget.add(new Label(tab.getTabTitle()));
+            printWidget.add(tab.getWidget(0));
+        }
+        StringBuilder html = new StringBuilder();
+        //generate styles
+        html.append("<style>" + StyleManger.getThemeString() + "</style>");
+        html.append("<body>" + printWidget.toString() + "</body>");
+        return html.toString();
     }
 }

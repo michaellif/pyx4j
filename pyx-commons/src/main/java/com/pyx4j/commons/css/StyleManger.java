@@ -85,17 +85,15 @@ public class StyleManger {
             return;
         }
         instance().theme = theme;
+        instance().palette = palette;
         alternativeHostnameIdx = 0;
-        StringBuilder stylesString = new StringBuilder();
-        for (Style style : theme.getAllStyles()) {
-            stylesString.append(style.toString(theme, palette));
-        }
+
+        String themeStr = getThemeString();
+
         cleanUpInjectedStyles();
         log.debug("install style {} ", theme.getClass().getName());
-        log.trace("{}", stylesString.toString());
-
-        StyleInjector.inject(stylesString.toString(), true);
-
+        log.trace("{}", themeStr);
+        StyleInjector.inject(themeStr, true);
     }
 
     private static void cleanUpInjectedStyles() {
@@ -119,5 +117,18 @@ public class StyleManger {
 
     public static Theme getTheme() {
         return instance().theme;
+    }
+
+    public static Palette getPalette() {
+        return instance().palette;
+    }
+
+    public static String getThemeString() {
+        StringBuilder stylesString = new StringBuilder();
+        for (Style style : instance().theme.getAllStyles()) {
+            stylesString.append(style.toString(instance().theme, instance().palette));
+        }
+
+        return stylesString.toString();
     }
 }
