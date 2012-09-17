@@ -84,7 +84,7 @@ public interface PaymentRecord extends IEntity {
         // state sets:
 
         public static Collection<PaymentStatus> processed() {
-            return EnumSet.of(Received, Rejected, Cleared, Returned);
+            return EnumSet.of(Rejected, Cleared, Returned);
         }
 
         // states:
