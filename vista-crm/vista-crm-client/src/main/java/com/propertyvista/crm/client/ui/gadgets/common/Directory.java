@@ -45,7 +45,7 @@ public class Directory {
 
     public enum Categories {
 
-        Availability, Arrears, Chart, Buildings, Payments, Leases, Notices, Maintenance, Demo;
+        Availability, Arrears, Chart, Buildings, Payments, Leases, Notices, Maintenance, Leads, Rentals, Demo;
 
         @Override
         public String toString() {

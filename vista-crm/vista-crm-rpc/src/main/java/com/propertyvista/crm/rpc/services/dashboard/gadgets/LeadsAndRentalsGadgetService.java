@@ -11,12 +11,17 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.dto.gadgets;
+package com.propertyvista.crm.rpc.services.dashboard.gadgets;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
+import java.util.Vector;
 
-@Transient
-public interface LeadAndRentalsGadgetDataDTO extends IEntity {
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.propertyvista.crm.rpc.dto.gadgets.LeadsAndRentalsGadgetDataDTO;
+import com.propertyvista.domain.property.asset.building.Building;
+
+public interface LeadsAndRentalsGadgetService extends AbstractCounterGadgetBaseService<LeadsAndRentalsGadgetDataDTO, Vector<Building>> {
+
+    @Override
+    public void countData(AsyncCallback<LeadsAndRentalsGadgetDataDTO> callback, Vector<Building> queryParams);
 }
