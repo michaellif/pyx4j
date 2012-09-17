@@ -37,5 +37,7 @@ public interface AuditRecordDTO extends IEntity {
 
     IPrimitive<VistaApplication> app();
 
+    IPrimitive<String> targetEntity();
+
     IPrimitive<String> details();
 }

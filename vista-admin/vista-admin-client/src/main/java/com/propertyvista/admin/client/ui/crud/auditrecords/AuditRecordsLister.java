@@ -25,10 +25,10 @@ public class AuditRecordsLister extends ListerBase<AuditRecordDTO> {
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().when()).build(),
                 new MemberColumnDescriptor.Builder(proto().pmc()).build(),
-                new MemberColumnDescriptor.Builder(proto().userName()).build(),
+                new MemberColumnDescriptor.Builder(proto().userName()).searchable(false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(),
-                new MemberColumnDescriptor.Builder(proto().app()).build(),
                 new MemberColumnDescriptor.Builder(proto().event()).build(),
+                new MemberColumnDescriptor.Builder(proto().targetEntity()).searchable(false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().details()).build()                
         );//@formatter:on
     }
