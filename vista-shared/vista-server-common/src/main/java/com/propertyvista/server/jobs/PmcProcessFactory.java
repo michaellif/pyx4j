@@ -42,6 +42,8 @@ public class PmcProcessFactory {
             return new UpdateArrearsProcess();
         case leaseActivation:
             return new LeaseActivationProcess();
+        case leaseRenewal:
+            return new LeaseRenewalProcess();
         case initializeFutureBillingCycles:
             return new FutureBillingCycleInitializationProcess();
         case updatePaymentsSummary:

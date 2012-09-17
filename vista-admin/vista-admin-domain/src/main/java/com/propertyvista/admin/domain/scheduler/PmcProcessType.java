@@ -44,6 +44,8 @@ public enum PmcProcessType implements Serializable {
 
     leaseActivation,
 
+    leaseRenewal,
+
     initializeFutureBillingCycles,
 
     cleanup,
