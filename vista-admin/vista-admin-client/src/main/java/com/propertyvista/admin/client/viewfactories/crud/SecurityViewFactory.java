@@ -17,6 +17,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.admin.client.ui.crud.auditrecords.AuditRecordListerView;
+import com.propertyvista.admin.client.ui.crud.auditrecords.AuditRecordListerViewImpl;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeViewImpl;
 
@@ -26,7 +28,10 @@ public class SecurityViewFactory extends ViewFactoryBase {
         if (!map.containsKey(type)) {
             if (PasswordChangeView.class.equals(type)) {
                 map.put(type, new PasswordChangeViewImpl());
+            } else if (AuditRecordListerView.class.equals(type)) {
+                map.put(type, new AuditRecordListerViewImpl());
             }
+
         }
 
         @SuppressWarnings("unchecked")

@@ -30,6 +30,7 @@ import com.propertyvista.admin.client.activity.crud.account.AccountViewerActivit
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserEditorActivity;
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserListerActivity;
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserViewerActivity;
+import com.propertyvista.admin.client.activity.crud.auditrecords.AuditRecordsActivity;
 import com.propertyvista.admin.client.activity.crud.legal.VistaTermsDefaultActivity;
 import com.propertyvista.admin.client.activity.crud.legal.VistaTermsEditorActivity;
 import com.propertyvista.admin.client.activity.crud.legal.VistaTermsViewerActivity;
@@ -121,6 +122,9 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new OnboardingUserListerActivity(crudPlace);
                             break;
                         }
+// - Security:
+                    } else if (place instanceof AdminSiteMap.Security.AuditRecord) {
+                        activity = new AuditRecordsActivity(place);
 // - Administration:
                     } else if (place instanceof AdminSiteMap.Administration.Maintenance) {
                         switch (crudPlace.getType()) {

@@ -77,6 +77,15 @@ public class AdminSiteMap implements SiteMap {
         }
     }
 
+    public static class Security extends AppPlace {
+
+        @PlaceProperties(caption = "Audit Records")
+        @NavigationItem(navigLabel = "Audit Records")
+        public static class AuditRecord extends CrudAppPlace {
+
+        }
+    }
+
     public static class Legal extends AppPlace {
         @PlaceProperties(caption = "Terms and Conditions")
         @NavigationItem(navigLabel = "Terms and Conditions")

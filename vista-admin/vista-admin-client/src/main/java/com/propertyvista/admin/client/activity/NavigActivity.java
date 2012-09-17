@@ -76,6 +76,11 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new AdminSiteMap.Management.Trigger());
         list.add(folder);
 
+        // Security
+        folder = new NavigFolder("Security");
+        folder.addNavigItem(new AdminSiteMap.Security.AuditRecord());
+        list.add(folder);
+
         // Legal
         folder = new NavigFolder("Legal");
         folder.addNavigItem(new AdminSiteMap.Legal.Terms());

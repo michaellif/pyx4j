@@ -28,6 +28,7 @@ import com.propertyvista.admin.domain.scheduler.Run;
 import com.propertyvista.admin.domain.scheduler.RunData;
 import com.propertyvista.admin.domain.scheduler.Trigger;
 import com.propertyvista.admin.domain.security.AdminUserCredential;
+import com.propertyvista.admin.domain.security.AuditRecord;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
 import com.propertyvista.admin.rpc.services.AdminPasswordChangeManagedService;
@@ -35,6 +36,7 @@ import com.propertyvista.admin.rpc.services.AdminPasswordChangeUserService;
 import com.propertyvista.admin.rpc.services.AdminPasswordResetService;
 import com.propertyvista.admin.rpc.services.AdminUserCrudService;
 import com.propertyvista.admin.rpc.services.AdminUserService;
+import com.propertyvista.admin.rpc.services.AuditRecordListerService;
 import com.propertyvista.admin.rpc.services.DBIntegrityCheckService;
 import com.propertyvista.admin.rpc.services.ExportDownloadService;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
@@ -110,6 +112,9 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(OnboardingMerchantAccountCrudService.class));
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(OnboardingMerchantAccount.class, EntityPermission.ALL));
+
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(AuditRecordListerService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(AuditRecord.class, EntityPermission.READ));
 
         if (com.pyx4j.config.shared.ApplicationMode.isDevelopment()) {
             grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(SimulatedDataPreloadService.class));
