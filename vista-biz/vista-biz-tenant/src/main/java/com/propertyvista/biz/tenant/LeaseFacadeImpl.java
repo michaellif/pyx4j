@@ -671,7 +671,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     private void persistCustomers(LeaseTerm leaseTerm) {
         for (Tenant tenant : leaseTerm.version().tenants()) {
             if (!tenant.isValueDetached()) {
-                if (tenant.id().isNull()) {
+                if (tenant.participantId().isNull()) {
                     ServerSideFactory.create(IdAssignmentFacade.class).assignId(tenant);
                 }
             }
@@ -681,7 +681,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
         for (Guarantor guarantor : leaseTerm.version().guarantors()) {
             if (!guarantor.isValueDetached()) {
-                if (guarantor.id().isNull()) {
+                if (guarantor.participantId().isNull()) {
                     ServerSideFactory.create(IdAssignmentFacade.class).assignId(guarantor);
                 }
             }
