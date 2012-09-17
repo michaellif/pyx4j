@@ -137,7 +137,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         settings = new CHyperlink(null, new Command() {
             @Override
             public void execute() {
-                presenter.SwitchCrmAndSettings();
+                presenter.showSettings();
             }
         });
         settings.setDebugIdSuffix(new StringDebugId("administration"));
@@ -223,14 +223,15 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     public void setPresenter(final Presenter presenter) {
         this.presenter = presenter;
 
-        // style settings link:
-        if (presenter.isSettingsPlace()) {
-            settings.setValue(i18n.tr("Home"));
-            settings.asWidget().addStyleName(BACK_TO_CRM);
-        } else {
-            settings.setValue(i18n.tr("Administration"));
-            settings.asWidget().removeStyleName(BACK_TO_CRM);
-        }
+// removed by VISTA-1995:
+//        // style settings link:
+//        if (presenter.isSettingsPlace()) {
+//            settings.setValue(i18n.tr("Home"));
+//            settings.asWidget().addStyleName(BACK_TO_CRM);
+//        } else {
+//            settings.setValue(i18n.tr("Administration"));
+//            settings.asWidget().removeStyleName(BACK_TO_CRM);
+//        }
     }
 
     @Override
