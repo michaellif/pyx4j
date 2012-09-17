@@ -16,6 +16,8 @@ public interface TopRightActionsView extends IsWidget {
 
         void login();
 
+        void showHome();
+
         void showAccount();
 
         void showAlerts();

@@ -112,6 +112,11 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     }
 
     @Override
+    public void showHome() {
+        AppSite.getPlaceController().goTo(CrmSite.getSystemDashboardPlace());
+    }
+
+    @Override
     public void showAccount() {
         AppSite.getPlaceController().goTo(new CrmSiteMap.Account());
     }

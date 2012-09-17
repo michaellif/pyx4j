@@ -34,13 +34,13 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private Presenter presenter;
 
-    private final HTML greetings;
+    private final CHyperlink greetings;
 
     private final CHyperlink logout;
 
     private final CHyperlink login;
 
-    private final CHyperlink account;
+    private final CHyperlink home;
 
     private final CHyperlink settings;
 
@@ -92,10 +92,16 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
         thisIsDemo.setVisible(false);
 
-        greetings = new HTML("");
-        greetings.getElement().getStyle().setDisplay(Display.INLINE);
-        greetings.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        greetings.getElement().getStyle().setMarginRight(1, Unit.EM);
+        greetings = new CHyperlink(null, new Command() {
+            @Override
+            public void execute() {
+                presenter.showAccount();
+            }
+        });
+        greetings.setDebugIdSuffix(new StringDebugId("account"));
+        greetings.asWidget().getElement().getStyle().setDisplay(Display.INLINE);
+        greetings.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        greetings.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
         logout = new CHyperlink(null, new Command() {
             @Override
@@ -118,15 +124,15 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         login.setValue(i18n.tr("Log In"));
         login.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
-        account = new CHyperlink(null, new Command() {
+        home = new CHyperlink(null, new Command() {
             @Override
             public void execute() {
-                presenter.showAccount();
+                presenter.showHome();
             }
         });
-        account.setDebugIdSuffix(new StringDebugId("account"));
-        account.setValue(i18n.tr("Account"));
-        account.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
+        home.setDebugIdSuffix(new StringDebugId("home"));
+        home.setValue(i18n.tr("Home"));
+        home.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
         settings = new CHyperlink(null, new Command() {
             @Override
@@ -201,7 +207,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         container.add(thisIsProduction);
         container.add(thisIsDemo);
         container.add(greetings);
-        container.add(account);
+        container.add(home);
         container.add(settings);
         container.add(login);
         container.add(logout);
@@ -233,11 +239,12 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 //        alert.setVisible(false);
 //        message.setVisible(false);
 //        search.setVisible(false);
-        account.setVisible(false);
+        home.setVisible(false);
         settings.setVisible(false);
         login.setVisible(true);
         getSatisfaction.setVisible(false);
-        greetings.setHTML("");
+        greetings.setVisible(false);
+        greetings.setValue("");
         thisIsDemo.getElement().getStyle().setPosition(Position.ABSOLUTE);
         thisIsDemo.getElement().getStyle().setProperty("marginLeft", "auto");
         thisIsDemo.getElement().getStyle().setProperty("marginRight", "auto");
@@ -252,10 +259,11 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 //        alert.setVisible(true);
 //        message.setVisible(true);
 //        search.setVisible(true);
-        account.setVisible(true);
+        home.setVisible(true);
         settings.setVisible(true);
         getSatisfaction.setVisible(true);
-        greetings.setHTML(i18n.tr("Welcome &nbsp;{0}", userName));
+        greetings.setValue(i18n.tr("Welcome {0}", userName));
+        greetings.setVisible(true);
 
         thisIsDemo.getElement().getStyle().setPosition(Position.RELATIVE);
         thisIsDemo.getElement().getStyle().setProperty("marginLeft", "1em");
