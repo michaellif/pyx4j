@@ -66,11 +66,12 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
             @Override
             public void onSuccess(E result) {
                 // If draft do not exists, we return clone of the data from current version
-                if ((result.getPrimaryKey().getVersion() == Key.VERSION_CURRENT)
-                        && ((entityId.getVersion() == Key.VERSION_DRAFT) || (retrieveTraget == RetrieveTraget.Edit))) {
-                    result.version().set(EntityGraph.businessDuplicate(result.version()));
-                    VersionedEntityUtils.setAsDraft(result.version());
-                    result.setPrimaryKey(entityId.asDraftKey());
+                if (retrieveTraget == RetrieveTraget.Edit) {
+                    if (result.getPrimaryKey().getVersion() == Key.VERSION_CURRENT) {
+                        result.version().set(EntityGraph.businessDuplicate(result.version()));
+                        VersionedEntityUtils.setAsDraft(result.version());
+                        result.setPrimaryKey(entityId.asDraftKey());
+                    }
                 }
                 callback.onSuccess(result);
             }
@@ -80,6 +81,9 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
     @Override
     public void approveFinal(AsyncCallback<VoidSerializable> callback, Key entityId) {
         E entity = Persistence.secureRetrieve(entityClass, entityId.asDraftKey());
+        if (entity.version().isNull()) {
+            throw new Error("There are no draft version to finalize");
+        }
         entity.saveAction().setValue(SaveAction.saveAsFinal);
         persist(entity, null);
         Persistence.service().commit();

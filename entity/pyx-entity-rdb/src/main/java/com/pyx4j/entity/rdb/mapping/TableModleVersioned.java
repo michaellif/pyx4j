@@ -69,7 +69,7 @@ public class TableModleVersioned {
         }
     }
 
-    public static List<IVersionData<IVersionedEntity<?>>> update(PersistenceContext persistenceContext, Mappings mappings, IEntity entity,
+    public static List<IVersionData<IVersionedEntity<?>>> update(PersistenceContext persistenceContext, Mappings mappings, IEntity entity, boolean newEntity,
             MemberOperationsMeta member) {
 
         List<IVersionData<IVersionedEntity<?>>> update = new ArrayList<IVersionData<IVersionedEntity<?>>>();
@@ -92,7 +92,7 @@ public class TableModleVersioned {
         draftCriteria.add(PropertyCriterion.eq(draftCriteria.proto().holder(), entity));
         draftCriteria.add(PropertyCriterion.isNull(draftCriteria.proto().fromDate()));
         draftCriteria.add(PropertyCriterion.isNull(draftCriteria.proto().toDate()));
-        List<? extends IVersionData<IVersionedEntity<?>>> draftsExisting = tm.query(persistenceContext, draftCriteria, 1);
+        List<? extends IVersionData<IVersionedEntity<?>>> draftsExisting = tm.query(persistenceContext, draftCriteria, 2);
         if (draftsExisting.size() > 1) {
             throw new Error("Duplicate Draft versions found in " + entity.getDebugExceptionInfoString());
         } else if (draftsExisting.size() > 0) {
@@ -129,6 +129,9 @@ public class TableModleVersioned {
                     memeberEntity.holder().set(versionedEntity);
                     ((IEntity) member.getMember(versionedEntity)).set(memeberEntity);
                 }
+                //TODO make it work
+            } else if (false && !newEntity && existingDraft == null) {
+                throw new Error("Can't finalize version when Draft was not created");
             } else if (memeberEntity.getPrimaryKey() != null) {
                 // TODO optimize new item creation if no data changed; for now Finalize create new data anyway, 
                 memeberEntity = EntityGraph.businessDuplicate(memeberEntity);

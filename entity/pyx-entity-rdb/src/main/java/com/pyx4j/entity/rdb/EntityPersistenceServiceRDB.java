@@ -548,7 +548,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
 
             for (MemberOperationsMeta member : tm.operationsMeta().getVersionInfoMembers()) {
-                for (IVersionData<IVersionedEntity<?>> memeberEntity : TableModleVersioned.update(getPersistenceContext(), mappings, entity, member)) {
+                for (IVersionData<IVersionedEntity<?>> memeberEntity : TableModleVersioned.update(getPersistenceContext(), mappings, entity, true, member)) {
                     merge(tableModel(memeberEntity.getEntityMeta()), memeberEntity);
                 }
             }
@@ -621,7 +621,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
             for (MemberOperationsMeta member : tm.operationsMeta().getVersionInfoMembers()) {
                 if (!((IEntity) member.getMember(entity)).isValueDetached()) {
-                    for (IVersionData<IVersionedEntity<?>> memeberEntity : TableModleVersioned.update(getPersistenceContext(), mappings, entity, member)) {
+                    for (IVersionData<IVersionedEntity<?>> memeberEntity : TableModleVersioned.update(getPersistenceContext(), mappings, entity, false, member)) {
                         merge(tableModel(memeberEntity.getEntityMeta()), memeberEntity);
                     }
                 }

@@ -23,6 +23,8 @@ package com.pyx4j.entity.rdb;
 import java.util.Date;
 import java.util.List;
 
+import junit.framework.Assert;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -102,6 +104,45 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
             assertEquals("VersionData.size()", 1, srv.query(criteria).size());
         }
+    }
+
+    public void TODO_testFinalizeNonExistingDraft() {
+        String testId = uniqueString();
+        final String v1Name = "V1-" + uniqueString();
+
+        // Initial item
+        ItemA itemA1 = EntityFactory.create(ItemA.class);
+        itemA1.testId().setValue(testId);
+        itemA1.version().name().setValue(v1Name);
+
+        //Save
+        srv.persist(itemA1);
+
+        itemA1 = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asDraftKey());
+        assertEquals("value Ok", v1Name, itemA1.version().name().getValue());
+
+        // Finalize
+        itemA1.saveAction().setValue(SaveAction.saveAsFinal);
+        srv.persist(itemA1);
+
+        // Try Finalize that should fail
+        itemA1 = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asDraftKey());
+        itemA1.saveAction().setValue(SaveAction.saveAsFinal);
+
+        boolean saved = false;
+        try {
+            srv.persist(itemA1);
+            saved = true;
+        } catch (Error ok) {
+        }
+
+        if (saved) {
+            Assert.fail("Should not finalize version when there are no draft");
+        }
+
+        // Verify data was not changed
+        itemA1 = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asCurrentKey());
+        assertEquals("value Ok", v1Name, itemA1.version().name().getValue());
     }
 
     public void testRetrieve() {
@@ -208,7 +249,8 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemA1.version().name().setValue(currentName);
         itemA1.version().testId().setValue(testId);
 
-        //Save initial value
+        //Save initial value (Draft then finalize)
+        srv.persist(itemA1);
         itemA1.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemA1);
 
@@ -249,7 +291,8 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemA1.version().name().setValue(v1Name);
         itemA1.version().testId().setValue(testId);
 
-        //Save new value
+        //Save new value (Draft then finalize)
+        srv.persist(itemA1);
         itemA1.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemA1);
 
@@ -353,6 +396,8 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemA1.version().name().setValue(origName);
         itemA1.version().testId().setValue(testId);
 
+        srv.persist(itemA1);
+
         // Finalize as of (current) date
         setDBTime("2011-01-01");
         itemA1.saveAction().setValue(SaveAction.saveAsFinal);
@@ -378,6 +423,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         setDBTime("2011-02-01");
         final String newName = "V2-" + uniqueString();
         itemA1.version().name().setValue(newName);
+        srv.persist(itemA1);
         itemA1.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemA1);
 
@@ -424,6 +470,8 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemA1.version().name().setValue(origAName);
         itemA1.version().testId().setValue(testId);
 
+        //(Draft then finalize)
+        srv.persist(itemA1);
         // Finalize
         itemA1.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemA1);
@@ -438,12 +486,16 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemB1.version().name().setValue(origBName);
         itemB1.version().testId().setValue(testId);
         itemB1.version().itemAFixed().set(itemA1);
+        //(Draft then finalize)
+        srv.persist(itemB1);
         itemB1.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemB1);
 
         setDBTime("2011-03-01");
         // Update A1
         itemA1.version().name().setValue("V2A1-" + uniqueString());
+        //(Draft then finalize)
+        srv.persist(itemA1);
         // Finalize
         itemA1.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemA1);
@@ -464,6 +516,8 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             {
                 ItemB itemB1r = srv.retrieve(ItemB.class, itemB1.getPrimaryKey());
                 assertEquals("ref not updated", origAName, itemB1r.version().itemAFixed().version().name().getValue());
+
+                srv.merge(itemB1r);
 
                 itemB1r.saveAction().setValue(SaveAction.saveAsFinal);
                 itemB1r.version().name().setValue(updateBName);
@@ -602,6 +656,8 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemA1.name().setValue("A1-" + uniqueString());
         itemA1.version().name().setValue("VA1-" + uniqueString());
         itemA1.version().testId().setValue(testId);
+        //(Draft then finalize)
+        srv.persist(itemA1);
         itemA1.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemA1);
 
@@ -620,6 +676,8 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemA3.name().setValue("A3-" + uniqueString());
         itemA3.version().name().setValue("VA3v-" + uniqueString());
         itemA3.version().testId().setValue(testId);
+        //(Draft then finalize)
+        srv.persist(itemA3);
         itemA3.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemA3);
 
@@ -699,6 +757,8 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         o.version().children().get(0).name().setValue(uniqueString());
         o.version().children().get(1).testId().setValue(testId);
 
+        //(Draft then finalize)
+        srv.persist(o);
         //Save initial value
         o.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(o);
