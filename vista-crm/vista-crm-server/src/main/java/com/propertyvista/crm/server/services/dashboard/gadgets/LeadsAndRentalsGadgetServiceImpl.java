@@ -48,6 +48,11 @@ public class LeadsAndRentalsGadgetServiceImpl implements LeadsAndRentalsGadgetSe
         callback.onSuccess(leadsCriteria(EntityListCriteria.create(Lead.class), buildings));
     }
 
+    @Override
+    public void makeAppointmentsCriteria(AsyncCallback<EntityListCriteria<Appointment>> callback, Vector<Building> buildingsFilter, String filterPreset) {
+        callback.onSuccess(appointmentsCriteria(EntityListCriteria.create(Appointment.class), buildingsFilter));
+    }
+
     int countLeads(Vector<Building> buildingsFilter) {
         return Persistence.service().count(leadsCriteria(EntityQueryCriteria.create(Lead.class), buildingsFilter));
     }

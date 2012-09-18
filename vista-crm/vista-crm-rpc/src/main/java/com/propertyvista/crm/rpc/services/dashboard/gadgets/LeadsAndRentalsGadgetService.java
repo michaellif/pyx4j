@@ -20,16 +20,22 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.dto.gadgets.LeadsAndRentalsGadgetDataDTO;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.AppointmentsCriteriaProvider;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.LeadCriteriaProvider;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 
-public interface LeadsAndRentalsGadgetService extends AbstractCounterGadgetBaseService<LeadsAndRentalsGadgetDataDTO, Vector<Building>>, LeadCriteriaProvider {
+public interface LeadsAndRentalsGadgetService extends AbstractCounterGadgetBaseService<LeadsAndRentalsGadgetDataDTO, Vector<Building>>, LeadCriteriaProvider,
+        AppointmentsCriteriaProvider {
 
     @Override
     public void countData(AsyncCallback<LeadsAndRentalsGadgetDataDTO> callback, Vector<Building> queryParams);
 
     @Override
     public void makeLeadFilterCriteria(AsyncCallback<EntityListCriteria<Lead>> callback, Vector<Building> buildings, String filterPreset);
+
+    @Override
+    public void makeAppointmentsCriteria(AsyncCallback<EntityListCriteria<Appointment>> callback, Vector<Building> buildingsFilter, String filterPreset);
 
 }
