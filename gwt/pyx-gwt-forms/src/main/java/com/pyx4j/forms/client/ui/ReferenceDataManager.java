@@ -37,9 +37,11 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.EntityServices;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityCriteriaFilter;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
@@ -201,17 +203,22 @@ public class ReferenceDataManager {
         }
     }
 
-    public static <T extends IEntity> void invalidate(Class<T> domain) {
+    @SuppressWarnings("unchecked")
+    public static <T extends IEntity> void invalidate(Class<T> domainClass) {
+        EntityMeta meta = EntityFactory.getEntityMeta(domainClass);
+        if (meta.getDBOClass() != null) {
+            domainClass = (Class<T>) meta.getDBOClass();
+        }
         Iterator<EntityQueryCriteria<?>> it = cache.keySet().iterator();
         while (it.hasNext()) {
             EntityQueryCriteria<?> terms = it.next();
-            if (terms.getEntityClass().equals(domain)) {
+            if (terms.getEntityClass().equals(domainClass)) {
                 it.remove();
             }
         }
 
         if (eventBus != null) {
-            eventBus.fireEvent(new ValueChangeEvent<Class<T>>(domain) {
+            eventBus.fireEvent(new ValueChangeEvent<Class<T>>(domainClass) {
             });
         }
     }
