@@ -66,8 +66,7 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
             @Override
             public void onSuccess(DTO result) {
                 // If draft do not exists, we return clone of the data from current version
-                if ((result.getPrimaryKey().getVersion() == Key.VERSION_CURRENT)
-                        && ((entityId.getVersion() == Key.VERSION_DRAFT) || (retrieveTraget == RetrieveTraget.Edit))) {
+                if ((retrieveTraget == RetrieveTraget.Edit) && (result.getPrimaryKey().getVersion() == Key.VERSION_CURRENT)) {
                     result.version().set(EntityGraph.businessDuplicate(result.version()));
                     VersionedEntityUtils.setAsDraft(result.version());
                     result.setPrimaryKey(entityId.asDraftKey());
@@ -83,7 +82,10 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
 
     @Override
     public void approveFinal(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        E entity = Persistence.secureRetrieveDraft(entityClass, entityId);
+        E entity = Persistence.secureRetrieve(entityClass, entityId);
+        if (entity.version().isNull()) {
+            throw new Error("There are no draft version to finalize");
+        }
         entity.saveAction().setValue(SaveAction.saveAsFinal);
         saveAsFinal(entity);
         Persistence.service().commit();
