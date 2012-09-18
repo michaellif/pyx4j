@@ -15,7 +15,6 @@ package com.propertyvista.onboarding;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -23,13 +22,13 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface UpdatePmcEquifaxInfoRequestIO extends RequestIO {
 
+    IPrimitive<Boolean> approved();
+
     IPrimitive<EquifaxReportType> reportType();
 
-    @NotNull
     @Length(10)
     IPrimitive<String> customerNumber();
 
-    @NotNull
     @Length(2)
     IPrimitive<String> securityCode();
 
