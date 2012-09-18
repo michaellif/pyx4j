@@ -26,6 +26,7 @@ import com.google.gwt.view.client.Range;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -187,8 +188,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(row, 0, new DecoratorBuilder(inject(proto().externalId()), 15).build());
 
         if (isEditable()) {
-            main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().complex()), 15).build());
-            get(proto().complex()).setViewable(true);
+            main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().complex(), new CEntityLabel<Complex>()), 15).build());
         } else {
             main.setWidget(row++, 1,
                     new DecoratorBuilder(inject(proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))), 15)
