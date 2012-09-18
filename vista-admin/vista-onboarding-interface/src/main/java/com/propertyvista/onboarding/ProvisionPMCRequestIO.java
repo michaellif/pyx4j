@@ -24,14 +24,14 @@ import com.pyx4j.i18n.annotations.I18n;
 @Deprecated
 public interface ProvisionPMCRequestIO extends RequestIO {
 
-    public enum VistaFeature {
+    public enum TBDVistaFeature {
 
         tbd1,
 
         tbd2,
     }
 
-    public enum VistaLicense {
+    public enum TBDVistaLicense {
 
         Units5,
 
@@ -44,9 +44,11 @@ public interface ProvisionPMCRequestIO extends RequestIO {
     }
 
     @NotNull
-    IPrimitive<VistaLicense> license();
+    IPrimitive<TBDVistaLicense> tbd_license();
 
     @NotNull
-    IPrimitive<VistaFeature> feature();
+    IPrimitive<TBDVistaFeature> tbd_feature();
+
+    VistaFeature feature();
 
 }

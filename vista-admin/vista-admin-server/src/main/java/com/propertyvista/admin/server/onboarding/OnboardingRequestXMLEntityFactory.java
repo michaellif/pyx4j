@@ -43,6 +43,7 @@ import com.propertyvista.onboarding.ReserveDnsNameRequestIO;
 import com.propertyvista.onboarding.UpdateBankAccountInfoRequestIO;
 import com.propertyvista.onboarding.UpdatePaymentTypeFeesRequestIO;
 import com.propertyvista.onboarding.UpdatePmcEquifaxInfoRequestIO;
+import com.propertyvista.onboarding.VistaFeature;
 
 public class OnboardingRequestXMLEntityFactory extends XMLEntityFactoryStrict {
 
@@ -75,6 +76,7 @@ public class OnboardingRequestXMLEntityFactory extends XMLEntityFactoryStrict {
         bind(UpdateBankAccountInfoRequestIO.class);
         bind(ApproveBankAccountInfoRequestIO.class);
         bind(BankAccountInfo.class);
+        bind(VistaFeature.class);
         bind(BankAccountInfoApproval.class);
         bind(UpdatePaymentTypeFeesRequestIO.class);
         bind(UpdatePmcEquifaxInfoRequestIO.class);
