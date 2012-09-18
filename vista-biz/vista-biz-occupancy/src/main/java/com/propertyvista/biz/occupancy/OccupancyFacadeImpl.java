@@ -57,7 +57,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public void setupNewUnit(AptUnit unit) {
         updateUnitAvailableFrom(unit.getPrimaryKey(), null);
 
-        // for new unit, create a vacant occupancy segment: 
+        // for new unit, create a vacant occupancy segment:
         AptUnitOccupancySegment vacant = EntityFactory.create(AptUnitOccupancySegment.class);
         vacant.unit().set(unit);
         vacant.status().setValue(Status.pending);
@@ -121,7 +121,8 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         if (prevSegment != null && (prevSegment.status().getValue() == Status.available)) {
 
             // remove the segment we have just created:
-            // TODO (i know that this is very stupid stupid and has to refactored)
+            // TODO (i know that this is very stupid stupid and has to
+            // refactored)
             EntityQueryCriteria<AptUnitOccupancySegment> criteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
             criteria.add(PropertyCriterion.ne(criteria.proto().id(), prevSegment.getPrimaryKey()));
             criteria.add(PropertyCriterion.eq(criteria.proto().status(), Status.available));
@@ -200,7 +201,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                 AptUnitOccupancySegment renoSeg = split(seg, renoStartDay, new SplittingHandler() {
                     @Override
                     public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
-                        // we already checked that;   
+                        // we already checked that;
                     }
 
                     @Override
@@ -253,10 +254,10 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         MakeVacantConstraintsDTO constraints = getMakeVacantConstraints(unitPk);
         LogicalDate min = constraints.minVacantFrom().getValue();
         LogicalDate max = constraints.maxVacantFrom().getValue();
-        if (//@formatter:off
-             constraints == null
-                 || !((vacantFrom.after(min) | vacantFrom.equals(min))                             
-                         & (max == null || (vacantFrom.before(max) | vacantFrom.equals(max))))) { //@formatter:on
+        if (// @formatter:off
+		constraints == null
+				|| !((vacantFrom.after(min) | vacantFrom.equals(min)) & (max == null || (vacantFrom
+						.before(max) | vacantFrom.equals(max))))) { // @formatter:on
             throw new IllegalArgumentException(SimpleMessageFormat.format("vacantFrom {0} doesn't match the constraints", vacantFrom));
         }
 
@@ -441,7 +442,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public boolean isScopeOffMarketAvailable(Key unitPk) {
         LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
-            return true; // newly created unit - can be scoped to any state!.. 
+            return true; // newly created unit - can be scoped to any state!..
         }
 
         List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, start);
@@ -458,7 +459,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public LogicalDate isRenovationAvailable(Key unitPk) {
         LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
-            return start; // newly created unit - can be scoped to any state!.. 
+            return start; // newly created unit - can be scoped to any state!..
         }
 
         List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, start);
@@ -475,14 +476,29 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     @Override
     public boolean isScopeAvailableAvailable(Key unitPk) {
         LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
-        if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
-            return true; // newly created unit - can be scoped to any state!.. 
-        }
 
-        List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, start);
-        for (AptUnitOccupancySegment segment : occupancy) {
-            if (segment.status().getValue() == Status.pending) {
-                return true;
+        // Check if the unit has entry in the Product Catalog: 
+        EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().id(), unitPk));
+
+        if (VistaTODO.queryByProductCatalog_VISTA_1997) {
+            criteria.add(PropertyCriterion.isNotNull(criteria.proto().productItems().$().product()));
+        } else {
+            // and finalized current Product only:
+            criteria.add(PropertyCriterion.isNotNull(criteria.proto().productItems().$().product().fromDate()));
+            criteria.add(PropertyCriterion.isNull(criteria.proto().productItems().$().product().toDate()));
+        }
+        if (Persistence.service().exists(criteria)) {
+            if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
+                return true; // newly created unit - can be scoped to any
+                             // state!..
+            }
+
+            List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, start);
+            for (AptUnitOccupancySegment segment : occupancy) {
+                if (segment.status().getValue() == Status.pending) {
+                    return true;
+                }
             }
         }
 
@@ -539,7 +555,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public LogicalDate isReserveAvailable(Key unitPk) {
         LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
-            return start; // newly created unit - can be scoped to any state!.. 
+            return start; // newly created unit - can be scoped to any state!..
         }
 
         List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, start);
@@ -557,7 +573,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public boolean isUnreserveAvailable(Key unitPk) {
         LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
-            return true; // newly created unit - can be scoped to any state!.. 
+            return true; // newly created unit - can be scoped to any state!..
         }
 
         List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, start);
@@ -574,7 +590,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public boolean isApproveLeaseAvaialble(Key unitPk) {
         LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
-            return true; // newly created unit - can be scoped to any state!.. 
+            return true; // newly created unit - can be scoped to any state!..
         }
 
         List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, start);
@@ -746,7 +762,8 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     /*
-     * Used in work-flow logic for newly created units in case of assigning them to the existing (pre-dated) lease!
+     * Used in work-flow logic for newly created units in case of assigning them
+     * to the existing (pre-dated) lease!
      */
     private void createAvailableSegment(Key unitPk, LogicalDate from) {
         AptUnitOccupancySegment segment = EntityFactory.create(AptUnitOccupancySegment.class);
