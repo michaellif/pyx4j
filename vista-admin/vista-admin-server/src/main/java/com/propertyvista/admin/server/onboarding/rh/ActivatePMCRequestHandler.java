@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.system.PmcActivationDeferredProcess;
 import com.propertyvista.config.ThreadPoolNames;
@@ -55,6 +56,7 @@ public class ActivatePMCRequestHandler extends AbstractRequestHandler<ActivatePM
 
         switch (pmc.status().getValue()) {
         case Created:
+            updateFeatures(pmc, request);
             DeferredProcessRegistry.fork(new PmcActivationDeferredProcess(pmc), ThreadPoolNames.IMPORTS);
             response.success().setValue(Boolean.TRUE);
             break;
@@ -65,6 +67,16 @@ public class ActivatePMCRequestHandler extends AbstractRequestHandler<ActivatePM
             response.success().setValue(Boolean.FALSE);
         }
         return response;
+    }
+
+    private void updateFeatures(Pmc pmc, ActivatePMCRequestIO request) {
+        if (!request.feature().equifaxReportType().isNull()) {
+            Persistence.service().retrieveMember(pmc.equifaxInfo());
+            pmc.equifaxInfo().reportType().setValue(OnboardingXMLUtils.convertEquifaxReportType(request.feature().equifaxReportType().getValue()));
+            Persistence.service().persist(pmc.equifaxInfo());
+            Persistence.service().commit();
+        }
+
     }
 
 }

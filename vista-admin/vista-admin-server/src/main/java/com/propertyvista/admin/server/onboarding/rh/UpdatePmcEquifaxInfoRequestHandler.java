@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.onboarding.UpdatePmcEquifaxInfoRequestIO;
@@ -51,12 +52,15 @@ public class UpdatePmcEquifaxInfoRequestHandler extends AbstractRequestHandler<U
             return response;
         }
 
+        Persistence.service().retrieveMember(pmc.equifaxInfo());
+
+        pmc.equifaxInfo().reportType().setValue(OnboardingXMLUtils.convertEquifaxReportType(request.reportType().getValue()));
         pmc.equifaxInfo().customerCode().setValue(request.customerCode().getValue());
         pmc.equifaxInfo().customerNumber().setValue(request.customerNumber().getValue());
         pmc.equifaxInfo().customerReferenceNumber().setValue(request.customerReferenceNumber().getValue());
         pmc.equifaxInfo().securityCode().setValue(request.securityCode().getValue());
 
-        Persistence.service().persist(pmc);
+        Persistence.service().persist(pmc.equifaxInfo());
         Persistence.service().commit();
 
         return response;

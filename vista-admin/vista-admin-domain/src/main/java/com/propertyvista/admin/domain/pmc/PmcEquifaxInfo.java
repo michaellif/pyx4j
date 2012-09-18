@@ -31,10 +31,20 @@ import com.propertyvista.domain.VistaNamespace;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PmcEquifaxInfo extends IEntity {
 
+    public enum EquifaxReportType {
+
+        longReport,
+
+        shortReport;
+
+    }
+
     @ReadOnly
     @Owner
     @JoinColumn
     Pmc pmc();
+
+    IPrimitive<EquifaxReportType> reportType();
 
     @NotNull
     @Length(10)
