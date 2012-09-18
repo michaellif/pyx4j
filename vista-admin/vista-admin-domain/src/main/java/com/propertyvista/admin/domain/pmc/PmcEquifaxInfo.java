@@ -44,6 +44,8 @@ public interface PmcEquifaxInfo extends IEntity {
     @JoinColumn
     Pmc pmc();
 
+    IPrimitive<Boolean> approved();
+
     IPrimitive<EquifaxReportType> reportType();
 
     @NotNull
