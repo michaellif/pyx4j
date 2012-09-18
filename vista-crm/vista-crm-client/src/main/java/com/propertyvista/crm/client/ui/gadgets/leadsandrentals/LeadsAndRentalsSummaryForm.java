@@ -15,13 +15,15 @@ package com.propertyvista.crm.client.ui.gadgets.leadsandrentals;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetSummaryForm;
 import com.propertyvista.crm.rpc.dto.gadgets.LeadsAndRentalsGadgetDataDTO;
 
 public class LeadsAndRentalsSummaryForm extends CounterGadgetSummaryForm<LeadsAndRentalsGadgetDataDTO> {
+
+    private static final I18n i18n = I18n.get(LeadsAndRentalsSummaryForm.class);
 
     public LeadsAndRentalsSummaryForm() {
         super(LeadsAndRentalsGadgetDataDTO.class);
@@ -45,13 +47,20 @@ public class LeadsAndRentalsSummaryForm extends CounterGadgetSummaryForm<LeadsAn
 
         String appointmentslabel =//@formatter:off 
                 getValue().leads().getValue() != 0 
-                ? SimpleMessageFormat.format("{0} ({1,number,percent} of Leads)", 
+                ? i18n.tr("{0} ({1,number,percent} of Leads)", 
                         getValue().appointments().getValue(), 
                         (double)getValue().appointments().getValue()/getValue().leads().getValue())
                 : getValue().appointments().getValue().toString();
                 //@formatter:on
-
         get(proto().appointmentsLabel()).setValue(appointmentslabel);
 
+        String rentalsLabel =//@formatter:off
+                getValue().appointments().getValue() != 0
+                ? i18n.tr("{0} ({1,number,percent} of Appontments)",
+                        getValue().rentals().getValue(),
+                        (double)getValue().rentals().getValue()/getValue().appointments().getValue())
+                : getValue().rentals().getValue().toString();
+        //@formatter:on
+        get(proto().rentalsLabel()).setValue(rentalsLabel);
     }
 }

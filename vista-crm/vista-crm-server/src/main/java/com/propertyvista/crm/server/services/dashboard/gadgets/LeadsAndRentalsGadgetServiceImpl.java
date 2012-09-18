@@ -30,6 +30,7 @@ public class LeadsAndRentalsGadgetServiceImpl implements LeadsAndRentalsGadgetSe
         LeadsAndRentalsGadgetDataDTO data = EntityFactory.create(LeadsAndRentalsGadgetDataDTO.class);
         data.leads().setValue(53);
         data.appointments().setValue(25);
+        data.rentals().setValue(5);
         callback.onSuccess(data);
     }
 
