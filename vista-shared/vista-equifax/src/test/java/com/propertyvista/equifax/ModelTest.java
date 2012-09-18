@@ -48,6 +48,8 @@ import ca.equifax.uat.to.ScoringProductType.Parameters;
 import ca.equifax.uat.to.SubjectsType;
 import ca.equifax.uat.to.SubjectsType.Subject;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
+
 import com.propertyvista.equifax.model.ChallengerMode;
 import com.propertyvista.equifax.model.EmploymentStatus;
 import com.propertyvista.equifax.model.MonthlyCostsOther;
@@ -74,103 +76,157 @@ public class ModelTest {
         CNCustomerInfoType cnCustomerInfo = factory.createCNCustomerInfoType();
         transmit.setCNCustomerInfo(cnCustomerInfo);
 
-        cnCustomerInfo.setCustomerCode("ABCD");
-        cnCustomerInfo.setCustomerId("0001");
+        cnCustomerInfo.setCustomerCode("P028");
+        cnCustomerInfo.setCustomerId("vista");
 
-        // customer info
         CustomerInfoType customerInfo = factory.createCustomerInfoType();
         cnCustomerInfo.setCustomerInfo(customerInfo);
 
-        customerInfo.setCustomerNumber("112233");
-        customerInfo.setSecurityCode("SEC001");
+        customerInfo.setCustomerNumber("999RZ00012");
+        customerInfo.setSecurityCode("77");
 
         // requests
         CNRequestsType requests = factory.createCNRequestsType();
         transmit.setCNRequests(requests);
+        // customer info  FMTLDECGEN0000115
+        if (true) {
+            // consumer requests
+            CNConsumerRequests consumerRequests = factory.createCNRequestsTypeCNConsumerRequests();
+            requests.setCNConsumerRequests(consumerRequests);
 
-        // consumer requests
-        CNConsumerRequests consumerRequests = factory.createCNRequestsTypeCNConsumerRequests();
-        requests.setCNConsumerRequests(consumerRequests);
+            // consumer request
+            CNConsumerRequestType consumerRequest = factory.createCNConsumerRequestType();
+            consumerRequests.getCNConsumerRequest().add(consumerRequest);
 
-        // consumer request
-        CNConsumerRequestType consumerRequest = factory.createCNConsumerRequestType();
-        consumerRequests.getCNConsumerRequest().add(consumerRequest);
+            // subjects
+            SubjectsType subjects = factory.createSubjectsType();
+            consumerRequest.setSubjects(subjects);
 
-        // subjects
-        SubjectsType subjects = factory.createSubjectsType();
-        consumerRequest.setSubjects(subjects);
+            // subject
+            Subject subject = factory.createSubjectsTypeSubject();
+            subjects.getSubject().add(subject);
+            subject.setSubjectType("SUBJ");
 
-        // subject
-        Subject subject = factory.createSubjectsTypeSubject();
-        subjects.getSubject().add(subject);
-        subject.setSubjectType("SUBJ");
+            // subject name
+            CNSubjectNameType subjectName = factory.createCNSubjectNameType();
+            subject.setSubjectName(subjectName);
+            subjectName.setFirstName("TESTDATA");
+            subjectName.setLastName("SOLO");
 
-        // subject name
-        CNSubjectNameType subjectName = factory.createCNSubjectNameType();
-        subject.setSubjectName(subjectName);
-        subjectName.setFirstName("Sherlock");
-        subjectName.setMiddleName("P");
-        subjectName.setLastName("Holmes");
+            // addresses
+            AddressesType addresses = factory.createAddressesType();
+            subjects.setAddresses(addresses);
 
-        // sin
-        subject.setSocialInsuranceNumber(new BigInteger("123456789"));
+            // address
+            {
+                Address address = factory.createAddressesTypeAddress();
+                addresses.getAddress().add(address);
+                address.setAddressType("CURR");
+                address.setCivicNumber("5099");
+                address.setStreetName("CREEKBANK");
+                address.setSuite("221b");
+                CityType city = factory.createCityType();
+                city.setValue("MISSISSAUGA");
+                address.setCity(city);
+                CodeType province = factory.createCodeType();
+                province.setCode("ON");
+                province.setDescription("Ontario");
+                address.setProvince(province);
+                address.setPostalCode("L4W5N2");
+            }
 
-        // date of birth
-        DateOfBirth dob = factory.createDateOfBirth();
-        dob.setValue("1967-08-13");
-        subject.setDateOfBirth(dob);
-
-        // subject fields
-        subject.setOccupation("Programmer");
-        subject.setEmployer("IBM");
-
-        // account number
-        AccountNumberType accountNumber = factory.createAccountNumberType();
-        accountNumber.setMnemonic("abc");
-        accountNumber.setValue("1277792");
-        subject.setAccountNumber(accountNumber);
-
-        // parsed telephones
-        ParsedTelephonesType telephones = factory.createParsedTelephonesType();
-        subject.setParsedTelephones(telephones);
-
-        // parsed telephone
-        ParsedTelephone telephone = factory.createParsedTelephone();
-        telephones.getParsedTelephone().add(telephone);
-        telephone.setAreaCode((short) 416);
-        telephone.setExtension((short) 555);
-        telephone.setNumber("2332");
-        telephone.setTelephoneType("home");
-
-        // addresses
-        AddressesType addresses = factory.createAddressesType();
-        subjects.setAddresses(addresses);
-
-        // address
-        Address address = factory.createAddressesTypeAddress();
-        addresses.getAddress().add(address);
-        address.setAddressType("CURR");
-        address.setCivicNumber("55");
-        address.setStreetName("Rose Valley St");
-        address.setSuite("221b");
-        CityType city = factory.createCityType();
-        city.setCode("YYZ");
-        city.setValue("Toronto");
-        address.setCity(city);
-        CodeType province = factory.createCodeType();
-        province.setCode("ON");
-        province.setDescription("Ontario");
-        address.setProvince(province);
-        address.setPostalCode("L1C 9H5");
+            // date of birth
+            DateOfBirth dob = factory.createDateOfBirth();
+            dob.setValue("1950-01-01");
+            subject.setDateOfBirth(dob);
+        }
 
         // customer info
-        consumerRequest.setCustomerInfo(customerInfo);
+        if (false) {
+            // consumer requests
+            CNConsumerRequests consumerRequests = factory.createCNRequestsTypeCNConsumerRequests();
+            requests.setCNConsumerRequests(consumerRequests);
 
-        // customer reference number
-        consumerRequest.setCustomerReferenceNumber("ABCDEFG");
-        consumerRequest.setECOAInquiryType("ABC");
-        consumerRequest.setJointAccessIndicator("JOINTABC");
-        consumerRequest.setProfileIndicator("Q"); // indicates iDecision request
+            // consumer request
+            CNConsumerRequestType consumerRequest = factory.createCNConsumerRequestType();
+            consumerRequests.getCNConsumerRequest().add(consumerRequest);
+
+            // subjects
+            SubjectsType subjects = factory.createSubjectsType();
+            consumerRequest.setSubjects(subjects);
+
+            // subject
+            Subject subject = factory.createSubjectsTypeSubject();
+            subjects.getSubject().add(subject);
+            subject.setSubjectType("SUBJ");
+
+            // subject name
+            CNSubjectNameType subjectName = factory.createCNSubjectNameType();
+            subject.setSubjectName(subjectName);
+            subjectName.setFirstName("Sherlock");
+            subjectName.setMiddleName("P");
+            subjectName.setLastName("Holmes");
+
+            // sin
+            subject.setSocialInsuranceNumber(new BigInteger("123456789"));
+
+            // date of birth
+            DateOfBirth dob = factory.createDateOfBirth();
+            dob.setValue("1967-08-13");
+            subject.setDateOfBirth(dob);
+
+            // subject fields
+            subject.setOccupation("Programmer");
+            subject.setEmployer("IBM");
+
+            // account number
+            AccountNumberType accountNumber = factory.createAccountNumberType();
+            accountNumber.setMnemonic("abc");
+            accountNumber.setValue("1277792");
+            subject.setAccountNumber(accountNumber);
+
+            // parsed telephones
+            ParsedTelephonesType telephones = factory.createParsedTelephonesType();
+            subject.setParsedTelephones(telephones);
+
+            // parsed telephone
+            ParsedTelephone telephone = factory.createParsedTelephone();
+            telephones.getParsedTelephone().add(telephone);
+            telephone.setAreaCode((short) 416);
+            telephone.setExtension((short) 555);
+            telephone.setNumber("1234567");
+            telephone.setTelephoneType("BUS");
+
+            // addresses
+            AddressesType addresses = factory.createAddressesType();
+            subjects.setAddresses(addresses);
+
+            // address
+            Address address = factory.createAddressesTypeAddress();
+            addresses.getAddress().add(address);
+            address.setAddressType("CURR");
+            address.setCivicNumber("55");
+            address.setStreetName("Rose Valley St");
+            address.setSuite("221b");
+            CityType city = factory.createCityType();
+            city.setCode("YYZ");
+            city.setValue("Toronto");
+            address.setCity(city);
+            CodeType province = factory.createCodeType();
+            province.setCode("ON");
+            province.setDescription("Ontario");
+            address.setProvince(province);
+            address.setPostalCode("L1C 9H5");
+
+            // customer info
+            consumerRequest.setCustomerInfo(customerInfo);
+
+            // customer reference number
+            consumerRequest.setCustomerReferenceNumber("ABCDEFG");
+            consumerRequest.setECOAInquiryType("ABC");
+            consumerRequest.setJointAccessIndicator("JOINTABC");
+            consumerRequest.setProfileIndicator("Q"); // indicates iDecision request
+        }
 
         // output parameters
         CNOutputParametersType outputParameters = factory.createCNOutputParametersType();
@@ -217,7 +273,7 @@ public class ModelTest {
         String xml = sw.toString();
         log.info("\n" + xml);
 
-        if (false) {
+        if (ServerSideConfiguration.isStartedUnderEclipse()) {
             ExampleClient.execute(transmit);
         }
 

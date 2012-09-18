@@ -52,7 +52,8 @@ public class XmlCreator {
 //         MDAD  = Advanced Decisionning
         scoringProduct.setProductType("MODL");
 
-        scoringProduct.setScoringNumber("12345");
+        //10301 for iDecision Power Consumer 
+        scoringProduct.setScoringNumber("10301");
         scoringProduct.setReportAttribute("N");
 
         return scoringProduct;
@@ -64,6 +65,7 @@ public class XmlCreator {
         // Type: CONS - Consumer, COMM - Commercial, COMB - Combined
         outputParameter.setOutputParameterType("CONS");
 
+        // X = is probably XML (VladS)
         //        02= Full-File Fixed Output
         //        06= Print Image Output (81 char per line)
         //        07= Print Image Output (80 char per line/V4.1 and greater)
@@ -84,10 +86,12 @@ public class XmlCreator {
         //        0R= National Credit File (Equifax Direct)
         //        0T= Service 222 Print Image Format (packaging)
         GenericOutputCode genCode = factory.createCNOutputParametersTypeOutputParameterGenericOutputCode();
-        genCode.setValue("02");
+        genCode.setValue("X");
         outputParameter.setGenericOutputCode(genCode);
 
-        outputParameter.setCustomizationCode("VVVVVVVV");
+        if (false) {
+            outputParameter.setCustomizationCode("VVVVVVVV");
+        }
         return outputParameter;
     }
 }

@@ -52,9 +52,9 @@ public class SystemConfig extends HostConfig {
     protected void configure() {
         super.configure();
         if (this.getProxyConfig() != null) {
-            log.info("proxy defined {}:{} ", this.getProxyConfig().getHost(), this.getProxyConfig().getPort());
+            log.info("default proxy defined {}:{} ", this.getProxyConfig().getHost(), this.getProxyConfig().getPort());
         } else {
-            log.info("proxy is not defined");
+            log.info("default proxy is not defined");
         }
     }
 
@@ -78,6 +78,7 @@ public class SystemConfig extends HostConfig {
 
     private void setVistaCaledonProxy() {
         setCaledonProxy("dev.birchwoodsoftwaregroup.com", 8888, "vista-tester", "Vista1102");
+        log.info("caledon proxy defined {}:{} ", this.getCaledonProxy().getHost(), this.getCaledonProxy().getPort());
     }
 
     private void setVistaLocalCaledonProxy() {
