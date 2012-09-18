@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 17, 2012
+ * Created on Sep 18, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.dashboard.gadgets;
+package com.propertyvista.crm.rpc.services.dashboard.gadgets.filters;
 
 import java.util.Vector;
 
@@ -19,17 +19,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
-import com.propertyvista.crm.rpc.dto.gadgets.LeadsAndRentalsGadgetDataDTO;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.LeadCriteriaProvider;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Lead;
 
-public interface LeadsAndRentalsGadgetService extends AbstractCounterGadgetBaseService<LeadsAndRentalsGadgetDataDTO, Vector<Building>>, LeadCriteriaProvider {
+public interface LeadCriteriaProvider {
 
-    @Override
-    public void countData(AsyncCallback<LeadsAndRentalsGadgetDataDTO> callback, Vector<Building> queryParams);
-
-    @Override
-    public void makeLeadFilterCriteria(AsyncCallback<EntityListCriteria<Lead>> callback, Vector<Building> buildings, String filterPreset);
+    void makeLeadFilterCriteria(AsyncCallback<EntityListCriteria<Lead>> callback, Vector<Building> buildings, String filterPreset);
 
 }

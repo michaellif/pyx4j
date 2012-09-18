@@ -18,6 +18,7 @@ import java.util.Vector;
 import com.google.gwt.core.client.GWT;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.components.LeadsDetailsFactory;
 import com.propertyvista.crm.rpc.dto.gadgets.LeadsAndRentalsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeadsAndRentalsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.LeadsAndRentalsGadgetMeta;
@@ -43,7 +44,8 @@ public class LeadsAndRentalsGadget extends CounterGadgetInstanceBase<LeadsAndRen
 
     @Override
     protected void bindDetailsFactories() {
-        // TODO Auto-generated method stub
+        bindDetailsFactory(proto().leads(), new LeadsDetailsFactory(GWT.<LeadsAndRentalsGadgetService> create(LeadsAndRentalsGadgetService.class), this,
+                proto().leads().getPath().toString()));
     }
 
 }

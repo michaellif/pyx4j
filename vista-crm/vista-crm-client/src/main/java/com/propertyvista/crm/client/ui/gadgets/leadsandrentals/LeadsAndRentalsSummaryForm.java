@@ -34,9 +34,9 @@ public class LeadsAndRentalsSummaryForm extends CounterGadgetSummaryForm<LeadsAn
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leads())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().appointmentsLabel())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rentalsLabel())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leads())).componentWidth(15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().appointmentsLabel())).componentWidth(15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rentalsLabel())).componentWidth(15).build());
 
         return content;
     }

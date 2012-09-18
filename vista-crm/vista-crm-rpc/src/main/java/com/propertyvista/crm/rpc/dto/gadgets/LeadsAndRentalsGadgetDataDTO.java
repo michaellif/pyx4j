@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface LeadsAndRentalsGadgetDataDTO extends IEntity {
 
+    @Caption(name = "Leads This Month")
     IPrimitive<Integer> leads();
 
     IPrimitive<Integer> appointments();

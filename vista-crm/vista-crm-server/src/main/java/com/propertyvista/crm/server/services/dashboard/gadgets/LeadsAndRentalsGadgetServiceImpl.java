@@ -17,21 +17,80 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.gadgets.LeadsAndRentalsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeadsAndRentalsGadgetService;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lead.Appointment;
+import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeadsAndRentalsGadgetServiceImpl implements LeadsAndRentalsGadgetService {
 
     @Override
-    public void countData(AsyncCallback<LeadsAndRentalsGadgetDataDTO> callback, Vector<Building> queryParams) {
+    public void countData(AsyncCallback<LeadsAndRentalsGadgetDataDTO> callback, Vector<Building> buildingsFilter) {
         LeadsAndRentalsGadgetDataDTO data = EntityFactory.create(LeadsAndRentalsGadgetDataDTO.class);
-        data.leads().setValue(53);
-        data.appointments().setValue(25);
-        data.rentals().setValue(5);
+
+        data.leads().setValue(countLeads(buildingsFilter));
+        data.appointments().setValue(countAppointments(buildingsFilter));
+        data.rentals().setValue(countRentals(buildingsFilter));
+
         callback.onSuccess(data);
+    }
+
+    @Override
+    public void makeLeadFilterCriteria(AsyncCallback<EntityListCriteria<Lead>> callback, Vector<Building> buildings, String filterPreset) {
+        callback.onSuccess(leadsCriteria(EntityListCriteria.create(Lead.class), buildings));
+    }
+
+    int countLeads(Vector<Building> buildingsFilter) {
+        return Persistence.service().count(leadsCriteria(EntityQueryCriteria.create(Lead.class), buildingsFilter));
+    }
+
+    int countAppointments(Vector<Building> buildingsFilter) {
+        return Persistence.service().count(appointmentsCriteria(EntityQueryCriteria.create(Appointment.class), buildingsFilter));
+    }
+
+    int countRentals(Vector<Building> buildingsFilter) {
+        EntityQueryCriteria<Lead> leadsCriteria = leadsCriteria(EntityQueryCriteria.create(Lead.class), buildingsFilter);
+
+        leadsCriteria.add(PropertyCriterion.ne(leadsCriteria.proto().lease(), null));
+        leadsCriteria.add(PropertyCriterion.ne(leadsCriteria.proto().lease().status(), Lease.Status.Application));
+
+        return Persistence.service().count(leadsCriteria);
+    }
+
+    <Criteria extends EntityQueryCriteria<? extends Lead>> Criteria leadsCriteria(Criteria criteria, Vector<Building> buildingsFilter) {
+
+        criteria.add(PropertyCriterion.le(criteria.proto().createDate(), Utils.dayOfCurrentTransaction()));
+        criteria.add(PropertyCriterion.ge(criteria.proto().createDate(), Utils.beginningOfMonth(Utils.dayOfCurrentTransaction())));
+
+        if (buildingsFilter != null && !buildingsFilter.isEmpty()) {
+            criteria.add(PropertyCriterion.in(criteria.proto().floorplan().building(), buildingsFilter));
+        }
+
+        return criteria;
+    }
+
+    <Criteria extends EntityQueryCriteria<? extends Appointment>> Criteria appointmentsCriteria(Criteria criteria, Vector<Building> buildingsFilter) {
+
+        criteria.add(PropertyCriterion.le(criteria.proto().date(), Utils.dayOfCurrentTransaction()));
+        criteria.add(PropertyCriterion.ge(criteria.proto().date(), Utils.beginningOfMonth(Utils.dayOfCurrentTransaction())));
+
+        if (buildingsFilter != null && !buildingsFilter.isEmpty()) {
+            criteria.add(PropertyCriterion.in(criteria.proto().lead().floorplan().building(), buildingsFilter));
+        }
+
+        return criteria;
+    }
+
+    <Criteria extends EntityQueryCriteria<? extends Lease>> Criteria rentals(Criteria criteria, Vector<Building> buildingsFilter) {
+        return criteria;
     }
 
 }

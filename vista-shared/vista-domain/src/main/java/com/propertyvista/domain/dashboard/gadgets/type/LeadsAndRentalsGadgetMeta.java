@@ -20,7 +20,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 
 @DiscriminatorValue("LeadsAndRentalsGadgetMeta")
-@Caption(name = "Leads and Rentals Gadget", description = "TBD")
+@Caption(name = "Leads and Rentals", description = "TBD")
 public interface LeadsAndRentalsGadgetMeta extends CounterGadgetBaseMetadata, BuildingGadget {
 
 }
