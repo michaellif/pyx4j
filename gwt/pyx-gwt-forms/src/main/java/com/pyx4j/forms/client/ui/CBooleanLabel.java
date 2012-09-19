@@ -23,8 +23,7 @@ package com.pyx4j.forms.client.ui;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
 
-@Deprecated
-public class CBooleanLabel extends CAbstractLabel<Boolean> {
+public class CBooleanLabel extends CLabel<Boolean> {
 
     private static final I18n i18n = I18n.get(CBooleanLabel.class);
 

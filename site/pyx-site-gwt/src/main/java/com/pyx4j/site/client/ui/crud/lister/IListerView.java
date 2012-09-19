@@ -43,8 +43,6 @@ public interface IListerView<E extends IEntity> extends IView {
 
         void setParent(Key parentID, Class<? extends IEntity> parentClass);
 
-        void setFilterByParent(boolean flag);
-
         void setPreDefinedFilters(List<Criterion> filters);
 
         void addPreDefinedFilters(List<Criterion> filters);

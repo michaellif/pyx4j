@@ -14,30 +14,36 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jun 12, 2010
- * @author vlads
+ * Created on Jan 28, 2010
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.widgets.client;
 
-@Deprecated
-public class CAbstractLabel<E> extends CReference<E, NativeLabel<E>> {
+import com.google.gwt.user.client.ui.HTML;
 
-    public CAbstractLabel() {
-        this(null);
-    }
+public class Label extends HTML implements IWidget {
 
-    public CAbstractLabel(String title) {
-        super(title);
-        setWidth("100%");
-        setWordWrap(true);
+    public Label() {
+
     }
 
     @Override
-    protected NativeLabel<E> createWidget() {
-        NativeLabel<E> widget = new NativeLabel<E>(this);
-//      widget.getElement().getStyle().setOverflowX(Overflow.AUTO);
-        widget.setWordWrap(this.isWordWrap());
-        return widget;
+    public void setEditable(boolean editable) {
     }
+
+    @Override
+    public boolean isEditable() {
+        return false;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
+
 }

@@ -110,16 +110,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     public void setParent(Key parentID, Class<? extends IEntity> parentClass) {
         this.parentID = parentID; // save parent id for newItem creation...
         this.parentClass = parentClass; // save parent class for polymorphic queries...
-        setFilterByParent(true);
-    }
-
-    @Override
-    public void setFilterByParent(boolean flag) {
-        if (flag) {
-            dataSource.setParentFiltering(parentID, parentClass);
-        } else {
-            dataSource.clearParentFiltering();
-        }
+        dataSource.setParentFiltering(parentID, parentClass);
     }
 
     @Override

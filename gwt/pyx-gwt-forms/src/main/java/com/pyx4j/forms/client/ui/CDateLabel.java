@@ -13,7 +13,7 @@ import java.util.Date;
 import com.google.gwt.i18n.client.DateTimeFormat;
 
 @Deprecated
-public class CDateLabel extends CAbstractLabel<Date> {
+public class CDateLabel extends CLabel<Date> {
 
     public CDateLabel() {
         this(null);

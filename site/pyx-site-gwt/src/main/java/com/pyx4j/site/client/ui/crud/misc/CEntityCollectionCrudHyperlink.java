@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,31 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 11, 2010
- * @author Michael
+ * Created on Sep 17, 2012
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.site.client.ui.crud.misc;
 
-public class CLabel<E> extends CComponent<E, NLabel<E>> {
+import com.google.gwt.user.client.Command;
 
-    private IFormat<E> format;
+import com.pyx4j.entity.shared.ICollection;
+import com.pyx4j.forms.client.ui.CAbstractHyperlink;
+import com.pyx4j.forms.client.ui.IFormat;
 
-    public CLabel() {
-        this(null);
+public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends CAbstractHyperlink<E> {
 
-    }
-
-    public CLabel(String title) {
+    protected CEntityCollectionCrudHyperlink(String title) {
         super(title);
-        setWidth("100%");
+        setWordWrap(true);
         setFormat(new IFormat<E>() {
             @Override
             public String format(E value) {
-                if (value == null) {
-                    return null;
+                if (value != null) {
+                    return value.size() + "";
                 } else {
-                    return value.toString();
+                    return null;
                 }
             }
 
@@ -47,21 +46,19 @@ public class CLabel<E> extends CComponent<E, NLabel<E>> {
                 return null;
             }
         });
+
     }
 
-    public void setFormat(IFormat<E> format) {
-        this.format = format;
+    public CEntityCollectionCrudHyperlink(String title, Command command) {
+        this(title);
+        setCommand(command);
     }
 
-    public IFormat<E> getFormat() {
-        return format;
-    }
-
+    /**
+     * Allow presentation update of the same entity when setValue is called
+     */
     @Override
-    protected NLabel<E> createWidget() {
-        NLabel<E> widget = new NLabel<E>(this);
-//      widget.getElement().getStyle().setOverflowX(Overflow.AUTO);
-//        widget.setWordWrap(this.isWordWrap());
-        return widget;
+    public boolean isValuesEquals(E value1, E value2) {
+        return value1 == value2;
     }
 }

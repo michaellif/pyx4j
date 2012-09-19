@@ -30,6 +30,7 @@ import com.pyx4j.site.rpc.AppPlace;
  * (see {@link CEntitySelectorHyperlink#getTargetPlace()}). In edit mode renders s text label with an arrow image
  * that triggers Entity Selector Dialog (see {@link CEntitySelectorHyperlink#getSelectorDialog()})
  */
+//TODO CEntitySelectorHyperlink should extend CEntityHyperlink ???
 public abstract class CEntitySelectorHyperlink<E extends IEntity> extends CTextFieldBase<E, NEntitySelectorHyperlink<E>> {
 
     protected abstract AppPlace getTargetPlace();

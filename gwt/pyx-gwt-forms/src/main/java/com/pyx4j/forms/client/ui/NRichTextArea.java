@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.widgets.client.richtext.ExtendedRichTextArea;
 import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
@@ -29,7 +30,6 @@ public class NRichTextArea extends NTextComponent<String, ExtendedRichTextArea, 
     public NRichTextArea(CRichTextArea textArea) {
         super(textArea);
         textArea.setWidth("100%");
-        textArea.setHeight("20em");
 
         getElement().getStyle().setProperty("resize", "none");
         sinkEvents(Event.ONMOUSEOVER);
@@ -44,7 +44,21 @@ public class NRichTextArea extends NTextComponent<String, ExtendedRichTextArea, 
 
     @Override
     protected ExtendedRichTextArea createEditor() {
-        return new ExtendedRichTextArea();
+        ExtendedRichTextArea area = new ExtendedRichTextArea();
+        area.setHeight("20em");
+        return area;
+    }
+
+    @Override
+    protected HTML createViewer() {
+        HTML viewer = super.createViewer();
+        //TODO move to styles and make it tidy
+        viewer.getElement().getStyle().setProperty("overflow", "auto");
+        viewer.getElement().getStyle().setProperty("height", "100%");
+        viewer.getElement().getStyle().setProperty("maxHeight", "15em");
+        viewer.getElement().getStyle().setProperty("background", "#fafafa");
+        viewer.getElement().getStyle().setProperty("padding", "2px");
+        return viewer;
     }
 
     public void scrollToBottom() {
