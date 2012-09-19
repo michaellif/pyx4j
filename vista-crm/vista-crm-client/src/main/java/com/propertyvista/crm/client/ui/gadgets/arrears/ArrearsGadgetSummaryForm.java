@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.arrears;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -61,14 +59,7 @@ public class ArrearsGadgetSummaryForm extends CounterGadgetSummaryForm<ArrearsGa
         get(proto().outstanding31to60Days()).setValue(i18n.tr("${0}", getValue().buckets().bucket60().getValue()));
         get(proto().outstanding61to90Days()).setValue(i18n.tr("${0}", getValue().buckets().bucket90().getValue()));
         get(proto().outstanding91andMoreDays()).setValue(i18n.tr("${0}", getValue().buckets().bucketOver90().getValue()));
-
-        BigDecimal total =//@formatter:off
-                getValue().bucketThisMonth().getValue()
-                    .add(getValue().buckets().bucket30().getValue())
-                    .add(getValue().buckets().bucket60().getValue())
-                    .add(getValue().buckets().bucket90().getValue());//@formatter:on
-
-        get(proto().outstandingTotal()).setValue(i18n.tr("${0}", total));
+        get(proto().outstandingTotal()).setValue(i18n.tr("${0}", getValue().buckets().arrearsAmount().getValue()));
     }
 
 }
