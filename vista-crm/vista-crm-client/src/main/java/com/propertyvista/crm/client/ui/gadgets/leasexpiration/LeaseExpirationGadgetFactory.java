@@ -51,8 +51,7 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
 
         @Override
         protected void bindDetailsFactories() {
-            UnitDetailsFactory unitDetailsFactory = unitDetailsFactory(proto().unitOccupancy());
-            bindDetailsFactory(proto().unitOccupancy(), unitDetailsFactory);
+            bindDetailsFactory(proto().unitOccupancy(), unitDetailsFactory(proto().unitOccupancy()));
 
             bindDetailsFactory(proto().numOfLeasesEndingThisMonth(), leaseDetailsFactory(proto().numOfLeasesEndingThisMonth()));
             bindDetailsFactory(proto().numOfLeasesEndingNextMonth(), leaseDetailsFactory(proto().numOfLeasesEndingNextMonth()));
@@ -60,11 +59,11 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
             bindDetailsFactory(proto().numOfLeasesOnMonthToMonth(), leaseDetailsFactory(proto().numOfLeasesOnMonthToMonth()));
         }
 
-        private LeasesDetailsFactory leaseDetailsFactory(IObject<?> category) {
+        private CounterDetailsFactory leaseDetailsFactory(IObject<?> category) {
             return new LeasesDetailsFactory(GWT.<LeaseExpirationGadgetService> create(LeaseExpirationGadgetService.class), this, category);
         }
 
-        private UnitDetailsFactory unitDetailsFactory(IObject<?> filter) {
+        private CounterDetailsFactory unitDetailsFactory(IObject<?> filter) {
             return new UnitDetailsFactory(GWT.<LeaseExpirationGadgetService> create(LeaseExpirationGadgetService.class), this, filter);
         }
 

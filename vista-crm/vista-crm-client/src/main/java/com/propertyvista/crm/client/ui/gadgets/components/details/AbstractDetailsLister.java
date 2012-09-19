@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets.components;
+package com.propertyvista.crm.client.ui.gadgets.components.details;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppPlaceEntityMapper;

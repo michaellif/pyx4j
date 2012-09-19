@@ -13,61 +13,46 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.components;
 
-import java.util.List;
-import java.util.Vector;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 
-import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase.CounterDetailsFactory;
+import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilterProvider;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.MaintenanceRequestCriteriaProvider;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public class MaintenanceRequestsDetailsFactory implements CounterDetailsFactory {
+public class MaintenanceRequestsDetailsFactory extends AbstractListerDetailsFactory<MaintenanceRequestDTO, CounterGadgetFilter> {
 
-    private final MaintenanceRequestsDetailsLister lister;
+    public static class MaintenanceRequestsDetailsLister extends AbstractDetailsLister<MaintenanceRequestDTO> {
 
-    private final MaintenanceRequestCriteriaProvider maintenanceRequestCriteriaProvider;
+        public MaintenanceRequestsDetailsLister() {
+            super(MaintenanceRequestDTO.class);
+            setColumnDescriptors(MaintenanceRequestLister.createColumnDescriptors());
+        }
 
-    private final String filter;
-
-    private final IBuildingFilterContainer buildingsFilterProvider;
-
-    public MaintenanceRequestsDetailsFactory(MaintenanceRequestCriteriaProvider maintenanceRequestCriteriaProvider,
-            IBuildingFilterContainer buildingsFilterContainer, IObject<?> filterPreset) {
-        this.buildingsFilterProvider = buildingsFilterContainer;
-        this.maintenanceRequestCriteriaProvider = maintenanceRequestCriteriaProvider;
-        this.lister = new MaintenanceRequestsDetailsLister();
-        this.filter = filterPreset.getPath().toString();
     }
 
-    @Override
-    public Widget createDetailsWidget() {
-        maintenanceRequestCriteriaProvider.makeMaintenaceRequestCriteria(new DefaultAsyncCallback<EntityListCriteria<MaintenanceRequestDTO>>() {
-
-            @Override
-            public void onSuccess(EntityListCriteria<MaintenanceRequestDTO> result) {
-                ListerDataSource<MaintenanceRequestDTO> dataSource = new ListerDataSource<MaintenanceRequestDTO>(MaintenanceRequestDTO.class, GWT
-                        .<AbstractListService<MaintenanceRequestDTO>> create(MaintenanceCrudService.class));
-                List<Criterion> filters = result.getFilters();
-                if (filters != null) {
-                    dataSource.setPreDefinedFilters(result.getFilters());
+    public MaintenanceRequestsDetailsFactory(final MaintenanceRequestCriteriaProvider maintenanceRequestCriteriaProvider,
+            IBuildingFilterContainer buildingsFilterContainer, IObject<?> filterPreset) {
+        super(//@formatter:off
+                MaintenanceRequestDTO.class,
+                new MaintenanceRequestsDetailsLister(),
+                GWT.<MaintenanceCrudService>create(MaintenanceCrudService.class),
+                new CounterGadgetFilterProvider(buildingsFilterContainer, filterPreset.getPath()),
+                new ICriteriaProvider<MaintenanceRequestDTO, CounterGadgetFilter>() {
+                    @Override
+                    public void makeCriteria(AsyncCallback<EntityListCriteria<MaintenanceRequestDTO>> callback, CounterGadgetFilter filterData) {
+                        maintenanceRequestCriteriaProvider.makeMaintenaceRequestCriteria(callback, filterData.getBuildings(), filterData.getCounterMember().toString());
+                    }
                 }
-                lister.setDataSource(dataSource);
-                lister.obtain(0);
-            }
-
-        }, new Vector<Building>(buildingsFilterProvider.getSelectedBuildingsStubs()), filter);
-        return lister;
+        );//@formatter:on
     }
 }

@@ -46,11 +46,10 @@ public class LeadsAndRentalsGadget extends CounterGadgetInstanceBase<LeadsAndRen
     @Override
     protected void bindDetailsFactories() {
         bindDetailsFactory(proto().leads(), new LeadsDetailsFactory(GWT.<LeadsAndRentalsGadgetService> create(LeadsAndRentalsGadgetService.class), this,
-                proto().leads().getPath().toString()));
+                proto().leads()));
 
         bindDetailsFactory(proto().appointmentsLabel(),
-                new AppointmentsDetailsFactory(GWT.<LeadsAndRentalsGadgetService> create(LeadsAndRentalsGadgetService.class), this, proto().appointments()
-                        .getPath().toString()));
+                new AppointmentsDetailsFactory(GWT.<LeadsAndRentalsGadgetService> create(LeadsAndRentalsGadgetService.class), this, proto().appointments()));
     }
 
 }

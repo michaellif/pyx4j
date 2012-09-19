@@ -13,60 +13,58 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.components;
 
-import java.util.List;
-import java.util.Vector;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
-import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase.CounterDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilterProvider;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.PaymentCriteriaProvider;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentDetailsFactory implements CounterDetailsFactory {
+public class PaymentDetailsFactory extends AbstractListerDetailsFactory<PaymentRecordDTO, CounterGadgetFilter> {
 
-    private final IBuildingFilterContainer buildingFilterContainer;
+    private static class PaymentsDetailsLister extends AbstractDetailsLister<PaymentRecordDTO> {
 
-    private final String filter;
+        public PaymentsDetailsLister() {
+            super(PaymentRecordDTO.class);
+            setColumnDescriptors(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().id()).build(),
+                    new MemberColumnDescriptor.Builder(proto().leaseParticipant().customer().customerId()).build(),
+                    new MemberColumnDescriptor.Builder(proto().leaseParticipant().customer().person().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().leaseParticipant().role()).build(),
+                    new MemberColumnDescriptor.Builder(proto().amount()).build(),
+                    new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).build(),
+                    new MemberColumnDescriptor.Builder(proto().createdDate()).build(),
+                    new MemberColumnDescriptor.Builder(proto().receivedDate()).build(),
+                    new MemberColumnDescriptor.Builder(proto().lastStatusChangeDate()).build(),
+                    new MemberColumnDescriptor.Builder(proto().targetDate()).build(),
+                    new MemberColumnDescriptor.Builder(proto().paymentStatus()).build()
+                );//@formatter:on
+        }
 
-    private final PaymentCriteriaProvider criteriaProvider;
-
-    private final PaymentsDetailsLister lister;
-
-    public PaymentDetailsFactory(PaymentCriteriaProvider criteriaProvider, IBuildingFilterContainer buildingFilterContainer, String filter) {
-        this.buildingFilterContainer = buildingFilterContainer;
-        this.filter = filter;
-        this.criteriaProvider = criteriaProvider;
-        this.lister = new PaymentsDetailsLister();
     }
 
-    @Override
-    public Widget createDetailsWidget() {
-        criteriaProvider.makePaymentCriteria(new DefaultAsyncCallback<EntityListCriteria<PaymentRecordDTO>>() {
-
-            @Override
-            public void onSuccess(EntityListCriteria<PaymentRecordDTO> result) {
-                ListerDataSource<PaymentRecordDTO> dataSource = new ListerDataSource<PaymentRecordDTO>(PaymentRecordDTO.class, GWT
-                        .<PaymentCrudService> create(PaymentCrudService.class));
-
-                List<Criterion> criteria = result.getFilters();
-                if (criteria != null) {
-                    dataSource.setPreDefinedFilters(criteria);
+    public PaymentDetailsFactory(final PaymentCriteriaProvider criteriaProvider, IBuildingFilterContainer buildingFilterContainer, IObject<?> member) {
+        super(//@formatter:off
+                PaymentRecordDTO.class,
+                new PaymentsDetailsLister(),
+                GWT.<PaymentCrudService>create(PaymentCrudService.class),
+                new CounterGadgetFilterProvider(buildingFilterContainer, member.getPath()),
+                new ICriteriaProvider<PaymentRecordDTO, CounterGadgetFilter>() {
+                    @Override
+                    public void makeCriteria(AsyncCallback<EntityListCriteria<PaymentRecordDTO>> callback, CounterGadgetFilter filterData) {
+                        criteriaProvider.makePaymentCriteria(callback, filterData.getBuildings(), filterData.getCounterMember().toString());
+                    }                    
                 }
-                lister.setDataSource(dataSource);
-                lister.obtain(0);
-            }
-
-        }, new Vector<Building>(buildingFilterContainer.getSelectedBuildingsStubs()), filter);
-        return lister;
+        );//@formatter:on
     }
 
 }

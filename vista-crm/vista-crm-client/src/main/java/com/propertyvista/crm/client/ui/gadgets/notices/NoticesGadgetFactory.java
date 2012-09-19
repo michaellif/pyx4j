@@ -63,155 +63,15 @@ public class NoticesGadgetFactory extends AbstractGadget<NoticesGadgetMetadata> 
 
         }
 
-        private LeasesDetailsFactory leaseDetailsFactory(IObject<?> category) {
+        private CounterDetailsFactory leaseDetailsFactory(IObject<?> category) {
             return new LeasesDetailsFactory(GWT.<LeaseExpirationGadgetService> create(NoticesGadgetService.class), this, category);
         }
 
-        private UnitDetailsFactory unitDetailsFactory(IObject<?> filter) {
-            return new UnitDetailsFactory(GWT.<LeaseExpirationGadgetService> create(NoticesGadgetService.class), this, filter);
+        private CounterDetailsFactory unitDetailsFactory(IObject<?> category) {
+            return new UnitDetailsFactory(GWT.<LeaseExpirationGadgetService> create(NoticesGadgetService.class), this, category);
         }
 
     }
-
-//    public static class NoticesGadget extends GadgetInstanceBase<NoticesGadgetMetadata> {
-//
-//        private NoticesSummaryForm summaryForm;
-//
-//        private UnitsDetailsLister unitsDetailsLister;
-//
-//        private LeasesDetailsLister leasesDetailsLister;
-//
-//        private final NoticesGadgetService service;
-//
-//        private IBuildingFilterContainer buildingsFilterContainer;
-//
-//        public NoticesGadget(GadgetMetadata metadata) {
-//            super(metadata, NoticesGadgetMetadata.class);
-//            service = GWT.<NoticesGadgetService> create(NoticesGadgetService.class);
-//            setDefaultPopulator(new Populator() {
-//
-//                @Override
-//                public void populate() {
-//                    NoticesGadgetMetadata.NoticesGadgetMode gadgetMode = getMetadata().activeMode().getValue();
-//                    gadgetMode = gadgetMode != null ? gadgetMode : NoticesGadgetMode.SUMMARY;
-//
-//                    summaryForm.setVisible(gadgetMode == NoticesGadgetMode.SUMMARY);
-//                    leasesDetailsLister.setVisible(gadgetMode == gadgetMode.NOTICES_DETAILS);
-//                    unitsDetailsLister.setVisible(gadgetMode == NoticesGadgetMode.VACANT_UNITS_DETAILS);
-//
-//                    switch (gadgetMode) {
-//                    case SUMMARY:
-//                        service.notices(new DefaultAsyncCallback<NoticesGadgetDataDTO>() {
-//                            @Override
-//                            public void onSuccess(NoticesGadgetDataDTO result) {
-//                                summaryForm.populate(result);
-//                                populateSucceded();
-//                            }
-//                        }, new Vector<Building>(buildingsFilterContainer.getSelectedBuildingsStubs()));
-//                        break;
-//                    case NOTICES_DETAILS:
-//                        service.makeNoticesFilterCriteria(new DefaultAsyncCallback<EntityListCriteria<LeaseDTO>>() {
-//
-//                            @Override
-//                            public void onSuccess(EntityListCriteria<LeaseDTO> result) {
-//                                ListerDataSource<LeaseDTO> leasesDataSource = new ListerDataSource<LeaseDTO>(LeaseDTO.class, GWT
-//                                        .<LeaseViewerCrudService> create(LeaseViewerCrudService.class));
-//                                leasesDataSource.setPreDefinedFilters(result.getFilters());
-//                                leasesDetailsLister.setDataSource(leasesDataSource);
-//                                leasesDetailsLister.obtain(0);
-//                                populateSucceded();
-//                            }
-//
-//                        }, getMetadata().activeNoticesFilter().getValue(), new Vector<Building>(buildingsFilterContainer.getSelectedBuildingsStubs()));
-//
-//                        break;
-//                    case VACANT_UNITS_DETAILS:
-//                        service.makeVacantUnitsFilterCriteria(new DefaultAsyncCallback<EntityListCriteria<AptUnitDTO>>() {
-//                            @Override
-//                            public void onSuccess(EntityListCriteria<AptUnitDTO> result) {
-//                                ListerDataSource<AptUnitDTO> vacantUnitsDataSource = new ListerDataSource<AptUnitDTO>(AptUnitDTO.class, GWT
-//                                        .<AbstractListService<AptUnitDTO>> create(UnitCrudService.class));
-//                                vacantUnitsDataSource.setPreDefinedFilters(result.getFilters());
-//                                unitsDetailsLister.setDataSource(vacantUnitsDataSource);
-//                                unitsDetailsLister.obtain(0);
-//                                populateSucceded();
-//                            }
-//                        }, new Vector<Building>(buildingsFilterContainer.getSelectedBuildingsStubs()));
-//                        break;
-//
-//                    }
-//                }
-//
-//            });
-//        }
-//
-//        @Override
-//        public void setContainerBoard(IBuildingFilterContainer buildingsFilterContainer) {
-//            this.buildingsFilterContainer = buildingsFilterContainer;
-//            this.buildingsFilterContainer.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
-//                @Override
-//                public void onBuildingSelectionChanged(BuildingSelectionChangedEvent event) {
-//                    populate();
-//                }
-//            });
-//        }
-//
-//        @Override
-//        protected Widget initContentPanel() {
-//
-//            FlowPanel gadgetContent = new FlowPanel();
-//
-//            summaryForm = new NoticesSummaryForm(this);
-//            summaryForm.initContent();
-//            summaryForm.setVisible(false);
-//            gadgetContent.add(summaryForm);
-//
-//            leasesDetailsLister = new LeasesDetailsLister(backToSummary());
-//            leasesDetailsLister.setVisible(false);
-//            gadgetContent.add(leasesDetailsLister);
-//
-//            unitsDetailsLister = new UnitsDetailsLister(backToSummary());
-//            unitsDetailsLister.setVisible(false);
-//            gadgetContent.add(unitsDetailsLister);
-//
-//            return gadgetContent;
-//        }
-//
-//        Command displayNotices(final NoticesGadgetMetadata.NoticesFilter filter) {
-//            return new Command() {
-//                @Override
-//                public void execute() {
-//                    getMetadata().activeMode().setValue(NoticesGadgetMetadata.NoticesGadgetMode.NOTICES_DETAILS);
-//                    getMetadata().activeNoticesFilter().setValue(filter);
-//                    saveMetadata();
-//                    populate();
-//                }
-//            };
-//        }
-//
-//        Command displayVacantUnits() {
-//            return new Command() {
-//                @Override
-//                public void execute() {
-//                    getMetadata().activeMode().setValue(NoticesGadgetMode.VACANT_UNITS_DETAILS);
-//                    saveMetadata();
-//                    populate();
-//                }
-//            };
-//        }
-//
-//        Command backToSummary() {
-//            return new Command() {
-//                @Override
-//                public void execute() {
-//                    getMetadata().activeMode().setValue(NoticesGadgetMode.SUMMARY);
-//                    saveMetadata();
-//                    populate();
-//                }
-//            };
-//        }
-//
-//    }
 
     public NoticesGadgetFactory() {
         super(NoticesGadgetMetadata.class);

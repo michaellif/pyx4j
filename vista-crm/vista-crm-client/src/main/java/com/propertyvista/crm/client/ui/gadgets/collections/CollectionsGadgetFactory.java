@@ -56,12 +56,11 @@ public class CollectionsGadgetFactory extends AbstractGadget<CollectionsGadgetMe
 
         private void bindTenantsDetailsFactory(IObject<?> member) {
             bindDetailsFactory(proto().tenantsPaidThisMonth(), new TenantsDetailsFactory(GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class),
-                    this, member.getPath().toString()));
+                    this, member));
         }
 
         private void bindPaymentDetailsFactory(IObject<?> member) {
-            bindDetailsFactory(member, new PaymentDetailsFactory(GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class), this, member.getPath()
-                    .toString()));
+            bindDetailsFactory(member, new PaymentDetailsFactory(GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class), this, member));
         }
     }
 

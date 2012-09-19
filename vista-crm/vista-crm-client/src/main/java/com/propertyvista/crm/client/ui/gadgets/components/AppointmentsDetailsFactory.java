@@ -13,68 +13,53 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.components;
 
-import java.util.List;
-import java.util.Vector;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
-import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase.CounterDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilterProvider;
 import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.AppointmentsCriteriaProvider;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
-public class AppointmentsDetailsFactory implements CounterDetailsFactory {
+public class AppointmentsDetailsFactory extends AbstractListerDetailsFactory<Appointment, CounterGadgetFilter> {
 
-    private final AppointmentsDetailsLister lister;
+    private static class AppointmentsDetailsLister extends AbstractDetailsLister<Appointment> {
 
-    private final IBuildingFilterContainer buildingFilterProvider;
+        public AppointmentsDetailsLister() {
+            super(Appointment.class);
+            setColumnDescriptors(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().date()).build(),
+                    new MemberColumnDescriptor.Builder(proto().time()).build(),
+                    new MemberColumnDescriptor.Builder(proto().agent()).build(),
+                    new MemberColumnDescriptor.Builder(proto().phone()).build(),
+                    new MemberColumnDescriptor.Builder(proto().email()).build(),
+                    new MemberColumnDescriptor.Builder(proto().status()).build()
+            );//@formatter:on
 
-    private final String filterPreset;
-
-    private final AppointmentsCriteriaProvider appointmentsCriteriaProvider;
-
-    public AppointmentsDetailsFactory(AppointmentsCriteriaProvider appointmentsCriteriaProvider, IBuildingFilterContainer bulindgFilterProvider,
-            String filterPreset) {
-
-        this.lister = new AppointmentsDetailsLister();
-        this.appointmentsCriteriaProvider = appointmentsCriteriaProvider;
-        this.buildingFilterProvider = bulindgFilterProvider;
-        this.filterPreset = filterPreset;
-
+        }
     }
 
-    @Override
-    public Widget createDetailsWidget() {
-        appointmentsCriteriaProvider.makeAppointmentsCriteria(new DefaultAsyncCallback<EntityListCriteria<Appointment>>() {
-
-            @Override
-            public void onSuccess(EntityListCriteria<Appointment> result) {
-                ListerDataSource<Appointment> listerDataSource = new ListerDataSource<Appointment>(Appointment.class, GWT
-                        .<AbstractListService<Appointment>> create(AppointmentCrudService.class));
-                List<Criterion> criteria = result.getFilters();
-                if (criteria != null) {
-                    listerDataSource.setPreDefinedFilters(criteria);
-                } else {
-                    listerDataSource.clearPreDefinedFilters();
+    public AppointmentsDetailsFactory(final AppointmentsCriteriaProvider appointmentsCriteriaProvider, IBuildingFilterContainer builingFilterContainer,
+            IObject<?> filterPreset) {
+        super(//@formatter:off
+                Appointment.class,
+                new AppointmentsDetailsLister(),
+                GWT.<AppointmentCrudService>create(AppointmentCrudService.class),
+                new CounterGadgetFilterProvider(builingFilterContainer, filterPreset.getPath()),
+                new ICriteriaProvider<Appointment, CounterGadgetFilter>() {
+                    @Override
+                    public void makeCriteria(AsyncCallback<EntityListCriteria<Appointment>> callback, CounterGadgetFilter filterData) {
+                        appointmentsCriteriaProvider.makeAppointmentsCriteria(callback, filterData.getBuildings(), filterData.getCounterMember().toString());
+                    }
                 }
-                lister.setDataSource(listerDataSource);
-                lister.obtain(0);
-
-            }
-
-        }, new Vector<Building>(buildingFilterProvider.getSelectedBuildingsStubs()), filterPreset);
-
-        return lister;
-
+        );//@formatter:on
     }
-
 }

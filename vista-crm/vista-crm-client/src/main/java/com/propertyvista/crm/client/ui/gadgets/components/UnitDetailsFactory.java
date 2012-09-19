@@ -13,66 +13,59 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.components;
 
-import java.util.Vector;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
-import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
-import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilterProvider;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.UnitCriteriaProvider;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 
-public class UnitDetailsFactory implements CounterGadgetInstanceBase.CounterDetailsFactory {
+public class UnitDetailsFactory extends AbstractListerDetailsFactory<AptUnitDTO, CounterGadgetFilter> {
 
-    private final UnitsDetailsLister lister;
+    public static class UnitsDetailsLister extends AbstractDetailsLister<AptUnitDTO> {
 
-    private final String unitsFilter;
+        private static final I18n i18n = I18n.get(UnitsDetailsLister.class);
 
-    private final UnitCriteriaProvider provider;
+        public UnitsDetailsLister() {
+            super(AptUnitDTO.class);
+            setColumnDescriptors(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().buildingCode()).build(),
+                new MemberColumnDescriptor.Builder(proto().floorplan().name()).title(i18n.tr("Floorplan Name")).build(),
+                new MemberColumnDescriptor.Builder(proto().floorplan().marketingName()).title(i18n.tr("Floorplan Marketing Name")).build(),
+                new MemberColumnDescriptor.Builder(proto().info().economicStatus()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto().info().floor()).build(),
+                new MemberColumnDescriptor.Builder(proto().info().number()).build(),
+                new MemberColumnDescriptor.Builder(proto().info().area()).build(),
+                new MemberColumnDescriptor.Builder(proto().info().areaUnits()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto().info()._bedrooms()).build(),
+                new MemberColumnDescriptor.Builder(proto().info()._bathrooms()).build(),
+                new MemberColumnDescriptor.Builder(proto().financial()._unitRent()).build(),
+                new MemberColumnDescriptor.Builder(proto().financial()._marketRent()).build(),
+                new MemberColumnDescriptor.Builder(proto()._availableForRent()).build()
+            );//@formatter:on
 
-    private final IBuildingFilterContainer buildingsFilterContainer;
+        }
 
-    public UnitDetailsFactory(UnitCriteriaProvider unitsCriteriaProvider, IBuildingFilterContainer buildingsFilterProvider, IObject<?> unitsFilter) {
-        this.lister = new UnitsDetailsLister();
-        this.buildingsFilterContainer = buildingsFilterProvider;
-        this.buildingsFilterContainer.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
-
-            @Override
-            public void onBuildingSelectionChanged(BuildingSelectionChangedEvent event) {
-                createDetailsWidget();
-            }
-        });
-        this.provider = unitsCriteriaProvider;
-        this.unitsFilter = unitsFilter.getPath().toString();
     }
 
-    @Override
-    public Widget createDetailsWidget() {
-
-        provider.makeUnitFilterCriteria(new DefaultAsyncCallback<EntityListCriteria<AptUnitDTO>>() {
-
-            @Override
-            public void onSuccess(EntityListCriteria<AptUnitDTO> result) {
-                ListerDataSource<AptUnitDTO> dataSource = new ListerDataSource<AptUnitDTO>(AptUnitDTO.class, GWT
-                        .<UnitCrudService> create(UnitCrudService.class));
-                dataSource.setPreDefinedFilters(result.getFilters());
-                lister.setDataSource(dataSource);
-                lister.obtain(0);
-            }
-
-        }, new Vector<Building>(buildingsFilterContainer.getSelectedBuildingsStubs()), unitsFilter);
-
-        return lister;
+    public UnitDetailsFactory(final UnitCriteriaProvider unitsCriteriaProvider, IBuildingFilterContainer buildingsFilterProvider, IObject<?> unitsFilter) {
+        super(//@formatter:on
+                AptUnitDTO.class, new UnitsDetailsLister(), GWT.<UnitCrudService> create(UnitCrudService.class), new CounterGadgetFilterProvider(
+                        buildingsFilterProvider, unitsFilter.getPath()), new ICriteriaProvider<AptUnitDTO, CounterGadgetFilter>() {
+                    @Override
+                    public void makeCriteria(AsyncCallback<EntityListCriteria<AptUnitDTO>> callback, CounterGadgetFilter filterData) {
+                        unitsCriteriaProvider.makeUnitFilterCriteria(callback, filterData.getBuildings(), filterData.getCounterMember().toString());
+                    }
+                });//@formatter:off
     }
-
 }

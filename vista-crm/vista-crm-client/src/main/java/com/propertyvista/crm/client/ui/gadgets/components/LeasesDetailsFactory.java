@@ -7,79 +7,76 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 12, 2012
+ * Created on Sep 19, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.gadgets.components;
 
-import java.util.List;
-import java.util.Vector;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 
-import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
-import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
-import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilterProvider;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.LeaseCriteriaProvider;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.LeaseDTO;
 
-public class LeasesDetailsFactory implements CounterGadgetInstanceBase.CounterDetailsFactory {
+public class LeasesDetailsFactory extends AbstractListerDetailsFactory<LeaseDTO, CounterGadgetFilter> {
 
-    private final LeasesDetailsLister lister;
+    private static class LeasesDetailsLister extends AbstractDetailsLister<LeaseDTO> {
 
-    private final String leaseFilter;
+        public LeasesDetailsLister() {
+            super(LeaseDTO.class);
+            setColumnDescriptors(//@formatter:off
+                    new Builder(proto().leaseId()).build(),
+                    new Builder(proto().type()).build(),
+                    
+                    new Builder(proto().unit().building().propertyCode()).build(),
+                    new Builder(proto().unit()).searchableOnly().build(),
+                    new Builder(proto().unit().info().number()).searchableOnly().columnTitle(proto().unit().getMeta().getCaption()).build(),
+                    
+                    new Builder(proto().status()).build(),
+                    new Builder(proto().completion()).build(),
+                    new Builder(proto().billingAccount().accountNumber()).build(),
+                    
+                    new Builder(proto().leaseFrom()).build(),
+                    new Builder(proto().leaseTo()).build(),
+                    
+                    new Builder(proto().expectedMoveIn()).build(),
+                    new Builder(proto().expectedMoveOut()).build(),
+                    new Builder(proto().actualMoveIn(), false).build(),
+                    new Builder(proto().actualMoveOut(), false).build(),
+                    new Builder(proto().moveOutNotice()).build(),
+                    
+                    new Builder(proto().approvalDate(), false).build(),
+                    new Builder(proto().creationDate(), false).build()
+            );//@formatter:on
 
-    private final IBuildingFilterContainer buildingFilterContainer;
-
-    private final LeaseCriteriaProvider leaseCriteriaProvider;
-
-    public LeasesDetailsFactory(LeaseCriteriaProvider leaseCriteriaProvider, IBuildingFilterContainer buildingsFilterContainer, IObject<?> leaseFilter) {
-        this.lister = new LeasesDetailsLister();
-        this.buildingFilterContainer = buildingsFilterContainer;
-        this.buildingFilterContainer.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
-            @Override
-            public void onBuildingSelectionChanged(BuildingSelectionChangedEvent event) {
-                createDetailsWidget();
-            }
-        });
-        this.leaseCriteriaProvider = leaseCriteriaProvider;
-        this.leaseFilter = leaseFilter.getPath().toString();
+        }
     }
 
-    @Override
-    public Widget createDetailsWidget() {
-        leaseCriteriaProvider.makeLeaseFilterCriteria(new DefaultAsyncCallback<EntityListCriteria<LeaseDTO>>() {
+    public LeasesDetailsFactory(final LeaseCriteriaProvider leaseCriteriaProvider, IBuildingFilterContainer buildingFilterContainer, IObject<?> leaseFilter) {
+        super(//@formatter:off
+                LeaseDTO.class,
+                new LeasesDetailsLister(),
+                GWT.<LeaseViewerCrudService>create(LeaseViewerCrudService.class),
+                new CounterGadgetFilterProvider(buildingFilterContainer, leaseFilter.getPath()),
+                new ICriteriaProvider<LeaseDTO, CounterGadgetFilter>() {
+                    @Override
+                    public void makeCriteria(final AsyncCallback<EntityListCriteria<LeaseDTO>> callback, CounterGadgetFilter filterData) {
+                        leaseCriteriaProvider.makeLeaseFilterCriteria(callback, filterData.getBuildings(), filterData.getCounterMember().toString());                        
+                    }
+                }                
+        );//@formatter:on
 
-            @Override
-            public void onSuccess(EntityListCriteria<LeaseDTO> result) {
-                ListerDataSource<LeaseDTO> listerDataSource = new ListerDataSource<LeaseDTO>(LeaseDTO.class, GWT
-                        .<AbstractListService<LeaseDTO>> create(LeaseViewerCrudService.class));
-                List<Criterion> criteria = result.getFilters();
-                if (criteria != null) {
-                    listerDataSource.setPreDefinedFilters(criteria);
-                } else {
-                    listerDataSource.clearPreDefinedFilters();
-                }
-                lister.setDataSource(listerDataSource);
-                lister.obtain(0);
-
-            }
-
-        }, new Vector<Building>(buildingFilterContainer.getSelectedBuildingsStubs()), leaseFilter);
-
-        return lister;
     }
 
 }

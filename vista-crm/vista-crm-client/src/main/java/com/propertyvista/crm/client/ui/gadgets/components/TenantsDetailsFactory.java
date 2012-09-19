@@ -13,58 +13,66 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.components;
 
-import java.util.List;
-import java.util.Vector;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
+import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase.CounterDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilterProvider;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.TenantCriteriaProvider;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.TenantDTO;
 
-public class TenantsDetailsFactory implements CounterDetailsFactory {
+public class TenantsDetailsFactory extends AbstractListerDetailsFactory<TenantDTO, CounterGadgetFilter> {
 
-    private final TenantCriteriaProvider tenantsCriteriaProvider;
+    public static class TenantsDetailsLister extends AbstractDetailsLister<TenantDTO> {
 
-    private final IBuildingFilterContainer buildingsFilterProvider;
+        private static final I18n i18n = I18n.get(TenantsDetailsLister.class);
 
-    private final String filterPreset;
+        public TenantsDetailsLister() {
+            super(TenantDTO.class);
+            setColumnDescriptors(//@formatter:off
+                    new Builder(proto().participantId()).build(),
+                    new Builder(proto().role()).build(),
+                    
+                    new Builder(proto().customer().person().name()).searchable(false).build(),
+                    new Builder(proto().customer().person().name().firstName(), false).build(),
+                    new Builder(proto().customer().person().name().lastName(), false).build(),
+                    new Builder(proto().customer().person().sex(), false).build(),
+                    new Builder(proto().customer().person().birthDate()).build(),
+                    
+                    new Builder(proto().customer().person().homePhone()).build(),
+                    new Builder(proto().customer().person().mobilePhone(), false).build(),
+                    new Builder(proto().customer().person().workPhone(), false).build(),
+                    new Builder(proto().customer().person().email()).build(),
+                    
+                    new Builder(proto().leaseTermV().holder()).columnTitle(i18n.tr("Lease Term")).searchable(false).build(),
+                    new Builder(proto().leaseTermV().holder().lease().leaseId()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build()
+                ); // @formatter:on
+        }
 
-    private final TenantsDetailsLister lister;
-
-    public TenantsDetailsFactory(TenantCriteriaProvider tenantsCriteriaProvider, IBuildingFilterContainer buildingsFilterProvider, String tentantFilterPreset) {
-        this.tenantsCriteriaProvider = tenantsCriteriaProvider;
-        this.buildingsFilterProvider = buildingsFilterProvider;
-        this.filterPreset = tentantFilterPreset;
-        this.lister = new TenantsDetailsLister();
     }
 
-    @Override
-    public Widget createDetailsWidget() {
-        tenantsCriteriaProvider.makeTenantCriteria(new DefaultAsyncCallback<EntityListCriteria<TenantDTO>>() {
-
-            @Override
-            public void onSuccess(EntityListCriteria<TenantDTO> result) {
-                ListerDataSource<TenantDTO> dataSource = new ListerDataSource<TenantDTO>(TenantDTO.class, GWT
-                        .<TenantCrudService> create(TenantCrudService.class));
-                List<Criterion> criteria = result.getFilters();
-                if (criteria != null) {
-                    dataSource.setPreDefinedFilters(criteria);
+    public TenantsDetailsFactory(final TenantCriteriaProvider tenantsCriteriaProvider, IBuildingFilterContainer buildingsFilterContainer,
+            IObject<?> tentantFilterPreset) {
+        super(//@formatter:off
+                TenantDTO.class,
+                new TenantsDetailsLister(),
+                GWT.<TenantCrudService>create(TenantCrudService.class),
+                new CounterGadgetFilterProvider(buildingsFilterContainer, tentantFilterPreset.getPath()),
+                new ICriteriaProvider<TenantDTO, CounterGadgetFilter>() {                    
+                    @Override
+                    public void makeCriteria(AsyncCallback<EntityListCriteria<TenantDTO>> callback, CounterGadgetFilter filterData) {
+                        tenantsCriteriaProvider.makeTenantCriteria(callback, filterData.getBuildings(), filterData.getCounterMember().toString());
+                    }                    
                 }
-                lister.setDataSource(dataSource);
-                lister.obtain(0);
-            }
-
-        }, new Vector<Building>(buildingsFilterProvider.getSelectedBuildingsStubs()), filterPreset);
-        return lister;
+        );//@formatter:on
     }
 }
