@@ -160,8 +160,6 @@ public class PaymentMethodForm extends PaymentMethodEditor {
 
         panel.setWidget(1, 0, new ScrollPanel(legalTerms.asWidget()));
         panel.getWidget(1, 0).setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTerms.name());
-        legalTerms.setAllowHtml(true);
-        legalTerms.setWordWrap(true);
 
         panel.setWidget(2, 0, new DecoratorBuilder(iAgreeBox, 5).customLabel(i18n.tr("I Agree")).build());
         iAgreeBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {

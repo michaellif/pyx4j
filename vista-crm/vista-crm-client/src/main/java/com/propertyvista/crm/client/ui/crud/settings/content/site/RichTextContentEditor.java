@@ -65,9 +65,7 @@ public class RichTextContentEditor extends CEntityDecoratableForm<HtmlContent> {
             editor.setImageProvider(new SiteImageResourceProvider());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().html(), editor), 60).build());
         } else {
-            CLabel content = new CLabel();
-            content.setAllowHtml(true);
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().html(), content), 60).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().html(), new CLabel<String>()), 60).build());
         }
 
         return main;

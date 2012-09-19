@@ -36,6 +36,7 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCollectionCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -194,6 +195,16 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                     new DecoratorBuilder(inject(proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))), 15)
                             .build());
         }
+
+        main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().floorplans(), new CEntityCollectionCrudHyperlink(null, new Command() {
+
+            @Override
+            public void execute() {
+                System.out.println("++++++++++++++++++++++");
+
+            }
+        })), 15).build());
+
         main.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());
         main.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(true, false)));
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);

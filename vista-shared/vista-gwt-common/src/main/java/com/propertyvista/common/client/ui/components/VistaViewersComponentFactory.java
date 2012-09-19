@@ -30,10 +30,8 @@ import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.EntityFormComponentFactory;
 
-import com.propertyvista.common.client.ui.components.c.CEmailLabel;
-import com.propertyvista.common.client.ui.components.c.CGeoLocationLabel;
+import com.propertyvista.common.client.ui.components.c.CGeoLocation;
 import com.propertyvista.domain.GeoLocation;
-import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
@@ -72,10 +70,8 @@ public class VistaViewersComponentFactory extends EntityFormComponentFactory {
             }
         } else if ((member.getValueClass().equals(Province.class)) || (member.getValueClass().equals(Country.class))) {
             return new CEntityLabel();
-        } else if (member.getValueClass().equals(Email.class)) {
-            return new CEmailLabel();
         } else if (member.getValueClass().equals(GeoLocation.class)) {
-            return new CGeoLocationLabel();
+            return new CGeoLocation();
         } else if (mm.isEntity() && !mm.isDetached() && !mm.isOwnedRelationships()) {
             return new CEntityLabel();
         }

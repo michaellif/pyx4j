@@ -17,7 +17,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -75,12 +74,7 @@ public class VistaTermsForm extends AdminEntityForm<VistaTerms> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).build());
             // content
             CComponent<?, ?> editor = null;
-            if (isEditable()) {
-                editor = new CRichTextArea();
-            } else {
-                editor = new CLabel();
-                ((CLabel) editor).setAllowHtml(true);
-            }
+            editor = new CRichTextArea();
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), editor), 60).build());
 
             return main;

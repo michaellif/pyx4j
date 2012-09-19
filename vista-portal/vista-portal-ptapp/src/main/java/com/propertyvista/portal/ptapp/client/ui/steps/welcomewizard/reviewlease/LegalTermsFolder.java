@@ -80,9 +80,7 @@ public class LegalTermsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
             main = new FormFlexPanel();
 
             int row = -1;
-            CLabel content = new CLabel();
-            content.setAllowHtml(true);
-            ScrollPanel scroll = new ScrollPanel(inject(proto().content().content(), content).asWidget());
+            ScrollPanel scroll = new ScrollPanel(inject(proto().content().content(), new CLabel<String>()).asWidget());
             main.setH2(++row, 0, 1, "");
             main.setWidget(++row, 0, scroll);
             main.setBR(++row, 0, 1);

@@ -138,8 +138,8 @@ public interface Building extends PolicyNode {
     // parent <-> child relationship:
 
     @Owned
-    @Detached(level = AttachLevel.Detached)
-    ISet<Floorplan> _Floorplans();
+    @Detached(level = AttachLevel.IdOnly)
+    ISet<Floorplan> floorplans();
 
     @Owned
     @Detached(level = AttachLevel.Detached)

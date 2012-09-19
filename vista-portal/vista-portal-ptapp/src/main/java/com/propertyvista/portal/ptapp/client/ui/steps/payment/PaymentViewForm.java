@@ -64,7 +64,7 @@ public class PaymentViewForm extends CEntityDecoratableForm<PaymentInformationDT
         item, selected
     }
 
-    private final CLabel termContent = new CLabel();
+    private final CLabel<String> termContent = new CLabel<String>();
 
     public PaymentViewForm() {
         super(PaymentInformationDTO.class, new VistaEditorsComponentFactory());
@@ -94,9 +94,8 @@ public class PaymentViewForm extends CEntityDecoratableForm<PaymentInformationDT
         info.getElement().getStyle().setMarginTop(1, Unit.EM);
         info.add(new Image(PortalImages.INSTANCE.userMessageInfo()));
 
-        CLabel notes;
-        inject(proto().oneTimePaymentTerms().content().content(), notes = new CLabel());
-        notes.setAllowHtml(true);
+        CLabel<String> notes;
+        inject(proto().oneTimePaymentTerms().content().content(), notes = new CLabel<String>());
         notes.asWidget().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.oneTimePaymentTerms);
         notes.asWidget().getElement().getStyle().setMarginLeft(1.5, Unit.EM);
         notes.asWidget().setWidth("auto");
@@ -125,8 +124,6 @@ public class PaymentViewForm extends CEntityDecoratableForm<PaymentInformationDT
             main.setH1(++row, 0, 1, i18n.tr("Pre-Authorized Payment"));
 
             inject(proto().recurrentPaymentTerms().content().content(), termContent);
-            termContent.setAllowHtml(true);
-            termContent.setWordWrap(true);
 
             ScrollPanel termsScroll = new ScrollPanel(termContent.asWidget());
             termsScroll.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.recurrentPaymentTerms);

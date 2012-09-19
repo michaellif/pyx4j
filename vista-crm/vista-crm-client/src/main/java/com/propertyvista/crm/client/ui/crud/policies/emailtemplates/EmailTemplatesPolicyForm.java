@@ -38,7 +38,6 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -140,10 +139,10 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().subject())).build());
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().useHeader())).build());
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().useFooter())).build());
+                CRichTextArea editor = new CRichTextArea();
+                editor.setImageProvider(new SiteImageResourceProvider());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), editor), 60).build());
                 if (isEditable()) {
-                    CRichTextArea editor = new CRichTextArea();
-                    editor.setImageProvider(new SiteImageResourceProvider());
-                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), editor), 60).build());
                     // create variable selection button
                     final PushButton pb = editor.getWidget().getEditor().getCustomButton();
                     pb.setText(i18n.tr("MERGE"));
@@ -183,10 +182,6 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                             }
                         }
                     });
-                } else {
-                    CLabel body = new CLabel();
-                    body.setAllowHtml(true);
-                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), body), 60).build());
                 }
                 return content;
             }

@@ -24,15 +24,12 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.dto.LegalTermsDescriptorDTO;
 
 public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
-
-    private static final I18n i18n = I18n.get(LeaseTemsFolder.class);
 
     public final static String DEFAULT_STYLE_PREFIX = "LeaseTemsFolder";
 
@@ -77,9 +74,7 @@ public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-            CLabel content = new CLabel();
-            content.setAllowHtml(true);
-            ScrollPanel scroll = new ScrollPanel(inject(proto().content().content(), content).asWidget());
+            ScrollPanel scroll = new ScrollPanel(inject(proto().content().content(), new CLabel<String>()).asWidget());
             main.setWidget(++row, 0, scroll);
             main.setBR(++row, 0, 1);
             main.setWidget(++row, 0, inject(proto().agrees(), new AgreeFolder(editable)));

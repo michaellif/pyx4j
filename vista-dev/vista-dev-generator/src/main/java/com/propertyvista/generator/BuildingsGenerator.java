@@ -383,7 +383,7 @@ public class BuildingsGenerator {
             } while (uniqueFloorplanNames.contains(floorplan.name().getValue()));
 
             uniqueFloorplanNames.add(floorplan.name().getValue());
-            building._Floorplans().add(floorplan);
+            building.floorplans().add(floorplan);
 
             floorplans.add(floorplan);
 

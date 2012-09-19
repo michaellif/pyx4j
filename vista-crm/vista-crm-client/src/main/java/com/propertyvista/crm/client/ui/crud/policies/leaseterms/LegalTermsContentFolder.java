@@ -87,9 +87,7 @@ public class LegalTermsContentFolder extends VistaBoxFolder<LegalTermsContent> {
                 editor.setImageProvider(new SiteImageResourceProvider());
                 termsContentComp = inject(proto().content(), editor);
             } else {
-                CLabel termsContentLabel = new CLabel();
-                termsContentLabel.setAllowHtml(true);
-                termsContentComp = inject(proto().content(), termsContentLabel);
+                termsContentComp = inject(proto().content(), new CLabel<String>());
             }
             contentPanel.setWidget(++row, 0, new DecoratorBuilder(termsContentComp, 45).labelWidth(10).build());
 
