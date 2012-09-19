@@ -37,6 +37,8 @@ public class NMonthYearPicker extends NFocusComponent<Date, MonthYearPicker, CMo
 
     public static final DateTimeFormat defaultDateFormat = DateTimeFormat.getFormat(i18n.tr("MMMM yyyy"));
 
+    public static final DateTimeFormat yearOnlyDateFormat = DateTimeFormat.getFormat(i18n.tr("yyyy"));
+
     public NMonthYearPicker(final CMonthYearPicker cComponent) {
         super(cComponent);
     }
@@ -67,7 +69,7 @@ public class NMonthYearPicker extends NFocusComponent<Date, MonthYearPicker, CMo
     @Override
     public void setNativeValue(Date value) {
         if (isViewable()) {
-            getViewer().setHTML(value == null ? "" : defaultDateFormat.format(value));
+            getViewer().setHTML(value == null ? "" : getCComponent().isYearOnly() ? yearOnlyDateFormat.format(value) : defaultDateFormat.format(value));
         } else {
             getEditor().setDate(value);
         }
