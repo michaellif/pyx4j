@@ -21,7 +21,7 @@ import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPrelo
 
 public class DatesPolicyPreloader extends AbstractPolicyPreloader<DatesPolicy> {
 
-    private static final LogicalDate YEAR_RANGE_START = new LogicalDate(1800 - 1900, 1, 1);
+    private static final LogicalDate YEAR_RANGE_START = new LogicalDate(20, 0, 1);
 
     private static final int YEAR_RANGE_SPAN = 5;
 
