@@ -34,11 +34,11 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
 
     void notice(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut);
 
-    void cancelNotice(AsyncCallback<VoidSerializable> callback, Key entityId);
+    void cancelNotice(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
 
     void evict(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut);
 
-    void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId);
+    void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
 
     /**
      * <code>callback</code> returns a message that should be display to the users (i.e. e-mails were send successfully);
@@ -46,6 +46,8 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
     void sendMail(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant> users, EmailTemplateType emailType);
 
     void activate(AsyncCallback<VoidSerializable> callback, Key entityId);
+
+    void cancelLease(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
 
     void createOffer(AsyncCallback<LeaseTermDTO> callback, Key entityId, LeaseTerm.Type type);
 }

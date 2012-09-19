@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -82,6 +83,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     private final MenuItem cancelEvictAction;
 
     private final MenuItem activateAction;
+
+    private final MenuItem cancelAction;
 
     private final Button renewButton;
 
@@ -147,7 +150,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         cancelNoticeAction = new MenuItem(i18n.tr("Cancel Notice"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).cancelNotice();
+                new ReasonBox(i18n.tr("Do you really want to cancel the Notice?")) {
+                    @Override
+                    public boolean onClickOk() {
+                        ((LeaseViewerView.Presenter) getPresenter()).cancelNotice(getReason());
+                        return true;
+                    }
+                }.show();
             }
         });
         addAction(cancelNoticeAction);
@@ -169,7 +178,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         cancelEvictAction = new MenuItem(i18n.tr("Cancel Evict"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).cancelEvict();
+                new ReasonBox(i18n.tr("Do you really want to cancel Evict?")) {
+                    @Override
+                    public boolean onClickOk() {
+                        ((LeaseViewerView.Presenter) getPresenter()).cancelEvict(getReason());
+                        return true;
+                    }
+                }.show();
             }
         });
         addAction(cancelEvictAction);
@@ -181,6 +196,20 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             }
         });
         addAction(activateAction);
+
+        cancelAction = new MenuItem(i18n.tr("Cancel"), new Command() {
+            @Override
+            public void execute() {
+                new ReasonBox(i18n.tr("Do you really want to cancel the Lease?")) {
+                    @Override
+                    public boolean onClickOk() {
+                        ((LeaseViewerView.Presenter) getPresenter()).cancelLease(getReason());
+                        return true;
+                    }
+                }.show();
+            }
+        });
+        addAction(cancelAction);
 
         // Renewing stuff : ---------------------------------------------------------------------------------------------------
 
@@ -234,6 +263,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(evictAction, false);
         setActionVisible(cancelEvictAction, false);
         setActionVisible(activateAction, false);
+        setActionVisible(cancelAction, false);
         super.reset();
     }
 
@@ -254,6 +284,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             setActionVisible(evictAction, status == Status.Active && completion == null);
             setActionVisible(cancelEvictAction, completion == CompletionType.Eviction && status != Status.Closed);
             setActionVisible(activateAction, status == Status.ExistingLease);
+            setActionVisible(cancelAction, !status.isFormer());
 
             renewButton.setVisible(status == Status.Active && completion == null && value.futureTerm().isNull());
         }
@@ -392,5 +423,32 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     @Override
     public void reportSendMailActionResult(String message) {
         MessageDialog.info(message);
+    }
+
+    private abstract class ReasonBox extends OkCancelDialog {
+
+        private final CTextArea reason = new CTextArea();
+
+        public ReasonBox(String title) {
+            super(title);
+            setBody(createBody());
+            setSize("350px", "100px");
+        }
+
+        protected Widget createBody() {
+            getOkButton().setEnabled(true);
+
+            VerticalPanel content = new VerticalPanel();
+            content.add(new HTML(i18n.tr("Please fill the reason") + ":"));
+            content.add(reason);
+
+            reason.setWidth("100%");
+            content.setWidth("100%");
+            return content.asWidget();
+        }
+
+        public String getReason() {
+            return reason.getValue();
+        }
     }
 }

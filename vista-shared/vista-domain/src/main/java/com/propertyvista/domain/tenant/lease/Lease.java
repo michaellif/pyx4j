@@ -61,7 +61,7 @@ public interface Lease extends IEntity {
 
         Approved, // Application
 
-        Cancelled, //TODO Implement (unreserve unit)
+        Cancelled,
 
         Active,
 
@@ -95,7 +95,7 @@ public interface Lease extends IEntity {
         }
 
         public static Collection<Status> former() {
-            return EnumSet.of(Completed, Closed);
+            return EnumSet.of(Cancelled, Completed, Closed);
         }
 
         // states:

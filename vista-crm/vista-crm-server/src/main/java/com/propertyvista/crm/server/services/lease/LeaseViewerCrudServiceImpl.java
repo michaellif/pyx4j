@@ -32,6 +32,7 @@ import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.server.services.lease.common.LeaseTermCrudServiceImpl;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
+import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
@@ -68,8 +69,9 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     @Override
-    public void cancelNotice(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId));
+    public void cancelNotice(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason) {
+        ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId),
+                CrmAppContext.getCurrentUserEmployee(), decisionReason);
         Persistence.service().commit();
         callback.onSuccess(null);
 
@@ -84,8 +86,9 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     @Override
-    public void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId));
+    public void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason) {
+        ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId),
+                CrmAppContext.getCurrentUserEmployee(), decisionReason);
         Persistence.service().commit();
         callback.onSuccess(null);
     }
@@ -149,6 +152,16 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
         ServerSideFactory.create(LeaseFacade.class).approveExistingLease(leaseId);
         ServerSideFactory.create(LeaseFacade.class).activate(leaseId);
+
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void cancelLease(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason) {
+        Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
+
+        ServerSideFactory.create(LeaseFacade.class).cancelLease(leaseId, CrmAppContext.getCurrentUserEmployee(), decisionReason);
 
         Persistence.service().commit();
         callback.onSuccess(null);

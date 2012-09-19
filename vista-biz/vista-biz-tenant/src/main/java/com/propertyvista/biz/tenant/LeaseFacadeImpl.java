@@ -204,49 +204,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public void renew(Lease leaseId) {
-        Lease lease = load(leaseId, false);
-
-        if (!lease.futureTerm().isNull()) {
-            // update old:
-            lease.currentTerm().status().setValue(LeaseTerm.Status.Historic);
-            lease.currentTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
-            persist(lease.currentTerm());
-
-            // set new:
-            lease.currentTerm().set(lease.futureTerm());
-            Persistence.service().retrieve(lease.currentTerm());
-            lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
-            updateLeaseDeposits(lease);
-
-            // save lease with new current term:
-            lease.currentTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
-            persist(lease);
-        } else {
-            throw new IllegalArgumentException(i18n.tr("There is no term for renewal"));
-        }
-    }
-
-    @Override
-    public void acceptOffer(Lease leaseId, LeaseTerm leaseTermId) {
-        Lease lease = load(leaseId, false);
-        LeaseTerm leaseTerm = Persistence.secureRetrieve(LeaseTerm.class, leaseTermId.getPrimaryKey());
-
-        Persistence.service().retrieveMember(lease.leaseTerms());
-        if (leaseTerm.status().getValue() == LeaseTerm.Status.Offer && lease.leaseTerms().contains(leaseTermId)) {
-            lease.futureTerm().set(leaseTerm);
-            lease.futureTerm().status().setValue(LeaseTerm.Status.AcceptedOffer);
-            lease.futureTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
-            persist(lease.futureTerm());
-
-            // save lease:
-            Persistence.secureSave(lease);
-        } else {
-            throw new IllegalArgumentException(i18n.tr("Invalid LeaseTerm supplied"));
-        }
-    }
-
-    @Override
     public BillableItem createBillableItem(ProductItem itemId, PolicyNode node) {
         ProductItem item = Persistence.secureRetrieve(ProductItem.class, itemId.getPrimaryKey());
         assert item != null;
@@ -423,6 +380,49 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
+    public void renew(Lease leaseId) {
+        Lease lease = load(leaseId, false);
+
+        if (!lease.futureTerm().isNull()) {
+            // update old:
+            lease.currentTerm().status().setValue(LeaseTerm.Status.Historic);
+            lease.currentTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
+            persist(lease.currentTerm());
+
+            // set new:
+            lease.currentTerm().set(lease.futureTerm());
+            Persistence.service().retrieve(lease.currentTerm());
+            lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
+            updateLeaseDeposits(lease);
+
+            // save lease with new current term:
+            lease.currentTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
+            persist(lease);
+        } else {
+            throw new IllegalArgumentException(i18n.tr("There is no term for renewal"));
+        }
+    }
+
+    @Override
+    public void complete(Lease leaseId) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+
+        lease.actualLeaseTo().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        lease.status().setValue(Status.Completed);
+
+        Persistence.secureSave(lease);
+    }
+
+    @Override
+    public void close(Lease leaseId) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+
+        lease.status().setValue(Status.Closed);
+
+        Persistence.secureSave(lease);
+    }
+
+    @Override
     public LeaseTerm createOffer(Lease leaseId, Type type) {
         Lease lease = load(leaseId, false);
 
@@ -455,6 +455,25 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
+    public void acceptOffer(Lease leaseId, LeaseTerm leaseTermId) {
+        Lease lease = load(leaseId, false);
+        LeaseTerm leaseTerm = Persistence.secureRetrieve(LeaseTerm.class, leaseTermId.getPrimaryKey());
+
+        Persistence.service().retrieveMember(lease.leaseTerms());
+        if (leaseTerm.status().getValue() == LeaseTerm.Status.Offer && lease.leaseTerms().contains(leaseTermId)) {
+            lease.futureTerm().set(leaseTerm);
+            lease.futureTerm().status().setValue(LeaseTerm.Status.AcceptedOffer);
+            lease.futureTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
+            persist(lease.futureTerm());
+
+            // save lease:
+            Persistence.secureSave(lease);
+        } else {
+            throw new IllegalArgumentException(i18n.tr("Invalid LeaseTerm supplied"));
+        }
+    }
+
+    @Override
     public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate noticeDay, LogicalDate moveOutDay) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
         if (lease.status().getValue() != Status.Active) {
@@ -471,7 +490,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public void cancelCompletionEvent(Lease leaseId) {
+    public void cancelCompletionEvent(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
         if (lease.completion().isNull()) {
             throw new IllegalStateException("lease " + leaseId.getPrimaryKey() + " must have notice in order to perform 'cancelNotice'");
@@ -487,22 +506,25 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public void complete(Lease leaseId) {
+    public void cancelLease(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
 
-        lease.actualLeaseTo().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        lease.status().setValue(Status.Completed);
+        Status status = lease.status().getValue();
+        lease.status().setValue(Status.Cancelled);
+
+        if (status != Status.ExistingLease) {
+            lease.actualLeaseTo().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        }
 
         Persistence.secureSave(lease);
-    }
 
-    @Override
-    public void close(Lease leaseId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
-
-        lease.status().setValue(Status.Closed);
-
-        Persistence.secureSave(lease);
+        switch (status) {
+        case ExistingLease:
+            ServerSideFactory.create(OccupancyFacade.class).migratedCancel(lease.unit().<AptUnit> createIdentityStub());
+            break;
+        default:
+            ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey());
+        }
     }
 
     // internals:

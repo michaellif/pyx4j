@@ -35,18 +35,19 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void notice(LogicalDate date, LogicalDate moveOut);
 
-        void cancelNotice();
+        void cancelNotice(String decisionReason);
 
         void evict(LogicalDate date, LogicalDate moveOut);
 
-        void cancelEvict();
+        void cancelEvict(String decisionReason);
 
         void sendMail(List<LeaseParticipant> users, EmailTemplateType emailType);
 
         void activate();
 
-        void createOffer(LeaseTerm.Type type);
+        void cancelLease(String decisionReason);
 
+        void createOffer(LeaseTerm.Type type);
     }
 
     IListerView<BillDataDTO> getBillListerView();

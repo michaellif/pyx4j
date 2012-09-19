@@ -66,6 +66,10 @@ public interface LeaseFacade {
 
     void renew(Lease leaseId);
 
+    void complete(Lease leaseId);
+
+    void close(Lease leaseId);
+
     // DB-data LeaseTerm state interfaces:
 
     LeaseTerm createOffer(Lease leaseId, LeaseTerm.Type type);
@@ -76,11 +80,9 @@ public interface LeaseFacade {
 
     void createCompletionEvent(Lease leaseId, Lease.CompletionType completionType, LogicalDate noticeDay, LogicalDate moveOutDay);
 
-    void cancelCompletionEvent(Lease leaseId);
+    void cancelCompletionEvent(Lease leaseId, Employee decidedBy, String decisionReason);
 
-    void complete(Lease leaseId);
-
-    void close(Lease leaseId);
+    void cancelLease(Lease leaseId, Employee decidedBy, String decisionReason);
 
     // Utils:
 

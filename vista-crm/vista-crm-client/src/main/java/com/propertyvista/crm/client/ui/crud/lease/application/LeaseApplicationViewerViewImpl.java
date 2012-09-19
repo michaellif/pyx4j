@@ -92,7 +92,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                     @Override
                     public void onSuccess(List<LeaseParticipant> result) {
                         new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenants/Guarantors To Send An Invitation To"), true, result) {
-
                             @Override
                             public boolean onClickOk() {
                                 ((LeaseApplicationViewerView.Presenter) getPresenter()).inviteUsers(getSelectedItems());
@@ -114,7 +113,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                     @Override
                     public void onSuccess(List<LeaseParticipant> result) {
                         new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenants/Guarantors To Check"), true, result) {
-
                             @Override
                             public boolean onClickOk() {
                                 // TODO make the credit check happen

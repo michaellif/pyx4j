@@ -147,13 +147,13 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
-    public void cancelNotice() {
+    public void cancelNotice(String decisionReason) {
         ((LeaseViewerCrudService) getService()).cancelNotice(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, getEntityId());
+        }, getEntityId(), decisionReason);
     }
 
     @Override
@@ -167,13 +167,13 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
-    public void cancelEvict() {
+    public void cancelEvict(String decisionReason) {
         ((LeaseViewerCrudService) getService()).cancelEvict(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, getEntityId());
+        }, getEntityId(), decisionReason);
     }
 
     @Override
@@ -196,6 +196,16 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
                 populate();
             }
         }, getEntityId());
+    }
+
+    @Override
+    public void cancelLease(String decisionReason) {
+        ((LeaseViewerCrudService) getService()).cancelLease(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, getEntityId(), decisionReason);
     }
 
     @Override
