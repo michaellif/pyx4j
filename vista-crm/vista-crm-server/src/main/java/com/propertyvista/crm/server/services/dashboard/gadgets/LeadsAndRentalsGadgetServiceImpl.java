@@ -29,7 +29,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.dto.LeaseDTO;
 
 public class LeadsAndRentalsGadgetServiceImpl implements LeadsAndRentalsGadgetService {
 
@@ -55,15 +54,8 @@ public class LeadsAndRentalsGadgetServiceImpl implements LeadsAndRentalsGadgetSe
     }
 
     @Override
-    public void makeLeaseFilterCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, Vector<Building> buildingsFilter, String leaseFilter) {
-
-        // TODO create a special lister for leads that displays lease
-
-        EntityListCriteria<LeaseDTO> criteria = EntityListCriteria.create(LeaseDTO.class);
-        if (buildingsFilter != null && !buildingsFilter.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().unit().building(), buildingsFilter));
-        }
-        callback.onSuccess(criteria);
+    public void makeLeaseFromLeadCriteria(AsyncCallback<EntityListCriteria<Lead>> callback, Vector<Building> buildings, String encodedFilterPreset) {
+        callback.onSuccess(leasesFromLeadsCriteria(EntityListCriteria.create(Lead.class), buildings));
     }
 
     int countLeads(Vector<Building> buildingsFilter) {
@@ -75,12 +67,7 @@ public class LeadsAndRentalsGadgetServiceImpl implements LeadsAndRentalsGadgetSe
     }
 
     int countRentals(Vector<Building> buildingsFilter) {
-        EntityQueryCriteria<Lead> leadsCriteria = leadsCriteria(EntityQueryCriteria.create(Lead.class), buildingsFilter);
-
-        leadsCriteria.add(PropertyCriterion.ne(leadsCriteria.proto().lease(), null));
-        leadsCriteria.add(PropertyCriterion.ne(leadsCriteria.proto().lease().status(), Lease.Status.Application));
-
-        return Persistence.service().count(leadsCriteria);
+        return Persistence.service().count(leasesFromLeadsCriteria(EntityQueryCriteria.create(Lead.class), buildingsFilter));
     }
 
     <Criteria extends EntityQueryCriteria<? extends Lead>> Criteria leadsCriteria(Criteria criteria, Vector<Building> buildingsFilter) {
@@ -92,6 +79,13 @@ public class LeadsAndRentalsGadgetServiceImpl implements LeadsAndRentalsGadgetSe
             criteria.add(PropertyCriterion.in(criteria.proto().floorplan().building(), buildingsFilter));
         }
 
+        return criteria;
+    }
+
+    <Criteria extends EntityQueryCriteria<? extends Lead>> Criteria leasesFromLeadsCriteria(Criteria criteria, Vector<Building> buildingsFilter) {
+        leadsCriteria(criteria, buildingsFilter);
+        criteria.add(PropertyCriterion.ne(criteria.proto().lease(), null));
+        criteria.add(PropertyCriterion.ne(criteria.proto().lease().status(), Lease.Status.Application));
         return criteria;
     }
 

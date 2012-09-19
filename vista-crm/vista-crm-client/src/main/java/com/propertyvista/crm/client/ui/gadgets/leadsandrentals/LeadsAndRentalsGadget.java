@@ -20,6 +20,7 @@ import com.google.gwt.core.client.GWT;
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.AppointmentsDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.LeadsDetailsFactory;
+import com.propertyvista.crm.client.ui.gadgets.components.LeasesFromLeadsDetailsFactory;
 import com.propertyvista.crm.rpc.dto.gadgets.LeadsAndRentalsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeadsAndRentalsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.LeadsAndRentalsGadgetMeta;
@@ -50,6 +51,9 @@ public class LeadsAndRentalsGadget extends CounterGadgetInstanceBase<LeadsAndRen
 
         bindDetailsFactory(proto().appointmentsLabel(),
                 new AppointmentsDetailsFactory(GWT.<LeadsAndRentalsGadgetService> create(LeadsAndRentalsGadgetService.class), this, proto().appointments()));
+
+        bindDetailsFactory(proto().rentalsLabel(),
+                new LeasesFromLeadsDetailsFactory(GWT.<LeadsAndRentalsGadgetService> create(LeadsAndRentalsGadgetService.class), this, proto().rentals()));
     }
 
 }
