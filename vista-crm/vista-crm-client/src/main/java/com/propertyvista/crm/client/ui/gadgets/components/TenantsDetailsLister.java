@@ -15,18 +15,15 @@ package com.propertyvista.crm.client.ui.gadgets.components;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 
 import com.propertyvista.dto.TenantDTO;
 
-public class TenantsDetailsLister extends BasicLister<TenantDTO> {
+public class TenantsDetailsLister extends AbstractDetailsLister<TenantDTO> {
 
     private static final I18n i18n = I18n.get(TenantsDetailsLister.class);
 
     public TenantsDetailsLister() {
-        super(TenantDTO.class, true, false);
+        super(TenantDTO.class);
         setColumnDescriptors(//@formatter:off
                 new Builder(proto().participantId()).build(),
                 new Builder(proto().role()).build(),
@@ -45,11 +42,6 @@ public class TenantsDetailsLister extends BasicLister<TenantDTO> {
                 new Builder(proto().leaseTermV().holder()).columnTitle(i18n.tr("Lease Term")).searchable(false).build(),
                 new Builder(proto().leaseTermV().holder().lease().leaseId()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build()
             ); // @formatter:on
-    }
-
-    @Override
-    protected void onItemSelect(TenantDTO item) {
-        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(item.getInstanceValueClass()).formViewerPlace(item.getPrimaryKey()));
     }
 
 }

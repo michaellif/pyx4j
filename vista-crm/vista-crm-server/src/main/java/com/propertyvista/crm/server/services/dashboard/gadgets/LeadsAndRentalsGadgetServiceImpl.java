@@ -29,6 +29,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.LeaseDTO;
 
 public class LeadsAndRentalsGadgetServiceImpl implements LeadsAndRentalsGadgetService {
 
@@ -51,6 +52,18 @@ public class LeadsAndRentalsGadgetServiceImpl implements LeadsAndRentalsGadgetSe
     @Override
     public void makeAppointmentsCriteria(AsyncCallback<EntityListCriteria<Appointment>> callback, Vector<Building> buildingsFilter, String filterPreset) {
         callback.onSuccess(appointmentsCriteria(EntityListCriteria.create(Appointment.class), buildingsFilter));
+    }
+
+    @Override
+    public void makeLeaseFilterCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, Vector<Building> buildingsFilter, String leaseFilter) {
+
+        // TODO create a special lister for leads that displays lease
+
+        EntityListCriteria<LeaseDTO> criteria = EntityListCriteria.create(LeaseDTO.class);
+        if (buildingsFilter != null && !buildingsFilter.isEmpty()) {
+            criteria.add(PropertyCriterion.in(criteria.proto().unit().building(), buildingsFilter));
+        }
+        callback.onSuccess(criteria);
     }
 
     int countLeads(Vector<Building> buildingsFilter) {

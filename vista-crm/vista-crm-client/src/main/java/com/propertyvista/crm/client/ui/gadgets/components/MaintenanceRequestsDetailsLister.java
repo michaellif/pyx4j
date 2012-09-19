@@ -13,12 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.components;
 
-import com.pyx4j.site.client.ui.crud.lister.BasicLister;
-
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public class MaintenanceRequestsDetailsLister extends BasicLister<MaintenanceRequestDTO> {
+public class MaintenanceRequestsDetailsLister extends AbstractDetailsLister<MaintenanceRequestDTO> {
 
     public MaintenanceRequestsDetailsLister() {
         super(MaintenanceRequestDTO.class);

@@ -25,7 +25,7 @@ import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.components.LeaseDetailsFactory;
+import com.propertyvista.crm.client.ui.gadgets.components.LeasesDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.UnitDetailsFactory;
 import com.propertyvista.crm.rpc.dto.gadgets.NoticesGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeaseExpirationGadgetService;
@@ -63,8 +63,8 @@ public class NoticesGadgetFactory extends AbstractGadget<NoticesGadgetMetadata> 
 
         }
 
-        private LeaseDetailsFactory leaseDetailsFactory(IObject<?> category) {
-            return new LeaseDetailsFactory(GWT.<LeaseExpirationGadgetService> create(NoticesGadgetService.class), this, category);
+        private LeasesDetailsFactory leaseDetailsFactory(IObject<?> category) {
+            return new LeasesDetailsFactory(GWT.<LeaseExpirationGadgetService> create(NoticesGadgetService.class), this, category);
         }
 
         private UnitDetailsFactory unitDetailsFactory(IObject<?> filter) {

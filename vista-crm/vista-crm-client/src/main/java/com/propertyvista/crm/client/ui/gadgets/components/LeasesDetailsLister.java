@@ -14,19 +14,13 @@
 package com.propertyvista.crm.client.ui.gadgets.components;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 
 import com.propertyvista.dto.LeaseDTO;
 
-public class LeasesDetailsLister extends BasicLister<LeaseDTO> {
-
-    private static final I18n i18n = I18n.get(LeasesDetailsLister.class);
+public class LeasesDetailsLister extends AbstractDetailsLister<LeaseDTO> {
 
     public LeasesDetailsLister() {
-        super(LeaseDTO.class, true, false);
+        super(LeaseDTO.class);
         setColumnDescriptors(//@formatter:off
                 new Builder(proto().leaseId()).build(),
                 new Builder(proto().type()).build(),
@@ -52,10 +46,5 @@ public class LeasesDetailsLister extends BasicLister<LeaseDTO> {
                 new Builder(proto().creationDate(), false).build()
         );//@formatter:on
 
-    }
-
-    @Override
-    protected void onItemSelect(LeaseDTO item) {
-        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(proto().getInstanceValueClass()).formViewerPlace(item.getPrimaryKey()));
     }
 }

@@ -26,7 +26,7 @@ import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
-import com.propertyvista.crm.client.ui.gadgets.components.LeaseDetailsFactory;
+import com.propertyvista.crm.client.ui.gadgets.components.LeasesDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.UnitDetailsFactory;
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeaseExpirationGadgetService;
@@ -60,8 +60,8 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
             bindDetailsFactory(proto().numOfLeasesOnMonthToMonth(), leaseDetailsFactory(proto().numOfLeasesOnMonthToMonth()));
         }
 
-        private LeaseDetailsFactory leaseDetailsFactory(IObject<?> category) {
-            return new LeaseDetailsFactory(GWT.<LeaseExpirationGadgetService> create(LeaseExpirationGadgetService.class), this, category);
+        private LeasesDetailsFactory leaseDetailsFactory(IObject<?> category) {
+            return new LeasesDetailsFactory(GWT.<LeaseExpirationGadgetService> create(LeaseExpirationGadgetService.class), this, category);
         }
 
         private UnitDetailsFactory unitDetailsFactory(IObject<?> filter) {

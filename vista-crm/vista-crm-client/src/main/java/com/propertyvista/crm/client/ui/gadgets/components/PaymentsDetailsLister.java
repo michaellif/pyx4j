@@ -14,17 +14,13 @@
 package com.propertyvista.crm.client.ui.gadgets.components;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentsDetailsLister extends BasicLister<PaymentRecordDTO> {
+public class PaymentsDetailsLister extends AbstractDetailsLister<PaymentRecordDTO> {
 
     public PaymentsDetailsLister() {
-        super(PaymentRecordDTO.class, true, false);
-
+        super(PaymentRecordDTO.class);
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().id()).build(),
                 new MemberColumnDescriptor.Builder(proto().leaseParticipant().customer().customerId()).build(),
@@ -38,12 +34,6 @@ public class PaymentsDetailsLister extends BasicLister<PaymentRecordDTO> {
                 new MemberColumnDescriptor.Builder(proto().targetDate()).build(),
                 new MemberColumnDescriptor.Builder(proto().paymentStatus()).build()
             );//@formatter:on
-
-    }
-
-    @Override
-    protected void onItemSelect(PaymentRecordDTO item) {
-        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(item.getInstanceValueClass()).formViewerPlace(item.getPrimaryKey()));
     }
 
 }

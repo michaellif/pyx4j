@@ -22,12 +22,14 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.propertyvista.crm.rpc.dto.gadgets.LeadsAndRentalsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.AppointmentsCriteriaProvider;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.LeadCriteriaProvider;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.LeaseCriteriaProvider;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.dto.LeaseDTO;
 
 public interface LeadsAndRentalsGadgetService extends AbstractCounterGadgetBaseService<LeadsAndRentalsGadgetDataDTO, Vector<Building>>, LeadCriteriaProvider,
-        AppointmentsCriteriaProvider {
+        AppointmentsCriteriaProvider, LeaseCriteriaProvider {
 
     @Override
     public void countData(AsyncCallback<LeadsAndRentalsGadgetDataDTO> callback, Vector<Building> queryParams);
@@ -37,5 +39,8 @@ public interface LeadsAndRentalsGadgetService extends AbstractCounterGadgetBaseS
 
     @Override
     public void makeAppointmentsCriteria(AsyncCallback<EntityListCriteria<Appointment>> callback, Vector<Building> buildingsFilter, String filterPreset);
+
+    @Override
+    public void makeLeaseFilterCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, Vector<Building> buildingsFilter, String leaseFilter);
 
 }

@@ -14,11 +14,10 @@
 package com.propertyvista.crm.client.ui.gadgets.components;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 
 import com.propertyvista.domain.tenant.lead.Appointment;
 
-public class AppointmentsDetailsLister extends BasicLister<Appointment> {
+public class AppointmentsDetailsLister extends AbstractDetailsLister<Appointment> {
 
     public AppointmentsDetailsLister() {
         super(Appointment.class);

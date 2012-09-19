@@ -15,11 +15,10 @@ package com.propertyvista.crm.client.ui.gadgets.components;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 
 import com.propertyvista.domain.tenant.lead.Lead;
 
-public class LeadsDetailsLister extends BasicLister<Lead> {
+public class LeadsDetailsLister extends AbstractDetailsLister<Lead> {
 
     private static final I18n i18n = I18n.get(LeadsDetailsLister.class);
 

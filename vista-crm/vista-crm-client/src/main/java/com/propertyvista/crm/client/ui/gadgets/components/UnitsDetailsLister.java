@@ -15,18 +15,15 @@ package com.propertyvista.crm.client.ui.gadgets.components;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 
 import com.propertyvista.dto.AptUnitDTO;
 
-public class UnitsDetailsLister extends BasicLister<AptUnitDTO> {
+public class UnitsDetailsLister extends AbstractDetailsLister<AptUnitDTO> {
 
     private static final I18n i18n = I18n.get(UnitsDetailsLister.class);
 
     public UnitsDetailsLister() {
-        super(AptUnitDTO.class, true, false);
+        super(AptUnitDTO.class);
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().buildingCode()).build(),
                 new MemberColumnDescriptor.Builder(proto().floorplan().name()).title(i18n.tr("Floorplan Name")).build(),
@@ -45,8 +42,4 @@ public class UnitsDetailsLister extends BasicLister<AptUnitDTO> {
 
     }
 
-    @Override
-    protected void onItemSelect(AptUnitDTO item) {
-        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(proto().getInstanceValueClass()).formViewerPlace(item.getPrimaryKey()));
-    }
 }

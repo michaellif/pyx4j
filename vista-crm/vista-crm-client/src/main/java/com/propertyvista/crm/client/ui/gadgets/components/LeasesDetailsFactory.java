@@ -35,7 +35,7 @@ import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.LeaseDTO;
 
-public class LeaseDetailsFactory implements CounterGadgetInstanceBase.CounterDetailsFactory {
+public class LeasesDetailsFactory implements CounterGadgetInstanceBase.CounterDetailsFactory {
 
     private final LeasesDetailsLister lister;
 
@@ -45,7 +45,7 @@ public class LeaseDetailsFactory implements CounterGadgetInstanceBase.CounterDet
 
     private final LeaseCriteriaProvider leaseCriteriaProvider;
 
-    public LeaseDetailsFactory(LeaseCriteriaProvider leaseCriteriaProvider, IBuildingFilterContainer buildingsFilterContainer, IObject<?> leaseFilter) {
+    public LeasesDetailsFactory(LeaseCriteriaProvider leaseCriteriaProvider, IBuildingFilterContainer buildingsFilterContainer, IObject<?> leaseFilter) {
         this.lister = new LeasesDetailsLister();
         this.buildingFilterContainer = buildingsFilterContainer;
         this.buildingFilterContainer.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
