@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.crm.client.ui.gadgets.applications.ApplicationsGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsStatusGadget;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsSummaryGadget;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsYOYAnalysisChartGadget;
@@ -46,7 +47,7 @@ public class Directory {
 
     public enum Categories {
 
-        Availability, Arrears, Chart, Buildings, Payments, Leases, Notices, Maintenance, Leads, Rentals, Demo;
+        Availability, Arrears, Chart, Buildings, Payments, Leases, Notices, Maintenance, Leads, Rentals, Demo, Applications;
 
         @Override
         public String toString() {
@@ -74,6 +75,7 @@ public class Directory {
         new MaintenanceGadgetFactory(),
         new CollectionsGadgetFactory(),
         new LeadsAndRentalsGadgetFactory(),
+        new ApplicationsGadgetFactory(),
         
         new BarChart2DGadget(),
         new DemoGadget(),
