@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.preloader;
 
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ARPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ApplicationDocumentationPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.BackgroundCheckPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.DatesPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.DepositPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.EmailTemplatesPolicyPreloader;
@@ -38,6 +39,7 @@ public class PreloadPolicies extends SimplePoliciesPreloader {
         add(new IdAssignmentPolicyPreloader());
         add(new RestrictionsPolicyPreloader());
         add(new DatesPolicyPreloader());
+        add(new BackgroundCheckPolicyPreloader());
 
         if (isProduction) {
             add(new ProductTaxPolicyPreloader());
