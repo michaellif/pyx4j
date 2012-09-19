@@ -18,12 +18,14 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.misc.EquifaxResult;
 
@@ -49,6 +51,8 @@ public class TenantApprovalFolder extends VistaTableFolder<TenantFinancialDTO> {
     public CComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(EquifaxResult.class)) {
             return new CEntityCrudHyperlink<EquifaxResult>(i18n.tr("View"), AppPlaceEntityMapper.resolvePlace(EquifaxResult.class));
+        } else if (member.getValueClass().equals(Person.class)) {
+            return new CEntityLabel<Person>();
         }
         return super.create(member);
     }

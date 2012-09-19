@@ -15,6 +15,8 @@ package com.propertyvista.crm.client.ui.crud.lease.application;
 
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -234,11 +236,17 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         }
 
         protected Widget createBody() {
-            getOkButton().setEnabled(true);
+            getOkButton().setEnabled(false);
 
             VerticalPanel content = new VerticalPanel();
             content.add(new HTML(i18n.tr("Please fill the reason") + ":"));
             content.add(reason);
+            reason.addValueChangeHandler(new ValueChangeHandler<String>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<String> event) {
+                    getOkButton().setEnabled(!event.getValue().isEmpty());
+                }
+            });
 
             reason.setWidth("100%");
             content.setWidth("100%");
