@@ -300,8 +300,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         lease.status().setValue(Lease.Status.Approved);
-        lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
         lease.approvalDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
         lease.leaseApplication().decidedBy().set(decidedBy);
         lease.leaseApplication().decisionReason().setValue(decisionReason);
         lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
@@ -383,6 +383,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         lease.status().setValue(Lease.Status.Approved);
+        lease.approvalDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
 
         ServerSideFactory.create(OccupancyFacade.class).migratedApprove(lease.unit().<AptUnit> createIdentityStub());
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
