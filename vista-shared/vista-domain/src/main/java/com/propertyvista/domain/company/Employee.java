@@ -15,10 +15,12 @@ package com.propertyvista.domain.company;
 
 import java.util.Date;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -51,14 +53,18 @@ public interface Employee extends Person {
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
-    @Timestamp
-    IPrimitive<Date> updated();
+    @Override
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> birthDate();
 
     @NotNull
     @ReadOnly
     @Detached
     @MemberColumn(name = "user_id")
     CrmUser user();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 
     @Detached
     IList<Portfolio> portfolios();
