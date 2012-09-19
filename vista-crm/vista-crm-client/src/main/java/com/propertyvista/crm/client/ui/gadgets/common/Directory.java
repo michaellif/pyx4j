@@ -19,6 +19,7 @@ import java.util.List;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.crm.client.ui.gadgets.applications.ApplicationsGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsStatusGadget;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsSummaryGadget;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsYOYAnalysisChartGadget;
@@ -59,6 +60,7 @@ public class Directory {
     public static List<IGadgetFactory> DIRECTORY = Arrays.asList(//@formatter:off
         (IGadgetFactory)new BuildingListerGadget(),
         
+        new ArrearsGadgetFactory(),
         new ArrearsStatusGadget(),
         new ArrearsSummaryGadget(),
         new ArrearsYOYAnalysisChartGadget(),

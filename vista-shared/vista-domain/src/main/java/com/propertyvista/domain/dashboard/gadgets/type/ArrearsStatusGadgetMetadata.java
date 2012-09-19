@@ -23,6 +23,10 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
+/**
+ * @deprecated it's gonna be replaced by an 'Arrears' gadget that shows summary and knows to zoom in to details
+ */
+@Deprecated
 @DiscriminatorValue("ArrearsGadgetMeta")
 @Caption(name = "Arrears Status", description = "Shows the information about lease arrears, including how long it is overdue, total balance, legal status information etc. This gadget can either show total arrears or arrears of specific type (i.e. rent, parking or other)")
 public interface ArrearsStatusGadgetMetadata extends ListerGadgetBaseMetadata, BuildingGadget {

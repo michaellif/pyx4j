@@ -22,6 +22,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 
+/**
+ * @deprecated it's gonna be replaced by an 'Arrears' gadget that shows summary and knows to zoom in to details
+ */
+@Deprecated
 @DiscriminatorValue("ArrearsSummaryGadgetMetadata")
 @Caption(name = "Arrears Summary", description = "Shows a short summary of the total arrears")
 public interface ArrearsSummaryGadgetMetadata extends ListerGadgetBaseMetadata, BuildingGadget {

@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.propertyvista.crm.client.ui.gadgets.applications.ApplicationsGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsStatusGadget;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsSummaryGadget;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsYOYAnalysisChartGadget;
@@ -44,9 +45,10 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 public class BuildingGadgetDirectory implements IGadgetDirectory {
 
     private static List<IGadgetFactory> DIRECTORY = Arrays.asList(//@formatter:off            
-            (IGadgetFactory) new ArrearsStatusGadget(),
+            (IGadgetFactory) new ArrearsStatusGadget(),            
             new ArrearsSummaryGadget(),
             new ArrearsYOYAnalysisChartGadget(),
+            new ArrearsGadgetFactory(),
                     
             new UnitAvailabilityReportGadget(),
             new UnitAvailabilitySummaryGadgetFactory(),
