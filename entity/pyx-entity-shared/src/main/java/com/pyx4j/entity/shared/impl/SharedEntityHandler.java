@@ -341,10 +341,12 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             switch (memberMeta.getObjectClassType()) {
             case Entity: {
                 IEntity member = (IEntity) root.getMember(memberName);
-                if (member.equals(entity)) {
-                    it.remove();
-                } else {
-                    removeValueFromGraph(member, entity, processed);
+                if (member.getAttachLevel() != AttachLevel.Detached) {
+                    if (member.equals(entity)) {
+                        it.remove();
+                    } else {
+                        removeValueFromGraph(member, entity, processed);
+                    }
                 }
             }
                 break;
@@ -362,7 +364,9 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
                         }
                     }
                 }
+                break;
             }
+            default:
                 break;
             }
         }
