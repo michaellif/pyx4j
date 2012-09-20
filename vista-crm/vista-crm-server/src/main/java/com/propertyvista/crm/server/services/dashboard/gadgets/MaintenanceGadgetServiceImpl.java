@@ -95,9 +95,9 @@ public class MaintenanceGadgetServiceImpl implements MaintenanceGadgetService {
         } else {
             throw new RuntimeException("don't know how to prepare a search criteria for member '" + member.getPath().toString() + "'");
         }
+
         if (buildingsFilter != null && !buildingsFilter.isEmpty()) {
-            // TODO deal with this crap later
-//            criteria.add(PropertyCriterion.in(criteria.proto().tenant().leaseTermV()))
+            criteria.add(PropertyCriterion.in(criteria.proto().tenant().leaseTermV().holder().lease().unit().building(), buildingsFilter));
         }
         if (lowerBound != null) {
             criteria.add(PropertyCriterion.ge(criteria.proto().submitted(), lowerBound));

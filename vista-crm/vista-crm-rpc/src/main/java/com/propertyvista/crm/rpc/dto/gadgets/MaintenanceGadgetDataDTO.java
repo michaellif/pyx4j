@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.rpc.dto.gadgets;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -24,10 +25,13 @@ public interface MaintenanceGadgetDataDTO extends IEntity {
 
     IPrimitive<Integer> urgentWorkOrders();
 
+    @Caption(name = "Outstanding Work Orders 1 to 2 Days")
     IPrimitive<Integer> outstandingWorkOrders1to2days();
 
+    @Caption(name = "Outstanding Work Orders 2 to 3 Days")
     IPrimitive<Integer> outstandingWorkOrders2to3days();
 
+    @Caption(name = "Outstanding Work Orders Over 3 Days")
     IPrimitive<Integer> outstandingWorkOrdersMoreThan3days();
 
 }

@@ -37,14 +37,15 @@ import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetada
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
-import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata.RefreshInterval;
 import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.MaintenanceGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata.RefreshInterval;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
@@ -104,6 +105,12 @@ public class DashboardGenerator extends Dashboards {
         noticesGadget.refreshInterval().setValue(RefreshInterval.Never);
         noticesGadget.docking().column().setValue(0);
         dmd.gadgets().add(noticesGadget);
+
+        MaintenanceGadgetMetadata maintenanceGadget = EntityFactory.create(MaintenanceGadgetMetadata.class);
+        maintenanceGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
+        maintenanceGadget.refreshInterval().setValue(RefreshInterval.Never);
+        maintenanceGadget.docking().column().setValue(0);
+        dmd.gadgets().add(maintenanceGadget);
 
         return dmd;
     }
