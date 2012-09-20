@@ -31,6 +31,8 @@ import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.PublicVisibilityType;
+
 @Inheritance
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
@@ -62,5 +64,8 @@ public interface Product<V extends IVersionData<?>> extends IVersionedEntity<V> 
         @Length(250)
         @Editor(type = Editor.EditorType.textarea)
         IPrimitive<String> description();
+
+        @NotNull
+        IPrimitive<PublicVisibilityType> visibility();
     }
 }

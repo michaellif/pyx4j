@@ -20,7 +20,7 @@ import java.util.List;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -98,7 +98,7 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
             @Override
             protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                 if (column.getObject() == proto().target()) {
-                    return inject(column.getObject(), new CLabel());
+                    return inject(column.getObject(), new CEnumLabel());
                 }
 
                 return super.createCell(column);

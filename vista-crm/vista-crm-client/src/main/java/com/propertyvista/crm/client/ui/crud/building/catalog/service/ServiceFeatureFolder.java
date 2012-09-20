@@ -23,8 +23,8 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
@@ -54,9 +54,10 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
                 new EntityFolderColumnDescriptor(proto().version().type(), "15em"),
-                new EntityFolderColumnDescriptor(proto().version().name(), "15em"),
+                new EntityFolderColumnDescriptor(proto().version().name(), "20em"),
                 new EntityFolderColumnDescriptor(proto().version().recurring(), "5em"),
-                new EntityFolderColumnDescriptor(proto().version().mandatory(), "5em")
+                new EntityFolderColumnDescriptor(proto().version().mandatory(), "5em"),
+                new EntityFolderColumnDescriptor(proto().version().visibility(), "10em")
         		);//@formatter:on	
     }
 
@@ -81,7 +82,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
             CComponent<?, ?> comp = null;
             if (member.equals(proto().version().type())) {
                 if (ServiceFeatureFolder.this.isEditable()) {
-                    comp = new CLabel();
+                    comp = new CEnumLabel();
                 } else {
                     comp = new CHyperlink(new Command() {
                         @Override

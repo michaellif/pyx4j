@@ -23,8 +23,8 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
@@ -83,7 +83,7 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
             CComponent<?, ?> comp = null;
             if (member.equals(proto().version().type())) {
                 if (ServiceConcessionFolder.this.isEditable()) {
-                    comp = new CLabel();
+                    comp = new CEnumLabel();
                 } else {
                     comp = new CHyperlink(new Command() {
                         @Override

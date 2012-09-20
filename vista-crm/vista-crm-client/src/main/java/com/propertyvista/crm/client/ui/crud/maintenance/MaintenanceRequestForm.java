@@ -156,8 +156,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         row = -1;
         surveyPanel.setH1(++row, 0, 2, proto().surveyResponse().getMeta().getCaption());
-        surveyPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel()), 10).build());
-        surveyPanel.setWidget(row, 1, new DecoratorBuilder(inject(proto().surveyResponse().description(), new CLabel()), 10).build());
+        surveyPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel<Integer>()), 10).build());
+        surveyPanel.setWidget(row, 1, new DecoratorBuilder(inject(proto().surveyResponse().description(), new CLabel<String>()), 10).build());
 
         // assemble main panel:
         FormFlexPanel main = new FormFlexPanel();

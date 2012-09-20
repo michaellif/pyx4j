@@ -23,6 +23,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
@@ -115,6 +116,7 @@ public class ProductCatalogGenerator {
         item.version().type().setValue(type);
         item.version().name().setValue(RandomUtil.randomLetters(6));
         item.version().description().setValue("Service description");
+        item.version().visibility().setValue(PublicVisibilityType.global);
 
         item.version().items().addAll(createServiceItems(type));
         return item;
@@ -172,6 +174,7 @@ public class ProductCatalogGenerator {
         item.version().type().setValue(type);
         item.version().name().setValue(RandomUtil.randomLetters(6));
         item.version().description().setValue("Feature description");
+        item.version().visibility().setValue(PublicVisibilityType.global);
 
         item.version().recurring().setValue(RandomUtil.randomBoolean() && !Feature.Type.nonReccuring().contains(type));
         item.version().mandatory().setValue(RandomUtil.randomBoolean() && !Feature.Type.nonMandatory().contains(type));

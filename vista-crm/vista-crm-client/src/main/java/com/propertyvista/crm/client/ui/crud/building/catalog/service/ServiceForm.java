@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
-import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -49,14 +49,20 @@ public class ServiceForm extends CrmEntityForm<Service> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().type(), new CLabel()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().name()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().description()), 57).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().type(), new CEnumLabel()), 20).build());
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().name()), 20).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().version().visibility()), 10).build());
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().description()), 55).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setH1(++row, 0, 2, i18n.tr("Items"));
         main.setWidget(++row, 0, inject(proto().version().items(), new ServiceItemFolder(this)));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return main;
     }

@@ -73,7 +73,7 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
                 protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                     CComponent<?, ?> comp = null;
                     if (proto().title() == column.getObject()) {
-                        comp = inject(column.getObject(), new CLabel());
+                        comp = inject(column.getObject(), new CLabel<String>());
                     } else if (proto().name() == column.getObject()) {
                         if (isEditable()) {
                             comp = inject(column.getObject(), new CEntityLabel<Name>());

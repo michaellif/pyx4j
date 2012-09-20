@@ -44,11 +44,11 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
 
         container.setH1(++row, 0, 1, i18n.tr("Contact Details"));
 
-        container.setWidget(++row, 0, widget = new DecoratorBuilder(inject(proto().name().firstName(), new CLabel()), 12).build());
+        container.setWidget(++row, 0, widget = new DecoratorBuilder(inject(proto().name().firstName(), new CLabel<String>()), 12).build());
         widget.getElement().getStyle().setMarginTop(20, Unit.PX);
 
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName(), new CLabel()), 12).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName(), new CLabel()), 20).build());
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName(), new CLabel<String>()), 12).build());
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName(), new CLabel<String>()), 20).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());

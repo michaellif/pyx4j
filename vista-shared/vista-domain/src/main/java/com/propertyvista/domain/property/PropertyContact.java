@@ -65,6 +65,7 @@ public interface PropertyContact extends IEntity {
 
     IPrimitive<String> name();
 
+    @NotNull
     IPrimitive<PublicVisibilityType> visibility();
 
     @ToString(index = 0)

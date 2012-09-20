@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.feature;
 
-import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -38,9 +38,10 @@ public class FeatureForm extends CrmEntityForm<Feature> {
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().type(), new CLabel()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().name()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().description()), 50).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().type(), new CEnumLabel()), 20).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().name()), 20).build());
+        content.setBR(++row, 0, 1);
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().description()), 55).build());
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         content.setH1(++row, 0, 2, i18n.tr("Items"));
@@ -51,6 +52,7 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         row = 0;
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().mandatory()), 4).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().recurring()), 4).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().visibility()), 10).build());
 
         content.getColumnFormatter().setWidth(0, "50%");
         content.getColumnFormatter().setWidth(1, "50%");

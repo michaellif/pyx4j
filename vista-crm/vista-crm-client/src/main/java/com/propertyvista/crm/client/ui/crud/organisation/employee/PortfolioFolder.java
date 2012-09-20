@@ -63,7 +63,7 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
                     CComponent<?, ?> comp = null;
                     if (proto().name() == column.getObject()) {
                         if (isEditable()) {
-                            comp = inject(column.getObject(), new CLabel());
+                            comp = inject(column.getObject(), new CLabel<String>());
                         } else {
                             comp = new CHyperlink(new Command() {
                                 @Override
@@ -74,7 +74,7 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
                             comp = inject(column.getObject(), comp);
                         }
                     } else if (proto().description() == column.getObject()) {
-                        comp = inject(column.getObject(), new CLabel());
+                        comp = inject(column.getObject(), new CLabel<String>());
                     } else {
                         comp = super.createCell(column);
                     }

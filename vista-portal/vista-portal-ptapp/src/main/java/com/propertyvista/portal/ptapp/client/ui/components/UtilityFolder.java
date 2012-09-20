@@ -64,7 +64,7 @@ public class UtilityFolder extends VistaTableFolder<ProductItemType> {
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject() == proto().name()) {
-                return inject(column.getObject(), new CLabel());
+                return inject(column.getObject(), new CLabel<String>());
             }
             return super.createCell(column);
         }

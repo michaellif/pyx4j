@@ -20,8 +20,8 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
@@ -75,7 +75,7 @@ public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePrice
             CComponent<?, ?> comp;
             if (column.getObject() == proto().type()) {
                 if (isEditable()) {
-                    comp = inject(proto().type(), new CLabel());
+                    comp = inject(proto().type(), new CEnumLabel());
                 } else {
                     comp = inject(proto().type(), new CHyperlink(new Command() {
                         @Override

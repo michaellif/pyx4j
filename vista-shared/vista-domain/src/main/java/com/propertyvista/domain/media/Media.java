@@ -66,5 +66,6 @@ public interface Media extends IEntity {
     @Caption(name = "URL")
     IPrimitive<String> url();
 
+    @NotNull
     IPrimitive<PublicVisibilityType> visibility();
 }

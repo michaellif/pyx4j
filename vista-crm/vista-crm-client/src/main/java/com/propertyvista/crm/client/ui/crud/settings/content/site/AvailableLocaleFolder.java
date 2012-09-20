@@ -71,8 +71,7 @@ class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (proto().lang().getPath().equals(member.getPath())) {
-            final CLabel langLabel = new CLabel();
-            return langLabel;
+            return new CLabel();
         }
         return super.create(member);
     }

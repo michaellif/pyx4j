@@ -158,6 +158,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                                 filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
                             }
 
+//                            filters.add(PropertyCriterion.in(proto().p`roductItems().$().product().visibility(), PublicVisibilityType.tenant()));
+
                         } else {
                             assert false : "Incorrect situation! Value shouln'd be edited in this lease status!";
                         }

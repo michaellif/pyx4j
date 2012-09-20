@@ -36,7 +36,8 @@ public class FeatureLister extends VersionedLister<Feature> {
             new MemberColumnDescriptor.Builder(proto().version().type(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().mandatory(), true).build(),
-            new MemberColumnDescriptor.Builder(proto().version().recurring(), true).build()
+            new MemberColumnDescriptor.Builder(proto().version().recurring(), true).build(),
+            new MemberColumnDescriptor.Builder(proto().version().visibility(), true).build()
         );//@formatter:on
     }
 

@@ -78,7 +78,7 @@ class SitePageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
             if (column.getObject().equals(proto().name())) {
                 CComponent<?, ?> comp = null;
                 if (parent.isEditable()) {
-                    comp = inject(column.getObject(), new CLabel());
+                    comp = inject(column.getObject(), new CLabel<String>());
                 } else {
                     comp = inject(column.getObject(), new CHyperlink(new Command() {
                         @Override
