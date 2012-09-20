@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 19, 2012
+ * Created on Sep 17, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.dashboard.gadgets;
+package com.propertyvista.crm.rpc.services.dashboard.gadgets.filters;
 
 import java.util.Vector;
 
@@ -19,17 +19,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
-import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetDataDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentTenantDTO;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.DelinquentTenantCriteriaProvider;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public interface ArrearsGadgetService extends AbstractCounterGadgetBaseService<ArrearsGadgetDataDTO, Vector<Building>>, DelinquentTenantCriteriaProvider {
+public interface DelinquentTenantCriteriaProvider {
 
-    @Override
-    public void countData(AsyncCallback<ArrearsGadgetDataDTO> callback, Vector<Building> queryParams);
-
-    @Override
-    public void makeTenantCriteria(AsyncCallback<EntityListCriteria<DelinquentTenantDTO>> callback, Vector<Building> buildingsFilter, String criteriaPreset);
+    void makeTenantCriteria(AsyncCallback<EntityListCriteria<DelinquentTenantDTO>> callback, Vector<Building> buildingsFilter, String criteriaPreset);
 
 }

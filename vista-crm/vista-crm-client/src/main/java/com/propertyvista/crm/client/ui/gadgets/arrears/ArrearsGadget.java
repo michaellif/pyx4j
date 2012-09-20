@@ -20,7 +20,6 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.shared.IObject;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.components.TenantsDetailsFactory;
 import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsGadgetMetadata;
@@ -56,7 +55,7 @@ public class ArrearsGadget extends CounterGadgetInstanceBase<ArrearsGadgetDataDT
     }
 
     private void bind(IObject<?> member) {
-        bindDetailsFactory(member, new TenantsDetailsFactory(GWT.<ArrearsGadgetService> create(ArrearsGadgetService.class), this, member));
+        bindDetailsFactory(member, new DelinquentTenantsDetailsFactory(GWT.<ArrearsGadgetService> create(ArrearsGadgetService.class), this, member));
     }
 
 }

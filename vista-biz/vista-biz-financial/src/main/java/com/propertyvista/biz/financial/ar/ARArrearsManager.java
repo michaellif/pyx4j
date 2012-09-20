@@ -211,7 +211,7 @@ public class ARArrearsManager {
             }
             AgingBuckets agingBuckets = agingBucketsMap.get(debit.debitType().getValue());
 
-            if (debit.dueDate().getValue().before(currentDate) & debit.dueDate().getValue().compareTo(firstDayOfCurrentMonth) >= 0) {
+            if (debit.dueDate().getValue().compareTo(firstDayOfCurrentMonth) >= 0 & debit.dueDate().getValue().compareTo(currentDate) < 0) {
                 agingBuckets.bucketThisMonth().setValue(agingBuckets.bucketThisMonth().getValue().add(debit.outstandingDebit().getValue()));
             }
 

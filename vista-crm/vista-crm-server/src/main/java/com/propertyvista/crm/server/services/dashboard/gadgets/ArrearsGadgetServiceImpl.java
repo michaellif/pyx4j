@@ -34,12 +34,12 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetDataDTO;
+import com.propertyvista.crm.rpc.dto.gadgets.DelinquentTenantDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.dto.TenantDTO;
 
 public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
 
@@ -56,8 +56,8 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
     }
 
     @Override
-    public void makeTenantCriteria(AsyncCallback<EntityListCriteria<TenantDTO>> callback, Vector<Building> buildingsFilter, String criteriaPreset) {
-        callback.onSuccess(delinquentTenantsCriteria(EntityListCriteria.create(TenantDTO.class), buildingsFilter, criteriaPreset));
+    public void makeTenantCriteria(AsyncCallback<EntityListCriteria<DelinquentTenantDTO>> callback, Vector<Building> buildingsFilter, String criteriaPreset) {
+        callback.onSuccess(delinquentTenantsCriteria(EntityListCriteria.create(DelinquentTenantDTO.class), buildingsFilter, criteriaPreset));
     }
 
     <Criteria extends EntityQueryCriteria<? extends Tenant>> Criteria delinquentTenantsCriteria(Criteria criteria, Vector<Building> buildingsFilter,
