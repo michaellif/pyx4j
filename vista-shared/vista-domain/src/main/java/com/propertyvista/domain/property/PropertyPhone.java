@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.marketing.PublicVisibilityType;
+import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.ref.PhoneProvider;
 import com.propertyvista.domain.ref.PhoneProviderReferenceAdapter;
 

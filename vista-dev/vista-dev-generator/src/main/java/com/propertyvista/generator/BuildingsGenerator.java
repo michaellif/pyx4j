@@ -25,9 +25,9 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
-import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.domain.property.PropertyManager;

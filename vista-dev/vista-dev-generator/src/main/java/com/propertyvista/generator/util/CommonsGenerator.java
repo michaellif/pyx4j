@@ -23,11 +23,11 @@ import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
-import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.PropertyContact;

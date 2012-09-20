@@ -33,7 +33,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.domain.marketing.PublicVisibilityType;
+import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.security.VistaBasicBehavior;

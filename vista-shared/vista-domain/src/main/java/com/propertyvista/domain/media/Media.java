@@ -27,7 +27,7 @@ import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.File;
-import com.propertyvista.domain.marketing.PublicVisibilityType;
+import com.propertyvista.domain.PublicVisibilityType;
 
 public interface Media extends IEntity {
 

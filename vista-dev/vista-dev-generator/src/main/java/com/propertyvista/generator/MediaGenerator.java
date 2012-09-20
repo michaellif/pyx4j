@@ -26,7 +26,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.File;
-import com.propertyvista.domain.marketing.PublicVisibilityType;
+import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;

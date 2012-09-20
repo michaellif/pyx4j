@@ -34,7 +34,7 @@ import com.pyx4j.geo.GeoBox;
 import com.pyx4j.geo.GeoCircle;
 import com.pyx4j.geo.GeoPoint;
 
-import com.propertyvista.domain.marketing.PublicVisibilityType;
+import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;

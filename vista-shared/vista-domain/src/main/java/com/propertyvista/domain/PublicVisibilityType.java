@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.marketing;
+package com.propertyvista.domain;
 
 import java.io.Serializable;
 
@@ -25,6 +25,8 @@ public enum PublicVisibilityType implements Serializable {
     internal,
 
     tenant,
+
+    existingTenant,
 
     @Translate("Public")
     global;

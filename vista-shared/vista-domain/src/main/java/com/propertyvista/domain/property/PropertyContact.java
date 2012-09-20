@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.marketing.PublicVisibilityType;
+import com.propertyvista.domain.PublicVisibilityType;
 
 @ToStringFormat("{0}{1,choice,null#|!null# ex.{1}}")
 public interface PropertyContact extends IEntity {
