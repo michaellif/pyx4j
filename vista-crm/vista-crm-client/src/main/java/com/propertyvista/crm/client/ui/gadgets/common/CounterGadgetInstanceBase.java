@@ -33,6 +33,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.Button;
@@ -73,7 +74,12 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
 
     public CounterGadgetInstanceBase(Class<Data> dataClass, final AbstractCounterGadgetBaseService<Data, Query> service,
             CounterGadgetSummaryForm<Data> summaryForm, GadgetMetadata metadata, Class<GadgetType> metadataClass) {
-        super(metadata, metadataClass);
+        this(dataClass, service, summaryForm, metadata, metadataClass, new CounterGadgetSetupForm<GadgetType>(metadataClass));
+    }
+
+    public CounterGadgetInstanceBase(Class<Data> dataClass, final AbstractCounterGadgetBaseService<Data, Query> service,
+            CounterGadgetSummaryForm<Data> summaryForm, GadgetMetadata metadata, Class<GadgetType> metadataClass, CEntityForm<GadgetType> form) {
+        super(metadata, metadataClass, form);
         this.dataClass = dataClass;
 
         this.detailsFactories = new HashMap<String, CounterGadgetInstanceBase.CounterDetailsFactory>();
