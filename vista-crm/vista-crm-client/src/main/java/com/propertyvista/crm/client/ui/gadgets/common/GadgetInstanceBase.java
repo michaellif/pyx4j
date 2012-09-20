@@ -269,7 +269,8 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
         errorPanel.setPixelSize(contentPanel.getElement().getClientWidth(), contentPanel.getElement().getClientHeight());
 
         errorPanel.add(new HTML(new SafeHtmlBuilder().appendEscaped(i18n.tr("Error:")).toSafeHtml()));
-        HTML errorMessage = new HTML(new SafeHtmlBuilder().appendEscaped(error.getLocalizedMessage()).toSafeHtml());
+        HTML errorMessage = new HTML(new SafeHtmlBuilder().appendEscaped(error.getMessage() == null ? i18n.tr("Uknown Error") : error.getLocalizedMessage())
+                .toSafeHtml());
         errorMessage.setWidth("100%");
         errorMessage.getElement().getStyle().setPaddingTop(1, Unit.EM);
         errorMessage.getElement().getStyle().setPaddingBottom(2, Unit.EM);
