@@ -37,14 +37,14 @@ public class ArrearsGadgetSummaryForm extends CounterGadgetSummaryForm<ArrearsGa
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().delinquentTenants())).customLabel("").useLabelSemicolon(false).build());
 
-        content.setH2(++row, 0, 1, i18n.tr("Outstanding"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingThisMonth())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstanding1to30Days())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstanding31to60Days())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstanding61to90Days())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstanding91andMoreDays())).build());
+        content.setH2(++row, 0, 1, i18n.tr("Outstanding:"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingThisMonth())).customLabel(i18n.tr("This Month")).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstanding1to30Days())).customLabel(i18n.tr("1 - 30")).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstanding31to60Days())).customLabel(i18n.tr("31 - 60")).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstanding61to90Days())).customLabel(i18n.tr("61 - 90")).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstanding91andMoreDays())).customLabel(i18n.tr("91+")).build());
 
-        content.setH3(++row, 0, 1, i18n.tr("Total"));
+        content.setH3(++row, 0, 1, i18n.tr("Total:"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingTotal())).customLabel("").useLabelSemicolon(false).build());
 
         return content;
@@ -54,7 +54,7 @@ public class ArrearsGadgetSummaryForm extends CounterGadgetSummaryForm<ArrearsGa
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().outstandingThisMonth()).setValue(i18n.tr("${0}", getValue().bucketThisMonth().getValue()));
+        get(proto().outstandingThisMonth()).setValue(i18n.tr("${0}", getValue().buckets().bucketThisMonth().getValue()));
         get(proto().outstanding1to30Days()).setValue(i18n.tr("${0}", getValue().buckets().bucket30().getValue()));
         get(proto().outstanding31to60Days()).setValue(i18n.tr("${0}", getValue().buckets().bucket60().getValue()));
         get(proto().outstanding61to90Days()).setValue(i18n.tr("${0}", getValue().buckets().bucket90().getValue()));

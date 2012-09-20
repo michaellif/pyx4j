@@ -195,6 +195,9 @@ public class ARArrearsManager {
 
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(currentDate);
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+        LogicalDate firstDayOfCurrentMonth = new LogicalDate(calendar.getTime());
+        calendar.setTime(currentDate);
         calendar.add(Calendar.DATE, -30);
         LogicalDate date30 = new LogicalDate(calendar.getTime());
         calendar.add(Calendar.DATE, -30);
@@ -207,6 +210,10 @@ public class ARArrearsManager {
                 agingBucketsMap.put(debit.debitType().getValue(), createAgingBuckets(debit.debitType().getValue()));
             }
             AgingBuckets agingBuckets = agingBucketsMap.get(debit.debitType().getValue());
+
+            if (debit.dueDate().getValue().before(currentDate) & debit.dueDate().getValue().compareTo(firstDayOfCurrentMonth) >= 0) {
+                agingBuckets.bucketThisMonth().setValue(agingBuckets.bucketThisMonth().getValue().add(debit.outstandingDebit().getValue()));
+            }
 
             if (debit.dueDate().getValue().compareTo(currentDate) >= 0) {
                 agingBuckets.bucketCurrent().setValue(agingBuckets.bucketCurrent().getValue().add(debit.outstandingDebit().getValue()));
@@ -240,6 +247,7 @@ public class ARArrearsManager {
     static AgingBuckets calculateTotalAgingBuckets(Collection<AgingBuckets> agingBucketsCollection) {
         AgingBuckets agingBuckets = createAgingBuckets(DebitType.total);
         for (AgingBuckets typedBuckets : agingBucketsCollection) {
+            agingBuckets.bucketThisMonth().setValue(agingBuckets.bucketCurrent().getValue().add(typedBuckets.bucketCurrent().getValue()));
             agingBuckets.bucketCurrent().setValue(agingBuckets.bucketCurrent().getValue().add(typedBuckets.bucketCurrent().getValue()));
             agingBuckets.bucket30().setValue(agingBuckets.bucket30().getValue().add(typedBuckets.bucket30().getValue()));
             agingBuckets.bucket60().setValue(agingBuckets.bucket60().getValue().add(typedBuckets.bucket60().getValue()));
@@ -254,6 +262,7 @@ public class ARArrearsManager {
 
     private static AgingBuckets createAgingBuckets(DebitType debitType) {
         AgingBuckets agingBuckets = EntityFactory.create(AgingBuckets.class);
+        agingBuckets.bucketThisMonth().setValue(new BigDecimal("0.00"));
         agingBuckets.bucketCurrent().setValue(new BigDecimal("0.00"));
         agingBuckets.bucket30().setValue(new BigDecimal("0.00"));
         agingBuckets.bucket60().setValue(new BigDecimal("0.00"));
@@ -273,6 +282,7 @@ public class ARArrearsManager {
     }
 
     private static void addInPlace(AgingBuckets buckets1, AgingBuckets buckets2) {
+        buckets1.bucketThisMonth().setValue(buckets1.bucketThisMonth().getValue().add(buckets2.bucketThisMonth().getValue()));
         buckets1.bucketCurrent().setValue(buckets1.bucketCurrent().getValue().add(buckets2.bucketCurrent().getValue()));
         buckets1.bucket30().setValue(buckets1.bucket30().getValue().add(buckets2.bucket30().getValue()));
         buckets1.bucket60().setValue(buckets1.bucket60().getValue().add(buckets2.bucket60().getValue()));

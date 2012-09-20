@@ -30,8 +30,13 @@ import com.propertyvista.domain.property.asset.building.Building;
 public class ArrearsGadget extends CounterGadgetInstanceBase<ArrearsGadgetDataDTO, Vector<Building>, ArrearsGadgetMetadata> {
 
     public ArrearsGadget(GadgetMetadata metadata) {
-        super(ArrearsGadgetDataDTO.class, GWT.<ArrearsGadgetService> create(ArrearsGadgetService.class), new ArrearsGadgetSummaryForm(), metadata,
-                ArrearsGadgetMetadata.class);
+        super(//@formatter:off
+                ArrearsGadgetDataDTO.class,
+                GWT.<ArrearsGadgetService> create(ArrearsGadgetService.class),
+                new ArrearsGadgetSummaryForm(),
+                metadata,
+                ArrearsGadgetMetadata.class
+       );//@formatter:on
     }
 
     @Override

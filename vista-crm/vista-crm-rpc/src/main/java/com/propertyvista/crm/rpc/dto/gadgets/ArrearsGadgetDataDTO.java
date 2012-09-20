@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.rpc.dto.gadgets;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -27,26 +25,24 @@ public interface ArrearsGadgetDataDTO extends IEntity {
 
     IPrimitive<Integer> delinquentTenants();
 
-    IPrimitive<BigDecimal> bucketThisMonth();
-
     AgingBuckets buckets();
 
     /** used for presentation */
-    @Caption(name = "This month")
+    @Caption(name = "Outstanding This Month")
     IPrimitive<String> outstandingThisMonth();
 
     /** used for presentation */
-    @Caption(name = "1 - 30")
+    @Caption(name = "Outstanding 1 to 30 Days")
     IPrimitive<String> outstanding1to30Days();
 
     /** used for presentation */
-    @Caption(name = "31 - 60")
+    @Caption(name = "Outstanding 31 to 60 Days")
     IPrimitive<String> outstanding31to60Days();
 
-    @Caption(name = "61 - 90")
+    @Caption(name = "Outstanding 61 to 90 Days")
     IPrimitive<String> outstanding61to90Days();
 
-    @Caption(name = "90 +")
+    @Caption(name = "Outstanding 91+ Days")
     IPrimitive<String> outstanding91andMoreDays();
 
     IPrimitive<String> outstandingTotal();

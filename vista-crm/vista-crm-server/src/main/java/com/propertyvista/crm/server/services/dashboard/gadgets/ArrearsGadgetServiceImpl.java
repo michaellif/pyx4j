@@ -14,13 +14,15 @@
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -36,67 +38,34 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
 
 public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
 
     @Override
     public void countData(AsyncCallback<ArrearsGadgetDataDTO> callback, Vector<Building> queryParams) {
-        ARFacade facade = ServerSideFactory.create(ARFacade.class);
-
-        Vector<Building> buildings = queryParams.isEmpty() ? Persistence.secureQuery(EntityQueryCriteria.create(Building.class)) : queryParams;
-
-        AgingBuckets proto = EntityFactory.create(AgingBuckets.class);
-
-        @SuppressWarnings("unchecked")
-        IPrimitive<BigDecimal>[] propertiesToAggregate = new IPrimitive[] {//@formatter:off
-                proto.bucketCurrent(),
-                proto.bucket30(),
-                proto.bucket60(),
-                proto.bucket90(),
-                proto.bucketOver90(),
-                proto.totalBalance(),
-                proto.arrearsAmount(),
-                proto.creditAmount()
-        };//@formatter:on
-
-        AgingBuckets totalBuckets = EntityFactory.create(AgingBuckets.class);
-        LogicalDate asOf = Utils.dayOfCurrentTransaction();
-
-        for (IPrimitive<BigDecimal> property : propertiesToAggregate) {
-            totalBuckets.setValue(property.getPath(), new BigDecimal("0.0"));
-        }
-
-        for (Building b : buildings) {
-
-            BuildingArrearsSnapshot snapshot = facade.getArrearsSnapshot(b, asOf);
-            if (snapshot == null) {
-                continue;
-            }
-            AgingBuckets snapshotBuckets = snapshot.totalAgingBuckets().detach();
-
-            for (IPrimitive<BigDecimal> property : propertiesToAggregate) {
-                BigDecimal value = (BigDecimal) totalBuckets.getValue(property.getPath());
-                value = value.add((BigDecimal) snapshotBuckets.getValue(property.getPath()));
-                totalBuckets.setValue(property.getPath(), value);
-            }
-        }
+        Set<Building> buildings = new HashSet<Building>(!queryParams.isEmpty() ? queryParams : Persistence.service().query(
+                EntityQueryCriteria.create(Building.class), AttachLevel.IdOnly));
 
         ArrearsGadgetDataDTO data = EntityFactory.create(ArrearsGadgetDataDTO.class);
-        data.delinquentTenants().setValue(9001);
-
-        data.bucketThisMonth().setValue(new BigDecimal("5.99"));
-        data.buckets().set(totalBuckets);
+        calculateArrearsSummary(data.buckets(), buildings);
+        countDelinquentTenants(data.delinquentTenants(), queryParams);
 
         callback.onSuccess(data);
-
     }
 
     @Override
     public void makeTenantCriteria(AsyncCallback<EntityListCriteria<TenantDTO>> callback, Vector<Building> buildingsFilter, String criteriaPreset) {
-        EntityListCriteria<TenantDTO> criteria = EntityListCriteria.create(TenantDTO.class);
+        callback.onSuccess(delinquentTenantsCriteria(EntityListCriteria.create(TenantDTO.class), buildingsFilter, criteriaPreset));
+    }
+
+    <Criteria extends EntityQueryCriteria<? extends Tenant>> Criteria delinquentTenantsCriteria(Criteria criteria, Vector<Building> buildingsFilter,
+            String criteriaPreset) {
+
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseTermV().holder().lease().billingAccount().arrearsSnapshots().$().toDate(),
                 OccupancyFacade.MAX_DATE));
+
         ArrearsGadgetDataDTO proto = EntityFactory.getEntityPrototype(ArrearsGadgetDataDTO.class);
         IObject<?> member = proto.getMember(new Path(criteriaPreset));
 
@@ -104,7 +73,8 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
             criteria.add(PropertyCriterion.gt(criteria.proto().leaseTermV().holder().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets()
                     .arrearsAmount(), BigDecimal.ZERO));
         } else if (proto.outstandingThisMonth() == member) {
-
+            criteria.add(PropertyCriterion.gt(criteria.proto().leaseTermV().holder().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets()
+                    .bucketThisMonth(), BigDecimal.ZERO));
         } else if (proto.outstanding1to30Days() == member) {
             criteria.add(PropertyCriterion.gt(criteria.proto().leaseTermV().holder().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets()
                     .bucket30(), BigDecimal.ZERO));
@@ -118,7 +88,49 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
             criteria.add(PropertyCriterion.gt(criteria.proto().leaseTermV().holder().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets()
                     .bucketOver90(), BigDecimal.ZERO));
         }
-        callback.onSuccess(criteria);
+        return criteria;
     }
 
+    private void calculateArrearsSummary(AgingBuckets aggregatedBuckets, Set<Building> buildings) {
+        BigDecimal zero = new BigDecimal("0.0");
+        aggregatedBuckets.bucketThisMonth().setValue(zero);
+        aggregatedBuckets.bucketCurrent().setValue(zero);
+        aggregatedBuckets.bucket30().setValue(zero);
+        aggregatedBuckets.bucket60().setValue(zero);
+        aggregatedBuckets.bucket90().setValue(zero);
+        aggregatedBuckets.bucketOver90().setValue(zero);
+        aggregatedBuckets.arrearsAmount().setValue(zero);
+        aggregatedBuckets.totalBalance().setValue(zero);
+        aggregatedBuckets.creditAmount().setValue(zero);
+
+        ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
+        for (Building b : buildings) {
+            BuildingArrearsSnapshot snapshot = arFacade.getArrearsSnapshot(b, Utils.dayOfCurrentTransaction());
+            if (snapshot == null) {
+                continue;
+            } else {
+                add(aggregatedBuckets.bucketThisMonth(), snapshot.totalAgingBuckets().bucketThisMonth());
+                add(aggregatedBuckets.bucketCurrent(), snapshot.totalAgingBuckets().bucketCurrent());
+                add(aggregatedBuckets.bucket30(), snapshot.totalAgingBuckets().bucket30());
+                add(aggregatedBuckets.bucket60(), snapshot.totalAgingBuckets().bucket60());
+                add(aggregatedBuckets.bucket90(), snapshot.totalAgingBuckets().bucket90());
+                add(aggregatedBuckets.bucketOver90(), snapshot.totalAgingBuckets().bucketOver90());
+                add(aggregatedBuckets.arrearsAmount(), snapshot.totalAgingBuckets().arrearsAmount());
+                add(aggregatedBuckets.totalBalance(), snapshot.totalAgingBuckets().totalBalance());
+                add(aggregatedBuckets.creditAmount(), snapshot.totalAgingBuckets().creditAmount());
+            }
+        }
+    }
+
+    private void countDelinquentTenants(IPrimitive<Integer> delinquentTenants, Vector<Building> queryParams) {
+        delinquentTenants.setValue(Persistence.service().count(//@formatter:off
+                delinquentTenantsCriteria(EntityQueryCriteria.create(Tenant.class),
+                queryParams,
+                EntityFactory.getEntityPrototype(ArrearsGadgetDataDTO.class).delinquentTenants().getPath().toString())
+        ));//@formatter:on
+    }
+
+    private void add(IPrimitive<BigDecimal> a, IPrimitive<BigDecimal> b) {
+        a.setValue(a.getValue().add(b.getValue()));
+    }
 }

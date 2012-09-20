@@ -29,6 +29,9 @@ public interface AgingBuckets extends IEntity {
     @Caption(name = "Current")
     IPrimitive<BigDecimal> bucketCurrent();
 
+    @Caption(name = "This Month")
+    IPrimitive<BigDecimal> bucketThisMonth();
+
     @Caption(name = "1 to 30")
     IPrimitive<BigDecimal> bucket30();
 
