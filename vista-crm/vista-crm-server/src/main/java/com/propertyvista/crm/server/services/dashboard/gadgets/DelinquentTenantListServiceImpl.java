@@ -38,11 +38,11 @@ public class DelinquentTenantListServiceImpl extends AbstractCrudServiceDtoImpl<
     protected void enhanceListRetrieved(Tenant entity, DelinquentTenantDTO dto) {
         super.enhanceListRetrieved(entity, dto);
 
-        Persistence.service().retrieveMember(entity.leaseTermV());
-        Persistence.service().retrieveMember(entity.leaseTermV().holder().lease());
+        Persistence.service().retrieveMember(dto.leaseTermV());
+        Persistence.service().retrieveMember(dto.leaseTermV().holder().lease());
 
         TransactionHistoryDTO transactionsHistory = ServerSideFactory.create(ARFacade.class).getTransactionHistory(
-                entity.leaseTermV().holder().lease().billingAccount());
+                dto.leaseTermV().holder().lease().billingAccount());
         dto.arrears().set(transactionsHistory.totalAgingBuckets().detach());
     }
 }

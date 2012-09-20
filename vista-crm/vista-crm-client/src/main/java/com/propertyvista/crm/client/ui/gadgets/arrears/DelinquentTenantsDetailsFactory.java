@@ -47,21 +47,21 @@ public class DelinquentTenantsDetailsFactory extends AbstractListerDetailsFactor
                     new Builder(proto().customer().person().name().lastName(), false).build(),
                     new Builder(proto().customer().person().sex(), false).build(),
                     new Builder(proto().customer().person().birthDate(), false).build(),
-                    
-                    new Builder(proto().customer().person().homePhone()).build(),
+                                        
                     new Builder(proto().customer().person().mobilePhone()).build(),
-                    new Builder(proto().customer().person().workPhone()).build(),
+                    new Builder(proto().customer().person().homePhone(), false).build(),
+                    new Builder(proto().customer().person().workPhone(), false).build(),
                     new Builder(proto().customer().person().email()).build(),
                     
-                    new Builder(proto().leaseTermV().holder().lease().unit()).columnTitle(i18n.tr("unit")).build(),
-                    new Builder(proto().leaseTermV().holder().lease().unit().info().number()).columnTitle(i18n.tr("unit")).searchableOnly().build(),
-                    new Builder(proto().leaseTermV().holder().lease().leaseId()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build(),
+                    new Builder(proto().leaseTermV().holder().lease()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build(),
                     
                     new Builder(proto().arrears().bucketThisMonth()).searchable(false).build(),
                     new Builder(proto().arrears().bucket30()).searchable(false).build(),
                     new Builder(proto().arrears().bucket60()).searchable(false).build(),
                     new Builder(proto().arrears().bucket90()).searchable(false).build(),
                     new Builder(proto().arrears().bucketOver90()).searchable(false).build(),
+                    new Builder(proto().arrears().arrearsAmount(), false).searchable(false).build(),
+                    new Builder(proto().arrears().creditAmount(), false).searchable(false).build(),
                     new Builder(proto().arrears().totalBalance()).searchable(false).build()
                     
              );// @formatter:on
