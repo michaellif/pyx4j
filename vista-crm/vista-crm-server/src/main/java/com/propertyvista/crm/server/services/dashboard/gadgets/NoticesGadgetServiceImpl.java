@@ -21,6 +21,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -40,27 +41,13 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
     public void countData(AsyncCallback<NoticesGadgetDataDTO> callback, Vector<Building> buildingsFilter) {
         NoticesGadgetDataDTO gadgetData = EntityFactory.create(NoticesGadgetDataDTO.class);
 
-        gadgetData.noticesLeavingThisMonth().setValue(
-                Persistence.service().count(
-                        fillNoticesCriteria(EntityListCriteria.create(Lease.class), EntityFactory.getEntityPrototype(NoticesGadgetDataDTO.class)
-                                .noticesLeavingThisMonth(), buildingsFilter)));
-        gadgetData.noticesLeavingNextMonth().setValue(
-                Persistence.service().count(
-                        fillNoticesCriteria(EntityListCriteria.create(Lease.class), EntityFactory.getEntityPrototype(NoticesGadgetDataDTO.class)
-                                .noticesLeavingNextMonth(), buildingsFilter)));
-        gadgetData.noticesLeavingOver90Days().setValue(
-                Persistence.service().count(
-                        fillNoticesCriteria(EntityListCriteria.create(Lease.class), EntityFactory.getEntityPrototype(NoticesGadgetDataDTO.class)
-                                .noticesLeavingOver90Days(), buildingsFilter)));
+        countNotices(gadgetData.noticesLeavingThisMonth(), buildingsFilter);
+        countNotices(gadgetData.noticesLeavingNextMonth(), buildingsFilter);
+        countNotices(gadgetData.noticesLeaving60to90Days(), buildingsFilter);
+        countNotices(gadgetData.noticesLeavingOver90Days(), buildingsFilter);
 
-        int numOfUnits = CommonQueries.numOfUnits(buildingsFilter);
-        if (numOfUnits != 0) {
-            int numOfVacantUnits = Persistence.service().count(vacantUnitsCriteria(EntityQueryCriteria.create(AptUnit.class), buildingsFilter));
-            double pctOfVacantUnits = (double) numOfVacantUnits / numOfUnits;
-            gadgetData.unitsVacant().setValue(Utils.countAndPercentLabel(numOfVacantUnits, pctOfVacantUnits));
-        } else {
-            gadgetData.unitsVacant().setValue("0");
-        }
+        gadgetData.totalUnits().setValue(CommonQueries.numOfUnits(buildingsFilter));
+        gadgetData.vacantUnits().setValue(Persistence.service().count(vacantUnitsCriteria(EntityQueryCriteria.create(AptUnit.class), buildingsFilter)));
 
         callback.onSuccess(gadgetData);
     }
@@ -76,7 +63,11 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
                 .getMember(new Path(leaseFilter)), buildingsFilter));
     }
 
-    private <Criteria extends EntityQueryCriteria<? extends Lease>> Criteria fillNoticesCriteria(Criteria criteria, IObject<?> noticesFilter,
+    private void countNotices(IPrimitive<Integer> member, Vector<Building> buildingsFilter) {
+        member.setValue(Persistence.service().count(fillNoticesCriteria(EntityListCriteria.create(Lease.class), member, buildingsFilter)));
+    }
+
+    private <Criteria extends EntityQueryCriteria<? extends Lease>> Criteria fillNoticesCriteria(Criteria criteria, IObject<?> noticesFilterPreset,
             Vector<Building> buildingsFilter) {
 
         LogicalDate lowerLeavingBound = null;
@@ -84,16 +75,22 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
         LogicalDate today = new LogicalDate(Persistence.service().getTransactionSystemTime());
 
         NoticesGadgetDataDTO proto = EntityFactory.getEntityPrototype(NoticesGadgetDataDTO.class);
+        IObject<?> noticesFilter = proto.getMember(noticesFilterPreset.getPath());
 
         if (proto.noticesLeavingThisMonth() == noticesFilter) {
-            lowerLeavingBound = Utils.beginningOfMonth(today);
+            lowerLeavingBound = today;
             upperLeavingBound = Utils.endOfMonth(today);
         } else if (proto.noticesLeavingNextMonth() == noticesFilter) {
             lowerLeavingBound = Utils.beginningOfNextMonth(today);
             upperLeavingBound = Utils.endOfMonth(lowerLeavingBound);
+        } else if (proto.noticesLeaving60to90Days() == noticesFilter) {
+            lowerLeavingBound = Utils.addDays(today, 60);
+            upperLeavingBound = Utils.addDays(today, 90);
         } else if (proto.noticesLeavingOver90Days() == noticesFilter) {
-            lowerLeavingBound = Utils.addDays(today, 90);
+            lowerLeavingBound = Utils.addDays(today, 91);
             upperLeavingBound = null;
+        } else {
+            throw new RuntimeException("unknown filter criteria: " + noticesFilter.getPath().toString());
         }
 
         if (lowerLeavingBound != null) {

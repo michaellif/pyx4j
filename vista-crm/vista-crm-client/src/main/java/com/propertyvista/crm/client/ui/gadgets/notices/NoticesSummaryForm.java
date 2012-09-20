@@ -13,17 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.notices;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetSummaryForm;
-import com.propertyvista.crm.client.ui.gadgets.util.Utils;
 import com.propertyvista.crm.rpc.dto.gadgets.NoticesGadgetDataDTO;
 
 public class NoticesSummaryForm extends CounterGadgetSummaryForm<NoticesGadgetDataDTO> {
@@ -36,48 +31,27 @@ public class NoticesSummaryForm extends CounterGadgetSummaryForm<NoticesGadgetDa
 
     @Override
     public IsWidget createContent() {
-        if (false) {
-            final double MARGIN = 1.5;
+        FormFlexPanel panel = new FormFlexPanel();
+        int row = -1;
+        panel.setH2(++row, 0, 1, i18n.tr("Vacancy:"));
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitVacancyLabel())).customLabel(i18n.tr("Units Vacant")).componentWidth(15).build());
+        panel.setH2(++row, 0, 1, i18n.tr("Notices Leaving:"));
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().noticesLeavingThisMonth())).customLabel(i18n.tr("This Month")).componentWidth(5).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().noticesLeavingNextMonth())).customLabel(i18n.tr("Next Month")).componentWidth(5).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().noticesLeaving60to90Days())).customLabel(i18n.tr("60 to 90 Days")).componentWidth(5)
+                .build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().noticesLeavingOver90Days())).customLabel(i18n.tr("90+")).componentWidth(5).build());
+        return panel;
 
-            VerticalPanel content = new VerticalPanel();
-            content.setWidth("100%");
-            content.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-            content.getElement().getStyle().setPaddingBottom(1, Unit.EM);
+    }
 
-            FlexTable vacancy = Utils.createTable(//@formatter:off
-                new String[] {"", ""},
-                new String[] {"100", "100"},
-                new String[] {i18n.tr("Units Vacant:")},
-                new Widget[][] {{
-                    inject(proto().unitsVacant()).asWidget(),
-                }}
-        );//@formatter:on
-            vacancy.getElement().getStyle().setMarginBottom(MARGIN, Unit.EM);
-            content.add(vacancy);
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
-            FlexTable notices = Utils.createTable(//@formatter:off
-                new String[] {"", i18n.tr("This Month"), i18n.tr("Next Month"), i18n.tr("90+")},
-                new String[] {"100", "100", "100", "100"},
-                new String[] {i18n.tr("Notices Leaving:")},
-                new Widget[][] {{
-                    inject(proto().noticesLeavingThisMonth()).asWidget(),
-                    inject(proto().noticesLeavingNextMonth()).asWidget(),
-                    inject(proto().noticesLeavingOver90Days()).asWidget()
-                }}
-        );//@formatter:off
-        content.add(notices);
-        return content;
-        } else {
-            FormFlexPanel panel = new FormFlexPanel();
-            int row = -1;
-            panel.setH2(++row, 0, 1, i18n.tr("Vacancy:"));
-            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitsVacant())).componentWidth(5).build());
-            panel.setH2(++row, 0, 1, i18n.tr("Notices Leaving:"));
-            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().noticesLeavingThisMonth())).customLabel(i18n.tr("This Month")).componentWidth(5).build());
-            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().noticesLeavingNextMonth())).customLabel(i18n.tr("Next Month")).componentWidth(5).build());
-            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().noticesLeavingOver90Days())).customLabel(i18n.tr("90+")).componentWidth(5).build());
-            return panel;
-        }
-        
+        int vacant = getValue().vacantUnits().getValue();
+        int total = getValue().totalUnits().getValue();
+        double percent = total != 0 ? vacant / (double) total : 0d;
+        get(proto().unitVacancyLabel()).setValue(i18n.tr("{0} of {1} ({2,number,percent})", vacant, total, percent));
     }
 }

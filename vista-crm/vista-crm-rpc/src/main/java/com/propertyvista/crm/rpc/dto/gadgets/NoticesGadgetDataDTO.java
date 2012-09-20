@@ -21,8 +21,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface NoticesGadgetDataDTO extends IEntity {
 
-    @Caption(name = "Vacant Units")
-    IPrimitive<String> unitsVacant();
+    IPrimitive<Integer> vacantUnits();
+
+    IPrimitive<Integer> totalUnits();
 
     @Caption(name = "Notices Leaving This Month")
     IPrimitive<Integer> noticesLeavingThisMonth();
@@ -30,6 +31,13 @@ public interface NoticesGadgetDataDTO extends IEntity {
     @Caption(name = "Notices Leaving Next Month")
     IPrimitive<Integer> noticesLeavingNextMonth();
 
+    @Caption(name = "Notices Leaving 60 to 90 Days")
+    IPrimitive<Integer> noticesLeaving60to90Days();
+
     @Caption(name = "Notices Leaving 90+ Days")
     IPrimitive<Integer> noticesLeavingOver90Days();
+
+    /** for UI only */
+    @Caption(name = "Unit Vacancy")
+    IPrimitive<String> unitVacancyLabel();
 }

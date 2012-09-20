@@ -55,16 +55,17 @@ public class NoticesGadgetFactory extends AbstractGadget<NoticesGadgetMetadata> 
 
         @Override
         protected void bindDetailsFactories() {
-            bindDetailsFactory(proto().unitsVacant(), unitDetailsFactory(proto().unitsVacant()));
+            bindDetailsFactory(proto().unitVacancyLabel(), unitDetailsFactory(proto().vacantUnits()));
 
-            bindDetailsFactory(proto().noticesLeavingThisMonth(), leaseDetailsFactory(proto().noticesLeavingThisMonth()));
-            bindDetailsFactory(proto().noticesLeavingNextMonth(), leaseDetailsFactory(proto().noticesLeavingNextMonth()));
-            bindDetailsFactory(proto().noticesLeavingOver90Days(), leaseDetailsFactory(proto().noticesLeavingOver90Days()));
+            bindLeaseDetailsFactory(proto().noticesLeavingThisMonth());
+            bindLeaseDetailsFactory(proto().noticesLeavingNextMonth());
+            bindLeaseDetailsFactory(proto().noticesLeaving60to90Days());
+            bindLeaseDetailsFactory(proto().noticesLeavingOver90Days());
 
         }
 
-        private CounterDetailsFactory leaseDetailsFactory(IObject<?> category) {
-            return new LeasesDetailsFactory(GWT.<LeaseExpirationGadgetService> create(NoticesGadgetService.class), this, category);
+        private void bindLeaseDetailsFactory(IObject<?> category) {
+            bindDetailsFactory(category, new LeasesDetailsFactory(GWT.<LeaseExpirationGadgetService> create(NoticesGadgetService.class), this, category));
         }
 
         private CounterDetailsFactory unitDetailsFactory(IObject<?> category) {
