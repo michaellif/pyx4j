@@ -40,10 +40,11 @@ public class NLabel<E> extends NComponent<E, Label, CLabel<E>, Label> implements
 
     @Override
     public void setNativeValue(E value) {
+        String html = value == null ? "" : getCComponent().getFormat().format(value);
         if (isViewable()) {
-            getViewer().setHTML(getCComponent().getFormat().format(value));
+            getViewer().setHTML(html);
         } else {
-            getEditor().setHTML(getCComponent().getFormat().format(value));
+            getEditor().setHTML(html);
         }
     }
 
