@@ -87,16 +87,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public Lease init(Lease lease) {
         // check client supplied initial status value:
-        if (lease.status().isNull()) {
-            throw new IllegalStateException(i18n.tr("Invalid Lease State"));
-        } else {
-            switch (lease.status().getValue()) {
-            case ExistingLease:
-            case Application:
-                break; // ok, allowed values...
-            default:
-                throw new IllegalStateException(i18n.tr("Invalid Lease State"));
-            }
+        assert !lease.status().isNull();
+        switch (lease.status().getValue()) {
+        case ExistingLease:
+        case Application:
+            break; // ok, allowed values...
+        default:
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
         ServerSideFactory.create(IdAssignmentFacade.class).assignId(lease);
@@ -231,10 +228,10 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         // Verify the status
         if (!Lease.Status.draft().contains(lease.status().getValue())) {
-            throw new IllegalStateException(i18n.tr("Invalid Lease State"));
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
         if (LeaseApplication.Status.Created != lease.leaseApplication().status().getValue()) {
-            throw new IllegalStateException(i18n.tr("Invalid Application State"));
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Applicatino Status (\"{0}\")", lease.leaseApplication().status().getValue()));
         }
 
         ServerSideFactory.create(OnlineApplicationFacade.class).createMasterOnlineApplication(lease.leaseApplication().onlineApplication());
@@ -363,7 +360,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Lease lease = load(leaseId, false);
 
         if (!EnumSet.of(Lease.Status.ExistingLease, Lease.Status.Approved).contains(lease.status().getValue())) {
-            throw new IllegalStateException(i18n.tr("Can't activate lease with status: {0}", lease.status().getStringView()));
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
         // set lease status to active ONLY if first (latest till now) bill is confirmed:
@@ -479,7 +476,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate noticeDay, LogicalDate moveOutDay) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
         if (lease.status().getValue() != Status.Active) {
-            throw new IllegalStateException("lease " + leaseId.getPrimaryKey() + " must be " + Status.Active + " in order to perform Completion");
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
         lease.completion().setValue(completionType);
@@ -494,8 +491,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public void cancelCompletionEvent(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
-        if (lease.completion().isNull()) {
-            throw new IllegalStateException("lease " + leaseId.getPrimaryKey() + " must have notice in order to perform 'cancelNotice'");
+        if (lease.status().getValue() != Status.Active) {
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
         lease.completion().setValue(null);
@@ -537,7 +534,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         if (!Lease.Status.draft().contains(lease.status().getValue())) {
-            throw new IllegalStateException(i18n.tr("Invalid Lease State"));
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
         if (lease.currentTerm().getPrimaryKey().equals(leaseTerm.getPrimaryKey().asCurrentKey())) {
@@ -593,7 +590,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         if (leaseTerm.equals(lease.currentTerm())) {
             if (!Lease.Status.draft().contains(lease.status().getValue())) {
-                throw new IllegalStateException(i18n.tr("Invalid Lease State"));
+                throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
             }
             Persistence.service().retrieve(lease.billingAccount().deposits());
             lease.billingAccount().deposits().clear();
@@ -682,8 +679,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 ServerSideFactory.create(OccupancyFacade.class).migratedCancel(previousLeaseEdition.unit().<AptUnit> createIdentityStub());
                 break;
             default:
-                throw new IllegalStateException(SimpleMessageFormat.format("it's not allowed to unset unit while lease's state is \"{0}\"", lease.status()
-                        .getValue()));
+                throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
             }
         }
         if (doReserve) {
@@ -695,8 +691,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 ServerSideFactory.create(OccupancyFacade.class).migrateStart(lease.unit().<AptUnit> createIdentityStub(), lease);
                 break;
             default:
-                throw new IllegalStateException(SimpleMessageFormat.format("it's not allowed to set unit while lease's state is \"{0}\"", lease.status()
-                        .getValue()));
+                throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
             }
         }
 
@@ -834,6 +829,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         case Application:
             visible = PublicVisibilityType.visibleToTenant().contains(product.version().visibility().getValue());
             break;
+        default:
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
         return visible;
