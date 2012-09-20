@@ -34,11 +34,11 @@ public class NativeHyperlink<E> extends Anchor implements INativeReference<E> {
 
     private boolean enabled;
 
-    private final CAbstractHyperlink<E> cHyperlink;
+    private final CReference<E> cHyperlink;
 
     private final NativeReferenceDelegate<E> delegate;
 
-    public NativeHyperlink(CAbstractHyperlink<E> hyperlink) {
+    public NativeHyperlink(CReference<E> hyperlink) {
         super(hyperlink.getValue() != null ? hyperlink.getValue().toString() : null);
         delegate = new NativeReferenceDelegate<E>(this);
 
@@ -70,7 +70,7 @@ public class NativeHyperlink<E> extends Anchor implements INativeReference<E> {
     }
 
     @Override
-    public CAbstractHyperlink<E> getCComponent() {
+    public CReference<E> getCComponent() {
         return cHyperlink;
     }
 

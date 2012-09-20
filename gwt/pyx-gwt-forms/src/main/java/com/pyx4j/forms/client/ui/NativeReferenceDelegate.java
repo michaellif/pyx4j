@@ -31,7 +31,7 @@ public class NativeReferenceDelegate<E> {
     @SuppressWarnings("unchecked")
     public void setNativeValue(E value) {
         String text = "";
-        CReference<E, ?> comp = (CReference<E, ?>) parent.getCComponent();
+        CReference<E> comp = (CReference<E>) parent.getCComponent();
         if (value != null) {
             if (comp.getFormat() != null) {
                 text = comp.getFormat().format(value);

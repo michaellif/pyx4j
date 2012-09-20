@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.Command;
 
-public class CHyperlink extends CAbstractHyperlink<String> {
+public class CHyperlink extends CReference<String> {
 
     public CHyperlink(Command command) {
         super(command);

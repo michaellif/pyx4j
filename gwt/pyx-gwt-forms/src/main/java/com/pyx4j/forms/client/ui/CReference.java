@@ -20,9 +20,9 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.Command;
 
-public abstract class CReference<E, T extends Widget & INativeReference<E>> extends CFocusComponent<E, T> {
+public class CReference<E> extends CFocusComponent<E, NativeHyperlink<E>> {
 
     private boolean wordWrap = false;
 
@@ -30,8 +30,34 @@ public abstract class CReference<E, T extends Widget & INativeReference<E>> exte
 
     private IFormat<E> format;
 
+    private Command command;
+
     public CReference(String title) {
         super(title);
+    }
+
+    public CReference(Command command) {
+        this(null, command);
+    }
+
+    public CReference(String title, Command command) {
+        super(title);
+        this.command = command;
+    }
+
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+
+    public Command getCommand() {
+        return command;
+    }
+
+    @Override
+    protected NativeHyperlink<E> createWidget() {
+        NativeHyperlink<E> widget = new NativeHyperlink<E>(this);
+        widget.setWordWrap(this.isWordWrap());
+        return widget;
     }
 
     public void setFormat(IFormat<E> format) {

@@ -24,7 +24,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class CEntityHyperlink<E extends IEntity> extends CAbstractHyperlink<E> {
+public class CEntityHyperlink<E extends IEntity> extends CReference<E> {
 
     protected CEntityHyperlink(String title) {
         super(title);

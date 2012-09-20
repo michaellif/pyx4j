@@ -23,10 +23,10 @@ package com.pyx4j.site.client.ui.crud.misc;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.ICollection;
-import com.pyx4j.forms.client.ui.CAbstractHyperlink;
+import com.pyx4j.forms.client.ui.CReference;
 import com.pyx4j.forms.client.ui.IFormat;
 
-public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends CAbstractHyperlink<E> {
+public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends CReference<E> {
 
     protected CEntityCollectionCrudHyperlink(String title) {
         super(title);
