@@ -38,15 +38,20 @@ public class CollectionsGadgetFactory extends AbstractGadget<CollectionsGadgetMe
     public static class CollectionsGaget extends CounterGadgetInstanceBase<CollectionsGadgetDataDTO, Vector<Building>, CollectionsGadgetMetadata> {
 
         public CollectionsGaget(GadgetMetadata metadata) {
-            super(CollectionsGadgetDataDTO.class, GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class), new CollectionsSummaryForm(),
-                    metadata, CollectionsGadgetMetadata.class);
+            super(//@formatter:off
+                    CollectionsGadgetDataDTO.class,
+                    GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class),
+                    new CollectionsSummaryForm(),
+                    metadata,
+                    CollectionsGadgetMetadata.class
+            );//@formatter:on
         }
 
         @Override
         protected void bindDetailsFactories() {
             bindTenantsDetailsFactory(proto().tenantsPaidThisMonth());
-            bindPaymentDetailsFactory(proto().fundsCollectedThisMonth());
-            bindPaymentDetailsFactory(proto().fundsInProcessing());
+            bindPaymentDetailsFactory(proto().fundsCollectedThisMonthLabel(), proto().fundsCollectedThisMonth());
+            bindPaymentDetailsFactory(proto().fundsInProcessingLabel(), proto().fundsInProcessing());
         }
 
         @Override
@@ -55,12 +60,11 @@ public class CollectionsGadgetFactory extends AbstractGadget<CollectionsGadgetMe
         }
 
         private void bindTenantsDetailsFactory(IObject<?> member) {
-            bindDetailsFactory(proto().tenantsPaidThisMonth(), new TenantsDetailsFactory(GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class),
-                    this, member));
+            bindDetailsFactory(member, new TenantsDetailsFactory(GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class), this, member));
         }
 
-        private void bindPaymentDetailsFactory(IObject<?> member) {
-            bindDetailsFactory(member, new PaymentDetailsFactory(GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class), this, member));
+        private void bindPaymentDetailsFactory(IObject<?> member, IObject<?> bindingFilter) {
+            bindDetailsFactory(member, new PaymentDetailsFactory(GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class), this, bindingFilter));
         }
     }
 

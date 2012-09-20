@@ -37,6 +37,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetada
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
+import com.propertyvista.domain.dashboard.gadgets.type.CollectionsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.MaintenanceGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata;
@@ -111,6 +112,12 @@ public class DashboardGenerator extends Dashboards {
         maintenanceGadget.refreshInterval().setValue(RefreshInterval.Never);
         maintenanceGadget.docking().column().setValue(0);
         dmd.gadgets().add(maintenanceGadget);
+
+        CollectionsGadgetMetadata collectionsGadget = EntityFactory.create(CollectionsGadgetMetadata.class);
+        collectionsGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
+        collectionsGadget.refreshInterval().setValue(RefreshInterval.Never);
+        collectionsGadget.docking().column().setValue(0);
+        dmd.gadgets().add(collectionsGadget);
 
         return dmd;
     }

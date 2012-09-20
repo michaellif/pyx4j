@@ -100,7 +100,6 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
         criteria.add(PropertyCriterion.ge(criteria.proto().createdDate(), thisMonthStartDay));
         criteria.add(PropertyCriterion.le(criteria.proto().createdDate(), today));
 
-        // TODO not sure about submitted status, but this since it's just a draft of a record, it shouldn't appear in the report at all
         criteria.add(PropertyCriterion.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Submitted));
         criteria.add(PropertyCriterion.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Canceled));
         if (proto.fundsCollectedThisMonth() == fundsFilterProto) {
@@ -114,19 +113,19 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
         return criteria;
     }
 
-    private void count(IObject<?> member, Vector<Building> buildingsFilter) {
+    private void count(IPrimitive<Integer> member, Vector<Building> buildingsFilter) {
 
         CollectionsGadgetDataDTO proto = EntityFactory.getEntityPrototype(CollectionsGadgetDataDTO.class);
         IObject<?> filter = proto.getMember(member.getPath());
 
         if (proto.tenantsPaidThisMonth() == filter) {
-            ((IPrimitive<Integer>) member).setValue(Persistence.service().count(tenantCriteria(EntityQueryCriteria.create(Tenant.class), buildingsFilter)));
+            member.setValue(Persistence.service().count(tenantCriteria(EntityQueryCriteria.create(Tenant.class), buildingsFilter)));
         } else {
             throw new RuntimeException("unknown filter preset: " + member.getPath().toString());
         }
     }
 
-    private void summarize(IObject<?> member, Vector<Building> buildingsFilter) {
+    private void summarize(IPrimitive<BigDecimal> member, Vector<Building> buildingsFilter) {
         BigDecimal sum = new BigDecimal("0.00");
 
         ICursorIterator<PaymentRecord> i = Persistence.service().query(null,
@@ -134,12 +133,7 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
         while (i.hasNext()) {
             sum = sum.add(i.next().amount().getValue());
         }
+        member.setValue(sum);
 
-        // TODO deal with this ugly thing once UI can support normal money anchor labels
-        if (member.getValueClass().equals(BigDecimal.class)) {
-            ((IPrimitive<BigDecimal>) member).setValue(sum);
-        } else if (member.getValueClass().equals(String.class)) {
-            ((IPrimitive<String>) member).setValue(Utils.asMoney(sum));
-        }
     }
 }

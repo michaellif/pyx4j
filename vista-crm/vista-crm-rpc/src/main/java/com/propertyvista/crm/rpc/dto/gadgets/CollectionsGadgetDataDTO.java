@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.rpc.dto.gadgets;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -22,8 +25,16 @@ public interface CollectionsGadgetDataDTO extends IEntity {
 
     IPrimitive<Integer> tenantsPaidThisMonth();
 
-    IPrimitive<String> fundsCollectedThisMonth();
+    IPrimitive<BigDecimal> fundsCollectedThisMonth();
 
-    IPrimitive<String> fundsInProcessing();
+    IPrimitive<BigDecimal> fundsInProcessing();
+
+    /** for UI only */
+    @Caption(name = "Funds Collected This Month")
+    IPrimitive<String> fundsCollectedThisMonthLabel();
+
+    /** for UI only */
+    @Caption(name = "Funds In Processing")
+    IPrimitive<String> fundsInProcessingLabel();
 
 }
