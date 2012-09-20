@@ -160,7 +160,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             }
 
                             if (!VistaTODO.queryByProductCatalog_VISTA_1997) {
-                                filters.add(PropertyCriterion.in(proto().productItems().$().product().visibility(), PublicVisibilityType.tenant()));
+                                filters.add(PropertyCriterion.in(proto().productItems().$().product().visibility(), PublicVisibilityType.visibleToTenant()));
                             }
 
                         } else {

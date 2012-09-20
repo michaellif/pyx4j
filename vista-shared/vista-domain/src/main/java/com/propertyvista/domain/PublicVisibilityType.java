@@ -33,11 +33,11 @@ public enum PublicVisibilityType implements Serializable {
     @Translate("Public")
     global;
 
-    public static Collection<PublicVisibilityType> tenant() {
+    public static Collection<PublicVisibilityType> visibleToTenant() {
         return EnumSet.of(tenant, global);
     }
 
-    public static Collection<PublicVisibilityType> existingTenant() {
+    public static Collection<PublicVisibilityType> visibleToExistingTenant() {
         return EnumSet.of(existingTenant, global);
     }
 

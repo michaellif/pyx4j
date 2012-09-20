@@ -196,11 +196,13 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             // features:
             Persistence.service().retrieve(selectedService.features());
             for (Feature feature : selectedService.features()) {
-                Persistence.service().retrieve(feature.version().items());
-                for (ProductItem item : feature.version().items()) {
-                    if (!item.isDefault().isBooleanTrue()) {
-                        Persistence.service().retrieve(item.product());
-                        currentValue.selectedFeatureItems().add(item);
+                if (ServerSideFactory.create(LeaseFacade.class).isProductAvailable(currentValue.lease(), feature)) {
+                    Persistence.service().retrieve(feature.version().items());
+                    for (ProductItem item : feature.version().items()) {
+                        if (!item.isDefault().isBooleanTrue()) {
+                            Persistence.service().retrieve(item.product());
+                            currentValue.selectedFeatureItems().add(item);
+                        }
                     }
                 }
             }
@@ -220,16 +222,18 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), currentValue.lease().unit().building().productCatalog()));
         criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), currentValue.lease().type()));
-        servicesLoop: for (Service service : Persistence.service().query(criteria)) {
-            EntityQueryCriteria<ProductItem> serviceCriteria = EntityQueryCriteria.create(ProductItem.class);
-            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ServiceItemType.class));
-            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().product(), service.version()));
-            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), currentValue.lease().unit()));
-            serviceCriteria
-                    .add(PropertyCriterion.ne(serviceCriteria.proto().id(), currentValue.version().leaseProducts().serviceItem().item().getPrimaryKey()));
-            currentValue.selectedServiceItems().addAll(Persistence.service().query(serviceCriteria));
-            if (!currentValue.selectedServiceItems().isEmpty()) {
-                break servicesLoop;
+        for (Service service : Persistence.service().query(criteria)) {
+            if (ServerSideFactory.create(LeaseFacade.class).isProductAvailable(currentValue.lease(), service)) {
+                EntityQueryCriteria<ProductItem> serviceCriteria = EntityQueryCriteria.create(ProductItem.class);
+                serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ServiceItemType.class));
+                serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().product(), service.version()));
+                serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), currentValue.lease().unit()));
+                serviceCriteria.add(PropertyCriterion.ne(serviceCriteria.proto().id(), currentValue.version().leaseProducts().serviceItem().item()
+                        .getPrimaryKey()));
+                currentValue.selectedServiceItems().addAll(Persistence.service().query(serviceCriteria));
+                if (!currentValue.selectedServiceItems().isEmpty()) {
+                    break;
+                }
             }
         }
     }
