@@ -33,8 +33,9 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
 import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
+import com.propertyvista.domain.dashboard.gadgets.type.ApplicationsGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.CollectionsGadgetMetadata;
@@ -126,6 +127,12 @@ public class DashboardGenerator extends Dashboards {
         leadsAndRentalsGadget.docking().column().setValue(0);
         dmd.gadgets().add(leadsAndRentalsGadget);
 
+        ApplicationsGadgetMetadata applicationsGadget = EntityFactory.create(ApplicationsGadgetMetadata.class);
+        applicationsGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
+        applicationsGadget.refreshInterval().setValue(RefreshInterval.Never);
+        applicationsGadget.docking().column().setValue(0);
+        dmd.gadgets().add(applicationsGadget);
+
         return dmd;
     }
 
@@ -174,14 +181,11 @@ public class DashboardGenerator extends Dashboards {
         dmd.description().setValue(i18n.tr("Contains various arrears gadgets"));
         dmd.layoutType().setValue(LayoutType.One);
 
-        ArrearsSummaryGadgetMetadata arrearsSummaryGadget = EntityFactory.create(ArrearsSummaryGadgetMetadata.class);
-        arrearsSummaryGadget.docking().column().setValue(0);
-        arrearsSummaryGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
-        arrearsSummaryGadget.refreshInterval().setValue(RefreshInterval.Never);
-        arrearsSummaryGadget.pageSize().setValue(1);
-        arrearsSummaryGadget.customizeDate().setValue(false);
-        arrearsSummaryGadget.columnDescriptors().addAll(defineArreasSummaryListerColumns());
-        dmd.gadgets().add(arrearsSummaryGadget);
+        ArrearsGadgetMetadata arrearsGadget = EntityFactory.create(ArrearsGadgetMetadata.class);
+        arrearsGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
+        arrearsGadget.docking().column().setValue(0);
+        arrearsGadget.refreshInterval().setValue(RefreshInterval.Never);
+        dmd.gadgets().add(arrearsGadget);
 
         ArrearsYOYAnalysisChartMetadata arrearsYOYAnalysisChart = EntityFactory.create(ArrearsYOYAnalysisChartMetadata.class);
         arrearsYOYAnalysisChart.docking().column().setValue(0);
