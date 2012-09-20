@@ -30,7 +30,7 @@ public class LeadsAndRentalsGadgetFactory extends AbstractGadget<LeadsAndRentals
 
     @Override
     public List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Leads.toString(), Directory.Categories.Rentals.toString());
+        return Arrays.asList(Directory.Categories.Leads.toString(), Directory.Categories.Rentals.toString(), Directory.Categories.Leases.toString());
     }
 
     @Override
