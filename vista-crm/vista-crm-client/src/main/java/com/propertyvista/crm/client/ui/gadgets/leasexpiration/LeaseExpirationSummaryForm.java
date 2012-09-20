@@ -34,19 +34,36 @@ final class LeaseExpirationSummaryForm extends CounterGadgetSummaryForm<LeaseExp
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
         content.setH2(++row, 0, 1, i18n.tr("Occupancy:"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitOccupancy())).customLabel(i18n.tr("Units Occupied")).componentWidth(5).build());
-        content.setH2(++row, 0, 1, i18n.tr("Leases On Month to Month:"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesOnMonthToMonth())).customLabel("").componentWidth(5)
-                .useLabelSemicolon(false).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitOccupancyLabel())).customLabel(i18n.tr("Units Occupied")).componentWidth(15)
+                .build());
+
+        if (false) {
+            content.setH2(++row, 0, 1, i18n.tr("Leases on Month to Month:"));
+            content.setWidget(++row, 0,
+                    new DecoratorBuilder(inject(proto().numOfLeasesOnMonthToMonth())).customLabel("").componentWidth(5).useLabelSemicolon(false).build());
+        }
+
         content.setH2(++row, 0, 1, i18n.tr("Leases Ending:"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesEndingThisMonth())).customLabel(i18n.tr("This Month")).componentWidth(5)
                 .build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesEndingNextMonth())).customLabel(i18n.tr("Next Month")).componentWidth(5)
+                .build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesEnding60to90Days())).customLabel(i18n.tr("60 to 90 Days")).componentWidth(5)
                 .build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesEndingOver90Days())).customLabel(i18n.tr("90+ Days")).componentWidth(5)
                 .build());
 
         return content;
 
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        int total = getValue().totalUnits().getValue();
+        int occupied = getValue().occupiedUnits().getValue();
+        double percent = total != 0 ? occupied / (double) total : 0;
+        get(proto().unitOccupancyLabel()).setValue(i18n.tr("{0} of {1} ({2,number,percent})", occupied, total, percent));
     }
 }

@@ -21,8 +21,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface LeaseExpirationGadgetDataDTO extends IEntity {
 
-    @Caption(name = "Occupied Units")
-    IPrimitive<String> unitOccupancy();
+    IPrimitive<Integer> occupiedUnits();
+
+    IPrimitive<Integer> totalUnits();
 
     @Caption(name = "Leases Ending This Month")
     IPrimitive<Integer> numOfLeasesEndingThisMonth();
@@ -30,10 +31,19 @@ public interface LeaseExpirationGadgetDataDTO extends IEntity {
     @Caption(name = "Leases Ending Next Month")
     IPrimitive<Integer> numOfLeasesEndingNextMonth();
 
+    @Caption(name = "Leases Ending 60 to 90 Days")
+    IPrimitive<Integer> numOfLeasesEnding60to90Days();
+
     @Caption(name = "Leases Ending 90+ Days")
     IPrimitive<Integer> numOfLeasesEndingOver90Days();
 
     @Caption(name = "Leases on Month to Month")
     IPrimitive<Integer> numOfLeasesOnMonthToMonth();
+
+    /**
+     * Warning: this is for Client side UI usage only, should not be touched by the server
+     */
+    @Caption(name = "Occupied Units")
+    IPrimitive<String> unitOccupancyLabel();
 
 }

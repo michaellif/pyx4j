@@ -51,20 +51,19 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
 
         @Override
         protected void bindDetailsFactories() {
-            bindDetailsFactory(proto().unitOccupancy(), unitDetailsFactory(proto().unitOccupancy()));
+            bindDetailsFactory(proto().unitOccupancyLabel(),
+                    new UnitDetailsFactory(GWT.<LeaseExpirationGadgetService> create(LeaseExpirationGadgetService.class), this, proto().occupiedUnits()));
 
-            bindDetailsFactory(proto().numOfLeasesEndingThisMonth(), leaseDetailsFactory(proto().numOfLeasesEndingThisMonth()));
-            bindDetailsFactory(proto().numOfLeasesEndingNextMonth(), leaseDetailsFactory(proto().numOfLeasesEndingNextMonth()));
-            bindDetailsFactory(proto().numOfLeasesEndingOver90Days(), leaseDetailsFactory(proto().numOfLeasesEndingOver90Days()));
-            bindDetailsFactory(proto().numOfLeasesOnMonthToMonth(), leaseDetailsFactory(proto().numOfLeasesOnMonthToMonth()));
+            bindLeaseDetailsFactory(proto().numOfLeasesEndingThisMonth());
+            bindLeaseDetailsFactory(proto().numOfLeasesEndingNextMonth());
+            bindLeaseDetailsFactory(proto().numOfLeasesEnding60to90Days());
+            bindLeaseDetailsFactory(proto().numOfLeasesEndingOver90Days());
+
+            bindLeaseDetailsFactory(proto().numOfLeasesOnMonthToMonth());
         }
 
-        private CounterDetailsFactory leaseDetailsFactory(IObject<?> category) {
-            return new LeasesDetailsFactory(GWT.<LeaseExpirationGadgetService> create(LeaseExpirationGadgetService.class), this, category);
-        }
-
-        private CounterDetailsFactory unitDetailsFactory(IObject<?> filter) {
-            return new UnitDetailsFactory(GWT.<LeaseExpirationGadgetService> create(LeaseExpirationGadgetService.class), this, filter);
+        private void bindLeaseDetailsFactory(IObject<?> filter) {
+            bindDetailsFactory(filter, new LeasesDetailsFactory(GWT.<LeaseExpirationGadgetService> create(LeaseExpirationGadgetService.class), this, filter));
         }
 
     }

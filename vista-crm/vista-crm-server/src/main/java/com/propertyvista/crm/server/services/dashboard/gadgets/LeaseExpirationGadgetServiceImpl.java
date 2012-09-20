@@ -21,6 +21,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -39,22 +40,19 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
 
     @Override
     public void countData(AsyncCallback<LeaseExpirationGadgetDataDTO> callback, Vector<Building> buildings) {
-        LeaseExpirationGadgetDataDTO proto = EntityFactory.getEntityPrototype(LeaseExpirationGadgetDataDTO.class);
         LeaseExpirationGadgetDataDTO gadgetData = EntityFactory.create(LeaseExpirationGadgetDataDTO.class);
 
-        gadgetData.numOfLeasesEndingThisMonth().setValue(count(proto.numOfLeasesEndingThisMonth(), buildings));
-        gadgetData.numOfLeasesEndingNextMonth().setValue(count(proto.numOfLeasesEndingNextMonth(), buildings));
-        gadgetData.numOfLeasesEndingOver90Days().setValue(count(proto.numOfLeasesEndingOver90Days(), buildings));
-        gadgetData.numOfLeasesOnMonthToMonth().setValue(count(proto.numOfLeasesOnMonthToMonth(), buildings));
+        count(gadgetData.numOfLeasesEndingThisMonth(), buildings);
+        count(gadgetData.numOfLeasesEndingNextMonth(), buildings);
+        count(gadgetData.numOfLeasesEnding60to90Days(), buildings);
+        count(gadgetData.numOfLeasesEndingOver90Days(), buildings);
 
-        int unitsCount = CommonQueries.numOfUnits(buildings);
-        int occupiedUnitsCount = numOfOccupiedUnits(buildings);
-        if (unitsCount != 0) {
-            double occupiedUnitsPercent = (double) occupiedUnitsCount / unitsCount;
-            gadgetData.unitOccupancy().setValue(Utils.countAndPercentLabel(occupiedUnitsCount, occupiedUnitsPercent));
-        } else {
-            gadgetData.unitOccupancy().setValue("0");
+        if (TODO_LEASES_ON_MONTH_TO_MONTH) {
+            count(gadgetData.numOfLeasesOnMonthToMonth(), buildings);
         }
+
+        gadgetData.totalUnits().setValue(CommonQueries.numOfUnits(buildings));
+        gadgetData.occupiedUnits().setValue(numOfOccupiedUnits(buildings));
 
         callback.onSuccess(gadgetData);
     }
@@ -70,32 +68,35 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
         callback.onSuccess(fillOccupiedUnitsCriteria(EntityListCriteria.create(AptUnitDTO.class), buildingsFilter));
     }
 
-    private int count(IObject<?> category, Vector<Building> buildings) {
-        return Persistence.service().count(fillLeaseFilterCriteria(EntityQueryCriteria.create(Lease.class), buildings, category));
+    private void count(IPrimitive<Integer> counter, Vector<Building> buildings) {
+        counter.setValue(Persistence.service().count(fillLeaseFilterCriteria(EntityQueryCriteria.create(Lease.class), buildings, counter)));
     }
 
     private <Criteria extends EntityQueryCriteria<? extends Lease>> Criteria fillLeaseFilterCriteria(Criteria leaseCriteria, Vector<Building> buildings,
-            IObject<?> leaseFilter) {
+            IObject<?> leaseFilterPreset) {
+        LeaseExpirationGadgetDataDTO proto = EntityFactory.getEntityPrototype(LeaseExpirationGadgetDataDTO.class);
+        IObject<?> leaseFilter = proto.getMember(leaseFilterPreset.getPath());
 
         LogicalDate leaseToLowerBound = null;
         LogicalDate leaseToUpperBound = null;
-        LogicalDate today = new LogicalDate(Persistence.service().getTransactionSystemTime());
+        LogicalDate today = Utils.dayOfCurrentTransaction();
 
-        LeaseExpirationGadgetDataDTO proto = EntityFactory.getEntityPrototype(LeaseExpirationGadgetDataDTO.class);
         if (proto.numOfLeasesEndingThisMonth() == leaseFilter) {
-
-            leaseToLowerBound = Utils.beginningOfMonth(today);
+            leaseToLowerBound = today;
             leaseToUpperBound = Utils.endOfMonth(today);
         } else if (proto.numOfLeasesEndingNextMonth() == leaseFilter) {
-
             leaseToLowerBound = Utils.beginningOfNextMonth(today);
             leaseToUpperBound = Utils.endOfMonth(leaseToLowerBound);
+        } else if (proto.numOfLeasesEnding60to90Days() == leaseFilter) {
+            leaseToLowerBound = Utils.addDays(today, 60);
+            leaseToUpperBound = Utils.addDays(today, 90);
         } else if (proto.numOfLeasesEndingOver90Days() == leaseFilter) {
-            // TODO this is not correct
-            leaseToLowerBound = Utils.beginningOfNextMonth(Utils.beginningOfNextMonth(Utils.beginningOfNextMonth(today)));
+            leaseToLowerBound = Utils.addDays(today, 91);
             leaseToUpperBound = null;
         } else if (proto.numOfLeasesOnMonthToMonth() == leaseFilter) {
-
+            if (!TODO_LEASES_ON_MONTH_TO_MONTH) {
+                throw new RuntimeException("on month to month has not yet been implemented'" + leaseFilter.getPath().toString() + "'");
+            }
         } else {
             throw new RuntimeException("it's unknown to to iterpret the lease filter '" + leaseFilter.getPath().toString() + "'");
         }
