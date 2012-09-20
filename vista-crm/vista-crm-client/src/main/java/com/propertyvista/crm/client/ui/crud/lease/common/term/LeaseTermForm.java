@@ -40,6 +40,7 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -158,7 +159,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                                 filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
                             }
 
-//                            filters.add(PropertyCriterion.in(proto().p`roductItems().$().product().visibility(), PublicVisibilityType.tenant()));
+                            if (!VistaTODO.queryByProductCatalog_VISTA_1997) {
+                                filters.add(PropertyCriterion.in(proto().productItems().$().product().visibility(), PublicVisibilityType.tenant()));
+                            }
 
                         } else {
                             assert false : "Incorrect situation! Value shouln'd be edited in this lease status!";
