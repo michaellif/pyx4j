@@ -39,12 +39,15 @@ public interface ArrearsGadgetDataDTO extends IEntity {
     @Caption(name = "Outstanding 31 to 60 Days")
     IPrimitive<String> outstanding31to60Days();
 
+    /** used for presentation */
     @Caption(name = "Outstanding 61 to 90 Days")
     IPrimitive<String> outstanding61to90Days();
 
+    /** used for presentation */
     @Caption(name = "Outstanding 91+ Days")
     IPrimitive<String> outstanding91andMoreDays();
 
+    /** used for presentation */
     IPrimitive<String> outstandingTotal();
 
 }
