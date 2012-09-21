@@ -103,7 +103,7 @@ public class EntityOperationsMeta {
         build(dialect, dialect.getNamingConvention(), entityMeta, path, null, null, entityMeta);
 
         Inheritance inheritance = entityMeta.getAnnotation(Inheritance.class);
-        if ((entityMeta.getPerstableSuperClass() != null)
+        if ((entityMeta.getPersistableSuperClass() != null)
                 || ((inheritance != null) && (inheritance.strategy() == Inheritance.InheritanceStrategy.SINGLE_TABLE))) {
             impClasses = new HashMap<String, Class<? extends IEntity>>();
             for (Class<? extends IEntity> subclass : Mappings.getPersistableAssignableFrom(entityMeta.getEntityClass())) {
@@ -213,7 +213,7 @@ public class EntityOperationsMeta {
                 }
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
 
-                    ValueAdapter valueAdapter = createEntityValueAdapter(dialect, memberMeta);
+                    ValueAdapter valueAdapter = createEntityValueAdapter(dialect, rootEntityMeta, memberMeta);
 
                     MemberCollectionOperationsMeta member;
                     JoinInformation joinInfo = JoinInformation.build(dialect, rootEntityMeta, entityMeta, memberMeta);
@@ -256,7 +256,7 @@ public class EntityOperationsMeta {
                     membersByPath.put(member.getMemberPath(), member);
                     allMembers.add(member);
                 } else if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    ValueAdapter valueAdapter = createEntityValueAdapter(dialect, memberMeta);
+                    ValueAdapter valueAdapter = createEntityValueAdapter(dialect, rootEntityMeta, memberMeta);
                     MemberOperationsMeta member;
                     JoinInformation joinInfo = JoinInformation.build(dialect, rootEntityMeta, entityMeta, memberMeta);
                     if (joinInfo == null) {
@@ -401,14 +401,15 @@ public class EntityOperationsMeta {
         }
     }
 
-    private void assertTypeCompativility(MemberMeta memberMeta1, MemberMeta memberMeta2) {
-        if (memberMeta1.getValueClass() != memberMeta2.getValueClass()) {
-            throw new DevInfoUnRecoverableRuntimeException("Incompatible mapping {0} {1} and {2} {3}", memberMeta1.getFieldName(), memberMeta1.getValueClass(),
-                    memberMeta2.getFieldName(), memberMeta2.getValueClass());
+    private void assertTypeCompativility(MemberMeta memberMetaSuper, MemberMeta memberMetaOverride) {
+        if (memberMetaSuper.getValueClass() != memberMetaOverride.getValueClass()
+                && memberMetaSuper.getValueClass().isAssignableFrom(memberMetaOverride.getValueClass())) {
+            throw new DevInfoUnRecoverableRuntimeException("Incompatible mapping {0} {1} and {2} {3}", memberMetaSuper.getFieldName(),
+                    memberMetaSuper.getValueClass(), memberMetaOverride.getFieldName(), memberMetaOverride.getValueClass());
         }
     }
 
-    static ValueAdapter createEntityValueAdapter(Dialect dialect, MemberMeta memberMeta) {
+    static ValueAdapter createEntityValueAdapter(Dialect dialect, EntityMeta rootEntityMeta, MemberMeta memberMeta) {
         @SuppressWarnings("unchecked")
         Class<? extends IEntity> entityClass = (Class<IEntity>) memberMeta.getValueClass();
         if (entityClass.getAnnotation(Inheritance.class) != null) {
@@ -419,8 +420,21 @@ public class EntityOperationsMeta {
             }
         } else if (memberMeta.getAnnotation(Versioned.class) != null) {
             return new ValueAdapterEntityVersioned(dialect, entityClass);
+        } else if ((rootEntityMeta.getPersistableSuperClass() != null) && (entityClass.getAnnotation(DiscriminatorValue.class) != null)
+                && isInheritedDecalarationChanges(rootEntityMeta.getPersistableSuperClass(), memberMeta)) {
+            return new ValueAdapterEntityPolymorphic(dialect, entityClass);
         } else {
             return new ValueAdapterEntity(dialect, entityClass);
+        }
+    }
+
+    private static boolean isInheritedDecalarationChanges(Class<? extends IEntity> superClass, MemberMeta memberMeta) {
+        EntityMeta superClassMeta = EntityFactory.getEntityMeta(superClass);
+        if (superClassMeta.getMemberNames().contains(memberMeta.getFieldName())) {
+            MemberMeta superMmberMeta = superClassMeta.getMemberMeta(memberMeta.getFieldName());
+            return superMmberMeta.getValueClass() != memberMeta.getValueClass();
+        } else {
+            return false;
         }
     }
 

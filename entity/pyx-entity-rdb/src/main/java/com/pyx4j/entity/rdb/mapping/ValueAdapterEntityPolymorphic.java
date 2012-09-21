@@ -61,8 +61,8 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
         sqlTypeDiscriminator = dialect.getTargetSqlType(String.class);
         discriminatorColumnNameSufix = dialect.getNamingConvention().sqlDiscriminatorColumnNameSufix();
 
-        Class<? extends IEntity> perstableSuperClass = EntityFactory.getEntityMeta(entityClass).getPerstableSuperClass();
-        if (perstableSuperClass != null) {
+        Class<? extends IEntity> persitableSuperClass = EntityFactory.getEntityMeta(entityClass).getPersistableSuperClass();
+        if (persitableSuperClass != null) {
             singlePkRoot = true;
         } else {
             Inheritance inheritance = entityClass.getAnnotation(Inheritance.class);
@@ -177,11 +177,13 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
 
     @Override
     public ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value) {
-        assert ((value == null) || (value instanceof Collection) || (value instanceof IEntity)) : "Can't query by polymorphic member using value of class "
+        assert (singlePkRoot || (value == null) || (value instanceof Collection) || (value instanceof IEntity)) : "Can't query by polymorphic member using value of class "
                 + value.getClass();
 
         if ((value instanceof IEntity) && (((IEntity) value).getPrimaryKey() == null)) {
             return new DiscriminatorQueryValueBindAdapter();
+        } else if ((value instanceof Key) || (value instanceof Long)) {
+            return new ValueAdapterEntity.QueryByEntityValueBindAdapter(sqlTypeKey);
         } else if (value instanceof Collection) {
             if (((Collection<?>) value).isEmpty()) {
                 return this;

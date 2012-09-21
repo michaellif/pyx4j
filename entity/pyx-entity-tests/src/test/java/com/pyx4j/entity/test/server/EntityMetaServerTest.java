@@ -35,18 +35,18 @@ public class EntityMetaServerTest extends InitializerTestBase {
         assertEquals("PersistenceName", "testEmployee", empMeta.getPersistenceName());
     }
 
-    public void testPerstableSuperClass() {
+    public void testPersistableSuperClass() {
         {
             EntityMeta empMeta = EntityFactory.getEntityMeta(SBase.class);
-            assertEquals("Self", null, empMeta.getPerstableSuperClass());
+            assertEquals("Self", null, empMeta.getPersistableSuperClass());
         }
         {
             EntityMeta empMeta = EntityFactory.getEntityMeta(SConcrete1.class);
-            assertEquals("Direct Super", SBase.class, empMeta.getPerstableSuperClass());
+            assertEquals("Direct Super", SBase.class, empMeta.getPersistableSuperClass());
         }
         {
             EntityMeta empMeta = EntityFactory.getEntityMeta(SConcrete1Ext.class);
-            assertEquals("Direct Super", SBase.class, empMeta.getPerstableSuperClass());
+            assertEquals("Direct Super", SBase.class, empMeta.getPersistableSuperClass());
         }
     }
 }

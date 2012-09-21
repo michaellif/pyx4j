@@ -46,7 +46,7 @@ public interface EntityMeta {
     /**
      * @see Inheritance.InheritanceStrategy.SINGLE_TABLE
      */
-    public Class<? extends IEntity> getPerstableSuperClass();
+    public Class<? extends IEntity> getPersistableSuperClass();
 
     public <T extends IEntity> boolean isEntityClassAssignableFrom(T targetInstance);
 

@@ -82,6 +82,10 @@ public class TestConfigurationHSQL extends com.pyx4j.entity.rdb.cfg.Configuratio
     public NamingConvention namingConvention() {
         ShortWords shortWords = new ShortWords();
         shortWords.add("TEST", "T");
+        shortWords.add("PARENT", "PA");
+        shortWords.add("HOLDER", "HLR");
+        shortWords.add("POLYMORPHIC", "PLM");
+        shortWords.add("HOLDERDISCRIMINATOR", "HOLDER_D");
 
         //TODO testDiferentNamingConvention
         boolean testDiferentNamingConvention = false;

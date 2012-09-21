@@ -46,6 +46,8 @@ import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToM
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyParentDTO;
 import com.pyx4j.entity.test.shared.domain.version.ItemA;
 import com.pyx4j.entity.test.shared.domain.version.ItemADTO;
+import com.pyx4j.entity.test.shared.domain.version.PolymorphicVersionedA;
+import com.pyx4j.entity.test.shared.domain.version.PolymorphicVersionedSuper;
 
 public class EntityMetaTest extends InitializerTestBase {
 
@@ -168,6 +170,32 @@ public class EntityMetaTest extends InitializerTestBase {
 
         ent1x.nameB1().setValue("v-name1-mod");
         assertEquals("value of name1 change", "v-name1-mod", ent2.reference().nameB1().getValue());
+    }
+
+    public void testPolymorphicMembersOverride() {
+        {
+            EntityMeta metaImpl = EntityFactory.getEntityMeta(PolymorphicVersionedA.class);
+            MemberMeta memeberMetaImp = metaImpl.getMemberMeta("version");
+            assertEquals(PolymorphicVersionedA.PolymorphicVersionDataA.class, memeberMetaImp.getValueClass());
+        }
+
+        {
+            EntityMeta metaSuper = EntityFactory.getEntityMeta(PolymorphicVersionedSuper.class);
+            MemberMeta memeberMetaSuper = metaSuper.getMemberMeta("version");
+            assertEquals(PolymorphicVersionedSuper.PolymorphicVersionDataSuper.class, memeberMetaSuper.getValueClass());
+        }
+
+        {
+            EntityMeta dataMetaImpl = EntityFactory.getEntityMeta(PolymorphicVersionedA.PolymorphicVersionDataA.class);
+            MemberMeta dataMemeberMetaImp = dataMetaImpl.getMemberMeta("holder");
+            assertEquals(PolymorphicVersionedA.class, dataMemeberMetaImp.getValueClass());
+        }
+
+        {
+            EntityMeta dataMetaSuper = EntityFactory.getEntityMeta(PolymorphicVersionedSuper.PolymorphicVersionDataSuper.class);
+            MemberMeta dataMemeberMetaSuper = dataMetaSuper.getMemberMeta("holder");
+            assertEquals(PolymorphicVersionedSuper.class, dataMemeberMetaSuper.getValueClass());
+        }
     }
 
     public void testExpandedFromClass() {

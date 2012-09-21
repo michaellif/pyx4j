@@ -114,7 +114,7 @@ public class TableModel {
         Inheritance inheritance = entityMeta.getAnnotation(Inheritance.class);
         if ((inheritance != null) && (inheritance.strategy() != Inheritance.InheritanceStrategy.TABLE_PER_CLASS)) {
             classModel = ModelType.superclass;
-        } else if (entityMeta.getPerstableSuperClass() != null) {
+        } else if (entityMeta.getPersistableSuperClass() != null) {
             if (entityMeta.getEntityClass().getAnnotation(AbstractEntity.class) != null) {
                 classModel = ModelType.superclass;
             } else {
@@ -251,8 +251,8 @@ public class TableModel {
             @SuppressWarnings("unchecked")
             Class<? extends IEntity> entityClass = (Class<IEntity>) member.getMemberMeta().getValueClass();
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
-            if (entityMeta.getPerstableSuperClass() != null) {
-                entityClass = entityMeta.getPerstableSuperClass();
+            if (entityMeta.getPersistableSuperClass() != null) {
+                entityClass = entityMeta.getPersistableSuperClass();
                 entityMeta = EntityFactory.getEntityMeta(entityClass);
             }
             Inheritance inheritance = entityClass.getAnnotation(Inheritance.class);

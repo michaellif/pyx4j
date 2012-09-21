@@ -90,6 +90,9 @@ public class TestConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurati
     public NamingConvention namingConvention() {
         ShortWords shortWords = new ShortWords();
         shortWords.add("TEST", "T");
+        shortWords.add("HOLDER", "HLR");
+        shortWords.add("POLYMORPHIC", "PLM");
+        shortWords.add("HOLDERDISCRIMINATOR", "HOLDER_D");
         return new NamingConventionOracle(64, shortWords);
     }
 }

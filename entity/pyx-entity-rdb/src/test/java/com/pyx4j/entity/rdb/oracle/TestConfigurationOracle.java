@@ -86,6 +86,7 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("READ", "R");
         shortWords.add("OWNED", "OW");
         shortWords.add("OWNER", "OR");
+        shortWords.add("POLYMORPHIC", "PLM");
         shortWords.add("MAIN", "M");
         shortWords.add("MEMBER", "MBR");
         shortWords.add("HOLDER", "HLR");

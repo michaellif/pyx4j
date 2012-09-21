@@ -38,6 +38,7 @@ import com.pyx4j.entity.test.shared.domain.inherit.Concrete3AssignedPKEntity;
 import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntity;
 import com.pyx4j.entity.test.shared.domain.inherit.ReferenceNotOwnerEntity;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SBase;
+import com.pyx4j.entity.test.shared.domain.inherit.single.SConcrete1;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SConcrete2;
 import com.pyx4j.entity.test.shared.domain.inherit.single.SReference;
 
@@ -561,5 +562,37 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Assert.assertEquals("Proper value", entr1.reference().nameB1().getValue(), ent2r2.nameB1().getValue());
         Assert.assertEquals("Proper value", ent2.nameC2().getValue(), ent2r2.nameC2().getValue());
 
+    }
+
+    public void testSingleTableQuery() {
+        String testId = uniqueString();
+
+        SConcrete1 ent1 = EntityFactory.create(SConcrete1.class);
+        ent1.testId().setValue(testId);
+        ent1.nameC1().setValue("c1:" + uniqueString());
+        ent1.nameB1().setValue("b1:" + uniqueString());
+        srv.persist(ent1);
+
+        SConcrete2 ent2 = EntityFactory.create(SConcrete2.class);
+        ent2.testId().setValue(testId);
+        ent2.nameC2().setValue("c2:" + uniqueString());
+        ent2.nameB1().setValue("b1:" + uniqueString());
+        srv.persist(ent2);
+
+        // Test Query
+        {
+            EntityQueryCriteria<SBase> criteria = EntityQueryCriteria.create(SBase.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            List<SBase> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 2, found.size());
+        }
+
+        {
+            EntityQueryCriteria<SBase> criteria = EntityQueryCriteria.create(SBase.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().nameB1(), ent2.nameB1()));
+            List<SBase> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 1, found.size());
+        }
     }
 }

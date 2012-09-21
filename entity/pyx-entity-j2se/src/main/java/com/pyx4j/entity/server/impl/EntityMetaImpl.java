@@ -62,7 +62,7 @@ public class EntityMetaImpl implements EntityMeta {
 
     private final Class<? extends IEntity> expandedFromClass;
 
-    private final Class<? extends IEntity> perstableSuperClass;
+    private final Class<? extends IEntity> persistableSuperClass;
 
     private final String persistenceName;
 
@@ -93,21 +93,21 @@ public class EntityMetaImpl implements EntityMeta {
     public EntityMetaImpl(Class<? extends IEntity> clazz) {
         entityClass = clazz;
 
-        Class<? extends IEntity> perstableSuperClass = null;
+        Class<? extends IEntity> persistableSuperClass = null;
         DiscriminatorValue discriminator = clazz.getAnnotation(DiscriminatorValue.class);
         if ((discriminator != null) || (clazz.getAnnotation(AbstractEntity.class) != null)) {
-            perstableSuperClass = findSingeTableInheritance(entityClass);
+            persistableSuperClass = findSingeTableInheritance(entityClass);
         } else {
-            perstableSuperClass = null;
+            persistableSuperClass = null;
         }
 
-        if (perstableSuperClass != entityClass) {
-            this.perstableSuperClass = perstableSuperClass;
+        if (persistableSuperClass != entityClass) {
+            this.persistableSuperClass = persistableSuperClass;
         } else {
-            this.perstableSuperClass = null;
+            this.persistableSuperClass = null;
         }
 
-        Class<? extends IEntity> persistableClass = perstableSuperClass;
+        Class<? extends IEntity> persistableClass = persistableSuperClass;
         if (persistableClass == null) {
             persistableClass = entityClass;
         }
@@ -170,9 +170,9 @@ public class EntityMetaImpl implements EntityMeta {
                 if ((inheritance != null) && (inheritance.strategy() == Inheritance.InheritanceStrategy.SINGLE_TABLE)) {
                     return superEntityClasses;
                 } else {
-                    Class<? extends IEntity> perstableSuperClass = findSingeTableInheritance(superEntityClasses);
-                    if (perstableSuperClass != null) {
-                        return perstableSuperClass;
+                    Class<? extends IEntity> persistableSuperClass = findSingeTableInheritance(superEntityClasses);
+                    if (persistableSuperClass != null) {
+                        return persistableSuperClass;
                     }
                 }
             }
@@ -191,8 +191,8 @@ public class EntityMetaImpl implements EntityMeta {
     }
 
     @Override
-    public Class<? extends IEntity> getPerstableSuperClass() {
-        return perstableSuperClass;
+    public Class<? extends IEntity> getPersistableSuperClass() {
+        return persistableSuperClass;
     }
 
     @Override

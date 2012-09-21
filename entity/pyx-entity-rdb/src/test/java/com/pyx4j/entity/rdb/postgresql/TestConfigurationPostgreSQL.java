@@ -82,6 +82,9 @@ public class TestConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Config
         ShortWords shortWords = new ShortWords();
         shortWords.add("TEST", "T");
         shortWords.add("PARENT", "PA");
+        shortWords.add("HOLDER", "HLR");
+        shortWords.add("POLYMORPHIC", "PLM");
+        shortWords.add("HOLDERDISCRIMINATOR", "HOLDER_D");
         return new NamingConventionOracle(63, shortWords);
     }
 }

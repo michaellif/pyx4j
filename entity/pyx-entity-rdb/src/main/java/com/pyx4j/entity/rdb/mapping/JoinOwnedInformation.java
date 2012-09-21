@@ -50,7 +50,7 @@ public class JoinOwnedInformation extends JoinInformation {
         joinTableSameAsTarget = true;
 
         sqlOwnerName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(ownerMemberMeta));
-        ownerValueAdapter = EntityOperationsMeta.createEntityValueAdapter(dialect, ownerMemberMeta);
+        ownerValueAdapter = EntityOperationsMeta.createEntityValueAdapter(dialect, entityMeta, ownerMemberMeta);
 
         if (memberMeta.getObjectClassType() == ObjectClassType.EntityList) {
             MemberMeta orderMemberMeta = findOrderMember(childEntityMeta);

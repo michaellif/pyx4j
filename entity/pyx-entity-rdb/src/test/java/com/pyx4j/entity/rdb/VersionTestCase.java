@@ -39,6 +39,9 @@ import com.pyx4j.entity.test.shared.domain.version.ItemA.ItemAVersion;
 import com.pyx4j.entity.test.shared.domain.version.ItemB;
 import com.pyx4j.entity.test.shared.domain.version.OwnedByVerOneToManyChild;
 import com.pyx4j.entity.test.shared.domain.version.OwnedByVerOneToManyParent;
+import com.pyx4j.entity.test.shared.domain.version.PolymorphicVersionedA;
+import com.pyx4j.entity.test.shared.domain.version.PolymorphicVersionedB;
+import com.pyx4j.entity.test.shared.domain.version.PolymorphicVersionedSuper;
 import com.pyx4j.entity.test.shared.domain.version.RefToCurrent;
 import com.pyx4j.entity.test.shared.domain.version.RefToVersioned;
 import com.pyx4j.gwt.server.DateUtils;
@@ -781,6 +784,77 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             EntityQueryCriteria<OwnedByVerOneToManyChild> criteriaChildren = EntityQueryCriteria.create(OwnedByVerOneToManyChild.class);
             criteriaChildren.add(PropertyCriterion.eq(criteriaChildren.proto().testId(), testId));
             assertEquals("ChildrenRemain", 0, srv.count(criteriaChildren));
+        }
+    }
+
+    public void testPolymorphicVersioned() {
+        String testId = uniqueString();
+
+        final String commonNameA = "Ca-" + uniqueString();
+        final String commonNameB = "Cb-" + uniqueString();
+
+        final String currentName = "V0-" + uniqueString();
+        final String currentNameA = "Va0-" + uniqueString();
+        final String currentNameB = "Vb0-" + uniqueString();
+
+        // Initial item
+        PolymorphicVersionedA itemA1 = EntityFactory.create(PolymorphicVersionedA.class);
+        {
+            itemA1.testId().setValue(testId);
+            itemA1.name().setValue(commonNameA);
+
+            itemA1.version().name().setValue(currentName);
+            itemA1.version().testId().setValue(testId);
+            itemA1.version().dataAv().setValue(currentNameA);
+
+            //Save initial value (Draft then finalize)
+            srv.persist(itemA1);
+            itemA1.saveAction().setValue(SaveAction.saveAsFinal);
+            srv.persist(itemA1);
+        }
+
+        PolymorphicVersionedB itemB1 = EntityFactory.create(PolymorphicVersionedB.class);
+        {
+            itemB1.testId().setValue(testId);
+            itemB1.name().setValue(commonNameB);
+
+            itemB1.version().name().setValue(currentName);
+            itemB1.version().testId().setValue(testId);
+            itemB1.version().dataBv().setValue(currentNameB);
+
+            //Save initial value (Draft then finalize)
+            srv.persist(itemB1);
+            itemB1.saveAction().setValue(SaveAction.saveAsFinal);
+            srv.persist(itemB1);
+        }
+
+        // Test Query Super by Owner
+        {
+            EntityQueryCriteria<PolymorphicVersionedSuper.PolymorphicVersionDataSuper> criteria = EntityQueryCriteria
+                    .create(PolymorphicVersionedSuper.PolymorphicVersionDataSuper.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().holder(), itemB1));
+            List<PolymorphicVersionedSuper.PolymorphicVersionDataSuper> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 1, found.size());
+        }
+
+        // Test Query leaf by Owner Key
+        {
+            EntityQueryCriteria<PolymorphicVersionedB.PolymorphicVersionDataB> criteria = EntityQueryCriteria
+                    .create(PolymorphicVersionedB.PolymorphicVersionDataB.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().holder(), itemB1.getPrimaryKey()));
+            List<PolymorphicVersionedB.PolymorphicVersionDataB> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 1, found.size());
+        }
+
+        // Test Query by Super
+        {
+            EntityQueryCriteria<PolymorphicVersionedSuper> criteria = EntityQueryCriteria.create(PolymorphicVersionedSuper.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().name(), commonNameA));
+            List<PolymorphicVersionedSuper> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 1, found.size());
         }
     }
 }

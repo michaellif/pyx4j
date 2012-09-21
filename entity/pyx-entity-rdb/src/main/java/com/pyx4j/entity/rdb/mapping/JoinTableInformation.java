@@ -66,7 +66,7 @@ class JoinTableInformation extends JoinInformation {
         }
         MemberMeta ownerMemberMeta = findOwnerMember(joinEntityMeta);
         sqlOwnerName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(ownerMemberMeta));
-        ownerValueAdapter = EntityOperationsMeta.createEntityValueAdapter(dialect, ownerMemberMeta);
+        ownerValueAdapter = EntityOperationsMeta.createEntityValueAdapter(dialect, rootEntityMeta, ownerMemberMeta);
 
         MemberMeta orderMemberMeta = findOrderMember(joinEntityMeta);
 
