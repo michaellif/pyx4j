@@ -481,13 +481,10 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().id(), unitPk));
 
-        if (VistaTODO.queryByProductCatalog_VISTA_1997) {
-            criteria.add(PropertyCriterion.isNotNull(criteria.proto().productItems().$().product()));
-        } else {
-            // and finalized current Product only:
-            criteria.add(PropertyCriterion.isNotNull(criteria.proto().productItems().$().product().fromDate()));
-            criteria.add(PropertyCriterion.isNull(criteria.proto().productItems().$().product().toDate()));
-        }
+        // and finalized current Product only:
+        criteria.add(PropertyCriterion.isNotNull(criteria.proto().productItems().$().product().fromDate()));
+        criteria.add(PropertyCriterion.isNull(criteria.proto().productItems().$().product().toDate()));
+
         if (Persistence.service().exists(criteria)) {
             if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
                 return true; // newly created unit - can be scoped to any
@@ -746,7 +743,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
 
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), unit.building()));
-        criteria.add(PropertyCriterion.in(criteria.proto().version().type(), SERVICES_PROVIDED_BY_UNIT));
+        criteria.add(PropertyCriterion.in(criteria.proto().version().serviceType(), SERVICES_PROVIDED_BY_UNIT));
 
         List<Service> services = Persistence.secureQuery(criteria);
         for (Service service : services) {

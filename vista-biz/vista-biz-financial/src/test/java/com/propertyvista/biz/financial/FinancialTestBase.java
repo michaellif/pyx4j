@@ -433,7 +433,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Service.ServiceV service = serviceItem.product().cast();
         Persistence.service().retrieve(service.features());
         for (Feature feature : service.features()) {
-            if (featureType.equals(feature.version().type().getValue()) && feature.version().items().size() != 0) {
+            if (featureType.equals(feature.version().featureType().getValue()) && feature.version().items().size() != 0) {
                 LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
                 BillableItem billableItem = leaseFacade.createBillableItem(feature.version().items().get(0), lease.unit().building());
 

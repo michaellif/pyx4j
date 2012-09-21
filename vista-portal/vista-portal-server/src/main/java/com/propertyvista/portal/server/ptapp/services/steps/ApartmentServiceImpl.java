@@ -248,7 +248,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         // fill available items:
         for (Service service : building.productCatalog().services()) {
-            if (service.version().type().equals(lease.type())) {
+            if (service.version().serviceType().equals(lease.type())) {
                 for (Feature feature : service.version().features()) {
                     for (ProductItem item : feature.version().items()) {
                         switch (item.type().<FeatureItemType> cast().featureType().getValue()) {

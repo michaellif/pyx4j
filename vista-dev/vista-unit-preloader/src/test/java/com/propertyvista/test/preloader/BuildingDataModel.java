@@ -134,7 +134,7 @@ public class BuildingDataModel {
     private void generateResidentialUnitService() {
         standardResidentialService = EntityFactory.create(Service.class);
         standardResidentialService.catalog().set(building.productCatalog());
-        standardResidentialService.version().type().setValue(Service.ServiceType.residentialUnit);
+        standardResidentialService.version().serviceType().setValue(Service.ServiceType.residentialUnit);
         standardResidentialService.version().name().setValue("Standard Residential Unit");
         standardResidentialService.version().description().setValue("Standard Residential Unit Lease for 1 year term");
         standardResidentialService.version().visibility().setValue(PublicVisibilityType.global);
@@ -171,12 +171,12 @@ public class BuildingDataModel {
 
         feature.catalog().set(building.productCatalog());
 
-        feature.version().type().setValue(type);
+        feature.version().featureType().setValue(type);
         feature.version().name().setValue("Regular " + type.name());
         feature.version().description().setValue("Feature - " + type.name());
         feature.version().visibility().setValue(PublicVisibilityType.global);
 
-        switch (feature.version().type().getValue()) {
+        switch (feature.version().featureType().getValue()) {
         case parking:
             feature.version().recurring().setValue(true);
             for (Parking parking : building._Parkings()) {

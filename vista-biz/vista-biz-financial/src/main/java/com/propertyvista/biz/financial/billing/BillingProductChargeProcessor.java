@@ -171,7 +171,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
         if (BillingUtils.isService(billableItem.item().product())) {
             charge.debitType().setValue(DebitType.lease);
         } else if (BillingUtils.isFeature(billableItem.item().product())) {
-            switch (billableItem.item().product().<Feature.FeatureV> cast().type().getValue()) {
+            switch (billableItem.item().product().<Feature.FeatureV> cast().featureType().getValue()) {
             case parking:
                 charge.debitType().setValue(DebitType.parking);
                 break;

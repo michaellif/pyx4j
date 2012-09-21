@@ -33,7 +33,7 @@ public class ServiceLister extends VersionedLister<Service> {
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().type()).build(),
+            new MemberColumnDescriptor.Builder(proto().version().serviceType()).build(),
             new MemberColumnDescriptor.Builder(proto().version().name()).build(),
             new MemberColumnDescriptor.Builder(proto().version().visibility(), true).build()
         );//@formatter:on
@@ -45,7 +45,7 @@ public class ServiceLister extends VersionedLister<Service> {
             @Override
             public boolean onClickOk() {
                 Service newService = EntityFactory.create(Service.class);
-                newService.version().type().setValue(getSelectedType());
+                newService.version().serviceType().setValue(getSelectedType());
                 newService.catalog().setPrimaryKey(getPresenter().getParent());
                 getPresenter().editNew(getItemOpenPlaceClass(), newService);
                 return true;

@@ -92,8 +92,8 @@ public class ProductCatalogGenerator {
 
     public void buildEligibilityMatrix(ProductCatalog catalog) {
         for (Service srv : catalog.services()) {
-            if (srv.version().type().getValue().equals(Service.ServiceType.residentialUnit)
-                    || srv.version().type().getValue().equals(Service.ServiceType.commercialUnit)) {
+            if (srv.version().serviceType().getValue().equals(Service.ServiceType.residentialUnit)
+                    || srv.version().serviceType().getValue().equals(Service.ServiceType.commercialUnit)) {
 
                 int count = catalog.features().size();
                 for (int i = 0; i < count; ++i) {
@@ -113,7 +113,7 @@ public class ProductCatalogGenerator {
         Service item = EntityFactory.create(Service.class);
         item.catalog().set(catalog);
 
-        item.version().type().setValue(type);
+        item.version().serviceType().setValue(type);
         item.version().name().setValue(RandomUtil.randomLetters(6));
         item.version().description().setValue("Service description");
         item.version().visibility().setValue(PublicVisibilityType.global);
@@ -171,7 +171,7 @@ public class ProductCatalogGenerator {
         Feature item = EntityFactory.create(Feature.class);
         item.catalog().set(catalog);
 
-        item.version().type().setValue(type);
+        item.version().featureType().setValue(type);
         item.version().name().setValue(RandomUtil.randomLetters(6));
         item.version().description().setValue("Feature description");
         item.version().visibility().setValue(PublicVisibilityType.global);
@@ -307,7 +307,7 @@ public class ProductCatalogGenerator {
 
     private Service getService(ProductCatalog catalog, Service.ServiceType type) {
         for (Service service : catalog.services()) {
-            if (service.version().type().getValue().equals(type)) {
+            if (service.version().serviceType().getValue().equals(type)) {
                 return service;
             }
         }

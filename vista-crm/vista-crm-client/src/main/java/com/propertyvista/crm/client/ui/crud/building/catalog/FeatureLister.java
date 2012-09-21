@@ -33,7 +33,7 @@ public class FeatureLister extends VersionedLister<Feature> {
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().type(), true).build(),
+            new MemberColumnDescriptor.Builder(proto().version().featureType(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().mandatory(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().recurring(), true).build(),
@@ -47,7 +47,7 @@ public class FeatureLister extends VersionedLister<Feature> {
             @Override
             public boolean onClickOk() {
                 Feature feature = EntityFactory.create(Feature.class);
-                feature.version().type().setValue(getSelectedType());
+                feature.version().featureType().setValue(getSelectedType());
                 feature.catalog().setPrimaryKey(getPresenter().getParent());
                 getPresenter().editNew(getItemOpenPlaceClass(), feature);
                 return true;

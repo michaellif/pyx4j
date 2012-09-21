@@ -315,7 +315,7 @@ public class AvailabilityReportManager {
 
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), unit.building()));
-        criteria.add(PropertyCriterion.in(criteria.proto().version().type(),
+        criteria.add(PropertyCriterion.in(criteria.proto().version().serviceType(),
                 new Vector<Service.ServiceType>(Arrays.asList(Service.ServiceType.residentialUnit, Service.ServiceType.commercialUnit))));
 
         List<Service> services = Persistence.secureQuery(criteria);
@@ -324,7 +324,7 @@ public class AvailabilityReportManager {
             Persistence.service().retrieve(service.version().items());
             for (ProductItem item : service.version().items()) {
                 if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(unit.getPrimaryKey())) {
-                    if (service.version().type().getValue() == ServiceType.residentialUnit) {
+                    if (service.version().serviceType().getValue() == ServiceType.residentialUnit) {
                         residentialUnitMarketRent = item.price().getValue();
                         break;
                     }

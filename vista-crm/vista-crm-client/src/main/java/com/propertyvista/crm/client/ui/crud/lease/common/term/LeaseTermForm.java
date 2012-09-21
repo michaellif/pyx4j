@@ -159,21 +159,15 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                                 filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
                             }
 
-                            if (!VistaTODO.queryByProductCatalog_VISTA_1997) {
-                                filters.add(PropertyCriterion.in(proto().productItems().$().product().visibility(), PublicVisibilityType.visibleToTenant()));
-                            }
+                            filters.add(PropertyCriterion.in(proto().productItems().$().product().visibility(), PublicVisibilityType.visibleToTenant()));
 
                         } else {
                             assert false : "Incorrect situation! Value shouln'd be edited in this lease status!";
                         }
 
-                        if (VistaTODO.queryByProductCatalog_VISTA_1997) {
-                            filters.add(PropertyCriterion.isNotNull(proto().productItems().$().product()));
-                        } else {
-                            // and finalized current Product only:
-                            filters.add(PropertyCriterion.isNotNull(proto().productItems().$().product().fromDate()));
-                            filters.add(PropertyCriterion.isNull(proto().productItems().$().product().toDate()));
-                        }
+                        // and finalized current Product only:
+                        filters.add(PropertyCriterion.isNotNull(proto().productItems().$().product().fromDate()));
+                        filters.add(PropertyCriterion.isNull(proto().productItems().$().product().toDate()));
 
                         super.setFilters(filters);
                     };

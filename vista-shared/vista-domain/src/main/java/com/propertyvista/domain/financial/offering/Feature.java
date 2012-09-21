@@ -20,7 +20,6 @@ import java.util.EnumSet;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -85,8 +84,7 @@ public interface Feature extends Product<FeatureV> {
 
         @NotNull
         @ToString(index = 0)
-        @MemberColumn(name = "featureType")
-        IPrimitive<Type> type();
+        IPrimitive<Type> featureType();
 
         IPrimitive<Boolean> recurring();
 

@@ -69,7 +69,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
     @Override
     protected void addItem() {
         EntitySelectorTableDialog<?> buildingElementSelectionBox = null;
-        switch (parent.getValue().version().type().getValue()) {
+        switch (parent.getValue().version().serviceType().getValue()) {
         case residentialUnit:
 // VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
 //        case residentialShortTermUnit:
@@ -132,7 +132,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             boolean isViewable = false;
             Class<? extends IEntity> buildingElementClass = null;
-            switch (parent.getValue().version().type().getValue()) {
+            switch (parent.getValue().version().serviceType().getValue()) {
             case residentialUnit:
 // VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
 //            case residentialShortTermUnit:
@@ -175,7 +175,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             if (column.getObject() == proto().type()) {
                 if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
                     final CEntityComboBox<ServiceItemType> combo = (CEntityComboBox<ServiceItemType>) comp;
-                    combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), parent.getValue().version().type()));
+                    combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), parent.getValue().version().serviceType()));
 // TODO : preselect if single option:                    
 //                    combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), parent.getValue().version().type()));
 //                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ProductItemType>>() {

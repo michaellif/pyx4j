@@ -107,7 +107,7 @@ public class AptUnitOccupancyManagerTestBase {
         Persistence.service().merge(unit);
 
         Service service = EntityFactory.create(Service.class);
-        service.version().type().setValue(ServiceType.residentialUnit);
+        service.version().serviceType().setValue(ServiceType.residentialUnit);
         service.version().name().setValue("Residential Unit Service");
         service.version().description().setValue("Residential Unit Descriptio");
 

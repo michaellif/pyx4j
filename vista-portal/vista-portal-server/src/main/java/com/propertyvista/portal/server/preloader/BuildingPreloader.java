@@ -277,7 +277,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 //            }
 
             for (Feature feature : building.productCatalog().features()) {
-                switch (feature.version().type().getValue()) {
+                switch (feature.version().featureType().getValue()) {
                 case parking:
                     for (ProductItem item : feature.version().items()) {
                         item.element().set(RandomUtil.random(buildingParkings));

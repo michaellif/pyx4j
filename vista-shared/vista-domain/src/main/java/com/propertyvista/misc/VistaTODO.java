@@ -42,8 +42,6 @@ public interface VistaTODO {
     /** joins with conditions */
     public final boolean complextQueryCriteria = true;
 
-    public final boolean queryByProductCatalog_VISTA_1997 = true;
-
     public final boolean VISTA_1588 = true;
 
 }

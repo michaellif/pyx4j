@@ -82,7 +82,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             Class<? extends IEntity> buildingElementClass = null;
-            switch (parent.getValue().version().type().getValue()) {
+            switch (parent.getValue().version().featureType().getValue()) {
             case parking:
                 buildingElementClass = Parking.class;
                 break;
@@ -113,7 +113,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
             if (column.getObject() == proto().type()) {
                 if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
                     final CEntityComboBox<FeatureItemType> combo = (CEntityComboBox<FeatureItemType>) comp;
-                    combo.addCriterion(PropertyCriterion.eq(combo.proto().featureType(), parent.getValue().version().type()));
+                    combo.addCriterion(PropertyCriterion.eq(combo.proto().featureType(), parent.getValue().version().featureType()));
 // TODO : preselect if single option:                    
 //                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ProductItemType>>() {
 //                        @Override

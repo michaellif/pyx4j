@@ -115,7 +115,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     private void retrieveServicePrices(AptUnitDTO dto) {
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), dto.building()));
-        criteria.add(PropertyCriterion.in(criteria.proto().version().type(), SERVICES_PROVIDED_BY_UNIT));
+        criteria.add(PropertyCriterion.in(criteria.proto().version().serviceType(), SERVICES_PROVIDED_BY_UNIT));
 
         List<Service> services = Persistence.secureQuery(criteria);
         for (Service service : services) {
@@ -124,7 +124,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
                 if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(dto.getPrimaryKey())) {
                     AptUnitServicePriceDTO serviceDTO = EntityFactory.create(AptUnitServicePriceDTO.class);
                     serviceDTO.id().setValue(service.id().getValue());
-                    serviceDTO.type().setValue(service.version().type().getValue());
+                    serviceDTO.type().setValue(service.version().serviceType().getValue());
                     serviceDTO.price().setValue(item.price().getValue());
                     dto.marketPrices().add(serviceDTO);
                 }
