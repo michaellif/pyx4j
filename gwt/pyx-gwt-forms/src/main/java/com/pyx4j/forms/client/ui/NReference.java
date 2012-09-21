@@ -45,10 +45,11 @@ public class NReference<E> extends NComponent<E, Label, CReference<E>, Anchor> i
                 text = value.toString();
             }
         }
-        if (comp.isAllowHtml()) {
-            setHTML(text);
-        } else {
-            setText(text);
+        if (getEditor() != null) {
+            getEditor().setText(text);
+        }
+        if (getViewer() != null) {
+            getViewer().setText(text);
         }
     }
 
@@ -56,24 +57,6 @@ public class NReference<E> extends NComponent<E, Label, CReference<E>, Anchor> i
     public E getNativeValue() throws ParseException {
         assert false : "getNativeValue() shouldn't be called on Reference";
         return null;
-    }
-
-    @Override
-    public void setWordWrap(boolean wrap) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setHTML(String text) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setText(String text) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override

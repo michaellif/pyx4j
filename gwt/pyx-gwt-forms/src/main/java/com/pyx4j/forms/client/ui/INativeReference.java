@@ -22,10 +22,4 @@ package com.pyx4j.forms.client.ui;
 
 public interface INativeReference<E> extends INativeComponent<E> {
 
-    void setWordWrap(boolean wrap);
-
-    void setHTML(String text);
-
-    void setText(String text);
-
 }

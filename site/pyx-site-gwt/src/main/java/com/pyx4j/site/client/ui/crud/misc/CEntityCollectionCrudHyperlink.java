@@ -30,7 +30,6 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
 
     protected CEntityCollectionCrudHyperlink(String title) {
         super(title);
-        setWordWrap(true);
         setFormat(new IFormat<E>() {
             @Override
             public String format(E value) {

@@ -28,7 +28,6 @@ public class CEntityHyperlink<E extends IEntity> extends CReference<E> {
 
     protected CEntityHyperlink(String title) {
         super(title);
-        setWordWrap(true);
         setFormat(new IFormat<E>() {
             @Override
             public String format(E value) {

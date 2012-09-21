@@ -24,10 +24,6 @@ import com.google.gwt.user.client.Command;
 
 public abstract class CReference<E> extends CComponent<E, NReference<E>> {
 
-    private boolean wordWrap = false;
-
-    private boolean allowHtml = false;
-
     private IFormat<E> format;
 
     private Command command;
@@ -56,7 +52,6 @@ public abstract class CReference<E> extends CComponent<E, NReference<E>> {
     @Override
     protected NReference<E> createWidget() {
         NReference<E> widget = new NReference<E>(this);
-        widget.setWordWrap(this.isWordWrap());
         return widget;
     }
 
@@ -66,25 +61,6 @@ public abstract class CReference<E> extends CComponent<E, NReference<E>> {
 
     public IFormat<E> getFormat() {
         return format;
-    }
-
-    public boolean isWordWrap() {
-        return wordWrap;
-    }
-
-    public void setWordWrap(boolean wrap) {
-        if (isWidgetCreated()) {
-            getWidget().setWordWrap(wrap);
-        }
-        wordWrap = wrap;
-    }
-
-    public boolean isAllowHtml() {
-        return allowHtml;
-    }
-
-    public void setAllowHtml(boolean allowHtml) {
-        this.allowHtml = allowHtml;
     }
 
     @Override
