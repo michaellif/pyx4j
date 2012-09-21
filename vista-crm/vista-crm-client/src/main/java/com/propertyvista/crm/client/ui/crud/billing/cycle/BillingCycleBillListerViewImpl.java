@@ -15,15 +15,11 @@ package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
@@ -58,7 +54,7 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
             @Override
             public void onClick(ClickEvent event) {
                 if (!getLister().getDataTablePanel().getDataTable().getCheckedItems().isEmpty()) {
-                    new ActionBox(i18n.tr("Reject Selected")) {
+                    new ReasonBox(i18n.tr("Reject Selected")) {
                         @Override
                         public boolean onClickOk() {
                             ((BillingCycleBillListerView.Presenter) getPresenter()).reject(getLister().getDataTablePanel().getDataTable().getCheckedItems(),
@@ -87,32 +83,5 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
     public void setActionButtonsVisible(boolean visible) {
         approveAction.setVisible(visible);
         rejectAction.setVisible(visible);
-    }
-
-    private abstract class ActionBox extends OkCancelDialog {
-
-        private final CTextArea reason = new CTextArea();
-
-        public ActionBox(String title) {
-            super(title);
-            setBody(createBody());
-            setSize("350px", "100px");
-        }
-
-        protected Widget createBody() {
-            getOkButton().setEnabled(true);
-
-            VerticalPanel content = new VerticalPanel();
-            content.add(new HTML(i18n.tr("Please fill the reason") + ":"));
-            content.add(reason);
-
-            reason.setWidth("100%");
-            content.setWidth("100%");
-            return content.asWidget();
-        }
-
-        public String getReason() {
-            return reason.getValue();
-        }
     }
 }

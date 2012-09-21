@@ -14,15 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.customer.lead.appointment;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.MenuItem;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingListerView;
 import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingListerViewImpl;
@@ -46,7 +42,7 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
         closeAction = new MenuItem(i18n.tr("Close"), new Command() {
             @Override
             public void execute() {
-                new ActionBox(i18n.tr("Close Appointment")) {
+                new ReasonBox(i18n.tr("Close Appointment")) {
                     @Override
                     public boolean onClickOk() {
                         ((AppointmentViewerView.Presenter) getPresenter()).close(getReason());
@@ -80,32 +76,5 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
         setEditingVisible(value.lead().status().getValue() != Lead.Status.closed);
 
         setActionVisible(closeAction, value.status().getValue() != Appointment.Status.closed);
-    }
-
-    private abstract class ActionBox extends OkCancelDialog {
-
-        private final CTextArea reason = new CTextArea();
-
-        public ActionBox(String title) {
-            super(title);
-            setBody(createBody());
-            setSize("350px", "100px");
-        }
-
-        protected Widget createBody() {
-            getOkButton().setEnabled(true);
-
-            VerticalPanel content = new VerticalPanel();
-            content.add(new HTML(i18n.tr("Please fill the reason") + ":"));
-            content.add(reason);
-
-            reason.setWidth("100%");
-            content.setWidth("100%");
-            return content.asWidget();
-        }
-
-        public String getReason() {
-            return reason.getValue();
-        }
     }
 }

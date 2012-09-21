@@ -15,22 +15,16 @@ package com.propertyvista.crm.client.ui.crud.lease.application;
 
 import java.util.List;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.MenuItem;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -225,38 +219,16 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         }
     }
 
-    private abstract class ActionBox extends OkCancelDialog {
-
-        private final CTextArea reason = new CTextArea();
+    private abstract class ActionBox extends ReasonBox {
 
         public ActionBox(String title) {
             super(title);
-            setBody(createBody());
-            setSize("350px", "100px");
-        }
-
-        protected Widget createBody() {
-            getOkButton().setEnabled(false);
-
-            VerticalPanel content = new VerticalPanel();
-            content.add(new HTML(i18n.tr("Please fill the reason") + ":"));
-            content.add(reason);
-            reason.addValueChangeHandler(new ValueChangeHandler<String>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<String> event) {
-                    getOkButton().setEnabled(!event.getValue().isEmpty());
-                }
-            });
-
-            reason.setWidth("100%");
-            content.setWidth("100%");
-            return content.asWidget();
         }
 
         public LeaseApplicationActionDTO updateValue(Action status) {
             LeaseApplicationActionDTO action = EntityFactory.create(LeaseApplicationActionDTO.class);
             action.leaseId().set(getForm().getValue().createIdentityStub());
-            action.decisionReason().setValue(reason.getValue());
+            action.decisionReason().setValue(getReason());
             action.action().setValue(status);
             return action;
         }

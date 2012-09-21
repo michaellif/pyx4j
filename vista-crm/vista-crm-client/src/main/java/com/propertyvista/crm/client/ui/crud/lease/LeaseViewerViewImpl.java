@@ -17,8 +17,6 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -29,7 +27,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -46,6 +43,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentLister;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillLister;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
@@ -425,38 +423,5 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     @Override
     public void reportSendMailActionResult(String message) {
         MessageDialog.info(message);
-    }
-
-    private abstract class ReasonBox extends OkCancelDialog {
-
-        private final CTextArea reason = new CTextArea();
-
-        public ReasonBox(String title) {
-            super(title);
-            setBody(createBody());
-            setSize("350px", "100px");
-        }
-
-        protected Widget createBody() {
-            getOkButton().setEnabled(false);
-
-            VerticalPanel content = new VerticalPanel();
-            content.add(new HTML(i18n.tr("Please fill the reason") + ":"));
-            content.add(reason);
-            reason.addValueChangeHandler(new ValueChangeHandler<String>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<String> event) {
-                    getOkButton().setEnabled(!event.getValue().isEmpty());
-                }
-            });
-
-            reason.setWidth("100%");
-            content.setWidth("100%");
-            return content.asWidget();
-        }
-
-        public String getReason() {
-            return reason.getValue();
-        }
     }
 }

@@ -14,15 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.billing.bill;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.MenuItem;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
@@ -69,7 +65,7 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> imple
         rejectAction = new MenuItem(DECLINE, new Command() {
             @Override
             public void execute() {
-                new ActionBox(DECLINE) {
+                new ReasonBox(DECLINE) {
                     @Override
                     public boolean onClickOk() {
                         ((BillViewerView.Presenter) getPresenter()).reject(getReason());
@@ -94,32 +90,5 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> imple
         setActionVisible(approveAction, value.bill().billStatus().getValue() == BillStatus.Finished);
         setActionVisible(rejectAction, value.bill().billStatus().getValue() == BillStatus.Finished);
         super.populate(value);
-    }
-
-    private abstract class ActionBox extends OkCancelDialog {
-
-        private final CTextArea reason = new CTextArea();
-
-        public ActionBox(String title) {
-            super(title);
-            setBody(createBody());
-            setSize("350px", "100px");
-        }
-
-        protected Widget createBody() {
-            getOkButton().setEnabled(true);
-
-            VerticalPanel content = new VerticalPanel();
-            content.add(new HTML(i18n.tr("Please fill the reason") + ":"));
-            content.add(reason);
-
-            reason.setWidth("100%");
-            content.setWidth("100%");
-            return content.asWidget();
-        }
-
-        public String getReason() {
-            return reason.getValue();
-        }
     }
 }
