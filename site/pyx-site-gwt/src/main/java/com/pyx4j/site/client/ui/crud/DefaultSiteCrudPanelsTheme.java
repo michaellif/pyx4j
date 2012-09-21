@@ -30,7 +30,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultSiteCrudPanelsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        HeaderContainer, HeaderToolbar, HeaderBreadcrumbs, Lister, ListerFiltersPanel, ListerListPanel, Header, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton, Visor, VisorHeader, VisorBackButton, VisorCaption
+        HeaderContainer, HeaderToolbar, HeaderBreadcrumbs, Lister, ListerFiltersPanel, ListerListPanel, Header, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton, HighlightedAction, Visor, VisorHeader, VisorBackButton, VisorCaption
     }
 
     public DefaultSiteCrudPanelsTheme() {
@@ -155,6 +155,13 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         style = new Style(selector, " .", StyleName.HighlightedButton, "-", DefaultWidgetsTheme.StyleDependent.disabled);
         style.addProperty("color", ThemeColor.foreground, 0);
         style.addGradient(ThemeColor.foreground, 0.4, ThemeColor.foreground, 0.4);
+        addStyle(style);
+
+        style = new Style(".gwt-MenuBar-vertical", " .", StyleName.HighlightedAction);
+        style.addProperty("color", ThemeColor.foreground, 0);
+//        style.addProperty("background-color", ThemeColor.object1, 0.2);
+        style.addGradient(ThemeColor.object1, 0.1, ThemeColor.object1, 0.5);
+        style.addProperty("font-weight", "bold");
         addStyle(style);
     }
 
