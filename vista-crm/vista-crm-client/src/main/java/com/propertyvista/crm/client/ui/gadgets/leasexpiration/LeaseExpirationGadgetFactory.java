@@ -18,8 +18,10 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
@@ -28,11 +30,15 @@ import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.components.LeasesDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.UnitDetailsFactory;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory.ICriteriaProvider;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeaseExpirationGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpirationGadgetMeta> {
 
@@ -51,8 +57,14 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
 
         @Override
         protected void bindDetailsFactories() {
-            bindDetailsFactory(proto().unitOccupancyLabel(),
-                    new UnitDetailsFactory(GWT.<LeaseExpirationGadgetService> create(LeaseExpirationGadgetService.class), this, proto().occupiedUnits()));
+            ICriteriaProvider<AptUnitDTO, CounterGadgetFilter> unitCriteriaProvider = new ICriteriaProvider<AptUnitDTO, CounterGadgetFilter>() {
+                @Override
+                public void makeCriteria(AsyncCallback<EntityListCriteria<AptUnitDTO>> callback, CounterGadgetFilter filterData) {
+                    GWT.<LeaseExpirationGadgetService> create(LeaseExpirationGadgetService.class).makeUnitFilterCriteria(callback, filterData.getBuildings(),
+                            filterData.getCounterMember().toString());
+                }
+            };
+            bindDetailsFactory(proto().unitOccupancyLabel(), new UnitDetailsFactory(this, unitCriteriaProvider));
 
             bindLeaseDetailsFactory(proto().numOfLeasesEndingThisMonth());
             bindLeaseDetailsFactory(proto().numOfLeasesEndingNextMonth());
@@ -63,9 +75,16 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
         }
 
         private void bindLeaseDetailsFactory(IObject<?> filter) {
-            bindDetailsFactory(filter, new LeasesDetailsFactory(GWT.<LeaseExpirationGadgetService> create(LeaseExpirationGadgetService.class), this, filter));
-        }
+            ICriteriaProvider<LeaseDTO, CounterGadgetFilter> criteriaProvider = new ICriteriaProvider<LeaseDTO, CounterGadgetFilter>() {
 
+                @Override
+                public void makeCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, CounterGadgetFilter filterData) {
+                    GWT.<LeaseExpirationGadgetService> create(LeaseExpirationGadgetService.class).makeLeaseFilterCriteria(callback, filterData.getBuildings(),
+                            filterData.getCounterMember());
+                }
+            };
+            bindDetailsFactory(filter, new LeasesDetailsFactory(this, criteriaProvider));
+        }
     }
 
     public LeaseExpirationGadgetFactory() {

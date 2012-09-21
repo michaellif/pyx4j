@@ -14,21 +14,15 @@
 package com.propertyvista.crm.client.ui.gadgets.components;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
-import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilterProvider;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeasesFromLeadListService;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.LeaseFromLeadCriteriaProvider;
 import com.propertyvista.domain.tenant.lead.Lead;
 
 public class LeasesFromLeadsDetailsFactory extends AbstractListerDetailsFactory<Lead, CounterGadgetFilter> {
@@ -72,19 +66,14 @@ public class LeasesFromLeadsDetailsFactory extends AbstractListerDetailsFactory<
 
     }
 
-    public LeasesFromLeadsDetailsFactory(final LeaseFromLeadCriteriaProvider criteriaProvider, IBuildingFilterContainer buildingFilterContainer,
-            IObject<?> member) {
+    public LeasesFromLeadsDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider,
+            ICriteriaProvider<Lead, CounterGadgetFilter> criteriaProvider) {
         super(//@formatter:off
                 Lead.class,
                 new LeasesFromLeadsLister(),
                 GWT.<LeasesFromLeadListService>create(LeasesFromLeadListService.class),
-                new CounterGadgetFilterProvider(buildingFilterContainer, member.getPath()),
-                new ICriteriaProvider<Lead, CounterGadgetFilter>() {
-                    @Override
-                    public void makeCriteria(AsyncCallback<EntityListCriteria<Lead>> callback, CounterGadgetFilter filterData) {
-                        criteriaProvider.makeLeaseFromLeadCriteria(callback, filterData.getBuildings(), filterData.getCounterMember().toString());
-                    }
-                }
+                filterDataProvider,
+                criteriaProvider
         );//@formatter:on
     }
 }

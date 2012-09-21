@@ -14,18 +14,12 @@
 package com.propertyvista.crm.client.ui.gadgets.components;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 
-import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
-import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilterProvider;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.LeaseCriteriaProvider;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -63,18 +57,13 @@ public class LeasesDetailsFactory extends AbstractListerDetailsFactory<LeaseDTO,
         }
     }
 
-    public LeasesDetailsFactory(final LeaseCriteriaProvider leaseCriteriaProvider, IBuildingFilterContainer buildingFilterContainer, IObject<?> leaseFilter) {
+    public LeasesDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterData, ICriteriaProvider<LeaseDTO, CounterGadgetFilter> criteriaProvider) {
         super(//@formatter:off
                 LeaseDTO.class,
                 new LeasesDetailsLister(),
                 GWT.<LeaseViewerCrudService>create(LeaseViewerCrudService.class),
-                new CounterGadgetFilterProvider(buildingFilterContainer, leaseFilter.getPath()),
-                new ICriteriaProvider<LeaseDTO, CounterGadgetFilter>() {
-                    @Override
-                    public void makeCriteria(final AsyncCallback<EntityListCriteria<LeaseDTO>> callback, CounterGadgetFilter filterData) {
-                        leaseCriteriaProvider.makeLeaseFilterCriteria(callback, filterData.getBuildings(), filterData.getCounterMember().toString());                        
-                    }
-                }                
+                filterData,
+                criteriaProvider
         );//@formatter:on
 
     }

@@ -14,19 +14,13 @@
 package com.propertyvista.crm.client.ui.gadgets.components;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
-import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilterProvider;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.ApplicationsCriteriaProvider;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.misc.VistaTODO;
@@ -76,19 +70,14 @@ public class ApplicationsDetailsFactory extends AbstractListerDetailsFactory<Lea
 
     }
 
-    public ApplicationsDetailsFactory(final ApplicationsCriteriaProvider criteriaProvider, IBuildingFilterContainer buildingFilterProvider,
-            IObject<?> filterPreset) {
+    public ApplicationsDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider,
+            ICriteriaProvider<LeaseApplicationDTO, CounterGadgetFilter> criteriaProvider) {
         super(//@formatter:off
                 LeaseApplicationDTO.class,
                 new ApplicationsLister(),
                 GWT.<LeaseApplicationViewerCrudService>create(LeaseApplicationViewerCrudService.class),
-                new CounterGadgetFilterProvider(buildingFilterProvider, filterPreset.getPath()),
-                new ICriteriaProvider<LeaseApplicationDTO, CounterGadgetFilter>() {
-                    @Override
-                    public void makeCriteria(AsyncCallback<EntityListCriteria<LeaseApplicationDTO>> callback, CounterGadgetFilter filterData) {
-                        criteriaProvider.makeApplicaitonsCriteria(callback, filterData.getBuildings(), filterData.getCounterMember().toString());
-                    }
-                }
+                filterDataProvider,
+                criteriaProvider
         );//@formatter:on
     }
 }

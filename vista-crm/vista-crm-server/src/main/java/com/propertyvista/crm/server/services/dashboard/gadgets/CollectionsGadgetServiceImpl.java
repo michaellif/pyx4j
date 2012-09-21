@@ -102,9 +102,9 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
 
         criteria.add(PropertyCriterion.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Submitted));
         criteria.add(PropertyCriterion.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Canceled));
-        if (proto.fundsCollectedThisMonth() == fundsFilterProto) {
+        if (proto.fundsCollectedThisMonth() == fundsFilterProto | proto.fundsCollectedThisMonthLabel() == fundsFilterProto) {
 
-        } else if (proto.fundsInProcessing() == fundsFilterProto) {
+        } else if (proto.fundsInProcessing() == fundsFilterProto | proto.fundsInProcessingLabel() == fundsFilterProto) {
             criteria.add(PropertyCriterion.in(criteria.proto().paymentStatus(), EnumSet.complementOf(EnumSet.copyOf(PaymentRecord.PaymentStatus.processed()))));
         } else {
             throw new RuntimeException("unknown filter preset: " + fundsFilter);

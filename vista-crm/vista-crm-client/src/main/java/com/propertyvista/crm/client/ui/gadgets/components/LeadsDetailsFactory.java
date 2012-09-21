@@ -14,20 +14,14 @@
 package com.propertyvista.crm.client.ui.gadgets.components;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
-import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilterProvider;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.LeadCriteriaProvider;
 import com.propertyvista.domain.tenant.lead.Lead;
 
 public class LeadsDetailsFactory extends AbstractListerDetailsFactory<Lead, CounterGadgetFilter> {
@@ -50,22 +44,15 @@ public class LeadsDetailsFactory extends AbstractListerDetailsFactory<Lead, Coun
                     new MemberColumnDescriptor.Builder(proto().status(), true).build()
             );//@formatter:on
         }
-
     }
 
-    public LeadsDetailsFactory(final LeadCriteriaProvider leadCriteriaProvider, IBuildingFilterContainer builindgsFilterContainer, IObject<?> filterMember) {
+    public LeadsDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider, ICriteriaProvider<Lead, CounterGadgetFilter> criteriaProvider) {
         super(//@formatter:off
                 Lead.class,
                 new LeadsDetailsLister(),
                 GWT.<LeadCrudService>create(LeadCrudService.class),
-                new CounterGadgetFilterProvider(builindgsFilterContainer, filterMember.getPath()), 
-                new ICriteriaProvider<Lead, CounterGadgetFilter>() {
-
-                    @Override
-                    public void makeCriteria(final AsyncCallback<EntityListCriteria<Lead>> callback, CounterGadgetFilter filterData) {
-                        leadCriteriaProvider.makeLeadFilterCriteria(callback, filterData.getBuildings(), filterData.getCounterMember().toString());                        
-                    }
-                }
+                filterDataProvider,
+                criteriaProvider
         );//@formatter:on
     }
 

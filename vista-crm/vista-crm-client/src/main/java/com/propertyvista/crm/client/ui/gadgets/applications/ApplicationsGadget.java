@@ -16,16 +16,21 @@ package com.propertyvista.crm.client.ui.gadgets.applications;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.ApplicationsDetailsFactory;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory.ICriteriaProvider;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.rpc.dto.gadgets.ApplicationsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ApplicationsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.ApplicationsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.dto.LeaseApplicationDTO;
 
 public class ApplicationsGadget extends CounterGadgetInstanceBase<ApplicationsGadgetDataDTO, Vector<Building>, ApplicationsGadgetMetadata> {
 
@@ -49,7 +54,13 @@ public class ApplicationsGadget extends CounterGadgetInstanceBase<ApplicationsGa
     }
 
     private void bind(IObject<?> member) {
-        bindDetailsFactory(member, new ApplicationsDetailsFactory(GWT.<ApplicationsGadgetService> create(ApplicationsGadgetService.class), this, member));
+        ICriteriaProvider<LeaseApplicationDTO, CounterGadgetFilter> criteriaProvider = new ICriteriaProvider<LeaseApplicationDTO, CounterGadgetFilter>() {
+            @Override
+            public void makeCriteria(AsyncCallback<EntityListCriteria<LeaseApplicationDTO>> callback, CounterGadgetFilter filterData) {
+                GWT.<ApplicationsGadgetService> create(ApplicationsGadgetService.class).makeApplicaitonsCriteria(callback, filterData.getBuildings(),
+                        filterData.getCounterMember());
+            }
+        };
+        bindDetailsFactory(member, new ApplicationsDetailsFactory(this, criteriaProvider));
     }
-
 }

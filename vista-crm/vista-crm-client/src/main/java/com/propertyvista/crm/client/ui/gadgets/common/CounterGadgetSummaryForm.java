@@ -24,17 +24,9 @@ import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 
+/** Now i'm trying to use ZoomableView form */
+@Deprecated
 public abstract class CounterGadgetSummaryForm<E extends IEntity> extends CEntityDecoratableForm<E> {
-
-    public CounterGadgetSummaryForm(Class<E> clazz) {
-        super(clazz, new DetailsLinkFactory<E>());
-        setEditable(false);
-        setViewable(true);
-    }
-
-    public void bindGadget(CounterGadgetInstanceBase<E, ?, ?> gadget) {
-        ((DetailsLinkFactory<E>) factory).bindGadget(gadget);
-    }
 
     private static class DetailsLinkFactory<E extends IEntity> implements IEditableComponentFactory {
 
@@ -46,17 +38,7 @@ public abstract class CounterGadgetSummaryForm<E extends IEntity> extends CEntit
         public CComponent<?, ?> create(final IObject<?> member) {
             assert gadget != null : "please bind a gadget prior to initializing the form";
             if (gadget.hasDetails(member)) {
-                return new CHyperlink(member.getMeta().getDescription(), new Command() {
-
-                    @Override
-                    public void execute() {
-                        if (gadget != null) {
-                            gadget.displayDetails(member);
-                        }
-                    }
-
-                });
-
+                return new CHyperlink(member.getMeta().getDescription(), null);
             } else {
                 return defaultFactory.create(member);
             }
@@ -66,4 +48,35 @@ public abstract class CounterGadgetSummaryForm<E extends IEntity> extends CEntit
             this.gadget = gadget;
         }
     }
+
+    private CounterGadgetInstanceBase<E, ?, ?> gadget;
+
+    public CounterGadgetSummaryForm(Class<E> clazz) {
+        super(clazz, new DetailsLinkFactory<E>());
+        setEditable(false);
+        setViewable(true);
+    }
+
+    public void bindGadget(CounterGadgetInstanceBase<E, ?, ?> gadget) {
+        ((DetailsLinkFactory<E>) factory).bindGadget(gadget);
+        this.gadget = gadget;
+    }
+
+    @Override
+    public CComponent<?, ?> create(final IObject<?> member) {
+        CComponent<?, ?> comp = super.create(member);
+
+        if ((gadget != null) && (comp instanceof CHyperlink) & gadget.hasDetails(member)) {
+            ((CHyperlink) comp).setCommand(new Command() {
+
+                @Override
+                public void execute() {
+                    gadget.displayDetails(member);
+                }
+
+            });
+        }
+        return comp;
+    }
+
 }

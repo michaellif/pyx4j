@@ -14,21 +14,15 @@
 package com.propertyvista.crm.client.ui.gadgets.arrears;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
-import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilterProvider;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentTenantDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.DelinquentTenantListService;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.DelinquentTenantCriteriaProvider;
 
 public class DelinquentTenantsDetailsFactory extends AbstractListerDetailsFactory<DelinquentTenantDTO, CounterGadgetFilter> {
 
@@ -69,20 +63,14 @@ public class DelinquentTenantsDetailsFactory extends AbstractListerDetailsFactor
 
     }
 
-    public DelinquentTenantsDetailsFactory(final DelinquentTenantCriteriaProvider tenantCriteriaProvider, IBuildingFilterContainer buildingFilterContainer,
-            IObject<?> member) {
+    public DelinquentTenantsDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider,
+            ICriteriaProvider<DelinquentTenantDTO, CounterGadgetFilter> criteriaProvider) {
         super(//@formatter:off
                 DelinquentTenantDTO.class,
                 new DelinquentTenantsLister(),
                 GWT.<DelinquentTenantListService>create(DelinquentTenantListService.class),
-                new CounterGadgetFilterProvider(buildingFilterContainer, member.getPath()),
-                new ICriteriaProvider<DelinquentTenantDTO, CounterGadgetFilter>() {
-
-                    @Override
-                    public void makeCriteria(AsyncCallback<EntityListCriteria<DelinquentTenantDTO>> callback, CounterGadgetFilter filterData) {
-                        tenantCriteriaProvider.makeTenantCriteria(callback, filterData.getBuildings(), filterData.getCounterMember().toString());
-                    }
-                }
+                filterDataProvider,
+                criteriaProvider
         );//@formatter:on
     }
 

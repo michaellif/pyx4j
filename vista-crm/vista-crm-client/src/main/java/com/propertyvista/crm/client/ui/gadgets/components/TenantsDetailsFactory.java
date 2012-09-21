@@ -14,20 +14,14 @@
 package com.propertyvista.crm.client.ui.gadgets.components;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
-import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilterProvider;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.TenantCriteriaProvider;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantsDetailsFactory extends AbstractListerDetailsFactory<TenantDTO, CounterGadgetFilter> {
@@ -60,19 +54,13 @@ public class TenantsDetailsFactory extends AbstractListerDetailsFactory<TenantDT
 
     }
 
-    public TenantsDetailsFactory(final TenantCriteriaProvider tenantsCriteriaProvider, IBuildingFilterContainer buildingsFilterContainer,
-            IObject<?> tentantFilterPreset) {
+    public TenantsDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider, ICriteriaProvider<TenantDTO, CounterGadgetFilter> criteriaProvider) {
         super(//@formatter:off
                 TenantDTO.class,
                 new TenantsDetailsLister(),
                 GWT.<TenantCrudService>create(TenantCrudService.class),
-                new CounterGadgetFilterProvider(buildingsFilterContainer, tentantFilterPreset.getPath()),
-                new ICriteriaProvider<TenantDTO, CounterGadgetFilter>() {                    
-                    @Override
-                    public void makeCriteria(AsyncCallback<EntityListCriteria<TenantDTO>> callback, CounterGadgetFilter filterData) {
-                        tenantsCriteriaProvider.makeTenantCriteria(callback, filterData.getBuildings(), filterData.getCounterMember().toString());
-                    }                    
-                }
+                filterDataProvider,
+                criteriaProvider
         );//@formatter:on
     }
 }

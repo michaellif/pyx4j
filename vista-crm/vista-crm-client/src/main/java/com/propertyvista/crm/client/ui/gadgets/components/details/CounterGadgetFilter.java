@@ -17,8 +17,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Vector;
 
-import com.pyx4j.entity.shared.Path;
-
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class CounterGadgetFilter implements Serializable {
@@ -27,24 +25,24 @@ public class CounterGadgetFilter implements Serializable {
 
     private final Vector<Building> buildings;
 
-    private final Path counterMember;
+    private final String encodedCounterFilter;
 
     public CounterGadgetFilter() {
         this.buildings = new Vector<Building>();
-        this.counterMember = new Path("/");
+        this.encodedCounterFilter = null;
     }
 
-    public CounterGadgetFilter(Collection<Building> buildings, Path counterMember) {
+    public CounterGadgetFilter(Collection<Building> buildings, String encodedCounterFilter) {
         this.buildings = new Vector<Building>(buildings);
-        this.counterMember = counterMember;
+        this.encodedCounterFilter = encodedCounterFilter;
     }
 
     public Vector<Building> getBuildings() {
         return new Vector<Building>(buildings);
     }
 
-    public Path getCounterMember() {
-        return counterMember;
+    public String getCounterMember() {
+        return encodedCounterFilter;
     }
 
 }

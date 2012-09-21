@@ -16,11 +16,16 @@ package com.propertyvista.crm.client.ui.gadgets.arrears;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory.ICriteriaProvider;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetDataDTO;
+import com.propertyvista.crm.rpc.dto.gadgets.DelinquentTenantDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
@@ -55,7 +60,13 @@ public class ArrearsGadget extends CounterGadgetInstanceBase<ArrearsGadgetDataDT
     }
 
     private void bind(IObject<?> member) {
-        bindDetailsFactory(member, new DelinquentTenantsDetailsFactory(GWT.<ArrearsGadgetService> create(ArrearsGadgetService.class), this, member));
+        ICriteriaProvider<DelinquentTenantDTO, CounterGadgetFilter> criteriaProvider = new ICriteriaProvider<DelinquentTenantDTO, CounterGadgetFilter>() {
+            @Override
+            public void makeCriteria(AsyncCallback<EntityListCriteria<DelinquentTenantDTO>> callback, CounterGadgetFilter filterData) {
+                GWT.<ArrearsGadgetService> create(ArrearsGadgetService.class).makeTenantCriteria(callback, filterData.getBuildings(),
+                        filterData.getCounterMember().toString());
+            }
+        };
+        bindDetailsFactory(member, new DelinquentTenantsDetailsFactory(this, criteriaProvider));
     }
-
 }

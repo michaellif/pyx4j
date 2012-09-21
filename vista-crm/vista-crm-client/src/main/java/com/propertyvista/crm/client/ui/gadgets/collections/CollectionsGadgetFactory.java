@@ -18,8 +18,10 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
@@ -27,11 +29,15 @@ import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.PaymentDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.TenantsDetailsFactory;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory.ICriteriaProvider;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.rpc.dto.gadgets.CollectionsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.CollectionsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.CollectionsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.dto.TenantDTO;
 
 public class CollectionsGadgetFactory extends AbstractGadget<CollectionsGadgetMetadata> {
 
@@ -60,11 +66,26 @@ public class CollectionsGadgetFactory extends AbstractGadget<CollectionsGadgetMe
         }
 
         private void bindTenantsDetailsFactory(IObject<?> member) {
-            bindDetailsFactory(member, new TenantsDetailsFactory(GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class), this, member));
+
+            ICriteriaProvider<TenantDTO, CounterGadgetFilter> criteriaProvider = new ICriteriaProvider<TenantDTO, CounterGadgetFilter>() {
+                @Override
+                public void makeCriteria(AsyncCallback<EntityListCriteria<TenantDTO>> callback, CounterGadgetFilter filterData) {
+                    GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class).makeTenantCriteria(callback, filterData.getBuildings(),
+                            filterData.getCounterMember().toString());
+                }
+            };
+            bindDetailsFactory(member, new TenantsDetailsFactory(this, criteriaProvider));
         }
 
         private void bindPaymentDetailsFactory(IObject<?> member, IObject<?> bindingFilter) {
-            bindDetailsFactory(member, new PaymentDetailsFactory(GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class), this, bindingFilter));
+            ICriteriaProvider<PaymentRecordDTO, CounterGadgetFilter> criteriaProvider = new ICriteriaProvider<PaymentRecordDTO, CounterGadgetFilter>() {
+                @Override
+                public void makeCriteria(AsyncCallback<EntityListCriteria<PaymentRecordDTO>> callback, CounterGadgetFilter filterData) {
+                    GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class).makePaymentCriteria(callback, filterData.getBuildings(),
+                            filterData.getCounterMember().toString());
+                }
+            };
+            bindDetailsFactory(member, new PaymentDetailsFactory(this, criteriaProvider));
         }
     }
 

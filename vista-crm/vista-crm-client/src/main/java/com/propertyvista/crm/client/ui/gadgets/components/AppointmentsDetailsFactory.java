@@ -14,19 +14,13 @@
 package com.propertyvista.crm.client.ui.gadgets.components;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
-import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
-import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilterProvider;
 import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.AppointmentsCriteriaProvider;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
 public class AppointmentsDetailsFactory extends AbstractListerDetailsFactory<Appointment, CounterGadgetFilter> {
@@ -47,19 +41,14 @@ public class AppointmentsDetailsFactory extends AbstractListerDetailsFactory<App
         }
     }
 
-    public AppointmentsDetailsFactory(final AppointmentsCriteriaProvider appointmentsCriteriaProvider, IBuildingFilterContainer builingFilterContainer,
-            IObject<?> filterPreset) {
+    public AppointmentsDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider,
+            ICriteriaProvider<Appointment, CounterGadgetFilter> criteriaProvider) {
         super(//@formatter:off
                 Appointment.class,
                 new AppointmentsDetailsLister(),
                 GWT.<AppointmentCrudService>create(AppointmentCrudService.class),
-                new CounterGadgetFilterProvider(builingFilterContainer, filterPreset.getPath()),
-                new ICriteriaProvider<Appointment, CounterGadgetFilter>() {
-                    @Override
-                    public void makeCriteria(AsyncCallback<EntityListCriteria<Appointment>> callback, CounterGadgetFilter filterData) {
-                        appointmentsCriteriaProvider.makeAppointmentsCriteria(callback, filterData.getBuildings(), filterData.getCounterMember().toString());
-                    }
-                }
+                filterDataProvider,
+                criteriaProvider
         );//@formatter:on
     }
 }

@@ -14,19 +14,13 @@
 package com.propertyvista.crm.client.ui.gadgets.components;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
-import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilterProvider;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.UnitCriteriaProvider;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.dto.AptUnitDTO;
 
@@ -58,14 +52,12 @@ public class UnitDetailsFactory extends AbstractListerDetailsFactory<AptUnitDTO,
 
     }
 
-    public UnitDetailsFactory(final UnitCriteriaProvider unitsCriteriaProvider, IBuildingFilterContainer buildingsFilterProvider, IObject<?> unitsFilter) {
-        super(//@formatter:on
-                AptUnitDTO.class, new UnitsDetailsLister(), GWT.<UnitCrudService> create(UnitCrudService.class), new CounterGadgetFilterProvider(
-                        buildingsFilterProvider, unitsFilter.getPath()), new ICriteriaProvider<AptUnitDTO, CounterGadgetFilter>() {
-                    @Override
-                    public void makeCriteria(AsyncCallback<EntityListCriteria<AptUnitDTO>> callback, CounterGadgetFilter filterData) {
-                        unitsCriteriaProvider.makeUnitFilterCriteria(callback, filterData.getBuildings(), filterData.getCounterMember().toString());
-                    }
-                });//@formatter:off
+    public UnitDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider, ICriteriaProvider<AptUnitDTO, CounterGadgetFilter> criteriaProvider) {
+        super(//@formatter:off
+                AptUnitDTO.class, new UnitsDetailsLister(),
+                GWT.<UnitCrudService> create(UnitCrudService.class),
+                filterDataProvider,
+                criteriaProvider
+                );//@formatter:on
     }
 }

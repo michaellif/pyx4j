@@ -18,20 +18,25 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.MaintenanceRequestsDetailsFactory;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory.ICriteriaProvider;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.rpc.dto.gadgets.MaintenanceGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.MaintenanceGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.MaintenanceRequestCriteriaProvider;
 import com.propertyvista.domain.dashboard.gadgets.type.MaintenanceGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceGadgetFactory extends AbstractGadget<MaintenanceGadgetMetadata> {
 
@@ -57,8 +62,14 @@ public class MaintenanceGadgetFactory extends AbstractGadget<MaintenanceGadgetMe
         }
 
         private void bindDetails(IObject<?> member) {
-            bindDetailsFactory(member, new MaintenanceRequestsDetailsFactory(GWT.<MaintenanceRequestCriteriaProvider> create(MaintenanceGadgetService.class),
-                    this, member));
+            ICriteriaProvider<MaintenanceRequestDTO, CounterGadgetFilter> criteriaProvider = new ICriteriaProvider<MaintenanceRequestDTO, CounterGadgetFilter>() {
+                @Override
+                public void makeCriteria(AsyncCallback<EntityListCriteria<MaintenanceRequestDTO>> callback, CounterGadgetFilter filterData) {
+                    GWT.<MaintenanceRequestCriteriaProvider> create(MaintenanceGadgetService.class).makeMaintenaceRequestCriteria(callback,
+                            filterData.getBuildings(), filterData.getCounterMember().toString());
+                }
+            };
+            bindDetailsFactory(member, new MaintenanceRequestsDetailsFactory(this, criteriaProvider));
         }
     }
 

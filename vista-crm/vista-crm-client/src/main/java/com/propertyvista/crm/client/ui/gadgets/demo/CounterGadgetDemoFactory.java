@@ -24,14 +24,19 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetSummaryForm;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewFolder;
+import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewFolder.IZoomableRowEditorFactory;
+import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewFolder.ZoomableViewEntityRowEditor;
+import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm;
 import com.propertyvista.crm.rpc.dto.gadgets.CounterGadgetDemoDTO;
+import com.propertyvista.crm.rpc.dto.gadgets.CounterGadgetDemoSubDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AbstractCounterGadgetBaseService;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.demo.CounterGadgetDemoMetadata;
@@ -50,9 +55,19 @@ public class CounterGadgetDemoFactory extends AbstractGadget<CounterGadgetDemoMe
                     dto.strValue().setValue("123");
                     dto.doubleValue().setValue(35.5d);
                     dto.moneyValue().setValue(new BigDecimal("99.99"));
+                    CounterGadgetDemoSubDataDTO foo = dto.xs().$();
+                    foo.a().setValue(5);
+                    foo.b().setValue(6);
+                    dto.xs().add(foo);
+
+                    foo = dto.xs().$();
+                    foo.a().setValue(55);
+                    foo.b().setValue(11);
+                    dto.xs().add(foo);
+
                     callback.onSuccess(dto);
                 }
-            }, new CounterGadgetSummaryForm<CounterGadgetDemoDTO>(CounterGadgetDemoDTO.class) {
+            }, new ZoomableViewForm<CounterGadgetDemoDTO>(CounterGadgetDemoDTO.class) {
 
                 @Override
                 public IsWidget createContent() {
@@ -61,6 +76,20 @@ public class CounterGadgetDemoFactory extends AbstractGadget<CounterGadgetDemoMe
                     content.add(new DecoratorBuilder(inject(proto().strValue())).build());
                     content.add(new DecoratorBuilder(inject(proto().doubleValue())).build());
                     content.add(new DecoratorBuilder(inject(proto().moneyValue())).build());
+                    IZoomableRowEditorFactory<CounterGadgetDemoSubDataDTO> factory = new IZoomableRowEditorFactory<CounterGadgetDemoSubDataDTO>() {
+                        @Override
+                        public ZoomableViewEntityRowEditor<CounterGadgetDemoSubDataDTO> createEditor(ZoomableViewFolder<CounterGadgetDemoSubDataDTO> parent,
+                                List<EntityFolderColumnDescriptor> columns) {
+                            return new ZoomableViewEntityRowEditor<CounterGadgetDemoSubDataDTO>(CounterGadgetDemoSubDataDTO.class, columns) {
+                            };
+                        }
+                    };
+                    content.add(inject(proto().xs(), new ZoomableViewFolder<CounterGadgetDemoSubDataDTO>(CounterGadgetDemoSubDataDTO.class, factory) {
+                        @Override
+                        public List<EntityFolderColumnDescriptor> columns() {
+                            return Arrays.asList(new EntityFolderColumnDescriptor(proto().a(), "10em"), new EntityFolderColumnDescriptor(proto().b(), "10em"));
+                        }
+                    }));
                     return content;
                 }
 
@@ -78,6 +107,12 @@ public class CounterGadgetDemoFactory extends AbstractGadget<CounterGadgetDemoMe
                 @Override
                 public Widget createDetailsWidget() {
                     return new HTML("BEHOLD THE DETAILS FOR THE COUNTER");
+                }
+            });
+            bindDetailsFactory(proto().xs().$().a(), new CounterDetailsFactory() {
+                @Override
+                public Widget createDetailsWidget() {
+                    return new HTML("asffsafsdfa");
                 }
             });
         }

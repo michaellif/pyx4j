@@ -16,16 +16,23 @@ package com.propertyvista.crm.client.ui.gadgets.leadsandrentals;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.AppointmentsDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.LeadsDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.LeasesFromLeadsDetailsFactory;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory.ICriteriaProvider;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.rpc.dto.gadgets.LeadsAndRentalsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeadsAndRentalsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.LeadsAndRentalsGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lead.Appointment;
+import com.propertyvista.domain.tenant.lead.Lead;
 
 public class LeadsAndRentalsGadget extends CounterGadgetInstanceBase<LeadsAndRentalsGadgetDataDTO, Vector<Building>, LeadsAndRentalsGadgetMeta> {
 
@@ -46,14 +53,32 @@ public class LeadsAndRentalsGadget extends CounterGadgetInstanceBase<LeadsAndRen
 
     @Override
     protected void bindDetailsFactories() {
-        bindDetailsFactory(proto().leads(), new LeadsDetailsFactory(GWT.<LeadsAndRentalsGadgetService> create(LeadsAndRentalsGadgetService.class), this,
-                proto().leads()));
+        ICriteriaProvider<Lead, CounterGadgetFilter> leadsCriteriaProvider = new ICriteriaProvider<Lead, CounterGadgetFilter>() {
 
-        bindDetailsFactory(proto().appointmentsLabel(),
-                new AppointmentsDetailsFactory(GWT.<LeadsAndRentalsGadgetService> create(LeadsAndRentalsGadgetService.class), this, proto().appointments()));
+            @Override
+            public void makeCriteria(final AsyncCallback<EntityListCriteria<Lead>> callback, CounterGadgetFilter filterData) {
+                GWT.<LeadsAndRentalsGadgetService> create(LeadsAndRentalsGadgetService.class).makeLeadFilterCriteria(callback, filterData.getBuildings(),
+                        filterData.getCounterMember().toString());
+            }
+        };
+        bindDetailsFactory(proto().leads(), new LeadsDetailsFactory(this, leadsCriteriaProvider));
 
-        bindDetailsFactory(proto().rentalsLabel(),
-                new LeasesFromLeadsDetailsFactory(GWT.<LeadsAndRentalsGadgetService> create(LeadsAndRentalsGadgetService.class), this, proto().rentals()));
+        ICriteriaProvider<Appointment, CounterGadgetFilter> appointmentCriteriaProvider = new ICriteriaProvider<Appointment, CounterGadgetFilter>() {
+            @Override
+            public void makeCriteria(AsyncCallback<EntityListCriteria<Appointment>> callback, CounterGadgetFilter filterData) {
+                GWT.<LeadsAndRentalsGadgetService> create(LeadsAndRentalsGadgetService.class).makeAppointmentsCriteria(callback, filterData.getBuildings(),
+                        filterData.getCounterMember().toString());
+            }
+        };
+        bindDetailsFactory(proto().appointmentsLabel(), new AppointmentsDetailsFactory(this, appointmentCriteriaProvider));
+
+        ICriteriaProvider<Lead, CounterGadgetFilter> leaseFromLeadCriteriaProvider = new ICriteriaProvider<Lead, CounterGadgetFilter>() {
+            @Override
+            public void makeCriteria(AsyncCallback<EntityListCriteria<Lead>> callback, CounterGadgetFilter filterData) {
+                GWT.<LeadsAndRentalsGadgetService> create(LeadsAndRentalsGadgetService.class).makeLeaseFromLeadCriteria(callback, filterData.getBuildings(),
+                        filterData.getCounterMember().toString());
+            }
+        };
+        bindDetailsFactory(proto().rentalsLabel(), new LeasesFromLeadsDetailsFactory(this, leaseFromLeadCriteriaProvider));
     }
-
 }

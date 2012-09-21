@@ -7,30 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 12, 2012
+ * Created on Sep 21, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.rpc.dto.gadgets;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface CounterGadgetDemoDTO extends IEntity {
+public interface CounterGadgetDemoSubDataDTO extends IEntity {
 
-    IPrimitive<String> strValue();
+    IPrimitive<Integer> a();
 
-    IPrimitive<Integer> counterValue();
-
-    IPrimitive<BigDecimal> moneyValue();
-
-    IPrimitive<Double> doubleValue();
-
-    IList<CounterGadgetDemoSubDataDTO> xs();
-
+    IPrimitive<Integer> b();
 }

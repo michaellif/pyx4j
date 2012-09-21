@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.gadgets.common;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
@@ -40,15 +41,19 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
+import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm.ZoominRequestHandler;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.BuildingGadgetBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory.IFilterDataChangedHandler;
+import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory.IFilterDataProvider;
+import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AbstractCounterGadgetBaseService;
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, GadgetType extends CounterGadgetBaseMetadata> extends
-        BuildingGadgetBase<GadgetType> implements IBuildingFilterContainer {
+        BuildingGadgetBase<GadgetType> implements IBuildingFilterContainer, IFilterDataProvider<CounterGadgetFilter> {
 
     public interface CounterDetailsFactory {
 
@@ -64,7 +69,7 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
 
     private HTML title;
 
-    private final CounterGadgetSummaryForm<Data> summaryForm;
+    private final ZoomableViewForm<Data> summaryForm;
 
     private SimplePanel detailsPanel;
 
@@ -72,13 +77,13 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
 
     private static SimpleEventBus eventBus;
 
-    public CounterGadgetInstanceBase(Class<Data> dataClass, final AbstractCounterGadgetBaseService<Data, Query> service,
-            CounterGadgetSummaryForm<Data> summaryForm, GadgetMetadata metadata, Class<GadgetType> metadataClass) {
+    public CounterGadgetInstanceBase(Class<Data> dataClass, final AbstractCounterGadgetBaseService<Data, Query> service, ZoomableViewForm<Data> summaryForm,
+            GadgetMetadata metadata, Class<GadgetType> metadataClass) {
         this(dataClass, service, summaryForm, metadata, metadataClass, new CounterGadgetSetupForm<GadgetType>(metadataClass));
     }
 
-    public CounterGadgetInstanceBase(Class<Data> dataClass, final AbstractCounterGadgetBaseService<Data, Query> service,
-            CounterGadgetSummaryForm<Data> summaryForm, GadgetMetadata metadata, Class<GadgetType> metadataClass, CEntityForm<GadgetType> form) {
+    public CounterGadgetInstanceBase(Class<Data> dataClass, final AbstractCounterGadgetBaseService<Data, Query> service, ZoomableViewForm<Data> summaryForm,
+            GadgetMetadata metadata, Class<GadgetType> metadataClass, CEntityForm<GadgetType> form) {
         super(metadata, metadataClass, form);
         this.dataClass = dataClass;
 
@@ -86,7 +91,19 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
         this.bindDetailsFactories();
 
         this.summaryForm = summaryForm;
-        this.summaryForm.bindGadget(this);
+
+        Set<String> paths = detailsFactories.keySet();
+        IObject<?>[] zoomableMembers = new IObject<?>[paths.size()];
+        int i = 0;
+        for (String path : paths) {
+            zoomableMembers[i++] = proto().getMember(new Path(path));
+        }
+        this.summaryForm.initZoomIn(new ZoominRequestHandler() {
+            @Override
+            public void onZoomIn(IObject<?> member) {
+                displayDetails(member);
+            }
+        }, zoomableMembers);
         this.summaryForm.initContent();
 
         setDefaultPopulator(new Populator() {
@@ -120,6 +137,23 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
             }
 
         });
+    }
+
+    @Override
+    public CounterGadgetFilter getFilterData() {
+        return new CounterGadgetFilter(buildingsFilterContainer.getSelectedBuildingsStubs(), getMetadata().activeDetails().getValue());
+    }
+
+    @Override
+    public void addFilterDataChangedHandler(final IFilterDataChangedHandler<CounterGadgetFilter> handler) {
+        if (false) {
+            buildingsFilterContainer.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
+                @Override
+                public void onBuildingSelectionChanged(BuildingSelectionChangedEvent event) {
+                    handler.handleFilterDataChange(new CounterGadgetFilter(event.getBuildings(), getMetadata().activeDetails().getValue()));
+                }
+            });
+        }
     }
 
     // TODO think what to do with building change selection events propagation, this implementation is not nice

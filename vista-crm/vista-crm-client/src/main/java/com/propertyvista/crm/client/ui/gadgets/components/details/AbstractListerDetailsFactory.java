@@ -31,7 +31,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase.CounterDetailsFactory;
 
-public class AbstractListerDetailsFactory<E extends IEntity, F extends Serializable> implements CounterDetailsFactory {
+public abstract class AbstractListerDetailsFactory<E extends IEntity, F extends Serializable> implements CounterDetailsFactory {
 
     public interface ICriteriaProvider<E extends IEntity, F extends Serializable> {
 
@@ -65,6 +65,16 @@ public class AbstractListerDetailsFactory<E extends IEntity, F extends Serializa
 
     private final AbstractListService<E> listerService;
 
+    /**
+     * 
+     * @param dataClass
+     * @param lister
+     * @param listerService
+     * @param filterDataProvider
+     *            provides filter data that is to be used to convert it to criteria by the criteria provider
+     * @param criteriaProvider
+     *            provides filter criteria for the lister
+     */
     public AbstractListerDetailsFactory(Class<E> dataClass, BasicLister<E> lister, AbstractListService<E> listerService,
             IFilterDataProvider<F> filterDataProvider, ICriteriaProvider<E, F> criteriaProvider) {
         this.panel = new SimplePanel();
@@ -118,4 +128,5 @@ public class AbstractListerDetailsFactory<E extends IEntity, F extends Serializa
 
         }, filterDataProvider.getFilterData());
     }
+
 }
