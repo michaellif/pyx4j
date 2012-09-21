@@ -28,7 +28,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -41,10 +40,10 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.SystemWallMessage;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
@@ -129,8 +128,15 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
         buttonPanel.add(loginButton);
 
         if (resetPasswordCommand != null) {
-            CHyperlink forgotPassword = new CHyperlink(null, resetPasswordCommand);
-            forgotPassword.setValue(i18n.tr("Reset Password"));
+            Anchor forgotPassword = new Anchor(null);
+            forgotPassword.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    resetPasswordCommand.execute();
+                }
+            });
+
+            forgotPassword.setHTML(i18n.tr("Reset Password"));
             buttonPanel.add(forgotPassword);
         }
         main.add(buttonPanel);
