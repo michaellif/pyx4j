@@ -45,6 +45,7 @@ public class NReference<E> extends NComponent<E, Label, CReference<E>, Anchor> i
                 text = value.toString();
             }
         }
+
         if (getEditor() != null) {
             getEditor().setText(text);
         }
@@ -70,7 +71,7 @@ public class NReference<E> extends NComponent<E, Label, CReference<E>, Anchor> i
         anchor.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (isEnabled() && getCComponent().getCommand() != null) {
+                if (getCComponent().getCommand() != null) {
                     getCComponent().getCommand().execute();
                 }
             }

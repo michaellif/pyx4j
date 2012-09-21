@@ -32,15 +32,8 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class CEntityCrudHyperlink<E extends IEntity> extends CEntityHyperlink<E> {
 
-    private String caption;
-
     public CEntityCrudHyperlink(final CrudAppPlace place) {
-        this(null, place);
-    }
-
-    public CEntityCrudHyperlink(String caption, final CrudAppPlace place) {
         super((String) null);
-        this.caption = caption;
         setCommand(new Command() {
             @Override
             public void execute() {
@@ -53,7 +46,7 @@ public class CEntityCrudHyperlink<E extends IEntity> extends CEntityHyperlink<E>
         setFormat(new IFormat<E>() {
             @Override
             public String format(E value) {
-                return CEntityCrudHyperlink.this.caption;
+                return getValue().getStringView();
             }
 
             @Override
@@ -61,14 +54,6 @@ public class CEntityCrudHyperlink<E extends IEntity> extends CEntityHyperlink<E>
                 return null;
             }
         });
-    }
-
-    public String getCaption() {
-        return caption;
-    }
-
-    public void setCaption(String caption) {
-        this.caption = caption;
     }
 
 }
