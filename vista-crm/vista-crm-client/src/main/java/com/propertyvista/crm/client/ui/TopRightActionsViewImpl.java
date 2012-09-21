@@ -7,6 +7,8 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -14,9 +16,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
-import com.pyx4j.commons.StringDebugId;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
@@ -34,15 +35,15 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private Presenter presenter;
 
-    private final CHyperlink greetings;
+    private final Anchor greetings;
 
-    private final CHyperlink logout;
+    private final Anchor logout;
 
-    private final CHyperlink login;
+    private final Anchor login;
 
-    private final CHyperlink home;
+    private final Anchor home;
 
-    private final CHyperlink settings;
+    private final Anchor settings;
 
     private final HTML thisIsProduction;
 
@@ -64,7 +65,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
 //    private final SearchBox search;
 
-    private final CHyperlink getSatisfaction;
+    private final Anchor getSatisfaction;
 
     private final Theme otherTheme = Theme.BrownWarm;
 
@@ -92,56 +93,66 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
         thisIsDemo.setVisible(false);
 
-        greetings = new CHyperlink(null, new Command() {
+        greetings = new Anchor(null);
+        greetings.addClickHandler(new ClickHandler() {
+
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.showAccount();
             }
         });
-        greetings.setDebugIdSuffix(new StringDebugId("account"));
+        greetings.ensureDebugId("account");
         greetings.asWidget().getElement().getStyle().setDisplay(Display.INLINE);
         greetings.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
         greetings.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
-        logout = new CHyperlink(null, new Command() {
+        logout = new Anchor(null);
+        logout.addClickHandler(new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.logout();
             }
         });
-        logout.setDebugIdSuffix(new StringDebugId("logout"));
-        logout.setValue(i18n.tr("LogOut"));
+
+        logout.ensureDebugId("logout");
+        logout.setHTML(i18n.tr("LogOut"));
         logout.setVisible(false);
         logout.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
-        login = new CHyperlink(null, new Command() {
+        login = new Anchor(null);
+        login.addClickHandler(new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.login();
             }
         });
-        login.setDebugIdSuffix(new StringDebugId("login"));
-        login.setValue(i18n.tr("Log In"));
+
+        login.ensureDebugId("login");
+        login.setHTML(i18n.tr("Log In"));
         login.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
-        home = new CHyperlink(null, new Command() {
+        home = new Anchor(null);
+        home.addClickHandler(new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.showHome();
             }
         });
-        home.setDebugIdSuffix(new StringDebugId("home"));
-        home.setValue(i18n.tr("Home"));
+
+        home.ensureDebugId("home");
+        home.setHTML(i18n.tr("Home"));
         home.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
-        settings = new CHyperlink(null, new Command() {
+        settings = new Anchor(null);
+        settings.addClickHandler(new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.showSettings();
             }
         });
-        settings.setDebugIdSuffix(new StringDebugId("administration"));
-        settings.setValue(i18n.tr("Administration"));
+
+        settings.ensureDebugId("administration");
+        settings.setHTML(i18n.tr("Administration"));
         settings.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
         locales = new HorizontalPanel();
@@ -177,15 +188,16 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 //
 //        search = new SearchBox();
 
-        getSatisfaction = new CHyperlink(null, new Command() {
+        getSatisfaction = new Anchor(null);
+        getSatisfaction.addClickHandler(new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.getSatisfaction();
             }
         });
 
-        getSatisfaction.setDebugIdSuffix(new StringDebugId("getSatisfaction"));
-        getSatisfaction.setValue(i18n.tr("Help"));
+        getSatisfaction.ensureDebugId("getSatisfaction");
+        getSatisfaction.setHTML(i18n.tr("Help"));
         getSatisfaction.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
         /**
@@ -245,7 +257,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         login.setVisible(true);
         getSatisfaction.setVisible(false);
         greetings.setVisible(false);
-        greetings.setValue("");
+        greetings.setHTML("");
         thisIsDemo.getElement().getStyle().setPosition(Position.ABSOLUTE);
         thisIsDemo.getElement().getStyle().setProperty("marginLeft", "auto");
         thisIsDemo.getElement().getStyle().setProperty("marginRight", "auto");
@@ -263,7 +275,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         home.setVisible(true);
         settings.setVisible(true);
         getSatisfaction.setVisible(true);
-        greetings.setValue(i18n.tr("Welcome {0}", userName));
+        greetings.setHTML(i18n.tr("Welcome {0}", userName));
         greetings.setVisible(true);
 
         thisIsDemo.getElement().getStyle().setPosition(Position.RELATIVE);

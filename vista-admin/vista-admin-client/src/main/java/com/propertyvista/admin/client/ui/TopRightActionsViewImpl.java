@@ -4,14 +4,14 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.Command;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
-import com.pyx4j.commons.StringDebugId;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 
@@ -27,13 +27,13 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private final HTML greetings;
 
-    private final CHyperlink logout;
+    private final Anchor logout;
 
-    private final CHyperlink login;
+    private final Anchor login;
 
-    private final CHyperlink account;
+    private final Anchor account;
 
-    private final CHyperlink settings;
+    private final Anchor settings;
 
 //    private final Image message;
 
@@ -56,40 +56,46 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         greetings.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         greetings.getElement().getStyle().setMarginRight(1, Unit.EM);
 
-        logout = new CHyperlink(null, new Command() {
+        logout = new Anchor(null);
+        logout.addClickHandler(new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.logout();
             }
         });
-        logout.setDebugIdSuffix(new StringDebugId("logout"));
-        logout.setValue(i18n.tr("LogOut"));
+        logout.ensureDebugId("logout");
+        logout.setHTML(i18n.tr("LogOut"));
         logout.setVisible(false);
         logout.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
-        login = new CHyperlink(null, new Command() {
+        login = new Anchor(null);
+        login.addClickHandler(new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.login();
             }
         });
-        login.setDebugIdSuffix(new StringDebugId("login"));
-        login.setValue(i18n.tr("Log In"));
+
+        login.ensureDebugId("login");
+        login.setHTML(i18n.tr("Log In"));
         login.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
-        account = new CHyperlink(null, new Command() {
+        account = new Anchor(null);
+        account.addClickHandler(new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.showAccount();
             }
         });
-        account.setDebugIdSuffix(new StringDebugId("account"));
-        account.setValue(i18n.tr("Account"));
+
+        account.ensureDebugId("account");
+        account.setHTML(i18n.tr("Account"));
         account.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
-        settings = new CHyperlink(null, new Command() {
+        settings = new Anchor(null);
+        settings.addClickHandler(new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.showSettings();
             }
         });

@@ -17,6 +17,8 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -24,10 +26,9 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.commons.StringDebugId;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
@@ -50,13 +51,13 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
     private final HTML greetings;
 
-    private final CHyperlink logout;
+    private final Anchor logout;
 
-    private final CHyperlink login;
+    private final Anchor login;
 
-    private final CHyperlink selectApplication;
+    private final Anchor selectApplication;
 
-    private final CHyperlink passwordChange;
+    private final Anchor passwordChange;
 
     MenuBar languageMenu;
 
@@ -81,46 +82,51 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
         greetings = new HTML("");
         topLinksPanel.add(greetings);
 
-        passwordChange = new CHyperlink(null, new Command() {
+        passwordChange = new Anchor(null);
+        passwordChange.addClickHandler(new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.changePassword();
             }
         });
-        passwordChange.setValue(i18n.tr("Change Password"));
+        passwordChange.setHTML(i18n.tr("Change Password"));
         topLinksPanel.add(passwordChange);
         topLinksPanel.add(new HTML("&nbsp;-&nbsp;"));
 
-        selectApplication = new CHyperlink(null, new Command() {
+        selectApplication = new Anchor(null);
+        selectApplication.addClickHandler(new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.changeApplication();
             }
         });
-        selectApplication.setValue(i18n.tr("Select an Application"));
+        selectApplication.setHTML(i18n.tr("Select an Application"));
         topLinksPanel.add(selectApplication);
         topLinksPanel.add(selectApplicationSeparator = new HTML("&nbsp; - &nbsp;"));
 
-        logout = new CHyperlink(null, new Command() {
+        logout = new Anchor(null);
+        logout.addClickHandler(new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.logout();
             }
         });
-        logout.setDebugIdSuffix(VistaFormsDebugId.Auth_LogOutTop);
-        logout.setValue(i18n.tr("Log Out"));
+
+        logout.ensureDebugId(VistaFormsDebugId.Auth_LogOutTop.name());
+        logout.setHTML(i18n.tr("Log Out"));
         logout.setVisible(false);
         topLinksPanel.add(logout);
 
-        login = new CHyperlink(null, new Command() {
+        login = new Anchor(null);
+        login.addClickHandler(new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.login();
             }
         });
-        login.setDebugIdSuffix(new StringDebugId("login"));
-        login.setValue(i18n.tr("Log In"));
-        login.setDebugIdSuffix(VistaFormsDebugId.Auth_LoginTop);
+
+        login.ensureDebugId(VistaFormsDebugId.Auth_LoginTop.name());
+        login.setHTML(i18n.tr("Log In"));
         topLinksPanel.add(login);
 
         topLinksPanel.add(new HTML("&nbsp;-&nbsp;"));
