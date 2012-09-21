@@ -150,7 +150,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         cancelNoticeAction = new MenuItem(i18n.tr("Cancel Notice"), new Command() {
             @Override
             public void execute() {
-                new ReasonBox(i18n.tr("Do you really want to cancel the Notice?")) {
+                new ReasonBox(i18n.tr("Cancel Notice")) {
                     @Override
                     public boolean onClickOk() {
                         ((LeaseViewerView.Presenter) getPresenter()).cancelNotice(getReason());
@@ -178,7 +178,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         cancelEvictAction = new MenuItem(i18n.tr("Cancel Evict"), new Command() {
             @Override
             public void execute() {
-                new ReasonBox(i18n.tr("Do you really want to cancel Evict?")) {
+                new ReasonBox(i18n.tr("Cancel Evict")) {
                     @Override
                     public boolean onClickOk() {
                         ((LeaseViewerView.Presenter) getPresenter()).cancelEvict(getReason());
@@ -200,7 +200,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         cancelAction = new MenuItem(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
-                new ReasonBox(i18n.tr("Do you really want to cancel the Lease?")) {
+                new ReasonBox(i18n.tr("Cancel Lease")) {
                     @Override
                     public boolean onClickOk() {
                         ((LeaseViewerView.Presenter) getPresenter()).cancelLease(getReason());
