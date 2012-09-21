@@ -537,6 +537,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
+        // TODO : use compareIgnoreVersion() when it'll be ready!!! 
         if (lease.currentTerm().equals(leaseTerm)) {
             AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitId.getPrimaryKey());
             if (unit.building().isValueDetached()) {
