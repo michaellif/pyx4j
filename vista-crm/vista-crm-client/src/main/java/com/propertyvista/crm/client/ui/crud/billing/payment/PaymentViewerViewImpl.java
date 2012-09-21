@@ -17,7 +17,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -72,7 +71,6 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
                 ((PaymentViewerView.Presenter) getPresenter()).processPayment();
             }
         });
-        processAction.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
         addAction(processAction);
 
         scheduleAction = new MenuItem(i18n.tr("Schedule"), new Command() {
@@ -81,7 +79,6 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
                 ((PaymentViewerView.Presenter) getPresenter()).schedulePayment();
             }
         });
-        scheduleAction.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
         addAction(scheduleAction);
     }
 
@@ -108,6 +105,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
                 setActionVisible(scheduleAction, true);
             } else {
                 setActionVisible(processAction, true);
+                setActionHighlighted(processAction, true);
             }
         }
 

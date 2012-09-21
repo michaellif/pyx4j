@@ -65,6 +65,8 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     private Button.ButtonMenuBar actionsMenu;
 
+    private int actionHighlightCounter = 0;
+
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         this(placeClass, false);
     }
@@ -132,6 +134,28 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         actionsButton.setVisible(!actionsMenu.isMenuEmpty());
     }
 
+    public void setActionHighlighted(MenuItem action, boolean highlight) {
+        if (highlight) {
+            action.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
+            if (actionHighlightCounter++ == 0) {
+                actionsButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
+            }
+        } else {
+            action.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
+            if (--actionHighlightCounter == 0) {
+                actionsButton.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
+            }
+        }
+    }
+
+    public void resetActionHighlighting() {
+        for (MenuItem action : actionsMenu.getItems()) {
+            action.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
+        }
+        actionsButton.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
+        actionHighlightCounter = 0;
+    }
+
     public void setEditingVisible(boolean visible) {
         if (editButton != null) {
             editButton.setVisible(visible);
@@ -151,6 +175,14 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     protected void setFinalizationVisible(boolean visible) {
         if (finalizeMenu != null) {
             finalizeMenu.setVisible(visible);
+
+            if (visible) {
+                finalizeMenu.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
+                versioningButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
+            } else {
+                finalizeMenu.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
+                versioningButton.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
+            }
         }
     }
 
@@ -158,6 +190,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     public void reset() {
         setFinalizationVisible(false);
         actionsButton.setVisible(false);
+        resetActionHighlighting();
         super.reset();
     }
 
@@ -172,13 +205,9 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
             caption = caption + " (";
             if (version.versionNumber().isNull()) { // draft case:
                 setFinalizationVisible(true);
-                versioningButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
-
                 caption = caption + i18n.tr("Draft Version");
             } else {
                 setFinalizationVisible(false);
-                versioningButton.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
-
                 if (value.getPrimaryKey().isCurrent()) {
                     caption = caption + i18n.tr("Current Version");
                 } else {
