@@ -105,7 +105,7 @@ public class Key implements java.io.Serializable {
     }
 
     /*
-     * Should not be used in GWT app.
+     * Should not be used in GWT app to get the value, string may be obfucated.
      * 
      * @exception NumberFormatException if the string representation does not contain a parsable <code>long</code>.
      */
@@ -143,6 +143,13 @@ public class Key implements java.io.Serializable {
             return false;
         }
         return this.toString().equals(other.toString());
+    }
+
+    public boolean equalsIgnoreVersion(Key other) {
+        if (other == this) {
+            return true;
+        }
+        return this.asLong() == other.asLong();
     }
 
     @Override
