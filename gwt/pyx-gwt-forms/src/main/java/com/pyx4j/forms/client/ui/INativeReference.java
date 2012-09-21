@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-public interface INativeReference<E> extends INativeFocusComponent<E> {
+public interface INativeReference<E> extends INativeComponent<E> {
 
     void setWordWrap(boolean wrap);
 

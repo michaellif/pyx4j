@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.Command;
 
-public class CReference<E> extends CFocusComponent<E, NativeHyperlink<E>> {
+public abstract class CReference<E> extends CComponent<E, NReference<E>> {
 
     private boolean wordWrap = false;
 
@@ -54,8 +54,8 @@ public class CReference<E> extends CFocusComponent<E, NativeHyperlink<E>> {
     }
 
     @Override
-    protected NativeHyperlink<E> createWidget() {
-        NativeHyperlink<E> widget = new NativeHyperlink<E>(this);
+    protected NReference<E> createWidget() {
+        NReference<E> widget = new NReference<E>(this);
         widget.setWordWrap(this.isWordWrap());
         return widget;
     }

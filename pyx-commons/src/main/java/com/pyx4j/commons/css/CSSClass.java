@@ -51,7 +51,7 @@ public enum CSSClass {
     pyx4j_CheckBox,
 
     //Hyperlink
-    pyx4j_Hyperlink,
+    pyx4j_Reference,
 
     //GroupBox
     pyx4j_GroupBox, pyx4j_GroupBox_Caption,

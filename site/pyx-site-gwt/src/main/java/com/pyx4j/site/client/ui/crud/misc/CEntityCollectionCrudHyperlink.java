@@ -61,4 +61,5 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
     public boolean isValuesEquals(E value1, E value2) {
         return value1 == value2;
     }
+
 }

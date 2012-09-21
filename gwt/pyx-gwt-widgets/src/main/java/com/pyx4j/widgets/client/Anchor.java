@@ -25,7 +25,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 
-public class Anchor extends com.google.gwt.user.client.ui.Anchor {
+public class Anchor extends com.google.gwt.user.client.ui.Anchor implements IFocusWidget {
 
     public static final String DEFAULT_HREF = "javascript:;";
 
@@ -72,6 +72,15 @@ public class Anchor extends com.google.gwt.user.client.ui.Anchor {
             }
         };
         return super.addClickHandler(wrapper);
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+    }
+
+    @Override
+    public boolean isEditable() {
+        return false;
     }
 
 }

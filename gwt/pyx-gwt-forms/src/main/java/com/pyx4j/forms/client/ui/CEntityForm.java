@@ -404,6 +404,9 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
                 if (value instanceof IEntity) {
                     // Process on the object level to avoid Polymorphic problems
                     ((IEntity) getValue().getMember(memberPath)).set((IEntity) value);
+                } else if (value instanceof ICollection) {
+                    //TODO uncomment after bug 2019 is fixed
+                    //((ICollection<?>) getValue().getMember(memberPath)).set((ICollection) value);
                 } else {
                     if (value instanceof Date) {
                         // Synchronize the value in Editor with model
