@@ -33,26 +33,6 @@ import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase.
 
 public abstract class AbstractListerDetailsFactory<E extends IEntity, F extends Serializable> implements CounterDetailsFactory {
 
-    public static interface ICriteriaProvider<E extends IEntity, F extends Serializable> {
-
-        void makeCriteria(AsyncCallback<EntityListCriteria<E>> callback, F filterData);
-
-    }
-
-    public static interface IFilterDataProvider<F extends Serializable> {
-
-        F getFilterData();
-
-        void addFilterDataChangedHandler(IFilterDataChangedHandler<F> handler);
-
-    }
-
-    public static interface IFilterDataChangedHandler<F extends Serializable> {
-
-        void handleFilterDataChange(F updatedFilterData);
-
-    }
-
     private final SimplePanel panel;
 
     private final BasicLister<E> lister;

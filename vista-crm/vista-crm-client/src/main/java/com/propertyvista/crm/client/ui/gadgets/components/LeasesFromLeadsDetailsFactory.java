@@ -22,6 +22,8 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
+import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
+import com.propertyvista.crm.client.ui.gadgets.components.details.IFilterDataProvider;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeasesFromLeadListService;
 import com.propertyvista.domain.tenant.lead.Lead;
 

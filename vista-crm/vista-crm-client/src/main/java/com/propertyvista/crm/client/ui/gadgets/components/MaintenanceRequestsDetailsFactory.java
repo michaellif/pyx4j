@@ -19,6 +19,8 @@ import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
+import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
+import com.propertyvista.crm.client.ui.gadgets.components.details.IFilterDataProvider;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
