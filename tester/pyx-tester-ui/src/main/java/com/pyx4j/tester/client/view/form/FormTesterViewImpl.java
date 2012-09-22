@@ -49,6 +49,8 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
 
     private final Button repopulateButton;
 
+    private final Button modeButton;
+
     private final SimplePanel formPanel;
 
     private final HashMap<TestFormType, CEntityForm<EntityI>> map = new HashMap<TestFormType, CEntityForm<EntityI>>();
@@ -112,6 +114,18 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
 
         repopulateButton.ensureDebugId(CompositeDebugId.debugId(DebugIds.ButtonPanel, DebugIds.RepopulateButton));
         buttonPanel.add(repopulateButton);
+
+        modeButton = new Button(currentForm == null || !currentForm.isViewable() ? "View" : "Edit");
+        modeButton.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                currentForm.setViewable(!currentForm.isViewable());
+                modeButton.setTextLabel(currentForm.isViewable() ? "Edit" : "View");
+            }
+        });
+//        viewButton.ensureDebugId(CompositeDebugId.debugId(DebugIds.ButtonPanel, DebugIds.ViewButton));
+        buttonPanel.add(modeButton);
 
         container.add(buttonPanel, DockPanel.NORTH);
 

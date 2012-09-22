@@ -34,6 +34,7 @@ import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CRadioGroupInteger;
@@ -69,6 +70,10 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
         main.setH1(++row, 0, 1, i18n.tr("Main Form"));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
+        // Personal Identity
+        CPersonalIdentityField personalId = new CPersonalIdentityField();
+        personalId.setPersonalIdentityFormat("XXX-XXX-xxx");
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().personalId(), personalId)));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().textBox())));
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().integerBox())));
 
