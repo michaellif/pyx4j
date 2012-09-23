@@ -52,6 +52,7 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Complex;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.misc.VistaTODO;
@@ -196,14 +197,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                             .build());
         }
 
-        main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().floorplans(), new CEntityCollectionCrudHyperlink(null, new Command() {
-
-            @Override
-            public void execute() {
-                System.out.println("++++++++++++++++++++++");
-
-            }
-        })), 15).build());
+        main.setWidget(row++, 1,
+                new DecoratorBuilder(inject(proto().floorplans(), new CEntityCollectionCrudHyperlink(AppPlaceEntityMapper.resolvePlace(Floorplan.class))), 15)
+                        .build());
 
         main.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());
         main.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(true, false)));
