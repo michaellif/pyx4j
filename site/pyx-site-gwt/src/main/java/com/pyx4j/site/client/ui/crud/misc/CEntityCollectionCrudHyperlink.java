@@ -25,11 +25,19 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.forms.client.ui.CReference;
 import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends CReference<E> {
 
-    protected CEntityCollectionCrudHyperlink(String title) {
-        super(title);
+    public CEntityCollectionCrudHyperlink(final CrudAppPlace place) {
+        super((String) null);
+        setCommand(new Command() {
+            @Override
+            public void execute() {
+                System.out.println("++++++++++++++++" + getValue().getParent());
+                //AppSite.getPlaceController().goTo(place);
+            }
+        });
         setFormat(new IFormat<E>() {
             @Override
             public String format(E value) {
@@ -46,11 +54,6 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
             }
         });
 
-    }
-
-    public CEntityCollectionCrudHyperlink(String title, Command command) {
-        this(title);
-        setCommand(command);
     }
 
     /**
