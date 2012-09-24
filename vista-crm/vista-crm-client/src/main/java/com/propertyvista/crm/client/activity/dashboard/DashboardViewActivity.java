@@ -13,33 +13,88 @@
  */
 package com.propertyvista.crm.client.activity.dashboard;
 
+import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.crm.client.activity.board.CrmBoardViewActivity;
+import com.pyx4j.commons.Key;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
+
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.DashboardPrinterDialog;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
-import com.propertyvista.crm.rpc.services.dashboard.BoardMetadataServiceBase;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class DashboardViewActivity extends CrmBoardViewActivity<DashboardView> implements DashboardView.Presenter {
+public class DashboardViewActivity extends AbstractActivity implements DashboardView.Presenter {
 
     private final DashboardMetadataService service = GWT.create(DashboardMetadataService.class);
 
-    public DashboardViewActivity(Place place) {
-        this((DashboardView) DashboardViewFactory.instance(DashboardView.class), place);
-    }
+    private final DashboardView view;
 
-    public DashboardViewActivity(DashboardView view) {
-        this(view, null);
-    }
+    private final Key dashboardId;
 
-    public DashboardViewActivity(DashboardView view, Place place) {
-        super(view, place);
+    public DashboardViewActivity(AppPlace place) {
+        view = DashboardViewFactory.instance(DashboardView.class);
+        dashboardId = getIdFromPlace(place);
     }
 
     @Override
-    protected BoardMetadataServiceBase getService() {
-        return service;
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        panel.setWidget(view);
+        view.setPresenter(this);
+        this.populate();
+    }
+
+    @Override
+    public void populate() {
+        service.retrieveMetadata(new DefaultAsyncCallback<DashboardMetadata>() {
+
+            @Override
+            public void onSuccess(DashboardMetadata result) {
+                view.setDashboardMetadata(result);
+            }
+        }, dashboardId);
+    }
+
+    @Override
+    public void save() {
+        service.saveDashboardMetadata(new DefaultAsyncCallback<DashboardMetadata>() {
+            @Override
+            public void onSuccess(DashboardMetadata result) {
+
+            }
+        }, view.getDashboardMetadata());
+    }
+
+    @Override
+    public void print() {
+        DashboardPrinterDialog.print(dashboardId, view.getSelectedBuildingsStubs());
+    }
+
+    @Override
+    @Deprecated
+    public void refresh() {
+        // TODO Auto-generated method stub
+
+    }
+
+    private static Key getIdFromPlace(AppPlace place) {
+        String val;
+        Key entityId = null;
+        if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
+            entityId = new Key(val);
+            // Validate argument
+            try {
+                entityId.asLong();
+            } catch (NumberFormatException e) {
+                entityId = null;
+            }
+
+        }
+        return entityId;
     }
 }

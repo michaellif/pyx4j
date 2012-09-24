@@ -13,10 +13,28 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
-import com.propertyvista.crm.client.ui.board.BoardView;
+import java.util.Vector;
 
-public interface DashboardView extends BoardView {
+import com.pyx4j.site.client.ui.crud.IView;
 
-    public interface Presenter extends BoardView.Presenter {
+import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.property.asset.building.Building;
+
+public interface DashboardView extends IView {
+
+    public interface Presenter extends IView.Presenter {
+
+        void save();
+
+        void print();
+
     }
+
+    void setPresenter(Presenter presenter);
+
+    void setDashboardMetadata(DashboardMetadata dashboardMetadata);
+
+    DashboardMetadata getDashboardMetadata();
+
+    Vector<Building> getSelectedBuildingsStubs();
 }

@@ -35,6 +35,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.property.asset.building.Building;
 
+@Deprecated
 public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
 
     private final static I18n i18n = I18n.get(CrmBoardViewImpl.class);

@@ -978,7 +978,7 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new CrmReportsActivity((CrmSiteMap.Reports) place);
 
                 } else if (place instanceof CrmSiteMap.Dashboard) {
-                    activity = new DashboardViewActivity(place);
+                    activity = new DashboardViewActivity((CrmSiteMap.Dashboard) place);
 
                 } else if (place instanceof CrmSiteMap.PasswordChange) {
                     activity = new PasswordChangeActivity(place);
