@@ -70,6 +70,7 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
         super.populate(value);
 
         setEditingVisible(!value.lease().status().getValue().isFormer() && value.status().getValue() != Status.AcceptedOffer);
+        setFinalizationVisible(!value.lease().status().getValue().isDraft());
 
         offerAcceptButton.setVisible(value.status().getValue() == Status.Offer && !((IVersionedEntity<?>) value).version().versionNumber().isNull()
                 && value.lease().futureTerm().isNull());
