@@ -50,6 +50,7 @@ public class UpdatePaymentTypeFeesRequestHandler extends AbstractRequestHandler<
             response.success().setValue(Boolean.FALSE);
             return response;
         }
+        Persistence.service().retrieveMember(pmc.paymentTypeInfo());
 
         pmc.paymentTypeInfo().ccVisaPaymentAvailable().setValue(request.ccVisaPaymentAvailable().getValue());
         pmc.paymentTypeInfo().ccVisaFee().setValue(request.ccVisaFee().getValue());
@@ -78,7 +79,7 @@ public class UpdatePaymentTypeFeesRequestHandler extends AbstractRequestHandler<
         pmc.paymentTypeInfo().interacVisaFee().setValue(request.interacVisaFee().getValue());
         pmc.paymentTypeInfo().interacVisaPaymentAvailable().setValue(request.interacVisaPaymentAvailable().getValue());
 
-        Persistence.service().persist(pmc);
+        Persistence.service().persist(pmc.paymentTypeInfo());
         Persistence.service().commit();
 
         return response;
