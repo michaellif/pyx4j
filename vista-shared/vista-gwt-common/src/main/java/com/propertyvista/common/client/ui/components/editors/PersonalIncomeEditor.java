@@ -134,7 +134,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
             comp.get(comp.proto().name()).setVisible(false);
             comp.get(comp.proto().ends()).setVisible(false);
             break;
-        case odsp:
+        case disabilitySupport:
         case dividends:
         case other:
             comp.get(comp.proto().name()).setVisible(true);
