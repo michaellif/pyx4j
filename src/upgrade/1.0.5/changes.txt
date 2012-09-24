@@ -5,6 +5,13 @@ update : personal_income.income_source
     unemployment -> unemployed
     odsp -> disabilitySupport
 
+??? Thereare structural changes:  Now table below a in one table IncomeInfo
+IncomeInfoEmployer
+IncomeInfoSeasonallyEmployed
+IncomeInfoSelfEmployed
+IncomeInfoSocialServices
+IncomeInfoOther
+IncomeInfoStudentIncome
 
 VISTA-1121 24/09/2012 14:51:45
     add  card_obfuscated_number and account_no_obfuscated_number to payment_PaymentDetails

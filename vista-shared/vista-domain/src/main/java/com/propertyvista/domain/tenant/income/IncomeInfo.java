@@ -31,9 +31,9 @@ import com.pyx4j.i18n.annotations.I18n;
  * General required information for all Income types.
  */
 @AbstractEntity
-@Inheritance
+@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface IIncomeInfo extends IEntity {
+public interface IncomeInfo extends IEntity {
 
     @Caption(name = "Description")
     IPrimitive<String> name();

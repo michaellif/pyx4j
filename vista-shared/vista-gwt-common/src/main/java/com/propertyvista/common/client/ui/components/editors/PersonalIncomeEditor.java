@@ -16,8 +16,10 @@ package com.propertyvista.common.client.ui.components.editors;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -28,7 +30,7 @@ import com.propertyvista.common.client.ui.components.ProofOfEmploymentUploaderFo
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
-import com.propertyvista.domain.tenant.income.IIncomeInfo;
+import com.propertyvista.domain.tenant.income.IncomeInfo;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoOther;
 import com.propertyvista.domain.tenant.income.IncomeInfoSeasonallyEmployed;
@@ -41,6 +43,8 @@ import com.propertyvista.domain.tenant.income.PersonalIncome;
 public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome> {
 
     private static final I18n i18n = I18n.get(PersonalIncomeEditor.class);
+
+    protected final SimplePanel detailsHolder = new SimplePanel();
 
     private ProofOfEmploymentUploaderFolder fileUpload;
 
@@ -58,7 +62,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
             incomeSource.addValueChangeHandler(new ValueChangeHandler<IncomeSource>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<IncomeSource> event) {
-                    setVisibility(event.getValue());
+                    selectDetailsEditor(event.getValue());
                 }
             });
             main.setWidget(++row, 0, new DecoratorBuilder(incomeSource, 25).build());
@@ -67,64 +71,66 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
         }
 
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, inject(proto().employer(), createEmployerEditor()));
-        main.setWidget(++row, 0, inject(proto().seasonallyEmployed(), createSeasonallyEmployedEditor()));
-        main.setWidget(++row, 0, inject(proto().selfEmployed(), createSelfEmployedEditor()));
-        main.setWidget(++row, 0, inject(proto().studentIncome(), createStudentIncomeEditor()));
-        main.setWidget(++row, 0, inject(proto().socialServices(), createSocialServicesEditor()));
-        main.setWidget(++row, 0, inject(proto().otherIncomeInformation(), createOtherIncomeInfoEditor()));
+        main.setWidget(++row, 0, detailsHolder);
         main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new ProofOfEmploymentUploaderFolder()));
 
         return main;
     }
 
     @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-
-        setVisibility(getValue().incomeSource().getValue());
+    protected void onValuePropagation(PersonalIncome value, boolean fireEvent, boolean populate) {
+        selectDetailsEditor(value.incomeSource().getValue());
+        super.onValuePropagation(value, fireEvent, populate);
     }
 
-    @SuppressWarnings("unchecked")
-    private void setVisibility(IncomeSource incomeSource) {
-        get(proto().employer()).setVisible(false);
-        get(proto().seasonallyEmployed()).setVisible(false);
-        get(proto().selfEmployed()).setVisible(false);
-        get(proto().studentIncome()).setVisible(false);
-        get(proto().socialServices()).setVisible(false);
-        get(proto().otherIncomeInformation()).setVisible(false);
-        fileUpload.setVisible(false);
+    protected void selectDetailsEditor(IncomeSource type) {
+        if (this.contains(proto().details())) {
+            this.unbind(proto().details());
+            detailsHolder.setWidget(null);
+        }
 
-        if (incomeSource != null) {
-            switch (incomeSource) {
+        fileUpload.setVisible(false);
+        if (type != null && getValue() != null) {
+            @SuppressWarnings("rawtypes")
+            CEntityForm editor = null;
+            IncomeInfo details = getValue().details();
+
+            switch (type) {
             case fulltime:
             case parttime:
-                get(proto().employer()).setVisible(true);
+                editor = createEmployerEditor();
                 fileUpload.setVisible(true);
                 break;
             case selfemployed:
-                get(proto().selfEmployed()).setVisible(true);
+                editor = createSelfEmployedEditor();
                 fileUpload.setVisible(true);
                 break;
             case seasonallyEmployed:
-                get(proto().seasonallyEmployed()).setVisible(true);
+                editor = createSeasonallyEmployedEditor();
                 fileUpload.setVisible(true);
                 break;
             case socialServices:
-                get(proto().socialServices()).setVisible(true);
+                editor = createSocialServicesEditor();
                 fileUpload.setVisible(true);
                 break;
             case student:
-                get(proto().studentIncome()).setVisible(true);
+                editor = createStudentIncomeEditor();
                 fileUpload.setVisible(true);
                 break;
             default:
-                @SuppressWarnings("rawtypes")
-                CEntityForm comp = (CEntityForm) get(proto().otherIncomeInformation());
-                comp.setVisible(true);
-                applyOtherLables(incomeSource, comp);
+                editor = createOtherIncomeInfoEditor();
+                applyOtherLables(type, editor);
             }
+
+            if (details.getInstanceValueClass() != editor.proto().getValueClass()) {
+                details.set(EntityFactory.create(editor.proto().getValueClass()));
+            }
+            this.inject(proto().details(), editor);
+            editor.populate(details.cast());
+            detailsHolder.setWidget(editor);
+
         }
+
     }
 
     private void applyOtherLables(IncomeSource incomeSource, CEntityForm<IncomeInfoOther> comp) {
@@ -147,7 +153,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
         }
     }
 
-    private void validationOfStartStopDates(final CEntityForm<? extends IIncomeInfo> comp) {
+    private void validationOfStartStopDates(final CEntityForm<? extends IncomeInfo> comp) {
         new StartEndDateValidation(comp.get(comp.proto().starts()), comp.get(comp.proto().ends()));
         comp.get(comp.proto().starts()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(comp.get(comp.proto().ends())));
         comp.get(comp.proto().ends()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(comp.get(comp.proto().starts())));

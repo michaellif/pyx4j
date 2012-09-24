@@ -43,32 +43,8 @@ public interface PersonalIncome extends IEntity, ApplicationDocumentHolder<Proof
     @NotNull
     IPrimitive<IncomeSource> incomeSource();
 
-    // incomeSource =  pension, retired, odsp, dividends
-    // NOTHING
-
-    // incomeSource =  unemployment and other
     @Owned
-    IncomeInfoOther otherIncomeInformation();
-
-    // incomeSource = fulltime, parttime
-    @Owned
-    IncomeInfoEmployer employer();
-
-    // incomeSource = selfemployed
-    @Owned
-    IncomeInfoSelfEmployed selfEmployed();
-
-    // incomeSource = seasonallyEmployed
-    @Owned
-    IncomeInfoSeasonallyEmployed seasonallyEmployed();
-
-    // incomeSource = socialServices
-    @Owned
-    IncomeInfoSocialServices socialServices();
-
-    // incomeSource = student
-    @Owned
-    IncomeInfoStudentIncome studentIncome();
+    IncomeInfo details();
 
     @OrderColumn
     IPrimitive<Integer> orderInOwner();

@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 @DiscriminatorValue("other")
 @Caption(name = "Income Information Other")
-public interface IncomeInfoOther extends IEntity, IIncomeInfo {
+public interface IncomeInfoOther extends IEntity, IncomeInfo {
     @Override
     @NotNull
     @Format("#0.00")

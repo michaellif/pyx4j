@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -138,14 +137,14 @@ public class ScreeningGenerator {
         {
             PersonalIncome income = EntityFactory.create(PersonalIncome.class);
             income.incomeSource().setValue(IncomeSource.fulltime);
-            income.employer().set(createEmployer());
+            income.details().set(createEmployer());
             income.documents().add(createProofOfEmploymentDocument());
             incomes.add(income);
         }
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
             PersonalIncome income = EntityFactory.create(PersonalIncome.class);
             income.incomeSource().setValue(IncomeSource.selfemployed);
-            income.selfEmployed().set(createSelfEmployed());
+            income.details().set(createSelfEmployed());
             income.documents().add(createProofOfEmploymentDocument());
             incomes.add(income);
         }
