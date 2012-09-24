@@ -521,8 +521,17 @@ public class LeaseFacadeImpl implements LeaseFacade {
         case ExistingLease:
             ServerSideFactory.create(OccupancyFacade.class).migratedCancel(lease.unit().<AptUnit> createIdentityStub());
             break;
-        default:
+
+        case Approved:
+            ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
+            break;
+
+        case Active:
             ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey());
+            break;
+
+        default:
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
     }
 
@@ -824,6 +833,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         boolean visible = false;
         switch (lease.status().getValue()) {
         case Active:
+        case Approved:
         case ExistingLease:
             visible = PublicVisibilityType.visibleToExistingTenant().contains(product.version().visibility().getValue());
             break;

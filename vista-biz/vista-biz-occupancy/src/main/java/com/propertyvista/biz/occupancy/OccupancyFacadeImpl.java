@@ -405,7 +405,14 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
         AptUnitOccupancySegment segment = retrieveOccupancySegment(unitPk, now);
         assertStatus(segment, Status.leased);
-        split(unitPk, addDay(segment.lease().currentTerm().termTo().getValue()), new SplittingHandler() {
+
+        // TODO : check the logic for Notice/Evict. + renewed lease!!!
+        LogicalDate uitFreeDate = segment.lease().currentTerm().termTo().getValue();
+        if (!segment.lease().actualLeaseTo().isNull()) {
+            uitFreeDate = segment.lease().actualLeaseTo().getValue();
+        }
+
+        split(unitPk, addDay(uitFreeDate), new SplittingHandler() {
 
             @Override
             public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
