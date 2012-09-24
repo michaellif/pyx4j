@@ -30,6 +30,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 @ToStringFormat("{0}")
 public abstract interface CustomizationHolder extends IEntity {
 
+    @Length(100)
+    IPrimitive<String> baseClass();
+
     @Length(255)
     @Indexed(group = "a,1")
     IPrimitive<String> className();

@@ -47,13 +47,25 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
 
     private final Class<? extends CustomizationHolder> customizationHolderEntityClass;
 
+    private final Class<E> baseClass;
+
     public <H extends CustomizationHolder> CustomizationPersistenceHelper(Class<H> customizationHolderEntityClass) {
+        this(customizationHolderEntityClass, null);
+    }
+
+    public <H extends CustomizationHolder> CustomizationPersistenceHelper(Class<H> customizationHolderEntityClass, Class<E> baseClass) {
         this.customizationHolderEntityClass = customizationHolderEntityClass;
+        this.baseClass = baseClass;
     }
 
     public Iterable<String> list(E proto) {
         EntityQueryCriteria<? extends CustomizationHolder> criteria = EntityQueryCriteria.create(customizationHolderEntityClass);
-        criteria.add(PropertyCriterion.eq(criteria.proto().className(), proto.getInstanceValueClass().getName()));
+        if (baseClass != null) {
+            criteria.add(PropertyCriterion.eq(criteria.proto().baseClass(), baseClass.getSimpleName()));
+        }
+        if (proto != null) {
+            criteria.add(PropertyCriterion.eq(criteria.proto().className(), proto.getInstanceValueClass().getSimpleName()));
+        }
 
         Iterator<? extends CustomizationHolder> i = Persistence.service().query(null, criteria, AttachLevel.ToStringMembers);
 
@@ -66,7 +78,10 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
 
     public void save(String id, E entity, boolean allowOverwrite) {
         EntityQueryCriteria<? extends CustomizationHolder> criteria = EntityQueryCriteria.create(customizationHolderEntityClass);
-        criteria.add(PropertyCriterion.eq(criteria.proto().className(), entity.getInstanceValueClass().getName()));
+        if (baseClass != null) {
+            criteria.add(PropertyCriterion.eq(criteria.proto().baseClass(), baseClass.getSimpleName()));
+        }
+        criteria.add(PropertyCriterion.eq(criteria.proto().className(), entity.getInstanceValueClass().getSimpleName()));
         criteria.add(PropertyCriterion.eq(criteria.proto().identifierKey(), id));
 
         if (!allowOverwrite && Persistence.service().count(criteria) != 0) {
@@ -83,17 +98,31 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
 
         CustomizationHolder settingsHolder = EntityFactory.create(customizationHolderEntityClass);
         settingsHolder.identifierKey().setValue(id);
-        settingsHolder.className().setValue(entity.getInstanceValueClass().getName());
+        if (baseClass != null) {
+            settingsHolder.baseClass().setValue(baseClass.getSimpleName());
+        }
+        settingsHolder.className().setValue(entity.getInstanceValueClass().getSimpleName());
         settingsHolder.serializedForm().setValue(stringWriter.toString());
 
         Persistence.service().persist(settingsHolder);
 
     }
 
+    /** for polymorphic loading */
+    public E load(String id) {
+        return load(id, null);
+    }
+
     public E load(String id, E proto) {
+        assert proto != null || (proto == null & baseClass != null) : "please intantiate CustomizationPersistenceHolder with base class in order to use polymorphic load";
         EntityQueryCriteria<? extends CustomizationHolder> criteria = EntityQueryCriteria.create(customizationHolderEntityClass);
-        criteria.add(PropertyCriterion.eq(criteria.proto().identifierKey(), id));
-        criteria.add(PropertyCriterion.eq(criteria.proto().className(), proto.getInstanceValueClass().getName()));
+        if (baseClass != null) {
+            criteria.add(PropertyCriterion.eq(criteria.proto().identifierKey(), id));
+            criteria.add(PropertyCriterion.eq(criteria.proto().baseClass(), baseClass.getSimpleName()));
+        }
+        if (proto != null) {
+            criteria.add(PropertyCriterion.eq(criteria.proto().className(), proto.getInstanceValueClass().getSimpleName()));
+        }
         CustomizationHolder holder = Persistence.service().retrieve(criteria);
 
         if (holder == null) {
@@ -108,7 +137,7 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
                 builder.setErrorHandler(null);
                 Document doc = builder.parse(new InputSource(new StringReader(holder.serializedForm().getValue())));
 
-                entity = (E) new XMLEntityParser().parse(proto.getInstanceValueClass(), doc.getDocumentElement());
+                entity = (E) new XMLEntityParser().parse(proto != null ? proto.getInstanceValueClass() : baseClass, doc.getDocumentElement());
             } catch (Throwable e) {
                 throw new RuntimeException("failed to deserialize data", e);
             }
@@ -119,7 +148,12 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
 
     public void delete(String id, E proto) {
         EntityQueryCriteria<? extends CustomizationHolder> criteria = EntityQueryCriteria.create(customizationHolderEntityClass);
-        criteria.add(PropertyCriterion.eq(criteria.proto().className(), proto.getInstanceValueClass().getName()));
+        if (baseClass != null) {
+            criteria.add(PropertyCriterion.eq(criteria.proto().baseClass(), baseClass.getSimpleName()));
+        }
+        if (proto != null) {
+            criteria.add(PropertyCriterion.eq(criteria.proto().className(), proto.getInstanceValueClass().getSimpleName()));
+        }
         criteria.add(PropertyCriterion.eq(criteria.proto().identifierKey(), id));
 
         // delete the old version

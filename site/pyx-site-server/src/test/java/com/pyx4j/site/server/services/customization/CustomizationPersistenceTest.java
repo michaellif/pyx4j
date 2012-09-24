@@ -73,7 +73,7 @@ public class CustomizationPersistenceTest {
         // test
         {
             EntityQueryCriteria<CustomizationHolderTable> criteriaFoo = EntityQueryCriteria.create(CustomizationHolderTable.class);
-            criteriaFoo.add(PropertyCriterion.eq(criteriaFoo.proto().className(), CustomizationTestEntity.class.getName()));
+            criteriaFoo.add(PropertyCriterion.eq(criteriaFoo.proto().className(), CustomizationTestEntity.class.getSimpleName()));
             criteriaFoo.add(PropertyCriterion.eq(criteriaFoo.proto().identifierKey(), "foo"));
             CustomizationHolderTable holder = Persistence.service().retrieve(criteriaFoo);
 
@@ -82,7 +82,7 @@ public class CustomizationPersistenceTest {
 
         {
             EntityQueryCriteria<CustomizationHolderTable> criteriaBar = EntityQueryCriteria.create(CustomizationHolderTable.class);
-            criteriaBar.add(PropertyCriterion.eq(criteriaBar.proto().className(), CustomizationTestEntity.class.getName()));
+            criteriaBar.add(PropertyCriterion.eq(criteriaBar.proto().className(), CustomizationTestEntity.class.getSimpleName()));
             criteriaBar.add(PropertyCriterion.eq(criteriaBar.proto().identifierKey(), "bar"));
             CustomizationHolderTable holder = Persistence.service().retrieve(criteriaBar);
 
