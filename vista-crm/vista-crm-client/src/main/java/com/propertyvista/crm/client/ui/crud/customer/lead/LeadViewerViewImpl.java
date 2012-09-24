@@ -53,27 +53,29 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
                 ((LeadViewerView.Presenter) getPresenter()).getInterestedUnits(new DefaultAsyncCallback<List<AptUnit>>() {
                     @Override
                     public void onSuccess(List<AptUnit> result) {
-                        int i = result.size();
-                        new EntitySelectorListDialog<AptUnit>(i18n.tr("Select Unit To Lease"), false, result, new Formatter<AptUnit>() {
-                            @Override
-                            public String format(AptUnit entity) {
-                                return entity.building().getStringView() + ", " + i18n.tr("Unit") + " " + entity.getStringView();
-                            }
-                        }) {
-                            @Override
-                            public boolean onClickOk() {
-                                ((LeadViewerView.Presenter) getPresenter()).convertToLease(getSelectedItems().get(0).getPrimaryKey());
-                                return true;
-                            }
+                        if (!result.isEmpty()) {
+                            new EntitySelectorListDialog<AptUnit>(i18n.tr("Select Unit To Lease"), false, result, new Formatter<AptUnit>() {
+                                @Override
+                                public String format(AptUnit entity) {
+                                    return entity.building().getStringView() + ", " + i18n.tr("Unit") + " " + entity.getStringView();
+                                }
+                            }) {
+                                @Override
+                                public boolean onClickOk() {
+                                    ((LeadViewerView.Presenter) getPresenter()).convertToLease(getSelectedItems().get(0).getPrimaryKey());
+                                    return true;
+                                }
 
-                            @Override
-                            public String defineWidth() {
-                                return "40em";
-                            }
-                        }.show();
+                                @Override
+                                public String defineWidth() {
+                                    return "40em";
+                                }
+                            }.show();
+                        } else {
+                            MessageDialog.info(i18n.tr("Guest(s) has not shown interest in any Unit."));
+                        }
                     }
                 });
-
             }
         });
         addAction(convertAction);

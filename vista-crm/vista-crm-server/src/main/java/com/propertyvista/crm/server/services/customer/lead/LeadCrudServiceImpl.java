@@ -31,6 +31,7 @@ import com.propertyvista.biz.tenant.LeadFacade;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
 
@@ -73,6 +74,7 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     public void getInterestedUnits(AsyncCallback<Vector<AptUnit>> callback, Key leadId) {
         EntityQueryCriteria<Showing> criteria = new EntityQueryCriteria<Showing>(Showing.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().appointment().lead(), leadId));
+        criteria.add(PropertyCriterion.ne(criteria.proto().appointment().status(), Appointment.Status.closed));
 
         Vector<AptUnit> units = new Vector<AptUnit>();
         for (Showing showing : Persistence.secureQuery(criteria)) {

@@ -155,7 +155,9 @@ public class TenantsGenerator {
 
         item.status().setValue(RandomUtil.randomEnum(Showing.Status.class));
         item.result().setValue(RandomUtil.randomEnum(Showing.Result.class));
-        item.reason().setValue(RandomUtil.randomEnum(Showing.Reason.class));
+        if (item.result().getValue() == Showing.Result.notInterested) {
+            item.reason().setValue(RandomUtil.randomEnum(Showing.Reason.class));
+        }
 
         return item;
     }
