@@ -20,8 +20,13 @@
  */
 package com.pyx4j.entity.shared.utils;
 
+import java.util.Map;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 
 public class VersionedEntityUtils {
 
@@ -35,5 +40,28 @@ public class VersionedEntityUtils {
         assert !entity.version().isNull();
         return (entity.getPrimaryKey() != null) && !entity.getPrimaryKey().isDraft() && entity.version().toDate().isNull()
                 && !entity.version().fromDate().isNull();
+    }
+
+    public static boolean equalsIgnoreVersion(IVersionedEntity<?> entity1, IVersionedEntity<?> entity2) {
+        if (entity2 == entity1) {
+            return true;
+        }
+        Map<String, Object> thisValue = ((SharedEntityHandler) entity1).getValue();
+        if (thisValue == null) {
+            return false;
+        }
+        Map<String, Object> otherValue = ((SharedEntityHandler) entity2).getValue();
+        if (otherValue == null) {
+            return false;
+        }
+        if (otherValue == thisValue) {
+            return true;
+        }
+        Key pk = (Key) thisValue.get(IEntity.PRIMARY_KEY);
+        if (pk == null) {
+            return false;
+        }
+        return pk.equalsIgnoreVersion((Key) otherValue.get(IEntity.PRIMARY_KEY))
+                && (entity1.getInstanceValueClass().equals(((IEntity) entity2).getInstanceValueClass()));
     }
 }
