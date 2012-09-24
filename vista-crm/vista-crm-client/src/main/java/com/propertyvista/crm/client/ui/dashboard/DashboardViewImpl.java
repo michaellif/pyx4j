@@ -135,7 +135,7 @@ public class DashboardViewImpl extends ViewImplBase implements DashboardView {
             gadget.setContainerBoard(this);
         }
 
-        protected void selectBuildings() {
+        private void selectBuildings() {
             new BuildingSelectorDialog(true, buildings) {
                 @Override
                 public boolean onClickOk() {
