@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type.base;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -25,7 +24,6 @@ import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.GadgetDockingMeta;
 
 @Inheritance
-@AbstractEntity
 public interface GadgetMetadata extends ISharedUserEntity {
 
     public enum RefreshInterval {
@@ -47,7 +45,7 @@ public interface GadgetMetadata extends ISharedUserEntity {
 
         /**
          * @param value
-         *            refersh time in minutes
+         *            refresh time in minutes
          */
         RefreshInterval(int value) {
             this.value = value * 60 * 1000;
@@ -72,4 +70,6 @@ public interface GadgetMetadata extends ISharedUserEntity {
 
     @EmbeddedEntity
     GadgetDockingMeta docking();
+
+    IPrimitive<String> gadgetId();
 }

@@ -13,11 +13,17 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.util.Collection;
+import java.util.UUID;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
+import com.pyx4j.site.server.services.customization.CustomizationPersistenceHelper;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.GadgetMetadataHolder;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.generator.DashboardGenerator;
 
 public class DashboardPreloader extends AbstractDataPreloader {
@@ -25,8 +31,9 @@ public class DashboardPreloader extends AbstractDataPreloader {
     @Override
     public String create() {
         DashboardGenerator generator = new DashboardGenerator();
-        Persistence.service().persist(generator.systemDashboards);
-        Persistence.service().persist(generator.buildingDashboards);
+
+        persistDashboards(generator.systemDashboards);
+        persistDashboards(generator.buildingDashboards);
 
         StringBuilder sb = new StringBuilder();
         sb.append("Created ").append(generator.systemDashboards.size() + generator.buildingDashboards.size()).append(" dashboards");
@@ -36,6 +43,25 @@ public class DashboardPreloader extends AbstractDataPreloader {
     @Override
     public String delete() {
         return deleteAll(DashboardMetadata.class);
+    }
+
+    void persistDashboards(Collection<DashboardMetadata> metadatas) {
+        for (DashboardMetadata dm : metadatas) {
+            persistDashboard(dm);
+        }
+    }
+
+    void persistDashboard(DashboardMetadata dm) {
+        for (GadgetMetadata gadget : dm.gadgets()) {
+            gadget.setPrimaryKey(new Key(1));
+            gadget.gadgetId().setValue(UUID.randomUUID().toString());
+            dm.gadgetIds().add(gadget.gadgetId().getValue());
+            new CustomizationPersistenceHelper<GadgetMetadata>(GadgetMetadataHolder.class, GadgetMetadata.class).save(gadget.gadgetId().getValue(), gadget,
+                    true);
+
+        }
+
+        Persistence.service().persist(dm);
     }
 
 }

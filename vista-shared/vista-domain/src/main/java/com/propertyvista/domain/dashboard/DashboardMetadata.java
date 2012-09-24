@@ -17,11 +17,12 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -83,15 +84,16 @@ public interface DashboardMetadata extends ISharedUserEntity {
 
     IPrimitive<LayoutType> layoutType();
 
-    IPrimitive<Boolean> isFavorite();
-
     IPrimitive<Boolean> isShared();
 
-    @Owned
+    @Transient
     IList<GadgetMetadata> gadgets();
+
+    IPrimitiveSet<String> gadgetIds();
 
     /**
      * Holds the docking position of the gadgets
      */
     IPrimitive<String> encodedLayout();
+
 }

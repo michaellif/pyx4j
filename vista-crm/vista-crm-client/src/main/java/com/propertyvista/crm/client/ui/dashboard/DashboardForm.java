@@ -40,7 +40,6 @@ public class DashboardForm extends CrmEntityForm<DashboardMetadata> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 40).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isFavorite()), 3).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isShared()), 3).build());
 
         selectTab(addTab(content));
