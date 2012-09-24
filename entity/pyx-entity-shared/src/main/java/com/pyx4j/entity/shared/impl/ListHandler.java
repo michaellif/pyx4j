@@ -46,8 +46,8 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
     }
 
     @Override
-    public void set(IList<TYPE> entity) {
-        setValue(entity.getValue());
+    public void set(IList<TYPE> typedList) {
+        setValue(typedList.getValue());
     }
 
     @SuppressWarnings("unchecked")

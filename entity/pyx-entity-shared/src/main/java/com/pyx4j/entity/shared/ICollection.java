@@ -36,6 +36,8 @@ public interface ICollection<TYPE extends IEntity, VALUE_TYPE> extends IObject<V
      */
     public TYPE $();
 
+    public void set(ICollection<TYPE, VALUE_TYPE> typedCollection);
+
     public String toStringIds();
 
     public boolean containsAny(TYPE... value);

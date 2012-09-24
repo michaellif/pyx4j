@@ -151,6 +151,11 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         }
     }
 
+    @Override
+    public void set(ICollection<TYPE, VALUE_TYPE> typedCollection) {
+        setValue(typedCollection.getValue());
+    }
+
     protected String exceptionInfo() {
         return getValueClass() + " '" + this.getFieldName() + "' of " + GWTJava5Helper.getSimpleName(getOwner().getObjectClass());
     }
