@@ -152,7 +152,7 @@ public class LeaseGenerator extends DataGenerator {
         details.bankId().setValue(paddZerro(RandomUtil.randomInt(999), 3));
         details.branchTransitNumber().setValue(paddZerro(RandomUtil.randomInt(99999), 5));
         details.accountNo().number().setValue(Integer.toString(RandomUtil.randomInt(99999)) + Integer.toString(RandomUtil.randomInt(999999)));
-        details.accountNo().reference().setValue(DomainUtil.last4Numbers(details.accountNo().number().getValue()));
+        details.accountNo().obfuscatedNumber().setValue(DomainUtil.obfuscateAccountNumber(details.accountNo().number().getValue()));
         m.details().set(details);
 
         m.customer().set(tenant.customer());

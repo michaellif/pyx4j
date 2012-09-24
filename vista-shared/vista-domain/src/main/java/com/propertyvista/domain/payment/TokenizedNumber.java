@@ -13,46 +13,14 @@
  */
 package com.propertyvista.domain.payment;
 
-import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.i18n.annotations.I18n;
 
-@ToStringFormat(value = "{0,choice,null#XXXX XXXX XXXX|!null#XXXX XXXX {0}}", nil = "XXXX XXXX XXXX")
+@ToStringFormat(value = "{0,choice,null#XXXX XXXX XXXX|!null#{0}}", nil = "XXXX XXXX XXXX")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @EmbeddedEntity
-public interface TokenizedNumber extends IEntity {
-
-    //TODO for pyx merge number @UpdatedBy(column = NumberUpdateValue.class)
-    @RpcTransient
-    IPrimitive<String> number();
-
-    interface NumberUpdateValue extends ColumnId {
-    }
-
-    /**
-     * Indicator for Server to update number() base on obfuscatedNumber().
-     */
-    //TODO for pyx @ColumnIdentificator(NumberUpdateValue.class)
-    // TODO rename to newNumber
-    @Transient(logTransient = true)
-    IPrimitive<String> newNumberValue();
-
-    // Number fragment presented to user
-    @ToString
-    @Length(4)
-    @Deprecated
-    IPrimitive<String> reference();
-
-    // -- New implementation
-    //TODO for pyx merge number @UpdatedBy(adapter = TokinezedAdapterClass.class)
-    @ToString
-    IPrimitive<String> obfuscatedNumber();
+public interface TokenizedNumber extends IPersonalIdentity {
 
 }

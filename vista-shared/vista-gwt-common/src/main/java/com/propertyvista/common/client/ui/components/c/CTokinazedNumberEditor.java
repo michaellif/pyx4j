@@ -59,8 +59,8 @@ public class CTokinazedNumberEditor<E extends TokenizedNumber> extends CTextFiel
         public String format(E value) {
             if (value == null) {
                 return "";
-            } else if (!value.newNumberValue().isNull()) {
-                return value.newNumberValue().getStringView();
+            } else if (!value.newNumber().isNull()) {
+                return value.newNumber().getStringView();
             } else {
                 return value.getStringView();
             }
@@ -74,8 +74,8 @@ public class CTokinazedNumberEditor<E extends TokenizedNumber> extends CTextFiel
 
             @SuppressWarnings("unchecked")
             E value = (E) EntityFactory.create(clazz);
-            value.newNumberValue().setValue(string);
-            value.reference().setValue(DomainUtil.last4Numbers(string));
+            value.newNumber().setValue(string);
+            value.obfuscatedNumber().setValue(DomainUtil.last4Numbers(string));
             return value;
         }
 

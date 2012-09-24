@@ -28,8 +28,8 @@ public class EcheckAccountNumberValidator implements EditableValueValidator<Toke
 
     @Override
     public ValidationError isValid(CComponent<TokenizedAccountNumber, ?> component, TokenizedAccountNumber value) {
-        if (CommonsStringUtils.isStringSet(value.newNumberValue().getValue())) {
-            return ValidationUtils.isAccountNumberValid(value.newNumberValue().getValue()) ? null : new ValidationError(component,
+        if (CommonsStringUtils.isStringSet(value.newNumber().getValue())) {
+            return ValidationUtils.isAccountNumberValid(value.newNumber().getValue()) ? null : new ValidationError(component,
                     i18n.tr("Account Number should consist of up to 12 digits"));
         } else {
             return null;

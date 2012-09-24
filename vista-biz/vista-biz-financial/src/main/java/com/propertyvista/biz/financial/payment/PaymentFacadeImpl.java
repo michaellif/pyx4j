@@ -71,24 +71,25 @@ public class PaymentFacadeImpl implements PaymentFacade {
         switch (paymentMethod.type().getValue()) {
         case Echeck:
             EcheckInfo eci = paymentMethod.details().cast();
-            if (!eci.accountNo().newNumberValue().isNull()) {
-                eci.accountNo().number().setValue(eci.accountNo().newNumberValue().getValue());
+            if (!eci.accountNo().newNumber().isNull()) {
+                eci.accountNo().number().setValue(eci.accountNo().newNumber().getValue());
+                eci.accountNo().obfuscatedNumber().setValue(DomainUtil.obfuscateAccountNumber(eci.accountNo().number().getValue()));
             } else {
                 Validate.isTrue(!paymentMethod.details().id().isNull(), "Account number is required");
                 //TODO move to framework
                 // Do merge.                
                 EcheckInfo origValue = Persistence.service().retrieve(EcheckInfo.class, eci.getPrimaryKey());
                 eci.accountNo().number().setValue(origValue.accountNo().number().getValue());
+                Validate.isTrue(eci.accountNo().obfuscatedNumber().equals(origValue.accountNo().obfuscatedNumber()));
             }
-            eci.accountNo().reference().setValue(DomainUtil.last4Numbers(eci.accountNo().number().getValue()));
             break;
         case CreditCard:
             //Verify CC change
             CreditCardInfo cc = paymentMethod.details().cast();
             if (!paymentMethod.details().id().isNull()) {
                 CreditCardInfo ccOrigValue = Persistence.service().retrieve(CreditCardInfo.class, cc.getPrimaryKey());
-                if (cc.card().newNumberValue().isNull()) {
-                    Validate.isTrue(cc.card().reference().equals(ccOrigValue.card().reference()));
+                if (cc.card().newNumber().isNull()) {
+                    Validate.isTrue(cc.card().obfuscatedNumber().equals(ccOrigValue.card().obfuscatedNumber()));
                 }
             }
             break;
@@ -109,9 +110,9 @@ public class PaymentFacadeImpl implements PaymentFacade {
         switch (paymentMethod.type().getValue()) {
         case CreditCard:
             CreditCardInfo cc = paymentMethod.details().cast();
-            if (!cc.card().newNumberValue().isNull()) {
-                cc.card().number().setValue(cc.card().newNumberValue().getValue());
-                cc.card().reference().setValue(DomainUtil.last4Numbers(cc.card().number().getValue()));
+            if (!cc.card().newNumber().isNull()) {
+                cc.card().number().setValue(cc.card().newNumber().getValue());
+                cc.card().obfuscatedNumber().setValue(DomainUtil.obfuscateCreditCardNumber(cc.card().newNumber().getValue()));
             }
             // Allow to update expiryDate 
             CreditCardProcessor.persistToken(building, cc);

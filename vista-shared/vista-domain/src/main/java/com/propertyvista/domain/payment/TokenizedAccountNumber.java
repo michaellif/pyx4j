@@ -24,7 +24,7 @@ import com.pyx4j.i18n.annotations.I18n;
 /**
  * Use for eCheck account numbers
  */
-@ToStringFormat(value = "{0,choice,null#XXXX XXXX XXXX|!null#XXXX XXXX {0}}", nil = "XXXX XXXX XXXX")
+@ToStringFormat(value = "{0,choice,null#XXXX XXXX XXXX|!null#{0}}", nil = "XXXX XXXX XXXX")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @EmbeddedEntity
 public interface TokenizedAccountNumber extends TokenizedNumber {
@@ -36,7 +36,7 @@ public interface TokenizedAccountNumber extends TokenizedNumber {
     @Override
     @Transient(logTransient = true)
     @Length(12)
-    IPrimitive<String> newNumberValue();
+    IPrimitive<String> newNumber();
 
     @Override
     @ToString

@@ -35,6 +35,7 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 
@@ -68,7 +69,8 @@ public class TenantsGenerator {
             // create new payment method details:
             CreditCardInfo details = EntityFactory.create(CreditCardInfo.class);
             details.cardType().setValue(CreditCardType.Visa);
-            details.card().reference().setValue(CommonsStringUtils.d00(RandomUtil.randomInt(99)) + CommonsStringUtils.d00(RandomUtil.randomInt(99)));
+            details.card().newNumber().setValue("00" + CommonsStringUtils.d00(RandomUtil.randomInt(99)) + CommonsStringUtils.d00(RandomUtil.randomInt(99)));
+            details.card().obfuscatedNumber().setValue(DomainUtil.obfuscateCreditCardNumber(details.card().newNumber().getValue()));
             details.nameOn().setValue(customer.person().name().getStringView());
             details.expiryDate().setValue(RandomUtil.randomLogicalDate(2012, 2015));
             m.details().set(details);
