@@ -35,6 +35,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
@@ -546,8 +547,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
-        // TODO : use compareIgnoreVersion() when it'll be ready!!! 
-        if (lease.currentTerm().equals(leaseTerm)) {
+        if (VersionedEntityUtils.equalsIgnoreVersion(lease.currentTerm(), leaseTerm)) {
             AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitId.getPrimaryKey());
             if (unit.building().isValueDetached()) {
                 Persistence.service().retrieve(unit.building());
