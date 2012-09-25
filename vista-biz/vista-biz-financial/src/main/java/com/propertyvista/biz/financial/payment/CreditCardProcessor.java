@@ -154,6 +154,10 @@ class CreditCardProcessor {
 
         if (response.code().getValue().equals("0000")) {
             cc.token().setValue(token.code().getValue());
+        } else if (response.code().getValue().equals("1019")) {
+            throw new UserRuntimeException(i18n.tr("Merchant account is not setup to receive CreditCard Payments"));
+        } else if (response.code().getValue().equals("1001")) {
+            throw new UserRuntimeException(i18n.tr("Merchant account is not activated"));
         } else {
             throw new UserRuntimeException(response.message().getValue());
         }
