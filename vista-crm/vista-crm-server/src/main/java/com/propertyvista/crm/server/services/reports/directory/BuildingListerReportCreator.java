@@ -29,7 +29,7 @@ import com.propertyvista.crm.server.services.building.BuildingCrudServiceImpl;
 import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
 import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
-import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
+import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.dto.BuildingDTO;
 
@@ -45,7 +45,7 @@ public class BuildingListerReportCreator implements GadgetReportModelCreator {
 
     @Override
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
-        final BuildingLister metadata = gadgetMetadata.duplicate(BuildingLister.class);
+        final BuildingListerGadgetMetadata metadata = gadgetMetadata.duplicate(BuildingListerGadgetMetadata.class);
 
         new BuildingCrudServiceImpl().list(new AsyncCallback<EntitySearchResult<BuildingDTO>>() {
 
@@ -69,7 +69,7 @@ public class BuildingListerReportCreator implements GadgetReportModelCreator {
         }, getSearchCriteria(metadata));
     }
 
-    private EntityListCriteria<BuildingDTO> getSearchCriteria(BuildingLister metadata) {
+    private EntityListCriteria<BuildingDTO> getSearchCriteria(BuildingListerGadgetMetadata metadata) {
         EntityListCriteria<BuildingDTO> criteria = new EntityListCriteria<BuildingDTO>(BuildingDTO.class);
         String sortCoulmn = metadata.primarySortColumn().propertyPath().getValue();
         if (sortCoulmn != null) {

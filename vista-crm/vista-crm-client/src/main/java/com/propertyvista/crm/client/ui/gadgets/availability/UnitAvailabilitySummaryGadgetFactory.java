@@ -42,15 +42,15 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilt
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatusSummaryLineDTO;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class UnitAvailabilitySummaryGadgetFactory extends AbstractGadget<UnitAvailabilitySummaryGMeta> {
+public class UnitAvailabilitySummaryGadgetFactory extends AbstractGadget<UnitAvailabilitySummaryGadgetMetadata> {
 
     private static final I18n i18n = I18n.get(UnitAvailabilitySummaryGadgetFactory.class);
 
-    private class UnitAvailabilitySummaryGadget extends GadgetInstanceBase<UnitAvailabilitySummaryGMeta> {
+    private class UnitAvailabilitySummaryGadget extends GadgetInstanceBase<UnitAvailabilitySummaryGadgetMetadata> {
 
         private DataTable<UnitAvailabilityStatusSummaryLineDTO> table;
 
@@ -61,7 +61,7 @@ public class UnitAvailabilitySummaryGadgetFactory extends AbstractGadget<UnitAva
         private final AvailabilityReportService service;
 
         public UnitAvailabilitySummaryGadget(GadgetMetadata gadgetMetadata) {
-            super(gadgetMetadata, UnitAvailabilitySummaryGMeta.class, new UnitAvailabilitySummaryGMetaForm());
+            super(gadgetMetadata, UnitAvailabilitySummaryGadgetMetadata.class, new UnitAvailabilitySummaryGMetaForm());
 
             service = GWT.<AvailabilityReportService> create(AvailabilityReportService.class);
 
@@ -87,8 +87,8 @@ public class UnitAvailabilitySummaryGadgetFactory extends AbstractGadget<UnitAva
         }
 
         @Override
-        protected UnitAvailabilitySummaryGMeta createDefaultSettings(Class<UnitAvailabilitySummaryGMeta> metadataClass) {
-            UnitAvailabilitySummaryGMeta settings = super.createDefaultSettings(metadataClass);
+        protected UnitAvailabilitySummaryGadgetMetadata createDefaultSettings(Class<UnitAvailabilitySummaryGadgetMetadata> metadataClass) {
+            UnitAvailabilitySummaryGadgetMetadata settings = super.createDefaultSettings(metadataClass);
 
             UnitAvailabilityStatusSummaryLineDTO proto = EntityFactory.getEntityPrototype(UnitAvailabilityStatusSummaryLineDTO.class);
             settings.columnDescriptors().addAll(ColumnDescriptorConverter.asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
@@ -155,7 +155,7 @@ public class UnitAvailabilitySummaryGadgetFactory extends AbstractGadget<UnitAva
     }
 
     public UnitAvailabilitySummaryGadgetFactory() {
-        super(UnitAvailabilitySummaryGMeta.class);
+        super(UnitAvailabilitySummaryGadgetMetadata.class);
     }
 
     @Override
@@ -164,7 +164,7 @@ public class UnitAvailabilitySummaryGadgetFactory extends AbstractGadget<UnitAva
     }
 
     @Override
-    protected GadgetInstanceBase<UnitAvailabilitySummaryGMeta> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<UnitAvailabilitySummaryGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new UnitAvailabilitySummaryGadget(gadgetMetadata);
     }
 

@@ -16,6 +16,7 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -29,6 +30,7 @@ import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 @Deprecated
 @DiscriminatorValue("ArrearsGadgetMeta")
 @Caption(name = "Arrears Status", description = "Shows the information about lease arrears, including how long it is overdue, total balance, legal status information etc. This gadget can either show total arrears or arrears of specific type (i.e. rent, parking or other)")
+@Transient
 public interface ArrearsStatusGadgetMetadata extends ListerGadgetBaseMetadata, BuildingGadget {
 
     @Caption(description = "Choose which category of arrears to display")

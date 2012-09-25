@@ -37,17 +37,17 @@ import com.propertyvista.domain.dashboard.gadgets.type.ApplicationsGadgetMetadat
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
+import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.CollectionsGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.LeadsAndRentalsGadgetMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.LeadsAndRentalsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.MaintenanceGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMeta;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata.RefreshInterval;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
@@ -76,7 +76,7 @@ public class DashboardGenerator extends Dashboards {
         dmd.description().setValue(i18n.tr("Displays default system data"));
         dmd.layoutType().setValue(LayoutType.One);
 
-        BuildingLister buildingLister = EntityFactory.create(BuildingLister.class);
+        BuildingListerGadgetMetadata buildingLister = EntityFactory.create(BuildingListerGadgetMetadata.class);
         buildingLister.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage
         buildingLister.pageSize().setValue(10);
         buildingLister.refreshInterval().setValue(RefreshInterval.Never);
@@ -121,7 +121,7 @@ public class DashboardGenerator extends Dashboards {
         collectionsGadget.docking().column().setValue(0);
         dmd.gadgets().add(collectionsGadget);
 
-        LeadsAndRentalsGadgetMeta leadsAndRentalsGadget = EntityFactory.create(LeadsAndRentalsGadgetMeta.class);
+        LeadsAndRentalsGadgetMetadata leadsAndRentalsGadget = EntityFactory.create(LeadsAndRentalsGadgetMetadata.class);
         leadsAndRentalsGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
         leadsAndRentalsGadget.refreshInterval().setValue(RefreshInterval.Never);
         leadsAndRentalsGadget.docking().column().setValue(0);
@@ -146,23 +146,23 @@ public class DashboardGenerator extends Dashboards {
         dmd.description().setValue(i18n.tr("Contains various availablility gadgets"));
         dmd.layoutType().setValue(LayoutType.One);
 
-        UnitAvailabilityGadgetMeta unitAvailabilityReport = EntityFactory.create(UnitAvailabilityGadgetMeta.class);
+        UnitAvailabilityGadgetMetadata unitAvailabilityReport = EntityFactory.create(UnitAvailabilityGadgetMetadata.class);
         unitAvailabilityReport.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage
         unitAvailabilityReport.refreshInterval().setValue(RefreshInterval.Never);
         unitAvailabilityReport.pageSize().setValue(10);
-        unitAvailabilityReport.filterPreset().setValue(UnitAvailabilityGadgetMeta.FilterPreset.VacantAndNotice);
+        unitAvailabilityReport.filterPreset().setValue(UnitAvailabilityGadgetMetadata.FilterPreset.VacantAndNotice);
         unitAvailabilityReport.docking().column().setValue(0);
         unitAvailabilityReport.columnDescriptors().addAll(defineUnitAvailabilityReportColumns());
         dmd.gadgets().add(unitAvailabilityReport);
 
-        UnitAvailabilitySummaryGMeta unitAvailabilitySummary = EntityFactory.create(UnitAvailabilitySummaryGMeta.class);
+        UnitAvailabilitySummaryGadgetMetadata unitAvailabilitySummary = EntityFactory.create(UnitAvailabilitySummaryGadgetMetadata.class);
         unitAvailabilitySummary.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
         unitAvailabilitySummary.refreshInterval().setValue(RefreshInterval.Never);
         unitAvailabilitySummary.docking().column().setValue(0);
         unitAvailabilitySummary.columnDescriptors().addAll(defineUnitSummaryStatusColumns());
         dmd.gadgets().add(unitAvailabilitySummary);
 
-        TurnoverAnalysisMetadata turnoverAnalysis = EntityFactory.create(TurnoverAnalysisMetadata.class);
+        UnitTurnoverAnalysisGadgetMetadata turnoverAnalysis = EntityFactory.create(UnitTurnoverAnalysisGadgetMetadata.class);
         turnoverAnalysis.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
         turnoverAnalysis.refreshInterval().setValue(RefreshInterval.Never);
         turnoverAnalysis.isTurnoverMeasuredByPercent().setValue(false);

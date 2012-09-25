@@ -15,6 +15,7 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -23,6 +24,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 @Caption(name = "Arrears YOY Analysis Chart", description = "A graph that visually demonstrates the arrear balance each month over the course of multiple years")
 @DiscriminatorValue("ArrearsYOYAnalysisChartMetadata")
+@Transient
 public interface ArrearsYOYAnalysisChartMetadata extends GadgetMetadata, BuildingGadget {
 
     @Caption(description = "Set the number of years ago to compare to the current year")

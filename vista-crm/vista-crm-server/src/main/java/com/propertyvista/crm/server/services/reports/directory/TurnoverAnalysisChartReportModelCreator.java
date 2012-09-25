@@ -32,7 +32,7 @@ import com.propertyvista.crm.server.services.reports.StaticTemplateReportModelBu
 import com.propertyvista.crm.server.services.reports.util.SvgRasterizer;
 import com.propertyvista.crm.server.services.reports.util.SvgRasterizerImpl;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO;
-import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.svg.gadgets.TurnoverAnalysisChartFactory;
 
@@ -54,7 +54,7 @@ public class TurnoverAnalysisChartReportModelCreator implements GadgetReportMode
 
     @Override
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
-        final TurnoverAnalysisMetadata turnoverAnalysisMetadata = (TurnoverAnalysisMetadata) gadgetMetadata;
+        final UnitTurnoverAnalysisGadgetMetadata turnoverAnalysisMetadata = (UnitTurnoverAnalysisGadgetMetadata) gadgetMetadata;
         final LogicalDate asOf = turnoverAnalysisMetadata.customizeDate().isBooleanTrue() ? turnoverAnalysisMetadata.asOf().getValue() : new LogicalDate(
                 SysDateManager.getSysDate());
 
@@ -66,7 +66,7 @@ public class TurnoverAnalysisChartReportModelCreator implements GadgetReportMode
                 BufferedImage graph = rasterizer.rasterize(new TurnoverAnalysisChartFactory(new SvgFactoryForBatik()).createChart(data,
                         turnoverAnalysisMetadata.isTurnoverMeasuredByPercent().getValue(), WIDTH, HEIGHT), WIDTH, HEIGHT);
 
-                callback.onSuccess(new StaticTemplateReportModelBuilder(TurnoverAnalysisMetadata.class)//@formatter:off
+                callback.onSuccess(new StaticTemplateReportModelBuilder(UnitTurnoverAnalysisGadgetMetadata.class)//@formatter:off
                         .param(TITLE, turnoverAnalysisMetadata.getEntityMeta().getCaption())
                         .param(AS_OF, i18n.tr("As of Date: {0}", DATE_FORMAT.format(asOf)))
                         .param(GRAPH, graph)

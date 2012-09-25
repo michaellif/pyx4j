@@ -28,13 +28,13 @@ import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetF
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
 import com.propertyvista.crm.rpc.dto.gadgets.LeadsAndRentalsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeadsAndRentalsGadgetService;
-import com.propertyvista.domain.dashboard.gadgets.type.LeadsAndRentalsGadgetMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.LeadsAndRentalsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 
-public class LeadsAndRentalsGadget extends CounterGadgetInstanceBase<LeadsAndRentalsGadgetDataDTO, Vector<Building>, LeadsAndRentalsGadgetMeta> {
+public class LeadsAndRentalsGadget extends CounterGadgetInstanceBase<LeadsAndRentalsGadgetDataDTO, Vector<Building>, LeadsAndRentalsGadgetMetadata> {
 
     public LeadsAndRentalsGadget(GadgetMetadata metadata) {
         super(//@formatter:off
@@ -42,7 +42,7 @@ public class LeadsAndRentalsGadget extends CounterGadgetInstanceBase<LeadsAndRen
                 GWT.<LeadsAndRentalsGadgetService> create(LeadsAndRentalsGadgetService.class),
                 new LeadsAndRentalsSummaryForm(),
                 metadata,
-                LeadsAndRentalsGadgetMeta.class
+                LeadsAndRentalsGadgetMetadata.class
         );//@formatter:on
     }
 

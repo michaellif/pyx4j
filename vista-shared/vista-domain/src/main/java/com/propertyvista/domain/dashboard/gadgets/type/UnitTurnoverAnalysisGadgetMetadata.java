@@ -16,6 +16,7 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -26,7 +27,8 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 @DiscriminatorValue("TurnoverAnalysisSettings")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Caption(name = "Turnover Analysis")
-public interface TurnoverAnalysisMetadata extends GadgetMetadata, BuildingGadget {
+@Transient
+public interface UnitTurnoverAnalysisGadgetMetadata extends GadgetMetadata, BuildingGadget {
 
     IPrimitive<Boolean> isTurnoverMeasuredByPercent();
 

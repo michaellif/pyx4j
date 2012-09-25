@@ -45,16 +45,16 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilt
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMeta;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMeta.FilterPreset;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata.FilterPreset;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilityGadgetMeta> {
+public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilityGadgetMetadata> {
 
     private static final I18n i18n = I18n.get(UnitAvailabilityReportGadget.class);
 
-    public static class UnitAvailabilityReportGadgetInstance extends ListerGadgetInstanceBase<UnitAvailabilityStatus, UnitAvailabilityGadgetMeta> implements
+    public static class UnitAvailabilityReportGadgetInstance extends ListerGadgetInstanceBase<UnitAvailabilityStatus, UnitAvailabilityGadgetMetadata> implements
             IBuildingBoardGadgetInstance {
 
         private VerticalPanel gadgetPanel;
@@ -66,7 +66,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         private CDatePicker asOf;
 
         public UnitAvailabilityReportGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, UnitAvailabilityGadgetMeta.class, new UnitAvailabilityGadgetMetatadaForm(), UnitAvailabilityStatus.class, false);
+            super(gmd, UnitAvailabilityGadgetMetadata.class, new UnitAvailabilityGadgetMetatadaForm(), UnitAvailabilityStatus.class, false);
             service = GWT.create(AvailabilityReportService.class);
         }
 
@@ -82,8 +82,8 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         }
 
         @Override
-        protected UnitAvailabilityGadgetMeta createDefaultSettings(Class<UnitAvailabilityGadgetMeta> metadataClass) {
-            UnitAvailabilityGadgetMeta settings = super.createDefaultSettings(metadataClass);
+        protected UnitAvailabilityGadgetMetadata createDefaultSettings(Class<UnitAvailabilityGadgetMetadata> metadataClass) {
+            UnitAvailabilityGadgetMetadata settings = super.createDefaultSettings(metadataClass);
             settings.filterPreset().setValue(FilterPreset.VacantAndNotice);
             UnitAvailabilityStatus proto = EntityFactory.getEntityPrototype(UnitAvailabilityStatus.class);
             settings.columnDescriptors().addAll(ColumnDescriptorConverter.asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
@@ -192,7 +192,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
     }
 
     public UnitAvailabilityReportGadget() {
-        super(UnitAvailabilityGadgetMeta.class);
+        super(UnitAvailabilityGadgetMetadata.class);
     }
 
     @Override
@@ -201,7 +201,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
     }
 
     @Override
-    protected GadgetInstanceBase<UnitAvailabilityGadgetMeta> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<UnitAvailabilityGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new UnitAvailabilityReportGadgetInstance(gadgetMetadata);
     }
 }

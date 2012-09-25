@@ -35,12 +35,12 @@ import com.propertyvista.crm.server.services.reports.directory.UnitAvailabilityS
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
+import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMeta;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
@@ -54,11 +54,11 @@ public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
     private ReportModelCreatorDispatcher() {
         map = new ConcurrentHashMap<Class<? extends GadgetMetadata>, GadgetReportModelCreator>();
 
-        map.put(BuildingLister.class, new BuildingListerReportCreator());
+        map.put(BuildingListerGadgetMetadata.class, new BuildingListerReportCreator());
 
-        map.put(UnitAvailabilityGadgetMeta.class, new UnitAvailabilityStatusReportCreator());
-        map.put(UnitAvailabilitySummaryGMeta.class, new UnitAvailabilitySummaryReportCreator());
-        map.put(TurnoverAnalysisMetadata.class, new TurnoverAnalysisChartReportModelCreator());
+        map.put(UnitAvailabilityGadgetMetadata.class, new UnitAvailabilityStatusReportCreator());
+        map.put(UnitAvailabilitySummaryGadgetMetadata.class, new UnitAvailabilitySummaryReportCreator());
+        map.put(UnitTurnoverAnalysisGadgetMetadata.class, new TurnoverAnalysisChartReportModelCreator());
 
         map.put(ArrearsStatusGadgetMetadata.class, new ArrearsStatusReportModelCreator());
         map.put(ArrearsSummaryGadgetMetadata.class, new ArrearsSummaryReportModelCreator());

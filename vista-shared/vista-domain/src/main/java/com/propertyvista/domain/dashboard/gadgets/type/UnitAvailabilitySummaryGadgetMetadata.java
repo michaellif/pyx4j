@@ -7,18 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 1, 2011
+ * Created on Jun 11, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
+import com.propertyvista.domain.dashboard.gadgets.type.base.HasCustomizableDateGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 
-@DiscriminatorValue("BuildingLister")
-public interface BuildingLister extends ListerGadgetBaseMetadata, BuildingGadget {
+@DiscriminatorValue("UnitAvailbilitySummaryGadgetMetadata")
+@Caption(name = "Unit Availability Summary", description = "Shows a summary of information about all units, including the total number of units, vacancy, notice and net exposure information in both percentages and quantity")
+@Transient
+public interface UnitAvailabilitySummaryGadgetMetadata extends ListerGadgetBaseMetadata, HasCustomizableDateGadgetMetadata, BuildingGadget {
 
 }

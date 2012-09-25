@@ -37,16 +37,16 @@ import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
-import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
+import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingListerGadget extends AbstractGadget<BuildingLister> {
+public class BuildingListerGadget extends AbstractGadget<BuildingListerGadgetMetadata> {
 
     private static final I18n i18n = I18n.get(BuildingListerGadget.class);
 
-    public static class BuildingListerGadgetInstance extends ListerGadgetInstanceBase<BuildingDTO, BuildingLister> {
+    public static class BuildingListerGadgetInstance extends ListerGadgetInstanceBase<BuildingDTO, BuildingListerGadgetMetadata> {
 
         private static final I18n i18n = I18n.get(BuildingListerGadgetInstance.class);
 
@@ -54,14 +54,14 @@ public class BuildingListerGadget extends AbstractGadget<BuildingLister> {
 
         @SuppressWarnings("unchecked")
         public BuildingListerGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, BuildingLister.class, null, BuildingDTO.class, false);
+            super(gmd, BuildingListerGadgetMetadata.class, null, BuildingDTO.class, false);
             service = (AbstractListService<BuildingDTO>) GWT.create(BuildingCrudService.class);
             initView();
         }
 
         @Override
-        protected BuildingLister createDefaultSettings(Class<BuildingLister> metadataClass) {
-            BuildingLister settings = super.createDefaultSettings(metadataClass);
+        protected BuildingListerGadgetMetadata createDefaultSettings(Class<BuildingListerGadgetMetadata> metadataClass) {
+            BuildingListerGadgetMetadata settings = super.createDefaultSettings(metadataClass);
             BuildingDTO proto = EntityFactory.getEntityPrototype(BuildingDTO.class);
             settings.columnDescriptors().addAll(ColumnDescriptorConverter.asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto.complex()).visible(false).build(),
@@ -116,7 +116,7 @@ public class BuildingListerGadget extends AbstractGadget<BuildingLister> {
     }
 
     public BuildingListerGadget() {
-        super(BuildingLister.class);
+        super(BuildingListerGadgetMetadata.class);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class BuildingListerGadget extends AbstractGadget<BuildingLister> {
     }
 
     @Override
-    protected GadgetInstanceBase<BuildingLister> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<BuildingListerGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new BuildingListerGadgetInstance(gadgetMetadata);
     }
 

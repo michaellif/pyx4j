@@ -15,12 +15,14 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 
 @DiscriminatorValue("LeadsAndRentalsGadgetMeta")
 @Caption(name = "Leads and Rentals", description = "TBD")
-public interface LeadsAndRentalsGadgetMeta extends CounterGadgetBaseMetadata, BuildingGadget {
+@Transient
+public interface LeadsAndRentalsGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 
 }

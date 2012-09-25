@@ -49,8 +49,8 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatusSummaryLineDTO.AvailabilityCategory;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO.AnalysisResolution;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMeta;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMeta.FilterPreset;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata.FilterPreset;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -61,7 +61,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
     @Override
     public void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>> callback, Vector<Key> buildings,
-            UnitAvailabilityGadgetMeta.FilterPreset filterPreset, LogicalDate on, Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
+            UnitAvailabilityGadgetMetadata.FilterPreset filterPreset, LogicalDate on, Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
 
         EntityListCriteria<UnitAvailabilityStatus> criteria = new EntityListCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
 

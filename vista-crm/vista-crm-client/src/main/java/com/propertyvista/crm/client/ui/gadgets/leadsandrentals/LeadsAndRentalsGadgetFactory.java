@@ -19,13 +19,13 @@ import java.util.List;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
-import com.propertyvista.domain.dashboard.gadgets.type.LeadsAndRentalsGadgetMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.LeadsAndRentalsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public class LeadsAndRentalsGadgetFactory extends AbstractGadget<LeadsAndRentalsGadgetMeta> {
+public class LeadsAndRentalsGadgetFactory extends AbstractGadget<LeadsAndRentalsGadgetMetadata> {
 
     public LeadsAndRentalsGadgetFactory() {
-        super(LeadsAndRentalsGadgetMeta.class);
+        super(LeadsAndRentalsGadgetMetadata.class);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class LeadsAndRentalsGadgetFactory extends AbstractGadget<LeadsAndRentals
     }
 
     @Override
-    protected GadgetInstanceBase<LeadsAndRentalsGadgetMeta> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<LeadsAndRentalsGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new LeadsAndRentalsGadget(gadgetMetadata);
     }
 

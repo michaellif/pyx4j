@@ -31,6 +31,12 @@ public interface AbstractMetadataService extends IService {
 
     public void saveDashboardMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata editableEntity);
 
+    /**
+     * @param proto
+     *            passes the instance value class of the gadget
+     */
+    public void createGadgetMetadata(AsyncCallback<GadgetMetadata> callback, GadgetMetadata proto);
+
     public void retrieveGadgetMetadata(AsyncCallback<GadgetMetadata> callback, Key gadgetMetadataId);
 
     public void saveGadgetMetadata(AsyncCallback<GadgetMetadata> callback, GadgetMetadata gadgetMetadata);

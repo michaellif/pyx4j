@@ -16,6 +16,7 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -27,7 +28,8 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMeta
 
 @DiscriminatorValue("UnitAvailability")
 @Caption(name = "Unit Availability", description = "Shows the information about units, whether they are available or rented, how long they have been vacant for and revenue lost as a result. Can be customized to show various information about buildings and units, for example their physical condition.")
-public interface UnitAvailabilityGadgetMeta extends ListerGadgetBaseMetadata, BuildingGadget {
+@Transient
+public interface UnitAvailabilityGadgetMetadata extends ListerGadgetBaseMetadata, BuildingGadget {
 
     @I18n
     enum FilterPreset {

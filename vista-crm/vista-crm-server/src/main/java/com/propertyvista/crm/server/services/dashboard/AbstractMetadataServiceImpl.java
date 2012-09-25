@@ -59,8 +59,9 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         } else {
             dm = Persistence.secureRetrieve(DashboardMetadata.class, entityId);
         }
+
         for (String id : dm.gadgetIds()) {
-            GadgetMetadata gm = new CustomizationPersistenceHelper<GadgetMetadata>(GadgetMetadataHolder.class, GadgetMetadata.class).load(id);
+            GadgetMetadata gm = gadgetStorage().load(id);
             dm.gadgets().add(gm);
         }
 
@@ -74,23 +75,26 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
             throw new Error("trying to save new dashboard metadata");
         }
 
+        CustomizationPersistenceHelper<GadgetMetadata> gadgetStorage = gadgetStorage();
+
         DashboardMetadata oldDm = Persistence.secureRetrieve(DashboardMetadata.class, dm.getPrimaryKey());
 
         // find deleted gadgets
-        Collection<GadgetMetadata> deletedGadgets = new ArrayList<GadgetMetadata>();
-        Collection<GadgetMetadata> remainingGadgets = new ArrayList<GadgetMetadata>();
-        for (GadgetMetadata oldGadgetMetadata : oldDm.gadgets()) {
+        Collection<String> deletedGadgetIds = new ArrayList<String>();
+        Collection<String> remainingGadgetIds = new ArrayList<String>();
+        for (String oldGadgetId : oldDm.gadgetIds()) {
             boolean isContained = false;
-            contained: for (GadgetMetadata inGadgetMetadata : dm.gadgets()) {
-                if (inGadgetMetadata.getPrimaryKey().equals(oldGadgetMetadata.getPrimaryKey())) {
+            contained: for (GadgetMetadata incomingGadgetMetadata : dm.gadgets()) {
+                if (oldGadgetId.equals(incomingGadgetMetadata.gadgetId().getValue())) {
                     isContained = true;
                     break contained;
                 }
             }
+
             if (!isContained) {
-                deletedGadgets.add(oldGadgetMetadata);
+                deletedGadgetIds.add(oldGadgetId);
             } else {
-                remainingGadgets.add(oldGadgetMetadata);
+                remainingGadgetIds.add(oldGadgetId);
             }
         }
 
@@ -102,29 +106,35 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
             }
         }
 
-        dm.gadgetIds().clear();
-        for (GadgetMetadata gadget : remainingGadgets) {
-            dm.gadgetIds().add(gadget.gadgetId().getValue());
-        }
-
         // delete deleted gadgets
-        for (GadgetMetadata gadget : deletedGadgets) {
-            new CustomizationPersistenceHelper<GadgetMetadata>(GadgetMetadataHolder.class, GadgetMetadata.class).delete(gadget.getPrimaryKey().toString(),
-                    gadget);
+        for (String gadgetId : deletedGadgetIds) {
+            gadgetStorage.delete(gadgetId);
         }
 
         // persist new gadgets        
         for (GadgetMetadata gadget : addedGadgets) {
             gadget.setPrimaryKey(new Key(1l));
             gadget.gadgetId().setValue(UUID.randomUUID().toString());
+            gadgetStorage.save(gadget.gadgetId().getValue(), gadget, true);
+        }
+
+        // rebind the incoming gadgets to the dashboard
+        dm.gadgetIds().clear();
+        for (String gadgetId : remainingGadgetIds) {
+            dm.gadgetIds().add(gadgetId);
+        }
+        for (GadgetMetadata gadget : addedGadgets) {
             dm.gadgetIds().add(gadget.gadgetId().getValue());
-            new CustomizationPersistenceHelper<GadgetMetadata>(GadgetMetadataHolder.class, GadgetMetadata.class).save(gadget.gadgetId().getValue(), gadget,
-                    true);
         }
 
         Persistence.secureSave(dm);
         Persistence.service().commit();
         callback.onSuccess(dm);
+    }
+
+    @Override
+    public void createGadgetMetadata(AsyncCallback<GadgetMetadata> callback, GadgetMetadata proto) {
+
     }
 
     @Override
@@ -134,15 +144,20 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
 
     @Override
     public void saveGadgetMetadata(AsyncCallback<GadgetMetadata> callback, GadgetMetadata gadgetMetadata) {
-        // TODO refactor all this crap: make it be called only when owner is set...
-        if (gadgetMetadata != null) {
-            Persistence.service().persist(gadgetMetadata);
-            Persistence.service().commit();
-            callback.onSuccess(gadgetMetadata);
-        } else {
+        if (gadgetMetadata == null) {
             throw new Error("Got null instead of gadget metadata");
         }
+        if (gadgetMetadata.gadgetId().isNull()) {
+            throw new Error("got gadget metadata with no defined id:" + gadgetMetadata.toString());
+        }
+        gadgetStorage().save(gadgetMetadata.gadgetId().getValue(), gadgetMetadata, true);
+        callback.onSuccess(gadgetMetadata);
+        Persistence.service().commit();
     }
 
     protected abstract DashboardMetadata retrieveDefaultMetadata();
+
+    private static CustomizationPersistenceHelper<GadgetMetadata> gadgetStorage() {
+        return new CustomizationPersistenceHelper<GadgetMetadata>(GadgetMetadataHolder.class, GadgetMetadata.class);
+    }
 }

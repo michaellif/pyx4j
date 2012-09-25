@@ -74,6 +74,8 @@ public abstract class AbstractDashboard extends ResizeComposite {
 
     private HashMap<ILayoutManager, Image> layoutButtons;
 
+    protected ILayoutManager activeLayoutManger;
+
     public AbstractDashboard(ICommonGadgetSettingsContainer container, IGadgetDirectory gadgetDirectory, List<ILayoutManager> layoutManagers) {
         this.commonGadgetSettingsContainer = container;
         this.gadgetDirectory = gadgetDirectory;
@@ -113,7 +115,16 @@ public abstract class AbstractDashboard extends ResizeComposite {
     protected abstract void onPrintRequested();
 
     private void placeGadgets() {
-        board = new Dashboard();
+        board = new Dashboard() {
+            // TODO this is a vicious hack: in this implementation we handle layouts via layout managers, and actually every change of the dashboard
+            // is a change of the layout, so we wish to update the dashboard metadata with new layout on every change             
+            @Override
+            public void onEvent(Reason reason) {
+                if (reason != BoardEvent.Reason.newLayout) {
+                    super.onEvent(reason);
+                }
+            }
+        };
         if (dashboardMetadata != null) {
             List<IGadgetInstance> gadgets = new ArrayList<IGadgetInstance>();
             for (GadgetMetadata metadata : dashboardMetadata.gadgets()) {
@@ -129,11 +140,12 @@ public abstract class AbstractDashboard extends ResizeComposite {
 
             for (ILayoutManager layoutManager : layoutButtons.keySet()) {
                 if (layoutManager.canHandle(dashboardMetadata)) {
-                    redrawLayoutButtons(layoutManager);
-                    layoutManager.restoreLayout(dashboardMetadata, gadgets.iterator(), board);
+                    activeLayoutManger = layoutManager;
                     break;
                 }
             }
+            redrawLayoutButtons(activeLayoutManger);
+            activeLayoutManger.restoreLayout(dashboardMetadata, gadgets.iterator(), board);
 
         } else {
             throw new Error("DashboardMetadata cannot be null");
@@ -177,10 +189,13 @@ public abstract class AbstractDashboard extends ResizeComposite {
             break;
         case repositionGadget:
             break;
-        case updateGadget:
-            // gadget settings were changed: IMHO not supposed to affect the dashboard metadata and be managed internally by the gadget
-            break;
+//        case updateGadget:
+//             gadget settings were changed: IMHO not supposed to affect the dashboard metadata and be managed internally by the gadget
+//            break;
         }
+        redrawLayoutButtons(activeLayoutManger); // emphasize the button that switches to the chosen layout manager
+        activeLayoutManger.saveLayout(dashboardMetadata, board);
+
         fireResizeRequests();
         onDashboardMetadataChanged();
     }
@@ -197,8 +212,8 @@ public abstract class AbstractDashboard extends ResizeComposite {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    redrawLayoutButtons(layoutManager);
-                    layoutManager.saveLayout(dashboardMetadata, board);
+                    activeLayoutManger = layoutManager;
+                    proccessDashboardEvent(BoardEvent.Reason.newLayout);
                 }
 
             });

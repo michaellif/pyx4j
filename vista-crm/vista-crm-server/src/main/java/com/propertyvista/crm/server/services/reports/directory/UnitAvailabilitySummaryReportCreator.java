@@ -30,7 +30,7 @@ import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
 import com.propertyvista.crm.server.services.reports.Util;
 import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatusSummaryLineDTO;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public class UnitAvailabilitySummaryReportCreator implements GadgetReportModelCreator {
@@ -43,7 +43,7 @@ public class UnitAvailabilitySummaryReportCreator implements GadgetReportModelCr
 
     @Override
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
-        final UnitAvailabilitySummaryGMeta availabilitySummaryMetadata = (UnitAvailabilitySummaryGMeta) gadgetMetadata;
+        final UnitAvailabilitySummaryGadgetMetadata availabilitySummaryMetadata = (UnitAvailabilitySummaryGadgetMetadata) gadgetMetadata;
         final LogicalDate asOf = availabilitySummaryMetadata.customizeDate().isBooleanTrue() ? availabilitySummaryMetadata.asOf().getValue() : new LogicalDate(
                 SysDateManager.getSysDate());
 

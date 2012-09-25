@@ -51,16 +51,16 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilt
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO.AnalysisResolution;
-import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.svg.gadgets.TurnoverAnalysisChartFactory;
 
-public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysisMetadata> {
+public class TurnoverAnalysisGraphGadget extends AbstractGadget<UnitTurnoverAnalysisGadgetMetadata> {
 
     private static final I18n i18n = I18n.get(TurnoverAnalysisGraphGadget.class);
 
-    private static class TurnoverAnalysisGraphGadgetInstance extends GadgetInstanceBase<TurnoverAnalysisMetadata> implements IBuildingBoardGadgetInstance {
+    private static class TurnoverAnalysisGraphGadgetInstance extends GadgetInstanceBase<UnitTurnoverAnalysisGadgetMetadata> implements IBuildingBoardGadgetInstance {
 
         private static final I18n i18n = I18n.get(TurnoverAnalysisGraphGadgetInstance.class);
 
@@ -93,7 +93,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
         private CDatePicker asOf;
 
         public TurnoverAnalysisGraphGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, TurnoverAnalysisMetadata.class);
+            super(gmd, UnitTurnoverAnalysisGadgetMetadata.class);
             service = GWT.create(AvailabilityReportService.class);
             setDefaultPopulator(new Populator() {
                 @Override
@@ -105,8 +105,8 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
         }
 
         @Override
-        protected TurnoverAnalysisMetadata createDefaultSettings(Class<TurnoverAnalysisMetadata> metadataClass) {
-            TurnoverAnalysisMetadata settings = super.createDefaultSettings(metadataClass);
+        protected UnitTurnoverAnalysisGadgetMetadata createDefaultSettings(Class<UnitTurnoverAnalysisGadgetMetadata> metadataClass) {
+            UnitTurnoverAnalysisGadgetMetadata settings = super.createDefaultSettings(metadataClass);
             settings.isTurnoverMeasuredByPercent().setValue(DEFAULT_IS_TURNOVER_MEASURED_BY_PERCENT);
             settings.turnoverAnalysisResolution().setValue(DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_MAX);
             return settings;
@@ -268,7 +268,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
 
         @Override
         public ISetup getSetup() {
-            return new SetupFormWrapper(new CEntityDecoratableForm<TurnoverAnalysisMetadata>(TurnoverAnalysisMetadata.class) {
+            return new SetupFormWrapper(new CEntityDecoratableForm<UnitTurnoverAnalysisGadgetMetadata>(UnitTurnoverAnalysisGadgetMetadata.class) {
                 @Override
                 public IsWidget createContent() {
                     FormFlexPanel p = new FormFlexPanel();
@@ -325,7 +325,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
     }
 
     public TurnoverAnalysisGraphGadget() {
-        super(TurnoverAnalysisMetadata.class);
+        super(UnitTurnoverAnalysisGadgetMetadata.class);
     }
 
     @Override
@@ -339,7 +339,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
     }
 
     @Override
-    protected GadgetInstanceBase<TurnoverAnalysisMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<UnitTurnoverAnalysisGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new TurnoverAnalysisGraphGadgetInstance(gadgetMetadata);
     }
 
