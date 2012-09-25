@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
@@ -104,6 +105,17 @@ public class ClientPolicyManager {
                 callback.onSuccess((POLICY) result);
             }
         }, (PolicyNode) node.createIdentityStub(), EntityFactory.getEntityPrototype(policyClass));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <POLICY extends Policy> void obtainHierarchicalEffectivePolicy(final IEntity entity, final Class<POLICY> policyClass,
+            final AsyncCallback<POLICY> callback) {
+        policyRetrieveService.obtainHierarchicalEffectivePolicy(new DefaultAsyncCallback<Policy>() {
+            @Override
+            public void onSuccess(Policy result) {
+                callback.onSuccess((POLICY) result);
+            }
+        }, entity.createIdentityStub(), EntityFactory.getEntityPrototype(policyClass));
     }
 
     public static void initialize(PolicyRetrieveService policyRetrieveService) {

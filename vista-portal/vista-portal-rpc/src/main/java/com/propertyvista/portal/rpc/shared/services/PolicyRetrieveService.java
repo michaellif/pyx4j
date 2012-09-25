@@ -15,6 +15,7 @@ package com.propertyvista.portal.rpc.shared.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.policy.framework.Policy;
@@ -23,5 +24,7 @@ import com.propertyvista.domain.policy.framework.PolicyNode;
 public interface PolicyRetrieveService extends IService {
 
     public void obtainEffectivePolicy(AsyncCallback<Policy> callback, PolicyNode node, Policy policyClass);
+
+    public void obtainHierarchicalEffectivePolicy(AsyncCallback<Policy> callback, IEntity entity, Policy policyClass);
 
 }

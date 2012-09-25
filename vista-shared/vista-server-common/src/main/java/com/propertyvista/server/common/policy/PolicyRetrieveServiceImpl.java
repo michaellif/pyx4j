@@ -16,6 +16,7 @@ package com.propertyvista.server.common.policy;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.framework.Policy;
@@ -33,4 +34,12 @@ public abstract class PolicyRetrieveServiceImpl implements PolicyRetrieveService
         callback.onSuccess(ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, (Class<Policy>) policyProto.getValueClass()));
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public void obtainHierarchicalEffectivePolicy(AsyncCallback<Policy> callback, IEntity entity, Policy policyProto) {
+        if (policyProto == null) {
+            throw new Error("A policy prototype was not provided");
+        }
+        callback.onSuccess(ServerSideFactory.create(PolicyFacade.class).obtainHierarchicalEffectivePolicy(entity, (Class<Policy>) policyProto.getValueClass()));
+    }
 }
