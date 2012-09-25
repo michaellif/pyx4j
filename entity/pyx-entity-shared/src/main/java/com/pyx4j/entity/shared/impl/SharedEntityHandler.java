@@ -182,11 +182,18 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public Key getPrimaryKey() {
-        Map<String, Object> v = getValue(false);
-        if (v == null) {
+        Map<String, Object> thisValue = getValue(false);
+        if (thisValue == null) {
+            if ((delegateValue) && getOwner().isValueDetached()) {
+                throw new RuntimeException("Access to detached entity " + exceptionInfo(thisValue));
+            }
             return null;
         } else {
-            return (Key) v.get(PRIMARY_KEY);
+            AttachLevel level = (AttachLevel) thisValue.get(DETACHED_ATTR);
+            if (level == AttachLevel.Detached) {
+                throw new RuntimeException("Access to detached " + thisValue.get(DETACHED_ATTR) + " entity " + exceptionInfo(thisValue));
+            }
+            return (Key) thisValue.get(PRIMARY_KEY);
         }
     }
 

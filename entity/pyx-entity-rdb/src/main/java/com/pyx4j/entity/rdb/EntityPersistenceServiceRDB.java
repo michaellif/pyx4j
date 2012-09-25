@@ -785,7 +785,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             Object value;
             Object lastValue;
             if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                value = ((IEntity) member.getMember(entity)).getPrimaryKey();
+                IEntity memberEntity = (IEntity) member.getMember(entity);
+                if (memberEntity.getAttachLevel() == AttachLevel.Detached) {
+                    continue;
+                }
+                value = memberEntity.getPrimaryKey();
                 lastValue = ((IEntity) member.getMember(baseEntity)).getPrimaryKey();
                 // TODO // merge incomplete data
 
@@ -978,6 +982,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             MemberMeta memberMeta = member.getMemberMeta();
             if (memberMeta.isOwnedRelationships()) {
                 IEntity childEntity = (IEntity) member.getMember(entity);
+                if (childEntity.getAttachLevel() == AttachLevel.Detached) {
+                    continue;
+                }
                 IEntity baseChildEntity = (IEntity) member.getMember(baseEntity);
                 if (!EqualsHelper.equals(childEntity.getPrimaryKey(), baseChildEntity.getPrimaryKey())) {
                     if (childEntity.getPrimaryKey() != null) {
