@@ -46,6 +46,7 @@ import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.policy.PolicyManager;
 import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -53,10 +54,14 @@ import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.tax.Tax;
+import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
+import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.portal.rpc.shared.BillingException;
 import com.propertyvista.server.jobs.StatisticsUtils;
@@ -484,5 +489,31 @@ public class BillingManager {
 
         Persistence.service().persist(bill.billingCycle());
 
+    }
+
+    public static void updateLeaseAdjustmentTax(LeaseAdjustment adjustment) {
+        if (adjustment.overwriteDefaultTax().isBooleanTrue()) {
+            return; // do nothing - use stored tax value 
+        }
+
+        Persistence.service().retrieve(adjustment.billingAccount());
+        Persistence.service().retrieve(adjustment.billingAccount().lease());
+        Persistence.service().retrieve(adjustment.billingAccount().lease().unit());
+        LeaseAdjustmentPolicy result = PolicyManager.obtainEffectivePolicy(adjustment.billingAccount().lease().unit().building(), LeaseAdjustmentPolicy.class);
+
+        // TODO: currently calculate current policed tax value,  
+        // in the future (when versioned policy will be implemented) - calculate tax effective on adjustment.targetDate().
+
+        BigDecimal taxRate = BigDecimal.ZERO;
+        for (LeaseAdjustmentPolicyItem item : result.policyItems()) {
+            if (item.leaseAdjustmentReason().equals(adjustment.reason())) {
+                for (Tax tax : item.taxes()) {
+                    taxRate = taxRate.add(tax.rate().getValue());
+                }
+                break;
+            }
+        }
+
+        adjustment.tax().setValue(taxRate);
     }
 }
