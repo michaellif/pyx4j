@@ -23,14 +23,14 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
 
-public class ArrearsYoyAnalysisGadgetMetadataForm extends CEntityDecoratableForm<ArrearsYOYAnalysisChartMetadata> {
+public class ArrearsYoyAnalysisGadgetMetadataForm extends CEntityDecoratableForm<ArrearsYOYAnalysisChartGadgetMetadata> {
 
     private final static I18n i18n = I18n.get(ArrearsYoyAnalysisGadgetMetadataForm.class);
 
     public ArrearsYoyAnalysisGadgetMetadataForm() {
-        super(ArrearsYOYAnalysisChartMetadata.class);
+        super(ArrearsYOYAnalysisChartGadgetMetadata.class);
     }
 
     @Override

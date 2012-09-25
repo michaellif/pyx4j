@@ -22,6 +22,8 @@ public interface IGadgetFactory {
 
     IGadgetInstance createGadget(GadgetMetadata metadata) throws Error;
 
+    Class<? extends GadgetMetadata> getGadgetMetadataClass();
+
     /** @return Return type of the gadget (is used for persistence system purposes and identification */
     String getType();
 

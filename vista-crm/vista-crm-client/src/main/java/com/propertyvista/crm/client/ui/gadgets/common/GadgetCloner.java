@@ -68,4 +68,9 @@ public class GadgetCloner implements IGadgetFactory {
     public static IGadgetFactory clone(IGadgetFactory other) {
         return new GadgetCloner(other);
     }
+
+    @Override
+    public Class<? extends GadgetMetadata> getGadgetMetadataClass() {
+        return other.getGadgetMetadataClass();
+    }
 }

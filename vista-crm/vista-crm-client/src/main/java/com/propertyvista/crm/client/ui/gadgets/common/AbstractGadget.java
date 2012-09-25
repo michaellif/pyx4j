@@ -31,7 +31,10 @@ public abstract class AbstractGadget<GADGET_TYPE extends GadgetMetadata> impleme
 
     private final boolean isBuildingGadget;
 
+    private final Class<GADGET_TYPE> gadgetMetadataClass;
+
     protected AbstractGadget(Class<GADGET_TYPE> gadgetMetadataClassLiteral) {
+        gadgetMetadataClass = gadgetMetadataClassLiteral;
         GADGET_TYPE gadgetMetadataProto = EntityFactory.getEntityPrototype(gadgetMetadataClassLiteral);
         isBuildingGadget = gadgetMetadataProto instanceof BuildingGadget;
         type = gadgetMetadataProto.getValueClass().getName();
@@ -78,6 +81,11 @@ public abstract class AbstractGadget<GADGET_TYPE extends GadgetMetadata> impleme
     @Override
     public boolean isAcceptedBy(DashboardType dashboardType) {
         return (DashboardType.system.equals(dashboardType) & !isBuildingGadget()) | (DashboardType.building.equals(dashboardType) & isBuildingGadget());
+    }
+
+    @Override
+    public Class<? extends GadgetMetadata> getGadgetMetadataClass() {
+        return gadgetMetadataClass;
     }
 
     protected abstract GadgetInstanceBase<GADGET_TYPE> createInstance(GadgetMetadata gadgetMetadata) throws Error;

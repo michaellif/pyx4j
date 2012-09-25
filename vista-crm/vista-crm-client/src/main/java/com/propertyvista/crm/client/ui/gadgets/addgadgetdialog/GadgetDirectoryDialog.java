@@ -34,7 +34,9 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
@@ -42,6 +44,8 @@ import com.pyx4j.widgets.client.dialog.OkOptionText;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IGadgetDirectory;
+import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 // TODO review styling/learn how to use the standard GWT resources
 public abstract class GadgetDirectoryDialog extends Dialog implements OkOptionText, OkCancelOption {
@@ -187,12 +191,19 @@ public abstract class GadgetDirectoryDialog extends Dialog implements OkOptionTe
             return false;
         } else {
             // reverse list because addGadget() inserts gadgets from the top
-            List<IGadgetFactory> gadgets = new ArrayList<IGadgetFactory>(selectedGadgetsListProvider.getList());
-            Collections.reverse(gadgets);
-            for (IGadgetFactory gadget : gadgets) {
-                IGadgetInstance instance = gadget.createGadget(null);
-                addGadget(instance);
-                instance.start();
+            List<IGadgetFactory> factories = new ArrayList<IGadgetFactory>(selectedGadgetsListProvider.getList());
+            Collections.reverse(factories);
+            for (final IGadgetFactory factory : factories) {
+                GWT.<DashboardMetadataService> create(DashboardMetadataService.class).createGadgetMetadata(new DefaultAsyncCallback<GadgetMetadata>() {
+
+                    @Override
+                    public void onSuccess(GadgetMetadata result) {
+                        IGadgetInstance instance = factory.createGadget(null);
+                        addGadget(instance);
+                        instance.start();
+                    }
+                }, EntityFactory.getEntityPrototype(factory.getGadgetMetadataClass()));
+
             }
             return true;
         }

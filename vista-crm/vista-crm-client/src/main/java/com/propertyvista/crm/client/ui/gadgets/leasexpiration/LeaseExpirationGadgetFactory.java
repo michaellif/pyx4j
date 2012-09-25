@@ -34,20 +34,20 @@ import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetF
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeaseExpirationGadgetService;
-import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.LeaseDTO;
 
-public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpirationGadgetMeta> {
+public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpirationGadgetMetadata> {
 
-    public class LeaseExpirationGadget extends CounterGadgetInstanceBase<LeaseExpirationGadgetDataDTO, Vector<Building>, LeaseExpirationGadgetMeta> implements
+    public class LeaseExpirationGadget extends CounterGadgetInstanceBase<LeaseExpirationGadgetDataDTO, Vector<Building>, LeaseExpirationGadgetMetadata> implements
             IBuildingFilterContainer {
 
         public LeaseExpirationGadget(GadgetMetadata metadata) {
             super(LeaseExpirationGadgetDataDTO.class, GWT.<LeaseExpirationGadgetService> create(LeaseExpirationGadgetService.class),
-                    new LeaseExpirationSummaryForm(), metadata, LeaseExpirationGadgetMeta.class);
+                    new LeaseExpirationSummaryForm(), metadata, LeaseExpirationGadgetMetadata.class);
         }
 
         @Override
@@ -88,7 +88,7 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
     }
 
     public LeaseExpirationGadgetFactory() {
-        super(LeaseExpirationGadgetMeta.class);
+        super(LeaseExpirationGadgetMetadata.class);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
     }
 
     @Override
-    protected GadgetInstanceBase<LeaseExpirationGadgetMeta> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<LeaseExpirationGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new LeaseExpirationGadget(gadgetMetadata);
     }
 

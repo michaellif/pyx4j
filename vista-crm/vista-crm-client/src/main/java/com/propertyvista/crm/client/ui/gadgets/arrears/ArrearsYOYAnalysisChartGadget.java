@@ -37,14 +37,14 @@ import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstan
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsYOYComparisonDataDTO;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.svg.gadgets.ArrearsYoyAnalysisChartFactory;
 
-public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnalysisChartMetadata> {
+public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnalysisChartGadgetMetadata> {
 
-    public static class ArrearsYOYAnalysisChartGadgetInstance extends GadgetInstanceBase<ArrearsYOYAnalysisChartMetadata> implements
+    public static class ArrearsYOYAnalysisChartGadgetInstance extends GadgetInstanceBase<ArrearsYOYAnalysisChartGadgetMetadata> implements
             IBuildingBoardGadgetInstance {
 
         private static final I18n i18n = I18n.get(ArrearsYOYAnalysisChartGadgetInstance.class);
@@ -61,7 +61,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
         private final SvgFactoryForGwt factory;
 
         public ArrearsYOYAnalysisChartGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, ArrearsYOYAnalysisChartMetadata.class, new ArrearsYoyAnalysisGadgetMetadataForm());
+            super(gmd, ArrearsYOYAnalysisChartGadgetMetadata.class, new ArrearsYoyAnalysisGadgetMetadataForm());
             service = GWT.create(ArrearsReportService.class);
             data = null;
             factory = new SvgFactoryForGwt();
@@ -74,8 +74,8 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
         }
 
         @Override
-        protected ArrearsYOYAnalysisChartMetadata createDefaultSettings(Class<ArrearsYOYAnalysisChartMetadata> metadataClass) {
-            ArrearsYOYAnalysisChartMetadata settings = super.createDefaultSettings(metadataClass);
+        protected ArrearsYOYAnalysisChartGadgetMetadata createDefaultSettings(Class<ArrearsYOYAnalysisChartGadgetMetadata> metadataClass) {
+            ArrearsYOYAnalysisChartGadgetMetadata settings = super.createDefaultSettings(metadataClass);
             settings.yearsToCompare().setValue(3);
             return settings;
         }
@@ -179,7 +179,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
     }
 
     public ArrearsYOYAnalysisChartGadget() {
-        super(ArrearsYOYAnalysisChartMetadata.class);
+        super(ArrearsYOYAnalysisChartGadgetMetadata.class);
     }
 
     @Override
@@ -188,7 +188,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
     };
 
     @Override
-    protected GadgetInstanceBase<ArrearsYOYAnalysisChartMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<ArrearsYOYAnalysisChartGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new ArrearsYOYAnalysisChartGadgetInstance(gadgetMetadata);
     }
 }

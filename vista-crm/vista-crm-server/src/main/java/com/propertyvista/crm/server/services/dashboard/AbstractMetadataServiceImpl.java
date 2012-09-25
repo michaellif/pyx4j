@@ -32,6 +32,7 @@ import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadataHolder;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.server.common.gadgets.GadgetMetadataFactory;
 
 abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
 
@@ -134,7 +135,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
 
     @Override
     public void createGadgetMetadata(AsyncCallback<GadgetMetadata> callback, GadgetMetadata proto) {
-
+        callback.onSuccess(GadgetMetadataFactory.createGadgetMetadata(proto));
     }
 
     @Override

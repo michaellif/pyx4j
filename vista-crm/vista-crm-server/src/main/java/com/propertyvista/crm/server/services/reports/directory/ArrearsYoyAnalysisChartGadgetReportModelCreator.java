@@ -30,7 +30,7 @@ import com.propertyvista.crm.server.services.reports.StaticTemplateReportModelBu
 import com.propertyvista.crm.server.services.reports.util.SvgRasterizer;
 import com.propertyvista.crm.server.services.reports.util.SvgRasterizerImpl;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsYOYComparisonDataDTO;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.svg.gadgets.ArrearsYoyAnalysisChartFactory;
@@ -50,7 +50,7 @@ public class ArrearsYoyAnalysisChartGadgetReportModelCreator implements GadgetRe
     @Override
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
 
-        final ArrearsYOYAnalysisChartMetadata arrearsYOYAnalysisChartMetadata = (ArrearsYOYAnalysisChartMetadata) gadgetMetadata;
+        final ArrearsYOYAnalysisChartGadgetMetadata arrearsYOYAnalysisChartMetadata = (ArrearsYOYAnalysisChartGadgetMetadata) gadgetMetadata;
 
         new ArrearsReportServiceImpl().arrearsMonthlyComparison(new AsyncCallback<ArrearsYOYComparisonDataDTO>() {
 
@@ -62,7 +62,7 @@ public class ArrearsYoyAnalysisChartGadgetReportModelCreator implements GadgetRe
                         WIDTH, HEIGHT);
 
                 //@formatter:off
-                callback.onSuccess(new StaticTemplateReportModelBuilder(ArrearsYOYAnalysisChartMetadata.class)
+                callback.onSuccess(new StaticTemplateReportModelBuilder(ArrearsYOYAnalysisChartGadgetMetadata.class)
                         .param(Params.TITLE.name(), arrearsYOYAnalysisChartMetadata.getEntityMeta().getCaption())
                         .param(Params.GRAPH.name(), graph)
                         .build());

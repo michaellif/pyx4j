@@ -13,13 +13,6 @@
  */
 package com.propertyvista.generator;
 
-import static com.propertyvista.generator.util.ColumnDescriptorEntityBuilder.defColumn;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.List;
-
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -27,34 +20,25 @@ import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
-import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
-import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
-import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatusSummaryLineDTO;
-import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
-import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
-import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.dashboard.gadgets.type.ApplicationsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.CollectionsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.LeadsAndRentalsGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.MaintenanceGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata.RefreshInterval;
-import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
-import com.propertyvista.domain.financial.billing.AgingBuckets;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
-import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.server.common.gadgets.GadgetMetadataFactory;
 
+@SuppressWarnings("unchecked")
 public class DashboardGenerator extends Dashboards {
 
     private final static I18n i18n = I18n.get(DashboardGenerator.class);
@@ -67,317 +51,75 @@ public class DashboardGenerator extends Dashboards {
         systemDashboards.add(makeDefaultPaymentsDashboard());
     }
 
-    private DashboardMetadata makeDefaultSystemDashboard() {
-        DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage 
-        dmd.type().setValue(DashboardType.system);
-        dmd.isShared().setValue(true);
-        dmd.name().setValue(i18n.tr("System"));
-        dmd.description().setValue(i18n.tr("Displays default system data"));
-        dmd.layoutType().setValue(LayoutType.One);
-
-        BuildingListerGadgetMetadata buildingLister = EntityFactory.create(BuildingListerGadgetMetadata.class);
-        buildingLister.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage
-        buildingLister.pageSize().setValue(10);
-        buildingLister.refreshInterval().setValue(RefreshInterval.Never);
-        buildingLister.docking().column().setValue(0);
-        buildingLister.columnDescriptors().addAll(defineBuildingListerColumns());
-
-        dmd.gadgets().add(buildingLister);
-
-        return dmd;
+    private DashboardMetadata makeDefaultArrearsDashboard() {
+        return makeDashboard(//@formatter:off
+                i18n.tr("Arrears"),
+                i18n.tr("Contains various arrears gadgets"),                
+                ArrearsGadgetMetadata.class,
+                ArrearsYOYAnalysisChartGadgetMetadata.class,
+                ArrearsStatusGadgetMetadata.class
+        );//@formatter:on    
     }
 
     private DashboardMetadata makeDefaultMiscDashboard() {
-        DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.type().setValue(DashboardType.building);
-        dmd.isShared().setValue(true);
-        dmd.name().setValue(i18n.tr("Misc"));
-        dmd.description().setValue(i18n.tr("Contains various gadgets"));
-        dmd.layoutType().setValue(LayoutType.One);
-
-        LeaseExpirationGadgetMeta leaseExpirationGadget = EntityFactory.create(LeaseExpirationGadgetMeta.class);
-        leaseExpirationGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
-        leaseExpirationGadget.refreshInterval().setValue(RefreshInterval.Never);
-        leaseExpirationGadget.activeDetails().setValue(null);
-        leaseExpirationGadget.docking().column().setValue(0);
-        dmd.gadgets().add(leaseExpirationGadget);
-
-        NoticesGadgetMetadata noticesGadget = EntityFactory.create(NoticesGadgetMetadata.class);
-        noticesGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
-        noticesGadget.refreshInterval().setValue(RefreshInterval.Never);
-        noticesGadget.docking().column().setValue(0);
-        dmd.gadgets().add(noticesGadget);
-
-        MaintenanceGadgetMetadata maintenanceGadget = EntityFactory.create(MaintenanceGadgetMetadata.class);
-        maintenanceGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
-        maintenanceGadget.refreshInterval().setValue(RefreshInterval.Never);
-        maintenanceGadget.docking().column().setValue(0);
-        dmd.gadgets().add(maintenanceGadget);
-
-        CollectionsGadgetMetadata collectionsGadget = EntityFactory.create(CollectionsGadgetMetadata.class);
-        collectionsGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
-        collectionsGadget.refreshInterval().setValue(RefreshInterval.Never);
-        collectionsGadget.docking().column().setValue(0);
-        dmd.gadgets().add(collectionsGadget);
-
-        LeadsAndRentalsGadgetMetadata leadsAndRentalsGadget = EntityFactory.create(LeadsAndRentalsGadgetMetadata.class);
-        leadsAndRentalsGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
-        leadsAndRentalsGadget.refreshInterval().setValue(RefreshInterval.Never);
-        leadsAndRentalsGadget.docking().column().setValue(0);
-        dmd.gadgets().add(leadsAndRentalsGadget);
-
-        ApplicationsGadgetMetadata applicationsGadget = EntityFactory.create(ApplicationsGadgetMetadata.class);
-        applicationsGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
-        applicationsGadget.refreshInterval().setValue(RefreshInterval.Never);
-        applicationsGadget.docking().column().setValue(0);
-        dmd.gadgets().add(applicationsGadget);
-
-        return dmd;
+        return makeDashboard(//@formatter:off
+                i18n.tr("Misc"),
+                i18n.tr("Contains various gadgets"),
+                LeaseExpirationGadgetMetadata.class,
+                NoticesGadgetMetadata.class,                
+                MaintenanceGadgetMetadata.class,                
+                CollectionsGadgetMetadata.class,                
+                LeadsAndRentalsGadgetMetadata.class,                
+                ApplicationsGadgetMetadata.class
+        );//@formatter:on    
     }
 
     private DashboardMetadata makeDefaultUnitAvailabilityDashboard() {
-        DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
-
-        dmd.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage 
-        dmd.type().setValue(DashboardType.building);
-        dmd.isShared().setValue(true);
-        dmd.name().setValue(i18n.tr("Availability"));
-        dmd.description().setValue(i18n.tr("Contains various availablility gadgets"));
-        dmd.layoutType().setValue(LayoutType.One);
-
-        UnitAvailabilityGadgetMetadata unitAvailabilityReport = EntityFactory.create(UnitAvailabilityGadgetMetadata.class);
-        unitAvailabilityReport.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage
-        unitAvailabilityReport.refreshInterval().setValue(RefreshInterval.Never);
-        unitAvailabilityReport.pageSize().setValue(10);
-        unitAvailabilityReport.filterPreset().setValue(UnitAvailabilityGadgetMetadata.FilterPreset.VacantAndNotice);
-        unitAvailabilityReport.docking().column().setValue(0);
-        unitAvailabilityReport.columnDescriptors().addAll(defineUnitAvailabilityReportColumns());
-        dmd.gadgets().add(unitAvailabilityReport);
-
-        UnitAvailabilitySummaryGadgetMetadata unitAvailabilitySummary = EntityFactory.create(UnitAvailabilitySummaryGadgetMetadata.class);
-        unitAvailabilitySummary.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
-        unitAvailabilitySummary.refreshInterval().setValue(RefreshInterval.Never);
-        unitAvailabilitySummary.docking().column().setValue(0);
-        unitAvailabilitySummary.columnDescriptors().addAll(defineUnitSummaryStatusColumns());
-        dmd.gadgets().add(unitAvailabilitySummary);
-
-        UnitTurnoverAnalysisGadgetMetadata turnoverAnalysis = EntityFactory.create(UnitTurnoverAnalysisGadgetMetadata.class);
-        turnoverAnalysis.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
-        turnoverAnalysis.refreshInterval().setValue(RefreshInterval.Never);
-        turnoverAnalysis.isTurnoverMeasuredByPercent().setValue(false);
-        turnoverAnalysis.docking().column().setValue(0);
-        dmd.gadgets().add(turnoverAnalysis);
-
-        return dmd;
-    }
-
-    private DashboardMetadata makeDefaultArrearsDashboard() {
-        DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage 
-        dmd.type().setValue(DashboardType.building);
-        dmd.isShared().setValue(true);
-        dmd.name().setValue(i18n.tr("Arrears"));
-        dmd.description().setValue(i18n.tr("Contains various arrears gadgets"));
-        dmd.layoutType().setValue(LayoutType.One);
-
-        ArrearsGadgetMetadata arrearsGadget = EntityFactory.create(ArrearsGadgetMetadata.class);
-        arrearsGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
-        arrearsGadget.docking().column().setValue(0);
-        arrearsGadget.refreshInterval().setValue(RefreshInterval.Never);
-        dmd.gadgets().add(arrearsGadget);
-
-        ArrearsYOYAnalysisChartMetadata arrearsYOYAnalysisChart = EntityFactory.create(ArrearsYOYAnalysisChartMetadata.class);
-        arrearsYOYAnalysisChart.docking().column().setValue(0);
-        arrearsYOYAnalysisChart.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
-        arrearsYOYAnalysisChart.refreshInterval().setValue(RefreshInterval.Never);
-        arrearsYOYAnalysisChart.yearsToCompare().setValue(3);
-        dmd.gadgets().add(arrearsYOYAnalysisChart);
-
-        ArrearsStatusGadgetMetadata arrearsStatusGadget = EntityFactory.create(ArrearsStatusGadgetMetadata.class);
-        arrearsStatusGadget.docking().column().setValue(0);
-        arrearsStatusGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
-        arrearsStatusGadget.refreshInterval().setValue(RefreshInterval.Never);
-        arrearsStatusGadget.pageSize().setValue(10);
-        arrearsStatusGadget.category().setValue(DebitType.total);
-        arrearsStatusGadget.columnDescriptors().addAll(defineArrearsStatusListerColumns());
-        dmd.gadgets().add(arrearsStatusGadget);
-
-        return dmd;
-
+        return makeDashboard(//@formatter:off
+                i18n.tr("Availablility"),
+                i18n.tr("Contains various availability gadgets"),                
+                UnitAvailabilityGadgetMetadata.class,
+                UnitAvailabilitySummaryGadgetMetadata.class,
+                UnitTurnoverAnalysisGadgetMetadata.class
+        );//@formatter:on    
     }
 
     private DashboardMetadata makeDefaultPaymentsDashboard() {
+        return makeDashboard(//@formatter:off
+                i18n.tr("Payments"),
+                i18n.tr("Contains various gadgets regarding payments"),                
+                PaymentRecordsGadgetMetadata.class,
+                PaymentsSummaryGadgetMetadata.class                
+        );//@formatter:on
+    }
+
+    private DashboardMetadata makeDefaultSystemDashboard() {
+        return makeSystemDashboard(//@formatter:off
+                i18n.tr("System"),
+                i18n.tr("Displays default system data"),
+                BuildingListerGadgetMetadata.class                
+        );//@formatter:on
+
+    }
+
+    private DashboardMetadata makeDashboard(String name, String description, Class<? extends GadgetMetadata>... gadgetMetadatas) {
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
         dmd.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage 
         dmd.type().setValue(DashboardType.building);
         dmd.isShared().setValue(true);
-        dmd.name().setValue(i18n.tr("Payments"));
-        dmd.description().setValue(i18n.tr("Contains various arrears gadgets"));
+        dmd.name().setValue(name);
+        dmd.description().setValue(description);
         dmd.layoutType().setValue(LayoutType.One);
-
-        PaymentRecordsGadgetMetadata paymentRecordsGadgetMetadata = EntityFactory.create(PaymentRecordsGadgetMetadata.class);
-        paymentRecordsGadgetMetadata.docking().column().setValue(0);
-        paymentRecordsGadgetMetadata.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
-        paymentRecordsGadgetMetadata.refreshInterval().setValue(RefreshInterval.Never);
-        paymentRecordsGadgetMetadata.pageSize().setValue(10);
-        paymentRecordsGadgetMetadata.customizeTargetDate().setValue(false);
-        paymentRecordsGadgetMetadata.columnDescriptors().addAll(definePaymentRecordsListerColumns());
-        paymentRecordsGadgetMetadata.paymentMethodFilter().addAll(EnumSet.allOf(PaymentType.class));
-        paymentRecordsGadgetMetadata.paymentStatusFilter().addAll(EnumSet.complementOf(EnumSet.of(PaymentStatus.Processing)));
-        dmd.gadgets().add(paymentRecordsGadgetMetadata);
-
-        PaymentsSummaryGadgetMetadata paymentsSummaryGadget = EntityFactory.create(PaymentsSummaryGadgetMetadata.class);
-        paymentsSummaryGadget.docking().column().setValue(0);
-        paymentsSummaryGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
-        paymentsSummaryGadget.refreshInterval().setValue(RefreshInterval.Never);
-        paymentsSummaryGadget.pageSize().setValue(10);
-        paymentsSummaryGadget.customizeDate().setValue(false);
-        paymentsSummaryGadget.columnDescriptors().addAll(definePaymentsSummaryListerColumns());
-        paymentsSummaryGadget.paymentStatus().addAll(PaymentStatus.processed());
-        dmd.gadgets().add(paymentsSummaryGadget);
-
+        for (Class<? extends GadgetMetadata> gadgetMetadata : gadgetMetadatas) {
+            dmd.gadgets().add(GadgetMetadataFactory.createGadgetMetadata(gadgetMetadata));
+        }
         return dmd;
     }
 
-    private List<? extends ColumnDescriptorEntity> defineUnitAvailabilityReportColumns() {
-        UnitAvailabilityStatus proto = EntityFactory.getEntityPrototype(UnitAvailabilityStatus.class);
-
-        return Arrays.asList(//@formatter:off
-                // references
-                defColumn(proto.building().propertyCode()).build(),
-                defColumn(proto.building().externalId()).visible(false).build(),
-                defColumn(proto.building().info().name()).visible(false).title(i18n.tr("Building Name")).build(),
-                defColumn(proto.building().info().address()).visible(false).build(),
-                defColumn(proto.building().propertyManager().name()).visible(false).title(i18n.tr("Property Manager")).build(),                    
-                defColumn(proto.building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
-                defColumn(proto.unit().info().number()).title(i18n.tr("Unit Name")).build(),
-                defColumn(proto.floorplan().name()).visible(false).title(i18n.tr("Floorplan Name")).build(),
-                defColumn(proto.floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
-                
-                // status
-                defColumn(proto.vacancyStatus()).build(),
-                defColumn(proto.rentedStatus()).visible(true).build(),
-                defColumn(proto.scoping()).visible(true).build(),
-                defColumn(proto.rentReadinessStatus()).visible(true).build(),
-                defColumn(proto.unitRent()).build(),
-                defColumn(proto.marketRent()).build(),
-                defColumn(proto.rentDeltaAbsolute()).visible(true).build(),
-                defColumn(proto.rentDeltaRelative()).visible(false).build(),
-                defColumn(proto.rentEndDay()).visible(true).build(),
-                defColumn(proto.moveInDay()).visible(true).build(),
-                defColumn(proto.rentedFromDay()).visible(true).build(),
-                defColumn(proto.daysVacant()).build(),
-                defColumn(proto.revenueLost()).build()
-        );//@formatter:on
+    private DashboardMetadata makeSystemDashboard(String name, String description, Class<? extends GadgetMetadata>... gadgetMetadatas) {
+        DashboardMetadata dm = makeDashboard(name, description, gadgetMetadatas);
+        dm.type().setValue(DashboardType.system);
+        return dm;
     }
 
-    private List<? extends ColumnDescriptorEntity> defineUnitSummaryStatusColumns() {
-        UnitAvailabilityStatusSummaryLineDTO proto = EntityFactory.create(UnitAvailabilityStatusSummaryLineDTO.class);
-        return Arrays.asList(//@formatter:off
-                defColumn(proto.category()).title("").sortable(false).build(),
-                defColumn(proto.units()).sortable(false).build(),
-                defColumn(proto.percentage()).sortable(false).build()
-        );//@formatter:on
-    }
-
-    private Collection<? extends ColumnDescriptorEntity> definePaymentsSummaryListerColumns() {
-        PaymentsSummary proto = EntityFactory.create(PaymentsSummary.class);
-        return Arrays.asList(//@formatter:off
-                (PaymentsSummary.summaryByBuilding)?
-                        defColumn(proto.building()).build():
-                        defColumn(proto.merchantAccount().accountNumber()).title(i18n.tr("Merchant Account")).build(),
-                defColumn(proto.status()).build(),
-                defColumn(proto.cash()).build(),
-                defColumn(proto.cheque()).build(),
-                defColumn(proto.eCheque()).build(),
-                defColumn(proto.eft()).build(),
-                defColumn(proto.cc()).build(),
-                defColumn(proto.interac()).build()
-        );//@formatter:on        
-    }
-
-    private List<ColumnDescriptorEntity> definePaymentRecordsListerColumns() {
-        PaymentRecordForReportDTO proto = EntityFactory.create(PaymentRecordForReportDTO.class);
-        return Arrays.asList(//@formatter:off
-                defColumn(proto.merchantAccount().accountNumber()).title(i18n.tr("Merchant Account")).build(),
-                defColumn(proto.billingAccount().lease().unit().building().propertyCode()).title(i18n.tr("Building")).build(),
-                defColumn(proto.billingAccount().lease().leaseId()).title(i18n.tr("Lease")).build(),
-                defColumn(proto.paymentMethod().customer()).title(i18n.tr("Tenant")).build(),                    
-                defColumn(proto.paymentMethod().type()).title(i18n.tr("Method")).build(),
-                defColumn(proto.paymentStatus()).title(i18n.tr("Status")).build(),
-                defColumn(proto.createdDate()).title(i18n.tr("Created")).build(),
-                defColumn(proto.receivedDate()).title(i18n.tr("Received")).build(),
-                defColumn(proto.finalizeDate()).title(i18n.tr("Finalized")).build(),
-                defColumn(proto.targetDate()).title(i18n.tr("Target")).build(),
-                defColumn(proto.amount()).title(i18n.tr("Amount")).build()                    
-        );//@formatter:on
-
-    }
-
-    private List<ColumnDescriptorEntity> defineBuildingListerColumns() {
-
-        BuildingDTO proto = EntityFactory.getEntityPrototype(BuildingDTO.class);
-
-        return Arrays.asList(//@formatter:off
-                defColumn(proto.complex()).visible(false).build(),
-                defColumn(proto.propertyCode()).build(),
-                defColumn(proto.propertyManager()).build(),
-                defColumn(proto.marketing().name()).title(i18n.tr("Marketing Name")).build(),
-                defColumn(proto.info().name()).build(),
-                defColumn(proto.info().type()).build(),
-                defColumn(proto.info().shape()).visible(false).build(),
-                defColumn(proto.info().address().streetName()).visible(false).build(),
-                defColumn(proto.info().address().city()).build(),
-                defColumn(proto.info().address().province()).build(),
-                defColumn(proto.info().address().country()).build()
-        );//@formatter:on
-    }
-
-    private List<ColumnDescriptorEntity> defineArrearsStatusListerColumns() {
-        LeaseArrearsSnapshotDTO proto = EntityFactory.getEntityPrototype(LeaseArrearsSnapshotDTO.class);
-
-        return Arrays.asList(//@formatter:off
-                defColumn(proto.billingAccount().lease().unit().building().propertyCode()).visible(true).build(),
-                defColumn(proto.billingAccount().lease().unit().building().info().name()).title(i18n.tr("Building")).build(),
-                defColumn(proto.billingAccount().lease().unit().building().info().address().streetNumber()).visible(false).build(),
-                defColumn(proto.billingAccount().lease().unit().building().info().address().streetName()).visible(false).build(),                    
-                defColumn(proto.billingAccount().lease().unit().building().info().address().province().name()).visible(false).title(i18n.tr("Province")).build(),                    
-                defColumn(proto.billingAccount().lease().unit().building().info().address().country().name()).visible(false).title(i18n.tr("Country")).build(),                    
-                defColumn(proto.billingAccount().lease().unit().building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
-                defColumn(proto.billingAccount().lease().unit().info().number()).title(i18n.tr("Unit")).build(),
-                defColumn(proto.billingAccount().lease().leaseId()).build(),
-                defColumn(proto.billingAccount().lease().leaseFrom()).build(),
-                defColumn(proto.billingAccount().lease().leaseTo()).build(),
-                
-                // arrears
-                defColumn(proto.selectedBuckets().bucketCurrent()).build(),
-                defColumn(proto.selectedBuckets().bucket30()).build(),
-                defColumn(proto.selectedBuckets().bucket60()).build(),
-                defColumn(proto.selectedBuckets().bucket90()).build(),
-                defColumn(proto.selectedBuckets().bucketOver90()).build(),
-                
-                defColumn(proto.selectedBuckets().arrearsAmount()).build()
-        //TODO calculate CREDIT AMOUNT                    
-        //        column(proto.selectedBuckets().creditAmount()).build(),                    
-        //        column(proto.selectedBuckets().totalBalance()).build(),
-        //TODO calculate LMR                    
-        //        column(proto.lmrToUnitRentDifference()).build()                   
-        );//@formatter:on        
-    }
-
-    private List<ColumnDescriptorEntity> defineArreasSummaryListerColumns() {
-        AgingBuckets proto = EntityFactory.create(AgingBuckets.class);
-
-        return Arrays.asList(//@formatter:off
-                defColumn(proto.bucketCurrent()).build(),
-                defColumn(proto.bucket30()).build(),
-                defColumn(proto.bucket60()).build(),
-                defColumn(proto.bucket90()).build(),
-                defColumn(proto.bucketOver90()).build(),
-                defColumn(proto.arrearsAmount()).build()
-//                column(proto.creditAmount()).build()
-//                column(proto.totalBalance()).build()                
-        );//@formatter:on
-    }
 }

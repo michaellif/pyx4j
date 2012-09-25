@@ -34,7 +34,7 @@ import com.propertyvista.crm.server.services.reports.directory.UnitAvailabilityS
 import com.propertyvista.crm.server.services.reports.directory.UnitAvailabilitySummaryReportCreator;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
@@ -62,7 +62,7 @@ public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
 
         map.put(ArrearsStatusGadgetMetadata.class, new ArrearsStatusReportModelCreator());
         map.put(ArrearsSummaryGadgetMetadata.class, new ArrearsSummaryReportModelCreator());
-        map.put(ArrearsYOYAnalysisChartMetadata.class, new ArrearsYoyAnalysisChartGadgetReportModelCreator());
+        map.put(ArrearsYOYAnalysisChartGadgetMetadata.class, new ArrearsYoyAnalysisChartGadgetReportModelCreator());
 
         map.put(PaymentRecordsGadgetMetadata.class, new PaymentRecordsReportModelCreator());
         map.put(PaymentsSummaryGadgetMetadata.class, new PaymentsSummaryReportModelCreator());
