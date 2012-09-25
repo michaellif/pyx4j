@@ -31,6 +31,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
+import com.pyx4j.entity.rdb.mapping.QueryBuilder;
 import com.pyx4j.entity.shared.IEntity;
 
 public abstract class Dialect {
@@ -194,12 +195,27 @@ public abstract class Dialect {
         }
     }
 
-    public String sqlFunction(SQLAggregateFunctions func, String args) {
-        if (args == null) {
-            return func.name() + "(*)";
-        } else {
-            return func.name() + "( " + args + " )";
+    @SuppressWarnings("incomplete-switch")
+    public String sqlFunction(QueryBuilder<?> queryBuilder, SQLAggregateFunctions func, String args) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(func.name());
+
+        switch (func) {
+        case COUNT:
+            if (queryBuilder.addDistinct()) {
+                if (args == null) {
+                    args = queryBuilder.getMainTableSqlAlias() + "." + this.getNamingConvention().sqlIdColumnName();
+                }
+                args = "DISTINCT " + args;
+            }
         }
+
+        if (args == null) {
+            sql.append("(*)");
+        } else {
+            sql.append("( ").append(args).append(" )");
+        }
+        return sql.toString();
     }
 
     public char likeWildCards() {

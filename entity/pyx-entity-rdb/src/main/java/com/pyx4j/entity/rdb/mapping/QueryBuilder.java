@@ -372,7 +372,7 @@ public class QueryBuilder<T extends IEntity> {
         return result;
     }
 
-    boolean addDistinct() {
+    public boolean addDistinct() {
         return queryJoin.addDistinct;
     }
 
