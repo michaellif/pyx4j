@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.rpc.services.billing;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -21,6 +23,8 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public interface LeaseAdjustmentCrudService extends AbstractCrudService<LeaseAdjustment> {
+
+    void calculateTax(AsyncCallback<BigDecimal> callback, LeaseAdjustment currentValue);
 
     void submitAdjustment(AsyncCallback<LeaseAdjustment> callback, Key entityId);
 }

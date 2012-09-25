@@ -25,6 +25,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -108,7 +109,7 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
         }
 
         private LogicalDate getStatusDate() {
-            return getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate();
+            return getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate(ClientContext.getServerDate());
         }
     }
 

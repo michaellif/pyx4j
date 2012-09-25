@@ -13,12 +13,16 @@
  */
 package com.propertyvista.crm.server.services.billing;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -41,10 +45,25 @@ public class LeaseAdjustmentCrudServiceImpl extends AbstractCrudServiceImpl<Leas
         super.persist(dbo, dto);
     }
 
+    @Override
+    protected void enhanceRetrieved(LeaseAdjustment entity, LeaseAdjustment dto) {
+        super.enhanceRetrieved(entity, dto);
+
+        Persistence.service().retrieve(dto.billingAccount());
+        Persistence.service().retrieve(dto.billingAccount().lease());
+        Persistence.service().retrieve(dto.billingAccount().lease().unit());
+    }
+
     private void updateAdjustments(LeaseAdjustment adj) {
         if (adj.created().isNull()) {
             adj.createdBy().set(CrmAppContext.getCurrentUserEmployee());
         }
+    }
+
+    @Override
+    public void calculateTax(final AsyncCallback<BigDecimal> callback, LeaseAdjustment currentValue) {
+        ServerSideFactory.create(BillingFacade.class).updateLeaseAdjustmentTax(currentValue);
+        callback.onSuccess(currentValue.tax().getValue());
     }
 
     @Override

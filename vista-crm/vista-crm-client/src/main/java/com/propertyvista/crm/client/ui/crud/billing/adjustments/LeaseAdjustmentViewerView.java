@@ -19,7 +19,7 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public interface LeaseAdjustmentViewerView extends IViewerView<LeaseAdjustment> {
 
-    interface Presenter extends IViewerView.Presenter {
+    interface Presenter extends IViewerView.Presenter, LeaseAdjustmentPresenter {
 
         void submitAdjustment();
     }

@@ -39,6 +39,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -60,7 +61,8 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<UnitTurnoverAnal
 
     private static final I18n i18n = I18n.get(TurnoverAnalysisGraphGadget.class);
 
-    private static class TurnoverAnalysisGraphGadgetInstance extends GadgetInstanceBase<UnitTurnoverAnalysisGadgetMetadata> implements IBuildingBoardGadgetInstance {
+    private static class TurnoverAnalysisGraphGadgetInstance extends GadgetInstanceBase<UnitTurnoverAnalysisGadgetMetadata> implements
+            IBuildingBoardGadgetInstance {
 
         private static final I18n i18n = I18n.get(TurnoverAnalysisGraphGadgetInstance.class);
 
@@ -188,7 +190,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<UnitTurnoverAnal
         }
 
         private LogicalDate getStatusDate() {
-            return getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate();
+            return getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate(ClientContext.getServerDate());
         }
 
         private Widget initAsOfBannerPanel() {

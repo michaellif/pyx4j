@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.reports.AbstractReportsActivity;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.ReportsAppPlace;
@@ -43,7 +44,7 @@ public class CrmReportsActivity extends AbstractReportsActivity {
         ReportMetadata metadata = super.retrieveReportSettings(place);
         if (metadata == null) {
             AvailabilityReportMetadata availabilityReportMetadata = EntityFactory.create(AvailabilityReportMetadata.class);
-            availabilityReportMetadata.asOf().setValue(new LogicalDate());
+            availabilityReportMetadata.asOf().setValue(new LogicalDate(ClientContext.getServerDate()));
             metadata = availabilityReportMetadata;
         }
         return metadata;

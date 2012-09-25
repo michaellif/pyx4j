@@ -13,13 +13,21 @@
  */
 package com.propertyvista.biz.financial.billing;
 
-import com.pyx4j.commons.LogicalDate;
+import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.Persistence;
+
+import com.propertyvista.biz.policy.PolicyManager;
 import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
+import com.propertyvista.domain.financial.tax.Tax;
+import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
+import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public class BillingFacadeImpl implements BillingFacade {
 
@@ -78,4 +86,30 @@ public class BillingFacadeImpl implements BillingFacade {
         return BillingManager.ensureBillingType(lease);
     }
 
+    @Override
+    public void updateLeaseAdjustmentTax(LeaseAdjustment adjustment) {
+        if (adjustment.overwriteDefaultTax().isBooleanTrue()) {
+            return; // do nothing - use stored tax value 
+        }
+
+        Persistence.service().retrieve(adjustment.billingAccount());
+        Persistence.service().retrieve(adjustment.billingAccount().lease());
+        Persistence.service().retrieve(adjustment.billingAccount().lease().unit());
+        LeaseAdjustmentPolicy result = PolicyManager.obtainEffectivePolicy(adjustment.billingAccount().lease().unit().building(), LeaseAdjustmentPolicy.class);
+
+        // TODO: currently calculate current policed tax value,  
+        // in the future (when versioned policy will be implemented) - calculate tax effective on adjustment.targetDate().
+
+        BigDecimal taxRate = BigDecimal.ZERO;
+        for (LeaseAdjustmentPolicyItem item : result.policyItems()) {
+            if (item.leaseAdjustmentReason().equals(adjustment.reason())) {
+                for (Tax tax : item.taxes()) {
+                    taxRate = taxRate.add(tax.rate().getValue());
+                }
+                break;
+            }
+        }
+
+        adjustment.tax().setValue(taxRate);
+    }
 }

@@ -106,6 +106,11 @@ public interface LeaseAdjustment extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
+    /*
+     * In case of overwriteDefaultTax == false,
+     * Tax value should be recalculated by means of current LeaseAdjustmentPolicy.
+     * so, in case of default(policed) tax - this member effectively becomes transient field.
+     */
     @NotNull
     @ToString(index = 2)
     @Format("#0.00")

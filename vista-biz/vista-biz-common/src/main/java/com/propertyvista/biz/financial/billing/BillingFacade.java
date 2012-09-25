@@ -20,6 +20,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public interface BillingFacade {
 
@@ -45,4 +46,8 @@ public interface BillingFacade {
     void initializeFutureBillingCycles();
 
     BillingType ensureBillingType(Lease lease);
+
+    // Unitls:
+
+    void updateLeaseAdjustmentTax(LeaseAdjustment adjustment);
 }

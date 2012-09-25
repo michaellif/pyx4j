@@ -31,6 +31,7 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
@@ -352,11 +353,11 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                     super.onValueSet(populate);
 
                     if (getValue().moveOutNotice().isNull()) {
-                        get(proto().moveOutNotice()).setValue(new LogicalDate());
+                        get(proto().moveOutNotice()).setValue(new LogicalDate(ClientContext.getServerDate()));
                     }
 
                     if (getValue().expectedMoveOut().isNull()) {
-                        get(proto().expectedMoveOut()).setValue(new LogicalDate());
+                        get(proto().expectedMoveOut()).setValue(new LogicalDate(ClientContext.getServerDate()));
                     }
                 }
 

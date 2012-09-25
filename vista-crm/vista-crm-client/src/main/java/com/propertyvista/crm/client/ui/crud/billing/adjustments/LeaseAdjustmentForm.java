@@ -27,18 +27,15 @@ import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.crm.client.ui.components.boxes.LeaseAdjustmentReasonSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.financial.tax.Tax;
-import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
-import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.TaxType;
@@ -108,7 +105,8 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             public void onValueChange(ValueChangeEvent<ExecutionType> event) {
                 get(proto().targetDate()).setEditable(event.getValue() != ExecutionType.immediate);
                 if (event.getValue() == ExecutionType.immediate) {
-                    get(proto().targetDate()).setValue(new LogicalDate());
+                    get(proto().targetDate()).setValue(new LogicalDate(ClientContext.getServerDate()));
+                    recalculateTaxesAndTotal();
                 }
             }
         });
@@ -202,24 +200,19 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             get(proto().tax()).setEditable(false);
             get(proto().taxType()).setEditable(false);
 
-            ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), LeaseAdjustmentPolicy.class,
-                    new DefaultAsyncCallback<LeaseAdjustmentPolicy>() {
-                        @Override
-                        public void onSuccess(LeaseAdjustmentPolicy result) {
-                            for (LeaseAdjustmentPolicyItem item : result.policyItems()) {
-                                if (item.leaseAdjustmentReason().equals(getValue().reason())) {
-                                    BigDecimal taxRate = BigDecimal.ZERO;
-                                    for (Tax tax : item.taxes()) {
-                                        taxRate = taxRate.add(tax.rate().getValue());
-                                    }
-
-                                    get(proto().tax()).populate(taxRate);
-                                }
-                            }
-
-                            recalculateTotal();
-                        }
-                    });
+            LeaseAdjustmentPresenter presenter;
+            if (isEditable()) {
+                presenter = (LeaseAdjustmentPresenter) ((LeaseAdjustmentEditorView) getParentView()).getPresenter();
+            } else {
+                presenter = (LeaseAdjustmentPresenter) ((LeaseAdjustmentViewerView) getParentView()).getPresenter();
+            }
+            presenter.calculateTax(new DefaultAsyncCallback<BigDecimal>() {
+                @Override
+                public void onSuccess(BigDecimal result) {
+                    get(proto().tax()).populate(result);
+                    recalculateTotal();
+                }
+            }, getValue());
         }
     }
 

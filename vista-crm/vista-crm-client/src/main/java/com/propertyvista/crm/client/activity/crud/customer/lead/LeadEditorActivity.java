@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.activity.crud.customer.lead;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -51,7 +50,6 @@ public class LeadEditorActivity extends EditorActivityBase<Lead> implements Lead
     protected void createNewEntity(AsyncCallback<Lead> callback) {
         Lead entity = EntityFactory.create(getEntityClass());
 
-        entity.createDate().setValue(new LogicalDate());
         entity.status().setValue(Status.active);
 
         callback.onSuccess(entity);

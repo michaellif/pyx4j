@@ -236,9 +236,9 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                                     user.setPrimaryKey(ClientContext.getUserVisit().getPrincipalPrimaryKey());
                                     user.name().setValue(ClientContext.getUserVisit().getName());
                                     getValue().user().set(user);
-                                    getValue().created().setValue(new LogicalDate());
+                                    getValue().created().setValue(new LogicalDate(ClientContext.getServerDate()));
                                 } else {
-                                    getValue().updated().setValue(new LogicalDate());
+                                    getValue().updated().setValue(new LogicalDate(ClientContext.getServerDate()));
                                 }
                                 getController().save(getValue(), new DefaultAsyncCallback<Key>() {
                                     @Override

@@ -34,6 +34,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 
@@ -147,7 +148,7 @@ public class PaymentRecordsGadgetFactory extends AbstractGadget<PaymentRecordsGa
         }
 
         private LogicalDate getTargetDate() {
-            return getMetadata().customizeTargetDate().isBooleanTrue() ? getMetadata().targetDate().getValue() : new LogicalDate();
+            return getMetadata().customizeTargetDate().isBooleanTrue() ? getMetadata().targetDate().getValue() : new LogicalDate(ClientContext.getServerDate());
         }
 
         private Widget initTitleWidget() {
