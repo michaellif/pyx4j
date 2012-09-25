@@ -41,6 +41,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.util.DomainUtil;
 
 public class PaymentFacadeImpl implements PaymentFacade {
@@ -60,6 +61,11 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public boolean isElectronicPaymentsAllowed(Lease leaseId) {
         return PaymentUtils.isElectronicPaymentsAllowed(leaseId);
+    }
+
+    @Override
+    public boolean isElectronicPaymentsAllowed(LeaseTerm leaseTermId) {
+        return PaymentUtils.isElectronicPaymentsAllowed(leaseTermId);
     }
 
     @Override

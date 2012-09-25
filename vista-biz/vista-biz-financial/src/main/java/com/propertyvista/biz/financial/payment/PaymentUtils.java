@@ -26,6 +26,7 @@ import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 class PaymentUtils {
 
@@ -58,6 +59,12 @@ class PaymentUtils {
     public static boolean isElectronicPaymentsAllowed(Lease leaseId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
         criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$()._Units().$()._Leases(), leaseId));
+        return isElectronicPaymentsAllowed(Persistence.service().retrieve(criteria));
+    }
+
+    public static boolean isElectronicPaymentsAllowed(LeaseTerm leaseTermId) {
+        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$()._Units().$()._Leases().$().leaseTerms(), leaseTermId));
         return isElectronicPaymentsAllowed(Persistence.service().retrieve(criteria));
     }
 

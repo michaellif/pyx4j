@@ -22,6 +22,7 @@ import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 public interface PaymentFacade {
 
@@ -30,6 +31,8 @@ public interface PaymentFacade {
     boolean isElectronicPaymentsAllowed(BillingAccount billingAccountId);
 
     boolean isElectronicPaymentsAllowed(Lease leaseId);
+
+    boolean isElectronicPaymentsAllowed(LeaseTerm leaseTermId);
 
     PaymentMethod persistPaymentMethod(Building building, PaymentMethod paymentMethod);
 
