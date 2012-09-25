@@ -146,7 +146,13 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
 
     }
 
+    public void delete(String id) {
+        delete(id, null);
+    }
+
     public void delete(String id, E proto) {
+        // TODO add assertion about polymorphic usage
+
         EntityQueryCriteria<? extends CustomizationHolder> criteria = EntityQueryCriteria.create(customizationHolderEntityClass);
         if (baseClass != null) {
             criteria.add(PropertyCriterion.eq(criteria.proto().baseClass(), baseClass.getSimpleName()));
