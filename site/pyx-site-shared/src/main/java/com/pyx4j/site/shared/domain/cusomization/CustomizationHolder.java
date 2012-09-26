@@ -20,6 +20,7 @@
  */
 package com.pyx4j.site.shared.domain.cusomization;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ToString;
@@ -28,7 +29,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @ToStringFormat("{0}")
-public abstract interface CustomizationHolder extends IEntity {
+@AbstractEntity
+public interface CustomizationHolder extends IEntity {
 
     @Length(100)
     IPrimitive<String> baseClass();
