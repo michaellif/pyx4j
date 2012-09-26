@@ -35,9 +35,6 @@ public class GadgetMetadataFactoryTestBase extends TestCase {
     protected final void assertForEachGagetMetadataClass(String assertion, Predicate p) {
         StringBuilder b = new StringBuilder();
         for (Class<? extends GadgetMetadata> klass : GadgetMetadataFinder.getGadgetMetadataClassesFromClassPath()) {
-            if (klass.getAnnotation(AbstractEntity.class) != null) {
-                continue;
-            }
             String error = p.reportWhatIsWrongWith(klass);
             if (error != null) {
                 b.append(klass.getName());

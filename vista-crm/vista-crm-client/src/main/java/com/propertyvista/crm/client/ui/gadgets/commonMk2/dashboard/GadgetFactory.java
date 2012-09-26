@@ -21,37 +21,37 @@ import com.propertyvista.crm.client.ui.gadgets.applications.ApplicationsGadgetFa
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsStatusGadget;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsYOYAnalysisChartGadget;
-import com.propertyvista.crm.client.ui.gadgets.availability.TurnoverAnalysisGraphGadget;
-import com.propertyvista.crm.client.ui.gadgets.availability.UnitAvailabilityReportGadget;
+import com.propertyvista.crm.client.ui.gadgets.availability.TurnoverAnalysisGraphGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.availability.UnitAvailabilityReportGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.availability.UnitAvailabilitySummaryGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.collections.CollectionsGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
-import com.propertyvista.crm.client.ui.gadgets.demo.BarChart2DGadget;
+import com.propertyvista.crm.client.ui.gadgets.demo.BarChart2DGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.demo.CounterGadgetDemoFactory;
-import com.propertyvista.crm.client.ui.gadgets.demo.DemoGadget;
-import com.propertyvista.crm.client.ui.gadgets.demo.GaugeGadget;
-import com.propertyvista.crm.client.ui.gadgets.demo.LineChartGadget;
-import com.propertyvista.crm.client.ui.gadgets.demo.PieChart2DGadget;
+import com.propertyvista.crm.client.ui.gadgets.demo.DemoGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.demo.GaugeGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.demo.LineChartGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.demo.PieChart2DGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.leadsandrentals.LeadsAndRentalsGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.leasexpiration.LeaseExpirationGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.maintenance.MaintenanceGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.notices.NoticesGadgetFactory;
-import com.propertyvista.crm.client.ui.gadgets.other.BuildingListerGadget;
+import com.propertyvista.crm.client.ui.gadgets.other.BuildingListerGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.payments.PaymentRecordsGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.payments.PaymentsSummaryGadgetFactory;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public class BuildingGadgetDirectory implements IGadgetDirectory {
+public class GadgetFactory implements IGadgetFactory {
 
     private static List<IGadgetFactory> DIRECTORY = Arrays.asList(//@formatter:off            
             (IGadgetFactory) new ArrearsStatusGadget(),
             new ArrearsYOYAnalysisChartGadget(),
             new ArrearsGadgetFactory(),
                     
-            new UnitAvailabilityReportGadget(),
+            new UnitAvailabilityReportGadgetFactory(),
             new UnitAvailabilitySummaryGadgetFactory(),
-            new TurnoverAnalysisGraphGadget(),
+            new TurnoverAnalysisGraphGadgetFactory(),
             
             new PaymentRecordsGadgetFactory(),
             new PaymentsSummaryGadgetFactory(),
@@ -64,32 +64,35 @@ public class BuildingGadgetDirectory implements IGadgetDirectory {
             new ApplicationsGadgetFactory(),
             
             // DEMO GADGETS
-            new BuildingListerGadget(),
-            new BarChart2DGadget(),
-            new DemoGadget(),
-            new GaugeGadget(),
-            new LineChartGadget(),
-            new PieChart2DGadget(),
+            new BuildingListerGadgetFactory(),
+            new BarChart2DGadgetFactory(),
+            new DemoGadgetFactory(),
+            new GaugeGadgetFactory(),
+            new LineChartGadgetFactory(),
+            new PieChart2DGadgetFactory(),
             new CounterGadgetDemoFactory()
     );//@formatter:on
 
+    public Collection<? extends IGadgetFactory> getAvailableGadgets() {
+        return DIRECTORY;
+    }
+
     @Override
-    public IGadgetInstance createGadgetInstance(GadgetMetadata gadgetMetadata) {
-        if (gadgetMetadata == null) {
-            return null;
-        }
-        String requestedGadgetType = gadgetMetadata.cast().getObjectClass().getName();
-        for (IGadgetFactory g : DIRECTORY) {
-            if (g.getType().equals(requestedGadgetType)) {
-                return g.createGadget(gadgetMetadata);
-            }
-        }
+    public Class<? extends GadgetMetadata> getGadgetMetadataClass() {
         return null;
     }
 
     @Override
-    public Collection<? extends IGadgetFactory> getAvailableGadgets() {
-        return DIRECTORY;
+    public IGadgetInstance createGadget(GadgetMetadata gadgetMetadata) throws Error {
+        if (gadgetMetadata == null) {
+            return null;
+        }
+        for (IGadgetFactory g : DIRECTORY) {
+            if (g.getGadgetMetadataClass().equals(gadgetMetadata.getInstanceValueClass())) {
+                return g.createGadget(gadgetMetadata);
+            }
+        }
+        return null;
     }
 
 }

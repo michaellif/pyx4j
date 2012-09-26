@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.arrears;
 
-import java.util.Arrays;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -30,8 +29,7 @@ import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
@@ -42,7 +40,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.svg.gadgets.ArrearsYoyAnalysisChartFactory;
 
-public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnalysisChartGadgetMetadata> {
+public class ArrearsYOYAnalysisChartGadget extends AbstractGadgetFactory<ArrearsYOYAnalysisChartGadgetMetadata> {
 
     public static class ArrearsYOYAnalysisChartGadgetInstance extends GadgetInstanceBase<ArrearsYOYAnalysisChartGadgetMetadata> implements
             IBuildingBoardGadgetInstance {
@@ -181,11 +179,6 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
     public ArrearsYOYAnalysisChartGadget() {
         super(ArrearsYOYAnalysisChartGadgetMetadata.class);
     }
-
-    @Override
-    public java.util.List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Arrears.toString(), Directory.Categories.Chart.toString());
-    };
 
     @Override
     protected GadgetInstanceBase<ArrearsYOYAnalysisChartGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {

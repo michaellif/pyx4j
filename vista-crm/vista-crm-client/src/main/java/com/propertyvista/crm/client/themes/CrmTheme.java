@@ -43,7 +43,7 @@ import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.crm.client.ui.board.BoardBase;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
-import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.GadgetDirectoryDialog;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 
 public class CrmTheme extends VistaTheme {
 
@@ -475,7 +475,7 @@ public class CrmTheme extends VistaTheme {
     }
 
     private void initGadgetDirectoryStyles() {
-        String prefix = GadgetDirectoryDialog.STYLE;
+        String prefix = AddGadgetDialog.ADD_GADGET_DIALOG_STYLE;
 
         // GADGETS LIST
         Style style = new Style("." + prefix + " .cellListOddItem");

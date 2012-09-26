@@ -45,8 +45,8 @@ import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.GadgetFactory;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
@@ -164,7 +164,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
             setLayout(dashboardMetadata.layoutType().getValue());
             // fill the dashboard with gadgets:
             for (GadgetMetadata gmd : dashboardMetadata.gadgets()) {
-                IGadgetInstance gadget = Directory.createGadget(gmd);
+                IGadgetInstance gadget = new GadgetFactory().createGadget(gmd);
                 if (gadget != null) {
                     // TODO a workaround
                     if (gmd.docking().column().getValue() == null) {

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.availability;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
@@ -45,7 +44,7 @@ import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
@@ -57,9 +56,9 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.svg.gadgets.TurnoverAnalysisChartFactory;
 
-public class TurnoverAnalysisGraphGadget extends AbstractGadget<UnitTurnoverAnalysisGadgetMetadata> {
+public class TurnoverAnalysisGraphGadgetFactory extends AbstractGadgetFactory<UnitTurnoverAnalysisGadgetMetadata> {
 
-    private static final I18n i18n = I18n.get(TurnoverAnalysisGraphGadget.class);
+    private static final I18n i18n = I18n.get(TurnoverAnalysisGraphGadgetFactory.class);
 
     private static class TurnoverAnalysisGraphGadgetInstance extends GadgetInstanceBase<UnitTurnoverAnalysisGadgetMetadata> implements
             IBuildingBoardGadgetInstance {
@@ -326,18 +325,8 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<UnitTurnoverAnal
 
     }
 
-    public TurnoverAnalysisGraphGadget() {
+    public TurnoverAnalysisGraphGadgetFactory() {
         super(UnitTurnoverAnalysisGadgetMetadata.class);
-    }
-
-    @Override
-    public String getDescription() {
-        return i18n.tr("A graph that visually demonstrates the turnover rate in either percentage or quantity over the course of multiple years");
-    }
-
-    @Override
-    public List<String> getCategories() {
-        return Arrays.asList(i18n.tr("Availability"), i18n.tr("Chart"));
     }
 
     @Override

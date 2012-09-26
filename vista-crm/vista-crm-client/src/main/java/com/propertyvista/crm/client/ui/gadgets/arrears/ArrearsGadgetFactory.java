@@ -13,24 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.arrears;
 
-import java.util.Arrays;
-import java.util.List;
-
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public class ArrearsGadgetFactory extends AbstractGadget<ArrearsGadgetMetadata> {
+public class ArrearsGadgetFactory extends AbstractGadgetFactory<ArrearsGadgetMetadata> {
 
     public ArrearsGadgetFactory() {
         super(ArrearsGadgetMetadata.class);
-    }
-
-    @Override
-    public List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Arrears.toString());
     }
 
     @Override

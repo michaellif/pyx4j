@@ -13,30 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.common;
 
-import java.util.List;
-
-import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public interface IGadgetFactory {
 
-    IGadgetInstance createGadget(GadgetMetadata metadata) throws Error;
-
     Class<? extends GadgetMetadata> getGadgetMetadataClass();
 
-    /** @return Return type of the gadget (is used for persistence system purposes and identification */
-    String getType();
-
-    String getName();
-
-    List<String> getCategories();
-
-    /** @return Return short explanation of gadget's abilities. */
-    String getDescription();
-
-    @Deprecated
-    boolean isBuildingGadget();
-
-    boolean isAcceptedBy(DashboardType dashboardType);
+    IGadgetInstance createGadget(GadgetMetadata metadata) throws Error;
 
 }

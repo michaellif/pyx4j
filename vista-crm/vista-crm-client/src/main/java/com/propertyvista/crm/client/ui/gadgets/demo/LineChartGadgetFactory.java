@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.gadgets.demo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Overflow;
@@ -32,13 +31,13 @@ import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.chart.LineChart;
 import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
 
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.demo.LineChartGadgetMetadata;
 
-public class LineChartGadget extends AbstractGadget<com.propertyvista.domain.dashboard.gadgets.type.demo.LineChartGadgetMetadata> {
-    private static final I18n i18n = I18n.get(LineChartGadget.class);
+public class LineChartGadgetFactory extends AbstractGadgetFactory<com.propertyvista.domain.dashboard.gadgets.type.demo.LineChartGadgetMetadata> {
+    private static final I18n i18n = I18n.get(LineChartGadgetFactory.class);
 
     public class LineChartGadgetInstance extends GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.LineChartGadgetMetadata> {
 
@@ -124,22 +123,12 @@ public class LineChartGadget extends AbstractGadget<com.propertyvista.domain.das
         }
     }
 
-    public LineChartGadget() {
+    public LineChartGadgetFactory() {
         super(com.propertyvista.domain.dashboard.gadgets.type.demo.LineChartGadgetMetadata.class);
     }
 
     @Override
-    public List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Demo.toString(), Directory.Categories.Chart.toString());
-    }
-
-    @Override
-    public String getDescription() {
-        return i18n.tr("Demo of a Line Chart gadget.");
-    }
-
-    @Override
-    protected GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.LineChartGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<LineChartGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new LineChartGadgetInstance(gadgetMetadata);
     }
 }

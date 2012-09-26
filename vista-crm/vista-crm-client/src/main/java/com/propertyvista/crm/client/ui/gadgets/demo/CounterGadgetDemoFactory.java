@@ -27,9 +27,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewFolder;
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewFolder.IZoomableRowEditorFactory;
@@ -41,7 +40,7 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.AbstractCounterGadge
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.demo.CounterGadgetDemoGadgetMetadata;
 
-public class CounterGadgetDemoFactory extends AbstractGadget<CounterGadgetDemoGadgetMetadata> {
+public class CounterGadgetDemoFactory extends AbstractGadgetFactory<CounterGadgetDemoGadgetMetadata> {
 
     public class CounterGadgetDemo extends CounterGadgetInstanceBase<CounterGadgetDemoDTO, VoidSerializable, CounterGadgetDemoGadgetMetadata> {
 
@@ -120,11 +119,6 @@ public class CounterGadgetDemoFactory extends AbstractGadget<CounterGadgetDemoGa
 
     public CounterGadgetDemoFactory() {
         super(CounterGadgetDemoGadgetMetadata.class);
-    }
-
-    @Override
-    public List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Demo.toString());
     }
 
     @Override

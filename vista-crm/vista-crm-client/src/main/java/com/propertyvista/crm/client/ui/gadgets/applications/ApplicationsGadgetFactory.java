@@ -13,24 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.applications;
 
-import java.util.Arrays;
-import java.util.List;
-
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.domain.dashboard.gadgets.type.ApplicationsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public class ApplicationsGadgetFactory extends AbstractGadget<ApplicationsGadgetMetadata> {
+public class ApplicationsGadgetFactory extends AbstractGadgetFactory<ApplicationsGadgetMetadata> {
 
     public ApplicationsGadgetFactory() {
         super(ApplicationsGadgetMetadata.class);
-    }
-
-    @Override
-    public List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Applications.toString());
     }
 
     @Override

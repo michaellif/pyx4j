@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.gadgets.demo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Overflow;
@@ -31,13 +30,13 @@ import com.pyx4j.svg.chart.DataSource;
 import com.pyx4j.svg.chart.Gauge;
 import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
 
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public class GaugeGadget extends AbstractGadget<com.propertyvista.domain.dashboard.gadgets.type.demo.GaugeGadgetMetadata> {
-    private static final I18n i18n = I18n.get(GaugeGadget.class);
+public class GaugeGadgetFactory extends AbstractGadgetFactory<com.propertyvista.domain.dashboard.gadgets.type.demo.GaugeGadgetMetadata> {
+
+    private static final I18n i18n = I18n.get(GaugeGadgetFactory.class);
 
     public static class GaugeGadgetInstance extends GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.GaugeGadgetMetadata> {
 
@@ -89,23 +88,14 @@ public class GaugeGadget extends AbstractGadget<com.propertyvista.domain.dashboa
         }
     }
 
-    public GaugeGadget() {
+    public GaugeGadgetFactory() {
         super(com.propertyvista.domain.dashboard.gadgets.type.demo.GaugeGadgetMetadata.class);
 
     }
 
     @Override
-    public List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Demo.toString(), Directory.Categories.Chart.toString());
-    }
-
-    @Override
-    public String getDescription() {
-        return i18n.tr("Demo of gauge based gadget.");
-    }
-
-    @Override
-    protected GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.GaugeGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.GaugeGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata)
+            throws Error {
         return new GaugeGadgetInstance(gadgetMetadata);
     }
 }

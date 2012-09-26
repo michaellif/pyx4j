@@ -36,8 +36,7 @@ import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
@@ -47,7 +46,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGa
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class UnitAvailabilitySummaryGadgetFactory extends AbstractGadget<UnitAvailabilitySummaryGadgetMetadata> {
+public class UnitAvailabilitySummaryGadgetFactory extends AbstractGadgetFactory<UnitAvailabilitySummaryGadgetMetadata> {
 
     private static final I18n i18n = I18n.get(UnitAvailabilitySummaryGadgetFactory.class);
 
@@ -157,11 +156,6 @@ public class UnitAvailabilitySummaryGadgetFactory extends AbstractGadget<UnitAva
 
     public UnitAvailabilitySummaryGadgetFactory() {
         super(UnitAvailabilitySummaryGadgetMetadata.class);
-    }
-
-    @Override
-    public List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Availability.toString());
     }
 
     @Override

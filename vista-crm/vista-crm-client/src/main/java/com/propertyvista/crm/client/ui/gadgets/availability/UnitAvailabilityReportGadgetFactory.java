@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.gadgets.availability;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -37,8 +36,7 @@ import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
@@ -51,9 +49,9 @@ import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMet
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilityGadgetMetadata> {
+public class UnitAvailabilityReportGadgetFactory extends AbstractGadgetFactory<UnitAvailabilityGadgetMetadata> {
 
-    private static final I18n i18n = I18n.get(UnitAvailabilityReportGadget.class);
+    private static final I18n i18n = I18n.get(UnitAvailabilityReportGadgetFactory.class);
 
     public static class UnitAvailabilityReportGadgetInstance extends ListerGadgetInstanceBase<UnitAvailabilityStatus, UnitAvailabilityGadgetMetadata> implements
             IBuildingBoardGadgetInstance {
@@ -192,13 +190,8 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         }
     }
 
-    public UnitAvailabilityReportGadget() {
+    public UnitAvailabilityReportGadgetFactory() {
         super(UnitAvailabilityGadgetMetadata.class);
-    }
-
-    @Override
-    public List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Availability.toString());
     }
 
     @Override

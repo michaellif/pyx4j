@@ -18,7 +18,6 @@ import static com.propertyvista.svg.gadgets.util.LabelHelper.makeListView;
 
 import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -40,8 +39,7 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
@@ -54,7 +52,7 @@ import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class PaymentRecordsGadgetFactory extends AbstractGadget<PaymentRecordsGadgetMetadata> {
+public class PaymentRecordsGadgetFactory extends AbstractGadgetFactory<PaymentRecordsGadgetMetadata> {
 
     private final static I18n i18n = I18n.get(PaymentRecordsGadgetFactory.class);
 
@@ -183,11 +181,6 @@ public class PaymentRecordsGadgetFactory extends AbstractGadget<PaymentRecordsGa
 
     public PaymentRecordsGadgetFactory() {
         super(PaymentRecordsGadgetMetadata.class);
-    }
-
-    @Override
-    public List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Payments.toString());
     }
 
     @Override

@@ -27,9 +27,12 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 @DiscriminatorValue("TurnoverAnalysisSettings")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-@Caption(name = "Turnover Analysis")
 @Transient
-@GadgetDescription(keywords = { "Units", "Chart", "Turnover" })
+@Caption(name = "Turnover Analysis")
+@GadgetDescription(//@formatter:off
+        description = "A graph that visually demonstrates the turnover rate in either percentage or quantity over the course of multiple years",
+        keywords = { "Units", "Chart", "Turnover", "Availability", "Occupancy" }
+)//@formatter:on
 public interface UnitTurnoverAnalysisGadgetMetadata extends GadgetMetadata, BuildingGadget {
 
     IPrimitive<Boolean> isTurnoverMeasuredByPercent();

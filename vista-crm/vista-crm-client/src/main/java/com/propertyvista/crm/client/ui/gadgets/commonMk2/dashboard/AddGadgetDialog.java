@@ -42,7 +42,6 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
-import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.GadgetCellTemplates;
 import com.propertyvista.crm.rpc.dto.dashboard.GadgetDescriptorDTO;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -160,6 +159,8 @@ public abstract class AddGadgetDialog extends OkCancelDialog implements OkOption
     }
 
     private static final I18n i18n = I18n.get(AddGadgetDialog.class);
+
+    public static final String ADD_GADGET_DIALOG_STYLE = "-vista-AddGadgetDialog";
 
     private boolean isLoading;
 

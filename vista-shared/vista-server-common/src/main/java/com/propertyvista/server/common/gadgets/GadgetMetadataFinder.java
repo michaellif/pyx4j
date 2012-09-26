@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
+
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public class GadgetMetadataFinder {
@@ -47,14 +49,13 @@ public class GadgetMetadataFinder {
 
         List<Class<? extends GadgetMetadata>> gadgetMetadataClasses = new ArrayList<Class<? extends GadgetMetadata>>();
         for (String gadgetMetadataClassName : gadgetMetadataClassNames) {
-            System.out.println(gadgetMetadataClassName);
             try {
 
                 Class<?> clazz = null;
                 if (true) {
                     clazz = ClassLoader.getSystemClassLoader().loadClass(gadgetMetadataClassName);
                 }
-                if (GadgetMetadata.class.isAssignableFrom(clazz)) {
+                if (GadgetMetadata.class.isAssignableFrom(clazz) & clazz.getAnnotation(AbstractEntity.class) == null) {
                     gadgetMetadataClasses.add((Class<? extends GadgetMetadata>) clazz);
                 }
             } catch (ClassNotFoundException e) {

@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.demo;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -26,15 +23,14 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.demo.DemoGadgetMetadata;
 
-public class DemoGadget extends AbstractGadget<DemoGadgetMetadata> {
+public class DemoGadgetFactory extends AbstractGadgetFactory<DemoGadgetMetadata> {
 
-    private static final I18n i18n = I18n.get(DemoGadget.class);
+    private static final I18n i18n = I18n.get(DemoGadgetFactory.class);
 
     public static class DemoGadgetInstance extends GadgetInstanceBase<DemoGadgetMetadata> {
         private HTML widget;
@@ -120,18 +116,8 @@ public class DemoGadget extends AbstractGadget<DemoGadgetMetadata> {
 
     }
 
-    public DemoGadget() {
+    public DemoGadgetFactory() {
         super(DemoGadgetMetadata.class);
-    }
-
-    @Override
-    public List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Demo.toString());
-    }
-
-    @Override
-    public String getDescription() {
-        return i18n.tr("Demo of a gadget");
     }
 
     @Override

@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.gadgets.demo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Overflow;
@@ -22,29 +21,27 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
-import com.pyx4j.svg.chart.ArcBasedChartConfigurator;
+import com.pyx4j.svg.chart.BarChart2D;
 import com.pyx4j.svg.chart.ChartTheme;
 import com.pyx4j.svg.chart.DataSource;
-import com.pyx4j.svg.chart.PieChart2D;
+import com.pyx4j.svg.chart.GridBasedChartConfigurator;
+import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
 
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public class PieChart2DGadget extends AbstractGadget<com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2DGadgetMetadata> {
-    private static final I18n i18n = I18n.get(PieChart2D.class);
+public class BarChart2DGadgetFactory extends AbstractGadgetFactory<com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2DGadgetMetadata> {
 
-    public static class PieChart2DGadgetInstance extends GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2DGadgetMetadata> {
+    public static class BarChart2DGadgetInstance extends GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2DGadgetMetadata> {
 
         private SimplePanel panel;
 
-        public PieChart2DGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2DGadgetMetadata.class);
+        public BarChart2DGadgetInstance(GadgetMetadata gmd) {
+            super(gmd, com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2DGadgetMetadata.class);
             setDefaultPopulator(new Populator() {
                 @Override
                 public void populate() {
@@ -54,72 +51,81 @@ public class PieChart2DGadget extends AbstractGadget<com.propertyvista.domain.da
         }
 
         @Override
-        public boolean isFullWidth() {
-            return false;
-        }
-
-        @Override
         public Widget initContentPanel() {
-            // TODO Auto-generated method stub
             panel = new SimplePanel();
 
             DataSource ds = new DataSource();
             List<Double> values = new ArrayList<Double>(5);
             values.add(80d);
+            values.add(60d);
+            values.add(10d);
             ds.addDataSet(ds.new Metric("Building 1"), values);
 
             values = new ArrayList<Double>(5);
+            values.add(80d);
+            values.add(58d);
             values.add(35d);
             ds.addDataSet(ds.new Metric("Building 2"), values);
 
             values = new ArrayList<Double>(5);
+            values.add(38d);
+            values.add(54d);
             values.add(13d);
             ds.addDataSet(ds.new Metric("Building 3"), values);
 
             values = new ArrayList<Double>(5);
+            values.add(38d);
+            values.add(30d);
             values.add(41d);
             ds.addDataSet(ds.new Metric("Building 4"), values);
 
             values = new ArrayList<Double>(5);
+            values.add(28d);
+            values.add(30d);
             values.add(7d);
             ds.addDataSet(ds.new Metric("Building 5"), values);
 
+            values = new ArrayList<Double>(6);
+            values.add(18d);
+            values.add(60d);
+            values.add(17d);
+            ds.addDataSet(ds.new Metric("Building 6"), values);
+
+            List<String> sd = new ArrayList<String>(3);
+            sd.add("2008");
+            sd.add("2009");
+            sd.add("2010");
+            ds.setSeriesDescription(sd);
+
             SvgFactory factory = new SvgFactoryForGwt();
 
-            ArcBasedChartConfigurator config = new ArcBasedChartConfigurator(factory, ds);
+            GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, ds, 700, 200);
             config.setLegend(true);
+            config.setGridType(GridType.Both);
             config.setTheme(ChartTheme.Bright);
-            config.setRadius(65);
 
             SvgRoot svgroot = factory.getSvgRoot();
-            svgroot.add(new PieChart2D(config));
+            svgroot.add(new BarChart2D(config));
 
             panel.add((Widget) svgroot);
-            panel.setSize("300px", "150px");
+            panel.setSize("700px", "200px");
             panel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
 
             ScrollPanel scroll = new ScrollPanel(panel);
             scroll.setWidth("100%");
+
             return scroll;
         }
     }
 
-    public PieChart2DGadget() {
-        super(com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2DGadgetMetadata.class);
+    public BarChart2DGadgetFactory() {
+        super(com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2DGadgetMetadata.class);
     }
 
     @Override
-    public List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Demo.toString(), Directory.Categories.Chart.toString());
+    protected GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2DGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata)
+            throws Error {
+        return new BarChart2DGadgetInstance(gadgetMetadata);
     }
 
-    @Override
-    public String getDescription() {
-        return i18n.tr("Demo of a pie chart based gadget.");
-    }
-
-    @Override
-    protected GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2DGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
-        return new PieChart2DGadgetInstance(gadgetMetadata);
-    }
 }

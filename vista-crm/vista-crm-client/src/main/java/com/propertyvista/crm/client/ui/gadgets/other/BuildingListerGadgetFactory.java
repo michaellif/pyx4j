@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.gadgets.other;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -31,8 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
@@ -42,9 +40,9 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingListerGadget extends AbstractGadget<BuildingListerGadgetMetadata> {
+public class BuildingListerGadgetFactory extends AbstractGadgetFactory<BuildingListerGadgetMetadata> {
 
-    private static final I18n i18n = I18n.get(BuildingListerGadget.class);
+    private static final I18n i18n = I18n.get(BuildingListerGadgetFactory.class);
 
     public static class BuildingListerGadgetInstance extends ListerGadgetInstanceBase<BuildingDTO, BuildingListerGadgetMetadata> {
 
@@ -115,18 +113,8 @@ public class BuildingListerGadget extends AbstractGadget<BuildingListerGadgetMet
 
     }
 
-    public BuildingListerGadget() {
+    public BuildingListerGadgetFactory() {
         super(BuildingListerGadgetMetadata.class);
-    }
-
-    @Override
-    public String getDescription() {
-        return i18n.tr("Table-list-like gadget which displays building data according to prefered rules. Query and display data can be set up");
-    }
-
-    @Override
-    public List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Buildings.toString());
     }
 
     @Override

@@ -23,7 +23,7 @@ import com.pyx4j.site.client.ui.ViewImplBase;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
-import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.BuildingGadgetDirectory;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.GadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.LayoutManagersFactory;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
@@ -41,7 +41,7 @@ public class DashboardViewImpl extends ViewImplBase implements DashboardView {
 
     public DashboardViewImpl() {
         this.buildingsFilterProvider = new BuildingsSelectionToolbar();
-        this.dashboard = new AbstractDashboard(buildingsFilterProvider, new BuildingGadgetDirectory(), LayoutManagersFactory.createLayoutManagers()) {
+        this.dashboard = new AbstractDashboard(buildingsFilterProvider, new GadgetFactory(), LayoutManagersFactory.createLayoutManagers()) {
 
             @Override
             protected void onPrintRequested() {

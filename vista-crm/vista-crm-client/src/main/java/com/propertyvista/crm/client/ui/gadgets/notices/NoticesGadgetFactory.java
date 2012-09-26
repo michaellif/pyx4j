@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.notices;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -23,9 +21,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.LeasesDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.UnitDetailsFactory;
@@ -39,7 +36,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.LeaseDTO;
 
-public class NoticesGadgetFactory extends AbstractGadget<NoticesGadgetMetadata> {
+public class NoticesGadgetFactory extends AbstractGadgetFactory<NoticesGadgetMetadata> {
 
     public static class NoticesGadget extends CounterGadgetInstanceBase<NoticesGadgetDataDTO, Vector<Building>, NoticesGadgetMetadata> {
 
@@ -95,11 +92,6 @@ public class NoticesGadgetFactory extends AbstractGadget<NoticesGadgetMetadata> 
 
     public NoticesGadgetFactory() {
         super(NoticesGadgetMetadata.class);
-    }
-
-    @Override
-    public List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Leases.toString());
     }
 
     @Override

@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.leasexpiration;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -23,9 +21,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.components.LeasesDetailsFactory;
@@ -40,10 +37,10 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.LeaseDTO;
 
-public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpirationGadgetMetadata> {
+public class LeaseExpirationGadgetFactory extends AbstractGadgetFactory<LeaseExpirationGadgetMetadata> {
 
-    public class LeaseExpirationGadget extends CounterGadgetInstanceBase<LeaseExpirationGadgetDataDTO, Vector<Building>, LeaseExpirationGadgetMetadata> implements
-            IBuildingFilterContainer {
+    public class LeaseExpirationGadget extends CounterGadgetInstanceBase<LeaseExpirationGadgetDataDTO, Vector<Building>, LeaseExpirationGadgetMetadata>
+            implements IBuildingFilterContainer {
 
         public LeaseExpirationGadget(GadgetMetadata metadata) {
             super(LeaseExpirationGadgetDataDTO.class, GWT.<LeaseExpirationGadgetService> create(LeaseExpirationGadgetService.class),
@@ -89,11 +86,6 @@ public class LeaseExpirationGadgetFactory extends AbstractGadget<LeaseExpiration
 
     public LeaseExpirationGadgetFactory() {
         super(LeaseExpirationGadgetMetadata.class);
-    }
-
-    @Override
-    public List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Leases.toString());
     }
 
     @Override

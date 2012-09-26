@@ -1,4 +1,4 @@
-package com.propertyvista.crm.client.ui.gadgets.addgadgetdialog;
+package com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard;
 
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;

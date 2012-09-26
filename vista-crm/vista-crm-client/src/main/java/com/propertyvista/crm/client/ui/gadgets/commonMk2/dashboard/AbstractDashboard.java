@@ -48,6 +48,7 @@ import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.board.BoardBase.StyleSuffix;
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -66,7 +67,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
 
     private final HorizontalPanel actionsPanel;
 
-    private final IGadgetDirectory gadgetDirectory;
+    private final IGadgetFactory gadgetDirectory;
 
     private final ICommonGadgetSettingsContainer commonGadgetSettingsContainer;
 
@@ -78,7 +79,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
 
     protected ILayoutManager activeLayoutManger;
 
-    public AbstractDashboard(ICommonGadgetSettingsContainer container, IGadgetDirectory gadgetDirectory, List<ILayoutManager> layoutManagers) {
+    public AbstractDashboard(ICommonGadgetSettingsContainer container, IGadgetFactory gadgetDirectory, List<ILayoutManager> layoutManagers) {
         this.commonGadgetSettingsContainer = container;
         this.gadgetDirectory = gadgetDirectory;
 
@@ -130,7 +131,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
         if (dashboardMetadata != null) {
             List<IGadgetInstance> gadgets = new ArrayList<IGadgetInstance>();
             for (GadgetMetadata metadata : dashboardMetadata.gadgets()) {
-                IGadgetInstance gadget = gadgetDirectory.createGadgetInstance(metadata);
+                IGadgetInstance gadget = gadgetDirectory.createGadget(metadata);
                 // TODO stupid way this stupid list is needed to separate layout from dashboard, but the implementation of segregation is not well done, review
                 if (gadget != null) {
                     gadgets.add(gadget);
@@ -248,7 +249,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
                         GWT.<DashboardMetadataService> create(DashboardMetadataService.class).createGadgetMetadata(new DefaultAsyncCallback<GadgetMetadata>() {
                             @Override
                             public void onSuccess(GadgetMetadata gadgteMetadata) {
-                                IGadgetInstance gadget = gadgetDirectory.createGadgetInstance(gadgteMetadata);
+                                IGadgetInstance gadget = gadgetDirectory.createGadget(gadgteMetadata);
                                 commonGadgetSettingsContainer.bindGadget(gadget);
                                 board.addGadget(gadget);
                                 gadget.start();

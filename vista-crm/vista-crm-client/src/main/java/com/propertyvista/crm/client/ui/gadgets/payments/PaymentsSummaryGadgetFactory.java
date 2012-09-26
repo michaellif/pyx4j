@@ -43,8 +43,7 @@ import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
@@ -57,7 +56,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class PaymentsSummaryGadgetFactory extends AbstractGadget<PaymentsSummaryGadgetMetadata> {
+public class PaymentsSummaryGadgetFactory extends AbstractGadgetFactory<PaymentsSummaryGadgetMetadata> {
 
     private final static I18n i18n = I18n.get(PaymentsSummaryGadgetFactory.class);
 
@@ -258,11 +257,6 @@ public class PaymentsSummaryGadgetFactory extends AbstractGadget<PaymentsSummary
 
     public PaymentsSummaryGadgetFactory() {
         super(PaymentsSummaryGadgetMetadata.class);
-    }
-
-    @Override
-    public List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Payments.toString());
     }
 
     @Override

@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.maintenance;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -23,9 +21,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
-import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.MaintenanceRequestsDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
@@ -38,7 +35,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public class MaintenanceGadgetFactory extends AbstractGadget<MaintenanceGadgetMetadata> {
+public class MaintenanceGadgetFactory extends AbstractGadgetFactory<MaintenanceGadgetMetadata> {
 
     public static class MaintenanceGadget extends CounterGadgetInstanceBase<MaintenanceGadgetDataDTO, Vector<Building>, MaintenanceGadgetMetadata> {
 
@@ -75,11 +72,6 @@ public class MaintenanceGadgetFactory extends AbstractGadget<MaintenanceGadgetMe
 
     public MaintenanceGadgetFactory() {
         super(MaintenanceGadgetMetadata.class);
-    }
-
-    @Override
-    public List<String> getCategories() {
-        return Arrays.asList(Directory.Categories.Maintenance.name());
     }
 
     @Override
