@@ -22,12 +22,14 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO.AnalysisResolution;
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 @DiscriminatorValue("TurnoverAnalysisSettings")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Caption(name = "Turnover Analysis")
 @Transient
+@GadgetDescription(keywords = { "Units", "Chart", "Turnover" })
 public interface UnitTurnoverAnalysisGadgetMetadata extends GadgetMetadata, BuildingGadget {
 
     IPrimitive<Boolean> isTurnoverMeasuredByPercent();

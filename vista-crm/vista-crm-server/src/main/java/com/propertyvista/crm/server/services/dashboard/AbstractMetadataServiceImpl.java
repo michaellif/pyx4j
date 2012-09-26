@@ -14,7 +14,11 @@
 package com.propertyvista.crm.server.services.dashboard;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.Vector;
 
@@ -22,23 +26,33 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.server.services.customization.CustomizationPersistenceHelper;
 
+import com.propertyvista.crm.rpc.dto.dashboard.GadgetDescriptorDTO;
 import com.propertyvista.crm.rpc.services.dashboard.AbstractMetadataService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.GadgetMetadataHolder;
+import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.server.common.gadgets.GadgetMetadataFactory;
+import com.propertyvista.server.common.gadgets.GadgetMetadataFinder;
 
 abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
 
     private final static I18n i18n = I18n.get(AbstractMetadataServiceImpl.class);
 
-    abstract void addTypeCriteria(EntityQueryCriteria<DashboardMetadata> criteria);
+    private final static Set<Class<? extends GadgetMetadata>> GADGET_TYPES;
+
+    static {
+        GADGET_TYPES = Collections.unmodifiableSet(new HashSet<Class<? extends GadgetMetadata>>(GadgetMetadataFinder.getGadgetMetadataClassesFromClassPath()));
+    }
 
     @Override
     public void listMetadata(AsyncCallback<Vector<DashboardMetadata>> callback) {
@@ -156,9 +170,33 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         Persistence.service().commit();
     }
 
+    @Override
+    public void listAvailableGadgets(AsyncCallback<Vector<GadgetDescriptorDTO>> callback, DashboardType boardType) {
+        Vector<GadgetDescriptorDTO> descriptors = new Vector<GadgetDescriptorDTO>();
+
+        for (Class<? extends GadgetMetadata> klass : GADGET_TYPES) {
+            GadgetDescription gadgetDescription = klass.getAnnotation(GadgetDescription.class);
+            // TODO add translation
+            if ((boardType == DashboardType.building & BuildingGadget.class.isAssignableFrom(klass))
+                    | (boardType != DashboardType.building & !BuildingGadget.class.isAssignableFrom(klass))) {
+                GadgetMetadata proto = EntityFactory.getEntityPrototype(klass);
+                descriptors.add(new GadgetDescriptorDTO(//@formatter:off
+                        proto.getEntityMeta().getCaption(),
+                        gadgetDescription != null ? gadgetDescription.description() : i18n.tr(""),
+                        Arrays.asList(gadgetDescription != null ? gadgetDescription.keywords() : new String[0]),
+                        proto
+                ));//@formatter:on
+            }
+        }
+        callback.onSuccess(descriptors);
+    }
+
     protected abstract DashboardMetadata retrieveDefaultMetadata();
+
+    protected abstract void addTypeCriteria(EntityQueryCriteria<DashboardMetadata> criteria);
 
     private static CustomizationPersistenceHelper<GadgetMetadata> gadgetStorage() {
         return new CustomizationPersistenceHelper<GadgetMetadata>(GadgetMetadataHolder.class, GadgetMetadata.class);
     }
+
 }

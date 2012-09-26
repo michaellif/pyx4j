@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
@@ -29,6 +30,7 @@ import com.propertyvista.domain.payment.PaymentType;
 @Caption(name = "Payment Records", description = "TBD")
 @DiscriminatorValue("PaymentRecordsGadgetMetadata")
 @Transient
+@GadgetDescription(keywords = { "Payments", "Funds", "Money" })
 public interface PaymentRecordsGadgetMetadata extends ListerGadgetBaseMetadata, BuildingGadget {
 
     /**

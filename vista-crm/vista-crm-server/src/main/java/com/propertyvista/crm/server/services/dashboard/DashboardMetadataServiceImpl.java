@@ -41,11 +41,6 @@ public class DashboardMetadataServiceImpl extends AbstractMetadataServiceImpl im
     }
 
     @Override
-    void addTypeCriteria(EntityQueryCriteria<DashboardMetadata> criteria) {
-        criteria.add(new PropertyCriterion(criteria.proto().layoutType(), Restriction.NOT_EQUAL, DashboardMetadata.LayoutType.Report));
-    }
-
-    @Override
     public void downloadBoard(final AsyncCallback<String> callback, VoidSerializable none, Key entityId) {
         DashboardMetadata result = Persistence.secureRetrieve(EntityCriteriaByPK.create(DashboardMetadata.class, entityId));
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -66,5 +61,10 @@ public class DashboardMetadataServiceImpl extends AbstractMetadataServiceImpl im
         criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.system));
         criteria.add(PropertyCriterion.ne(criteria.proto().layoutType(), DashboardMetadata.LayoutType.Report));
         return Persistence.secureRetrieve(criteria);
+    }
+
+    @Override
+    protected void addTypeCriteria(EntityQueryCriteria<DashboardMetadata> criteria) {
+        criteria.add(new PropertyCriterion(criteria.proto().layoutType(), Restriction.NOT_EQUAL, DashboardMetadata.LayoutType.Report));
     }
 }

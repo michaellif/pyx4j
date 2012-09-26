@@ -16,10 +16,12 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 
 @DiscriminatorValue("BuildingLister")
 @Transient
+@GadgetDescription(keywords = "Buildings")
 public interface BuildingListerGadgetMetadata extends ListerGadgetBaseMetadata {
 
 }

@@ -19,13 +19,15 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.HasCustomizableDateGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 import com.propertyvista.domain.financial.PaymentRecord;
 
 @DiscriminatorValue("PaymentsSummaryGadgetMetadata")
 @Transient
-@Caption(name = "Payments Summary", description = "TBD")
+@Caption(name = "Payments Summary")
+@GadgetDescription(keywords = { "Payments", "Money", "Funds", "Collections" })
 public interface PaymentsSummaryGadgetMetadata extends ListerGadgetBaseMetadata, HasCustomizableDateGadgetMetadata, BuildingGadget {
 
     IPrimitiveSet<PaymentRecord.PaymentStatus> paymentStatus();

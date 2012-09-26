@@ -19,10 +19,12 @@ import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 
 @DiscriminatorValue("LeadsAndRentalsGadgetMeta")
-@Caption(name = "Leads and Rentals", description = "TBD")
+@Caption(name = "Leads and Rentals")
 @Transient
+@GadgetDescription(keywords = { "Leads", "Rentals", "Leases" })
 public interface LeadsAndRentalsGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 
 }

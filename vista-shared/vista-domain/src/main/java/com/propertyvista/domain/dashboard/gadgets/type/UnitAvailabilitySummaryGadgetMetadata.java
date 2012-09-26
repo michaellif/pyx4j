@@ -18,12 +18,17 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.HasCustomizableDateGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 
 @DiscriminatorValue("UnitAvailbilitySummaryGadgetMetadata")
-@Caption(name = "Unit Availability Summary", description = "Shows a summary of information about all units, including the total number of units, vacancy, notice and net exposure information in both percentages and quantity")
+@Caption(name = "Unit Availability Summary")
 @Transient
+@GadgetDescription(//@formatter:off
+        description = "Shows a summary of information about all units, including the total number of units, vacancy, notice and net exposure information in both percentages and quantity",
+        keywords = {"Units", "Availability", "Occupancy", "Vacancy"}
+)//@formatter:on
 public interface UnitAvailabilitySummaryGadgetMetadata extends ListerGadgetBaseMetadata, HasCustomizableDateGadgetMetadata, BuildingGadget {
 
 }
