@@ -13,7 +13,11 @@
  */
 package com.propertyvista.pmsite.server;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +28,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
+import org.apache.wicket.SystemMapper;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
@@ -32,6 +37,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.protocol.http.servlet.ServletWebResponse;
 import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
@@ -44,6 +50,7 @@ import org.apache.wicket.request.handler.PageProvider;
 import org.apache.wicket.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.mapper.MountedMapper;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
@@ -74,6 +81,7 @@ import com.propertyvista.pmsite.server.pages.StaticPage;
 import com.propertyvista.pmsite.server.pages.TermsAcceptancePage;
 import com.propertyvista.pmsite.server.pages.TermsDeclinedPage;
 import com.propertyvista.pmsite.server.pages.UnitDetailsPage;
+import com.propertyvista.shared.CompiledLocale;
 
 public class PMSiteApplication extends AuthenticatedWebApplication {
 
@@ -133,7 +141,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
             if (ApplicationMode.isDevelopment()) {
                 IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
                 for (String pName : persistParams) {
-                    org.apache.wicket.util.string.StringValue pValue = params.getParameterValue(pName);
+                    StringValue pValue = params.getParameterValue(pName);
                     if (pValue != null && !pValue.isNull()) {
                         newParams.set(pName, pValue);
                     }
@@ -145,11 +153,21 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
         @Override
         protected UrlInfo parseRequest(Request request) {
-            final UrlInfo info = super.parseRequest(request);
+            UrlInfo info = super.parseRequest(request);
             if (info != null && info.getPageParameters() != null) {
-                final StringValue lang = info.getPageParameters().get(ParamNameLang);
+                StringValue lang = info.getPageParameters().get(ParamNameLang);
                 if (!lang.isEmpty()) {
                     ((PMSiteWebRequest) request).setSiteLocale(lang.toString());
+                    // If given lang not supported the above method will use default locale,
+                    // and we will need to redirect to corresponding url
+                    String siteLang = ((PMSiteWebRequest) request).getSiteLocale().lang().getValue().getLanguage();
+                    if (!lang.toString().equalsIgnoreCase(siteLang)) {
+                        PageParameters newParams = new PageParameters(info.getPageParameters());
+                        newParams.set(ParamNameLang, siteLang);
+                        info = new UrlInfo(info.getPageComponentInfo(), info.getPageClass(), newParams);
+                    }
+                } else {
+                    throw new RuntimeException("Missing site locale");
                 }
             }
             return info;
@@ -171,6 +189,80 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
     protected void init() {
 
         super.init();
+
+        setRootRequestMapper(new SystemMapper(this) {
+            @Override
+            public IRequestHandler mapRequest(final Request request) {
+
+                class MapperScore implements Comparable<MapperScore> {
+                    protected final IRequestMapper mapper;
+
+                    protected final int score;
+
+                    public MapperScore(IRequestMapper mapper) {
+                        this.mapper = mapper;
+                        this.score = mapper.getCompatibilityScore(request);
+                    }
+
+                    @Override
+                    public int compareTo(final MapperScore o) {
+                        return o.score - score;
+                    }
+                }
+
+                List<MapperScore> list = new ArrayList<MapperScore>();
+
+                for (Iterator<IRequestMapper> iterator = iterator(); iterator.hasNext();) {
+                    list.add(new MapperScore(iterator.next()));
+                }
+
+                Collections.sort(list);
+
+                for (MapperScore mapperWithScore : list) {
+                    IRequestHandler handler = mapperWithScore.mapper.mapRequest(request);
+                    if (handler != null) {
+                        return handler;
+                    }
+                }
+
+                // default catch-all mapping - will render error page if url is not recognized
+                log.debug("Resource Not Found: " + request.getUrl().toString());
+                boolean pageRequested = false;
+                MapperScore bestMatch = list.get(0);
+                if (bestMatch.mapper instanceof MountedMapper) {
+                    pageRequested = true;
+                } else {
+                    for (MapperScore ms : list) {
+                        if (ms.score < bestMatch.score) {
+                            break;
+                        } else if (ms.mapper instanceof MountedMapper) {
+                            pageRequested = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (pageRequested) {
+                    // if url has no query part and no trailing slash, try to fix by appending slash
+                    if (request.getUrl().getQueryString().length() == 0) {
+                        List<String> segments = request.getUrl().getSegments();
+                        String last = segments.get(segments.size() - 1);
+                        for (CompiledLocale locale : CompiledLocale.values()) {
+                            if (locale.getLanguage().equals(last)) {
+                                // no trailing slash - respond with redirect
+                                return new RedirectRequestHandler(last + "/");
+                            }
+                        }
+                    }
+                    // not our page - show error
+                    internalError = new Exception("Page Not Found: " + request.getUrl().toString());
+                    return new RenderPageRequestHandler(new PageProvider(InternalErrorPage.class));
+                }
+
+                return null;
+            }
+
+        });
 
         if (ServerSideConfiguration.isRunningInDeveloperEnviroment()) {
             getResourceSettings().setResourcePollFrequency(Duration.ONE_SECOND);
