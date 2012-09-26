@@ -59,7 +59,6 @@ public abstract class LeaseAdjustmentReasonSelectorDialog extends EntitySelector
                 new MemberColumnDescriptor.Builder(proto().name(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().glCode(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().actionType(), true).build()
-
         ); //@formatter:on
     }
 

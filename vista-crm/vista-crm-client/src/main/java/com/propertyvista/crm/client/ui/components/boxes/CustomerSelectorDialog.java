@@ -56,10 +56,15 @@ public abstract class CustomerSelectorDialog extends EntitySelectorTableDialog<C
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().person().name()).build(),
+                new MemberColumnDescriptor.Builder(proto().person().name()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().person().name().firstName()).searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto().person().name().lastName()).searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto().person().sex()).visible(false).build(),
                 new MemberColumnDescriptor.Builder(proto().person().birthDate()).build(),
                 new MemberColumnDescriptor.Builder(proto().person().email()).build(),
-                new MemberColumnDescriptor.Builder(proto().person().homePhone()).build()
+                new MemberColumnDescriptor.Builder(proto().person().homePhone()).build(),
+                new MemberColumnDescriptor.Builder(proto().person().mobilePhone()).build(),
+                new MemberColumnDescriptor.Builder(proto().person().workPhone()).visible(false).build()
         );//@formatter:on
     }
 
