@@ -72,7 +72,7 @@ public class ArrearsStatusReportModelCreator implements GadgetReportModelCreator
                 
                 JasperReportModel model = new DynamicTableTemplateReportModelBuilder()
                         .template(template)
-                        .param(Param.TITLE.name(), i18n.tr(metadata.getEntityMeta().getCaption()))
+                        .param(Param.TITLE.name(), metadata.getEntityMeta().getCaption())
                         .param(Param.ARREARS_CATEGORY.name(), i18n.tr("Arrears Category: {0}", arrearsCategory.toString()))
                         .param(Param.AS_OF.name(), i18n.tr("As of Date: {0}", DATE_FORMAT.format(asOf)))
                         .data(result.getData().iterator())

@@ -46,7 +46,7 @@ public class I18nMessageResolver implements IComponentResolver {
         @Override
         public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
             String message = markupStream.get().toCharSequence().toString();
-            replaceComponentTagBody(markupStream, openTag, I18n.get(this.getClass()).tr(message));
+            replaceComponentTagBody(markupStream, openTag, I18n.get(this.getClass()).translate(null, message));
         }
     }
 }
