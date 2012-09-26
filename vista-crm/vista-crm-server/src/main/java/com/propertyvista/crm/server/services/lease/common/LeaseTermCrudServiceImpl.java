@@ -125,7 +125,11 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     @Override
     public void setSelectedUnit(AsyncCallback<LeaseTermDTO> callback, AptUnit unitId, LeaseTermDTO currentValue) {
-        ServerSideFactory.create(LeaseFacade.class).setUnit(createDBO(currentValue), unitId);
+        LeaseTerm term = currentValue; // works for newly created lease/application, but:
+        if (currentValue.lease().currentTerm().getInstanceValueClass().equals(LeaseTerm.class)) {
+            term = createDBO(currentValue);
+        }
+        ServerSideFactory.create(LeaseFacade.class).setUnit(term, unitId);
         loadDetachedProducts(currentValue);
         fillServiceEligibilityData(currentValue);
         fillserviceItems(currentValue);
@@ -134,7 +138,11 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     @Override
     public void setSelectedService(AsyncCallback<LeaseTermDTO> callback, ProductItem serviceId, LeaseTermDTO currentValue) {
-        ServerSideFactory.create(LeaseFacade.class).setService(createDBO(currentValue), serviceId);
+        LeaseTerm term = currentValue; // works for newly created lease/application, but:
+        if (currentValue.lease().currentTerm().getInstanceValueClass().equals(LeaseTerm.class)) {
+            term = createDBO(currentValue);
+        }
+        ServerSideFactory.create(LeaseFacade.class).setService(term, serviceId);
         loadDetachedProducts(currentValue);
         fillServiceEligibilityData(currentValue);
         callback.onSuccess(currentValue);

@@ -92,8 +92,10 @@ public class LeaseFacadeImpl implements LeaseFacade {
         switch (lease.status().getValue()) {
         case Application:
             lease.leaseApplication().status().setValue(LeaseApplication.Status.Created);
+            break; // ok, allowed value...
         case ExistingLease:
-            break; // ok, allowed values...
+            lease.leaseApplication().status().setValue(null);
+            break; // ok, allowed value...
         default:
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }

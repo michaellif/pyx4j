@@ -30,17 +30,17 @@ import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseTermDTO;
 
-public class SelectLeaseTypeDialog extends SelectEnumDialog<Service.ServiceType> implements OkCancelOption {
+public class LeaseApplicationDataDialog extends SelectEnumDialog<Service.ServiceType> implements OkCancelOption {
 
-    private final static I18n i18n = I18n.get(SelectLeaseTypeDialog.class);
+    private final static I18n i18n = I18n.get(LeaseApplicationDataDialog.class);
 
     private final AptUnit selectedUnitId;
 
-    public SelectLeaseTypeDialog() {
+    public LeaseApplicationDataDialog() {
         this(null);
     }
 
-    public SelectLeaseTypeDialog(AptUnit selectedUnitId) {
+    public LeaseApplicationDataDialog(AptUnit selectedUnitId) {
         super(i18n.tr("Select Lease Type"), EnumSet.allOf(Service.ServiceType.class));
         this.selectedUnitId = selectedUnitId;
     }
@@ -62,11 +62,6 @@ public class SelectLeaseTypeDialog extends SelectEnumDialog<Service.ServiceType>
                         LeaseTermEditorActivity.ReturnBehaviour.Application.name()));
         return true;
     }
-
-    @Override
-    public boolean onClickCancel() {
-        return true;
-    };
 
     private Lease createNewLease(Service.ServiceType leaseType) {
         Lease newLease = EntityFactory.create(Lease.class);
