@@ -18,7 +18,7 @@ import java.util.Random;
 /**
  * @see <a href="http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Account+Numbers"/>
  */
-public class AccountNumberGenerator {
+class AccountNumberGenerator {
 
     public static final int ACCOUNT_NUMBER_LENGTH = 13;
 

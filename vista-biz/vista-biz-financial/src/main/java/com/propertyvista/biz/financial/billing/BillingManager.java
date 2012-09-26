@@ -46,7 +46,6 @@ import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.biz.policy.PolicyManager;
 import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -499,7 +498,8 @@ public class BillingManager {
         Persistence.service().retrieve(adjustment.billingAccount());
         Persistence.service().retrieve(adjustment.billingAccount().lease());
         Persistence.service().retrieve(adjustment.billingAccount().lease().unit());
-        LeaseAdjustmentPolicy result = PolicyManager.obtainEffectivePolicy(adjustment.billingAccount().lease().unit().building(), LeaseAdjustmentPolicy.class);
+        LeaseAdjustmentPolicy result = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                adjustment.billingAccount().lease().unit().building(), LeaseAdjustmentPolicy.class);
 
         // TODO: currently calculate current policed tax value,  
         // in the future (when versioned policy will be implemented) - calculate tax effective on adjustment.targetDate().

@@ -34,7 +34,7 @@ import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
 
-public class PolicyManager {
+class PolicyManager {
 
     // TODO keep this in some kind of "PoliciesHeriarchy" class, pass as dependency in the constructor
     @SuppressWarnings("unchecked")
