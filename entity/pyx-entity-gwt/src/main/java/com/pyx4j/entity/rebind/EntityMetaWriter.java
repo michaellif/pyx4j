@@ -114,7 +114,7 @@ public class EntityMetaWriter {
         if (s.equals("\"\"") || s.equals("null")) {
             return s;
         } else {
-            return "i18n.tr(" + s + ")";
+            return "i18n.translate(null, " + s + ")";
         }
     }
 

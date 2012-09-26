@@ -48,7 +48,15 @@ public abstract class I18n {
 
     }
 
-    protected abstract String translate(final String context, final String text);
+    /**
+     * Returns <code>text</code> translated into the currently selected
+     * language.
+     * 
+     * @param text
+     *            Dynamically obtained text to translate that is known to be extraced and in translation table.
+     * @return the translation
+     */
+    public abstract String translate(final String context, final String text);
 
     /**
      * Returns <code>text</code> translated into the currently selected

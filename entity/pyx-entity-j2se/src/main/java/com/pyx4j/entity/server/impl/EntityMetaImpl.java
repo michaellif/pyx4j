@@ -55,8 +55,11 @@ import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.i18n.annotations.I18nAnnotation;
+import com.pyx4j.i18n.shared.I18n;
 
 public class EntityMetaImpl implements EntityMeta {
+
+    private static final I18n i18n = I18n.get(EntityMetaImpl.class);
 
     private final Class<? extends IEntity> entityClass;
 
@@ -65,6 +68,8 @@ public class EntityMetaImpl implements EntityMeta {
     private final Class<? extends IEntity> persistableSuperClass;
 
     private final String persistenceName;
+
+    private final String i18nContext;
 
     private final String caption;
 
@@ -157,6 +162,13 @@ public class EntityMetaImpl implements EntityMeta {
             caption = captionValue;
         }
 
+        com.pyx4j.i18n.annotations.I18n trCfg = entityClass.getAnnotation(com.pyx4j.i18n.annotations.I18n.class);
+        String context = null;
+        if (trCfg != null) {
+            context = trCfg.context();
+        }
+        i18nContext = context;
+
         persistenceTransient = (entityClass.getAnnotation(Transient.class) != null);
         rpcTransient = (entityClass.getAnnotation(RpcTransient.class) != null) || (entityClass.getAnnotation(RpcBlacklist.class) != null);
     }
@@ -213,17 +225,17 @@ public class EntityMetaImpl implements EntityMeta {
 
     @Override
     public String getCaption() {
-        return caption;
+        return i18n.translate(i18nContext, caption);
     }
 
     @Override
     public String getDescription() {
-        return description;
+        return i18n.translate(i18nContext, description);
     }
 
     @Override
     public String getWatermark() {
-        return watermark;
+        return i18n.translate(i18nContext, watermark);
     }
 
     @Override
@@ -341,7 +353,7 @@ public class EntityMetaImpl implements EntityMeta {
     public String getToStringFormat() {
         ToStringFormat annotation = entityClass.getAnnotation(ToStringFormat.class);
         if (annotation != null) {
-            return annotation.value();
+            return i18n.translate(i18nContext, annotation.value());
         } else {
             return null;
         }
@@ -351,7 +363,7 @@ public class EntityMetaImpl implements EntityMeta {
     public String getNullString() {
         ToStringFormat annotation = entityClass.getAnnotation(ToStringFormat.class);
         if (annotation != null) {
-            return annotation.nil();
+            return i18n.translate(i18nContext, annotation.nil());
         } else {
             return "";
         }

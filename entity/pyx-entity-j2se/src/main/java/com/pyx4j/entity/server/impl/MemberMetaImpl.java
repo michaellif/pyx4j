@@ -55,8 +55,11 @@ import com.pyx4j.entity.shared.impl.PrimitiveHandler;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 import com.pyx4j.i18n.annotations.I18nAnnotation;
+import com.pyx4j.i18n.shared.I18n;
 
 public class MemberMetaImpl implements MemberMeta {
+
+    private static final I18n i18n = I18n.get(MemberMetaImpl.class);
 
     private final Method method;
 
@@ -86,6 +89,8 @@ public class MemberMetaImpl implements MemberMeta {
     private final Class<? extends IObject> objectClass;
 
     private final ObjectClassType objectClassType;
+
+    private final String i18nContext;
 
     private final String caption;
 
@@ -182,6 +187,14 @@ public class MemberMetaImpl implements MemberMeta {
         } else {
             caption = captionValue;
         }
+
+        com.pyx4j.i18n.annotations.I18n trCfg = interfaceClass.getAnnotation(com.pyx4j.i18n.annotations.I18n.class);
+        String context = null;
+        if (trCfg != null) {
+            context = trCfg.context();
+        }
+        i18nContext = context;
+
         persistenceTransient = (method.getAnnotation(Transient.class) != null);
         rpcTransient = (method.getAnnotation(RpcTransient.class) != null);
         Owned aOwned = method.getAnnotation(Owned.class);
@@ -265,17 +278,17 @@ public class MemberMetaImpl implements MemberMeta {
 
     @Override
     public String getCaption() {
-        return caption;
+        return i18n.translate(i18nContext, caption);
     }
 
     @Override
     public String getDescription() {
-        return description;
+        return i18n.translate(i18nContext, description);
     }
 
     @Override
     public String getWatermark() {
-        return watermark;
+        return i18n.translate(i18nContext, watermark);
     }
 
     @Override
@@ -368,7 +381,7 @@ public class MemberMetaImpl implements MemberMeta {
     public String getFormat() {
         Format formatAnnotation = method.getAnnotation(Format.class);
         if (formatAnnotation != null) {
-            return formatAnnotation.value();
+            return i18n.translate(i18nContext, formatAnnotation.value());
         } else {
             return null;
         }
@@ -388,7 +401,7 @@ public class MemberMetaImpl implements MemberMeta {
     public String getNullString() {
         Format formatAnnotation = method.getAnnotation(Format.class);
         if (formatAnnotation != null) {
-            return formatAnnotation.nil();
+            return i18n.translate(i18nContext, formatAnnotation.nil());
         } else {
             return "";
         }
