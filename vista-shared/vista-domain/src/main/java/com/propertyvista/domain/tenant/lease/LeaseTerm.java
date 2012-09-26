@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import java.util.EnumSet;
+
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
@@ -54,6 +56,10 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
         FixedEx,
 
         Periodic;
+
+        public static EnumSet<Type> renew() {
+            return EnumSet.of(Fixed, Periodic);
+        }
 
         @Override
         public String toString() {

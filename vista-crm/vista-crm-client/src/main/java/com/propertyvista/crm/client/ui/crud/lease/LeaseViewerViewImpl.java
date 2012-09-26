@@ -222,7 +222,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         offerAction = new MenuItem(i18n.tr("Create Offer"), new Command() {
             @Override
             public void execute() {
-                new SelectEnumDialog<LeaseTerm.Type>(i18n.tr("Select Term Type"), EnumSet.allOf(LeaseTerm.Type.class)) {
+                new SelectEnumDialog<LeaseTerm.Type>(i18n.tr("Select Term Type"), LeaseTerm.Type.renew()) {
                     @Override
                     public boolean onClickOk() {
                         ((LeaseViewerView.Presenter) getPresenter()).createOffer(getSelectedType());
