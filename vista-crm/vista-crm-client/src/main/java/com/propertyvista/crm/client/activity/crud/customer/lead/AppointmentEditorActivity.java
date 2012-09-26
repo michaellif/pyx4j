@@ -18,15 +18,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
-public class AppointmentEditorActivity extends EditorActivityBase<Appointment> {
+public class AppointmentEditorActivity extends CrmEditorActivity<Appointment> {
 
     @SuppressWarnings("unchecked")
     public AppointmentEditorActivity(CrudAppPlace place) {

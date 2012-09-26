@@ -17,9 +17,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
@@ -27,7 +27,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.dto.TenantDTO;
 
-public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implements TenantEditorView.Presenter {
+public class TenantEditorActivity extends CrmEditorActivity<TenantDTO> implements TenantEditorView.Presenter {
 
     public TenantEditorActivity(CrudAppPlace place) {
         super(place, CustomerViewFactory.instance(TenantEditorView.class), GWT.<TenantCrudService> create(TenantCrudService.class), TenantDTO.class);

@@ -16,15 +16,15 @@ package com.propertyvista.crm.client.activity.crud.unit;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.unit.UnitItemEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
 import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
-public class UnitItemEditorActivity extends EditorActivityBase<AptUnitItem> {
+public class UnitItemEditorActivity extends CrmEditorActivity<AptUnitItem> {
 
     @SuppressWarnings("unchecked")
     public UnitItemEditorActivity(CrudAppPlace place) {

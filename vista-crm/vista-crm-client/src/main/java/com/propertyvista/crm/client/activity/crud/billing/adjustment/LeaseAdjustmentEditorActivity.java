@@ -22,16 +22,16 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.Status;
 
-public class LeaseAdjustmentEditorActivity extends EditorActivityBase<LeaseAdjustment> implements LeaseAdjustmentEditorView.Presenter {
+public class LeaseAdjustmentEditorActivity extends CrmEditorActivity<LeaseAdjustment> implements LeaseAdjustmentEditorView.Presenter {
 
     public LeaseAdjustmentEditorActivity(CrudAppPlace place) {
         super(place, LeaseViewFactory.instance(LeaseAdjustmentEditorView.class), GWT

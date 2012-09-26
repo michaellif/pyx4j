@@ -16,15 +16,15 @@ package com.propertyvista.crm.client.activity.crud.building;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.building.mech.RoofEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.dto.RoofDTO;
 
-public class RoofEditorActivity extends EditorActivityBase<RoofDTO> {
+public class RoofEditorActivity extends CrmEditorActivity<RoofDTO> {
 
     @SuppressWarnings("unchecked")
     public RoofEditorActivity(CrudAppPlace place) {

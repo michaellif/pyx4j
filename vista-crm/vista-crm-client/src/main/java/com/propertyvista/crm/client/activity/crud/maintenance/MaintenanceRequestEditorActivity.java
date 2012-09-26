@@ -18,16 +18,16 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MaintenanceViewFactory;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public class MaintenanceRequestEditorActivity extends EditorActivityBase<MaintenanceRequestDTO> implements MaintenanceRequestEditorView.Presenter {
+public class MaintenanceRequestEditorActivity extends CrmEditorActivity<MaintenanceRequestDTO> implements MaintenanceRequestEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
     public MaintenanceRequestEditorActivity(CrudAppPlace place) {

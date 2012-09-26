@@ -16,15 +16,15 @@ package com.propertyvista.crm.client.activity.crud.settings.tax;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason.LeaseAdjustmentReasonEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.admin.LeaseAdjustmentReasonCrudService;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
-public class LeaseAdjustmentReasonEditorActivity extends EditorActivityBase<LeaseAdjustmentReason> {
+public class LeaseAdjustmentReasonEditorActivity extends CrmEditorActivity<LeaseAdjustmentReason> {
 
     public LeaseAdjustmentReasonEditorActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(LeaseAdjustmentReasonEditorView.class), GWT

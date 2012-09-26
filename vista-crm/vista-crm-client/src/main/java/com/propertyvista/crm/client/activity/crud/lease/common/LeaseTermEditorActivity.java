@@ -23,9 +23,9 @@ import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -37,7 +37,7 @@ import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.dto.LeaseTermDTO;
 
-public class LeaseTermEditorActivity extends EditorActivityBase<LeaseTermDTO> implements LeaseTermEditorView.Presenter {
+public class LeaseTermEditorActivity extends CrmEditorActivity<LeaseTermDTO> implements LeaseTermEditorView.Presenter {
 
     public static final String ARG_NAME_RETURN_BH = "rbh";
 

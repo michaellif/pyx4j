@@ -18,15 +18,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.building.ParkingCrudService;
 import com.propertyvista.dto.ParkingDTO;
 
-public class ParkingEditorActivity extends EditorActivityBase<ParkingDTO> implements ParkingEditorView.Presenter {
+public class ParkingEditorActivity extends CrmEditorActivity<ParkingDTO> implements ParkingEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
     public ParkingEditorActivity(CrudAppPlace place) {

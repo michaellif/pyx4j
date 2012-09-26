@@ -16,15 +16,15 @@ package com.propertyvista.crm.client.activity.crud.customer.screening;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.screening.PersonScreeningEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.screening.PersonScreeningCrudService;
 import com.propertyvista.domain.tenant.PersonScreening;
 
-public class PersonScreeningEditorActivity extends EditorActivityBase<PersonScreening> {
+public class PersonScreeningEditorActivity extends CrmEditorActivity<PersonScreening> {
 
     @SuppressWarnings("unchecked")
     public PersonScreeningEditorActivity(CrudAppPlace place) {

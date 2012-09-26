@@ -16,15 +16,15 @@ package com.propertyvista.crm.client.activity.crud.settings.tax;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
-public class GlCodeCategoryEditorActivity extends EditorActivityBase<GlCodeCategory> {
+public class GlCodeCategoryEditorActivity extends CrmEditorActivity<GlCodeCategory> {
 
     public GlCodeCategoryEditorActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(GlCodeCategoryEditorView.class), GWT

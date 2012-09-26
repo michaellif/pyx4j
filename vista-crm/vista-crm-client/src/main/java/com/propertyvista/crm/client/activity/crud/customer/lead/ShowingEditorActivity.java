@@ -19,9 +19,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
@@ -29,7 +29,7 @@ import com.propertyvista.crm.rpc.services.customer.lead.ShowingCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
-public class ShowingEditorActivity extends EditorActivityBase<ShowingDTO> implements ShowingEditorView.Presenter {
+public class ShowingEditorActivity extends CrmEditorActivity<ShowingDTO> implements ShowingEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
     public ShowingEditorActivity(CrudAppPlace place) {

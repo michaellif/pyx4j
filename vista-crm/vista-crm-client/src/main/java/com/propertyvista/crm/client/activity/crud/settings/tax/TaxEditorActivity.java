@@ -16,15 +16,15 @@ package com.propertyvista.crm.client.activity.crud.settings.tax;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.admin.TaxCrudService;
 import com.propertyvista.domain.financial.tax.Tax;
 
-public class TaxEditorActivity extends EditorActivityBase<Tax> {
+public class TaxEditorActivity extends CrmEditorActivity<Tax> {
 
     public TaxEditorActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(TaxEditorView.class), GWT.<AbstractCrudService<Tax>> create(TaxCrudService.class), Tax.class);

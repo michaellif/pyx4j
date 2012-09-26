@@ -20,9 +20,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.AvailableLocaleSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
@@ -33,7 +33,7 @@ import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageDescriptor.Type;
 import com.propertyvista.domain.site.SiteDescriptor;
 
-public class PageEditorActivity extends EditorActivityBase<PageDescriptor> implements PageEditor.Presenter {
+public class PageEditorActivity extends CrmEditorActivity<PageDescriptor> implements PageEditor.Presenter {
 
     private PageParent pageParentArg = null;
 

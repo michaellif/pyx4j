@@ -16,15 +16,15 @@ package com.propertyvista.crm.client.activity.crud.settings.merchantaccount;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.settings.merchantaccount.MerchantAccountEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
 import com.propertyvista.domain.financial.MerchantAccount;
 
-public class MerchantAccountEditorActivity extends EditorActivityBase<MerchantAccount> {
+public class MerchantAccountEditorActivity extends CrmEditorActivity<MerchantAccount> {
 
     public MerchantAccountEditorActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(MerchantAccountEditorView.class), GWT

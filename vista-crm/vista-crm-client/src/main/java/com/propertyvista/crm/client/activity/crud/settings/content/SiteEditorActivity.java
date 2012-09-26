@@ -18,16 +18,16 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.ReferenceDataManager;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteEditor;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.admin.SiteDescriptorCrudService;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public class SiteEditorActivity extends EditorActivityBase<SiteDescriptorDTO> implements SiteEditor.Presenter {
+public class SiteEditorActivity extends CrmEditorActivity<SiteDescriptorDTO> implements SiteEditor.Presenter {
 
     @SuppressWarnings("unchecked")
     public SiteEditorActivity(CrudAppPlace place) {
