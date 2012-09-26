@@ -20,6 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-public interface INativeReference<E> extends INativeComponent<E> {
+public interface INativeHyperlink<E> extends INativeComponent<E> {
 
 }

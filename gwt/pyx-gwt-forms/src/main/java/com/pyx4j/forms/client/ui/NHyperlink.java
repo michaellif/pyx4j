@@ -28,16 +28,16 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 
-public class NReference<E> extends NComponent<E, Label, CReference<E>, Anchor> implements INativeReference<E> {
+public class NHyperlink<E> extends NComponent<E, Label, CHyperlink<E>, Anchor> implements INativeHyperlink<E> {
 
-    public NReference(final CReference<E> reference) {
-        super(reference);
+    public NHyperlink(final CHyperlink<E> hyperlink) {
+        super(hyperlink);
     }
 
     @Override
     public void setNativeValue(E value) {
         String text = "";
-        CReference<E> comp = getCComponent();
+        CHyperlink<E> comp = getCComponent();
         if (value != null) {
             if (comp.getFormat() != null) {
                 text = comp.getFormat().format(value);
@@ -56,7 +56,7 @@ public class NReference<E> extends NComponent<E, Label, CReference<E>, Anchor> i
 
     @Override
     public E getNativeValue() throws ParseException {
-        assert false : "getNativeValue() shouldn't be called on Reference";
+        assert false : "getNativeValue() shouldn't be called on Hyperlink";
         return null;
     }
 

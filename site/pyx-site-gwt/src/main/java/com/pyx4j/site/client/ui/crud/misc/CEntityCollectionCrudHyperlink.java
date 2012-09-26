@@ -23,11 +23,11 @@ package com.pyx4j.site.client.ui.crud.misc;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.ICollection;
-import com.pyx4j.forms.client.ui.CReference;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends CReference<E> {
+public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends CHyperlink<E> {
 
     public CEntityCollectionCrudHyperlink(final CrudAppPlace place) {
         super((String) null);

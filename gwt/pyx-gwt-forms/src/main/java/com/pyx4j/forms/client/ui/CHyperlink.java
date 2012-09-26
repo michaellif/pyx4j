@@ -22,14 +22,54 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.Command;
 
-public class CHyperlink extends CReference<String> {
+public class CHyperlink<E> extends CComponent<E, INativeHyperlink<E>> {
+
+    private IFormat<E> format;
+
+    private Command command;
+
+    public CHyperlink(String title) {
+        super(title);
+    }
 
     public CHyperlink(Command command) {
-        super(command);
+        this(null, command);
     }
 
     public CHyperlink(String title, Command command) {
-        super(title, command);
+        super(title);
+        this.command = command;
     }
 
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+
+    public Command getCommand() {
+        return command;
+    }
+
+    @Override
+    protected NHyperlink<E> createWidget() {
+        NHyperlink<E> widget = new NHyperlink<E>(this);
+        return widget;
+    }
+
+    public void setFormat(IFormat<E> format) {
+        this.format = format;
+    }
+
+    public IFormat<E> getFormat() {
+        return format;
+    }
+
+    @Override
+    public void onEditingStart() {
+        // do nothing - not editable...
+    }
+
+    @Override
+    public void onEditingStop() {
+        // do nothing - not editable...
+    }
 }
