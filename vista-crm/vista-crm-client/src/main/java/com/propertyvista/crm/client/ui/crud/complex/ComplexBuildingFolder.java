@@ -19,17 +19,21 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
@@ -94,16 +98,17 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof BuildingInfo) {
-                return new CEntityLabel<BuildingInfo>();
-            }
-            return super.create(member);
-        }
-
-        @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            if (column.getObject() == proto().complexPrimary() && isEditable()) {
+            if (proto().propertyCode() == column.getObject()) {
+                return inject(proto().propertyCode(), new CHyperlink<String>(null, new Command() {
+                    @Override
+                    public void execute() {
+                        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Building.class).formViewerPlace(getValue().getPrimaryKey()));
+                    }
+                }));
+            } else if (proto().info() == column.getObject()) {
+                return inject(proto().info(), new CEntityLabel<BuildingInfo>());
+            } else if (column.getObject() == proto().complexPrimary() && isEditable()) {
                 CComponent<?, ?> comp = inject(column.getObject());
                 comp.inheritViewable(false); // always not viewable!
                 return comp;
