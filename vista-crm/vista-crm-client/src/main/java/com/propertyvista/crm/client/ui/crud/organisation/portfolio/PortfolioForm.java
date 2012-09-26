@@ -16,13 +16,18 @@ package com.propertyvista.crm.client.ui.crud.organisation.portfolio;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
@@ -80,6 +85,20 @@ public class PortfolioForm extends CrmEntityForm<Portfolio> {
                 return new CEntityFolderRowEditor<Building>(Building.class, columns()) {
                     {
                         setViewable(true);
+                    }
+
+                    @Override
+                    protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                        if (proto().propertyCode() == column.getObject()) {
+                            return inject(proto().propertyCode(), new CHyperlink<String>(null, new Command() {
+                                @Override
+                                public void execute() {
+                                    AppSite.getPlaceController().goTo(
+                                            AppPlaceEntityMapper.resolvePlace(Building.class).formViewerPlace(getValue().getPrimaryKey()));
+                                }
+                            }));
+                        }
+                        return super.createCell(column);
                     }
                 };
             } else {
