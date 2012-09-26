@@ -62,7 +62,7 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
     @Override
     protected EntityListCriteria<LeaseDTO> updateCriteria(EntityListCriteria<LeaseDTO> criteria) {
         // TODO : set all that stuff in Activity (like TenantListers) or CRUD service ?
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), EnumSet.of(Lease.Status.Active, Lease.Status.ExistingLease)));
+        criteria.add(PropertyCriterion.in(criteria.proto().status(), EnumSet.of(Lease.Status.Active, Lease.Status.ExistingLease, Lease.Status.Approved)));
         return super.updateCriteria(criteria);
     }
 
