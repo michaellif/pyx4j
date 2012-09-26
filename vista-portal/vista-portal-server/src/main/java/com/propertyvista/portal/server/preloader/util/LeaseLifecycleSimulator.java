@@ -130,7 +130,6 @@ public class LeaseLifecycleSimulator {
         lease.currentTerm().termFrom().setValue(leaseFrom);
         lease.currentTerm().termTo().setValue(leaseTo);
         lease.expectedMoveIn().setValue(leaseFrom);
-        lease.expectedMoveOut().setValue(leaseTo);
 
         setUpBillableItemsEffectiveTime(lease);
 

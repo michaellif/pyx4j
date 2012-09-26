@@ -783,9 +783,18 @@ public class LeaseFacadeImpl implements LeaseFacade {
             lease.leaseTo().set(terms.get(terms.size() - 1).termTo());
         }
 
-        // special case of automatically renewed leases:
-        if (lease.currentTerm().type().getValue() == LeaseTerm.Type.FixedEx) {
-            lease.leaseTo().set(null);
+        // some common checks/corrections: 
+        if (lease.expectedMoveIn().isNull()) {
+            lease.expectedMoveIn().setValue(lease.leaseFrom().getValue());
+        }
+        // term type corrections:
+        switch (lease.currentTerm().type().getValue()) {
+        case Fixed:
+            lease.expectedMoveOut().setValue(lease.currentTerm().termTo().getValue());
+            break;
+        case FixedEx:
+            lease.leaseTo().set(null); // special case for automatically renewed leases
+            break;
         }
     }
 

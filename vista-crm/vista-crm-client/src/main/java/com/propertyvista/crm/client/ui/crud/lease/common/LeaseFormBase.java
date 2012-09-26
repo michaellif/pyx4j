@@ -52,12 +52,13 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         setTabVisible(chargesTab, getValue().status().getValue().isDraft());
         setTabVisible(depositsTab, !getValue().status().getValue().isDraft());
 
-        get(proto().completion()).setVisible(!getValue().completion().isNull());
-
-        get(proto().moveOutNotice()).setVisible(!getValue().moveOutNotice().isNull());
-        get(proto().expectedMoveOut()).setVisible(!getValue().expectedMoveOut().isNull());
-
         get(proto().approvalDate()).setVisible(!getValue().approvalDate().isNull());
+
+        get(proto().completion()).setVisible(!getValue().completion().isNull());
+        get(proto().moveOutNotice()).setVisible(!getValue().moveOutNotice().isNull());
+
+        get(proto().expectedMoveIn()).setVisible(!getValue().expectedMoveIn().isNull());
+        get(proto().expectedMoveOut()).setVisible(!getValue().expectedMoveOut().isNull());
 
         get(proto().actualLeaseTo()).setVisible(!getValue().actualLeaseTo().isNull());
         get(proto().actualMoveIn()).setVisible(!getValue().actualMoveIn().isNull());

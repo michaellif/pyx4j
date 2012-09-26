@@ -174,16 +174,22 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     protected void setFinalizationVisible(boolean visible) {
         if (finalizeMenu != null) {
-            finalizeMenu.setVisible(visible);
+            if (visible != isFinalizationVisible()) {
+                finalizeMenu.setVisible(visible);
 
-            if (visible) {
-                finalizeMenu.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
-                versioningButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
-            } else {
-                finalizeMenu.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
-                versioningButton.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
+                if (visible) {
+                    finalizeMenu.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
+                    versioningButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
+                } else {
+                    finalizeMenu.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
+                    versioningButton.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
+                }
             }
         }
+    }
+
+    protected boolean isFinalizationVisible() {
+        return (finalizeMenu != null ? finalizeMenu.isVisible() : false);
     }
 
     @Override
