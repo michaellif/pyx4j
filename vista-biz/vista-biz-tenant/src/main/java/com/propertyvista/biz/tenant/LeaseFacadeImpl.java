@@ -90,8 +90,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
         // check client supplied initial status value:
         assert !lease.status().isNull();
         switch (lease.status().getValue()) {
-        case ExistingLease:
         case Application:
+            lease.leaseApplication().status().setValue(LeaseApplication.Status.Created);
+        case ExistingLease:
             break; // ok, allowed values...
         default:
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
@@ -110,7 +111,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
         lease.currentTerm().lease().set(lease);
 
-        lease.leaseApplication().status().setValue(LeaseApplication.Status.Created);
         lease.billingAccount().accountNumber().setValue(ServerSideFactory.create(IdAssignmentFacade.class).createAccountNumber());
         lease.billingAccount().billCounter().setValue(0);
 
