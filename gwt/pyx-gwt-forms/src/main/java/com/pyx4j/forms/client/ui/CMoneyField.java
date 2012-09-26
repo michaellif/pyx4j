@@ -37,7 +37,7 @@ public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>
         super();
         setFormat(new MoneyFormat());
         addValueValidator(new TextBoxParserValidator<BigDecimal>());
-        setWatermark("$0.00");
+        setWatermark(i18n.tr("$0.00"));
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>
         private final NumberFormat nf;
 
         MoneyFormat() {
-            nf = NumberFormat.getFormat("#,##0.00");
+            nf = NumberFormat.getFormat(i18n.tr("#,##0.00"));
         }
 
         @Override
