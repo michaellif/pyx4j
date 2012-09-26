@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.components.cms;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
-import com.pyx4j.forms.client.ui.CReference;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -24,7 +24,7 @@ import com.propertyvista.crm.client.ui.components.media.MediaUploadDialog;
 import com.propertyvista.domain.File;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
-public class FileUploadHyperlink extends CReference<File> {
+public class FileUploadHyperlink extends CHyperlink<File> {
 
     private static final I18n i18n = I18n.get(FileUploadHyperlink.class);
 

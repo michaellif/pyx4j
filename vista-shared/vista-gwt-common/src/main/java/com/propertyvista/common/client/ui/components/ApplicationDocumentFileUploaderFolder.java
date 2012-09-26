@@ -120,7 +120,7 @@ public class ApplicationDocumentFileUploaderFolder extends VistaTableFolder<Appl
     private abstract class DownloadDocumentHyperlink extends CHyperlink {
 
         public DownloadDocumentHyperlink() {
-            super(null);
+            super("");
             setCommand(new Command() {
                 @Override
                 public void execute() {
