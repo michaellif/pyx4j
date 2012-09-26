@@ -36,15 +36,15 @@ import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public class PieChart2DGadget extends AbstractGadget<com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2D> {
+public class PieChart2DGadget extends AbstractGadget<com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2DGadgetMetadata> {
     private static final I18n i18n = I18n.get(PieChart2D.class);
 
-    public static class PieChart2DGadgetInstance extends GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2D> {
+    public static class PieChart2DGadgetInstance extends GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2DGadgetMetadata> {
 
         private SimplePanel panel;
 
         public PieChart2DGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2D.class);
+            super(gmd, com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2DGadgetMetadata.class);
             setDefaultPopulator(new Populator() {
                 @Override
                 public void populate() {
@@ -105,7 +105,7 @@ public class PieChart2DGadget extends AbstractGadget<com.propertyvista.domain.da
     }
 
     public PieChart2DGadget() {
-        super(com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2D.class);
+        super(com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2DGadgetMetadata.class);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class PieChart2DGadget extends AbstractGadget<com.propertyvista.domain.da
     }
 
     @Override
-    protected GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2D> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2DGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new PieChart2DGadgetInstance(gadgetMetadata);
     }
 }

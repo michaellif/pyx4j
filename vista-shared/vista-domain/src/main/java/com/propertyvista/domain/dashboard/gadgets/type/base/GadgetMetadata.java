@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type.base;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Transient;
@@ -26,6 +27,7 @@ import com.propertyvista.domain.dashboard.GadgetDockingMeta;
 
 @Transient
 @Inheritance
+@AbstractEntity
 public interface GadgetMetadata extends ISharedUserEntity {
 
     public enum RefreshInterval {

@@ -37,15 +37,15 @@ import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public class LineChartGadget extends AbstractGadget<com.propertyvista.domain.dashboard.gadgets.type.demo.LineChart> {
+public class LineChartGadget extends AbstractGadget<com.propertyvista.domain.dashboard.gadgets.type.demo.LineChartGadgetMetadata> {
     private static final I18n i18n = I18n.get(LineChartGadget.class);
 
-    public class LineChartGadgetInstance extends GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.LineChart> {
+    public class LineChartGadgetInstance extends GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.LineChartGadgetMetadata> {
 
         private SimplePanel panel;
 
         public LineChartGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, com.propertyvista.domain.dashboard.gadgets.type.demo.LineChart.class);
+            super(gmd, com.propertyvista.domain.dashboard.gadgets.type.demo.LineChartGadgetMetadata.class);
             setDefaultPopulator(new Populator() {
                 @Override
                 public void populate() {
@@ -125,7 +125,7 @@ public class LineChartGadget extends AbstractGadget<com.propertyvista.domain.das
     }
 
     public LineChartGadget() {
-        super(com.propertyvista.domain.dashboard.gadgets.type.demo.LineChart.class);
+        super(com.propertyvista.domain.dashboard.gadgets.type.demo.LineChartGadgetMetadata.class);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class LineChartGadget extends AbstractGadget<com.propertyvista.domain.das
     }
 
     @Override
-    protected GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.LineChart> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.LineChartGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new LineChartGadgetInstance(gadgetMetadata);
     }
 }

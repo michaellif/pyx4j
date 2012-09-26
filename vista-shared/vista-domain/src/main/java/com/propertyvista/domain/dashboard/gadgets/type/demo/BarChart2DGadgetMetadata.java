@@ -13,15 +13,17 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type.demo;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-@DiscriminatorValue("Gauge")
+@DiscriminatorValue("BarChart2D")
+@Caption(name = "Bar Chart 2D")
 @Table(prefix = "demo")
 @Transient
-public interface Gauge extends GadgetMetadata {
+public interface BarChart2DGadgetMetadata extends GadgetMetadata {
 
 }

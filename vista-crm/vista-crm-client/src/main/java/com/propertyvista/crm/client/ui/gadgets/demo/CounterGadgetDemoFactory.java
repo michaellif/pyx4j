@@ -39,11 +39,11 @@ import com.propertyvista.crm.rpc.dto.gadgets.CounterGadgetDemoDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.CounterGadgetDemoSubDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AbstractCounterGadgetBaseService;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.demo.CounterGadgetDemoMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.demo.CounterGadgetDemoGadgetMetadata;
 
-public class CounterGadgetDemoFactory extends AbstractGadget<CounterGadgetDemoMetadata> {
+public class CounterGadgetDemoFactory extends AbstractGadget<CounterGadgetDemoGadgetMetadata> {
 
-    public class CounterGadgetDemo extends CounterGadgetInstanceBase<CounterGadgetDemoDTO, VoidSerializable, CounterGadgetDemoMetadata> {
+    public class CounterGadgetDemo extends CounterGadgetInstanceBase<CounterGadgetDemoDTO, VoidSerializable, CounterGadgetDemoGadgetMetadata> {
 
         public CounterGadgetDemo(GadgetMetadata metadata) {
             super(CounterGadgetDemoDTO.class, new AbstractCounterGadgetBaseService<CounterGadgetDemoDTO, VoidSerializable>() {
@@ -93,7 +93,7 @@ public class CounterGadgetDemoFactory extends AbstractGadget<CounterGadgetDemoMe
                     return content;
                 }
 
-            }, metadata, CounterGadgetDemoMetadata.class);
+            }, metadata, CounterGadgetDemoGadgetMetadata.class);
         }
 
         @Override
@@ -119,7 +119,7 @@ public class CounterGadgetDemoFactory extends AbstractGadget<CounterGadgetDemoMe
     }
 
     public CounterGadgetDemoFactory() {
-        super(CounterGadgetDemoMetadata.class);
+        super(CounterGadgetDemoGadgetMetadata.class);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class CounterGadgetDemoFactory extends AbstractGadget<CounterGadgetDemoMe
     }
 
     @Override
-    protected GadgetInstanceBase<CounterGadgetDemoMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<CounterGadgetDemoGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new CounterGadgetDemo(gadgetMetadata);
     }
 

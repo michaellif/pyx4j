@@ -13,135 +13,70 @@
  */
 package com.propertyvista.server.common.gadgets;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.util.UUID;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public class GadgetMetadataFactoryTest extends TestCase {
+public class GadgetMetadataFactoryTest extends GadgetMetadataFactoryTestBase {
+
+    public void testEachGadgetMetadataShouldBeATransientEntity() {
+        assertForEachGagetMetadataClass("The following gadget metadata classes must be marked as @Transient", new Predicate() {
+            @Override
+            public String reportWhatIsWrongWith(Class<? extends GadgetMetadata> klass) {
+                return (klass.getAnnotation(Transient.class) == null) ? "" : null;
+            }
+        });
+    }
 
     public void testGadgetMetadataNamingConvention() {
-        if (false) {
-            StringBuilder badGadgetMetadataNamesBuilder = new StringBuilder();
-            for (Class<? extends GadgetMetadata> gadgetMetadataClass : getGadgetMetadataClassesFromClassPath()) {
-                if (!gadgetMetadataClass.getSimpleName().endsWith("GadgetMetadata")) {
-                    badGadgetMetadataNamesBuilder.append(gadgetMetadataClass.getName()).append("\n");
-                }
-            }
-            String badNames = badGadgetMetadataNamesBuilder.toString();
-            Assert.assertTrue("These are evil gadgets that don't follow the naming convention:\n " + badNames, badNames.length() == 0);
-        }
+        assertForEachGagetMetadataClass("The following gadget metadata classes must the naming convention (which is <Gadget Name>||GadgetMetadata)",
+                new Predicate() {
+
+                    @Override
+                    public String reportWhatIsWrongWith(Class<? extends GadgetMetadata> klass) {
+                        return !klass.getSimpleName().endsWith("GadgetMetadata") ? "" : null;
+                    }
+                });
     }
 
-    public void testDefaultSettingsInitializorsExisitForEveryGadgetMetadata() {
+    public void testEachGadgetMetadataHasDefaultInitializer() {
+        assertForEachGagetMetadataClass("The following gadget metadata classes cannot be instantiated with default settings", new Predicate() {
 
-    }
-
-    private List<Class<? extends GadgetMetadata>> getGadgetMetadataClassesFromClassPath() {
-        String gadgetMetadataPackagePath = GadgetMetadata.class.getPackage().getName().replace('.', File.separatorChar).replace("base", "");
-
-        System.out.println(gadgetMetadataPackagePath);
-        List<String> gadgetMetadataClassNames = new ArrayList<String>();
-        for (String classPathEntry : System.getProperty("java.class.path").split(File.pathSeparator)) {
-            if (classPathEntry.endsWith("jar")) {
-                gadgetMetadataClassNames.addAll(gadgetMetadataNamesFromJar(classPathEntry, gadgetMetadataPackagePath));
-            } else {
-                gadgetMetadataClassNames.addAll(gadgetMetadataNamesFromDir(classPathEntry, gadgetMetadataPackagePath));
-            }
-        }
-
-        if (false) {
-            // this is here just for testing jars, normally it should find in on disk
-            gadgetMetadataClassNames.addAll(gadgetMetadataNamesFromJar(
-                    "C:\\work\\m2-repository\\com\\propertyvista\\vista-domain\\1.0.5-SNAPSHOT\\vista-domain-1.0.5-SNAPSHOT.jar", gadgetMetadataPackagePath));
-        }
-
-        List<Class<? extends GadgetMetadata>> gadgetMetadataClasses = new ArrayList<Class<? extends GadgetMetadata>>();
-        for (String gadgetMetadataClassName : gadgetMetadataClassNames) {
-            System.out.println(gadgetMetadataClassName);
-            try {
-
-                Class<?> clazz = null;
-                if (true) {
-                    clazz = ClassLoader.getSystemClassLoader().loadClass(gadgetMetadataClassName);
-                } else {
-
-                }
-                if (GadgetMetadata.class.isAssignableFrom(clazz)) {
-                    gadgetMetadataClasses.add((Class<? extends GadgetMetadata>) clazz);
-                }
-            } catch (ClassNotFoundException e) {
-                throw new Error("class was not found, please clean the project", e);
-            }
-        }
-
-        return gadgetMetadataClasses;
-    }
-
-    private Collection<? extends String> gadgetMetadataNamesFromDir(String classPathEntry, String gadgetMetadataPackagePath) {
-        List<String> paths = new ArrayList<String>();
-        File root = new File(classPathEntry + File.separatorChar + gadgetMetadataPackagePath);
-        gadgetMetadataNamesFromDir(paths, root, 1000);
-
-        List<String> names = new ArrayList<String>();
-        for (String path : paths) {
-            int i = path.indexOf(gadgetMetadataPackagePath);
-            names.add(path.substring(i).replaceFirst("\\.class$", "").replace(File.separatorChar, '.'));
-        }
-        return names;
-    }
-
-    private void gadgetMetadataNamesFromDir(List<String> paths, File rootDir, int maxDepthSafeGuard) {
-        if (maxDepthSafeGuard == 0) {
-            // maxDepthSafeGuard is for cases where Files follow links
-            return;
-        }
-        File[] files = rootDir.listFiles();
-        if (files == null) {
-            return;
-        } else {
-            for (File file : rootDir.listFiles()) {
-                if (file.isDirectory()) {
-                    gadgetMetadataNamesFromDir(paths, file, maxDepthSafeGuard - 1);
-                } else if (file.getPath().endsWith(".class")) {
-                    paths.add(file.getAbsolutePath());
-                }
-            }
-        }
-    }
-
-    private List<String> gadgetMetadataNamesFromJar(String jarFileName, String gadgetMetadataRootPackagetPath) {
-        List<String> names = new ArrayList<String>();
-        String prefix = gadgetMetadataRootPackagetPath.replace(File.separatorChar, '/');
-        JarFile jarFile = null;
-        try {
-            jarFile = new JarFile(jarFileName);
-            Enumeration<JarEntry> entries = jarFile.entries();
-            while (entries.hasMoreElements()) {
-                JarEntry entry = entries.nextElement();
-                if (entry.getName().startsWith(prefix) & entry.getName().endsWith(".class")) {
-                    names.add(entry.getName().replaceFirst("\\.class$", "").replace('/', '.'));
-                }
-            }
-        } catch (IOException e) {
-
-        } finally {
-            if (jarFile != null) {
+            @Override
+            public String reportWhatIsWrongWith(Class<? extends GadgetMetadata> klass) {
+                Throwable instantiationError = null;
                 try {
-                    jarFile.close();
-                } catch (IOException e) {
+                    GadgetMetadataFactory.createGadgetMetadata(klass);
+                } catch (Throwable e) {
+                    instantiationError = e;
                 }
+                return instantiationError == null ? null : instantiationError.toString();
             }
-        }
-        return names;
+
+        });
     }
+
+    public void testEachInitializedGadgetMetadataMustHaveUUID() {
+        assertForEachGagetMetadataClass("In the following gadget metadata field '"
+                + EntityFactory.getEntityPrototype(GadgetMetadata.class).gadgetId().getFieldName() + "' must be initialized with a valid UUID by default",
+                new Predicate() {
+                    @Override
+                    public String reportWhatIsWrongWith(Class<? extends GadgetMetadata> klass) {
+                        boolean hasUUID = false;
+                        try {
+                            GadgetMetadata metadata = GadgetMetadataFactory.createGadgetMetadata(klass);
+                            UUID.fromString(metadata.gadgetId().getValue());
+                            hasUUID = true;
+                        } catch (Throwable e) {
+                            // in this test it's not relevant
+                        }
+                        return hasUUID ? null : "";
+                    }
+
+                });
+    }
+
 }

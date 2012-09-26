@@ -30,17 +30,17 @@ import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.demo.Demo;
+import com.propertyvista.domain.dashboard.gadgets.type.demo.DemoGadgetMetadata;
 
-public class DemoGadget extends AbstractGadget<Demo> {
+public class DemoGadget extends AbstractGadget<DemoGadgetMetadata> {
 
     private static final I18n i18n = I18n.get(DemoGadget.class);
 
-    public static class DemoGadgetInstance extends GadgetInstanceBase<Demo> {
+    public static class DemoGadgetInstance extends GadgetInstanceBase<DemoGadgetMetadata> {
         private HTML widget;
 
         public DemoGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, Demo.class);
+            super(gmd, DemoGadgetMetadata.class);
             setDefaultPopulator(new Populator() {
                 @Override
                 public void populate() {
@@ -121,7 +121,7 @@ public class DemoGadget extends AbstractGadget<Demo> {
     }
 
     public DemoGadget() {
-        super(Demo.class);
+        super(DemoGadgetMetadata.class);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class DemoGadget extends AbstractGadget<Demo> {
     }
 
     @Override
-    protected GadgetInstanceBase<Demo> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<DemoGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new DemoGadgetInstance(gadgetMetadata);
     }
 }

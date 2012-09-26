@@ -36,15 +36,15 @@ import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public class GaugeGadget extends AbstractGadget<com.propertyvista.domain.dashboard.gadgets.type.demo.Gauge> {
+public class GaugeGadget extends AbstractGadget<com.propertyvista.domain.dashboard.gadgets.type.demo.GaugeGadgetMetadata> {
     private static final I18n i18n = I18n.get(GaugeGadget.class);
 
-    public static class GaugeGadgetInstance extends GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.Gauge> {
+    public static class GaugeGadgetInstance extends GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.GaugeGadgetMetadata> {
 
         private SimplePanel panel;
 
         public GaugeGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, com.propertyvista.domain.dashboard.gadgets.type.demo.Gauge.class);
+            super(gmd, com.propertyvista.domain.dashboard.gadgets.type.demo.GaugeGadgetMetadata.class);
             setDefaultPopulator(new Populator() {
                 @Override
                 public void populate() {
@@ -90,7 +90,7 @@ public class GaugeGadget extends AbstractGadget<com.propertyvista.domain.dashboa
     }
 
     public GaugeGadget() {
-        super(com.propertyvista.domain.dashboard.gadgets.type.demo.Gauge.class);
+        super(com.propertyvista.domain.dashboard.gadgets.type.demo.GaugeGadgetMetadata.class);
 
     }
 
@@ -105,7 +105,7 @@ public class GaugeGadget extends AbstractGadget<com.propertyvista.domain.dashboa
     }
 
     @Override
-    protected GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.Gauge> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.GaugeGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new GaugeGadgetInstance(gadgetMetadata);
     }
 }

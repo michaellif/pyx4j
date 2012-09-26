@@ -37,15 +37,15 @@ import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public class BarChart2DGadget extends AbstractGadget<com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2D> {
+public class BarChart2DGadget extends AbstractGadget<com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2DGadgetMetadata> {
     private static final I18n i18n = I18n.get(BarChart2DGadget.class);
 
-    public static class BarChart2DGadgetInstance extends GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2D> {
+    public static class BarChart2DGadgetInstance extends GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2DGadgetMetadata> {
 
         private SimplePanel panel;
 
         public BarChart2DGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2D.class);
+            super(gmd, com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2DGadgetMetadata.class);
             setDefaultPopulator(new Populator() {
                 @Override
                 public void populate() {
@@ -123,7 +123,7 @@ public class BarChart2DGadget extends AbstractGadget<com.propertyvista.domain.da
     }
 
     public BarChart2DGadget() {
-        super(com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2D.class);
+        super(com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2DGadgetMetadata.class);
     }
 
     @Override
@@ -137,7 +137,7 @@ public class BarChart2DGadget extends AbstractGadget<com.propertyvista.domain.da
     }
 
     @Override
-    protected GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2D> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2DGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new BarChart2DGadgetInstance(gadgetMetadata);
     }
 

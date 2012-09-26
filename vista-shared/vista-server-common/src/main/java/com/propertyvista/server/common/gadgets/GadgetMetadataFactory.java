@@ -34,7 +34,7 @@ public class GadgetMetadataFactory {
         try {
             initializer = (GadgetMetadataDefaultSettings<?>) classLoader.loadClass(INITIALIZERS_PACKAGE + "." + initializerClassSimpleName).newInstance();
         } catch (Exception e) {
-            throw new RuntimeException("failed to instantiate default settings initializer for gadget :" + clazz.getName(), e);
+            throw new RuntimeException("failed to instantiate default settings initializer for gadget: " + clazz.getName(), e);
         }
 
         GadgetMetadata gadgetMetadata = EntityFactory.create(clazz);
