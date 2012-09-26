@@ -15,6 +15,7 @@ package com.propertyvista.common.client.ui.components;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -45,13 +46,10 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
             @Override
             public ValidationError isValid(CComponent<IList<IdentificationDocument>, ?> component, IList<IdentificationDocument> value) {
                 if (value != null) {
-                    if (documentationPolicy != null) {
-                        int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
-                        if (numOfRemainingDocs > 0) {
-                            return new ValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
-                        }
-                    } else {
-                        return new ValidationError(component, i18n.tr("Validation Policy Not Available"));
+                    assert (documentationPolicy != null);
+                    int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
+                    if (numOfRemainingDocs > 0) {
+                        return new ValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
                     }
                 }
                 return null;
@@ -60,14 +58,12 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
         asWidget().setSize("100%", "100%");
     }
 
-    @Override
-    protected void onValueSet(final boolean populate) {
-        ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), ApplicationDocumentationPolicy.class,
+    public void setParentEntity(IEntity parentEntity) {
+        ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, ApplicationDocumentationPolicy.class,
                 new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
                     @Override
                     public void onSuccess(ApplicationDocumentationPolicy result) {
                         documentationPolicy = result;
-                        IdUploaderFolder.super.onValueSet(populate);
                     }
                 });
     }

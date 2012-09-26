@@ -215,6 +215,10 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
+        if (isEditable()) {
+            fileUpload.setParentEntity(getValue());
+        }
+
         enablePreviousAddress();
     }
 

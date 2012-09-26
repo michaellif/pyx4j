@@ -80,6 +80,10 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
+        if (isEditable()) {
+            fileUpload.setParentEntity(getValue());
+        }
+
         enablePreviousAddress();
     }
 
