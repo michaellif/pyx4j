@@ -149,6 +149,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
                             filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
 
+                            filters.add(PropertyCriterion.in(proto().productItems().$().product().visibility(), PublicVisibilityType.visibleToExistingTenant()));
+
                         } else if (currentValue.lease().status().getValue() == Lease.Status.Application) { // lease application:
 
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
