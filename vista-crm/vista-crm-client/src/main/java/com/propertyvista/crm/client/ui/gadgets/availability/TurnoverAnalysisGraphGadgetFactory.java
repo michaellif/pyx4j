@@ -106,14 +106,6 @@ public class TurnoverAnalysisGraphGadgetFactory extends AbstractGadgetFactory<Un
         }
 
         @Override
-        protected UnitTurnoverAnalysisGadgetMetadata createDefaultSettings(Class<UnitTurnoverAnalysisGadgetMetadata> metadataClass) {
-            UnitTurnoverAnalysisGadgetMetadata settings = super.createDefaultSettings(metadataClass);
-            settings.isTurnoverMeasuredByPercent().setValue(DEFAULT_IS_TURNOVER_MEASURED_BY_PERCENT);
-            settings.turnoverAnalysisResolution().setValue(DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_MAX);
-            return settings;
-        }
-
-        @Override
         public void setContainerBoard(IBuildingFilterContainer board) {
             super.setContainerBoard(board);
             board.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {

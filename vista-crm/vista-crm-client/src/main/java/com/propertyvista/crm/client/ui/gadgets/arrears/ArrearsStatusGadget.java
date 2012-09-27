@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.arrears;
 
-import java.util.Arrays;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -25,10 +24,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -40,12 +37,10 @@ import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
-import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class ArrearsStatusGadget extends AbstractGadgetFactory<ArrearsStatusGadgetMetadata> {
@@ -65,41 +60,6 @@ public class ArrearsStatusGadget extends AbstractGadgetFactory<ArrearsStatusGadg
         public ArrearsStatusGadgetInstance(GadgetMetadata gmd) {
             super(gmd, ArrearsStatusGadgetMetadata.class, new ArrearsStatusGadgetMetadataForm(), LeaseArrearsSnapshotDTO.class, false);
             service = GWT.<ArrearsReportService> create(ArrearsReportService.class);
-        }
-
-        @Override
-        protected ArrearsStatusGadgetMetadata createDefaultSettings(Class<ArrearsStatusGadgetMetadata> metadataClass) {
-            ArrearsStatusGadgetMetadata settings = super.createDefaultSettings(metadataClass);
-            settings.category().setValue(DebitType.total);
-            LeaseArrearsSnapshotDTO proto = EntityFactory.getEntityPrototype(LeaseArrearsSnapshotDTO.class);
-            settings.columnDescriptors().addAll(ColumnDescriptorConverter.asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().propertyCode()).visible(true).build(),
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().name()).title(i18n.tr("Building")).build(),
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().streetNumber()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().streetName()).visible(false).build(),                    
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().province().name()).visible(false).title(i18n.tr("Province")).build(),                    
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().country().name()).visible(false).title(i18n.tr("Country")).build(),                    
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().info().number()).title(i18n.tr("Unit")).build(),
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().leaseId()).build(),
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().leaseFrom()).build(),
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().leaseTo()).build(),
-                    
-                    // arrears
-                    new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucketCurrent()).build(),
-                    new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucket30()).build(),
-                    new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucket60()).build(),
-                    new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucket90()).build(),
-                    new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucketOver90()).build(),
-                    
-                    new MemberColumnDescriptor.Builder(proto.selectedBuckets().arrearsAmount()).build()
-// TODO calculate CREDIT AMOUNT                    
-//                    new MemberColumnDescriptor.Builder(proto.selectedBuckets().creditAmount()).build(),                    
-//                    new MemberColumnDescriptor.Builder(proto.selectedBuckets().totalBalance()).build(),
-// TODO calculate LMR                    
-//                    new MemberColumnDescriptor.Builder(proto.lmrToUnitRentDifference()).build()                   
-            )));//@formatter:on
-            return settings;
         }
 
         @Override

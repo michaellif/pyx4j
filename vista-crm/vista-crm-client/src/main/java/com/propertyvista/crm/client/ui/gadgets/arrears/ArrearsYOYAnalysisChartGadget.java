@@ -72,13 +72,6 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadgetFactory<Arrears
         }
 
         @Override
-        protected ArrearsYOYAnalysisChartGadgetMetadata createDefaultSettings(Class<ArrearsYOYAnalysisChartGadgetMetadata> metadataClass) {
-            ArrearsYOYAnalysisChartGadgetMetadata settings = super.createDefaultSettings(metadataClass);
-            settings.yearsToCompare().setValue(3);
-            return settings;
-        }
-
-        @Override
         public Widget initContentPanel() {
             graphPanel = new LayoutPanel() {
                 // FIXME this supposed to cause automatic resizing of the graph, but unfortunately it doesn't: fix auto-resizing 

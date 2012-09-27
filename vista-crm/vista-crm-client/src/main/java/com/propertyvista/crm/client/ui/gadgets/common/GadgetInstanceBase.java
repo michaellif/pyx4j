@@ -31,7 +31,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -40,7 +39,6 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata.RefreshInterval;
 
 public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IGadgetInstance {
 
@@ -76,7 +74,8 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     // TODO metadataClass argument is needed only for creation of the default metatada, remove when default metadata creation is implemented on server side
     @SuppressWarnings("unchecked")
     public GadgetInstanceBase(GadgetMetadata metadata, Class<T> metadataClass, CEntityContainer<T> setupForm) {
-        this.metadata = (metadata == null) ? createDefaultSettings(metadataClass) : (T) metadata.cast();
+        assert metadata != null;
+        this.metadata = (T) metadata;
         this.setupForm = setupForm;
         if (setupForm != null) {
             this.setupForm.initContent();
@@ -112,21 +111,6 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
         panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         return panel;
     }
-
-    /**
-     * Construct instance of class that supposed to store Gadget settings and initializes it with default values. This method is called from the constructor of
-     * {@link GadgetInstanceBase} when no gadget metadata is supplied or gadget metadata doesn't contain settings. The settings created by this class are stored
-     * in
-     * gadget metadata. Subclasses of {@link GadgetInstanceBase} have to override this method when they wish to provide their own settings class.
-     * 
-     * @return instance of settings (cannot be <code>null</code>)
-     */
-    // TODO this should be done on server side
-    protected T createDefaultSettings(Class<T> metadataClass) {
-        T settings = EntityFactory.create(metadataClass);
-        settings.refreshInterval().setValue(RefreshInterval.Never);
-        return settings;
-    };
 
     @Override
     public void setContainerBoard(IBuildingFilterContainer board) {

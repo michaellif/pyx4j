@@ -27,8 +27,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable;
-import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
@@ -237,13 +237,6 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
      */
     protected final int getPageSize() {
         return getMetadata().pageSize().getValue();
-    }
-
-    @Override
-    protected GADGET_TYPE createDefaultSettings(Class<GADGET_TYPE> metadataClass) {
-        GADGET_TYPE settings = super.createDefaultSettings(metadataClass);
-        settings.pageSize().setValue(DEFAULT_PAGE_SIZE);
-        return settings;
     }
 
     private List<ColumnDescriptor> getColumnDescriptorsFromSettings() {

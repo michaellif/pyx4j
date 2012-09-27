@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.availability;
 
-import java.util.Arrays;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -27,10 +26,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
@@ -41,11 +38,9 @@ import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
-import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata.FilterPreset;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -78,41 +73,6 @@ public class UnitAvailabilityReportGadgetFactory extends AbstractGadgetFactory<U
                     populate();
                 }
             });
-        }
-
-        @Override
-        protected UnitAvailabilityGadgetMetadata createDefaultSettings(Class<UnitAvailabilityGadgetMetadata> metadataClass) {
-            UnitAvailabilityGadgetMetadata settings = super.createDefaultSettings(metadataClass);
-            settings.filterPreset().setValue(FilterPreset.VacantAndNotice);
-            UnitAvailabilityStatus proto = EntityFactory.getEntityPrototype(UnitAvailabilityStatus.class);
-            settings.columnDescriptors().addAll(ColumnDescriptorConverter.asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
-                    // references
-                    new MemberColumnDescriptor.Builder(proto.building().propertyCode()).build(),
-                    new MemberColumnDescriptor.Builder(proto.building().externalId()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto.building().info().name()).visible(false).title(i18n.tr("Building Name")).build(),
-                    new MemberColumnDescriptor.Builder(proto.building().info().address()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto.building().propertyManager().name()).visible(false).title(i18n.tr("Property Manager")).build(),                    
-                    new MemberColumnDescriptor.Builder(proto.building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
-                    new MemberColumnDescriptor.Builder(proto.unit().info().number()).title(i18n.tr("Unit Name")).build(),
-                    new MemberColumnDescriptor.Builder(proto.floorplan().name()).visible(false).title(i18n.tr("Floorplan Name")).build(),
-                    new MemberColumnDescriptor.Builder(proto.floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
-                    
-                    // status
-                    new MemberColumnDescriptor.Builder(proto.vacancyStatus()).build(),
-                    new MemberColumnDescriptor.Builder(proto.rentedStatus()).visible(true).build(),
-                    new MemberColumnDescriptor.Builder(proto.scoping()).visible(true).build(),
-                    new MemberColumnDescriptor.Builder(proto.rentReadinessStatus()).visible(true).build(),
-                    new MemberColumnDescriptor.Builder(proto.unitRent()).build(),
-                    new MemberColumnDescriptor.Builder(proto.marketRent()).build(),
-                    new MemberColumnDescriptor.Builder(proto.rentDeltaAbsolute()).visible(true).build(),
-                    new MemberColumnDescriptor.Builder(proto.rentDeltaRelative()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto.rentEndDay()).visible(true).build(),
-                    new MemberColumnDescriptor.Builder(proto.moveInDay()).visible(true).build(),
-                    new MemberColumnDescriptor.Builder(proto.rentedFromDay()).visible(true).build(),
-                    new MemberColumnDescriptor.Builder(proto.daysVacant()).build(),
-                    new MemberColumnDescriptor.Builder(proto.revenueLost()).build()
-            )));//@formatter:on
-            return settings;
         }
 
         @Override

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.availability;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
@@ -26,11 +25,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.datatable.DataItem;
 import com.pyx4j.forms.client.ui.datatable.DataTable;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
@@ -84,19 +81,6 @@ public class UnitAvailabilitySummaryGadgetFactory extends AbstractGadgetFactory<
                     populate();
                 }
             });
-        }
-
-        @Override
-        protected UnitAvailabilitySummaryGadgetMetadata createDefaultSettings(Class<UnitAvailabilitySummaryGadgetMetadata> metadataClass) {
-            UnitAvailabilitySummaryGadgetMetadata settings = super.createDefaultSettings(metadataClass);
-
-            UnitAvailabilityStatusSummaryLineDTO proto = EntityFactory.getEntityPrototype(UnitAvailabilityStatusSummaryLineDTO.class);
-            settings.columnDescriptors().addAll(ColumnDescriptorConverter.asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto.category()).title("").sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto.units()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto.percentage()).sortable(false).build()
-            )));//@formatter:on
-            return settings;
         }
 
         @Override

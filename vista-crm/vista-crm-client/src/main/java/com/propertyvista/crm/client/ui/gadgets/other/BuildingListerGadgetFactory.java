@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.other;
 
-import java.util.Arrays;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -22,10 +21,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
@@ -33,7 +30,6 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
@@ -55,26 +51,6 @@ public class BuildingListerGadgetFactory extends AbstractGadgetFactory<BuildingL
             super(gmd, BuildingListerGadgetMetadata.class, null, BuildingDTO.class, false);
             service = (AbstractListService<BuildingDTO>) GWT.create(BuildingCrudService.class);
             initView();
-        }
-
-        @Override
-        protected BuildingListerGadgetMetadata createDefaultSettings(Class<BuildingListerGadgetMetadata> metadataClass) {
-            BuildingListerGadgetMetadata settings = super.createDefaultSettings(metadataClass);
-            BuildingDTO proto = EntityFactory.getEntityPrototype(BuildingDTO.class);
-            settings.columnDescriptors().addAll(ColumnDescriptorConverter.asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto.complex()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto.propertyCode()).build(),
-                    new MemberColumnDescriptor.Builder(proto.propertyManager()).build(),
-                    new MemberColumnDescriptor.Builder(proto.marketing().name()).title(i18n.tr("Marketing Name")).build(),
-                    new MemberColumnDescriptor.Builder(proto.info().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto.info().type()).build(),
-                    new MemberColumnDescriptor.Builder(proto.info().shape()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto.info().address().streetName()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto.info().address().city()).build(),
-                    new MemberColumnDescriptor.Builder(proto.info().address().province()).build(),
-                    new MemberColumnDescriptor.Builder(proto.info().address().country()).build()
-            )));//@formatter:on
-            return settings;
         }
 
         @Override

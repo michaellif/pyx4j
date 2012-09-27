@@ -13,11 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.payments;
 
-import static com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter.asColumnDesciptorEntityList;
 import static com.propertyvista.svg.gadgets.util.LabelHelper.makeListView;
 
-import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -29,9 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -48,7 +43,6 @@ import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForRepor
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -76,30 +70,6 @@ public class PaymentRecordsGadgetFactory extends AbstractGadgetFactory<PaymentRe
                     populate();
                 }
             });
-        }
-
-        @Override
-        protected PaymentRecordsGadgetMetadata createDefaultSettings(Class<PaymentRecordsGadgetMetadata> metadataClass) {
-            PaymentRecordsGadgetMetadata settings = super.createDefaultSettings(metadataClass);
-
-            settings.paymentMethodFilter().addAll(EnumSet.allOf(PaymentType.class));
-            settings.paymentStatusFilter().addAll(EnumSet.complementOf(EnumSet.of(PaymentStatus.Processing)));
-
-            PaymentRecordForReportDTO proto = EntityFactory.create(PaymentRecordForReportDTO.class);
-            settings.columnDescriptors().addAll(asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto.merchantAccount().accountNumber()).title(i18n.tr("Merchant Account")).build(),
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().propertyCode()).title(i18n.tr("Building")).build(),
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().leaseId()).title(i18n.tr("Lease")).build(),
-                    new MemberColumnDescriptor.Builder(proto.paymentMethod().customer()).title(i18n.tr("Tenant")).build(),                    
-                    new MemberColumnDescriptor.Builder(proto.paymentMethod().type()).title(i18n.tr("Method")).build(),
-                    new MemberColumnDescriptor.Builder(proto.paymentStatus()).title(i18n.tr("Status")).build(),
-                    new MemberColumnDescriptor.Builder(proto.createdDate()).title(i18n.tr("Created")).build(),
-                    new MemberColumnDescriptor.Builder(proto.receivedDate()).title(i18n.tr("Received")).build(),
-                    new MemberColumnDescriptor.Builder(proto.finalizeDate()).title(i18n.tr("Finalized")).build(),
-                    new MemberColumnDescriptor.Builder(proto.targetDate()).title(i18n.tr("Target")).build(),
-                    new MemberColumnDescriptor.Builder(proto.amount()).title(i18n.tr("Amount")).build()                    
-            )));//@formatter:on
-            return settings;
         }
 
         @Override

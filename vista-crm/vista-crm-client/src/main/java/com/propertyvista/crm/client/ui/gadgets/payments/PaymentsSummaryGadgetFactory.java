@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.payments;
 
-import static com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter.asColumnDesciptorEntityList;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -53,7 +51,6 @@ import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class PaymentsSummaryGadgetFactory extends AbstractGadgetFactory<PaymentsSummaryGadgetMetadata> {
@@ -82,30 +79,6 @@ public class PaymentsSummaryGadgetFactory extends AbstractGadgetFactory<Payments
                     populate();
                 }
             });
-        }
-
-        @Override
-        protected PaymentsSummaryGadgetMetadata createDefaultSettings(Class<PaymentsSummaryGadgetMetadata> metadataClass) {
-
-            PaymentsSummaryGadgetMetadata settings = super.createDefaultSettings(metadataClass);
-
-            settings.paymentStatus().addAll(PaymentStatus.processed());
-
-            PaymentsSummary proto = EntityFactory.create(PaymentsSummary.class);
-            settings.columnDescriptors().addAll(asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
-                    (PaymentsSummary.summaryByBuilding)?
-                    new MemberColumnDescriptor.Builder(proto.building()).build():
-                    new MemberColumnDescriptor.Builder(proto.merchantAccount().accountNumber()).title(i18n.tr("Merchant Account")).build(),
-                    new MemberColumnDescriptor.Builder(proto.status()).build(),
-                    new MemberColumnDescriptor.Builder(proto.cash()).build(),
-                    new MemberColumnDescriptor.Builder(proto.cheque()).build(),
-                    new MemberColumnDescriptor.Builder(proto.eCheque()).build(),
-                    new MemberColumnDescriptor.Builder(proto.eft()).build(),
-                    new MemberColumnDescriptor.Builder(proto.cc()).build(),
-                    new MemberColumnDescriptor.Builder(proto.interac()).build()                    
-            )));//@formatter:on
-
-            return settings;
         }
 
         @Override
