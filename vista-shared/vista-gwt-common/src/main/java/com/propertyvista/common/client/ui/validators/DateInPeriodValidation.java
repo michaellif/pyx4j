@@ -42,7 +42,7 @@ public class DateInPeriodValidation {
     public DateInPeriodValidation(final CComponent<LogicalDate, ?> value1, final CComponent<LogicalDate, ?> value2, final CComponent<LogicalDate, ?> value3,
             String message) {
         if (message == null) {
-            message = i18n.tr("herp derp error message");
+            message = i18n.tr("The date entered is not within the range specified");
         }
         final String msg = message;
 
