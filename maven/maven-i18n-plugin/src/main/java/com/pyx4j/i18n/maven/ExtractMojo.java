@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -53,6 +54,7 @@ import com.pyx4j.scanner.JarFileScanner;
 import com.pyx4j.scanner.Scanner;
 import com.pyx4j.scanner.ScannerEntry;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
@@ -231,6 +233,14 @@ public class ExtractMojo extends AbstractMojo {
     public List<String> translates = null;
 
     /**
+     * Use Google Translate to create translation for languages
+     * Comma separated list of languages to translate or merge.
+     * 
+     * @parameter
+     */
+    public String translate = null;
+
+    /**
      * The directory containing generated classes.
      * 
      * @parameter expression="${project.build.outputDirectory}"
@@ -262,6 +272,18 @@ public class ExtractMojo extends AbstractMojo {
             dependancy = this.project.getSystemArtifacts();
         } else {
             throw new MojoExecutionException("Unsupported scope " + scope);
+        }
+
+        if (translates != null && translate != null) {
+            throw new MojoExecutionException("Unsupported parameters  use <translates> or <translate>");
+        }
+        if (translate != null) {
+            if (translate.contains(",")) {
+                translates = Arrays.asList(translate.split(","));
+            } else {
+                translates = new ArrayList<String>();
+                translates.add(translate);
+            }
         }
 
         StrictPatternExcludesArtifactFilter excludeFilter = null;
