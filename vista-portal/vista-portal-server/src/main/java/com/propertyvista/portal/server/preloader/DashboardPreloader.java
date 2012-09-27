@@ -14,9 +14,7 @@
 package com.propertyvista.portal.server.preloader;
 
 import java.util.Collection;
-import java.util.UUID;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.site.server.services.customization.CustomizationPersistenceHelper;
@@ -53,8 +51,6 @@ public class DashboardPreloader extends AbstractDataPreloader {
 
     void persistDashboard(DashboardMetadata dm) {
         for (GadgetMetadata gadget : dm.gadgets()) {
-            gadget.setPrimaryKey(new Key(1));
-            gadget.gadgetId().setValue(UUID.randomUUID().toString());
             dm.gadgetIds().add(gadget.gadgetId().getValue());
             new CustomizationPersistenceHelper<GadgetMetadata>(GadgetMetadataHolder.class, GadgetMetadata.class).save(gadget.gadgetId().getValue(), gadget,
                     true);
