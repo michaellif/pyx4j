@@ -46,10 +46,13 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
             @Override
             public ValidationError isValid(CComponent<IList<IdentificationDocument>, ?> component, IList<IdentificationDocument> value) {
                 if (value != null) {
-                    assert (documentationPolicy != null);
-                    int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
-                    if (numOfRemainingDocs > 0) {
-                        return new ValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
+// TODO it should be enough, but now validate is called on populate!?                    
+//                    assert (documentationPolicy != null);
+                    if (documentationPolicy != null) {
+                        int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
+                        if (numOfRemainingDocs > 0) {
+                            return new ValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
+                        }
                     }
                 }
                 return null;
