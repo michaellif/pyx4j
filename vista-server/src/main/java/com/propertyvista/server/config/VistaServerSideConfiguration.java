@@ -23,6 +23,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.config.server.LocaleResolver;
 import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
@@ -166,6 +167,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     @Override
     public NamespaceResolver getNamespaceResolver() {
         return new VistaNamespaceResolver();
+    }
+
+    @Override
+    public LocaleResolver getLocaleResolver() {
+        return new VistaCookieLocaleResolver();
     }
 
     @Override

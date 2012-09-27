@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -109,6 +110,7 @@ public class CrmSite extends VistaSite {
     }
 
     private void initSiteTheme() {
+        Cookies.setCookie("locale", ClentNavigUtils.getCurrentLocale().name());
         SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
         siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
             @Override
