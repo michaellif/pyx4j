@@ -34,14 +34,12 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.Service.ServiceType;
@@ -82,15 +80,6 @@ public class AptUnitOccupancyManagerTestBase {
         TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaCrmBehavior.Occupancy, VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();
 
-        Persistence.service().delete(new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class));
-        Persistence.service().delete(new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class));
-        {
-            EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
-            leaseCriteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
-            Persistence.service().delete(leaseCriteria);
-        }
-        Persistence.service().delete(new EntityQueryCriteria<AptUnit>(AptUnit.class));
-//        Persistence.service().delete(new EntityQueryCriteria<Building>(Building.class));
         Persistence.service().setTransactionSystemTime(asDate("1900-01-01"));
 
         generateIdAssignmentPolicy();
@@ -196,6 +185,7 @@ public class AptUnitOccupancyManagerTestBase {
      */
     protected void assertExpectedTimeline() {
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
         criteria.asc(criteria.proto().dateFrom());
         List<AptUnitOccupancySegment> actualTimeline = Persistence.service().query(criteria);
         Assert.assertEquals("expected and actual timelines' number of segments don't match", expectedTimeline.size(), actualTimeline.size());

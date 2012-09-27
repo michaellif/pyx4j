@@ -62,17 +62,17 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             if (i < DemoData.UserType.TENANT.getDefaultMax()) {
                 Tenant mainTenant = lease.currentTerm().version().tenants().get(0);
                 String email = DemoData.UserType.TENANT.getEmail(i + 1);
-                mainTenant.customer().person().email().setValue(email);
+                mainTenant.leaseCustomer().customer().person().email().setValue(email);
                 // Make one (Third) Customer with Two Leases
                 if (i == 2) {
-                    dualTenantCustomer = mainTenant.customer();
+                    dualTenantCustomer = mainTenant.leaseCustomer().customer();
                 }
             } else if (i == DemoData.UserType.TENANT.getDefaultMax()) {
                 Tenant mainTenant = lease.currentTerm().version().tenants().get(0);
-                mainTenant.customer().set(dualTenantCustomer);
+                mainTenant.leaseCustomer().customer().set(dualTenantCustomer);
                 // Trick to share the same already saved data
-                mainTenant.screening().set(mainTenant.customer().personScreenings().iterator().next());
-                mainTenant.preauthorizedPayment().set(mainTenant.customer().paymentMethods().iterator().next());
+                mainTenant.screening().set(mainTenant.leaseCustomer().customer().personScreenings().iterator().next());
+                mainTenant.preauthorizedPayment().set(mainTenant.leaseCustomer().customer().paymentMethods().iterator().next());
             }
 
             // Create normal Active Lease first for Shortcut users
@@ -130,28 +130,28 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             if (i < DemoData.UserType.PTENANT.getDefaultMax()) {
                 Tenant mainTenant = lease.currentTerm().version().tenants().get(0);
                 String email = DemoData.UserType.PTENANT.getEmail(i + 1);
-                mainTenant.customer().person().email().setValue(email);
+                mainTenant.leaseCustomer().customer().person().email().setValue(email);
 
                 // Make one (Third) Customer with Two Applications
                 if (i == 2) {
-                    dualPotentialCustomer = mainTenant.customer();
+                    dualPotentialCustomer = mainTenant.leaseCustomer().customer();
                 }
 
                 //Set PCOAPPLICANT users that can login using UI
                 if (lease.currentTerm().version().tenants().size() > 1) {
                     Tenant tenant = lease.currentTerm().version().tenants().get(1);
                     String email2 = DemoData.UserType.PCOAPPLICANT.getEmail(i + 1);
-                    tenant.customer().person().email().setValue(email2);
+                    tenant.leaseCustomer().customer().person().email().setValue(email2);
 
                     tenant.role().setValue(LeaseParticipant.Role.CoApplicant);
                     tenant.takeOwnership().setValue(false);
                 }
             } else if (i == DemoData.UserType.PTENANT.getDefaultMax()) {
                 Tenant mainTenant = lease.currentTerm().version().tenants().get(0);
-                mainTenant.customer().set(dualPotentialCustomer);
+                mainTenant.leaseCustomer().customer().set(dualPotentialCustomer);
                 // Trick to share the same already saved data 
-                mainTenant.screening().set(mainTenant.customer().personScreenings().iterator().next());
-                mainTenant.preauthorizedPayment().set(mainTenant.customer().paymentMethods().iterator().next());
+                mainTenant.screening().set(mainTenant.leaseCustomer().customer().personScreenings().iterator().next());
+                mainTenant.preauthorizedPayment().set(mainTenant.leaseCustomer().customer().paymentMethods().iterator().next());
             }
 
             Persistence.service().setTransactionSystemTime(lease.currentTerm().termFrom().getValue());

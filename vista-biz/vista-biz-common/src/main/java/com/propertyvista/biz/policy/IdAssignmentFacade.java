@@ -16,10 +16,9 @@ package com.propertyvista.biz.policy;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseCustomer;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 
 public interface IdAssignmentFacade {
@@ -34,9 +33,7 @@ public interface IdAssignmentFacade {
 
     void assignId(Lease lease);
 
-    void assignId(Tenant tenant);
-
-    void assignId(Guarantor guarantor);
+    <E extends LeaseCustomer> void assignId(E leaseCustomer);
 
     void assignId(Employee employee);
 

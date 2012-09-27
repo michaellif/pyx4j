@@ -111,8 +111,8 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
         // check that all lease participants have an associated user entity (email)
         for (LeaseParticipant user : users) {
-            if (user.customer().user().isNull()) {
-                throw new UserRuntimeException(i18n.tr("''Send Email'' operation failed, email of lease participant {0} was not found", user.customer()
+            if (user.leaseCustomer().customer().user().isNull()) {
+                throw new UserRuntimeException(i18n.tr("''Send Email'' operation failed, email of lease participant {0} was not found", user.leaseCustomer().customer()
                         .person().name().getStringView()));
             }
         }

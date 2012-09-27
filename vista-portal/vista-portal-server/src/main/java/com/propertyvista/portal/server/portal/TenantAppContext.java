@@ -60,7 +60,7 @@ public class TenantAppContext extends VistaCustomerContext {
 
     public static Tenant getCurrentUserTenantInLease() {
         EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().customer().user(), TenantAppContext.getCurrentUser()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseCustomer().customer().user(), TenantAppContext.getCurrentUser()));
         return Persistence.service().retrieve(criteria);
     }
 }

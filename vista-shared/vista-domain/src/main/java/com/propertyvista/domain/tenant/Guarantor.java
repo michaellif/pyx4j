@@ -22,7 +22,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
-@ToStringFormat("{0}, {1} - {2}")
+@ToStringFormat("{0} - {1}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @DiscriminatorValue("Guarantor")
 public interface Guarantor extends LeaseParticipant {

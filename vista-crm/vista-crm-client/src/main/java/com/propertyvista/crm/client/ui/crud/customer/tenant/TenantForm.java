@@ -71,10 +71,10 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
+        get(proto().leaseCustomer().customer().person().email()).setMandatory(!getValue().leaseCustomer().customer().user().isNull());
 
         if (isEditable()) {
-            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().participantId()), getValue().getPrimaryKey());
+            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().leaseCustomer().participantId()), getValue().getPrimaryKey());
         }
     }
 
@@ -82,17 +82,17 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
         FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().participantId()), 7).build());
-        main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Tenant"))));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().participantId()), 7).build());
+        main.setWidget(++row, 0, inject(proto().leaseCustomer().customer().person().name(), new NameEditor(i18n.tr("Tenant"))));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().sex()), 7).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().birthDate()), 9).build());
 
         main.setBR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().homePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().mobilePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().workPhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().email()), 25).build());
 
         if (!isEditable()) {
             main.setBR(++row, 0, 1);
@@ -108,7 +108,7 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
     private FormFlexPanel createContactsTab(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
 
-        main.setWidget(0, 0, inject(proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable())));
+        main.setWidget(0, 0, inject(proto().leaseCustomer().customer().emergencyContacts(), new EmergencyContactFolder(isEditable())));
 
         return main;
     }
@@ -147,19 +147,19 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
 
     @Override
     public void addValidations() {
-        get(proto().customer().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
+        get(proto().leaseCustomer().customer().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
 
             @Override
             public ValidationError isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
                 if (value == null || getValue() == null) {
                     return null;
                 }
-                return !EntityGraph.hasBusinessDuplicates(getValue().customer().emergencyContacts()) ? null : new ValidationError(component, i18n
+                return !EntityGraph.hasBusinessDuplicates(getValue().leaseCustomer().customer().emergencyContacts()) ? null : new ValidationError(component, i18n
                         .tr("Duplicate contacts specified"));
             }
 
         });
 
-        new PastDateValidation(get(proto().customer().person().birthDate()));
+        new PastDateValidation(get(proto().leaseCustomer().customer().person().birthDate()));
     }
 }

@@ -38,6 +38,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -255,4 +256,8 @@ public interface Lease extends IEntity {
     LeaseTerm currentTerm();
 
     LeaseTerm futureTerm();
+
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
+    ISet<LeaseCustomer> leaseCustomers();
 }

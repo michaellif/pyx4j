@@ -47,7 +47,7 @@ public class GuarantorRetriever extends CustomerRetriever {
         if (guarantor == null) {
             throw new SecurityViolationException("Invalid data access");
         }
-        super.retrieve(guarantor.customer());
+        super.retrieve(guarantor.leaseCustomer().customer());
         super.retrieve(guarantor.screening());
     }
 }

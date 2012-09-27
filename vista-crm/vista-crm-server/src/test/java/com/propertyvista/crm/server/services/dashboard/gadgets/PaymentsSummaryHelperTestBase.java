@@ -83,8 +83,8 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
         lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.Application);
 
         Tenant tenant = lease.currentTerm().version().tenants().$();
-        tenant.customer().person().name().firstName().setValue("Foo");
-        tenant.customer().person().name().lastName().setValue("Foo");
+        tenant.leaseCustomer().customer().person().name().firstName().setValue("Foo");
+        tenant.leaseCustomer().customer().person().name().lastName().setValue("Foo");
         lease.currentTerm().version().tenants().add(tenant);
         lease.status().setValue(Lease.Status.ExistingLease);
         lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
@@ -119,7 +119,7 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
         if (tenant.isValueDetached()) {
             Persistence.service().retrieve(tenant);
         }
-        paymentMethod.customer().set(tenant.customer());
+        paymentMethod.customer().set(tenant.leaseCustomer().customer());
         Persistence.service().persist(paymentMethod);
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);

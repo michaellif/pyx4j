@@ -27,9 +27,9 @@ public class TenantInApprovedLeaseValidator extends CompositeEntityValidator<Ten
     protected void init() {
         bind(proto().role(), new NotNullValidator());
 
-        bind(proto().customer().person().name().firstName(), new NotNullValidator());
-        bind(proto().customer().person().name().lastName(), new NotNullValidator());
-        bind(proto().customer().person().birthDate(), new NotNullValidator());
+        bind(proto().leaseCustomer().customer().person().name().firstName(), new NotNullValidator());
+        bind(proto().leaseCustomer().customer().person().name().lastName(), new NotNullValidator());
+        bind(proto().leaseCustomer().customer().person().birthDate(), new NotNullValidator());
     }
 
 }

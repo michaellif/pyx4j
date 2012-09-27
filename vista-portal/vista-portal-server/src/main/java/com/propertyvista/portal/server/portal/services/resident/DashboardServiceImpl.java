@@ -37,7 +37,7 @@ public class DashboardServiceImpl implements DashboardService {
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().floorplan());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().building());
 
-        dashboard.general().tenantName().setValue(tenantInLease.customer().person().name().getStringView());
+        dashboard.general().tenantName().setValue(tenantInLease.leaseCustomer().customer().person().name().getStringView());
         dashboard.general().floorplanName().set(tenantInLease.leaseTermV().holder().lease().unit().floorplan().marketingName());
         AddressStructured address = tenantInLease.leaseTermV().holder().lease().unit().building().info().address().duplicate();
         address.suiteNumber().set(tenantInLease.leaseTermV().holder().lease().unit().info().number());

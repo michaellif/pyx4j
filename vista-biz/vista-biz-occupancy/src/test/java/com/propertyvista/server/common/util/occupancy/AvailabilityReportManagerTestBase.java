@@ -62,14 +62,9 @@ public class AvailabilityReportManagerTestBase {
         TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaCrmBehavior.Occupancy, VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();
 
-        Persistence.service().delete(new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class));
-        Persistence.service().delete(new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class));
-        Persistence.service().delete(new EntityQueryCriteria<Lease>(Lease.class));
-        Persistence.service().delete(new EntityQueryCriteria<AptUnit>(AptUnit.class));
-
         unit = EntityFactory.create(AptUnit.class);
         unit.info().number().setValue("1");
-        unit.building().propertyCode().setValue("2");
+        unit.building().propertyCode().setValue(String.valueOf(System.currentTimeMillis()).substring(5));
         Persistence.service().merge(unit.building());
         Persistence.service().merge(unit);
         unitId = unit.getPrimaryKey();

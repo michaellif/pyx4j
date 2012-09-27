@@ -76,7 +76,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         if (disabled) {
             return;
         }
-        String token = AccessKey.createAccessToken(leaseParticipant.customer().user(), CustomerUserCredential.class, 10);
+        String token = AccessKey.createAccessToken(leaseParticipant.leaseCustomer().customer().user(), CustomerUserCredential.class, 10);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
@@ -117,7 +117,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         if (disabled) {
             return;
         }
-        CustomerUser user = tenant.customer().user();
+        CustomerUser user = tenant.leaseCustomer().customer().user();
         if (user.isValueDetached()) {
             Persistence.service().retrieve(user);
         }

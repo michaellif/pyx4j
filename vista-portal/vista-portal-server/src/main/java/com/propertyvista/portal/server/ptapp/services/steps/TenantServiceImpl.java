@@ -78,8 +78,8 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             } else {
                 existingTenants.remove(idx);
                 Persistence.service().retrieve(tenantInLease);
-                if (!EntityGraph.memebersEquals(tenantInApplication.customer().person().name(), tenantInLease.customer().person().name(), tenantInApplication
-                        .customer().person().name().firstName(), tenantInApplication.customer().person().name().middleName(), tenantInApplication.customer()
+                if (!EntityGraph.memebersEquals(tenantInApplication.leaseCustomer().customer().person().name(), tenantInLease.leaseCustomer().customer().person().name(), tenantInApplication
+                        .leaseCustomer().customer().person().name().firstName(), tenantInApplication.leaseCustomer().customer().person().name().middleName(), tenantInApplication.leaseCustomer().customer()
                         .person().name().lastName())) {
                     tenantInApplication.changeStatus().setValue(TenantInLeaseDTO.ChangeStatus.Updated);
                 }
@@ -89,7 +89,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             tenantInLease.leaseTermV().set(lease.currentTerm().version());
             tenantInLease.orderInLease().setValue(no++);
             new TenantConverter.TenantEditorConverter().copyDTOtoDBO(tenantInApplication, tenantInLease);
-            Persistence.service().merge(tenantInLease.customer());
+            Persistence.service().merge(tenantInLease.leaseCustomer().customer());
             Persistence.service().merge(tenantInLease);
             lease.currentTerm().version().tenants().add(tenantInLease);
 

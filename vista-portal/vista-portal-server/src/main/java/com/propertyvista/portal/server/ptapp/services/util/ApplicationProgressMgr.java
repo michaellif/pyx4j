@@ -60,8 +60,8 @@ public class ApplicationProgressMgr {
             if (!tenant.takeOwnership().isBooleanTrue()) {
                 return false;
             }
-            return (TimeUtils.isOlderThan(tenant.customer().person().birthDate().getValue(), 18));
-        } else if (tenant.customer().equals(PtAppContext.retrieveCurrentUserCustomer())) {
+            return (TimeUtils.isOlderThan(tenant.leaseCustomer().customer().person().birthDate().getValue(), 18));
+        } else if (tenant.leaseCustomer().customer().equals(PtAppContext.retrieveCurrentUserCustomer())) {
             return true; // allow just his/her data...
         }
         return false;
@@ -100,7 +100,7 @@ public class ApplicationProgressMgr {
     public static void createTenantDataSteps(OnlineApplication application, Customer tenant) {
 
         EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), tenant));
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseCustomer().customer(), tenant));
         Tenant outer = Persistence.service().retrieve(criteria);
         if (outer == null) {
             throw new Error("TenantInLease for '" + tenant.getStringView() + "' not found");
@@ -112,7 +112,7 @@ public class ApplicationProgressMgr {
     public static void createGurantorDataSteps(OnlineApplication application, Customer guarantor) {
 
         EntityQueryCriteria<Guarantor> criteria = EntityQueryCriteria.create(Guarantor.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), guarantor));
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseCustomer().customer(), guarantor));
         Guarantor outer = Persistence.service().retrieve(criteria);
         if (outer == null) {
             throw new Error("PersonGuarantor for '" + guarantor.getStringView() + "' not found");
@@ -196,7 +196,7 @@ public class ApplicationProgressMgr {
             // create an new sub-step:
             subStep = EntityFactory.create(ApplicationWizardSubstep.class);
             subStep.placeArgument().setValue(tenant.getPrimaryKey().toString());
-            subStep.name().setValue(tenant.customer().person().name().getStringView());
+            subStep.name().setValue(tenant.leaseCustomer().customer().person().name().getStringView());
             subStep.status().setValue(ApplicationWizardStep.Status.notVisited);
         }
 

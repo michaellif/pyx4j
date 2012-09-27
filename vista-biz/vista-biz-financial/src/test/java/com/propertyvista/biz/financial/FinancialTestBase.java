@@ -44,7 +44,6 @@ import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.print.BillPrint;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
-import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -300,8 +299,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(serviceItem.price().getValue());
 
         Tenant tenantInLease = EntityFactory.create(Tenant.class);
-        ServerSideFactory.create(IdAssignmentFacade.class).assignId(tenantInLease);
-        tenantInLease.customer().set(tenantDataModel.getTenant());
+        tenantInLease.leaseCustomer().customer().set(tenantDataModel.getTenant());
         tenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
         lease.currentTerm().version().tenants().add(tenantInLease);
 

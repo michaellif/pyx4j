@@ -49,7 +49,7 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
         setTabEnabled(tab, !isEditable());
 
         if (isEditable()) {
-            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().participantId()), getValue().getPrimaryKey());
+            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().leaseCustomer().participantId()), getValue().getPrimaryKey());
         }
     }
 
@@ -57,24 +57,24 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
+        get(proto().leaseCustomer().customer().person().email()).setMandatory(!getValue().leaseCustomer().customer().user().isNull());
     }
 
     private FormFlexPanel createDetailsTab(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().participantId()), 7).build());
-        main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Guarantor"))));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().participantId()), 7).build());
+        main.setWidget(++row, 0, inject(proto().leaseCustomer().customer().person().name(), new NameEditor(i18n.tr("Guarantor"))));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().sex()), 7).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().birthDate()), 9).build());
 
         main.setBR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().homePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().mobilePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().workPhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().email()), 25).build());
 
         if (!isEditable()) {
             main.setBR(++row, 0, 1);
@@ -88,6 +88,6 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
 
     @Override
     public void addValidations() {
-        new PastDateValidation(get(proto().customer().person().birthDate()));
+        new PastDateValidation(get(proto().leaseCustomer().customer().person().birthDate()));
     }
 }

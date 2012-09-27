@@ -32,7 +32,7 @@ public class TenantConverter {
 
         @Override
         protected void bind() {
-            bind(dtoProto.customer(), dboProto.customer());
+            bind(dtoProto.leaseCustomer().customer(), dboProto.leaseCustomer().customer());
             bind(dtoProto.relationship(), dboProto.relationship());
             bind(dtoProto.role(), dboProto.role());
             bind(dtoProto.takeOwnership(), dboProto.takeOwnership());
@@ -47,8 +47,8 @@ public class TenantConverter {
 
         @Override
         protected void bind() {
-            bind(dtoProto.person(), dboProto.customer().person());
-            bind(dtoProto.emergencyContacts(), dboProto.customer().emergencyContacts());
+            bind(dtoProto.person(), dboProto.leaseCustomer().customer().person());
+            bind(dtoProto.emergencyContacts(), dboProto.leaseCustomer().customer().emergencyContacts());
         }
     }
 
@@ -60,7 +60,7 @@ public class TenantConverter {
 
         @Override
         protected void bind() {
-            bind(dtoProto.person(), dboProto.customer().person());
+            bind(dtoProto.person(), dboProto.leaseCustomer().customer().person());
         }
     }
 

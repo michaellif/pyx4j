@@ -97,7 +97,7 @@ public class EmailTemplateRootObjectLoader {
             if (context.leaseParticipant().isNull()) {
                 throw new Error("TenantInLease should be provided in context");
             }
-            t.Name().setValue(context.leaseParticipant().customer().person().name().getStringView());
+            t.Name().setValue(context.leaseParticipant().leaseCustomer().customer().person().name().getStringView());
         } else if (tObj instanceof BuildingT) {
             BuildingT t = (BuildingT) tObj;
             Building bld = null;
@@ -138,10 +138,10 @@ public class EmailTemplateRootObjectLoader {
             AbstractUser user = null;
             if (!context.leaseParticipant().isNull()) {
                 app = getApplication(context.leaseParticipant());
-                if (context.leaseParticipant().customer().user().isValueDetached()) {
-                    Persistence.service().retrieve(context.leaseParticipant().customer().user());
+                if (context.leaseParticipant().leaseCustomer().customer().user().isValueDetached()) {
+                    Persistence.service().retrieve(context.leaseParticipant().leaseCustomer().customer().user());
                 }
-                user = context.leaseParticipant().customer().user();
+                user = context.leaseParticipant().leaseCustomer().customer().user();
             } else if (!context.lease().isNull() && !context.user().isNull()) {
                 app = getApplication(context.user(), context.lease());
                 user = context.user();
@@ -159,7 +159,7 @@ public class EmailTemplateRootObjectLoader {
             if (context.lease().isNull()) {
                 context.lease().set(getLease(context.leaseParticipant()));
             }
-            t.ApplicantName().setValue(context.leaseParticipant().customer().person().name().getStringView());
+            t.ApplicantName().setValue(context.leaseParticipant().leaseCustomer().customer().person().name().getStringView());
             t.StartDate().setValue(context.lease().currentTerm().termFrom().getStringView());
             t.StartDateWeekDay().setValue(new SimpleDateFormat("EEEE").format(context.lease().currentTerm().termFrom().getValue()));
         }

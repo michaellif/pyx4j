@@ -78,8 +78,8 @@ public class CampaignManager {
 
     private static void execute(PhoneCallCampaign phoneCallCampaign, Tenant tenant) {
         List<String> numbers = new ArrayList<String>();
-        String name = tenant.customer().person().name().firstName().getValue() + " " + tenant.customer().person().name().lastName().getValue();
-        String number = tenant.customer().person().homePhone().getValue();
+        String name = tenant.leaseCustomer().customer().person().name().firstName().getValue() + " " + tenant.leaseCustomer().customer().person().name().lastName().getValue();
+        String number = tenant.leaseCustomer().customer().person().homePhone().getValue();
         if (ApplicationMode.isDevelopment()) {
             String allowedNumber = DevelopmentSecurity.callNumberFilter(number);
             log.info("We will call {} instead of {}", allowedNumber, number);

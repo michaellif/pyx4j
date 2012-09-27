@@ -18,12 +18,21 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 public class LightWeightLeaseManagement {
+
+    static long uniqueId = 0;
+
+    synchronized static String uniqueId() {
+        return String.valueOf(uniqueId++);
+    }
 
     public static Lease create(Status status) {
         Lease lease = EntityFactory.create(Lease.class);
@@ -49,6 +58,15 @@ public class LightWeightLeaseManagement {
             lease.currentTerm().set(term);
 
             lease.currentTerm().lease().set(lease);
+
+            for (Tenant tenantInLease : lease.currentTerm().version().tenants()) {
+                Customer customer = tenantInLease.leaseCustomer().customer();
+                tenantInLease.leaseCustomer().set(EntityFactory.create(LeaseCustomerTenant.class));
+                tenantInLease.leaseCustomer().participantId().setValue(uniqueId());
+                tenantInLease.leaseCustomer().lease().set(lease);
+                tenantInLease.leaseCustomer().customer().set(customer);
+                Persistence.service().persist(tenantInLease.leaseCustomer());
+            }
         }
         if (finalize) {
             lease.currentTerm().saveAction().setValue(SaveAction.saveAsFinal);

@@ -62,7 +62,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         for (Tenant tenant : masterOnlineApplication.leaseApplication().lease().currentTerm().version().tenants()) {
             Persistence.service().retrieve(tenant);
             if (LeaseParticipant.Role.Applicant == tenant.role().getValue()) {
-                if (tenant.customer().user().isNull()) {
+                if (tenant.leaseCustomer().customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Primary applicant must have an e-mail to start Online Application."));
                 }
                 tenant.application().set(createOnlineApplication(masterOnlineApplication, tenant, Role.Applicant));
@@ -103,7 +103,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
                 .getPrimaryKey());
         for (Tenant tenant : leaseTerm.version().tenants()) {
             Persistence.service().retrieve(tenant);
-            if (application.customer().equals(tenant.customer())) {
+            if (application.customer().equals(tenant.leaseCustomer().customer())) {
 
                 switch (tenant.role().getValue()) {
                 case Applicant:
@@ -125,7 +125,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         }
         for (Guarantor guarantor : leaseTerm.version().guarantors()) {
             Persistence.service().retrieve(guarantor);
-            if (application.customer().equals(guarantor.customer())) {
+            if (application.customer().equals(guarantor.leaseCustomer().customer())) {
                 if (application.status().getValue() == OnlineApplication.Status.Submitted) {
                     return VistaCustomerBehavior.GuarantorSubmitted;
                 } else {
@@ -265,7 +265,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
         for (Tenant tenant : lease.currentTerm().version().tenants()) {
             if ((tenant.role().getValue() == LeaseParticipant.Role.CoApplicant && (!tenant.takeOwnership().isBooleanTrue()))) {
-                if (tenant.customer().user().isNull()) {
+                if (tenant.leaseCustomer().customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Co-Applicant must have an e-mail to start Online Application."));
                 }
                 tenant.application().set(createOnlineApplication(lease.leaseApplication().onlineApplication(), tenant, Role.CoApplicant));
@@ -278,8 +278,8 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     private void inviteGuarantors(Lease lease, Customer tenant) {
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
         for (Guarantor guarantor : lease.currentTerm().version().guarantors()) {
-            if (guarantor.tenant().customer().equals(tenant)) {
-                if (guarantor.customer().user().isNull()) {
+            if (guarantor.tenant().leaseCustomer().customer().equals(tenant)) {
+                if (guarantor.leaseCustomer().customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Guarantor must have an e-mail to start Online Application."));
                 }
                 guarantor.application().set(createOnlineApplication(lease.leaseApplication().onlineApplication(), guarantor, Role.Guarantor));
@@ -312,7 +312,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         }
 
         app.masterOnlineApplication().set(masterOnlineApplication);
-        app.customer().set(participant.customer());
+        app.customer().set(participant.leaseCustomer().customer());
         app.role().setValue(role);
         Persistence.service().persist(app);
         return app;

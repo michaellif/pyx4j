@@ -87,7 +87,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     @Override
     protected void persist(PaymentRecord entity, PaymentRecordDTO dto) {
-        entity.paymentMethod().customer().set(dto.leaseParticipant().customer());
+        entity.paymentMethod().customer().set(dto.leaseParticipant().leaseCustomer().customer());
 
         // Do not change profile methods
         if (entity.paymentMethod().id().isNull()) {

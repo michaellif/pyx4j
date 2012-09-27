@@ -28,8 +28,8 @@ public class PaymentLister extends ListerBase<PaymentRecordDTO> {
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().id()).build(),
-            new MemberColumnDescriptor.Builder(proto().leaseParticipant().customer().customerId()).build(),
-            new MemberColumnDescriptor.Builder(proto().leaseParticipant().customer().person().name()).build(),
+            new MemberColumnDescriptor.Builder(proto().leaseParticipant().leaseCustomer().customer().customerId()).build(),
+            new MemberColumnDescriptor.Builder(proto().leaseParticipant().leaseCustomer().customer().person().name()).build(),
             new MemberColumnDescriptor.Builder(proto().leaseParticipant().role()).build(),
             new MemberColumnDescriptor.Builder(proto().amount()).build(),
             new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).build(),

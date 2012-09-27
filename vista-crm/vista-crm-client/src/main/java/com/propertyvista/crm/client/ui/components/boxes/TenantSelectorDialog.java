@@ -56,18 +56,18 @@ public abstract class TenantSelectorDialog extends EntitySelectorTableDialog<Ten
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().customer().customerId()).build(),
+                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().customerId()).build(),
                 new MemberColumnDescriptor.Builder(proto().role()).build(),
                 
-                new MemberColumnDescriptor.Builder(proto().customer().person().name()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().customer().person().name().firstName()).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().customer().person().name().lastName()).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().customer().person().sex()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto().customer().person().birthDate(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().customer().person().email(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().customer().person().homePhone()).build(),
-                new MemberColumnDescriptor.Builder(proto().customer().person().mobilePhone()).build(),
-                new MemberColumnDescriptor.Builder(proto().customer().person().workPhone()).build(),
+                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().name()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().name().firstName()).searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().name().lastName()).searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().sex()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().birthDate(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().email(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().homePhone()).build(),
+                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().mobilePhone()).build(),
+                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().workPhone()).build(),
                 
                 new MemberColumnDescriptor.Builder(proto().leaseTermV().holder()).columnTitle(i18n.tr("Lease Term")).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().leaseTermV().holder().lease().leaseId()).searchableOnly().build()

@@ -30,10 +30,11 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssign
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseCustomer;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.server.domain.IdAssignmentSequence;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -79,16 +80,17 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
     }
 
     @Override
-    public void assignId(Tenant tenant) {
-        if (needsGeneratedId(IdTarget.tenant)) {
-            tenant.participantId().setValue(getId(IdTarget.tenant));
-        }
-    }
-
-    @Override
-    public void assignId(Guarantor guarantor) {
-        if (needsGeneratedId(IdTarget.guarantor)) {
-            guarantor.participantId().setValue(getId(IdTarget.guarantor));
+    public <E extends LeaseCustomer> void assignId(E leaseCustomer) {
+        if (leaseCustomer instanceof LeaseCustomerTenant) {
+            if (needsGeneratedId(IdTarget.tenant)) {
+                leaseCustomer.participantId().setValue(getId(IdTarget.tenant));
+            }
+        } else if (leaseCustomer instanceof LeaseCustomerGuarantor) {
+            if (needsGeneratedId(IdTarget.guarantor)) {
+                leaseCustomer.participantId().setValue(getId(IdTarget.guarantor));
+            }
+        } else {
+            throw new IllegalArgumentException();
         }
     }
 

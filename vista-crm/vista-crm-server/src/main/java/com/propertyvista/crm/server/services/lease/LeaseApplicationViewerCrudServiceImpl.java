@@ -82,7 +82,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             Persistence.service().retrieve(tenant.screening(), AttachLevel.ToStringMembers);
 
             if (tenant.role().getValue() == LeaseParticipant.Role.Applicant) {
-                dto.mainApplicant().set(tenant.customer());
+                dto.mainApplicant().set(tenant.leaseCustomer().customer());
                 dto.numberOfApplicants().setValue(dto.numberOfApplicants().getValue() + 1);
             } else if (tenant.role().getValue() == LeaseParticipant.Role.CoApplicant) {
                 dto.numberOfApplicants().setValue(dto.numberOfApplicants().getValue() + 1);
@@ -107,8 +107,8 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         // check that we can send the e-mail before we actually try to send email
         for (LeaseParticipant user : users) {
             // check that all lease participants have an associated user entity (email)            
-            if (user.customer().user().isNull()) {
-                throw new UserRuntimeException(i18n.tr("Failed to invite users, email of lease participant {0} was not found", user.customer().person().name()
+            if (user.leaseCustomer().customer().user().isNull()) {
+                throw new UserRuntimeException(i18n.tr("Failed to invite users, email of lease participant {0} was not found", user.leaseCustomer().customer().person().name()
                         .getStringView()));
             }
 
@@ -116,7 +116,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             if (user.application().isNull()) {
                 throw new UserRuntimeException(
                         i18n.tr("Failed to invite users, application invitation for {0} can be sent only after the main applicant will have finished his own applicaiton",
-                                user.customer().person().name().getStringView()));
+                                user.leaseCustomer().customer().person().name().getStringView()));
             }
         }
 

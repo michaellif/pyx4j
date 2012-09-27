@@ -43,7 +43,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
     static {
         TenantCharge proto = EntityFactory.getEntityPrototype(TenantCharge.class);
-        COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenant().customer().person().name(), "33em"));
+        COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenant().leaseCustomer().customer().person().name(), "33em"));
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenant().percentage(), "7em"));
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.amount(), "7em"));
     }
@@ -100,7 +100,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
                 CComponent<?, ?> comp = inject(column.getObject());
                 comp.inheritViewable(false); // always not viewable!
                 return comp;
-            } else if (column.getObject() == proto().tenant().customer().person().name()) {
+            } else if (column.getObject() == proto().tenant().leaseCustomer().customer().person().name()) {
                 return inject(column.getObject(), new CEntityLabel<Name>());
             }
             return super.createCell(column);

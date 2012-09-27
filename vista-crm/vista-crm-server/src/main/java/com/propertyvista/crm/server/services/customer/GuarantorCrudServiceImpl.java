@@ -57,7 +57,7 @@ public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarant
 
     @Override
     protected void persist(Guarantor entity, GuarantorDTO dto) {
-        ServerSideFactory.create(CustomerFacade.class).persistCustomer(entity.customer());
+        ServerSideFactory.create(CustomerFacade.class).persistCustomer(entity.leaseCustomer().customer());
         entity.role().setValue(LeaseParticipant.Role.Guarantor);
     }
 

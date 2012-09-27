@@ -55,7 +55,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
     @Override
     protected void enhanceRetrieved(Tenant entity, TenantDTO dto) {
         // load detached data:
-        Persistence.service().retrieve(dto.customer().emergencyContacts());
+        Persistence.service().retrieve(dto.leaseCustomer().customer().emergencyContacts());
         Persistence.service().retrieve(dto.leaseTermV());
         Persistence.service().retrieve(dto.leaseTermV().holder(), AttachLevel.ToStringMembers);
 
@@ -87,7 +87,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
 
     @Override
     protected void persist(Tenant entity, TenantDTO dto) {
-        ServerSideFactory.create(CustomerFacade.class).persistCustomer(entity.customer());
+        ServerSideFactory.create(CustomerFacade.class).persistCustomer(entity.leaseCustomer().customer());
 
         // persist payment methods:
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
@@ -104,7 +104,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
         // save new/edited ones (and memorize pre-authorized method):
         entity.preauthorizedPayment().set(null);
         for (PaymentMethod paymentMethod : dto.paymentMethods()) {
-            paymentMethod.customer().set(entity.customer());
+            paymentMethod.customer().set(entity.leaseCustomer().customer());
             paymentMethod.isOneTimePayment().setValue(false);
             ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(building, paymentMethod);
             if (paymentMethod.isPreauthorized().isBooleanTrue()) {

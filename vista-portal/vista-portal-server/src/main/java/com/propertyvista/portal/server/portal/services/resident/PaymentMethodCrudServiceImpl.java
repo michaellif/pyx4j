@@ -68,7 +68,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<Paymen
         Persistence.service().retrieve(tenantInLease.leaseTermV());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit());
 
-        entity.customer().set(tenantInLease.customer());
+        entity.customer().set(tenantInLease.leaseCustomer().customer());
 
         Validate.isTrue(PaymentType.avalableInPortal().contains(entity.type().getValue()));
         entity.isOneTimePayment().setValue(Boolean.FALSE);

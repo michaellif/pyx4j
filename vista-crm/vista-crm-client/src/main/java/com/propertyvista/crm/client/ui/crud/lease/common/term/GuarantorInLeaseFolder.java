@@ -66,7 +66,7 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
         for (Customer customer : customers) {
             Guarantor newGuarantorInLease = EntityFactory.create(Guarantor.class);
             newGuarantorInLease.leaseTermV().setPrimaryKey(leaseTerm.getValue().version().getPrimaryKey());
-            newGuarantorInLease.customer().set(customer);
+            newGuarantorInLease.leaseCustomer().customer().set(customer);
             newGuarantorInLease.role().setValue(LeaseParticipant.Role.Guarantor);
             newGuarantorInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
             addItem(newGuarantorInLease);
@@ -93,15 +93,15 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
 
             FormFlexPanel left = new FormFlexPanel();
             int row = -1;
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().participantId()), 7).build());
-            left.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class) {
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().participantId()), 7).build());
+            left.setWidget(++row, 0, inject(proto().leaseCustomer().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class) {
                 @Override
                 public Key getLinkKey() {
                     return GuarantorInLeaseEditor.this.getValue().getPrimaryKey();
                 }
             }));
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().sex()), 7).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().birthDate()), 9).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().screening()), 9).customLabel(i18n.tr("Use Screening From")).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CComboBox<Tenant>() {
                 @Override
@@ -117,10 +117,10 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
 
             FormFlexPanel right = new FormFlexPanel();
             row = -1;
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().email()), 25).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().homePhone()), 15).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().mobilePhone()), 15).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().workPhone()), 15).build());
 
             // assemble main panel:
             main.setWidget(0, 0, left);
@@ -137,15 +137,16 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
             super.onValueSet(populate);
 
             if (isEditable()) {
-                ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().participantId()), getValue().getPrimaryKey());
+                ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().leaseCustomer().participantId()), getValue()
+                        .getPrimaryKey());
 
-                get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
+                get(proto().leaseCustomer().customer().person().email()).setMandatory(!getValue().leaseCustomer().customer().user().isNull());
 
                 if (get(proto().screening()) instanceof CEntityComboBox<?>) {
                     @SuppressWarnings("unchecked")
                     CEntityComboBox<PersonScreening> combo = (CEntityComboBox<PersonScreening>) get(proto().screening());
                     combo.resetCriteria();
-                    combo.addCriterion(PropertyCriterion.eq(combo.proto().screene(), getValue().customer()));
+                    combo.addCriterion(PropertyCriterion.eq(combo.proto().screene(), getValue().leaseCustomer().customer()));
                     combo.refreshOptions();
                 }
 

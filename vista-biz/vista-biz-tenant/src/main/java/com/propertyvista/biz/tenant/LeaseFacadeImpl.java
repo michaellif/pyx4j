@@ -58,6 +58,7 @@ import com.propertyvista.domain.financial.offering.Service.ServiceType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -67,6 +68,10 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
+import com.propertyvista.domain.tenant.lease.LeaseCustomer;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 
@@ -713,23 +718,39 @@ public class LeaseFacadeImpl implements LeaseFacade {
     private void persistCustomers(LeaseTerm leaseTerm) {
         for (Tenant tenant : leaseTerm.version().tenants()) {
             if (!tenant.isValueDetached()) {
-                if (tenant.participantId().isNull()) {
-                    ServerSideFactory.create(IdAssignmentFacade.class).assignId(tenant);
-                }
-            }
-            if (!tenant.customer().isValueDetached()) {
-                ServerSideFactory.create(CustomerFacade.class).persistCustomer(tenant.customer());
+                persistLeaseCustomer(leaseTerm, tenant, LeaseCustomerTenant.class);
             }
         }
         for (Guarantor guarantor : leaseTerm.version().guarantors()) {
             if (!guarantor.isValueDetached()) {
-                if (guarantor.participantId().isNull()) {
-                    ServerSideFactory.create(IdAssignmentFacade.class).assignId(guarantor);
-                }
+                persistLeaseCustomer(leaseTerm, guarantor, LeaseCustomerGuarantor.class);
             }
-            if (!guarantor.customer().isValueDetached()) {
-                ServerSideFactory.create(CustomerFacade.class).persistCustomer(guarantor.customer());
+        }
+    }
+
+    private <E extends LeaseCustomer, P extends LeaseParticipant> void persistLeaseCustomer(LeaseTerm leaseTerm, P leaseParticipant, Class<E> leaseCustomerClass) {
+        boolean newCustomer = leaseParticipant.leaseCustomer().customer().id().isNull();
+        if (!leaseParticipant.leaseCustomer().customer().isValueDetached()) {
+            ServerSideFactory.create(CustomerFacade.class).persistCustomer(leaseParticipant.leaseCustomer().customer());
+        }
+        // Is new LeaseCustomer find or create new
+        if (leaseParticipant.leaseCustomer().id().isNull()) {
+            E leaseCustomer = null;
+            if (!newCustomer) {
+                EntityQueryCriteria<E> criteria = EntityQueryCriteria.create(leaseCustomerClass);
+                criteria.add(PropertyCriterion.eq(criteria.proto().lease(), leaseTerm.lease()));
+                criteria.add(PropertyCriterion.eq(criteria.proto().customer(), leaseParticipant.leaseCustomer().customer()));
+                leaseCustomer = Persistence.service().retrieve(criteria);
             }
+            if (leaseCustomer == null) {
+                Customer customer = leaseParticipant.leaseCustomer().customer();
+                leaseCustomer = EntityFactory.create(leaseCustomerClass);
+                leaseCustomer.lease().set(leaseTerm.lease());
+                leaseCustomer.customer().set(customer);
+                ServerSideFactory.create(IdAssignmentFacade.class).assignId(leaseCustomer);
+                Persistence.service().persist(leaseCustomer);
+            }
+            leaseParticipant.leaseCustomer().set(leaseCustomer);
         }
     }
 

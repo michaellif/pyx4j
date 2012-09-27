@@ -45,8 +45,8 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
         passwordAction = new MenuItem(i18n.tr("Change Password"), new Command() {
             @Override
             public void execute() {
-                ((GuarantorViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().customer().user().getPrimaryKey(), getForm()
-                        .getValue().customer().person().getStringView());
+                ((GuarantorViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().leaseCustomer().customer().user().getPrimaryKey(), getForm()
+                        .getValue().leaseCustomer().customer().person().getStringView());
             }
         });
         addAction(passwordAction);
@@ -68,7 +68,7 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
         super.populate(value);
 
         // Disable password change button for guarantors with no associated user principal
-        if (value != null & !value.customer().user().isNull()) {
+        if (value != null & !value.leaseCustomer().customer().user().isNull()) {
             setActionVisible(passwordAction, true);
         } else {
             setActionVisible(passwordAction, false);

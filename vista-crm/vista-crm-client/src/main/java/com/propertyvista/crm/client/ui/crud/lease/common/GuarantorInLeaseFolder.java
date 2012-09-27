@@ -44,8 +44,8 @@ public class GuarantorInLeaseFolder extends VistaTableFolder<Guarantor> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().participantId(), "7em"),
-                new EntityFolderColumnDescriptor(proto().customer().person().name(), "25em"),
+                new EntityFolderColumnDescriptor(proto().leaseCustomer().participantId(), "7em"),
+                new EntityFolderColumnDescriptor(proto().leaseCustomer().customer().person().name(), "25em"),
                 new EntityFolderColumnDescriptor(proto().role(), "10em"),
                 new EntityFolderColumnDescriptor(proto().tenant(), "25em"),
                 new EntityFolderColumnDescriptor(proto().relationship(), "15em"));
@@ -70,8 +70,8 @@ public class GuarantorInLeaseFolder extends VistaTableFolder<Guarantor> {
 
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            if (proto().customer().person().name() == column.getObject()) {
-                return inject(proto().customer().person().name(), new CEntityHyperlink<Name>(null, new Command() {
+            if (proto().leaseCustomer().customer().person().name() == column.getObject()) {
+                return inject(proto().leaseCustomer().customer().person().name(), new CEntityHyperlink<Name>(null, new Command() {
                     @Override
                     public void execute() {
                         AppSite.getPlaceController().goTo(

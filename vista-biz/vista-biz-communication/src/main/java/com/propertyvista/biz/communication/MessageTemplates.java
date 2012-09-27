@@ -101,9 +101,9 @@ public class MessageTemplates {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
         MailMessage email = new MailMessage();
-        CustomerUser user = tenantInLease.customer().user();
+        CustomerUser user = tenantInLease.leaseCustomer().customer().user();
         if (user.isValueDetached()) {
-            Persistence.service().retrieve(tenantInLease.customer().user());
+            Persistence.service().retrieve(tenantInLease.leaseCustomer().customer().user());
         }
         email.setTo(user.email().getValue());
         email.setSender(getSender());
@@ -120,13 +120,13 @@ public class MessageTemplates {
         Persistence.service().retrieve(leaseParticipant.leaseTermV().holder().lease().unit());
         Persistence.service().retrieve(leaseParticipant.leaseTermV().holder().lease().unit().building());
 
-        Persistence.service().retrieve(leaseParticipant.customer().user());
+        Persistence.service().retrieve(leaseParticipant.leaseCustomer().customer().user());
 
         EmailTemplate emailTemplate = getEmailTemplate(emailType, leaseParticipant.leaseTermV().holder().lease().unit().building());
 
         // create required data context
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
-        context.user().set(leaseParticipant.customer().user());
+        context.user().set(leaseParticipant.leaseCustomer().customer().user());
         context.lease().set(leaseParticipant.leaseTermV().holder().lease());
         context.leaseParticipant().set(leaseParticipant);
         context.accessToken().setValue(token);
@@ -136,7 +136,7 @@ public class MessageTemplates {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
         MailMessage email = new MailMessage();
-        email.setTo(leaseParticipant.customer().user().email().getValue());
+        email.setTo(leaseParticipant.leaseCustomer().customer().user().email().getValue());
         email.setSender(getSender());
         // set email subject and body from the template
         buildEmail(email, emailTemplate, data);
@@ -156,7 +156,7 @@ public class MessageTemplates {
         PolicyNode policyNode = Persistence.service().retrieve(nodeCrit);
         // get building policy node form the first available TenantInLease entry
         EntityQueryCriteria<Tenant> tilCrit = EntityQueryCriteria.create(Tenant.class);
-        tilCrit.add(PropertyCriterion.eq(tilCrit.proto().customer().user(), user));
+        tilCrit.add(PropertyCriterion.eq(tilCrit.proto().leaseCustomer().customer().user(), user));
 
         // TODO Fix this!
         Tenant til = Persistence.service().retrieve(tilCrit);

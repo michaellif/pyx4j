@@ -74,7 +74,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
         for (Customer customer : customers) {
             Tenant newTenantInLease = EntityFactory.create(Tenant.class);
             newTenantInLease.leaseTermV().setPrimaryKey(leaseTerm.getValue().version().getPrimaryKey());
-            newTenantInLease.customer().set(customer);
+            newTenantInLease.leaseCustomer().customer().set(customer);
             if (!isApplicantPresent()) {
                 newTenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
                 newTenantInLease.relationship().setValue(PersonRelationship.Other); // just do not leave it empty - it's mandatory field!
@@ -165,15 +165,15 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
 
             FormFlexPanel left = new FormFlexPanel();
             int row = -1;
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().participantId()), 7).build());
-            left.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().participantId()), 7).build());
+            left.setWidget(++row, 0, inject(proto().leaseCustomer().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
                 @Override
                 public Key getLinkKey() {
                     return TenantInLeaseEditor.this.getValue().getPrimaryKey();
                 }
             }));
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().sex()), 7).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().birthDate()), 9).build());
 
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role()), 15).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
@@ -182,10 +182,10 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
 
             FormFlexPanel right = new FormFlexPanel();
             row = -1;
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().email()), 25).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().homePhone()), 15).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().mobilePhone()), 15).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().workPhone()), 15).build());
 
             if (isEditable()) {
                 get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseParticipant.Role>() {
@@ -199,7 +199,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
                     }
                 });
 
-                get(proto().customer().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+                get(proto().leaseCustomer().customer().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<LogicalDate> event) {
                         if (event.getValue() != null) {
@@ -232,9 +232,10 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
             super.onValueSet(populate);
 
             if (isEditable()) {
-                ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().participantId()), getValue().getPrimaryKey());
+                ClientPolicyManager
+                        .setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().leaseCustomer().participantId()), getValue().getPrimaryKey());
 
-                get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
+                get(proto().leaseCustomer().customer().person().email()).setMandatory(!getValue().leaseCustomer().customer().user().isNull());
 
                 if (get(proto().role()) instanceof CComboBox) {
                     CComboBox<Role> role = (CComboBox<Role>) get(proto().role());
@@ -243,8 +244,8 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
 
                 get(proto().percentage()).setEditable(getValue().role().getValue() != LeaseParticipant.Role.Dependent);
 
-                if (!getValue().customer().person().birthDate().isNull()) {
-                    if (!ValidationUtils.isOlderThen18(getValue().customer().person().birthDate().getValue())) {
+                if (!getValue().leaseCustomer().customer().person().birthDate().isNull()) {
+                    if (!ValidationUtils.isOlderThen18(getValue().leaseCustomer().customer().person().birthDate().getValue())) {
                         get(proto().role()).setEditable(false);
                     }
                 }
@@ -255,7 +256,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
             if (get(proto().screening()) instanceof CEntityComboBox<?>) {
                 CEntityComboBox<PersonScreening> combo = (CEntityComboBox<PersonScreening>) get(proto().screening());
                 combo.resetCriteria();
-                combo.addCriterion(PropertyCriterion.eq(combo.proto().screene(), getValue().customer()));
+                combo.addCriterion(PropertyCriterion.eq(combo.proto().screene(), getValue().leaseCustomer().customer()));
                 combo.refreshOptions();
             }
         }

@@ -49,7 +49,7 @@ public class DigitalSignatureMgr {
                 boolean isExist = false;
                 for (Iterator<DigitalSignature> it = existingSignatures.iterator(); it.hasNext();) {
                     DigitalSignature sig = it.next();
-                    if (sig.person().equals(tenant.customer())) {
+                    if (sig.person().equals(tenant.leaseCustomer().customer())) {
                         isExist = true;
                         application.signatures().add(sig);
                         it.remove();
@@ -58,7 +58,7 @@ public class DigitalSignatureMgr {
                 }
 
                 if (!isExist) { // create signature if absent: 
-                    createDigitalSignature(application, tenant.customer());
+                    createDigitalSignature(application, tenant.leaseCustomer().customer());
                     ApplicationProgressMgr.invalidateSummaryStep(application);
                 }
             }

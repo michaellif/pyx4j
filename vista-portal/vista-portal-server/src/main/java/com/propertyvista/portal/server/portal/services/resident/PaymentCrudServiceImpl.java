@@ -90,9 +90,9 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     @Override
     protected void persist(PaymentRecord entity, PaymentRecordDTO dto) {
-        entity.paymentMethod().customer().set(dto.leaseParticipant().customer());
+        entity.paymentMethod().customer().set(dto.leaseParticipant().leaseCustomer().customer());
 
-        Validate.isTrue(entity.paymentMethod().customer().equals(TenantAppContext.getCurrentUserTenantInLease().customer()));
+        Validate.isTrue(entity.paymentMethod().customer().equals(TenantAppContext.getCurrentUserTenantInLease().leaseCustomer().customer()));
 
         Validate.isTrue(PaymentType.avalableInPortal().contains(dto.paymentMethod().type().getValue()));
 

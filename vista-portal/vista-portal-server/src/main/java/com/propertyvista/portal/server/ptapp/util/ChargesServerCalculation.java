@@ -46,7 +46,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         if (tenant.role().getValue() == LeaseParticipant.Role.Dependent) {
             return false;
         }
-        return TimeUtils.isOlderThan(tenant.customer().person().birthDate().getValue(), 18);
+        return TimeUtils.isOlderThan(tenant.leaseCustomer().customer().person().birthDate().getValue(), 18);
     }
 
     public static boolean updatePaymentSplitCharges(Charges charges, List<Tenant> tenants) {
@@ -121,7 +121,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         charges.paymentSplitCharges().charges().clear();
         for (Tenant tenant : tenants) {
             LeaseParticipant.Role role = tenant.role().getValue();
-            log.debug("Going to reset payment splits for tenant {} of age {}", tenant.relationship().getValue(), tenant.customer().person().birthDate()
+            log.debug("Going to reset payment splits for tenant {} of age {}", tenant.relationship().getValue(), tenant.leaseCustomer().customer().person().birthDate()
                     .getValue());
 
             if (!isEligibleForPaymentSplit(tenant)) { // make sure that it is eligible

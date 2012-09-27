@@ -22,7 +22,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;
@@ -32,9 +31,6 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.SplittingHandler;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
-import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoverStats;
-import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -67,29 +63,6 @@ public class UnitTurnoverAnalysisManagerTestBase {
         VistaTestDBSetup.init();
         TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaCrmBehavior.Occupancy, VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();
-
-        // clear tables
-        Persistence.service().delete(EntityQueryCriteria.create(UnitTurnoverStats.class));
-        Persistence.service().delete(EntityQueryCriteria.create(AptUnitOccupancySegment.class));
-        Persistence.service().delete(EntityQueryCriteria.create(UnitAvailabilityStatus.class));
-        //TODO this is unsupported, consider DB is empty for every test:  See  pom.xml <forkMode>always</forkMode>
-        if (false) {
-
-            {
-                EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
-                leaseCriteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
-                Persistence.service().delete(leaseCriteria);
-            }
-            {
-                EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
-                leaseCriteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
-                Persistence.service().delete(leaseCriteria);
-            }
-            Persistence.service().delete(EntityQueryCriteria.create(AptUnit.class));
-            Persistence.service().delete(EntityQueryCriteria.create(Floorplan.class));
-            Persistence.service().delete(EntityQueryCriteria.create(ProductCatalog.class));
-            Persistence.service().delete(EntityQueryCriteria.create(Building.class));
-        }
 
         // define common domain objects
         building = EntityFactory.create(Building.class);
@@ -125,12 +98,12 @@ public class UnitTurnoverAnalysisManagerTestBase {
      * @param dateTo
      */
     protected void lease(AptUnit unit, String dateFrom, String dateTo) {
-        Customer tenant = EntityFactory.create(Customer.class);
+        Customer customer = EntityFactory.create(Customer.class);
         CustomerUser user = EntityFactory.create(CustomerUser.class);
         user.name().setValue("tenant " + dateFrom);
         Persistence.service().merge(user);
-        tenant.user().set(user);
-        Persistence.service().merge(tenant);
+        customer.user().set(user);
+        Persistence.service().merge(customer);
 
         final Lease lease = LightWeightLeaseManagement.create(Lease.Status.Application);
 
@@ -143,7 +116,7 @@ public class UnitTurnoverAnalysisManagerTestBase {
         lease.expectedMoveIn().setValue(asDate(dateFrom));
 
         Tenant tenantInLease = EntityFactory.create(Tenant.class);
-        tenantInLease.customer().set(tenant);
+        tenantInLease.leaseCustomer().customer().set(customer);
         tenantInLease.orderInLease().setValue(1);
         tenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
         lease.currentTerm().version().tenants().add(tenantInLease);
@@ -181,6 +154,7 @@ public class UnitTurnoverAnalysisManagerTestBase {
     protected AptUnit unit(long pk) {
         String number = "unit-" + pk;
         EntityQueryCriteria<AptUnit> c = EntityQueryCriteria.create(AptUnit.class);
+        c.add(PropertyCriterion.eq(c.proto().building(), building));
         c.add(PropertyCriterion.eq(c.proto().info().number(), number));
         AptUnit unit = Persistence.service().retrieve(c);
         if (unit == null) {

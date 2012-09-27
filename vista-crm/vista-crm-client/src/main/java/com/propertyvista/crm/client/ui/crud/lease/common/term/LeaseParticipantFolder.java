@@ -69,7 +69,7 @@ public abstract class LeaseParticipantFolder<E extends LeaseParticipant> extends
     private List<Customer> retrieveExistingCustomers() {
         List<Customer> customers = new ArrayList<Customer>(getValue().size());
         for (LeaseParticipant wrapper : getValue()) {
-            customers.add(wrapper.customer());
+            customers.add(wrapper.leaseCustomer().customer());
         }
         return customers;
     }

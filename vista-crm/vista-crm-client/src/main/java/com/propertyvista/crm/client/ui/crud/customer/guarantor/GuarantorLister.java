@@ -27,18 +27,18 @@ public class GuarantorLister extends ListerBase<GuarantorDTO> {
         super(GuarantorDTO.class, false);
 
         setColumnDescriptors(//@formatter:off
-            new Builder(proto().participantId()).build(),
+            new Builder(proto().leaseCustomer().participantId()).build(),
             
-            new Builder(proto().customer().person().name()).searchable(false).build(),
-            new Builder(proto().customer().person().name().firstName(), false).build(),
-            new Builder(proto().customer().person().name().lastName(), false).build(),
-            new Builder(proto().customer().person().sex()).build(),
-            new Builder(proto().customer().person().birthDate()).build(),
+            new Builder(proto().leaseCustomer().customer().person().name()).searchable(false).build(),
+            new Builder(proto().leaseCustomer().customer().person().name().firstName(), false).build(),
+            new Builder(proto().leaseCustomer().customer().person().name().lastName(), false).build(),
+            new Builder(proto().leaseCustomer().customer().person().sex()).build(),
+            new Builder(proto().leaseCustomer().customer().person().birthDate()).build(),
             
-            new Builder(proto().customer().person().homePhone()).build(),
-            new Builder(proto().customer().person().mobilePhone()).build(),
-            new Builder(proto().customer().person().workPhone()).build(),
-            new Builder(proto().customer().person().email()).title("E-mail address").build(),
+            new Builder(proto().leaseCustomer().customer().person().homePhone()).build(),
+            new Builder(proto().leaseCustomer().customer().person().mobilePhone()).build(),
+            new Builder(proto().leaseCustomer().customer().person().workPhone()).build(),
+            new Builder(proto().leaseCustomer().customer().person().email()).title("E-mail address").build(),
             
             new Builder(proto().leaseTermV().holder()).columnTitle(i18n.tr("Lease Term")).searchable(false).build(),
             new Builder(proto().leaseTermV().holder().lease().leaseId()).searchableOnly().build()
