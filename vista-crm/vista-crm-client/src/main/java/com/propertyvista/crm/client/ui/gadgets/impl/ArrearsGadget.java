@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets.arrears;
+package com.propertyvista.crm.client.ui.gadgets.impl;
 
 import java.util.Vector;
 
@@ -21,19 +21,20 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
+import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsGadgetSummaryForm;
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
+import com.propertyvista.crm.client.ui.gadgets.components.details.DelinquentTenantsDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
 import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetDataDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentTenantDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class ArrearsGadget extends CounterGadgetInstanceBase<ArrearsGadgetDataDTO, Vector<Building>, ArrearsGadgetMetadata> {
 
-    public ArrearsGadget(GadgetMetadata metadata) {
+    public ArrearsGadget(ArrearsGadgetMetadata metadata) {
         super(//@formatter:off
                 ArrearsGadgetDataDTO.class,
                 GWT.<ArrearsGadgetService> create(ArrearsGadgetService.class),

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets.leadsandrentals;
+package com.propertyvista.crm.client.ui.gadgets.impl;
 
 import java.util.Vector;
 
@@ -26,17 +26,17 @@ import com.propertyvista.crm.client.ui.gadgets.components.LeadsDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.LeasesFromLeadsDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
+import com.propertyvista.crm.client.ui.gadgets.leadsandrentals.LeadsAndRentalsSummaryForm;
 import com.propertyvista.crm.rpc.dto.gadgets.LeadsAndRentalsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeadsAndRentalsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.LeadsAndRentalsGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 
 public class LeadsAndRentalsGadget extends CounterGadgetInstanceBase<LeadsAndRentalsGadgetDataDTO, Vector<Building>, LeadsAndRentalsGadgetMetadata> {
 
-    public LeadsAndRentalsGadget(GadgetMetadata metadata) {
+    public LeadsAndRentalsGadget(LeadsAndRentalsGadgetMetadata metadata) {
         super(//@formatter:off
                 LeadsAndRentalsGadgetDataDTO.class,
                 GWT.<LeadsAndRentalsGadgetService> create(LeadsAndRentalsGadgetService.class),

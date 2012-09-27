@@ -15,10 +15,13 @@
 
 	<inherits name='com.propertyvista.common.VistaCommon' />
 
-    <source path="client"/>
+    <source path="client" excludes="codegen/**"/>    
 
     <entry-point class='com.propertyvista.crm.client.CrmSite'/>
     
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.crm.client.*" />
     
+    <generate-with class="com.propertyvista.crm.client.codegen.GadgetFactoryGenerator">
+    	<when-type-is class="com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory"/>
+  	</generate-with>
 </module>

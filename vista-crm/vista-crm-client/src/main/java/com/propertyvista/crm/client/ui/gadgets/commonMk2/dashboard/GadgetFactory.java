@@ -19,8 +19,8 @@ import java.util.List;
 
 import com.propertyvista.crm.client.ui.gadgets.applications.ApplicationsGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsGadgetFactory;
-import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsStatusGadget;
-import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsYOYAnalysisChartGadget;
+import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsStatusGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsYOYAnalysisChartGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.availability.TurnoverAnalysisGraphGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.availability.UnitAvailabilityReportGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.availability.UnitAvailabilitySummaryGadgetFactory;
@@ -45,8 +45,8 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 public class GadgetFactory implements IGadgetFactory {
 
     private static List<IGadgetFactory> DIRECTORY = Arrays.asList(//@formatter:off            
-            (IGadgetFactory) new ArrearsStatusGadget(),
-            new ArrearsYOYAnalysisChartGadget(),
+            (IGadgetFactory) new ArrearsStatusGadgetFactory(),
+            new ArrearsYOYAnalysisChartGadgetFactory(),
             new ArrearsGadgetFactory(),
                     
             new UnitAvailabilityReportGadgetFactory(),

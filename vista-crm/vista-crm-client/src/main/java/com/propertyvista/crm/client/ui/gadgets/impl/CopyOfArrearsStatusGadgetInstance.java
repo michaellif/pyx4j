@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets.arrears;
+package com.propertyvista.crm.client.ui.gadgets.impl;
 
 import java.util.Vector;
 
@@ -33,6 +33,7 @@ import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
+import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsStatusGadgetMetadataForm;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
@@ -43,9 +44,9 @@ import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetada
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class ArrearsStatusGadget extends AbstractGadgetFactory<ArrearsStatusGadgetMetadata> {
+public class CopyOfArrearsStatusGadgetInstance extends AbstractGadgetFactory<ArrearsStatusGadgetMetadata> {
 
-    private final static I18n i18n = I18n.get(ArrearsStatusGadget.class);
+    private final static I18n i18n = I18n.get(CopyOfArrearsStatusGadgetInstance.class);
 
     private static class ArrearsStatusGadgetInstance extends ListerGadgetInstanceBase<LeaseArrearsSnapshotDTO, ArrearsStatusGadgetMetadata> {
 
@@ -131,7 +132,7 @@ public class ArrearsStatusGadget extends AbstractGadgetFactory<ArrearsStatusGadg
         }
     }
 
-    public ArrearsStatusGadget() {
+    public CopyOfArrearsStatusGadgetInstance() {
         super(ArrearsStatusGadgetMetadata.class);
     }
 

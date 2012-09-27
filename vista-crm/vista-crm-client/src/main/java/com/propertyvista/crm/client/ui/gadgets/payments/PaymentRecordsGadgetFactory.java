@@ -13,141 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.payments;
 
-import static com.propertyvista.svg.gadgets.util.LabelHelper.makeListView;
-
-import java.util.Vector;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.AppSite;
-
-import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
-import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
-import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
+import com.propertyvista.crm.client.ui.gadgets.impl.PaymentRecordsGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
-import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.property.asset.building.Building;
 
 public class PaymentRecordsGadgetFactory extends AbstractGadgetFactory<PaymentRecordsGadgetMetadata> {
-
-    private final static I18n i18n = I18n.get(PaymentRecordsGadgetFactory.class);
-
-    private static class PaymentRecordsGadget extends ListerGadgetInstanceBase<PaymentRecordForReportDTO, PaymentRecordsGadgetMetadata> {
-
-        private final PaymentReportService service;
-
-        private HTML titlePanel;
-
-        public PaymentRecordsGadget(GadgetMetadata gadgetMetadata) {
-            super(gadgetMetadata, PaymentRecordsGadgetMetadata.class, new PaymentRecordsGadgetMetadataForm(), PaymentRecordForReportDTO.class, false);
-            this.service = GWT.<PaymentReportService> create(PaymentReportService.class);
-        }
-
-        @Override
-        public void setContainerBoard(IBuildingFilterContainer board) {
-            super.setContainerBoard(board);
-            board.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
-                @Override
-                public void onBuildingSelectionChanged(BuildingSelectionChangedEvent event) {
-                    populate();
-                }
-            });
-        }
-
-        @Override
-        protected Widget initContentPanel() {
-            VerticalPanel contentPanel = new VerticalPanel();
-            contentPanel.setWidth("100%");
-
-            contentPanel.add(initTitleWidget());
-            contentPanel.add(initListerWidget());
-
-            return contentPanel;
-        }
-
-        @Override
-        protected void populatePage(final int pageNumber) {
-            service.paymentRecords(//@formatter:off
-                    new AsyncCallback<EntitySearchResult<PaymentRecordForReportDTO>>() {
-
-                        @Override
-                        public void onSuccess(EntitySearchResult<PaymentRecordForReportDTO> result) {
-                            redrawTitle();
-                            setPageData(result.getData(), pageNumber, result.getTotalRows(), result.hasMoreData());
-                            populateSucceded();
-                        }
-        
-                        @Override
-                        public void onFailure(Throwable caught) {
-                            populateFailed(caught);
-                        }
-        
-                    },
-                    new Vector<Building>(containerBoard.getSelectedBuildingsStubs()),
-                    getTargetDate(),
-                    new Vector<PaymentType>(getMetadata().paymentMethodFilter()),
-                    new Vector<PaymentRecord.PaymentStatus>(getMetadata().paymentStatusFilter()),
-                    pageNumber,
-                    getPageSize(),
-                    new Vector<Sort>(getListerSortingCriteria()));//@formatter:on
-        }
-
-        @Override
-        protected void onItemSelect(PaymentRecordForReportDTO item) {
-            AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(PaymentRecord.class, item.getPrimaryKey()));
-        }
-
-        private LogicalDate getTargetDate() {
-            return getMetadata().customizeTargetDate().isBooleanTrue() ? getMetadata().targetDate().getValue() : new LogicalDate(ClientContext.getServerDate());
-        }
-
-        private Widget initTitleWidget() {
-            titlePanel = new HTML("");
-            return titlePanel;
-        }
-
-        private void redrawTitle() {
-            // actually "none" is never supposed to happen thanks to automatic setup form validation
-            String paymentTypeFilterView = !getMetadata().paymentMethodFilter().isEmpty() ? makeListView(getMetadata().paymentMethodFilter()) : i18n.tr("none");
-            String statusFilterView = !getMetadata().paymentStatusFilter().isEmpty() ? makeListView(getMetadata().paymentStatusFilter()) : i18n.tr("none");
-
-            titlePanel.setHTML(new SafeHtmlBuilder()//@formatter:off                     
-                    .appendHtmlConstant("<div>")
-                        .appendEscaped(i18n.tr("Target Date: {0}", getTargetDate()))
-                    .appendHtmlConstant("</div>")
-                    
-                    .appendHtmlConstant("<div>")                    
-                        .appendEscaped(i18n.tr("Payment Method: {0}", paymentTypeFilterView))
-                    .appendHtmlConstant("</div>")
-                    
-                    .appendHtmlConstant("<div>")                    
-                        .appendEscaped(i18n.tr("Payment Statuses: {0}", statusFilterView))
-                    .appendHtmlConstant("</div>")
-                    
-                    .toSafeHtml());//@formatter:on
-
-            titlePanel.getElement().getStyle().setProperty("textAlign", "center");
-        }
-
-    }
 
     public PaymentRecordsGadgetFactory() {
         super(PaymentRecordsGadgetMetadata.class);
@@ -155,7 +27,7 @@ public class PaymentRecordsGadgetFactory extends AbstractGadgetFactory<PaymentRe
 
     @Override
     protected GadgetInstanceBase<PaymentRecordsGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
-        return new PaymentRecordsGadget(gadgetMetadata);
+        return new PaymentRecordsGadget((PaymentRecordsGadgetMetadata) gadgetMetadata);
     }
 
 }

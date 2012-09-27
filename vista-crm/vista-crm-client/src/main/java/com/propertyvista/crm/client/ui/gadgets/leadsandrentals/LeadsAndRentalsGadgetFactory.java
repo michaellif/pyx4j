@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.gadgets.leadsandrentals;
 
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.impl.LeadsAndRentalsGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.LeadsAndRentalsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
@@ -26,7 +27,7 @@ public class LeadsAndRentalsGadgetFactory extends AbstractGadgetFactory<LeadsAnd
 
     @Override
     protected GadgetInstanceBase<LeadsAndRentalsGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
-        return new LeadsAndRentalsGadget(gadgetMetadata);
+        return new LeadsAndRentalsGadget((LeadsAndRentalsGadgetMetadata) gadgetMetadata);
     }
 
 }

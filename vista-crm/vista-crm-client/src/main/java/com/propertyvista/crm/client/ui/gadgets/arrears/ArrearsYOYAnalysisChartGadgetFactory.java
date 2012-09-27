@@ -7,26 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 10, 2011
+ * Created on Nov 17, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets.availability;
+package com.propertyvista.crm.client.ui.gadgets.arrears;
 
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.impl.UnitAvailabilityReportGadget;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
+import com.propertyvista.crm.client.ui.gadgets.impl.ArrearsYOYAnalysisChartGadget;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public class UnitAvailabilityReportGadgetFactory extends AbstractGadgetFactory<UnitAvailabilityGadgetMetadata> {
+public class ArrearsYOYAnalysisChartGadgetFactory extends AbstractGadgetFactory<ArrearsYOYAnalysisChartGadgetMetadata> {
 
-    public UnitAvailabilityReportGadgetFactory() {
-        super(UnitAvailabilityGadgetMetadata.class);
+    public ArrearsYOYAnalysisChartGadgetFactory() {
+        super(ArrearsYOYAnalysisChartGadgetMetadata.class);
     }
 
     @Override
-    protected GadgetInstanceBase<UnitAvailabilityGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
-        return new UnitAvailabilityReportGadget((UnitAvailabilityGadgetMetadata) gadgetMetadata);
+    protected GadgetInstanceBase<ArrearsYOYAnalysisChartGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+        return new ArrearsYOYAnalysisChartGadget((ArrearsYOYAnalysisChartGadgetMetadata) gadgetMetadata);
     }
 }

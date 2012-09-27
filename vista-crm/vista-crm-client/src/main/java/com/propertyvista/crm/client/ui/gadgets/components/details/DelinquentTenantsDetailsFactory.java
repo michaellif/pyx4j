@@ -11,18 +11,13 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets.arrears;
+package com.propertyvista.crm.client.ui.gadgets.components.details;
 
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
-import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
-import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
-import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
-import com.propertyvista.crm.client.ui.gadgets.components.details.IFilterDataProvider;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentTenantDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.DelinquentTenantListService;
 

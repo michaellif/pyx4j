@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.gadgets.applications;
 
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.impl.ApplicationsGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.ApplicationsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
@@ -26,7 +27,7 @@ public class ApplicationsGadgetFactory extends AbstractGadgetFactory<Application
 
     @Override
     protected GadgetInstanceBase<ApplicationsGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
-        return new ApplicationsGadget(gadgetMetadata);
+        return new ApplicationsGadget((ApplicationsGadgetMetadata) gadgetMetadata);
     }
 
 }

@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.dashboard;
 
 import java.util.Vector;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
@@ -22,8 +23,8 @@ import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.pyx4j.site.client.ui.ViewImplBase;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
-import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.GadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.LayoutManagersFactory;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
@@ -41,7 +42,8 @@ public class DashboardViewImpl extends ViewImplBase implements DashboardView {
 
     public DashboardViewImpl() {
         this.buildingsFilterProvider = new BuildingsSelectionToolbar();
-        this.dashboard = new AbstractDashboard(buildingsFilterProvider, new GadgetFactory(), LayoutManagersFactory.createLayoutManagers()) {
+        this.dashboard = new AbstractDashboard(buildingsFilterProvider, GWT.<IGadgetFactory> create(IGadgetFactory.class),
+                LayoutManagersFactory.createLayoutManagers()) {
 
             @Override
             protected void onPrintRequested() {

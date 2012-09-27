@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets.applications;
+package com.propertyvista.crm.client.ui.gadgets.impl;
 
 import java.util.Vector;
 
@@ -21,6 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
+import com.propertyvista.crm.client.ui.gadgets.applications.ApplicationsGadgetSummaryForm;
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.ApplicationsDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
@@ -28,13 +29,12 @@ import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvi
 import com.propertyvista.crm.rpc.dto.gadgets.ApplicationsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ApplicationsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.ApplicationsGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
 public class ApplicationsGadget extends CounterGadgetInstanceBase<ApplicationsGadgetDataDTO, Vector<Building>, ApplicationsGadgetMetadata> {
 
-    public ApplicationsGadget(GadgetMetadata metadata) {
+    public ApplicationsGadget(ApplicationsGadgetMetadata metadata) {
         super(ApplicationsGadgetDataDTO.class, GWT.<ApplicationsGadgetService> create(ApplicationsGadgetService.class), new ApplicationsGadgetSummaryForm(),
                 metadata, ApplicationsGadgetMetadata.class);
     }

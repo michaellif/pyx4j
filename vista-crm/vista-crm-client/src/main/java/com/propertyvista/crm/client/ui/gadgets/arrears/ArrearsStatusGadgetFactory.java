@@ -7,26 +7,31 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 10, 2011
+ * Created on May 15, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets.availability;
+package com.propertyvista.crm.client.ui.gadgets.arrears;
+
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.impl.UnitAvailabilityReportGadget;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
+import com.propertyvista.crm.client.ui.gadgets.impl.ArrearsStatusGadget;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public class UnitAvailabilityReportGadgetFactory extends AbstractGadgetFactory<UnitAvailabilityGadgetMetadata> {
+public class ArrearsStatusGadgetFactory extends AbstractGadgetFactory<ArrearsStatusGadgetMetadata> {
 
-    public UnitAvailabilityReportGadgetFactory() {
-        super(UnitAvailabilityGadgetMetadata.class);
+    final static I18n i18n = I18n.get(ArrearsStatusGadgetFactory.class);
+
+    public ArrearsStatusGadgetFactory() {
+        super(ArrearsStatusGadgetMetadata.class);
     }
 
     @Override
-    protected GadgetInstanceBase<UnitAvailabilityGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
-        return new UnitAvailabilityReportGadget((UnitAvailabilityGadgetMetadata) gadgetMetadata);
+    protected GadgetInstanceBase<ArrearsStatusGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+        return new ArrearsStatusGadget((ArrearsStatusGadgetMetadata) gadgetMetadata);
     }
+
 }

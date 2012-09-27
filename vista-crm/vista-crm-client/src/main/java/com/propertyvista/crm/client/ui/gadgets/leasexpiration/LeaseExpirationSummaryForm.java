@@ -21,7 +21,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm;
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
 
-final class LeaseExpirationSummaryForm extends ZoomableViewForm<LeaseExpirationGadgetDataDTO> {
+public final class LeaseExpirationSummaryForm extends ZoomableViewForm<LeaseExpirationGadgetDataDTO> {
 
     private static final I18n i18n = I18n.get(LeaseExpirationSummaryForm.class);
 
