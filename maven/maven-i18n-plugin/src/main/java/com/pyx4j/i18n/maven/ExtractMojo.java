@@ -273,9 +273,11 @@ public class ExtractMojo extends AbstractMojo {
         } else {
             throw new MojoExecutionException("Unsupported scope " + scope);
         }
-
+        if (merge && autoTranslate) {
+            throw new MojoExecutionException("Unsupported parameters;  use <merge> or <autoTranslate>");
+        }
         if (translates != null && translate != null) {
-            throw new MojoExecutionException("Unsupported parameters  use <translates> or <translate>");
+            throw new MojoExecutionException("Unsupported parameters;  use <translates> or <translate>");
         }
         if (translate != null) {
             if (translate.contains(",")) {
@@ -284,6 +286,10 @@ public class ExtractMojo extends AbstractMojo {
                 translates = new ArrayList<String>();
                 translates.add(translate);
             }
+        }
+
+        if (getLog().isDebugEnabled()) {
+            POCatalog.debug = true;
         }
 
         StrictPatternExcludesArtifactFilter excludeFilter = null;
@@ -535,6 +541,9 @@ public class ExtractMojo extends AbstractMojo {
 
             POCatalog catalog = new POCatalog(lang, true);
             if (translationCatalog != null) {
+                if (!translationCatalog.canRead()) {
+                    throw new MojoExecutionException("Can't read translationCatalog '" + translationCatalog.getAbsolutePath() + "'");
+                }
                 catalog.loadCatalog(translationCatalog);
             }
             POFile poTransl = po.cloneForTranslation();
@@ -547,6 +556,9 @@ public class ExtractMojo extends AbstractMojo {
                 if (((entry.translated == null) || (entry.translated.length() == 0)) && (!entry.contanisFlag("java-format"))) {
                     try {
                         entry.translated = gt.translate(entry.untranslated, sourceLanguage, lang);
+                        if (entry.translated == null) {
+                            getLog().info("Can't translate \"" + entry.untranslated + "\"");
+                        }
                     } catch (Throwable e) {
                         throw new MojoExecutionException("translate error", e);
                     }

@@ -21,6 +21,7 @@
 package ut;
 
 import com.pyx4j.i18n.annotations.I18nComment;
+import com.pyx4j.i18n.annotations.I18nContext;
 import com.pyx4j.i18n.shared.I18n;
 
 public class MainClass {
@@ -35,6 +36,20 @@ public class MainClass {
             System.out.println(i18n.tr("Go Nested"));
         }
 
+    }
+
+    public MainClass() {
+        System.out.println(i18n.tr("Constructor"));
+    }
+
+    @I18nContext(javaFormatFlag = true)
+    public MainClass(boolean v) {
+        System.out.println(i18n.tr("Constructor with java format"));
+    }
+
+    @I18nContext(javaFormatFlag = true)
+    public void somthing() {
+        System.out.println(i18n.tr("method with java format"));
     }
 
     @I18nComment("This is where we go")

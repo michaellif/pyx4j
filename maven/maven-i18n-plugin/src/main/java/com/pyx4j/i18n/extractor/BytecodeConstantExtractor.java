@@ -48,6 +48,7 @@ import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 import com.pyx4j.i18n.annotations.I18nAnnotation;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.annotations.I18nComment.I18nCommentTarget;
+import com.pyx4j.i18n.annotations.I18nContext;
 import com.pyx4j.i18n.annotations.Translate;
 
 public class BytecodeConstantExtractor {
@@ -61,6 +62,8 @@ public class BytecodeConstantExtractor {
     static String TRANSLATABLE_ANNOTATION_CLASS = AsmUtils.annotationCodeName(I18nAnnotation.class);
 
     static String COMMENT_ANNOTATION_CLASS = AsmUtils.annotationCodeName(I18nComment.class);
+
+    static String CONTEXT_ANNOTATION_CLASS = AsmUtils.annotationCodeName(I18nContext.class);
 
     private final Collection<ClassNode> translatableSuper = new Vector<ClassNode>();
 
@@ -105,6 +108,9 @@ public class BytecodeConstantExtractor {
                         continue;
                     }
                     AnnotationNode mnode = AsmUtils.getAnnotation(TRANSLATABLE_CLASS, methodNode);
+                    if (mnode == null) {
+                        mnode = AsmUtils.getAnnotation(CONTEXT_ANNOTATION_CLASS, methodNode);
+                    }
                     if (mnode != null) {
                         if (Boolean.TRUE.equals(AsmUtils.getAnnotationValue(mnode, "javaFormatFlag"))) {
                             elementDefintition.javaFormatFlag = true;
@@ -133,6 +139,20 @@ public class BytecodeConstantExtractor {
         @Override
         public Frame[] analyze(final String owner, final MethodNode m) throws AnalyzerException {
             currentMethodNode = m;
+            AnnotationNode mnode = AsmUtils.getAnnotation(CONTEXT_ANNOTATION_CLASS, currentMethodNode);
+            boolean javaFormatFlag = false;
+            String context = null;
+            if (mnode != null) {
+                if (Boolean.TRUE.equals(AsmUtils.getAnnotationValue(mnode, "javaFormatFlag"))) {
+                    javaFormatFlag = true;
+                }
+                Object v = AsmUtils.getAnnotationValue(mnode, "context");
+                if (v != null) {
+                    context = v.toString();
+                }
+
+            }
+            interpreter.setCurrentContext(context, javaFormatFlag);
             return super.analyze(owner, m);
         }
 
@@ -411,6 +431,9 @@ public class BytecodeConstantExtractor {
 
                 String methodComment = (String) AsmUtils.getAnnotationValue(COMMENT_ANNOTATION_CLASS, "value", methodNode);
                 String memeberContext = (String) AsmUtils.getAnnotationValue(TRANSLATION_CLASS, "context", methodNode);
+                if ((memeberContext == null) || memeberContext.length() == 0) {
+                    memeberContext = (String) AsmUtils.getAnnotationValue(CONTEXT_ANNOTATION_CLASS, "context", methodNode);
+                }
                 if ((memeberContext == null) || memeberContext.length() == 0) {
                     memeberContext = classContext;
                 }

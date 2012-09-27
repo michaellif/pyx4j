@@ -40,6 +40,8 @@ public class POCatalog implements Translator {
 
     private boolean updated = false;
 
+    public static boolean debug = false;
+
     public POCatalog(String lang, boolean loadDefault) {
         this.lang = lang;
         if (loadDefault) {
@@ -130,6 +132,9 @@ public class POCatalog implements Translator {
 
     public void write() {
         if (!updated) {
+            if (debug) {
+                System.out.println("POCatalog " + lang + " not updated");
+            }
             return;
         }
         if (!poDirectory.isDirectory()) {
@@ -155,6 +160,9 @@ public class POCatalog implements Translator {
         try {
             POFileWriter poWriter = new POFileWriter();
             poWriter.write(mainLandFile(), po);
+            if (debug) {
+                System.out.println("POCatalog " + lang + " file " + mainLandFile().getAbsolutePath() + " updated");
+            }
         } catch (IOException e) {
             throw new RuntimeException("POFile " + mainLandFile().getAbsolutePath() + " write error", e);
         }

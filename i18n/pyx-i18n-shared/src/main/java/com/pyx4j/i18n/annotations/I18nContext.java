@@ -25,31 +25,18 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ ElementType.TYPE, ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR })
+@Target({ ElementType.METHOD, ElementType.CONSTRUCTOR })
 @Retention(RetentionPolicy.CLASS)
-public @interface I18nComment {
-
-    String value();
-
-    public static enum I18nCommentTarget {
-
-        All,
-
-        /**
-         * Only the @I18n (IEntity/Enum) class name and do not affect all its members,
-         */
-        This,
-
-        /**
-         * Only add this comment to members
-         */
-        Memebers
-
-    }
+public @interface I18nContext {
 
     /**
-     * Where to add this comment, On member or filed this has no effect.
+     * Set gettext flag: java-format for extracted text
      */
-    I18nCommentTarget target() default I18nCommentTarget.All;
+    boolean javaFormatFlag() default false;
+
+    /**
+     * TBD strategy, Context if present is added to every translatable member of the class.
+     */
+    String context() default "";
 
 }

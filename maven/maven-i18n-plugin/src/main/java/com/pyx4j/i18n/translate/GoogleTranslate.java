@@ -94,6 +94,9 @@ public class GoogleTranslate {
         HttpResponse response = httpClient.execute(request);
 
         if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+            System.err.println("translate error " + response.getStatusLine().getStatusCode() + " " + response.getStatusLine().getReasonPhrase());
+            System.err.println("translate API key " + apiKey);
+            System.err.println(EntityUtils.toString(response.getEntity(), "UTF-8"));
             return null;
         } else {
             String responce = EntityUtils.toString(response.getEntity(), "UTF-8");

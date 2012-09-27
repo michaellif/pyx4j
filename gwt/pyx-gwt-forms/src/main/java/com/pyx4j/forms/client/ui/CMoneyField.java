@@ -27,6 +27,7 @@ import com.google.gwt.i18n.client.NumberFormat;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
+import com.pyx4j.i18n.annotations.I18nContext;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>> {
@@ -49,6 +50,7 @@ public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>
 
         private final NumberFormat nf;
 
+        @I18nContext(javaFormatFlag = true)
         MoneyFormat() {
             nf = NumberFormat.getFormat(i18n.tr("#,##0.00"));
         }
@@ -68,10 +70,11 @@ public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>
                 return null; // empty value case
             }
             try {
-                string = string.replaceAll("[,$]+", "");
-                // f and d are parsed by Double but we want to show error (VISTA-996)
-                string = string.replaceAll("[fd]+", "a");
-                return new BigDecimal(string);
+                string = string.trim();
+                if (string.startsWith("$")) {
+                    string = string.substring(1);
+                }
+                return new BigDecimal(nf.parse(string));
             } catch (NumberFormatException e) {
                 throw new ParseException(i18n.tr("Invalid money format. Enter valid number"), 0);
             }

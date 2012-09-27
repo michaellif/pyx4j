@@ -59,8 +59,17 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
 
     private int currentLineNr;
 
+    boolean currentContextJavaFormatFlag = false;
+
+    private String currentContext = null;
+
     public void setCurrentLineNr(int currentLineNr) {
         this.currentLineNr = currentLineNr;
+    }
+
+    public void setCurrentContext(String context, boolean javaFormatFlag) {
+        this.currentContext = context;
+        this.currentContextJavaFormatFlag = javaFormatFlag;
     }
 
     public void setCurrentComment(String currentComment) {
@@ -79,7 +88,8 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
                 Value arg = (Value) values.get(1);
                 if (arg instanceof StringConstantValue) {
                     boolean javaFormatFlag = (values.size() > 2);
-                    i18nString(currentLineNr, null, ((StringConstantValue) arg).string, javaFormatFlag, currentComment);
+                    i18nString(currentLineNr, currentContext, ((StringConstantValue) arg).string, javaFormatFlag || currentContextJavaFormatFlag,
+                            currentComment);
                 } else {
                     reportError(currentLineNr, arg);
                 }
@@ -88,7 +98,8 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
                 Value argText = (Value) values.get(2);
                 if ((argText instanceof StringConstantValue) && (argContext instanceof StringConstantValue)) {
                     boolean javaFormatFlag = (values.size() > 3);
-                    i18nString(currentLineNr, ((StringConstantValue) argContext).string, ((StringConstantValue) argText).string, javaFormatFlag, currentComment);
+                    String context = ((StringConstantValue) argContext).string;
+                    i18nString(currentLineNr, context, ((StringConstantValue) argText).string, javaFormatFlag, currentComment);
                 } else {
                     reportError(currentLineNr, argText);
                 }
