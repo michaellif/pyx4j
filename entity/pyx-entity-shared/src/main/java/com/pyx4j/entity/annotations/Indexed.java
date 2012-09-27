@@ -49,7 +49,9 @@ public @interface Indexed {
     char global() default 0;
 
     /**
-     * Allow for multi column indexes
+     * Allow for multi column indexes,
+     * 
+     * Unique per hierarchy: start with discriminator
      */
     String[] group() default {};
 
