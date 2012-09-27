@@ -14,9 +14,8 @@
 package com.propertyvista.server.common.gadgets.defaultsettings;
 
 import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadgetMetadata;
-import com.propertyvista.server.common.gadgets.GadgetMetadataCommonDefaultSettings;
 
-public class UnitTurnoverAnalysisGadgetMetadataDefaultSettings extends GadgetMetadataCommonDefaultSettings<UnitTurnoverAnalysisGadgetMetadata> {
+public class UnitTurnoverAnalysisGadgetMetadataDefaultSettings extends AbstractGadgetMetadataCommonDefaultSettings<UnitTurnoverAnalysisGadgetMetadata> {
 
     @Override
     public void init(UnitTurnoverAnalysisGadgetMetadata gadgetMetadata) {

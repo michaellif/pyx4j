@@ -26,6 +26,13 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
+/**
+ * @deprecated I've discovered that this approach of finding GadgetMetadata works only during local build on developer's machine, so it won't be used anymore.
+ *             Instead the {@link GadgetMetadata} concrete implementations, should to be bound implicitly in {@link GadgetMetadataRepository}, and it will be used
+ *             as a repository for all gadget types
+ * @author ArtyomB
+ */
+@Deprecated
 public class GadgetMetadataFinder {
 
     public static List<Class<? extends GadgetMetadata>> getGadgetMetadataClassesFromClassPath() {

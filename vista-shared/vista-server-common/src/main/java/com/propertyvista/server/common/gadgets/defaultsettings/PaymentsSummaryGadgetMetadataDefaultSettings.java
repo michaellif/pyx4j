@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.common.gadgets.defaultsettings;
 
-import static com.propertyvista.server.common.gadgets.ColumnDescriptorEntityBuilder.defColumn;
+import static com.propertyvista.server.common.gadgets.defaultsettings.ColumnDescriptorEntityBuilder.defColumn;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,9 +25,8 @@ import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
-import com.propertyvista.server.common.gadgets.GadgetMetadataCommonDefaultSettings;
 
-public class PaymentsSummaryGadgetMetadataDefaultSettings extends GadgetMetadataCommonDefaultSettings<PaymentsSummaryGadgetMetadata> {
+public class PaymentsSummaryGadgetMetadataDefaultSettings extends AbstractGadgetMetadataCommonDefaultSettings<PaymentsSummaryGadgetMetadata> {
 
     private static final I18n i18n = I18n.get(PaymentsSummaryGadgetMetadataDefaultSettings.class);
 

@@ -7,15 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-09-26
+ * Created on Sep 27, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.server.common.gadgets.defaultsettings;
 
-import com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2DGadgetMetadata;
-import com.propertyvista.server.common.gadgets.GadgetMetadataCommonDefaultSettings;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public class PieChart2DGadgetMetadataDefaultSettings extends GadgetMetadataCommonDefaultSettings<PieChart2DGadgetMetadata> {
+public class GadgetMetadataCommonDefaultSettings extends AbstractGadgetMetadataCommonDefaultSettings<GadgetMetadata> {
 
 }

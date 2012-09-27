@@ -20,7 +20,7 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public class GadgetMetadataFactoryTestBase extends TestCase {
+public class GadgetMetadataRepositoryTestBase extends TestCase {
 
     interface Predicate {
 
@@ -34,7 +34,7 @@ public class GadgetMetadataFactoryTestBase extends TestCase {
     /** skips metadatas marked with {@link AbstractEntity} */
     protected final void assertForEachGagetMetadataClass(String assertion, Predicate p) {
         StringBuilder b = new StringBuilder();
-        for (Class<? extends GadgetMetadata> klass : GadgetMetadataFinder.getGadgetMetadataClassesFromClassPath()) {
+        for (Class<? extends GadgetMetadata> klass : GadgetMetadataRepository.get().getGadgetMetadataClasses()) {
             String error = p.reportWhatIsWrongWith(klass);
             if (error != null) {
                 b.append(klass.getName());

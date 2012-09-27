@@ -13,9 +13,18 @@
  */
 package com.propertyvista.server.common.gadgets.defaultsettings;
 
-import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata;
-import com.propertyvista.server.common.gadgets.GadgetMetadataCommonDefaultSettings;
+import java.util.UUID;
 
-public class NoticesGadgetMetadataDefaultSettings extends GadgetMetadataCommonDefaultSettings<NoticesGadgetMetadata> {
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata.RefreshInterval;
+
+public class AbstractGadgetMetadataCommonDefaultSettings<G extends GadgetMetadata> implements GadgetMetadataDefaultSettings<G> {
+
+    @Override
+    public void init(G gadgetMetadata) {
+        gadgetMetadata.docking().column().setValue(0);
+        gadgetMetadata.refreshInterval().setValue(RefreshInterval.Never);
+        gadgetMetadata.gadgetId().setValue(UUID.randomUUID().toString());
+    }
 
 }

@@ -36,7 +36,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMet
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
-import com.propertyvista.server.common.gadgets.GadgetMetadataFactory;
+import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
 
 @SuppressWarnings("unchecked")
 public class DashboardGenerator extends Dashboards {
@@ -111,7 +111,7 @@ public class DashboardGenerator extends Dashboards {
         dmd.description().setValue(description);
         dmd.layoutType().setValue(LayoutType.One);
         for (Class<? extends GadgetMetadata> gadgetMetadata : gadgetMetadatas) {
-            dmd.gadgets().add(GadgetMetadataFactory.createGadgetMetadata(gadgetMetadata));
+            dmd.gadgets().add(GadgetMetadataRepository.get().createGadgetMetadata(gadgetMetadata));
         }
         return dmd;
     }

@@ -14,9 +14,8 @@
 package com.propertyvista.server.common.gadgets.defaultsettings;
 
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
-import com.propertyvista.server.common.gadgets.GadgetMetadataCommonDefaultSettings;
 
-public class ArrearsYOYAnalysisChartGadgetMetadataDefaultSettings extends GadgetMetadataCommonDefaultSettings<ArrearsYOYAnalysisChartGadgetMetadata> {
+public class ArrearsYOYAnalysisChartGadgetMetadataDefaultSettings extends AbstractGadgetMetadataCommonDefaultSettings<ArrearsYOYAnalysisChartGadgetMetadata> {
 
     @Override
     public void init(ArrearsYOYAnalysisChartGadgetMetadata gadgetMetadata) {

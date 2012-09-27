@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.common.gadgets.defaultsettings;
 
-import static com.propertyvista.server.common.gadgets.ColumnDescriptorEntityBuilder.defColumn;
+import static com.propertyvista.server.common.gadgets.defaultsettings.ColumnDescriptorEntityBuilder.defColumn;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,9 +25,8 @@ import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDT
 import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
-import com.propertyvista.server.common.gadgets.GadgetMetadataCommonDefaultSettings;
 
-public class ArrearsStatusGadgetMetadataDefaultSettings extends GadgetMetadataCommonDefaultSettings<ArrearsStatusGadgetMetadata> {
+public class ArrearsStatusGadgetMetadataDefaultSettings extends AbstractGadgetMetadataCommonDefaultSettings<ArrearsStatusGadgetMetadata> {
 
     private static final I18n i18n = I18n.get(ArrearsStatusGadgetMetadataDefaultSettings.class);
 
@@ -37,6 +36,7 @@ public class ArrearsStatusGadgetMetadataDefaultSettings extends GadgetMetadataCo
         gadgetMetadata.pageSize().setValue(10);
         gadgetMetadata.category().setValue(DebitType.total);
         gadgetMetadata.columnDescriptors().addAll(defineArrearsStatusListerColumns());
+
     }
 
     private List<ColumnDescriptorEntity> defineArrearsStatusListerColumns() {

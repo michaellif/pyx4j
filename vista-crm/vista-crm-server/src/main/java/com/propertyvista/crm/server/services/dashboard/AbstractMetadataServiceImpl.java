@@ -16,9 +16,6 @@ package com.propertyvista.crm.server.services.dashboard;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 import java.util.Vector;
 
@@ -41,18 +38,11 @@ import com.propertyvista.domain.dashboard.GadgetMetadataHolder;
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
-import com.propertyvista.server.common.gadgets.GadgetMetadataFactory;
-import com.propertyvista.server.common.gadgets.GadgetMetadataFinder;
+import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
 
 abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
 
     private final static I18n i18n = I18n.get(AbstractMetadataServiceImpl.class);
-
-    private final static Set<Class<? extends GadgetMetadata>> GADGET_TYPES;
-
-    static {
-        GADGET_TYPES = Collections.unmodifiableSet(new HashSet<Class<? extends GadgetMetadata>>(GadgetMetadataFinder.getGadgetMetadataClassesFromClassPath()));
-    }
 
     @Override
     public void listMetadata(AsyncCallback<Vector<DashboardMetadata>> callback) {
@@ -149,7 +139,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
 
     @Override
     public void createGadgetMetadata(AsyncCallback<GadgetMetadata> callback, GadgetMetadata proto) {
-        callback.onSuccess(GadgetMetadataFactory.createGadgetMetadata(proto));
+        callback.onSuccess(GadgetMetadataRepository.get().createGadgetMetadata(proto));
     }
 
     @Override
@@ -174,7 +164,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
     public void listAvailableGadgets(AsyncCallback<Vector<GadgetDescriptorDTO>> callback, DashboardType boardType) {
         Vector<GadgetDescriptorDTO> descriptors = new Vector<GadgetDescriptorDTO>();
 
-        for (Class<? extends GadgetMetadata> klass : GADGET_TYPES) {
+        for (Class<? extends GadgetMetadata> klass : GadgetMetadataRepository.get().getGadgetMetadataClasses()) {
             GadgetDescription gadgetDescription = klass.getAnnotation(GadgetDescription.class);
             // TODO add translation
             if ((boardType == DashboardType.building & BuildingGadget.class.isAssignableFrom(klass))

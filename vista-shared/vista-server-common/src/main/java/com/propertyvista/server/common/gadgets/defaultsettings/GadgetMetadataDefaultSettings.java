@@ -13,9 +13,10 @@
  */
 package com.propertyvista.server.common.gadgets.defaultsettings;
 
-import com.propertyvista.domain.dashboard.gadgets.type.ApplicationsGadgetMetadata;
-import com.propertyvista.server.common.gadgets.GadgetMetadataCommonDefaultSettings;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public class ApplicationsGadgetMetadataDefaultSettings extends GadgetMetadataCommonDefaultSettings<ApplicationsGadgetMetadata> {
+public interface GadgetMetadataDefaultSettings<G extends GadgetMetadata> {
+
+    void init(G gadgetMetadata);
 
 }

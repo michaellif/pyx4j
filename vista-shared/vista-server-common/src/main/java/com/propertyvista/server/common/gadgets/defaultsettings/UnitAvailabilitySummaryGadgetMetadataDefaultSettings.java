@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.common.gadgets.defaultsettings;
 
-import static com.propertyvista.server.common.gadgets.ColumnDescriptorEntityBuilder.defColumn;
+import static com.propertyvista.server.common.gadgets.defaultsettings.ColumnDescriptorEntityBuilder.defColumn;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,9 +23,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatusSummaryLineDTO;
 import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGadgetMetadata;
-import com.propertyvista.server.common.gadgets.GadgetMetadataCommonDefaultSettings;
 
-public class UnitAvailabilitySummaryGadgetMetadataDefaultSettings extends GadgetMetadataCommonDefaultSettings<UnitAvailabilitySummaryGadgetMetadata> {
+public class UnitAvailabilitySummaryGadgetMetadataDefaultSettings extends AbstractGadgetMetadataCommonDefaultSettings<UnitAvailabilitySummaryGadgetMetadata> {
 
     @Override
     public void init(UnitAvailabilitySummaryGadgetMetadata gadgetMetadata) {
