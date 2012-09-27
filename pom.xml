@@ -179,7 +179,8 @@
         <axis2Version>1.5.4</axis2Version>
         <wicket.version>1.5.0</wicket.version>
 
-        <google.translate.apiKey>AIzaSyAa7EDFOm17VLX7tLJqCZfn2SX8qT5kYcE</google.translate.apiKey>
+        <google.translate.apiKey>AIzaSyB4epMBre3NeR-_1fgKFz3-V6iA1qpfh-M</google.translate.apiKey>
+        <i18n.translate>ru,fr,es,zh_CN,zh_TW</i18n.translate>
         <poSaveLocation>true</poSaveLocation>
         <poSufix></poSufix>
     </properties>
@@ -452,6 +453,13 @@
             <modules>
                 <module>../pyx4j</module>
             </modules>
+        </profile>
+
+        <profile>
+            <id>i18n-ru</id>
+            <properties>
+                <i18n.translate>ru</i18n.translate>
+            </properties>
         </profile>
 
         <profile>

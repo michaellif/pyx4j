@@ -104,7 +104,7 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
 
     public static class GeoNumberFormat implements IFormat<Double> {
 
-        private final NumberFormat nf = NumberFormat.getFormat("#0.000000");;
+        private final NumberFormat nf = NumberFormat.getFormat(i18n.tr("#0.000000"));
 
         @Override
         public String format(Double value) {
@@ -129,7 +129,7 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
                     return Math.round(d + (min / 60.) + (sec / 3600.)) / 1000000.;
                 } else {
                     try {
-                        return Math.abs(Double.valueOf(string));
+                        return Math.abs(nf.parse(string));
                     } catch (NumberFormatException e) {
                         throw new ParseException(i18n.tr("Coordinate Format error"), 0);
                     }

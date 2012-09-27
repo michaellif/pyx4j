@@ -43,10 +43,19 @@ maven profiles used in build:
           mvn package -P i18n,i18n-merge  -Dmaven.test.skip=true
 
     * i18n,i18n-auto
-        Extract text catalogs and create automatic translations (ru and fr) using Google translate  (vista-i18n-catalog\src\main\resources\translations)
+        Extract text catalogs and create automatic translations (ru and fr) using Google translate and vista-i18n-catalog\src\main\resources\translations
+
+    * i18n,i18n-auto,i18n-ru
+        Only auto translate "ru"
+
+    * i18n,i18n-auto-all
+        Using Google translate update Vista calog vista-i18n-catalog\src\main\resources\translations
 
     * i18n,i18n-auto,i18n-auto-all
-	    Generate .po for ru and fr and update Translation Catalog using Google translate
+	    Generate .po for "ru", "fr" and other while updating Translation Catalog using Google translate
+
+    * i18n,i18n-auto,i18n-auto-all,i18n-ru
+	    Generate .po for "ru" while updating Translation Catalog using Google translate
 
     * caledon-tests
         Enable caledon tests

@@ -53,7 +53,6 @@ public class VistaEditorsComponentFactory extends EntityFormComponentFactory {
             return c;
         } else if (member.getValueClass().equals(GeoLocation.class)) {
             return new GeoLocationEditor();
-            //return new CGeoLocation();
         }
         return super.create(member);
     }
