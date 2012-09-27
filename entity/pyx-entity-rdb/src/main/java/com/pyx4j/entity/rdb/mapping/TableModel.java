@@ -541,6 +541,7 @@ public class TableModel {
             int parameterIndex = 1;
             if (classModel != ModelType.regular) {
                 DiscriminatorValue discriminator = entity.getValueClass().getAnnotation(DiscriminatorValue.class);
+                assert (discriminator != null) : "Can't persist Abstract " + entity.getValueClass();
                 stmt.setString(parameterIndex, discriminator.value());
                 parameterIndex++;
             }
