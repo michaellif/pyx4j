@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
@@ -45,8 +46,8 @@ import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
-import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.GadgetFactory;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
@@ -164,7 +165,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
             setLayout(dashboardMetadata.layoutType().getValue());
             // fill the dashboard with gadgets:
             for (GadgetMetadata gmd : dashboardMetadata.gadgets()) {
-                IGadgetInstance gadget = new GadgetFactory().createGadget(gmd);
+                IGadgetInstance gadget = GWT.<IGadgetFactory> create(IGadgetFactory.class).createGadget(gmd);
                 if (gadget != null) {
                     // TODO a workaround
                     if (gmd.docking().column().getValue() == null) {

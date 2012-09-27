@@ -26,7 +26,7 @@ import com.propertyvista.crm.client.ui.gadgets.components.LeadsDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.LeasesFromLeadsDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
-import com.propertyvista.crm.client.ui.gadgets.leadsandrentals.LeadsAndRentalsSummaryForm;
+import com.propertyvista.crm.client.ui.gadgets.forms.LeadsAndRentalsSummaryForm;
 import com.propertyvista.crm.rpc.dto.gadgets.LeadsAndRentalsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeadsAndRentalsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.LeadsAndRentalsGadgetMetadata;

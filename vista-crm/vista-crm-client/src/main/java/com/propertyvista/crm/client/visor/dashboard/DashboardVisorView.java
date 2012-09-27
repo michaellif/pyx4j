@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.visor.dashboard;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -23,9 +24,9 @@ import com.google.gwt.user.client.ui.Composite;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
-import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.GadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.ICommonGadgetSettingsContainer;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.LayoutManagersFactory;
@@ -66,7 +67,8 @@ public class DashboardVisorView extends Composite {
                 });
             }
         };
-        this.dashboard = new AbstractDashboard(commonGadgetSettingsContainer, new GadgetFactory(), LayoutManagersFactory.createLayoutManagers()) {
+        this.dashboard = new AbstractDashboard(commonGadgetSettingsContainer, GWT.<IGadgetFactory> create(IGadgetFactory.class),
+                LayoutManagersFactory.createLayoutManagers()) {
 
             @Override
             protected void onDashboardMetadataChanged() {

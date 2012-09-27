@@ -27,7 +27,7 @@ import com.propertyvista.crm.client.ui.gadgets.components.LeasesDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.UnitDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
-import com.propertyvista.crm.client.ui.gadgets.leasexpiration.LeaseExpirationSummaryForm;
+import com.propertyvista.crm.client.ui.gadgets.forms.LeaseExpirationSummaryForm;
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeaseExpirationGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMetadata;

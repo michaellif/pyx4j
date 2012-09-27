@@ -11,14 +11,10 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets.impl;
+package com.propertyvista.crm.client.ui.gadgets.impl.demo;
 
-import com.propertyvista.crm.rebind.GadgetFactoryGenerator;
+public interface _DemoGadgetPackageMarker {
 
-/**
- * This interface is used by {@link GadgetFactoryGenerator} to search for implementations of gadgets.
- * Gadgets implementations that are in this package here will be added automatically to GWT generated gadget factory (<code>GWT.create(IGadgetFactory))
- */
-public interface _GadgetPackageMarker {
+    public boolean ENABLE_DEMO_GADGETS = true;
 
 }

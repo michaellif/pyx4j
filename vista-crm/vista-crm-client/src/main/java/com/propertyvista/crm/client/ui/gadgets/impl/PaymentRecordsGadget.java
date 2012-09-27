@@ -36,7 +36,7 @@ import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEven
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
-import com.propertyvista.crm.client.ui.gadgets.payments.PaymentRecordsGadgetMetadataForm;
+import com.propertyvista.crm.client.ui.gadgets.forms.PaymentRecordsGadgetMetadataForm;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;

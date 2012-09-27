@@ -21,12 +21,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
-import com.propertyvista.crm.client.ui.gadgets.collections.CollectionsSummaryForm;
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.PaymentDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.TenantsDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
+import com.propertyvista.crm.client.ui.gadgets.forms.CollectionsSummaryForm;
 import com.propertyvista.crm.rpc.dto.gadgets.CollectionsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.CollectionsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.CollectionsGadgetMetadata;

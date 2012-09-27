@@ -25,7 +25,7 @@ import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.MaintenanceRequestsDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
-import com.propertyvista.crm.client.ui.gadgets.maintenance.MaintenanceGadgetSummaryForm;
+import com.propertyvista.crm.client.ui.gadgets.forms.MaintenanceGadgetSummaryForm;
 import com.propertyvista.crm.rpc.dto.gadgets.MaintenanceGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.MaintenanceGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.MaintenanceRequestCriteriaProvider;

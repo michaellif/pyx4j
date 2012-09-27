@@ -26,7 +26,7 @@ import com.propertyvista.crm.client.ui.gadgets.components.LeasesDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.UnitDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
-import com.propertyvista.crm.client.ui.gadgets.notices.NoticesSummaryForm;
+import com.propertyvista.crm.client.ui.gadgets.forms.NoticesSummaryForm;
 import com.propertyvista.crm.rpc.dto.gadgets.NoticesGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.NoticesGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata;
