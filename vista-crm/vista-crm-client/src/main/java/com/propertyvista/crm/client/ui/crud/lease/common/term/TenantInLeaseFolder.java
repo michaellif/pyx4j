@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -43,6 +44,7 @@ import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.dto.LeaseTermDTO;
 
@@ -157,7 +159,6 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
             super(Tenant.class);
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public IsWidget createContent() {
             FormFlexPanel main = new FormFlexPanel();
@@ -219,8 +220,8 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
             main.setWidget(0, 0, left);
             main.setWidget(0, 1, right);
 
-            main.getColumnFormatter().setWidth(0, "60%");
-            main.getColumnFormatter().setWidth(1, "40%");
+            main.getColumnFormatter().setWidth(0, "50%");
+            main.getColumnFormatter().setWidth(1, "50%");
 
             return main;
         }
@@ -230,10 +231,15 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
-
             if (isEditable()) {
                 ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().participantId()), getValue().getPrimaryKey());
+
+                get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
+
+                if (get(proto().role()) instanceof CComboBox) {
+                    CComboBox<Role> role = (CComboBox<Role>) get(proto().role());
+                    role.setOptions(Role.tenantRelated());
+                }
 
                 get(proto().percentage()).setEditable(getValue().role().getValue() != LeaseParticipant.Role.Dependent);
 

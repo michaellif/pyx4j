@@ -126,8 +126,8 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
             main.setWidget(0, 0, left);
             main.setWidget(0, 1, right);
 
-            main.getColumnFormatter().setWidth(0, "60%");
-            main.getColumnFormatter().setWidth(1, "40%");
+            main.getColumnFormatter().setWidth(0, "50%");
+            main.getColumnFormatter().setWidth(1, "50%");
 
             return main;
         }
@@ -136,25 +136,25 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
-
             if (isEditable()) {
                 ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().participantId()), getValue().getPrimaryKey());
-            }
 
-            if (get(proto().screening()) instanceof CEntityComboBox<?>) {
-                @SuppressWarnings("unchecked")
-                CEntityComboBox<PersonScreening> combo = (CEntityComboBox<PersonScreening>) get(proto().screening());
-                combo.resetCriteria();
-                combo.addCriterion(PropertyCriterion.eq(combo.proto().screene(), getValue().customer()));
-                combo.refreshOptions();
-            }
+                get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
 
-            if (get(proto().tenant()) instanceof CComboBox<?>) {
-                @SuppressWarnings("unchecked")
-                CComboBox<Tenant> combo = (CComboBox<Tenant>) get(proto().tenant());
-                combo.setOptions(leaseTerm.getValue().version().tenants());
-                combo.getOptions();
+                if (get(proto().screening()) instanceof CEntityComboBox<?>) {
+                    @SuppressWarnings("unchecked")
+                    CEntityComboBox<PersonScreening> combo = (CEntityComboBox<PersonScreening>) get(proto().screening());
+                    combo.resetCriteria();
+                    combo.addCriterion(PropertyCriterion.eq(combo.proto().screene(), getValue().customer()));
+                    combo.refreshOptions();
+                }
+
+                if (get(proto().tenant()) instanceof CComboBox<?>) {
+                    @SuppressWarnings("unchecked")
+                    CComboBox<Tenant> combo = (CComboBox<Tenant>) get(proto().tenant());
+                    combo.setOptions(leaseTerm.getValue().version().tenants());
+                    combo.getOptions();
+                }
             }
         }
     }
