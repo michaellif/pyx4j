@@ -562,6 +562,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
             lease.unit().set(unit);
 
+            lease.billingAccount().billingType().set(ServerSideFactory.create(BillingFacade.class).ensureBillingType(lease));
+
             updateTermUnitRelatedData(leaseTerm, lease.unit(), lease.type().getValue());
         } else {
             throw new IllegalArgumentException(i18n.tr("Invalid Lease/Term pair supplied"));

@@ -48,7 +48,6 @@ import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -295,8 +294,16 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
             ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(serviceItem.element().cast().getPrimaryKey());
         }
 
+        lease.currentTerm().termFrom().setValue(FinancialTestsUtils.getDate(leaseDateFrom));
+        lease.currentTerm().termTo().setValue(FinancialTestsUtils.getDate(leaseDateTo));
+
         lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, (AptUnit) serviceItem.element().cast());
-        lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(serviceItem.price().getValue());
+
+        if (agreedPrice != null) {
+            lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(agreedPrice);
+        } else {
+            lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(serviceItem.price().getValue());
+        }
 
         Tenant tenantInLease = EntityFactory.create(Tenant.class);
         tenantInLease.leaseCustomer().customer().set(tenantDataModel.getTenant());
@@ -305,27 +312,15 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         lease.approvalDate().setValue(lease.currentTerm().termFrom().getValue());
 
-        // TODO - this must be done via facade
-        lease.currentTerm().termFrom().setValue(FinancialTestsUtils.getDate(leaseDateFrom));
-        lease.currentTerm().termTo().setValue(FinancialTestsUtils.getDate(leaseDateTo));
-        lease.currentTerm().version().leaseProducts().serviceItem().expirationDate().set(lease.currentTerm().termTo());
-
         lease.billingAccount().carryforwardBalance().setValue(carryforwardBalance);
 
-        if (carryforwardBalance != null) {
-            lease.creationDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
-        }
-
-        if (agreedPrice != null) {
-            lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(agreedPrice);
-        }
+        lease.creationDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
 
         ServerSideFactory.create(LeaseFacade.class).persist(lease);
-
-        BillingType billingType = ServerSideFactory.create(BillingFacade.class).ensureBillingType(lease);
-        lease.billingAccount().billingType().set(billingType);
-        Persistence.service().persist(lease.billingAccount());
         Persistence.service().commit();
+    }
+
+    protected void renewLease(String leaseDateTo, BigDecimal agreedPrice) {
     }
 
     protected Bill approveApplication(boolean printBill) {

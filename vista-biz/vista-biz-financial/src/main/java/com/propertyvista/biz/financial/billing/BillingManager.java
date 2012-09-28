@@ -79,12 +79,17 @@ public class BillingManager {
             lease.currentTerm().set(Persistence.service().retrieve(LeaseTerm.class, lease.currentTerm().getPrimaryKey().asDraftKey()));
         }
 
-        lease = ensureInitBillingAccount(lease);
         BillingCycle billingCycle = getNextBillingCycle(lease);
         validateBillingRunPreconditions(billingCycle, lease, preview);
         return produceBill(billingCycle, lease, preview);
     }
 
+    /**
+     * 
+     * @param date
+     *            - executionTargetDate
+     * @param dynamicStatisticsRecord
+     */
     static void runBilling(LogicalDate date, StatisticsRecord dynamicStatisticsRecord) {
         for (BillingType billingType : Persistence.service().query(EntityQueryCriteria.create(BillingType.class))) {
 
@@ -261,29 +266,6 @@ public class BillingManager {
         } else {
             return getSubsiquentBillingCycle(previousBill.billingCycle());
         }
-    }
-
-    /**
-     * Set appropriate billingType if needed
-     */
-    static Lease ensureInitBillingAccount(Lease lease) {
-        if (lease.currentTerm().termFrom().isNull()) {
-            throw new BillingException("'Lease from' date is not set");
-        }
-
-        // fetch *BillingAccount* from the persistence to be sure we get the most recent version
-        // (i.e. fetching it from lease.billingAccount() might give use not the most recent one, if lease is not up to date for some oblivious reason)
-        BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, lease.billingAccount().getPrimaryKey());
-        if (billingAccount == null) {
-            throw new BillingException("BillingAccount not exist");
-        }
-        if (billingAccount.billingType().isNull()) {
-            billingAccount.billingType().set(ensureBillingType(lease));
-            Persistence.service().persist(billingAccount);
-            Persistence.service().commit();
-            lease.billingAccount().set(billingAccount);
-        }
-        return lease;
     }
 
     static Bill getLatestConfirmedBill(Lease lease) {
