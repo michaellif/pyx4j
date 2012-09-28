@@ -21,11 +21,14 @@
 package com.pyx4j.entity.shared;
 
 import com.pyx4j.entity.annotations.ColumnId;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.i18n.annotations.I18n;
 
-@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+@EmbeddedEntity
 public interface IPersonalIdentity extends IEntity {
 
     //TODO for pyx merge number @UpdatedBy(column = NumberUpdateValue.class)

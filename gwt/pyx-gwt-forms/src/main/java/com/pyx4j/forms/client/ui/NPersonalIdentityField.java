@@ -10,7 +10,7 @@ import com.pyx4j.entity.shared.IPersonalIdentity;
 
 public class NPersonalIdentityField extends NTextBox<IPersonalIdentity> {
 
-    public NPersonalIdentityField(CTextFieldBase<IPersonalIdentity, ?> cComponent) {
+    public NPersonalIdentityField(CPersonalIdentityField cComponent) {
         super(cComponent);
     }
 

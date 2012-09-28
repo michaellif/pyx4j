@@ -42,19 +42,29 @@ public class CPersonalIdentityField extends CTextFieldBase<IPersonalIdentity, NP
     }
 
     public CPersonalIdentityField(String title) {
-        super(title);
-        setFormat(new PersonalIdentityFormat());
+        this(null, title, false);
     }
 
-    public CPersonalIdentityField(String title, boolean mandatory) {
-        this(title);
-        this.setMandatory(mandatory);
+    public CPersonalIdentityField(String pattern, String title) {
+        this(pattern, title, false);
+    }
+
+    public CPersonalIdentityField(String pattern, String title, boolean mandatory) {
+        super(title);
+        setMandatory(mandatory);
+        setPersonalIdentityFormat(pattern == null ? "" : pattern);
     }
 
     // Possible formats - 'XXX-XXX-xxx', 'XXXX XXXX XXXX xxxx', 'xxx XXX XXX xxx'
     public void setPersonalIdentityFormat(String pattern) {
+        super.setWatermark(pattern.toUpperCase());
         setFormat(new PersonalIdentityFormat(pattern));
         addValueValidator(new TextBoxParserValidator<IPersonalIdentity>());
+    }
+
+    @Override
+    public void setWatermark(String watermark) {
+        //do nothing, watermark is set by component
     }
 
     @Override
