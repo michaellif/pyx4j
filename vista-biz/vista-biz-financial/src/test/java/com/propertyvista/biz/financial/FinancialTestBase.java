@@ -75,6 +75,7 @@ import com.propertyvista.server.jobs.DepositInterestAdjustmentProcess;
 import com.propertyvista.server.jobs.DepositRefundProcess;
 import com.propertyvista.server.jobs.LeaseActivationProcess;
 import com.propertyvista.server.jobs.LeaseCompletionProcess;
+import com.propertyvista.server.jobs.LeaseRenewalProcess;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.test.preloader.ARPolicyDataModel;
@@ -320,7 +321,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().commit();
     }
 
-    protected void renewLease(String leaseDateTo, BigDecimal agreedPrice) {
+    protected void renewLease(String leaseDateTo, BigDecimal agreedPrice, LeaseTerm.Type leaseTermType) {
+        LeaseTerm term = ServerSideFactory.create(LeaseFacade.class).createOffer(lease, leaseTermType);
+        term.termTo().setValue(FinancialTestsUtils.getDate(leaseDateTo));
+        ServerSideFactory.create(LeaseFacade.class).acceptOffer(lease, term);
     }
 
     protected Bill approveApplication(boolean printBill) {
@@ -750,5 +754,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         // schedule lease activation and completion process to run daily
         schedulePmcProcess(new LeaseActivationProcess(), new Schedule());
         schedulePmcProcess(new LeaseCompletionProcess(), new Schedule());
+        schedulePmcProcess(new LeaseRenewalProcess(), new Schedule());
     }
 }
