@@ -17,8 +17,6 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public interface IGadgetFactory {
 
-    Class<? extends GadgetMetadata> getGadgetMetadataClass();
-
     IGadgetInstance createGadget(GadgetMetadata metadata) throws Error;
 
 }

@@ -14,9 +14,7 @@
 package com.propertyvista.crm.rebind;
 
 import java.io.PrintWriter;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.ext.Generator;
@@ -25,9 +23,8 @@ import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.TreeLogger.Type;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
-import com.google.gwt.core.ext.typeinfo.JPackage;
-import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
+import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
@@ -36,73 +33,34 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
-import com.propertyvista.crm.client.ui.gadgets.impl.ArrearsGadget;
-import com.propertyvista.crm.client.ui.gadgets.impl._GadgetPackageMarker;
-import com.propertyvista.crm.client.ui.gadgets.impl.demo._DemoGadgetPackageMarker;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public class GadgetFactoryGenerator extends Generator {
-
-    // TODO just for testing, use classpath scanning for the implementations of gadgets
-    private static final Class<? extends GadgetInstanceBase<?>>[] GADGET_IMPLS = (Class<? extends GadgetInstanceBase<?>>[]) new Class<?>[] {//@formatter:off
-            ArrearsGadget.class,
-    };//@formatter:on
-
-    private List<Class<? extends GadgetInstanceBase<?>>> getGadgetImplClasses(TreeLogger logger, List<JPackage> gadgetPackages)
-            throws UnableToCompleteException {
-        if (false) {
-            return Arrays.<Class<? extends GadgetInstanceBase<?>>> asList(GADGET_IMPLS);
-        } else {
-            List<Class<? extends GadgetInstanceBase<?>>> xs = new ArrayList<Class<? extends GadgetInstanceBase<?>>>();
-            for (JPackage jpackage : gadgetPackages) {
-                for (JType type : jpackage.getTypes()) {
-
-                    Class<? extends GadgetInstanceBase<?>> klass = null;
-                    try {
-                        klass = ((Class<? extends GadgetInstanceBase<?>>) GadgetFactoryGenerator.this.getClass().getClassLoader()
-                                .loadClass(type.getQualifiedSourceName()));
-                    } catch (ClassNotFoundException e) {
-                        logger.log(Type.ERROR, e.toString());
-                        throw new UnableToCompleteException();
-                    }
-                    if (GadgetInstanceBase.class.isAssignableFrom(klass) & !Modifier.isAbstract(klass.getModifiers())) {
-                        xs.add(klass);
-                    }
-
-                }
-            }
-            if (xs.isEmpty()) {
-                logger.log(Type.WARN, "the gadget factory generator hasn't found any gadgets");
-            }
-            return xs;
-        }
-    }
 
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
         String implName = null;
         try {
-            JClassType type = context.getTypeOracle().getType(typeName);
-            List<JPackage> gadgetsPackages = new ArrayList<JPackage>();
-            gadgetsPackages.add(context.getTypeOracle().getPackage(_GadgetPackageMarker.class.getPackage().getName()));
-            if (_DemoGadgetPackageMarker.ENABLE_DEMO_GADGETS) {
-                gadgetsPackages.add(context.getTypeOracle().getPackage(_DemoGadgetPackageMarker.class.getPackage().getName()));
+            JClassType factoryInterfaceType = context.getTypeOracle().getType(typeName);
+            List<Class<? extends GadgetInstanceBase<?>>> gadgetImplClasses = getGadgetImplClasses(logger, context.getTypeOracle());
+
+            if (gadgetImplClasses.isEmpty()) {
+                logger.log(Type.WARN, "the gadget factory generator hasn't found any gadgets");
+            } else {
+                logger.log(Type.INFO, "generating gadget factory for the following gadgets: " + toString(gadgetImplClasses));
             }
 
-            logger.log(Type.INFO, "generating gadget factory for the following gadgets: " + getGadgetImplClasses(logger, gadgetsPackages).toString());
-
-            String implSimpleName = type.getSimpleSourceName() + "Impl";
-            PrintWriter pw = context.tryCreate(logger, type.getPackage().getName(), implSimpleName);
+            String implSimpleName = (factoryInterfaceType.getSimpleSourceName() + "Impl").replaceFirst("^I", "");
+            PrintWriter pw = context.tryCreate(logger, factoryInterfaceType.getPackage().getName(), implSimpleName);
             if (pw != null) {
-                ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(type.getPackage().getName(), implSimpleName);
+                ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(factoryInterfaceType.getPackage().getName(), implSimpleName);
                 composer.addImplementedInterface(IGadgetFactory.class.getName());
                 composer.addImport(RuntimeException.class.getName());
                 composer.addImport(GadgetInstanceBase.class.getName());
                 composer.addImport(GadgetMetadata.class.getName());
 
-                for (Class<? extends GadgetInstanceBase<?>> klass : getGadgetImplClasses(logger, gadgetsPackages)) {
+                for (Class<? extends GadgetInstanceBase<?>> klass : gadgetImplClasses) {
                     composer.addImport(klass.getName());
-                    composer.addImport(getGadgetMetadataClass(logger, klass).getName());
                 }
                 SourceWriter w = composer.createSourceWriter(context, pw);
 
@@ -116,11 +74,11 @@ public class GadgetFactoryGenerator extends Generator {
                 w.println("GadgetInstanceBase<?> gadget = null;");
                 w.println("if (metadata == null) {");
                 w.indentln("return null;");
-                for (Class<? extends GadgetInstanceBase<?>> gadgetClass : getGadgetImplClasses(logger, gadgetsPackages)) {
+                for (Class<? extends GadgetInstanceBase<?>> gadgetClass : gadgetImplClasses) {
                     Class<? extends GadgetMetadata> gadgetMetadataClass = getGadgetMetadataClass(logger, gadgetClass);
                     w.indent();
-                    w.println("} else if (metadata.getInstanceValueClass().equals(%s.class)) {", gadgetMetadataClass.getSimpleName());
-                    w.indentln("gadget = new %s((%s)metadata);", gadgetClass.getSimpleName(), gadgetMetadataClass.getSimpleName());
+                    w.println("} else if (metadata.getInstanceValueClass().equals(%s.class)) {", gadgetMetadataClass.getName());
+                    w.indentln("gadget = new %s((%s) metadata);", gadgetClass.getSimpleName(), gadgetMetadataClass.getName());
                     composer.addImport(gadgetClass.getName());
                     w.outdent();
                 }
@@ -133,17 +91,12 @@ public class GadgetFactoryGenerator extends Generator {
                 w.indentln("return gadget;");
                 w.println("}");
                 w.outdent();
-                w.println("}"); // gadget implementation
-
-                // TODO remove this method 
-                w.println();
-                w.println("@Override public Class<? extends GadgetMetadata> getGadgetMetadataClass() {");
-                w.indentln("return null;");
                 w.println("}");
+
                 w.outdent();
                 w.commit(logger);
             }
-            implName = type.getPackage().getName() + "." + implSimpleName;
+            implName = factoryInterfaceType.getPackage().getName() + "." + implSimpleName;
         } catch (NotFoundException e) {
             logger.log(Type.ERROR, e.toString());
             throw new UnableToCompleteException();
@@ -153,6 +106,7 @@ public class GadgetFactoryGenerator extends Generator {
 
     }
 
+    @SuppressWarnings("unchecked")
     private static Class<? extends GadgetMetadata> getGadgetMetadataClass(TreeLogger logger, Class<? extends GadgetInstanceBase<?>> gadgetClass)
             throws UnableToCompleteException {
         Class<? extends GadgetMetadata> gadgetMetadataClass = null;
@@ -173,5 +127,31 @@ public class GadgetFactoryGenerator extends Generator {
         }
 
         return gadgetMetadataClass;
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<Class<? extends GadgetInstanceBase<?>>> getGadgetImplClasses(TreeLogger logger, TypeOracle typeOracle) throws UnableToCompleteException {
+        JClassType baseGadgetType = typeOracle.findType(GadgetInstanceBase.class.getName());
+        List<Class<? extends GadgetInstanceBase<?>>> gadgetImplClasses = new ArrayList<Class<? extends GadgetInstanceBase<?>>>();
+        ClassLoader classLoader = getClass().getClassLoader();
+        for (JClassType type : typeOracle.getTypes()) {
+            if (baseGadgetType.isAssignableFrom(type) & !type.isAbstract()) {
+                try {
+                    gadgetImplClasses.add((Class<? extends GadgetInstanceBase<?>>) classLoader.loadClass(type.getQualifiedSourceName()));
+                } catch (ClassNotFoundException e) {
+                    logger.log(Type.ERROR, "failed to load gadget implementation class '" + type.getQualifiedSourceName() + "'", e);
+                }
+            }
+        }
+
+        return gadgetImplClasses;
+    }
+
+    private static String toString(List<Class<? extends GadgetInstanceBase<?>>> classList) {
+        StringBuilder builder = new StringBuilder();
+        for (Class<?> klass : classList) {
+            builder.append(klass.getSimpleName()).append(' ');
+        }
+        return builder.toString();
     }
 }
