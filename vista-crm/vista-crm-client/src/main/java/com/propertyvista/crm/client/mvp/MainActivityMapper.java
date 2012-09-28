@@ -649,17 +649,16 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new DashboardEditorActivity(crudPlace);
 
 // - Settings:
-                    } else if (place instanceof CrmSiteMap.Account) {
+                    } else if (place instanceof CrmSiteMap.Account.AccountData) {
                         // the service that the Account related activities use doesn't care about the 'id' arg,
                         // but nevertheless the base "Activity" classes need it, so we just add a value let them be happy
                         switch (crudPlace.getType()) {
                         case editor:
-                            ((CrmSiteMap.Account) place).formEditorPlace(new Key(1));
+                            ((CrmSiteMap.Account.AccountData) place).formEditorPlace(new Key(1));
                             activity = new AccountEditorActivity(crudPlace);
                             break;
                         case viewer:
-                        case lister: /* this is required hack, don't remove!!! */
-                            ((CrmSiteMap.Account) place).formViewerPlace(new Key(1));
+                            ((CrmSiteMap.Account.AccountData) place).formViewerPlace(new Key(1));
                             activity = new AccountViewerActivity(crudPlace);
                             break;
                         }

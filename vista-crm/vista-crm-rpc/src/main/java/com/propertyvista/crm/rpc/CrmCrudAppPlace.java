@@ -18,6 +18,14 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 public abstract class CrmCrudAppPlace extends CrudAppPlace {
 
+    public CrmCrudAppPlace() {
+        super();
+    }
+
+    public CrmCrudAppPlace(Type type) {
+        super(type);
+    }
+
     @Override
     public void setType(Type type) {
         super.setType(type);
