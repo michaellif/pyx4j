@@ -403,6 +403,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
             updateLeaseDeposits(lease);
 
+            // clear next reference:
             lease.nextTerm().set(null);
 
             // save lease with new current term:
