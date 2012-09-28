@@ -104,7 +104,7 @@ public class BytecodeConstantExtractor {
                         elementDefintition.isMainElement = true;
                     }
                     elementDefintition.strategy = getStrategyAnnotationValue(methodNode);
-                    if ((elementDefintition.strategy == I18nStrategy.IgnoreAll) || (elementDefintition.strategy == I18nStrategy.IgnoreMemeber)) {
+                    if ((elementDefintition.strategy == I18nStrategy.IgnoreAll) || (elementDefintition.strategy == I18nStrategy.IgnoreMember)) {
                         continue;
                     }
                     AnnotationNode mnode = AsmUtils.getAnnotation(TRANSLATABLE_CLASS, methodNode);
@@ -417,7 +417,7 @@ public class BytecodeConstantExtractor {
             }
         }
 
-        if (strategy != I18nStrategy.IgnoreMemeber) {
+        if (strategy != I18nStrategy.IgnoreMember) {
             for (@SuppressWarnings("rawtypes")
             Iterator i = classNode.methods.iterator(); i.hasNext();) {
                 MethodNode methodNode = (MethodNode) i.next();

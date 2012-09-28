@@ -61,7 +61,7 @@ public @interface I18n {
          */
         IgnoreThis,
 
-        IgnoreMemeber,
+        IgnoreMember,
 
         IgnoreAll
 

@@ -34,7 +34,7 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface AuthenticationRequest extends IEntity {
 
-    @I18n(strategy = I18n.I18nStrategy.IgnoreMemeber)
+    @I18n(strategy = I18n.I18nStrategy.IgnoreMember)
     IPrimitive<String> logoutApplicationUrl();
 
     @Editor(type = EditorType.email)
