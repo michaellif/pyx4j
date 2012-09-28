@@ -20,7 +20,11 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pyx4j.entity.annotations.ColumnId;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.rdb.dialect.Dialect;
@@ -60,6 +64,32 @@ public class JoinOwnedInformation extends JoinInformation {
             }
             sqlOrderColumnName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(orderMemberMeta));
             orderMemberName = orderMemberMeta.getFieldName();
+
+            if (EntityFactory.getEntityMeta(childEntityClass).getPersistableSuperClass() != null) {
+                List<String> discriminatorStrings = new ArrayList<String>();
+                for (Class<? extends IEntity> subclass : Mappings.getPersistableAssignableFrom(childEntityClass)) {
+                    DiscriminatorValue discriminator = subclass.getAnnotation(DiscriminatorValue.class);
+                    if (discriminator != null) {
+                        discriminatorStrings.add(discriminator.value());
+                    }
+                }
+                if (discriminatorStrings.size() == 1) {
+                    sqlChildJoinContition = dialect.sqlDiscriminatorColumnName() + " = '" + discriminatorStrings.get(0) + "'";
+                } else {
+                    sqlChildJoinContition = dialect.sqlDiscriminatorColumnName() + " IN (";
+                    boolean first = true;
+                    for (String desc : discriminatorStrings) {
+                        if (first) {
+                            first = false;
+                        } else {
+                            sqlChildJoinContition += ",";
+                        }
+                        sqlChildJoinContition += "'" + desc + "'";
+                    }
+                    sqlChildJoinContition += ") ";
+                }
+            }
+
         }
     }
 

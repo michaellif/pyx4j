@@ -66,7 +66,7 @@ public class SQLUtils {
     }
 
     public static String debugInfo(Dialect dialect, ResultSet resultSet) throws SQLException {
-        return "TODO 'TableName'" + " id = " + resultSet.getLong(dialect.getNamingConvention().sqlIdColumnName());
+        return "'" + resultSet.getMetaData().getTableName(1) + "'" + " id = " + resultSet.getLong(dialect.getNamingConvention().sqlIdColumnName());
     }
 
     public static void logAndClearWarnings(Connection connection) throws SQLException {

@@ -33,16 +33,20 @@ public class MemberExternalOperationsMeta extends MemberOperationsMeta {
 
     private final String sqlValueName;
 
+    private final String sqlChildJoinContition;
+
     private final ValueAdapter ownerValueAdapter;
 
     public MemberExternalOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta, String memberPath,
-            Class<? extends IEntity> joinTableClass, boolean joinTableSameAsTarget, String sqlOwnerName, ValueAdapter ownerValueAdapter, String sqlValueName) {
+            Class<? extends IEntity> joinTableClass, boolean joinTableSameAsTarget, String sqlOwnerName, ValueAdapter ownerValueAdapter, String sqlValueName,
+            String sqlChildJoinContition) {
         super(memberAccess, valueAdapter, sqlName, memberMeta, memberPath);
         this.joinTableClass = joinTableClass;
         this.joinTableSameAsTarget = joinTableSameAsTarget;
         this.sqlOwnerName = sqlOwnerName;
         this.ownerValueAdapter = ownerValueAdapter;
         this.sqlValueName = sqlValueName;
+        this.sqlChildJoinContition = sqlChildJoinContition;
     }
 
     public Class<? extends IEntity> joinTableClass() {
@@ -63,6 +67,14 @@ public class MemberExternalOperationsMeta extends MemberOperationsMeta {
 
     public ValueAdapter getOwnerValueAdapter() {
         return ownerValueAdapter;
+    }
+
+    public boolean hasChildJoinContition() {
+        return sqlChildJoinContition != null;
+    }
+
+    public String getSqlChildJoinContition() {
+        return sqlChildJoinContition;
     }
 
     @Override

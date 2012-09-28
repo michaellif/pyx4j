@@ -40,6 +40,10 @@ import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalO
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmChildA;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmChildB;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmParent;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st2.BidirectionalOneToMany2PlmSTChildA;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st2.BidirectionalOneToMany2PlmSTChildAC;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st2.BidirectionalOneToMany2PlmSTChildB;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st2.BidirectionalOneToMany2PlmSTParent;
 
 public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingTestCase {
 
@@ -362,6 +366,175 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
 
             List<BidirectionalOneToManyPlmSTChildA> children = srv.query(criteria);
+
+            assertEquals(4, children.size());
+        }
+
+    }
+
+    public void testOwnedDualListPolymorphismInSingleTable() {
+        String testId = uniqueString();
+
+        // setup
+        BidirectionalOneToMany2PlmSTParent o1 = EntityFactory.create(BidirectionalOneToMany2PlmSTParent.class);
+        o1.testId().setValue(testId);
+        o1.value().setValue("papa1");
+
+        BidirectionalOneToMany2PlmSTChildA c1A1 = EntityFactory.create(BidirectionalOneToMany2PlmSTChildA.class);
+        c1A1.testId().setValue(testId);
+        c1A1.valueA().setValue("a1");
+        c1A1.value().setValue("a");
+
+        BidirectionalOneToMany2PlmSTChildA c1A2 = EntityFactory.create(BidirectionalOneToMany2PlmSTChildA.class);
+        c1A2.testId().setValue(testId);
+        c1A2.valueA().setValue("a2");
+        c1A2.value().setValue("x");
+
+        BidirectionalOneToMany2PlmSTChildB c1B1 = EntityFactory.create(BidirectionalOneToMany2PlmSTChildB.class);
+        c1B1.testId().setValue(testId);
+        c1B1.valueB().setValue("b1");
+        c1B1.value().setValue("b");
+
+        BidirectionalOneToMany2PlmSTChildB c1B2 = EntityFactory.create(BidirectionalOneToMany2PlmSTChildB.class);
+        c1B2.testId().setValue(testId);
+        c1B2.valueB().setValue("b2");
+        c1B2.value().setValue("x");
+
+        o1.childrenA().add(c1A1);
+        o1.childrenB().add(c1B1);
+        o1.childrenA().add(c1A2);
+        o1.childrenB().add(c1B2);
+
+        srv.persist(o1);
+
+        BidirectionalOneToMany2PlmSTParent o2 = EntityFactory.create(BidirectionalOneToMany2PlmSTParent.class);
+        o2.testId().setValue(testId);
+        o2.value().setValue("papa2");
+
+        BidirectionalOneToMany2PlmSTChildA c2A1 = EntityFactory.create(BidirectionalOneToMany2PlmSTChildA.class);
+        c2A1.testId().setValue(testId);
+        c2A1.valueA().setValue("a1");
+        c2A1.value().setValue("b");
+
+        o2.childrenA().add(c2A1);
+
+        srv.persist(o2);
+
+        {
+            // test retrieval of owned polymorphic children        
+            BidirectionalOneToMany2PlmSTParent papaFromDB = srv.retrieve(BidirectionalOneToMany2PlmSTParent.class, o1.getPrimaryKey());
+            assertNotNull("we must retrieve something", papaFromDB);
+
+            assertEquals("assert list size", 2, papaFromDB.childrenA().size());
+            assertEquals("assert list size", 2, papaFromDB.childrenB().size());
+
+            assertEquals(BidirectionalOneToMany2PlmSTChildA.class, papaFromDB.childrenA().get(0).getInstanceValueClass());
+            assertEquals(BidirectionalOneToMany2PlmSTChildA.class, papaFromDB.childrenA().get(1).getInstanceValueClass());
+            assertEquals(BidirectionalOneToMany2PlmSTChildB.class, papaFromDB.childrenB().get(0).getInstanceValueClass());
+            assertEquals(BidirectionalOneToMany2PlmSTChildB.class, papaFromDB.childrenB().get(1).getInstanceValueClass());
+        }
+
+        {
+            // test search
+            EntityQueryCriteria<BidirectionalOneToMany2PlmSTParent> criteria = EntityQueryCriteria.create(BidirectionalOneToMany2PlmSTParent.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().childrenA().$().value(), "x"));
+            List<BidirectionalOneToMany2PlmSTParent> papas = srv.query(criteria);
+
+            assertNotNull(papas);
+            assertEquals(1, papas.size());
+            assertEquals("papa1", papas.get(0).value().getValue());
+        }
+
+        {
+            EntityQueryCriteria<BidirectionalOneToMany2PlmSTParent> criteria = EntityQueryCriteria.create(BidirectionalOneToMany2PlmSTParent.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().childrenA().$().value(), "b"));
+            criteria.desc(criteria.proto().value());
+            List<BidirectionalOneToMany2PlmSTParent> papas = srv.query(criteria);
+
+            assertNotNull(papas);
+            assertEquals(1, papas.size());
+            assertEquals("papa2", papas.get(0).value().getValue());
+        }
+
+        {
+            // test search by Class
+            EntityQueryCriteria<BidirectionalOneToMany2PlmSTParent> criteria = EntityQueryCriteria.create(BidirectionalOneToMany2PlmSTParent.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().childrenA(), BidirectionalOneToMany2PlmSTChildA.class));
+            List<BidirectionalOneToMany2PlmSTParent> papas = srv.query(criteria);
+
+            assertNotNull(papas);
+            assertEquals(2, papas.size());
+        }
+
+        {
+            // test search by Class
+            EntityQueryCriteria<BidirectionalOneToMany2PlmSTParent> criteria = EntityQueryCriteria.create(BidirectionalOneToMany2PlmSTParent.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.notExists(criteria.proto().childrenB()));
+            List<BidirectionalOneToMany2PlmSTParent> papas = srv.query(criteria);
+
+            assertNotNull(papas);
+            assertEquals(1, papas.size());
+            assertEquals("papa2", papas.get(0).value().getValue());
+        }
+
+        {
+            // test search not exists
+            EntityQueryCriteria<BidirectionalOneToMany2PlmSTParent> criteria = EntityQueryCriteria.create(BidirectionalOneToMany2PlmSTParent.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.notExists(criteria.proto().childrenB()));
+            List<BidirectionalOneToMany2PlmSTParent> papas = srv.query(criteria);
+
+            assertNotNull(papas);
+            assertEquals(1, papas.size());
+            assertEquals("papa2", papas.get(0).value().getValue());
+        }
+
+        // setup for query
+        BidirectionalOneToMany2PlmSTParent o3 = EntityFactory.create(BidirectionalOneToMany2PlmSTParent.class);
+        o3.testId().setValue(testId);
+        o3.value().setValue("papa3");
+        srv.persist(o3);
+
+        BidirectionalOneToMany2PlmSTChildAC c3AC1 = EntityFactory.create(BidirectionalOneToMany2PlmSTChildAC.class);
+        c3AC1.testId().setValue(testId);
+        c3AC1.valueA().setValue("ac1");
+        c3AC1.value().setValue("ac");
+        c3AC1.parent().set(o3);
+        srv.persist(c3AC1);
+
+        // test search IN criteria by Classes
+        {
+            EntityQueryCriteria<BidirectionalOneToMany2PlmSTParent> criteria = EntityQueryCriteria.create(BidirectionalOneToMany2PlmSTParent.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion
+                    .in(criteria.proto().childrenA(), BidirectionalOneToMany2PlmSTChildA.class, BidirectionalOneToMany2PlmSTChildAC.class));
+            List<BidirectionalOneToMany2PlmSTParent> papas = srv.query(criteria);
+
+            assertNotNull(papas);
+            assertEquals(3, papas.size());
+        }
+
+        // test search IN criteria by Values
+        {
+            EntityQueryCriteria<BidirectionalOneToMany2PlmSTParent> criteria = EntityQueryCriteria.create(BidirectionalOneToMany2PlmSTParent.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.in(criteria.proto().childrenA(), c1A1, c2A1, c3AC1));
+            List<BidirectionalOneToMany2PlmSTParent> papas = srv.query(criteria);
+
+            assertNotNull(papas);
+            assertEquals(3, papas.size());
+        }
+
+        // Query children by itself use multiple inheritance
+        {
+            EntityQueryCriteria<BidirectionalOneToMany2PlmSTChildA> criteria = EntityQueryCriteria.create(BidirectionalOneToMany2PlmSTChildA.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+
+            List<BidirectionalOneToMany2PlmSTChildA> children = srv.query(criteria);
 
             assertEquals(4, children.size());
         }

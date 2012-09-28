@@ -243,6 +243,9 @@ public class TableModelCollections {
                 }
                 sql.append(name).append(" = ?");
             }
+            if (member.hasChildJoinContition()) {
+                sql.append(" AND ").append(member.getSqlChildJoinContition());
+            }
 
             if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
@@ -342,6 +345,9 @@ public class TableModelCollections {
                     sql.append(" AND ");
                 }
                 sql.append(name).append(" = ?");
+            }
+            if (member.hasChildJoinContition()) {
+                sql.append(" AND ").append(member.getSqlChildJoinContition());
             }
 
             if (dialect.isMultitenantSharedSchema()) {

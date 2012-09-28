@@ -269,7 +269,7 @@ class TableDDL {
             }
         }
         if ((indexDef.group != null) && indexDef.group.startsWith("discriminator")) {
-            sql.append(", ").append(dialect.getNamingConvention().sqlIdColumnName()).append(dialect.getNamingConvention().sqlDiscriminatorColumnNameSufix());
+            sql.append(", ").append(dialect.sqlDiscriminatorColumnName());
         }
         sql.append(")");
         return sql.toString();

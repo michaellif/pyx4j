@@ -201,6 +201,12 @@ class QueryJoinBuilder {
             condition.append(" = ");
             condition.append(fromAlias).append('.').append(dialect.getNamingConvention().sqlIdColumnName());
 
+            if (memberOper.hasChildJoinContition()) {
+                condition.append(" AND (");
+                condition.append(memberJoin.alias).append('.').append(memberOper.getSqlChildJoinContition());
+                condition.append(")");
+            }
+
             if (memberOper instanceof MemberVersionDataOperationsMeta) {
                 MemberVersionDataOperationsMeta memberVersionDataOper = (MemberVersionDataOperationsMeta) memberOper;
                 condition.append(" AND (");
