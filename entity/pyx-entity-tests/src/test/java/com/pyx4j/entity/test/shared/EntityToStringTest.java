@@ -40,9 +40,9 @@ public class EntityToStringTest extends InitializerTestBase {
 
     public void testToStringOrderByDeclaration() {
         SortBy entity = EntityFactory.create(SortBy.class);
-        List<String> toStringMemeber = entity.getEntityMeta().getToStringMemberNames();
-        assertEquals("member 1 Order", 0, toStringMemeber.indexOf(entity.name().getFieldName()));
-        assertEquals("member 2 Order", 1, toStringMemeber.indexOf(entity.amount().getFieldName()));
+        List<String> toStringMember = entity.getEntityMeta().getToStringMemberNames();
+        assertEquals("member 1 Order", 0, toStringMember.indexOf(entity.name().getFieldName()));
+        assertEquals("member 2 Order", 1, toStringMember.indexOf(entity.amount().getFieldName()));
     }
 
     public void testStringView() {

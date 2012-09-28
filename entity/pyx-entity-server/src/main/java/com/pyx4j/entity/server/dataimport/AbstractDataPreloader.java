@@ -131,7 +131,7 @@ public abstract class AbstractDataPreloader implements DataPreloader {
     }
 
     @SuppressWarnings("unchecked")
-    protected <T extends IEntity> T retrieveByMemeber(Class<T> clazz, IObject<?> member, String value) {
+    protected <T extends IEntity> T retrieveByMember(Class<T> clazz, IObject<?> member, String value) {
         String key = clazz.getName() + "-" + member.getFieldName() + "=" + value;
         if (namesCache.containsKey(key)) {
             return (T) namesCache.get(key);

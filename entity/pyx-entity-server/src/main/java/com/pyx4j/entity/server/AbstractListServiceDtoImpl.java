@@ -64,8 +64,8 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
     }
 
     @Override
-    protected boolean retriveDetachedMember(IEntity dboMemeber) {
-        return Persistence.service().retrieve(dboMemeber);
+    protected boolean retriveDetachedMember(IEntity dboMember) {
+        return Persistence.service().retrieve(dboMember);
     }
 
     protected Path convertPropertyDTOPathToDBOPath(String path, E dboProto, DTO dtoProto) {

@@ -47,9 +47,9 @@ public class IPojoTest extends TestCase {
         BeanUtils.setProperty(pojo, entity.name().getFieldName(), "Petia 10");
         assertEquals("Modify Entit value via Pojo", "Petia 10", entity.name().getValue());
 
-        assertNull(BeanUtils.getProperty(pojo, entity.entMemeber().getFieldName() + "." + entity.entMemeber().description().getFieldName()));
-        entity.entMemeber().description().setValue("Kolia 7");
-        assertEquals("Kolia 7", BeanUtils.getProperty(pojo, entity.entMemeber().getFieldName() + "." + entity.entMemeber().description().getFieldName()));
+        assertNull(BeanUtils.getProperty(pojo, entity.entMember().getFieldName() + "." + entity.entMember().description().getFieldName()));
+        entity.entMember().description().setValue("Kolia 7");
+        assertEquals("Kolia 7", BeanUtils.getProperty(pojo, entity.entMember().getFieldName() + "." + entity.entMember().description().getFieldName()));
 
     }
 

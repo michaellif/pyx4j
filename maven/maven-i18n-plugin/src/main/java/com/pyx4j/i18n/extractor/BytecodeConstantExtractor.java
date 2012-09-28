@@ -306,18 +306,18 @@ public class BytecodeConstantExtractor {
             String comment = (String) AsmUtils.getAnnotationValue(COMMENT_ANNOTATION_CLASS, "value", fieldNode);
 
             Object translationValue = AsmUtils.getAnnotationValue(TRANSLATION_CLASS, "value", fieldNode);
-            String memeberContext = (String) AsmUtils.getAnnotationValue(TRANSLATION_CLASS, "context", fieldNode);
-            if ((memeberContext == null) || memeberContext.length() == 0) {
-                memeberContext = classContext;
+            String memberContext = (String) AsmUtils.getAnnotationValue(TRANSLATION_CLASS, "context", fieldNode);
+            if ((memberContext == null) || memberContext.length() == 0) {
+                memberContext = classContext;
             }
 
             if (translationValue != null) {
-                extractor.addEntry(classSourceFileName, 1, memeberContext, translationValue.toString(), false, classComment, comment);
+                extractor.addEntry(classSourceFileName, 1, memberContext, translationValue.toString(), false, classComment, comment);
             } else {
                 if (capitalize) {
-                    extractor.addEntry(classSourceFileName, 1, memeberContext, EnglishGrammar.capitalize(fieldNode.name), false, classComment, comment);
+                    extractor.addEntry(classSourceFileName, 1, memberContext, EnglishGrammar.capitalize(fieldNode.name), false, classComment, comment);
                 } else {
-                    extractor.addEntry(classSourceFileName, 1, memeberContext, fieldNode.name, false, classComment, comment);
+                    extractor.addEntry(classSourceFileName, 1, memberContext, fieldNode.name, false, classComment, comment);
                 }
             }
 
@@ -360,15 +360,15 @@ public class BytecodeConstantExtractor {
         I18nCommentTarget classCommentTarget = getCommentTargetAnnotationValue(classNode);
         String classContext = (String) AsmUtils.getAnnotationValue(TRANSLATABLE_CLASS, "context", classNode);
 
-        String classCommentMemebers = null;
+        String classCommentMembers = null;
         String classCommentSelf = null;
         switch (classCommentTarget) {
         case All:
             classCommentSelf = classComment;
-            classCommentMemebers = classComment;
+            classCommentMembers = classComment;
             break;
-        case Memebers:
-            classCommentMemebers = classComment;
+        case Members:
+            classCommentMembers = classComment;
             break;
         case This:
             classCommentSelf = classComment;
@@ -430,12 +430,12 @@ public class BytecodeConstantExtractor {
                 }
 
                 String methodComment = (String) AsmUtils.getAnnotationValue(COMMENT_ANNOTATION_CLASS, "value", methodNode);
-                String memeberContext = (String) AsmUtils.getAnnotationValue(TRANSLATION_CLASS, "context", methodNode);
-                if ((memeberContext == null) || memeberContext.length() == 0) {
-                    memeberContext = (String) AsmUtils.getAnnotationValue(CONTEXT_ANNOTATION_CLASS, "context", methodNode);
+                String memberContext = (String) AsmUtils.getAnnotationValue(TRANSLATION_CLASS, "context", methodNode);
+                if ((memberContext == null) || memberContext.length() == 0) {
+                    memberContext = (String) AsmUtils.getAnnotationValue(CONTEXT_ANNOTATION_CLASS, "context", methodNode);
                 }
-                if ((memeberContext == null) || memeberContext.length() == 0) {
-                    memeberContext = classContext;
+                if ((memberContext == null) || memberContext.length() == 0) {
+                    memberContext = classContext;
                 }
 
                 boolean methodNameFoound = false;
@@ -453,7 +453,7 @@ public class BytecodeConstantExtractor {
                                     if (elementDefintition.isMainElement) {
                                         methodNameFoound = true;
                                     }
-                                    extractor.addEntry(classSourceFileName, 2, memeberContext, value, elementDefintition.javaFormatFlag, classCommentMemebers,
+                                    extractor.addEntry(classSourceFileName, 2, memberContext, value, elementDefintition.javaFormatFlag, classCommentMembers,
                                             methodComment);
                                 }
                             } else {
@@ -470,10 +470,10 @@ public class BytecodeConstantExtractor {
                         capitalize = false;
                     }
                     if (capitalize) {
-                        extractor.addEntry(classSourceFileName, 2, memeberContext, EnglishGrammar.capitalize(methodNode.name), false, classCommentMemebers,
+                        extractor.addEntry(classSourceFileName, 2, memberContext, EnglishGrammar.capitalize(methodNode.name), false, classCommentMembers,
                                 methodComment);
                     } else {
-                        extractor.addEntry(classSourceFileName, 2, memeberContext, methodNode.name, false, classCommentMemebers, methodComment);
+                        extractor.addEntry(classSourceFileName, 2, memberContext, methodNode.name, false, classCommentMembers, methodComment);
                     }
                 }
             }

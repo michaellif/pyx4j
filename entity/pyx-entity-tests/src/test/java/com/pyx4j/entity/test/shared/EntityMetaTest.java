@@ -175,26 +175,26 @@ public class EntityMetaTest extends InitializerTestBase {
     public void testPolymorphicMembersOverride() {
         {
             EntityMeta metaImpl = EntityFactory.getEntityMeta(PolymorphicVersionedA.class);
-            MemberMeta memeberMetaImp = metaImpl.getMemberMeta("version");
-            assertEquals(PolymorphicVersionedA.PolymorphicVersionDataA.class, memeberMetaImp.getValueClass());
+            MemberMeta memberMetaImp = metaImpl.getMemberMeta("version");
+            assertEquals(PolymorphicVersionedA.PolymorphicVersionDataA.class, memberMetaImp.getValueClass());
         }
 
         {
             EntityMeta metaSuper = EntityFactory.getEntityMeta(PolymorphicVersionedSuper.class);
-            MemberMeta memeberMetaSuper = metaSuper.getMemberMeta("version");
-            assertEquals(PolymorphicVersionedSuper.PolymorphicVersionDataSuper.class, memeberMetaSuper.getValueClass());
+            MemberMeta memberMetaSuper = metaSuper.getMemberMeta("version");
+            assertEquals(PolymorphicVersionedSuper.PolymorphicVersionDataSuper.class, memberMetaSuper.getValueClass());
         }
 
         {
             EntityMeta dataMetaImpl = EntityFactory.getEntityMeta(PolymorphicVersionedA.PolymorphicVersionDataA.class);
-            MemberMeta dataMemeberMetaImp = dataMetaImpl.getMemberMeta("holder");
-            assertEquals(PolymorphicVersionedA.class, dataMemeberMetaImp.getValueClass());
+            MemberMeta dataMemberMetaImp = dataMetaImpl.getMemberMeta("holder");
+            assertEquals(PolymorphicVersionedA.class, dataMemberMetaImp.getValueClass());
         }
 
         {
             EntityMeta dataMetaSuper = EntityFactory.getEntityMeta(PolymorphicVersionedSuper.PolymorphicVersionDataSuper.class);
-            MemberMeta dataMemeberMetaSuper = dataMetaSuper.getMemberMeta("holder");
-            assertEquals(PolymorphicVersionedSuper.class, dataMemeberMetaSuper.getValueClass());
+            MemberMeta dataMemberMetaSuper = dataMetaSuper.getMemberMeta("holder");
+            assertEquals(PolymorphicVersionedSuper.class, dataMemberMetaSuper.getValueClass());
         }
     }
 

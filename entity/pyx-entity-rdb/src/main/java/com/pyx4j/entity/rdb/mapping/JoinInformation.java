@@ -50,7 +50,7 @@ abstract class JoinInformation {
 
     String sqlOrderColumnName = null;
 
-    String orderMemeberName = null;
+    String orderMemberName = null;
 
     ValueAdapter ownerValueAdapter;
 
@@ -127,16 +127,16 @@ abstract class JoinInformation {
         return ownerMemberMeta;
     }
 
-    private static boolean ownerClassMatch(Class<?> memeberClass, Class<?>... entityClasses) {
-        if (memeberClass.getAnnotation(Inheritance.class) != null) {
+    private static boolean ownerClassMatch(Class<?> memberClass, Class<?>... entityClasses) {
+        if (memberClass.getAnnotation(Inheritance.class) != null) {
             for (Class<?> entityClass : entityClasses) {
-                if (memeberClass.isAssignableFrom(entityClass)) {
+                if (memberClass.isAssignableFrom(entityClass)) {
                     return true;
                 }
             }
         } else {
             for (Class<?> entityClass : entityClasses) {
-                if (memeberClass.isAssignableFrom(entityClass)) {
+                if (memberClass.isAssignableFrom(entityClass)) {
                     return true;
                 }
             }

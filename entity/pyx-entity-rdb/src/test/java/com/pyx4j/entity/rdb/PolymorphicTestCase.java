@@ -44,15 +44,15 @@ import com.pyx4j.entity.test.shared.domain.inherit.single.SReference;
 
 public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
-    public void testMemeberPersist() {
-        testMemeber(TestCaseMethod.Persist);
+    public void testMemberPersist() {
+        testMember(TestCaseMethod.Persist);
     }
 
-    public void testMemeberMerge() {
-        testMemeber(TestCaseMethod.Merge);
+    public void testMemberMerge() {
+        testMember(TestCaseMethod.Merge);
     }
 
-    private void testMemeber(TestCaseMethod testCaseMethod) {
+    private void testMember(TestCaseMethod testCaseMethod) {
 
         ReferenceEntity ent = EntityFactory.create(ReferenceEntity.class);
         Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
@@ -76,15 +76,15 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Assert.assertEquals("Proper value", ent2.nameC2().getValue(), ent2r.nameC2().getValue());
     }
 
-    public void testMemeberDetachedL1Persist() {
-        testMemeberDetachedL1(TestCaseMethod.Persist);
+    public void testMemberDetachedL1Persist() {
+        testMemberDetachedL1(TestCaseMethod.Persist);
     }
 
-    public void testMemeberDetachedL1Merge() {
-        testMemeberDetachedL1(TestCaseMethod.Merge);
+    public void testMemberDetachedL1Merge() {
+        testMemberDetachedL1(TestCaseMethod.Merge);
     }
 
-    private void testMemeberDetachedL1(TestCaseMethod testCaseMethod) {
+    private void testMemberDetachedL1(TestCaseMethod testCaseMethod) {
 
         Concrete2Entity ent = EntityFactory.create(Concrete2Entity.class);
         ent.nameC2().setValue("c1:" + uniqueString());
@@ -114,15 +114,15 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
     }
 
-    public void testMemeberDetachedL2Persist() {
-        testMemeberDetachedL2(TestCaseMethod.Persist);
+    public void testMemberDetachedL2Persist() {
+        testMemberDetachedL2(TestCaseMethod.Persist);
     }
 
-    public void testMemeberDetachedL2Merge() {
-        testMemeberDetachedL2(TestCaseMethod.Merge);
+    public void testMemberDetachedL2Merge() {
+        testMemberDetachedL2(TestCaseMethod.Merge);
     }
 
-    private void testMemeberDetachedL2(TestCaseMethod testCaseMethod) {
+    private void testMemberDetachedL2(TestCaseMethod testCaseMethod) {
         ReferenceEntity ent = EntityFactory.create(ReferenceEntity.class);
         ent.name().setValue("r:" + uniqueString());
 
@@ -159,15 +159,15 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
     }
 
-    public void testListMemeberPersist() {
-        testListMemeber(TestCaseMethod.Persist);
+    public void testListMemberPersist() {
+        testListMember(TestCaseMethod.Persist);
     }
 
-    public void testListMemeberMerge() {
-        testListMemeber(TestCaseMethod.Merge);
+    public void testListMemberMerge() {
+        testListMember(TestCaseMethod.Merge);
     }
 
-    private void testListMemeber(TestCaseMethod testCaseMethod) {
+    private void testListMember(TestCaseMethod testCaseMethod) {
 
         ReferenceEntity ent = EntityFactory.create(ReferenceEntity.class);
 
@@ -515,15 +515,15 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Assert.assertEquals("Proper value", ent.nameC2().getValue(), ent2r2.nameC2().getValue());
     }
 
-    public void testSingleTableMemeberPersist() {
-        testSingleTableMemeber(TestCaseMethod.Persist);
+    public void testSingleTableMemberPersist() {
+        testSingleTableMember(TestCaseMethod.Persist);
     }
 
-    public void testSingleTableMemeberMerge() {
-        testSingleTableMemeber(TestCaseMethod.Merge);
+    public void testSingleTableMemberMerge() {
+        testSingleTableMember(TestCaseMethod.Merge);
     }
 
-    private void testSingleTableMemeber(TestCaseMethod testCaseMethod) {
+    private void testSingleTableMember(TestCaseMethod testCaseMethod) {
         String testId = uniqueString();
 
         SReference ent = EntityFactory.create(SReference.class);

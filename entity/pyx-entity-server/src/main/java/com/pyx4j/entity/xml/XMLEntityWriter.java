@@ -269,7 +269,7 @@ public class XMLEntityWriter {
                 continue;
             }
 
-            if (!emitMemeber(entity, memberName, member)) {
+            if (!emitMember(entity, memberName, member)) {
                 continue;
             }
             if (!isEmitLogTransient()) {
@@ -324,7 +324,7 @@ public class XMLEntityWriter {
         xml.endIdented();
     }
 
-    protected boolean emitMemeber(IEntity entity, String memberName, IObject<?> member) {
+    protected boolean emitMember(IEntity entity, String memberName, IObject<?> member) {
         return !member.isNull();
     }
 

@@ -375,10 +375,10 @@ public class EntityMetaImpl implements EntityMeta {
         if (toStringMemberNames == null) {
             toStringMemberNames = new Vector<String>();
             final Map<String, ToString> sortKeys = new HashMap<String, ToString>();
-            for (String memeber : getMemberNames()) {
+            for (String member : getMemberNames()) {
                 Method method;
                 try {
-                    method = entityClass.getMethod(memeber);
+                    method = entityClass.getMethod(member);
                 } catch (Throwable e) {
                     throw new Error(e);
                 }
@@ -407,10 +407,10 @@ public class EntityMetaImpl implements EntityMeta {
     public synchronized List<String> getBusinessEqualMemberNames() {
         if (businessEqualMemberNames == null) {
             businessEqualMemberNames = new Vector<String>();
-            for (String memeber : getMemberNames()) {
+            for (String member : getMemberNames()) {
                 Method method;
                 try {
-                    method = entityClass.getMethod(memeber);
+                    method = entityClass.getMethod(member);
                 } catch (Throwable e) {
                     throw new Error(e);
                 }

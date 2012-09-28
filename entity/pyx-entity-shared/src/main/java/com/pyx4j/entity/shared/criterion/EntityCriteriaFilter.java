@@ -66,12 +66,12 @@ public class EntityCriteriaFilter<E extends IEntity> implements Filter<E> {
     }
 
     private boolean accept(E input, PropertyCriterion propertyCriterion) {
-        IObject<?> valueMemeber = input.getMember(new Path(propertyCriterion.getPropertyPath()));
+        IObject<?> valueMember = input.getMember(new Path(propertyCriterion.getPropertyPath()));
         Object value;
-        if (valueMemeber instanceof IEntity) {
-            value = valueMemeber;
+        if (valueMember instanceof IEntity) {
+            value = valueMember;
         } else {
-            value = valueMemeber.getValue();
+            value = valueMember.getValue();
         }
         switch (propertyCriterion.getRestriction()) {
         case NOT_EQUAL:

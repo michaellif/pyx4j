@@ -146,8 +146,8 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
         shortDTOMemberPath.append(dtoMemberPath.getRootObjectClassName()).append(Path.PATH_SEPARATOR);
         Iterator<String> it = dtoMemberPath.getPathMembers().iterator();
         while (it.hasNext()) {
-            String memeber = it.next();
-            shortDTOMemberPath.append(memeber).append(Path.PATH_SEPARATOR);
+            String member = it.next();
+            shortDTOMemberPath.append(member).append(Path.PATH_SEPARATOR);
             b = bindingByDTOMemberPath.get(new Path(shortDTOMemberPath.toString()));
             if (b != null) {
                 StringBuilder shortDBOMemberPath = new StringBuilder(b.dboMemberPath.toString());
@@ -169,7 +169,7 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
         return dto;
     }
 
-    protected boolean retriveDetachedMember(IEntity dboMemeber) {
+    protected boolean retriveDetachedMember(IEntity dboMember) {
         return false;
     }
 

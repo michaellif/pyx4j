@@ -100,11 +100,11 @@ public class InMemeoryListService<E extends IEntity> implements AbstractListServ
             }
 
             String getValue(E entity) {
-                IObject<?> valueMemeber = entity.getMember(path);
-                if (valueMemeber instanceof IEntity) {
-                    return valueMemeber.getStringView();
+                IObject<?> valueMember = entity.getMember(path);
+                if (valueMember instanceof IEntity) {
+                    return valueMember.getStringView();
                 } else {
-                    return valueMemeber.getStringView();
+                    return valueMember.getStringView();
                 }
             }
         };

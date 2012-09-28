@@ -35,7 +35,7 @@ public interface PojoTestEntity extends IEntity {
 
     IPrimitive<Integer> rating();
 
-    PojoMemberTestEntity entMemeber();
+    PojoMemberTestEntity entMember();
 
     IList<PojoMemberTestEntity> entList();
 

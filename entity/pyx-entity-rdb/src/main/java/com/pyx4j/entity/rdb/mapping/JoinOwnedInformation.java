@@ -59,7 +59,7 @@ public class JoinOwnedInformation extends JoinInformation {
                         + entityMeta.getEntityClass().getName() + "\n add @OrderColumn to " + childEntityClass);
             }
             sqlOrderColumnName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(orderMemberMeta));
-            orderMemeberName = orderMemberMeta.getFieldName();
+            orderMemberName = orderMemberMeta.getFieldName();
         }
     }
 

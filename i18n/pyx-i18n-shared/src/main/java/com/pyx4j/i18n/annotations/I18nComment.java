@@ -43,7 +43,7 @@ public @interface I18nComment {
         /**
          * Only add this comment to members
          */
-        Memebers
+        Members
 
     }
 

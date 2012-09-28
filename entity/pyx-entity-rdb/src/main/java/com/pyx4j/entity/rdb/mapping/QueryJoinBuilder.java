@@ -250,8 +250,8 @@ class QueryJoinBuilder {
             putMemberJoin(path, memberJoin);
 
             @SuppressWarnings("unchecked")
-            Class<? extends IEntity> memeberEntityClass = (Class<? extends IEntity>) memberOper.getMemberMeta().getValueClass();
-            memberJoin.sqlTableName = TableModel.getTableName(dialect, EntityFactory.getEntityMeta(memeberEntityClass));
+            Class<? extends IEntity> memberEntityClass = (Class<? extends IEntity>) memberOper.getMemberMeta().getValueClass();
+            memberJoin.sqlTableName = TableModel.getTableName(dialect, EntityFactory.getEntityMeta(memberEntityClass));
 
             StringBuilder condition = new StringBuilder();
             condition.append(memberJoin.alias).append('.').append(dialect.getNamingConvention().sqlIdColumnName());
@@ -275,8 +275,8 @@ class QueryJoinBuilder {
             putMemberJoin(path, memberJoin);
 
             @SuppressWarnings("unchecked")
-            Class<? extends IEntity> memeberEntityClass = (Class<? extends IEntity>) memberOper.getMemberMeta().getValueClass();
-            memberJoin.sqlTableName = TableModel.getTableName(dialect, EntityFactory.getEntityMeta(memeberEntityClass));
+            Class<? extends IEntity> memberEntityClass = (Class<? extends IEntity>) memberOper.getMemberMeta().getValueClass();
+            memberJoin.sqlTableName = TableModel.getTableName(dialect, EntityFactory.getEntityMeta(memberEntityClass));
 
             StringBuilder condition = new StringBuilder();
             condition.append(memberJoin.alias).append('.').append(dialect.getNamingConvention().sqlIdColumnName());

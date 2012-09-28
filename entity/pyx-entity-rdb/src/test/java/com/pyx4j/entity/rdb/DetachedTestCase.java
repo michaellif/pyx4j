@@ -34,7 +34,7 @@ import com.pyx4j.entity.test.shared.domain.detached.OwnedWithBackReference;
 //TODO move to GAE tests as well
 public abstract class DetachedTestCase extends DatastoreTestBase {
 
-    private void testDetachedMemeber(TestCaseMethod testCaseMethod) {
+    private void testDetachedMember(TestCaseMethod testCaseMethod) {
         MainEnity main = EntityFactory.create(MainEnity.class);
         main.detachedEntity().name().setValue("Test1");
 
@@ -55,15 +55,15 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
         Assert.assertEquals("did retrieve value", main.detachedEntity().name().getValue(), mainR.detachedEntity().name().getValue());
     }
 
-    public void testDetachedMemeberPersist() {
-        testDetachedMemeber(TestCaseMethod.Persist);
+    public void testDetachedMemberPersist() {
+        testDetachedMember(TestCaseMethod.Persist);
     }
 
-    public void testDetachedMemeberMerge() {
-        testDetachedMemeber(TestCaseMethod.Merge);
+    public void testDetachedMemberMerge() {
+        testDetachedMember(TestCaseMethod.Merge);
     }
 
-    private void testDetachedMemeberInList(TestCaseMethod testCaseMethod) {
+    private void testDetachedMemberInList(TestCaseMethod testCaseMethod) {
         MainEnity main = EntityFactory.create(MainEnity.class);
         DetachedEntity d0 = EntityFactory.create(DetachedEntity.class);
         d0.name().setValue("Test2.0");
@@ -96,15 +96,15 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
         Assert.assertEquals("did retrieve value", main.detachedEntities().get(1).name().getValue(), mainR.detachedEntities().get(1).name().getValue());
     }
 
-    public void testDetachedMemeberInListPersist() {
-        testDetachedMemeberInList(TestCaseMethod.Persist);
+    public void testDetachedMemberInListPersist() {
+        testDetachedMemberInList(TestCaseMethod.Persist);
     }
 
-    public void testDetachedMemebeInListrMerge() {
-        testDetachedMemeberInList(TestCaseMethod.Merge);
+    public void testDetachedMembeInListrMerge() {
+        testDetachedMemberInList(TestCaseMethod.Merge);
     }
 
-    public void testDetachedMemeberInOwnedObject(TestCaseMethod testCaseMethod) {
+    public void testDetachedMemberInOwnedObject(TestCaseMethod testCaseMethod) {
         MainHolderEnity main = EntityFactory.create(MainHolderEnity.class);
         main.ownedEntity().name().setValue("Test2");
         main.ownedEntity().detachedEntity().name().setValue("Test2.C");
@@ -128,15 +128,15 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
         Assert.assertEquals("did retrieve value", main.ownedEntity().detachedEntity().name().getValue(), mainR.ownedEntity().detachedEntity().name().getValue());
     }
 
-    public void testDetachedMemeberInOwnedObjectPersist() {
-        testDetachedMemeberInOwnedObject(TestCaseMethod.Persist);
+    public void testDetachedMemberInOwnedObjectPersist() {
+        testDetachedMemberInOwnedObject(TestCaseMethod.Persist);
     }
 
-    public void testDetachedMemeberInOwnedObjectMerge() {
-        testDetachedMemeberInOwnedObject(TestCaseMethod.Merge);
+    public void testDetachedMemberInOwnedObjectMerge() {
+        testDetachedMemberInOwnedObject(TestCaseMethod.Merge);
     }
 
-    public void testDetachedMemeberInListInOwnedObject(TestCaseMethod testCaseMethod) {
+    public void testDetachedMemberInListInOwnedObject(TestCaseMethod testCaseMethod) {
         MainHolderEnity main = EntityFactory.create(MainHolderEnity.class);
         main.ownedEntity().name().setValue("Test4");
 
@@ -175,15 +175,15 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
                 .name().getValue());
     }
 
-    public void testDetachedMemeberInListInOwnedObjectPersist() {
-        testDetachedMemeberInListInOwnedObject(TestCaseMethod.Persist);
+    public void testDetachedMemberInListInOwnedObjectPersist() {
+        testDetachedMemberInListInOwnedObject(TestCaseMethod.Persist);
     }
 
-    public void testDetachedMemeberInListInOwnedObjectMerge() {
-        testDetachedMemeberInListInOwnedObject(TestCaseMethod.Merge);
+    public void testDetachedMemberInListInOwnedObjectMerge() {
+        testDetachedMemberInListInOwnedObject(TestCaseMethod.Merge);
     }
 
-    public void testDetachedOwnerMemeber() {
+    public void testDetachedOwnerMember() {
         MainHolderEnity main1 = EntityFactory.create(MainHolderEnity.class);
         main1.name().setValue("m1 " + uniqueString());
         main1.ownedWithBackReference().name().setValue("c1 " + uniqueString());

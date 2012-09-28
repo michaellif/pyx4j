@@ -236,7 +236,7 @@ public class EntityOperationsMeta {
                     } else {
                         member = new MemberCollectionOperationsMeta(memberAccess, valueAdapter, joinInfo.sqlName, memberMeta, memberPath,
                                 joinInfo.joinTableClass, joinInfo.joinTableSameAsTarget, joinInfo.sqlOwnerName, joinInfo.ownerValueAdapter,
-                                joinInfo.sqlValueName, joinInfo.sqlOrderColumnName, joinInfo.orderMemeberName, false);
+                                joinInfo.sqlValueName, joinInfo.sqlOrderColumnName, joinInfo.orderMemberName, false);
                     }
                     collectionMembers.add(member);
                     switch (memberMeta.getAttachLevel()) {

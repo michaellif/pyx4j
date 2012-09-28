@@ -273,7 +273,7 @@ public class EntityGraph {
         return false;
     }
 
-    public static boolean memebersEquals(IEntity ent1, IEntity ent2, IPrimitive<?>... protoValues) {
+    public static boolean membersEquals(IEntity ent1, IEntity ent2, IPrimitive<?>... protoValues) {
         for (IPrimitive<?> member : protoValues) {
             if (!ent1.getMember(member.getFieldName()).equals(ent2.getMember(member.getFieldName()))) {
                 return false;
@@ -282,7 +282,7 @@ public class EntityGraph {
         return true;
     }
 
-    public static void memebersCopy(IEntity src, IEntity dst, IPrimitive<?>... protoValues) {
+    public static void membersCopy(IEntity src, IEntity dst, IPrimitive<?>... protoValues) {
         for (IPrimitive<?> member : protoValues) {
             String memberFieldName = member.getFieldName();
             Object v = src.getMember(memberFieldName).getValue();
@@ -300,7 +300,7 @@ public class EntityGraph {
         return update(src, dst, new HashSet<IEntity>());
     }
 
-    public static boolean updateMemebers(IEntity src, IEntity dst, IPrimitive<?>... protoValues) {
+    public static boolean updateMembers(IEntity src, IEntity dst, IPrimitive<?>... protoValues) {
         boolean updated = false;
         for (IPrimitive<?> member : protoValues) {
             if (!src.getMember(member.getFieldName()).equals(dst.getMember(member.getFieldName()))) {

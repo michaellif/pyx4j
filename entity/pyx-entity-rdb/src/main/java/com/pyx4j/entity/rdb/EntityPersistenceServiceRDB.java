@@ -514,8 +514,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                                 }
                             }
                             if (!childEntity.isValueDetached()) {
-                                if (member.orderMemeberName() != null) {
-                                    childEntity.setMemberValue(member.orderMemeberName(), Integer.valueOf(orderInParent));
+                                if (member.orderMemberName() != null) {
+                                    childEntity.setMemberValue(member.orderMemberName(), Integer.valueOf(orderInParent));
                                 }
                                 persist(tableModel(childEntity.getEntityMeta()), childEntity);
                             }
@@ -548,8 +548,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
 
             for (MemberOperationsMeta member : tm.operationsMeta().getVersionInfoMembers()) {
-                for (IVersionData<IVersionedEntity<?>> memeberEntity : TableModleVersioned.update(getPersistenceContext(), mappings, entity, true, member)) {
-                    merge(tableModel(memeberEntity.getEntityMeta()), memeberEntity);
+                for (IVersionData<IVersionedEntity<?>> memberEntity : TableModleVersioned.update(getPersistenceContext(), mappings, entity, true, member)) {
+                    merge(tableModel(memberEntity.getEntityMeta()), memberEntity);
                 }
             }
             for (MemberOperationsMeta member : tm.operationsMeta().getDetachedMembers()) {
@@ -621,8 +621,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
             for (MemberOperationsMeta member : tm.operationsMeta().getVersionInfoMembers()) {
                 if (!((IEntity) member.getMember(entity)).isValueDetached()) {
-                    for (IVersionData<IVersionedEntity<?>> memeberEntity : TableModleVersioned.update(getPersistenceContext(), mappings, entity, false, member)) {
-                        merge(tableModel(memeberEntity.getEntityMeta()), memeberEntity);
+                    for (IVersionData<IVersionedEntity<?>> memberEntity : TableModleVersioned.update(getPersistenceContext(), mappings, entity, false, member)) {
+                        merge(tableModel(memberEntity.getEntityMeta()), memberEntity);
                     }
                 }
             }
