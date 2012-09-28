@@ -78,7 +78,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             } else {
                 existingTenants.remove(idx);
                 Persistence.service().retrieve(tenantInLease);
-                if (!EntityGraph.memebersEquals(tenantInApplication.leaseCustomer().customer().person().name(), tenantInLease.leaseCustomer().customer().person().name(), tenantInApplication
+                if (!EntityGraph.membersEquals(tenantInApplication.leaseCustomer().customer().person().name(), tenantInLease.leaseCustomer().customer().person().name(), tenantInApplication
                         .leaseCustomer().customer().person().name().firstName(), tenantInApplication.leaseCustomer().customer().person().name().middleName(), tenantInApplication.leaseCustomer().customer()
                         .person().name().lastName())) {
                     tenantInApplication.changeStatus().setValue(TenantInLeaseDTO.ChangeStatus.Updated);

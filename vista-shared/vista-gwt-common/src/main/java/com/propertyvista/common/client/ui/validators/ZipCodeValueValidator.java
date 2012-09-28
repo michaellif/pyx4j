@@ -31,9 +31,9 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
 
     private final Path countryPath;
 
-    public ZipCodeValueValidator(CEntityForm<?> editor, Country countryMemeberProto) {
+    public ZipCodeValueValidator(CEntityForm<?> editor, Country countryMemberProto) {
         this.editor = editor;
-        this.countryPath = countryMemeberProto.getPath();
+        this.countryPath = countryMemberProto.getPath();
     }
 
     private String countryName() {
