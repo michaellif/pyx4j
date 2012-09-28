@@ -124,6 +124,9 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
 
     @Override
     public void createGadgetMetadata(AsyncCallback<GadgetMetadata> callback, GadgetMetadata proto) {
+        GadgetMetadata gadget = GadgetMetadataRepository.get().createGadgetMetadata(proto);
+        gadgetStorage().save(gadget.gadgetId().getValue(), gadget, false);
+        Persistence.service().commit();
         callback.onSuccess(GadgetMetadataRepository.get().createGadgetMetadata(proto));
     }
 
