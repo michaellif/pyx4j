@@ -21,16 +21,9 @@ import java.util.Vector;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellList;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
@@ -38,10 +31,10 @@ import com.google.gwt.view.client.SingleSelectionModel;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
+import com.propertyvista.crm.client.ui.components.KeywordsBox;
 import com.propertyvista.crm.rpc.dto.dashboard.GadgetDescriptorDTO;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -60,102 +53,6 @@ public abstract class AddGadgetDialog extends OkCancelDialog implements OkOption
             }
         }
 
-    }
-
-    public abstract static class KeywordsSelectionBox extends Composite {
-
-        private final FlowPanel widgetPanel;
-
-        private final ListBox potentialKeywordsBox;
-
-        private final Button addKeywordButton;
-
-        private final Set<String> activeKeywords;
-
-        private final Set<String> potentialKeywords;
-
-        private final FlowPanel activeKeywordsPanel;
-
-        public KeywordsSelectionBox() {
-            activeKeywords = new HashSet<String>();
-            potentialKeywords = new HashSet<String>();
-
-            final Command addKeywordCommand = new Command() {
-                @Override
-                public void execute() {
-                    if (potentialKeywordsBox.getSelectedIndex() != -1) {
-                        String keyword = potentialKeywordsBox.getItemText(potentialKeywordsBox.getSelectedIndex());
-                        if (!"".equals(keyword)) {
-                            potentialKeywords.remove(keyword);
-                            activeKeywords.add(keyword);
-                            updateKeywords(true);
-                        }
-                    }
-                }
-            };
-            activeKeywordsPanel = new FlowPanel();
-            activeKeywordsPanel.getElement().getStyle().setProperty("display", "inline");
-            potentialKeywordsBox = new ListBox(false);
-            potentialKeywordsBox.getElement().getStyle().setProperty("float", "left");
-            potentialKeywordsBox.getElement().getStyle().setProperty("display", "inline");
-
-            addKeywordButton = new Button("+", new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    addKeywordCommand.execute();
-                }
-            });
-
-            widgetPanel = new FlowPanel();
-            widgetPanel.setWidth("100%");
-            widgetPanel.add(activeKeywordsPanel);
-
-            widgetPanel.add(potentialKeywordsBox);
-            widgetPanel.add(addKeywordButton);
-
-            initWidget(widgetPanel);
-        }
-
-        public void setKeywords(Set<String> keywords, boolean execCallback) {
-            potentialKeywords.clear();
-            potentialKeywords.addAll(keywords);
-            activeKeywords.clear();
-            updateKeywords(execCallback);
-        }
-
-        protected abstract void onKeywordsChanged(Set<String> keywords);
-
-        private void updateKeywords(boolean execCallback) {
-            potentialKeywordsBox.clear();
-
-            for (String keyword : potentialKeywords) {
-                potentialKeywordsBox.addItem(keyword, keyword);
-            }
-            potentialKeywordsBox.setVisible(!potentialKeywords.isEmpty());
-            addKeywordButton.setVisible(!potentialKeywords.isEmpty());
-
-            activeKeywordsPanel.clear();
-            for (final String keyword : activeKeywords) {
-                final Button keywordButton = new Button(keyword);
-                keywordButton.addClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        activeKeywordsPanel.remove(keywordButton);
-
-                        activeKeywords.remove(keyword);
-                        potentialKeywords.add(keyword);
-
-                        updateKeywords(true);
-                    }
-                });
-                keywordButton.getElement().getStyle().setMarginRight(5, Unit.PX);
-                activeKeywordsPanel.add(keywordButton);
-            }
-
-            if (execCallback) {
-                onKeywordsChanged(activeKeywords);
-            }
-        }
     }
 
     private static final I18n i18n = I18n.get(AddGadgetDialog.class);
@@ -186,7 +83,7 @@ public abstract class AddGadgetDialog extends OkCancelDialog implements OkOption
         final ListDataProvider<GadgetDescriptorDTO> descriptorsProvider = new ListDataProvider<GadgetDescriptorDTO>();
         descriptorsProvider.addDataDisplay(descriptorsListWidget);
 
-        final KeywordsSelectionBox keywordsSelectionBox = new KeywordsSelectionBox() {
+        final KeywordsBox keywordsSelectionBox = new KeywordsBox() {
             @Override
             protected void onKeywordsChanged(Set<String> keywords) {
                 if (keywords == null || keywords.isEmpty()) {
@@ -209,8 +106,8 @@ public abstract class AddGadgetDialog extends OkCancelDialog implements OkOption
                 }
             }
         };
-        HTML keywordSelectionBoxLabel = new HTML(i18n.tr("Filter:"));
-
+        HTML keywordSelectionBoxLabel = new HTML(i18n.tr("Filter by keywords:"));
+        keywordSelectionBoxLabel.getElement().getStyle().setProperty("fontWeight", "bold");
         body = new VerticalPanel();
         body.setSize("100%", "100%");
         body.add(keywordSelectionBoxLabel);

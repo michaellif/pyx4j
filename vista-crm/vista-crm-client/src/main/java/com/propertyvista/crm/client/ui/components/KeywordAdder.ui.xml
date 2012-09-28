@@ -1,0 +1,19 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.keywordAdder {
+			display: inline-block;
+		}
+		.keywordAdderButton {
+			display: inline;
+		}
+		.keywordAdderList {
+			display: inline;
+		}
+	</ui:style>
+	<g:HTMLPanel styleName="{style.keywordAdder}">
+		<g:ListBox ui:field ="keywordsList"  styleName="{style.keywordAdderList}" />
+		<g:Button ui:field = "button" styleName="{style.keywordAdderButton}" text="+"/>
+	</g:HTMLPanel>
+</ui:UiBinder> 
