@@ -129,7 +129,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         if (currentValue.lease().currentTerm().getInstanceValueClass().equals(LeaseTerm.class)) {
             term = createDBO(currentValue);
         }
-        ServerSideFactory.create(LeaseFacade.class).setUnit(term, unitId);
+        term = ServerSideFactory.create(LeaseFacade.class).setUnit(term, unitId);
+        currentValue = createDTO(term);
         loadDetachedProducts(currentValue);
         fillServiceEligibilityData(currentValue);
         fillserviceItems(currentValue);
@@ -142,7 +143,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         if (currentValue.lease().currentTerm().getInstanceValueClass().equals(LeaseTerm.class)) {
             term = createDBO(currentValue);
         }
-        ServerSideFactory.create(LeaseFacade.class).setService(term, serviceId);
+        term = ServerSideFactory.create(LeaseFacade.class).setService(term, serviceId);
+        currentValue = createDTO(term);
         loadDetachedProducts(currentValue);
         fillServiceEligibilityData(currentValue);
         callback.onSuccess(currentValue);
