@@ -36,9 +36,9 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-public class TableModleExternal {
+public class TableModelExternal {
 
-    private static final Logger log = LoggerFactory.getLogger(TableModleExternal.class);
+    private static final Logger log = LoggerFactory.getLogger(TableModelExternal.class);
 
     public static void retrieve(PersistenceContext persistenceContext, IEntity entity, MemberExternalOperationsMeta member) {
         if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {

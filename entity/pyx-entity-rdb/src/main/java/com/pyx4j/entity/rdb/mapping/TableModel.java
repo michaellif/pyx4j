@@ -721,7 +721,7 @@ public class TableModel {
                 // verify graph integrity
                 continue;
             }
-            TableModleExternal.retrieve(persistenceContext, entity, member);
+            TableModelExternal.retrieve(persistenceContext, entity, member);
         }
 
         for (MemberOperationsMeta member : entityOperationsMeta.getVersionInfoMembers()) {
@@ -732,7 +732,7 @@ public class TableModel {
     public void retrieveMember(PersistenceContext persistenceContext, IEntity entity, IEntity entityMember) {
         MemberOperationsMeta member = entityOperationsMeta.getMember(new Path(entity.getValueClass(), entityMember.getFieldName()).toString());
         assert (member != null) : "Member " + entityMember.getFieldName() + " not found";
-        TableModleExternal.retrieve(persistenceContext, entity, (MemberExternalOperationsMeta) member);
+        TableModelExternal.retrieve(persistenceContext, entity, (MemberExternalOperationsMeta) member);
     }
 
     public void retrieveMember(PersistenceContext persistenceContext, IEntity entity, ICollection<?, ?> collectionMember) {
