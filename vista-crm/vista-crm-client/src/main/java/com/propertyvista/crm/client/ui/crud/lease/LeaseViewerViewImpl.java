@@ -287,7 +287,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             setActionVisible(activateAction, status == Status.ExistingLease);
             setActionVisible(cancelAction, !status.isFormer());
 
-            renewButton.setVisible(status == Status.Active && completion == null && value.futureTerm().isNull());
+            renewButton.setVisible(status == Status.Active && completion == null && value.nextTerm().isNull());
         }
     }
 

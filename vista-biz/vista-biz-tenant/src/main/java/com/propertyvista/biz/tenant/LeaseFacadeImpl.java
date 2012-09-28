@@ -390,17 +390,20 @@ public class LeaseFacadeImpl implements LeaseFacade {
     public void renew(Lease leaseId) {
         Lease lease = load(leaseId, false);
 
-        if (!lease.futureTerm().isNull()) {
+        if (!lease.nextTerm().isNull()) {
             // update old:
-            lease.currentTerm().status().setValue(LeaseTerm.Status.Historic);
-            lease.currentTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
-            persist(lease.currentTerm());
+            lease.previousTerm().set(lease.currentTerm());
+            lease.previousTerm().status().setValue(LeaseTerm.Status.Historic);
+            lease.previousTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
+            persist(lease.previousTerm());
 
             // set new:
-            lease.currentTerm().set(lease.futureTerm());
+            lease.currentTerm().set(lease.nextTerm());
             Persistence.service().retrieve(lease.currentTerm());
             lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
             updateLeaseDeposits(lease);
+
+            lease.nextTerm().set(null);
 
             // save lease with new current term:
             lease.currentTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
@@ -468,10 +471,10 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         Persistence.service().retrieveMember(lease.leaseTerms());
         if (leaseTerm.status().getValue() == LeaseTerm.Status.Offer && lease.leaseTerms().contains(leaseTermId)) {
-            lease.futureTerm().set(leaseTerm);
-            lease.futureTerm().status().setValue(LeaseTerm.Status.AcceptedOffer);
-            lease.futureTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
-            persist(lease.futureTerm());
+            lease.nextTerm().set(leaseTerm);
+            lease.nextTerm().status().setValue(LeaseTerm.Status.AcceptedOffer);
+            lease.nextTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
+            persist(lease.nextTerm());
 
             // save lease:
             Persistence.secureSave(lease);

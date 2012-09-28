@@ -41,8 +41,8 @@ public class LeaseRenewalProcess implements PmcProcess {
     public void executePmcJob(PmcProcessContext context) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Active));
-        criteria.add(PropertyCriterion.isNotNull(criteria.proto().futureTerm()));
-        criteria.add(PropertyCriterion.le(criteria.proto().futureTerm().termFrom(), Persistence.service().getTransactionSystemTime()));
+        criteria.add(PropertyCriterion.isNotNull(criteria.proto().nextTerm()));
+        criteria.add(PropertyCriterion.le(criteria.proto().nextTerm().termFrom(), Persistence.service().getTransactionSystemTime()));
 
         long total = 0;
         long failed = 0;

@@ -253,9 +253,11 @@ public interface Lease extends IEntity {
     @Detached(level = AttachLevel.Detached)
     IList<LeaseTerm> leaseTerms();
 
+    LeaseTerm previousTerm();
+
     LeaseTerm currentTerm();
 
-    LeaseTerm futureTerm();
+    LeaseTerm nextTerm();
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)

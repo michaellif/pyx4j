@@ -60,7 +60,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         viewFutureTerm = new MenuItem(i18n.tr("Future"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getForm().getValue().futureTerm());
+                ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getForm().getValue().nextTerm());
             }
         });
         viewsMenu.addItem(viewFutureTerm);
@@ -103,6 +103,6 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
     public void populate(DTO value) {
         super.populate(value);
 
-        viewFutureTerm.setVisible(!value.futureTerm().isNull());
+        viewFutureTerm.setVisible(!value.nextTerm().isNull());
     }
 }
