@@ -1,5 +1,19 @@
 # @version $Revision$ ($Author$) $Date$
 
+VISTA-1997 21/09/2012  vlad
+    feature ->  product
+    feature_v -> product_v
+    service  ->  product
+    service_v  -> product_v
+    service_v$features - >  product_v$features
+    service_v$concessions -> product_v$concessions
+
+    Add FK   product_item_product_fk
+
+    Migration Notes:
+        You need to mere IDs from two tables to one (feature & service -> product) and (feature_v & service_v -> product_v).
+        Only one additional table product_item.product  used to reference to  service  or feature  so only one table to update.
+
 VISTA-2007 24/09/2012 12:25:52 vlads
 update : personal_income.income_source
     unemployment -> unemployed
@@ -13,7 +27,19 @@ IncomeInfoSocialServices
 IncomeInfoOther
 IncomeInfoStudentIncome
 
-VISTA-1121 24/09/2012 14:51:45
-    add  card_obfuscated_number and account_no_obfuscated_number to payment_PaymentDetails
+VISTA-1121 24/09/2012 14:51:45  vlads
+    add card_obfuscated_number and account_no_obfuscated_number to payment_PaymentDetails
     set card_obfuscated_number = "XXXXXXXXX" + reference  for  payment_PaymentDetails where iddiscrimator = "CreditCard"
     set account_no_obfuscated_number = "XXXXXX" + reference where iddiscrimator = "EcheckInfo"
+
+VISTA-1964,VISTA-1922 	27/09/2012 22:59:12  vlads
+
+    tenant -> Lease_Participant
+    guarantor -> Lease_Participant
+    new table lease_customer
+
+    Migration Notes:
+        You need to mere IDs from two tables to one (tenant & guarantor -> Lease_Participant)
+        move participantId and customer from  old tenant & guarantor to Lease_Customer
+
+

@@ -41,7 +41,7 @@ import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 
-@Inheritance
+@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
 public interface LeaseParticipant extends IEntity {
 
