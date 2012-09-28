@@ -20,7 +20,6 @@ import com.google.gwt.resources.client.ImageResource;
 import com.pyx4j.widgets.client.dashboard.IBoard;
 
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
-import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public interface ILayoutManager {
 
@@ -36,14 +35,14 @@ public interface ILayoutManager {
 
     String getLayoutName();
 
-    /** saves current board layout to dashboard metadata */
-    void saveLayout(DashboardMetadata dashboardMetadata, IBoard board);
-
-    /** places gadgets in the board in the positions defined by layout data from dashboard metadata */
-    void restoreLayout(DashboardMetadata dasboardMetadata, Iterator<IGadgetInstance> gadget, IBoard board);
-
     /**
      * returns true if provided dashboard metadata holds information that is required for this layout manager
      */
-    boolean canHandle(DashboardMetadata dashboardMetadta);
+    boolean canHandle(String encodedLayout);
+
+    /** places gadgets in the board in the positions defined by layout data from dashboard metadata */
+    void restoreLayout(String encodedLayout, Iterator<IGadgetInstance> gadgetsIterator, IBoard board);
+
+    /** swithces to layout defined by the layout manager and returns new encoded layout */
+    String switchLayout(String oldEncodedLayout, IBoard board);
 }

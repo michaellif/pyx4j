@@ -39,6 +39,7 @@ import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.dashboard.BoardEvent;
@@ -47,17 +48,20 @@ import com.pyx4j.widgets.client.dashboard.IBoard;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.resources.CrmImages;
-import com.propertyvista.crm.client.ui.board.BoardBase.StyleSuffix;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-/** A template class for dashboard */
+/** A template class for a dashboard */
 public abstract class AbstractDashboard extends ResizeComposite {
 
     public static String DEFAULT_STYLE_PREFIX = "vista_DashboardView";
+
+    public enum StyleSuffix implements IStyleName {
+        filtersDescription, filtersPanel, actionsPanel;
+    }
 
     private static final I18n i18n = I18n.get(AbstractDashboard.class);
 
@@ -67,7 +71,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
 
     private final HorizontalPanel actionsPanel;
 
-    private final IGadgetFactory gadgetDirectory;
+    private final IGadgetFactory gadgetFactory;
 
     private final ICommonGadgetSettingsContainer commonGadgetSettingsContainer;
 
@@ -81,7 +85,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
 
     public AbstractDashboard(ICommonGadgetSettingsContainer container, IGadgetFactory gadgetDirectory, List<ILayoutManager> layoutManagers) {
         this.commonGadgetSettingsContainer = container;
-        this.gadgetDirectory = gadgetDirectory;
+        this.gadgetFactory = gadgetDirectory;
 
         this.dashboardPanel = new DockLayoutPanel(Unit.EM);
         this.dashboardPanel.setSize("100%", "100%");
@@ -130,9 +134,10 @@ public abstract class AbstractDashboard extends ResizeComposite {
         };
         if (dashboardMetadata != null) {
             List<IGadgetInstance> gadgets = new ArrayList<IGadgetInstance>();
-            for (GadgetMetadata metadata : dashboardMetadata.gadgets()) {
-                IGadgetInstance gadget = gadgetDirectory.createGadget(metadata);
-                // TODO stupid way this stupid list is needed to separate layout from dashboard, but the implementation of segregation is not well done, review
+
+            // instantiate gadgets
+            for (GadgetMetadata metadata : dashboardMetadata.gadgetMetadataList()) {
+                IGadgetInstance gadget = gadgetFactory.createGadget(metadata);
                 if (gadget != null) {
                     gadgets.add(gadget);
                     commonGadgetSettingsContainer.bindGadget(gadget);
@@ -141,14 +146,15 @@ public abstract class AbstractDashboard extends ResizeComposite {
                 }
             }
 
+            // place them in the correct places inside the board
             for (ILayoutManager layoutManager : layoutButtons.keySet()) {
-                if (layoutManager.canHandle(dashboardMetadata)) {
+                if (layoutManager.canHandle(dashboardMetadata.encodedLayout().getValue())) {
                     activeLayoutManger = layoutManager;
+                    activeLayoutManger.restoreLayout(dashboardMetadata.encodedLayout().getValue(), gadgets.iterator(), board);
+                    redrawLayoutButtons(activeLayoutManger);
                     break;
                 }
             }
-            redrawLayoutButtons(activeLayoutManger);
-            activeLayoutManger.restoreLayout(dashboardMetadata, gadgets.iterator(), board);
 
         } else {
             throw new Error("DashboardMetadata cannot be null");
@@ -197,7 +203,8 @@ public abstract class AbstractDashboard extends ResizeComposite {
 //            break;
         }
         redrawLayoutButtons(activeLayoutManger); // emphasize the button that switches to the chosen layout manager
-        activeLayoutManger.saveLayout(dashboardMetadata, board);
+        String updatedEncodedLayout = activeLayoutManger.switchLayout(dashboardMetadata.encodedLayout().getValue(), board);
+        dashboardMetadata.encodedLayout().setValue(updatedEncodedLayout);
 
         fireResizeRequests();
         onDashboardMetadataChanged();
@@ -249,7 +256,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
                         GWT.<DashboardMetadataService> create(DashboardMetadataService.class).createGadgetMetadata(new DefaultAsyncCallback<GadgetMetadata>() {
                             @Override
                             public void onSuccess(GadgetMetadata gadgteMetadata) {
-                                IGadgetInstance gadget = gadgetDirectory.createGadget(gadgteMetadata);
+                                IGadgetInstance gadget = gadgetFactory.createGadget(gadgteMetadata);
                                 commonGadgetSettingsContainer.bindGadget(gadget);
                                 board.addGadget(gadget);
                                 gadget.start();

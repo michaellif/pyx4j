@@ -29,6 +29,7 @@ import com.propertyvista.crm.client.event.BoardUpdateEvent;
 import com.propertyvista.crm.client.ui.dashboard.DashboardEditor;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
@@ -50,9 +51,7 @@ public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadat
             public void onSuccess(DashboardType type) {
                 DashboardMetadata entity = EntityFactory.create(getEntityClass());
                 entity.type().setValue(type);
-                entity.layoutType().setValue(LayoutType.Two12);
-                // TODO: get current user Key here: 
-                //entity.user().id().setValue(Key.DORMANT_KEY);
+                entity.encodedLayout().setValue(new DashboardColumnLayoutFormat.Builder(LayoutType.Two11).build().getSerializedForm());
 
                 callback.onSuccess(entity);
             }

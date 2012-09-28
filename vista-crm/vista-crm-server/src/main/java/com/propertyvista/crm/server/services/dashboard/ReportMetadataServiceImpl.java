@@ -24,7 +24,6 @@ import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.server.IOUtils;
@@ -59,12 +58,7 @@ public class ReportMetadataServiceImpl extends AbstractMetadataServiceImpl imple
     protected DashboardMetadata retrieveDefaultMetadata() {
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.system));
-        criteria.add(PropertyCriterion.eq(criteria.proto().layoutType(), DashboardMetadata.LayoutType.Report));
         return Persistence.service().retrieve(criteria);
     }
 
-    @Override
-    protected void addTypeCriteria(EntityQueryCriteria<DashboardMetadata> criteria) {
-        criteria.add(new PropertyCriterion(criteria.proto().layoutType(), Restriction.EQUAL, DashboardMetadata.LayoutType.Report));
-    }
 }

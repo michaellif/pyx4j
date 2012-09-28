@@ -13,13 +13,22 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
+import com.pyx4j.rpc.server.LocalService;
 import com.pyx4j.site.server.services.customization.CustomizationPersistenceHelper;
 
+import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
+import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat.Builder;
+import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.GadgetMetadataHolder;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.generator.DashboardGenerator;
@@ -50,14 +59,41 @@ public class DashboardPreloader extends AbstractDataPreloader {
     }
 
     void persistDashboard(DashboardMetadata dm) {
-        for (GadgetMetadata gadget : dm.gadgets()) {
-            dm.gadgetIds().add(gadget.gadgetId().getValue());
-            new CustomizationPersistenceHelper<GadgetMetadata>(GadgetMetadataHolder.class, GadgetMetadata.class).save(gadget.gadgetId().getValue(), gadget,
-                    true);
+        // simulate creation of gadgets and dashboard:
+        // first create a dashboard without any gadgets,
+        // then save gadgets separately
+        // then bind them to dashboard via service
+        List<GadgetMetadata> gadgetMetadataList = new ArrayList<GadgetMetadata>(dm.gadgetMetadataList());
+        dm.gadgetMetadataList().clear();
+        Persistence.service().persist(dm);
 
+        // save gadgets
+        CustomizationPersistenceHelper<GadgetMetadata> gadgetStorage = new CustomizationPersistenceHelper<GadgetMetadata>(GadgetMetadataHolder.class,
+                GadgetMetadata.class);
+        for (GadgetMetadata gadgetMetadata : gadgetMetadataList) {
+            gadgetStorage.save(gadgetMetadata.gadgetId().getValue(), gadgetMetadata, true);
         }
 
-        Persistence.service().persist(dm);
-    }
+        // add gadgets in dashboard metadata as 'new gadgets' (without parent dashboardId), define basic layout and save them in traditional way via service
+        Builder layoutBuilder = new DashboardColumnLayoutFormat.Builder(LayoutType.One);
+        for (GadgetMetadata gadgetMetadata : gadgetMetadataList) {
+            layoutBuilder.bind(gadgetMetadata.gadgetId().getValue(), 0);
+        }
+        dm.encodedLayout().setValue(layoutBuilder.build().getSerializedForm());
 
+        LocalService.create(DashboardMetadataService.class).saveDashboardMetadata(new AsyncCallback<DashboardMetadata>() {
+
+            @Override
+            public void onSuccess(DashboardMetadata result) {
+
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new Error(caught);
+            }
+
+        }, dm);
+
+    }
 }

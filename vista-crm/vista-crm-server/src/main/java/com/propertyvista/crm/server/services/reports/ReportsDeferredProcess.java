@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.JasperReportProcessor;
@@ -46,7 +45,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
-import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -99,9 +97,10 @@ public class ReportsDeferredProcess implements IDeferredProcess {
                 MasterReportModel masterReportModel = null;
                 HashMap<String, Object> masterReportParameters = new HashMap<String, Object>();
 
-                if (dashboard.layoutType().getValue() == LayoutType.Report) {
+                if (false) {
                     masterReportParameters.put(MasterReportModel.REPORT_TITLE, dashboard.name().getValue());
-                    masterReportModel = new MasterReportModel(prepareSubreportsForReportLayout(dashboard.gadgets(), selectedBuildigns), masterReportParameters);
+                    masterReportModel = new MasterReportModel(prepareSubreportsForReportLayout(dashboard.gadgetMetadataList(), selectedBuildigns),
+                            masterReportParameters);
                 } else {
                     String title;
                     if (dashboard.type().getValue() == DashboardType.building) {
@@ -114,7 +113,7 @@ public class ReportsDeferredProcess implements IDeferredProcess {
                         title = dashboard.name().getValue();
                     }
                     masterReportParameters.put(MasterReportModel.REPORT_TITLE, title);
-                    masterReportModel = new MasterReportModel(prepareSubreportsForDashboardLayout(dashboard.gadgets(), selectedBuildigns),
+                    masterReportModel = new MasterReportModel(prepareSubreportsForDashboardLayout(dashboard.gadgetMetadataList(), selectedBuildigns),
                             masterReportParameters);
                 }
 
@@ -245,7 +244,7 @@ public class ReportsDeferredProcess implements IDeferredProcess {
 
         GadgetMetadata leftGadgetMetadata = null;
         for (GadgetMetadata gadgetMetadata : gadgetMetadatas) {
-            switch (gadgetMetadata.docking().column().getValue()) {
+            switch (-1) {
             case -1:
                 if (leftGadgetMetadata != null) {
                     subreports.add(new MasterReportEntry(createSubReportModel(leftGadgetMetadata, selectedBuildigns), null));
@@ -265,12 +264,7 @@ public class ReportsDeferredProcess implements IDeferredProcess {
                 leftGadgetMetadata = null;
                 break;
             default:
-                throw new Exception(SimpleMessageFormat.format(//@formatter:off
-                        "invalid docking column value {0} for gadget {1} (id() =  {2})",
-                        gadgetMetadata.docking().column().getValue(),
-                        gadgetMetadata.getEntityMeta().getCaption(),
-                        gadgetMetadata.getPrimaryKey()
-                ));//@formatter:on
+
             }
         }
         if (leftGadgetMetadata != null) {

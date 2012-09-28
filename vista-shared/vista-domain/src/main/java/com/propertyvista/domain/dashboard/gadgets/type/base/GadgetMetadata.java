@@ -14,7 +14,7 @@
 package com.propertyvista.domain.dashboard.gadgets.type.base;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -23,7 +23,7 @@ import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.ISharedUserEntity;
-import com.propertyvista.domain.dashboard.GadgetDockingMeta;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 @Transient
 @Inheritance
@@ -72,8 +72,8 @@ public interface GadgetMetadata extends ISharedUserEntity {
     @NotNull
     IPrimitive<RefreshInterval> refreshInterval();
 
-    @EmbeddedEntity
-    GadgetDockingMeta docking();
-
     IPrimitive<String> gadgetId();
+
+    @Detached
+    DashboardMetadata dashboard();
 }

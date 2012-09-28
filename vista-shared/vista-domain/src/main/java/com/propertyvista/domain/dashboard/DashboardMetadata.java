@@ -22,7 +22,6 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -82,17 +81,14 @@ public interface DashboardMetadata extends ISharedUserEntity {
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
-    IPrimitive<LayoutType> layoutType();
-
     IPrimitive<Boolean> isShared();
 
+    /** Only used for transporting gadgets from server to client, when dashboard adds a new gadget it add it's id to: encoded layout */
     @Transient
-    IList<GadgetMetadata> gadgets();
-
-    IPrimitiveSet<String> gadgetIds();
+    IList<GadgetMetadata> gadgetMetadataList();
 
     /**
-     * Holds the docking position of the gadgets
+     * Holds the docking position of the gadgets and gadgetIds {@link GadgetMetadata#gadgetId()}
      */
     IPrimitive<String> encodedLayout();
 

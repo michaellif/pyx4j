@@ -32,12 +32,11 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.crm.client.ui.board.BoardBase;
-import com.propertyvista.crm.client.ui.board.BoardBase.StyleSuffix;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.ICommonGadgetSettingsContainer;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -63,11 +62,11 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
         this.buildings = new Vector<Building>();
 
         bar = new FlowPanel();
-        bar.setStyleName(BoardBase.DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);
+        bar.setStyleName(AbstractDashboard.DEFAULT_STYLE_PREFIX + AbstractDashboard.StyleSuffix.actionsPanel);
         bar.setSize("100%", "100%");
 
         buildingsView = new HTML("");
-        buildingsView.setStyleName(BoardBase.DEFAULT_STYLE_PREFIX + BoardBase.StyleSuffix.filtersDescription);
+        buildingsView.setStyleName(AbstractDashboard.DEFAULT_STYLE_PREFIX + AbstractDashboard.StyleSuffix.filtersDescription);
         buildingsView.getElement().getStyle().setFloat(Float.LEFT);
         buildingsView.getElement().getStyle().setPaddingTop(5, Unit.PX);
         buildingsView.getElement().getStyle().setPaddingLeft(10, Unit.PX);

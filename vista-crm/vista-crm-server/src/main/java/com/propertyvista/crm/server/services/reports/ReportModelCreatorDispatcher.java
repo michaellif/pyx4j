@@ -74,8 +74,7 @@ public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
         if (creator != null) {
             creator.createReportModel(callback, gadgetMetadata, selectedBuildings);
         } else {
-            callback.onSuccess(createReportNotImplementedModel(gadgetMetadata.getInstanceValueClass().getSimpleName(), gadgetMetadata.docking().column()
-                    .getValue() == -1));
+            callback.onSuccess(createReportNotImplementedModel(gadgetMetadata.getInstanceValueClass().getSimpleName(), true));
         }
     }
 

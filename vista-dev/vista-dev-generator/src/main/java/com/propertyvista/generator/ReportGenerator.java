@@ -19,7 +19,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
-import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class ReportGenerator {
 
@@ -32,7 +31,6 @@ public class ReportGenerator {
         dmd.isShared().setValue(true);
         dmd.name().setValue(i18n.tr("System Report"));
         dmd.description().setValue(i18n.tr("Displays default system data"));
-        dmd.layoutType().setValue(LayoutType.Report);
         return dmd;
     }
 }

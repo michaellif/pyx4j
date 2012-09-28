@@ -41,8 +41,8 @@ import com.propertyvista.crm.client.ui.SearchBox;
 import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
-import com.propertyvista.crm.client.ui.board.BoardBase;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 
 public class CrmTheme extends VistaTheme {
@@ -383,24 +383,24 @@ public class CrmTheme extends VistaTheme {
     }
 
     protected void initDashboardView() {
-        String prefix = BoardBase.DEFAULT_STYLE_PREFIX;
+        String prefix = AbstractDashboard.DEFAULT_STYLE_PREFIX;
 
         Style style = new Style(Selector.valueOf(prefix));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, BoardBase.StyleSuffix.filtersDescription));
+        style = new Style(Selector.valueOf(prefix, AbstractDashboard.StyleSuffix.filtersDescription));
         style.addProperty("color", ThemeColor.foreground, 0.95);
         style.addProperty("font-weight", "bold");
         style.addProperty("font-size", "1.1em");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, BoardBase.StyleSuffix.filtersPanel));
+        style = new Style(Selector.valueOf(prefix, AbstractDashboard.StyleSuffix.filtersPanel));
         style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.3);
         style.addProperty("color", ThemeColor.foreground);
         style.addProperty("border-bottom", "1px solid #ccc");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, BoardBase.StyleSuffix.actionsPanel));
+        style = new Style(Selector.valueOf(prefix, AbstractDashboard.StyleSuffix.actionsPanel));
         style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.3);
         style.addProperty("color", ThemeColor.foreground);
         style.addProperty("margin-bottom", "0.2em");

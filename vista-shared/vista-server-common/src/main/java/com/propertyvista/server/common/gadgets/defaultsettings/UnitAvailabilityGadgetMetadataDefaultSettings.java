@@ -34,7 +34,6 @@ public class UnitAvailabilityGadgetMetadataDefaultSettings extends AbstractGadge
         super.init(gadgetMetadata);
         gadgetMetadata.pageSize().setValue(10);
         gadgetMetadata.filterPreset().setValue(UnitAvailabilityGadgetMetadata.FilterPreset.VacantAndNotice);
-        gadgetMetadata.docking().column().setValue(0);
         gadgetMetadata.columnDescriptors().addAll(defineUnitAvailabilityReportColumns());
     }
 

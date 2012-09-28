@@ -27,7 +27,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
@@ -66,7 +65,6 @@ public class ReportReportTest extends ReportsTestBase {
         anyUser.setPrimaryKey(ISharedUserEntity.DORMANT_KEY);
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), anyUser));
-        criteria.add(new PropertyCriterion(criteria.proto().layoutType(), Restriction.EQUAL, DashboardMetadata.LayoutType.Report));
         Vector<DashboardMetadata> dms = Persistence.secureQuery(criteria);
 
         for (DashboardMetadata dm : dms) {

@@ -13,12 +13,7 @@
  */
 package com.propertyvista.crm.server.services.dashboard;
 
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
-
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
-import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class DashboardMetadataCrudServiceImpl extends AbstractMetadataCrudServiceImpl implements DashboardMetadataCrudService {
 
@@ -31,8 +26,4 @@ public class DashboardMetadataCrudServiceImpl extends AbstractMetadataCrudServic
         bindCompleateDBO();
     }
 
-    @Override
-    void addTypeCriteria(EntityListCriteria<DashboardMetadata> criteria) {
-        criteria.add(new PropertyCriterion(criteria.proto().layoutType(), Restriction.NOT_EQUAL, DashboardMetadata.LayoutType.Report));
-    }
 }

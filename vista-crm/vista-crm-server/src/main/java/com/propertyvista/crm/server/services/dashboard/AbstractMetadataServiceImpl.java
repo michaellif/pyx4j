@@ -16,7 +16,6 @@ package com.propertyvista.crm.server.services.dashboard;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.UUID;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -29,6 +28,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.server.services.customization.CustomizationPersistenceHelper;
 
+import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
 import com.propertyvista.crm.rpc.dto.dashboard.GadgetDescriptorDTO;
 import com.propertyvista.crm.rpc.services.dashboard.AbstractMetadataService;
 import com.propertyvista.crm.server.util.CrmAppContext;
@@ -49,7 +49,6 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
         criteria.or().left(PropertyCriterion.eq(criteria.proto().user(), CrmAppContext.getCurrentUserPrimaryKey()))
                 .right(PropertyCriterion.eq(criteria.proto().isShared(), true));
-        addTypeCriteria(criteria);
         Vector<DashboardMetadata> dashboardMetadataList = Persistence.secureQuery(criteria);
         callback.onSuccess(dashboardMetadataList);
     }
@@ -65,75 +64,61 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
             dm = Persistence.secureRetrieve(DashboardMetadata.class, entityId);
         }
 
-        for (String id : dm.gadgetIds()) {
+        DashboardColumnLayoutFormat format = new DashboardColumnLayoutFormat(dm.encodedLayout().getValue());
+        for (String id : format.gadgetIds()) {
             GadgetMetadata gm = gadgetStorage().load(id);
-            dm.gadgets().add(gm);
+            if (gm != null) {
+                dm.gadgetMetadataList().add(gm);
+            } else {
+                throw new Error("gadget metadtata '" + id + "' was not found");
+            }
         }
 
         callback.onSuccess(dm);
     }
 
+    /**
+     * calcualte the difference of gadgets new/deleted and save the result
+     */
     @Override
     public void saveDashboardMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata dm) {
+        // TODO refactor
         // this function should not be used to create new dashboards/reports (new dashboards/reports should be created via CRUD service) 
         if (dm.getPrimaryKey() == null) {
             throw new Error("trying to save new dashboard metadata");
         }
 
-        CustomizationPersistenceHelper<GadgetMetadata> gadgetStorage = gadgetStorage();
-
         DashboardMetadata oldDm = Persistence.secureRetrieve(DashboardMetadata.class, dm.getPrimaryKey());
+        DashboardColumnLayoutFormat oldLayout = new DashboardColumnLayoutFormat(oldDm.encodedLayout().getValue());
+        DashboardColumnLayoutFormat newLayout = new DashboardColumnLayoutFormat(dm.encodedLayout().getValue());
 
         // find deleted gadgets
         Collection<String> deletedGadgetIds = new ArrayList<String>();
-        Collection<String> remainingGadgetIds = new ArrayList<String>();
-        for (String oldGadgetId : oldDm.gadgetIds()) {
+        for (String oldGadgetId : oldLayout.gadgetIds()) {
             boolean isContained = false;
-            contained: for (GadgetMetadata incomingGadgetMetadata : dm.gadgets()) {
-                if (oldGadgetId.equals(incomingGadgetMetadata.gadgetId().getValue())) {
+            contained: for (String incomingGadgetId : newLayout.gadgetIds()) {
+                if (oldGadgetId.equals(incomingGadgetId)) {
                     isContained = true;
                     break contained;
                 }
             }
-
             if (!isContained) {
                 deletedGadgetIds.add(oldGadgetId);
-            } else {
-                remainingGadgetIds.add(oldGadgetId);
             }
         }
 
-        // find new gadgets
-        Collection<GadgetMetadata> addedGadgets = new ArrayList<GadgetMetadata>();
-        for (GadgetMetadata gadgetMetadata : dm.gadgets()) {
-            if (gadgetMetadata.getPrimaryKey() == null) {
-                addedGadgets.add(gadgetMetadata);
-            }
-        }
+        Persistence.secureSave(dm);
+
+        CustomizationPersistenceHelper<GadgetMetadata> gadgetStorage = gadgetStorage();
 
         // delete deleted gadgets
         for (String gadgetId : deletedGadgetIds) {
             gadgetStorage.delete(gadgetId);
         }
+        // TODO add gadget -> dashboard reference
 
-        // persist new gadgets        
-        for (GadgetMetadata gadget : addedGadgets) {
-            gadget.setPrimaryKey(new Key(1l));
-            gadget.gadgetId().setValue(UUID.randomUUID().toString());
-            gadgetStorage.save(gadget.gadgetId().getValue(), gadget, true);
-        }
-
-        // rebind the incoming gadgets to the dashboard
-        dm.gadgetIds().clear();
-        for (String gadgetId : remainingGadgetIds) {
-            dm.gadgetIds().add(gadgetId);
-        }
-        for (GadgetMetadata gadget : addedGadgets) {
-            dm.gadgetIds().add(gadget.gadgetId().getValue());
-        }
-
-        Persistence.secureSave(dm);
         Persistence.service().commit();
+
         callback.onSuccess(dm);
     }
 
@@ -182,8 +167,6 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
     }
 
     protected abstract DashboardMetadata retrieveDefaultMetadata();
-
-    protected abstract void addTypeCriteria(EntityQueryCriteria<DashboardMetadata> criteria);
 
     private static CustomizationPersistenceHelper<GadgetMetadata> gadgetStorage() {
         return new CustomizationPersistenceHelper<GadgetMetadata>(GadgetMetadataHolder.class, GadgetMetadata.class);

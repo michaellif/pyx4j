@@ -22,14 +22,6 @@ import com.propertyvista.crm.client.ui.dashboard.DashboardManagement;
 import com.propertyvista.crm.client.ui.dashboard.DashboardManagementImpl;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
-import com.propertyvista.crm.client.ui.report.ReportEditor;
-import com.propertyvista.crm.client.ui.report.ReportEditorImpl;
-import com.propertyvista.crm.client.ui.report.ReportManagement;
-import com.propertyvista.crm.client.ui.report.ReportManagementImpl;
-import com.propertyvista.crm.client.ui.report.ReportView;
-import com.propertyvista.crm.client.ui.report.ReportViewImpl;
-import com.propertyvista.crm.client.ui.reports.CrmReportsView;
-import com.propertyvista.crm.client.ui.reports.CrmReportsViewImpl;
 
 public class DashboardViewFactory extends ViewFactoryBase {
 
@@ -41,16 +33,6 @@ public class DashboardViewFactory extends ViewFactoryBase {
                 map.put(type, new DashboardManagementImpl());
             } else if (DashboardEditor.class.equals(type)) {
                 map.put(type, new DashboardEditorImpl());
-
-            } else if (ReportView.class.equals(type)) {
-                map.put(type, new ReportViewImpl());
-            } else if (ReportManagement.class.equals(type)) {
-                map.put(type, new ReportManagementImpl());
-            } else if (ReportEditor.class.equals(type)) {
-                map.put(type, new ReportEditorImpl());
-
-            } else if (CrmReportsView.class.equals(type)) {
-                map.put(type, new CrmReportsViewImpl());
             }
         }
 

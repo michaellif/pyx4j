@@ -23,7 +23,6 @@ public class AbstractGadgetMetadataCommonDefaultSettings<G extends GadgetMetadat
 
     @Override
     public void init(G gadgetMetadata) {
-        gadgetMetadata.docking().column().setValue(0);
         gadgetMetadata.refreshInterval().setValue(RefreshInterval.Never);
         gadgetMetadata.gadgetId().setValue(UUID.randomUUID().toString());
         if (ListerGadgetBaseMetadata.class.isAssignableFrom(gadgetMetadata.getInstanceValueClass())) {

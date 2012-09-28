@@ -13,24 +13,19 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
-import com.pyx4j.forms.client.ui.NotImplementedException;
 import com.pyx4j.widgets.client.dashboard.BoardLayout;
 import com.pyx4j.widgets.client.dashboard.IBoard;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
-import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public class DashboardLayoutManager implements ILayoutManager {
-
-    private final boolean TODO_PENDING_LAYOUT_STORAGE_IN_GADGET_METADATA = false;
 
     private final LayoutType layoutType;
 
@@ -50,81 +45,37 @@ public class DashboardLayoutManager implements ILayoutManager {
     }
 
     @Override
-    public boolean canHandle(DashboardMetadata dashboardMetadta) {
-        return dashboardMetadta.layoutType().getValue() == layoutType;
+    public boolean canHandle(String encodedLayout) {
+        return encodedLayout.startsWith(layoutType.name().toString());
     }
 
     @Override
-    public void restoreLayout(DashboardMetadata dashboardMetadata, Iterator<IGadgetInstance> gadgetsIterator, IBoard board) {
+    public void restoreLayout(String encodedLayout, Iterator<IGadgetInstance> gadgetsIterator, IBoard board) {
         board.setLayout(boardLayout);
-
-        Iterator<Integer> columnsIterator = getColumnsIterator(dashboardMetadata);
+        DashboardColumnLayoutFormat layoutFormat = new DashboardColumnLayoutFormat(encodedLayout);
         while (gadgetsIterator.hasNext()) {
-            if (TODO_PENDING_LAYOUT_STORAGE_IN_GADGET_METADATA) {
-                Integer column = 0;
-                if (columnsIterator.hasNext()) {
-                    column = columnsIterator.next();
-                }
-            }
             IGadgetInstance gadget = gadgetsIterator.next();
-            board.addGadget(gadget, gadget.getMetadata().docking().column().getValue());
+            board.addGadget(gadget, layoutFormat.getGadgetColumn(gadget.getMetadata().gadgetId().getValue()));
         }
     }
 
     @Override
-    public void saveLayout(DashboardMetadata dashboardMetadata, IBoard board) {
-        if (dashboardMetadata != null) {
-            board.setLayout(boardLayout);
-            dashboardMetadata.layoutType().setValue(layoutType);
-            dashboardMetadata.gadgets().clear();
-
-            IGadgetIterator it = board.getGadgetIterator();
-            List<String> columns = new ArrayList<String>();
-            while (it.hasNext()) {
-                IGadget gadget = it.next();
-                ((IGadgetInstance) gadget).getMetadata().docking().column().setValue(it.getColumn());
-                if (TODO_PENDING_LAYOUT_STORAGE_IN_GADGET_METADATA) {
-                    columns.add(String.valueOf(it.getColumn()));
-                }
-                if (gadget instanceof IGadgetInstance) {
-                    GadgetMetadata gadgetMetadata = ((IGadgetInstance) gadget).getMetadata();
-                    dashboardMetadata.gadgets().add(gadgetMetadata);
-                }
-            }
-
-            StringBuilder encodedLayoutBuilder = new StringBuilder();
-            for (int i = 0; i < columns.size(); ++i) {
-                encodedLayoutBuilder.append(columns.get(i));
-                if (i != (columns.size() - 1)) {
-                    encodedLayoutBuilder.append(" ");
-                }
-            }
-            dashboardMetadata.encodedLayout().setValue(encodedLayoutBuilder.toString());
+    public String switchLayout(String oldEncodedLayout, IBoard board) {
+        if (board.getLayout() != boardLayout) {
+            // TODO add layout switching algorithm here
         }
-    }
-
-    private Iterator<Integer> getColumnsIterator(DashboardMetadata dashboardMetadata) {
-        final String[] columns = (dashboardMetadata.encodedLayout().isNull() ? "" : dashboardMetadata.encodedLayout().getValue()).split(" ");
-
-        return new Iterator<Integer>() {
-
-            private int i = 0;
-
-            @Override
-            public boolean hasNext() {
-                return i < columns.length;
+        board.setLayout(boardLayout);
+        DashboardColumnLayoutFormat.Builder layoutFormatBuilder = new DashboardColumnLayoutFormat.Builder(layoutType);
+        IGadgetIterator it = board.getGadgetIterator();
+        while (it.hasNext()) {
+            IGadget gadget = it.next();
+            if (gadget instanceof IGadgetInstance) {
+                GadgetMetadata gadgetMetadata = ((IGadgetInstance) gadget).getMetadata();
+                String gadgetId = gadgetMetadata.gadgetId().getValue();
+                layoutFormatBuilder.bind(gadgetId, it.getColumn());
             }
-
-            @Override
-            public Integer next() {
-                return Integer.parseInt(columns[i++]);
-            }
-
-            @Override
-            public void remove() {
-                throw new NotImplementedException();
-            }
-        };
+        }
+        return layoutFormatBuilder.build().getSerializedForm();
     }
 
     @Override

@@ -16,6 +16,7 @@ package com.propertyvista.generator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
 import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
@@ -109,9 +110,10 @@ public class DashboardGenerator extends Dashboards {
         dmd.isShared().setValue(true);
         dmd.name().setValue(name);
         dmd.description().setValue(description);
-        dmd.layoutType().setValue(LayoutType.One);
+        dmd.encodedLayout().setValue(new DashboardColumnLayoutFormat.Builder(LayoutType.One).build().getSerializedForm());
+
         for (Class<? extends GadgetMetadata> gadgetMetadata : gadgetMetadatas) {
-            dmd.gadgets().add(GadgetMetadataRepository.get().createGadgetMetadata(gadgetMetadata));
+            dmd.gadgetMetadataList().add(GadgetMetadataRepository.get().createGadgetMetadata(gadgetMetadata));
         }
         return dmd;
     }

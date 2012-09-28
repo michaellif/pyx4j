@@ -57,17 +57,22 @@ public class DashboardViewActivity extends AbstractActivity implements Dashboard
             public void onSuccess(DashboardMetadata result) {
                 view.setDashboardMetadata(result);
             }
+
         }, dashboardId);
     }
 
     @Override
     public void save() {
+        DashboardMetadata dm = view.getDashboardMetadata();
+//        // we don't need to tranfer the gadgets list: this field is only used one way (from server to client)
+//        dm.gadgetMetadataList().clear();
+
         service.saveDashboardMetadata(new DefaultAsyncCallback<DashboardMetadata>() {
             @Override
             public void onSuccess(DashboardMetadata result) {
 
             }
-        }, view.getDashboardMetadata());
+        }, dm);
     }
 
     @Override

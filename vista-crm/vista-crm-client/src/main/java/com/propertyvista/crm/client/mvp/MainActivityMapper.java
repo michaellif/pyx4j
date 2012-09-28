@@ -187,9 +187,6 @@ import com.propertyvista.crm.client.activity.policies.producttax.ProductTaxPolic
 import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyViewerActivity;
-import com.propertyvista.crm.client.activity.report.CrmReportsActivity;
-import com.propertyvista.crm.client.activity.report.ReportEditorActivity;
-import com.propertyvista.crm.client.activity.report.ReportManagementActivity;
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
@@ -638,13 +635,9 @@ public class MainActivityMapper implements AppActivityMapper {
                         }
 
 // - Report/Dashboard-related:
-                    } else if (place instanceof CrmSiteMap.Report.Management) {
-                        activity = new ReportManagementActivity(place);
                     } else if (place instanceof CrmSiteMap.Dashboard.Management) {
                         activity = new DashboardManagementActivity(place);
 
-                    } else if (place instanceof CrmSiteMap.Report.Edit) {
-                        activity = new ReportEditorActivity(crudPlace);
                     } else if (place instanceof CrmSiteMap.Dashboard.Edit) {
                         activity = new DashboardEditorActivity(crudPlace);
 
@@ -972,9 +965,6 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new CrmAuditRecordsListerActivity(place);
 
                     } // CRUD APP PLACE IF ENDS HERE
-
-                } else if (place instanceof CrmSiteMap.Reports) {
-                    activity = new CrmReportsActivity((CrmSiteMap.Reports) place);
 
                 } else if (place instanceof CrmSiteMap.Dashboard) {
                     activity = new DashboardViewActivity((CrmSiteMap.Dashboard) place);

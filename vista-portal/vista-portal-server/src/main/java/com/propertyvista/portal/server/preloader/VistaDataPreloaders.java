@@ -39,7 +39,6 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         add(new CrmRolesPreloader());
         add(new PreloadPolicies(production));
         add(new DashboardPreloader());
-        add(new ReportPreloader());
         add(new RefferenceDataPreloader());
 
         if (production) {
