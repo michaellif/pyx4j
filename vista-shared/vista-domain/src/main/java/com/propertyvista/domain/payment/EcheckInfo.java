@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -47,5 +48,5 @@ public interface EcheckInfo extends PaymentDetails {
     @NotNull
     @ToString(index = 2)
     @Caption(name = "Account Number")
-    TokenizedAccountNumber accountNo();
+    IPersonalIdentity accountNo();
 }

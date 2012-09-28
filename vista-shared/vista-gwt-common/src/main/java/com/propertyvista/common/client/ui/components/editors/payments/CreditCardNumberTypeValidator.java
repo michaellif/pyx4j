@@ -13,16 +13,16 @@
  */
 package com.propertyvista.common.client.ui.components.editors.payments;
 
+import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
-import com.propertyvista.domain.payment.TokenizedCreditCardNumber;
 import com.propertyvista.domain.util.ValidationUtils;
 
-public class CreditCardNumberTypeValidator implements EditableValueValidator<TokenizedCreditCardNumber> {
+public class CreditCardNumberTypeValidator implements EditableValueValidator<IPersonalIdentity> {
 
     private static final I18n i18n = I18n.get(CreditCardNumberTypeValidator.class);
 
@@ -39,7 +39,7 @@ public class CreditCardNumberTypeValidator implements EditableValueValidator<Tok
     }
 
     @Override
-    public ValidationError isValid(CComponent<TokenizedCreditCardNumber, ?> component, TokenizedCreditCardNumber value) {
+    public ValidationError isValid(CComponent<IPersonalIdentity, ?> component, IPersonalIdentity value) {
         if ((value == null) || value.newNumber().isNull()) {
             return null; // editing tokenized credit card.
         } else if (creditCardTypeProvider.getCreditCardType() == null

@@ -21,11 +21,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
+import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -35,13 +37,11 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.components.c.CTokinazedNumberEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardNumberTypeValidator.CreditCardTypeProvider;
 import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
-import com.propertyvista.domain.payment.TokenizedCreditCardNumber;
 import com.propertyvista.domain.util.ValidationUtils;
 
 public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo> {
@@ -64,9 +64,7 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOn()), 20).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardType()), 15).build());
-        panel.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().card(), new CTokinazedNumberEditor<TokenizedCreditCardNumber>(TokenizedCreditCardNumber.class)), 15)
-                        .build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().card(), new CPersonalIdentityField("XXXX XXXX XXXX xxxx", null)), 15).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 15).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityCode()), 3).build());
 
@@ -103,9 +101,9 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
             }
         });
 
-        get(proto().card()).addValueChangeHandler(new ValueChangeHandler<TokenizedCreditCardNumber>() {
+        get(proto().card()).addValueChangeHandler(new ValueChangeHandler<IPersonalIdentity>() {
             @Override
-            public void onValueChange(ValueChangeEvent<TokenizedCreditCardNumber> event) {
+            public void onValueChange(ValueChangeEvent<IPersonalIdentity> event) {
                 get(proto().card()).setMandatory(true);
                 get(proto().securityCode()).setMandatory(true);
             }

@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -27,10 +28,8 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.components.c.CTokinazedNumberEditor;
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberValidator;
 import com.propertyvista.domain.payment.EcheckInfo;
-import com.propertyvista.domain.payment.TokenizedAccountNumber;
 import com.propertyvista.domain.util.ValidationUtils;
 
 public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
@@ -56,8 +55,7 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankId()), 3).build());
 
-        panel.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().accountNo(), new CTokinazedNumberEditor<TokenizedAccountNumber>(TokenizedAccountNumber.class)), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNo(), new CPersonalIdentityField("XXXX XXXX xxxx", null)), 20).build());
         panel.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         if (isEditable()) {
