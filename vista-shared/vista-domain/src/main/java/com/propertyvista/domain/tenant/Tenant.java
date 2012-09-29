@@ -16,19 +16,15 @@ package com.propertyvista.domain.tenant;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
@@ -52,10 +48,4 @@ public interface Tenant extends LeaseParticipant<LeaseCustomerTenant> {
     @Editor(type = EditorType.percentage)
     IPrimitive<BigDecimal> percentage();
 
-    // ----------------------------------------------------
-    // parent <-> child relationship:
-
-    //    @Owned
-    @Detached(level = AttachLevel.Detached)
-    ISet<MaintenanceRequest> _MaintenanceRequests();
 }

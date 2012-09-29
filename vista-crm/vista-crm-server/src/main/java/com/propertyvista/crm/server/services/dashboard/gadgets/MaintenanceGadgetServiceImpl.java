@@ -97,7 +97,7 @@ public class MaintenanceGadgetServiceImpl implements MaintenanceGadgetService {
         }
 
         if (buildingsFilter != null && !buildingsFilter.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().tenant().leaseTermV().holder().lease().unit().building(), buildingsFilter));
+            criteria.add(PropertyCriterion.in(criteria.proto().leaseCustomer().lease().unit().building(), buildingsFilter));
         }
         if (lowerBound != null) {
             criteria.add(PropertyCriterion.ge(criteria.proto().submitted(), lowerBound));

@@ -31,7 +31,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 
 public interface MaintenanceRequest extends IEntity {
 
@@ -39,7 +39,7 @@ public interface MaintenanceRequest extends IEntity {
     @Detached
     @NotNull
     @JoinColumn
-    Tenant tenant();
+    LeaseCustomerTenant leaseCustomer();
 
     @Detached
     @NotNull

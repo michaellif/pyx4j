@@ -43,5 +43,10 @@ VISTA-1964,VISTA-1922 	27/09/2012 22:59:12  vlads
         move participantId and customer from  old tenant & guarantor to Lease_Customer
         move preauthorizedPayment from tenant to LeaseCustomer.preauthorizedPayment
 
+    remove table lease_participant$_maintenance_requests (it was not used)
+    rename MaintenanceRequest.tenant -> leaseCustomer
+    change MaintenanceRequest.tenant FK to point to LeaseCustomer
+
+
 VISTA-2023 28/09/2012  michael
 Use IPersonalIdentity instead TokenizedAccountNumber, TokenizedCreditCardNumber

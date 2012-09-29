@@ -13,9 +13,14 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.payment.PaymentMethod;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
@@ -23,4 +28,11 @@ import com.propertyvista.domain.payment.PaymentMethod;
 public interface LeaseCustomerTenant extends LeaseCustomer {
 
     PaymentMethod preauthorizedPayment();
+
+    // ----------------------------------------------------
+    // parent <-> child relationship:
+
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
+    ISet<MaintenanceRequest> _MaintenanceRequests();
 }
