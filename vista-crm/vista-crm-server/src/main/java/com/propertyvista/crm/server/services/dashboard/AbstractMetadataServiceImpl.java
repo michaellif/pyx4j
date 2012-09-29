@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.services.dashboard;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -29,6 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.server.services.customization.CustomizationPersistenceHelper;
 
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
+import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat.Builder;
 import com.propertyvista.crm.rpc.dto.dashboard.GadgetDescriptorDTO;
 import com.propertyvista.crm.rpc.services.dashboard.AbstractMetadataService;
 import com.propertyvista.crm.server.util.CrmAppContext;
@@ -40,6 +42,8 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
 
+// TODO rename to dashboard metadata service
+// TODO extract gadget related stuff to another service
 abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
 
     private final static I18n i18n = I18n.get(AbstractMetadataServiceImpl.class);
@@ -65,13 +69,23 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         }
 
         DashboardColumnLayoutFormat format = new DashboardColumnLayoutFormat(dm.encodedLayout().getValue());
+        List<String> lostIds = new ArrayList<String>();
         for (String id : format.gadgetIds()) {
             GadgetMetadata gm = gadgetStorage().load(id);
             if (gm != null) {
                 dm.gadgetMetadataList().add(gm);
-            } else {
-                throw new Error("gadget metadtata '" + id + "' was not found");
             }
+        }
+
+        if (!lostIds.isEmpty()) {
+            Builder updatedFormatBuilder = new DashboardColumnLayoutFormat.Builder(format.getLayoutType());
+            for (String id : format.gadgetIds()) {
+                if (!lostIds.contains(id)) {
+                    updatedFormatBuilder.bind(id, format.getGadgetColumn(id));
+                }
+            }
+            dm.encodedLayout().setValue(updatedFormatBuilder.build().getSerializedForm());
+            throw new Error("gadgets with IDs: " + lostIds + "could not be loaded and were removed from the dashboard");
         }
 
         callback.onSuccess(dm);
@@ -82,7 +96,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
      */
     @Override
     public void saveDashboardMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata dm) {
-        // TODO refactor
+
         // this function should not be used to create new dashboards/reports (new dashboards/reports should be created via CRUD service) 
         if (dm.getPrimaryKey() == null) {
             throw new Error("trying to save new dashboard metadata");
@@ -127,7 +141,8 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         GadgetMetadata gadget = GadgetMetadataRepository.get().createGadgetMetadata(proto);
         gadgetStorage().save(gadget.gadgetId().getValue(), gadget, false);
         Persistence.service().commit();
-        callback.onSuccess(GadgetMetadataRepository.get().createGadgetMetadata(proto));
+
+        callback.onSuccess(gadget);
     }
 
     @Override
@@ -152,14 +167,13 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
     public void listAvailableGadgets(AsyncCallback<Vector<GadgetDescriptorDTO>> callback, DashboardType boardType) {
         Vector<GadgetDescriptorDTO> descriptors = new Vector<GadgetDescriptorDTO>();
 
-        for (Class<? extends GadgetMetadata> klass : GadgetMetadataRepository.get().getGadgetMetadataClasses()) {
-            GadgetDescription gadgetDescription = klass.getAnnotation(GadgetDescription.class);
-            // TODO add translation
-            if ((boardType == DashboardType.building & BuildingGadget.class.isAssignableFrom(klass))
-                    | (boardType != DashboardType.building & !BuildingGadget.class.isAssignableFrom(klass))) {
-                GadgetMetadata proto = EntityFactory.getEntityPrototype(klass);
+        for (Class<? extends GadgetMetadata> gadgetMetadataClass : GadgetMetadataRepository.get().getGadgetMetadataClasses()) {
+            if (isAcceptedBy(boardType, gadgetMetadataClass)) {
+                GadgetMetadata proto = EntityFactory.getEntityPrototype(gadgetMetadataClass);
+                GadgetDescription gadgetDescription = gadgetMetadataClass.getAnnotation(GadgetDescription.class);
                 descriptors.add(new GadgetDescriptorDTO(//@formatter:off
                         proto.getEntityMeta().getCaption(),
+                        // TODO add translation: get description and keywords through i18n
                         gadgetDescription != null ? gadgetDescription.description() : i18n.tr(""),
                         Arrays.asList(gadgetDescription != null ? gadgetDescription.keywords() : new String[0]),
                         proto
@@ -173,6 +187,11 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
 
     private static CustomizationPersistenceHelper<GadgetMetadata> gadgetStorage() {
         return new CustomizationPersistenceHelper<GadgetMetadata>(GadgetMetadataHolder.class, GadgetMetadata.class);
+    }
+
+    private static boolean isAcceptedBy(DashboardType boardType, Class<? extends GadgetMetadata> gadgetMetadataClass) {
+        return (boardType == DashboardType.building & BuildingGadget.class.isAssignableFrom(gadgetMetadataClass))
+                | (boardType != DashboardType.building & !BuildingGadget.class.isAssignableFrom(gadgetMetadataClass));
     }
 
 }
