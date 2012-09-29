@@ -39,6 +39,7 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
@@ -187,9 +188,14 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             lease.status().setValue(Status.Application);
-            lease = leaseFacade().init(lease);
-            lease = leaseFacade().setUnit(lease, lease.unit());
-            lease = leaseFacade().persist(lease);
+            lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
+            lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, lease.unit());
+            lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
+
+            Tenant mainTenant = lease.currentTerm().version().tenants().get(0);
+            mainTenant.leaseCustomer().preauthorizedPayment().set(mainTenant.leaseCustomer().customer().paymentMethods().iterator().next());
+            Persistence.service().merge(mainTenant.leaseCustomer());
+
             if (isDebugged) {
                 System.out.println("" + now() + " created lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
                         + lease.currentTerm().termTo().getValue());
@@ -209,7 +215,7 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            leaseFacade().approveApplication(lease, null, "simulation");
+            ServerSideFactory.create(LeaseFacade.class).approveApplication(lease, null, "simulation");
 
             if (isDebugged) {
                 System.out.println("" + now() + " approved lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
@@ -229,7 +235,7 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            leaseFacade().activate(lease);
+            ServerSideFactory.create(LeaseFacade.class).activate(lease);
             if (isDebugged) {
                 System.out.println("" + now() + " activated lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
                         + lease.currentTerm().termTo().getValue());
@@ -417,7 +423,7 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            leaseFacade().createCompletionEvent(lease, CompletionType.Notice, now(), lease.currentTerm().termTo().getValue());
+            ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, now(), lease.currentTerm().termTo().getValue());
         }
     }
 
@@ -429,7 +435,7 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            leaseFacade().complete(lease);
+            ServerSideFactory.create(LeaseFacade.class).complete(lease);
         }
     }
 
@@ -440,10 +446,6 @@ public class LeaseLifecycleSimulator {
         calendar.setTime(billingCycleStartDate);
         calendar.add(Calendar.DATE, -cycle.paymentFrequency().getValue().getBillRunTargetDayOffset());
         return new LogicalDate(calendar.getTime());
-    }
-
-    private static LeaseFacade leaseFacade() {
-        return ServerSideFactory.create(LeaseFacade.class);
     }
 
     private static long rndBetween(long min, long max) {

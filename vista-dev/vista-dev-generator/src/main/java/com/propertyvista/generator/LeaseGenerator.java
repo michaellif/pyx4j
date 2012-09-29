@@ -160,8 +160,7 @@ public class LeaseGenerator extends DataGenerator {
         m.billingAddress().set(CommonsGenerator.createAddress());
         m.phone().setValue(CommonsGenerator.createPhone());
 
-        tenant.preauthorizedPayment().set(m);
-        tenant.leaseCustomer().customer().paymentMethods().add(tenant.preauthorizedPayment());
+        tenant.leaseCustomer().customer().paymentMethods().add(m);
     }
 
     public static void attachDocumentData(Lease lease) {

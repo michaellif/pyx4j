@@ -43,7 +43,7 @@ import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
-public interface LeaseParticipant extends IEntity {
+public interface LeaseParticipant<LC extends LeaseCustomer> extends IEntity {
 
     @I18n
     @XmlType(name = "TenantRole")
@@ -71,7 +71,7 @@ public interface LeaseParticipant extends IEntity {
     @NotNull
     @ReadOnly
     @ToString(index = 0)
-    LeaseCustomer leaseCustomer();
+    LC leaseCustomer();
 
     @NotNull
     @ToString(index = 1)

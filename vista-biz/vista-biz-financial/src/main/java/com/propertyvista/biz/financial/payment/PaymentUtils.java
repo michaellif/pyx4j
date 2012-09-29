@@ -98,7 +98,7 @@ class PaymentUtils {
     }
 
     public static PaymentMethod retrievePreAuthorizedPaymentMethod(Tenant tenant) {
-        PaymentMethod method = tenant.preauthorizedPayment();
+        PaymentMethod method = tenant.leaseCustomer().preauthorizedPayment();
         if (method.isNull()) {
             return null;
         } else {

@@ -70,7 +70,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
 
         // mark pre-authorized one:
         for (PaymentMethod paymentMethod : dto.paymentMethods()) {
-            if (paymentMethod.equals(entity.preauthorizedPayment())) {
+            if (paymentMethod.equals(entity.leaseCustomer().preauthorizedPayment())) {
                 paymentMethod.isPreauthorized().setValue(Boolean.TRUE);
                 break;
             }
@@ -102,13 +102,15 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
         }
 
         // save new/edited ones (and memorize pre-authorized method):
-        entity.preauthorizedPayment().set(null);
         for (PaymentMethod paymentMethod : dto.paymentMethods()) {
             paymentMethod.customer().set(entity.leaseCustomer().customer());
             paymentMethod.isOneTimePayment().setValue(false);
             ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(building, paymentMethod);
             if (paymentMethod.isPreauthorized().isBooleanTrue()) {
-                entity.preauthorizedPayment().set(paymentMethod);
+                if (!entity.leaseCustomer().preauthorizedPayment().equals(paymentMethod)) {
+                    entity.leaseCustomer().preauthorizedPayment().set(paymentMethod);
+                    Persistence.service().merge(entity.leaseCustomer());
+                }
             }
         }
 

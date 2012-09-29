@@ -41,6 +41,7 @@ VISTA-1964,VISTA-1922 	27/09/2012 22:59:12  vlads
     Migration Notes:
         You need to mere IDs from two tables to one (tenant & guarantor -> Lease_Participant)
         move participantId and customer from  old tenant & guarantor to Lease_Customer
+        move preauthorizedPayment from tenant to LeaseCustomer.preauthorizedPayment
 
 VISTA-2023 28/09/2012  michael
-Use IPersonalIdentity instead TokenizedAccountNumber, TokenizedCreditCardNumber 
+Use IPersonalIdentity instead TokenizedAccountNumber, TokenizedCreditCardNumber

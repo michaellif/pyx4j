@@ -72,7 +72,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 mainTenant.leaseCustomer().customer().set(dualTenantCustomer);
                 // Trick to share the same already saved data
                 mainTenant.screening().set(mainTenant.leaseCustomer().customer().personScreenings().iterator().next());
-                mainTenant.preauthorizedPayment().set(mainTenant.leaseCustomer().customer().paymentMethods().iterator().next());
             }
 
             // Create normal Active Lease first for Shortcut users
@@ -151,7 +150,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 mainTenant.leaseCustomer().customer().set(dualPotentialCustomer);
                 // Trick to share the same already saved data 
                 mainTenant.screening().set(mainTenant.leaseCustomer().customer().personScreenings().iterator().next());
-                mainTenant.preauthorizedPayment().set(mainTenant.leaseCustomer().customer().paymentMethods().iterator().next());
             }
 
             Persistence.service().setTransactionSystemTime(lease.currentTerm().termFrom().getValue());

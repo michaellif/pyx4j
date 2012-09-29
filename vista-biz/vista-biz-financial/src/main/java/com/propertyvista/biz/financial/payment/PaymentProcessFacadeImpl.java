@@ -312,6 +312,9 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                     }
                     break tanantLoop;
                 case CoApplicant:
+                    //TODO Payment split
+                    break;
+                default:
                     break;
                 }
 

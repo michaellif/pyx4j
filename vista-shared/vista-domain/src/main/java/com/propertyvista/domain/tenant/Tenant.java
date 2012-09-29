@@ -29,13 +29,13 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 @ToStringFormat("{0} - {1}{2,choice,null#|!null#, {2}}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @DiscriminatorValue("Tenant")
-public interface Tenant extends LeaseParticipant {
+public interface Tenant extends LeaseParticipant<LeaseCustomerTenant> {
 
     @NotNull
     @ToString(index = 2)
@@ -51,9 +51,6 @@ public interface Tenant extends LeaseParticipant {
     @Caption(name = "Rent Percentage")
     @Editor(type = EditorType.percentage)
     IPrimitive<BigDecimal> percentage();
-
-    @Deprecated
-    PaymentMethod preauthorizedPayment();
 
     // ----------------------------------------------------
     // parent <-> child relationship:
