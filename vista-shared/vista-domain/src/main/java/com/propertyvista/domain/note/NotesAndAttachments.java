@@ -13,9 +13,11 @@
  */
 package com.propertyvista.domain.note;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
@@ -27,13 +29,21 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.security.CrmUser;
 
 @ToStringFormat("\"{0}\", by {1}; last modified {2}")
 public interface NotesAndAttachments extends IEntity {
 
-    IPrimitive<String> noteeId();
+    @Indexed(group = { "o,1" })
+    @I18n(strategy = I18n.I18nStrategy.IgnoreMember)
+    IPrimitive<Key> ownerId();
+
+    @Indexed(group = { "o,2" })
+    @I18n(strategy = I18n.I18nStrategy.IgnoreMember)
+    @Length(80)
+    IPrimitive<String> ownerClass();
 
     @NotNull
     @Length(128)

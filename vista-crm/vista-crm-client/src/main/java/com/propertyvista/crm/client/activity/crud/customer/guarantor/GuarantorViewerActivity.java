@@ -28,6 +28,7 @@ import com.propertyvista.common.client.ui.components.security.PasswordChangeView
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
+import com.propertyvista.crm.client.visor.notes.NotesParentId;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.screening.PersonScreeningCrudService;
@@ -71,8 +72,8 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     }
 
     @Override
-    protected String createNotesParentId() {
-        return getEntitySimpleClassName(Guarantor.class) + ':' + notesParentPrimaryKey.toString();
+    protected NotesParentId createNotesParentId() {
+        return new NotesParentId(Guarantor.class, notesParentPrimaryKey);
     }
 
     @Override

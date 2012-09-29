@@ -23,6 +23,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.event.CrudNavigateEvent;
 import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorController;
+import com.propertyvista.crm.client.visor.notes.NotesParentId;
 
 public class CrmViewerActivity<E extends IEntity> extends ViewerActivityBase<E> {
 
@@ -56,8 +57,8 @@ public class CrmViewerActivity<E extends IEntity> extends ViewerActivityBase<E> 
         return notesAndAttachmentsController;
     }
 
-    protected String createNotesParentId() {
-        return getEntitySimpleClassName(entityClass) + ':' + getEntityId().asCurrentKey().toString();
+    protected NotesParentId createNotesParentId() {
+        return new NotesParentId(entityClass, getEntityId());
     }
 
     // TODO : this algorithm should be revised 

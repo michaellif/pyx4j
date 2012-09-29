@@ -28,6 +28,7 @@ import com.propertyvista.common.client.ui.components.security.PasswordChangeView
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
+import com.propertyvista.crm.client.visor.notes.NotesParentId;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.screening.PersonScreeningCrudService;
@@ -70,8 +71,8 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     }
 
     @Override
-    protected String createNotesParentId() {
-        return getEntitySimpleClassName(Tenant.class) + ':' + notesParentPrimaryKey.toString();
+    protected NotesParentId createNotesParentId() {
+        return new NotesParentId(Tenant.class, notesParentPrimaryKey);
     }
 
     @Override

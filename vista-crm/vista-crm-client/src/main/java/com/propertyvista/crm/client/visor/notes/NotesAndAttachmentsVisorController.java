@@ -34,9 +34,9 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
 
     private final NotesAndAttachmentsVisorView view;
 
-    private final String notesParentId;
+    private final NotesParentId notesParentId;
 
-    public NotesAndAttachmentsVisorController(String notesParentId) {
+    public NotesAndAttachmentsVisorController(NotesParentId notesParentId) {
         service = GWT.<NotesAndAttachmentsCrudService> create(NotesAndAttachmentsCrudService.class);
         view = new NotesAndAttachmentsVisorView(this);
         this.notesParentId = notesParentId;
@@ -60,14 +60,14 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
 
     public void populate(DefaultAsyncCallback<EntitySearchResult<NotesAndAttachments>> callback) {
         EntityListCriteria<NotesAndAttachments> criteria = new EntityListCriteria<NotesAndAttachments>(NotesAndAttachments.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().noteeId(), notesParentId));
+        criteria.add(PropertyCriterion.eq(criteria.proto().ownerClass(), notesParentId.getOwnerClass()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().ownerId(), notesParentId.getOwnerId()));
         service.list(callback, criteria);
     }
 
     public void save(NotesAndAttachments item, DefaultAsyncCallback<Key> callback) {
-        if (item.noteeId().isNull()) {
-            item.noteeId().setValue(notesParentId);
-        }
+        item.ownerClass().setValue(notesParentId.getOwnerClass());
+        item.ownerId().setValue(notesParentId.getOwnerId());
         if (item.getPrimaryKey() == null) {
             service.create(callback, item);
         } else {
