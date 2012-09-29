@@ -33,11 +33,14 @@ import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.screening.PersonScreeningCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implements TenantViewerView.Presenter {
 
     private final IListerView.Presenter<PersonScreening> screeningLister;
+
+    private Key notesParentPrimaryKey;
 
     public TenantViewerActivity(CrudAppPlace place) {
         super(place, CustomerViewFactory.instance(TenantViewerView.class), GWT.<TenantCrudService> create(TenantCrudService.class));
@@ -63,6 +66,12 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
 
         screeningLister.setParent(result.leaseCustomer().customer().getPrimaryKey());
         screeningLister.populate();
+        notesParentPrimaryKey = result.leaseCustomer().getPrimaryKey();
+    }
+
+    @Override
+    protected String createNotesParentId() {
+        return getEntitySimpleClassName(Tenant.class) + ':' + notesParentPrimaryKey.toString();
     }
 
     @Override

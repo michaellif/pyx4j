@@ -17,10 +17,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -38,10 +36,10 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
 
     private final String notesParentId;
 
-    public NotesAndAttachmentsVisorController(Class<? extends IEntity> parentClass, Key parentKey) {
+    public NotesAndAttachmentsVisorController(String notesParentId) {
         service = GWT.<NotesAndAttachmentsCrudService> create(NotesAndAttachmentsCrudService.class);
         view = new NotesAndAttachmentsVisorView(this);
-        notesParentId = createNotesParentId(parentClass, parentKey);
+        this.notesParentId = notesParentId;
     }
 
     @Override
@@ -85,8 +83,4 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
         }
     }
 
-    // Note : this algorithm should be revised 
-    private String createNotesParentId(Class<? extends IEntity> parentClass, Key parentKey) {
-        return GWTJava5Helper.getSimpleName(parentClass) + ':' + parentKey.toString();
-    }
 }

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.activity.crud;
 
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
@@ -50,8 +51,18 @@ public class CrmViewerActivity<E extends IEntity> extends ViewerActivityBase<E> 
 
     public NotesAndAttachmentsVisorController getNotesAndAttachmentsController() {
         if (notesAndAttachmentsController == null) {
-            notesAndAttachmentsController = new NotesAndAttachmentsVisorController(entityClass, getEntityId());
+            notesAndAttachmentsController = new NotesAndAttachmentsVisorController(createNotesParentId());
         }
         return notesAndAttachmentsController;
+    }
+
+    protected String createNotesParentId() {
+        return getEntitySimpleClassName(entityClass) + ':' + getEntityId().asCurrentKey().toString();
+    }
+
+    // TODO : this algorithm should be revised 
+    //TODO use EntityMeta or ClassName.getClassName(klass)
+    public final String getEntitySimpleClassName(Class<? extends IEntity> entityClass) {
+        return GWTJava5Helper.getSimpleName(entityClass);
     }
 }

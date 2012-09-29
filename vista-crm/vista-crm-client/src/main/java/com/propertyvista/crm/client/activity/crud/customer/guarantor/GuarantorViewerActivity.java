@@ -31,12 +31,15 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.screening.PersonScreeningCrudService;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> implements GuarantorViewerView.Presenter {
 
     private final IListerView.Presenter<PersonScreening> screeningLister;
+
+    private Key notesParentPrimaryKey;
 
     @SuppressWarnings("unchecked")
     public GuarantorViewerActivity(CrudAppPlace place) {
@@ -63,6 +66,13 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
 
         screeningLister.setParent(result.leaseCustomer().customer().getPrimaryKey());
         screeningLister.populate();
+
+        notesParentPrimaryKey = result.leaseCustomer().getPrimaryKey();
+    }
+
+    @Override
+    protected String createNotesParentId() {
+        return getEntitySimpleClassName(Guarantor.class) + ':' + notesParentPrimaryKey.toString();
     }
 
     @Override
