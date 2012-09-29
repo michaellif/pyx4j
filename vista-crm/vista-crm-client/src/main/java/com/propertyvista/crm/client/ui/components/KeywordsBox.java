@@ -18,25 +18,104 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiFactory;
-import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.commons.css.IStyleName;
 
 public abstract class KeywordsBox extends Composite {
 
-    interface KeywordsBoxUiBinder extends UiBinder<Widget, KeywordsBox> {
+    public static String DEFAULT_STYLE_PREFIX = "-vista-KeywordsBox";
+
+    public enum StyleSuffix implements IStyleName {
+        ActiveKeywords, KeywordsAdder, KeywordsAdderList, KeywordsAdderButton, Keyword, KeywordLabel, KeywordUnselectButton;
     };
 
-    private static KeywordsBoxUiBinder uiBinder = GWT.create(KeywordsBoxUiBinder.class);
+    private class Keyword extends Composite {
 
-    @UiField
+        public Keyword(String keyword) {
+            FlowPanel p = new FlowPanel();
+            p.add(makeKeywordLabel(keyword));
+            p.add(makeUnselectButton(keyword));
+            initWidget(p);
+            setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Keyword);
+        }
+
+        private Label makeKeywordLabel(String keyword) {
+            Label label = new Label();
+            label.setTitle(keyword);
+            label.setText(new SafeHtmlBuilder().appendEscaped(keyword).toSafeHtml().asString());
+            label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.KeywordLabel);
+            return label;
+        }
+
+        private Label makeUnselectButton(final String keyword) {
+            Label button = new Label();
+            button.setText("X");
+            button.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    KeywordsBox.this.unselect(keyword);
+                }
+            });
+            button.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.KeywordUnselectButton);
+            return button;
+        }
+
+    }
+
+    private class KeywordAdder extends Composite {
+
+        ListBox keywordsList;
+
+        public KeywordAdder() {
+            FlowPanel p = new FlowPanel();
+            p.add(keywordsList = makeKeywordsList());
+            p.add(makeAddButton());
+            initWidget(p);
+            setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.KeywordsAdder);
+        }
+
+        public void setAvaiableKeywords(Set<String> keywords) {
+            keywordsList.clear();
+            keywordsList.addItem("");
+            for (String keyword : keywords) {
+                keywordsList.addItem(keyword);
+            }
+        }
+
+        private ListBox makeKeywordsList() {
+            ListBox listBox = new ListBox(false);
+            listBox.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.KeywordsAdderList);
+            return listBox;
+        }
+
+        private Widget makeAddButton() {
+            Button button = new Button();
+            button.setText("+");
+            button.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    if (keywordsList.getSelectedIndex() > 0) { // the first item is blank
+                        KeywordsBox.this.select(keywordsList.getItemText(keywordsList.getSelectedIndex()));
+                    }
+                }
+            });
+            button.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.KeywordsAdderButton);
+            return button;
+        }
+
+    }
+
     FlowPanel activeKeywordsPanel;
 
-    @UiField
     KeywordAdder keywordAdder;
 
     private final List<String> activeKeywords;
@@ -47,20 +126,27 @@ public abstract class KeywordsBox extends Composite {
         activeKeywords = new ArrayList<String>();
         potentialKeywords = new ArrayList<String>();
 
-        initWidget(uiBinder.createAndBindUi(this));
+        FlowPanel p = new FlowPanel();
+        p.add(activeKeywordsPanel = makeActiveKeywordsPanel());
+        p.add(keywordAdder = new KeywordAdder());
+        initWidget(p);
+    }
+
+    private FlowPanel makeActiveKeywordsPanel() {
+        FlowPanel p = new FlowPanel();
+        p.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.ActiveKeywords);
+        return p;
     }
 
     public void select(String keyword) {
         activeKeywords.add(keyword);
         potentialKeywords.remove(keyword);
-
         redraw(true);
     }
 
     public void unselect(String keyword) {
         activeKeywords.remove(keyword);
         potentialKeywords.add(keyword);
-
         redraw(true);
     }
 
@@ -73,15 +159,10 @@ public abstract class KeywordsBox extends Composite {
 
     protected abstract void onKeywordsChanged(Set<String> keywords);
 
-    @UiFactory
-    KeywordAdder makeKeywordAdder() {
-        return new KeywordAdder(this);
-    }
-
     private void redraw(boolean execCallback) {
         activeKeywordsPanel.clear();
         for (String keyword : activeKeywords) {
-            activeKeywordsPanel.add(new Keyword(this, keyword));
+            activeKeywordsPanel.add(new Keyword(keyword));
         }
         keywordAdder.setAvaiableKeywords(new HashSet<String>(potentialKeywords));
         keywordAdder.setVisible(!potentialKeywords.isEmpty());

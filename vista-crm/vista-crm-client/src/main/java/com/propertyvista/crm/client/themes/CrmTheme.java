@@ -42,6 +42,7 @@ import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
+import com.propertyvista.crm.client.ui.components.KeywordsBox;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 
@@ -124,6 +125,8 @@ public class CrmTheme extends VistaTheme {
         initSuggestBoxStyle();
 
         initReportsStyles();
+
+        initKeywordBoxStyles();
     }
 
     @Override
@@ -594,6 +597,60 @@ public class CrmTheme extends VistaTheme {
     private void initReportsStyles() {
         Style style = new Style("." + AbstractReportsView.Styles.SettingsFormPanel.name());
         style.addProperty("background-color", ThemeColor.object1, 0.3);
+        addStyle(style);
+    }
+
+    private void initKeywordBoxStyles() {
+        Style style = new Style("." + KeywordsBox.DEFAULT_STYLE_PREFIX);
+        style.addProperty("display", "inline");
+        style.addProperty("border-style", "inset");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-radius", "3px");
+        addStyle(style);
+
+        style = new Style("." + KeywordsBox.DEFAULT_STYLE_PREFIX + KeywordsBox.StyleSuffix.ActiveKeywords);
+        style.addProperty("display", "inline");
+        addStyle(style);
+
+        style = new Style("." + KeywordsBox.DEFAULT_STYLE_PREFIX + KeywordsBox.StyleSuffix.Keyword);
+        style.addProperty("display", "inline-block");
+        style.addProperty("padding-top", "2px");
+        style.addProperty("padding-bottom", "3px");
+        style.addProperty("padding-left", "5px");
+        style.addProperty("padding-right", "5px");
+        style.addProperty("margin-right", "5px");
+        style.addProperty("border-style", "outset");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-radius", "5px");
+        style.addGradient(ThemeColor.object1, 0.1, ThemeColor.object1, 0.5);
+        addStyle(style);
+
+        style = new Style("." + KeywordsBox.DEFAULT_STYLE_PREFIX + KeywordsBox.StyleSuffix.KeywordLabel);
+        style.addProperty("display", "inline");
+        addStyle(style);
+
+        style = new Style("." + KeywordsBox.DEFAULT_STYLE_PREFIX + KeywordsBox.StyleSuffix.KeywordUnselectButton);
+        style.addProperty("display", "inline");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("margin-left", "5px");
+        style.addProperty("padding", "2px");
+        style.addProperty("border-radius", "2px");
+        addStyle(style);
+
+        style = new Style("." + KeywordsBox.DEFAULT_STYLE_PREFIX + KeywordsBox.StyleSuffix.KeywordUnselectButton + ":hover");
+        style.addProperty("background-color", ThemeColor.object1, 0.5);
+        addStyle(style);
+
+        style = new Style("." + KeywordsBox.DEFAULT_STYLE_PREFIX + KeywordsBox.StyleSuffix.KeywordsAdder);
+        style.addProperty("display", "inline-block");
+        addStyle(style);
+
+        style = new Style("." + KeywordsBox.DEFAULT_STYLE_PREFIX + KeywordsBox.StyleSuffix.KeywordsAdderList);
+        style.addProperty("display", "inline");
+        addStyle(style);
+
+        style = new Style("." + KeywordsBox.DEFAULT_STYLE_PREFIX + KeywordsBox.StyleSuffix.KeywordsAdderButton);
+        style.addProperty("display", "inline");
         addStyle(style);
     }
 
