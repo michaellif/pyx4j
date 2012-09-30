@@ -6,7 +6,7 @@
 <listAttribute key="com.google.gwt.eclipse.core.ENTRY_POINT_MODULES">
 <listEntry value="vista.portalHosted"/>
 </listAttribute>
-<stringAttribute key="com.google.gwt.eclipse.core.URL" value="http://vista.dev.birchwoodsoftwaregroup.com:8888/vista/residents"/>
+<stringAttribute key="com.google.gwt.eclipse.core.URL" value="http://vista.dev.birchwoodsoftwaregroup.com:8888/vista/en/residents"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/vista-portal-client"/>
 </listAttribute>
