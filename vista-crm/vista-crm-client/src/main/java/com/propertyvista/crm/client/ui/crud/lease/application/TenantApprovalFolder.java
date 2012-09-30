@@ -26,15 +26,15 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.dto.TenantFinancialDTO;
+import com.propertyvista.dto.LeaseApprovalParticipantDTO;
 import com.propertyvista.misc.EquifaxResult;
 
-public class TenantApprovalFolder extends VistaTableFolder<TenantFinancialDTO> {
+public class TenantApprovalFolder extends VistaTableFolder<LeaseApprovalParticipantDTO> {
 
     private static final I18n i18n = I18n.get(TenantApprovalFolder.class);
 
     public TenantApprovalFolder(boolean modifyable) {
-        super(TenantFinancialDTO.class, modifyable);
+        super(LeaseApprovalParticipantDTO.class, modifyable);
     }
 
     @Override

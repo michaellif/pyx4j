@@ -44,4 +44,8 @@ public interface VistaTODO {
 
     public final boolean VISTA_1588 = true;
 
+    public final boolean Equifax_Short_VISTA_478 = false;
+
+    public final boolean Equifax_Long_VISTA_478 = true;
+
 }

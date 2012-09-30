@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
@@ -30,6 +28,7 @@ import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
@@ -47,9 +46,10 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         addTab(createInfoTab());
         addTab(createFinancialTab());
 
-// TODO : credit check (Equifax) isn't implemented yet (see LeaseApplicationViewerViewImpl)!        
-//      tabPanel.add(createApprovalTab(), i18n.tr("Approval"));
-//        tabPanel.setLastTabDisabled(true);
+        // TODO : credit check (Equifax) isn't implemented yet (see LeaseApplicationViewerViewImpl)!        
+        if (!VistaTODO.Equifax_Short_VISTA_478) {
+            addTab(createApprovalTab());
+        }
 
         if (VistaFeatures.instance().onlineApplication()) {
             onlineStatusTab = addTab(createOnlineStatusTab());
@@ -107,8 +107,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         };
     }
 
-    private Widget createApprovalTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createApprovalTab() {
+        FormFlexPanel main = new FormFlexPanel(i18n.tr("Approval"));
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -124,7 +124,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().equifaxApproval().suggestedDecision()), 25).build());
 
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, inject(proto().tenantFinancials(), new TenantApprovalFolder(false)));
+        main.setWidget(++row, 0, inject(proto().leaseApproval().participants(), new TenantApprovalFolder(false)));
 
         return main;
     }

@@ -30,6 +30,8 @@ public interface LeaseApplicationDTO extends LeaseDTO {
 
     IList<TenantFinancialDTO> tenantFinancials();
 
+    LeaseApprovalDTO leaseApproval();
+
     IList<TenantInfoDTO> tenantInfo();
 
     IPrimitive<Integer> numberOfOccupants();

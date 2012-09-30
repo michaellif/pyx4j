@@ -38,6 +38,7 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
+import com.propertyvista.dto.LeaseApprovalParticipantDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.server.common.util.TenantConverter;
@@ -60,6 +61,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             TenantRetriever tr = new TenantRetriever(tenant.getPrimaryKey(), true);
             dto.tenantInfo().add(createTenantInfoDTO(tr));
             dto.tenantFinancials().add(createTenantFinancialDTO(tr));
+            dto.leaseApproval().participants().add(createLeaseApprovalParticipantDTO(tr));
         }
 
         dto.masterApplicationStatus().set(
@@ -108,8 +110,8 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         for (LeaseParticipant user : users) {
             // check that all lease participants have an associated user entity (email)            
             if (user.leaseCustomer().customer().user().isNull()) {
-                throw new UserRuntimeException(i18n.tr("Failed to invite users, email of lease participant {0} was not found", user.leaseCustomer().customer().person().name()
-                        .getStringView()));
+                throw new UserRuntimeException(i18n.tr("Failed to invite users, email of lease participant {0} was not found", user.leaseCustomer().customer()
+                        .person().name().getStringView()));
             }
 
             // check that selected guarantors/co-applicants have online-applications
@@ -178,4 +180,12 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         tfDTO.person().set(tr.getPerson());
         return tfDTO;
     }
+
+    private LeaseApprovalParticipantDTO createLeaseApprovalParticipantDTO(TenantRetriever tr) {
+        LeaseApprovalParticipantDTO dto = EntityFactory.create(LeaseApprovalParticipantDTO.class);
+        dto.person().set(tr.getPerson());
+        dto.equifaxApproval().set(tr.getScreening().equifaxApproval());
+        return dto;
+    }
+
 }
