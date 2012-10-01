@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.rpc.dto.dashboard;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
@@ -33,6 +33,7 @@ public class DashboardColumnLayoutFormat {
 
         public Builder bind(String gadgetId, int column) {
             format.gadgetBinding.put(gadgetId, column);
+            format.gadgetOrder.add(gadgetId);
             return this;
         }
 
@@ -45,6 +46,8 @@ public class DashboardColumnLayoutFormat {
     private final DashboardMetadata.LayoutType layoutType;
 
     private final Map<String, Integer> gadgetBinding;
+
+    private final List<String> gadgetOrder;
 
     /**
      * @param serializedFormat
@@ -59,11 +62,13 @@ public class DashboardColumnLayoutFormat {
         String[] temp = serializedFormat.split("\n");
         layoutType = LayoutType.valueOf(temp[0]);
         gadgetBinding = new HashMap<String, Integer>();
+        gadgetOrder = new ArrayList<String>();
         for (int i = 1; i < temp.length; ++i) {
             String[] rawBinding = temp[i].split(" ");
             Integer column = Integer.parseInt(rawBinding[1]);
             String gadgetId = rawBinding[0];
             gadgetBinding.put(gadgetId, column);
+            gadgetOrder.add(gadgetId);
         }
     }
 
@@ -74,9 +79,8 @@ public class DashboardColumnLayoutFormat {
     public String getSerializedForm() {
         StringBuilder builder = new StringBuilder();
         builder.append(getLayoutType().name().toString()).append("\n");
-        for (Entry<String, Integer> entry : gadgetBinding.entrySet()) {
-            String gadgetId = entry.getKey().toString();
-            String column = entry.getValue().toString();
+        for (String gadgetId : gadgetOrder) {
+            String column = "" + getGadgetColumn(gadgetId);
             builder.append(gadgetId).append(' ').append(column).append("\n");
         }
         return builder.toString();
@@ -91,8 +95,8 @@ public class DashboardColumnLayoutFormat {
         return gadgetBinding.get(gadgetId);
     }
 
-    public Set<String> gadgetIds() {
-        return gadgetBinding.keySet();
+    public Iterable<String> gadgetIds() {
+        return gadgetOrder;
     }
 
 }
