@@ -20,7 +20,8 @@
  */
 package com.pyx4j.svg.gwt;
 
-//import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.pyx4j.svg.basic.Circle;
 import com.pyx4j.svg.basic.Defs;
 import com.pyx4j.svg.basic.Group;
@@ -30,28 +31,18 @@ import com.pyx4j.svg.basic.Path;
 import com.pyx4j.svg.basic.Stop;
 import com.pyx4j.svg.basic.SvgElement;
 import com.pyx4j.svg.basic.SvgFactory;
+import com.pyx4j.svg.gwt.event.MouseEventHandler;
 import com.pyx4j.svg.util.Utils;
+//import com.pyx4j.commons.css.ColorUtil;
 
 public class ColorPicker implements IsSvgElement {
-
-    //private final DraggableMouseListener listener;
-
-    private final boolean dragging = false;
-
-    private int dragStartX;
-
-    private int dragStartY;
 
     private final SvgFactory svgFactory;
 
     private final Group container;
 
-    private String id;
-
-    private final int radius;
-
-    private final int hue;
-
+    private final Widget content; 
+    
     private final int xStart;
 
     private final int yStart;
@@ -59,106 +50,123 @@ public class ColorPicker implements IsSvgElement {
     private final static int RIM_WIDTH = 25;
 
     protected final static int PADDING = 15;
+    
+    private final int radius;
 
-    public ColorPicker(SvgFactory svgfactory, int xStart, int yStart, int radius, int hue) {
+    private int hueInt;
+    
+    public double hue;
+    
+    private double saturation = 1;
+    
+    private double lightness = 0.5;
+
+    private float markerSize;
+    
+    private String color;
+    
+    private Circle circleIn;
+    
+    private Circle circleOut;
+    
+    private Circle circleColor;
+   
+    private int currentMarkerX;
+    
+    private int currentMarkerY;
+
+    public ColorPicker(SvgFactory svgfactory, Widget content, int radius, int hueInt) {
         this.svgFactory = svgfactory;
         container = svgFactory.createGroup();
         this.radius = radius;
-        this.xStart = xStart;
-        this.yStart = yStart;
-        this.hue = hue;
-
+        this.hueInt = hueInt;
+        this.content = content;
+        xStart = radius + PADDING + RIM_WIDTH/2;
+        yStart = radius + RIM_WIDTH/2;
         drawColorWheel();
     }
 
-/*
- * public void onMouseDown(MouseDownEvent event) {
- * dragging = true;
- * 
- * //capturing the mouse to the dragged widget.
- * //DOM.setCapture(getElement());
- * //dragStartX = event.getRelativeX(getElement());
- * //dragStartY = event.getRelativeY(getElement());
- * System.out.println("onMouseDown");
- * }
- * 
- * public void onMouseUp(MouseUpEvent event) {
- * dragging = false;
- * //DOM.releaseCapture(getElement());
- * System.out.println("onMouseUp");
- * }
- * 
- * public void onMouseMove(MouseMoveEvent event) {
- * if (dragging) {
- * // we don’t want the widget to go off-screen, so the top/left
- * // values should always remain be positive.
- * //int newX = Math.max(0, event.getRelativeX(getElement()) + getAbsoluteLeft() - dragStartX);
- * //int newY = Math.max(0, event.getRelativeY(getElement()) + getAbsoluteTop() - dragStartY);
- * //DOM.setStyleAttribute(getElement(), "left", "" + newX);
- * //DOM.setStyleAttribute(getElement(), "top", "" + newY);
- * }
- * System.out.println("onMouseMove");
- * }
- */
+    private class ColorPickerDragDrop extends MouseEventHandler {
+        protected boolean inMotion = false;
+        protected boolean circleDrag = false;
+   	
+        public ColorPickerDragDrop(Widget dragHandle) {
+          super(dragHandle);
+        }
+
+        public void onMouseUp(MouseUpEvent event) {
+            super.onMouseUp(event);
+            inMotion = false;
+            circleDrag = false;
+          }
+
+        @Override
+        public void handleDrag(int dragEndX, int dragEndY) {
+        	
+         	if(!inMotion) {
+            	circleDrag = Math.max(Math.abs(currentMarkerX-PADDING-dragStartX), Math.abs(currentMarkerY-dragStartY)) < markerSize;
+            	inMotion = true;
+         	}
+         	
+            if (circleDrag) {
+            	double hueRadian = Math.atan2(yStart - dragEndY,xStart - dragEndX - PADDING ) + Math.PI/2;
+           	    drawMarkers(hueRadian, false);
+            } 
+        }
+    }   
+    
     protected void drawColorWheel() {
 
-        int nSegments = 100;
+        int nSegments = 90;
+        markerSize = (float) Utils.round(RIM_WIDTH * 0.3, 2);
+
         double nudge = 8 / (double) radius / nSegments * Math.PI;
         double angle1 = 0, angle2;
         double am, tan, xm, ym;
-        double d1 = 0, d2;
-        String color1;
-        String color2;
+        double hue1 = 0, hue2;
+        String color1, color2;
         float x1, x2, y1, y2;
         double r1 = (double) (radius + RIM_WIDTH / 2) / radius;
-        double r2 = (double) (radius - RIM_WIDTH / 2) / radius; // inner/outer radius.
+        double r2 = (double) (radius - RIM_WIDTH / 2) / radius;
 
-        //DraggableWidgetWrapper wrapper = new DraggableWidgetWrapper(new Widget());
         // Each segment goes from angle1 to angle2.
         for (int i = 0; i <= nSegments; ++i) {
 
             Defs defs = svgFactory.createDefs();
 
-            d2 = (double) i / nSegments;
-            angle2 = d2 * Math.PI * 2;
-
-            // Endpoints
+            hue2 = (double) i / nSegments;
+            angle2 = hue2 * Math.PI * 2;
             x1 = (float) Math.sin(angle1);
             y1 = (float) (-Math.cos(angle1));
             x2 = (float) Math.sin(angle2);
             y2 = (float) (-Math.cos(angle2));
+            
             // Midpoint chosen so that the endpoints are tangent to the circle.
             am = (angle1 + angle2) / 2;
             tan = 1 / Math.cos((angle2 - angle1) / 2);
             xm = Math.sin(am) * tan;
             ym = -Math.cos(am) * tan;
-            double[] rgb = convertHSLtoRGB(d2, 1, (float) 0.5);
-            color2 = pack(rgb);
+            color2 = rgbToHex(hslToRgb(hue2, saturation, lightness));
 
             if (i > 0) {
                 double corr = (1 + Math.min(Math.abs(Math.tan(angle1)), Math.abs(Math.tan(Math.PI / 2 - angle1)))) / nSegments;
-                rgb = convertHSLtoRGB(d1 - 0.15 * corr, 1, 0.5);
-                //rgb = hsl2rgb(d1 - 0.15 * corr, 1, 0.5);
-                color1 = pack(rgb);
-                rgb = convertHSLtoRGB(d2 + 0.15 * corr, 1, 0.5);
-                //rgb = hsl2rgb(d2 + 0.15 * corr, 1, 0.5);
-                color2 = pack(rgb);
-                //fb.pack(fb.HSLToRGB([d2 + 0.15 * corr, 1, 0.5]));
-                // Create gradient fill between the endpoints.
+                color1 = rgbToHex(hslToRgb(hue1 - 0.15 * corr, saturation, lightness));
+                color2 = rgbToHex(hslToRgb(hue2 + 0.15 * corr, saturation, lightness));
+                
                 float a = (float) Utils.round(xStart - x1 * radius, 2);
                 float b = (float) Utils.round(yStart - y1 * radius, 2);
                 float c = (float) Utils.round(xStart - x2 * radius, 2);
-                float d = (float) Utils.round(yStart - y2 * radius, 2);
+                float d = (float) Utils.round(yStart - y2 * radius, 2);                
                 LinearGradient linear = svgFactory.createLinearGradient(a, b, c, d);
                 linear.setAttribute("gradientUnits", "userSpaceOnUse");
-                Stop stop = svgFactory.createStop();
-                stop.setAttribute("offset", "0");
-                stop.setAttribute("style", "stop-color:" + color1);
-                linear.add(stop);
-                Stop stop1 = svgFactory.createStop();
-                stop1.setAttribute("offset", "1");
-                stop1.setAttribute("style", "stop-color:" + color2);
-                linear.add(stop1);
+                Stop stopStart = svgFactory.createStop();
+                stopStart.setAttribute("offset", "0");
+                stopStart.setAttribute("style", "stop-color:" + color1);
+                linear.add(stopStart);
+                Stop stopEnd = svgFactory.createStop();
+                stopEnd.setAttribute("offset", "1");
+                stopEnd.setAttribute("style", "stop-color:" + color2);
+                linear.add(stopEnd);
                 defs.add(linear);
                 container.add(defs);
 
@@ -174,200 +182,90 @@ public class ColorPicker implements IsSvgElement {
                 p.setAttribute("fill", "url(#" + linear.getId() + ")");
                 p.setAttribute("stroke", "none");
 
-                //p.setAttribute("onmouseup", "onMouseUp");
-                //p.setAttribute("onmousedown", "onMouseDown");
-                //p.setAttribute("onmousemove", "onMouseMove");
-                //makeDraggable(p);
                 container.add(p);
             }
-
             // Prevent seams where curves join.
             angle1 = angle2 - nudge;
             color1 = color2;
-            d1 = d2;
+            hue1 = hue2;
         }
 
-        drawMarkers(hue);
+        new ColorPickerDragDrop( content );
+        drawMarkers(Utils.degree2radian(hueInt),true);
+        
         return;
-
     }
 
-    public int[] hsl2rgb(double h, double s, double l) {
-        int r, g, b;
+    public void drawMarkers(double hueValue, boolean first) {
 
-        if (s == 0) {
-            r = g = b = (int) l; // achromatic
+        float innerWidth = (float) Math.ceil(markerSize / 4);
+        int innerRadius = Math.round(markerSize - innerWidth + 1);
+        currentMarkerX = (int) Math.round(xStart - Math.sin(hueValue) * radius);
+        currentMarkerY = (int) Math.round(yStart + Math.cos(hueValue) * radius);
+        
+        color = rgbToHex(hslToRgb( (hueValue / 6.28 + 1) % 1, saturation, lightness));
+       	//System.out.println("color=" + color);
+
+        if(first) {        	
+            circleIn = svgFactory.createCircle(currentMarkerX, currentMarkerY, innerRadius);
+            circleIn.setFill("none");
+            circleIn.setStroke("#000");
+            circleIn.setStrokeWidth(Integer.toString((int) (innerWidth + 1)));
+            circleIn.setTransform("matrix(1,0,0,1,0,0)");
+            container.add(circleIn);
+            circleOut = svgFactory.createCircle( currentMarkerX, currentMarkerY, Math.round(markerSize));
+            circleOut.setFill("none");
+            circleOut.setStroke("#fff");
+            circleOut.setStrokeWidth(Integer.toString((int) innerWidth));
+            circleOut.setTransform("matrix(1,0,0,1,0,0)");
+            container.add(circleOut);    
+            
+            circleColor = svgFactory.createCircle(xStart, yStart, radius/2);
+            circleColor.setFill(color);
+            circleColor.setStroke("black");
+            circleColor.setStrokeWidth("2");
+            circleColor.setTransform("matrix(1,0,0,1,0,0)");
+            container.add(circleColor);
         } else {
-
-            double q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-            double p = 2 * l - q;
-            r = hue2rgb(p, q, h + 1 / 3);
-            g = hue2rgb(p, q, h);
-            b = hue2rgb(p, q, h - 1 / 3);
-        }
-        int[] rgb = new int[3];
-        rgb[0] = r;
-        rgb[1] = g;
-        rgb[2] = b;
-
-        return rgb;
+        	circleIn.setAttribute("cx", String.valueOf(currentMarkerX));
+        	circleIn.setAttribute("cy", String.valueOf(currentMarkerY));
+           	circleOut.setAttribute("cx", String.valueOf(currentMarkerX));
+        	circleOut.setAttribute("cy", String.valueOf(currentMarkerY));
+            circleColor.setFill(color);
+       }
+    }
+ 
+    public int hslToRgb(double hue, double saturation, double lightness) {
+        double m2 = (lightness <= 0.5) ? lightness * (saturation + 1) : lightness + saturation - lightness * saturation;
+        double m1 = lightness * 2 - m2;
+    	int r = (int) Math.round(convertHUEtoRGB(m1, m2, hue + 0.33333) * 255);
+    	int g = (int) Math.round(convertHUEtoRGB(m1, m2, hue) * 255);
+    	int b = (int) Math.round(convertHUEtoRGB(m1, m2, hue - 0.33333) * 255);
+        return (r << 16) | (g << 8) | (b << 0);
     }
 
-    public int hue2rgb(double p, double q, double t) {
-        if (t < 0)
-            t += 1;
-        if (t > 1)
-            t -= 1;
-        if (t < (double) 1 / 6)
-            return (int) (p + (q - p) * 6 * t);
-        if (t < (double) 1 / 2)
+    public double convertHUEtoRGB(double p, double q, double t) {
+        t = (t + 1) % 1;
+        if (t * 6 < 1)
+            return (p + (q - p) * t * 6);
+        if (t * 2 < 1)
             return (int) q;
-        if (t < (double) 2 / 3)
-            return (int) (p + (q - p) * (2 / 3 - t) * 6);
-        return (int) p;
+        if (t * 3 < 2)
+            return (p + (q - p) * (0.66666 - t) * 6);
+        return p;
     }
 
-    public double[] convertHSLtoRGB(double h, double s, double l) {
-        double m1, m2;
-        double r, g, b;
-        m2 = (l <= 0.5) ? l * (s + 1) : l + s - l * s;
-        m1 = l * 2 - m2;
-        r = convertHUEtoRGB(m1, m2, h + 0.33333);
-        g = convertHUEtoRGB(m1, m2, h);
-        b = convertHUEtoRGB(m1, m2, h - 0.33333);
-        double[] rgb = new double[3];
-        rgb[0] = r;
-        rgb[1] = g;
-        rgb[2] = b;
-
-        return rgb;
-    }
-
-    public double convertHUEtoRGB(double m1, double m2, double h) {
-        h = (h + 1) % 1;
-        if (h * 6 < 1)
-            return (m1 + (m2 - m1) * h * 6);
-        if (h * 2 < 1)
-            return (int) m2;
-        if (h * 3 < 2)
-            return (m1 + (m2 - m1) * (0.66666 - h) * 6);
-        return m1;
-    }
-
-    public String pack(double[] rgb) {
-
-        int r = (int) Math.round(rgb[0] * 255);
-        int g = (int) Math.round(rgb[1] * 255);
-        int b = (int) Math.round(rgb[2] * 255);
-        return '#' + dec2hex(r) + dec2hex(g) + dec2hex(b);
-    }
-
-    public String dec2hex(int x) {
-        return (x < 16 ? '0' + Integer.toHexString(x) : Integer.toHexString(x));
-    }
-
-    public void drawMarkers(int hue) {
-        // Determine marker dimensions
-        int sz = RIM_WIDTH;
-        float markerSize = (float) Utils.round(RIM_WIDTH * 0.3, 2);
-        float lw = (float) Math.ceil(markerSize / 4);
-        float r = markerSize - lw + 1;
-        double angle = Utils.degree2radian(hue);
-        double x1, x2, y1, y2;
-        x1 = xStart - Math.sin(angle) * radius;
-        y1 = yStart + Math.cos(angle) * radius;
-        Circle circle = svgFactory.createCircle((int) Math.round(x1), (int) Math.round(y1), Math.round(r));
-        circle.setFill("none");
-        circle.setStroke("#000");
-        circle.setStrokeWidth(Integer.toString((int) (lw + 1)));
-        container.add(circle);
-        Circle circle2 = svgFactory.createCircle((int) Math.round(x1), (int) Math.round(y1), Math.round(markerSize));
-        circle2.setFill("none");
-        circle2.setStroke("#fff");
-        circle.setStrokeWidth(Integer.toString((int) lw));
-        container.add(circle2);
+    public static String rgbToHex(int rgb) {
+        String colorString = Integer.toHexString(rgb);
+        int length = colorString.length();
+        for (int i = 0; i < (6 - length); i++) {
+            colorString = "0" + colorString;
+        }
+        return "#" + colorString;
     }
 
     @Override
     public SvgElement asSvgElement() {
         return container;
     }
-
-//    public static MouseEventHandler makeDraggable(Shape item{
-//        return new MouseEventHandler(ite;
-//    }
-
-/*
- * private class DraggableMouseListener implements MouseDownHandler, MouseUpHandler, MouseMoveHandler {
- * 
- * private boolean dragging = false;
- * 
- * private int dragStartX;
- * 
- * private int dragStartY;
- * 
- * @Override
- * public void onMouseDown(MouseDownEvent event) {
- * dragging = true;
- * 
- * //capturing the mouse to the dragged widget.
- * //DOM.setCapture(getElement());
- * //dragStartX = event.getRelativeX(getElement());
- * //dragStartY = event.getRelativeY(getElement());
- * }
- * 
- * @Override
- * public void onMouseUp(MouseUpEvent event) {
- * dragging = false;
- * //DOM.releaseCapture(getElement());
- * }
- * 
- * @Override
- * public void onMouseMove(MouseMoveEvent event) {
- * if (dragging) {
- * // we don’t want the widget to go off-screen, so the top/left
- * // values should always remain be positive.
- * //int newX = Math.max(0, event.getRelativeX(getElement()) + getAbsoluteLeft() - dragStartX);
- * //int newY = Math.max(0, event.getRelativeY(getElement()) + getAbsoluteTop() - dragStartY);
- * //DOM.setStyleAttribute(getElement(), "left", "" + newX);
- * //DOM.setStyleAttribute(getElement(), "top", "" + newY);
- * }
- * }
- * 
- * }
- * 
- * @Override
- * public void onBrowserEvent(Event event) {
- * switch (DOM.eventGetType(event)) {
- * case Event.ONMOUSEDOWN:
- * case Event.ONMOUSEUP:
- * case Event.ONMOUSEMOVE:
- * DomEvent.fireNativeEvent(event, this);
- * break;
- * }
- * }
- * 
- * @Override
- * public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
- * return addDomHandler(handler, MouseDownEvent.getType());
- * }
- * 
- * @Override
- * public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
- * return addDomHandler(handler, MouseUpEvent.getType());
- * }
- * 
- * @Override
- * public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
- * return addDomHandler(handler, MouseMoveEvent.getType());
- * }
- * 
- * @Override
- * public void onPreviewNativeEvent(NativePreviewEvent event) {
- * //Event e = Event.as(event.getNativeEvent());
- * //if (DOM.eventGetType(e) == Event.ONMOUSEDOWN && DOM.isOrHasChild(getElement(), DOM.eventGetTarget(e))) {
- * // DOM.eventPreventDefault(e);
- * //}
- * }
- */
 }

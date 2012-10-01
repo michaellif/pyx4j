@@ -141,13 +141,12 @@ public class SVGDemo implements EntryPoint {
 
         content.add(new HTML("Color Picker"));
         SvgRoot svgroot = svgFactory.getSvgRoot();
+        ((Widget) svgroot).setSize("352px", "220px");
         Group g = svgFactory.createGroup();
-        ColorPicker colorPicker = new ColorPicker(svgFactory, 115, 115, 90, 90);
+        ColorPicker colorPicker = new ColorPicker(svgFactory, (Widget) svgroot, 90, 120);
         g.add(colorPicker);
         svgroot.add(g);
-
-        ((Widget) svgroot).setSize("352px", "400px");
-        content.add((Widget) svgroot);
+        content.add((Widget) svgroot);      
 
     }
 }

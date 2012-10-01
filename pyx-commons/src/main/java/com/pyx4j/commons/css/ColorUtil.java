@@ -168,4 +168,23 @@ public class ColorUtil {
         return rgb;
     }
 
+    public static int hslToRgb(double hue, double saturation, double lightness) {
+        double m2 = (lightness <= 0.5) ? lightness * (saturation + 1) : lightness + saturation - lightness * saturation;
+        double m1 = lightness * 2 - m2;
+    	int r = (int) Math.round(convertHUEtoRGB(m1, m2, hue + 0.33333) * 255);
+    	int g = (int) Math.round(convertHUEtoRGB(m1, m2, hue) * 255);
+    	int b = (int) Math.round(convertHUEtoRGB(m1, m2, hue - 0.33333) * 255);
+        return (r << 16) | (g << 8) | (b << 0);
+    }
+
+    public static double convertHUEtoRGB(double p, double q, double t) {
+        t = (t + 1) % 1;
+        if (t * 6 < 1)
+            return (p + (q - p) * t * 6);
+        if (t * 2 < 1)
+            return (int) q;
+        if (t * 3 < 2)
+            return (p + (q - p) * (0.66666 - t) * 6);
+        return p;
+    }
 }

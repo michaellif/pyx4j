@@ -18,9 +18,10 @@
  * @author Alex
  * @version $Id$
  */
-package com.pyx4j.svg.chart;
+package com.pyx4j.svg.gwt.event;
 
 import com.google.gwt.event.dom.client.DomEvent;
+import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
 import com.google.gwt.event.dom.client.HasMouseMoveHandlers;
 import com.google.gwt.event.dom.client.HasMouseUpHandlers;
@@ -33,41 +34,47 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.svg.basic.Shape;
 
-public class MouseEventHandler extends SimplePanel implements HasMouseDownHandlers, HasMouseUpHandlers, HasMouseMoveHandlers {
+public abstract class MouseEventHandler implements MouseMoveHandler, MouseUpHandler, MouseDownHandler {
 
-    public MouseEventHandler(Shape item) {
-        super();
-        DOM.appendChild(getElement(), DOM.getElementById(item.getId()));
-        DOM.sinkEvents(getElement(), DOM.getEventsSunk(getElement()) | Event.MOUSEEVENTS);
+    protected boolean dragging = false;
+    protected Widget dragHandle;
+    protected int dragStartX;
+    protected int dragStartY;
+    
+    public MouseEventHandler(Widget dragHandle) {
+        this.dragHandle = dragHandle;
+        dragHandle.addDomHandler(this, MouseDownEvent.getType());
+        dragHandle.addDomHandler(this, MouseUpEvent.getType());
+        dragHandle.addDomHandler(this, MouseMoveEvent.getType());
     }
 
-    @Override
-    public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
-        return addHandler(handler, MouseDownEvent.getType());
-    }
+    public abstract void handleDrag(int absX, int absY);
 
-    @Override
-    public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
-        return addHandler(handler, MouseUpEvent.getType());
-    }
-
-    @Override
-    public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
-        return addHandler(handler, MouseMoveEvent.getType());
-    }
-
-    @Override
-    public void onBrowserEvent(Event event) {
-        switch (DOM.eventGetType(event)) {
-        case Event.ONMOUSEDOWN:
-        case Event.ONMOUSEUP:
-        case Event.ONMOUSEMOVE:
-            DomEvent.fireNativeEvent(event, this);
-            break;
-        }
-    }
+    public void onMouseDown(MouseDownEvent event) {
+     	dragging = true;
+        DOM.setCapture(dragHandle.getElement());
+        dragStartX = event.getX();
+        dragStartY = event.getY();
+        DOM.eventPreventDefault(DOM.eventGetCurrentEvent());
+      }
+   
+      public void onMouseMove(MouseMoveEvent event) {
+    	  
+          if (dragging) {
+              handleDrag(event.getX(), event.getY());
+              dragStartX = event.getX();
+              dragStartY = event.getY();
+          }
+      }
+      
+      public void onMouseUp(MouseUpEvent event) {
+        dragging = false;
+        DOM.releaseCapture(dragHandle.getElement());
+      }
 }
