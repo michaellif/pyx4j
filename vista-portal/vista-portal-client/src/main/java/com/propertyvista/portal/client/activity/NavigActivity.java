@@ -29,6 +29,7 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 
 public class NavigActivity extends AbstractActivity implements NavigView.NavigPresenter {
@@ -60,6 +61,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
 
         if (VistaTODO.enableWelcomeWizardDemoMode && !VistaTODO.removedForProduction) { // this is just mock-up!..
             items.add(new Residents.Insurance());
+        }
+        if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
+            items.add(new PortalSiteMap.LeaseContextSelection());
         }
 
         view.setNavig(items);

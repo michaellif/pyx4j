@@ -31,6 +31,7 @@ public class PortalSiteMap implements SiteMap {
     }
 
     @PlaceProperties(caption = "Select Lease")
+    @NavigationItem(navigLabel = "Select Lease")
     public static class LeaseContextSelection extends AppPlace {
     }
 
@@ -48,6 +49,7 @@ public class PortalSiteMap implements SiteMap {
 
     @PlaceProperties(caption = "Potential Tenants")
     public static class PotentialTenants extends AppPlace {
+
     }
 
     @PlaceProperties(caption = "Dashboard")
@@ -102,5 +104,6 @@ public class PortalSiteMap implements SiteMap {
         public static class Insurance extends AppPlace {
 
         }
+
     }
 }
