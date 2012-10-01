@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -30,6 +31,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -54,6 +56,12 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, GadgetType extends CounterGadgetBaseMetadata> extends
         BuildingGadgetBase<GadgetType> implements IBuildingFilterContainer, IFilterDataProvider<CounterGadgetFilter> {
+
+    public enum StyleNames implements IStyleName {
+
+        CounterGadgetCaption;
+
+    }
 
     public interface CounterDetailsFactory {
 
@@ -204,11 +212,14 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
             }
         });
         returnButton.getElement().getStyle().setFloat(Float.LEFT);
+        returnButton.getElement().getStyle().setMarginRight(2, Unit.EM);
         titlePanel.add(returnButton);
 
         title = new HTML();
+        title.setStyleName(StyleNames.CounterGadgetCaption.name());
+        title.getElement().getStyle().setDisplay(Display.INLINE);
         title.getElement().getStyle().setFloat(Float.LEFT);
-        title.getElement().getStyle().setMarginLeft(2, Unit.EM);
+
         titlePanel.add(title);
 
         content.add(titlePanel);

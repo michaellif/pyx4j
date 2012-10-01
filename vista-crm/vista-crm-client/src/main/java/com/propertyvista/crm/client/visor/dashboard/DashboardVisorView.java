@@ -75,10 +75,6 @@ public class DashboardVisorView extends Composite {
                 DashboardVisorView.this.controller.saveDashboardMetadata();
             }
 
-            @Override
-            protected void onPrintRequested() {
-                DashboardVisorView.this.controller.print();
-            }
         };
 
         initWidget(this.dashboard);

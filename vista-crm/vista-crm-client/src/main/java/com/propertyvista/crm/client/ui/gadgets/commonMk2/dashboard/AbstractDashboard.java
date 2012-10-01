@@ -30,6 +30,7 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -40,6 +41,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.dashboard.BoardEvent;
@@ -48,6 +50,7 @@ import com.pyx4j.widgets.client.dashboard.IBoard;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.client.ui.dashboard.printing.DashboardPrintHelper;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
@@ -119,7 +122,9 @@ public abstract class AbstractDashboard extends ResizeComposite {
 
     protected abstract void onDashboardMetadataChanged();
 
-    protected abstract void onPrintRequested();
+    protected final void onPrintRequested() {
+        Print.preview(DashboardPrintHelper.makePrintLayout(DOM.clone(board.asWidget().getElement(), true)));
+    }
 
     private void placeGadgets() {
         board = new Dashboard() {
@@ -201,6 +206,8 @@ public abstract class AbstractDashboard extends ResizeComposite {
 //        case updateGadget:
 //             gadget settings were changed: IMHO not supposed to affect the dashboard metadata and be managed internally by the gadget
 //            break;
+        default:
+            break;
         }
         redrawLayoutButtons(activeLayoutManger); // emphasize the button that switches to the chosen layout manager
         String updatedEncodedLayout = activeLayoutManger.switchLayout(dashboardMetadata.encodedLayout().getValue(), board);

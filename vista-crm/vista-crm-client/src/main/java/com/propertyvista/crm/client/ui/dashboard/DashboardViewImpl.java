@@ -46,11 +46,6 @@ public class DashboardViewImpl extends ViewImplBase implements DashboardView {
                 LayoutManagersFactory.createLayoutManagers()) {
 
             @Override
-            protected void onPrintRequested() {
-                presenter.print();
-            }
-
-            @Override
             protected void onDashboardMetadataChanged() {
                 presenter.save();
             }
