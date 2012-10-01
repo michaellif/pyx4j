@@ -16,17 +16,16 @@ package com.propertyvista.portal.client.ui.residents;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
@@ -46,7 +45,7 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
 
     protected final Button submitButton;
 
-    protected final CHyperlink cancel;
+    protected final Anchor cancel;
 
     public BasicViewImpl() {
         add(messagePanel = new UserMessagePanel());
@@ -69,13 +68,12 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
         });
         add(DecorationUtils.inline(submitButton));
 
-        cancel = new CHyperlink(new Command() {
+        cancel = new Anchor(i18n.tr("Cancel"), new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.cancel();
             }
         });
-        cancel.setValue(i18n.tr("Cancel"));
         cancel.asWidget().getElement().getStyle().setMargin(10, Unit.PX);
         cancel.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         add(cancel);

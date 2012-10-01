@@ -26,6 +26,6 @@ public class ViewBillViewImpl extends BasicViewImpl<BillDTO> implements ViewBill
         super(new ViewBillForm());
 
         submitButton.setVisible(false);
-        cancel.setValue(i18n.tr("Back"));
+        cancel.setText(i18n.tr("Back"));
     }
 }

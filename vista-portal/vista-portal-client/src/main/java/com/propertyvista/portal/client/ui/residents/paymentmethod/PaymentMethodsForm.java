@@ -41,6 +41,7 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView.Presenter;
 import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
 
@@ -91,8 +92,6 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
         public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof PaymentMethod) {
                 return new PaymentMethodEditorEx();
-            } else if (member instanceof PaymentDetails) {
-                return new CEntityLabel<PaymentDetails>();
             }
             return super.create(member);
         }
@@ -148,12 +147,14 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
             public CComponent<?, ?> create(IObject<?> member) {
                 CComponent<?, ?> comp = null;
                 if (member.equals(proto().type())) {
-                    comp = new CHyperlink(new Command() {
+                    comp = new CHyperlink<PaymentType>(new Command() {
                         @Override
                         public void execute() {
                             presenter.editPaymentMethod(getValue());
                         }
                     });
+                } else if (member.equals(proto().details())) {
+                    comp = new CEntityLabel<PaymentDetails>();
                 } else if (member.equals(proto().isPreauthorized())) {
                     comp = new CCheckBox();
                     comp.inheritViewable(false);

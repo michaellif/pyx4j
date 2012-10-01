@@ -91,7 +91,7 @@ public class BillingHistoryForm extends CEntityForm<BillListDTO> implements Bill
             public CComponent<?, ?> create(IObject<?> member) {
                 CComponent<?, ?> comp = null;
                 if (member.equals(proto().referenceNo())) {
-                    comp = new CHyperlink(new Command() {
+                    comp = new CHyperlink<String>(new Command() {
                         @Override
                         public void execute() {
                             presenter.view(getValue());
