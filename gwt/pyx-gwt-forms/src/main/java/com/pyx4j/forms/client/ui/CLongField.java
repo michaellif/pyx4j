@@ -20,14 +20,45 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.i18n.shared.I18n;
+
 public class CLongField extends CNumberField<Long> {
+
+    private static final I18n i18n = I18n.get(CLongField.class);
 
     public CLongField() {
         this(null);
     }
 
     public CLongField(String title) {
-        super(title, "Should be numeric in range from " + Long.MIN_VALUE + " to " + Long.MAX_VALUE);
+        super(title);
+        setFormat(new IFormat<Long>() {
+
+            @Override
+            public String format(Long value) {
+                if (value == null) {
+                    return "";
+                } else {
+                    return getNumberFormat().format(value);
+                }
+            }
+
+            @Override
+            public Long parse(String string) throws ParseException {
+                if (CommonsStringUtils.isEmpty(string)) {
+                    return null; // empty value case
+                }
+                try {
+                    return new Double(getNumberFormat().parse(string)).longValue();
+                } catch (NumberFormatException e) {
+                    throw new ParseException(i18n.tr("Should Be Numeric In Range From " + Long.MIN_VALUE + " to " + Long.MAX_VALUE), 0);
+                }
+            }
+
+        });
     }
 
     @Override
@@ -36,11 +67,6 @@ public class CLongField extends CNumberField<Long> {
             return false;
         }
         return value >= from && value <= to;
-    }
-
-    @Override
-    public Long valueOf(String string) {
-        return Long.valueOf(string);
     }
 
 }

@@ -20,9 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.text.ParseException;
+import com.google.gwt.i18n.client.NumberFormat;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -33,12 +32,11 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
 
     private TextBoxParserValidator<E> validator;
 
-    private final String validationMessage;
+    private NumberFormat numberFormat;
 
-    public CNumberField(String title, String validationMessage) {
+    public CNumberField(String title) {
         super(title);
-        this.validationMessage = validationMessage;
-        setFormat(new DefaultNumberFormat());
+        numberFormat = NumberFormat.getDecimalFormat();
         validator = new TextBoxParserValidator<E>();
         addValueValidator(validator);
     }
@@ -52,27 +50,6 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
         removeValueValidator(validator);
         validator = new NumberFieldRangeValidator(from, to);
         addValueValidator(validator);
-    }
-
-    class DefaultNumberFormat implements IFormat<E> {
-
-        @Override
-        public String format(E value) {
-            return value.toString();
-        }
-
-        @Override
-        public E parse(String string) throws ParseException {
-            if (CommonsStringUtils.isEmpty(string)) {
-                return null; // empty value case
-            }
-            try {
-                return valueOf(string);
-            } catch (NumberFormatException e) {
-                throw new ParseException(validationMessage, 0);
-            }
-        }
-
     }
 
     protected String dataTypeName() {
@@ -110,5 +87,11 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
 
     abstract boolean isInRange(E value, E from, E to);
 
-    public abstract E valueOf(String string);
+    NumberFormat getNumberFormat() {
+        return numberFormat;
+    }
+
+    public void setNumberPattern(String pattern) {
+        numberFormat = NumberFormat.getFormat(pattern);
+    }
 }

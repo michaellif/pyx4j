@@ -22,8 +22,6 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
-import com.google.gwt.i18n.client.NumberFormat;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -36,7 +34,31 @@ public class CDoubleField extends CNumberField<Double> {
     }
 
     public CDoubleField(String title) {
-        super(title, i18n.tr("Should Be A Numeric Value"));
+        super(title);
+        setFormat(new IFormat<Double>() {
+
+            @Override
+            public String format(Double value) {
+                if (value == null) {
+                    return "";
+                } else {
+                    return getNumberFormat().format(value);
+                }
+            }
+
+            @Override
+            public Double parse(String string) throws ParseException {
+                if (CommonsStringUtils.isEmpty(string)) {
+                    return null; // empty value case
+                }
+                try {
+                    return getNumberFormat().parse(string);
+                } catch (NumberFormatException e) {
+                    throw new ParseException(i18n.tr("Should Be A Numeric Value"), 0);
+                }
+            }
+
+        });
     }
 
     @Override
@@ -47,43 +69,4 @@ public class CDoubleField extends CNumberField<Double> {
         return value >= from && value <= to;
     }
 
-    @Override
-    public Double valueOf(String string) {
-        return Double.valueOf(string);
-    }
-
-    public void setNumberFormat(String pattern) {
-        setFormat(new DoubleNumberFormat(pattern));
-    }
-
-    class DoubleNumberFormat implements IFormat<Double> {
-
-        NumberFormat nf;
-
-        DoubleNumberFormat(String pattern) {
-            nf = NumberFormat.getFormat(pattern);
-        }
-
-        @Override
-        public String format(Double value) {
-            if (value == null) {
-                return "";
-            } else {
-                return nf.format(value);
-            }
-        }
-
-        @Override
-        public Double parse(String string) throws ParseException {
-            if (CommonsStringUtils.isEmpty(string)) {
-                return null; // empty value case
-            }
-            try {
-                return valueOf(string);
-            } catch (NumberFormatException e) {
-                throw new ParseException("DoubleNumberFormat", 0);
-            }
-        }
-
-    }
 }

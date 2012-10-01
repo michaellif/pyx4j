@@ -20,6 +20,9 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CIntegerField extends CNumberField<Integer> {
@@ -31,7 +34,31 @@ public class CIntegerField extends CNumberField<Integer> {
     }
 
     public CIntegerField(String title) {
-        super(title, i18n.tr("Should Be An Integer"));
+        super(title);
+        setFormat(new IFormat<Integer>() {
+
+            @Override
+            public String format(Integer value) {
+                if (value == null) {
+                    return "";
+                } else {
+                    return getNumberFormat().format(value);
+                }
+            }
+
+            @Override
+            public Integer parse(String string) throws ParseException {
+                if (CommonsStringUtils.isEmpty(string)) {
+                    return null; // empty value case
+                }
+                try {
+                    return new Double(getNumberFormat().parse(string)).intValue();
+                } catch (NumberFormatException e) {
+                    throw new ParseException(i18n.tr("Should Be An Integer"), 0);
+                }
+            }
+
+        });
     }
 
     @Override
@@ -45,11 +72,6 @@ public class CIntegerField extends CNumberField<Integer> {
             return false;
         }
         return value >= from && value <= to;
-    }
-
-    @Override
-    public Integer valueOf(String string) {
-        return Integer.valueOf(string);
     }
 
 }

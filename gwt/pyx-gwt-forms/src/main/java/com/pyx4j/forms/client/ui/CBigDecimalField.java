@@ -21,7 +21,9 @@
 package com.pyx4j.forms.client.ui;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CBigDecimalField extends CNumberField<BigDecimal> {
@@ -33,7 +35,31 @@ public class CBigDecimalField extends CNumberField<BigDecimal> {
     }
 
     public CBigDecimalField(String title) {
-        super(title, i18n.tr("Should Be An Integer"));
+        super(title);
+        setFormat(new IFormat<BigDecimal>() {
+
+            @Override
+            public String format(BigDecimal value) {
+                if (value == null) {
+                    return "";
+                } else {
+                    return getNumberFormat().format(value);
+                }
+            }
+
+            @Override
+            public BigDecimal parse(String string) throws ParseException {
+                if (CommonsStringUtils.isEmpty(string)) {
+                    return null; // empty value case
+                }
+                try {
+                    return new BigDecimal(string);
+                } catch (NumberFormatException e) {
+                    throw new ParseException(i18n.tr("Should Be A Decimal"), 0);
+                }
+            }
+
+        });
     }
 
     @Override
@@ -47,11 +73,6 @@ public class CBigDecimalField extends CNumberField<BigDecimal> {
             return false;
         }
         return value.compareTo(from) >= 0 && value.compareTo(to) <= 0;
-    }
-
-    @Override
-    public BigDecimal valueOf(String string) {
-        return new BigDecimal(string);
     }
 
 }

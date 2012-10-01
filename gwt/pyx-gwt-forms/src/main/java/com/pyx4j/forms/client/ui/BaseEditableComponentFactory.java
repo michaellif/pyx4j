@@ -163,7 +163,7 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
         } else if (mm.getValueClass().equals(Double.class)) {
             CDoubleField comp = new CDoubleField();
             if (mm.getFormat() != null) {
-                (comp).setNumberFormat(mm.getFormat());
+                (comp).setNumberPattern(mm.getFormat());
             }
             return comp;
         } else if (mm.getValueClass().equals(String.class)) {
