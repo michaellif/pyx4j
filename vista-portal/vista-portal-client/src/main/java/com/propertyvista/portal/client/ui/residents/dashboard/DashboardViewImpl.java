@@ -32,8 +32,8 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
 
     @Override
     public void populate(TenantDashboardDTO dashboard) {
-        form.getPayButton().setVisible(SecurityController.checkBehavior(VistaCustomerBehavior.ElectronicPaymentsAllowed));
         form.populate(dashboard);
+        form.getPayButton().setVisible(SecurityController.checkBehavior(VistaCustomerBehavior.ElectronicPaymentsAllowed));
     }
 
     @Override
