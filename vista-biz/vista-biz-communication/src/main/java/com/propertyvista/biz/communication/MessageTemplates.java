@@ -85,7 +85,6 @@ public class MessageTemplates {
     public static MailMessage createApplicationStatusEmail(Tenant tenantInLease, EmailTemplateType type) {
         // get building policy node
         Persistence.service().retrieve(tenantInLease.leaseTermV());
-        Persistence.service().retrieve(tenantInLease.leaseTermV().holder());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().building());
@@ -115,7 +114,6 @@ public class MessageTemplates {
 
     public static MailMessage createTenantInvitationEmail(LeaseParticipant leaseParticipant, EmailTemplateType emailType, String token) {
         Persistence.service().retrieve(leaseParticipant.leaseTermV());
-        Persistence.service().retrieve(leaseParticipant.leaseTermV().holder());
         Persistence.service().retrieve(leaseParticipant.leaseTermV().holder().lease());
         Persistence.service().retrieve(leaseParticipant.leaseTermV().holder().lease().unit());
         Persistence.service().retrieve(leaseParticipant.leaseTermV().holder().lease().unit().building());
@@ -162,7 +160,6 @@ public class MessageTemplates {
         Tenant til = Persistence.service().retrieve(tilCrit);
         if (til != null) {
             Persistence.service().retrieve(til.leaseTermV());
-            Persistence.service().retrieve(til.leaseTermV().holder());
             Persistence.service().retrieve(til.leaseTermV().holder().lease());
             Persistence.service().retrieve(til.leaseTermV().holder().lease().unit());
             Persistence.service().retrieve(til.leaseTermV().holder().lease().unit().building());

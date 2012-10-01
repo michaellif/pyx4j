@@ -31,7 +31,6 @@ public class AddressRetriever {
         }
 
         Persistence.service().retrieve(participant.leaseTermV());
-        Persistence.service().retrieve(participant.leaseTermV().holder());
         Persistence.service().retrieve(participant.leaseTermV().holder().lease());
         Persistence.service().retrieve(participant.leaseTermV().holder().lease().unit());
         Persistence.service().retrieve(participant.leaseTermV().holder().lease().unit().building());

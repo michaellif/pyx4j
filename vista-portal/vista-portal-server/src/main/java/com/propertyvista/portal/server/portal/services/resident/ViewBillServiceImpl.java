@@ -46,7 +46,8 @@ public class ViewBillServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDT
             // find current bill key instead:
             Tenant tenant = TenantAppContext.getCurrentUserTenantInLease();
             Persistence.service().retrieve(tenant.leaseTermV());
-            Persistence.service().retrieve(tenant.leaseTermV().holder());
+            Persistence.service().retrieve(tenant.leaseTermV().holder().lease());
+
             entityId = ServerSideFactory.create(BillingFacade.class).getLatestBill(tenant.leaseTermV().holder().lease()).getPrimaryKey();
         }
         super.retrieve(callback, entityId, retrieveTraget);

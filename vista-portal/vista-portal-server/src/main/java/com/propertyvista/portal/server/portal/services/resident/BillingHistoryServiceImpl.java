@@ -37,7 +37,7 @@ public class BillingHistoryServiceImpl implements BillingHistoryService {
 
         Tenant tenant = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenant.leaseTermV());
-        Persistence.service().retrieve(tenant.leaseTermV().holder());
+        Persistence.service().retrieve(tenant.leaseTermV().holder().lease());
 
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), tenant.leaseTermV().holder().lease().billingAccount()));
         for (Bill bill : Persistence.service().query(criteria)) {

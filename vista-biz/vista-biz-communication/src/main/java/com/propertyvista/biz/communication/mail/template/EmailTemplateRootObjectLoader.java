@@ -219,7 +219,6 @@ public class EmailTemplateRootObjectLoader {
 
         if (tenantInLease.leaseTermV().isValueDetached()) {
             Persistence.service().retrieve(tenantInLease.leaseTermV());
-            Persistence.service().retrieve(tenantInLease.leaseTermV().holder());
         }
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
 

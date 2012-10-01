@@ -33,6 +33,7 @@ public class DashboardServiceImpl implements DashboardService {
 
         Tenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenantInLease.leaseTermV());
+        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().floorplan());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().building());
