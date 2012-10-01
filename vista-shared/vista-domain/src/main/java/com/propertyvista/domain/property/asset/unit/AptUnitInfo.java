@@ -67,7 +67,7 @@ public interface AptUnitInfo extends IEntity {
 
     // ---- Physical: ----------------
 
-    @Format("#0.000")
+    @Format("0.##")
     IPrimitive<Double> area();
 
     IPrimitive<AreaMeasurementUnit> areaUnits();
