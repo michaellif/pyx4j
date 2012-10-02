@@ -79,7 +79,7 @@ public class Persistence {
         return r;
     }
 
-    public static <T extends IEntity> Vector<T> secureQuery(EntityQueryCriteria<T> criteria) {
+    public static <T extends IEntity> Vector<T> secureQuery(EntityQueryCriteria<T> criteria, AttachLevel attachLevel) {
         SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
 
         @SuppressWarnings({ "rawtypes" })
@@ -90,13 +90,17 @@ public class Persistence {
             }
         }
 
-        List<T> rc = PersistenceServicesFactory.getPersistenceService().query(criteria);
+        List<T> rc = PersistenceServicesFactory.getPersistenceService().query(criteria, attachLevel);
         Vector<T> v = new Vector<T>();
         for (T ent : rc) {
             SecurityController.assertPermission(EntityPermission.permissionRead(ent));
             v.add(ent);
         }
         return v;
+    }
+
+    public static <T extends IEntity> Vector<T> secureQuery(EntityQueryCriteria<T> criteria) {
+        return secureQuery(criteria, AttachLevel.Attached);
     }
 
     public static <T extends IEntity> T secureRetrieve(EntityQueryCriteria<T> criteria) {
