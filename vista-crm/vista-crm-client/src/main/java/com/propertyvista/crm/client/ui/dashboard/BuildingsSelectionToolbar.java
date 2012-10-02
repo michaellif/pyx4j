@@ -111,7 +111,7 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
         for (Building building : buildings) {
             stubs.add(building.<Building> createIdentityStub());
         }
-        return new Vector<Building>(buildings);
+        return stubs;
     }
 
     @Override
