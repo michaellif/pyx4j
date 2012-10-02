@@ -13,7 +13,10 @@
  */
 package com.propertyvista.crm.rpc.services.dashboard;
 
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-public interface DashboardMetadataCrudService extends AbstractMetadataCrudService {
+import com.propertyvista.domain.dashboard.DashboardMetadata;
+
+public interface DashboardMetadataCrudService extends AbstractCrudService<DashboardMetadata> {
 
 }

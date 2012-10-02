@@ -48,8 +48,7 @@ import com.propertyvista.crm.rpc.services.customer.lead.ShowingCrudService;
 import com.propertyvista.crm.rpc.services.customer.screening.PersonScreeningCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
-import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataCrudService;
-import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
+import com.propertyvista.crm.rpc.services.dashboard.GadgetMetadataService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
@@ -132,8 +131,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(GadgetMetadata.class, sharedUserEntityAccess, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DashboardMetadataService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DashboardMetadataCrudService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ReportMetadataService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ReportMetadataCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(GadgetMetadataService.class));
 
         // Add All GadgetSettings
         //grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(MyGadgetSettings.class, EntityPermission.ALL));

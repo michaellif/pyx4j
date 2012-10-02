@@ -30,7 +30,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -38,18 +37,18 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
+import com.propertyvista.crm.rpc.services.dashboard.GadgetMetadataService;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IGadgetInstance {
 
     private static final I18n i18n = I18n.get(GadgetInstanceBase.class);
 
-    // TODO change to special service for gadget metadata
-    private static final DashboardMetadataService dashboardMetadataService = GWT.create(DashboardMetadataService.class);
+    private static final GadgetMetadataService GADGET_METADATA_SERVICE = GWT.create(DashboardMetadataService.class);
 
     private boolean isRunning;
 
-    protected IGadgetInstancePresenter presenter;
+    protected IBuildingFilterContainer containerBoard;
 
     private final RefreshTimer refreshTimer;
 
@@ -65,11 +64,9 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     private Populator defaultPopulator;
 
-    private final T metadata;
-
-    protected IBuildingFilterContainer containerBoard;
-
     private CEntityContainer<T> setupForm;
+
+    private final T metadata;
 
     // TODO metadataClass argument is needed only for creation of the default metatada, remove when default metadata creation is implemented on server side
     @SuppressWarnings("unchecked")
@@ -88,6 +85,19 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     public GadgetInstanceBase(GadgetMetadata metadata, Class<T> metadataClass) {
         this(metadata, metadataClass, null);
+    }
+
+    @Override
+    public T getMetadata() {
+        return metadata;
+    }
+
+    /** @deprecated this is not used at all!!! */
+    // FIXME ask Misha or VladL if it's safe to get rid of this (now description is stored on server and is retrieved by GadgetMetataService.listAvailableGadgets) 
+    @Deprecated
+    @Override
+    public final String getDescription() {
+        return null;
     }
 
     protected Panel initLoadingPanel() {
@@ -118,7 +128,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     }
 
     protected void saveMetadata() {
-        dashboardMetadataService.saveGadgetMetadata(new DefaultAsyncCallback<GadgetMetadata>() {
+        GADGET_METADATA_SERVICE.saveGadgetMetadata(new DefaultAsyncCallback<GadgetMetadata>() {
 
             @Override
             public void onSuccess(GadgetMetadata result) {
@@ -137,11 +147,6 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     protected RefreshTimer getRefreshTimer() {
         return refreshTimer;
-    }
-
-    @Override
-    public T getMetadata() {
-        return metadata;
     }
 
     /**
@@ -172,11 +177,6 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
         return gadgetPanel;
     }
 
-    /** Implement in derived class to set up custom height: i.e. for graphs that have absolute height. */
-    protected String defineHeight() {
-        return "100%";
-    }
-
     @Override
     public Widget asWidget() {
         return gadgetPanel;
@@ -185,12 +185,6 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     @Override
     public String getName() {
         return metadata.getEntityMeta().getCaption();
-    }
-
-    @Override
-    public String getDescription() {
-        // FIXME talk to someone about this: do we really need to keep this inside the gadget
-        return getMetadata().getMeta().getDescription();
     }
 
     /** Set a callback that will run on each time refresh period and when {@link #populate(boolean)} or {@link #populate()} are exectuted. */
@@ -204,6 +198,11 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     protected void populate(boolean showLoadingPanel) {
         populate(defaultPopulator, showLoadingPanel);
+    }
+
+    /** Implement in derived class to set up custom height: i.e. for graphs that have absolute height. */
+    protected String defineHeight() {
+        return "100%";
     }
 
     protected void populate(final Populator populator, boolean showLoadingPanel) {
@@ -334,11 +333,6 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     }
 
     // notifications:
-
-    @Deprecated
-    protected void onDashboardDateChangeEvent(LogicalDate changedDate) {
-        // TODO remove this method (remains of date setup in dashboard)
-    }
 
     @Override
     public void onResize() {

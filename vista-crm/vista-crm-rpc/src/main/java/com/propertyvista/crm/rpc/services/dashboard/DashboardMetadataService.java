@@ -13,6 +13,21 @@
  */
 package com.propertyvista.crm.rpc.services.dashboard;
 
+import java.util.Vector;
 
-public interface DashboardMetadataService extends BoardMetadataServiceBase {
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.rpc.shared.IService;
+
+import com.propertyvista.domain.dashboard.DashboardMetadata;
+
+public interface DashboardMetadataService extends IService {
+
+    public void listMetadata(AsyncCallback<Vector<DashboardMetadata>> callback);
+
+    public void retrieveMetadata(AsyncCallback<DashboardMetadata> callback, Key entityId);
+
+    public void saveDashboardMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata editableEntity);
+
 }

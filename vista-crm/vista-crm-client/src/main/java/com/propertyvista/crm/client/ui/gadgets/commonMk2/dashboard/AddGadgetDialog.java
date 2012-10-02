@@ -36,7 +36,7 @@ import com.pyx4j.widgets.client.dialog.OkOptionText;
 
 import com.propertyvista.crm.client.ui.components.KeywordsBox;
 import com.propertyvista.crm.rpc.dto.dashboard.GadgetDescriptorDTO;
-import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
+import com.propertyvista.crm.rpc.services.dashboard.GadgetMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
@@ -67,8 +67,12 @@ public abstract class AddGadgetDialog extends OkCancelDialog implements OkOption
 
     private final List<GadgetDescriptorDTO> descriptors;
 
+    private final GadgetMetadataService gadgetMetadataService;
+
     public AddGadgetDialog(DashboardMetadata.DashboardType boardType) {
         super(i18n.tr("Available Gadgets"));
+        gadgetMetadataService = GWT.<GadgetMetadataService> create(GadgetMetadataService.class);
+
         isLoading = true;
 
         descriptors = new ArrayList<GadgetDescriptorDTO>();
@@ -114,7 +118,7 @@ public abstract class AddGadgetDialog extends OkCancelDialog implements OkOption
         body.add(keywordsSelectionBox);
         body.add(descriptorListScrollPanel);
 
-        GWT.<DashboardMetadataService> create(DashboardMetadataService.class).listAvailableGadgets(new DefaultAsyncCallback<Vector<GadgetDescriptorDTO>>() {
+        gadgetMetadataService.listAvailableGadgets(new DefaultAsyncCallback<Vector<GadgetDescriptorDTO>>() {
             @Override
             public void onSuccess(Vector<GadgetDescriptorDTO> result) {
                 isLoading = false;
@@ -138,7 +142,13 @@ public abstract class AddGadgetDialog extends OkCancelDialog implements OkOption
             GadgetDescriptorDTO selectedDescriptor = ((SingleSelectionModel<GadgetDescriptorDTO>) descriptorsListWidget.getSelectionModel())
                     .getSelectedObject();
             if (selectedDescriptor != null) {
-                addGadget(selectedDescriptor.getProto());
+                gadgetMetadataService.createGadgetMetadata(new DefaultAsyncCallback<GadgetMetadata>() {
+                    @Override
+                    public void onSuccess(GadgetMetadata gadgteMetadata) {
+                        onAddGadget(gadgteMetadata);
+                    }
+                }, selectedDescriptor.getProto());
+
             }
             return true;
         } else {
@@ -151,5 +161,5 @@ public abstract class AddGadgetDialog extends OkCancelDialog implements OkOption
         return i18n.tr("Add");
     }
 
-    protected abstract void addGadget(GadgetMetadata proto);
+    protected abstract void onAddGadget(GadgetMetadata proto);
 }

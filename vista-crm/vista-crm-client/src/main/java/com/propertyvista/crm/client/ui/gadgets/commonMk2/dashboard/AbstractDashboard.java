@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Cursor;
@@ -43,7 +42,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.dashboard.BoardEvent;
 import com.pyx4j.widgets.client.dashboard.Dashboard;
 import com.pyx4j.widgets.client.dashboard.IBoard;
@@ -53,7 +51,6 @@ import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.dashboard.printing.DashboardPrintHelper;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
-import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
@@ -259,17 +256,12 @@ public abstract class AbstractDashboard extends ResizeComposite {
             public void onClick(ClickEvent event) {
                 new AddGadgetDialog(AbstractDashboard.this.getDashboardMetadata().type().getValue()) {
                     @Override
-                    protected void addGadget(GadgetMetadata proto) {
-                        GWT.<DashboardMetadataService> create(DashboardMetadataService.class).createGadgetMetadata(new DefaultAsyncCallback<GadgetMetadata>() {
-                            @Override
-                            public void onSuccess(GadgetMetadata gadgteMetadata) {
-                                IGadgetInstance gadget = gadgetFactory.createGadget(gadgteMetadata);
-                                commonGadgetSettingsContainer.bindGadget(gadget);
-                                board.addGadget(gadget);
-                                gadget.start();
-                            }
-                        }, proto);
-                    }
+                    protected void onAddGadget(GadgetMetadata gadgetMetadata) {
+                        IGadgetInstance gadget = gadgetFactory.createGadget(gadgetMetadata);
+                        commonGadgetSettingsContainer.bindGadget(gadget);
+                        board.addGadget(gadget);
+                        gadget.start();
+                    };
                 }.show();
             }
         });
