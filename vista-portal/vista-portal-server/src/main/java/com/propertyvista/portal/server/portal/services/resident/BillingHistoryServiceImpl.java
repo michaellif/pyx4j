@@ -43,11 +43,11 @@ public class BillingHistoryServiceImpl implements BillingHistoryService {
         for (Bill bill : Persistence.service().query(criteria)) {
             BillDataDTO dto = EntityFactory.create(BillDataDTO.class);
             dto.setPrimaryKey(bill.getPrimaryKey());
-            dto.amount().setValue(bill.totalDueAmount().getValue());
-            dto.dueDate().setValue(bill.dueDate().getValue());
+            dto.referenceNo().set(bill.billSequenceNumber());
+            dto.amount().set(bill.totalDueAmount());
+            dto.dueDate().set(bill.dueDate());
             //TODO 1
             // dto.fromDate().setValue(bill.billingCycle().executionDate().getValue());
-            dto.referenceNo().setValue("View");
 
             bills.add(dto);
         }

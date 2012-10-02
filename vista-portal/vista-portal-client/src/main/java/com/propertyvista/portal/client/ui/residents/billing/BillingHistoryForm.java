@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents.billing;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,10 +67,10 @@ public class BillingHistoryForm extends CEntityForm<BillListDTO> implements Bill
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
             ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            columns.add(new EntityFolderColumnDescriptor(proto().referenceNo(), "5em"));
             columns.add(new EntityFolderColumnDescriptor(proto().amount(), "10em"));
             columns.add(new EntityFolderColumnDescriptor(proto().dueDate(), "10em"));
             columns.add(new EntityFolderColumnDescriptor(proto().fromDate(), "10em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().referenceNo(), "10em"));
             return columns;
         }
 
@@ -90,8 +91,8 @@ public class BillingHistoryForm extends CEntityForm<BillListDTO> implements Bill
             @Override
             public CComponent<?, ?> create(IObject<?> member) {
                 CComponent<?, ?> comp = null;
-                if (member.equals(proto().referenceNo())) {
-                    comp = new CHyperlink<String>(new Command() {
+                if (member.equals(proto().amount())) {
+                    comp = new CHyperlink<BigDecimal>(new Command() {
                         @Override
                         public void execute() {
                             presenter.view(getValue());

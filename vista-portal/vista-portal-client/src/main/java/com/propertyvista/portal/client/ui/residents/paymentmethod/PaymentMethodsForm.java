@@ -27,8 +27,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -41,7 +40,6 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView.Presenter;
 import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
 
@@ -146,16 +144,14 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
             @Override
             public CComponent<?, ?> create(IObject<?> member) {
                 CComponent<?, ?> comp = null;
-                if (member.equals(proto().type())) {
-                    comp = new CHyperlink<PaymentType>(new Command() {
+                if (member.equals(proto().details())) {
+                    comp = new CEntityHyperlink<PaymentDetails>(null, new Command() {
                         @Override
                         public void execute() {
                             presenter.editPaymentMethod(getValue());
                         }
                     });
                     comp.setViewable(true);
-                } else if (member.equals(proto().details())) {
-                    comp = new CEntityLabel<PaymentDetails>();
                 } else if (member.equals(proto().isPreauthorized())) {
                     comp = new CCheckBox();
                     comp.inheritViewable(false);

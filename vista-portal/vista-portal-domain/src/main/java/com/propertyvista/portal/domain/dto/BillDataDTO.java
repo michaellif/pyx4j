@@ -27,8 +27,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface BillDataDTO extends IEntity {
 
-    @Caption(name = "")
-    IPrimitive<String> referenceNo();
+    @Caption(name = "#")
+    IPrimitive<Integer> referenceNo();
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> fromDate();
