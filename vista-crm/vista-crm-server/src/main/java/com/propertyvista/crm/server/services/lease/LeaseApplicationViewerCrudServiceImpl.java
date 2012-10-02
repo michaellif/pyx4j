@@ -122,7 +122,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             }
         }
 
-        for (LeaseParticipant user : users) {
+        for (LeaseParticipant<?> user : users) {
             if (user.isInstanceOf(Tenant.class)) {
                 Tenant tenant = user.duplicate(Tenant.class);
                 if (tenant.role().getValue() == LeaseParticipant.Role.Applicant) {
