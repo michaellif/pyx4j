@@ -24,6 +24,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -247,7 +248,7 @@ public class XMLEntityWriter {
             }
         }
 
-        if (emitted) {
+        if (emitted || EnumSet.of(AttachLevel.Detached, AttachLevel.IdOnly).contains(entity.getAttachLevel())) {
             xml.writeEmpty(name, entityAttributes);
             return;
         }
