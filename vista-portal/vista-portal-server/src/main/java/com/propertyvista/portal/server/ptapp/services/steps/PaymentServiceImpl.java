@@ -114,6 +114,6 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
         CustomerRetriever r = new CustomerRetriever(PtAppContext.retrieveCurrentUserCustomer().getPrimaryKey());
-        callback.onSuccess(r.getScreening().currentAddress().duplicate(AddressStructured.class));
+        callback.onSuccess(r.getScreening().version().currentAddress().duplicate(AddressStructured.class));
     }
 }

@@ -184,7 +184,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     private LeaseApprovalParticipantDTO createLeaseApprovalParticipantDTO(TenantRetriever tr) {
         LeaseApprovalParticipantDTO dto = EntityFactory.create(LeaseApprovalParticipantDTO.class);
         dto.person().set(tr.getPerson());
-        dto.equifaxApproval().set(tr.getScreening().equifaxApproval());
+        dto.equifaxApproval().set(tr.getScreening().version().equifaxApproval());
         return dto;
     }
 

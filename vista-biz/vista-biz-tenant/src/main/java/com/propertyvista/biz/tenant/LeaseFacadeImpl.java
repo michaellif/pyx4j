@@ -734,7 +734,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
     }
 
-    private <E extends LeaseCustomer, P extends LeaseParticipant> void persistLeaseCustomer(LeaseTerm leaseTerm, P leaseParticipant, Class<E> leaseCustomerClass) {
+    private <E extends LeaseCustomer, P extends LeaseParticipant<?>> void persistLeaseCustomer(LeaseTerm leaseTerm, P leaseParticipant,
+            Class<E> leaseCustomerClass) {
         boolean newCustomer = leaseParticipant.leaseCustomer().customer().id().isNull();
         if (!leaseParticipant.leaseCustomer().customer().isValueDetached()) {
             ServerSideFactory.create(CustomerFacade.class).persistCustomer(leaseParticipant.leaseCustomer().customer());

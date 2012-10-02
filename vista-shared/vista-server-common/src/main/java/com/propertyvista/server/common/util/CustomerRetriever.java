@@ -88,9 +88,9 @@ public class CustomerRetriever {
             }
             Persistence.service().retrieve(screening.documents());
             if (retrieveFinancialData) {
-                Persistence.service().retrieve(screening.incomes());
-                Persistence.service().retrieve(screening.assets());
-                Persistence.service().retrieve(screening.equifaxApproval());
+                Persistence.service().retrieve(screening.version().incomes());
+                Persistence.service().retrieve(screening.version().assets());
+                Persistence.service().retrieve(screening.version().equifaxApproval());
             }
         }
     }
@@ -119,8 +119,8 @@ public class CustomerRetriever {
             // save detached entities:
             Persistence.service().merge(screening.documents());
             if (retrieveFinancialData) {
-                Persistence.service().merge(screening.incomes());
-                Persistence.service().merge(screening.assets());
+                Persistence.service().merge(screening.version().incomes());
+                Persistence.service().merge(screening.version().assets());
             }
         }
     }

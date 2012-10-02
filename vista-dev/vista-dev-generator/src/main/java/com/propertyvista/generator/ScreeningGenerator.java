@@ -66,19 +66,19 @@ public class ScreeningGenerator {
         }
 
         // Address
-        screening.currentAddress().set(createPriorAddress());
-        screening.previousAddress().set(createPriorAddress());
-        makeAddressValid(screening.currentAddress(), screening.previousAddress());
+        screening.version().currentAddress().set(createPriorAddress());
+        screening.version().previousAddress().set(createPriorAddress());
+        makeAddressValid(screening.version().currentAddress(), screening.version().previousAddress());
 
         // Questions
-        screening.legalQuestions().set(createLegalQuestions());
+        screening.version().legalQuestions().set(createLegalQuestions());
 
         // Incomes
-        screening.incomes().addAll(createIncomes());
+        screening.version().incomes().addAll(createIncomes());
 
         // Assets
-        int minAssets = (screening.incomes().size() == 0) ? 1 : 0;
-        screening.assets().addAll(createAssets(minAssets));
+        int minAssets = (screening.version().incomes().size() == 0) ? 1 : 0;
+        screening.version().assets().addAll(createAssets(minAssets));
 
         return screening;
     }
@@ -234,7 +234,7 @@ public class ScreeningGenerator {
         for (ApplicationDocument document : screening.documents()) {
             attachDocumentData(document);
         }
-        for (PersonalIncome income : screening.incomes()) {
+        for (PersonalIncome income : screening.version().incomes()) {
             for (ApplicationDocument document : income.documents()) {
                 attachDocumentData(document);
             }

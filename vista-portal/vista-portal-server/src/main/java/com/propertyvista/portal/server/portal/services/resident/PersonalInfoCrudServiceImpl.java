@@ -51,7 +51,7 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
         critAddr.add(PropertyCriterion.eq(critAddr.proto().screene(), tenant));
         List<PersonScreening> result = Persistence.service().query(critAddr);
         if (result.size() > 0) {
-            dto.currentAddress().set(result.get(0).currentAddress());
+            dto.currentAddress().set(result.get(0).version().currentAddress());
         }
 
         callback.onSuccess(dto);

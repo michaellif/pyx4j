@@ -82,26 +82,26 @@ public class PTGenerator {
 
     void createEquifaxApproival(PersonScreening ts) {
         // TODO: currently - just some mockup stuff:
-        ts.equifaxApproval().suggestedDecision().setValue(RandomUtil.randomEnum(Decision.class));
-        switch (ts.equifaxApproval().suggestedDecision().getValue()) {
+        ts.version().equifaxApproval().suggestedDecision().setValue(RandomUtil.randomEnum(Decision.class));
+        switch (ts.version().equifaxApproval().suggestedDecision().getValue()) {
         case Approve:
-            ts.equifaxApproval().percenrtageApproved().setValue(80 + RandomUtil.randomDouble(40));
-            ts.equifaxApproval().suggestedDecision().setValue(Decision.Approve);
+            ts.version().equifaxApproval().percenrtageApproved().setValue(80 + RandomUtil.randomDouble(40));
+            ts.version().equifaxApproval().suggestedDecision().setValue(Decision.Approve);
             break;
         case RequestInfo:
-            ts.equifaxApproval().percenrtageApproved().setValue(40 + RandomUtil.randomDouble(20));
-            ts.equifaxApproval().suggestedDecision().setValue(Decision.RequestInfo);
+            ts.version().equifaxApproval().percenrtageApproved().setValue(40 + RandomUtil.randomDouble(20));
+            ts.version().equifaxApproval().suggestedDecision().setValue(Decision.RequestInfo);
             break;
         case Decline:
-            ts.equifaxApproval().percenrtageApproved().setValue(RandomUtil.randomDouble(20));
-            ts.equifaxApproval().suggestedDecision().setValue(Decision.Decline);
+            ts.version().equifaxApproval().percenrtageApproved().setValue(RandomUtil.randomDouble(20));
+            ts.version().equifaxApproval().suggestedDecision().setValue(Decision.Decline);
             break;
 
         default:
-            ts.equifaxApproval().suggestedDecision().setValue(Decision.Pending);
+            ts.version().equifaxApproval().suggestedDecision().setValue(Decision.Pending);
         }
 
-        ts.equifaxApproval().checkResultDetails().set(EntityFactory.create(EquifaxResult.class));
-        ts.equifaxApproval().checkResultDetails().suggestedDecision().setValue(ts.equifaxApproval().suggestedDecision().getValue());
+        ts.version().equifaxApproval().checkResultDetails().set(EntityFactory.create(EquifaxResult.class));
+        ts.version().equifaxApproval().checkResultDetails().suggestedDecision().setValue(ts.version().equifaxApproval().suggestedDecision().getValue());
     }
 }

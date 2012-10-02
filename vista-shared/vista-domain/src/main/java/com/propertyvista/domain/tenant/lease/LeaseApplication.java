@@ -106,5 +106,6 @@ public interface LeaseApplication extends IEntity {
 
     Notes notes();
 
+    @Deprecated
     EquifaxApproval equifaxApproval();
 }

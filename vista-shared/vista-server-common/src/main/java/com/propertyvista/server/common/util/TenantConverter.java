@@ -72,11 +72,11 @@ public class TenantConverter {
 
         @Override
         protected void bind() {
-            bind(dtoProto.currentAddress(), dboProto.currentAddress());
-            bind(dtoProto.previousAddress(), dboProto.previousAddress());
+            bind(dtoProto.version().currentAddress(), dboProto.version().currentAddress());
+            bind(dtoProto.version().previousAddress(), dboProto.version().previousAddress());
             bind(dtoProto.documents(), dboProto.documents());
-            bind(dtoProto.legalQuestions(), dboProto.legalQuestions());
-            bind(dtoProto.equifaxApproval(), dboProto.equifaxApproval());
+            bind(dtoProto.version().legalQuestions(), dboProto.version().legalQuestions());
+            bind(dtoProto.version().equifaxApproval(), dboProto.version().equifaxApproval());
         }
     }
 
@@ -88,9 +88,9 @@ public class TenantConverter {
 
         @Override
         protected void bind() {
-            bind(dtoProto.incomes(), dboProto.incomes());
-            bind(dtoProto.assets(), dboProto.assets());
-            bind(dtoProto.equifaxApproval(), dboProto.equifaxApproval());
+            bind(dtoProto.incomes(), dboProto.version().incomes());
+            bind(dtoProto.assets(), dboProto.version().assets());
+            bind(dtoProto.equifaxApproval(), dboProto.version().equifaxApproval());
         }
     }
 }

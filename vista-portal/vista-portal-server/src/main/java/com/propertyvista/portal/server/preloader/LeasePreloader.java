@@ -70,8 +70,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             } else if (i == DemoData.UserType.TENANT.getDefaultMax()) {
                 Tenant mainTenant = lease.currentTerm().version().tenants().get(0);
                 mainTenant.leaseCustomer().customer().set(dualTenantCustomer);
-                // Trick to share the same already saved data
-                mainTenant.screening().set(mainTenant.leaseCustomer().customer().personScreenings().iterator().next());
             }
 
             // Create normal Active Lease first for Shortcut users
@@ -148,8 +146,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             } else if (i == DemoData.UserType.PTENANT.getDefaultMax()) {
                 Tenant mainTenant = lease.currentTerm().version().tenants().get(0);
                 mainTenant.leaseCustomer().customer().set(dualPotentialCustomer);
-                // Trick to share the same already saved data 
-                mainTenant.screening().set(mainTenant.leaseCustomer().customer().personScreenings().iterator().next());
             }
 
             Persistence.service().setTransactionSystemTime(lease.currentTerm().termFrom().getValue());

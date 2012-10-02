@@ -37,7 +37,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
-import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -98,8 +97,7 @@ public class LeaseGenerator extends DataGenerator {
         Tenant mainTenant = EntityFactory.create(Tenant.class);
         mainTenant.leaseCustomer().customer().set(customerGenerator.createCustomer());
         mainTenant.leaseCustomer().customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
-        mainTenant.leaseCustomer().customer().personScreenings().add(screeningGenerator.createScreening());
-        mainTenant.screening().set(mainTenant.leaseCustomer().customer().personScreenings().iterator().next());
+        mainTenant.leaseCustomer().customer().personScreening().set(screeningGenerator.createScreening());
         mainTenant.role().setValue(LeaseParticipant.Role.Applicant);
         mainTenant.percentage().setValue(new BigDecimal(1));
         lease.currentTerm().version().tenants().add(mainTenant);
@@ -107,8 +105,7 @@ public class LeaseGenerator extends DataGenerator {
         addPreathorisedPaymentMethod(mainTenant);
         Guarantor guarantor = EntityFactory.create(Guarantor.class);
         guarantor.leaseCustomer().customer().set(customerGenerator.createCustomer());
-        guarantor.screening().set(screeningGenerator.createScreening());
-        guarantor.leaseCustomer().customer().personScreenings().add(guarantor.screening());
+        guarantor.leaseCustomer().customer().personScreening().set(screeningGenerator.createScreening());
         guarantor.role().setValue(LeaseParticipant.Role.Guarantor);
         guarantor.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
         guarantor.tenant().set(mainTenant);
@@ -119,8 +116,7 @@ public class LeaseGenerator extends DataGenerator {
             Tenant tenant = EntityFactory.create(Tenant.class);
             tenant.leaseCustomer().customer().set(customerGenerator.createCustomer());
             tenant.leaseCustomer().customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
-            tenant.screening().set(screeningGenerator.createScreening());
-            tenant.leaseCustomer().customer().personScreenings().add(tenant.screening());
+            tenant.leaseCustomer().customer().personScreening().set(screeningGenerator.createScreening());
 
             tenant.role().setValue(RandomUtil.random(EnumSet.of(LeaseParticipant.Role.CoApplicant, LeaseParticipant.Role.Dependent)));
             tenant.percentage().setValue(BigDecimal.ZERO);
@@ -165,9 +161,7 @@ public class LeaseGenerator extends DataGenerator {
 
     public static void attachDocumentData(Lease lease) {
         for (Tenant tenant : lease.currentTerm().version().tenants()) {
-            for (PersonScreening screening : tenant.leaseCustomer().customer().personScreenings()) {
-                ScreeningGenerator.attachDocumentData(screening);
-            }
+            ScreeningGenerator.attachDocumentData(tenant.leaseCustomer().customer().personScreening());
         }
     }
 

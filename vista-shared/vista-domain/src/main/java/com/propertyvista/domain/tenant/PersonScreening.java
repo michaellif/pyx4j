@@ -28,20 +28,22 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IVersionData;
+import com.pyx4j.entity.shared.IVersionedEntity;
 
 import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.ApplicationDocumentHolder;
 import com.propertyvista.domain.media.IdentificationDocument;
+import com.propertyvista.domain.tenant.PersonScreening.PersonScreeningV;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.misc.EquifaxApproval;
 
 @DiscriminatorValue("PersonScreening")
-public interface PersonScreening extends IEntity, ApplicationDocumentHolder<IdentificationDocument> {
+public interface PersonScreening extends IVersionedEntity<PersonScreeningV>, ApplicationDocumentHolder<IdentificationDocument> {
 
     @Owner
     @NotNull
@@ -50,43 +52,48 @@ public interface PersonScreening extends IEntity, ApplicationDocumentHolder<Iden
     @JoinColumn
     Customer screene();
 
-    @Format("MM/dd/yyyy")
-    @Timestamp(Update.Created)
-    IPrimitive<LogicalDate> createDate();
+    public interface PersonScreeningV extends IVersionData<PersonScreening> {
 
-    @ToString(index = 0)
-    @Format("MM/dd/yyyy")
-    @Timestamp(Update.Updated)
-    IPrimitive<LogicalDate> updateDate();
+        @Format("MM/dd/yyyy")
+        @Timestamp(Update.Created)
+        IPrimitive<LogicalDate> createDate();
 
-    /**
-     * TODO I think that it is better to have a list here since some forms may ask for
-     * more than one previous address
-     */
-    @EmbeddedEntity
-    PriorAddress currentAddress();
+        @ToString(index = 0)
+        @Format("MM/dd/yyyy")
+        @Timestamp(Update.Updated)
+        IPrimitive<LogicalDate> updateDate();
 
-    @EmbeddedEntity
-    PriorAddress previousAddress();
+        /**
+         * TODO I think that it is better to have a list here since some forms may ask for
+         * more than one previous address
+         */
+        @EmbeddedEntity
+        PriorAddress currentAddress();
 
-    @Owned
-    @Caption(name = "General Questions")
-    LegalQuestions legalQuestions();
+        @EmbeddedEntity
+        PriorAddress previousAddress();
 
-    //=============== Financial =============//
+        @Owned
+        @Caption(name = "General Questions")
+        LegalQuestions legalQuestions();
 
-    @Owned
-    @Detached
-    @Length(3)
-    @Caption(name = "Income")
-    IList<PersonalIncome> incomes();
+        //=============== Financial =============//
 
-    @Owned
-    @Detached
-    @Length(3)
-    IList<PersonalAsset> assets();
+        @Owned
+        @Detached
+        @Length(3)
+        @Caption(name = "Income")
+        IList<PersonalIncome> incomes();
 
-    //=============== Approval =============//
+        @Owned
+        @Detached
+        @Length(3)
+        IList<PersonalAsset> assets();
 
-    EquifaxApproval equifaxApproval();
+        //=============== Approval =============//
+
+        @Deprecated
+        EquifaxApproval equifaxApproval();
+
+    }
 }

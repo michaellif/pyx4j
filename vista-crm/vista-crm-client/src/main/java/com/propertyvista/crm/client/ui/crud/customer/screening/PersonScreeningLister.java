@@ -24,11 +24,11 @@ public class PersonScreeningLister extends ListerBase<PersonScreening> {
         super(PersonScreening.class, true);
 
         setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().createDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().updateDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().version().createDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().version().updateDate()).build(),
     
-            new MemberColumnDescriptor.Builder(proto().equifaxApproval().percenrtageApproved()).build(),
-            new MemberColumnDescriptor.Builder(proto().equifaxApproval().suggestedDecision()).build()
+            new MemberColumnDescriptor.Builder(proto().version().equifaxApproval().percenrtageApproved()).build(),
+            new MemberColumnDescriptor.Builder(proto().version().equifaxApproval().suggestedDecision()).build()
         );//@formatter:on
     }
 }

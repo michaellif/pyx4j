@@ -76,7 +76,7 @@ public interface PersonalAsset extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
-    PersonScreening owner();
+    PersonScreening.PersonScreeningV owner();
 
     @OrderColumn
     IPrimitive<Integer> seq();

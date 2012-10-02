@@ -37,7 +37,7 @@ public interface PersonalIncome extends IEntity, ApplicationDocumentHolder<Proof
     @ReadOnly
     @Detached
     @JoinColumn
-    PersonScreening owner();
+    PersonScreening.PersonScreeningV owner();
 
     @ToString
     @NotNull

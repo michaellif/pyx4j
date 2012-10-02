@@ -48,7 +48,7 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
     private final FormFlexPanel previousAddress = new FormFlexPanel() {
         @Override
         public void setVisible(boolean visible) {
-            get(proto().previousAddress()).setVisible(visible);
+            get(proto().version().previousAddress()).setVisible(visible);
             super.setVisible(visible);
         }
     };
@@ -70,7 +70,7 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
         selectTab(tab);
 
         addTab(createAddressesTab(i18n.tr("Addresses")));
-        addTab(createlegalQuestionsTab(proto().legalQuestions().getMeta().getCaption()));
+        addTab(createlegalQuestionsTab(proto().version().legalQuestions().getMeta().getCaption()));
         addTab(createIncomesTab(i18n.tr("Incomes")));
         addTab(createAssetsTab(i18n.tr("Assets")));
 
@@ -90,7 +90,7 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
     @Override
     public void addValidations() {
         @SuppressWarnings("unchecked")
-        CEntityForm<PriorAddress> currentAddressForm = ((CEntityForm<PriorAddress>) get(proto().currentAddress()));
+        CEntityForm<PriorAddress> currentAddressForm = ((CEntityForm<PriorAddress>) get(proto().version().currentAddress()));
 
         currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
             @Override
@@ -105,7 +105,7 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
         // ------------------------------------------------------------------------------------------------
 
         @SuppressWarnings("unchecked")
-        final CEntityForm<PriorAddress> previousAddressForm = ((CEntityForm<PriorAddress>) get(proto().previousAddress()));
+        final CEntityForm<PriorAddress> previousAddressForm = ((CEntityForm<PriorAddress>) get(proto().version().previousAddress()));
 
         new PastDateValidation(previousAddressForm.get(previousAddressForm.proto().moveInDate()));
 
@@ -115,7 +115,7 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
                 if (value == null || getValue() == null) {
                     return null;
                 }
-                IPrimitive<LogicalDate> date = getValue().previousAddress().moveOutDate();
+                IPrimitive<LogicalDate> date = getValue().version().previousAddress().moveOutDate();
                 return (date.isNull() || value.before(date.getValue())) ? null : new ValidationError(component, i18n
                         .tr("Move In Date must be less then Move Out Date"));
             }
@@ -135,7 +135,7 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
                 if (value == null || getValue() == null) {
                     return null;
                 }
-                IPrimitive<LogicalDate> date = getValue().previousAddress().moveInDate();
+                IPrimitive<LogicalDate> date = getValue().version().previousAddress().moveInDate();
                 return (date.isNull() || value.after(date.getValue())) ? null : new ValidationError(component, i18n
                         .tr("Move Out Date must be greater then Move In Date"));
             }
@@ -159,11 +159,11 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
         FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
-        main.setH1(++row, 0, 1, proto().currentAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().currentAddress(), new PriorAddressEditor()));
+        main.setH1(++row, 0, 1, proto().version().currentAddress().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().version().currentAddress(), new PriorAddressEditor()));
 
-        previousAddress.setH1(0, 0, 1, proto().previousAddress().getMeta().getCaption());
-        previousAddress.setWidget(1, 0, inject(proto().previousAddress(), new PriorAddressEditor()));
+        previousAddress.setH1(0, 0, 1, proto().version().previousAddress().getMeta().getCaption());
+        previousAddress.setWidget(1, 0, inject(proto().version().previousAddress(), new PriorAddressEditor()));
         main.setWidget(++row, 0, previousAddress);
 
         return main;
@@ -174,31 +174,31 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
 
         int row = 0;
         main.setWidget(row++, 0,
-                new DecoratorBuilder(inject(proto().legalQuestions().suedForRent()), 10, 45).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
+                new DecoratorBuilder(inject(proto().version().legalQuestions().suedForRent()), 10, 45).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
         main.setHR(row++, 0, 1);
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().legalQuestions().suedForDamages()), 10, 45).labelAlignment(Alignment.left)
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().suedForDamages()), 10, 45).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
         main.setHR(row++, 0, 1);
         main.setWidget(row++, 0,
-                new DecoratorBuilder(inject(proto().legalQuestions().everEvicted()), 10, 45).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
+                new DecoratorBuilder(inject(proto().version().legalQuestions().everEvicted()), 10, 45).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
         main.setHR(row++, 0, 1);
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().legalQuestions().defaultedOnLease()), 10, 45).labelAlignment(Alignment.left)
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().defaultedOnLease()), 10, 45).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
         main.setHR(row++, 0, 1);
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().legalQuestions().convictedOfFelony()), 10, 45).labelAlignment(Alignment.left)
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().convictedOfFelony()), 10, 45).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
         main.setHR(row++, 0, 1);
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().legalQuestions().legalTroubles()), 10, 45).labelAlignment(Alignment.left)
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().legalTroubles()), 10, 45).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
         main.setHR(row++, 0, 1);
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().legalQuestions().filedBankruptcy()), 10, 45).labelAlignment(Alignment.left)
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().filedBankruptcy()), 10, 45).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
 
         return main;
     }
 
     private void enablePreviousAddress() {
-        previousAddress.setVisible(BusinessRules.infoPageNeedPreviousAddress(getValue().currentAddress().moveInDate().getValue()));
+        previousAddress.setVisible(BusinessRules.infoPageNeedPreviousAddress(getValue().version().currentAddress().moveInDate().getValue()));
     }
 
 // Financial: ------------------------------------------------------------------------------------------------
@@ -206,7 +206,7 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
     private FormFlexPanel createIncomesTab(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
 
-        main.setWidget(0, 0, inject(proto().incomes(), new PersonalIncomeFolder(isEditable())));
+        main.setWidget(0, 0, inject(proto().version().incomes(), new PersonalIncomeFolder(isEditable())));
 
         return main;
     }
@@ -214,7 +214,7 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
     private FormFlexPanel createAssetsTab(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
 
-        main.setWidget(0, 0, inject(proto().assets(), new PersonalAssetFolder(isEditable())));
+        main.setWidget(0, 0, inject(proto().version().assets(), new PersonalAssetFolder(isEditable())));
 
         return main;
     }

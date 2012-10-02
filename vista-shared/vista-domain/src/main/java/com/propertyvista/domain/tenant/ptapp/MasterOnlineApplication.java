@@ -77,5 +77,6 @@ public interface MasterOnlineApplication extends IEntity {
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createDate();
 
+    @Deprecated
     EquifaxApproval equifaxApproval();
 }
