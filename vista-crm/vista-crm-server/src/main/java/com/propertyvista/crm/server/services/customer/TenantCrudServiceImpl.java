@@ -55,9 +55,10 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
     @Override
     protected void enhanceRetrieved(Tenant entity, TenantDTO dto) {
         // load detached data:
-        Persistence.service().retrieve(dto.leaseCustomer().customer().emergencyContacts());
         Persistence.service().retrieve(dto.leaseTermV());
         Persistence.service().retrieve(dto.leaseTermV().holder(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(dto.leaseCustomer().customer().emergencyContacts());
+        Persistence.service().retrieveMember(dto.leaseCustomer().customer().personScreening(), AttachLevel.ToStringMembers);
 
         // fill/update payment methods: 
         dto.paymentMethods().clear();

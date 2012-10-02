@@ -15,8 +15,6 @@ package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
 import java.util.List;
 
-import com.google.gwt.user.client.ui.HTML;
-
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -25,8 +23,9 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -38,6 +37,7 @@ import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.EmergencyContact;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantForm extends CrmEntityForm<TenantDTO> {
@@ -55,16 +55,9 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
     @Override
     public void createTabs() {
 
-        Tab tab = addTab(createDetailsTab(i18n.tr("Details")));
-        selectTab(tab);
-
+        selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
         addTab(createContactsTab(i18n.tr("Emergency Contacts")));
-
-        tab = addTab(isEditable() ? new HTML() : ((TenantViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
-        setTabEnabled(tab, !isEditable());
-
         addTab(createPaymentMethodsTab(i18n.tr("Payment Methods")));
-
     }
 
     @Override
@@ -75,6 +68,8 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
 
         if (isEditable()) {
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().leaseCustomer().participantId()), getValue().getPrimaryKey());
+        } else {
+            get(proto().leaseCustomer().customer().personScreening()).setVisible(!getValue().leaseCustomer().customer().personScreening().isNull());
         }
     }
 
@@ -100,6 +95,11 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTermV(), new CLeaseTermVHyperlink()), 35).customLabel(i18n.tr("Lease Term"))
                     .build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role()), 10).build());
+            main.setWidget(
+                    ++row,
+                    0,
+                    new DecoratorBuilder(inject(proto().leaseCustomer().customer().personScreening(), new CEntityCrudHyperlink<PersonScreening>(
+                            AppPlaceEntityMapper.resolvePlace(PersonScreening.class))), 15).build());
         }
 
         return main;
@@ -154,8 +154,8 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
                 if (value == null || getValue() == null) {
                     return null;
                 }
-                return !EntityGraph.hasBusinessDuplicates(getValue().leaseCustomer().customer().emergencyContacts()) ? null : new ValidationError(component, i18n
-                        .tr("Duplicate contacts specified"));
+                return !EntityGraph.hasBusinessDuplicates(getValue().leaseCustomer().customer().emergencyContacts()) ? null : new ValidationError(component,
+                        i18n.tr("Duplicate contacts specified"));
             }
 
         });

@@ -99,5 +99,4 @@ public interface LeaseParticipant<LC extends LeaseCustomer> extends IEntity {
     @Detached
     @Versioned
     PersonScreening screening();
-
 }
