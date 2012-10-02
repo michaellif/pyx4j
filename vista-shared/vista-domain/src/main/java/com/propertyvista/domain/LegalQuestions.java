@@ -16,11 +16,14 @@ package com.propertyvista.domain;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Table(prefix = "person_screening_")
 public interface LegalQuestions extends IEntity {
+
     @Editor(type = EditorType.radiogroup)
     @Caption(name = "Have you ever been sued for rent?")
     @NotNull

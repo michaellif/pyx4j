@@ -27,6 +27,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -195,6 +196,10 @@ public class LeaseLifecycleSimulator {
             Tenant mainTenant = lease.currentTerm().version().tenants().get(0);
             mainTenant.leaseCustomer().preauthorizedPayment().set(mainTenant.leaseCustomer().customer().paymentMethods().iterator().next());
             Persistence.service().merge(mainTenant.leaseCustomer());
+            for (Tenant tenant : lease.currentTerm().version().tenants()) {
+                tenant.leaseCustomer().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
+                Persistence.service().persist(tenant.leaseCustomer().customer().personScreening());
+            }
 
             if (isDebugged) {
                 System.out.println("" + now() + " created lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
