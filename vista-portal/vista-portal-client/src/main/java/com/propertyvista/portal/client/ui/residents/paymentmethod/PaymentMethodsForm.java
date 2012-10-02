@@ -170,15 +170,25 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                     @Override
                     public void onValueChange(ValueChangeEvent<Boolean> event) {
                         if (event.getValue().booleanValue()) {
-                            presenter.savePaymentMethod(PaymentMethodEditorEx.this.getValue());
-                            for (int i = 0; i < PaymentMethodFolder.this.getItemCount(); ++i) {
-                                for (CComponent<?, ?> comp : PaymentMethodFolder.this.getItem(i).getComponents()) {
-                                    if (comp instanceof PaymentMethodEditorEx && !comp.equals(PaymentMethodEditorEx.this)) {
-                                        ((PaymentMethodEditorEx) comp).get(proto().isPreauthorized()).setValue(false, false);
-                                        presenter.savePaymentMethod(((PaymentMethodEditorEx) comp).getValue());
+                            MessageDialog.confirm(i18n.tr("Please Confirm"), i18n.tr("Mark the payment as pre-authorized?"), new Command() {
+                                @Override
+                                public void execute() { // Confirmation:
+                                    presenter.savePaymentMethod(PaymentMethodEditorEx.this.getValue());
+                                    for (int i = 0; i < PaymentMethodFolder.this.getItemCount(); ++i) {
+                                        for (CComponent<?, ?> comp : PaymentMethodFolder.this.getItem(i).getComponents()) {
+                                            if (comp instanceof PaymentMethodEditorEx && !comp.equals(PaymentMethodEditorEx.this)) {
+                                                ((PaymentMethodEditorEx) comp).get(proto().isPreauthorized()).setValue(false, false);
+                                                presenter.savePaymentMethod(((PaymentMethodEditorEx) comp).getValue());
+                                            }
+                                        }
                                     }
                                 }
-                            }
+                            }, new Command() {
+                                @Override
+                                public void execute() { // Declining:
+                                    get(proto().isPreauthorized()).setValue(false, false);
+                                }
+                            });
                         }
                     }
                 });
