@@ -29,6 +29,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeaseExpirationGadgetService;
+import com.propertyvista.crm.server.services.dashboard.util.CommonQueries;
+import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
@@ -39,20 +41,22 @@ import com.propertyvista.dto.LeaseDTO;
 public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetService {
 
     @Override
-    public void countData(AsyncCallback<LeaseExpirationGadgetDataDTO> callback, Vector<Building> buildings) {
+    public void countData(AsyncCallback<LeaseExpirationGadgetDataDTO> callback, Vector<Building> buildingsFilter) {
+        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
+
         LeaseExpirationGadgetDataDTO gadgetData = EntityFactory.create(LeaseExpirationGadgetDataDTO.class);
 
-        count(gadgetData.numOfLeasesEndingThisMonth(), buildings);
-        count(gadgetData.numOfLeasesEndingNextMonth(), buildings);
-        count(gadgetData.numOfLeasesEnding60to90Days(), buildings);
-        count(gadgetData.numOfLeasesEndingOver90Days(), buildings);
+        count(gadgetData.numOfLeasesEndingThisMonth(), buildingsFilter);
+        count(gadgetData.numOfLeasesEndingNextMonth(), buildingsFilter);
+        count(gadgetData.numOfLeasesEnding60to90Days(), buildingsFilter);
+        count(gadgetData.numOfLeasesEndingOver90Days(), buildingsFilter);
 
         if (TODO_LEASES_ON_MONTH_TO_MONTH) {
-            count(gadgetData.numOfLeasesOnMonthToMonth(), buildings);
+            count(gadgetData.numOfLeasesOnMonthToMonth(), buildingsFilter);
         }
 
-        gadgetData.totalUnits().setValue(CommonQueries.numOfUnits(buildings));
-        gadgetData.occupiedUnits().setValue(numOfOccupiedUnits(buildings));
+        gadgetData.totalUnits().setValue(CommonQueries.numOfUnits(buildingsFilter));
+        gadgetData.occupiedUnits().setValue(numOfOccupiedUnits(buildingsFilter));
 
         callback.onSuccess(gadgetData);
     }
@@ -79,19 +83,19 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
 
         LogicalDate leaseToLowerBound = null;
         LogicalDate leaseToUpperBound = null;
-        LogicalDate today = Utils.dayOfCurrentTransaction();
+        LogicalDate today = Util.dayOfCurrentTransaction();
 
         if (proto.numOfLeasesEndingThisMonth() == leaseFilter) {
             leaseToLowerBound = today;
-            leaseToUpperBound = Utils.endOfMonth(today);
+            leaseToUpperBound = Util.endOfMonth(today);
         } else if (proto.numOfLeasesEndingNextMonth() == leaseFilter) {
-            leaseToLowerBound = Utils.beginningOfNextMonth(today);
-            leaseToUpperBound = Utils.endOfMonth(leaseToLowerBound);
+            leaseToLowerBound = Util.beginningOfNextMonth(today);
+            leaseToUpperBound = Util.endOfMonth(leaseToLowerBound);
         } else if (proto.numOfLeasesEnding60to90Days() == leaseFilter) {
-            leaseToLowerBound = Utils.addDays(today, 60);
-            leaseToUpperBound = Utils.addDays(today, 90);
+            leaseToLowerBound = Util.addDays(today, 60);
+            leaseToUpperBound = Util.addDays(today, 90);
         } else if (proto.numOfLeasesEndingOver90Days() == leaseFilter) {
-            leaseToLowerBound = Utils.addDays(today, 91);
+            leaseToLowerBound = Util.addDays(today, 91);
             leaseToUpperBound = null;
         } else if (proto.numOfLeasesOnMonthToMonth() == leaseFilter) {
             if (!TODO_LEASES_ON_MONTH_TO_MONTH) {

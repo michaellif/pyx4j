@@ -20,7 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.report.JasperReportModel;
 
 import com.propertyvista.crm.server.services.reports.directory.ArrearsStatusReportModelCreator;
@@ -40,6 +39,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMet
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
 
@@ -68,11 +68,12 @@ public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
     }
 
     @Override
-    public void createReportModel(AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
+    public void createReportModel(AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Building> buildingsFilter) {
+
         GadgetReportModelCreator creator = map.get(gadgetMetadata.getInstanceValueClass());
 
         if (creator != null) {
-            creator.createReportModel(callback, gadgetMetadata, selectedBuildings);
+            creator.createReportModel(callback, gadgetMetadata, buildingsFilter);
         } else {
             callback.onSuccess(createReportNotImplementedModel(gadgetMetadata.getInstanceValueClass().getSimpleName(), true));
         }

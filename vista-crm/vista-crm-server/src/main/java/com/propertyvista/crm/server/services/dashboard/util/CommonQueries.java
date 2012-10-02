@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.dashboard.gadgets;
+package com.propertyvista.crm.server.services.dashboard.util;
 
 import java.util.Vector;
 

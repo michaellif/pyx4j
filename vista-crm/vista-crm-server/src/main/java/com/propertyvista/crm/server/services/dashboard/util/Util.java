@@ -11,29 +11,43 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.dashboard.gadgets;
+package com.propertyvista.crm.server.services.dashboard.util;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
 import com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.LeaseDTO;
 
-public class Utils {
+public class Util {
 
-    public static String countAndPercentLabel(int count, double percent) {
-        return MessageFormat.format("{0,number,integer} ({1,number,percent})", count, percent);
+    /**
+     * @return building stubs that are in portfolio of the current user
+     */
+    public static Vector<Building> enforcePortfolio(List<Building> buildingsFilter) {
+        Vector<Building> enforcedBuildingsFilter = new Vector<Building>();
+
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        if (!enforcedBuildingsFilter.isEmpty()) {
+            criteria.add(PropertyCriterion.in(criteria.proto().id(), buildingsFilter));
+        }
+        enforcedBuildingsFilter.addAll(Persistence.secureQuery(criteria));
+        return enforcedBuildingsFilter;
     }
 
     public static LogicalDate dayOfCurrentTransaction() {

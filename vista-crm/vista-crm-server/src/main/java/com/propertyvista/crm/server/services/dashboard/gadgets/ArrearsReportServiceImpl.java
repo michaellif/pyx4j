@@ -41,6 +41,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
+import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter;
 import com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter.PropertyMapper;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsComparisonDTO;
@@ -54,6 +55,7 @@ import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 
+// TODO join with Arrears Gadget Service
 public class ArrearsReportServiceImpl implements ArrearsReportService {
 
     private final static I18n i18n = I18n.get(ArrearsReportServiceImpl.class);
@@ -61,6 +63,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     // reminder: resist the urge to make it static because maybe it's not thread safe
     private final EntityDtoBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> dtoBinder = new EntityDtoBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO>(
             LeaseArrearsSnapshot.class, LeaseArrearsSnapshotDTO.class) {
+
         @Override
         protected void bind() {
             bind(dtoProto.fromDate(), dboProto.fromDate());
@@ -87,15 +90,16 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     };
 
     @Override
-    public void leaseArrearsRoster(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, Vector<Building> buildingStubs, LogicalDate asOf,
+    public void leaseArrearsRoster(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, Vector<Building> buildingsFilter, LogicalDate asOf,
             DebitType arrearsCategory, Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
+        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
 
         EntityDto2DboCriteriaConverter<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> criteriaConverter = createCriteriaConverter(arrearsCategory);
         Collection<Criterion> customCriteria = new Vector<Criterion>(); // reserved for future use
 
         EntitySearchResult<LeaseArrearsSnapshot> roster = ServerSideFactory.create(ARFacade.class).getArrearsSnapshotRoster(//@formatter:off
                 asOf,
-                buildingStubs,
+                buildingsFilter,
                 new Vector<Criterion>(criteriaConverter.convertDTOSearchCriteria(customCriteria)),
                 new Vector<Sort>(criteriaConverter.convertDTOSortingCriteria(sortingCriteria)),
                 pageNumber,
@@ -117,12 +121,12 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     }
 
     @Override
-    public void summary(AsyncCallback<EntitySearchResult<AgingBuckets>> callback, Vector<Building> selectedBuildingsStubs, LogicalDate asOf) {
+    public void summary(AsyncCallback<EntitySearchResult<AgingBuckets>> callback, Vector<Building> buildingsFilter, LogicalDate asOf) {
+        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
 
         ARFacade facade = ServerSideFactory.create(ARFacade.class);
 
-        Vector<Building> buildings = selectedBuildingsStubs.isEmpty() ? Persistence.secureQuery(EntityQueryCriteria.create(Building.class))
-                : selectedBuildingsStubs;
+        Vector<Building> buildings = buildingsFilter.isEmpty() ? Persistence.secureQuery(EntityQueryCriteria.create(Building.class)) : buildingsFilter;
 
         AgingBuckets proto = EntityFactory.create(AgingBuckets.class);
 
@@ -170,15 +174,17 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     }
 
     @Override
-    public void arrearsMonthlyComparison(AsyncCallback<ArrearsYOYComparisonDataDTO> callback, Vector<Building> buildingsCriteria, int yearsAgo) {
+    public void arrearsMonthlyComparison(AsyncCallback<ArrearsYOYComparisonDataDTO> callback, Vector<Building> buildingsFilter, int yearsAgo) {
+        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
+
         if (yearsAgo < 0 | yearsAgo > YOY_ANALYSIS_CHART_MAX_YEARS_AGO) {
             throw new UserRuntimeException(i18n.tr("the value of years for comparison has to be between 0 and {0}", YOY_ANALYSIS_CHART_MAX_YEARS_AGO));
         }
         Vector<Building> buildings = null;
-        if (buildingsCriteria.isEmpty()) {
+        if (buildingsFilter.isEmpty()) {
             buildings = new Vector<Building>(Persistence.secureQuery(EntityQueryCriteria.create(Building.class)));
         } else {
-            buildings = buildingsCriteria;
+            buildings = buildingsFilter;
         }
 
         final LogicalDate now = new LogicalDate(SysDateManager.getSysDate());

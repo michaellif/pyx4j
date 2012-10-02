@@ -19,14 +19,14 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.server.LocalService;
 import com.pyx4j.svg.j2se.SvgFactoryForBatik;
 
 import com.propertyvista.biz.financial.SysDateManager;
-import com.propertyvista.crm.server.services.dashboard.gadgets.AvailabilityReportServiceImpl;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
 import com.propertyvista.crm.server.services.reports.StaticTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.util.SvgRasterizer;
@@ -34,6 +34,7 @@ import com.propertyvista.crm.server.services.reports.util.SvgRasterizerImpl;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.svg.gadgets.TurnoverAnalysisChartFactory;
 
 public class TurnoverAnalysisChartReportModelCreator implements GadgetReportModelCreator {
@@ -53,12 +54,13 @@ public class TurnoverAnalysisChartReportModelCreator implements GadgetReportMode
     protected static final String AS_OF = "AS_OF";
 
     @Override
-    public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
+    public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Building> buildingsFilter) {
+
         final UnitTurnoverAnalysisGadgetMetadata turnoverAnalysisMetadata = (UnitTurnoverAnalysisGadgetMetadata) gadgetMetadata;
         final LogicalDate asOf = turnoverAnalysisMetadata.customizeDate().isBooleanTrue() ? turnoverAnalysisMetadata.asOf().getValue() : new LogicalDate(
                 SysDateManager.getSysDate());
 
-        new AvailabilityReportServiceImpl().turnoverAnalysis(new AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>>() {
+        LocalService.create(AvailabilityReportService.class).turnoverAnalysis(new AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>>() {
 
             @Override
             public void onSuccess(Vector<UnitTurnoversPerIntervalDTO> data) {
@@ -78,7 +80,7 @@ public class TurnoverAnalysisChartReportModelCreator implements GadgetReportMode
                 callback.onFailure(arg0);
             }
 
-        }, new Vector<Key>(), asOf);
+        }, buildingsFilter, asOf);
     }
 
 }

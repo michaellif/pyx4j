@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
@@ -81,7 +80,7 @@ public class UnitAvailabilityReportGadget extends ListerGadgetInstanceBase<UnitA
     }
 
     @Override
-    protected void populatePage(int pageNumber) {
+    protected void populatePage(final int pageNumber) {
         if (containerBoard.getSelectedBuildingsStubs() == null) {
             setAsOf(getStatusDate());
             setPageData(new Vector<UnitAvailabilityStatus>(), 0, 0, false);
@@ -89,16 +88,10 @@ public class UnitAvailabilityReportGadget extends ListerGadgetInstanceBase<UnitA
             return;
         }
 
-        final int page = pageNumber;
-        final Vector<Key> buildingPks = new Vector<Key>(containerBoard.getSelectedBuildingsStubs().size());
-        for (Building b : containerBoard.getSelectedBuildingsStubs()) {
-            buildingPks.add(b.getPrimaryKey());
-        }
-
         service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>>() {
             @Override
             public void onSuccess(EntitySearchResult<UnitAvailabilityStatus> result) {
-                setPageData(result.getData(), page, result.getTotalRows(), result.hasMoreData());
+                setPageData(result.getData(), pageNumber, result.getTotalRows(), result.hasMoreData());
                 redrawFilterDisplayPanel();
                 populateSucceded();
             }
@@ -107,7 +100,8 @@ public class UnitAvailabilityReportGadget extends ListerGadgetInstanceBase<UnitA
             public void onFailure(Throwable caught) {
                 populateFailed(caught);
             }
-        }, buildingPks, getMetadata().filterPreset().getValue(), getStatusDate(), new Vector<Sort>(getListerSortingCriteria()), pageNumber, getPageSize());
+        }, new Vector<Building>(containerBoard.getSelectedBuildingsStubs()), getMetadata().filterPreset().getValue(), getStatusDate(), new Vector<Sort>(
+                getListerSortingCriteria()), pageNumber, getPageSize());
     }
 
     private void setAsOf(LogicalDate statusDate) {

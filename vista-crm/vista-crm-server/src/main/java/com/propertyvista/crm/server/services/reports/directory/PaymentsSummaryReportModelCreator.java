@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.server.services.reports.directory;
 
-import static com.propertyvista.crm.server.services.reports.Util.asStubs;
 import static com.propertyvista.crm.server.services.reports.Util.getSortingCriteria;
 
 import java.math.BigDecimal;
@@ -24,7 +23,6 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -45,6 +43,7 @@ import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.svg.gadgets.util.LabelHelper;
 
 public class PaymentsSummaryReportModelCreator implements GadgetReportModelCreator {
@@ -58,7 +57,7 @@ public class PaymentsSummaryReportModelCreator implements GadgetReportModelCreat
     private static final I18n i18n = I18n.get(PaymentsSummaryReportModelCreator.class);
 
     @Override
-    public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
+    public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Building> selectedBuildings) {
         final PaymentsSummaryGadgetMetadata paymentsSummaryGadgetMetadata = gadgetMetadata.duplicate(PaymentsSummaryGadgetMetadata.class);
         final LogicalDate targetDate = paymentsSummaryGadgetMetadata.customizeDate().isBooleanTrue() ? paymentsSummaryGadgetMetadata.asOf().getValue()
                 : new LogicalDate(SysDateManager.getSysDate());
@@ -115,7 +114,7 @@ public class PaymentsSummaryReportModelCreator implements GadgetReportModelCreat
                         callback.onFailure(error);
                     }
                 },
-                asStubs(selectedBuildings),
+                selectedBuildings,
                 targetDate,
                 paymentStatusCriteria,
                 0,

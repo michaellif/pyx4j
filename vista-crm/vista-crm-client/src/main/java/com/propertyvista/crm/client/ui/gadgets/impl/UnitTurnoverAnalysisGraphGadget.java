@@ -33,7 +33,6 @@ import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -153,11 +152,6 @@ public class UnitTurnoverAnalysisGraphGadget extends GadgetInstanceBase<UnitTurn
             return;
         }
 
-        final Vector<Key> buildingPks = new Vector<Key>(containerBoard.getSelectedBuildingsStubs().size());
-        for (Building b : containerBoard.getSelectedBuildingsStubs()) {
-            buildingPks.add(b.getPrimaryKey());
-        }
-
         service.turnoverAnalysis(new AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>>() {
 
             @Override
@@ -170,7 +164,7 @@ public class UnitTurnoverAnalysisGraphGadget extends GadgetInstanceBase<UnitTurn
                 setTurnoverAnalysisData(result);
                 populateSucceded();
             }
-        }, buildingPks, getStatusDate());
+        }, new Vector<Building>(containerBoard.getSelectedBuildingsStubs()), getStatusDate());
     }
 
     private LogicalDate getStatusDate() {

@@ -17,20 +17,21 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.server.LocalService;
 
-import com.propertyvista.crm.server.services.building.BuildingCrudServiceImpl;
+import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
 import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerReportCreator implements GadgetReportModelCreator {
@@ -44,10 +45,10 @@ public class BuildingListerReportCreator implements GadgetReportModelCreator {
     private final static I18n i18n = I18n.get(BuildingListerReportCreator.class);
 
     @Override
-    public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
+    public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Building> buildingsFilter) {
         final BuildingListerGadgetMetadata metadata = gadgetMetadata.duplicate(BuildingListerGadgetMetadata.class);
 
-        new BuildingCrudServiceImpl().list(new AsyncCallback<EntitySearchResult<BuildingDTO>>() {
+        LocalService.create(BuildingCrudService.class).list(new AsyncCallback<EntitySearchResult<BuildingDTO>>() {
 
             @Override
             public void onSuccess(EntitySearchResult<BuildingDTO> result) {

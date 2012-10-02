@@ -42,6 +42,7 @@ import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
+import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO.PaymentFeeMeasure;
@@ -86,9 +87,10 @@ public class PaymentReportServiceImpl implements PaymentReportService {
     }
 
     @Override
-    public void paymentRecords(AsyncCallback<EntitySearchResult<PaymentRecordForReportDTO>> callback, Vector<Building> buildings, LogicalDate targetDate,
+    public void paymentRecords(AsyncCallback<EntitySearchResult<PaymentRecordForReportDTO>> callback, Vector<Building> buildingsFilter, LogicalDate targetDate,
             Vector<PaymentType> paymentTypeCriteria, Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria, int pageNumber, int pageSize,
             Vector<Sort> sortingCriteria) {
+        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
 
         EntityListCriteria<PaymentRecord> criteria = EntityListCriteria.create(PaymentRecord.class);
 
@@ -99,8 +101,8 @@ public class PaymentReportServiceImpl implements PaymentReportService {
 
         // set up search criteria
         criteria.add(PropertyCriterion.eq(criteria.proto().lastStatusChangeDate(), targetDate));
-        if (!buildings.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().billingAccount().lease().unit().building(), buildings));
+        if (!buildingsFilter.isEmpty()) {
+            criteria.add(PropertyCriterion.in(criteria.proto().billingAccount().lease().unit().building(), buildingsFilter));
         }
         if (!paymentTypeCriteria.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().paymentMethod().type(), paymentTypeCriteria));
@@ -126,14 +128,15 @@ public class PaymentReportServiceImpl implements PaymentReportService {
     }
 
     @Override
-    public void paymentsSummary(AsyncCallback<EntitySearchResult<PaymentsSummary>> callback, Vector<Building> buildings, LogicalDate targetDate,
+    public void paymentsSummary(AsyncCallback<EntitySearchResult<PaymentsSummary>> callback, Vector<Building> buildingsFilter, LogicalDate targetDate,
             Vector<PaymentStatus> paymentStatusCriteria, int pageNumber, int pageSize, Vector<Sort> sortingCriteria) {
+        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
 
         Vector<PaymentsSummary> summariesVector = new Vector<PaymentsSummary>();
 
         PaymentsSummaryHelper summaryHelper = new PaymentsSummaryHelper();
 
-        Iterator<Building> buildingIterator = !buildings.isEmpty() ? buildings.iterator() : Persistence.service().query(null,
+        Iterator<Building> buildingIterator = !buildingsFilter.isEmpty() ? buildingsFilter.iterator() : Persistence.service().query(null,
                 EntityQueryCriteria.create(Building.class), AttachLevel.Detached);
 
         if (PaymentsSummary.summaryByBuilding) {

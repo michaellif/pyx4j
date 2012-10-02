@@ -40,6 +40,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
+import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.crm.server.util.SortingFactory;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
@@ -60,15 +61,16 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
     private static SortingFactory<UnitAvailabilityStatus> SORTING_FACTORY = new SortingFactory<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
 
     @Override
-    public void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>> callback, Vector<Key> buildings,
+    public void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>> callback, Vector<Building> buildingsFilter,
             UnitAvailabilityGadgetMetadata.FilterPreset filterPreset, LogicalDate on, Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
+        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
 
         EntityListCriteria<UnitAvailabilityStatus> criteria = new EntityListCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
 
         ArrayList<UnitAvailabilityStatus> allUnitStatuses = new ArrayList<UnitAvailabilityStatus>();
 
-        if (!buildings.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
+        if (!buildingsFilter.isEmpty()) {
+            criteria.add(PropertyCriterion.in(criteria.proto().building(), buildingsFilter));
         }
         if (on == null) {
             throw new IllegalArgumentException("the report date cannot be null");
@@ -139,86 +141,12 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         callback.onSuccess(result);
     }
 
-    private void clearUnrequiredData(Vector<UnitAvailabilityStatus> unitsStatusPage) {
-        for (UnitAvailabilityStatus status : unitsStatusPage) {
-            Building building = EntityFactory.create(Building.class);
-            building.id().setValue(status.building().id().getValue());
-            building.propertyCode().setValue(status.building().propertyCode().getValue());
-            building.externalId().setValue(status.building().externalId().getValue());
-            building.info().name().setValue(status.building().info().name().getValue());
-            building.info().address().setValue(status.building().info().address().getValue());
-            building.propertyManager().name().setValue(status.building().propertyManager().name().getValue());
-            building.complex().name().setValue(status.building().complex().name().getValue());
-            status.building().set(building);
-
-            AptUnit unit = EntityFactory.create(AptUnit.class);
-            unit.id().setValue(status.unit().id().getValue());
-            unit.info().number().setValue(status.unit().info().number().getValue());
-            status.unit().set(unit);
-
-            Floorplan floorplan = EntityFactory.create(Floorplan.class);
-            floorplan.id().setValue(status.floorplan().id().getValue());
-            floorplan.name().setValue(status.floorplan().name().getValue());
-            floorplan.marketingName().setValue(status.floorplan().marketingName().getValue());
-            status.floorplan().set(floorplan);
-
-        }
-
-    }
-
-    private StatusFilter filterFor(FilterPreset filterPreset) {
-        switch (filterPreset) {
-        case NetExposure:
-            return new StatusFilter() {
-                @Override
-                public boolean isAcceptable(UnitAvailabilityStatus status) {
-                    return !status.vacancyStatus().isNull() & status.rentedStatus().getValue() != RentedStatus.Rented;
-                }
-            };
-        case Notice:
-            return new StatusFilter() {
-                @Override
-                public boolean isAcceptable(UnitAvailabilityStatus status) {
-                    return !status.vacancyStatus().isNull() & status.vacancyStatus().getValue() == Vacancy.Notice;
-                }
-            };
-        case Rented:
-            return new StatusFilter() {
-                @Override
-                public boolean isAcceptable(UnitAvailabilityStatus status) {
-                    return !status.vacancyStatus().isNull() & status.rentedStatus().getValue() == RentedStatus.Rented;
-                }
-            };
-        case Vacant:
-            return new StatusFilter() {
-                @Override
-                public boolean isAcceptable(UnitAvailabilityStatus status) {
-                    return !status.vacancyStatus().isNull() & status.vacancyStatus().getValue() == Vacancy.Vacant;
-                }
-            };
-        case VacantAndNotice:
-            return new StatusFilter() {
-                @Override
-                public boolean isAcceptable(UnitAvailabilityStatus status) {
-                    return status.vacancyStatus().getValue() != null;
-                }
-            };
-        default:
-            throw new IllegalStateException("unknown filter preset: " + filterPreset);
-        }
-    }
-
     @Override
-    public void summary(AsyncCallback<UnitAvailabilityReportSummaryDTO> callback, Vector<Key> buildings, LogicalDate toDate) {
-        if (buildings == null) {
-            callback.onFailure(new Error("the set of buildings was not provided."));
-            return;
-        }
+    public void summary(AsyncCallback<UnitAvailabilityReportSummaryDTO> callback, Vector<Building> buildingsFilter, LogicalDate toDate) {
+        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
 
         EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
-        if (!buildings.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
-        }
+
         if (toDate == null) {
             toDate = new LogicalDate(SysDateManager.getSysDate());
         }
@@ -290,17 +218,19 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
     }
 
     @Override
-    public void unitStatusSummary(AsyncCallback<Vector<UnitAvailabilityStatusSummaryLineDTO>> callback, Vector<Building> buildings, LogicalDate asOf) {
+    public void unitStatusSummary(AsyncCallback<Vector<UnitAvailabilityStatusSummaryLineDTO>> callback, Vector<Building> buildingsFilter, LogicalDate asOf) {
+        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
+
         Vector<UnitAvailabilityStatusSummaryLineDTO> summary = new Vector<UnitAvailabilityStatusSummaryLineDTO>();
 
-        if (buildings == null) {
+        if (buildingsFilter == null) {
             callback.onFailure(new Error("the set of buildings was not provided."));
             return;
         }
 
         EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
-        if (!buildings.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
+        if (!buildingsFilter.isEmpty()) {
+            criteria.add(PropertyCriterion.in(criteria.proto().building(), buildingsFilter));
         }
         criteria.add(PropertyCriterion.le(criteria.proto().statusFrom(), asOf));
         // use descending order of the status date in order to select the most recent statuses first
@@ -360,6 +290,60 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         callback.onSuccess(summary);
     }
 
+    @Override
+    public void turnoverAnalysis(AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>> callback, Vector<Building> buildingsFilter, LogicalDate reportDate) {
+        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
+
+        Vector<UnitTurnoversPerIntervalDTO> result = new Vector<UnitTurnoversPerIntervalDTO>(12);
+
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(reportDate);
+        cal.add(Calendar.MONTH, -12);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        LogicalDate tweleveMonthsAgo = new LogicalDate(cal.getTime());
+
+        LogicalDate endOfMonth = Util.endOfMonth(tweleveMonthsAgo);
+
+        UnitTurnoverAnalysisFacade manager = ServerSideFactory.create(UnitTurnoverAnalysisFacade.class);
+
+        Key[] buildingsArray = new Key[buildingsFilter.size()];
+        int i = 0;
+        for (Building b : buildingsFilter) {
+            buildingsArray[i++] = b.getPrimaryKey();
+        }
+
+        int totalTurnovers = 0;
+
+        while (endOfMonth.before(reportDate)) {
+            UnitTurnoversPerIntervalDTO intervalStats = EntityFactory.create(UnitTurnoversPerIntervalDTO.class);
+            intervalStats.intervalSize().setValue(AnalysisResolution.Month);
+            intervalStats.intervalValue().setValue(new LogicalDate(endOfMonth));
+
+            int turnovers = manager.turnoversSinceBeginningOfTheMonth(endOfMonth, buildingsArray);
+            intervalStats.unitsTurnedOverAbs().setValue(turnovers);
+            totalTurnovers += turnovers;
+            result.add(intervalStats);
+
+            endOfMonth = Util.endOfMonth(Util.beginningOfNextMonth(endOfMonth));
+        }
+        UnitTurnoversPerIntervalDTO intervalStats = EntityFactory.create(UnitTurnoversPerIntervalDTO.class);
+        intervalStats.intervalSize().setValue(AnalysisResolution.Month);
+        intervalStats.intervalValue().setValue(new LogicalDate(endOfMonth));
+        intervalStats.unitsTurnedOverAbs().setValue(manager.turnoversSinceBeginningOfTheMonth(reportDate, buildingsArray));
+        result.add(intervalStats);
+
+        if (totalTurnovers != 0) {
+            for (UnitTurnoversPerIntervalDTO stats : result) {
+                stats.unitsTurnedOverPct().setValue((double) (stats.unitsTurnedOverAbs().getValue()) / totalTurnovers);
+            }
+        } else {
+            for (UnitTurnoversPerIntervalDTO stats : result) {
+                stats.unitsTurnedOverPct().setValue(0d);
+            }
+        }
+        callback.onSuccess(result);
+    }
+
     private static UnitAvailabilityStatusSummaryLineDTO makeSummaryRecord(UnitAvailabilityStatusSummaryLineDTO.AvailabilityCategory category, int units,
             double percentile) {
         UnitAvailabilityStatusSummaryLineDTO summaryRecord = EntityFactory.create(UnitAvailabilityStatusSummaryLineDTO.class);
@@ -412,73 +396,73 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
     }
 
-    @Override
-    public void turnoverAnalysis(AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>> callback, Vector<Key> buidlings, LogicalDate reportDate) {
-        if (buidlings.isEmpty()) {
-            List<Building> bb = Persistence.secureQuery(EntityQueryCriteria.create(Building.class));
-            for (Building building : bb) {
-                buidlings.add(building.getPrimaryKey());
-            }
-        }
-        Vector<UnitTurnoversPerIntervalDTO> result = new Vector<UnitTurnoversPerIntervalDTO>(12);
-        if (buidlings.isEmpty()) {
-            // TODO maybe error??
-            callback.onSuccess(result);
-            return;
+    private void clearUnrequiredData(Vector<UnitAvailabilityStatus> unitsStatusPage) {
+        for (UnitAvailabilityStatus status : unitsStatusPage) {
+            Building building = EntityFactory.create(Building.class);
+            building.id().setValue(status.building().id().getValue());
+            building.propertyCode().setValue(status.building().propertyCode().getValue());
+            building.externalId().setValue(status.building().externalId().getValue());
+            building.info().name().setValue(status.building().info().name().getValue());
+            building.info().address().setValue(status.building().info().address().getValue());
+            building.propertyManager().name().setValue(status.building().propertyManager().name().getValue());
+            building.complex().name().setValue(status.building().complex().name().getValue());
+            status.building().set(building);
+
+            AptUnit unit = EntityFactory.create(AptUnit.class);
+            unit.id().setValue(status.unit().id().getValue());
+            unit.info().number().setValue(status.unit().info().number().getValue());
+            status.unit().set(unit);
+
+            Floorplan floorplan = EntityFactory.create(Floorplan.class);
+            floorplan.id().setValue(status.floorplan().id().getValue());
+            floorplan.name().setValue(status.floorplan().name().getValue());
+            floorplan.marketingName().setValue(status.floorplan().marketingName().getValue());
+            status.floorplan().set(floorplan);
+
         }
 
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(reportDate);
-        cal.add(Calendar.MONTH, -12);
-        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-        LogicalDate tweleveMonthsAgo = new LogicalDate(cal.getTime());
-        LogicalDate endOfTheMonth = thisMonthEnd(tweleveMonthsAgo);
-        UnitTurnoverAnalysisFacade manager = ServerSideFactory.create(UnitTurnoverAnalysisFacade.class);
-
-        Key[] buildingsArray = buidlings.toArray(new Key[buidlings.size()]);
-        int totalTurnovers = 0;
-
-        while (endOfTheMonth.before(reportDate)) {
-            UnitTurnoversPerIntervalDTO intervalStats = EntityFactory.create(UnitTurnoversPerIntervalDTO.class);
-            intervalStats.intervalSize().setValue(AnalysisResolution.Month);
-            intervalStats.intervalValue().setValue(new LogicalDate(endOfTheMonth));
-            int turnovers = manager.turnoversSinceBeginningOfTheMonth(endOfTheMonth, buildingsArray);
-            intervalStats.unitsTurnedOverAbs().setValue(turnovers);
-            totalTurnovers += turnovers;
-            result.add(intervalStats);
-            endOfTheMonth = nextMonthEnd(endOfTheMonth);
-        }
-        UnitTurnoversPerIntervalDTO intervalStats = EntityFactory.create(UnitTurnoversPerIntervalDTO.class);
-        intervalStats.intervalSize().setValue(AnalysisResolution.Month);
-        intervalStats.intervalValue().setValue(new LogicalDate(endOfTheMonth));
-        intervalStats.unitsTurnedOverAbs().setValue(manager.turnoversSinceBeginningOfTheMonth(reportDate, buildingsArray));
-        result.add(intervalStats);
-
-        if (totalTurnovers != 0) {
-            for (UnitTurnoversPerIntervalDTO stats : result) {
-                stats.unitsTurnedOverPct().setValue((double) (stats.unitsTurnedOverAbs().getValue()) / totalTurnovers);
-            }
-        } else {
-            for (UnitTurnoversPerIntervalDTO stats : result) {
-                stats.unitsTurnedOverPct().setValue(0d);
-            }
-        }
-        callback.onSuccess(result);
     }
 
-    private LogicalDate thisMonthEnd(LogicalDate date) {
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(date);
-        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-        return new LogicalDate(cal.getTime());
-    }
-
-    private LogicalDate nextMonthEnd(LogicalDate endOfTheMonth) {
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(endOfTheMonth);
-        cal.add(Calendar.MONTH, 1);
-        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-        return new LogicalDate(cal.getTime());
+    private StatusFilter filterFor(FilterPreset filterPreset) {
+        switch (filterPreset) {
+        case NetExposure:
+            return new StatusFilter() {
+                @Override
+                public boolean isAcceptable(UnitAvailabilityStatus status) {
+                    return !status.vacancyStatus().isNull() & status.rentedStatus().getValue() != RentedStatus.Rented;
+                }
+            };
+        case Notice:
+            return new StatusFilter() {
+                @Override
+                public boolean isAcceptable(UnitAvailabilityStatus status) {
+                    return !status.vacancyStatus().isNull() & status.vacancyStatus().getValue() == Vacancy.Notice;
+                }
+            };
+        case Rented:
+            return new StatusFilter() {
+                @Override
+                public boolean isAcceptable(UnitAvailabilityStatus status) {
+                    return !status.vacancyStatus().isNull() & status.rentedStatus().getValue() == RentedStatus.Rented;
+                }
+            };
+        case Vacant:
+            return new StatusFilter() {
+                @Override
+                public boolean isAcceptable(UnitAvailabilityStatus status) {
+                    return !status.vacancyStatus().isNull() & status.vacancyStatus().getValue() == Vacancy.Vacant;
+                }
+            };
+        case VacantAndNotice:
+            return new StatusFilter() {
+                @Override
+                public boolean isAcceptable(UnitAvailabilityStatus status) {
+                    return status.vacancyStatus().getValue() != null;
+                }
+            };
+        default:
+            throw new IllegalStateException("unknown filter preset: " + filterPreset);
+        }
     }
 
 }

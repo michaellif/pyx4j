@@ -18,11 +18,9 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
@@ -51,7 +49,7 @@ public class ArrearsStatusReportModelCreator implements GadgetReportModelCreator
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MMM/yyyy");
 
     @Override
-    public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
+    public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Building> buildingsFilter) {
         final ArrearsStatusGadgetMetadata metadata = gadgetMetadata.duplicate(ArrearsStatusGadgetMetadata.class);
         final LogicalDate asOf = metadata.customizeDate().isBooleanTrue() ? metadata.asOf().getValue() : new LogicalDate(SysDateManager.getSysDate());
         final DebitType arrearsCategory = metadata.category().getValue();
@@ -91,22 +89,11 @@ public class ArrearsStatusReportModelCreator implements GadgetReportModelCreator
 
         new ArrearsReportServiceImpl().leaseArrearsRoster(//@formatter:off
                 serviceCallback,
-                asStubs(selectedBuildings),
+                buildingsFilter,
                 asOf,
                 arrearsCategory,
                 sortingCriteria,
                 0,
                 Integer.MAX_VALUE);//@formatter:on
-    }
-
-    // TODO this has to be refactored on more generic level (for now it's just a HACK)
-    private static Vector<Building> asStubs(Vector<Key> selectedBuildings) {
-        Vector<Building> stubs = new Vector<Building>();
-        for (Key key : selectedBuildings) {
-            Building stub = EntityFactory.create(Building.class);
-            stub.setPrimaryKey(key);
-            stub.setAttachLevel(AttachLevel.IdOnly);
-        }
-        return stubs;
     }
 }

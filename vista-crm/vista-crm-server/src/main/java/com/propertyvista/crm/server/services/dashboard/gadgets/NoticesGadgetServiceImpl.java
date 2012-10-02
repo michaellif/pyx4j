@@ -29,6 +29,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.gadgets.NoticesGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.NoticesGadgetService;
+import com.propertyvista.crm.server.services.dashboard.util.CommonQueries;
+import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -39,6 +41,8 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
 
     @Override
     public void countData(AsyncCallback<NoticesGadgetDataDTO> callback, Vector<Building> buildingsFilter) {
+        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
+
         NoticesGadgetDataDTO gadgetData = EntityFactory.create(NoticesGadgetDataDTO.class);
 
         countNotices(gadgetData.noticesLeavingThisMonth(), buildingsFilter);
@@ -79,15 +83,15 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
 
         if (proto.noticesLeavingThisMonth() == noticesFilter) {
             lowerLeavingBound = today;
-            upperLeavingBound = Utils.endOfMonth(today);
+            upperLeavingBound = Util.endOfMonth(today);
         } else if (proto.noticesLeavingNextMonth() == noticesFilter) {
-            lowerLeavingBound = Utils.beginningOfNextMonth(today);
-            upperLeavingBound = Utils.endOfMonth(lowerLeavingBound);
+            lowerLeavingBound = Util.beginningOfNextMonth(today);
+            upperLeavingBound = Util.endOfMonth(lowerLeavingBound);
         } else if (proto.noticesLeaving60to90Days() == noticesFilter) {
-            lowerLeavingBound = Utils.addDays(today, 60);
-            upperLeavingBound = Utils.addDays(today, 90);
+            lowerLeavingBound = Util.addDays(today, 60);
+            upperLeavingBound = Util.addDays(today, 90);
         } else if (proto.noticesLeavingOver90Days() == noticesFilter) {
-            lowerLeavingBound = Utils.addDays(today, 91);
+            lowerLeavingBound = Util.addDays(today, 91);
             upperLeavingBound = null;
         } else {
             throw new RuntimeException("unknown filter criteria: " + noticesFilter.getPath().toString());

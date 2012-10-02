@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.JasperReportProcessor;
@@ -70,15 +69,15 @@ public class ReportsDeferredProcess implements IDeferredProcess {
 
     private final EntityQueryCriteria<?> queryCriteria;
 
-    private final Vector<Key> selectedBuildigns;
+    private final Vector<Building> selectedBuildigns;
 
     private final JasperFileFormat format;
 
-    public ReportsDeferredProcess(EntityQueryCriteria<DashboardMetadata> queryCriteria, Vector<Key> selectedBuildings, JasperFileFormat format) {
+    public ReportsDeferredProcess(EntityQueryCriteria<DashboardMetadata> queryCriteria, Vector<Building> selectedBuildings, JasperFileFormat format) {
         this.queryCriteria = queryCriteria;
         this.format = format;
         if (selectedBuildings == null) {
-            this.selectedBuildigns = new Vector<Key>();
+            this.selectedBuildigns = new Vector<Building>();
         } else {
             this.selectedBuildigns = selectedBuildings;
         }
@@ -165,7 +164,7 @@ public class ReportsDeferredProcess implements IDeferredProcess {
 
     private String buildingsLabel() {
         Iterator<String> buildingLabelIterator = new Iterator<String>() {
-            Iterator<Key> buildingsI = selectedBuildigns.iterator();
+            Iterator<Building> buildingsI = selectedBuildigns.iterator();
 
             @Override
             public boolean hasNext() {
@@ -174,7 +173,7 @@ public class ReportsDeferredProcess implements IDeferredProcess {
 
             @Override
             public String next() {
-                return Persistence.service().retrieve(Building.class, buildingsI.next(), AttachLevel.Attached).propertyCode().getValue();
+                return Persistence.service().retrieve(Building.class, buildingsI.next().getPrimaryKey(), AttachLevel.Attached).propertyCode().getValue();
             }
 
             @Override
@@ -185,7 +184,7 @@ public class ReportsDeferredProcess implements IDeferredProcess {
         return StringUtils.join(buildingLabelIterator, ", ");
     }
 
-    static JasperReportModel createSubReportModel(GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) throws Exception {
+    static JasperReportModel createSubReportModel(GadgetMetadata gadgetMetadata, Vector<Building> selectedBuildings) throws Exception {
         final Boolean[] isFinished = new Boolean[] { false };
         final JasperReportModel[] result = new JasperReportModel[] { null };
         final Throwable[] error = new Throwable[] { null };
@@ -231,7 +230,7 @@ public class ReportsDeferredProcess implements IDeferredProcess {
         }
     }
 
-    static List<MasterReportEntry> prepareSubreportsForDashboardLayout(IList<GadgetMetadata> gadgets, Vector<Key> selectedBuildigns) throws Exception {
+    static List<MasterReportEntry> prepareSubreportsForDashboardLayout(IList<GadgetMetadata> gadgets, Vector<Building> selectedBuildigns) throws Exception {
         List<MasterReportEntry> subreports = new LinkedList<MasterReportEntry>();
         for (GadgetMetadata gadgetMetadata : gadgets) {
             subreports.add(new MasterReportEntry(createSubReportModel(gadgetMetadata, selectedBuildigns)));
@@ -239,7 +238,7 @@ public class ReportsDeferredProcess implements IDeferredProcess {
         return subreports;
     }
 
-    static List<MasterReportEntry> prepareSubreportsForReportLayout(List<GadgetMetadata> gadgetMetadatas, Vector<Key> selectedBuildigns) throws Exception {
+    static List<MasterReportEntry> prepareSubreportsForReportLayout(List<GadgetMetadata> gadgetMetadatas, Vector<Building> selectedBuildigns) throws Exception {
         List<MasterReportEntry> subreports = new LinkedList<MasterReportEntry>();
 
         GadgetMetadata leftGadgetMetadata = null;

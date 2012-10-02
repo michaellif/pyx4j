@@ -17,21 +17,21 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.server.LocalService;
 
 import com.propertyvista.biz.financial.SysDateManager;
-import com.propertyvista.crm.server.services.dashboard.gadgets.AvailabilityReportServiceImpl;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
-import com.propertyvista.crm.server.services.reports.Util;
 import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatusSummaryLineDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class UnitAvailabilitySummaryReportCreator implements GadgetReportModelCreator {
 
@@ -42,12 +42,13 @@ public class UnitAvailabilitySummaryReportCreator implements GadgetReportModelCr
     private static final I18n i18n = I18n.get(UnitAvailabilitySummaryReportCreator.class);
 
     @Override
-    public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
+    public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Building> buildingsFilter) {
+
         final UnitAvailabilitySummaryGadgetMetadata availabilitySummaryMetadata = (UnitAvailabilitySummaryGadgetMetadata) gadgetMetadata;
         final LogicalDate asOf = availabilitySummaryMetadata.customizeDate().isBooleanTrue() ? availabilitySummaryMetadata.asOf().getValue() : new LogicalDate(
                 SysDateManager.getSysDate());
 
-        new AvailabilityReportServiceImpl().unitStatusSummary(new AsyncCallback<Vector<UnitAvailabilityStatusSummaryLineDTO>>() {//@formatter:off
+        LocalService.create(AvailabilityReportService.class).unitStatusSummary(new AsyncCallback<Vector<UnitAvailabilityStatusSummaryLineDTO>>() {//@formatter:off
 
             @Override
             public void onSuccess(Vector<UnitAvailabilityStatusSummaryLineDTO> result) {
@@ -70,6 +71,6 @@ public class UnitAvailabilitySummaryReportCreator implements GadgetReportModelCr
                 callback.onFailure(arg0);
             }
 
-        }, Util.asStubs(selectedBuildings), asOf);//@formatter:on
+        }, buildingsFilter, asOf);//@formatter:on
     }
 }

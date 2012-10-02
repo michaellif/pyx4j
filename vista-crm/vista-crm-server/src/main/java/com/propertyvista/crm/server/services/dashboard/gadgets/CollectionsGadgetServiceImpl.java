@@ -33,6 +33,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.gadgets.CollectionsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.CollectionsGadgetService;
+import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Tenant;
@@ -43,6 +44,8 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
 
     @Override
     public void countData(AsyncCallback<CollectionsGadgetDataDTO> callback, Vector<Building> buildingsFilter) {
+        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
+
         CollectionsGadgetDataDTO data = EntityFactory.create(CollectionsGadgetDataDTO.class);
 
         count(data.tenantsPaidThisMonth(), buildingsFilter);
@@ -67,8 +70,8 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
      * @return a criteria that should find all the tenants who payed during the month defined by the transaction time
      */
     private <Criteria extends EntityQueryCriteria<? extends Tenant>> Criteria tenantCriteria(Criteria criteria, Vector<Building> buildingsFilter) {
-        LogicalDate today = Utils.dayOfCurrentTransaction();
-        LogicalDate thisMonthStartDay = Utils.beginningOfMonth(today);
+        LogicalDate today = Util.dayOfCurrentTransaction();
+        LogicalDate thisMonthStartDay = Util.beginningOfMonth(today);
 
         criteria.add(PropertyCriterion.ne(criteria.proto().leaseTermV().holder().lease().billingAccount().payments().$().paymentStatus(),
                 PaymentRecord.PaymentStatus.Submitted));
@@ -94,8 +97,8 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
         CollectionsGadgetDataDTO proto = EntityFactory.getEntityPrototype(CollectionsGadgetDataDTO.class);
         IObject<?> fundsFilterProto = proto.getMember(new Path(fundsFilter));
 
-        LogicalDate today = Utils.dayOfCurrentTransaction();
-        LogicalDate thisMonthStartDay = Utils.beginningOfMonth(today);
+        LogicalDate today = Util.dayOfCurrentTransaction();
+        LogicalDate thisMonthStartDay = Util.beginningOfMonth(today);
 
         criteria.add(PropertyCriterion.ge(criteria.proto().createdDate(), thisMonthStartDay));
         criteria.add(PropertyCriterion.le(criteria.proto().createdDate(), today));

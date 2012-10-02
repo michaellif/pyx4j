@@ -14,15 +14,12 @@
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -36,6 +33,7 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetDataDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentTenantDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService;
+import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -44,13 +42,12 @@ import com.propertyvista.domain.tenant.Tenant;
 public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
 
     @Override
-    public void countData(AsyncCallback<ArrearsGadgetDataDTO> callback, Vector<Building> queryParams) {
-        Set<Building> buildings = new HashSet<Building>(!queryParams.isEmpty() ? queryParams : Persistence.service().query(
-                EntityQueryCriteria.create(Building.class), AttachLevel.IdOnly));
+    public void countData(AsyncCallback<ArrearsGadgetDataDTO> callback, Vector<Building> buildingsFilter) {
+        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
 
         ArrearsGadgetDataDTO data = EntityFactory.create(ArrearsGadgetDataDTO.class);
-        calculateArrearsSummary(data.buckets(), buildings);
-        countDelinquentTenants(data.delinquentTenants(), queryParams);
+        calculateArrearsSummary(data.buckets(), buildingsFilter);
+        countDelinquentTenants(data.delinquentTenants(), buildingsFilter);
 
         callback.onSuccess(data);
     }
@@ -91,7 +88,7 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
         return criteria;
     }
 
-    private void calculateArrearsSummary(AgingBuckets aggregatedBuckets, Set<Building> buildings) {
+    private void calculateArrearsSummary(AgingBuckets aggregatedBuckets, Vector<Building> buildings) {
         BigDecimal zero = new BigDecimal("0.0");
         aggregatedBuckets.bucketThisMonth().setValue(zero);
         aggregatedBuckets.bucketCurrent().setValue(zero);
@@ -105,7 +102,7 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
 
         ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
         for (Building b : buildings) {
-            BuildingArrearsSnapshot snapshot = arFacade.getArrearsSnapshot(b, Utils.dayOfCurrentTransaction());
+            BuildingArrearsSnapshot snapshot = arFacade.getArrearsSnapshot(b, Util.dayOfCurrentTransaction());
             if (snapshot == null) {
                 continue;
             } else {

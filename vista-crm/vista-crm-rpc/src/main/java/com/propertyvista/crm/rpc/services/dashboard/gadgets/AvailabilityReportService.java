@@ -17,7 +17,6 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
@@ -32,13 +31,13 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public interface AvailabilityReportService extends IService {
 
-    void turnoverAnalysis(AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>> callback, Vector<Key> buidlings, LogicalDate reportDate);
+    void turnoverAnalysis(AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>> callback, Vector<Building> buidlingsFilter, LogicalDate reportDate);
 
-    void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>> callback, Vector<Key> buildings,
+    void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>> callback, Vector<Building> buildingsFilter,
             UnitAvailabilityGadgetMetadata.FilterPreset filterPreset, LogicalDate when, Vector<Sort> sortingCriteria, int pageNumber, int pageSize);
 
-    void summary(AsyncCallback<UnitAvailabilityReportSummaryDTO> callback, Vector<Key> buildings, LogicalDate toDate);
+    void summary(AsyncCallback<UnitAvailabilityReportSummaryDTO> callback, Vector<Building> buildingsFilter, LogicalDate toDate);
 
-    void unitStatusSummary(AsyncCallback<Vector<UnitAvailabilityStatusSummaryLineDTO>> callback, Vector<Building> buildings, LogicalDate asOf);
+    void unitStatusSummary(AsyncCallback<Vector<UnitAvailabilityStatusSummaryLineDTO>> callback, Vector<Building> buildingsFilter, LogicalDate asOf);
 
 }

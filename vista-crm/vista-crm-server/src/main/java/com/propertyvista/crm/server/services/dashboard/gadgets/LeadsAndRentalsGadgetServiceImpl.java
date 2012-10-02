@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.gadgets.LeadsAndRentalsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeadsAndRentalsGadgetService;
+import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -34,6 +35,8 @@ public class LeadsAndRentalsGadgetServiceImpl implements LeadsAndRentalsGadgetSe
 
     @Override
     public void countData(AsyncCallback<LeadsAndRentalsGadgetDataDTO> callback, Vector<Building> buildingsFilter) {
+        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
+
         LeadsAndRentalsGadgetDataDTO data = EntityFactory.create(LeadsAndRentalsGadgetDataDTO.class);
 
         data.leads().setValue(countLeads(buildingsFilter));
@@ -72,8 +75,8 @@ public class LeadsAndRentalsGadgetServiceImpl implements LeadsAndRentalsGadgetSe
 
     <Criteria extends EntityQueryCriteria<? extends Lead>> Criteria leadsCriteria(Criteria criteria, Vector<Building> buildingsFilter) {
 
-        criteria.add(PropertyCriterion.le(criteria.proto().createDate(), Utils.dayOfCurrentTransaction()));
-        criteria.add(PropertyCriterion.ge(criteria.proto().createDate(), Utils.beginningOfMonth(Utils.dayOfCurrentTransaction())));
+        criteria.add(PropertyCriterion.le(criteria.proto().createDate(), Util.dayOfCurrentTransaction()));
+        criteria.add(PropertyCriterion.ge(criteria.proto().createDate(), Util.beginningOfMonth(Util.dayOfCurrentTransaction())));
 
         if (buildingsFilter != null && !buildingsFilter.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().floorplan().building(), buildingsFilter));
@@ -91,8 +94,8 @@ public class LeadsAndRentalsGadgetServiceImpl implements LeadsAndRentalsGadgetSe
 
     <Criteria extends EntityQueryCriteria<? extends Appointment>> Criteria appointmentsCriteria(Criteria criteria, Vector<Building> buildingsFilter) {
 
-        criteria.add(PropertyCriterion.le(criteria.proto().date(), Utils.dayOfCurrentTransaction()));
-        criteria.add(PropertyCriterion.ge(criteria.proto().date(), Utils.beginningOfMonth(Utils.dayOfCurrentTransaction())));
+        criteria.add(PropertyCriterion.le(criteria.proto().date(), Util.dayOfCurrentTransaction()));
+        criteria.add(PropertyCriterion.ge(criteria.proto().date(), Util.beginningOfMonth(Util.dayOfCurrentTransaction())));
 
         if (buildingsFilter != null && !buildingsFilter.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().lead().floorplan().building(), buildingsFilter));

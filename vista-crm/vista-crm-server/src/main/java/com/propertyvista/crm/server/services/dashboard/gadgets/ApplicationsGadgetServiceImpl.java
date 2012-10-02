@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.gadgets.ApplicationsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ApplicationsGadgetService;
+import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
@@ -37,6 +38,8 @@ public class ApplicationsGadgetServiceImpl implements ApplicationsGadgetService 
 
     @Override
     public void countData(AsyncCallback<ApplicationsGadgetDataDTO> callback, Vector<Building> buildingsFilter) {
+        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
+
         ApplicationsGadgetDataDTO data = EntityFactory.create(ApplicationsGadgetDataDTO.class);
 
         count(data.applications(), buildingsFilter);
@@ -57,8 +60,8 @@ public class ApplicationsGadgetServiceImpl implements ApplicationsGadgetService 
     <Criteria extends EntityQueryCriteria<? extends Lease>> Criteria applicationsCriteria(Criteria criteria, Vector<Building> builidngsFilter,
             String applicationsFilter) {
 
-        criteria.add(PropertyCriterion.ge(criteria.proto().creationDate(), Utils.beginningOfMonth(Utils.dayOfCurrentTransaction())));
-        criteria.add(PropertyCriterion.le(criteria.proto().creationDate(), Utils.dayOfCurrentTransaction()));
+        criteria.add(PropertyCriterion.ge(criteria.proto().creationDate(), Util.beginningOfMonth(Util.dayOfCurrentTransaction())));
+        criteria.add(PropertyCriterion.le(criteria.proto().creationDate(), Util.dayOfCurrentTransaction()));
 
         if (builidngsFilter != null && !builidngsFilter.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().unit().building(), builidngsFilter));
