@@ -153,6 +153,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                             presenter.editPaymentMethod(getValue());
                         }
                     });
+                    comp.setViewable(true);
                 } else if (member.equals(proto().details())) {
                     comp = new CEntityLabel<PaymentDetails>();
                 } else if (member.equals(proto().isPreauthorized())) {

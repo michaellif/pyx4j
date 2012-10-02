@@ -97,6 +97,7 @@ public class BillingHistoryForm extends CEntityForm<BillListDTO> implements Bill
                             presenter.view(getValue());
                         }
                     });
+                    comp.setViewable(true);
                 } else {
                     comp = super.create(member);
                 }
