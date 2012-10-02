@@ -44,6 +44,7 @@ public class LeaseApprovalValidator extends CompositeEntityValidator<Lease> {
 
         bind(proto().currentTerm().version().tenants(), new HasAtLeastOneApplicantValidator());
         bind(proto().currentTerm().version().tenants(), new TenantInApprovedLeaseValidator());
+        bind(proto().currentTerm().version().guarantors(), new GuarantorInApprovedLeaseValidator());
 
         bind(proto().currentTerm().version().leaseProducts().serviceItem(), new NotNullValidator());
 
@@ -51,11 +52,11 @@ public class LeaseApprovalValidator extends CompositeEntityValidator<Lease> {
     }
 
     @Override
-    protected void prepare(Lease obj) {
+    protected void prepare(Lease lease) {
         // load detached members:
-        if (obj.getPrimaryKey() != null) {
-            Persistence.service().retrieve(obj.currentTerm().version().tenants());
-            Persistence.service().retrieve(obj.currentTerm().version().guarantors());
+        if (lease.getPrimaryKey() != null) {
+            Persistence.service().retrieve(lease.currentTerm().version().tenants());
+            Persistence.service().retrieve(lease.currentTerm().version().guarantors());
         }
     }
 }

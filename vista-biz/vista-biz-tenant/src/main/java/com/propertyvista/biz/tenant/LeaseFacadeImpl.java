@@ -29,6 +29,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -60,6 +61,7 @@ import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -270,6 +272,16 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.leaseApplication().decisionReason().setValue(decisionReason);
         lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
 
+        // migrate participants:
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+        for (Tenant tenant : lease.currentTerm().version().tenants()) {
+            tenant.screening().set(retrivePersonScreeningId(tenant.leaseCustomer().customer()));
+        }
+        Persistence.service().retrieve(lease.currentTerm().version().guarantors());
+        for (Guarantor guarantor : lease.currentTerm().version().guarantors()) {
+            guarantor.screening().set(retrivePersonScreeningId(guarantor.leaseCustomer().customer()));
+        }
+
         finalize(lease);
 
         ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
@@ -289,6 +301,16 @@ public class LeaseFacadeImpl implements LeaseFacade {
                     ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(tenant);
                 }
             }
+        }
+    }
+
+    public PersonScreening retrivePersonScreeningId(Customer entity) {
+        if (!entity.personScreening().isNull()) {
+            EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().screene(), entity));
+            return Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
+        } else {
+            return null;
         }
     }
 

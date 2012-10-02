@@ -13,12 +13,12 @@
  */
 package com.propertyvista.biz.validation.validators.lease;
 
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Guarantor;
 
-public class TenantInApprovedLeaseValidator extends LeaseParticipantInApprovedLeaseValidator<Tenant> {
+public class GuarantorInApprovedLeaseValidator extends LeaseParticipantInApprovedLeaseValidator<Guarantor> {
 
-    public TenantInApprovedLeaseValidator() {
-        super(Tenant.class);
+    public GuarantorInApprovedLeaseValidator() {
+        super(Guarantor.class);
     }
 
 }
