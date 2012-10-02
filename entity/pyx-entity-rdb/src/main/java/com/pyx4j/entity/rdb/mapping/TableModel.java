@@ -721,6 +721,9 @@ public class TableModel {
                 // verify graph integrity
                 continue;
             }
+            if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
+                continue;
+            }
             TableModelExternal.retrieve(persistenceContext, entity, member);
         }
 

@@ -1118,9 +1118,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             try {
                 TableModel tm = tableModel(entityMember.getOwner().getEntityMeta());
                 tm.retrieveMember(getPersistenceContext(), entityMember.getOwner(), entityMember);
-                if (cascadeRetrieve(entityMember, attachLevel) == null) {
-                    throw new RuntimeException("Entity '" + entityMember.getEntityMeta().getCaption() + "' " + entityMember.getPrimaryKey() + " "
-                            + entityMember.getPath() + " NotFound");
+                if (entityMember.getPrimaryKey() != null) {
+                    if (cascadeRetrieve(entityMember, attachLevel) == null) {
+                        throw new RuntimeException("Entity '" + entityMember.getEntityMeta().getCaption() + "' " + entityMember.getPrimaryKey() + " "
+                                + entityMember.getPath() + " NotFound");
+                    }
                 }
             } finally {
                 endContext();
