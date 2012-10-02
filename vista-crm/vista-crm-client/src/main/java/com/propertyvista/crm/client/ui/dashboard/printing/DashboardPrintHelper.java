@@ -111,15 +111,14 @@ public class DashboardPrintHelper {
     }
 
     private static void clean(Node n) {
-        boolean isRemoved = false;
 
         if (hasDefinedType(n) && n.getNodeType() == Node.ELEMENT_NODE) {
             Element e = (Element) n;
-            if (PRINT_EL_CLASS_BLACKLIST.contains(e.getClassName())) {
+            if (e.getTagName().endsWith("svg")) {
+                return;
+            } else if (PRINT_EL_CLASS_BLACKLIST.contains(e.getClassName())) {
                 e.removeFromParent();
-                isRemoved = true;
-            }
-            if (!isRemoved) {
+            } else {
                 // remove scroll bars
                 String overflow = e.getStyle().getOverflow();
                 if ("auto".equals(overflow) | "scroll".equals(overflow)) {
