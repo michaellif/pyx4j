@@ -47,6 +47,8 @@ public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarant
         // load detached data:
         Persistence.service().retrieve(dto.leaseTermV());
         Persistence.service().retrieve(dto.leaseTermV().holder(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(dto.leaseCustomer().customer().emergencyContacts());
+        Persistence.service().retrieveMember(dto.leaseCustomer().customer().personScreening(), AttachLevel.ToStringMembers);
     }
 
     @Override

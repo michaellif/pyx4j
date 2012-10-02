@@ -15,17 +15,15 @@ package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.dto.GuarantorDTO;
 
 public interface GuarantorViewerView extends IViewerView<GuarantorDTO> {
 
     interface Presenter extends IViewerView.Presenter {
 
+        void goToCreateScreening();
+
         void goToChangePassword(Key guarantorPrincipalPk, String guarantorName);
     }
-
-    IListerView<PersonScreening> getScreeningListerView();
 }

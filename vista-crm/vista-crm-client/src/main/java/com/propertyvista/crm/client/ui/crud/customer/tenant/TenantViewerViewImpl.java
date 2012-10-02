@@ -48,8 +48,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         screeningAction = new MenuItem(i18n.tr("Create Screening"), new Command() {
             @Override
             public void execute() {
-                ((TenantViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().leaseCustomer().customer().user().getPrimaryKey(),
-                        getForm().getValue().leaseCustomer().customer().person().getStringView());
+                ((TenantViewerView.Presenter) getPresenter()).goToCreateScreening();
             }
         });
         addAction(screeningAction);
@@ -59,6 +58,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
     public void reset() {
         setActionVisible(passwordAction, false);
         setActionVisible(screeningAction, false);
+
         super.reset();
     }
 

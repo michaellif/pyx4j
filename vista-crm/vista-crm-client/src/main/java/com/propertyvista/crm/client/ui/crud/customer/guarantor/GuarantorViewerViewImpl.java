@@ -17,27 +17,21 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.customer.screening.PersonScreeningLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO> implements GuarantorViewerView {
 
     private final static I18n i18n = I18n.get(GuarantorViewerViewImpl.class);
 
-    private final IListerView<PersonScreening> screeningLister;
-
     private final MenuItem passwordAction;
+
+    private final MenuItem screeningAction;
 
     public GuarantorViewerViewImpl() {
         super(CrmSiteMap.Tenants.Guarantor.class);
-
-        screeningLister = new ListerInternalViewImplBase<PersonScreening>(new PersonScreeningLister());
 
         //set main form here:
         setForm(new GuarantorForm(true));
@@ -45,27 +39,34 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
         passwordAction = new MenuItem(i18n.tr("Change Password"), new Command() {
             @Override
             public void execute() {
-                ((GuarantorViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().leaseCustomer().customer().user().getPrimaryKey(), getForm()
-                        .getValue().leaseCustomer().customer().person().getStringView());
+                ((GuarantorViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().leaseCustomer().customer().user().getPrimaryKey(),
+                        getForm().getValue().leaseCustomer().customer().person().getStringView());
             }
         });
         addAction(passwordAction);
-    }
 
-    @Override
-    public IListerView<PersonScreening> getScreeningListerView() {
-        return screeningLister;
+        screeningAction = new MenuItem(i18n.tr("Create Screening"), new Command() {
+            @Override
+            public void execute() {
+                ((GuarantorViewerView.Presenter) getPresenter()).goToCreateScreening();
+            }
+        });
+        addAction(screeningAction);
     }
 
     @Override
     public void reset() {
         setActionVisible(passwordAction, false);
+        setActionVisible(screeningAction, false);
+
         super.reset();
     }
 
     @Override
     public void populate(GuarantorDTO value) {
         super.populate(value);
+
+        setActionVisible(screeningAction, value.leaseCustomer().customer().personScreening().isNull());
 
         // Disable password change button for guarantors with no associated user principal
         if (value != null & !value.leaseCustomer().customer().user().isNull()) {
