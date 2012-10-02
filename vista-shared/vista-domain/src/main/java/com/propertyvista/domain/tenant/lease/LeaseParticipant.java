@@ -30,6 +30,7 @@ import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -99,4 +100,7 @@ public interface LeaseParticipant<LC extends LeaseCustomer> extends IEntity {
     @Detached
     @Versioned
     PersonScreening screening();
+    @Transient
+    PersonScreening effectiveScreening();
+
 }

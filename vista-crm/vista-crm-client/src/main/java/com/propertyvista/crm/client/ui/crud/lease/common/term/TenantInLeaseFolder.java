@@ -25,15 +25,15 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -178,7 +178,11 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role()), 15).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().percentage()), 5).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().screening()), 9).customLabel(i18n.tr("Use Screening From")).build());
+            left.setWidget(
+                    ++row,
+                    0,
+                    new DecoratorBuilder(inject(proto().effectiveScreening(),
+                            new CEntityCrudHyperlink<PersonScreening>(AppPlaceEntityMapper.resolvePlace(PersonScreening.class))), 9).build());
 
             FormFlexPanel right = new FormFlexPanel();
             row = -1;
@@ -252,13 +256,6 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
             }
 
             get(proto().relationship()).setVisible(getValue().role().getValue() != LeaseParticipant.Role.Applicant);
-
-            if (get(proto().screening()) instanceof CEntityComboBox<?>) {
-                CEntityComboBox<PersonScreening> combo = (CEntityComboBox<PersonScreening>) get(proto().screening());
-                combo.resetCriteria();
-                combo.addCriterion(PropertyCriterion.eq(combo.proto().screene(), getValue().leaseCustomer().customer()));
-                combo.refreshOptions();
-            }
         }
     }
 }

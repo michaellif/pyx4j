@@ -19,6 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -40,6 +41,7 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseTermDTO;
 
@@ -105,14 +107,14 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             Persistence.service().retrieve(dto.version().tenants());
         }
         for (Tenant item : dto.version().tenants()) {
-            Persistence.service().retrieve(item.screening());
+            setEffectiveScreening(item);
         }
 
         if (in.getPrimaryKey() != null) {
             Persistence.service().retrieve(dto.version().guarantors());
         }
         for (Guarantor item : dto.version().guarantors()) {
-            Persistence.service().retrieve(item.screening());
+            setEffectiveScreening(item);
         }
 
         Persistence.service().retrieve(dto.lease());
@@ -121,6 +123,15 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             fillServiceEligibilityData(dto);
             fillserviceItems(dto);
         }
+    }
+
+    private void setEffectiveScreening(LeaseParticipant<?> peaseParticipant) {
+        if (peaseParticipant.screening().isNull()) {
+            Persistence.service().retrieveMember(peaseParticipant.leaseCustomer().customer().personScreening(), AttachLevel.IdOnly);
+        } else {
+            peaseParticipant.effectiveScreening().set(peaseParticipant.screening());
+        }
+        Persistence.service().retrieve(peaseParticipant.effectiveScreening(), AttachLevel.ToStringMembers);
     }
 
     @Override

@@ -305,13 +305,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     public PersonScreening retrivePersonScreeningId(Customer entity) {
-        if (!entity.personScreening().isNull()) {
-            EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().screene(), entity));
-            return Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
-        } else {
-            return null;
-        }
+        Persistence.service().retrieveMember(entity.personScreening(), AttachLevel.IdOnly);
+        return entity.personScreening();
     }
 
     @Override
