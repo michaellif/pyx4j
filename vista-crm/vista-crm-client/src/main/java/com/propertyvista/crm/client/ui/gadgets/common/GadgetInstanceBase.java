@@ -36,7 +36,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
-import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.GadgetMetadataService;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
@@ -44,7 +43,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     private static final I18n i18n = I18n.get(GadgetInstanceBase.class);
 
-    private static final GadgetMetadataService GADGET_METADATA_SERVICE = GWT.create(DashboardMetadataService.class);
+    private static final GadgetMetadataService GADGET_METADATA_SERVICE = GWT.create(GadgetMetadataService.class);
 
     private boolean isRunning;
 
