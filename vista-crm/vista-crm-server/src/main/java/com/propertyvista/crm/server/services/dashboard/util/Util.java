@@ -21,6 +21,7 @@ import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -43,10 +44,10 @@ public class Util {
         Vector<Building> enforcedBuildingsFilter = new Vector<Building>();
 
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        if (!enforcedBuildingsFilter.isEmpty()) {
+        if (!buildingsFilter.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().id(), buildingsFilter));
         }
-        enforcedBuildingsFilter.addAll(Persistence.secureQuery(criteria));
+        enforcedBuildingsFilter.addAll(Persistence.secureQuery(criteria, AttachLevel.IdOnly));
         return enforcedBuildingsFilter;
     }
 
