@@ -32,4 +32,8 @@ public enum BoardLayout {
     public int columns() {
         return columns;
     }
+
+    public final boolean isRowLayout() {
+        return columns() == 0;
+    }
 }
