@@ -24,11 +24,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface LoginNotificationsConfigurationDTO extends IEntity {
 
-    @Caption(name = "E-Mail")
+    @Caption(name = "Enabled")
     IPrimitive<Boolean> isEmailNotificationEnabled();
 
     @Editor(type = EditorType.email)
     @NotNull
     IPrimitive<String> email();
-
 }

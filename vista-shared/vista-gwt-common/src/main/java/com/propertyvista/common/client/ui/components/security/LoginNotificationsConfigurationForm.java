@@ -17,7 +17,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -31,22 +30,20 @@ public class LoginNotificationsConfigurationForm extends CEntityDecoratableForm<
 
     @Override
     public IsWidget createContent() {
-
         FormFlexPanel contentPanel = new FormFlexPanel();
-        int row = -1;
 
-        contentPanel.setWidget(++row, 0, inject(proto().isEmailNotificationEnabled()));
-        CComponent<Boolean, ?> isEmailNotificationEnabled = get(proto().isEmailNotificationEnabled());
-        isEmailNotificationEnabled.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+        contentPanel.setWidget(0, 0, new DecoratorBuilder(inject(proto().isEmailNotificationEnabled()), 5).build());
+        contentPanel.setWidget(0, 1, new DecoratorBuilder(inject(proto().email()), 25).labelWidth(8).build());
+
+        get(proto().isEmailNotificationEnabled()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().email()).setEnabled(Boolean.TRUE.equals(event.getValue())); // must use this syntax because not sure that value is never null
             }
         });
 
-        contentPanel.setWidget(row, 1, new DecoratorBuilder(inject(proto().email())).labelWidth(5).build());
-        CComponent<String, ?> email = get(proto().email());
-        email.setVisible(true);
+        contentPanel.getColumnFormatter().setWidth(0, "20%");
+        contentPanel.getColumnFormatter().setWidth(1, "80%");
 
         return contentPanel;
     }
@@ -55,6 +52,10 @@ public class LoginNotificationsConfigurationForm extends CEntityDecoratableForm<
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().email()).setEnabled(getValue().isEmailNotificationEnabled().isBooleanTrue());
+        if (isEditable()) {
+            get(proto().email()).setEnabled(getValue().isEmailNotificationEnabled().isBooleanTrue());
+        } else {
+            get(proto().email()).setVisible(getValue().isEmailNotificationEnabled().isBooleanTrue());
+        }
     }
 }

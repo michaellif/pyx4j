@@ -19,7 +19,6 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -44,9 +43,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     @Override
     public void createTabs() {
-        Tab tab = addTab(createInfoTab(i18n.tr("Personal Information")));
-        selectTab(tab);
-
+        selectTab(addTab(createInfoTab(i18n.tr("Personal Information"))));
         addTab(createPrivilegesTab(i18n.tr("Privileges")));
         addTab(createAuditingConfigurationTab(i18n.tr("Auditing Configuration")));
     }
@@ -125,10 +122,9 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     private FormFlexPanel createAuditingConfigurationTab(String title) {
-
         FormFlexPanel tabContent = new FormFlexPanel(title);
-        int row = -1;
-        tabContent.setWidget(++row, 0, inject(proto().userAuditingConfiguration(), new UserAuditingConfigurationForm()));
+
+        tabContent.setWidget(0, 0, inject(proto().userAuditingConfiguration(), new UserAuditingConfigurationForm()));
 
         return tabContent;
     }
