@@ -20,11 +20,15 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Panel;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.events.DevShortcutEvent;
+import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 
 public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<E, NativeEntityPanel<E>> implements IEditableComponentFactory {
@@ -68,6 +72,9 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
                 getWidget().setWidget(getDecorator());
             }
             addValidations();
+            if (ApplicationMode.isDevelopment()) {
+                DevelopmentShortcutUtil.attachDevelopmentShortcuts(getWidget(), this);
+            }
             initiated = true;
         }
     }
@@ -106,6 +113,10 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
 
     public void addValidations() {
 
+    }
+
+    public final HandlerRegistration addDevShortcutHandler(DevShortcutHandler handler) {
+        return addHandler(handler, DevShortcutEvent.getType());
     }
 
 }
