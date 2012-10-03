@@ -21,7 +21,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.IPersonalIdentity;
+import com.pyx4j.forms.client.events.DevShortcutEvent;
+import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -29,6 +33,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextComponent;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -131,5 +136,34 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
                 }
             }
         });
+
+        if (ApplicationMode.isDevelopment()) {
+            this.addDevShortcutHandler(new DevShortcutHandler() {
+                @Override
+                public void onDevShortcut(DevShortcutEvent event) {
+                    if (event.getKeyCode() == 'Q') {
+                        event.consume();
+                        devGenerateCreditCard();
+                    }
+                }
+
+            });
+        }
+
+    }
+
+    private void devGenerateCreditCard() {
+        get(proto().nameOn()).setValue("Dev");
+        get(proto().cardType()).setValue(CreditCardType.Visa);
+
+        if (false) {
+            getValue().card().newNumber().setValue("4222222222222");
+            get(proto().card()).setValue(getValue().card());
+        } else {
+            ((CTextFieldBase<?, ?>) get(proto().card())).setValueByString("4222222222222");
+        }
+
+        get(proto().expiryDate()).setValue(new LogicalDate());
+        get(proto().securityCode()).setValue("123");
     }
 }
