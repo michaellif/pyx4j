@@ -19,6 +19,10 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.forms.client.events.DevShortcutEvent;
+import com.pyx4j.forms.client.events.DevShortcutHandler;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -28,6 +32,8 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
+import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
@@ -109,6 +115,22 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         return main;
     }
 
+    @Override
+    public void addValidations() {
+        super.addValidations();
+        if (ApplicationMode.isDevelopment()) {
+            this.addDevShortcutHandler(new DevShortcutHandler() {
+                @Override
+                public void onDevShortcut(DevShortcutEvent event) {
+                    if (event.getKeyCode() == 'Q') {
+                        event.consume();
+                        devGenerateAddress();
+                    }
+                }
+            });
+        }
+    }
+
     private void attachFilters(final AddressStructured proto, CComponent<Province, ?> province, CComponent<Country, ?> country, CComponent<String, ?> postalCode) {
         postalCode.addValueValidator(new ZipCodeValueValidator(this, proto.country()));
         country.addValueChangeHandler(new RevalidationTrigger<Country>(postalCode));
@@ -147,5 +169,16 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
                 //TODO generic case for other countries
             }
         }
+    }
+
+    protected void devGenerateAddress() {
+        ((CComboBox<?>) get(proto().province())).setValueByString("Ontario");
+        get(proto().city()).setValue("Toronto");
+        get(proto().postalCode()).setValue("M5H 1A1");
+
+        get(proto().streetNumber()).setValue("100");
+        get(proto().streetName()).setValue("King");
+        get(proto().streetType()).setValue(StreetType.street);
+        get(proto().streetDirection()).setValue(StreetDirection.west);
     }
 }

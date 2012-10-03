@@ -27,6 +27,7 @@ import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.GuarantorDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
@@ -48,7 +49,13 @@ public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarant
         Persistence.service().retrieve(dto.leaseTermV());
         Persistence.service().retrieve(dto.leaseTermV().holder(), AttachLevel.ToStringMembers);
         Persistence.service().retrieve(dto.leaseCustomer().customer().emergencyContacts());
+
+        // Retrieve draft
         Persistence.service().retrieveMember(dto.leaseCustomer().customer().personScreening(), AttachLevel.ToStringMembers);
+        if (dto.leaseCustomer().customer().personScreening().version().isEmpty()) {
+            dto.leaseCustomer().customer().personScreening()
+                    .set(Persistence.service().retrieve(PersonScreening.class, dto.leaseCustomer().customer().personScreening().getPrimaryKey().asDraftKey()));
+        }
     }
 
     @Override
