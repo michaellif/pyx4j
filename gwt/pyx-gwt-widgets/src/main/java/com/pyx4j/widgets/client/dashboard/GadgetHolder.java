@@ -376,6 +376,7 @@ final class GadgetHolder extends SimplePanel {
 
             @Override
             public void execute() {
+                onItemSelected();
                 expand();
             }
 
