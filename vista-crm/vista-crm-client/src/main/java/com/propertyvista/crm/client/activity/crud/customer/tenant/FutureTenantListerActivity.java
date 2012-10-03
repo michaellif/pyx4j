@@ -33,7 +33,7 @@ public class FutureTenantListerActivity extends ListerActivityBase<TenantDTO> {
 
         // filter out just potential tenants:
         TenantDTO proto = EntityFactory.getEntityPrototype(TenantDTO.class);
-        addPreDefinedFilter(PropertyCriterion.in(proto.leaseTermV().holder().lease().status(), Lease.Status.draft()));
+        addPreDefinedFilter(PropertyCriterion.in(proto.leaseCustomer().lease().status(), Lease.Status.draft()));
     }
 
     @Override
