@@ -69,7 +69,8 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
         if (isEditable()) {
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().leaseCustomer().participantId()), getValue().getPrimaryKey());
         } else {
-            get(proto().leaseCustomer().customer().personScreening()).setVisible(!getValue().leaseCustomer().customer().personScreening().isNull());
+            get(proto().leaseCustomer().customer().personScreening()).setVisible(
+                    getValue().leaseCustomer().customer().personScreening().getPrimaryKey() != null);
         }
     }
 

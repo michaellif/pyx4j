@@ -56,7 +56,8 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
         get(proto().leaseCustomer().customer().person().email()).setMandatory(!getValue().leaseCustomer().customer().user().isNull());
 
         if (!isEditable()) {
-            get(proto().leaseCustomer().customer().personScreening()).setVisible(!getValue().leaseCustomer().customer().personScreening().isNull());
+            get(proto().leaseCustomer().customer().personScreening()).setVisible(
+                    getValue().leaseCustomer().customer().personScreening().getPrimaryKey() != null);
         }
     }
 

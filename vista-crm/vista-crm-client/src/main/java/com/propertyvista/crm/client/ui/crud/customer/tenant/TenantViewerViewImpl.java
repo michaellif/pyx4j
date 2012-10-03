@@ -66,7 +66,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
     public void populate(TenantDTO value) {
         super.populate(value);
 
-        setActionVisible(screeningAction, value.leaseCustomer().customer().personScreening().isNull());
+        setActionVisible(screeningAction, value.leaseCustomer().customer().personScreening().getPrimaryKey() == null);
 
         // Disable password change button for tenants with no associated user principal
         if (value != null & !value.leaseCustomer().customer().user().isNull()) {
