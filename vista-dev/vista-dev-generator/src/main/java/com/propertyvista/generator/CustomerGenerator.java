@@ -17,14 +17,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.generator.util.CommonsGenerator;
-import com.propertyvista.generator.util.RandomUtil;
 
 public class CustomerGenerator {
 
@@ -43,14 +40,7 @@ public class CustomerGenerator {
 
     public EmergencyContact createEmergencyContact() {
         EmergencyContact contact = EntityFactory.create(EmergencyContact.class);
-
-        contact.sex().setValue(RandomUtil.randomEnum(Person.Sex.class));
-        contact.name().set(CommonsGenerator.createName());
-
-        contact.homePhone().setValue(CommonsGenerator.createPhone());
-        contact.mobilePhone().setValue(CommonsGenerator.createPhone());
-
-        contact.email().setValue(CommonsGenerator.createEmail(contact.name()));
+        contact.set(CommonsGenerator.createPerson().duplicate(EmergencyContact.class));
 
         contact.address().set(CommonsGenerator.createAddress());
 
