@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
+import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
@@ -166,7 +167,7 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
             @Override
             public IsWidget createContent() {
                 FlowPanel panel = new FlowPanel();
-                addNotMandatory(panel, proto().card());
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().card(), new CPersonalIdentityField("XXXX XXXX XXXX xxxx", null))));
                 addNotMandatory(panel, proto().expiryDate());
                 addNotMandatory(panel, proto().nameOn());
                 addNotMandatory(panel, proto().securityCode());

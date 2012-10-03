@@ -23,6 +23,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.rpc.AppPlace;
@@ -96,11 +97,11 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
     @Override
     public VistaCustomerBehavior getOnlineApplicationBehavior(OnlineApplication application) {
-        MasterOnlineApplication masterOnlineApplication = Persistence.service().retrieve(MasterOnlineApplication.class,
-                application.masterOnlineApplication().getPrimaryKey());
+        EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
+        criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
+        criteria.add(PropertyCriterion.eq(criteria.proto().lease().leaseApplication().onlineApplication().applications(), application));
+        LeaseTerm leaseTerm = Persistence.service().retrieve(criteria);
 
-        LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, masterOnlineApplication.leaseApplication().lease().currentTerm()
-                .getPrimaryKey());
         for (Tenant tenant : leaseTerm.version().tenants()) {
             Persistence.service().retrieve(tenant);
             if (application.customer().equals(tenant.leaseCustomer().customer())) {
