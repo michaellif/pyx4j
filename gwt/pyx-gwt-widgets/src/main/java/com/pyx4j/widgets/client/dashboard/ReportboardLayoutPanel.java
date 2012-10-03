@@ -120,34 +120,7 @@ public class ReportboardLayoutPanel extends FlowPanel implements BoardEvent {
     }
 
     public void removeGadget(int index) {
-        if (!checkIndex(index, false)) {
-            return;
-        }
-
-        CellPanel cell = (CellPanel) getWidget(index);
-        if (Reportboard.Location.Full.equals(cell.getLocation())) {
-            remove(cell);
-        } else if (Reportboard.Location.Left.equals(cell.getLocation())) {
-            if (index + 1 < getWidgetCount()) {
-                CellPanel nextCell = (CellPanel) getWidget(index + 1);
-                if (nextCell.isSpaceHolder()) {
-                    remove(cell);
-                    remove(nextCell);
-                } else {
-                    cell.setSpaceHolder();
-                }
-            }
-        } else if (Reportboard.Location.Right.equals(cell.getLocation())) {
-            if (index > 0) {
-                CellPanel previousCell = (CellPanel) getWidget(index - 1);
-                if (previousCell.isSpaceHolder()) {
-                    remove(cell);
-                    remove(previousCell);
-                } else {
-                    cell.setSpaceHolder();
-                }
-            }
-        }
+        removeGadgetImpl(index);
     }
 
     public void removeGadget(Widget widget) {
@@ -202,6 +175,44 @@ public class ReportboardLayoutPanel extends FlowPanel implements BoardEvent {
                 ((CellPanel) getWidget(i)).setWidget(widgetReplaceTo);
             }
         }
+    }
+
+    /** returns the number of cells removed from the panel */
+    private int removeGadgetImpl(int index) {
+        int removedCellCount = 0;
+        if (!checkIndex(index, false)) {
+            return removedCellCount;
+        }
+
+        CellPanel cell = (CellPanel) getWidget(index);
+        if (Reportboard.Location.Full.equals(cell.getLocation())) {
+            remove(cell);
+            removedCellCount = 1;
+        } else if (Reportboard.Location.Left.equals(cell.getLocation())) {
+            if (index + 1 < getWidgetCount()) {
+                CellPanel nextCell = (CellPanel) getWidget(index + 1);
+                if (nextCell.isSpaceHolder()) {
+                    remove(cell);
+                    remove(nextCell);
+                    removedCellCount = 1;
+                } else {
+                    cell.setSpaceHolder();
+                }
+            }
+        } else if (Reportboard.Location.Right.equals(cell.getLocation())) {
+            if (index > 0) {
+                CellPanel previousCell = (CellPanel) getWidget(index - 1);
+                if (previousCell.isSpaceHolder()) {
+                    remove(cell);
+                    remove(previousCell);
+                    removedCellCount = 2;
+                } else {
+                    cell.setSpaceHolder();
+                }
+            }
+        }
+
+        return removedCellCount;
     }
 
     private boolean checkIndex(int index, boolean insert) {
@@ -296,7 +307,8 @@ public class ReportboardLayoutPanel extends FlowPanel implements BoardEvent {
             if (!checkIndex(index, false)) {
                 throw new NoSuchElementException();
             }
-            removeGadget(index--);
+            int removedCount = removeGadgetImpl(index);
+            index -= removedCount;
         }
 
         @Override
