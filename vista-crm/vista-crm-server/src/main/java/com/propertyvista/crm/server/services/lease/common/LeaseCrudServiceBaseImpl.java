@@ -75,12 +75,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             Persistence.service().retrieve(dto.currentTerm().version().guarantors());
         }
 
-        Persistence.service().retrieveMember(in.leaseTerms());
-        if (!in.leaseTerms().isEmpty()) {
-            dto.leaseFrom().set(in.leaseTerms().get(0).termFrom());
-            dto.leaseTo().set(in.leaseTerms().get(in.leaseTerms().size() - 1).termTo());
-        }
-
         Persistence.service().retrieve(dto.billingAccount());
     }
 
@@ -93,7 +87,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         Persistence.service().retrieve(dto.currentTerm().version().leaseProducts().serviceItem().item().product());
 
         for (BillableItem item : dto.currentTerm().version().leaseProducts().featureItems()) {
-            Persistence.service().retrieve(item.item().product(), AttachLevel.ToStringMembers);
+            Persistence.service().retrieve(item.item().product());
         }
     }
 }
