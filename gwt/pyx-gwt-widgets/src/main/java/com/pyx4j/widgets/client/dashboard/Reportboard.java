@@ -131,6 +131,71 @@ public class Reportboard extends SimplePanel implements IBoard, IBoardRoot {
         return reportLayoutPanel.getGadgetIterator();
     }
 
+    public void expandGadget(IGadget gadget) {
+        IGadgetIterator i = getGadgetIterator();
+        // check if we are able to expand shrink the gadget,
+        int gadgetColumn = Integer.MAX_VALUE;
+        boolean isFoundInLeftColumn = false;
+        int col = Integer.MAX_VALUE;
+        while (i.hasNext()) {
+            IGadget otherGadget = i.next();
+            col = i.getColumn();
+            if (!isFoundInLeftColumn) {
+                if (otherGadget == gadget) {
+                    isFoundInLeftColumn = true;
+                    gadgetColumn = col;
+                    if (gadgetColumn == -1) {
+                        // we can shrink the gadget
+                        break;
+                    } else if (gadgetColumn == 1) {
+                        // we cannot do anything because gadget is in the right column
+                        return;
+                    }
+                }
+            } else {
+                // here we have gadget in the left columnm, and want to expand the gadget
+                if (i.getColumn() != 1) {
+                    // we can expand the gadget
+                    break;
+                } else {
+                    // next gadget in the same row
+                    return;
+                }
+            }
+        }
+        if (gadgetColumn != Integer.MAX_VALUE) {
+            i = getGadgetIterator();
+            int row = 0; // it seems that row count starts with 1
+            int prevCol = Integer.MAX_VALUE;
+            col = Integer.MAX_VALUE;
+            while (i.hasNext()) {
+                IGadget other = i.next();
+                col = i.getColumn();
+                if (row == 0 | col == -1 | col == 1 | (prevCol == col)) {
+                    ++row;
+                    prevCol = col;
+                }
+                if (other == gadget) {
+                    i.remove();
+                    int updatedColumn = gadgetColumn == -1 ? 0 : -1;
+
+                    // if the gadget is last insertGadget() doesn't work as expected (adds gadget BEFORE THE LAST GADGET) so we use add()
+                    // (it seems that insertGadget() can only insert a gadget between gadgets) 
+                    if (i.hasNext()) {
+                        insertGadget(gadget, updatedColumn, row);
+                    } else {
+                        addGadget(gadget, updatedColumn);
+                    }
+                    break;
+                }
+            }
+            onEvent(Reason.repositionGadget);
+        }
+
+        // the gadget passed all the constraints so we add it back, but in expanded (-1) or contracted (0) state 
+
+    }
+
 // IBoardRoot:
 
     @Override
@@ -166,4 +231,5 @@ public class Reportboard extends SimplePanel implements IBoard, IBoardRoot {
             }
         }
     }
+
 }

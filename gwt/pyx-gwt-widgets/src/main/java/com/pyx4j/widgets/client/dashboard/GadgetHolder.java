@@ -236,6 +236,10 @@ final class GadgetHolder extends SimplePanel {
         return !scroll.isVisible();
     }
 
+    private void expand() {
+        ((Reportboard) root).expandGadget(holdedGadget);
+    }
+
     private void maximize() {
         if (isMaximized()) {
             root.showNormal(this);
@@ -337,6 +341,10 @@ final class GadgetHolder extends SimplePanel {
                 addItem((isMinimized() ? i18n.tr("Expand") : i18n.tr("Minimize")), cmdMinimize);
             }
 
+            if (root instanceof Reportboard) {
+                addItem(i18n.tr("Two Columns / One Column"), cmdExpand);
+            }
+
             if (!(isMinimized() || isMaximized())) {
                 addItem(i18n.tr("Delete"), cmdDelete);
             }
@@ -362,6 +370,15 @@ final class GadgetHolder extends SimplePanel {
                 onItemSelected();
                 setup();
             }
+        };
+
+        private final Command cmdExpand = new Command() {
+
+            @Override
+            public void execute() {
+                expand();
+            }
+
         };
 
         private final Command cmdDelete = new Command() {
