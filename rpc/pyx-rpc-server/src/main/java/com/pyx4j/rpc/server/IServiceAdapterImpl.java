@@ -167,6 +167,8 @@ public class IServiceAdapterImpl implements IServiceAdapter {
 
     private Serializable runMethod(IService serviceInstance, Method method, List<Serializable> args) {
         try {
+            log.debug("RPC call {}.{}", serviceInstance.getClass().getName(), method.getName());
+
             ServerAsyncCallback callback = new ServerAsyncCallback();
             Object[] methodArgs = new Object[args.size() + 1];
             methodArgs[0] = callback;
