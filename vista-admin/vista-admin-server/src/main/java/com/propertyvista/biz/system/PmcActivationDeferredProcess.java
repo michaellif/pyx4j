@@ -16,6 +16,7 @@ package com.propertyvista.biz.system;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.deferred.AbstractDeferredProcess;
+import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 
@@ -33,6 +34,7 @@ public class PmcActivationDeferredProcess extends AbstractDeferredProcess {
     public void execute() {
         try {
             Persistence.service().startBackgroundProcessTransaction();
+            Lifecycle.startElevatedUserContext();
             ServerSideFactory.create(PmcFacade.class).activatePmc(pmcId);
             Persistence.service().commit();
         } finally {
