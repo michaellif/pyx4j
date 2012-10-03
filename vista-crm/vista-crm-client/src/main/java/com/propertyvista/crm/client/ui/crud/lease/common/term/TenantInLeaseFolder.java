@@ -235,6 +235,8 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
+            get(proto().effectiveScreening()).setVisible(!getValue().effectiveScreening().isNull());
+
             if (isEditable()) {
                 ClientPolicyManager
                         .setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().leaseCustomer().participantId()), getValue().getPrimaryKey());

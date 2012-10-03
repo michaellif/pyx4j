@@ -20,13 +20,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -102,7 +102,6 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
             }));
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().sex()), 7).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().birthDate()), 9).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().screening()), 9).customLabel(i18n.tr("Use Screening From")).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CComboBox<Tenant>() {
                 @Override
                 public String getItemName(Tenant o) {
@@ -114,6 +113,11 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
                 }
             }), 25).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
+            left.setWidget(
+                    ++row,
+                    0,
+                    new DecoratorBuilder(inject(proto().effectiveScreening(),
+                            new CEntityCrudHyperlink<PersonScreening>(AppPlaceEntityMapper.resolvePlace(PersonScreening.class))), 9).build());
 
             FormFlexPanel right = new FormFlexPanel();
             row = -1;
@@ -136,19 +140,13 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
+            get(proto().effectiveScreening()).setVisible(!getValue().effectiveScreening().isNull());
+
             if (isEditable()) {
                 ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().leaseCustomer().participantId()), getValue()
                         .getPrimaryKey());
 
                 get(proto().leaseCustomer().customer().person().email()).setMandatory(!getValue().leaseCustomer().customer().user().isNull());
-
-                if (get(proto().screening()) instanceof CEntityComboBox<?>) {
-                    @SuppressWarnings("unchecked")
-                    CEntityComboBox<PersonScreening> combo = (CEntityComboBox<PersonScreening>) get(proto().screening());
-                    combo.resetCriteria();
-                    combo.addCriterion(PropertyCriterion.eq(combo.proto().screene(), getValue().leaseCustomer().customer()));
-                    combo.refreshOptions();
-                }
 
                 if (get(proto().tenant()) instanceof CComboBox<?>) {
                     @SuppressWarnings("unchecked")

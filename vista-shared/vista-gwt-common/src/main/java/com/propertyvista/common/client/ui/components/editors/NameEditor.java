@@ -62,6 +62,7 @@ public class NameEditor extends CEntityDecoratableForm<Name> {
             });
         } else {
             viewComp = new CEntityLabel<Name>();
+            viewComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         }
     }
 
@@ -86,7 +87,7 @@ public class NameEditor extends CEntityDecoratableForm<Name> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameSuffix()), 5).build());
         } else {
             main.setWidget(++row, 0, new DecoratorBuilder(viewComp, 25).customLabel(customViewLabel).useLabelSemicolon(customViewLabel != null).build());
-            viewComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+            viewComp.setViewable(true);
         }
 
         return main;
