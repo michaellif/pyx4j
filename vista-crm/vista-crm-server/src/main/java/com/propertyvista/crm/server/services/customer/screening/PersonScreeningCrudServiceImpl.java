@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.server.services.customer.screening;
 
-import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.customer.screening.PersonScreeningCrudService;
 import com.propertyvista.domain.tenant.PersonScreening;
 
-public class PersonScreeningCrudServiceImpl extends AbstractCrudServiceImpl<PersonScreening> implements PersonScreeningCrudService {
+public class PersonScreeningCrudServiceImpl extends AbstractVersionedCrudServiceImpl<PersonScreening> implements PersonScreeningCrudService {
 
     public PersonScreeningCrudServiceImpl() {
         super(PersonScreening.class);

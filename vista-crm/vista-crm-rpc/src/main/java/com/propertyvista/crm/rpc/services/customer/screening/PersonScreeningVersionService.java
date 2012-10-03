@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.rpc.services.customer.screening;
 
-import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
+import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 
 import com.propertyvista.domain.tenant.PersonScreening;
 
-public interface PersonScreeningCrudService extends AbstractVersionedCrudService<PersonScreening> {
+public interface PersonScreeningVersionService extends AbstractVersionDataListService<PersonScreening.PersonScreeningV> {
 }

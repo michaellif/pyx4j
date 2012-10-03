@@ -17,16 +17,22 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.server.common.security.VistaSystemPermission;
 import com.propertyvista.shared.adapters.ApplicationDocumentUploadedBlobSecurityAdapter;
 
 public class ApplicationDocumentUploadedBlobSecurityAdapterImpl implements ApplicationDocumentUploadedBlobSecurityAdapter {
+
+    private static final Logger log = LoggerFactory.getLogger(ApplicationDocumentUploadedBlobSecurityAdapterImpl.class);
 
     private static final String LIST_SESSION_ATTRIBUTE = ApplicationDocumentUploadedBlobSecurityAdapterImpl.class.getName();
 
@@ -50,13 +56,23 @@ public class ApplicationDocumentUploadedBlobSecurityAdapterImpl implements Appli
         @SuppressWarnings("unchecked")
         Set<Key> userUploadeKeys = (Set<Key>) Context.getVisit().getAttribute(LIST_SESSION_ATTRIBUTE);
         if (userUploadeKeys == null) {
-            return false;
+            if (VistaTODO.UploadedBlobSecurity) {
+                log.error("TODO Fix the UploadedBlobSecurity");
+                return true;
+            } else {
+                return false;
+            }
         }
         Key blobKeyNew = ((Key) valueNew);
         if (blobKeyNew != null & userUploadeKeys.contains(blobKeyNew)) {
             return true;
         } else {
-            return false;
+            if (VistaTODO.UploadedBlobSecurity) {
+                log.error("TODO Fix the UploadedBlobSecurity");
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 }

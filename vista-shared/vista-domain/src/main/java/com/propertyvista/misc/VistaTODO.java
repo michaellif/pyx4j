@@ -48,4 +48,6 @@ public interface VistaTODO {
 
     public final boolean Equifax_Long_VISTA_478 = true;
 
+    public final boolean UploadedBlobSecurity = true;
+
 }
