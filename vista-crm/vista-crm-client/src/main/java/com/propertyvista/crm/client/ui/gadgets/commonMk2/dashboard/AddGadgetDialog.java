@@ -19,109 +19,238 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.view.client.ListDataProvider;
-import com.google.gwt.view.client.SingleSelectionModel;
 
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.OkDialog;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
+import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.KeywordsBox;
 import com.propertyvista.crm.rpc.dto.dashboard.GadgetDescriptorDTO;
 import com.propertyvista.crm.rpc.services.dashboard.GadgetMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
-public abstract class AddGadgetDialog extends OkCancelDialog implements OkOptionText {
+public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
 
-    public static class GadgetDescriptorCell extends AbstractCell<GadgetDescriptorDTO> {
+    public static final String ADD_GADGET_DIALOG_STYLE = "-vista-AddGadgetDialog";
 
-        private static final GadgetCellTemplates GADGET_CELL_TEMPLATES = GWT.create(GadgetCellTemplates.class);
+    public enum StyleSuffix implements IStyleName {
+
+        GadgetDescriptionsList, GadgetDescriptionBox, GadgetNameLabel, GadgetDescriptionText, GadgetDescriptionDecorator,
+
+    }
+
+    @Transient
+    public interface AddGadgetGadgetDescriptor extends IEntity {
+
+        IPrimitive<String> name();
+
+        IPrimitive<String> description();
+
+        GadgetMetadata gadgetMetadataProto();
+    }
+
+    @Transient
+    public interface AddGadgetGadgetDescriptorContainer extends IEntity {
+
+        IList<AddGadgetGadgetDescriptor> descriptors();
+    }
+
+    public class GadgetDescriptorsListForm extends CEntityForm<AddGadgetGadgetDescriptorContainer> {
+
+        public GadgetDescriptorsListForm() {
+            super(AddGadgetGadgetDescriptorContainer.class);
+            setViewable(true);
+        }
 
         @Override
-        public void render(com.google.gwt.cell.client.Cell.Context context, GadgetDescriptorDTO value, SafeHtmlBuilder sb) {
-            if (value != null) {
-                sb.append(GADGET_CELL_TEMPLATES.gadgetCellWithInlineDescription(value.getName(), value.getDescription()));
-            }
+        public IsWidget createContent() {
+            FlowPanel contentPanel = new FlowPanel();
+            contentPanel.add(inject(proto().descriptors(), new GadgetDescriptorFolder()));
+            contentPanel.addStyleName(ADD_GADGET_DIALOG_STYLE + StyleSuffix.GadgetDescriptionsList);
+            return contentPanel;
         }
 
     }
 
+    public class GadgetDescriptorFolder extends VistaBoxFolder<AddGadgetGadgetDescriptor> {
+
+        public class GadgetDescriptorDecorator extends Composite implements IFolderItemDecorator<AddGadgetGadgetDescriptor> {
+
+            private final SimplePanel componentPanel;
+
+            private final Button addButton;
+
+            public GadgetDescriptorDecorator() {
+                FlowPanel decoratorPanel = new FlowPanel();
+                decoratorPanel.setWidth("100%");
+                decoratorPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                decoratorPanel.setStyleName(ADD_GADGET_DIALOG_STYLE + StyleSuffix.GadgetDescriptionDecorator);
+
+                componentPanel = new SimplePanel();
+                componentPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                decoratorPanel.add(componentPanel);
+
+                SimplePanel buttonsPanel = new SimplePanel();
+
+                addButton = new Button(i18n.tr("Add"));
+                addButton.getElement().getStyle().setFloat(Float.RIGHT);
+                buttonsPanel.setWidget(addButton);
+
+                decoratorPanel.add(buttonsPanel);
+
+                initWidget(decoratorPanel);
+            }
+
+            @Override
+            public void setComponent(final CEntityFolderItem<AddGadgetGadgetDescriptor> folderItem) {
+                if (folderItem != null) {
+                    componentPanel.setWidget(folderItem.createContent());
+                    addButton.addClickHandler(new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent event) {
+                            AddGadgetDialog.this.addGadget((GadgetMetadata) EntityFactory.getEntityPrototype(folderItem.getValue().gadgetMetadataProto()
+                                    .getInstanceValueClass()));
+                        }
+                    });
+
+                } else {
+                    componentPanel.clear();
+                }
+            }
+
+            @Override
+            public EntityFolderImages getImages() {
+                return VistaImages.INSTANCE;
+            }
+
+            @Override
+            public void setActionsState(boolean remove, boolean up, boolean down) {
+
+            }
+
+            @Override
+            public void adoptItemActionsBar() {
+
+            }
+
+            @Override
+            public void onSetDebugId(IDebugId parentDebugId) {
+
+            }
+
+        }
+
+        public class GadgetDescriptorForm extends CEntityDecoratableForm<AddGadgetGadgetDescriptor> {
+
+            public GadgetDescriptorForm() {
+                super(AddGadgetGadgetDescriptor.class);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                FlowPanel contentPanel = new FlowPanel();
+                contentPanel.add(inject(proto().name()));
+                contentPanel.add(inject(proto().description()));
+
+                contentPanel.addStyleName(ADD_GADGET_DIALOG_STYLE + StyleSuffix.GadgetDescriptionBox);
+                get(proto().name()).asWidget().addStyleName(ADD_GADGET_DIALOG_STYLE + StyleSuffix.GadgetNameLabel);
+                get(proto().description()).asWidget().addStyleName(ADD_GADGET_DIALOG_STYLE + StyleSuffix.GadgetDescriptionText);
+                return contentPanel;
+            }
+        }
+
+        public GadgetDescriptorFolder() {
+            super(AddGadgetGadgetDescriptor.class);
+            setAddable(false);
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof AddGadgetGadgetDescriptor) {
+                return new GadgetDescriptorForm();
+            } else {
+                return super.create(member);
+            }
+        }
+
+        @Override
+        public IFolderItemDecorator<AddGadgetGadgetDescriptor> createItemDecorator() {
+            return new GadgetDescriptorDecorator();
+        }
+    }
+
     private static final I18n i18n = I18n.get(AddGadgetDialog.class);
 
-    public static final String ADD_GADGET_DIALOG_STYLE = "-vista-AddGadgetDialog";
-
-    private boolean isLoading;
+    private final GadgetMetadataService gadgetMetadataService;
 
     private final VerticalPanel body;
 
-    private final CellList<GadgetDescriptorDTO> descriptorsListWidget;
-
     private final List<GadgetDescriptorDTO> descriptors;
 
-    private final GadgetMetadataService gadgetMetadataService;
+    private final GadgetDescriptorsListForm descriptorsListForm;
 
     public AddGadgetDialog(DashboardMetadata.DashboardType boardType) {
         super(i18n.tr("Available Gadgets"));
         gadgetMetadataService = GWT.<GadgetMetadataService> create(GadgetMetadataService.class);
 
-        isLoading = true;
-
         descriptors = new ArrayList<GadgetDescriptorDTO>();
 
-        descriptorsListWidget = new CellList<GadgetDescriptorDTO>(new GadgetDescriptorCell());
-        descriptorsListWidget.setSelectionModel(new SingleSelectionModel<GadgetDescriptorDTO>());
+        body = new VerticalPanel();
+        body.setSize("100%", "100%");
 
-        ScrollPanel descriptorListScrollPanel = new ScrollPanel(descriptorsListWidget);
-        descriptorListScrollPanel.setWidth("100%");
-        descriptorListScrollPanel.setHeight("30em");
+        HTML keywordSelectionBoxLabel = new HTML(i18n.tr("Filter by keywords:"));
+        keywordSelectionBoxLabel.getElement().getStyle().setProperty("fontWeight", "bold");
 
-        final ListDataProvider<GadgetDescriptorDTO> descriptorsProvider = new ListDataProvider<GadgetDescriptorDTO>();
-        descriptorsProvider.addDataDisplay(descriptorsListWidget);
-
+        body.add(keywordSelectionBoxLabel);
         final KeywordsBox keywordsSelectionBox = new KeywordsBox() {
             @Override
             protected void onKeywordsChanged(Set<String> keywords) {
-                if (keywords == null || keywords.isEmpty()) {
-                    descriptorsProvider.setList(descriptors);
-                } else {
-                    List<GadgetDescriptorDTO> filteredDescriptors = new ArrayList<GadgetDescriptorDTO>();
-                    for (GadgetDescriptorDTO descriptor : descriptors) {
-                        boolean isFiltered = true;
-                        for (String keyword : keywords) {
-                            if (!descriptor.getKeywords().contains(keyword)) {
-                                isFiltered = false;
-                                break;
-                            }
-                        }
-                        if (isFiltered) {
-                            filteredDescriptors.add(descriptor);
-                        }
-                    }
-                    descriptorsProvider.setList(filteredDescriptors);
-                }
+                AddGadgetDialog.this.updateDescriptorsForm(keywords);
             }
         };
-        HTML keywordSelectionBoxLabel = new HTML(i18n.tr("Filter by keywords:"));
-        keywordSelectionBoxLabel.getElement().getStyle().setProperty("fontWeight", "bold");
-        body = new VerticalPanel();
-        body.setSize("100%", "100%");
-        body.add(keywordSelectionBoxLabel);
         body.add(keywordsSelectionBox);
-        body.add(descriptorListScrollPanel);
+
+        descriptorsListForm = new GadgetDescriptorsListForm();
+        descriptorsListForm.initContent();
+        ScrollPanel descriptorListScroller = new ScrollPanel();
+        descriptorListScroller.setSize("600px", "300px");
+        descriptorListScroller.setWidget(descriptorsListForm);
+        body.add(descriptorListScroller);
 
         gadgetMetadataService.listAvailableGadgets(new DefaultAsyncCallback<Vector<GadgetDescriptorDTO>>() {
             @Override
             public void onSuccess(Vector<GadgetDescriptorDTO> result) {
-                isLoading = false;
                 descriptors.clear();
                 descriptors.addAll(result);
 
@@ -138,28 +267,54 @@ public abstract class AddGadgetDialog extends OkCancelDialog implements OkOption
 
     @Override
     public boolean onClickOk() {
-        if (!isLoading) {
-            GadgetDescriptorDTO selectedDescriptor = ((SingleSelectionModel<GadgetDescriptorDTO>) descriptorsListWidget.getSelectionModel())
-                    .getSelectedObject();
-            if (selectedDescriptor != null) {
-                gadgetMetadataService.createGadgetMetadata(new DefaultAsyncCallback<GadgetMetadata>() {
-                    @Override
-                    public void onSuccess(GadgetMetadata gadgteMetadata) {
-                        onAddGadget(gadgteMetadata);
-                    }
-                }, selectedDescriptor.getProto());
-
-            }
-            return true;
-        } else {
-            return false;
-        }
+        return true;
     }
 
     @Override
     public String optionTextOk() {
-        return i18n.tr("Add");
+        return i18n.tr("Close");
     }
 
-    protected abstract void onAddGadget(GadgetMetadata proto);
+    protected abstract void onAddGadget(GadgetMetadata gadgetMetadata);
+
+    private void addGadget(GadgetMetadata proto) {
+        GWT.<GadgetMetadataService> create(GadgetMetadataService.class).createGadgetMetadata(new DefaultAsyncCallback<GadgetMetadata>() {
+
+            @Override
+            public void onSuccess(GadgetMetadata result) {
+                onAddGadget(result);
+            }
+
+        }, proto);
+    }
+
+    private void updateDescriptorsForm(Set<String> keywords) {
+        List<GadgetDescriptorDTO> filteredDescriptors = new ArrayList<GadgetDescriptorDTO>();
+        if (keywords == null || keywords.isEmpty()) {
+            filteredDescriptors.addAll(descriptors);
+        } else {
+            for (GadgetDescriptorDTO descriptor : descriptors) {
+                boolean isFiltered = true;
+                for (String keyword : keywords) {
+                    if (!descriptor.getKeywords().contains(keyword)) {
+                        isFiltered = false;
+                        break;
+                    }
+                }
+                if (isFiltered) {
+                    filteredDescriptors.add(descriptor);
+                }
+            }
+        }
+
+        AddGadgetGadgetDescriptorContainer descriptorsContainerEntity = EntityFactory.create(AddGadgetGadgetDescriptorContainer.class);
+        for (GadgetDescriptorDTO descriptor : filteredDescriptors) {
+            AddGadgetGadgetDescriptor descriptorEntity = EntityFactory.create(AddGadgetGadgetDescriptor.class);
+            descriptorEntity.name().setValue(descriptor.getName());
+            descriptorEntity.description().setValue(descriptor.getDescription());
+            descriptorEntity.gadgetMetadataProto().set(descriptor.getProto());
+            descriptorsContainerEntity.descriptors().add(descriptorEntity);
+        }
+        descriptorsListForm.populate(descriptorsContainerEntity);
+    }
 }

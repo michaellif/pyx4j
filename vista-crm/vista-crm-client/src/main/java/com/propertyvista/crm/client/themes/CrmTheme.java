@@ -103,7 +103,6 @@ public class CrmTheme extends VistaTheme {
 
         initGeneralStyles();
         initBodyStyles();
-        initCellListStyle();
 
         intitNavigationStyles();
         intitShortCutStyles();
@@ -118,7 +117,7 @@ public class CrmTheme extends VistaTheme {
         initDialogBoxStyles();
         initMenuBarStyles();
 
-        initGadgetDirectoryStyles();
+        initAddGadgetDialogStyles();
         initTransactionHistoryStyles();
         initArrearsViewStyles();
 
@@ -477,46 +476,38 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
     }
 
-    private void initGadgetDirectoryStyles() {
+    private void initAddGadgetDialogStyles() {
         String prefix = AddGadgetDialog.ADD_GADGET_DIALOG_STYLE;
 
-        // GADGETS LIST
-        Style style = new Style("." + prefix + " .cellListOddItem");
-        style.addGradient(ThemeColor.object1, 0.1, ThemeColor.object1, 0.4);
+        Style style = new Style("." + prefix + AddGadgetDialog.StyleSuffix.GadgetDescriptionsList);
+        style.addProperty("margin-top", "0.5em");
+        style.addProperty("margin-left", "0.5em");
+        style.addProperty("margin-right", "0.5em");
+        style.addProperty("margin-bottom", "0.5em");
+        addStyle(style);
+
+        style = new Style("." + prefix + AddGadgetDialog.StyleSuffix.GadgetDescriptionBox);
+        style.addProperty("margin-bottom", "0.2em");
+        addStyle(style);
+
+        style = new Style("." + prefix + AddGadgetDialog.StyleSuffix.GadgetDescriptionDecorator);
         style.addProperty("color", ThemeColor.foreground);
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "outset");
-        style.addProperty("margin", "0.2em");
-        style.addProperty("padding", "0.5em 1em");
+        style.addProperty("margin-top", "0.2em");
+        style.addProperty("margin-bottom", "0.5em");
         addStyle(style);
 
-        style = new Style("." + prefix + " .cellListEvenItem");
-        style.addGradient(ThemeColor.object1, 0.1, ThemeColor.object1, 0.4);
+        style = new Style("." + prefix + AddGadgetDialog.StyleSuffix.GadgetDescriptionDecorator + ":hover");
+        style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.8);
+        addStyle(style);
+
+        style = new Style("." + prefix + AddGadgetDialog.StyleSuffix.GadgetNameLabel);
         style.addProperty("color", ThemeColor.foreground);
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "outset");
-        style.addProperty("margin", "0.2em");
-        style.addProperty("padding", "0.5em 1em");
-        addStyle(style);
-
-        // CATEGORIES TREE
-        style = new Style("." + prefix + " .cellTreeItem");
-        style.addProperty("color", ThemeColor.foreground);
-        addStyle(style);
-
-        style = new Style("." + prefix + " .cellTreeSelectedItem");
-        style.addGradient(ThemeColor.object1, 0.1, ThemeColor.object1, 0.4);
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "outset");
-        addStyle(style);
-
-        style = new Style("." + prefix + " .cellTreeKeyboardSelectedItem");
-        style.addProperty("background-color", ThemeColor.object2);
-        addStyle(style);
-
-        style = new Style("." + prefix + " .cellTreeItemValue");
-        style.addProperty("text-align", "left");
         style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style("." + prefix + AddGadgetDialog.StyleSuffix.GadgetDescriptionText);
+        style.addProperty("color", ThemeColor.foreground);
+        style.addProperty("text-align", "justify");
         addStyle(style);
     }
 
@@ -614,15 +605,15 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style("." + KeywordsBox.DEFAULT_STYLE_PREFIX + KeywordsBox.StyleSuffix.Keyword);
         style.addProperty("display", "inline-block");
-        style.addProperty("padding-top", "2px");
-        style.addProperty("padding-bottom", "3px");
+        style.addProperty("padding-top", "1px");
+        style.addProperty("padding-bottom", "1px");
         style.addProperty("padding-left", "5px");
         style.addProperty("padding-right", "5px");
         style.addProperty("margin-right", "5px");
-        style.addProperty("border-style", "outset");
+//        style.addProperty("border-style", "outset");
         style.addProperty("border-width", "1px");
-        style.addProperty("border-radius", "5px");
-        style.addGradient(ThemeColor.object1, 0.1, ThemeColor.object1, 0.5);
+//        style.addProperty("border-radius", "5px");
+        style.addGradient(ThemeColor.object1, 0.5, ThemeColor.object1, 1);
         addStyle(style);
 
         style = new Style("." + KeywordsBox.DEFAULT_STYLE_PREFIX + KeywordsBox.StyleSuffix.KeywordLabel);
@@ -633,12 +624,12 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("display", "inline");
         style.addProperty("cursor", "pointer");
         style.addProperty("margin-left", "5px");
-        style.addProperty("padding", "2px");
+        style.addProperty("padding", "0px");
         style.addProperty("border-radius", "2px");
         addStyle(style);
 
         style = new Style("." + KeywordsBox.DEFAULT_STYLE_PREFIX + KeywordsBox.StyleSuffix.KeywordUnselectButton + ":hover");
-        style.addProperty("background-color", ThemeColor.object1, 0.5);
+        style.addProperty("background-color", ThemeColor.object1, 1);
         addStyle(style);
 
         style = new Style("." + KeywordsBox.DEFAULT_STYLE_PREFIX + KeywordsBox.StyleSuffix.KeywordsAdder);
@@ -650,7 +641,7 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style("." + KeywordsBox.DEFAULT_STYLE_PREFIX + KeywordsBox.StyleSuffix.KeywordsAdderButton);
-        style.addProperty("display", "inline");
+        style.addProperty("display", "inline-block");
         addStyle(style);
     }
 

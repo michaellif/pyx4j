@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.components;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +22,6 @@ import java.util.Set;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.widgets.client.Button;
 
 public abstract class KeywordsBox extends Composite {
 
@@ -86,7 +87,9 @@ public abstract class KeywordsBox extends Composite {
         public void setAvaiableKeywords(Set<String> keywords) {
             keywordsList.clear();
             keywordsList.addItem("");
-            for (String keyword : keywords) {
+            List<String> sortedKeywords = new ArrayList<String>(keywords);
+            Collections.sort(sortedKeywords);
+            for (String keyword : sortedKeywords) {
                 keywordsList.addItem(keyword);
             }
         }
@@ -98,8 +101,7 @@ public abstract class KeywordsBox extends Composite {
         }
 
         private Widget makeAddButton() {
-            Button button = new Button();
-            button.setText("+");
+            Button button = new Button("+");
             button.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -108,7 +110,7 @@ public abstract class KeywordsBox extends Composite {
                     }
                 }
             });
-            button.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.KeywordsAdderButton);
+            button.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.KeywordsAdderButton);
             return button;
         }
 

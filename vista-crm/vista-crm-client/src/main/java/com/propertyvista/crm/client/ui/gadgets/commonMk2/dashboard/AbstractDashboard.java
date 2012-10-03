@@ -157,6 +157,8 @@ public abstract class AbstractDashboard extends ResizeComposite {
 
     private void propagateLayoutToMetadata() {
         dashboardMetadata.encodedLayout().setValue(activeLayoutManger.encodeLayout(board));
+        // TODO not quiet sure this has to resize notification has to be here
+        fireResizeRequests();
         onDashboardMetadataChanged();
     }
 
