@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard;
 
-import java.util.Iterator;
+import java.util.List;
 
 import com.google.gwt.resources.client.ImageResource;
 
@@ -41,8 +41,7 @@ public interface ILayoutManager {
     boolean canHandle(String encodedLayout);
 
     /** places gadgets in the board in the positions defined by layout data from dashboard metadata */
-    void restoreLayout(String encodedLayout, Iterator<IGadgetInstance> gadgetsIterator, IBoard board);
+    IBoard arrange(String encodedLayout, List<IGadgetInstance> gadgtes);
 
-    /** swithces to layout defined by the layout manager and returns new encoded layout */
-    String switchLayout(String oldEncodedLayout, IBoard board);
+    String encodeLayout(IBoard board);
 }

@@ -29,7 +29,8 @@ public class LayoutManagersFactory {
                 new DashboardLayoutManager(LayoutType.Two11, BoardLayout.Two11, CrmDashboardResources.Layout22ColumnResources.INSTANCE),
                 new DashboardLayoutManager(LayoutType.Two12, BoardLayout.Two12, CrmDashboardResources.Layout12ColumnResources.INSTANCE),
                 new DashboardLayoutManager(LayoutType.Two21, BoardLayout.Two21, CrmDashboardResources.Layout21ColumnResources.INSTANCE),                
-                new DashboardLayoutManager(LayoutType.Three, BoardLayout.Three, CrmDashboardResources.Layout3ColumnResources.INSTANCE)
+                new DashboardLayoutManager(LayoutType.Three, BoardLayout.Three, CrmDashboardResources.Layout3ColumnResources.INSTANCE),
+                new DashboardLayoutManager(LayoutType.Report, BoardLayout.Report, CrmDashboardResources.LayoutRowsResources.INSTANCE)
         );//@formatter:on
     }
 

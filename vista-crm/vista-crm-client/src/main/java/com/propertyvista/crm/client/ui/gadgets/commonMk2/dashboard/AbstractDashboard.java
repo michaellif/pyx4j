@@ -43,8 +43,8 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dashboard.BoardEvent;
-import com.pyx4j.widgets.client.dashboard.Dashboard;
 import com.pyx4j.widgets.client.dashboard.IBoard;
+import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.resources.CrmImages;
@@ -107,9 +107,31 @@ public abstract class AbstractDashboard extends ResizeComposite {
     }
 
     public void setDashboardMetatdata(DashboardMetadata dashboardMetadata) {
-        this.dashboardMetadata = dashboardMetadata;
+        assert dashboardMetadata != null : "DashboardMetadata cannot be null";
 
-        placeGadgets();
+        this.dashboardMetadata = dashboardMetadata;
+        List<IGadgetInstance> gadgets = new ArrayList<IGadgetInstance>();
+
+        // instantiate gadgets
+        for (GadgetMetadata metadata : dashboardMetadata.gadgetMetadataList()) {
+            IGadgetInstance gadget = gadgetFactory.createGadget(metadata);
+            if (gadget != null) {
+                gadgets.add(gadget);
+                commonGadgetSettingsContainer.bindGadget(gadget);
+            } else {
+                throw new Error("gadget factory doesn't know how to instantiate gadget type '" + metadata.getInstanceValueClass().getName() + "'");
+            }
+        }
+
+        // set the active layout manager
+        for (ILayoutManager layoutManager : layoutButtons.keySet()) {
+            if (layoutManager.canHandle(dashboardMetadata.encodedLayout().getValue())) {
+                activeLayoutManger = layoutManager;
+                break;
+            }
+        }
+        updateLayoutButtons();
+        arrange(gadgets);
         startGadgets();
     }
 
@@ -123,58 +145,45 @@ public abstract class AbstractDashboard extends ResizeComposite {
         Print.preview(DashboardPrintHelper.makePrintLayout(DOM.clone(board.asWidget().getElement(), true)));
     }
 
-    private void placeGadgets() {
-        board = new Dashboard() {
-            // TODO this is a vicious hack: in this implementation we handle layouts via layout managers, and actually every change of the dashboard
-            // is a change of the layout, so we wish to update the dashboard metadata with new layout on every change             
-            @Override
-            public void onEvent(Reason reason) {
-                if (reason != BoardEvent.Reason.newLayout) {
-                    super.onEvent(reason);
-                }
-            }
-        };
-        if (dashboardMetadata != null) {
-            List<IGadgetInstance> gadgets = new ArrayList<IGadgetInstance>();
+    private void setLayoutManager(ILayoutManager layoutManager) {
+        // the following action must be done with the old layout manager and old board
+        List<IGadgetInstance> gadgets = extractGadgetsFromBoard();
 
-            // instantiate gadgets
-            for (GadgetMetadata metadata : dashboardMetadata.gadgetMetadataList()) {
-                IGadgetInstance gadget = gadgetFactory.createGadget(metadata);
-                if (gadget != null) {
-                    gadgets.add(gadget);
-                    commonGadgetSettingsContainer.bindGadget(gadget);
-                } else {
-                    throw new Error("gadget factory doesn't know how to instantiate gadget type '" + metadata.getInstanceValueClass().getName() + "'");
-                }
-            }
+        activeLayoutManger = layoutManager;
+        updateLayoutButtons();
+        arrange(gadgets);
+        propagateLayoutToMetadata();
+    }
 
-            // place them in the correct places inside the board
-            for (ILayoutManager layoutManager : layoutButtons.keySet()) {
-                if (layoutManager.canHandle(dashboardMetadata.encodedLayout().getValue())) {
-                    activeLayoutManger = layoutManager;
-                    activeLayoutManger.restoreLayout(dashboardMetadata.encodedLayout().getValue(), gadgets.iterator(), board);
-                    redrawLayoutButtons(activeLayoutManger);
-                    break;
-                }
-            }
+    private void propagateLayoutToMetadata() {
+        dashboardMetadata.encodedLayout().setValue(activeLayoutManger.encodeLayout(board));
+        onDashboardMetadataChanged();
+    }
 
-        } else {
-            throw new Error("DashboardMetadata cannot be null");
+    private List<IGadgetInstance> extractGadgetsFromBoard() {
+        dashboardMetadata.encodedLayout().setValue(activeLayoutManger.encodeLayout(board));
+        List<IGadgetInstance> gadgets = new ArrayList<IGadgetInstance>();
+        IGadgetIterator i = board.getGadgetIterator();
+        while (i.hasNext()) {
+            IGadget g = i.next();
+            if (g instanceof IGadgetInstance) {
+                gadgets.add((IGadgetInstance) g);
+            }
+            i.remove();
         }
+        return gadgets;
+    }
 
+    private void arrange(List<IGadgetInstance> gadgets) {
+        board = activeLayoutManger.arrange(dashboardMetadata.encodedLayout().getValue(), gadgets);
         board.addEventHandler(new BoardEvent() {
             @Override
-            public void onEvent(final Reason reason) {
-                // use a deferred command so that the actual event processing unlinked from event!
-                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        AbstractDashboard.this.proccessDashboardEvent(reason);
-                    }
-                });
+            public void onEvent(Reason reason) {
+                if (reason == Reason.removeGadget | reason == Reason.repositionGadget) {
+                    propagateLayoutToMetadata();
+                }
             }
         });
-
         scrollPanel.setWidget(board);
     }
 
@@ -190,30 +199,6 @@ public abstract class AbstractDashboard extends ResizeComposite {
         });
     }
 
-    private void proccessDashboardEvent(BoardEvent.Reason reason) {
-        switch (reason) {
-        case addGadget:
-            break;
-        case newLayout:
-            break;
-        case removeGadget:
-            break;
-        case repositionGadget:
-            break;
-//        case updateGadget:
-//             gadget settings were changed: IMHO not supposed to affect the dashboard metadata and be managed internally by the gadget
-//            break;
-        default:
-            break;
-        }
-        redrawLayoutButtons(activeLayoutManger); // emphasize the button that switches to the chosen layout manager
-        String updatedEncodedLayout = activeLayoutManger.switchLayout(dashboardMetadata.encodedLayout().getValue(), board);
-        dashboardMetadata.encodedLayout().setValue(updatedEncodedLayout);
-
-        fireResizeRequests();
-        onDashboardMetadataChanged();
-    }
-
     private Widget createActionsWidget(List<ILayoutManager> layoutManagers) {
         HorizontalPanel actionsWidget = new HorizontalPanel();
 
@@ -226,8 +211,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    activeLayoutManger = layoutManager;
-                    proccessDashboardEvent(BoardEvent.Reason.newLayout);
+                    setLayoutManager(layoutManager);
                 }
 
             });
@@ -237,6 +221,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
         }
 
         final Image addGadget = new Image(CrmImages.INSTANCE.dashboardAddGadget());
+        addGadget.setTitle(i18n.tr("Add Gadget..."));
         addGadget.getElement().getStyle().setCursor(Cursor.POINTER);
         addGadget.addMouseOverHandler(new MouseOverHandler() {
             @Override
@@ -250,7 +235,6 @@ public abstract class AbstractDashboard extends ResizeComposite {
                 addGadget.setResource(CrmImages.INSTANCE.dashboardAddGadget());
             }
         });
-        addGadget.setTitle(i18n.tr("Add Gadget..."));
         addGadget.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -261,6 +245,8 @@ public abstract class AbstractDashboard extends ResizeComposite {
                         commonGadgetSettingsContainer.bindGadget(gadget);
                         board.addGadget(gadget);
                         gadget.start();
+
+                        propagateLayoutToMetadata();
                     };
                 }.show();
             }
@@ -296,9 +282,9 @@ public abstract class AbstractDashboard extends ResizeComposite {
         return actionsWidget;
     }
 
-    private void redrawLayoutButtons(ILayoutManager layoutManager) {
+    private void updateLayoutButtons() {
         for (Map.Entry<ILayoutManager, Image> entry : layoutButtons.entrySet()) {
-            ImageResource imageResource = entry.getKey().equals(layoutManager) ? entry.getKey().getResources().layoutIconSelected() : entry.getKey()
+            ImageResource imageResource = entry.getKey().equals(activeLayoutManger) ? entry.getKey().getResources().layoutIconSelected() : entry.getKey()
                     .getResources().layoutIcon();
             entry.getValue().setResource(imageResource);
         }

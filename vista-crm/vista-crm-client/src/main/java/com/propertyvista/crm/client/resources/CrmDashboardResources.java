@@ -90,4 +90,18 @@ public interface CrmDashboardResources {
         public ImageResource layoutIconSelected();
 
     }
+
+    interface LayoutRowsResources extends ILayoutManager.Resources, ClientBundle {
+
+        LayoutRowsResources INSTANCE = GWT.create(LayoutRowsResources.class);
+
+        @Override
+        @Source("DashboardLayoutReportNotToggled.png")
+        public ImageResource layoutIcon();
+
+        @Override
+        @Source("DashboardLayoutReport.png")
+        public ImageResource layoutIconSelected();
+
+    }
 }
