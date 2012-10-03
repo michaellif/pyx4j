@@ -102,16 +102,23 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
             }));
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().sex()), 7).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().birthDate()), 9).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CComboBox<Tenant>() {
-                @Override
-                public String getItemName(Tenant o) {
-                    if (o == null) {
-                        return getNoSelectionText();
-                    } else {
-                        return o.getStringView();
+            if (isEditable()) {
+                left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CComboBox<Tenant>() {
+                    @Override
+                    public String getItemName(Tenant o) {
+                        if (o == null) {
+                            return getNoSelectionText();
+                        } else {
+                            return o.getStringView();
+                        }
                     }
-                }
-            }), 25).build());
+                }), 25).build());
+            } else {
+                left.setWidget(++row, 0,
+                        new DecoratorBuilder(inject(proto().tenant(), new CEntityCrudHyperlink<Tenant>(AppPlaceEntityMapper.resolvePlace(Tenant.class))))
+                                .build());
+            }
+
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
             left.setWidget(
                     ++row,
