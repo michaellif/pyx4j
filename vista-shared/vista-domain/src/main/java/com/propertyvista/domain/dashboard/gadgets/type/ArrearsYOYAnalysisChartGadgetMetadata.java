@@ -26,8 +26,8 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 @Caption(name = "Arrears YOY Analysis Chart")
 @DiscriminatorValue("ArrearsYOYAnalysisChartMetadata")
 @Transient
-@GadgetDescription(description = "A graph that visually demonstrates the arrear balance each month over the course of multiple years", keywords = { "Arrears",
-        "Chart" })
+@GadgetDescription(name = "Arrears YOY Analysis Chart", description = "A graph that visually demonstrates the arrear balance each month over the course of multiple years", keywords = {
+        "Arrears", "Chart" })
 public interface ArrearsYOYAnalysisChartGadgetMetadata extends GadgetMetadata, BuildingGadget {
 
     @Caption(description = "Set the number of years ago to compare to the current year")

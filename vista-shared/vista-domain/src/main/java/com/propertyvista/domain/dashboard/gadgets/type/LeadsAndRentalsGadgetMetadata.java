@@ -24,7 +24,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 @DiscriminatorValue("LeadsAndRentalsGadgetMeta")
 @Caption(name = "Leads and Rentals")
 @Transient
-@GadgetDescription(keywords = { "Leads", "Rentals", "Leases" })
+@GadgetDescription(name = "Leads vs. Rentals", keywords = { "Leads", "Rentals", "Leases" })
 public interface LeadsAndRentalsGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 
 }

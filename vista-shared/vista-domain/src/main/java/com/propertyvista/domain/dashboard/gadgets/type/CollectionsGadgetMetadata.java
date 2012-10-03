@@ -21,10 +21,10 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 
-@Caption(name = "Collections", description = "TBD")
+@Caption(name = "Collections")
 @DiscriminatorValue("Collections Gadget Metadata")
 @Transient
-@GadgetDescription(keywords = { "Collections", "Funds", "Money", "Payments" })
+@GadgetDescription(name = "Collections", keywords = { "Collections", "Funds", "Money", "Payments" })
 public interface CollectionsGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 
 }

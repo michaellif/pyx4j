@@ -28,9 +28,10 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 
 @DiscriminatorValue("UnitAvailability")
-@Caption(name = "Unit Availability")
 @Transient
+@Caption(name = "Unit Availability")
 @GadgetDescription(//@formatter:off
+        name = "Unit Availability",
         description = "Shows the information about units, whether they are available or rented, how long they have been vacant for and revenue lost as a result. Can be customized to show various information about buildings and units, for example their physical condition.",
         keywords = {"Units", "Availability", "Occupancy", "Vacancy"}
 )//@formatter:on

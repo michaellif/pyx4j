@@ -24,7 +24,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 @DiscriminatorValue("Arrears Gadget Metadata")
 @Transient
 @Caption(name = "Arrears")
-@GadgetDescription(keywords = { "Arrears" })
+@GadgetDescription(name = "Arrears", keywords = { "Arrears" })
 public interface ArrearsGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 
 }

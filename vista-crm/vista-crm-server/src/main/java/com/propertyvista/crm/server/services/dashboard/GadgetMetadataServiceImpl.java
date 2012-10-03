@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.server.services.dashboard;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -65,10 +66,11 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
                 GadgetMetadata proto = EntityFactory.getEntityPrototype(gadgetMetadataClass);
                 GadgetDescription gadgetDescription = gadgetMetadataClass.getAnnotation(GadgetDescription.class);
                 descriptors.add(new GadgetDescriptorDTO(//@formatter:off
-                        proto.getEntityMeta().getCaption(),
+                        i18n.translate("", gadgetDescription.name()),
                         // TODO add translation: get description and keywords through i18n
-                        gadgetDescription != null ? gadgetDescription.description() : i18n.tr(""),
-                        Arrays.asList(gadgetDescription != null ? gadgetDescription.keywords() : new String[0]),
+                        
+                        i18n.translate("", gadgetDescription.description()),
+                        translate("", gadgetDescription.keywords()),
                         proto
                 ));//@formatter:on
             }
@@ -81,4 +83,11 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
                 | (boardType != DashboardType.building & !BuildingGadget.class.isAssignableFrom(gadgetMetadataClass));
     }
 
+    private static List<String> translate(String context, String... words) {
+        ArrayList<String> translatedWords = new ArrayList<String>();
+        for (String word : words) {
+            translatedWords.add(i18n.translate(context, word));
+        }
+        return translatedWords;
+    }
 }

@@ -22,6 +22,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMeta
 @DiscriminatorValue("BuildingLister")
 @Transient
 @GadgetDescription(//@formatter:off
+        name = "Listing of Buildings",
         description = "Table-list-like gadget which displays building data according to prefered rules. Query and display data can be set up",
         keywords = "Buildings"
 )//@formatter:on

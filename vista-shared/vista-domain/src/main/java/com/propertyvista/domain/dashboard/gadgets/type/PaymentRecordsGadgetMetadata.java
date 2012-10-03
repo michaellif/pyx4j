@@ -30,7 +30,7 @@ import com.propertyvista.domain.payment.PaymentType;
 @Caption(name = "Payment Records", description = "TBD")
 @DiscriminatorValue("PaymentRecordsGadgetMetadata")
 @Transient
-@GadgetDescription(keywords = { "Payments", "Funds", "Money" })
+@GadgetDescription(name = "Payment Records", keywords = { "Payments", "Funds", "Money" })
 public interface PaymentRecordsGadgetMetadata extends ListerGadgetBaseMetadata, BuildingGadget {
 
     /**

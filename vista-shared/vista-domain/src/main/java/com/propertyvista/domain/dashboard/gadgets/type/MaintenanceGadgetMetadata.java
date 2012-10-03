@@ -22,9 +22,9 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMet
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 
 @DiscriminatorValue("Maintenance Gadget Metadata")
-@Caption(name = "Maintenance - Work Orders")
 @Transient
-@GadgetDescription(keywords = { "Maintenance", "Work Orders" })
+@Caption(name = "Maintenance - Work Orders")
+@GadgetDescription(name = "Maintenance - Work Orders", keywords = { "Maintenance", "Work Orders" })
 public interface MaintenanceGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 
 }

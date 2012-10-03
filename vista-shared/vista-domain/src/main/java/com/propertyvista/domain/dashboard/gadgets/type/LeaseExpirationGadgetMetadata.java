@@ -22,9 +22,9 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMet
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 
 @DiscriminatorValue("Lease Expiration Gadget")
-@Caption(name = "Lease Expiration")
 @Transient
-@GadgetDescription(keywords = { "Leases" })
+@Caption(name = "Lease Expiration")
+@GadgetDescription(name = "Lease Expiration", keywords = { "Leases" })
 public interface LeaseExpirationGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 
 }

@@ -18,7 +18,6 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO.AnalysisResolution;
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
@@ -26,10 +25,10 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 @DiscriminatorValue("TurnoverAnalysisSettings")
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Transient
 @Caption(name = "Turnover Analysis")
 @GadgetDescription(//@formatter:off
+        name = "Unit Turnover Analysis",
         description = "A graph that visually demonstrates the turnover rate in either percentage or quantity over the course of multiple years",
         keywords = { "Units", "Chart", "Turnover", "Availability", "Occupancy" }
 )//@formatter:on

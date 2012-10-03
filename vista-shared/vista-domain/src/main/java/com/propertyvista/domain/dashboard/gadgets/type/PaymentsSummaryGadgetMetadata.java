@@ -27,7 +27,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 @DiscriminatorValue("PaymentsSummaryGadgetMetadata")
 @Transient
 @Caption(name = "Payments Summary")
-@GadgetDescription(keywords = { "Payments", "Money", "Funds", "Collections" })
+@GadgetDescription(name = "Payment Records Summary", keywords = { "Payments", "Money", "Funds", "Collections" })
 public interface PaymentsSummaryGadgetMetadata extends ListerGadgetBaseMetadata, HasCustomizableDateGadgetMetadata, BuildingGadget {
 
     IPrimitiveSet<PaymentRecord.PaymentStatus> paymentStatus();
