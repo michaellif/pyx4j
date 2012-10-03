@@ -76,13 +76,10 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
-import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseApplicationDTO;
-import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.misc.EquifaxResult;
 
@@ -127,9 +124,6 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(ShowingDTO.class, Marketing.Showing.class, defaultImage);
 
         AppPlaceEntityMapper.register(Lease.class, CrmSiteMap.Tenants.Lease.class, defaultImage);
-        AppPlaceEntityMapper.register(LeaseApplication.class, CrmSiteMap.Tenants.LeaseApplication.class, defaultImage);
-
-        AppPlaceEntityMapper.register(Lease.class, CrmSiteMap.Tenants.Lease.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseTerm.class, CrmSiteMap.Tenants.LeaseTerm.class, defaultImage);
 
         AppPlaceEntityMapper.register(BillingCycle.class, CrmSiteMap.Finance.BillingCycle.class, defaultImage);
@@ -171,7 +165,6 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(ARPolicy.class, CrmSiteMap.Settings.Policies.AR.class, defaultImage);
 
         // DTO mappings:
-        AppPlaceEntityMapper.register(LeaseDTO.class, CrmSiteMap.Tenants.Lease.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseDTO.class, CrmSiteMap.Tenants.Lease.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseApplicationDTO.class, CrmSiteMap.Tenants.LeaseApplication.class, defaultImage);
     }

@@ -26,10 +26,10 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMethod;
 
-import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.dto.LeaseApplicationDTO;
 
 public class BreadcrumbsHelper {
 
@@ -65,6 +65,17 @@ public class BreadcrumbsHelper {
             if (owner.isValueDetached()) {
                 Persistence.service().retrieve(owner);
             }
+
+            if (owner instanceof Lease) {
+                // Redirect to Applications
+                Lease lease = (Lease) owner;
+                if (lease.status().getValue() == Lease.Status.Application) {
+                    LeaseApplicationDTO leaseApplication = EntityFactory.create(LeaseApplicationDTO.class);
+                    leaseApplication.set(lease.duplicate(LeaseApplicationDTO.class));
+                    owner = leaseApplication;
+                }
+            }
+
             lastTrailEntity = owner;
             owners.add(toStringDuplicate(owner));
             return true;
@@ -88,28 +99,14 @@ public class BreadcrumbsHelper {
 
         // Special case for no business owned
         if (startFromTarget instanceof PersonScreening) {
-            {
-                EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().screening(), startFromTarget));
-                Tenant tenant = Persistence.service().retrieve(criteria);
-                if (tenant != null) {
-                    Persistence.service().retrieve(tenant.leaseTermV());
-                    startFromTarget = tenant.leaseTermV().holder();
-                    trail.add(toStringDuplicate(tenant));
-                    trail.add(toStringDuplicate(startFromTarget));
-                }
-            }
-            if (startFromTarget instanceof PersonScreening) {
-                EntityQueryCriteria<Guarantor> criteria = EntityQueryCriteria.create(Guarantor.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().screening(), startFromTarget));
-                Guarantor guarantor = Persistence.service().retrieve(criteria);
-                if (guarantor != null) {
-                    Persistence.service().retrieve(guarantor.leaseTermV());
-                    startFromTarget = guarantor.leaseTermV().holder();
-                    trail.add(toStringDuplicate(guarantor));
-                    trail.add(toStringDuplicate(startFromTarget));
-                }
-            }
+            @SuppressWarnings("rawtypes")
+            EntityQueryCriteria<LeaseParticipant> criteria = EntityQueryCriteria.create(LeaseParticipant.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().leaseCustomer().customer().personScreening(), startFromTarget));
+            criteria.desc(criteria.proto().leaseCustomer().lease().updated());
+            LeaseParticipant<?> leaseParticipant = Persistence.service().retrieve(criteria);
+            trail.add(toStringDuplicate(leaseParticipant));
+            Persistence.service().retrieve(leaseParticipant.leaseTermV());
+            startFromTarget = leaseParticipant.leaseTermV();
         }
 
         if (startFromTarget instanceof Lease) {
