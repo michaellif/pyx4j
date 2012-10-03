@@ -400,6 +400,18 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return addBillableItem(Type.booking, date, date);
     }
 
+    protected void cancelBillableItem(String billableItemId, String expirationDate) {
+        Lease lease = retrieveLease();
+
+        BillableItem billableItem = findBillableItem(billableItemId, lease);
+        assert (billableItem != null);
+
+        billableItem.expirationDate().setValue(FinancialTestsUtils.getDate(expirationDate));
+
+        Persistence.service().merge(billableItem);
+        Persistence.service().commit();
+    }
+
     protected void changeBillableItem(String billableItemId, String effectiveDate, String expirationDate) {
         Lease lease = retrieveLeaseForEdit();
 
@@ -492,7 +504,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                 FinancialTestsUtils.getDate(expirationDate));
     }
 
-    private BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, BillableItemAdjustment.Type adjustmentType,
+    protected BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, BillableItemAdjustment.Type adjustmentType,
             LogicalDate effectiveDate, LogicalDate expirationDate) {
 
         Lease lease = retrieveLeaseForEdit();
