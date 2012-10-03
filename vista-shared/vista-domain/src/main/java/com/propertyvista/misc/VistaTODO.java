@@ -50,4 +50,6 @@ public interface VistaTODO {
 
     public final boolean UploadedBlobSecurity = true;
 
+    public final boolean ApplicationDocumentationPolicyRefacotring = true;
+
 }

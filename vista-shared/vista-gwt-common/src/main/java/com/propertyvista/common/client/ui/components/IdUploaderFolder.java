@@ -33,6 +33,7 @@ import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.misc.VistaTODO;
 
 public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
 
@@ -42,33 +43,41 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
 
     public IdUploaderFolder() {
         super(IdentificationDocument.class);
-        addValueValidator(new EditableValueValidator<IList<IdentificationDocument>>() {
-            @Override
-            public ValidationError isValid(CComponent<IList<IdentificationDocument>, ?> component, IList<IdentificationDocument> value) {
-                if (value != null) {
+
+        if (!VistaTODO.ApplicationDocumentationPolicyRefacotring) {
+
+            addValueValidator(new EditableValueValidator<IList<IdentificationDocument>>() {
+                @Override
+                public ValidationError isValid(CComponent<IList<IdentificationDocument>, ?> component, IList<IdentificationDocument> value) {
+                    if (value != null) {
 // TODO it should be enough, but now validate is called on populate!?                    
 //                    assert (documentationPolicy != null);
-                    if (documentationPolicy != null) {
-                        int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
-                        if (numOfRemainingDocs > 0) {
-                            return new ValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
+                        if (documentationPolicy != null) {
+                            int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
+                            if (numOfRemainingDocs > 0) {
+                                return new ValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
+                            }
                         }
                     }
+                    return null;
                 }
-                return null;
-            }
-        });
+            });
+
+        }
+
         asWidget().setSize("100%", "100%");
     }
 
     public void setParentEntity(IEntity parentEntity) {
-        ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, ApplicationDocumentationPolicy.class,
-                new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
-                    @Override
-                    public void onSuccess(ApplicationDocumentationPolicy result) {
-                        documentationPolicy = result;
-                    }
-                });
+        if (!VistaTODO.ApplicationDocumentationPolicyRefacotring) {
+            ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, ApplicationDocumentationPolicy.class,
+                    new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
+                        @Override
+                        public void onSuccess(ApplicationDocumentationPolicy result) {
+                            documentationPolicy = result;
+                        }
+                    });
+        }
     }
 
     @Override
