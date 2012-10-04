@@ -200,6 +200,12 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             assertEquals("getDraft", draftName, itemA1r.version().name().getValue());
         }
 
+        // Retrieval of item as draft toStringMemebers
+        {
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asDraftKey(), AttachLevel.ToStringMembers);
+            assertEquals("ToStringMembers getStringView", " - " + draftName, itemA1r.getStringView());
+        }
+
         srv.startTransaction();
 
         // Retrieval of item before current existed
@@ -235,6 +241,12 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             srv.retrieve(itemA1r);
             assertTrue("version is not null", !itemA1r.version().isNull());
             assertEquals("getCurrent", currentName, itemA1r.version().name().getValue());
+        }
+
+        // Retrieval of item as current toStringMemebers
+        {
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asCurrentKey(), AttachLevel.ToStringMembers);
+            assertEquals("ToStringMembers getStringView", " - " + currentName, itemA1r.getStringView());
         }
 
     }
