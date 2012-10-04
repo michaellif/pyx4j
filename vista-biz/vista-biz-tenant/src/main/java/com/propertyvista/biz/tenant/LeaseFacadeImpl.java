@@ -200,16 +200,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
         finalizeBillableItems(leaseTerm);
 
         // migrate participants:
-        if (leaseTerm.version().tenants().getAttachLevel() == AttachLevel.IdOnly) {
-            Persistence.service().retrieve(leaseTerm.version().tenants());
-        }
+        Persistence.ensureRetrieve(leaseTerm.version().tenants(), AttachLevel.Attached);
         for (Tenant tenant : leaseTerm.version().tenants()) {
             tenant.screening().set(retrivePersonScreeningId(tenant.leaseCustomer().customer()));
         }
 
-        if (leaseTerm.version().tenants().getAttachLevel() == AttachLevel.IdOnly) {
-            Persistence.service().retrieve(leaseTerm.version().guarantors());
-        }
+        Persistence.ensureRetrieve(leaseTerm.version().guarantors(), AttachLevel.Attached);
         for (Guarantor guarantor : leaseTerm.version().guarantors()) {
             guarantor.screening().set(retrivePersonScreeningId(guarantor.leaseCustomer().customer()));
         }
