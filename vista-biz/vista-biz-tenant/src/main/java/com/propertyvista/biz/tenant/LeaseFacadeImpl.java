@@ -36,6 +36,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -198,6 +199,16 @@ public class LeaseFacadeImpl implements LeaseFacade {
     public LeaseTerm finalize(LeaseTerm leaseTerm) {
         finalizeBillableItems(leaseTerm);
 
+        // migrate participants:
+        Persistence.service().retrieve(leaseTerm.version().tenants());
+        for (Tenant tenant : leaseTerm.version().tenants()) {
+            tenant.screening().set(retrivePersonScreeningId(tenant.leaseCustomer().customer()));
+        }
+        Persistence.service().retrieve(leaseTerm.version().guarantors());
+        for (Guarantor guarantor : leaseTerm.version().guarantors()) {
+            guarantor.screening().set(retrivePersonScreeningId(guarantor.leaseCustomer().customer()));
+        }
+
         leaseTerm.saveAction().setValue(SaveAction.saveAsFinal);
         leaseTerm = persist(leaseTerm);
 
@@ -271,16 +282,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.leaseApplication().decidedBy().set(decidedBy);
         lease.leaseApplication().decisionReason().setValue(decisionReason);
         lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-
-        // migrate participants:
-        Persistence.service().retrieve(lease.currentTerm().version().tenants());
-        for (Tenant tenant : lease.currentTerm().version().tenants()) {
-            tenant.screening().set(retrivePersonScreeningId(tenant.leaseCustomer().customer()));
-        }
-        Persistence.service().retrieve(lease.currentTerm().version().guarantors());
-        for (Guarantor guarantor : lease.currentTerm().version().guarantors()) {
-            guarantor.screening().set(retrivePersonScreeningId(guarantor.leaseCustomer().customer()));
-        }
 
         finalize(lease);
 
@@ -468,18 +469,22 @@ public class LeaseFacadeImpl implements LeaseFacade {
         // migrate participants:
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
         for (Tenant tenant : lease.currentTerm().version().tenants()) {
-            Tenant copy = (Tenant) tenant.duplicate();
-            copy.id().setValue(null);
-            term.version().tenants().add(copy);
+            term.version().tenants().add(businessDuplicate(tenant));
         }
         Persistence.service().retrieve(lease.currentTerm().version().guarantors());
         for (Guarantor guarantor : lease.currentTerm().version().guarantors()) {
-            Guarantor copy = (Guarantor) guarantor.duplicate();
-            copy.id().setValue(null);
-            term.version().guarantors().add(copy);
+            term.version().guarantors().add(businessDuplicate(guarantor));
         }
 
         return term;
+    }
+
+    private <P extends LeaseParticipant<?>> P businessDuplicate(P leaseParticipant) {
+        // There are no own entities for now, 
+        Persistence.retrieveOwned(leaseParticipant);
+        P copy = EntityGraph.businessDuplicate(leaseParticipant);
+        copy.screening().set(null);
+        return copy;
     }
 
     @Override

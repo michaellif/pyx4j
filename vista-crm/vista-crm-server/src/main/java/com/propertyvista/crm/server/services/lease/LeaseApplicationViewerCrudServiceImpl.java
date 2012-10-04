@@ -41,8 +41,8 @@ import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseApprovalParticipantDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
+import com.propertyvista.server.common.util.LeaseParticipantUtils;
 import com.propertyvista.server.common.util.TenantConverter;
-import com.propertyvista.server.common.util.TenantRetriever;
 
 public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<LeaseApplicationDTO> implements LeaseApplicationViewerCrudService {
 
@@ -57,11 +57,30 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         super.enhanceRetrieved(in, dto);
         enhanceRetrievedCommon(in, dto);
 
-        for (Tenant tenant : dto.currentTerm().version().tenants()) {
-            TenantRetriever tr = new TenantRetriever(tenant.getPrimaryKey(), true);
-            dto.tenantInfo().add(createTenantInfoDTO(tr));
-            dto.tenantFinancials().add(createTenantFinancialDTO(tr));
-            dto.leaseApproval().participants().add(createLeaseApprovalParticipantDTO(tr));
+        for (Tenant tenantId : dto.currentTerm().version().tenants()) {
+            Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
+            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(tenant, AttachLevel.Attached);
+
+            {
+                Persistence.service().retrieve(tenant.leaseCustomer().customer().emergencyContacts());
+                TenantInfoDTO tenantInfoDTO = new TenantConverter.Tenant2TenantInfo().createDTO(tenant);
+                new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tenant.effectiveScreening(), tenantInfoDTO);
+                dto.tenantInfo().add(tenantInfoDTO);
+            }
+
+            {
+                TenantFinancialDTO tenantFinancial = new TenantConverter.TenantFinancialEditorConverter().createDTO(tenant.effectiveScreening());
+                tenantFinancial.person().set(tenant.leaseCustomer().customer().person());
+                dto.tenantFinancials().add(tenantFinancial);
+            }
+
+            {
+                LeaseApprovalParticipantDTO approval = EntityFactory.create(LeaseApprovalParticipantDTO.class);
+                approval.person().set(tenant.leaseCustomer().customer().person());
+
+                approval.equifaxApproval().set(tenant.effectiveScreening().version().equifaxApproval());
+                dto.leaseApproval().participants().add(approval);
+            }
         }
 
         dto.masterApplicationStatus().set(
@@ -166,26 +185,6 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         }
         Persistence.service().commit();
         callback.onSuccess(null);
-    }
-
-    // internal helpers:
-    private TenantInfoDTO createTenantInfoDTO(TenantRetriever tr) {
-        TenantInfoDTO tiDTO = new TenantConverter.Tenant2TenantInfo().createDTO(tr.getTenant());
-        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.getScreening(), tiDTO);
-        return tiDTO;
-    }
-
-    private TenantFinancialDTO createTenantFinancialDTO(TenantRetriever tr) {
-        TenantFinancialDTO tfDTO = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.getScreening());
-        tfDTO.person().set(tr.getPerson());
-        return tfDTO;
-    }
-
-    private LeaseApprovalParticipantDTO createLeaseApprovalParticipantDTO(TenantRetriever tr) {
-        LeaseApprovalParticipantDTO dto = EntityFactory.create(LeaseApprovalParticipantDTO.class);
-        dto.person().set(tr.getPerson());
-        dto.equifaxApproval().set(tr.getScreening().version().equifaxApproval());
-        return dto;
     }
 
 }

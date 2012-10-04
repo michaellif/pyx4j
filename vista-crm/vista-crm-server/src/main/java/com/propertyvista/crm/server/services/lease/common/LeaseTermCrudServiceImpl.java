@@ -41,9 +41,9 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseTermDTO;
+import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
 public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<LeaseTerm, LeaseTermDTO> implements LeaseTermCrudService {
 
@@ -107,14 +107,14 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             Persistence.service().retrieve(dto.version().tenants());
         }
         for (Tenant item : dto.version().tenants()) {
-            setEffectiveScreening(item);
+            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(item, AttachLevel.ToStringMembers);
         }
 
         if (in.getPrimaryKey() != null) {
             Persistence.service().retrieve(dto.version().guarantors());
         }
         for (Guarantor item : dto.version().guarantors()) {
-            setEffectiveScreening(item);
+            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(item, AttachLevel.ToStringMembers);
         }
 
         Persistence.service().retrieve(dto.lease());
@@ -123,15 +123,6 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             fillServiceEligibilityData(dto);
             fillserviceItems(dto);
         }
-    }
-
-    private void setEffectiveScreening(LeaseParticipant<?> peaseParticipant) {
-        if (peaseParticipant.screening().isNull()) {
-            Persistence.service().retrieveMember(peaseParticipant.leaseCustomer().customer().personScreening(), AttachLevel.IdOnly);
-        } else {
-            peaseParticipant.effectiveScreening().set(peaseParticipant.screening());
-        }
-        Persistence.service().retrieve(peaseParticipant.effectiveScreening(), AttachLevel.ToStringMembers);
     }
 
     @Override

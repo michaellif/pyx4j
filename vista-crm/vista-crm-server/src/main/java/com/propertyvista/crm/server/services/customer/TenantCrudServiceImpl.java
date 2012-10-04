@@ -29,10 +29,10 @@ import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
+import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
 public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, TenantDTO> implements TenantCrudService {
 
@@ -60,12 +60,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
         Persistence.service().retrieve(dto.leaseTermV().holder(), AttachLevel.ToStringMembers);
         Persistence.service().retrieve(dto.leaseCustomer().customer().emergencyContacts());
 
-        // Retrieve draft
-        Persistence.service().retrieveMember(dto.leaseCustomer().customer().personScreening(), AttachLevel.ToStringMembers);
-        if (dto.leaseCustomer().customer().personScreening().version().isEmpty()) {
-            dto.leaseCustomer().customer().personScreening()
-                    .set(Persistence.service().retrieve(PersonScreening.class, dto.leaseCustomer().customer().personScreening().getPrimaryKey().asDraftKey()));
-        }
+        LeaseParticipantUtils.retrieveCustomerScreeningPointer(dto.leaseCustomer().customer());
 
         // fill/update payment methods: 
         dto.paymentMethods().clear();
