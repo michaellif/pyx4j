@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
@@ -22,9 +21,12 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMet
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 
 @DiscriminatorValue("LeadsAndRentalsGadgetMeta")
-@Caption(name = "Leads and Rentals")
 @Transient
-@GadgetDescription(name = "Leads vs. Rentals", keywords = { "Leads", "Rentals", "Leases" })
+@GadgetDescription(//@formatter:off
+        name = "Leads vs. Rentals",
+        description = "Displays comparison of number of leads vs number of appointmends vs number of rentals",
+        keywords = { "Leads", "Rentals", "Leases" }
+)//@formatter:on
 public interface LeadsAndRentalsGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 
 }

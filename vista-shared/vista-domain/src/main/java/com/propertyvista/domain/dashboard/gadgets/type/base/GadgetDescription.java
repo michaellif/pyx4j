@@ -22,10 +22,10 @@ import com.pyx4j.i18n.annotations.I18n;
 public @interface GadgetDescription {
 
     @I18n
-    String name() default "TBD";
+    String name() default "";
 
     @I18n
-    String description() default "TBD";
+    String description() default "";
 
     @I18n
     String[] keywords() default {};

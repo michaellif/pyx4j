@@ -24,7 +24,11 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 @DiscriminatorValue("Maintenance Gadget Metadata")
 @Transient
 @Caption(name = "Maintenance - Work Orders")
-@GadgetDescription(name = "Maintenance - Work Orders", keywords = { "Maintenance", "Work Orders" })
+@GadgetDescription(//@formatter:off        
+        name = "Maintenance - Work Orders",
+        description = "Displays summary of maintenance orders grouped by priorty and lets to view details of grouped orders",
+        keywords = { "Maintenance", "Work Orders" }
+)//@formatter:on
 public interface MaintenanceGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 
 }

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type.demo;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
@@ -22,8 +21,11 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 
 @DiscriminatorValue("DemoCounterGadget")
 @Transient
-@Caption(name = "Counter Gadget Demo")
-@GadgetDescription(keywords = "Demo", description = "A gadgets that displays counters and allows to zoom-in into details")
+@GadgetDescription(//@formatter:off
+        name = "Counter Gadget Demo",
+        description = "A gadget that displays counters and allows to zoom-in into details",
+        keywords = {"Demo"} 
+)//@formatter:on
 public interface CounterGadgetDemoGadgetMetadata extends CounterGadgetBaseMetadata {
 
 }

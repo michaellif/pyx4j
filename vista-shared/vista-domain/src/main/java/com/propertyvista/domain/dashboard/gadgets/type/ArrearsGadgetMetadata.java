@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
@@ -23,8 +22,11 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 
 @DiscriminatorValue("Arrears Gadget Metadata")
 @Transient
-@Caption(name = "Arrears")
-@GadgetDescription(name = "Arrears", keywords = { "Arrears" })
+@GadgetDescription(//@formatter:off
+        name = "Arrears",
+        description = "Displays arrears. Can be configured to display different categories of arrears",
+        keywords = { "Arrears" }
+)
 public interface ArrearsGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 
 }

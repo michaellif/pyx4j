@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
@@ -23,8 +22,11 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 
 @DiscriminatorValue("Lease Expiration Gadget")
 @Transient
-@Caption(name = "Lease Expiration")
-@GadgetDescription(name = "Lease Expiration", keywords = { "Leases" })
+@GadgetDescription(//@formatter:off
+        name = "Lease Expiration",
+        description = "Displays summary of leases that about to expire grouped by expiration date.",
+        keywords = { "Leases" }
+)//@formatter:on
 public interface LeaseExpirationGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 
 }

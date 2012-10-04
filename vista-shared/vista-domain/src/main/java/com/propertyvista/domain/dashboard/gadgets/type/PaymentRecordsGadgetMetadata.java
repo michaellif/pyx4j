@@ -14,7 +14,6 @@
 package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -27,10 +26,13 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMeta
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
 
-@Caption(name = "Payment Records", description = "TBD")
 @DiscriminatorValue("PaymentRecordsGadgetMetadata")
 @Transient
-@GadgetDescription(name = "Payment Records", keywords = { "Payments", "Funds", "Money" })
+@GadgetDescription(//@formatter:off
+        name = "Payment Records",
+        description = "Displays payment records that changed today.",
+        keywords = { "Payments", "Collections", "Money"}
+)//@formatter:on
 public interface PaymentRecordsGadgetMetadata extends ListerGadgetBaseMetadata, BuildingGadget {
 
     /**

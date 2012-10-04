@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitiveSet;
@@ -26,8 +25,11 @@ import com.propertyvista.domain.financial.PaymentRecord;
 
 @DiscriminatorValue("PaymentsSummaryGadgetMetadata")
 @Transient
-@Caption(name = "Payments Summary")
-@GadgetDescription(name = "Payment Records Summary", keywords = { "Payments", "Money", "Funds", "Collections" })
+@GadgetDescription(//@formatter:off
+        name = "Payment Records Summary",
+        description = "Displays payments aggregated by merchant account",
+        keywords = { "Payments", "Collections", "Money"}
+)//@formatter:on
 public interface PaymentsSummaryGadgetMetadata extends ListerGadgetBaseMetadata, HasCustomizableDateGadgetMetadata, BuildingGadget {
 
     IPrimitiveSet<PaymentRecord.PaymentStatus> paymentStatus();

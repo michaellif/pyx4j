@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type.demo;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
@@ -22,8 +21,11 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 @DiscriminatorValue("BarChart2D")
 @Transient
-@Caption(name = "Bar Chart 2D Demo")
-@GadgetDescription(description = "Demo that displays a 2D Bar Chart")
+@GadgetDescription(//@formatter:off
+        name = "Bar Chart 2D Demo",
+        description = "Demo that displays a 2D Bar Chart",
+        keywords = {"Demo", "Chart"}
+)//@formatter:on
 public interface BarChart2DGadgetMetadata extends GadgetMetadata {
 
 }
