@@ -13,13 +13,18 @@
  */
 package com.propertyvista.common.client.ui.components.editors;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.events.DevShortcutEvent;
+import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -197,6 +202,25 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
             public void addValidations() {
                 super.addValidations();
                 validationOfStartStopDates(this);
+
+                if (ApplicationMode.isDevelopment()) {
+                    this.addDevShortcutHandler(new DevShortcutHandler() {
+                        @Override
+                        public void onDevShortcut(DevShortcutEvent event) {
+                            if (event.getKeyCode() == 'Q') {
+                                event.consume();
+                                devGenerateIncomeInfoEmployer();
+                            }
+                        }
+                    });
+                }
+            }
+
+            private void devGenerateIncomeInfoEmployer() {
+                get(proto().name()).setValue("Nowhere");
+                get(proto().supervisorName()).setValue("Bob");
+                get(proto().supervisorPhone()).setValue("1234567890");
+                get(proto().monthlyAmount()).setValue(new BigDecimal("3000"));
             }
         };
     }

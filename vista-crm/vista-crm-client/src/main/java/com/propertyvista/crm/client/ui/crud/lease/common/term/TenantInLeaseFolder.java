@@ -22,9 +22,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.events.DevShortcutEvent;
+import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -258,6 +261,30 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
             }
 
             get(proto().relationship()).setVisible(getValue().role().getValue() != LeaseParticipant.Role.Applicant);
+        }
+
+        @Override
+        public void addValidations() {
+            super.addValidations();
+            if (ApplicationMode.isDevelopment()) {
+                this.addDevShortcutHandler(new DevShortcutHandler() {
+                    @Override
+                    public void onDevShortcut(DevShortcutEvent event) {
+                        if (event.getKeyCode() == 'Q') {
+                            event.consume();
+                            devGenerateTenant();
+                        }
+                    }
+                });
+            }
+        }
+
+        private void devGenerateTenant() {
+            NameEditor nameEditor = (NameEditor) get(proto().leaseCustomer().customer().person().name());
+            nameEditor.get(nameEditor.proto().firstName()).setValue("Firstname");
+            nameEditor.get(nameEditor.proto().lastName()).setValue("Lastname");
+            get(proto().leaseCustomer().customer().person().birthDate()).setValue(new LogicalDate(80, 1, 1));
+            get(proto().role()).setValue(LeaseParticipant.Role.Applicant);
         }
     }
 }
