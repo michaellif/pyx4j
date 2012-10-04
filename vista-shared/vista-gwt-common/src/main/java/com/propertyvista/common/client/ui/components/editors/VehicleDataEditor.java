@@ -16,6 +16,11 @@ package com.propertyvista.common.client.ui.components.editors;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.forms.client.events.DevShortcutEvent;
+import com.pyx4j.forms.client.events.DevShortcutHandler;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.OptionsFilter;
@@ -76,5 +81,27 @@ public class VehicleDataEditor extends CEntityDecoratableForm<Vehicle> {
         panel.getColumnFormatter().setWidth(1, "50%");
 
         return panel;
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+        if (ApplicationMode.isDevelopment()) {
+            this.addDevShortcutHandler(new DevShortcutHandler() {
+                @Override
+                public void onDevShortcut(DevShortcutEvent event) {
+                    if (event.getKeyCode() == 'Q') {
+                        event.consume();
+                        devGenerateVehicle();
+                    }
+                }
+            });
+        }
+    }
+
+    private void devGenerateVehicle() {
+        ((CComboBox<?>) get(proto().province())).setValueByString("Ontario");
+        get(proto().plateNumber()).setValue("DriveFast1");
+        get(proto().year()).setValue(new LogicalDate());
     }
 }
