@@ -42,6 +42,14 @@ public class VersionedEntityUtils {
                 && !entity.version().fromDate().isNull();
     }
 
+    public static <T extends IVersionedEntity<?>> boolean isDraft(T entity) {
+        return (entity.getPrimaryKey() == null) || entity.getPrimaryKey().isDraft();
+    }
+
+    public static <T extends IVersionData<?>> boolean isDraft(T entity) {
+        return (entity.getPrimaryKey() == null) || entity.fromDate().isNull();
+    }
+
     public static boolean equalsIgnoreVersion(IVersionedEntity<?> entity1, IVersionedEntity<?> entity2) {
         if (entity2 == entity1) {
             return true;
