@@ -119,8 +119,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 });
             }
         });
-// TODO : credit check (Equifax) isn't implemented yet (see LeaseApplicationForm)!          
-//        addAction(checkAction.asWidget());
+        addAction(checkAction);
 
         // TODO Move Lease
         {
