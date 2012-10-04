@@ -200,11 +200,16 @@ public class LeaseFacadeImpl implements LeaseFacade {
         finalizeBillableItems(leaseTerm);
 
         // migrate participants:
-        Persistence.service().retrieve(leaseTerm.version().tenants());
+        if (leaseTerm.version().tenants().getAttachLevel() == AttachLevel.IdOnly) {
+            Persistence.service().retrieve(leaseTerm.version().tenants());
+        }
         for (Tenant tenant : leaseTerm.version().tenants()) {
             tenant.screening().set(retrivePersonScreeningId(tenant.leaseCustomer().customer()));
         }
-        Persistence.service().retrieve(leaseTerm.version().guarantors());
+
+        if (leaseTerm.version().tenants().getAttachLevel() == AttachLevel.IdOnly) {
+            Persistence.service().retrieve(leaseTerm.version().guarantors());
+        }
         for (Guarantor guarantor : leaseTerm.version().guarantors()) {
             guarantor.screening().set(retrivePersonScreeningId(guarantor.leaseCustomer().customer()));
         }
@@ -305,9 +310,15 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
     }
 
-    public PersonScreening retrivePersonScreeningId(Customer entity) {
-        Persistence.service().retrieveMember(entity.personScreening(), AttachLevel.IdOnly);
-        return entity.personScreening();
+    public PersonScreening retrivePersonScreeningId(Customer customer) {
+        if (customer.personScreening().getAttachLevel() == AttachLevel.Detached) {
+            Persistence.service().retrieveMember(customer.personScreening(), AttachLevel.IdOnly);
+        }
+        if (customer.personScreening().isNull()) {
+            return null;
+        } else {
+            return customer.personScreening();
+        }
     }
 
     @Override
