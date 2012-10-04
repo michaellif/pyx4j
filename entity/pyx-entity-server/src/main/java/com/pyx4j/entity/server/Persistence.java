@@ -32,6 +32,7 @@ import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.DatastoreReadOnlyRuntimeException;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -176,6 +177,21 @@ public class Persistence {
                 }
             }
         });
+    }
+
+    public static <T extends IEntity> void ensureRetrieve(T entity, AttachLevel attachLevel) {
+        if (entity.getAttachLevel().ordinal() < attachLevel.ordinal()) {
+            service().retrieve(entity, attachLevel);
+        }
+    }
+
+    public static <T extends IEntity> void ensureRetrieve(ICollection<T, ?> entityIterable, AttachLevel attachLevel) {
+        if (entityIterable.getAttachLevel().ordinal() < attachLevel.ordinal()) {
+            service().retrieve(entityIterable, attachLevel);
+        }
+        for (T entity : entityIterable) {
+            ensureRetrieve(entity, attachLevel);
+        }
     }
 
 }
