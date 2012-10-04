@@ -41,7 +41,7 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void cancelEvict(String decisionReason);
 
-        void sendMail(List<LeaseParticipant> users, EmailTemplateType emailType);
+        void sendMail(List<LeaseParticipant<?>> users, EmailTemplateType emailType);
 
         void activate();
 

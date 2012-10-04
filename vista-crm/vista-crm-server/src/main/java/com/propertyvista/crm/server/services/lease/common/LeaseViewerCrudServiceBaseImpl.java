@@ -53,10 +53,10 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     }
 
     @Override
-    public void retrieveUsers(AsyncCallback<Vector<LeaseParticipant>> callback, Key entityId) {
+    public void retrieveUsers(AsyncCallback<Vector<LeaseParticipant<?>>> callback, Key entityId) {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(EntityFactory.createIdentityStub(Lease.class, entityId), false);
 
-        Vector<LeaseParticipant> users = new Vector<LeaseParticipant>();
+        Vector<LeaseParticipant<?>> users = new Vector<LeaseParticipant<?>>();
 
         assert (!lease.currentTerm().isNull());
         Persistence.service().retrieve(lease.currentTerm().version().tenants());

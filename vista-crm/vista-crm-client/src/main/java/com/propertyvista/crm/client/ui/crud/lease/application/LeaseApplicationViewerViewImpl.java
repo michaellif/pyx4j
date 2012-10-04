@@ -84,10 +84,10 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         inviteAction = new MenuItem(INVITE, new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
+                ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant<?>>>() {
                     @Override
-                    public void onSuccess(List<LeaseParticipant> result) {
-                        new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenants/Guarantors To Send An Invitation To"), true, result) {
+                    public void onSuccess(List<LeaseParticipant<?>> result) {
+                        new EntitySelectorListDialog<LeaseParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Send An Invitation To"), true, result) {
                             @Override
                             public boolean onClickOk() {
                                 ((LeaseApplicationViewerView.Presenter) getPresenter()).inviteUsers(getSelectedItems());
@@ -105,10 +105,10 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         checkAction = new MenuItem(i18n.tr("Credit Check"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
+                ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant<?>>>() {
                     @Override
-                    public void onSuccess(List<LeaseParticipant> result) {
-                        new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenants/Guarantors To Check"), true, result) {
+                    public void onSuccess(List<LeaseParticipant<?>> result) {
+                        new EntitySelectorListDialog<LeaseParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Check"), true, result) {
                             @Override
                             public boolean onClickOk() {
                                 // TODO make the credit check happen
@@ -142,10 +142,10 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             moreInfoAction = new MenuItem(MORE_INFO, new Command() {
                 @Override
                 public void execute() {
-                    ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
+                    ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant<?>>>() {
                         @Override
-                        public void onSuccess(List<LeaseParticipant> result) {
-                            new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenants/Guarantors To Acquire Info"), true, result) {
+                        public void onSuccess(List<LeaseParticipant<?>> result) {
+                            new EntitySelectorListDialog<LeaseParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Acquire Info"), true, result) {
 
                                 @Override
                                 public boolean onClickOk() {

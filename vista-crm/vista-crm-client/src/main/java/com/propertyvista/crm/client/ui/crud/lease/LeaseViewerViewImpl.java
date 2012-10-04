@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.lease;
 
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
@@ -110,9 +109,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         sendMailAction = new MenuItem(i18n.tr("Send Mail..."), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
+                ((LeaseViewerView.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant<?>>>() {
                     @Override
-                    public void onSuccess(List<LeaseParticipant> result) {
+                    public void onSuccess(List<LeaseParticipant<?>> result) {
                         new SendMailBox(result) {
                             @Override
                             public boolean onClickOk() {
@@ -387,17 +386,17 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         }
     }
 
-    private abstract class SendMailBox extends EntitySelectorListDialog<LeaseParticipant> {
+    private abstract class SendMailBox extends EntitySelectorListDialog<LeaseParticipant<?>> {
 
         private CComboBox<EmailTemplateType> emailType;
 
-        public SendMailBox(List<LeaseParticipant> applicationUsers) {
+        public SendMailBox(List<LeaseParticipant<?>> applicationUsers) {
             super(i18n.tr("Send Mail"), true, applicationUsers);
             getOkButton().setText(i18n.tr("Send"));
         }
 
         @Override
-        protected Widget initBody(boolean isMultiselectAllowed, List<LeaseParticipant> data) {
+        protected Widget initBody(boolean isMultiselectAllowed, List<LeaseParticipant<?>> data) {
             VerticalPanel body = new VerticalPanel();
             body.add(new HTML(i18n.tr("Select Tenants:")));
             body.add(super.initBody(isMultiselectAllowed, data));

@@ -58,14 +58,14 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
     }
 
     @Override
-    public void inviteUsers(List<LeaseParticipant> users) {
+    public void inviteUsers(List<LeaseParticipant<?>> users) {
         ((LeaseApplicationViewerCrudService) getService()).inviteUsers(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String message) {
                 populate();
                 ((LeaseApplicationViewerView) getView()).reportInviteUsersActionResult(message);
             }
-        }, getEntityId(), new Vector<LeaseParticipant>(users));
+        }, getEntityId(), new Vector<LeaseParticipant<?>>(users));
     }
 
     @Override

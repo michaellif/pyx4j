@@ -177,14 +177,14 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
-    public void sendMail(List<LeaseParticipant> users, EmailTemplateType emailType) {
+    public void sendMail(List<LeaseParticipant<?>> users, EmailTemplateType emailType) {
         ((LeaseViewerCrudService) getService()).sendMail(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String message) {
                 populate();
                 ((LeaseViewerView) getView()).reportSendMailActionResult(message);
             }
-        }, getEntityId(), new Vector<LeaseParticipant>(users), emailType);
+        }, getEntityId(), new Vector<LeaseParticipant<?>>(users), emailType);
     }
 
     @Override

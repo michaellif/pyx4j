@@ -94,7 +94,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     @Override
-    public void sendMail(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant> users, EmailTemplateType emailType) {
+    public void sendMail(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant<?>> users, EmailTemplateType emailType) {
         Lease lease = Persistence.service().retrieve(dboClass, entityId);
         if ((lease == null) || (lease.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
@@ -110,16 +110,16 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         Persistence.service().retrieve(app);
 
         // check that all lease participants have an associated user entity (email)
-        for (LeaseParticipant user : users) {
+        for (LeaseParticipant<?> user : users) {
             if (user.leaseCustomer().customer().user().isNull()) {
-                throw new UserRuntimeException(i18n.tr("''Send Email'' operation failed, email of lease participant {0} was not found", user.leaseCustomer().customer()
-                        .person().name().getStringView()));
+                throw new UserRuntimeException(i18n.tr("''Send Email'' operation failed, email of lease participant {0} was not found", user.leaseCustomer()
+                        .customer().person().name().getStringView()));
             }
         }
 
         if (emailType == EmailTemplateType.TenantInvitation) {
             // check that selected users can be used for this template
-            for (LeaseParticipant user : users) {
+            for (LeaseParticipant<?> user : users) {
                 if (user.isInstanceOf(Guarantor.class)) {
                     throw new UserRuntimeException(i18n.tr(
                             "''Send Mail'' operation failed: can''t send \"{0}\" for Guarantor. Please re-send e-mail for all valid recipients.",
@@ -129,7 +129,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
             // send e-mails
             CommunicationFacade commFacade = ServerSideFactory.create(CommunicationFacade.class);
-            for (LeaseParticipant user : users) {
+            for (LeaseParticipant<?> user : users) {
                 if (user.isInstanceOf(Tenant.class)) {
                     Tenant tenant = user.duplicate(Tenant.class);
                     commFacade.sendTenantInvitation(tenant);

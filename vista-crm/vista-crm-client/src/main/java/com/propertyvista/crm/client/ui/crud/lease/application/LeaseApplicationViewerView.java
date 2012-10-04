@@ -26,7 +26,7 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
 
         void startOnlineApplication();
 
-        void inviteUsers(List<LeaseParticipant> users);
+        void inviteUsers(List<LeaseParticipant<?>> users);
 
         void applicationAction(LeaseApplicationActionDTO action);
     }

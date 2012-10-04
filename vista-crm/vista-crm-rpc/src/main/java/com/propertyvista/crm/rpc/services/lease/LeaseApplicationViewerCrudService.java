@@ -32,7 +32,7 @@ public interface LeaseApplicationViewerCrudService extends LeaseViewerCrudServic
     /**
      * callback returns a message that should be passed to the users.
      */
-    void inviteUsers(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant> users);
+    void inviteUsers(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant<?>> users);
 
     void applicationAction(AsyncCallback<VoidSerializable> callback, LeaseApplicationActionDTO actionDTO);
 }

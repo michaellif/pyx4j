@@ -100,14 +100,14 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     }
 
     @Override
-    public void inviteUsers(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant> users) {
+    public void inviteUsers(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant<?>> users) {
         CommunicationFacade commFacade = ServerSideFactory.create(CommunicationFacade.class);
         if (users.isEmpty()) {
             throw new UserRuntimeException(i18n.tr("No users to send invitation"));
         }
 
         // check that we can send the e-mail before we actually try to send email
-        for (LeaseParticipant user : users) {
+        for (LeaseParticipant<?> user : users) {
             // check that all lease participants have an associated user entity (email)            
             if (user.leaseCustomer().customer().user().isNull()) {
                 throw new UserRuntimeException(i18n.tr("Failed to invite users, email of lease participant {0} was not found", user.leaseCustomer().customer()

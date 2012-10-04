@@ -43,7 +43,7 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
     /**
      * <code>callback</code> returns a message that should be display to the users (i.e. e-mails were send successfully);
      */
-    void sendMail(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant> users, EmailTemplateType emailType);
+    void sendMail(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant<?>> users, EmailTemplateType emailType);
 
     void activate(AsyncCallback<VoidSerializable> callback, Key entityId);
 
