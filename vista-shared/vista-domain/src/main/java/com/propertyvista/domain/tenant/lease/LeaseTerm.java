@@ -39,7 +39,6 @@ import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
@@ -107,10 +106,6 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
     @Format("MM/dd/yyyy")
     @ToString(index = 1)
     IPrimitive<LogicalDate> termTo();
-
-    @Detached
-    // should be loaded in service when necessary!..
-    IList<Document> documents();
 
     @ReadOnly
     @Timestamp(Update.Created)

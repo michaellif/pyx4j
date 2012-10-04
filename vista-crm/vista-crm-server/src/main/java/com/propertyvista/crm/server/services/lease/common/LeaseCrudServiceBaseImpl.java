@@ -42,7 +42,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         // load detached entities:
         Persistence.service().retrieve(dto.billingAccount().adjustments());
         Persistence.service().retrieve(dto.billingAccount().deposits());
-        Persistence.service().retrieve(dto.documents());
 
         loadDetachedProducts(dto);
 

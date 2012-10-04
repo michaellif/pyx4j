@@ -44,7 +44,6 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 @ToStringFormat("{0}, {1}, {2}, {3}")
@@ -221,10 +220,6 @@ public interface Lease extends IEntity {
     @JoinColumn
     @Owned(forceCreation = true, cascade = {})
     BillingAccount billingAccount();
-
-    @Detached
-    // should be loaded in service when necessary!..
-    IList<Document> documents();
 
     // internals:
 
