@@ -26,7 +26,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
 
 import com.propertyvista.crm.client.event.BoardUpdateEvent;
-import com.propertyvista.crm.client.ui.dashboard.DashboardEditor;
+import com.propertyvista.crm.client.ui.dashboard.DashboardManagementEditorView;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
@@ -35,18 +35,18 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
-public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadata> {
+public class DashboardManagementEditorActivity extends EditorActivityBase<DashboardMetadata> {
 
     @SuppressWarnings("unchecked")
-    public DashboardEditorActivity(CrudAppPlace place) {
-        super(place, DashboardViewFactory.instance(DashboardEditor.class), (AbstractCrudService<DashboardMetadata>) GWT
+    public DashboardManagementEditorActivity(CrudAppPlace place) {
+        super(place, DashboardViewFactory.instance(DashboardManagementEditorView.class), (AbstractCrudService<DashboardMetadata>) GWT
                 .create(DashboardMetadataCrudService.class), DashboardMetadata.class);
 
     }
 
     @Override
     protected void createNewEntity(final AsyncCallback<DashboardMetadata> callback) {
-        ((DashboardEditor) getView()).showSelectTypePopUp(new DefaultAsyncCallback<DashboardMetadata.DashboardType>() {
+        ((DashboardManagementEditorView) getView()).showSelectTypePopUp(new DefaultAsyncCallback<DashboardMetadata.DashboardType>() {
             @Override
             public void onSuccess(DashboardType type) {
                 DashboardMetadata entity = EntityFactory.create(getEntityClass());
@@ -74,7 +74,7 @@ public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadat
 
     @Override
     protected void goToViewer(Key entityID) {
-        CrudAppPlace place = new CrmSiteMap.Dashboard.Management();
+        CrudAppPlace place = new CrmSiteMap.Dashboard.Manage();
         place.setType(Type.lister);
         AppSite.getPlaceController().goTo(place);
     }

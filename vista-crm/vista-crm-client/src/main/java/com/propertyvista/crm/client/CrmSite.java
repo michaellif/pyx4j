@@ -150,7 +150,7 @@ public class CrmSite extends VistaSite {
     }
 
     static public AppPlace getSystemDashboardPlace() {
-        return new CrmSiteMap.Dashboard().formPlace(new Key(-1));
+        return new CrmSiteMap.Dashboard.View().formPlace(new Key(-1));
     }
 
     private boolean isBrowserCompatible() {

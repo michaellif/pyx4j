@@ -25,12 +25,12 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
-public class DashboardEditorImpl extends CrmEditorViewImplBase<DashboardMetadata> implements DashboardEditor {
+public class DashboardManagementEditorViewImpl extends CrmEditorViewImplBase<DashboardMetadata> implements DashboardManagementEditorView {
 
-    private static final I18n i18n = I18n.get(DashboardEditorImpl.class);
+    private static final I18n i18n = I18n.get(DashboardManagementEditorViewImpl.class);
 
-    public DashboardEditorImpl() {
-        super(CrmSiteMap.Dashboard.Edit.class, new DashboardForm());
+    public DashboardManagementEditorViewImpl() {
+        super(CrmSiteMap.Dashboard.Manage.class, new DashboardForm());
     }
 
     @Override

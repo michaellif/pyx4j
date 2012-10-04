@@ -7,16 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-25
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
-public interface DashboardManagement extends IListerView<DashboardMetadata> {
+public interface DashboardManagementEditorView extends IEditorView<DashboardMetadata> {
 
+    void showSelectTypePopUp(AsyncCallback<DashboardType> callback);
 }

@@ -62,7 +62,7 @@ public class ComplexCrudServiceImpl extends AbstractCrudServiceDtoImpl<Complex, 
         {
             EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.building));
-            dto.dashboards().addAll(Persistence.service().query(criteria, AttachLevel.ToStringMembers));
+            dto.dashboards().addAll(Persistence.secureQuery(criteria, AttachLevel.ToStringMembers));
         }
 
         {

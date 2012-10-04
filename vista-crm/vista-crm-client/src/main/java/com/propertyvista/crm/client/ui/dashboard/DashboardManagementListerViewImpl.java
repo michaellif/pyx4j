@@ -7,23 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-04-22
+ * Created on 2011-05-25
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.dashboard;
+package com.propertyvista.crm.client.ui.dashboard;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
-import com.pyx4j.rpc.shared.IService;
-
+import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public interface DashboardMetadataService extends IService {
-
-    public void retrieveMetadata(AsyncCallback<DashboardMetadata> callback, Key entityId);
-
-    public void saveDashboardMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata editableEntity);
-
+public class DashboardManagementListerViewImpl extends CrmListerViewImplBase<DashboardMetadata> implements DashboardManagementListerView {
+    public DashboardManagementListerViewImpl() {
+        super(CrmSiteMap.Dashboard.Manage.class);
+        setLister(new DashboardLister());
+    }
 }

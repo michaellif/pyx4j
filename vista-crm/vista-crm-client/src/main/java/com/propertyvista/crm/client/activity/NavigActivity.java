@@ -26,6 +26,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -36,7 +38,7 @@ import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
+import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -54,7 +56,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
     private final NavigView view;
 
-    private final DashboardMetadataService dashboardMetadataService;
+    private final DashboardMetadataCrudService dashboardMetadataCrudService;
 
     private boolean isDashboardFolderUpdateRequired;
 
@@ -67,7 +69,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         isDashboardFolderUpdateRequired = previousUserPk == null || currentUserPk == null || !previousUserPk.equals(currentUserPk);
         previousUserPk = currentUserPk;
 
-        dashboardMetadataService = GWT.<DashboardMetadataService> create(DashboardMetadataService.class);
+        dashboardMetadataCrudService = GWT.<DashboardMetadataCrudService> create(DashboardMetadataCrudService.class);
 
         view = CrmVeiwFactory.instance(NavigView.class);
         view.setPresenter(this);
@@ -155,14 +157,17 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
             if (isDashboardFolderUpdateRequired) {
                 dashboardFolder = new NavigFolder(i18n.tr("Dashboards"), CrmImages.INSTANCE.dashboardsNormal(), CrmImages.INSTANCE.dashboardsHover(),
                         CrmImages.INSTANCE.dashboardsActive());
-                dashboardFolder.addNavigItem(new CrmSiteMap.Dashboard.Management());
+                dashboardFolder.addNavigItem(new CrmSiteMap.Dashboard.Manage());
                 // add the rest of stuff asynchronously from the server
-                dashboardMetadataService.listMetadata(new DefaultAsyncCallback<Vector<DashboardMetadata>>() {
+
+                dashboardMetadataCrudService.list(new DefaultAsyncCallback<EntitySearchResult<DashboardMetadata>>() {
+
                     @Override
-                    public void onSuccess(Vector<DashboardMetadata> result) {
-                        Collections.sort(result, ORDER_BY_NAME);
-                        for (DashboardMetadata metadata : result) {
-                            dashboardFolder.addNavigItem(new CrmSiteMap.Dashboard().formPlace(metadata.getPrimaryKey(), metadata.name().getStringView()));
+                    public void onSuccess(EntitySearchResult<DashboardMetadata> result) {
+                        Vector<DashboardMetadata> metadataList = result.getData();
+                        Collections.sort(metadataList, ORDER_BY_NAME);
+                        for (DashboardMetadata metadata : metadataList) {
+                            dashboardFolder.addNavigItem(new CrmSiteMap.Dashboard.View().formPlace(metadata.getPrimaryKey(), metadata.name().getStringView()));
                         }
                         isDashboardFolderUpdateRequired = false;
 
@@ -170,7 +175,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
                         endCreateNavigFolders(list);
                     }
-                });
+
+                }, EntityListCriteria.create(DashboardMetadata.class));
+
             } else {
                 list.add(dashboardFolder);
                 endCreateNavigFolders(list);

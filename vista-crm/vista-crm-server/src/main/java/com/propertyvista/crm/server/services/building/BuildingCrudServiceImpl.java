@@ -153,7 +153,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     private void retrieveDashboards(BuildingDTO dto) {
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.building));
-        dto.dashboards().addAll(Persistence.service().query(criteria, AttachLevel.Attached));
+        dto.dashboards().addAll(Persistence.secureQuery(criteria, AttachLevel.ToStringMembers));
     }
 
 }

@@ -145,8 +145,9 @@ import com.propertyvista.crm.client.activity.crud.unit.UnitListerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyViewerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitViewerActivity;
-import com.propertyvista.crm.client.activity.dashboard.DashboardEditorActivity;
-import com.propertyvista.crm.client.activity.dashboard.DashboardManagementActivity;
+import com.propertyvista.crm.client.activity.dashboard.DashboardManagementEditorActivity;
+import com.propertyvista.crm.client.activity.dashboard.DashboardManagementListerActivity;
+import com.propertyvista.crm.client.activity.dashboard.DashboardManagementViewerActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivicty;
@@ -635,11 +636,20 @@ public class MainActivityMapper implements AppActivityMapper {
                         }
 
 // - Report/Dashboard-related:
-                    } else if (place instanceof CrmSiteMap.Dashboard.Management) {
-                        activity = new DashboardManagementActivity(place);
+                    } else if (place instanceof CrmSiteMap.Dashboard.Manage) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new DashboardManagementEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new DashboardManagementViewerActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new DashboardManagementListerActivity(crudPlace);
+                        default:
 
-                    } else if (place instanceof CrmSiteMap.Dashboard.Edit) {
-                        activity = new DashboardEditorActivity(crudPlace);
+                            break;
+                        }
 
 // - Settings:
                     } else if (place instanceof CrmSiteMap.Account.AccountData) {
@@ -966,8 +976,9 @@ public class MainActivityMapper implements AppActivityMapper {
 
                     } // CRUD APP PLACE IF ENDS HERE
 
-                } else if (place instanceof CrmSiteMap.Dashboard) {
-                    activity = new DashboardViewActivity((CrmSiteMap.Dashboard) place);
+                    // Dashboard related stuff again
+                } else if (place instanceof CrmSiteMap.Dashboard.View) {
+                    activity = new DashboardViewActivity((CrmSiteMap.Dashboard.View) place);
 
                 } else if (place instanceof CrmSiteMap.PasswordChange) {
                     activity = new PasswordChangeActivity(place);

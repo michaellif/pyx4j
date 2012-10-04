@@ -22,16 +22,16 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.event.BoardUpdateEvent;
-import com.propertyvista.crm.client.ui.dashboard.DashboardManagement;
+import com.propertyvista.crm.client.ui.dashboard.DashboardManagementListerView;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class DashboardManagementActivity extends ListerActivityBase<DashboardMetadata> {
+public class DashboardManagementListerActivity extends ListerActivityBase<DashboardMetadata> {
 
     @SuppressWarnings("unchecked")
-    public DashboardManagementActivity(Place place) {
-        super(place, (DashboardManagement) DashboardViewFactory.instance(DashboardManagement.class), (AbstractCrudService<DashboardMetadata>) GWT
+    public DashboardManagementListerActivity(Place place) {
+        super(place, (DashboardManagementListerView) DashboardViewFactory.instance(DashboardManagementListerView.class), (AbstractCrudService<DashboardMetadata>) GWT
                 .create(DashboardMetadataCrudService.class), DashboardMetadata.class);
 
     }

@@ -417,8 +417,8 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
     private String getNavigLabel(AppPlace place) {
         if (place instanceof CrmSiteMap.Report) {
             return ((CrmSiteMap.Report) place).getName();
-        } else if (place instanceof CrmSiteMap.Dashboard) {
-            return ((CrmSiteMap.Dashboard) place).getName();
+        } else if (place instanceof CrmSiteMap.Dashboard.View) {
+            return ((CrmSiteMap.Dashboard.View) place).getName();
         }
         return AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel();
     }

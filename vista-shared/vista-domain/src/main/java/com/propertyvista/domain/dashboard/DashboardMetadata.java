@@ -14,9 +14,11 @@
 package com.propertyvista.domain.dashboard;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -28,8 +30,8 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.domain.security.CrmUser;
 
-// FIXME i guess some refactoring is needed to create polymorphic metadata for each type of dashboard: system, building, report
 @Caption(name = "Dashboard")
 public interface DashboardMetadata extends ISharedUserEntity {
 
@@ -80,6 +82,12 @@ public interface DashboardMetadata extends ISharedUserEntity {
     @Length(250)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
+
+    @ReadOnly
+    @Detached
+    @NotNull
+    @MemberColumn(name = "owner_user_id")
+    CrmUser ownerUser();
 
     IPrimitive<Boolean> isShared();
 

@@ -16,7 +16,6 @@ package com.propertyvista.crm.server.services.dashboard;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -29,20 +28,10 @@ import com.pyx4j.site.server.services.customization.CustomizationPersistenceHelp
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat.Builder;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
-import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public class DashboardMetadataServiceImpl implements DashboardMetadataService {
-
-    @Override
-    public void listMetadata(AsyncCallback<Vector<DashboardMetadata>> callback) {
-        EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
-        criteria.or().left(PropertyCriterion.eq(criteria.proto().user(), CrmAppContext.getCurrentUserPrimaryKey()))
-                .right(PropertyCriterion.eq(criteria.proto().isShared(), true));
-        Vector<DashboardMetadata> dashboardMetadataList = Persistence.secureQuery(criteria);
-        callback.onSuccess(dashboardMetadataList);
-    }
 
     @Override
     public void retrieveMetadata(AsyncCallback<DashboardMetadata> callback, Key entityId) {
@@ -53,6 +42,10 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
             dm = retrieveDefaultMetadata();
         } else {
             dm = Persistence.secureRetrieve(DashboardMetadata.class, entityId);
+        }
+        if (dm == null) {
+            callback.onSuccess(null);
+            return;
         }
 
         DashboardColumnLayoutFormat format = new DashboardColumnLayoutFormat(dm.encodedLayout().getValue());

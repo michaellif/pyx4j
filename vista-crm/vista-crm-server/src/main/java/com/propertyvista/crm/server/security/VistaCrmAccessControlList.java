@@ -15,7 +15,6 @@ package com.propertyvista.crm.server.security;
 
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessService;
 import com.pyx4j.essentials.rpc.report.ReportServices;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
@@ -28,6 +27,7 @@ import com.propertyvista.crm.rpc.services.UpdateUploadService;
 import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
+import com.propertyvista.crm.rpc.services.breadcrumbs.BreadcrumbsService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
 import com.propertyvista.crm.rpc.services.building.LockerAreaCrudService;
@@ -49,6 +49,17 @@ import com.propertyvista.crm.rpc.services.customer.screening.PersonScreeningCrud
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.GadgetMetadataService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.ApplicationsGadgetService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.CollectionsGadgetService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.DelinquentTenantListService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeadsAndRentalsGadgetService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeaseExpirationGadgetService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.MaintenanceGadgetService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.NoticesGadgetService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
@@ -69,7 +80,6 @@ import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -99,7 +109,6 @@ import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
-import com.propertyvista.server.common.security.SharedUserEntityInstanceAccess;
 
 public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
@@ -115,6 +124,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
             grant(VistaBasicBehavior.CRM, new EntityPermission("*", EntityPermission.ALL));
             grant(VistaBasicBehavior.CRM, new EntityPermission("*", EntityPermission.READ));
         }
+
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DeferredProcessService.class));
         grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(EntityServices.Query.class));
         grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(ReportServices.class, "*"));
@@ -125,16 +135,32 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(FeedbackService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmPolicyRetrieveService.class));
 
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(BreadcrumbsService.class));
+
 // - Dashboard:
-        InstanceAccess sharedUserEntityAccess = new SharedUserEntityInstanceAccess();
-        grant(VistaBasicBehavior.CRM, new EntityPermission(DashboardMetadata.class, sharedUserEntityAccess, EntityPermission.ALL));
-        grant(VistaBasicBehavior.CRM, new EntityPermission(GadgetMetadata.class, sharedUserEntityAccess, EntityPermission.ALL));
+        // we want owners (dashboard creator) to have full access to dashboards they own, and other users only read-only access and only for shared.
+        grant(VistaBasicBehavior.CRM, new EntityPermission(DashboardMetadata.class, new DashboardOwnerInstanceAccess(), EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(DashboardMetadata.class, new DashboardUserInstanceAccess(), EntityPermission.READ));
+        grant(VistaBasicBehavior.CRM, new DashboardDatasetAccessRule(), DashboardMetadata.class);
+
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DashboardMetadataService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DashboardMetadataCrudService.class));
+
+// - Gadgets:
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(GadgetMetadataService.class));
 
-        // Add All GadgetSettings
-        //grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(MyGadgetSettings.class, EntityPermission.ALL));
+        // TODO define correct behaviors
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ApplicationsGadgetService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ArrearsGadgetService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ArrearsReportService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(AvailabilityReportService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CollectionsGadgetService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DelinquentTenantListService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeadsAndRentalsGadgetService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseExpirationGadgetService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MaintenanceGadgetService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(NoticesGadgetService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PaymentReportService.class));
 
 // - Building-related:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Building.class, EntityPermission.ALL));

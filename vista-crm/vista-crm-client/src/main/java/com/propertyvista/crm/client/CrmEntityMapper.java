@@ -146,7 +146,7 @@ public class CrmEntityMapper {
 
         AppPlaceEntityMapper.register(HomePageGadget.class, CrmSiteMap.Settings.HomePageGadgets.class, defaultImage);
 
-        AppPlaceEntityMapper.register(DashboardMetadata.class, CrmSiteMap.Dashboard.Edit.class, defaultImage);
+        AppPlaceEntityMapper.register(DashboardMetadata.class, CrmSiteMap.Dashboard.Manage.class, defaultImage);
         // TODO add report place mapping here
 
         // policies

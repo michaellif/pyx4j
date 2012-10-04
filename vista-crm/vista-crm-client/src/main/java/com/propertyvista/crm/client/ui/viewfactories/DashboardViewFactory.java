@@ -16,10 +16,12 @@ package com.propertyvista.crm.client.ui.viewfactories;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
-import com.propertyvista.crm.client.ui.dashboard.DashboardEditor;
-import com.propertyvista.crm.client.ui.dashboard.DashboardEditorImpl;
-import com.propertyvista.crm.client.ui.dashboard.DashboardManagement;
-import com.propertyvista.crm.client.ui.dashboard.DashboardManagementImpl;
+import com.propertyvista.crm.client.ui.dashboard.DashboardManagementEditorView;
+import com.propertyvista.crm.client.ui.dashboard.DashboardManagementEditorViewImpl;
+import com.propertyvista.crm.client.ui.dashboard.DashboardManagementListerView;
+import com.propertyvista.crm.client.ui.dashboard.DashboardManagementListerViewImpl;
+import com.propertyvista.crm.client.ui.dashboard.DashboardManagementViewerView;
+import com.propertyvista.crm.client.ui.dashboard.DashboardManagementViewerViewImpl;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
 
@@ -29,10 +31,12 @@ public class DashboardViewFactory extends ViewFactoryBase {
         if (!map.containsKey(type)) {
             if (DashboardView.class.equals(type)) {
                 map.put(type, new DashboardViewImpl());
-            } else if (DashboardManagement.class.equals(type)) {
-                map.put(type, new DashboardManagementImpl());
-            } else if (DashboardEditor.class.equals(type)) {
-                map.put(type, new DashboardEditorImpl());
+            } else if (DashboardManagementListerView.class.equals(type)) {
+                map.put(type, new DashboardManagementListerViewImpl());
+            } else if (DashboardManagementEditorView.class.equals(type)) {
+                map.put(type, new DashboardManagementEditorViewImpl());
+            } else if (DashboardManagementViewerView.class.equals(type)) {
+                map.put(type, new DashboardManagementViewerViewImpl());
             }
         }
 

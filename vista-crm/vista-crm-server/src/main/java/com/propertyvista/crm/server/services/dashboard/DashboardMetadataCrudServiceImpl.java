@@ -21,10 +21,10 @@ import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
-import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.server.common.security.VistaContext;
 
@@ -41,38 +41,29 @@ public class DashboardMetadataCrudServiceImpl extends AbstractCrudServiceImpl<Da
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<DashboardMetadata>> callback, EntityListCriteria<DashboardMetadata> criteria) {
-        criteria.or().left(PropertyCriterion.eq(criteria.proto().user(), CrmAppContext.getCurrentUserPrimaryKey()))
+        criteria.or().left(PropertyCriterion.eq(criteria.proto().ownerUser(), CrmAppContext.getCurrentUserPrimaryKey()))
                 .right(PropertyCriterion.eq(criteria.proto().isShared(), true));
         super.list(callback, criteria);
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, DashboardMetadata entity) {
-        entity.setPrimaryKey(null);
-
-        if (entity.isShared().isBooleanTrue()) {
-            entity.user().setPrimaryKey(ISharedUserEntity.DORMANT_KEY);
+    public void create(AsyncCallback<Key> callback, DashboardMetadata dashboardMetadata) {
+        if (dashboardMetadata.getPrimaryKey() == null) {
+            dashboardMetadata.ownerUser().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
+            super.create(callback, dashboardMetadata);
         } else {
-            entity.user().setPrimaryKey(CrmAppContext.getCurrentUserPrimaryKey());
+            throw new SecurityViolationException("Trying to overwrite an existing entity");
         }
-        super.create(callback, entity);
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, DashboardMetadata entity) {
-        //Assert Permission
-        Persistence.secureRetrieve(DashboardMetadata.class, entity.getPrimaryKey());
+    public void save(AsyncCallback<Key> callback, DashboardMetadata dashboardMetadata) {
+        super.save(callback, dashboardMetadata);
+    }
 
-        // TODO  add proper management of secure adapters
-
-        if (entity.user().getPrimaryKey() != ISharedUserEntity.DORMANT_KEY) {
-            entity.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
-        }
-
-        if (entity.isShared().isBooleanTrue()) {
-            entity.user().setPrimaryKey(ISharedUserEntity.DORMANT_KEY);
-        }
-
-        super.save(callback, entity);
+    @Override
+    protected void enhanceListRetrieved(DashboardMetadata entity, DashboardMetadata dto) {
+        super.enhanceListRetrieved(entity, dto);
+        Persistence.service().retrieve(dto.ownerUser());
     }
 }
