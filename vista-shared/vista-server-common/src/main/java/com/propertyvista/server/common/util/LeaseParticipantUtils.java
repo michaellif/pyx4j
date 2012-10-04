@@ -25,9 +25,13 @@ public class LeaseParticipantUtils {
 
     public static void retrieveCustomerScreeningPointer(Customer customer) {
         // Retrieve draft if there are no final version
-        Persistence.service().retrieveMember(customer.personScreening(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieveMember(customer.personScreening(), AttachLevel.IdOnly);
         if ((!customer.personScreening().isNull()) && customer.personScreening().version().isEmpty()) {
-            customer.personScreening().set(Persistence.service().retrieve(PersonScreening.class, customer.personScreening().getPrimaryKey().asDraftKey()));
+            customer.personScreening().set(
+                    Persistence.service().retrieve(PersonScreening.class, customer.personScreening().getPrimaryKey().asDraftKey(), AttachLevel.IdOnly));
+        }
+        if (!customer.personScreening().isNull()) {
+            Persistence.service().retrieve(customer.personScreening(), AttachLevel.ToStringMembers);
         }
     }
 
@@ -38,16 +42,19 @@ public class LeaseParticipantUtils {
             PersonScreening personScreening = leaseParticipant.leaseCustomer().customer().personScreening();
             if (!personScreening.isNull()) {
                 // Find if Draft exists, retrieve pointer to it
-                leaseParticipant.effectiveScreening().set(
-                        Persistence.service().retrieve(PersonScreening.class, personScreening.getPrimaryKey().asDraftKey(), attachLevel));
-                if (leaseParticipant.effectiveScreening().version().isNull()) {
-                    leaseParticipant.effectiveScreening().set(
-                            Persistence.service().retrieve(PersonScreening.class, personScreening.getPrimaryKey().asCurrentKey(), attachLevel));
+                PersonScreening draft = Persistence.service().retrieve(PersonScreening.class, personScreening.getPrimaryKey().asDraftKey(), AttachLevel.IdOnly);
+                if (!draft.version().isNull()) {
+                    leaseParticipant.effectiveScreening().set(draft);
+                } else {
+                    leaseParticipant.effectiveScreening().set(personScreening);
+                }
+                if (!leaseParticipant.effectiveScreening().isNull()) {
+                    Persistence.service().retrieve(leaseParticipant.effectiveScreening(), attachLevel);
                 }
             }
         } else {
             leaseParticipant.effectiveScreening().set(leaseParticipant.screening());
-            if (leaseParticipant.effectiveScreening().isNull()) {
+            if (!leaseParticipant.effectiveScreening().isNull()) {
                 Persistence.service().retrieve(leaseParticipant.effectiveScreening(), attachLevel);
             }
         }

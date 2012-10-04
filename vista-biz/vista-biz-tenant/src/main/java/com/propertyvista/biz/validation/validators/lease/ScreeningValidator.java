@@ -33,6 +33,8 @@ public class ScreeningValidator implements EntityValidator<Customer> {
 
     private static final I18n i18n = I18n.get(ScreeningValidator.class);
 
+    public static final boolean screeningIsAutomaticallyFinalized = true;
+
     @Override
     public Set<ValidationFailure> validate(Customer entity) {
         if (!entity.personScreening().isNull()) {

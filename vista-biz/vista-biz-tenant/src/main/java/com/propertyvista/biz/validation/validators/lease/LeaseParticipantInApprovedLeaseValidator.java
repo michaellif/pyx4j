@@ -31,7 +31,10 @@ public class LeaseParticipantInApprovedLeaseValidator<E extends LeaseParticipant
         bind(proto().leaseCustomer().customer().person().name().lastName(), new NotNullValidator());
         bind(proto().leaseCustomer().customer().person().birthDate(), new NotNullValidator());
 
-        bind(proto().leaseCustomer().customer(), new ScreeningValidator());
+        // Screening is automatically finalized
+        if (!ScreeningValidator.screeningIsAutomaticallyFinalized) {
+            bind(proto().leaseCustomer().customer(), new ScreeningValidator());
+        }
     }
 
 }

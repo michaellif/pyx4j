@@ -49,6 +49,7 @@ import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.validators.lease.LeaseApprovalValidator;
+import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -307,13 +308,25 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     public PersonScreening retrivePersonScreeningId(Customer customer) {
-        if (customer.personScreening().getAttachLevel() == AttachLevel.Detached) {
-            Persistence.service().retrieveMember(customer.personScreening(), AttachLevel.IdOnly);
-        }
-        if (customer.personScreening().isNull()) {
-            return null;
+        if (ScreeningValidator.screeningIsAutomaticallyFinalized) {
+            EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customer));
+            criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
+            PersonScreening screening = Persistence.service().retrieve(criteria);
+            if ((screening != null) && (!screening.version().isNull())) {
+                screening.saveAction().setValue(SaveAction.saveAsFinal);
+                Persistence.service().persist(screening);
+            }
+            return screening;
         } else {
-            return customer.personScreening();
+            if (customer.personScreening().getAttachLevel() == AttachLevel.Detached) {
+                Persistence.service().retrieveMember(customer.personScreening(), AttachLevel.IdOnly);
+            }
+            if (customer.personScreening().isNull()) {
+                return null;
+            } else {
+                return customer.personScreening();
+            }
         }
     }
 
