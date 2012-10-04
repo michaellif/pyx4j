@@ -111,7 +111,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                         new EntitySelectorListDialog<LeaseParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Check"), true, result) {
                             @Override
                             public boolean onClickOk() {
-                                // TODO make the credit check happen
+                                ((LeaseApplicationViewerView.Presenter) getPresenter()).creditCheck(getSelectedItems());
                                 return true;
                             }
                         }.show();
@@ -240,6 +240,11 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
     @Override
     public void reportInviteUsersActionResult(String message) {
+        MessageDialog.info(message);
+    }
+
+    @Override
+    public void reportCreditCheckActionResult(String message) {
         MessageDialog.info(message);
     }
 }

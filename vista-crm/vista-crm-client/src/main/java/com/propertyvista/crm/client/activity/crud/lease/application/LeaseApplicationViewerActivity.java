@@ -69,6 +69,17 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
     }
 
     @Override
+    public void creditCheck(List<LeaseParticipant<?>> users) {
+        ((LeaseApplicationViewerCrudService) getService()).creditCheck(new DefaultAsyncCallback<String>() {
+            @Override
+            public void onSuccess(String message) {
+                populate();
+                ((LeaseApplicationViewerView) getView()).reportCreditCheckActionResult(message);
+            }
+        }, getEntityId(), new Vector<LeaseParticipant<?>>(users));
+    }
+
+    @Override
     public void applicationAction(final LeaseApplicationActionDTO action) {
         ((LeaseApplicationViewerCrudService) getService()).applicationAction(new DefaultAsyncCallback<VoidSerializable>() {
             @Override

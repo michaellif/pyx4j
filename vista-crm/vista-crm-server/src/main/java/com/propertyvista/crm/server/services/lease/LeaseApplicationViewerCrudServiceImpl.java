@@ -164,6 +164,12 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     }
 
     @Override
+    public void creditCheck(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant<?>> users) {
+        String successMessage = i18n.tr("Credit check has been proceeded successfully (DEMO)");
+        callback.onSuccess(successMessage);
+    }
+
+    @Override
     public void applicationAction(AsyncCallback<VoidSerializable> callback, LeaseApplicationActionDTO actionDTO) {
 
         switch (actionDTO.action().getValue()) {
@@ -181,10 +187,8 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             break;
         default:
             throw new IllegalArgumentException();
-
         }
         Persistence.service().commit();
         callback.onSuccess(null);
     }
-
 }

@@ -34,5 +34,7 @@ public interface LeaseApplicationViewerCrudService extends LeaseViewerCrudServic
      */
     void inviteUsers(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant<?>> users);
 
+    void creditCheck(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant<?>> users);
+
     void applicationAction(AsyncCallback<VoidSerializable> callback, LeaseApplicationActionDTO actionDTO);
 }
