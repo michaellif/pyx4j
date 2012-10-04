@@ -189,7 +189,7 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
             nameEditor.get(nameEditor.proto().firstName()).setValue("FirstnameG");
             nameEditor.get(nameEditor.proto().lastName()).setValue("LastnameG");
             get(proto().leaseCustomer().customer().person().birthDate()).setValue(new LogicalDate(80, 1, 1));
-            get(proto().role()).setValue(LeaseParticipant.Role.Applicant);
+            get(proto().relationship()).setValue(PersonRelationship.Grandfather);
         }
     }
 }

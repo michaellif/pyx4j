@@ -285,7 +285,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
             nameEditor.get(nameEditor.proto().lastName()).setValue("Lastname");
             get(proto().leaseCustomer().customer().person().birthDate()).setValue(new LogicalDate(80, 1, 1));
             get(proto().role()).setValue(LeaseParticipant.Role.Applicant);
-            get(proto().percentage()).setValue(new BigDecimal("100"));
+            get(proto().percentage()).setValue(new BigDecimal(1));
         }
     }
 }
