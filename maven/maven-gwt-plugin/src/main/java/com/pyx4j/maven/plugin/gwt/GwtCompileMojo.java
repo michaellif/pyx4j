@@ -83,10 +83,10 @@ public class GwtCompileMojo extends AbstractGWTMojo {
     /**
      * Add -strict parameter to the compiler command line.
      * 
-     * @parameter default-value="false"  expression="${gwt.compiler.strict}"
+     * @parameter default-value="false" expression="${gwt.compiler.strict}"
      */
     private boolean strict;
-    
+
     /**
      * GWT 2.0 Enable faster, but less-optimized, compilations
      * 
@@ -314,6 +314,11 @@ public class GwtCompileMojo extends AbstractGWTMojo {
             argList.add("-war");
             argList.add(this.webappDirectory.getAbsolutePath());
 
+            if (deploy != null) {
+                argList.add("-deploy");
+                argList.add(this.deploy.getAbsolutePath());
+            }
+
             if (workDir != null) {
                 argList.add("-workDir");
                 argList.add(this.workDir.getAbsolutePath());
@@ -342,7 +347,7 @@ public class GwtCompileMojo extends AbstractGWTMojo {
                 argList.add("-compileReport");
             }
             if (strict) {
-            	argList.add("-strict");
+                argList.add("-strict");
             }
             if (disableClassMetadata) {
                 argList.add("-XdisableClassMetadata");
