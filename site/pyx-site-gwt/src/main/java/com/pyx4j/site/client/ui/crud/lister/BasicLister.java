@@ -40,8 +40,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable;
-import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
@@ -362,11 +362,13 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
             sorts = (List<Sort>) getMemento().getObject(MementoKeys.sortingData.name());
         }
 
-        if (filters != null && filters.size() > 0) {
+        if (filters != null && !filters.isEmpty()) {
             setFilters(filters);
         }
 
-        setSorting(sorts);
+        if (sorts != null && !sorts.isEmpty()) {
+            setSorting(sorts);
+        }
 
         // should be called last:
         obtain(pageNumber);
