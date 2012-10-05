@@ -23,7 +23,6 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.validators.RegexValidator;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
@@ -142,10 +141,9 @@ public class CPersonalIdentityField extends CTextFieldBase<IPersonalIdentity, NP
                         // input didn't change - return as is
                         return value;
                     } else {
-                        IPersonalIdentity newValue = EntityFactory.create(IPersonalIdentity.class);
-                        newValue.newNumber().setValue(data);
-                        newValue.obfuscatedNumber().setValue(null);
-                        return newValue;
+                        value.newNumber().setValue(data);
+                        value.obfuscatedNumber().setValue(null);
+                        return value;
                     }
                 }
                 throw new ParseException(i18n.tr("Identity value is invalid for the given format."), 0);
