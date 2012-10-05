@@ -22,6 +22,8 @@ public class PmcProcessFactory {
         switch (triggerType) {
         case test:
             return new TestPmcProcess();
+
+// Billing-related:
         case billing:
             return new BillingProcess();
         case paymentsIssue:
@@ -36,16 +38,22 @@ public class PmcProcessFactory {
             return new PadReciveAcknowledgmentProcess();
         case paymentsPadReciveReconciliation:
             return new PadReciveReconciliationProcess();
+        case initializeFutureBillingCycles:
+            return new FutureBillingCycleInitializationProcess();
+
+// Lease-related:
+        case leaseActivation:
+            return new LeaseActivationProcess();
+        case leaseCompletion:
+            return new LeaseCompletionProcess();
+        case leaseRenewal:
+            return new LeaseRenewalProcess();
+
+// Misc:
         case cleanup:
             return new CleanupPmcProcess();
         case updateArrears:
             return new UpdateArrearsProcess();
-        case leaseActivation:
-            return new LeaseActivationProcess();
-        case leaseRenewal:
-            return new LeaseRenewalProcess();
-        case initializeFutureBillingCycles:
-            return new FutureBillingCycleInitializationProcess();
         case updatePaymentsSummary:
             // TODO: not sure if it should happen: return new PaymentsSummarySnapshotProcess();
         default:
