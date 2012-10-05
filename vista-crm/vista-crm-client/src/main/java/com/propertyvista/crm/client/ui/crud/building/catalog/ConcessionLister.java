@@ -13,8 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
@@ -59,5 +63,10 @@ public class ConcessionLister extends VersionedLister<Concession> {
             new MemberColumnDescriptor.Builder(proto().version().effectiveDate()).build(),
             new MemberColumnDescriptor.Builder(proto().version().expirationDate()).build()
         );//@formatter:on
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().version().type().getPath().toString(), false));
     }
 }

@@ -13,9 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.glcode;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
@@ -57,5 +61,10 @@ public class GlCodeCategoryLister extends ListerBase<GlCodeCategory> {
             new MemberColumnDescriptor.Builder(proto().description()).build(),
             new MemberColumnDescriptor.Builder(proto().glCodes()).build()
         );//@formatter:on
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().categoryId().getPath().toString(), false));
     }
 }

@@ -31,5 +31,4 @@ public class ParkingLister extends ListerBase<ParkingDTO> {
             new MemberColumnDescriptor.Builder(proto().totalSpaces()).build()
         );//@formatter:on
     }
-
 }

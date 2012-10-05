@@ -13,6 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
@@ -32,6 +36,7 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
             new MemberColumnDescriptor.Builder(proto().complexPrimary(), false).build(),
             new MemberColumnDescriptor.Builder(proto().externalId(), false).build(),
             new MemberColumnDescriptor.Builder(proto().propertyManager(), true).build(),
+            
             new MemberColumnDescriptor.Builder(proto().info().name(), true).build(),
             new MemberColumnDescriptor.Builder(proto().info().type(), true).build(),
             new MemberColumnDescriptor.Builder(proto().info().shape(), false).build(),
@@ -55,14 +60,22 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
             new MemberColumnDescriptor.Builder(proto().info().waterSupply(), false).build(),
             new MemberColumnDescriptor.Builder(proto().info().centralAir(), false).build(),
             new MemberColumnDescriptor.Builder(proto().info().centralHeat(), false).build(),
+            
             new MemberColumnDescriptor.Builder(proto().contacts().website(), false).build(),
+            
             new MemberColumnDescriptor.Builder(proto().financial().dateAcquired(), true).build(),
             new MemberColumnDescriptor.Builder(proto().financial().purchasePrice(), true).build(),
             new MemberColumnDescriptor.Builder(proto().financial().marketPrice(), false).build(),
             new MemberColumnDescriptor.Builder(proto().financial().lastAppraisalDate(), true).build(),
             new MemberColumnDescriptor.Builder(proto().financial().lastAppraisalValue(), true).build(),
             new MemberColumnDescriptor.Builder(proto().financial().currency().name(), false).title(proto().financial().currency()).build(),
+            
             new MemberColumnDescriptor.Builder(proto().marketing().name(), false).title(i18n.tr("Marketing Name")).build()
         ); //@formatter:on
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().propertyCode().getPath().toString(), false), new Sort(proto().propertyManager().getPath().toString(), false));
     }
 }

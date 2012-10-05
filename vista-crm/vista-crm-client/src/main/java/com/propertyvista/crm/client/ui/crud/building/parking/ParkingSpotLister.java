@@ -29,5 +29,4 @@ public class ParkingSpotLister extends ListerBase<ParkingSpot> {
         );//@formatter:on
 
     }
-
 }

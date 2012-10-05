@@ -13,6 +13,10 @@
  */
 package com.propertyvista.admin.client.ui.crud.adminusers;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
@@ -38,6 +42,11 @@ public class AdminUserListerViewImpl extends AdminListerViewImplBase<AdminUserDT
                     new MemberColumnDescriptor.Builder(proto().created()).build(),
                     new MemberColumnDescriptor.Builder(proto().credentialUpdated()).build()
             );//@formatter:on
+        }
+
+        @Override
+        public List<Sort> getDefaultSorting() {
+            return Arrays.asList(new Sort(proto().name().getPath().toString(), false), new Sort(proto().created().getPath().toString(), false));
         }
     }
 }

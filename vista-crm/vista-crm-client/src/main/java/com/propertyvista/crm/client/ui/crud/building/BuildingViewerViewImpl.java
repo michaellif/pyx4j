@@ -40,7 +40,6 @@ import com.propertyvista.crm.client.ui.crud.building.mech.ElevatorLister;
 import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
-import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
@@ -92,7 +91,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
         floorplanLister = new ListerInternalViewImplBase<FloorplanDTO>(new FloorplanLister());
 
-        unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new UnitLister(true));
+        unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new BuildingUnitLister(true));
 
         elevatorLister = new ListerInternalViewImplBase<ElevatorDTO>(new ElevatorLister());
         boilerLister = new ListerInternalViewImplBase<BoilerDTO>(new BoilerLister());

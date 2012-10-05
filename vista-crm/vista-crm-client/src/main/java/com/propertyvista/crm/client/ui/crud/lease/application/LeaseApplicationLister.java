@@ -13,9 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
@@ -65,6 +68,11 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
             
             new Builder(proto().currentTerm().version().tenants()).build()
         );//@formatter:on
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().leaseId().getPath().toString(), false));
     }
 
     @Override

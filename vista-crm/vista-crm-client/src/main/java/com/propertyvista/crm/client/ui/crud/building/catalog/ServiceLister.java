@@ -13,9 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog;
 
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
@@ -37,6 +40,11 @@ public class ServiceLister extends VersionedLister<Service> {
             new MemberColumnDescriptor.Builder(proto().version().name()).build(),
             new MemberColumnDescriptor.Builder(proto().version().visibility(), true).build()
         );//@formatter:on
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().version().serviceType().getPath().toString(), false));
     }
 
     @Override

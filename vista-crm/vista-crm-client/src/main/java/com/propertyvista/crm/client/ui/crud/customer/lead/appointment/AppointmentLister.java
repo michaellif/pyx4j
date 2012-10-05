@@ -13,6 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead.appointment;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
@@ -30,5 +34,10 @@ public class AppointmentLister extends ListerBase<Appointment> {
                 new MemberColumnDescriptor.Builder(proto().email()).build(),
                 new MemberColumnDescriptor.Builder(proto().status()).build()
         );//@formatter:on
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().date().getPath().toString(), false), new Sort(proto().time().getPath().toString(), false));
     }
 }

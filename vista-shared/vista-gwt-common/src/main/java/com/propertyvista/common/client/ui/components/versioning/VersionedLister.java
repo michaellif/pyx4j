@@ -13,11 +13,15 @@
  */
 package com.propertyvista.common.client.ui.components.versioning;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.i18n.annotations.I18n;
@@ -25,7 +29,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
 
-public class VersionedLister<E extends IEntity> extends ListerBase<E> {
+public class VersionedLister<E extends IVersionedEntity<?>> extends ListerBase<E> {
 
     @I18n(context = "Version Display Mode")
     public enum VersionDisplayMode {
@@ -80,5 +84,10 @@ public class VersionedLister<E extends IEntity> extends ListerBase<E> {
             break;
         }
         return super.updateCriteria(criteria);
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().version().versionNumber().getPath().toString(), false));
     }
 }

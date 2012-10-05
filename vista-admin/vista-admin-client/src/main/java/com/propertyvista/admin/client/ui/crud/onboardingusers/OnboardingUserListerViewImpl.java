@@ -13,6 +13,10 @@
  */
 package com.propertyvista.admin.client.ui.crud.onboardingusers;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
@@ -42,6 +46,11 @@ public class OnboardingUserListerViewImpl extends AdminListerViewImplBase<Onboar
                     new MemberColumnDescriptor.Builder(proto().created()).build(),
                     new MemberColumnDescriptor.Builder(proto().credentialUpdated(), false).build()
             );//@formatter:on
+        }
+
+        @Override
+        public List<Sort> getDefaultSorting() {
+            return Arrays.asList(new Sort(proto().pmc().namespace().getPath().toString(), false));
         }
     }
 }

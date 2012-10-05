@@ -13,6 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
@@ -52,5 +56,11 @@ public class BillingCycleBillLister extends ListerBase<BillDataDTO> {
             new MemberColumnDescriptor.Builder(proto().bill().recurringFeatureCharges(),false).build(),
             new MemberColumnDescriptor.Builder(proto().bill().oneTimeFeatureCharges(),false).build()
         );//@formatter:on
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().bill().executionDate().getPath().toString(), false), new Sort(proto().bill().dueDate().getPath().toString(),
+                false));
     }
 }

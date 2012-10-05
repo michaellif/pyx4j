@@ -137,6 +137,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
+        get(proto().externalId()).setVisible(!getValue().externalId().isNull());
+
         // tweak property code editing UI:
         if (isEditable()) {
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.propertyCode, get(proto().propertyCode()), getValue().getPrimaryKey());

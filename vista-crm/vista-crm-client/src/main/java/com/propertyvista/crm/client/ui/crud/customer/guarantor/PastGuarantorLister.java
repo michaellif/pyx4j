@@ -13,35 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.dto.GuarantorDTO;
-
-public class PastGuarantorLister extends ListerBase<GuarantorDTO> {
-
-    protected static final I18n i18n = I18n.get(PastGuarantorLister.class);
+public class PastGuarantorLister extends GuarantorLister {
 
     public PastGuarantorLister() {
-        super(GuarantorDTO.class, false);
-
-        setColumnDescriptors(//@formatter:off
-            new Builder(proto().leaseCustomer().customer().customerId(), false).build(),
-            
-            new Builder(proto().leaseCustomer().customer().person().name()).searchable(false).build(),
-            new Builder(proto().leaseCustomer().customer().person().name().firstName(), false).build(),
-            new Builder(proto().leaseCustomer().customer().person().name().lastName(), false).build(),
-            new Builder(proto().leaseCustomer().customer().person().sex()).build(),
-            new Builder(proto().leaseCustomer().customer().person().birthDate()).build(),
-            
-            new Builder(proto().leaseCustomer().customer().person().homePhone()).build(),
-            new Builder(proto().leaseCustomer().customer().person().mobilePhone()).build(),
-            new Builder(proto().leaseCustomer().customer().person().workPhone()).build(),
-            new Builder(proto().leaseCustomer().customer().person().email()).title("E-mail address").build(),
-            
-            new Builder(proto().leaseTermV().holder()).columnTitle(i18n.tr("Lease Term")).searchable(false).build(),
-            new Builder(proto().leaseTermV().holder().lease().leaseId()).searchableOnly().build()
-        );//@formatter:on
     }
 }

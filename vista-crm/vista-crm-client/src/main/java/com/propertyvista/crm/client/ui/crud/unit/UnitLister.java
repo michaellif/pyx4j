@@ -13,11 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -31,7 +35,7 @@ import com.propertyvista.dto.BuildingDTO;
 
 public class UnitLister extends ListerBase<AptUnitDTO> {
 
-    private static final I18n i18n = I18n.get(UnitLister.class);
+    public static final I18n i18n = I18n.get(UnitLister.class);
 
     public UnitLister() {
         this(true);
@@ -39,23 +43,34 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
 
     public UnitLister(boolean allowAddNew) {
         super(AptUnitDTO.class, allowAddNew);
+        setupColumns();
+    }
 
+    protected void setupColumns() {
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().buildingCode()).build(),
+                
                 new MemberColumnDescriptor.Builder(proto().floorplan().name()).title(i18n.tr("Floorplan Name")).build(),
-                new MemberColumnDescriptor.Builder(proto().floorplan().marketingName()).title(i18n.tr("Floorplan Marketing Name")).build(),
-                new MemberColumnDescriptor.Builder(proto().info().economicStatus()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto().floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
+                
                 new MemberColumnDescriptor.Builder(proto().info().floor()).build(),
                 new MemberColumnDescriptor.Builder(proto().info().number()).build(),
                 new MemberColumnDescriptor.Builder(proto().info().area()).build(),
                 new MemberColumnDescriptor.Builder(proto().info().areaUnits()).visible(false).build(),
                 new MemberColumnDescriptor.Builder(proto().info()._bedrooms()).build(),
                 new MemberColumnDescriptor.Builder(proto().info()._bathrooms()).build(),
+                new MemberColumnDescriptor.Builder(proto().info().economicStatus()).visible(false).build(),
+                
                 new MemberColumnDescriptor.Builder(proto().financial()._unitRent()).build(),
                 new MemberColumnDescriptor.Builder(proto().financial()._marketRent()).build(),
+                
                 new MemberColumnDescriptor.Builder(proto()._availableForRent()).build()
        );//@formatter:on
+    }
 
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().buildingCode().getPath().toString(), false), new Sort(proto().info().number().getPath().toString(), false));
     }
 
     @Override
