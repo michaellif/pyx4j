@@ -51,9 +51,17 @@ public abstract class AbstractGWTMojo extends AbstractMojo {
     /**
      * -war(-out) The directory to write output files into
      * 
-     * @parameter default-value="${project.build.directory}";
+     * @parameter default-value="${project.build.directory}/${project.build.finalName}";
      */
     protected File webappDirectory;
+
+    /**
+     * -deploy The directory into which deployable but not servable output files will be written (defaults to 'WEB-INF/deploy' under the webappDirectory
+     * directory/jar, and may be the same as the extra directory/jar)
+     * 
+     * @parameter
+     */
+    protected File deploy;
 
     /**
      * -gen The directory into which generated files will be written for review
