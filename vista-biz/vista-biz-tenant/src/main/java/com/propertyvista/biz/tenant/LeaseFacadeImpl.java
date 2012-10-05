@@ -544,6 +544,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         Persistence.secureSave(lease);
 
+// TODO: review with Artyom        
 //        ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey());
     }
 
@@ -560,6 +561,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         Persistence.secureSave(lease);
 
+// TODO: review with Artyom        
 //        ServerSideFactory.create(OccupancyFacade.class).cancelEndLease(lease.unit().getPrimaryKey());
 //        updateUnitRentPrice(lease);
 

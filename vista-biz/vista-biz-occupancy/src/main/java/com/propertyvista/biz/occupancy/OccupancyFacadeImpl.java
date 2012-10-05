@@ -426,6 +426,9 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             }
         });
         new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
+
+// TODO: review with Artyom        
+        updateUnitAvailableFrom(unitPk, null);
     }
 
     @Override
@@ -441,7 +444,9 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         Persistence.service().delete(delete);
         leasedSegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
         Persistence.secureSave(leasedSegment);
-        updateUnitAvailableFrom(unitPk, null);
+
+// TODO: review with Artyom        
+//        updateUnitAvailableFrom(unitPk, null);
         new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
     }
 
