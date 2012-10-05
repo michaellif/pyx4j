@@ -299,11 +299,24 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
     }
 
     public void setFilters(List<Criterion> filters) {
-        dataTablePanel.setFilters(filters);
+        if (filters != null) {
+            dataTablePanel.setFilters(filters);
+        } else {
+            dataTablePanel.resetFilters();
+        }
     }
 
     public void resetFilters() {
-        dataTablePanel.resetFilters();
+        setFilters(getDefaultFilters());
+    }
+
+    /**
+     * Override in descendants to supply desired set
+     * 
+     * @return default filter list (null);
+     */
+    public List<Criterion> getDefaultFilters() {
+        return null;
     }
 
     public List<Sort> getSorting() {
@@ -333,6 +346,19 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         }
     }
 
+    public void resetSorting() {
+        setSorting(getDefaultSorting());
+    }
+
+    /**
+     * Override in descendants to supply desired set
+     * 
+     * @return default sorting list (null);
+     */
+    public List<Sort> getDefaultSorting() {
+        return null;
+    }
+
     public void discard() {
         dataTablePanel.discard();
     }
@@ -353,8 +379,8 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
     @SuppressWarnings("unchecked")
     public void restoreState() {
         int pageNumber = 0;
-        List<Criterion> filters = null;
-        List<Sort> sorts = null;
+        List<Criterion> filters = getDefaultFilters();
+        List<Sort> sorts = getDefaultSorting();
 
         if (getMemento().mayRestore()) {
             pageNumber = getMemento().getInteger(MementoKeys.page.name());
@@ -362,13 +388,8 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
             sorts = (List<Sort>) getMemento().getObject(MementoKeys.sortingData.name());
         }
 
-        if (filters != null && !filters.isEmpty()) {
-            setFilters(filters);
-        }
-
-        if (sorts != null && !sorts.isEmpty()) {
-            setSorting(sorts);
-        }
+        setFilters(filters);
+        setSorting(sorts);
 
         // should be called last:
         obtain(pageNumber);
