@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.SecurityViolationException;
 
+import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -58,13 +59,24 @@ public class DashboardMetadataCrudServiceImpl extends AbstractCrudServiceImpl<Da
 
     @Override
     public void save(AsyncCallback<Key> callback, DashboardMetadata dashboardMetadata) {
+        DashboardMetadata oldDashboardMetadata = Persistence.secureRetrieve(DashboardMetadata.class, dashboardMetadata.getPrimaryKey());
+
+        // delete all shadow settings if required
+        if (oldDashboardMetadata.isShared().isBooleanTrue() & !dashboardMetadata.isShared().isBooleanTrue()) {
+            for (String gadgetId : new DashboardColumnLayoutFormat(dashboardMetadata.encodedLayout().getValue()).gadgetIds()) {
+                Util.gadgetStorage().deleteAll(gadgetId + ":%");
+            }
+        }
         super.save(callback, dashboardMetadata);
-        // TODO see if is shared status changed and delete all shadow gadgets
     }
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        // TODO delete ALL child gadgets
+        // delete all child gadgets
+        DashboardMetadata dm = Persistence.secureRetrieve(DashboardMetadata.class, entityId);
+        for (String gadgetId : new DashboardColumnLayoutFormat(dm.encodedLayout().getValue()).gadgetIds()) {
+            Util.gadgetStorage().deleteAll(gadgetId + "%");
+        }
         super.delete(callback, entityId);
     }
 
