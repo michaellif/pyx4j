@@ -108,7 +108,7 @@
         </init-param>
         <init-param>
             <param-name>ignoreUrls</param-name>
-            <param-value>/residents/*,/media/*,/site-resource/*,*.siteimgrc</param-value>
+            <param-value>/residents/*,/media/*,/o/*,*.siteimgrc</param-value>
         </init-param>
     </filter>
 
@@ -116,7 +116,6 @@
         <filter-name>wicket.site</filter-name>
         <url-pattern>/portal/*</url-pattern>
     </filter-mapping>
-
 
     <!-- Servlets -->
 
@@ -283,6 +282,11 @@
         <url-pattern>/o/sim-sim-otkroisa</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>VistaDevSessionServlet</servlet-name>
+        <url-pattern>/portal/o/sim-sim-otkroisa</url-pattern>
+    </servlet-mapping>
+    
     <servlet>
         <servlet-name>RemoteServiceServlet</servlet-name>
         <servlet-class>com.pyx4j.rpc.server.RemoteServiceServlet</servlet-class>
