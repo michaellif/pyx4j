@@ -96,6 +96,11 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     }
 
     @Override
+    public boolean isAppsContextlessDepoyment() {
+        return false;
+    }
+
+    @Override
     public String getApplicationURLNamespace() {
         return ".dev.birchwoodsoftwaregroup.com:8888/vista/";
     }

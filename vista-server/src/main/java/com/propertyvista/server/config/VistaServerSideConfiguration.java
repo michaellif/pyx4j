@@ -124,24 +124,43 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public boolean isAppsContextlessDepoyment() {
+        return true;
+    }
+
+    @Override
     public String getDefaultBaseURLresidentPortal(String pmcDnsName, boolean secure) {
+        String base;
         if (secure) {
-            return getApplicationDeploymentProtocol() + "://" + "portal" + getAppUrlSeparator() + pmcDnsName + getApplicationURLNamespace()
-                    + DeploymentConsts.PORTAL_URL;
+            base = getApplicationDeploymentProtocol() + "://" + "portal" + getAppUrlSeparator() + pmcDnsName + getApplicationURLNamespace();
         } else {
-            return "http" + "://" + "portal" + getAppUrlSeparator() + pmcDnsName + getApplicationURLNamespace() + DeploymentConsts.PORTAL_URL;
+            base = "http" + "://" + "portal" + getAppUrlSeparator() + pmcDnsName + getApplicationURLNamespace();
+        }
+        if (isAppsContextlessDepoyment()) {
+            return base;
+        } else {
+            return base + DeploymentConsts.PORTAL_URL;
         }
     }
 
     @Override
     public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
-        return getApplicationDeploymentProtocol() + "://" + "crm" + getAppUrlSeparator() + pmcDnsName + getApplicationURLNamespace() + DeploymentConsts.CRM_URL;
+        String base = getApplicationDeploymentProtocol() + "://" + "crm" + getAppUrlSeparator() + pmcDnsName + getApplicationURLNamespace();
+        if (isAppsContextlessDepoyment()) {
+            return base;
+        } else {
+            return base + DeploymentConsts.CRM_URL;
+        }
     }
 
     @Override
     public String getDefaultBaseURLprospectPortal(String pmcDnsName) {
-        return getApplicationDeploymentProtocol() + "://" + "pt" + getAppUrlSeparator() + pmcDnsName + getApplicationURLNamespace()
-                + DeploymentConsts.PTAPP_URL;
+        String base = getApplicationDeploymentProtocol() + "://" + "ptapp" + getAppUrlSeparator() + pmcDnsName + getApplicationURLNamespace();
+        if (isAppsContextlessDepoyment()) {
+            return base;
+        } else {
+            return base + DeploymentConsts.PTAPP_URL;
+        }
     }
 
     @Override

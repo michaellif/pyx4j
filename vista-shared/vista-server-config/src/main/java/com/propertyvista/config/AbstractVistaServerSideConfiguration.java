@@ -46,6 +46,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract String openIdProviderDomain();
 
+    public abstract boolean isAppsContextlessDepoyment();
+
     /**
      * This method should not be used directly since PMC may have custom DNS configuration
      * Use @see VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true);

@@ -118,6 +118,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public boolean isAppsContextlessDepoyment() {
+        return true;
+    }
+
+    @Override
     public String getDefaultBaseURLresidentPortal(String pmcDnsName, boolean secure) {
         String url = getMainApplicationURL() + "r";
         if (secure) {
