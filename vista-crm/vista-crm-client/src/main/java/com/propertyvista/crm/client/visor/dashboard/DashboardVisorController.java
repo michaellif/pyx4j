@@ -60,16 +60,22 @@ public class DashboardVisorController implements IDashboardVisorController {
 
     @Override
     public void saveDashboardMetadata() {
-        service.saveDashboardMetadata(new AsyncCallback<DashboardMetadata>() {
-            @Override
-            public void onSuccess(DashboardMetadata result) {
-            }
+        DashboardMetadata dm = view.getDashboardMetadata();
 
-            @Override
-            public void onFailure(Throwable caught) {
+        // the if statement is only for sake of defense programming, because a View shouldn't request save() when in ReadOnly mode
+        if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(dm.ownerUser().getPrimaryKey())) {
+            dm.gadgetMetadataList().clear(); // clear gadget metadata list it's only one way transportation
+            service.saveDashboardMetadata(new AsyncCallback<DashboardMetadata>() {
+                @Override
+                public void onSuccess(DashboardMetadata result) {
+                }
 
-            }
-        }, view.getDashboardMetadata());
+                @Override
+                public void onFailure(Throwable caught) {
+
+                }
+            }, dm);
+        }
     }
 
     @Override

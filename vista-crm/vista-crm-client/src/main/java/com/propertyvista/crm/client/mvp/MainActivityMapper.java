@@ -148,7 +148,7 @@ import com.propertyvista.crm.client.activity.crud.unit.UnitViewerActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementEditorActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementListerActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementViewerActivity;
-import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
+import com.propertyvista.crm.client.activity.dashboard.DashboardActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerActivity;
@@ -978,7 +978,7 @@ public class MainActivityMapper implements AppActivityMapper {
 
                     // Dashboard related stuff again
                 } else if (place instanceof CrmSiteMap.Dashboard.View) {
-                    activity = new DashboardViewActivity((CrmSiteMap.Dashboard.View) place);
+                    activity = new DashboardActivity((CrmSiteMap.Dashboard.View) place);
 
                 } else if (place instanceof CrmSiteMap.PasswordChange) {
                     activity = new PasswordChangeActivity(place);

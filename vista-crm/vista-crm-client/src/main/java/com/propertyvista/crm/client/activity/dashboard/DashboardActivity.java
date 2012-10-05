@@ -30,7 +30,7 @@ import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class DashboardViewActivity extends AbstractActivity implements DashboardView.Presenter {
+public class DashboardActivity extends AbstractActivity implements DashboardView.Presenter {
 
     private final DashboardMetadataService service = GWT.create(DashboardMetadataService.class);
 
@@ -38,7 +38,7 @@ public class DashboardViewActivity extends AbstractActivity implements Dashboard
 
     private final Key dashboardId;
 
-    public DashboardViewActivity(AppPlace place) {
+    public DashboardActivity(AppPlace place) {
         view = DashboardViewFactory.instance(DashboardView.class);
         dashboardId = getIdFromPlace(place);
     }
@@ -66,14 +66,18 @@ public class DashboardViewActivity extends AbstractActivity implements Dashboard
     @Override
     public void save() {
         DashboardMetadata dm = view.getDashboardMetadata();
-        dm.gadgetMetadataList().clear();
 
-        service.saveDashboardMetadata(new DefaultAsyncCallback<DashboardMetadata>() {
-            @Override
-            public void onSuccess(DashboardMetadata result) {
+        // the if statement is only for sake of defense programming, because a View shouldn't request save() when in ReadOnly mode
+        if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(dm.ownerUser().getPrimaryKey())) {
+            dm.gadgetMetadataList().clear();
 
-            }
-        }, dm);
+            service.saveDashboardMetadata(new DefaultAsyncCallback<DashboardMetadata>() {
+                @Override
+                public void onSuccess(DashboardMetadata result) {
+
+                }
+            }, dm);
+        }
     }
 
     @Override
