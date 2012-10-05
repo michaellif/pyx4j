@@ -165,7 +165,6 @@ public interface Lease extends IEntity {
 
     @NotNull
     @ToString(index = 0)
-    @Caption(name = "Id")
     @Length(14)
     @Indexed(uniqueConstraint = true, ignoreCase = true)
     @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)

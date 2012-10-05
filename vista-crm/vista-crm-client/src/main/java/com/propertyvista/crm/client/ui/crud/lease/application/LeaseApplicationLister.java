@@ -37,7 +37,7 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
         super(LeaseApplicationDTO.class, true);
 
         setColumnDescriptors(//@formatter:off
-            new Builder(proto().leaseId()).build(),
+            new Builder(proto().leaseId()).columnTitle(i18n.tr("Id")).build(),
             new Builder(proto().type()).build(),
             
             new Builder(proto().unit().building().propertyCode()).build(),

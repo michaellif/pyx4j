@@ -34,14 +34,16 @@ public class PastLeaseLister extends ListerBase<LeaseDTO> {
         super(LeaseDTO.class, false);
 
         setColumnDescriptors(//@formatter:off
-            new Builder(proto().unit().building().propertyCode()).build(),
-            new Builder(proto().unit()).build(),
-            
-            new Builder(proto().leaseId()).build(),
+            new Builder(proto().leaseId()).columnTitle(i18n.tr("Id")).build(),
             new Builder(proto().type()).build(),
+            
+            new Builder(proto().unit().building().propertyCode()).build(),
+            new Builder(proto().unit()).searchable(false).build(),
+            new Builder(proto().unit().info().number()).columnTitle(proto().unit().getMeta().getCaption()).searchableOnly().build(),
             
             new Builder(proto().status()).build(),
             new Builder(proto().completion()).build(),
+            new Builder(proto().billingAccount().accountNumber()).build(),
             
             new Builder(proto().leaseFrom()).build(),
             new Builder(proto().leaseTo()).build(),
@@ -53,9 +55,7 @@ public class PastLeaseLister extends ListerBase<LeaseDTO> {
             new Builder(proto().moveOutNotice(), false).build(),
             
             new Builder(proto().approvalDate(), false).build(),
-            new Builder(proto().creationDate(), false).build(),
-            
-            new Builder(proto().currentTerm().version().tenants()).build()
+            new Builder(proto().creationDate(), false).build()
         );//@formatter:on
     }
 
