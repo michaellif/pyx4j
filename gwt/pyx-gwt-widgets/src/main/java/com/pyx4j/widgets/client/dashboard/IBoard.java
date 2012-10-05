@@ -36,5 +36,7 @@ public interface IBoard extends IsWidget {
 
     void addEventHandler(BoardEvent handler);
 
+    void setReadOnly(boolean isReadOnly);
+
     IGadgetIterator getGadgetIterator();
 }

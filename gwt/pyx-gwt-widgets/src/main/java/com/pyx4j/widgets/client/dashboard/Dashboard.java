@@ -139,4 +139,9 @@ public class Dashboard extends SimplePanel implements IBoard, IBoardRoot {
             }
         }
     }
+
+    @Override
+    public void setReadOnly(boolean isReadOnly) {
+        dashboardLayoutPanel.setReadOnly(isReadOnly);
+    }
 }

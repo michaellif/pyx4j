@@ -85,6 +85,8 @@ final class GadgetHolder extends SimplePanel {
 
     private boolean inMenu = false;
 
+    protected boolean isReadOnly;
+
     // public interface:
     public IGadget getGadget() {
         return holdedGadget;
@@ -92,6 +94,7 @@ final class GadgetHolder extends SimplePanel {
 
     // internals:
     public GadgetHolder(IGadget gadget, PickupDragController gadgetDragController, IBoardRoot root) {
+        this.isReadOnly = false;
 
         this.holdedGadget = gadget;
         this.gadgetDragController = gadgetDragController;
@@ -160,6 +163,9 @@ final class GadgetHolder extends SimplePanel {
         this.gadgetDragController.addDragHandler(new DragHandler() {
             @Override
             public void onPreviewDragStart(DragStartEvent event) throws VetoDragException {
+                if (GadgetHolder.this.isReadOnly) {
+                    throw new VetoDragException();
+                }
             }
 
             @Override
@@ -178,6 +184,11 @@ final class GadgetHolder extends SimplePanel {
         });
     }
 
+    public void setReadOnly(boolean isReadOnly) {
+        caption.setStyleDependentName(CSSNames.StyleDependent.readonly.name(), isReadOnly);
+        this.isReadOnly = isReadOnly;
+    }
+
     private Widget createGadgetMenu() {
         final Image btn = new Image(images.WindowMenu());
         btn.getElement().getStyle().setCursor(Cursor.POINTER);
@@ -186,7 +197,7 @@ final class GadgetHolder extends SimplePanel {
             public void onClick(ClickEvent event) {
                 // show the menu:
                 final PopupPanel pp = new PopupPanel(true);
-                pp.setWidget(new GadgetMenu() {
+                pp.setWidget(new GadgetMenu(GadgetHolder.this.isReadOnly) {
                     @Override
                     protected void onItemSelected() {
                         pp.hide();
@@ -332,7 +343,11 @@ final class GadgetHolder extends SimplePanel {
 
     private abstract class GadgetMenu extends MenuBar {
 
-        GadgetMenu() {
+        /**
+         * @param isReadOnly
+         *            if <code>true</code> a menu will not contain commands that can change the state of the parent dashboard
+         */
+        GadgetMenu(boolean isReadOnly) {
             super(true);
             addStyleName(CSSNames.BASE_NAME + StyleSuffix.HolderMenu);
 
@@ -341,15 +356,15 @@ final class GadgetHolder extends SimplePanel {
                 addItem((isMinimized() ? i18n.tr("Expand") : i18n.tr("Minimize")), cmdMinimize);
             }
 
-            if (root instanceof Reportboard) {
+            if (!isReadOnly & (root instanceof Reportboard)) {
                 addItem(i18n.tr("Two Columns / One Column"), cmdExpand);
             }
 
-            if (!(isMinimized() || isMaximized())) {
+            if (!isReadOnly & !(isMinimized() || isMaximized())) {
                 addItem(i18n.tr("Delete"), cmdDelete);
             }
 
-            if (holdedGadget.isSetupable() && !inSetup && !isMinimized()) {
+            if (!isReadOnly & holdedGadget.isSetupable() && !inSetup && !isMinimized()) {
                 addSeparator();
                 addItem(i18n.tr("Setup"), cmdSetup);
             }

@@ -232,4 +232,9 @@ public class Reportboard extends SimplePanel implements IBoard, IBoardRoot {
         }
     }
 
+    @Override
+    public void setReadOnly(boolean isReadOnly) {
+        reportLayoutPanel.setReadOnly(isReadOnly);
+    }
+
 }

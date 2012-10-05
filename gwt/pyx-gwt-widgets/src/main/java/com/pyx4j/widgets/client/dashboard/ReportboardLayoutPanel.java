@@ -45,6 +45,17 @@ public class ReportboardLayoutPanel extends FlowPanel implements BoardEvent {
         setWidth("100%");
     }
 
+    public void setReadOnly(boolean isReadOnly) {
+        for (Widget cell : this) {
+            if (cell instanceof CellPanel) {
+                Widget w = ((CellPanel) cell).getWidget();
+                if (w instanceof GadgetHolder) {
+                    ((GadgetHolder) w).setReadOnly(isReadOnly);
+                }
+            }
+        }
+    }
+
     public void addGadget(Widget widget, Reportboard.Location location) {
         insertGadget(widget, location, getWidgetCount());
     }

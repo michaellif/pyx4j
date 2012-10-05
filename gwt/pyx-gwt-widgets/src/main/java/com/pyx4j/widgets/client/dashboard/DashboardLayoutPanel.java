@@ -63,6 +63,17 @@ class DashboardLayoutPanel extends FlowPanel implements BoardEvent {
         return refresh();
     }
 
+    public void setReadOnly(boolean isReadOnly) {
+        for (int i = 0; i < getColumnsCount(); ++i) {
+            for (int j = 0; j < getColumnPanel(i).getWidgetCount(); ++j) {
+                Widget w = getColumnPanel(i).getWidget(j);
+                if (w instanceof GadgetHolder) {
+                    ((GadgetHolder) w).setReadOnly(isReadOnly);
+                }
+            }
+        }
+    }
+
     // Widget manipulation: 
     public boolean addGadget(Widget widget) {
         return insertGadget(widget, 0, 0);

@@ -32,6 +32,6 @@ public class CSSNames {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        disabled, selected, hover, maximized
+        disabled, selected, hover, maximized, readonly
     }
 }
