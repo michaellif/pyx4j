@@ -30,7 +30,7 @@ public class DashboardManagementEditorViewImpl extends CrmEditorViewImplBase<Das
     private static final I18n i18n = I18n.get(DashboardManagementEditorViewImpl.class);
 
     public DashboardManagementEditorViewImpl() {
-        super(CrmSiteMap.Dashboard.Manage.class, new DashboardForm());
+        super(CrmSiteMap.Dashboard.Manage.class, new DashboardManagementForm());
     }
 
     @Override

@@ -20,6 +20,8 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 
+import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.ViewImplBase;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 
@@ -32,6 +34,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public class DashboardViewImpl extends ViewImplBase implements DashboardView {
 
+    private static final I18n i18n = I18n.get(DashboardViewImpl.class);
+
     private final BuildingsSelectionToolbar buildingsFilterProvider;
 
     private final AbstractDashboard dashboard;
@@ -42,14 +46,17 @@ public class DashboardViewImpl extends ViewImplBase implements DashboardView {
 
     public DashboardViewImpl() {
         this.buildingsFilterProvider = new BuildingsSelectionToolbar();
-        this.dashboard = new AbstractDashboard(buildingsFilterProvider, GWT.<IGadgetFactory> create(IGadgetFactory.class),
+        this.dashboard = new AbstractDashboard(//@formatter:off
+                buildingsFilterProvider,
+                GWT.<IGadgetFactory> create(IGadgetFactory.class),
                 LayoutManagersFactory.createLayoutManagers()) {
-
+            
             @Override
             protected void onDashboardMetadataChanged() {
                 presenter.save();
             }
-        };
+            
+        };//@formatter:on
 
         this.panel = new DockLayoutPanel(Unit.EM);
         this.panel.addNorth(buildingsFilterProvider, 2.5);
@@ -66,10 +73,19 @@ public class DashboardViewImpl extends ViewImplBase implements DashboardView {
     @Override
     public void setDashboardMetadata(DashboardMetadata dashboardMetadata) {
         if (dashboardMetadata != null) {
+            // this is awkward way to hide buildings bar because setVisible will not work propertly in DockLayoutPanel
             panel.setWidgetSize(buildingsFilterProvider, dashboardMetadata.type().getValue() == DashboardType.building ? 2.5 : 0.1);
+
             dashboard.setDashboardMetatdata(dashboardMetadata);
+
             setCaption(dashboardMetadata.name().getValue());
         }
+    }
+
+    @Override
+    public void setReadOnly(boolean isReadOnly) {
+        dashboard.setReadOnly(isReadOnly);
+        setCaption(SimpleMessageFormat.format("{0} {1}", dashboard.getDashboardMetadata().name().getValue(), isReadOnly ? i18n.tr("(read only)") : ""));
     }
 
     @Override

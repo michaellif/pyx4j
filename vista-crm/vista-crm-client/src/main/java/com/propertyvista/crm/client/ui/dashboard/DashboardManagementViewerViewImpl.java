@@ -21,7 +21,7 @@ public class DashboardManagementViewerViewImpl extends CrmViewerViewImplBase<Das
 
     public DashboardManagementViewerViewImpl() {
         super(CrmSiteMap.Dashboard.Manage.class);
-        setForm(new DashboardForm(true));
+        setForm(new DashboardManagementForm(true));
     }
 
 }

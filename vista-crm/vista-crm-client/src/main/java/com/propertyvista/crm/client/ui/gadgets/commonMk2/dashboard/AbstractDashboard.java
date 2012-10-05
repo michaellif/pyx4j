@@ -83,7 +83,14 @@ public abstract class AbstractDashboard extends ResizeComposite {
 
     protected ILayoutManager activeLayoutManger;
 
+    private Image printButton;
+
+    private HorizontalPanel actionsWidget;
+
+    private boolean isReadOnly;
+
     public AbstractDashboard(ICommonGadgetSettingsContainer container, IGadgetFactory gadgetDirectory, List<ILayoutManager> layoutManagers) {
+        this.isReadOnly = false;
         this.commonGadgetSettingsContainer = container;
         this.gadgetFactory = gadgetDirectory;
 
@@ -131,8 +138,22 @@ public abstract class AbstractDashboard extends ResizeComposite {
             }
         }
         updateLayoutButtons();
-        arrange(gadgets);
+        arrangeGadgets(gadgets);
         startGadgets();
+    }
+
+    /**
+     * Defines if the layout can be changed by user interaction.
+     * 
+     * @param isReadOnly
+     *            when <code>true</code> doesn't allow to rearrange or to add new gadgets interactively.
+     */
+    public void setReadOnly(boolean isReadOnly) {
+        this.isReadOnly = isReadOnly;
+        setLayoutModifyingControlsVisible(!isReadOnly);
+        if (board != null) {
+            board.setReadOnly(isReadOnly);
+        }
     }
 
     public DashboardMetadata getDashboardMetadata() {
@@ -151,7 +172,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
 
         activeLayoutManger = layoutManager;
         updateLayoutButtons();
-        arrange(gadgets);
+        arrangeGadgets(gadgets);
         propagateLayoutToMetadata();
     }
 
@@ -176,8 +197,9 @@ public abstract class AbstractDashboard extends ResizeComposite {
         return gadgets;
     }
 
-    private void arrange(List<IGadgetInstance> gadgets) {
+    private void arrangeGadgets(List<IGadgetInstance> gadgets) {
         board = activeLayoutManger.arrange(dashboardMetadata.encodedLayout().getValue(), gadgets);
+        board.setReadOnly(isReadOnly);
         board.addEventHandler(new BoardEvent() {
             @Override
             public void onEvent(Reason reason) {
@@ -202,7 +224,7 @@ public abstract class AbstractDashboard extends ResizeComposite {
     }
 
     private Widget createActionsWidget(List<ILayoutManager> layoutManagers) {
-        HorizontalPanel actionsWidget = new HorizontalPanel();
+        actionsWidget = new HorizontalPanel();
 
         layoutButtons = new HashMap<ILayoutManager, Image>();
         for (final ILayoutManager layoutManager : layoutManagers) {
@@ -254,34 +276,42 @@ public abstract class AbstractDashboard extends ResizeComposite {
             }
         });
 
-        final Image print = new Image(CrmImages.INSTANCE.dashboardPrint());
-        print.addMouseOverHandler(new MouseOverHandler() {
+        printButton = new Image(CrmImages.INSTANCE.dashboardPrint());
+        printButton.addMouseOverHandler(new MouseOverHandler() {
             @Override
             public void onMouseOver(MouseOverEvent event) {
-                print.setResource(CrmImages.INSTANCE.dashboardPrintHover());
+                printButton.setResource(CrmImages.INSTANCE.dashboardPrintHover());
             }
         });
-        print.addMouseOutHandler(new MouseOutHandler() {
+        printButton.addMouseOutHandler(new MouseOutHandler() {
             @Override
             public void onMouseOut(MouseOutEvent event) {
-                print.setResource(CrmImages.INSTANCE.dashboardPrint());
+                printButton.setResource(CrmImages.INSTANCE.dashboardPrint());
             }
         });
-        print.addClickHandler(new ClickHandler() {
+        printButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 onPrintRequested();
             }
         });
-        print.getElement().getStyle().setCursor(Cursor.POINTER);
+        printButton.getElement().getStyle().setCursor(Cursor.POINTER);
 
         actionsWidget.add(new HTML("&nbsp;&nbsp;&nbsp;&nbsp;"));
         actionsWidget.add(addGadget);
 
-        actionsWidget.add(print);
+        actionsWidget.add(printButton);
         actionsWidget.setSpacing(4);
 
         return actionsWidget;
+    }
+
+    private void setLayoutModifyingControlsVisible(boolean isVisible) {
+        for (Widget w : actionsWidget) {
+            if (!w.equals(printButton)) {
+                w.setVisible(isVisible);
+            }
+        }
     }
 
     private void updateLayoutButtons() {

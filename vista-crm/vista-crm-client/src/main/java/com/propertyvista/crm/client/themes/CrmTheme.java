@@ -447,6 +447,10 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("cursor", "move");
         addStyle(style);
 
+        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption, CSSNames.StyleDependent.readonly));
+        style.addProperty("cursor", "default");
+        addStyle(style);
+
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption) + ":hover");
         addStyle(style);
 

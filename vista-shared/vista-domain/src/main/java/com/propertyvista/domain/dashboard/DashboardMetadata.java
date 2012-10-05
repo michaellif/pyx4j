@@ -71,7 +71,6 @@ public interface DashboardMetadata extends ISharedUserEntity {
         }
     }
 
-    @ToString(index = 1)
     @MemberColumn(name = "dashboardType")
     IPrimitive<DashboardType> type();
 

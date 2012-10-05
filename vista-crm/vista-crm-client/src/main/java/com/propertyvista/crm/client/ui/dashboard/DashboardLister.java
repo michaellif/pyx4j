@@ -18,6 +18,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
@@ -31,7 +32,7 @@ public class DashboardLister extends ListerBase<DashboardMetadata> {
 
     public DashboardLister() {
         super(DashboardMetadata.class, true);
-        getDataTablePanel().setFilteringEnabled(false);
+        getDataTablePanel().setFilteringEnabled(true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 
         addActionItem(new Button(i18n.tr("Delete Checked"), new ClickHandler() {
@@ -41,7 +42,11 @@ public class DashboardLister extends ListerBase<DashboardMetadata> {
                     @Override
                     public void onConfirmed() {
                         for (DashboardMetadata item : getDataTablePanel().getDataTable().getCheckedItems()) {
-                            getPresenter().delete(item.getPrimaryKey());
+                            if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(item.ownerUser().getPrimaryKey())) {
+                                getPresenter().delete(item.getPrimaryKey());
+                            } else {
+                                MessageDialog.info(i18n.tr("You must be owner of dashboard \"{0}\" to delete it", item.name().getValue()));
+                            }
                         }
                     }
 
@@ -56,6 +61,7 @@ public class DashboardLister extends ListerBase<DashboardMetadata> {
             new MemberColumnDescriptor.Builder(proto().type()).build(),
             new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().isShared()).build(),
+            new MemberColumnDescriptor.Builder(proto().ownerUser()).title(i18n.tr("Owner")).build(),
             new MemberColumnDescriptor.Builder(proto().description()).build()
         );//@formatter:on
     }

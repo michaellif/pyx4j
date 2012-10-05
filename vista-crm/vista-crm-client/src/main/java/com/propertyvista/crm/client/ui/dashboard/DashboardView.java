@@ -37,4 +37,6 @@ public interface DashboardView extends IView {
     DashboardMetadata getDashboardMetadata();
 
     Vector<Building> getSelectedBuildingsStubs();
+
+    void setReadOnly(boolean isReadOnly);
 }

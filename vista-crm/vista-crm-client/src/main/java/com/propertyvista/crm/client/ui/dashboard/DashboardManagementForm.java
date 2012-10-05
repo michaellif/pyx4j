@@ -20,15 +20,15 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class DashboardForm extends CrmEntityForm<DashboardMetadata> {
+public class DashboardManagementForm extends CrmEntityForm<DashboardMetadata> {
 
-    private static final I18n i18n = I18n.get(DashboardForm.class);
+    private static final I18n i18n = I18n.get(DashboardManagementForm.class);
 
-    public DashboardForm() {
+    public DashboardManagementForm() {
         this(false);
     }
 
-    public DashboardForm(boolean viewMode) {
+    public DashboardManagementForm(boolean viewMode) {
         super(DashboardMetadata.class, viewMode);
     }
 
@@ -41,6 +41,8 @@ public class DashboardForm extends CrmEntityForm<DashboardMetadata> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 40).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isShared()), 3).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ownerUser().name()), 15).customLabel(i18n.tr("Owner")).build());
+        (get(proto().ownerUser().name())).setViewable(true);
 
         selectTab(addTab(content));
     }

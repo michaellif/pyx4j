@@ -98,4 +98,8 @@ public class DashboardVisorView extends Composite {
         eventBus.fireEvent(new BuildingSelectionChangedEvent(buildingsFilter));
     }
 
+    public void setReadOnly(boolean isReadOnly) {
+        this.dashboard.setReadOnly(isReadOnly);
+    }
+
 }

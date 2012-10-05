@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -56,6 +57,7 @@ public class DashboardViewActivity extends AbstractActivity implements Dashboard
             @Override
             public void onSuccess(DashboardMetadata result) {
                 view.setDashboardMetadata(result);
+                view.setReadOnly(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(result.ownerUser().getPrimaryKey()));
             }
 
         }, dashboardId);
@@ -64,8 +66,7 @@ public class DashboardViewActivity extends AbstractActivity implements Dashboard
     @Override
     public void save() {
         DashboardMetadata dm = view.getDashboardMetadata();
-//        // we don't need to tranfer the gadgets list: this field is only used one way (from server to client)
-//        dm.gadgetMetadataList().clear();
+        dm.gadgetMetadataList().clear();
 
         service.saveDashboardMetadata(new DefaultAsyncCallback<DashboardMetadata>() {
             @Override

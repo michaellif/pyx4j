@@ -20,6 +20,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.crud.IView;
 
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.DashboardPrinterDialog;
@@ -28,6 +30,8 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class DashboardVisorController implements IDashboardVisorController {
+
+    private static final I18n i18n = I18n.get(DashboardVisorController.class);
 
     private final DashboardVisorView view;
 
@@ -76,11 +80,14 @@ public class DashboardVisorController implements IDashboardVisorController {
     private void populate(final IView parentView) {
         service.retrieveMetadata(new AsyncCallback<DashboardMetadata>() {
             @Override
-            public void onSuccess(DashboardMetadata result) {
+            public void onSuccess(DashboardMetadata dashboardMetadata) {
                 view.setBuildings(buildings);
-                view.populate(result);
+                view.populate(dashboardMetadata);
 
-                parentView.showVisor(getView(), dashboardStub.name().getValue());
+                boolean isReadOnly = !ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(dashboardMetadata.ownerUser().getPrimaryKey());
+                view.setReadOnly(isReadOnly);
+                String readOnlyWarning = isReadOnly ? " " + i18n.tr("(read only)") : "";
+                parentView.showVisor(getView(), dashboardStub.name().getValue() + readOnlyWarning);
             }
 
             @Override
