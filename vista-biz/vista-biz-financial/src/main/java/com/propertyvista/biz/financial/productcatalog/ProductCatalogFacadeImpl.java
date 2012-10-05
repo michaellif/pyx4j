@@ -13,19 +13,11 @@
  */
 package com.propertyvista.biz.financial.productcatalog;
 
-import java.math.BigDecimal;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class ProductCatalogFacadeImpl implements ProductCatalogFacade {
@@ -48,39 +40,5 @@ public class ProductCatalogFacadeImpl implements ProductCatalogFacade {
         } else {
             log.info("productCatalog feature disabled");
         }
-    }
-
-    /*
-     * TODO Move to LeaseFacade
-     */
-    @Deprecated
-    @Override
-    public void updateUnitRentPrice(Lease lease) {
-        Persistence.service().retrieve(lease.unit());
-
-        BigDecimal origPrice = lease.unit().financial()._unitRent().getValue();
-        BigDecimal currentPrice = getUnitRentPrice(lease.unit());
-
-        if ((origPrice != null && !origPrice.equals(currentPrice)) || (origPrice == null && currentPrice != null)) {
-            lease.unit().financial()._unitRent().setValue(currentPrice);
-            Persistence.service().merge(lease.unit());
-            Persistence.service().commit();
-        }
-    }
-
-    /*
-     * Move to LeaseFacade
-     */
-    @Deprecated
-    public BigDecimal getUnitRentPrice(AptUnit unit) {
-        EntityQueryCriteria<Lease> leaseCriteria = new EntityQueryCriteria<Lease>(Lease.class);
-        leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit(), unit));
-        Lease lease = Persistence.service().retrieve(leaseCriteria);
-        if (lease != null && !lease.currentTerm().version().leaseProducts().isNull()
-                && !lease.currentTerm().version().leaseProducts().serviceItem().isNull()) {
-            //TODO add concessions and adjustments
-            return lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue();
-        }
-        return null;
     }
 }

@@ -15,18 +15,10 @@ package com.propertyvista.biz.financial.productcatalog;
 
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface ProductCatalogFacade {
 
     void updateUnitMarketPrice(Building building);
 
     void updateUnitMarketPrice(Service service);
-
-    /*
-     * TODO Move to LeaseFacade
-     */
-    @Deprecated
-    void updateUnitRentPrice(Lease lease);
-
 }

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.tenant;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -43,7 +44,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
-import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
@@ -288,7 +288,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
         finalize(lease);
 
         ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
-        ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
+
+        updateUnitRentPrice(lease);
+
         Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
         if (bill.billStatus().getValue() != Bill.BillStatus.Failed) {
             ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
@@ -387,10 +389,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.status().setValue(Lease.Status.Approved);
         lease.approvalDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
 
-        ServerSideFactory.create(OccupancyFacade.class).migratedApprove(lease.unit().<AptUnit> createIdentityStub());
-        ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
-
         finalize(lease);
+
+        ServerSideFactory.create(OccupancyFacade.class).migratedApprove(lease.unit().<AptUnit> createIdentityStub());
+
+        updateUnitRentPrice(lease);
 
         Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
         if (bill.billStatus().getValue() != Bill.BillStatus.Failed) {
@@ -460,6 +463,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.status().setValue(Status.Completed);
 
         Persistence.secureSave(lease);
+
+        ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey());
     }
 
     @Override
@@ -539,7 +544,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         Persistence.secureSave(lease);
 
-        ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey());
+//        ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey());
     }
 
     @Override
@@ -555,7 +560,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         Persistence.secureSave(lease);
 
-        ServerSideFactory.create(OccupancyFacade.class).cancelEndLease(lease.unit().getPrimaryKey());
+//        ServerSideFactory.create(OccupancyFacade.class).cancelEndLease(lease.unit().getPrimaryKey());
+//        updateUnitRentPrice(lease);
 
         // TODO: add notes with decisionReason!!!
     }
@@ -910,6 +916,24 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         return leaseTerm;
+    }
+
+    private void updateUnitRentPrice(Lease lease) {
+        if (lease.unit().isValueDetached()) {
+            Persistence.service().retrieve(lease.unit());
+        }
+
+        BigDecimal origPrice = lease.unit().financial()._unitRent().getValue();
+        BigDecimal currentPrice = null;
+        if (!lease.currentTerm().version().isNull() && !lease.currentTerm().version().leaseProducts().serviceItem().isNull()) {
+            currentPrice = lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue();
+        }
+
+        if ((origPrice != null && !origPrice.equals(currentPrice)) || (origPrice == null && currentPrice != null)) {
+            lease.unit().financial()._unitRent().setValue(currentPrice);
+            Persistence.service().merge(lease.unit());
+            Persistence.service().commit();
+        }
     }
 
     @Override
