@@ -15,13 +15,13 @@ package com.propertyvista.portal.rpc;
 
 public interface DeploymentConsts {
 
-    public static final String PORTAL_URL = "";
+    public static final String PORTAL_URL = "portal/";
 
     public static final String PTAPP_URL = "ptapp/";
 
     public static final String CRM_URL = "crm/";
 
-    public static final String TENANT_URL = "residents/";
+    public static final String TENANT_URL = "portal/residents/";
 
     public static final String ADMIN_URL = "admin/";
 

@@ -22,7 +22,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import templates.TemplateResources;
@@ -121,14 +120,7 @@ public class TermsAcceptancePage extends BasePage {
             @Override
             public void onSubmit() {
                 // redirect to target
-                String targetUrl = getPage().getPageParameters().get(PMSiteApplication.ParamNameTarget).toString();
-                if (targetUrl == null || targetUrl.length() == 0) {
-                    setResponsePage(getApplication().getHomePage());
-                } else {
-                    // get path relative to context root
-                    String toRoot = PMSiteApplication.get().getPathToRoot();
-                    throw new RedirectToUrlException(toRoot + targetUrl);
-                }
+                PMSiteApplication.get().redirectToTarget();
             }
         });
     }

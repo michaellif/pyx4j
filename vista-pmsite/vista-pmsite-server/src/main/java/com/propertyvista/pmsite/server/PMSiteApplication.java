@@ -158,16 +158,14 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
                 StringValue lang = info.getPageParameters().get(ParamNameLang);
                 if (!lang.isEmpty()) {
                     ((PMSiteWebRequest) request).setSiteLocale(lang.toString());
-                    // If given lang not supported the above method will use default locale,
-                    // and we will need to redirect to corresponding url
-                    String siteLang = ((PMSiteWebRequest) request).getSiteLocale().lang().getValue().getLanguage();
-                    if (!lang.toString().equalsIgnoreCase(siteLang)) {
-                        PageParameters newParams = new PageParameters(info.getPageParameters());
-                        newParams.set(ParamNameLang, siteLang);
-                        info = new UrlInfo(info.getPageComponentInfo(), info.getPageClass(), newParams);
-                    }
-                } else {
-                    throw new RuntimeException("Missing site locale");
+                }
+                // If given lang is not supported the above method will set the default locale,
+                // and we will need to redirect to corresponding url
+                String siteLang = ((PMSiteWebRequest) request).getSiteLocale().lang().getValue().getLanguage();
+                if (lang.isEmpty() || !lang.toString().equalsIgnoreCase(siteLang)) {
+                    PageParameters newParams = new PageParameters(info.getPageParameters());
+                    newParams.set(ParamNameLang, siteLang);
+                    info = new UrlInfo(info.getPageComponentInfo(), info.getPageClass(), newParams);
                 }
             }
             return info;
@@ -292,12 +290,6 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         return internalError;
     }
 
-    // get path to context root
-    public String getPathToRoot() {
-        HttpServletRequest req = ((ServletWebRequest) RequestCycle.get().getRequest()).getContainerRequest();
-        return req.getServletPath().replaceAll("/+[^/]*", "../").replaceFirst("../", "");
-    }
-
     @Override
     public IRequestCycleProvider getRequestCycleProvider() {
         return super.getRequestCycleProvider();
@@ -383,6 +375,29 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         // remove auth token if present
         target.removeQueryParameters(AuthenticationService.AUTH_TOKEN_ARG);
         return target.toString();
+    }
+
+    // get path to context root
+    private String getPathToRoot() {
+        HttpServletRequest req = ((ServletWebRequest) RequestCycle.get().getRequest()).getContainerRequest();
+        return req.getServletPath().replaceAll("/+[^/]*", "../").replaceFirst("../", "");
+    }
+
+    public void redirectToTarget() {
+        String targetUrl = RequestCycle.get().getRequest().getRequestParameters().getParameterValue(PMSiteApplication.ParamNameTarget).toString();
+        if (targetUrl == null || targetUrl.length() == 0) {
+            throw new RestartResponseException(getHomePage());
+        } else {
+            // get path relative to context root
+            String toRoot = getPathToRoot();
+            String servletPath = RequestCycle.get().getRequest().getFilterPath();
+            if (servletPath.startsWith("/")) {
+                servletPath = servletPath.substring(1);
+            }
+            toRoot += servletPath + "/" + targetUrl;
+            throw new RedirectToUrlException(toRoot + "");
+        }
+
     }
 
     // we want to use target url parameter to avoid storing it in session

@@ -108,13 +108,13 @@
         </init-param>
         <init-param>
             <param-name>ignoreUrls</param-name>
-            <param-value>/o/*,/public/*,/static/*,/static-errors/*,/media/*,*.siteimgrc,/admin/*,/crm/*,/portal/*,/ptapp/*,/interfaces/*,/demo/*</param-value>
+            <param-value>/portal/srv/*</param-value>
         </init-param>
     </filter>
 
     <filter-mapping>
         <filter-name>wicket.site</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/portal/*</url-pattern>
     </filter-mapping>
 
 

@@ -30,7 +30,6 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestParameters;
-import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -178,7 +177,7 @@ public final class PwdChangePage extends BasePage {
                     public void onSuccess(AuthenticationResponse result) {
                         // success - restart wicket session and redirect to target
                         PMSiteSession.get().signIn(null, null);
-                        redirectToTarget();
+                        PMSiteApplication.get().redirectToTarget();
                     }
 
                     @Override
@@ -191,7 +190,7 @@ public final class PwdChangePage extends BasePage {
                     @Override
                     public void onSuccess(VoidSerializable result) {
                         // success - redirect to target
-                        redirectToTarget();
+                        PMSiteApplication.get().redirectToTarget();
                     }
 
                     @Override
@@ -212,18 +211,6 @@ public final class PwdChangePage extends BasePage {
             error(caught.getMessage());
         } else {
             error(i18n.tr("Action failed. Please try again later."));
-        }
-    }
-
-    private void redirectToTarget() {
-        // Success - redirect to target page
-        String targetUrl = getPage().getPageParameters().get(PMSiteApplication.ParamNameTarget).toString();
-        if (targetUrl == null || targetUrl.length() == 0) {
-            setResponsePage(ResidentsPage.class);
-        } else {
-            // get path relative to context root
-            String toRoot = PMSiteApplication.get().getPathToRoot();
-            throw new RedirectToUrlException(toRoot + targetUrl);
         }
     }
 }

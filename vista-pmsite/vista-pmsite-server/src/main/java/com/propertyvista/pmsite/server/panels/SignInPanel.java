@@ -40,7 +40,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestParameters;
-import org.apache.wicket.request.flow.RedirectToUrlException;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -238,15 +237,8 @@ public class SignInPanel extends Panel {
                 } else {
                     strategy.remove();
                 }
-
-                String targetUrl = getPage().getPageParameters().get(PMSiteApplication.ParamNameTarget).toString();
-                if (targetUrl == null || targetUrl.length() == 0) {
-                    setResponsePage(getApplication().getHomePage());
-                } else {
-                    // get path relative to context root
-                    String toRoot = PMSiteApplication.get().getPathToRoot();
-                    throw new RedirectToUrlException(toRoot + targetUrl);
-                }
+                // redirect to target url
+                PMSiteApplication.get().redirectToTarget();
             } else {
                 strategy.remove();
             }
