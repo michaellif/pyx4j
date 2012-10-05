@@ -100,6 +100,7 @@ public interface PaymentRecord extends IEntity {
     @JoinColumn
     BillingAccount billingAccount();
 
+    @SuppressWarnings("rawtypes")
     @NotNull
     @Detached
     LeaseParticipant leaseParticipant();

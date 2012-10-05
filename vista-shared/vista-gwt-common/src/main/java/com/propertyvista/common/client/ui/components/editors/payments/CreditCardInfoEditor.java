@@ -23,7 +23,6 @@ import com.google.gwt.view.client.Range;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -47,6 +46,7 @@ import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.domain.payment.CreditCardNumberIdentity;
 import com.propertyvista.domain.util.ValidationUtils;
 
 public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo> {
@@ -106,9 +106,9 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
             }
         });
 
-        get(proto().card()).addValueChangeHandler(new ValueChangeHandler<IPersonalIdentity>() {
+        get(proto().card()).addValueChangeHandler(new ValueChangeHandler<CreditCardNumberIdentity>() {
             @Override
-            public void onValueChange(ValueChangeEvent<IPersonalIdentity> event) {
+            public void onValueChange(ValueChangeEvent<CreditCardNumberIdentity> event) {
                 get(proto().card()).setMandatory(true);
                 get(proto().securityCode()).setMandatory(true);
             }
