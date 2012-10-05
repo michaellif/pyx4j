@@ -103,12 +103,12 @@ public class ServletUtils {
         return receivingURL;
     }
 
-    public static String getActualRequestContextPath(HttpServletRequest request) {
+    public static String getActualRequestContextPath(HttpServletRequest request, String path) {
         String forwardedContext = request.getHeader("x-forwarded-context");
         if (forwardedContext == null) {
-            return request.getContextPath();
+            return request.getContextPath() + path;
         } else {
-            return forwardedContext;
+            return (request.getContextPath() + path).substring(forwardedContext.length());
         }
     }
 
