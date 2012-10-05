@@ -31,6 +31,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.PublicVisibilityType;
@@ -360,13 +361,11 @@ public class PMSiteContentManager implements Serializable {
     }
 
     /*
-     * Media images rendered by media servlet at /contextPath/media/{id}/{size}.jpg
+     * Media images rendered by media servlet at /contextPath/portal/media/{id}/{size}.jpg
      * We want to build a relative! path from the current page down to the servlet root
      */
     public static String getContextPath() {
-        String servletPath = com.pyx4j.server.contexts.Context.getRequest().getServletPath();
-        // shift back for every path segment; then remove one segment - for the script name
-        return servletPath.replaceAll("/+[^/]*", "../").replaceFirst("../", "");
+        return ServletUtils.getActualRequestContextPath(com.pyx4j.server.contexts.Context.getRequest()) + "/" + DeploymentConsts.PORTAL_URL;
     }
 
     public static String getMediaImgUrl(long mediaId, ThumbnailSize size) {

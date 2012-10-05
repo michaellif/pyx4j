@@ -80,7 +80,8 @@
                             <module>${gwtModuleCompile}</module>
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
-                            <webappDirectory>${gwtDestinationWarFolder}</webappDirectory>
+                            <webappDirectory>${gwtDestinationWarFolder}/portal</webappDirectory>
+                            <deploy>${gwtDestinationWarFolder}/WEB-INF/deploy</deploy>
                             <generated>${project.build.directory}/gwt-generated</generated>
                             <extra>${project.build.directory}/gwt-extra</extra>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
