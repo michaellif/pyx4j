@@ -199,6 +199,16 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
+    public void closeLease(String decisionReason) {
+        ((LeaseViewerCrudService) getService()).closeLease(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, getEntityId(), decisionReason);
+    }
+
+    @Override
     public void cancelLease(String decisionReason) {
         ((LeaseViewerCrudService) getService()).cancelLease(new DefaultAsyncCallback<VoidSerializable>() {
             @Override

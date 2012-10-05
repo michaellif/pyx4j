@@ -84,6 +84,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem activateAction;
 
+    private final MenuItem closeAction;
+
     private final MenuItem cancelAction;
 
     private final Button renewButton;
@@ -197,6 +199,20 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addAction(activateAction);
 
+        closeAction = new MenuItem(i18n.tr("Close"), new Command() {
+            @Override
+            public void execute() {
+                new ReasonBox(i18n.tr("Close Lease")) {
+                    @Override
+                    public boolean onClickOk() {
+                        ((LeaseViewerView.Presenter) getPresenter()).closeLease(getReason());
+                        return true;
+                    }
+                }.show();
+            }
+        });
+        addAction(closeAction);
+
         cancelAction = new MenuItem(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
@@ -263,6 +279,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(evictAction, false);
         setActionVisible(cancelEvictAction, false);
         setActionVisible(activateAction, false);
+        setActionVisible(closeAction, false);
         setActionVisible(cancelAction, false);
         super.reset();
     }
@@ -284,6 +301,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             setActionVisible(evictAction, status == Status.Active && completion == null);
             setActionVisible(cancelEvictAction, completion == CompletionType.Eviction && status != Status.Closed);
             setActionVisible(activateAction, status == Status.ExistingLease);
+            setActionVisible(closeAction, status == Status.Completed);
             setActionVisible(cancelAction, !status.isFormer());
 
             renewButton.setVisible(status == Status.Active && completion == null && value.nextTerm().isNull());

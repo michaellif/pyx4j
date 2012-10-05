@@ -45,6 +45,8 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void activate();
 
+        void closeLease(String decisionReason);
+
         void cancelLease(String decisionReason);
 
         void createOffer(LeaseTerm.Type type);

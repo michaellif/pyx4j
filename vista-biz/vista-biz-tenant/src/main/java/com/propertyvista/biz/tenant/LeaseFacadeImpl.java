@@ -556,6 +556,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Persistence.secureSave(lease);
 
         ServerSideFactory.create(OccupancyFacade.class).cancelEndLease(lease.unit().getPrimaryKey());
+
+        // TODO: add notes with decisionReason!!!
     }
 
     @Override
@@ -587,6 +589,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         default:
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
+
+        // TODO: add notes with decisionReason!!!
     }
 
     // internals:
