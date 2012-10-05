@@ -18,8 +18,12 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.forms.client.events.DevShortcutEvent;
+import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -95,5 +99,25 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
                 }
             }
         });
+
+        if (ApplicationMode.isDevelopment()) {
+            this.addDevShortcutHandler(new DevShortcutHandler() {
+                @Override
+                public void onDevShortcut(DevShortcutEvent event) {
+                    if (event.getKeyCode() == 'Q') {
+                        event.consume();
+                        devGenerateEcheck();
+                    }
+                }
+
+            });
+        }
+    }
+
+    private void devGenerateEcheck() {
+        get(proto().nameOn()).setValue("Dev");
+        get(proto().bankId()).setValue("123");
+        get(proto().branchTransitNumber()).setValue("12345");
+        ((CTextFieldBase<?, ?>) get(proto().accountNo())).setValueByString("2345 6789");
     }
 }
