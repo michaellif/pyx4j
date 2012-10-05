@@ -16,6 +16,7 @@ package com.propertyvista.domain.dashboard.gadgets.type.base;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -24,6 +25,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.security.CrmUser;
 
 @Transient
 @Inheritance
@@ -75,5 +77,11 @@ public interface GadgetMetadata extends ISharedUserEntity {
     IPrimitive<String> gadgetId();
 
     @Detached
+    @ReadOnly(allowOverrideNull = true)
     DashboardMetadata dashboard();
+
+    @Detached
+    @ReadOnly
+    CrmUser ownerUser();
+
 }

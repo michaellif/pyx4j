@@ -33,6 +33,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
@@ -126,15 +127,22 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
         this.containerBoard = board;
     }
 
-    protected void saveMetadata() {
-        GADGET_METADATA_SERVICE.saveGadgetMetadata(new DefaultAsyncCallback<GadgetMetadata>() {
+    /** final is to validatate the security */
+    protected final void saveMetadata() {
+        // the check for ownership is here only so that user will not see security violation errors produced by the server
+        // on illegal attempts to save gadgetMetadata
+        if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey())) {
 
-            @Override
-            public void onSuccess(GadgetMetadata result) {
-                getMetadata().set(result);
-            }
+            GADGET_METADATA_SERVICE.saveGadgetMetadata(new DefaultAsyncCallback<GadgetMetadata>() {
 
-        }, getMetadata());
+                @Override
+                public void onSuccess(GadgetMetadata result) {
+                    getMetadata().set(result);
+                }
+
+            }, getMetadata());
+
+        }
     }
 
     /**
