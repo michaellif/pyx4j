@@ -150,6 +150,7 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
         delete(id, null);
     }
 
+    // TODO check that id has no wildcards
     public void delete(String id, E proto) {
         // TODO add assertion about polymorphic usage
 
@@ -164,5 +165,23 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
 
         // delete the old version
         Persistence.service().delete(criteria);
+    }
+
+    public void deleteAll(String idPattern, E proto) {
+        EntityQueryCriteria<? extends CustomizationHolder> criteria = EntityQueryCriteria.create(customizationHolderEntityClass);
+        if (baseClass != null) {
+            criteria.add(PropertyCriterion.eq(criteria.proto().baseClass(), baseClass.getSimpleName()));
+        }
+        if (proto != null) {
+            criteria.add(PropertyCriterion.eq(criteria.proto().className(), proto.getInstanceValueClass().getSimpleName()));
+        }
+        criteria.add(PropertyCriterion.like(criteria.proto().identifierKey(), idPattern));
+
+        // delete the old version
+        Persistence.service().delete(criteria);
+    }
+
+    public void deleteAll(String idPattern) {
+        deleteAll(idPattern, null);
     }
 }
