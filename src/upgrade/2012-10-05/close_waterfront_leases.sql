@@ -20,3 +20,12 @@ INSERT INTO waterfront.apt_unit_occupancy_segment (id,unit,date_from,date_to,sta
 UPDATE 	waterfront.lease_v 
 SET	status = 'Closed' 
 WHERE 	holder IN (SELECT id FROM waterfront.lease WHERE lease_to < '2012-10-01');
+
+-- manual commit
+
+-- Update unit
+
+UPDATE	waterfront.apt_unit 
+SET	financial__unit_rent = 520
+WHERE id = 19929
+RETURNING *;
