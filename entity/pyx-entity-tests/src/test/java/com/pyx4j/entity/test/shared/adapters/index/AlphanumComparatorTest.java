@@ -28,8 +28,19 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 
 public class AlphanumComparatorTest extends TestCase {
+
+    private static void assertAlphanum(String value, String expected) {
+        assertEquals(value, expected, AlphanumIndexAdapter.alphanum(value));
+    }
+
+    public void testAlphanumValues() {
+        assertAlphanum("10A", "0000010a");
+        assertAlphanum("10A21", "0000010a0000021");
+        assertAlphanum("10A21c4", "0000010a0000021c4");
+    }
 
     private static void add(List<String> anum, String... values) {
         anum.addAll(Arrays.asList(values));

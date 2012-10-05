@@ -140,7 +140,7 @@ public class MemberOperationsMeta implements EntityMemberAccess {
         return memberAccess.getMember(entity);
     }
 
-    public Class<? extends IndexAdapter<?>> getIndexAdapter() {
+    public Class<? extends IndexAdapter<?>> getIndexAdapterClass() {
         return indexAdapterClass;
     }
 
@@ -150,7 +150,7 @@ public class MemberOperationsMeta implements EntityMemberAccess {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public Object getIndexedValue(IEntity entity) {
-        IndexAdapter adapter = AdapterFactory.getIndexAdapter(indexAdapterClass);
+        IndexAdapter adapter = AdapterFactory.getIndexAdapter(getIndexAdapterClass());
         return adapter.getIndexedValue(entity, memberMeta, memberMeta.isEntity() ? getMember(entity) : getMemberValue(entity));
     }
 

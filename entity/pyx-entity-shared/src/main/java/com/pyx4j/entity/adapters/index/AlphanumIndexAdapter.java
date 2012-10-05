@@ -25,6 +25,10 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class AlphanumIndexAdapter extends AbstractIndexAdapter<String> {
 
+    private static final int maxGroups = 2;
+
+    private static final int paddingMax = 6;
+
     @Override
     public Object getIndexedValue(IEntity entity, MemberMeta memberMeta, String value) {
         if (value == null) {
@@ -39,28 +43,42 @@ public class AlphanumIndexAdapter extends AbstractIndexAdapter<String> {
         return String.class;
     }
 
+    @Override
+    public int getIndexValueLength(MemberMeta memberMeta) {
+        int len = super.getIndexValueLength(memberMeta);
+        if (len == 0) {
+            return 0;
+        } else {
+            return len + maxGroups * paddingMax;
+        }
+    }
+
     public static String alphanum(String value) {
         StringBuilder b = new StringBuilder();
         StringBuilder n = new StringBuilder();
+        int padCount = 0;
         for (char c : value.toCharArray()) {
-            if (Character.isDigit(c)) {
+            if (padCount >= maxGroups) {
+                b.append(Character.toLowerCase(c));
+            } else if (Character.isDigit(c)) {
                 n.append(c);
             } else {
                 if (n.length() != 0) {
-                    normalizenum(b,n);
+                    normalizenum(b, n);
+                    padCount++;
                     n = new StringBuilder();
                 }
                 b.append(Character.toLowerCase(c));
             }
         }
         if (n.length() != 0) {
-            normalizenum(b,n);
+            normalizenum(b, n);
         }
         return b.toString();
     }
-    
-    public static void normalizenum( StringBuilder b,StringBuilder value) {
-        for(int i = 0; i <= 6 - value.length(); i ++) {
+
+    public static void normalizenum(StringBuilder b, StringBuilder value) {
+        for (int i = 0; i <= paddingMax - value.length(); i++) {
             b.append('0');
         }
         b.append(value);

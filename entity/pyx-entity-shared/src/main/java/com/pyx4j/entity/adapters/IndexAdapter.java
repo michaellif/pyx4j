@@ -37,4 +37,6 @@ public interface IndexAdapter<E> {
 
     public Class<?> getIndexValueClass();
 
+    public int getIndexValueLength(MemberMeta memberMeta);
+
 }

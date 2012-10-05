@@ -40,4 +40,9 @@ public abstract class AbstractIndexAdapter<E> implements IndexAdapter<E> {
         }
     }
 
+    @Override
+    public int getIndexValueLength(MemberMeta memberMeta) {
+        return memberMeta.getLength();
+    }
+
 }

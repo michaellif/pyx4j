@@ -30,11 +30,13 @@ import java.util.Map;
 import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.mapping.TableMetadata.ColumnMetadata;
 import com.pyx4j.entity.rdb.mapping.TableModel.ModelType;
+import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -330,8 +332,14 @@ class TableDDL {
         if (Enum.class.isAssignableFrom(member.getIndexValueClass())) {
             sql.append("(" + TableModel.ENUM_STRING_LENGHT_MAX + ")");
         } else if (String.class == member.getIndexValueClass()) {
-            sql.append('(').append((member.getMemberMeta().getLength() == 0) ? TableModel.ORDINARY_STRING_LENGHT_MAX : member.getMemberMeta().getLength())
-                    .append(')');
+
+            IndexAdapter<?> adapter = AdapterFactory.getIndexAdapter(member.getIndexAdapterClass());
+            int len = adapter.getIndexValueLength(member.getMemberMeta());
+            if (len == 0) {
+                len = TableModel.ORDINARY_STRING_LENGHT_MAX;
+            }
+
+            sql.append('(').append(len).append(')');
         }
         return sql.toString();
     }
