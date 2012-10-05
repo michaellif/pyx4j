@@ -59,6 +59,13 @@ public class DashboardMetadataCrudServiceImpl extends AbstractCrudServiceImpl<Da
     @Override
     public void save(AsyncCallback<Key> callback, DashboardMetadata dashboardMetadata) {
         super.save(callback, dashboardMetadata);
+        // TODO see if is shared status changed and delete all shadow gadgets
+    }
+
+    @Override
+    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+        // TODO delete ALL child gadgets
+        super.delete(callback, entityId);
     }
 
     @Override

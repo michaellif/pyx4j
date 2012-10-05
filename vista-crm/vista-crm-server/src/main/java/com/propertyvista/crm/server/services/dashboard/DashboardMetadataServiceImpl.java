@@ -28,6 +28,7 @@ import com.pyx4j.site.server.services.customization.CustomizationPersistenceHelp
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat.Builder;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
+import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
@@ -39,7 +40,7 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
         if (entityId == null) {
             dm = null;
         } else if (entityId.asLong() == -1) {
-            dm = retrieveDefaultMetadata();
+            dm = retrieveDefaultDashboardMetadata();
         } else {
             dm = Persistence.secureRetrieve(DashboardMetadata.class, entityId);
         }
@@ -51,12 +52,23 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
         DashboardColumnLayoutFormat format = new DashboardColumnLayoutFormat(dm.encodedLayout().getValue());
         List<String> lostIds = new ArrayList<String>();
         for (String id : format.gadgetIds()) {
-            GadgetMetadata gm = Util.gadgetStorage().load(id);
+            GadgetMetadata gm = null;
+            // for shared dashboards we use a shadow of gadget metadata with effective-id = id + :userKey (but on server side it's transparent)
+            if (dm.isShared().isBooleanTrue() & !CrmAppContext.getCurrentUserPrimaryKey().equals(dm.ownerUser().getPrimaryKey())) {
+                String shadowId = Util.makeShadowId(id);
+                gm = Util.gadgetStorage().load(shadowId);
+            }
+            if (gm == null) {
+                gm = Util.gadgetStorage().load(id);
+            }
             if (gm != null) {
                 dm.gadgetMetadataList().add(gm);
+            } else {
+                lostIds.add(id);
             }
         }
 
+        // actually this is not supposted to happen but for percation (i.e. bad db migration or something) 
         if (!lostIds.isEmpty()) {
             Builder updatedFormatBuilder = new DashboardColumnLayoutFormat.Builder(format.getLayoutType());
             for (String id : format.gadgetIds()) {
@@ -72,7 +84,7 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
     }
 
     /**
-     * calcualte the difference of gadgets new/deleted and save the result
+     * Compute the difference of gadgets new/deleted and save the result
      */
     @Override
     public void saveDashboardMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata dm) {
@@ -116,7 +128,7 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
         callback.onSuccess(dm);
     }
 
-    private DashboardMetadata retrieveDefaultMetadata() {
+    private DashboardMetadata retrieveDefaultDashboardMetadata() {
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.system));
         return Persistence.secureRetrieve(criteria);

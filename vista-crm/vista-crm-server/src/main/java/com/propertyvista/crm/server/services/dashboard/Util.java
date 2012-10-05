@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.dashboard;
 
 import com.pyx4j.site.server.services.customization.CustomizationPersistenceHelper;
 
+import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.dashboard.GadgetMetadataHolder;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
@@ -22,6 +23,10 @@ public class Util {
 
     public static CustomizationPersistenceHelper<GadgetMetadata> gadgetStorage() {
         return new CustomizationPersistenceHelper<GadgetMetadata>(GadgetMetadataHolder.class, GadgetMetadata.class);
+    }
+
+    public static String makeShadowId(String id) {
+        return id + ":" + CrmAppContext.getCurrentUserPrimaryKey().toString();
     }
 
 }

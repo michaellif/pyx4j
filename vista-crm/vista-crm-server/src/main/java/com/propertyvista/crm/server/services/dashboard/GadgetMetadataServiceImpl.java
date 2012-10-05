@@ -22,7 +22,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.crm.rpc.dto.dashboard.GadgetDescriptorDTO;
 import com.propertyvista.crm.rpc.services.dashboard.GadgetMetadataService;
@@ -57,11 +56,16 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
         if (gadgetMetadata.gadgetId().isNull()) {
             throw new Error("got gadget metadata with no defined id:" + gadgetMetadata.toString());
         }
-        if (!CrmAppContext.getCurrentUserPrimaryKey().equals(gadgetMetadata.ownerUser().getPrimaryKey())) {
-            throw new SecurityViolationException(i18n.tr("Change of gadget settings can be perfromed only by its owner"));
+        // effectiveGadgetId is requried so that users that alter a gadget that belongs to a shared dashboard won't mess up owners settings
+        // so basically we use a shadow metadata with different key
+        String effectiveGadgetId = null;
+        if (CrmAppContext.getCurrentUserPrimaryKey().equals(gadgetMetadata.ownerUser().getPrimaryKey())) {
+            effectiveGadgetId = gadgetMetadata.gadgetId().getValue();
+        } else {
+            effectiveGadgetId = Util.makeShadowId(gadgetMetadata.gadgetId().getValue());
         }
 
-        Util.gadgetStorage().save(gadgetMetadata.gadgetId().getValue(), gadgetMetadata, true);
+        Util.gadgetStorage().save(effectiveGadgetId, gadgetMetadata, true);
         Persistence.service().commit();
 
         callback.onSuccess(gadgetMetadata);
