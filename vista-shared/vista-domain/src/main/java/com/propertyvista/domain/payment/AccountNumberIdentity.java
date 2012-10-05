@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -32,6 +33,7 @@ public interface AccountNumberIdentity extends IPersonalIdentity {
 
     @Override
     @Length(12)
+    @Transient
     IPrimitive<String> newNumber();
 
     @Override
