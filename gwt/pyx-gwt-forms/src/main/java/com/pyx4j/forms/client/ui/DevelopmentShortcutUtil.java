@@ -20,11 +20,9 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.event.logical.shared.AttachEvent;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Event.NativePreviewEvent;
-import com.google.gwt.user.client.Event.NativePreviewHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.events.DevShortcutEvent;
@@ -36,29 +34,20 @@ class DevelopmentShortcutUtil {
 
     static final void attachDevelopmentShortcuts(Widget widget, final CComponent<?, ?> component) {
 
-        widget.addAttachHandler(new AttachEvent.Handler() {
-
-            private HandlerRegistration handlerRegistration = null;
+        widget.addDomHandler(new KeyDownHandler() {
 
             @Override
-            public void onAttachOrDetach(AttachEvent event) {
-                if (event.isAttached()) {
-                    handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
-                        @Override
-                        public void onPreviewNativeEvent(NativePreviewEvent event) {
-                            if ((event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey())) {
-                                DevShortcutEvent devShortcutEvent = new DevShortcutEvent(event.getNativeEvent().getKeyCode());
-                                component.fireEvent(devShortcutEvent);
-                                if (devShortcutEvent.isConsumed()) {
-                                    event.getNativeEvent().preventDefault();
-                                }
-                            }
-                        }
-                    });
-                } else if (handlerRegistration != null) {
-                    handlerRegistration.removeHandler();
+            public void onKeyDown(KeyDownEvent event) {
+                if ((event.getNativeEvent().getCtrlKey() && (event.getNativeKeyCode() != KeyCodes.KEY_CTRL))) {
+                    DevShortcutEvent devShortcutEvent = new DevShortcutEvent(event.getNativeEvent().getKeyCode());
+                    component.fireEvent(devShortcutEvent);
+                    if (devShortcutEvent.isConsumed()) {
+                        event.preventDefault();
+                    }
                 }
+
             }
-        });
+        }, KeyDownEvent.getType());
+
     }
 }
