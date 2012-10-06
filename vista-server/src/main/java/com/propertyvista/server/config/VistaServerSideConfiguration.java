@@ -130,12 +130,8 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getDefaultBaseURLresidentPortal(String pmcDnsName, boolean secure) {
-        String base;
-        if (secure) {
-            base = getApplicationDeploymentProtocol() + "://" + "portal" + getAppUrlSeparator() + pmcDnsName + getApplicationURLNamespace();
-        } else {
-            base = "http" + "://" + "portal" + getAppUrlSeparator() + pmcDnsName + getApplicationURLNamespace();
-        }
+        String base = secure ? getApplicationDeploymentProtocol() : "http";
+        base += "://" + pmcDnsName + getAppUrlSeparator() + "portal" + getApplicationURLNamespace();
         if (isAppsContextlessDepoyment()) {
             return base;
         } else {
@@ -145,7 +141,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
-        String base = getApplicationDeploymentProtocol() + "://" + "crm" + getAppUrlSeparator() + pmcDnsName + getApplicationURLNamespace();
+        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "crm" + getApplicationURLNamespace();
         if (isAppsContextlessDepoyment()) {
             return base;
         } else {
@@ -155,7 +151,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getDefaultBaseURLprospectPortal(String pmcDnsName) {
-        String base = getApplicationDeploymentProtocol() + "://" + "ptapp" + getAppUrlSeparator() + pmcDnsName + getApplicationURLNamespace();
+        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "ptapp" + getApplicationURLNamespace();
         if (isAppsContextlessDepoyment()) {
             return base;
         } else {
@@ -165,7 +161,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getDefaultBaseURLvistaAdmin() {
-        return getApplicationDeploymentProtocol() + "://" + "internal" + getApplicationURLNamespace() + DeploymentConsts.ADMIN_URL;
+        return getApplicationDeploymentProtocol() + "://" + "static" + getApplicationURLNamespace() + DeploymentConsts.ADMIN_URL;
     }
 
     @Override

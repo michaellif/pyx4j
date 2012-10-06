@@ -100,7 +100,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                 namespaceProposal = parts[parts.length - 3];
             } else if (dnsBase.equals("birchwoodsoftwaregroup.com")) {
                 if (parts.length >= 4) {
-                    namespaceProposal = parts[parts.length - 4];
+                    namespaceProposal = parts[0];
                 } else if (parts.length == 3) {
                     String finalHostName = parts[parts.length - 3];
                     int envIdx = finalHostName.lastIndexOf('-');
