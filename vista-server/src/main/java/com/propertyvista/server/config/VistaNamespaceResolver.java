@@ -77,8 +77,8 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         // www.ABC.dev.birchwoodsoftwaregroup.com
 
         // Support wildcard HTTPS on dev
-        // crm-vista-22.birchwoodsoftwaregroup.com
-        // vista-22.birchwoodsoftwaregroup.com
+        // vista-crm-22.birchwoodsoftwaregroup.com
+        // vista-portal-22.birchwoodsoftwaregroup.com
 
         // Prod: Get the 3rd part of URL.
         // www.ABC.propertyvista.com 
@@ -103,9 +103,12 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                     namespaceProposal = parts[parts.length - 4];
                 } else if (parts.length == 3) {
                     String finalHostName = parts[parts.length - 3];
-                    String[] finalHostNameParts = finalHostName.split("\\-");
-                    if (finalHostNameParts.length >= 2) {
-                        namespaceProposal = finalHostNameParts[finalHostNameParts.length - 2];
+                    int envIdx = finalHostName.lastIndexOf('-');
+                    if (envIdx > 0) {
+                        int appIdx = finalHostName.lastIndexOf('-', envIdx - 1);
+                        if (appIdx > 0) {
+                            namespaceProposal = finalHostName.substring(0, appIdx);
+                        }
                     }
                 }
             }
