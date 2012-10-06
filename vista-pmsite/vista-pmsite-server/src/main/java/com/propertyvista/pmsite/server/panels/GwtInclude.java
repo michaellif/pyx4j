@@ -13,13 +13,17 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 
 public class GwtInclude extends Panel {
 
@@ -32,6 +36,10 @@ public class GwtInclude extends Panel {
                 + "\";} function gwtPortalGoogleAPIKey() { return \"" + VistaDeployment.getPortalGoogleAPIKey() + "\";}");
         script.setEscapeModelStrings(false); // do not HTML escape JavaScript code
         add(script);
+
+        WebMarkupContainer relativeGwtInclude = new WebMarkupContainer("gwtResidentsJs");
+        relativeGwtInclude.add(new AttributeAppender("src", Model.of(PMSiteContentManager.getContextPath() + "residents/residents.nocache.js")));
+        add(relativeGwtInclude);
 
     }
 
