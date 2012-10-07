@@ -592,6 +592,24 @@
                         </executions>
                     </plugin>
 
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>deploy.echo-config</id>
+                                <phase>pre-integration-test</phase>
+                                <goals><goal>run</goal></goals>
+                                <configuration>
+                                    <target>
+                                        <echo  message="vista-tomcat-url   : ${vista-tomcat-url}"/>
+                                        <echo  message="deployContext      : ${deployContext}"/>
+                                        <echo  message="vista-app-ping-url : ${vista-app-ping-url}"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
                     <!-- See http://cargo.codehaus.org/Maven2+plugin -->
                     <plugin>
                         <groupId>org.codehaus.cargo</groupId>
