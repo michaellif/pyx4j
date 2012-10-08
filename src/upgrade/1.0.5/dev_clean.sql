@@ -31,6 +31,16 @@ BEGIN
 			SELECT * INTO v_void FROM _dba_.truncate_schema_table(v_schema_name,v_table_name, TRUE) ;
 
 		END LOOP;
+
+		-- All the rest  screening tables  asumend not existen in DB
+		FOREACH v_table_name IN ARRAY
+		ARRAY[	'person_screening',
+			    'legal_questions']
+		LOOP
+			SELECT * INTO v_void FROM _dba_.truncate_schema_table(v_schema_name,v_table_name, TRUE) ;
+
+		END LOOP;
+
 	END LOOP;
 END;
 $$
