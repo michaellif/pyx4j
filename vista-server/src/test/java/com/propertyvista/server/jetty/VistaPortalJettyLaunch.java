@@ -15,6 +15,8 @@ package com.propertyvista.server.jetty;
 
 import com.pyx4j.jetty.JettyLaunch;
 
+import com.propertyvista.misc.VistaTODO;
+
 public class VistaPortalJettyLaunch extends JettyLaunch {
 
     public static void main(String[] args) throws Exception {
@@ -28,6 +30,9 @@ public class VistaPortalJettyLaunch extends JettyLaunch {
 
     @Override
     public int getServerSslPort() {
+        if (VistaTODO.codeBaseIsProdBranch) {
+            return 0;
+        }
         if (OSValidator.isWindows()) {
             return 443;
         } else if (OSValidator.isMac()) {
