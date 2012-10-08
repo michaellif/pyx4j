@@ -805,8 +805,8 @@ BEGIN
         -- lease_participant
 
         EXECUTE 'CREATE TABLE '||v_schema_name||'.lease_participant ( '||
-        '   id              BIGINT      NOT NULL,'||
-        '   tenant_id           BIGINT,'||
+        '   id                      BIGINT      NOT NULL,'||
+        '   tenant_id               BIGINT,'||
         '   iddiscriminator         VARCHAR(64)     NOT NULL,'||
         '   lease_customerdiscriminator VARCHAR(50),'||
         '   lease_customer          BIGINT,'||
@@ -814,12 +814,13 @@ BEGIN
         '   lease_term_v            BIGINT,'||
         '   order_in_lease          INT,'||
         '   application             BIGINT,'||
-        '   screening           BIGINT,'||
+        '   screening               BIGINT,'||
+        '   screening_for           TIMESTAMP WITHOUT TIME ZONE,'||
         '   relationship            VARCHAR(50),'||
         '   tenantdiscriminator     VARCHAR(50),'||
-        '   tenant              BIGINT,'||
+        '   tenant                  BIGINT,'||
         '   take_ownership          BOOLEAN,'||
-        '   percentage                      NUMERIC(18,2),'||
+        '   percentage              NUMERIC(18,2),'||
         '   CONSTRAINT lease_participant_pk PRIMARY KEY(id),'||
         '   CONSTRAINT lease_participant_application_fk FOREIGN KEY(application) '||
         '       REFERENCES '||v_schema_name||'.online_application(id),'||
@@ -918,6 +919,15 @@ BEGIN
 
         END LOOP;
 
+        -- Delete tables that was never used
+
+        FOREACH v_table_name IN ARRAY
+        ARRAY[  'lease$documents',
+                'lease_term$documents']
+        LOOP
+            SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,v_table_name,TRUE);
+
+        END LOOP;
 
     END LOOP;
 END;
