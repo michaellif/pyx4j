@@ -142,11 +142,11 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
         } else {
             String discriminatorValue = rs.getString(memberSqlName + discriminatorColumnNameSufix);
             if (discriminatorValue == null) {
-                throw new Error("Missing discriminatorValue '" + memberSqlName + discriminatorColumnNameSufix + "' " + SQLUtils.debugInfo(dialect, rs));
+                throw new SQLException("Missing discriminatorValue '" + memberSqlName + discriminatorColumnNameSufix + "' " + SQLUtils.debugInfo(dialect, rs));
             }
             Class<? extends IEntity> entityClass = impClasses.get(discriminatorValue);
             if (entityClass == null) {
-                throw new Error("Unmaped discriminator '" + discriminatorValue + "' " + SQLUtils.debugInfo(dialect, rs));
+                throw new SQLException("Unmaped discriminator '" + discriminatorValue + "' " + SQLUtils.debugInfo(dialect, rs));
             }
             IEntity entityValue = EntityFactory.create(entityClass);
             entityValue.setPrimaryKey(new Key(value));
