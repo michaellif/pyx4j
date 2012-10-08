@@ -798,8 +798,8 @@ BEGIN
         'JOIN (SELECT customer, MAX(participant_id) AS participant_id FROM '||v_schema_name||'.guarantor GROUP BY customer) b ON (d.customer = b.customer)) AS a)';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_customer OWNER TO vista';
-        EXECUTE 'CREATE UNIQUE INDEX lease_customer_lease_customer_idx ON '||v_schema_name||'.lease_customer USING btree(lease,customer,iddiscriminator)';
-        EXECUTE 'CREATE UNIQUE INDEX lease_customer_participant_id_idx ON '||v_schema_name||'.lease_customer USING btree(participant_id,iddiscriminator)';
+        EXECUTE 'CREATE INDEX lease_customer_lease_customer_idx ON '||v_schema_name||'.lease_customer USING btree(lease,customer,iddiscriminator)';
+        EXECUTE 'CREATE INDEX lease_customer_participant_id_idx ON '||v_schema_name||'.lease_customer USING btree(participant_id,iddiscriminator)';
 
 
         -- lease_participant
