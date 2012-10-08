@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION _dba_.pg_schema_size(text) RETURNS bigint AS $$
-SELECT 	sum(pg_relation_size(schemaname||'.'||tablename))::bigint 
+SELECT 	sum(pg_relation_size(schemaname||'.'||tablename))::bigint
 FROM 	pg_tables
 WHERE 	schemaname = $1;
 $$
@@ -46,18 +46,18 @@ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION _dba_.clone_schema_tables(v_original TEXT, v_replica TEXT) RETURNS void AS
 $$
-DECLARE 
+DECLARE
 	v_table_name 	VARCHAR(64);
 BEGIN
 	-- Check if the original schema exists
-	IF NOT EXISTS (	SELECT 'x' FROM pg_namespace 
+	IF NOT EXISTS (	SELECT 'x' FROM pg_namespace
 					WHERE nspname = v_original)
 	THEN
 		RAISE EXCEPTION 'Schema % does not exist!', v_original;
 	END IF;
-	
+
 	-- If replica schema already exists, let user drop it himself
-	IF EXISTS (	SELECT 'x' FROM pg_namespace 
+	IF EXISTS (	SELECT 'x' FROM pg_namespace
 				WHERE nspname = v_replica)
 	THEN
 		RAISE NOTICE 'Schema % already exists!', v_replica;
@@ -66,7 +66,7 @@ BEGIN
 	END IF;
 
 	EXECUTE 'CREATE SCHEMA '||v_replica;
-	
+
 	FOR v_table_name IN
 	SELECT table_name FROM information_schema.tables WHERE table_schema = v_original
 	LOOP
@@ -74,7 +74,7 @@ BEGIN
 		' INCLUDING CONSTRAINTS INCLUDING INDEXES INCLUDING DEFAULTS)';
 		EXECUTE 'INSERT INTO '||v_replica||'.'||v_table_name||' (SELECT * FROM '||v_original||'.'||v_table_name||')';
 	END LOOP;
-	
+
 END;
 $$
 LANGUAGE plpgsql VOLATILE;
@@ -113,7 +113,7 @@ LOOP
         -- In some cases application does not create fk constraint at all,
 	-- or creates just a few
 	IF NOT EXISTS (SELECT 'x' FROM information_schema.constraint_column_usage
-			WHERE 	table_schema = v_target_schema 
+			WHERE 	table_schema = v_target_schema
 			AND 	constraint_schema = v_target_schema
 			AND 	table_name = v_ref_table_name
 			AND 	column_name = v_ref_col_name
@@ -140,9 +140,9 @@ AND		(array_length(a.conkey,1) > 1 OR array_length(a.confkey,1) > 1)
 LOOP
           	-- Constrained columns
           	SELECT INTO v_concolumns
-        	ARRAY(SELECT b.attname FROM 
+        	ARRAY(SELECT b.attname FROM
         			(SELECT a.conrelid, unnest(a.conkey) AS conkey
-        			 FROM pg_constraint a 
+        			 FROM pg_constraint a
         			JOIN pg_class b ON (a.conrelid = b.oid)
         			JOIN pg_namespace c ON (a.connamespace = c.oid)
         			WHERE   a.contype = 'f'
@@ -150,12 +150,12 @@ LOOP
 					AND     c.nspname = v_source_schema) a
 				JOIN pg_attribute b ON (a.conrelid = b.attrelid AND a.conkey = b.attnum)
 			ORDER BY a.conkey);
-        
+
         	-- Referenced columns
           	SELECT INTO v_confcolumns
         	ARRAY(SELECT b.attname FROM
-        			(SELECT a.confrelid,unnest(a.confkey) AS confkey 
-        			 FROM pg_constraint a 
+        			(SELECT a.confrelid,unnest(a.confkey) AS confkey
+        			 FROM pg_constraint a
         			 JOIN pg_class b ON (a.confrelid = b.oid)
         			 JOIN pg_namespace c ON (a.connamespace = c.oid)
         			 JOIN pg_class d ON (a.conrelid = d.oid)
@@ -167,14 +167,14 @@ LOOP
 				ORDER BY a.confkey);
         	-- In some cases application does not create fk constraint at all,
 		-- or creates just a few
-		-- Probably not a problem in this case, since muti-column constraints 
+		-- Probably not a problem in this case, since muti-column constraints
 		-- are created only in public schema (at least for now)
 		IF NOT EXISTS (SELECT 'x' FROM information_schema.constraint_column_usage
-				WHERE 	table_schema = v_target_schema 
+				WHERE 	table_schema = v_target_schema
 				AND 	constraint_schema = v_target_schema
 				AND 	table_name = v_ref_table_name
 				AND	constraint_name = v_conname)
-		THEN     
+		THEN
         		EXECUTE 'ALTER TABLE '||v_target_schema||'.'||v_table_name||' ADD CONSTRAINT '||v_conname||
         		' FOREIGN KEY ('||array_to_string(v_concolumns,',')||') REFERENCES '
         		||v_target_schema||'.'||v_ref_table_name||' ('||array_to_string(v_confcolumns,',')||')';
@@ -188,8 +188,8 @@ LANGUAGE plpgsql VOLATILE;
 
 /**
 ***	---------------------------------------------------------------------------------------------------
-***	
-***	Variation of clone_schema_tables_fk, the difference being that instead of default 
+***
+***	Variation of clone_schema_tables_fk, the difference being that instead of default
 ***	ON DELETE RESTRICT foreign key constraints, it creates ON DELETE CASCADE constraints.
 ***	Very useful for getting rid of large chunks of data quickly.
 ***
@@ -243,9 +243,9 @@ FOR 	v_conname,v_table_name,v_ref_table_name IN
 LOOP
           	-- Constrained columns
           	SELECT INTO v_concolumns
-        	ARRAY(SELECT b.attname FROM 
+        	ARRAY(SELECT b.attname FROM
         			(SELECT a.conrelid, unnest(a.conkey) AS conkey
-        			 FROM pg_constraint a 
+        			 FROM pg_constraint a
         			JOIN pg_class b ON (a.conrelid = b.oid)
         			JOIN pg_namespace c ON (a.connamespace = c.oid)
         			WHERE   a.contype = 'f'
@@ -253,12 +253,12 @@ LOOP
 					AND     c.nspname = v_source_schema) a
 				JOIN pg_attribute b ON (a.conrelid = b.attrelid AND a.conkey = b.attnum)
 			ORDER BY a.conkey);
-        
+
         	-- Referenced columns
           	SELECT INTO v_confcolumns
         	ARRAY(SELECT b.attname FROM
-        			(SELECT a.confrelid,unnest(a.confkey) AS confkey 
-        			 FROM pg_constraint a 
+        			(SELECT a.confrelid,unnest(a.confkey) AS confkey
+        			 FROM pg_constraint a
         			 JOIN pg_class b ON (a.confrelid = b.oid)
         			 JOIN pg_namespace c ON (a.connamespace = c.oid)
         			 JOIN pg_class d ON (a.conrelid = d.oid)
@@ -268,7 +268,7 @@ LOOP
 					 AND	d.relname = v_table_name) a
 					JOIN pg_attribute b ON (a.confrelid = b.attrelid AND a.confkey = b.attnum)
 				ORDER BY a.confkey);
-        	       
+
         	EXECUTE 'ALTER TABLE '||v_target_schema||'.'||v_table_name||' ADD CONSTRAINT '||v_conname||
         	' FOREIGN KEY ('||array_to_string(v_concolumns,',')||') REFERENCES '
         	||v_target_schema||'.'||v_ref_table_name||' ('||array_to_string(v_confcolumns,',')||') '||
@@ -346,7 +346,7 @@ v_query         TEXT;
 BEGIN
 
 FOR v_table_name IN
-SELECT a.relname FROM pg_class a JOIN pg_namespace b ON (a.relnamespace = b.oid) 
+SELECT a.relname FROM pg_class a JOIN pg_namespace b ON (a.relnamespace = b.oid)
 WHERE a.relkind = 'r' AND b.nspname = v_schema_name
 LOOP
         SELECT v_table_name||'_seq' INTO v_seq_name;
@@ -362,17 +362,17 @@ LANGUAGE plpgsql VOLATILE;
 
 CREATE OR REPLACE FUNCTION _dba_.table_diff (v_source_schema text, v_target_schema text, v_table text)
 RETURNS TABLE (table_name VARCHAR(64),column_name VARCHAR(64),data_type	VARCHAR(64),is_nullable	BOOLEAN,schema_version VARCHAR(12))
-AS 
+AS
 $$
 (SELECT a.*, 'NEW' as schema_version
-FROM 
+FROM
 		(SELECT 	table_name,column_name,
 					CASE WHEN data_type = 'character' THEN 'char('||character_maximum_length||')'
 					WHEN data_type = 'character varying' THEN 'varchar('||character_maximum_length||')'
 					WHEN data_type = 'numeric' THEN 'numeric('||numeric_precision||','||numeric_scale||')'
 					ELSE  data_type END as data_type,
 					is_nullable::boolean as is_nullable
-		FROM 		information_schema.columns 
+		FROM 		information_schema.columns
 		WHERE 		table_schema = $2
 		AND			table_name = $3
 		EXCEPT
@@ -382,19 +382,19 @@ FROM
 				WHEN data_type = 'numeric' THEN 'numeric('||numeric_precision||','||numeric_scale||')'
 				ELSE  data_type END as data_type,
 				is_nullable::boolean as is_nullable
-		FROM 	information_schema.columns 
+		FROM 	information_schema.columns
 		WHERE 	table_schema = $1
 		AND		table_name = $3) as a)
 	UNION
 	(SELECT a.*, 'OLD' as schema_version
-	FROM 
+	FROM
 		(SELECT 	table_name,column_name,/*ordinal_position,*/
 				CASE WHEN data_type = 'character' THEN 'char('||character_maximum_length||')'
 				WHEN data_type = 'character varying' THEN 'varchar('||character_maximum_length||')'
 				WHEN data_type = 'numeric' THEN 'numeric('||numeric_precision||','||numeric_scale||')'
 				ELSE  data_type END as data_type,
 				is_nullable::boolean as is_nullable
-		FROM 	information_schema.columns 
+		FROM 	information_schema.columns
 		WHERE 	table_schema = $1
 		AND		table_name = $3
 		EXCEPT
@@ -404,11 +404,11 @@ FROM
 				WHEN data_type = 'numeric' THEN 'numeric('||numeric_precision||','||numeric_scale||')'
 				ELSE  data_type END as data_type,
 				is_nullable::boolean as is_nullable
-		FROM 	information_schema.columns 
+		FROM 	information_schema.columns
 		WHERE 	table_schema = $2
 		AND		table_name = $3) as a);
 
-$$ 
+$$
 LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION _dba_.copy_schema_data(v_source_schema TEXT, v_target_schema TEXT) RETURNS VOID AS
@@ -417,50 +417,50 @@ DECLARE
 	v_table_name 	VARCHAR(64);
 	v_column_list	TEXT;
 BEGIN
-	-- Check that there are no schema version incompatibilities 
+	-- Check that there are no schema version incompatibilities
 	IF EXISTS (SELECT a.relname FROM pg_class a JOIN pg_namespace b ON (a.relnamespace = b.oid)
-				WHERE b.nspname = v_source_schema 
+				WHERE b.nspname = v_source_schema
 				AND a.relkind = 'r'
 				AND _dba_.check_table_altered(v_source_schema,v_target_schema,a.relname) = TRUE
 				AND a.reltuples > 0 )
 	THEN
 		RAISE EXCEPTION 'Modified tables detected - cannot continue';
 	END IF;
-	
-	FOR v_table_name  IN 
+
+	FOR v_table_name  IN
 	SELECT a.relname FROM pg_class a JOIN pg_namespace b ON (a.relnamespace = b.oid)
-				WHERE b.nspname = v_source_schema 
+				WHERE b.nspname = v_source_schema
 				AND a.relkind = 'r'
 				AND _dba_.check_table_altered(v_source_schema,v_target_schema,a.relname) = FALSE
 				AND a.reltuples > 0
 	LOOP
-		SELECT INTO v_column_list array_to_string(ARRAY(SELECT column_name::text FROM information_schema.columns 
+		SELECT INTO v_column_list array_to_string(ARRAY(SELECT column_name::text FROM information_schema.columns
 		WHERE table_name = v_table_name AND table_schema = v_source_schema ORDER BY ordinal_position),',');
-		
+
 		EXECUTE 'DELETE FROM '||v_target_schema||'.'||v_table_name;
 		EXECUTE 'INSERT INTO '||v_target_schema||'.'||v_table_name||' ('||v_column_list||') (SELECT '||
 		v_column_list||' FROM '||v_source_schema||'.'||v_table_name||')';
-		
+
 	END LOOP;
 END;
 $$
 LANGUAGE plpgsql VOLATILE;
 
-CREATE OR REPLACE FUNCTION _dba_.grant_schema_tables_privs(v_schema_name TEXT, v_user TEXT, 
+CREATE OR REPLACE FUNCTION _dba_.grant_schema_tables_privs(v_schema_name TEXT, v_user TEXT,
 v_privs TEXT DEFAULT 'SELECT,INSERT,UPDATE,DELETE') RETURNS VOID AS
 $$
 DECLARE
 	v_table		VARCHAR(64);
 	v_stmt 	TEXT;
 BEGIN
-	FOR v_table IN 
+	FOR v_table IN
 	SELECT relname FROM pg_class a JOIN pg_namespace b ON (a.relnamespace = b.oid)
 	WHERE b.nspname = v_schema_name
 	AND a.relkind = 'r'
 	LOOP
 		v_stmt := 'GRANT '||v_privs||' ON TABLE '||v_schema_name||'.'||v_table||' TO '||v_user;
 		EXECUTE v_stmt;
-		
+
 	END LOOP;
 END;
 $$
@@ -484,25 +484,25 @@ $$
 LANGUAGE plpgsql VOLATILE;
 
 /**
-***	==================================================================	
+***	==================================================================
 ***
 ***		Schema comparison functions
 ***
 ***	==================================================================
 **/
 
-CREATE OR REPLACE FUNCTION _dba_.compare_schema_tables(text,text) 
+CREATE OR REPLACE FUNCTION _dba_.compare_schema_tables(text,text)
 RETURNS TABLE(table_name VARCHAR(64),column_name VARCHAR(64),data_type VARCHAR(64),is_nullable BOOLEAN,schema_version VARCHAR(64)) AS
 $$
 	SELECT a.*, $2 as schema_version
-	FROM 
+	FROM
 		(SELECT 	table_name,column_name,
 				CASE WHEN data_type = 'character' THEN 'char('||character_maximum_length||')'
 				WHEN data_type = 'character varying' THEN 'varchar('||character_maximum_length||')'
 				WHEN data_type = 'numeric' THEN 'numeric('||numeric_precision||','||numeric_scale||')'
 				ELSE  data_type END as data_type,
 				is_nullable::boolean as is_nullable
-		FROM 		information_schema.columns 
+		FROM 		information_schema.columns
 		WHERE 	table_schema = $2
 		EXCEPT
 		SELECT 		table_name,column_name,
@@ -511,18 +511,18 @@ $$
 				WHEN data_type = 'numeric' THEN 'numeric('||numeric_precision||','||numeric_scale||')'
 				ELSE  data_type END as data_type,
 				is_nullable::boolean as is_nullable
-		FROM 		information_schema.columns 
+		FROM 		information_schema.columns
 		WHERE 	table_schema = $1) as a
 	UNION
 	SELECT a.*, $1 as schema_version
-	FROM 
+	FROM
 		(SELECT 	table_name,column_name,
 				CASE WHEN data_type = 'character' THEN 'char('||character_maximum_length||')'
 				WHEN data_type = 'character varying' THEN 'varchar('||character_maximum_length||')'
 				WHEN data_type = 'numeric' THEN 'numeric('||numeric_precision||','||numeric_scale||')'
 				ELSE  data_type END as data_type,
 				is_nullable::boolean as is_nullable
-		FROM 		information_schema.columns 
+		FROM 		information_schema.columns
 		WHERE 	table_schema = $1
 		EXCEPT
 		SELECT 		table_name,column_name,
@@ -531,44 +531,44 @@ $$
 				WHEN data_type = 'numeric' THEN 'numeric('||numeric_precision||','||numeric_scale||')'
 				ELSE  data_type END as data_type,
 				is_nullable::boolean as is_nullable
-		FROM 		information_schema.columns 
+		FROM 		information_schema.columns
 		WHERE 	table_schema = $2) as a;
 $$
 LANGUAGE SQL VOLATILE;
 
 CREATE OR REPLACE FUNCTION _dba_.compare_schema_sequences(text,text)
 RETURNS TABLE(	sequence_name 	VARCHAR(64),
-		data_type 	VARCHAR(64), 
-		start_value 	VARCHAR(18), 
-		minimum_value 	VARCHAR(18), 
-		maximum_value 	VARCHAR(18), 
+		data_type 	VARCHAR(64),
+		start_value 	VARCHAR(18),
+		minimum_value 	VARCHAR(18),
+		maximum_value 	VARCHAR(18),
 		increment 	VARCHAR(18),
-		cycle_option 	VARCHAR(3), 
-		schema_version VARCHAR(64)) AS 
+		cycle_option 	VARCHAR(3),
+		schema_version VARCHAR(64)) AS
 $$
-	SELECT a.*,$2 AS schema_version 
-	FROM 
+	SELECT a.*,$2 AS schema_version
+	FROM
 		(SELECT 	sequence_name,data_type,start_value,minimum_value,
-				maximum_value,increment,cycle_option 
+				maximum_value,increment,cycle_option
 		 FROM 		information_schema.sequences
 		 WHERE		sequence_schema = $2
 		EXCEPT
 		 SELECT 	sequence_name,data_type,start_value,minimum_value,
-				maximum_value,increment,cycle_option 
+				maximum_value,increment,cycle_option
 		 FROM 		information_schema.sequences
-		 WHERE		sequence_schema = $1 ) AS a 
+		 WHERE		sequence_schema = $1 ) AS a
 	UNION
 	SELECT a.*,$1 AS schema_version
-	FROM 
+	FROM
 		(SELECT 	sequence_name,data_type,start_value,minimum_value,
-				maximum_value,increment,cycle_option 
+				maximum_value,increment,cycle_option
 		 FROM 		information_schema.sequences
 		 WHERE		sequence_schema = $1
 		EXCEPT
 		 SELECT 	sequence_name,data_type,start_value,minimum_value,
-				maximum_value,increment,cycle_option 
+				maximum_value,increment,cycle_option
 		 FROM 		information_schema.sequences
-		 WHERE		sequence_schema = $2 ) AS a ;		
+		 WHERE		sequence_schema = $2 ) AS a ;
 
 $$
 LANGUAGE SQL VOLATILE;
@@ -584,15 +584,15 @@ LANGUAGE SQL VOLATILE;
 
 CREATE OR REPLACE FUNCTION _dba_.compare_schema_constraints(text,text)
 RETURNS TABLE (	constraint_name 	pg_catalog.name,
-		constraint_type 	CHAR(1), 
+		constraint_type 	CHAR(1),
 		table_name 		pg_catalog.name,
 		ref_table_name		pg_catalog.name,
 		column_name		pg_catalog.name,
 		ref_column_name		pg_catalog.name,
 		schema_version		VARCHAR(64)) AS
 $$
-	SELECT a.*,$2 AS schema_version 
-	FROM 
+	SELECT a.*,$2 AS schema_version
+	FROM
 		(SELECT 	a.conname AS constraint_name,
 				a.contype::char AS constraint_type,
 				b.relname AS table_name,
@@ -623,8 +623,8 @@ $$
 		WHERE   f.nspname = $1
 		AND	(array_length(a.conkey,1) = 1 AND array_length(a.confkey,1) = 1)) AS a
 	UNION
-	SELECT a.*,$1 AS schema_version 
-	FROM 
+	SELECT a.*,$1 AS schema_version
+	FROM
 		(SELECT 	a.conname AS constraint_name,
 				a.contype::char AS constraint_type,
 				b.relname AS table_name,
@@ -662,8 +662,8 @@ RETURNS TABLE (	table_name 		pg_catalog.name,
 		index_name		pg_catalog.name,
 		schema_version		VARCHAR(64)) AS
 $$
-	SELECT a.*, $2 as schema_version 
-	FROM 
+	SELECT a.*, $2 as schema_version
+	FROM
 		(SELECT tablename AS table_name,
 			indexname AS index_name
 		FROM pg_indexes
@@ -674,8 +674,8 @@ $$
 		FROM pg_indexes
 		WHERE schemaname = $1) AS a
 	UNION
-	SELECT a.*, $1 as schema_version 
-	FROM 
+	SELECT a.*, $1 as schema_version
+	FROM
 		(SELECT tablename AS table_name,
 			indexname AS index_name
 		FROM pg_indexes
@@ -689,4 +689,80 @@ $$
 LANGUAGE SQL VOLATILE;
 
 
+CREATE OR REPLACE FUNCTION _dba_.drop_schema_table
+(v_schema_name TEXT, v_table_name TEXT, v_drop_non_empty BOOLEAN DEFAULT FALSE) RETURNS VOID
+AS
+$$
+DECLARE
+	v_constraint_name 	VARCHAR(64);
+	v_con_table_name	VARCHAR(64);
+	v_rowcount		    BIGINT;
+BEGIN
 
+	EXECUTE 'SELECT COUNT(*) FROM '||v_schema_name||'.'||v_table_name INTO v_rowcount;
+
+	-- Nothing to be done if table is not empty
+	-- v_drop_not_empty is true
+	IF (v_rowcount != 0 AND v_drop_non_empty = FALSE)
+	THEN
+		RAISE NOTICE 'Table %.% has % rows',v_schema_name,v_table_name,v_rowcount;
+		RAISE EXCEPTION 'Cannot drop non-empty table %.%',v_schema_name,v_table_name;
+	END IF;
+
+	FOR v_constraint_name,v_con_table_name IN
+	SELECT 	a.conname, b.relname
+	FROM 	pg_constraint a
+	JOIN 	pg_class b ON (a.conrelid = b.oid)
+	JOIN 	pg_class c ON (a.confrelid = c.oid)
+	JOIN 	pg_namespace d ON (a.connamespace = d.oid)
+	WHERE 	c.relname = v_table_name
+	AND 	d.nspname = v_schema_name
+	LOOP
+		EXECUTE 'ALTER TABLE '||v_schema_name||'.'||v_con_table_name||' DROP CONSTRAINT '||v_constraint_name;
+	END LOOP;
+
+	-- Drop part - shouldn't be any problem by now
+
+	EXECUTE 'DROP TABLE '||v_schema_name||'.'||v_table_name;
+END;
+$$
+LANGUAGE plpgsql VOLATILE;
+
+CREATE OR REPLACE FUNCTION _dba_.truncate_schema_table
+(v_schema_name TEXT, v_table_name TEXT, v_drop_non_empty BOOLEAN DEFAULT FALSE) RETURNS VOID
+AS
+$$
+DECLARE
+	v_constraint_name 	VARCHAR(64);
+	v_con_table_name	VARCHAR(64);
+	v_rowcount		    BIGINT;
+BEGIN
+
+	EXECUTE 'SELECT COUNT(*) FROM '||v_schema_name||'.'||v_table_name INTO v_rowcount;
+
+	-- Nothing to be done if table is not empty
+	-- v_drop_not_empty is true
+	IF (v_rowcount != 0 AND v_drop_non_empty = FALSE)
+	THEN
+		RAISE NOTICE 'Table %.% has % rows',v_schema_name,v_table_name,v_rowcount;
+		RAISE EXCEPTION 'Cannot drop non-empty table %.%',v_schema_name,v_table_name;
+	END IF;
+
+	FOR v_constraint_name,v_con_table_name IN
+	SELECT 	a.conname, b.relname
+	FROM 	pg_constraint a
+	JOIN 	pg_class b ON (a.conrelid = b.oid)
+	JOIN 	pg_class c ON (a.confrelid = c.oid)
+	JOIN 	pg_namespace d ON (a.connamespace = d.oid)
+	WHERE 	c.relname = v_table_name
+	AND 	d.nspname = v_schema_name
+	LOOP
+		EXECUTE 'ALTER TABLE '||v_schema_name||'.'||v_con_table_name||' DROP CONSTRAINT '||v_constraint_name;
+	END LOOP;
+
+	-- Drop part - shouldn't be any problem by now
+
+	EXECUTE 'TRUNCATE TABLE '||v_schema_name||'.'||v_table_name;
+END;
+$$
+LANGUAGE plpgsql VOLATILE;

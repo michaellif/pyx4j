@@ -1,10 +1,11 @@
 /**
 ***	=================================================================================
+*** @version $Revision$ ($Author$) $Date$
 ***
 ***		Migration to version 1.0.5
-***		
+***
 ***		Since it is a huge transaction setting max_locks_per_transaction = 256
-***		for running this script is higly recommended 
+***		for running this script is higly recommended
 ***
 ***	=================================================================================
 **/
@@ -14,47 +15,6 @@
 /*
 CREATE SCHEMA _dba_ ;
 */
-
-
-CREATE OR REPLACE FUNCTION _dba_.drop_schema_table
-(v_schema_name TEXT, v_table_name TEXT, v_drop_non_empty BOOLEAN DEFAULT FALSE) RETURNS VOID 
-AS
-$$
-DECLARE
-	v_constraint_name 	VARCHAR(64);
-	v_con_table_name	VARCHAR(64);
-	v_rowcount		BIGINT;
-BEGIN
-	
-	EXECUTE 'SELECT COUNT(*) FROM '||v_schema_name||'.'||v_table_name INTO v_rowcount;
-
-	-- Nothing to be done if table is not empty
-	-- v_drop_not_empty is true
-	IF (v_rowcount != 0 AND v_drop_non_empty = FALSE)
-	THEN
-		RAISE NOTICE 'Table %.% has % rows',v_schema_name,v_table_name,v_rowcount;		
-		RAISE EXCEPTION 'Cannot drop non-empty table %.%',v_schema_name,v_table_name;
-	END IF;		
-		
-	FOR v_constraint_name,v_con_table_name IN 
-	SELECT 	a.conname, b.relname 
-	FROM 	pg_constraint a 
-	JOIN 	pg_class b ON (a.conrelid = b.oid)
-	JOIN 	pg_class c ON (a.confrelid = c.oid)
-	JOIN 	pg_namespace d ON (a.connamespace = d.oid) 
-	WHERE 	c.relname = v_table_name
-	AND 	d.nspname = v_schema_name
-	LOOP
-		EXECUTE 'ALTER TABLE '||v_schema_name||'.'||v_con_table_name||' DROP CONSTRAINT '||v_constraint_name;
-	END LOOP;
-
-	-- Drop part - shouldn't be any problem by now
-	
-	EXECUTE 'DROP TABLE '||v_schema_name||'.'||v_table_name;
-END;
-$$
-LANGUAGE plpgsql VOLATILE;
-
 
 BEGIN TRANSACTION;
 
@@ -67,18 +27,6 @@ SET search_path = '_admin_';
 ALTER TABLE admin_pmc_equifax_info
 	ADD COLUMN report_type VARCHAR(50),
 	ADD COLUMN approved BOOLEAN;
-
-/** The following insert to be disabled in development environment **/
-INSERT INTO admin_pmc_payment_type_info 
-(id,pmc,cc_visa_fee,cc_visa_payment_available,interac_visa_fee,interac_visa_payment_available,
-cc_master_card_fee,cc_master_card_payment_available,interac_caledon_fee,interac_caledon_payment_available,
-eft_fee,eft_payment_available,e_cheque_fee,e_check_payment_available) VALUES
-(nextval('public.admin_pmc_payment_type_info_seq'),2,1.3,TRUE,0.6,TRUE,2.02,TRUE,1.3,TRUE,0.75,TRUE,0.5,TRUE),
-(nextval('public.admin_pmc_payment_type_info_seq'),3,1.5,TRUE,0.75,TRUE,2.22,TRUE,NULL,FALSE,1.5,TRUE,1.5,TRUE),
-(nextval('public.admin_pmc_payment_type_info_seq'),6,1.5,TRUE,0.75,TRUE,2.22,TRUE,NULL,FALSE,1.5,TRUE,1.5,TRUE),
-(nextval('public.admin_pmc_payment_type_info_seq'),9,1.5,TRUE,0.75,TRUE,2.22,TRUE,NULL,FALSE,1.5,TRUE,1.5,TRUE),
-(nextval('public.admin_pmc_payment_type_info_seq'),13,1.5,TRUE,0.75,TRUE,2.22,TRUE,NULL,FALSE,1.5,TRUE,1.5,TRUE);
-
 
 
 /** 	public schema	**/
@@ -140,35 +88,35 @@ DROP SEQUENCE unit_availability_summary_gmeta_seq;
 
 -- Create new sequences - 15 total
 
-CREATE SEQUENCE gadget_metadata_holder_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1; 
+CREATE SEQUENCE gadget_metadata_holder_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE gadget_metadata_holder_seq OWNER TO vista;
-CREATE SEQUENCE income_info_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1; 
+CREATE SEQUENCE income_info_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE income_info_seq OWNER TO vista;
-CREATE SEQUENCE lease_customer_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1; 
+CREATE SEQUENCE lease_customer_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE lease_customer_seq OWNER TO vista;
-CREATE SEQUENCE lease_participant_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1; 
+CREATE SEQUENCE lease_participant_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE lease_participant_seq OWNER TO vista;
-CREATE SEQUENCE lease_term$documents_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1; 
+CREATE SEQUENCE lease_term$documents_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE lease_term$documents_seq OWNER TO vista;
-CREATE SEQUENCE lease_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1; 
+CREATE SEQUENCE lease_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE lease_term_seq OWNER TO vista;
-CREATE SEQUENCE lease_term_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1; 
+CREATE SEQUENCE lease_term_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE lease_term_v_seq OWNER TO vista;
-CREATE SEQUENCE lease_term_vlease_products$concessions_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1; 
+CREATE SEQUENCE lease_term_vlease_products$concessions_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE lease_term_vlease_products$concessions_seq OWNER TO vista;
-CREATE SEQUENCE lease_term_vlease_products$feature_items_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1; 
+CREATE SEQUENCE lease_term_vlease_products$feature_items_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE lease_term_vlease_products$feature_items_seq OWNER TO vista;
-CREATE SEQUENCE notes_and_attachments$attachments_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1; 
+CREATE SEQUENCE notes_and_attachments$attachments_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE notes_and_attachments$attachments_seq OWNER TO vista;
-CREATE SEQUENCE product_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1; 
+CREATE SEQUENCE product_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE product_seq OWNER TO vista;
-CREATE SEQUENCE product_v$concessions_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1; 
+CREATE SEQUENCE product_v$concessions_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE product_v$concessions_seq OWNER TO vista;
-CREATE SEQUENCE product_v$features_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1; 
+CREATE SEQUENCE product_v$features_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE product_v$features_seq OWNER TO vista;
-CREATE SEQUENCE product_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1; 
+CREATE SEQUENCE product_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE product_v_seq OWNER TO vista;
-CREATE SEQUENCE reports_settings_holder_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1; 
+CREATE SEQUENCE reports_settings_holder_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE reports_settings_holder_seq OWNER TO vista;
 
 /**
@@ -189,12 +137,12 @@ DECLARE
 	v_table_name			VARCHAR(64);
 	v_void				CHAR(1);
 BEGIN
-	FOR v_schema_name IN 
+	FOR v_schema_name IN
 	SELECT namespace FROM _admin_.admin_pmc WHERE status IN ('Active','Suspended')
 	LOOP
 		-- DROP all gadget tables
 		/**
-		***	We will use new and progressive way of dropping tables 
+		***	We will use new and progressive way of dropping tables
 		***	instead of old boring DROP TABLE routine
 		**/
 
@@ -228,13 +176,13 @@ BEGIN
  			'payments_summary_gadget_metadata',
 			'turnover_analysis_metadata',
 			'building_lister',
-			'gadget_docking_meta']	
+			'gadget_docking_meta']
 		LOOP
-			-- DROPS NON-EMPTY TABLES!			
+			-- DROPS NON-EMPTY TABLES!
 			SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,v_table_name,TRUE) ;
 
 		END LOOP;
-		
+
 		-- income related tables
 		FOREACH v_table_name IN ARRAY
 		ARRAY[	'income_info_other',
@@ -246,8 +194,8 @@ BEGIN
 		LOOP
 			SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,v_table_name) ;
 
-		END LOOP;		
-				
+		END LOOP;
+
 
 		-- aging_buckets table
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.aging_buckets ADD COLUMN bucket_this_month NUMERIC(18,2)';
@@ -268,7 +216,7 @@ BEGIN
 
 		-- building
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.building DROP COLUMN dashboard, DROP COLUMN notes_and_attachments';
-		
+
 		-- complex
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.complex DROP COLUMN dashboard';
 
@@ -280,13 +228,13 @@ BEGIN
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.dashboard_metadata DROP COLUMN is_favorite,'||
 								'DROP COLUMN layout_type,'||
 								'ADD COLUMN encoded_layout VARCHAR(500)';
-		
+
 		-- employee
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.employee ADD COLUMN employee_id_s VARCHAR(14)';
 		EXECUTE 'UPDATE '||v_schema_name||'.employee SET employee_id_s = _dba_.convert_id_to_string(employee_id)';
-		
-		
-		-- gadget_metadata_holder - there is a chance that it will be added by db integrity check 
+
+
+		-- gadget_metadata_holder - there is a chance that it will be added by db integrity check
 
 		EXECUTE 'CREATE TABLE '||v_schema_name||'.gadget_metadata_holder '||
 				'(	id		BIGINT		NOT NULL, '||
@@ -299,9 +247,9 @@ BEGIN
 		'.gadget_metadata_holder USING btree (class_name,identifier_key)';
 
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.gadget_metadata_holder OWNER TO vista';
-					 			
 
-		-- income_info 
+
+		-- income_info
 
 		EXECUTE 'CREATE TABLE '||v_schema_name||'.income_info ('||
     			'	id 				BIGINT 			NOT NULL,'||
@@ -354,7 +302,7 @@ BEGIN
 		-- invoice_concession_sub_line_item
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_concession_sub_line_item ADD COLUMN line_itemdiscriminator VARCHAR(50)';
 		EXECUTE 'CREATE INDEX  invoice_concession_sub_line_item_line_itemdiscriminator_idx ON '||v_schema_name||'.invoice_concession_sub_line_item '||
-		'USING btree (line_itemdiscriminator) ';		
+		'USING btree (line_itemdiscriminator) ';
 
 		-- lead
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.lead ADD COLUMN lead_id_s VARCHAR(14)';
@@ -369,7 +317,7 @@ BEGIN
 		-- master_online_application
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.master_online_application ADD COLUMN online_application_id_s VARCHAR(14)';
 		EXECUTE 'UPDATE '||v_schema_name||'.master_online_application SET online_application_id_s = _dba_.convert_id_to_string(online_application_id) ';
-		
+
 		-- notes_and_attachments
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.notes_and_attachments DROP COLUMN x,'||
 							'ADD COLUMN owner_id BIGINT,'||
@@ -381,7 +329,7 @@ BEGIN
 							'ADD COLUMN created DATE';
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.notes_and_attachments '||
 		'ADD CONSTRAINT notes_and_attachments_crmuser_fk FOREIGN KEY(crmuser) REFERENCES '||v_schema_name||'.crm_user(id)';
-		
+
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.notes_and_attachments OWNER TO vista';
 
 		EXECUTE 'CREATE INDEX notes_and_attachments_owner_id_owner_class_idx ON '||v_schema_name||'.notes_and_attachments '||
@@ -408,22 +356,22 @@ BEGIN
 		EXECUTE 'CREATE INDEX notes_and_attachments$attachments_owner_idx ON '||v_schema_name||'.notes_and_attachments$attachments '||
 		'USING btree (owner) ';
 
-		--  notes_and_attachments$notes -- drop	
-		SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'notes_and_attachments$notes',FALSE);		
+		--  notes_and_attachments$notes -- drop
+		SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'notes_and_attachments$notes',FALSE);
 
 		-- payment_payment_details
 
-		
+
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_payment_details RENAME COLUMN account_no_reference TO account_no_obfuscated_number';
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_payment_details RENAME COLUMN card_reference TO card_obfuscated_number';
 
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_payment_details ALTER COLUMN account_no_obfuscated_number TYPE VARCHAR(500),'||
 										'ALTER COLUMN card_obfuscated_number TYPE VARCHAR(500)';
-		
+
 		EXECUTE 'UPDATE '||v_schema_name||'.payment_payment_details '||
 		'	SET 	account_no_obfuscated_number = LPAD(account_no_obfuscated_number,12,''X''),
-				card_obfuscated_number = LPAD(card_obfuscated_number,16,''X'') ';	
-		
+				card_obfuscated_number = LPAD(card_obfuscated_number,16,''X'') ';
+
 		-- personal_income
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.personal_income DROP COLUMN employer,'||
 									'DROP COLUMN other_income_information,'||
@@ -432,8 +380,8 @@ BEGIN
 									'DROP COLUMN social_services,'||
 									'DROP COLUMN student_income,'||
 									'ADD COLUMN details BIGINT,'||
-									'ADD COLUMN detailsdiscriminator VARCHAR(50)';		
-	
+									'ADD COLUMN detailsdiscriminator VARCHAR(50)';
+
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.personal_income ADD CONSTRAINT personal_income_details_fk FOREIGN KEY(details) '||
 			'REFERENCES '||v_schema_name||'.income_info(id) ';
 
@@ -450,10 +398,10 @@ BEGIN
 
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.reports_settings_holder OWNER TO vista';
 
-		
+
 		-- tenant_charge
-		EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge ADD COLUMN tenantdiscriminator VARCHAR(50)';		
-	
+		EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge ADD COLUMN tenantdiscriminator VARCHAR(50)';
+
 		-- unit_availability_status
 
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.unit_availability_status RENAME COLUMN status_date TO status_from';
@@ -469,9 +417,9 @@ BEGIN
 			'CASE WHEN b.status_from IS NOT NULL THEN  b.status_from -1 '||
 			'ELSE ''3000-01-01'' END AS date_til FROM t AS a '||
 			'LEFT JOIN t AS b ON (a.unit = b.unit AND a.rownum +1 = b.rownum) ) AS b '
-			'WHERE a.id = b.id ';	
+			'WHERE a.id = b.id ';
 
-			
+
 		/**
 		***	-----------------------------------------------------------------------------------------
 		***		Service,feature, product and such
@@ -479,7 +427,7 @@ BEGIN
 		**/
 
 		-- product
-		
+
 		EXECUTE 'CREATE TABLE '||v_schema_name||'.product ( '||
 			'	id			BIGINT		NOT NULL,'||
 			'	old_id			BIGINT,'||			-- To hold original value for data migration
@@ -498,8 +446,8 @@ BEGIN
 
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.product OWNER TO vista';
 
-		
-		-- product_v		
+
+		-- product_v
 
 		EXECUTE 'CREATE TABLE '||v_schema_name||'.product_v ( '||
 			'	id			BIGINT 		NOT NULL,'||
@@ -536,12 +484,12 @@ BEGIN
 
 		EXECUTE 'UPDATE '||v_schema_name||'.product_v AS b '||
 		'	SET 	holder = a.holder '||
-		'	FROM	'|| 
+		'	FROM	'||
 		'	(SELECT a.id,b.id AS holder '||
 		'	FROM '||v_schema_name||'.product_v a '||
 		'	JOIN '||v_schema_name||'.product b ON (a.old_holder = b.old_id)) AS a '||
 		'	WHERE b.id = a.id ';
-		
+
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ADD CONSTRAINT product_v_holder_fk FOREIGN KEY(holder) REFERENCES '||v_schema_name||'.product(id)';
 
 		EXECUTE 'CREATE INDEX product_v_holder_holderdiscriminator_from_date_to_date_idx ON '||v_schema_name||'.product_v '||
@@ -562,16 +510,16 @@ BEGIN
 		'(SELECT nextval(''product_v$features_seq'') AS id,b.id AS owner,''feature'',c.id AS value,a.seq '||
 		'FROM '||v_schema_name||'.service_v$features a '||
 		'JOIN '||v_schema_name||'.product_v b ON (a.owner = b.old_id) '||
-		'JOIN '||v_schema_name||'.product c ON (a.value = c.old_id))';	
-		
-		EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v$features '||	
+		'JOIN '||v_schema_name||'.product c ON (a.value = c.old_id))';
+
+		EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v$features '||
 		'	ADD CONSTRAINT product_v$features_owner_fk FOREIGN KEY(owner) REFERENCES '||v_schema_name||'.product_v(id), '||
 		'	ADD CONSTRAINT product_v$features_value_fk FOREIGN KEY(value) REFERENCES '||v_schema_name||'.product(id) ';
-		
+
 		EXECUTE 'CREATE INDEX product_v$features_owner_idx ON '||v_schema_name||'.product_v$features USING btree(owner)';
 
-		EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v$features OWNER TO vista';	
-		
+		EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v$features OWNER TO vista';
+
 		-- product_v$concessions
 
 		EXECUTE 'CREATE TABLE '||v_schema_name||'.product_v$concessions ( '||
@@ -580,22 +528,22 @@ BEGIN
 		'	value		BIGINT,'||
 		'	seq		INT,'||
 		'	CONSTRAINT product_v$concessions_pk PRIMARY KEY(id))';
-		
-	
+
+
 		EXECUTE 'INSERT INTO '||v_schema_name||'.product_v$concessions (id,owner,value,seq) '||
 		'(SELECT nextval(''public.product_v$concessions_seq'') AS id, b.id AS owner,a.value,a.seq '
 		'FROM '||v_schema_name||'.service_v$concessions a '||
 		'JOIN '||v_schema_name||'.product_v b ON (a.owner = b.old_id))';
-		
-	 
+
+
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v$concessions '||
 		'	ADD CONSTRAINT product_v$concessions_owner_fk FOREIGN KEY(owner) REFERENCES '||v_schema_name||'.product_v(id), '||
 		'	ADD CONSTRAINT product_v$concessions_value_fk FOREIGN KEY(value) REFERENCES '||v_schema_name||'.concession(id) ';
 		EXECUTE 'CREATE INDEX product_v$concessions_owner_idx ON '||v_schema_name||'.product_v$concessions USING btree (owner) ';
 
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v$concessions OWNER TO vista';
-		
-		-- product_item 
+
+		-- product_item
 
 		EXECUTE 'UPDATE '||v_schema_name||'.product_item AS b '||
 		'	SET 	product = a.product '||
@@ -608,8 +556,8 @@ BEGIN
 		'REFERENCES '||v_schema_name||'.product_v(id)';
 
 		-- cleanup
-		
-		FOREACH v_table_name IN ARRAY 
+
+		FOREACH v_table_name IN ARRAY
 		ARRAY[	'service_v$concessions',
 			'service_v$features',
 			'service_v',
@@ -618,7 +566,7 @@ BEGIN
 			'feature']
 		LOOP
 			SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,v_table_name,TRUE);
-		
+
 		END LOOP;
 
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v DROP COLUMN old_id, DROP COLUMN old_holder';
@@ -626,13 +574,13 @@ BEGIN
 
 		/**
 		***	-----------------------------------------------------------------------------------------
-		***		
+		***
 		***		Services, features and products section is over. Finally!
 		***		Now for the next big task - lease migration.
-		***	
+		***
 		***	------------------------------------------------------------------------------------------
-		**/	
-	
+		**/
+
 		-- lease
 
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.lease ADD COLUMN actual_lease_to DATE,'||
@@ -647,8 +595,8 @@ BEGIN
 								'ADD COLUMN move_out_notice DATE,'||
 								'ADD COLUMN next_term BIGINT,'||
 								'ADD COLUMN previous_term BIGINT';
-								
-		
+
+
 		/**
 		***	Migratting lease_v data to lease - if lease is not in draft mode,
 		***	the latest version should be taken, else - the draft one
@@ -660,7 +608,7 @@ BEGIN
 		 			'FROM 		'||v_schema_name||'.lease_v '||
 		 			'WHERE 		to_date IS NULL '||
 		 			'AND 		version_number IS NOT NULL) '||				-- t is just the completed versions of lease
-		'UPDATE '||v_schema_name||'.lease AS a '||		
+		'UPDATE '||v_schema_name||'.lease AS a '||
 		'SET 	actual_lease_to = b.actual_lease_to,'||
 		'	actual_move_in = b.actual_move_in,'||
 		'	actual_move_out = b.actual_move_out,'||
@@ -668,14 +616,14 @@ BEGIN
 		'	status = b.status,'||
 		'	expected_move_in = b.expected_move_in,'||
 		'	expected_move_out = b.expected_move_out,'||
-		'	move_out_notice = b.move_out_notice '|| 
+		'	move_out_notice = b.move_out_notice '||
 		' FROM  '||
 		'(SELECT holder,actual_lease_to,actual_move_in,actual_move_out,'||
 		'	completion,status,expected_move_in,expected_move_out,'||
 		'	move_out_notice '||
 		'FROM  	t '||
 		'UNION '||
-		'(SELECT holder,actual_lease_to,actual_move_in,actual_move_out,'|| 				-- draft versions that are not in t 
+		'(SELECT holder,actual_lease_to,actual_move_in,actual_move_out,'|| 				-- draft versions that are not in t
 		'	completion,status,expected_move_in,expected_move_out,'||
 		'	move_out_notice '||
 		'FROM  	'||v_schema_name||'.lease_v '||
@@ -684,7 +632,7 @@ BEGIN
 		'AND	holder NOT IN (SELECT holder FROM t))) AS b '||
 		'WHERE 	a.id = b.holder ';
 
-		
+
 		-- lease_term
 
 		EXECUTE 'CREATE TABLE '||v_schema_name||'.lease_term ( '||
@@ -731,7 +679,7 @@ BEGIN
 		'FROM '||v_schema_name||'.lease_v a '||
 		'JOIN '||v_schema_name||'.lease_term b ON (a.holder = b.lease) '||
 		'ORDER BY a.holder) ';
-		
+
 		EXECUTE 'CREATE INDEX lease_term_v_holder_from_date_to_date_idx ON '||v_schema_name||'.lease_term_v USING btree (holder, from_date, to_date)';
 
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_v OWNER TO vista';
@@ -769,12 +717,12 @@ BEGIN
 		'FROM '||v_schema_name||'.lease_vlease_products$concessions a '||
 		'JOIN '||v_schema_name||'.lease_term_v b ON (b.old_id = a.owner) '||
 		'ORDER BY b.id )';
-		
+
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_vlease_products$concessions OWNER TO vista';
 		EXECUTE 'CREATE INDEX lease_term_vlease_products$concessions_owner_idx ON '||v_schema_name||'.lease_term_vlease_products$concessions '||
 		'USING btree (owner)';
-		
-		
+
+
 		-- lease_term_vlease_products$feature_items
 		EXECUTE 'CREATE TABLE '||v_schema_name||'.lease_term_vlease_products$feature_items ( '||
 		'	id 		BIGINT		NOT NULL,'||
@@ -792,12 +740,12 @@ BEGIN
 		'FROM '||v_schema_name||'.lease_vlease_products$feature_items a '||
 		'JOIN '||v_schema_name||'.lease_term_v b ON (b.old_id = a.owner) '||
 		'ORDER BY b.id )';
-		
+
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_vlease_products$feature_items OWNER TO vista';
 		EXECUTE 'CREATE INDEX lease_term_vlease_products$feature_items_owner_idx ON '||v_schema_name||'.lease_term_vlease_products$feature_items '||
 		'USING btree (owner)';
 
-			
+
 		-- lease - revisited
 
 		EXECUTE 'UPDATE '||v_schema_name||'.lease AS a '||
@@ -827,7 +775,7 @@ BEGIN
 		'		REFERENCES '||v_schema_name||'.lease(id),'||
     		'	CONSTRAINT lease_customer_preauthorized_payment_fk FOREIGN KEY(preauthorized_payment) '||
 		'		REFERENCES '||v_schema_name||'.payment_method(id))';
-		
+
 		EXECUTE 'INSERT INTO '||v_schema_name||'.lease_customer '||
 		'(id,iddiscriminator,lease,customer,participant_id,preauthorized_payment,participant_id_s) '||
 		'(SELECT nextval(''public.lease_customer_seq'') AS id,''Tenant'' AS iddiscriminator,a.* '||
@@ -849,14 +797,14 @@ BEGIN
 		'JOIN '||v_schema_name||'.lease_v c ON (a.id = c.holder) '||
 		'JOIN '||v_schema_name||'.guarantor d ON (c.id = d.lease_v) '||
 		'JOIN (SELECT customer, MAX(participant_id) AS participant_id FROM '||v_schema_name||'.guarantor GROUP BY customer) b ON (d.customer = b.customer)) AS a)';
-		
+
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_customer OWNER TO vista';
 		EXECUTE 'CREATE INDEX lease_customer_lease_customer_idx ON '||v_schema_name||'.lease_customer USING btree(lease,customer,iddiscriminator)';
 		EXECUTE 'CREATE INDEX lease_customer_participant_id_idx ON '||v_schema_name||'.lease_customer USING btree(participant_id,iddiscriminator)';
 
 
 		-- lease_participant
-		
+
 		EXECUTE 'CREATE TABLE '||v_schema_name||'.lease_participant ( '||
 		'	id				BIGINT 		NOT NULL,'||
 		'	tenant_id			BIGINT,'||
@@ -884,7 +832,7 @@ BEGIN
 		'		REFERENCES '||v_schema_name||'.person_screening(id), '||
     		'	CONSTRAINT lease_participant_tenant_fk FOREIGN KEY(tenant) '||
 		'		REFERENCES vista.lease_participant(id))';
-		
+
 		EXECUTE 'INSERT INTO '||v_schema_name||'.lease_participant '||
 		'(id,iddiscriminator,lease_customerdiscriminator,lease_customer,participant_role,lease_term_v,order_in_lease,'||
 		'application,screening,relationship,tenantdiscriminator,tenant) '||
@@ -896,7 +844,7 @@ BEGIN
 		'JOIN '||v_schema_name||'.lease_customer c ON (a.customer = c.customer) '||
 		'LEFT JOIN '||v_schema_name||'.lease_participant d ON (d.tenant_id = a.tenant) '||
 		'ORDER BY a.id )';
-		
+
 		EXECUTE 'INSERT INTO '||v_schema_name||'.lease_participant '||
 		'(id,tenant_id,iddiscriminator,lease_customerdiscriminator,lease_customer,participant_role,lease_term_v,order_in_lease,'||
 		'application,screening,relationship,take_ownership,percentage) '||
@@ -907,37 +855,37 @@ BEGIN
 		'JOIN '||v_schema_name||'.lease_term_v b ON (a.lease_v = b.old_id) '||
 		'JOIN '||v_schema_name||'.lease_customer c ON (a.customer = c.customer) '||
 		'ORDER BY a.id )';
-		
+
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant OWNER TO vista';
 		EXECUTE 'CREATE INDEX lease_participant_application_idx ON '||v_schema_name||'.lease_participant USING btree(application)';
 		EXECUTE 'CREATE INDEX lease_participant_lease_term_v_idx ON '||v_schema_name||'.lease_participant USING btree(lease_term_v)';
 
 		-- maintenance_request - hope that there are no real maintenance requests!
-		
+
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request ADD COLUMN lease_customer BIGINT,'||
 										'ADD COLUMN lease_customerdiscriminator VARCHAR(50),'||
 										'ADD CONSTRAINT maintenance_request_lease_customer_fk FOREIGN KEY(lease_customer) '||
 										'	REFERENCES '||v_schema_name||'.lease_customer(id)';
-		
+
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request DROP COLUMN tenant';
-		
+
 		-- payment_record
-		
+
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record RENAME COLUMN lease_participant TO tenant_id ';
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record ADD COLUMN lease_participant BIGINT ';
 
 		EXECUTE 'UPDATE '||v_schema_name||'.payment_record AS a '||
 			'SET 	lease_participant = b.id '||
 			'FROM 	(SELECT id,tenant_id FROM '||v_schema_name||'.lease_participant) AS b '||
-			'WHERE 	a.tenant_id = b.tenant_id ';		
-		
+			'WHERE 	a.tenant_id = b.tenant_id ';
+
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record ADD CONSTRAINT payment_record_lease_participant_fk FOREIGN KEY(lease_participant) '||
 								'REFERENCES '||v_schema_name||'.lease_participant(id),'||
 								'DROP COLUMN tenant_id ';
 
 		-- tenant_charge
 
-		EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge DROP CONSTRAINT tenant_charge_tenant_fk';		
+		EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge DROP CONSTRAINT tenant_charge_tenant_fk';
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge RENAME COLUMN tenant  TO old_tenant';
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge ADD COLUMN tenant BIGINT';
 
@@ -950,17 +898,17 @@ BEGIN
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge ADD CONSTRAINT tenant_charge_tenant_fk FOREIGN KEY(tenant) '||
 							'REFERENCES '||v_schema_name||'.lease_participant(id), '||
 							'DROP COLUMN old_tenant';
-				
-		
+
+
 		/**	Cleanup **/
 
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_v DROP COLUMN old_id';
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant DROP COLUMN tenant_id';
 
-		
-		-- Delete all extra tables 
 
-		FOREACH v_table_name IN ARRAY 
+		-- Delete all extra tables
+
+		FOREACH v_table_name IN ARRAY
 		ARRAY[	'guarantor',
 			'lease_v',
 			'lease_vlease_products$concessions',
@@ -970,8 +918,8 @@ BEGIN
 			SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,v_table_name,TRUE);
 
 		END LOOP;
-			
-	
+
+
 	END LOOP;
 END;
 $$
