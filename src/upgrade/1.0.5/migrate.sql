@@ -201,7 +201,7 @@ BEGIN
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.aging_buckets ADD COLUMN bucket_this_month NUMERIC(18,2)';
 
 		-- apt_unit table
-		EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit ADD COLUMN info_number_s VARCHAR(20), DROP COLUMN notes_and_attachments';
+		EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit ADD COLUMN info_number_s VARCHAR(32), DROP COLUMN notes_and_attachments';
 		EXECUTE 'UPDATE '||v_schema_name||'.apt_unit SET info_number_s = _dba_.convert_id_to_string(info_unit_number)';
 
 		-- billing_bill
@@ -221,7 +221,7 @@ BEGIN
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.complex DROP COLUMN dashboard';
 
 		-- customer
-		EXECUTE 'ALTER TABLE '||v_schema_name||'.customer ADD COLUMN customer_id_s VARCHAR(14)';
+		EXECUTE 'ALTER TABLE '||v_schema_name||'.customer ADD COLUMN customer_id_s VARCHAR(26)';
 		EXECUTE 'UPDATE '||v_schema_name||'.customer SET customer_id_s = _dba_.convert_id_to_string(customer_id) ';
 
 		-- dashboard_metadata
@@ -230,7 +230,7 @@ BEGIN
 								'ADD COLUMN encoded_layout VARCHAR(500)';
 
 		-- employee
-		EXECUTE 'ALTER TABLE '||v_schema_name||'.employee ADD COLUMN employee_id_s VARCHAR(14)';
+		EXECUTE 'ALTER TABLE '||v_schema_name||'.employee ADD COLUMN employee_id_s VARCHAR(26)';
 		EXECUTE 'UPDATE '||v_schema_name||'.employee SET employee_id_s = _dba_.convert_id_to_string(employee_id)';
 
 
@@ -305,7 +305,7 @@ BEGIN
 		'USING btree (line_itemdiscriminator) ';
 
 		-- lead
-		EXECUTE 'ALTER TABLE '||v_schema_name||'.lead ADD COLUMN lead_id_s VARCHAR(14)';
+		EXECUTE 'ALTER TABLE '||v_schema_name||'.lead ADD COLUMN lead_id_s VARCHAR(26)';
 		EXECUTE 'UPDATE '||v_schema_name||'.lead SET lead_id_s = _dba_.convert_id_to_string(lead_id) ';
 
 		-- lease_application
@@ -315,7 +315,7 @@ BEGIN
 		-- LATER!!!
 
 		-- master_online_application
-		EXECUTE 'ALTER TABLE '||v_schema_name||'.master_online_application ADD COLUMN online_application_id_s VARCHAR(14)';
+		EXECUTE 'ALTER TABLE '||v_schema_name||'.master_online_application ADD COLUMN online_application_id_s VARCHAR(26)';
 		EXECUTE 'UPDATE '||v_schema_name||'.master_online_application SET online_application_id_s = _dba_.convert_id_to_string(online_application_id) ';
 
 		-- notes_and_attachments
@@ -365,8 +365,8 @@ BEGIN
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_payment_details RENAME COLUMN account_no_reference TO account_no_obfuscated_number';
 		EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_payment_details RENAME COLUMN card_reference TO card_obfuscated_number';
 
-		EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_payment_details ALTER COLUMN account_no_obfuscated_number TYPE VARCHAR(500),'||
-										'ALTER COLUMN card_obfuscated_number TYPE VARCHAR(500)';
+		EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_payment_details ALTER COLUMN account_no_obfuscated_number TYPE VARCHAR(12),'||
+										'ALTER COLUMN card_obfuscated_number TYPE VARCHAR(16)';
 
 		EXECUTE 'UPDATE '||v_schema_name||'.payment_payment_details '||
 		'	SET 	account_no_obfuscated_number = LPAD(account_no_obfuscated_number,12,''X''),
@@ -591,7 +591,7 @@ BEGIN
 								'ADD COLUMN current_term BIGINT,'||
 								'ADD COLUMN expected_move_in DATE,'||
 								'ADD COLUMN expected_move_out DATE,'||
-								'ADD COLUMN lease_id_s VARCHAR(14),'||
+								'ADD COLUMN lease_id_s VARCHAR(26),'||
 								'ADD COLUMN move_out_notice DATE,'||
 								'ADD COLUMN next_term BIGINT,'||
 								'ADD COLUMN previous_term BIGINT';
@@ -767,7 +767,7 @@ BEGIN
 		'	customer		BIGINT,'||
 		'	participant_id		VARCHAR(14),'||
 		'	preauthorized_payment	BIGINT,'||
-		'	participant_id_s	VARCHAR(14),'||
+		'	participant_id_s	VARCHAR(26),'||
 		'	CONSTRAINT lease_customer_pk PRIMARY KEY(id),'||
 		'	CONSTRAINT lease_customer_customer_fk FOREIGN KEY(customer) '||
 		'		REFERENCES '||v_schema_name||'.customer(id),'||
@@ -930,5 +930,5 @@ DROP FUNCTION _dba_.migrate_to_105();
 
 SET client_min_messages = 'NOTICE';
 
--- COMMIT;
+COMMIT;
 
