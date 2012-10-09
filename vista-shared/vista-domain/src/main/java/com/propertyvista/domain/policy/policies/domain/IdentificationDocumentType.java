@@ -17,8 +17,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
@@ -33,7 +31,6 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
-import com.propertyvista.domain.ref.Province;
 
 @ToStringFormat("{0}")
 public interface IdentificationDocumentType extends IEntity {
@@ -79,17 +76,4 @@ public interface IdentificationDocumentType extends IEntity {
     @Caption(name = "ID Type")
     @MemberColumn(name = "idType")
     IPrimitive<Type> type();
-
-    // Fillable fields:
-
-    @NotNull
-    IPrimitive<String> documentID();
-
-    @Caption(description = "Country/Organization Issued the Document")
-    IPrimitive<String> documentIssuer();
-
-    @NotNull
-    @Caption(name = "Province/State", description = "Province/State, In Which The License Has Been Issued")
-    @Editor(type = EditorType.combo)
-    Province driversLicenseState();
 }
