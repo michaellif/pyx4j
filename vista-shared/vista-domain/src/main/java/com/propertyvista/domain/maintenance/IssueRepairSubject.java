@@ -15,6 +15,7 @@ package com.propertyvista.domain.maintenance;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -29,6 +30,7 @@ public interface IssueRepairSubject extends IEntity {
     @Owner
     @JoinColumn
     @NotNull
+    @MemberColumn(notNull = true)
     IssueElement issueElement();
 
     @OrderColumn

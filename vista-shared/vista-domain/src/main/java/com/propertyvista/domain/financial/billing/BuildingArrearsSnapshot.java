@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -28,6 +29,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 public interface BuildingArrearsSnapshot extends ArrearsSnapshot {
 
     @Owner
+    @MemberColumn(notNull = true)
     @Detached
     @NotNull
     @Indexed

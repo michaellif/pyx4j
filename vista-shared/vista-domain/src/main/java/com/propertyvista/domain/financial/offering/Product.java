@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -41,6 +42,7 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V> {
 
     @Owner
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @JoinColumn

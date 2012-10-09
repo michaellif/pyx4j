@@ -34,6 +34,7 @@ public interface EmailTemplate extends IEntity {
 
     @Owner
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @JoinColumn

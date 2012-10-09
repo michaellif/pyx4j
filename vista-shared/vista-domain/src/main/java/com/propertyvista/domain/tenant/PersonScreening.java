@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -47,6 +48,7 @@ public interface PersonScreening extends IVersionedEntity<PersonScreeningV>, App
 
     @Owner
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @JoinColumn

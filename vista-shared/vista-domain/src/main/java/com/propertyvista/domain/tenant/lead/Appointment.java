@@ -54,6 +54,7 @@ public interface Appointment extends IEntity {
 
     @Owner
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @JoinColumn

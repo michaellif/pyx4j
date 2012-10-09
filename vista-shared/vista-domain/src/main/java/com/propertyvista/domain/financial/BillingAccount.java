@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -46,6 +47,7 @@ public interface BillingAccount extends IEntity {
 
     @Owner
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     Lease lease();

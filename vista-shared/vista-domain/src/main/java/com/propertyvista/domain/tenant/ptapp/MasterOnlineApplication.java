@@ -58,6 +58,7 @@ public interface MasterOnlineApplication extends IEntity {
     }
 
     @Owner
+    @MemberColumn(notNull = true)
     LeaseApplication leaseApplication();
 
     @NotNull

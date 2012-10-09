@@ -58,6 +58,7 @@ public interface PageDescriptor extends Descriptor {
 
     @Owner
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @JoinColumn

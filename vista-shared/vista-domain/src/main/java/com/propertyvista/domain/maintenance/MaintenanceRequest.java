@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
@@ -38,6 +39,7 @@ public interface MaintenanceRequest extends IEntity {
     @Owner
     @Detached
     @NotNull
+    @MemberColumn(notNull = true)
     @JoinColumn
     LeaseCustomerTenant leaseCustomer();
 

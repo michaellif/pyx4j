@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
@@ -36,6 +37,7 @@ public interface BillingCycle extends IEntity {
     @ToString(index = 0)
     @ReadOnly
     @Owner
+    @MemberColumn(notNull = true)
     @Detached
     @JoinColumn
     @Indexed(group = "DBT,2", uniqueConstraint = true)

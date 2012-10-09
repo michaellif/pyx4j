@@ -39,6 +39,7 @@ public interface Equipment extends LicensedWarrantedMaintained, Notes {
 
     @Owner
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @JoinColumn

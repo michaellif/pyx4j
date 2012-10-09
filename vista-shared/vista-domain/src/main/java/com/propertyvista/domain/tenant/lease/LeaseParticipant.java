@@ -71,6 +71,7 @@ public interface LeaseParticipant<LC extends LeaseCustomer> extends IEntity {
     }
 
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @ToString(index = 0)
     LC leaseCustomer();
@@ -82,6 +83,7 @@ public interface LeaseParticipant<LC extends LeaseCustomer> extends IEntity {
 
     @Owner
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @Indexed

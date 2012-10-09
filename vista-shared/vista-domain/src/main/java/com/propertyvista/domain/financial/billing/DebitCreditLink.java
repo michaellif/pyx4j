@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
@@ -30,6 +31,7 @@ public interface DebitCreditLink extends IEntity {
     InvoiceDebit debitItem();
 
     @Owner
+    @MemberColumn(notNull = true)
     @JoinColumn
     InvoiceCredit creditItem();
 

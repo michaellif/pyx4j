@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -34,6 +35,7 @@ public interface LeaseArrearsSnapshot extends ArrearsSnapshot {
     @Owner
     @Detached
     @NotNull
+    @MemberColumn(notNull = true)
     @Indexed
     @JoinColumn
     BillingAccount billingAccount();

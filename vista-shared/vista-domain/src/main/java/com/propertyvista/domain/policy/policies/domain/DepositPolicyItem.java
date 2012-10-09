@@ -52,6 +52,7 @@ public interface DepositPolicyItem extends IEntity {
 
     @Owner
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @JoinColumn

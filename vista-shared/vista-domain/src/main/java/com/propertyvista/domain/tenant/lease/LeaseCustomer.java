@@ -41,6 +41,7 @@ public interface LeaseCustomer extends IEntity {
 
     @Owner
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @JoinColumn
@@ -48,6 +49,7 @@ public interface LeaseCustomer extends IEntity {
     Lease lease();
 
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @ToString(index = 1)
     @Indexed(uniqueConstraint = true, group = { "discriminator+lc,2" })

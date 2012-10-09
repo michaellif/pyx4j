@@ -54,18 +54,19 @@ public class LightWeightLeaseManagement {
             LeaseTerm term = lease.currentTerm().detach();
 
             lease.currentTerm().set(null);
-            Persistence.secureSave(lease);
+            Persistence.service().persist(lease);
             lease.currentTerm().set(term);
 
             lease.currentTerm().lease().set(lease);
 
-            for (Tenant tenantInLease : lease.currentTerm().version().tenants()) {
+            for (Tenant tenantInLease : term.version().tenants()) {
                 Customer customer = tenantInLease.leaseCustomer().customer();
-                tenantInLease.leaseCustomer().set(EntityFactory.create(LeaseCustomerTenant.class));
-                tenantInLease.leaseCustomer().participantId().setValue(uniqueId());
-                tenantInLease.leaseCustomer().lease().set(lease);
-                tenantInLease.leaseCustomer().customer().set(customer);
-                Persistence.service().persist(tenantInLease.leaseCustomer());
+                LeaseCustomerTenant leaseCustomer = EntityFactory.create(LeaseCustomerTenant.class);
+                leaseCustomer.participantId().setValue(uniqueId());
+                leaseCustomer.lease().set(lease);
+                leaseCustomer.customer().set(customer);
+                Persistence.service().persist(leaseCustomer);
+                tenantInLease.leaseCustomer().set(leaseCustomer);
             }
         }
         if (finalize) {

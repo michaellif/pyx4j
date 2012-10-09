@@ -118,6 +118,7 @@ public interface FloorplanAmenity extends Amenity {
 
     @Owner
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @Indexed

@@ -52,6 +52,7 @@ public interface AptUnit extends BuildingElement, PolicyNode {
 
     @Override
     @Owner
+    @MemberColumn(notNull = true)
     @NotNull
     @ReadOnly
     @Detached

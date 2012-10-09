@@ -15,6 +15,7 @@ package com.propertyvista.domain.financial;
 
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
@@ -22,6 +23,7 @@ import com.pyx4j.entity.shared.IEntity;
 public interface PaymentRecordProcessing extends IEntity {
 
     @Owner
+    @MemberColumn(notNull = true)
     @JoinColumn
     PaymentRecord paymentRecord();
 

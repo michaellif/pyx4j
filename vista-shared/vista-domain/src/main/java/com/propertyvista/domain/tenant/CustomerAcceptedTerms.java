@@ -16,6 +16,7 @@ package com.propertyvista.domain.tenant;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
@@ -24,6 +25,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface CustomerAcceptedTerms extends IEntity {
 
     @Owner
+    @MemberColumn(notNull = true)
     @JoinColumn
     @Detached
     @ReadOnly

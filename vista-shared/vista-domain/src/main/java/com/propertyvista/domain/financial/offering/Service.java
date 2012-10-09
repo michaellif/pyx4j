@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -68,6 +69,7 @@ public interface Service extends Product<ServiceV> {
     public interface ServiceV extends Product.ProductV<Service> {
 
         @NotNull
+        @MemberColumn(notNull = true)
         @ToString(index = 0)
         IPrimitive<ServiceType> serviceType();
 

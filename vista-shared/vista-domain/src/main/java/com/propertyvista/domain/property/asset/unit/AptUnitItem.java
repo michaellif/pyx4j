@@ -142,6 +142,7 @@ public interface AptUnitItem extends IEntity {
     //TODO VladS. use this for join
     @Owner
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @JoinColumn

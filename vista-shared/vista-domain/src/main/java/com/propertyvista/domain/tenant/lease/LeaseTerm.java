@@ -129,6 +129,7 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
 
     @Owner
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @JoinColumn

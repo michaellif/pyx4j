@@ -59,6 +59,7 @@ public interface IdentificationDocumentType extends IEntity {
 
     @Owner
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @JoinColumn

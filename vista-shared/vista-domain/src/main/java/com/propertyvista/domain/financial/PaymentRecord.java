@@ -28,6 +28,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -95,6 +96,7 @@ public interface PaymentRecord extends IEntity {
     };
 
     @Owner
+    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @JoinColumn

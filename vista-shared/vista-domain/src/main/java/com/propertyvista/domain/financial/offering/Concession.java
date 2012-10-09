@@ -95,6 +95,7 @@ public interface Concession extends IVersionedEntity<ConcessionV> {
 
     @Owner
     @NotNull
+    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @JoinColumn

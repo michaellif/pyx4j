@@ -18,7 +18,6 @@ import java.util.GregorianCalendar;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.person.Person.Sex;
 import com.propertyvista.domain.tenant.Customer;
@@ -45,7 +44,7 @@ public class TenantDataModel {
         Persistence.service().persist(tenant);
     }
 
-    public IEntity getTenant() {
+    public Customer getTenant() {
         return tenant;
     }
 

@@ -40,6 +40,7 @@ public interface PaymentMethod extends IEntity {
     @Detached
     @ReadOnly
     @Owner
+    @MemberColumn(notNull = true)
     @JoinColumn
     Customer customer();
 

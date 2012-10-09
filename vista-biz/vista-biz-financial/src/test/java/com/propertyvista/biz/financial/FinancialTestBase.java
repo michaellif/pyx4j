@@ -578,8 +578,12 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return adjustment;
     }
 
-    protected PaymentRecord receivePayment(String receivedDate, LeaseParticipant leaseParticipant, String amount, PaymentType type) {
+    protected PaymentRecord receivePayment(String receivedDate, String amount, PaymentType type) {
         Lease lease = retrieveLease();
+
+        // Just use the first tenant
+        LeaseParticipant<?> leaseParticipant = lease.currentTerm().version().tenants().iterator().next();
+        Persistence.service().retrieve(leaseParticipant);
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
         paymentRecord.createdDate().setValue(FinancialTestsUtils.getDate(receivedDate));
@@ -591,6 +595,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         // add payment method type
         PaymentMethod pm = EntityFactory.create(PaymentMethod.class);
+        pm.customer().set(leaseParticipant.leaseCustomer().customer());
         pm.type().setValue(type);
         paymentRecord.paymentMethod().set(pm);
         Persistence.service().persist(pm);
@@ -611,7 +616,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected PaymentRecord receiveAndPostPayment(String receivedDate, String amount, PaymentType type) {
-        PaymentRecord paymentRecord = receivePayment(receivedDate, null, amount, type); // TODO : find leaseParticipant, if nedded here!.. 
+        PaymentRecord paymentRecord = receivePayment(receivedDate, amount, type);
         postPayment(paymentRecord);
         return paymentRecord;
     }
