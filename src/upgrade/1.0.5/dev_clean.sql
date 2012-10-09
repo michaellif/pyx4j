@@ -21,27 +21,28 @@ BEGIN
 	LOOP
 		-- income related tables
 		FOREACH v_table_name IN ARRAY
-		ARRAY[	'income_info_other',
-			'income_info_self_employed',
-			'income_info_social_services',
-			'income_info_seasonally_employed',
-			'income_info_student_income',
-			'income_info_employer']
+		ARRAY[ 'income_info_other',
+			   'income_info_self_employed',
+			   'income_info_social_services',
+			   'income_info_seasonally_employed',
+			   'income_info_student_income',
+			   'income_info_employer']
 		LOOP
 			SELECT * INTO v_void FROM _dba_.truncate_schema_table(v_schema_name,v_table_name, TRUE) ;
-
 		END LOOP;
 
 		-- All the rest  screening tables  asumend not existen in DB
-/*
+
 		FOREACH v_table_name IN ARRAY
 		ARRAY[	'person_screening',
 			    'legal_questions']
 		LOOP
 			SELECT * INTO v_void FROM _dba_.truncate_schema_table(v_schema_name,v_table_name, TRUE) ;
-
 		END LOOP;
-*/
+
+        EXECUTE 'UPDATE '||v_schema_name||'.tenant SET screening = NULL';
+        EXECUTE 'UPDATE '||v_schema_name||'.guarantor SET screening = NULL';
+
 
 	END LOOP;
 END;

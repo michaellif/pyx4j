@@ -6,13 +6,13 @@ set PGPASSWORD=root
 psql --username postgres --file ../dba_scripts/swap_prod_dev.sql
 @if errorlevel 1 goto errormark
 
-psql --username postgres -d "vista_prod" --file ../dba_scripts/dba_functions.sql
+psql --username postgres -d "vista" --file ../dba_scripts/dba_functions.sql
 @if errorlevel 1 goto errormark
 
-psql --username postgres -d "vista_prod" --file dev_clean.sql
+psql --username postgres -d "vista" --file dev_clean.sql
 @if errorlevel 1 goto errormark
 
-psql --username postgres -d "vista_prod" --file migrate.sql
+psql --username postgres -d "vista" --file migrate.sql
 @if errorlevel 1 goto errormark
 
 

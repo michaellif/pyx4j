@@ -236,7 +236,7 @@ BEGIN
                                 'DROP COLUMN layout_type,'||
                                 'ADD COLUMN encoded_layout VARCHAR(500),'||
                                 'ADD COLUMN owner_user_id BIGINT';
-        -- test of _dba_.exec_sql function                        
+        -- test of _dba_.exec_sql function
         SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.dashboard_metadata '||
                                                 'ADD CONSTRAINT dashboard_metadata_owner_user_id_fk FOREIGN KEY(owner_user_id) '||
                                                 'REFERENCES '||v_schema_name||'.crm_user(id)');
@@ -324,10 +324,10 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_application DROP COLUMN lease_on_application,'||
                                     'DROP COLUMN lease_on_application_for';
         -- legal_questions
-        
+
         SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.legal_questions RENAME TO '||
                                                 'person_screening_legal_questions');
-        
+
         -- master_online_application
         EXECUTE 'ALTER TABLE '||v_schema_name||'.master_online_application ADD COLUMN online_application_id_s VARCHAR(26)';
         EXECUTE 'UPDATE '||v_schema_name||'.master_online_application SET online_application_id_s = _dba_.convert_id_to_string(online_application_id) ';
@@ -387,30 +387,31 @@ BEGIN
                 card_obfuscated_number = LPAD(card_obfuscated_number,16,''X'') ';
 
         -- personal_income - bye-bye
-        
+
         -- SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'personal_income',FALSE);
-        
+
         -- person_screening
         SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.person_screening '||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_pk CASCADE,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_pkey CASCADE,'||            -- Very special case for pangroup
-                                                'DROP CONSTRAINT IF EXISTS person_screening_current_address_country_fk,'|| 
+                                                'DROP CONSTRAINT IF EXISTS person_screening_current_address_country_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_current_address_province_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_equifax_approval_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_legal_questions_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_previous_address_country_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_previous_address_province_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_screene_fk');
-                
+
         SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.person_screening RENAME TO person_screening_v');
-        
+
         SELECT * INTO v_void FROM _dba_.exec_sql('CREATE TABLE '||v_schema_name||'.person_screening ( '||
                                                 '       id              BIGINT          NOT NULL,'||
                                                 '       screene         BIGINT,'||
                                                 '       CONSTRAINT person_screening_pk PRIMARY KEY(id),'||
                                                 '       CONSTRAINT person_screening_screene_fk FOREIGN KEY(screene) '||
                                                 '               REFERENCES '||v_schema_name||'.customer(id))');
-        
+
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening OWNER TO vista';
 
         -- reports_settings_holder
         EXECUTE 'CREATE TABLE '||v_schema_name||'.reports_settings_holder ('||
@@ -508,7 +509,7 @@ BEGIN
         '(SELECT nextval(''public.product_v_seq'') AS id, id AS old_id,''service'',version_number,to_date,from_date,'||
         'description,holder,created_by_user_key,name,service_type '||
         'FROM '||v_schema_name||'.service_v ORDER BY id)';
-        
+
 
         EXECUTE 'UPDATE '||v_schema_name||'.product_v AS b '||
         '   SET     holder = a.holder '||
@@ -517,14 +518,14 @@ BEGIN
         '   FROM '||v_schema_name||'.product_v a '||
         '   JOIN '||v_schema_name||'.product b ON (a.old_holder = b.old_id)) AS a '||
         '   WHERE b.id = a.id ';
-        
+
         SELECT * INTO v_void FROM _dba_.exec_sql('UPDATE '||v_schema_name||'.product_v AS a '
                                                 'SET holderdiscriminator = b.iddiscriminator '
                                                 'FROM (SELECT a.id,a.iddiscriminator '||
                                                 '      FROM '||v_schema_name||'.product a '||
                                                 '      JOIN '||v_schema_name||'.product_v b ON (a.id = b.holder)) AS b '||
                                                 'WHERE a.holder = b.id');
-        
+
         SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.product_v ALTER COLUMN holderdiscriminator SET NOT NULL');
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ADD CONSTRAINT product_v_holder_fk FOREIGN KEY(holder) REFERENCES '||v_schema_name||'.product(id)';
@@ -808,8 +809,8 @@ BEGIN
         'JOIN '||v_schema_name||'.tenant b ON (c.id = b.lease_v) '||
         'GROUP BY a.id,b.customer '||
         'ORDER BY a.id ) AS a )';
-        
-        
+
+
         EXECUTE 'INSERT INTO '||v_schema_name||'.lease_customer '||
         '(id,iddiscriminator,lease,customer,participant_id) '||
         '(SELECT nextval(''public.lease_customer_seq'') AS id,''Guarantor'' AS iddiscriminator,a.* '||
@@ -820,10 +821,10 @@ BEGIN
         'JOIN '||v_schema_name||'.guarantor b ON (c.id = b.lease_v) '||
         'GROUP BY a.id,b.customer '||
         'ORDER BY a.id ) AS a )';
-        
+
         EXECUTE 'UPDATE '||v_schema_name||'.lease_customer '||
         '       SET     participant_id_s = LPAD(participant_id,7,''0'')';
-        
+
         EXECUTE 'UPDATE '||v_schema_name||'.lease_customer AS a '||
         '       SET preauthorized_payment = b.preauthorized_payment '||
         '       FROM '||
@@ -834,7 +835,7 @@ BEGIN
         '               WHERE b.preauthorized_payment IS NOT NULL ) AS b '||
         '       WHERE   a.lease = b.lease '||
         '       AND     a.customer = b.customer ';
-        
+
 
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_customer OWNER TO vista';
@@ -960,7 +961,7 @@ BEGIN
 
         END LOOP;
 
-   
+
 
     END LOOP;
 END;
@@ -972,5 +973,5 @@ DROP FUNCTION _dba_.migrate_to_105();
 
 SET client_min_messages = 'NOTICE';
 
--- COMMIT;
+COMMIT;
 
