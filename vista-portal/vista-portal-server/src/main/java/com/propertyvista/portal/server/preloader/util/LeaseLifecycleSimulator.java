@@ -366,7 +366,6 @@ public class LeaseLifecycleSimulator {
             m.isOneTimePayment().setValue(Boolean.TRUE);
             m.sameAsCurrent().setValue(Boolean.FALSE);
             m.billingAddress().set(CommonsGenerator.createAddress());
-            m.phone().setValue(CommonsGenerator.createPhone());
 
             return m;
         }

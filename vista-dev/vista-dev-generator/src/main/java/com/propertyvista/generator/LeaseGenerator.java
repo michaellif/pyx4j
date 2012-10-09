@@ -154,7 +154,6 @@ public class LeaseGenerator extends DataGenerator {
         m.customer().set(tenant.leaseCustomer().customer());
         m.sameAsCurrent().setValue(Boolean.FALSE);
         m.billingAddress().set(CommonsGenerator.createAddress());
-        m.phone().setValue(CommonsGenerator.createPhone());
 
         tenant.leaseCustomer().customer().paymentMethods().add(m);
     }

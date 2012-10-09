@@ -78,7 +78,6 @@ public class TenantsGenerator {
             m.customer().set(customer);
             m.sameAsCurrent().setValue(Boolean.FALSE);
             m.billingAddress().set(CommonsGenerator.createAddress());
-            m.phone().setValue(CommonsGenerator.createPhone());
 
             l.add(m);
         }
