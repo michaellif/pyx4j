@@ -61,4 +61,6 @@ public interface NamingConvention {
 
     public String sqlForeignKeyName(String tableFrom, String indexColName, String tableTo);
 
+    public String sqlConstraintName(String tableName, String colName);
+
 }

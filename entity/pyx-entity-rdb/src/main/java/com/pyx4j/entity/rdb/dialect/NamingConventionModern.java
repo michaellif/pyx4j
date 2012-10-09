@@ -149,4 +149,14 @@ public class NamingConventionModern implements NamingConvention {
         sql.append("_Fk");
         return sql.toString();
     }
+
+    @Override
+    public String sqlConstraintName(String tableName, String colName) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(tableName);
+        sql.append('_');
+        sql.append(colName);
+        sql.append("_ck");
+        return sql.toString();
+    }
 }

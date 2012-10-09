@@ -26,6 +26,7 @@ import java.util.Set;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.GeneratedValue;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -129,6 +130,15 @@ public class MemberOperationsMeta implements EntityMemberAccess {
 
     public String sqlName() {
         return sqlName;
+    }
+
+    public boolean hasNotNullConstraint() {
+        MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
+        if (memberColumn == null) {
+            return false;
+        } else {
+            return memberColumn.notNull();
+        }
     }
 
     public Object getPersistMemberValue(IEntity entity) {

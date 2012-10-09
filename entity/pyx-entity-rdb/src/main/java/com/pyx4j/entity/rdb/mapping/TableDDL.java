@@ -33,7 +33,6 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.mapping.TableMetadata.ColumnMetadata;
 import com.pyx4j.entity.rdb.mapping.TableModel.ModelType;
@@ -125,8 +124,8 @@ class TableDDL {
                 sql.append(", ");
                 sql.append(sqlName).append(' ');
                 member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
-                if (member.getMemberMeta().isValidatorAnnotationPresent(NotNull.class) && (member.getSubclassDiscriminators() == null)) {
-                    //sql.append(" NOT NULL ");
+                if (member.hasNotNullConstraint() && (member.getSubclassDiscriminators() == null)) {
+                    sql.append(" NOT NULL ");
                 }
                 if (member.getMemberMeta().isIndexed()) {
                     addIndexDef(indexes, member, sqlName, member.getMemberMeta().getAnnotation(Indexed.class));
@@ -165,10 +164,44 @@ class TableDDL {
             }
         }
 
+        // create Polymorphic NotNull constraint
+        for (MemberOperationsMeta member : tableModel.operationsMeta().getColumnMembers()) {
+            for (String sqlName : member.getValueAdapter().getColumnNames(member.sqlName())) {
+                if (member.hasNotNullConstraint() && (member.getSubclassDiscriminators() != null)) {
+                    sqls.add(createPolymorphicNotNullConstraint(dialect, tableModel.tableName, sqlName, member));
+                }
+            }
+        }
+
         if (tableModel.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
             sqls.add(sqlAlterIdentity(dialect, tableModel.tableName));
         }
         return sqls;
+    }
+
+    private static String createPolymorphicNotNullConstraint(Dialect dialect, String tableName, String sqlName, MemberOperationsMeta member) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("ALTER TABLE ").append(getFullTableName(dialect, tableName));
+        sql.append(" ADD CONSTRAINT ");
+        sql.append(dialect.getNamingConvention().sqlConstraintName(tableName, sqlName));
+        sql.append(" CHECK ");
+        sql.append(" (");
+        for (String discriminator : member.getSubclassDiscriminators()) {
+            sql.append(" (");
+            sql.append(dialect.sqlDiscriminatorColumnName()).append(" = '").append(discriminator).append("'");
+            sql.append(" AND ");
+            sql.append(sqlName).append(" IS NOT NULL");
+            sql.append(")");
+
+            sql.append(" OR (");
+            sql.append(dialect.sqlDiscriminatorColumnName()).append(" != '").append(discriminator).append("'");
+            sql.append(" AND ");
+            sql.append(sqlName).append(" IS NULL");
+            sql.append(")");
+        }
+        sql.append(")");
+
+        return sql.toString();
     }
 
     static String sqlCreateForeignKey(Dialect dialect, String tableFrom, String indexColName, String tableTo) {

@@ -233,4 +233,14 @@ public class NamingConventionOracle implements NamingConvention {
         return makeName(sql.toString());
     }
 
+    @Override
+    public String sqlConstraintName(String tableName, String colName) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(makeName(tableName));
+        sql.append('_');
+        sql.append(makeName(colName));
+        sql.append("_ck");
+        return makeName(sql.toString());
+    }
+
 }

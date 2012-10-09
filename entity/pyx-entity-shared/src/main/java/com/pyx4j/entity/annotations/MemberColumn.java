@@ -34,6 +34,11 @@ public @interface MemberColumn {
 
     String name() default "";
 
+    /**
+     * Add NOT NULL CONSTRAINT to database.
+     */
+    boolean notNull() default false;
+
     Class<? extends MemberModificationAdapter<?>>[] modificationAdapters() default {};
 
     @SuppressWarnings("rawtypes")

@@ -25,7 +25,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target( { ElementType.METHOD })
+/**
+ * 
+ * This does not add NOT NULL CONSTRAINT to database.
+ * Use @MemberColumn(notNull = true)
+ * 
+ * TODO rename this to mandatory.
+ * 
+ */
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NotNull {
 
