@@ -57,7 +57,9 @@ public class DashboardActivity extends AbstractActivity implements DashboardView
             @Override
             public void onSuccess(DashboardMetadata result) {
                 view.setDashboardMetadata(result);
-                view.setReadOnly(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(result.ownerUser().getPrimaryKey()));
+                if (result != null) {
+                    view.setReadOnly(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(result.ownerUser().getPrimaryKey()));
+                }
             }
 
         }, dashboardId);
