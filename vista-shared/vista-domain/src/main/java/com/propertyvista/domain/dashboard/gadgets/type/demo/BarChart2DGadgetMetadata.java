@@ -18,13 +18,34 @@ import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("BarChart2D")
 @Transient
 @GadgetDescription(//@formatter:off
         name = "Bar Chart 2D Demo",
         description = "Demo that displays a 2D Bar Chart",
-        keywords = {"Demo", "Chart"}
+        keywords = {"Demo", "Chart"},
+        allowedBehaviors = {
+                VistaCrmBehavior.PropertyManagement,
+                VistaCrmBehavior.Mechanicals,
+                VistaCrmBehavior.BuildingFinancial,
+                VistaCrmBehavior.Marketing,
+                VistaCrmBehavior.MarketingMedia,
+                VistaCrmBehavior.Tenants,
+                VistaCrmBehavior.Equifax,
+                VistaCrmBehavior.Emergency,
+                VistaCrmBehavior.ScreeningData,
+                VistaCrmBehavior.Occupancy,
+                VistaCrmBehavior.Maintenance,
+                VistaCrmBehavior.Organization,
+                VistaCrmBehavior.Contacts,
+                VistaCrmBehavior.ProductCatalog,
+                VistaCrmBehavior.Billing,
+                VistaCrmBehavior.Reports,
+                VistaCrmBehavior.PropertyVistaAccountOwner,
+                VistaCrmBehavior.PropertyVistaSupport
+        }
 )//@formatter:on
 public interface BarChart2DGadgetMetadata extends GadgetMetadata {
 

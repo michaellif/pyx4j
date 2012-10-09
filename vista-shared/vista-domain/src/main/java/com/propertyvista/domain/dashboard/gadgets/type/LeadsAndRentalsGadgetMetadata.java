@@ -19,13 +19,34 @@ import com.pyx4j.entity.annotations.Transient;
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("LeadsAndRentalsGadgetMeta")
 @Transient
 @GadgetDescription(//@formatter:off
         name = "Leads vs. Rentals",
         description = "Displays comparison of number of leads vs number of appointmends vs number of rentals",
-        keywords = { "Leads", "Rentals", "Leases" }
+        keywords = { "Leads", "Rentals", "Leases" },
+        allowedBehaviors = {
+                VistaCrmBehavior.PropertyManagement,
+                VistaCrmBehavior.Mechanicals,
+                VistaCrmBehavior.BuildingFinancial,
+                VistaCrmBehavior.Marketing,
+                VistaCrmBehavior.MarketingMedia,
+                VistaCrmBehavior.Tenants,
+                VistaCrmBehavior.Equifax,
+                VistaCrmBehavior.Emergency,
+                VistaCrmBehavior.ScreeningData,
+                VistaCrmBehavior.Occupancy,
+                VistaCrmBehavior.Maintenance,
+                VistaCrmBehavior.Organization,
+                VistaCrmBehavior.Contacts,
+                VistaCrmBehavior.ProductCatalog,
+                VistaCrmBehavior.Billing,
+                VistaCrmBehavior.Reports,
+                VistaCrmBehavior.PropertyVistaAccountOwner,
+                VistaCrmBehavior.PropertyVistaSupport
+        }
 )//@formatter:on
 public interface LeadsAndRentalsGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 

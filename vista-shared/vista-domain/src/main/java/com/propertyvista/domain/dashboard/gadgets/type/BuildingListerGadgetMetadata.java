@@ -18,13 +18,34 @@ import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("BuildingLister")
 @Transient
 @GadgetDescription(//@formatter:off
         name = "Listing of Buildings",
         description = "Table-list-like gadget which displays building data according to prefered rules. Query and display data can be set up",
-        keywords = "Buildings"
+        keywords = "Buildings",
+        allowedBehaviors = {
+                VistaCrmBehavior.PropertyManagement,
+                VistaCrmBehavior.Mechanicals,
+                VistaCrmBehavior.BuildingFinancial,
+                VistaCrmBehavior.Marketing,
+                VistaCrmBehavior.MarketingMedia,
+                VistaCrmBehavior.Tenants,
+                VistaCrmBehavior.Equifax,
+                VistaCrmBehavior.Emergency,
+                VistaCrmBehavior.ScreeningData,
+                VistaCrmBehavior.Occupancy,
+                VistaCrmBehavior.Maintenance,
+                VistaCrmBehavior.Organization,
+                VistaCrmBehavior.Contacts,
+                VistaCrmBehavior.ProductCatalog,
+                VistaCrmBehavior.Billing,
+                VistaCrmBehavior.Reports,
+                VistaCrmBehavior.PropertyVistaAccountOwner,
+                VistaCrmBehavior.PropertyVistaSupport
+        }        
 )//@formatter:on
 public interface BuildingListerGadgetMetadata extends ListerGadgetBaseMetadata {
 

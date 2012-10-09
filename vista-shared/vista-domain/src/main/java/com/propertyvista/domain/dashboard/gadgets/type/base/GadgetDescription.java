@@ -18,6 +18,8 @@ import java.lang.annotation.RetentionPolicy;
 
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.security.VistaCrmBehavior;
+
 @Retention(RetentionPolicy.RUNTIME)
 public @interface GadgetDescription {
 
@@ -29,5 +31,7 @@ public @interface GadgetDescription {
 
     @I18n
     String[] keywords() default {};
+
+    VistaCrmBehavior[] allowedBehaviors() default { VistaCrmBehavior.PropertyVistaAccountOwner, VistaCrmBehavior.PropertyVistaSupport };
 
 }

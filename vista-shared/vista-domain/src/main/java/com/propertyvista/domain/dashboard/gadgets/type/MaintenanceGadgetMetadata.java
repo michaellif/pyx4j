@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("Maintenance Gadget Metadata")
 @Transient
@@ -27,7 +28,27 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 @GadgetDescription(//@formatter:off        
         name = "Maintenance - Work Orders",
         description = "Displays summary of maintenance orders grouped by priorty and lets to view details of grouped orders",
-        keywords = { "Maintenance", "Work Orders" }
+        keywords = { "Maintenance", "Work Orders" },
+        allowedBehaviors = {
+                VistaCrmBehavior.PropertyManagement,
+                VistaCrmBehavior.Mechanicals,
+                VistaCrmBehavior.BuildingFinancial,
+                VistaCrmBehavior.Marketing,
+                VistaCrmBehavior.MarketingMedia,
+                VistaCrmBehavior.Tenants,
+                VistaCrmBehavior.Equifax,
+                VistaCrmBehavior.Emergency,
+                VistaCrmBehavior.ScreeningData,
+                VistaCrmBehavior.Occupancy,
+                VistaCrmBehavior.Maintenance,
+                VistaCrmBehavior.Organization,
+                VistaCrmBehavior.Contacts,
+                VistaCrmBehavior.ProductCatalog,
+                VistaCrmBehavior.Billing,
+                VistaCrmBehavior.Reports,
+                VistaCrmBehavior.PropertyVistaAccountOwner,
+                VistaCrmBehavior.PropertyVistaSupport
+        }
 )//@formatter:on
 public interface MaintenanceGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 

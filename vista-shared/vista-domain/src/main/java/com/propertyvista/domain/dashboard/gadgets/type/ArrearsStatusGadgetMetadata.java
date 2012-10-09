@@ -24,6 +24,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 /**
  * @deprecated it's gonna be replaced by an 'Arrears' gadget that shows summary and knows to zoom in to details
@@ -32,7 +33,31 @@ import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 @DiscriminatorValue("ArrearsGadgetMeta")
 @Transient
 @Caption(name = "Arrears Status")
-@GadgetDescription(name = "Arrears Status", description = "Shows the information about lease arrears, including how long it is overdue, total balance, legal status information etc. This gadget can either show total arrears or arrears of specific type (i.e. rent, parking or other)", keywords = "Arrears")
+@GadgetDescription(//@formatter:off
+        name = "Arrears Status",
+        description = "Shows the information about lease arrears, including how long it is overdue, total balance, legal status information etc. This gadget can either show total arrears or arrears of specific type (i.e. rent, parking or other)",
+        keywords = "Arrears",
+        allowedBehaviors = {
+                VistaCrmBehavior.PropertyManagement,
+                VistaCrmBehavior.Mechanicals,
+                VistaCrmBehavior.BuildingFinancial,
+                VistaCrmBehavior.Marketing,
+                VistaCrmBehavior.MarketingMedia,
+                VistaCrmBehavior.Tenants,
+                VistaCrmBehavior.Equifax,
+                VistaCrmBehavior.Emergency,
+                VistaCrmBehavior.ScreeningData,
+                VistaCrmBehavior.Occupancy,
+                VistaCrmBehavior.Maintenance,
+                VistaCrmBehavior.Organization,
+                VistaCrmBehavior.Contacts,
+                VistaCrmBehavior.ProductCatalog,
+                VistaCrmBehavior.Billing,
+                VistaCrmBehavior.Reports,
+                VistaCrmBehavior.PropertyVistaAccountOwner,
+                VistaCrmBehavior.PropertyVistaSupport
+        }
+)//@formatter:on
 public interface ArrearsStatusGadgetMetadata extends ListerGadgetBaseMetadata, BuildingGadget {
 
     @Caption(description = "Choose which category of arrears to display")

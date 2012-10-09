@@ -20,11 +20,27 @@ import com.pyx4j.entity.annotations.Transient;
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("ApplicationsGadgetMetadata")
 @Transient
 @Caption(name = "Applications")
-@GadgetDescription(name = "Applications", description = "TBD", keywords = { "Applications" })
+@GadgetDescription(//@formatter:off
+        name = "Applications",
+        description = "TBD",
+        keywords = { "Applications" },
+        allowedBehaviors = {                               
+                VistaCrmBehavior.Tenants,
+                VistaCrmBehavior.Equifax,
+                VistaCrmBehavior.Emergency,
+                VistaCrmBehavior.ScreeningData,                
+                VistaCrmBehavior.Contacts,
+                VistaCrmBehavior.ProductCatalog,                
+                VistaCrmBehavior.Reports,
+                VistaCrmBehavior.PropertyVistaAccountOwner,
+                VistaCrmBehavior.PropertyVistaSupport
+        }
+)//@formatter:on
 public interface ApplicationsGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 
 }

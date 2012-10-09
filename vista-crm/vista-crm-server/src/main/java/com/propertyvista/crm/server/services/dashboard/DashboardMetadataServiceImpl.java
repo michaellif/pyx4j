@@ -21,8 +21,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.server.services.customization.CustomizationPersistenceHelper;
 
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
@@ -30,9 +33,13 @@ import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat.Build
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.AccessDeniedGagetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 public class DashboardMetadataServiceImpl implements DashboardMetadataService {
+
+    private static final I18n i18n = I18n.get(DashboardMetadataServiceImpl.class);
 
     @Override
     public void retrieveMetadata(AsyncCallback<DashboardMetadata> callback, Key entityId) {
@@ -62,7 +69,7 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
                 gm = Util.gadgetStorage().load(id);
             }
             if (gm != null) {
-                dm.gadgetMetadataList().add(gm);
+                dm.gadgetMetadataList().add(enforcePermissions(gm));
             } else {
                 lostIds.add(id);
             }
@@ -134,4 +141,20 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
         return Persistence.secureRetrieve(criteria);
     }
 
+    /**
+     * @param gm
+     * @return if provided gadgetMetadata is not accessible by current user, returns instance of {@link AccessDeniedGagetMetadata }
+     */
+    private GadgetMetadata enforcePermissions(GadgetMetadata gm) {
+        GadgetDescription description = gm.getInstanceValueClass().getAnnotation(GadgetDescription.class);
+        if (SecurityController.checkAnyBehavior(description.allowedBehaviors())) {
+            return gm;
+        } else {
+            AccessDeniedGagetMetadata accessDenied = EntityFactory.create(AccessDeniedGagetMetadata.class);
+            accessDenied.gadgetId().setValue(gm.gadgetId().getValue());
+            accessDenied.gadgetName().setValue(i18n.translate(null, description.name()));
+            return accessDenied;
+        }
+
+    }
 }

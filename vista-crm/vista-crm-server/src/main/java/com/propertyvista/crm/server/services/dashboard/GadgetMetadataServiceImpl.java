@@ -22,11 +22,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.crm.rpc.dto.dashboard.GadgetDescriptorDTO;
 import com.propertyvista.crm.rpc.services.dashboard.GadgetMetadataService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
+import com.propertyvista.domain.dashboard.gadgets.type.AccessDeniedGagetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
@@ -56,8 +58,12 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
         if (gadgetMetadata.gadgetId().isNull()) {
             throw new Error("got gadget metadata with no defined id:" + gadgetMetadata.toString());
         }
-        // effectiveGadgetId is requried so that users that alter a gadget that belongs to a shared dashboard won't mess up owners settings
-        // so basically we use a shadow metadata with different key
+        if (gadgetMetadata.getInstanceValueClass().equals(AccessDeniedGagetMetadata.class)) {
+            throw new Error("Access Denied");
+        }
+
+        // effectiveGadgetId is required so that users that alter a gadget that belongs to a shared dashboard won't mess up        
+        // settings that belong to gadget's owner, so basically we use a shadow metadata with different key
         String effectiveGadgetId = null;
         if (CrmAppContext.getCurrentUserPrimaryKey().equals(gadgetMetadata.ownerUser().getPrimaryKey())) {
             effectiveGadgetId = gadgetMetadata.gadgetId().getValue();
@@ -76,13 +82,16 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
         Vector<GadgetDescriptorDTO> descriptors = new Vector<GadgetDescriptorDTO>();
 
         for (Class<? extends GadgetMetadata> gadgetMetadataClass : GadgetMetadataRepository.get().getGadgetMetadataClasses()) {
-            if (isAcceptedBy(boardType, gadgetMetadataClass)) {
+            GadgetDescription gadgetDescription = gadgetMetadataClass.getAnnotation(GadgetDescription.class);
+            if (isAcceptedBy(boardType, gadgetMetadataClass) &//@formatter:off
+                    SecurityController.checkAnyBehavior(gadgetDescription.allowedBehaviors()) &
+                    !gadgetMetadataClass.equals(AccessDeniedGagetMetadata.class)
+                    ) {//@formatter:on
                 GadgetMetadata proto = EntityFactory.getEntityPrototype(gadgetMetadataClass);
-                GadgetDescription gadgetDescription = gadgetMetadataClass.getAnnotation(GadgetDescription.class);
                 descriptors.add(new GadgetDescriptorDTO(//@formatter:off
-                        i18n.translate("", gadgetDescription.name()),
-                        i18n.translate("", gadgetDescription.description()),
-                        translate("", gadgetDescription.keywords()),
+                        i18n.translate(null, gadgetDescription.name()),
+                        i18n.translate(null, gadgetDescription.description()),
+                        translate(null, gadgetDescription.keywords()),
                         proto
                 ));//@formatter:on
             }

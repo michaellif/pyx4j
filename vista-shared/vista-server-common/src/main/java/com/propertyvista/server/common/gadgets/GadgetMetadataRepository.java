@@ -15,6 +15,7 @@ package com.propertyvista.server.common.gadgets;
 
 import java.util.Arrays;
 
+import com.propertyvista.domain.dashboard.gadgets.type.AccessDeniedGagetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ApplicationsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
@@ -81,7 +82,10 @@ public final class GadgetMetadataRepository extends GadgetMetadataRepositoryBase
                 bind(DemoGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
                 bind(GaugeGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
                 bind(LineChartGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
-                bind(PieChart2DGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class)
+                bind(PieChart2DGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
+                
+                // SPECIAL GADGETS                
+                bind(AccessDeniedGagetMetadata.class, GadgetMetadataCommonDefaultSettings.class)
         ));//@formatter:on
     }
 

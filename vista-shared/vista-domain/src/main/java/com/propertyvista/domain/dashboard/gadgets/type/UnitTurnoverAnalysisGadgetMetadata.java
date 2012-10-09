@@ -23,6 +23,7 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerI
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("TurnoverAnalysisSettings")
 @Transient
@@ -30,7 +31,27 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 @GadgetDescription(//@formatter:off
         name = "Unit Turnover Analysis",
         description = "A graph that visually demonstrates the turnover rate in either percentage or quantity over the course of multiple years",
-        keywords = { "Units", "Chart", "Turnover", "Availability", "Occupancy" }
+        keywords = { "Units", "Chart", "Turnover", "Availability", "Occupancy" },
+        allowedBehaviors = {
+                VistaCrmBehavior.PropertyManagement,
+                VistaCrmBehavior.Mechanicals,
+                VistaCrmBehavior.BuildingFinancial,
+                VistaCrmBehavior.Marketing,
+                VistaCrmBehavior.MarketingMedia,
+                VistaCrmBehavior.Tenants,
+                VistaCrmBehavior.Equifax,
+                VistaCrmBehavior.Emergency,
+                VistaCrmBehavior.ScreeningData,
+                VistaCrmBehavior.Occupancy,
+                VistaCrmBehavior.Maintenance,
+                VistaCrmBehavior.Organization,
+                VistaCrmBehavior.Contacts,
+                VistaCrmBehavior.ProductCatalog,
+                VistaCrmBehavior.Billing,
+                VistaCrmBehavior.Reports,
+                VistaCrmBehavior.PropertyVistaAccountOwner,
+                VistaCrmBehavior.PropertyVistaSupport
+        }
 )//@formatter:on
 public interface UnitTurnoverAnalysisGadgetMetadata extends GadgetMetadata, BuildingGadget {
 

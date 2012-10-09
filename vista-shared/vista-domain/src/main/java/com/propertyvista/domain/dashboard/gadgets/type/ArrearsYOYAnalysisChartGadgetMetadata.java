@@ -22,12 +22,36 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @Caption(name = "Arrears YOY Analysis Chart")
 @DiscriminatorValue("ArrearsYOYAnalysisChartMetadata")
 @Transient
-@GadgetDescription(name = "Arrears YOY Analysis Chart", description = "A graph that visually demonstrates the arrear balance each month over the course of multiple years", keywords = {
-        "Arrears", "Chart" })
+@GadgetDescription(//@formatter:off
+        name = "Arrears YOY Analysis Chart",
+        description = "A graph that visually demonstrates the arrear balance each month over the course of multiple years", 
+        keywords = {"Arrears", "Chart" },
+        allowedBehaviors = {
+                VistaCrmBehavior.PropertyManagement,
+                VistaCrmBehavior.Mechanicals,
+                VistaCrmBehavior.BuildingFinancial,
+                VistaCrmBehavior.Marketing,
+                VistaCrmBehavior.MarketingMedia,
+                VistaCrmBehavior.Tenants,
+                VistaCrmBehavior.Equifax,
+                VistaCrmBehavior.Emergency,
+                VistaCrmBehavior.ScreeningData,
+                VistaCrmBehavior.Occupancy,
+                VistaCrmBehavior.Maintenance,
+                VistaCrmBehavior.Organization,
+                VistaCrmBehavior.Contacts,
+                VistaCrmBehavior.ProductCatalog,
+                VistaCrmBehavior.Billing,
+                VistaCrmBehavior.Reports,
+                VistaCrmBehavior.PropertyVistaAccountOwner,
+                VistaCrmBehavior.PropertyVistaSupport
+        }
+)//@formatter:on
 public interface ArrearsYOYAnalysisChartGadgetMetadata extends GadgetMetadata, BuildingGadget {
 
     @Caption(description = "Set the number of years ago to compare to the current year")

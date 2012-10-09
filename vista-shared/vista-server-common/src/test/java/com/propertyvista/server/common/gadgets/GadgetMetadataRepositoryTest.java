@@ -103,14 +103,14 @@ public class GadgetMetadataRepositoryTest extends GadgetMetadataRepositoryTestBa
                         }
                         String error = "";
                         if (d.name().equals("")) {
-                            error += "doesn't have a name;";
+                            error += "doesn't have a name; ";
                         }
                         if (d.description().equals("")) {
                             // TODO maybe worth to add some kind of spell check?
-                            error += "doesn't have a description;";
+                            error += "doesn't have a description; ";
                         }
                         if (d.keywords().length == 0) {
-                            error += "doesn't have any keywords;";
+                            error += "doesn't have any keywords; ";
                         }
 
                         return "".equals(error) ? null : error;
