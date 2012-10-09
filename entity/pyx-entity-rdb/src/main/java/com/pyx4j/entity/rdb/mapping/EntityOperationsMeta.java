@@ -100,7 +100,7 @@ public class EntityOperationsMeta {
     EntityOperationsMeta(Dialect dialect, EntityMeta entityMeta) {
         mainEntityMeta = entityMeta;
         String path = GWTJava5Helper.getSimpleName(entityMeta.getEntityClass());
-        build(dialect, dialect.getNamingConvention(), entityMeta, path, null, null, entityMeta);
+        build(dialect, dialect.getNamingConvention(), entityMeta, path, null, null, entityMeta, null);
 
         Inheritance inheritance = entityMeta.getAnnotation(Inheritance.class);
         if ((entityMeta.getPersistableSuperClass() != null)
@@ -108,7 +108,6 @@ public class EntityOperationsMeta {
             impClasses = new HashMap<String, Class<? extends IEntity>>();
             for (Class<? extends IEntity> subclass : Mappings.getPersistableAssignableFrom(entityMeta.getEntityClass())) {
                 EntityMeta subclassMeta = EntityFactory.getEntityMeta(subclass);
-                build(dialect, dialect.getNamingConvention(), subclassMeta, path, null, null, subclassMeta);
 
                 // TODO this is duplicate code from ValueAdapterEntityPolymorphic
                 DiscriminatorValue discriminator = subclass.getAnnotation(DiscriminatorValue.class);
@@ -124,6 +123,8 @@ public class EntityOperationsMeta {
                 } else if (subclass.getAnnotation(AbstractEntity.class) == null) {
                     throw new Error("Class " + subclass.getName() + " require @AbstractEntity or @DiscriminatorValue annotation");
                 }
+
+                build(dialect, dialect.getNamingConvention(), subclassMeta, path, null, null, subclassMeta, discriminator);
             }
 
             {
@@ -163,7 +164,7 @@ public class EntityOperationsMeta {
     }
 
     private void build(Dialect dialect, NamingConvention namingConvention, EntityMeta rootEntityMeta, String path, List<String> accessPath,
-            List<String> namesPath, EntityMeta entityMeta) {
+            List<String> namesPath, EntityMeta entityMeta, DiscriminatorValue subclassDiscriminator) {
         String ownerMemberName = entityMeta.getOwnerMemberName();
         for (String memberName : entityMeta.getMemberNames()) {
             MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
@@ -202,7 +203,8 @@ public class EntityOperationsMeta {
 
                     @SuppressWarnings("unchecked")
                     Class<? extends IEntity> entityClass = (Class<IEntity>) memberMeta.getObjectClass();
-                    build(dialect, namingConvention, rootEntityMeta, memberPathBase, accessPathChild, namesPathChild, EntityFactory.getEntityMeta(entityClass));
+                    build(dialect, namingConvention, rootEntityMeta, memberPathBase, accessPathChild, namesPathChild, EntityFactory.getEntityMeta(entityClass),
+                            subclassDiscriminator);
                 }
             } else {
                 EntityMemberAccess memberAccess;
@@ -283,6 +285,7 @@ public class EntityOperationsMeta {
                             externalMembers.add((MemberExternalOperationsMeta) member);
                         }
                     }
+                    member.addSubclassDiscriminator(subclassDiscriminator);
 
                     membersByPath.put(member.getMemberPath(), member);
                     allMembers.add(member);
@@ -349,6 +352,7 @@ public class EntityOperationsMeta {
                                 + entityMeta.getEntityClass().getName());
                     }
                     MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, memberPath);
+                    member.addSubclassDiscriminator(subclassDiscriminator);
                     columnMembers.add(member);
                     membersByPath.put(member.getMemberPath(), member);
                     allMembers.add(member);

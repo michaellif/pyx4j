@@ -125,7 +125,7 @@ class TableDDL {
                 sql.append(", ");
                 sql.append(sqlName).append(' ');
                 member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
-                if (member.getMemberMeta().isValidatorAnnotationPresent(NotNull.class)) {
+                if (member.getMemberMeta().isValidatorAnnotationPresent(NotNull.class) && (member.getSubclassDiscriminators() == null)) {
                     //sql.append(" NOT NULL ");
                 }
                 if (member.getMemberMeta().isIndexed()) {

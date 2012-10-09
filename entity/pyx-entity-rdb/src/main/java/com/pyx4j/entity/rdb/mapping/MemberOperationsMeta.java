@@ -20,7 +20,11 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.pyx4j.entity.adapters.IndexAdapter;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.GeneratedValue;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.server.AdapterFactory;
@@ -52,6 +56,8 @@ public class MemberOperationsMeta implements EntityMemberAccess {
 
     private MemberOperationsMeta sortMemberOperationsMeta;
 
+    private Set<String> subclassDiscriminators;
+
     public MemberOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta, String memberPath) {
         this(memberAccess, valueAdapter, sqlName, memberMeta, memberPath, null, null, false);
     }
@@ -80,6 +86,20 @@ public class MemberOperationsMeta implements EntityMemberAccess {
 
     public void setSortMemberOperationsMeta(MemberOperationsMeta sortMemberOperationsMeta) {
         this.sortMemberOperationsMeta = sortMemberOperationsMeta;
+    }
+
+    public void addSubclassDiscriminator(DiscriminatorValue subclassDiscriminator) {
+        if (subclassDiscriminator == null) {
+            return;
+        }
+        if (subclassDiscriminators == null) {
+            subclassDiscriminators = new HashSet<String>();
+        }
+        subclassDiscriminators.add(subclassDiscriminator.value());
+    }
+
+    public Set<String> getSubclassDiscriminators() {
+        return subclassDiscriminators;
     }
 
     public boolean isOwnerColumn() {
