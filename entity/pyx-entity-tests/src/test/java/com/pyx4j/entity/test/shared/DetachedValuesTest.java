@@ -164,4 +164,18 @@ public class DetachedValuesTest extends InitializerTestBase {
         assertTrue("parent.cloneEntity isValuesDetached", empc.department().isValueDetached());
 
     }
+
+    public void testAssigments() {
+        final Employee emp = EntityFactory.create(Employee.class);
+        emp.setValueDetached();
+
+        final Employee emp2 = EntityFactory.create(Employee.class);
+
+        assertException("entity().set(detachedEntity{DetachedByParent})", new Runnable() {
+            @Override
+            public void run() {
+                emp2.department().set(emp.department());
+            }
+        });
+    }
 }

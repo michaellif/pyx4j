@@ -25,6 +25,7 @@ import java.util.Date;
 import junit.framework.Assert;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
@@ -119,6 +120,22 @@ public class CollectionsImplementationTest extends InitializerTestBase {
 
         ent2.references().remove(ent1);
         assertEquals("empty collection size", 0, ent2.references().size());
+    }
+
+    public void testIdOnlyCollectionPolymorphic() {
+        Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
+        ent1.setPrimaryKey(new Key(1));
+        ent1.setAttachLevel(AttachLevel.IdOnly);
+
+        ReferenceEntity ent2 = EntityFactory.create(ReferenceEntity.class);
+
+        ent2.references().add(ent1);
+
+        assertEquals("collection size", 1, ent2.references().size());
+        Base1Entity item = ent2.references().iterator().next();
+        assertTrue("item data type " + item.getClass(), item instanceof Concrete2Entity);
+
+        assertEquals("AttachLevel preserved", AttachLevel.IdOnly, item.getAttachLevel());
     }
 
     public void testPolymorphicRemoval() {

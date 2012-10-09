@@ -394,6 +394,12 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             assert this.getEntityMeta().isEntityClassAssignableFrom(entity) : this.getEntityMeta().getCaption() + " is not assignable from "
                     + entity.getEntityMeta().getCaption();
             Map<String, Object> value = ((SharedEntityHandler) entity).ensureValue();
+
+            AttachLevel level = entity.getAttachLevel();
+            if (level == AttachLevel.Detached) {
+                throw new RuntimeException("Access to detached " + level + " entity " + exceptionInfo(value));
+            }
+
             //TODO Test type safety at runtime.
             if (!this.getObjectClass().equals(entity.getInstanceValueClass())) {
                 // allow polymorphic Member
@@ -516,19 +522,19 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public AttachLevel getAttachLevel() {
+        if ((delegateValue) && getOwner().isValueDetached()) {
+            return AttachLevel.Detached;
+        }
         Map<String, Object> thisValue = this.getValue(false);
         if ((thisValue == null) || (thisValue.isEmpty())) {
-            if ((delegateValue) && getOwner().isValueDetached()) {
-                return AttachLevel.Detached;
-            } else {
-                return AttachLevel.Attached;
-            }
-        }
-        AttachLevel level = (AttachLevel) thisValue.get(DETACHED_ATTR);
-        if (level == null) {
             return AttachLevel.Attached;
         } else {
-            return level;
+            AttachLevel level = (AttachLevel) thisValue.get(DETACHED_ATTR);
+            if (level == null) {
+                return AttachLevel.Attached;
+            } else {
+                return level;
+            }
         }
     }
 
