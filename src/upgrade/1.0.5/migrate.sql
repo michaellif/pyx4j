@@ -392,15 +392,15 @@ BEGIN
         
         -- person_screening
         SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.person_screening '||
-                                                'DROP CONSTRAINT IF EXISTS person_screening_pk,'||
-                                                'DROP CONSTRAINT IF EXISTS person_screening_pkey,'||            -- Very special case for pangroup
-                                                'DROP CONSTRAINT person_screening_current_address_country_fk,'|| 
-                                                'DROP CONSTRAINT person_screening_current_address_province_fk,'||
-                                                'DROP CONSTRAINT person_screening_equifax_approval_fk,'||
-                                                'DROP CONSTRAINT person_screening_legal_questions_fk,'||
-                                                'DROP CONSTRAINT person_screening_previous_address_country_fk,'||
-                                                'DROP CONSTRAINT person_screening_previous_address_province_fk,'||
-                                                'DROP CONSTRAINT person_screening_screene_fk');
+                                                'DROP CONSTRAINT IF EXISTS person_screening_pk CASCADE,'||
+                                                'DROP CONSTRAINT IF EXISTS person_screening_pkey CASCADE,'||            -- Very special case for pangroup
+                                                'DROP CONSTRAINT IF EXISTS person_screening_current_address_country_fk,'|| 
+                                                'DROP CONSTRAINT IF EXISTS person_screening_current_address_province_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS person_screening_equifax_approval_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS person_screening_legal_questions_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS person_screening_previous_address_country_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS person_screening_previous_address_province_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS person_screening_screene_fk');
                 
         SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.person_screening RENAME TO person_screening_v');
         
@@ -799,26 +799,26 @@ BEGIN
         '       REFERENCES '||v_schema_name||'.payment_method(id))';
 
         EXECUTE 'INSERT INTO '||v_schema_name||'.lease_customer '||
-        '(id,iddiscriminator,lease,customer,participant_id,preauthorized_payment,participant_id_s) '||
+        '(id,iddiscriminator,lease,customer,participant_id,participant_id_s) '||
         '(SELECT nextval(''public.lease_customer_seq'') AS id,''Tenant'' AS iddiscriminator,a.* '||
         'FROM '||
-        '(SELECT DISTINCT a.id AS lease, b.customer, b.participant_id, d.preauthorized_payment, '||
-        'LPAD(b.participant_id,7,''0'') AS participant_id_s '||
+        '(SELECT DISTINCT a.id AS lease, d.customer, d.participant_id,  '||
+        'LPAD(d.participant_id,7,''0'') AS participant_id_s '||
         'FROM '||v_schema_name||'.lease a '||
         'JOIN '||v_schema_name||'.lease_v c ON (a.id = c.holder) '||
-        'JOIN '||v_schema_name||'.tenant d ON (c.id = d.lease_v) '||
-        'JOIN (SELECT customer, MAX(participant_id) AS participant_id FROM '||v_schema_name||'.tenant GROUP BY customer) b ON (d.customer = b.customer)) AS a)';
+        'JOIN '||v_schema_name||'.tenant d ON (c.id = d.lease_v)) AS a)';
+        
 
         EXECUTE 'INSERT INTO '||v_schema_name||'.lease_customer '||
         '(id,iddiscriminator,lease,customer,participant_id,participant_id_s) '||
         '(SELECT nextval(''public.lease_customer_seq'') AS id,''Guarantor'' AS iddiscriminator,a.* '||
         'FROM '||
-        '(SELECT DISTINCT a.id AS lease, b.customer, b.participant_id, '||
-        'LPAD(b.participant_id,7,''0'') AS participant_id_s '||
+        '(SELECT DISTINCT a.id AS lease, d.customer, d.participant_id, '||
+        'LPAD(d.participant_id,7,''0'') AS participant_id_s '||
         'FROM '||v_schema_name||'.lease a '||
         'JOIN '||v_schema_name||'.lease_v c ON (a.id = c.holder) '||
-        'JOIN '||v_schema_name||'.guarantor d ON (c.id = d.lease_v) '||
-        'JOIN (SELECT customer, MAX(participant_id) AS participant_id FROM '||v_schema_name||'.guarantor GROUP BY customer) b ON (d.customer = b.customer)) AS a)';
+        'JOIN '||v_schema_name||'.guarantor d ON (c.id = d.lease_v)) AS a)' ;
+       
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_customer OWNER TO vista';
         EXECUTE 'CREATE INDEX lease_customer_lease_customer_idx ON '||v_schema_name||'.lease_customer USING btree(lease,customer,iddiscriminator)';
@@ -908,7 +908,7 @@ BEGIN
 
         -- tenant_charge
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge DROP CONSTRAINT tenant_charge_tenant_fk';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge DROP CONSTRAINT IF EXISTS tenant_charge_tenant_fk';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge RENAME COLUMN tenant  TO old_tenant';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge ADD COLUMN tenant BIGINT';
 
