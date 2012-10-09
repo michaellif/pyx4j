@@ -799,30 +799,47 @@ BEGIN
         '       REFERENCES '||v_schema_name||'.payment_method(id))';
 
         EXECUTE 'INSERT INTO '||v_schema_name||'.lease_customer '||
-        '(id,iddiscriminator,lease,customer,participant_id,participant_id_s) '||
-        '(SELECT nextval(''public.lease_customer_seq'') AS id,''Tenant'' AS iddiscriminator,a.* '||
-        'FROM '||
-        '(SELECT DISTINCT a.id AS lease, d.customer, d.participant_id,  '||
-        'LPAD(d.participant_id,7,''0'') AS participant_id_s '||
+        '(id,iddiscriminator,lease,customer,participant_id) '||
+        '(SELECT nextval(''public.lease_customer_seq'') AS id,''Tenant'' AS iddiscriminator,'||
+        'a.* FROM '||
+        '(SELECT a.id AS lease, b.customer, MAX(b.participant_id) AS participant_id  '||
         'FROM '||v_schema_name||'.lease a '||
         'JOIN '||v_schema_name||'.lease_v c ON (a.id = c.holder) '||
-        'JOIN '||v_schema_name||'.tenant d ON (c.id = d.lease_v)) AS a)';
+        'JOIN '||v_schema_name||'.tenant b ON (c.id = b.lease_v) '||
+        'GROUP BY a.id,b.customer '||
+        'ORDER BY a.id ) AS a )';
         
-
+        
         EXECUTE 'INSERT INTO '||v_schema_name||'.lease_customer '||
-        '(id,iddiscriminator,lease,customer,participant_id,participant_id_s) '||
+        '(id,iddiscriminator,lease,customer,participant_id) '||
         '(SELECT nextval(''public.lease_customer_seq'') AS id,''Guarantor'' AS iddiscriminator,a.* '||
         'FROM '||
-        '(SELECT DISTINCT a.id AS lease, d.customer, d.participant_id, '||
-        'LPAD(d.participant_id,7,''0'') AS participant_id_s '||
+        '(SELECT a.id AS lease, b.customer, MAX(b.participant_id) AS participant_id '||
         'FROM '||v_schema_name||'.lease a '||
         'JOIN '||v_schema_name||'.lease_v c ON (a.id = c.holder) '||
-        'JOIN '||v_schema_name||'.guarantor d ON (c.id = d.lease_v)) AS a)' ;
-       
+        'JOIN '||v_schema_name||'.guarantor b ON (c.id = b.lease_v) '||
+        'GROUP BY a.id,b.customer '||
+        'ORDER BY a.id ) AS a )';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_customer '||
+        '       SET     participant_id_s = LPAD(participant_id,7,''0'')';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_customer AS a '||
+        '       SET preauthorized_payment = b.preauthorized_payment '||
+        '       FROM '||
+        '       (SELECT a.id AS lease, b.customer, b.preauthorized_payment '||
+        '               FROM '||v_schema_name||'.lease a '||
+        '               JOIN '||v_schema_name||'.lease_v c ON (a.id = c.holder) '||
+        '               JOIN '||v_schema_name||'.tenant b ON (a.id = b.lease_v) '||
+        '               WHERE b.preauthorized_payment IS NOT NULL ) AS b '||
+        '       WHERE   a.lease = b.lease '||
+        '       AND     a.customer = b.customer ';
+        
+
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_customer OWNER TO vista';
-        EXECUTE 'CREATE INDEX lease_customer_lease_customer_idx ON '||v_schema_name||'.lease_customer USING btree(lease,customer,iddiscriminator)';
-        EXECUTE 'CREATE INDEX lease_customer_participant_id_idx ON '||v_schema_name||'.lease_customer USING btree(participant_id,iddiscriminator)';
+        EXECUTE 'CREATE UNIQUE INDEX lease_customer_lease_customer_idx ON '||v_schema_name||'.lease_customer USING btree(lease,customer,iddiscriminator)';
+        EXECUTE 'CREATE UNIQUE INDEX lease_customer_participant_id_idx ON '||v_schema_name||'.lease_customer USING btree(participant_id,iddiscriminator)';
 
 
         -- lease_participant
