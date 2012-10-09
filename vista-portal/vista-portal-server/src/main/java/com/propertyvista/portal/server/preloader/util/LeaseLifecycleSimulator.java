@@ -46,6 +46,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
@@ -93,6 +94,8 @@ public class LeaseLifecycleSimulator {
 
     private TenantAgent tenantAgent = new DefaultTenantAgent();
 
+    public LogicalDate leaseTo;
+
     private LeaseLifecycleSimulator() {
         this.events = new PriorityQueue<LeaseLifecycleSimulator.LeaseEventContainer>(10, new Comparator<LeaseEventContainer>() {
             @Override
@@ -106,6 +109,7 @@ public class LeaseLifecycleSimulator {
                 }
             }
         });
+        leaseTo = null;
     }
 
     public static LeaseLifecycleSimulatorBuilder sim() {
@@ -127,7 +131,7 @@ public class LeaseLifecycleSimulator {
         LogicalDate reservedOn = add(max(simStart, lease.unit()._availableForRent().getValue()), rndBetween(minAvailableTerm, maxAvailableTerm));
 
         LogicalDate leaseFrom = add(reservedOn, rndBetween(minReserveTerm, maxReserveTerm));
-        LogicalDate leaseTo = add(leaseFrom, rndBetween(MIN_LEASE_TERM, MAX_LEASE_TERM));
+        LogicalDate leaseTo = this.leaseTo != null ? this.leaseTo : add(leaseFrom, rndBetween(MIN_LEASE_TERM, MAX_LEASE_TERM));
 
         lease.currentTerm().termFrom().setValue(leaseFrom);
         lease.currentTerm().termTo().setValue(leaseTo);
@@ -189,6 +193,7 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             lease.status().setValue(Status.Application);
+            lease.currentTerm().type().setValue(Type.Fixed);
             lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
             lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, lease.unit());
             lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
@@ -196,6 +201,7 @@ public class LeaseLifecycleSimulator {
             Tenant mainTenant = lease.currentTerm().version().tenants().get(0);
             mainTenant.leaseCustomer().preauthorizedPayment().set(mainTenant.leaseCustomer().customer().paymentMethods().iterator().next());
             Persistence.service().merge(mainTenant.leaseCustomer());
+
             for (Tenant tenant : lease.currentTerm().version().tenants()) {
                 tenant.leaseCustomer().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
                 Persistence.service().persist(tenant.leaseCustomer().customer().personScreening());
@@ -612,6 +618,15 @@ public class LeaseLifecycleSimulator {
         /** inclusive */
         public LeaseLifecycleSimulatorBuilder end(String simEnd) {
             return end(toDate(simEnd));
+        }
+
+        public LeaseLifecycleSimulatorBuilder leaseTo(LogicalDate leaseTo) {
+            leaseLifecycleSim.leaseTo = leaseTo;
+            return this;
+        }
+
+        public LeaseLifecycleSimulatorBuilder leaseTo(String leaseTo) {
+            return leaseTo(toDate(leaseTo));
         }
 
         public LeaseLifecycleSimulatorBuilder simulateBilling() {

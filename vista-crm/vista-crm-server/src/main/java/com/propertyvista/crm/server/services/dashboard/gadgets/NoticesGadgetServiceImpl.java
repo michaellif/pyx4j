@@ -106,7 +106,7 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
         if (buildingsFilter != null && !buildingsFilter.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().unit().building(), buildingsFilter));
         }
-
+        criteria.add(PropertyCriterion.eq(criteria.proto().completion(), Lease.CompletionType.Notice));
         return criteria;
     }
 

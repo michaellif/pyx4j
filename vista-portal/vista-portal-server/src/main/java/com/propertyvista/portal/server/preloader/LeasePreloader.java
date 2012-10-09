@@ -16,6 +16,7 @@ package com.propertyvista.portal.server.preloader;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Random;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -42,6 +43,8 @@ import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSimulator.Le
 public class LeasePreloader extends BaseVistaDevDataPreloader {
 
     private static final int MAX_NUM_OF_LEASES_WITH_SIM_BILLING = 3;
+
+    private static Random RND = new Random(1l);
 
     @Override
     public String create() {
@@ -104,8 +107,14 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 } else {
                     Calendar cal = new GregorianCalendar();
                     cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+                    cal.add(Calendar.YEAR, -1);
                     simBuilder.start(new LogicalDate(cal.getTime()));
 
+                    cal.setTime(new LogicalDate());
+                    if (i % 2 == 0) {
+                        cal.add(Calendar.MONTH, 1 + RND.nextInt() % 4);
+                        simBuilder.leaseTo(new LogicalDate(cal.getTime()));
+                    }
                     simBuilder.end(new LogicalDate());
 
                     simBuilder.availabilityTermConstraints(0l, 0l);
