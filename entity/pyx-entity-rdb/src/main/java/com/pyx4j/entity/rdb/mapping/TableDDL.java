@@ -33,6 +33,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.mapping.TableMetadata.ColumnMetadata;
 import com.pyx4j.entity.rdb.mapping.TableModel.ModelType;
@@ -124,7 +125,9 @@ class TableDDL {
                 sql.append(", ");
                 sql.append(sqlName).append(' ');
                 member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
-
+                if (member.getMemberMeta().isValidatorAnnotationPresent(NotNull.class)) {
+                    //sql.append(" NOT NULL ");
+                }
                 if (member.getMemberMeta().isIndexed()) {
                     addIndexDef(indexes, member, sqlName, member.getMemberMeta().getAnnotation(Indexed.class));
                 }

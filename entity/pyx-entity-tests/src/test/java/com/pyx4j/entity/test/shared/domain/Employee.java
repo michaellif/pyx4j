@@ -30,7 +30,6 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -102,7 +101,6 @@ public interface Employee extends IEntity {
     Employee manager();
 
     @Owned
-    @NotNull
     @Caption(name = "Mail address")
     Address homeAddress();
 

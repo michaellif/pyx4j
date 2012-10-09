@@ -32,6 +32,7 @@ import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.i18n.annotations.I18n;
 
 @AbstractEntity
@@ -41,6 +42,7 @@ public interface IVersionData<VERSIONED_ENTITY extends IVersionedEntity<?>> exte
     @Owner
     @JoinColumn
     @Indexed(group = { "h,1" })
+    @NotNull
     VERSIONED_ENTITY holder();
 
     @OrderColumn
