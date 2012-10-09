@@ -29,11 +29,12 @@ ALTER TABLE admin_pmc_equifax_info
     ADD COLUMN approved BOOLEAN;
 
 
+
 /**     public schema   **/
 
 SET search_path = 'public';
 
--- Remove sequences for tables to be deleted - 50 in total
+-- Remove sequences for tables to be deleted - 53 in total
 
 DROP SEQUENCE arrears_status_gadget_metadata$column_descriptors_seq;
 DROP SEQUENCE arrears_status_gadget_metadata_seq;
@@ -63,6 +64,8 @@ DROP SEQUENCE income_info_student_income_seq;
 DROP SEQUENCE lease_v_seq;
 DROP SEQUENCE lease_vlease_products$concessions_seq;
 DROP SEQUENCE lease_vlease_products$feature_items_seq;
+DROP SEQUENCE lease$documents_seq;
+DROP SEQUENCE legal_questions_seq;
 DROP SEQUENCE lister_gadget_base_metadata$column_descriptors_seq;
 DROP SEQUENCE lister_gadget_base_metadata_seq;
 DROP SEQUENCE note$attachments_seq;
@@ -75,6 +78,7 @@ DROP SEQUENCE payment_records_gadget_metadata_seq;
 DROP SEQUENCE payments_summary_gadget_metadata$column_descriptors_seq;
 DROP SEQUENCE payments_summary_gadget_metadata$payment_status_seq;
 DROP SEQUENCE payments_summary_gadget_metadata_seq;
+DROP SEQUENCE personal_income_seq;
 DROP SEQUENCE service_seq;
 DROP SEQUENCE service_v$concessions_seq;
 DROP SEQUENCE service_v$features_seq;
@@ -86,7 +90,7 @@ DROP SEQUENCE unit_availability_gadget_meta_seq;
 DROP SEQUENCE unit_availability_summary_gmeta$column_descriptors_seq;
 DROP SEQUENCE unit_availability_summary_gmeta_seq;
 
--- Create new sequences - 15 total
+-- Create new sequences - 17 total
 
 CREATE SEQUENCE gadget_metadata_holder_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE gadget_metadata_holder_seq OWNER TO vista;
@@ -96,8 +100,6 @@ CREATE SEQUENCE lease_customer_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MI
 ALTER SEQUENCE lease_customer_seq OWNER TO vista;
 CREATE SEQUENCE lease_participant_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE lease_participant_seq OWNER TO vista;
-CREATE SEQUENCE lease_term$documents_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-ALTER SEQUENCE lease_term$documents_seq OWNER TO vista;
 CREATE SEQUENCE lease_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE lease_term_seq OWNER TO vista;
 CREATE SEQUENCE lease_term_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -108,6 +110,12 @@ CREATE SEQUENCE lease_term_vlease_products$feature_items_seq START WITH 1 INCREM
 ALTER SEQUENCE lease_term_vlease_products$feature_items_seq OWNER TO vista;
 CREATE SEQUENCE notes_and_attachments$attachments_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE notes_and_attachments$attachments_seq OWNER TO vista;
+CREATE SEQUENCE person_screening_legal_questions_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ALTER SEQUENCE person_screening_legal_questions_seq OWNER TO vista;
+CREATE SEQUENCE person_screening_personal_income_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ALTER SEQUENCE person_screening_personal_income_seq OWNER TO vista;
+CREATE SEQUENCE person_screening_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ALTER SEQUENCE person_screening_v_seq OWNER TO vista;
 CREATE SEQUENCE product_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE product_seq OWNER TO vista;
 CREATE SEQUENCE product_v$concessions_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -133,9 +141,9 @@ LANGUAGE SQL IMMUTABLE;
 CREATE OR REPLACE FUNCTION _dba_.migrate_to_105() RETURNS VOID AS
 $$
 DECLARE
-    v_schema_name           VARCHAR(64);
-    v_table_name            VARCHAR(64);
-    v_void              CHAR(1);
+    v_schema_name               VARCHAR(64);
+    v_table_name                VARCHAR(64);
+    v_void                      CHAR(1);
 BEGIN
     FOR v_schema_name IN
     SELECT namespace FROM _admin_.admin_pmc WHERE status IN ('Active','Suspended')
@@ -226,7 +234,12 @@ BEGIN
         -- dashboard_metadata
         EXECUTE 'ALTER TABLE '||v_schema_name||'.dashboard_metadata DROP COLUMN is_favorite,'||
                                 'DROP COLUMN layout_type,'||
-                                'ADD COLUMN encoded_layout VARCHAR(500)';
+                                'ADD COLUMN encoded_layout VARCHAR(500),'||
+                                'ADD COLUMN owner_user_id BIGINT';
+        -- test of _dba_.exec_sql function                        
+        SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.dashboard_metadata '||
+                                                'ADD CONSTRAINT dashboard_metadata_owner_user_id_fk FOREIGN KEY(owner_user_id) '||
+                                                'REFERENCES '||v_schema_name||'.crm_user(id)');
 
         -- employee
         EXECUTE 'ALTER TABLE '||v_schema_name||'.employee ADD COLUMN employee_id_s VARCHAR(26)';
@@ -310,9 +323,11 @@ BEGIN
         -- lease_application
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_application DROP COLUMN lease_on_application,'||
                                     'DROP COLUMN lease_on_application_for';
-        -- maintenance_requests
-        -- LATER!!!
-
+        -- legal_questions
+        
+        SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.legal_questions RENAME TO '||
+                                                'person_screening_legal_questions');
+        
         -- master_online_application
         EXECUTE 'ALTER TABLE '||v_schema_name||'.master_online_application ADD COLUMN online_application_id_s VARCHAR(26)';
         EXECUTE 'UPDATE '||v_schema_name||'.master_online_application SET online_application_id_s = _dba_.convert_id_to_string(online_application_id) ';
@@ -371,18 +386,30 @@ BEGIN
         '   SET     account_no_obfuscated_number = LPAD(account_no_obfuscated_number,12,''X''),
                 card_obfuscated_number = LPAD(card_obfuscated_number,16,''X'') ';
 
-        -- personal_income
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.personal_income DROP COLUMN employer,'||
-                                    'DROP COLUMN other_income_information,'||
-                                    'DROP COLUMN seasonally_employed,'||
-                                    'DROP COLUMN self_employed,'||
-                                    'DROP COLUMN social_services,'||
-                                    'DROP COLUMN student_income,'||
-                                    'ADD COLUMN details BIGINT,'||
-                                    'ADD COLUMN detailsdiscriminator VARCHAR(50)';
-
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.personal_income ADD CONSTRAINT personal_income_details_fk FOREIGN KEY(details) '||
-            'REFERENCES '||v_schema_name||'.income_info(id) ';
+        -- personal_income - bye-bye
+        
+        -- SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'personal_income',FALSE);
+        
+        -- person_screening
+        SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.person_screening '||
+                                                'DROP CONSTRAINT person_screening_pk,'||
+                                                'DROP CONSTRAINT person_screening_current_address_country_fk,'|| 
+                                                'DROP CONSTRAINT person_screening_current_address_province_fk,'||
+                                                'DROP CONSTRAINT person_screening_equifax_approval_fk,'||
+                                                'DROP CONSTRAINT person_screening_legal_questions_fk,'||
+                                                'DROP CONSTRAINT person_screening_previous_address_country_fk,'||
+                                                'DROP CONSTRAINT person_screening_previous_address_province_fk,'||
+                                                'DROP CONSTRAINT person_screening_screene_fk');
+                
+        SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.person_screening RENAME TO person_screening_v');
+        
+        SELECT * INTO v_void FROM _dba_.exec_sql('CREATE TABLE '||v_schema_name||'.person_screening ( '||
+                                                '       id              BIGINT          NOT NULL,'||
+                                                '       screene         BIGINT,'||
+                                                '       CONSTRAINT person_screening_pk PRIMARY KEY(id),'||
+                                                '       CONSTRAINT person_screening_screene_fk FOREIGN KEY(screene) '||
+                                                '               REFERENCES '||v_schema_name||'.customer(id))');
+        
 
         -- reports_settings_holder
         EXECUTE 'CREATE TABLE '||v_schema_name||'.reports_settings_holder ('||
@@ -480,6 +507,7 @@ BEGIN
         '(SELECT nextval(''public.product_v_seq'') AS id, id AS old_id,''service'',version_number,to_date,from_date,'||
         'description,holder,created_by_user_key,name,service_type '||
         'FROM '||v_schema_name||'.service_v ORDER BY id)';
+        
 
         EXECUTE 'UPDATE '||v_schema_name||'.product_v AS b '||
         '   SET     holder = a.holder '||
@@ -488,6 +516,15 @@ BEGIN
         '   FROM '||v_schema_name||'.product_v a '||
         '   JOIN '||v_schema_name||'.product b ON (a.old_holder = b.old_id)) AS a '||
         '   WHERE b.id = a.id ';
+        
+        SELECT * INTO v_void FROM _dba_.exec_sql('UPDATE '||v_schema_name||'.product_v AS a '
+                                                'SET holderdiscriminator = b.iddiscriminator '
+                                                'FROM (SELECT a.id,a.iddiscriminator '||
+                                                '      FROM '||v_schema_name||'.product a '||
+                                                '      JOIN '||v_schema_name||'.product_v b ON (a.id = b.holder)) AS b '||
+                                                'WHERE a.holder = b.id');
+        
+        SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.product_v ALTER COLUMN holderdiscriminator SET NOT NULL');
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ADD CONSTRAINT product_v_holder_fk FOREIGN KEY(holder) REFERENCES '||v_schema_name||'.product(id)';
 
@@ -683,21 +720,6 @@ BEGIN
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_v OWNER TO vista';
 
-        -- lease_term$documents
-        EXECUTE 'CREATE TABLE '||v_schema_name||'.lease_term$documents ( '||
-        '   id      BIGINT      NOT NULL,'||
-        '   owner       BIGINT,'||
-        '   value       BIGINT,'||
-        '   seq     INT,'||
-        '   CONSTRAINT lease_term$documents_pk PRIMARY KEY(id),'||
-        '   CONSTRAINT lease_term$documents_owner_fk FOREIGN KEY(owner) '||
-        '       REFERENCES '||v_schema_name||'.lease_term(id),'||
-        '   CONSTRAINT lease_term$documents_value_fk FOREIGN KEY(value) '||
-        '       REFERENCES '||v_schema_name||'.document(id))';
-
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term$documents OWNER TO vista';
-        EXECUTE 'CREATE INDEX lease_term$documents_owner_idx ON '||v_schema_name||'.lease_term$documents USING btree (owner)';
-
         -- lease_term_vlease_products$concessions
         EXECUTE 'CREATE TABLE '||v_schema_name||'.lease_term_vlease_products$concessions ( '||
         '   id      BIGINT      NOT NULL,'||
@@ -760,19 +782,19 @@ BEGIN
         -- lease_customer
 
         EXECUTE 'CREATE TABLE '||v_schema_name||'.lease_customer ( '||
-        '   id          BIGINT          NOT NULL,'||
-        '   iddiscriminator     VARCHAR(64)     NOT NULL,'||
-        '   lease           BIGINT,'||
-        '   customer        BIGINT,'||
-        '   participant_id      VARCHAR(14),'||
-        '   preauthorized_payment   BIGINT,'||
-        '   participant_id_s    VARCHAR(26),'||
+        '   id                          BIGINT          NOT NULL,'||
+        '   iddiscriminator             VARCHAR(64)     NOT NULL,'||
+        '   lease                       BIGINT,'||
+        '   customer                    BIGINT,'||
+        '   participant_id              VARCHAR(14),'||
+        '   preauthorized_payment       BIGINT,'||
+        '   participant_id_s            VARCHAR(26),'||
         '   CONSTRAINT lease_customer_pk PRIMARY KEY(id),'||
         '   CONSTRAINT lease_customer_customer_fk FOREIGN KEY(customer) '||
         '       REFERENCES '||v_schema_name||'.customer(id),'||
-            '   CONSTRAINT lease_customer_lease_fk FOREIGN KEY(lease) '||
+        '   CONSTRAINT lease_customer_lease_fk FOREIGN KEY(lease) '||
         '       REFERENCES '||v_schema_name||'.lease(id),'||
-            '   CONSTRAINT lease_customer_preauthorized_payment_fk FOREIGN KEY(preauthorized_payment) '||
+        '   CONSTRAINT lease_customer_preauthorized_payment_fk FOREIGN KEY(preauthorized_payment) '||
         '       REFERENCES '||v_schema_name||'.payment_method(id))';
 
         EXECUTE 'INSERT INTO '||v_schema_name||'.lease_customer '||
@@ -910,24 +932,17 @@ BEGIN
 
         FOREACH v_table_name IN ARRAY
         ARRAY[  'guarantor',
-            'lease_v',
-            'lease_vlease_products$concessions',
-            'lease_vlease_products$feature_items',
-            'tenant']
+                'lease_v',
+                'lease_vlease_products$concessions',
+                'lease_vlease_products$feature_items',
+                'lease$documents',
+                'tenant']
         LOOP
             SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,v_table_name,TRUE);
 
         END LOOP;
 
-        -- Delete tables that was never used
-
-        FOREACH v_table_name IN ARRAY
-        ARRAY[  'lease$documents',
-                'lease_term$documents']
-        LOOP
-            SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,v_table_name,TRUE);
-
-        END LOOP;
+   
 
     END LOOP;
 END;
@@ -939,5 +954,5 @@ DROP FUNCTION _dba_.migrate_to_105();
 
 SET client_min_messages = 'NOTICE';
 
-COMMIT;
+-- COMMIT;
 

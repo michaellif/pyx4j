@@ -702,7 +702,7 @@ BEGIN
 	EXECUTE 'SELECT COUNT(*) FROM '||v_schema_name||'.'||v_table_name INTO v_rowcount;
 
 	-- Nothing to be done if table is not empty
-	-- v_drop_not_empty is true
+	-- v_drop_not_empty is false
 	IF (v_rowcount != 0 AND v_drop_non_empty = FALSE)
 	THEN
 		RAISE NOTICE 'Table %.% has % rows',v_schema_name,v_table_name,v_rowcount;
@@ -741,7 +741,7 @@ BEGIN
 	EXECUTE 'SELECT COUNT(*) FROM '||v_schema_name||'.'||v_table_name INTO v_rowcount;
 
 	-- Nothing to be done if table is not empty
-	-- v_drop_not_empty is true
+	-- v_drop_not_empty is false
 	IF (v_rowcount != 0 AND v_drop_non_empty = FALSE)
 	THEN
 		RAISE NOTICE 'Table %.% has % rows',v_schema_name,v_table_name,v_rowcount;
@@ -766,3 +766,21 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql VOLATILE;
+
+/**
+***     =====================================================================
+***     Merely a wrapper around plpgsql EXECUTE, throwing exceptions
+***     and returning error code on error 
+***     This function's main purpose is to avoid retyping RAISE EXCEPTION 
+***     in long migration scripts
+***     =================================================================
+**/ 
+CREATE OR REPLACE FUNCTION _dba_.exec_sql (v_sql TEXT) RETURNS VOID AS
+$$
+BEGIN
+        EXECUTE v_sql;
+        EXCEPTION WHEN OTHERS THEN
+                RAISE EXCEPTION 'Failed executing statement "%", code: %, error message: %',v_sql,SQLSTATE,SQLERRM ;
+END;
+$$
+LANGUAGE plpgsql VOLATILE; 
