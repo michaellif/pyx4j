@@ -438,6 +438,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>EnvLinksServlet</servlet-name>
+        <servlet-class>com.propertyvista.server.ci.EnvLinksServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>EnvLinksServlet</servlet-name>
+        <url-pattern>/index.html</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>ServletContainerLoginServlet</servlet-name>
         <servlet-class>com.pyx4j.security.server.ServletContainerLoginServlet</servlet-class>
     </servlet>

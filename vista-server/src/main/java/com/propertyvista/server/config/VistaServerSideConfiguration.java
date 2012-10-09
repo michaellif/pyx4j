@@ -161,7 +161,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getDefaultBaseURLvistaAdmin() {
-        return getApplicationDeploymentProtocol() + "://" + "static" + getApplicationURLNamespace() + DeploymentConsts.ADMIN_URL;
+        return getApplicationDeploymentProtocol() + "://" + "admin" + getApplicationURLNamespace() + DeploymentConsts.ADMIN_URL;
     }
 
     @Override
