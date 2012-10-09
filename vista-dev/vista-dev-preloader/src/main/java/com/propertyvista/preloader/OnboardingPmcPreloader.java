@@ -70,8 +70,7 @@ public class OnboardingPmcPreloader extends AbstractDataPreloader {
 
         for (OnboardingUserCredential cred : creds) {
             cred.pmc().set(pmc);
-
-            cred.onboardingAccountId().setValue(null); // We will lookup by pmc
+            cred.onboardingAccountId().setValue(onboardingAccountId);
             Persistence.service().persist(cred);
         }
 
