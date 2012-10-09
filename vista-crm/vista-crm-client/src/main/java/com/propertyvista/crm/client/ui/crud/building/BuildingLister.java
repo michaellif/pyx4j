@@ -76,6 +76,6 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().propertyCode().getPath().toString(), false), new Sort(proto().propertyManager().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().propertyCode().getPath().toString(), false));
     }
 }

@@ -52,6 +52,8 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
 
     protected final SimplePanel paymentDetailsHolder = new SimplePanel();
 
+    protected Widget paymentDetailsHeader;
+
     protected Widget billingAddressHeader;
 
     public PaymentMethodEditor() {
@@ -75,6 +77,7 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
         }), 25).build());
 
         main.setH3(++row, 0, 1, proto().details().getMeta().getCaption());
+        paymentDetailsHeader = main.getWidget(row, 0);
         main.setWidget(++row, 0, paymentDetailsHolder);
 
         main.setH3(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
@@ -136,6 +139,8 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
 
         get(proto().sameAsCurrent()).setVisible(!isViewable());
         get(proto().billingAddress()).setEditable(!getValue().sameAsCurrent().isBooleanTrue());
+
+        paymentDetailsHeader.setVisible(this.contains(proto().details()));
     }
 
     @SuppressWarnings("unchecked")
@@ -143,7 +148,7 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
 
         if (this.contains(proto().details())) {
             this.unbind(proto().details());
-            paymentDetailsHolder.setWidget(null);
+            setPaymentDetailsWidget(null);
         }
 
         if (populate) {
@@ -159,7 +164,8 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
 
             switch (type) {
             case Cash:
-                editor = new CashInfoEditor();
+                // Disable cash editor:            
+//                editor = new CashInfoEditor();
                 if (details.getInstanceValueClass() != CashInfo.class) {
                     details.set(EntityFactory.create(CashInfo.class));
                 }
@@ -202,9 +208,14 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
             if (editor != null) {
                 this.inject(proto().details(), editor);
                 editor.populate(details.cast());
-                paymentDetailsHolder.setWidget(editor);
+                setPaymentDetailsWidget(editor.asWidget());
             }
         }
+    }
+
+    private void setPaymentDetailsWidget(Widget w) {
+        paymentDetailsHolder.setWidget(w);
+        paymentDetailsHeader.setVisible(w != null);
     }
 
     public void initNew(PaymentType type) {
