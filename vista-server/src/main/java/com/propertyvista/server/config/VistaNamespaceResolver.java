@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.NamespaceResolver;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -68,6 +69,9 @@ public class VistaNamespaceResolver implements NamespaceResolver {
             }
             if (servletPath.startsWith("/public/schema") || servletPath.startsWith("/public/version") || servletPath.startsWith("/static/")
                     || servletPath.startsWith("/demo/") || servletPath.startsWith("/public/status") || servletPath.startsWith("/o/")) {
+                return "_";
+            }
+            if (ApplicationMode.isDevelopment() && servletPath.equals("/")) {
                 return "_";
             }
         }
