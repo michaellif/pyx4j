@@ -2,13 +2,19 @@
 ***	=======================================================================
 ***	@version $Revision$ ($Author$) $Date$
 ***
-***		Renames vista_prod <> vista
+***		Creates database vista with template vista_prod
 ***
 ***	=======================================================================
 **/
 
-ALTER DATABASE vista_prod RENAME TO vista_prod1;
-ALTER DATABASE vista RENAME TO vista_prod;
-ALTER DATABASE vista_prod1 RENAME TO vista;
+ALTER USER vista NOLOGIN;
+SELECT pg_terminate_backend(procpid) FROM pg_stat_activity 
+WHERE datname = 'vista_prod'
+AND usename = 'vista';
+DROP DATABASE IF EXISTS vista;
+CREATE DATABASE vista TEMPLATE vista_prod OWNER vista;
+ALTER USER vista LOGIN;
+
+
 
 

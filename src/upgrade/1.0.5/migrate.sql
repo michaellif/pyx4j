@@ -392,7 +392,8 @@ BEGIN
         
         -- person_screening
         SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.person_screening '||
-                                                'DROP CONSTRAINT person_screening_pk,'||
+                                                'DROP CONSTRAINT IF EXISTS person_screening_pk,'||
+                                                'DROP CONSTRAINT IF EXISTS person_screening_pkey,'||            -- Very special case for pangroup
                                                 'DROP CONSTRAINT person_screening_current_address_country_fk,'|| 
                                                 'DROP CONSTRAINT person_screening_current_address_province_fk,'||
                                                 'DROP CONSTRAINT person_screening_equifax_approval_fk,'||
