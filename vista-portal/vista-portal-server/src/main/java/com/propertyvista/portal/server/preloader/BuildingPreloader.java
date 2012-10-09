@@ -19,6 +19,7 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -29,6 +30,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
+import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -292,6 +294,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
 
             Persistence.service().persist(building);
+
             // Save Versioned Items, 
             // Preload data in a past all for product catalog assignments in LaseSimulator
             Persistence.service().setTransactionSystemTime(DateUtils.detectDateformat("2008-01-01"));
@@ -312,11 +315,12 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 Persistence.service().setTransactionSystemTime(null);
             }
 
+            ServerSideFactory.create(ProductCatalogFacade.class).updateUnitMarketPrice(building);
+
             //Do not publish until data is clean-up
             if (true) {
                 PublicDataUpdater.updateIndexData(building);
             }
-
         }
         SharedGeoLocator.save();
         if (noGeoCount > 0) {
