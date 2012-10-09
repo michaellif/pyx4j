@@ -85,9 +85,6 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sameAsCurrent())).build());
         main.setWidget(++row, 0, inject(proto().billingAddress(), new AddressStructuredEditor(true)));
 
-        main.setHR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phone()), 12).build());
-
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isPreauthorized())).build());
         get(proto().isPreauthorized()).setVisible(false);

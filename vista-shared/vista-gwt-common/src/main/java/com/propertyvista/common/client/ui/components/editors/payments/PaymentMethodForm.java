@@ -112,10 +112,6 @@ public class PaymentMethodForm extends PaymentMethodEditor {
         container.setWidget(++row, 0, inject(proto().billingAddress(), new AddressStructuredEditor(twoColumns)));
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
 
-        container.setHR(++row, 0, 3);
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phone()), 15).build());
-        container.getFlexCellFormatter().setColSpan(row, 0, 3);
-
         container.setBR(++row, 0, 3);
         container.setWidget(++row, 0, createLegalTermsPanel());
         container.getFlexCellFormatter().setColSpan(row, 0, 3);

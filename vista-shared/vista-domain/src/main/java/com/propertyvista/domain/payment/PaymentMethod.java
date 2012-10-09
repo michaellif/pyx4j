@@ -65,9 +65,6 @@ public interface PaymentMethod extends IEntity {
     @EmbeddedEntity
     AddressStructured billingAddress();
 
-    @Editor(type = EditorType.phone)
-    IPrimitive<String> phone();
-
     /**
      * Indicates if this method is one-time usage only.
      * TODO: rename to isProfiledMethod (inverse logic!)
