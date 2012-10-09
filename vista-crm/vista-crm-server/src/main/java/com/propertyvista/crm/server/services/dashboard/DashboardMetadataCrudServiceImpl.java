@@ -64,7 +64,7 @@ public class DashboardMetadataCrudServiceImpl extends AbstractCrudServiceImpl<Da
         // delete all shadow settings if required
         if (oldDashboardMetadata.isShared().isBooleanTrue() & !dashboardMetadata.isShared().isBooleanTrue()) {
             for (String gadgetId : new DashboardColumnLayoutFormat(dashboardMetadata.encodedLayout().getValue()).gadgetIds()) {
-                Util.gadgetStorage().deleteAll(gadgetId + ":%");
+                Util.gadgetStorage().deleteMatching(gadgetId + ":%");
             }
         }
         super.save(callback, dashboardMetadata);
@@ -75,7 +75,7 @@ public class DashboardMetadataCrudServiceImpl extends AbstractCrudServiceImpl<Da
         // delete all child gadgets
         DashboardMetadata dm = Persistence.secureRetrieve(DashboardMetadata.class, entityId);
         for (String gadgetId : new DashboardColumnLayoutFormat(dm.encodedLayout().getValue()).gadgetIds()) {
-            Util.gadgetStorage().deleteAll(gadgetId + "%");
+            Util.gadgetStorage().deleteMatching(gadgetId + "%");
         }
         super.delete(callback, entityId);
     }
