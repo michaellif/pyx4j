@@ -71,7 +71,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                     || servletPath.startsWith("/demo/") || servletPath.startsWith("/public/status") || servletPath.startsWith("/o/")) {
                 return "_";
             }
-            if (ApplicationMode.isDevelopment() && servletPath.equals("/")) {
+            if (ApplicationMode.isDevelopment() && servletPath.equals("/index.html")) {
                 return "_";
             }
         }
