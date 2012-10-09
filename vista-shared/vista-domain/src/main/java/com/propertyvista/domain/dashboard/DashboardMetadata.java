@@ -22,18 +22,18 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.security.CrmUser;
 
 @Caption(name = "Dashboard")
-public interface DashboardMetadata extends ISharedUserEntity {
+public interface DashboardMetadata extends IEntity {
 
     @I18n
     public enum DashboardType {

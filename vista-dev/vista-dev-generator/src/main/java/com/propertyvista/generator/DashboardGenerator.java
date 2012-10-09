@@ -17,7 +17,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
-import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
@@ -105,7 +104,6 @@ public class DashboardGenerator extends Dashboards {
 
     private DashboardMetadata makeDashboard(String name, String description, Class<? extends GadgetMetadata>... gadgetMetadatas) {
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage  
         dmd.type().setValue(DashboardType.building);
         dmd.isShared().setValue(true);
         dmd.name().setValue(name);
