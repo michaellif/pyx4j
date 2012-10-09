@@ -37,7 +37,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.rpc.customization.CustomizationOverwriteAttemptException;
 
-public class CustomizationPersistenceTest {
+public class CustomizationPersistenceHelperTest {
 
     static {
         TestWithDB.setUp();
@@ -67,8 +67,8 @@ public class CustomizationPersistenceTest {
         entity.valueDate().setValue(new LogicalDate(cal.getTime()));
 
         // save
-        serviceHelper().save("foo", entity, true);
-        serviceHelper().save("bar", entity, true);
+        customizationPersistenceHelper().save("foo", entity, true);
+        customizationPersistenceHelper().save("bar", entity, true);
 
         // test
         {
@@ -103,11 +103,51 @@ public class CustomizationPersistenceTest {
         entity.valueDate().setValue(new LogicalDate(cal.getTime()));
 
         // save
-        serviceHelper().save("foo", entity, true);
+        customizationPersistenceHelper().save("testSaveOverwrite", entity, true);
 
         // try to save with the same name, an exception must be thrown in the process
-        serviceHelper().save("foo", entity, false);
+        customizationPersistenceHelper().save("testSaveOverwrite", entity, false);
 
+    }
+
+    @Test(expected = Error.class)
+    public void testSaveMustNotAllowToOverwriteReadonlyProperty() {
+        // setup
+        CustomizationTestEntity entity = EntityFactory.create(CustomizationTestEntity.class);
+        entity.valueStr().setValue("strValue");
+        customizationPersistenceHelper().save("testSaveMustNotAllowToOverwriteReadonlyProperty", entity, true);
+
+        // save again (MUST Fail)
+        entity.readOnlyProperty().setValue(7);
+        customizationPersistenceHelper().save("testSaveMustNotAllowToOverwriteReadonlyProperty", entity, true);
+    }
+
+    @Test
+    public void testSaveMustAllowToOverwriteNullInReadonlyProperty() {
+        // setup
+        CustomizationTestEntity entity = EntityFactory.create(CustomizationTestEntity.class);
+        entity.valueStr().setValue("strValue");
+        customizationPersistenceHelper().save("testSaveMustAllowToOverwriteNullInReadonlyProperty", entity, true);
+
+        // save again (MUST not fail)
+        entity.readOnlyAllowOverwritreNull().setValue(7);
+        customizationPersistenceHelper().save("testSaveMustAllowToOverwriteNullInReadonlyProperty", entity, true);
+    }
+
+    @Test(expected = Error.class)
+    public void testSaveMustNotAllowToOverwriteReadonlyPropertyAfterOverwrittenNull() {
+        // setup
+        CustomizationTestEntity entity = EntityFactory.create(CustomizationTestEntity.class);
+        entity.valueStr().setValue("strValue");
+        customizationPersistenceHelper().save("testSaveMustNotAllowToOverwriteReadonlyPropertyAfterOverwrittenNull", entity, true);
+
+        // save again (MUST not fail)
+        entity.readOnlyAllowOverwritreNull().setValue(7);
+        customizationPersistenceHelper().save("testSaveMustNotAllowToOverwriteReadonlyPropertyAfterOverwrittenNull", entity, true);
+
+        // save again (MUST fail)
+        entity.readOnlyAllowOverwritreNull().setValue(11);
+        customizationPersistenceHelper().save("testSaveMustNotAllowToOverwriteReadonlyPropertyAfterOverwrittenNull", entity, true);
     }
 
     @Test
@@ -122,16 +162,27 @@ public class CustomizationPersistenceTest {
 
         // save
         entity.valueStr().setValue("foo value");
-        serviceHelper().save("foo", entity, true);
+        customizationPersistenceHelper().save("foo", entity, true);
 
         entity.valueStr().setValue("bar value");
-        serviceHelper().save("bar", entity, true);
+        customizationPersistenceHelper().save("bar", entity, true);
 
-        // load
-        CustomizationTestEntity testEntity = serviceHelper().load("bar", EntityFactory.getEntityPrototype(CustomizationTestEntity.class));
+        {
+            // load
+            CustomizationTestEntity testEntity = customizationPersistenceHelper().load("bar", EntityFactory.getEntityPrototype(CustomizationTestEntity.class));
 
-        // test
-        Assert.assertEquals("bar value", testEntity.valueStr().getValue());
+            // test
+            Assert.assertEquals("bar value", testEntity.valueStr().getValue());
+        }
+
+        {
+            // load another one
+            CustomizationTestEntity testEntity = customizationPersistenceHelper().load("foo", EntityFactory.getEntityPrototype(CustomizationTestEntity.class));
+
+            // test
+            Assert.assertEquals("foo value", testEntity.valueStr().getValue());
+
+        }
 
     }
 
@@ -147,18 +198,42 @@ public class CustomizationPersistenceTest {
         cal.add(Calendar.DAY_OF_MONTH, 1);
         entity.valueDate().setValue(new LogicalDate(cal.getTime()));
 
-        serviceHelper().save("foo", entity, true);
+        customizationPersistenceHelper().save("foo", entity, true);
 
         CustomizationTestEntity loadedEntity;
-        loadedEntity = serviceHelper().load("foo", (CustomizationTestEntity) EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
+        loadedEntity = customizationPersistenceHelper().load("foo", (CustomizationTestEntity) EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
         Assert.assertNotNull(loadedEntity);
 
         // perform 'delete', and check that the customization was actually deleted
-        serviceHelper().delete("foo", (CustomizationTestEntity) EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
+        customizationPersistenceHelper().delete("foo", (CustomizationTestEntity) EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
 
-        loadedEntity = serviceHelper().load("foo", (CustomizationTestEntity) EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
+        loadedEntity = customizationPersistenceHelper().load("foo", (CustomizationTestEntity) EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
         Assert.assertNull(loadedEntity);
 
+    }
+
+    @Test
+    public void testDeleteMatching() {
+        // setup
+        CustomizationTestEntity entity0 = EntityFactory.create(CustomizationTestEntity.class);
+        entity0.valueStr().setValue("foo");
+        customizationPersistenceHelper().save("foo", entity0, true);
+
+        CustomizationTestEntity entity1 = EntityFactory.create(CustomizationTestEntity.class);
+        entity1.valueStr().setValue("boABCo");
+        customizationPersistenceHelper().save("boABCo", entity1, true);
+
+        CustomizationTestEntity entity2 = EntityFactory.create(CustomizationTestEntity.class);
+        entity2.valueStr().setValue("moABCD");
+        customizationPersistenceHelper().save("moABCD", entity2, true);
+
+        // perform 'deleteMatching'
+        customizationPersistenceHelper().deleteMatching("o%o", EntityFactory.getEntityPrototype(CustomizationTestEntity.class));
+
+        // test
+        Assert.assertNull(customizationPersistenceHelper().load("foo", EntityFactory.getEntityPrototype(CustomizationTestEntity.class)));
+        Assert.assertNull(customizationPersistenceHelper().load("boo", EntityFactory.getEntityPrototype(CustomizationTestEntity.class)));
+        Assert.assertNotNull(customizationPersistenceHelper().load("moABCD", EntityFactory.getEntityPrototype(CustomizationTestEntity.class)));
     }
 
     @Test
@@ -174,12 +249,12 @@ public class CustomizationPersistenceTest {
             cal.add(Calendar.DAY_OF_MONTH, 1);
             entity.valueDate().setValue(new LogicalDate(cal.getTime()));
 
-            serviceHelper().save("" + i, entity, true);
+            customizationPersistenceHelper().save("" + i, entity, true);
         }
 
         // test List
         int num = 0;
-        Iterator<String> listIterator = serviceHelper().list(EntityFactory.getEntityPrototype(CustomizationTestEntity.class)).iterator();
+        Iterator<String> listIterator = customizationPersistenceHelper().list(EntityFactory.getEntityPrototype(CustomizationTestEntity.class)).iterator();
         while (listIterator.hasNext()) {
             listIterator.next();
             ++num;
@@ -187,7 +262,7 @@ public class CustomizationPersistenceTest {
         Assert.assertEquals(10, num);
     }
 
-    private CustomizationPersistenceHelper<CustomizationTestEntity> serviceHelper() {
+    private CustomizationPersistenceHelper<CustomizationTestEntity> customizationPersistenceHelper() {
         return new CustomizationPersistenceHelper<CustomizationTestEntity>(CustomizationHolderTable.class);
     }
 

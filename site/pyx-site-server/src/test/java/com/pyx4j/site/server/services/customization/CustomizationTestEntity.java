@@ -21,6 +21,7 @@
 package com.pyx4j.site.server.services.customization;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -29,5 +30,11 @@ public interface CustomizationTestEntity extends IEntity {
     IPrimitive<String> valueStr();
 
     IPrimitive<LogicalDate> valueDate();
+
+    @ReadOnly
+    IPrimitive<Integer> readOnlyProperty();
+
+    @ReadOnly(allowOverrideNull = true)
+    IPrimitive<Integer> readOnlyAllowOverwritreNull();
 
 }

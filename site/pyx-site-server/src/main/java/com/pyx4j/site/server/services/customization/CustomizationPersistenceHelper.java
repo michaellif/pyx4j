@@ -30,6 +30,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
+import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -76,6 +78,12 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
         return result;
     }
 
+    /**
+     * @param id
+     * @param entity
+     * @param allowOverwrite
+     *            defines whether we can save an entity with the same id (doesn't have anything to do with {@link ReadOnly})
+     */
     public void save(String id, E entity, boolean allowOverwrite) {
         EntityQueryCriteria<? extends CustomizationHolder> criteria = EntityQueryCriteria.create(customizationHolderEntityClass);
         if (baseClass != null) {
@@ -84,19 +92,41 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
         criteria.add(PropertyCriterion.eq(criteria.proto().className(), entity.getInstanceValueClass().getSimpleName()));
         criteria.add(PropertyCriterion.eq(criteria.proto().identifierKey(), id));
 
-        if (!allowOverwrite && Persistence.service().count(criteria) != 0) {
+        CustomizationHolder oldVersionHolder = Persistence.service().retrieve(criteria);
+        if (!allowOverwrite & oldVersionHolder != null) {
             throw new CustomizationOverwriteAttemptException();
         }
+        if (oldVersionHolder != null) {
+            E oldVersion = deserialize(oldVersionHolder, (E) EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
 
-        // delete the old version
-        Persistence.service().delete(criteria);
+            for (String memberName : oldVersion.getEntityMeta().getMemberNames()) {
+                ReadOnly readOnly = oldVersion.getEntityMeta().getMemberMeta(memberName).getAnnotation(ReadOnly.class);
+                if (readOnly != null) {
+                    boolean readOnlyViolation = false;
+                    if (oldVersion.getMember(memberName).isNull()) {
+                        if (!entity.getMember(memberName).isNull() & !readOnly.allowOverrideNull()) {
+                            readOnlyViolation = true;
+                        }
+                    } else if (!oldVersion.getMember(memberName).equals(entity.getMember(memberName))) {
+                        readOnlyViolation = true;
+                    }
+                    if (readOnlyViolation) {
+                        throw new Error(SimpleMessageFormat.format("not allowed to overwrite readonly property {0} of {1}", memberName, oldVersion
+                                .getInstanceValueClass().getSimpleName()));
+                    }
+                }
+            }
+        }
 
-        // save new
+        // save new        
         XMLStringWriter stringWriter = new XMLStringWriter();
         XMLEntityWriter entityWriter = new XMLEntityWriter(stringWriter, new XMLEntityNamingConventionDefault());
         entityWriter.write(entity);
 
         CustomizationHolder settingsHolder = EntityFactory.create(customizationHolderEntityClass);
+        if (oldVersionHolder != null) {
+            settingsHolder.setPrimaryKey(oldVersionHolder.getPrimaryKey());
+        }
         settingsHolder.identifierKey().setValue(id);
         if (baseClass != null) {
             settingsHolder.baseClass().setValue(baseClass.getSimpleName());
@@ -104,7 +134,7 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
         settingsHolder.className().setValue(entity.getInstanceValueClass().getSimpleName());
         settingsHolder.serializedForm().setValue(stringWriter.toString());
 
-        Persistence.service().persist(settingsHolder);
+        Persistence.service().merge(settingsHolder);
 
     }
 
@@ -117,31 +147,18 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
         assert proto != null || (proto == null & baseClass != null) : "please intantiate CustomizationPersistenceHolder with base class in order to use polymorphic load";
         EntityQueryCriteria<? extends CustomizationHolder> criteria = EntityQueryCriteria.create(customizationHolderEntityClass);
         if (baseClass != null) {
-            criteria.add(PropertyCriterion.eq(criteria.proto().identifierKey(), id));
             criteria.add(PropertyCriterion.eq(criteria.proto().baseClass(), baseClass.getSimpleName()));
         }
         if (proto != null) {
             criteria.add(PropertyCriterion.eq(criteria.proto().className(), proto.getInstanceValueClass().getSimpleName()));
         }
+        criteria.add(PropertyCriterion.eq(criteria.proto().identifierKey(), id));
         CustomizationHolder holder = Persistence.service().retrieve(criteria);
 
         if (holder == null) {
             return null;
         } else {
-            E entity = null;
-            try {
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                factory.setIgnoringComments(true);
-                factory.setValidating(false);
-                DocumentBuilder builder = factory.newDocumentBuilder();
-                builder.setErrorHandler(null);
-                Document doc = builder.parse(new InputSource(new StringReader(holder.serializedForm().getValue())));
-
-                entity = (E) new XMLEntityParser().parse(proto != null ? proto.getInstanceValueClass() : baseClass, doc.getDocumentElement());
-            } catch (Throwable e) {
-                throw new RuntimeException("failed to deserialize data", e);
-            }
-            return entity;
+            return deserialize(holder, proto);
         }
 
     }
@@ -150,7 +167,6 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
         delete(id, null);
     }
 
-    // TODO check that id has no wildcards
     public void delete(String id, E proto) {
         // TODO add assertion about polymorphic usage
 
@@ -163,11 +179,16 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
         }
         criteria.add(PropertyCriterion.eq(criteria.proto().identifierKey(), id));
 
-        // delete the old version
         Persistence.service().delete(criteria);
     }
 
-    public void deleteAll(String idPattern, E proto) {
+    /**
+     * Deletes multiple customizations matching having <code>idPattern</code> as a substring
+     * 
+     * @param idPattern
+     *            a substring used for matching the IDs, can contain standard SQL matching syntax ('%' and '?')
+     */
+    public void deleteMatching(String idPattern, E proto) {
         EntityQueryCriteria<? extends CustomizationHolder> criteria = EntityQueryCriteria.create(customizationHolderEntityClass);
         if (baseClass != null) {
             criteria.add(PropertyCriterion.eq(criteria.proto().baseClass(), baseClass.getSimpleName()));
@@ -177,11 +198,30 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
         }
         criteria.add(PropertyCriterion.like(criteria.proto().identifierKey(), idPattern));
 
-        // delete the old version
         Persistence.service().delete(criteria);
     }
 
-    public void deleteAll(String idPattern) {
-        deleteAll(idPattern, null);
+    /**
+     * Polymorphic version of {@link #deleteMatching(String, IEntity)}
+     */
+    public void deleteMatching(String idPattern) {
+        deleteMatching(idPattern, null);
+    }
+
+    private E deserialize(CustomizationHolder cusomizationHolder, E proto) {
+        try {
+
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setIgnoringComments(true);
+            factory.setValidating(false);
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            builder.setErrorHandler(null);
+            Document doc = builder.parse(new InputSource(new StringReader(cusomizationHolder.serializedForm().getValue())));
+
+            return (E) new XMLEntityParser().parse(proto != null ? proto.getInstanceValueClass() : baseClass, doc.getDocumentElement());
+
+        } catch (Throwable e) {
+            throw new RuntimeException("failed to deserialize data", e);
+        }
     }
 }
