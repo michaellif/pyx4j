@@ -92,6 +92,7 @@ public interface DashboardMetadata extends IEntity {
 
     /** Only used for transporting gadgets from server to client, when dashboard adds a new gadget it add it's id to: encoded layout */
     @Transient
+    // TODO it's supposed to be set
     IList<GadgetMetadata> gadgetMetadataList();
 
     /**

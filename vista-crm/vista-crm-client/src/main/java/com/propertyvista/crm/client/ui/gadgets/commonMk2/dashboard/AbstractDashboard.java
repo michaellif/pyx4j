@@ -113,6 +113,14 @@ public abstract class AbstractDashboard extends ResizeComposite {
         initWidget(this.dashboardPanel);
     }
 
+    /**
+     * Fills the dashboard with gadgets.
+     * 
+     * @param dashboardMetadata
+     *            a valid dashboard metadata with well defined {@link DashboardMetadata#encodedLayout()} and gadget metadata inside
+     *            {@link DashboardMetadata#gadgetMetadataList()}.
+     *            Must not be <code>null</code>.
+     */
     public void setDashboardMetatdata(DashboardMetadata dashboardMetadata) {
         assert dashboardMetadata != null : "DashboardMetadata cannot be null";
 
@@ -169,7 +177,6 @@ public abstract class AbstractDashboard extends ResizeComposite {
     private void setLayoutManager(ILayoutManager layoutManager) {
         // the following action must be done with the old layout manager and old board
         List<IGadgetInstance> gadgets = extractGadgetsFromBoard();
-
         activeLayoutManger = layoutManager;
         updateLayoutButtons();
         arrangeGadgets(gadgets);

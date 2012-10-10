@@ -44,7 +44,11 @@ public class DashboardViewImpl extends ViewImplBase implements DashboardView {
 
     private final DockLayoutPanel panel;
 
+    private boolean isReadOnly;
+
     public DashboardViewImpl() {
+        this.isReadOnly = true;
+
         this.buildingsFilterProvider = new BuildingsSelectionToolbar();
         this.dashboard = new AbstractDashboard(//@formatter:off
                 buildingsFilterProvider,
@@ -72,25 +76,25 @@ public class DashboardViewImpl extends ViewImplBase implements DashboardView {
 
     @Override
     public void setDashboardMetadata(DashboardMetadata dashboardMetadata) {
+        dashboard.setVisible(dashboardMetadata != null);
+        // this is awkward way to hide buildings bar because setVisible will not work properly in DockLayoutPanel
+        panel.setWidgetSize(buildingsFilterProvider, (dashboardMetadata != null) && (dashboardMetadata.type().getValue() == DashboardType.building) ? 2.5 : 0.1);
         if (dashboardMetadata != null) {
-            // this is awkward way to hide buildings bar because setVisible will not work propertly in DockLayoutPanel
-            panel.setWidgetSize(buildingsFilterProvider, dashboardMetadata.type().getValue() == DashboardType.building ? 2.5 : 0.1);
-
             dashboard.setDashboardMetatdata(dashboardMetadata);
-
-            setCaption(dashboardMetadata.name().getValue());
         }
+        updateCaption();
     }
 
     @Override
     public void setReadOnly(boolean isReadOnly) {
-        dashboard.setReadOnly(isReadOnly);
-        setCaption(SimpleMessageFormat.format("{0} {1}", dashboard.getDashboardMetadata().name().getValue(), isReadOnly ? i18n.tr("(read only)") : ""));
+        this.isReadOnly = isReadOnly;
+        this.dashboard.setReadOnly(isReadOnly);
+        this.updateCaption();
     }
 
     @Override
     public DashboardMetadata getDashboardMetadata() {
-        return dashboard.getDashboardMetadata();
+        return dashboard.isVisible() ? dashboard.getDashboardMetadata() : null;
     }
 
     @Override
@@ -100,18 +104,26 @@ public class DashboardViewImpl extends ViewImplBase implements DashboardView {
 
     @Override
     public IMemento getMemento() {
-        // FIXME shouldn't exist
+        // TODO not used
         return null;
     }
 
     @Override
     public void storeState(Place place) {
-        // FIXME shouldn't exist
+        // TODO not used
     }
 
     @Override
     public void restoreState() {
-        // FIXME shoudln't exist
+        // TODO not used
+    }
+
+    private void updateCaption() {
+        String caption = "";
+        if (getDashboardMetadata() != null) {
+            caption = SimpleMessageFormat.format("{0} {1}", dashboard.getDashboardMetadata().name().getValue(), isReadOnly ? i18n.tr("(read only)") : "");
+        }
+        setCaption(caption);
     }
 
 }
