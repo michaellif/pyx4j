@@ -42,14 +42,14 @@ public class PaymentsSummaryGadgetMetadataDefaultSettings extends AbstractGadget
         return Arrays.asList(//@formatter:off
                 (PaymentsSummary.summaryByBuilding)?
                         defColumn(proto.building()).build():
-                        defColumn(proto.merchantAccount().accountNumber()).title(i18n.tr("Merchant Account")).build(),
-                defColumn(proto.status()).build(),
-                defColumn(proto.cash()).build(),
-                defColumn(proto.cheque()).build(),
-                defColumn(proto.eCheque()).build(),
-                defColumn(proto.eft()).build(),
-                defColumn(proto.cc()).build(),
-                defColumn(proto.interac()).build()
+                        defColumn(proto.merchantAccount().accountNumber()).title(i18n.ntr("Merchant Account")).build(),
+                        defColumn(proto.status()).build(),
+                        defColumn(proto.cash()).build(),
+                        defColumn(proto.cheque()).build(),
+                        defColumn(proto.eCheque()).build(),
+                        defColumn(proto.eft()).build(),
+                        defColumn(proto.cc()).build(),
+                        defColumn(proto.interac()).build()
         );//@formatter:on        
     }
 

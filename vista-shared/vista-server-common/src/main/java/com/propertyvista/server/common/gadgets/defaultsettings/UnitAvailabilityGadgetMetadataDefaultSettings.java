@@ -44,13 +44,13 @@ public class UnitAvailabilityGadgetMetadataDefaultSettings extends AbstractGadge
                 // references
                 defColumn(proto.building().propertyCode()).build(),
                 defColumn(proto.building().externalId()).visible(false).build(),
-                defColumn(proto.building().info().name()).visible(false).title(i18n.tr("Building Name")).build(),
+                defColumn(proto.building().info().name()).visible(false).title(i18n.ntr("Building Name")).build(),
                 defColumn(proto.building().info().address()).visible(false).build(),
-                defColumn(proto.building().propertyManager().name()).visible(false).title(i18n.tr("Property Manager")).build(),                    
-                defColumn(proto.building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
-                defColumn(proto.unit().info().number()).title(i18n.tr("Unit Name")).build(),
-                defColumn(proto.floorplan().name()).visible(false).title(i18n.tr("Floorplan Name")).build(),
-                defColumn(proto.floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
+                defColumn(proto.building().propertyManager().name()).visible(false).title(i18n.ntr("Property Manager")).build(),                    
+                defColumn(proto.building().complex().name()).visible(false).title(i18n.ntr("Complex")).build(),
+                defColumn(proto.unit().info().number()).title(i18n.ntr("Unit Name")).build(),
+                defColumn(proto.floorplan().name()).visible(false).title(i18n.ntr("Floorplan Name")).build(),
+                defColumn(proto.floorplan().marketingName()).visible(false).title(i18n.ntr("Floorplan Marketing Name")).build(),
                 
                 // status
                 defColumn(proto.vacancyStatus()).build(),

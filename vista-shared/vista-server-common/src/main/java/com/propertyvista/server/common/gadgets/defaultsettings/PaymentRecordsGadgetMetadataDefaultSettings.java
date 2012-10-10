@@ -43,17 +43,17 @@ public class PaymentRecordsGadgetMetadataDefaultSettings extends AbstractGadgetM
     private List<ColumnDescriptorEntity> definePaymentRecordsListerColumns() {
         PaymentRecordForReportDTO proto = EntityFactory.create(PaymentRecordForReportDTO.class);
         return Arrays.asList(//@formatter:off
-                defColumn(proto.merchantAccount().accountNumber()).title(i18n.tr("Merchant Account")).build(),
-                defColumn(proto.billingAccount().lease().unit().building().propertyCode()).title(i18n.tr("Building")).build(),
-                defColumn(proto.billingAccount().lease().leaseId()).title(i18n.tr("Lease")).build(),
-                defColumn(proto.paymentMethod().customer()).title(i18n.tr("Tenant")).build(),                    
-                defColumn(proto.paymentMethod().type()).title(i18n.tr("Method")).build(),
-                defColumn(proto.paymentStatus()).title(i18n.tr("Status")).build(),
-                defColumn(proto.createdDate()).title(i18n.tr("Created")).build(),
-                defColumn(proto.receivedDate()).title(i18n.tr("Received")).build(),
-                defColumn(proto.finalizeDate()).title(i18n.tr("Finalized")).build(),
-                defColumn(proto.targetDate()).title(i18n.tr("Target")).build(),
-                defColumn(proto.amount()).title(i18n.tr("Amount")).build()                    
+                defColumn(proto.merchantAccount().accountNumber()).title(i18n.ntr("Merchant Account")).build(),
+                defColumn(proto.billingAccount().lease().unit().building().propertyCode()).title(i18n.ntr("Building")).build(),
+                defColumn(proto.billingAccount().lease().leaseId()).title(i18n.ntr("Lease")).build(),
+                defColumn(proto.paymentMethod().customer()).title(i18n.ntr("Tenant")).build(),                    
+                defColumn(proto.paymentMethod().type()).title(i18n.ntr("Method")).build(),
+                defColumn(proto.paymentStatus()).title(i18n.ntr("Status")).build(),
+                defColumn(proto.createdDate()).title(i18n.ntr("Created")).build(),
+                defColumn(proto.receivedDate()).title(i18n.ntr("Received")).build(),
+                defColumn(proto.finalizeDate()).title(i18n.ntr("Finalized")).build(),
+                defColumn(proto.targetDate()).title(i18n.ntr("Target")).build(),
+                defColumn(proto.amount()).title(i18n.ntr("Amount")).build()                    
         );//@formatter:on
 
     }

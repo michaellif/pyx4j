@@ -44,13 +44,13 @@ public class ArrearsStatusGadgetMetadataDefaultSettings extends AbstractGadgetMe
 
         return Arrays.asList(//@formatter:off
                 defColumn(proto.billingAccount().lease().unit().building().propertyCode()).visible(true).build(),
-                defColumn(proto.billingAccount().lease().unit().building().info().name()).title(i18n.tr("Building")).build(),
+                defColumn(proto.billingAccount().lease().unit().building().info().name()).title(i18n.ntr("Building")).build(),
                 defColumn(proto.billingAccount().lease().unit().building().info().address().streetNumber()).visible(false).build(),
                 defColumn(proto.billingAccount().lease().unit().building().info().address().streetName()).visible(false).build(),                    
-                defColumn(proto.billingAccount().lease().unit().building().info().address().province().name()).visible(false).title(i18n.tr("Province")).build(),                    
-                defColumn(proto.billingAccount().lease().unit().building().info().address().country().name()).visible(false).title(i18n.tr("Country")).build(),                    
-                defColumn(proto.billingAccount().lease().unit().building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
-                defColumn(proto.billingAccount().lease().unit().info().number()).title(i18n.tr("Unit")).build(),
+                defColumn(proto.billingAccount().lease().unit().building().info().address().province().name()).visible(false).title(i18n.ntr("Province")).build(),                    
+                defColumn(proto.billingAccount().lease().unit().building().info().address().country().name()).visible(false).title(i18n.ntr("Country")).build(),                    
+                defColumn(proto.billingAccount().lease().unit().building().complex().name()).visible(false).title(i18n.ntr("Complex")).build(),
+                defColumn(proto.billingAccount().lease().unit().info().number()).title(i18n.ntr("Unit")).build(),
                 defColumn(proto.billingAccount().lease().leaseId()).build(),
                 defColumn(proto.billingAccount().lease().leaseFrom()).build(),
                 defColumn(proto.billingAccount().lease().leaseTo()).build(),

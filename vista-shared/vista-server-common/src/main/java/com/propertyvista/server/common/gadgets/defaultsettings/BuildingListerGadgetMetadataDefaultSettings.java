@@ -44,7 +44,7 @@ public class BuildingListerGadgetMetadataDefaultSettings extends AbstractGadgetM
                 defColumn(proto.complex()).visible(false).build(),
                 defColumn(proto.propertyCode()).build(),
                 defColumn(proto.propertyManager()).build(),
-                defColumn(proto.marketing().name()).title(i18n.tr("Marketing Name")).build(),
+                defColumn(proto.marketing().name()).title(i18n.ntr("Marketing Name")).build(),
                 defColumn(proto.info().name()).build(),
                 defColumn(proto.info().type()).build(),
                 defColumn(proto.info().shape()).visible(false).build(),
