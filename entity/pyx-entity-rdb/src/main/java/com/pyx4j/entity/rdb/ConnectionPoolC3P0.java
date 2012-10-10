@@ -31,6 +31,7 @@ import com.mchange.v2.c3p0.DataSources;
 import com.mchange.v2.c3p0.impl.C3P0ImplUtils;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 
 public class ConnectionPoolC3P0 implements ConnectionPool {
@@ -62,6 +63,10 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
             dataSource.setUnreturnedConnectionTimeout(cfg.unreturnedConnectionTimeout());
             dataSource.setDebugUnreturnedConnectionStackTraces(true);
 
+            if (ServerSideConfiguration.isRunningInDeveloperEnviroment()) {
+                dataSource.setTestConnectionOnCheckout(true);
+            }
+
             log.debug("Pool size is {} min and {} max", dataSource.getMinPoolSize(), dataSource.getMaxPoolSize());
             dataSource.setIdentityToken(C3P0ImplUtils.allocateIdentityToken(dataSource));
             C3P0Registry.reregister(dataSource);
@@ -79,6 +84,9 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
             dataSourceBackgroundProcess.setUnreturnedConnectionTimeout(cfg.unreturnedConnectionBackgroundProcessTimeout());
             dataSourceBackgroundProcess.setDebugUnreturnedConnectionStackTraces(true);
             dataSourceBackgroundProcess.setIdentityToken(C3P0ImplUtils.allocateIdentityToken(dataSourceBackgroundProcess));
+
+            dataSourceBackgroundProcess.setTestConnectionOnCheckout(true);
+
             C3P0Registry.reregister(dataSourceBackgroundProcess);
         }
 
