@@ -22,22 +22,31 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
 
 public class ColumnDescriptorConverter {
+
+    private static final I18n i18n = I18n.get(ColumnDescriptorConverter.class);
 
     public static <E extends IEntity> ColumnDescriptor columnDescriptorFromEntity(Class<E> describedEntityClass, ColumnDescriptorEntity columnDescriptorEntity) {
         if (columnDescriptorEntity != null && !columnDescriptorEntity.isNull()) {
             IEntity proto = EntityFactory.getEntityPrototype(describedEntityClass);
             IObject<?> member = proto.getMember(new Path(columnDescriptorEntity.propertyPath().getValue()));
 
-            ColumnDescriptor columnDescriptor = new MemberColumnDescriptor.Builder(member)
-                    .title(columnDescriptorEntity.title().isNull() ? "" : columnDescriptorEntity.title().getValue())
-                    .sortable(columnDescriptorEntity.isSortable().getValue()).width(columnDescriptorEntity.width().getValue())
-                    .wordWrap(columnDescriptorEntity.wrapWords().getValue()).visible(columnDescriptorEntity.isVisible().getValue()).build();
-
-            return columnDescriptor;
+            MemberColumnDescriptor.Builder columnDescriptorBuilder = new MemberColumnDescriptor.Builder(member);
+            if (!columnDescriptorEntity.title().isNull()) {
+                columnDescriptorBuilder.title(i18n.translate("", columnDescriptorEntity.title().getValue()));
+            }
+            //@formatter:off
+            return columnDescriptorBuilder
+                .sortable(columnDescriptorEntity.isSortable().getValue())
+                .width(columnDescriptorEntity.width().getValue())
+                .wordWrap(columnDescriptorEntity.wrapWords().getValue())
+                .visible(columnDescriptorEntity.isVisible().getValue())
+                .build();
+            //@formatter:on
         } else {
             return null;
         }

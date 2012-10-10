@@ -40,11 +40,7 @@ public class ColumnDescriptorEntityBuilder {
         descriptor.propertyPath().setValue(property.getPath().toString());
         descriptor.isSortable().setValue(true);
 
-        if (title != null) {
-            descriptor.title().setValue(title);
-        } else {
-            descriptor.title().setValue(property.getMeta().getCaption());
-        }
+        descriptor.title().setValue(title); // if null the client that converts this entity to column descriptor should use Caption property metadata
 
         descriptor.isSortable().setValue(true);
         descriptor.width().setValue(null);

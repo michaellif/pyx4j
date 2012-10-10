@@ -41,10 +41,12 @@ public class MaintenanceGadgetSummaryForm extends ZoomableViewForm<MaintenanceGa
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().urgentWorkOrders())).customLabel("").useLabelSemicolon(false).componentWidth(5).build());
 
         content.setH2(++row, 0, 1, i18n.tr("Outstanding:"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingWorkOrders1to2days())).customLabel("1 to 2 days").componentWidth(5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingWorkOrders2to3days())).customLabel("2 to 3 days").componentWidth(5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingWorkOrdersMoreThan3days())).customLabel("3 and more").componentWidth(5)
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingWorkOrders1to2days())).customLabel(i18n.tr("1 to 2 days")).componentWidth(5)
                 .build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingWorkOrders2to3days())).customLabel(i18n.tr("2 to 3 days")).componentWidth(5)
+                .build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingWorkOrdersMoreThan3days())).customLabel(i18n.tr("3 and more"))
+                .componentWidth(5).build());
         return content;
 
     }
