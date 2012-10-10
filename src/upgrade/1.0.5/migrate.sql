@@ -872,7 +872,7 @@ BEGIN
             '   CONSTRAINT lease_participant_screening_fk FOREIGN KEY(screening) '||
         '       REFERENCES '||v_schema_name||'.person_screening(id), '||
             '   CONSTRAINT lease_participant_tenant_fk FOREIGN KEY(tenant) '||
-        '       REFERENCES vista.lease_participant(id))';
+        '       REFERENCES '||v_schema_name||'.lease_participant(id))';
 
         EXECUTE 'INSERT INTO '||v_schema_name||'.lease_participant '||
         '(id,iddiscriminator,lease_customerdiscriminator,lease_customer,participant_role,lease_term_v,order_in_lease,'||
