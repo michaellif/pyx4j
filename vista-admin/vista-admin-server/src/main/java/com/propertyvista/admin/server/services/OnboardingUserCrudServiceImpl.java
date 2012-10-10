@@ -45,14 +45,16 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
         bind(dtoProto.enabled(), dboProto.enabled());
         bind(dtoProto.requireChangePasswordOnNextLogIn(), dboProto.requiredPasswordChangeOnNextLogIn());
 
+        bind(dtoProto.pmc(), dboProto.pmc());
+        bind(dtoProto.onboardingAccountId(), dboProto.onboardingAccountId());
+        bind(dtoProto.pmcStatus(), dboProto.pmc().status());
+
     }
 
     @Override
     protected void enhanceRetrieved(OnboardingUserCredential entity, OnboardingUserDTO dto) {
         if (!entity.pmc().isNull()) {
             dto.onboardingAccountId().setValue(entity.pmc().onboardingAccountId().getValue());
-            dto.pmcStatus().setValue(entity.pmc().status().getValue());
-            dto.pmc().set(entity.pmc());
         }
     }
 
