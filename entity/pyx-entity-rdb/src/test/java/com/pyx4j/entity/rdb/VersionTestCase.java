@@ -726,7 +726,19 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
             List<ItemA> list = srv.query(criteria);
-            assertEquals("final and draft data", 2, list.size());
+            assertEquals("draft data", 2, list.size());
+        }
+
+        // List/Find Draft, Ass sort by version date
+        // Do not create LEFT JOIN , forced INNER JOIN
+        {
+            EntityQueryCriteria<ItemA> criteria = EntityQueryCriteria.create(ItemA.class);
+            criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.asc(criteria.proto().version().name());
+
+            List<ItemA> list = srv.query(criteria);
+            assertEquals("draft data", 2, list.size());
         }
 
         // List/Find Draft by version() data

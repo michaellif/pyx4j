@@ -94,13 +94,6 @@ public class QueryBuilder<T extends IEntity> {
             firstCriteria = false;
         }
 
-        // Build JOIN for ORDER BY. This will not allow us to Use DISTINCT and add special criteria for collections
-        if ((criteria.getSorts() != null) && (!criteria.getSorts().isEmpty())) {
-            for (EntityQueryCriteria.Sort sort : expandToStringMembers(criteria.getSorts())) {
-                queryJoin.buildQueryMember(sort.getPropertyPath(), true, true);
-            }
-        }
-
         if (IVersionedEntity.class.isAssignableFrom(operationsMeta.entityMeta().getEntityClass())) {
             IVersionedEntity<?> versionedProto = (IVersionedEntity<?>) criteria.proto();
             switch (criteria.getVersionedCriteria()) {
@@ -127,6 +120,13 @@ public class QueryBuilder<T extends IEntity> {
             appendPropertyCriterion(new PropertyCriterion(criteria.proto().instanceValueClass(), Restriction.IN, operationsMeta.impClasses.values()),
                     firstCriteria, true);
             firstCriteria = false;
+        }
+
+        // Build JOIN for ORDER BY. This will not allow us to Use DISTINCT and add special criteria for collections
+        if ((criteria.getSorts() != null) && (!criteria.getSorts().isEmpty())) {
+            for (EntityQueryCriteria.Sort sort : expandToStringMembers(criteria.getSorts())) {
+                queryJoin.buildQueryMember(sort.getPropertyPath(), true, true);
+            }
         }
 
         if ((criteria.getFilters() != null) && (!criteria.getFilters().isEmpty())) {
