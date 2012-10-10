@@ -84,24 +84,35 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
     public BasicValue naryOperation(AbstractInsnNode insn, @SuppressWarnings("rawtypes") List values) throws AnalyzerException {
         if (insn.getOpcode() == INVOKEVIRTUAL) {
             MethodInsnNode methodInsn = (MethodInsnNode) insn;
-            if (I18N_CLASS.equals(methodInsn.owner) && "tr".equals(methodInsn.name)) {
-                Value arg = (Value) values.get(1);
-                if (arg instanceof StringConstantValue) {
-                    boolean javaFormatFlag = (values.size() > 2);
-                    i18nString(currentLineNr, currentContext, ((StringConstantValue) arg).string, javaFormatFlag || currentContextJavaFormatFlag,
-                            currentComment);
-                } else {
-                    reportError(currentLineNr, arg);
-                }
-            } else if (I18N_CLASS.equals(methodInsn.owner) && "trc".equals(methodInsn.name)) {
-                Value argContext = (Value) values.get(1);
-                Value argText = (Value) values.get(2);
-                if ((argText instanceof StringConstantValue) && (argContext instanceof StringConstantValue)) {
-                    boolean javaFormatFlag = (values.size() > 3);
-                    String context = ((StringConstantValue) argContext).string;
-                    i18nString(currentLineNr, context, ((StringConstantValue) argText).string, javaFormatFlag, currentComment);
-                } else {
-                    reportError(currentLineNr, argText);
+            if (I18N_CLASS.equals(methodInsn.owner)) {
+                if ("tr".equals(methodInsn.name)) {
+                    Value arg = (Value) values.get(1);
+                    if (arg instanceof StringConstantValue) {
+                        boolean javaFormatFlag = (values.size() > 2);
+                        i18nString(currentLineNr, currentContext, ((StringConstantValue) arg).string, javaFormatFlag || currentContextJavaFormatFlag,
+                                currentComment);
+                    } else {
+                        reportError(currentLineNr, arg);
+                    }
+                } else if ("trc".equals(methodInsn.name)) {
+                    Value argContext = (Value) values.get(1);
+                    Value argText = (Value) values.get(2);
+                    if ((argText instanceof StringConstantValue) && (argContext instanceof StringConstantValue)) {
+                        boolean javaFormatFlag = (values.size() > 3);
+                        String context = ((StringConstantValue) argContext).string;
+                        i18nString(currentLineNr, context, ((StringConstantValue) argText).string, javaFormatFlag, currentComment);
+                    } else {
+                        reportError(currentLineNr, argText);
+                    }
+                } else if ("ntr".equals(methodInsn.name)) {
+                    Value arg = (Value) values.get(1);
+                    if (arg instanceof StringConstantValue) {
+                        boolean javaFormatFlag = (values.size() > 2);
+                        i18nString(currentLineNr, currentContext, ((StringConstantValue) arg).string, javaFormatFlag || currentContextJavaFormatFlag,
+                                currentComment);
+                    } else {
+                        reportError(currentLineNr, arg);
+                    }
                 }
             }
         }

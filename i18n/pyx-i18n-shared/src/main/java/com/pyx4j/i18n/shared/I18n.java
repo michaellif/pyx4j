@@ -59,6 +59,18 @@ public abstract class I18n {
     public abstract String translate(final String context, final String text);
 
     /**
+     * Returns <code>text</code> not translated.
+     * 
+     * This is marker function for text extraction
+     * 
+     * @param text
+     * @return original text
+     */
+    public final String ntr(final String text) {
+        return text;
+    }
+
+    /**
      * Returns <code>text</code> translated into the currently selected
      * language. Every user-visible string in the program must be wrapped into
      * this function.
