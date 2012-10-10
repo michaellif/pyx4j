@@ -459,6 +459,15 @@ public class LeaseFacadeImpl implements LeaseFacade {
     public void complete(Lease leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
 
+        // Verify the status
+        if (lease.status().getValue() != Lease.Status.Active) {
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+        }
+        // if renewed and or forcibly moving out:  
+        if (!lease.nextTerm().isNull() && lease.completion().isNull()) {
+            throw new IllegalStateException(SimpleMessageFormat.format("Lease has next term ready"));
+        }
+
         lease.actualLeaseTo().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         lease.status().setValue(Status.Completed);
 
@@ -543,9 +552,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.expectedMoveOut().setValue(moveOutDay);
 
         Persistence.secureSave(lease);
-
-// TODO: review with Artyom        
-//        ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey());
     }
 
     @Override
@@ -560,10 +566,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.expectedMoveOut().setValue(null);
 
         Persistence.secureSave(lease);
-
-// TODO: review with Artyom        
-//        ServerSideFactory.create(OccupancyFacade.class).cancelEndLease(lease.unit().getPrimaryKey());
-//        updateUnitRentPrice(lease);
 
         // TODO: add notes with decisionReason!!!
     }

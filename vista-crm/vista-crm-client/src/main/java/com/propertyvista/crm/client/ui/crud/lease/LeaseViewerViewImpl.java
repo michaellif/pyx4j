@@ -84,6 +84,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem activateAction;
 
+    private final MenuItem completeAction;
+
     private final MenuItem closeAction;
 
     private final MenuItem cancelAction;
@@ -199,6 +201,20 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addAction(activateAction);
 
+        completeAction = new MenuItem(i18n.tr("Complete"), new Command() {
+            @Override
+            public void execute() {
+                new ReasonBox(i18n.tr("Complete Lease")) {
+                    @Override
+                    public boolean onClickOk() {
+                        ((LeaseViewerView.Presenter) getPresenter()).completeLease(getReason());
+                        return true;
+                    }
+                }.show();
+            }
+        });
+        addAction(completeAction);
+
         closeAction = new MenuItem(i18n.tr("Close"), new Command() {
             @Override
             public void execute() {
@@ -279,6 +295,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(evictAction, false);
         setActionVisible(cancelEvictAction, false);
         setActionVisible(activateAction, false);
+        setActionVisible(completeAction, false);
         setActionVisible(closeAction, false);
         setActionVisible(cancelAction, false);
         super.reset();
@@ -295,12 +312,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             CompletionType completion = value.completion().getValue();
 
             setActionVisible(sendMailAction, true);
-            setActionVisible(runBillAction, status.isActive());
+            setActionVisible(runBillAction, status.isCurrent());
             setActionVisible(noticeAction, status == Status.Active && completion == null);
             setActionVisible(cancelNoticeAction, completion == CompletionType.Notice && status != Status.Closed);
             setActionVisible(evictAction, status == Status.Active && completion == null);
             setActionVisible(cancelEvictAction, completion == CompletionType.Eviction && status != Status.Closed);
             setActionVisible(activateAction, status == Status.ExistingLease);
+            setActionVisible(completeAction, status == Status.Active && completion != null);
             setActionVisible(closeAction, status == Status.Completed);
             setActionVisible(cancelAction, !status.isFormer());
 

@@ -47,6 +47,8 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
 
     void activate(AsyncCallback<VoidSerializable> callback, Key entityId);
 
+    void completeLease(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
+
     void closeLease(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
 
     void cancelLease(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
