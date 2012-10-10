@@ -16,6 +16,7 @@ package com.propertyvista.server.jetty;
 import com.pyx4j.jetty.JettyLaunch;
 
 import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.server.config.VistaServerSideConfigurationDev;
 
 public class VistaPortalJettyLaunch extends JettyLaunch {
 
@@ -25,7 +26,7 @@ public class VistaPortalJettyLaunch extends JettyLaunch {
 
     @Override
     public int getServerPort() {
-        return 8888;
+        return VistaServerSideConfigurationDev.devServerPort;
     }
 
     @Override

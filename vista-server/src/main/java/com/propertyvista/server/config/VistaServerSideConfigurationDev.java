@@ -24,6 +24,8 @@ import com.propertyvista.misc.VistaTODO;
 
 public class VistaServerSideConfigurationDev extends VistaServerSideConfiguration {
 
+    public static int devServerPort = 8888;
+
     @Override
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
         // Disable environment selection.
@@ -102,7 +104,7 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
 
     @Override
     public String getApplicationURLNamespace() {
-        return ".dev.birchwoodsoftwaregroup.com:8888/vista/";
+        return ".dev.birchwoodsoftwaregroup.com:" + devServerPort + "/vista/";
     }
 
 }
