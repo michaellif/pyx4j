@@ -38,7 +38,7 @@ public class FloorplanCrudServiceImpl extends AbstractCrudServiceDtoImpl<Floorpl
     }
 
     @Override
-    protected void enhanceRetrieved(Floorplan in, FloorplanDTO dto) {
+    protected void enhanceRetrieved(Floorplan in, FloorplanDTO dto, RetrieveTraget retrieveTraget) {
         Persistence.service().retrieveMember(in.amenities());
         dto.amenities().set(in.amenities());
         Persistence.service().retrieve(dto.media());

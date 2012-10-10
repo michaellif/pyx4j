@@ -44,7 +44,7 @@ public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarant
     }
 
     @Override
-    protected void enhanceRetrieved(Guarantor entity, GuarantorDTO dto) {
+    protected void enhanceRetrieved(Guarantor entity, GuarantorDTO dto, RetrieveTraget retrieveTraget) {
         // load detached data:
         Persistence.service().retrieve(dto.leaseTermV());
         Persistence.service().retrieve(dto.leaseTermV().holder(), AttachLevel.ToStringMembers);

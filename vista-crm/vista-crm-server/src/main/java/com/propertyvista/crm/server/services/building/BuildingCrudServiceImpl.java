@@ -59,7 +59,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     }
 
     @Override
-    protected void enhanceRetrieved(Building in, BuildingDTO dto) {
+    protected void enhanceRetrieved(Building in, BuildingDTO dto, RetrieveTraget retrieveTraget) {
         // load detached entities/lists. Update other places: BuildingsResource and BuildingRetriever
         Persistence.service().retrieve(dto.media());
         Persistence.service().retrieve(dto.productCatalog());

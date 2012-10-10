@@ -70,8 +70,8 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     }
 
     @Override
-    protected void enhanceRetrieved(Pmc entity, PmcDTO dto) {
-        super.enhanceRetrieved(entity, dto);
+    protected void enhanceRetrieved(Pmc entity, PmcDTO dto, RetrieveTraget retrieveTraget) {
+        super.enhanceRetrieved(entity, dto, retrieveTraget);
 
         dto.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.CRM, true));
         dto.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.TenantPortal, false));
@@ -170,7 +170,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         CacheService.reset();
 
         PmcDTO dto = createDTO(pmc);
-        enhanceRetrieved(pmc, dto);
+        enhanceRetrieved(pmc, dto, null);
 
         callback.onSuccess(dto);
 
@@ -192,7 +192,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
         if (pmc != null) {
             PmcDTO dto = createDTO(pmc);
-            enhanceRetrieved(pmc, dto);
+            enhanceRetrieved(pmc, dto, null);
             callback.onSuccess(dto);
         } else {
             callback.onSuccess(null);

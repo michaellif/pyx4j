@@ -40,7 +40,7 @@ public class ServiceCrudServiceImpl extends AbstractVersionedCrudServiceImpl<Ser
     }
 
     @Override
-    protected void enhanceRetrieved(Service dbo, Service dto) {
+    protected void enhanceRetrieved(Service dbo, Service dto, RetrieveTraget retrieveTraget) {
         // Load detached data:
 
         /*

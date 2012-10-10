@@ -36,7 +36,7 @@ public class UnitOccupancyCrudServiceImpl extends AbstractCrudServiceImpl<AptUni
     }
 
     @Override
-    protected void enhanceRetrieved(AptUnitOccupancySegment entity, AptUnitOccupancySegment dto) {
+    protected void enhanceRetrieved(AptUnitOccupancySegment entity, AptUnitOccupancySegment dto, RetrieveTraget retrieveTraget) {
         if (dto.dateFrom().getValue().equals(OccupancyFacade.MIN_DATE)) {
             dto.dateFrom().setValue(null);
         }
@@ -47,7 +47,7 @@ public class UnitOccupancyCrudServiceImpl extends AbstractCrudServiceImpl<AptUni
 
     @Override
     protected void enhanceListRetrieved(AptUnitOccupancySegment entity, AptUnitOccupancySegment dto) {
-        this.enhanceRetrieved(entity, dto);
+        this.enhanceRetrieved(entity, dto, null);
     }
 
     @Override

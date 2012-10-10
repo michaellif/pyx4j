@@ -62,8 +62,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
-    protected void enhanceRetrieved(PaymentRecord entity, PaymentRecordDTO dto) {
-        super.enhanceRetrieved(entity, dto);
+    protected void enhanceRetrieved(PaymentRecord entity, PaymentRecordDTO dto, RetrieveTraget retrieveTraget) {
+        super.enhanceRetrieved(entity, dto, retrieveTraget);
         enhanceListRetrieved(entity, dto);
     }
 

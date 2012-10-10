@@ -34,7 +34,7 @@ public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageD
     }
 
     @Override
-    protected void enhanceRetrieved(PageDescriptor entity, PageDescriptor dto) {
+    protected void enhanceRetrieved(PageDescriptor entity, PageDescriptor dto, RetrieveTraget retrieveTraget) {
         // load content caption:
         for (PageContent content : dto.content()) {
 

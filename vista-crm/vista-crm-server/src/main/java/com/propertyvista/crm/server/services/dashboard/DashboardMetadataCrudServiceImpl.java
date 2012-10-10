@@ -81,13 +81,13 @@ public class DashboardMetadataCrudServiceImpl extends AbstractCrudServiceImpl<Da
     }
 
     @Override
-    protected void enhanceRetrieved(DashboardMetadata entity, DashboardMetadata dto) {
+    protected void enhanceRetrieved(DashboardMetadata entity, DashboardMetadata dto, RetrieveTraget retrieveTraget) {
         Persistence.service().retrieve(dto.ownerUser());
     }
 
     @Override
     protected void enhanceListRetrieved(DashboardMetadata entity, DashboardMetadata dto) {
         super.enhanceListRetrieved(entity, dto);
-        this.enhanceRetrieved(entity, dto);
+        this.enhanceRetrieved(entity, dto, null);
     }
 }

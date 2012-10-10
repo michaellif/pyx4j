@@ -34,7 +34,7 @@ import com.propertyvista.payment.pad.CaledonPadSftpClient;
 public class SimulationServiceImpl extends AdminServiceImpl implements SimulationService {
 
     @Override
-    public void retrieve(AsyncCallback<SimulationDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget retrieveTraget) {
+    public void retrieve(AsyncCallback<SimulationDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
         SimulationDTO result = EntityFactory.create(SimulationDTO.class);
         result.setPrimaryKey(entityId);
 

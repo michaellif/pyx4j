@@ -54,7 +54,7 @@ public class ViewBillServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDT
     }
 
     @Override
-    protected void enhanceRetrieved(Bill entity, BillDTO dto) {
+    protected void enhanceRetrieved(Bill entity, BillDTO dto, RetrieveTraget retrieveTraget) {
         // load detached entities:
         Persistence.service().retrieve(dto.lineItems());
         Persistence.service().retrieve(dto.billingAccount());

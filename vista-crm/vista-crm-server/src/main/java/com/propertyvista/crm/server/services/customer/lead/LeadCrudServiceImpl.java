@@ -48,7 +48,7 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     }
 
     @Override
-    protected void enhanceRetrieved(Lead entity, Lead dto) {
+    protected void enhanceRetrieved(Lead entity, Lead dto, RetrieveTraget retrieveTraget) {
         if (!dto.floorplan().isNull()) {
             Persistence.service().retrieve(dto.floorplan().building(), AttachLevel.ToStringMembers);
         }
@@ -59,7 +59,7 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
 
     @Override
     protected void enhanceListRetrieved(Lead entity, Lead dto) {
-        enhanceRetrieved(entity, dto);
+        enhanceRetrieved(entity, dto, null);
         // just clear unnecessary data before serialization: 
         dto.comments().setValue(null);
     }

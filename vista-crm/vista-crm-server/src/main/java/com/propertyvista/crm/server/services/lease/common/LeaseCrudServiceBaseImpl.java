@@ -36,7 +36,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     }
 
     @Override
-    protected void enhanceRetrieved(Lease in, DTO dto) {
+    protected void enhanceRetrieved(Lease in, DTO dto, RetrieveTraget retrieveTraget) {
         enhanceRetrievedCommon(in, dto);
 
         // load detached entities:

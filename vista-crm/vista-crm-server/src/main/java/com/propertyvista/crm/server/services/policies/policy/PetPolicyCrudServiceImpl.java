@@ -55,8 +55,8 @@ public class PetPolicyCrudServiceImpl extends GenericPolicyCrudService<PetPolicy
     }
 
     @Override
-    protected void enhanceRetrieved(PetPolicy in, PetPolicyDTO dto) {
-        super.enhanceRetrieved(in, dto);
+    protected void enhanceRetrieved(PetPolicy in, PetPolicyDTO dto, RetrieveTraget retrieveTraget) {
+        super.enhanceRetrieved(in, dto, retrieveTraget);
         attachNewPets(dto);
     }
 

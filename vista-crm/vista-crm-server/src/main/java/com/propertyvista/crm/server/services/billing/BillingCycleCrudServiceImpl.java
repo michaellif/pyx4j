@@ -36,7 +36,7 @@ public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill
     }
 
     @Override
-    protected void enhanceRetrieved(BillingCycle entity, BillingCycleDTO dto) {
+    protected void enhanceRetrieved(BillingCycle entity, BillingCycleDTO dto, RetrieveTraget retrieveTraget) {
         enhanceListRetrieved(entity, dto);
         Persistence.service().retrieve(dto.building(), AttachLevel.ToStringMembers);
 

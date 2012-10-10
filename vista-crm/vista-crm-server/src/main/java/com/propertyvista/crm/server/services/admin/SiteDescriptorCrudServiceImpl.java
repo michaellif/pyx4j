@@ -71,7 +71,7 @@ public class SiteDescriptorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Si
     }
 
     @Override
-    protected void enhanceRetrieved(SiteDescriptor in, SiteDescriptorDTO dto) {
+    protected void enhanceRetrieved(SiteDescriptor in, SiteDescriptorDTO dto, RetrieveTraget retrieveTraget) {
         // load transient data:
         dto.news().addAll(Persistence.service().query(EntityQueryCriteria.create(News.class)));
         dto.testimonials().addAll(Persistence.service().query(EntityQueryCriteria.create(Testimonial.class)));

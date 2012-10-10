@@ -57,7 +57,7 @@ public class ComplexCrudServiceImpl extends AbstractCrudServiceDtoImpl<Complex, 
     }
 
     @Override
-    protected void enhanceRetrieved(Complex entity, ComplexDTO dto) {
+    protected void enhanceRetrieved(Complex entity, ComplexDTO dto, RetrieveTraget retrieveTraget) {
         // add dashboards
         {
             EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);

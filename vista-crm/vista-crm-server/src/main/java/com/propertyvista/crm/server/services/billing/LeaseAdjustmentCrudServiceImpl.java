@@ -46,8 +46,8 @@ public class LeaseAdjustmentCrudServiceImpl extends AbstractCrudServiceImpl<Leas
     }
 
     @Override
-    protected void enhanceRetrieved(LeaseAdjustment entity, LeaseAdjustment dto) {
-        super.enhanceRetrieved(entity, dto);
+    protected void enhanceRetrieved(LeaseAdjustment entity, LeaseAdjustment dto, RetrieveTraget retrieveTraget) {
+        super.enhanceRetrieved(entity, dto, retrieveTraget);
 
         Persistence.service().retrieve(dto.billingAccount());
         Persistence.service().retrieve(dto.billingAccount().lease());

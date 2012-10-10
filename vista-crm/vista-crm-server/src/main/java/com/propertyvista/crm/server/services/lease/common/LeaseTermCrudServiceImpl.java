@@ -47,8 +47,6 @@ import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
 public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<LeaseTerm, LeaseTermDTO> implements LeaseTermCrudService {
 
-    private RetrieveTraget retrieveTraget;
-
     public LeaseTermCrudServiceImpl() {
         super(LeaseTerm.class, LeaseTermDTO.class);
     }
@@ -56,12 +54,6 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     @Override
     protected void bind() {
         bindCompleateDBO();
-    }
-
-    @Override
-    public void retrieve(AsyncCallback<LeaseTermDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
-        this.retrieveTraget = retrieveTraget;
-        super.retrieve(callback, entityId, retrieveTraget);
     }
 
     @Override
@@ -102,8 +94,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     }
 
     @Override
-    protected void enhanceRetrieved(LeaseTerm in, LeaseTermDTO dto) {
-        super.enhanceRetrieved(in, dto);
+    protected void enhanceRetrieved(LeaseTerm in, LeaseTermDTO dto, RetrieveTraget retrieveTraget) {
+        super.enhanceRetrieved(in, dto, retrieveTraget);
 
         if (in.getPrimaryKey() != null) {
             Persistence.service().retrieve(dto.version().tenants());
@@ -123,9 +115,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         Persistence.service().retrieve(dto.lease());
         if (!dto.lease().unit().isNull()) {
-            if (dto.lease().unit().building().isValueDetached()) {
-                Persistence.service().retrieve(dto.lease().unit().building());
-            }
+            Persistence.ensureRetrieve(dto.lease().unit().building(), AttachLevel.ToStringMembers);
 
             if (retrieveTraget == RetrieveTraget.Edit) {
                 // fill runtime editor data:
@@ -288,6 +278,6 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     }
 
     public void update(LeaseTerm dbo, LeaseTermDTO dto) {
-        enhanceRetrieved(dbo, dto);
+        enhanceRetrieved(dbo, dto, null);
     }
 }

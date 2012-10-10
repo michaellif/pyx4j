@@ -50,7 +50,7 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
     }
 
     @Override
-    protected void enhanceRetrieved(Employee entity, EmployeeDTO dto) {
+    protected void enhanceRetrieved(Employee entity, EmployeeDTO dto, RetrieveTraget retrieveTraget) {
         Persistence.service().retrieve(dto.portfolios());
         Persistence.service().retrieve(dto.employees());
 

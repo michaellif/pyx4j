@@ -36,8 +36,6 @@ import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
 public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, TenantDTO> implements TenantCrudService {
 
-    private RetrieveTraget retrieveTraget;
-
     public TenantCrudServiceImpl() {
         super(Tenant.class, TenantDTO.class);
     }
@@ -48,13 +46,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
     }
 
     @Override
-    public void retrieve(AsyncCallback<TenantDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
-        this.retrieveTraget = retrieveTraget;
-        super.retrieve(callback, entityId, retrieveTraget);
-    }
-
-    @Override
-    protected void enhanceRetrieved(Tenant entity, TenantDTO dto) {
+    protected void enhanceRetrieved(Tenant entity, TenantDTO dto, RetrieveTraget retrieveTraget) {
         // load detached data:
         Persistence.service().retrieve(dto.leaseTermV());
         Persistence.service().retrieve(dto.leaseTermV().holder(), AttachLevel.ToStringMembers);

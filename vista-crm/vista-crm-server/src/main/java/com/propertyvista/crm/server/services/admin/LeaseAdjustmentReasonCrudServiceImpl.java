@@ -30,8 +30,8 @@ public class LeaseAdjustmentReasonCrudServiceImpl extends AbstractCrudServiceImp
     }
 
     @Override
-    protected void enhanceRetrieved(LeaseAdjustmentReason entity, LeaseAdjustmentReason dto) {
-        super.enhanceRetrieved(entity, dto);
+    protected void enhanceRetrieved(LeaseAdjustmentReason entity, LeaseAdjustmentReason dto, RetrieveTraget retrieveTraget) {
+        super.enhanceRetrieved(entity, dto, retrieveTraget);
 
         // TODO fill taxes from policy here, but which policy scope to use? 
     }

@@ -54,7 +54,7 @@ public class AdminUserServiceImpl extends AbstractCrudServiceDtoImpl<AdminUserCr
     }
 
     @Override
-    protected void enhanceRetrieved(AdminUserCredential entity, AdminUserDTO dto) {
+    protected void enhanceRetrieved(AdminUserCredential entity, AdminUserDTO dto, RetrieveTraget retrieveTraget) {
         if (!entity.behaviors().isEmpty()) {
             dto.role().setValue(entity.behaviors().iterator().next());
         }

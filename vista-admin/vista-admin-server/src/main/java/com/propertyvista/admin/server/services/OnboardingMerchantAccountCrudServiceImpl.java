@@ -64,7 +64,7 @@ public class OnboardingMerchantAccountCrudServiceImpl extends AbstractCrudServic
     }
 
     @Override
-    protected void enhanceRetrieved(OnboardingMerchantAccount entity, OnboardingMerchantAccountDTO dto) {
+    protected void enhanceRetrieved(OnboardingMerchantAccount entity, OnboardingMerchantAccountDTO dto, RetrieveTraget retrieveTraget) {
         setCalulatedFileds(entity, dto);
     }
 

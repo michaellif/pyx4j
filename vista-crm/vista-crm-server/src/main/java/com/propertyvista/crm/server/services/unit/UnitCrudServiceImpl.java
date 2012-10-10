@@ -51,7 +51,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     }
 
     @Override
-    protected void enhanceRetrieved(AptUnit in, AptUnitDTO dto) {
+    protected void enhanceRetrieved(AptUnit in, AptUnitDTO dto, RetrieveTraget retrieveTraget) {
         //TODO: calculate value here:
         dto.buildingCode().set(Persistence.service().retrieve(Building.class, dto.building().getPrimaryKey()).propertyCode());
 

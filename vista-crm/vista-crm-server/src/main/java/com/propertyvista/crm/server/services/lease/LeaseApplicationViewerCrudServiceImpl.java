@@ -53,8 +53,8 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     }
 
     @Override
-    protected void enhanceRetrieved(Lease in, LeaseApplicationDTO dto) {
-        super.enhanceRetrieved(in, dto);
+    protected void enhanceRetrieved(Lease in, LeaseApplicationDTO dto, RetrieveTraget retrieveTraget) {
+        super.enhanceRetrieved(in, dto, retrieveTraget);
         enhanceRetrievedCommon(in, dto);
 
         for (Tenant tenantId : dto.currentTerm().version().tenants()) {

@@ -52,7 +52,7 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
     }
 
     @Override
-    protected void enhanceRetrieved(OnboardingUserCredential entity, OnboardingUserDTO dto) {
+    protected void enhanceRetrieved(OnboardingUserCredential entity, OnboardingUserDTO dto, RetrieveTraget retrieveTraget) {
         if (!entity.pmc().isNull()) {
             dto.onboardingAccountId().setValue(entity.pmc().onboardingAccountId().getValue());
         }

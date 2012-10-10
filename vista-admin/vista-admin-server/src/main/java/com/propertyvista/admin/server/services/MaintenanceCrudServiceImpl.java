@@ -51,7 +51,7 @@ public class MaintenanceCrudServiceImpl extends AdminServiceImpl implements Main
     }
 
     @Override
-    public void retrieve(AsyncCallback<SystemMaintenanceState> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget retrieveTraget) {
+    public void retrieve(AsyncCallback<SystemMaintenanceState> callback, Key entityId, RetrieveTraget retrieveTraget) {
         SystemMaintenanceState state = SystemMaintenance.getSystemMaintenanceInfo();
         state.setPrimaryKey(entityId);
         callback.onSuccess(state);
