@@ -26,10 +26,22 @@ import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 @Category(FunctionalTests.class)
 public class BillingCycleTest extends VistaDBTestBase {
+
+    private static Building building;
+
+    @Override
+    protected void setUp() throws java.lang.Exception {
+        super.setUp();
+        if (building == null) {
+            building = EntityFactory.create(Building.class);
+            Persistence.service().persist(building);
+        }
+    }
 
     public void testFirstBillingCycle() throws ParseException {
         BillingCycle billingCycle = createFirstBillingCycle(FinancialTestsUtils.getDate("23-Feb-2012"), null, false);
@@ -105,7 +117,7 @@ public class BillingCycleTest extends VistaDBTestBase {
         billingType.billingCycleStartDay().setValue(billingPeriodStartDay);
         Persistence.service().persist(billingType);
 
-        BillingCycle billingCycle = BillingManager.getNewLeaseInitialBillingCycle(billingType, null, leaseStartDate, useCycleLeaseDay);
+        BillingCycle billingCycle = BillingManager.getNewLeaseInitialBillingCycle(billingType, building, leaseStartDate, useCycleLeaseDay);
         return billingCycle;
     }
 
@@ -116,7 +128,7 @@ public class BillingCycleTest extends VistaDBTestBase {
         billingType.billingCycleStartDay().setValue(billingPeriodStartDay);
         Persistence.service().persist(billingType);
 
-        BillingCycle billingCycle = BillingManager.getExistingLeaseInitialBillingCycle(billingType, null, leaseStartDate, leaseCreationDate,
+        BillingCycle billingCycle = BillingManager.getExistingLeaseInitialBillingCycle(billingType, building, leaseStartDate, leaseCreationDate,
                 useCycleLeaseDay);
         return billingCycle;
     }

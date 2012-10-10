@@ -399,8 +399,8 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
 
         //==================== RUN 14  ======================//
 
-        SysDateManager.setSysDate("07-Jan-2012");
-        receiveAndPostPayment("07-Dec-2013", "1041.94");
+        SysDateManager.setSysDate("07-Jan-2013");
+        receiveAndPostPayment("07-Jan-2013", "1041.94");
         SysDateManager.setSysDate("01-Feb-2013");
 
         bill = runBilling(true, true);
