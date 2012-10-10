@@ -23,12 +23,15 @@ import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentListerView;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lead.Lead.ConvertToLeaseAppraisal;
 
 public interface LeadViewerView extends IViewerView<Lead> {
 
     interface Presenter extends IViewerView.Presenter {
 
         void getInterestedUnits(AsyncCallback<List<AptUnit>> callback);
+
+        void convertToLeaseApprisal(AsyncCallback<ConvertToLeaseAppraisal> callback);
 
         void convertToLease(Key unitId);
 

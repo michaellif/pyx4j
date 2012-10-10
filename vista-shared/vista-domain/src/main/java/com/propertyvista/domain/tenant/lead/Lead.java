@@ -99,6 +99,27 @@ public interface Lead extends IEntity {
         }
     }
 
+    @I18n
+    public enum ConvertToLeaseAppraisal {
+
+        @Translate("OK")
+        Positive,
+
+        @Translate("There are no active appointments.")
+        NoAppointments,
+
+        @Translate("There are no seen showings.")
+        NoShowings,
+
+        @Translate("Guest(s) has not shown interest in any Unit?")
+        NoUnits;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
     @Owned
     IList<Guest> guests();
 
@@ -161,5 +182,5 @@ public interface Lead extends IEntity {
     // parent <-> child relationship:
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<Appointment> _Appointments();
+    ISet<Appointment> appointments();
 }

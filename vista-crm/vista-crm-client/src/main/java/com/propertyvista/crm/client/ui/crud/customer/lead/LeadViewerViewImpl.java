@@ -31,6 +31,7 @@ import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.Appointmen
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lead.Lead.ConvertToLeaseAppraisal;
 import com.propertyvista.domain.tenant.lead.Lead.Status;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -50,29 +51,42 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
         convertAction = new MenuItem(i18n.tr("Convert to Lease"), new Command() {
             @Override
             public void execute() {
-                ((LeadViewerView.Presenter) getPresenter()).getInterestedUnits(new DefaultAsyncCallback<List<AptUnit>>() {
+                ((LeadViewerView.Presenter) getPresenter()).convertToLeaseApprisal(new DefaultAsyncCallback<ConvertToLeaseAppraisal>() {
                     @Override
-                    public void onSuccess(List<AptUnit> result) {
-                        if (!result.isEmpty()) {
-                            new EntitySelectorListDialog<AptUnit>(i18n.tr("Select Unit To Lease"), false, result, new Formatter<AptUnit>() {
+                    public void onSuccess(ConvertToLeaseAppraisal result) {
+                        switch (result) {
+                        case Positive:
+                            ((LeadViewerView.Presenter) getPresenter()).getInterestedUnits(new DefaultAsyncCallback<List<AptUnit>>() {
                                 @Override
-                                public String format(AptUnit entity) {
-                                    return entity.building().getStringView() + ", " + i18n.tr("Unit") + " " + entity.getStringView();
-                                }
-                            }) {
-                                @Override
-                                public boolean onClickOk() {
-                                    ((LeadViewerView.Presenter) getPresenter()).convertToLease(getSelectedItems().get(0).getPrimaryKey());
-                                    return true;
-                                }
+                                public void onSuccess(List<AptUnit> result) {
+                                    if (!result.isEmpty()) {
+                                        new EntitySelectorListDialog<AptUnit>(i18n.tr("Select Unit To Lease"), false, result, new Formatter<AptUnit>() {
+                                            @Override
+                                            public String format(AptUnit entity) {
+                                                return entity.building().getStringView() + ", " + i18n.tr("Unit") + " " + entity.getStringView();
+                                            }
+                                        }) {
+                                            @Override
+                                            public boolean onClickOk() {
+                                                ((LeadViewerView.Presenter) getPresenter()).convertToLease(getSelectedItems().get(0).getPrimaryKey());
+                                                return true;
+                                            }
 
-                                @Override
-                                public String defineWidth() {
-                                    return "40em";
+                                            @Override
+                                            public String defineWidth() {
+                                                return "40em";
+                                            }
+                                        }.show();
+                                    } else {
+                                        MessageDialog.info(ConvertToLeaseAppraisal.NoUnits.toString());
+                                    }
                                 }
-                            }.show();
-                        } else {
-                            MessageDialog.info(i18n.tr("Guest(s) has not shown interest in any Unit."));
+                            });
+                            break;
+
+                        default:
+                            MessageDialog.info(result.toString());
+                            break;
                         }
                     }
                 });

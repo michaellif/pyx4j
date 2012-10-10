@@ -33,6 +33,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lead.Lead.ConvertToLeaseAppraisal;
 import com.propertyvista.domain.tenant.lead.Showing;
 
 public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implements LeadCrudService {
@@ -75,18 +76,42 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
         EntityQueryCriteria<Showing> criteria = new EntityQueryCriteria<Showing>(Showing.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().appointment().lead(), leadId));
         criteria.add(PropertyCriterion.ne(criteria.proto().appointment().status(), Appointment.Status.closed));
+        criteria.add(PropertyCriterion.eq(criteria.proto().status(), Showing.Status.seen));
+        criteria.add(PropertyCriterion.eq(criteria.proto().result(), Showing.Result.interested));
 
         Vector<AptUnit> units = new Vector<AptUnit>();
         for (Showing showing : Persistence.secureQuery(criteria)) {
-            if (!showing.result().isNull() && showing.result().getValue() == Showing.Result.interested) {
-                if (!units.contains(showing.unit())) {
-                    Persistence.service().retrieve(showing.unit().building(), AttachLevel.ToStringMembers);
-                    units.add((AptUnit) showing.unit().detach());
-                }
+            if (!units.contains(showing.unit())) {
+                Persistence.service().retrieve(showing.unit().building(), AttachLevel.ToStringMembers);
+                units.add((AptUnit) showing.unit().detach());
             }
         }
 
         callback.onSuccess(units);
+    }
+
+    @Override
+    public void convertToLeaseApprisal(AsyncCallback<ConvertToLeaseAppraisal> callback, Key leadId) {
+        ConvertToLeaseAppraisal result = ConvertToLeaseAppraisal.Positive;
+
+        EntityQueryCriteria<Appointment> criteriaApp = new EntityQueryCriteria<Appointment>(Appointment.class);
+        criteriaApp.add(PropertyCriterion.eq(criteriaApp.proto().lead(), leadId));
+        criteriaApp.add(PropertyCriterion.ne(criteriaApp.proto().status(), Appointment.Status.closed));
+        Vector<Appointment> apps = Persistence.secureQuery(criteriaApp);
+        if (apps.isEmpty()) {
+            result = ConvertToLeaseAppraisal.NoAppointments;
+        } else {
+            EntityQueryCriteria<Showing> criteriaShw = new EntityQueryCriteria<Showing>(Showing.class);
+            criteriaShw.add(PropertyCriterion.eq(criteriaShw.proto().appointment().lead(), leadId));
+            criteriaShw.add(PropertyCriterion.ne(criteriaShw.proto().appointment().status(), Appointment.Status.closed));
+            criteriaShw.add(PropertyCriterion.eq(criteriaShw.proto().status(), Showing.Status.seen));
+            Vector<Showing> shws = Persistence.secureQuery(criteriaShw);
+            if (shws.isEmpty()) {
+                result = ConvertToLeaseAppraisal.NoShowings;
+            }
+        }
+
+        callback.onSuccess(result);
     }
 
     @Override

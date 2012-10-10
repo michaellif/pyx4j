@@ -34,6 +34,7 @@ import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lead.Lead.ConvertToLeaseAppraisal;
 
 public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadViewerView.Presenter {
 
@@ -50,6 +51,16 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
         ((LeadCrudService) getService()).getInterestedUnits(new DefaultAsyncCallback<Vector<AptUnit>>() {
             @Override
             public void onSuccess(Vector<AptUnit> result) {
+                callback.onSuccess(result);
+            }
+        }, getEntityId());
+    }
+
+    @Override
+    public void convertToLeaseApprisal(final AsyncCallback<ConvertToLeaseAppraisal> callback) {
+        ((LeadCrudService) getService()).convertToLeaseApprisal(new DefaultAsyncCallback<ConvertToLeaseAppraisal>() {
+            @Override
+            public void onSuccess(ConvertToLeaseAppraisal result) {
                 callback.onSuccess(result);
             }
         }, getEntityId());

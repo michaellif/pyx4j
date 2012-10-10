@@ -97,5 +97,5 @@ public interface Appointment extends IEntity {
     // parent <-> child relationship:
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<Showing> _Showings();
+    ISet<Showing> showings();
 }
