@@ -194,11 +194,11 @@ BEGIN
         -- income related tables
         FOREACH v_table_name IN ARRAY
         ARRAY[  'income_info_other',
-            'income_info_self_employed',
-            'income_info_social_services',
-            'income_info_seasonally_employed',
-            'income_info_student_income',
-            'income_info_employer']
+                'income_info_self_employed',
+                'income_info_social_services',
+                'income_info_seasonally_employed',
+                'income_info_student_income',
+                'income_info_employer']
         LOOP
             SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,v_table_name) ;
 
@@ -217,6 +217,17 @@ BEGIN
         -- billing_debit_credit_link
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_debit_credit_link ADD COLUMN credit_itemdiscriminator VARCHAR(50),'||
                                         'ADD COLUMN debit_itemdiscriminator VARCHAR(50)';
+        
+         SELECT * INTO v_void FROM _dba_.exec_sql('UPDATE '||v_schema_name||'.billing_debit_credit_link AS a '||
+                                                '       SET     credit_itemdiscriminator = b.iddiscriminator '||
+                                                '       FROM    (SELECT id,iddiscriminator FROM '||v_schema_name||'.billing_invoice_line_item ) AS b '||
+                                                'WHERE  a.credit_item = b.id ');
+        
+        SELECT * INTO v_void FROM _dba_.exec_sql('UPDATE '||v_schema_name||'.billing_debit_credit_link AS a '||
+                                                '       SET     debit_itemdiscriminator = b.iddiscriminator '||
+                                                '       FROM    (SELECT id,iddiscriminator FROM '||v_schema_name||'.billing_invoice_line_item ) AS b '||
+                                                'WHERE  a.debit_item = b.id ');
+        
 
         -- billing_invoice_line_item
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_invoice_line_item ADD COLUMN product_chargediscriminator VARCHAR(50)';
@@ -235,7 +246,7 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.dashboard_metadata DROP COLUMN is_favorite,'||
                                 'DROP COLUMN layout_type,'||
                                 'ADD COLUMN encoded_layout VARCHAR(500),'||
-                                'ADD COLUMN owner_user_id BIGINT';
+                                'RENAME COLUMN user_id TO owner_user_id';
         -- test of _dba_.exec_sql function
         SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.dashboard_metadata '||
                                                 'ADD CONSTRAINT dashboard_metadata_owner_user_id_fk FOREIGN KEY(owner_user_id) '||
@@ -260,6 +271,14 @@ BEGIN
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.gadget_metadata_holder OWNER TO vista';
 
+        -- identification_document_type
+        
+        SET search_path = v_schema_name;
+        
+        ALTER TABLE identification_document_type DROP COLUMN document_id,
+                                                DROP COLUMN document_issuer,
+                                                DROP COLUMN drivers_license_state;
+        
 
         -- income_info
 
@@ -516,7 +535,7 @@ BEGIN
         '   FROM    '||
         '   (SELECT a.id,b.id AS holder '||
         '   FROM '||v_schema_name||'.product_v a '||
-        '   JOIN '||v_schema_name||'.product b ON (a.old_holder = b.old_id)) AS a '||
+        '   JOIN '||v_schema_name||'.product b ON (a.old_holder = b.old_id AND a.iddiscriminator = b.iddiscriminator)) AS a '||
         '   WHERE b.id = a.id ';
 
         SELECT * INTO v_void FROM _dba_.exec_sql('UPDATE '||v_schema_name||'.product_v AS a '
@@ -597,11 +616,11 @@ BEGIN
 
         FOREACH v_table_name IN ARRAY
         ARRAY[  'service_v$concessions',
-            'service_v$features',
-            'service_v',
-            'service',
-            'feature_v',
-            'feature']
+                'service_v$features',
+                'service_v',
+                'service',
+                'feature_v',
+                'feature']
         LOOP
             SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,v_table_name,TRUE);
 
