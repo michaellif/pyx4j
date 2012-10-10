@@ -101,7 +101,7 @@ public class LeaseLifecycleSimulator {
 
     private LogicalDate leaseTo;
 
-    private final int maintenanceRequestsPerMonth = 2;
+    private final int maintenanceRequestsPerMonth = 0;
 
     private List<IssueClassification> issueClassifications;
 
@@ -225,7 +225,6 @@ public class LeaseLifecycleSimulator {
             maintenanceRequest.leaseCustomer().setPrimaryKey(lease.leaseCustomers().iterator().next().getPrimaryKey());
             maintenanceRequest.issueClassification().set(issueClassifications.get(RandomUtil.randomInt(issueClassifications.size())));
             Persistence.service().persist(maintenanceRequest);
-
         }
     }
 

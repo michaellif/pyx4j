@@ -16,6 +16,7 @@ package com.propertyvista.admin.server.services.sim;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -24,14 +25,22 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.scheduler.RunStats;
 import com.propertyvista.admin.rpc.services.sim.SimulatedDataPreloadService;
+import com.propertyvista.domain.maintenance.IssueClassification;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.server.jobs.UpdateArrearsProcess;
 
@@ -53,74 +62,62 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
 
     @Override
     public void generateArrearsHistory(AsyncCallback<VoidSerializable> callback) {
-        if (false) {
-            try {
-                NamespaceManager.setNamespace("vista");
-                if (!run) {
-                    run = true;
-
-                    setProgress(0, 365);
-
-                    UpdateArrearsProcess updateArrearsProcess = new UpdateArrearsProcess();
-                    PmcProcessContext context = new PmcProcessContext(EntityFactory.create(RunStats.class), new Date());
-                    GregorianCalendar cal = new GregorianCalendar();
-                    cal.add(Calendar.YEAR, -2);
-                    LogicalDate today = new LogicalDate();
-                    LogicalDate simToday = new LogicalDate(cal.getTime());
-
-                    while (run & !simToday.after(today)) {
-                        boolean error = false;
-                        try {
-                            Persistence.service().setTransactionSystemTime(simToday);
-                            updateArrearsProcess.executePmcJob(context);
-                        } catch (Throwable caught) {
-                            caught.printStackTrace();
-                        }
-
-                        if (!error) {
-                            log.info("simulated data preloader: finished update arrears for {}", new LogicalDate(cal.getTime()));
-                        } else {
-                            log.error("simulated data preloader: failed up update arrears for {}", new LogicalDate(cal.getTime()));
-                        }
-                        cal.add(Calendar.MONTH, 1);
-                        simToday = new LogicalDate(cal.getTime());
-                        incProgress();
-                    }
-                    run = false;
-                    Persistence.service().setTransactionSystemTime(null);
-
+        if (ApplicationMode.isDevelopment()) {
+            synchronized (mutex) {
+                if (process == null || !process.isAlive()) {
+                    process = new ArrearsGenerationProcess();
+                    process.start();
                 } else {
-                    run = false;
+                    process.interrupt();
                 }
-
-            } catch (Throwable e) {
-                e.printStackTrace();
-            } finally {
             }
-        }
-        synchronized (mutex) {
-            if (process == null || !process.isAlive()) {
-                process = new ArrearsGenerationProcess();
-                process.start();
-            } else {
-                process.interrupt();
-            }
+        } else {
+            throw new Error("this functionality is only for development");
         }
         callback.onSuccess(null);
     }
 
     @Override
     public void getArrearsHistoryGenerationProgress(AsyncCallback<Vector<Integer>> callback) {
-        Vector<Integer> progress;
-        synchronized (mutex) {
-            if (process.isAlive()) {
-                progress = getProgress();
-            } else {
-                progress = null;
+        if (ApplicationMode.isDevelopment()) {
+            Vector<Integer> progress;
+            synchronized (mutex) {
+                if (process.isAlive()) {
+                    progress = getProgress();
+                } else {
+                    progress = null;
+                }
             }
+
+            callback.onSuccess(progress);
+        } else {
+            callback.onSuccess(new Vector<Integer>());
+        }
+    }
+
+    @Override
+    public void generateMaintenanceRequests(AsyncCallback<VoidSerializable> callback) {
+        if (ApplicationMode.isDevelopment()) {
+            NamespaceManager.setNamespace("vista");
+
+            List<IssueClassification> issueClassifications = Persistence.service().query(EntityQueryCriteria.create(IssueClassification.class));
+            EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
+            leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().status(), Lease.Status.Active));
+            List<Lease> leases = Persistence.service().query(leaseCriteria);
+            if (leases.size() > 0) {
+                final int NUM_OF_DAYS_AGO = 10;
+                final long TODAY = new LogicalDate().getTime();
+                GregorianCalendar cal = new GregorianCalendar();
+                for (cal.add(GregorianCalendar.DAY_OF_YEAR, -NUM_OF_DAYS_AGO); cal.getTimeInMillis() < TODAY; cal.add(GregorianCalendar.DAY_OF_YEAR, 1)) {
+                    makeMaintenanceRequest(issueClassifications, leases.get(RandomUtil.randomInt(leases.size())), new LogicalDate(cal.getTime()));
+                }
+                Persistence.service().commit();
+            }
+        } else {
+            throw new Error("this functionality is only for development");
         }
 
-        callback.onSuccess(progress);
+        callback.onSuccess(null);
     }
 
     private void setProgress(int current, int max) {
@@ -143,6 +140,19 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
             progress.add(max);
             return progress;
         }
+    }
+
+    private void makeMaintenanceRequest(List<IssueClassification> issueClassifications, Lease lease, LogicalDate when) {
+        MaintenanceRequest maintenanceRequest = EntityFactory.create(MaintenanceRequest.class);
+        maintenanceRequest.submitted().setValue(when);
+        maintenanceRequest.updated().setValue(when);
+        maintenanceRequest.status().setValue(MaintenanceRequestStatus.Submitted);
+        maintenanceRequest.description().setValue(RandomUtil.randomLetters(50));
+
+        Persistence.service().retrieveMember(lease.leaseCustomers());
+        maintenanceRequest.leaseCustomer().setPrimaryKey(lease.leaseCustomers().iterator().next().getPrimaryKey());
+        maintenanceRequest.issueClassification().set(issueClassifications.get(RandomUtil.randomInt(issueClassifications.size())));
+        Persistence.service().persist(maintenanceRequest);
     }
 
     private class ArrearsGenerationProcess extends Thread {

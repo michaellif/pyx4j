@@ -30,4 +30,6 @@ public interface SimulatedDataPreloadService extends IService {
      */
     void getArrearsHistoryGenerationProgress(AsyncCallback<Vector<Integer>> callback);
 
+    void generateMaintenanceRequests(AsyncCallback<VoidSerializable> callback);
+
 }

@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.admin.client.ui.crud.simulateddatapreload.SimulatedDataPreloadView;
 import com.propertyvista.admin.client.viewfactories.MiscViewFactory;
@@ -56,6 +57,17 @@ public class SimulatedDataPreloadActivity extends AbstractActivity {
         });
     }
 
+    public void generateMaintenanceRequests() {
+        service.generateMaintenanceRequests(new DefaultAsyncCallback<VoidSerializable>() {
+
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                MessageDialog.info("Finished making maintenance requests");
+            }
+
+        });
+    }
+
     protected void pollArrearsHishtoryGenerationProgress() {
         Timer timer = new Timer() {
 
@@ -77,4 +89,5 @@ public class SimulatedDataPreloadActivity extends AbstractActivity {
         };
         timer.schedule(1000);
     }
+
 }

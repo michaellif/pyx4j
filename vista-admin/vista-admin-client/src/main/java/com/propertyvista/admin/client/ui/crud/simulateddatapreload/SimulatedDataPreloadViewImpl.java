@@ -16,35 +16,43 @@ package com.propertyvista.admin.client.ui.crud.simulateddatapreload;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.admin.client.activity.crud.simulateddatapreload.SimulatedDataPreloadActivity;
 
 public class SimulatedDataPreloadViewImpl implements SimulatedDataPreloadView {
 
-    private final VerticalPanel viewPanel;
+    private final FormFlexPanel viewPanel;
 
     private SimulatedDataPreloadActivity presenter;
 
     private Button arrearsHistoryGenerationButton;
 
+    private Button maintenanceRequestsGenerationButton;
+
     public SimulatedDataPreloadViewImpl() {
-        viewPanel = new VerticalPanel();
-        viewPanel.setSize("100%", "100%");
-        viewPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        viewPanel.add(arrearsHistoryGenerationButton = new Button("Generate arrears snapshots history", new ClickHandler() {
+        viewPanel = new FormFlexPanel();
+        viewPanel.setWidth("100%");
+        int row = -1;
+        viewPanel.setWidget(++row, 0, arrearsHistoryGenerationButton = new Button("Generate arrears snapshots history", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.generateArrearsSnapshotsHistory();
 
             }
         }));
-        arrearsHistoryGenerationButton.getElement().getStyle().setPadding(1, Unit.EM);
-        arrearsHistoryGenerationButton.getElement().getStyle().setMargin(2, Unit.EM);
+        viewPanel.setWidget(++row, 0, maintenanceRequestsGenerationButton = new Button("Generate maintenance requests", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.generateMaintenanceRequests();
+
+            }
+        }));
+        arrearsHistoryGenerationButton.getElement().getStyle().setWidth(20, Unit.EM);
+        maintenanceRequestsGenerationButton.getElement().getStyle().setWidth(20, Unit.EM);
 
     }
 
