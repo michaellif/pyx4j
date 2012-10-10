@@ -83,6 +83,9 @@ public interface Configuration extends IPersistenceConfiguration {
      */
     public int tablesItentityOffset();
 
+    /**
+     * This takes priority over connectionAutomaticTestTable
+     */
     public String connectionValidationQuery();
 
     public String connectionAutomaticTestTable();
