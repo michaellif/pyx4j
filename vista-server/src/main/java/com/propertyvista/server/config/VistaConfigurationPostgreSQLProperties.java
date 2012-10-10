@@ -36,6 +36,11 @@ public class VistaConfigurationPostgreSQLProperties extends ConfigurationPostgre
     }
 
     @Override
+    public String connectionAutomaticTestTable() {
+        return null;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         return new VistaDBNamingConvention();
     }

@@ -65,6 +65,11 @@ public class VistaConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Confi
     }
 
     @Override
+    public String connectionAutomaticTestTable() {
+        return null;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         return new VistaDBNamingConvention();
     }
