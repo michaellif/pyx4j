@@ -50,8 +50,11 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
     /**
      * This method called for single entity returned to the GWT client. As opposite to entries in list.
      * This is empty callback function that don't need to be called from implementation.
+     * 
+     * @param retrieveTraget
+     *            TODO
      */
-    protected void enhanceRetrieved(E entity, DTO dto) {
+    protected void enhanceRetrieved(E entity, DTO dto, RetrieveTraget retrieveTraget) {
     }
 
     protected E retrieve(Key entityId, RetrieveTraget retrieveTraget) {
@@ -81,7 +84,7 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
             retrievedSingle(entity, retrieveTraget);
         }
         DTO dto = createDTO(entity);
-        enhanceRetrieved(entity, dto);
+        enhanceRetrieved(entity, dto, retrieveTraget);
         callback.onSuccess(dto);
     }
 
