@@ -17,10 +17,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.I18nAnnotation;
 
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @Retention(RetentionPolicy.RUNTIME)
+@I18nAnnotation(element = "")
 public @interface GadgetDescription {
 
     @I18n
