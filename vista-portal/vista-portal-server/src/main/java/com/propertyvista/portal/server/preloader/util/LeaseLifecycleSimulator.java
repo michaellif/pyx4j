@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
 
@@ -28,6 +29,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -36,6 +38,9 @@ import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingType;
+import com.propertyvista.domain.maintenance.IssueClassification;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentMethod;
@@ -76,7 +81,7 @@ public class LeaseLifecycleSimulator {
 
     private static final long MIN_NOTICE_TERM = 1000L * 60L * 60L * 24L * 31L;
 
-    private static final long MAX_NOTICE_TERM = 1000L * 60L * 60L * 24L * 60L;
+    private static final long MAX_NOTICE_TERM = 1000L * 60L * 60L * 24L * 130L;
 
     private long minAvailableTerm = 0;
 
@@ -94,7 +99,11 @@ public class LeaseLifecycleSimulator {
 
     private TenantAgent tenantAgent = new DefaultTenantAgent();
 
-    public LogicalDate leaseTo;
+    private LogicalDate leaseTo;
+
+    private final int maintenanceRequestsPerMonth = 2;
+
+    private List<IssueClassification> issueClassifications;
 
     private LeaseLifecycleSimulator() {
         this.events = new PriorityQueue<LeaseLifecycleSimulator.LeaseEventContainer>(10, new Comparator<LeaseEventContainer>() {
@@ -110,6 +119,7 @@ public class LeaseLifecycleSimulator {
             }
         });
         leaseTo = null;
+        issueClassifications = Persistence.service().query(EntityQueryCriteria.create(IssueClassification.class));
     }
 
     public static LeaseLifecycleSimulatorBuilder sim() {
@@ -145,12 +155,28 @@ public class LeaseLifecycleSimulator {
         queueEvent(max(leaseFrom, sub(leaseTo, rndBetween(MIN_NOTICE_TERM, MAX_NOTICE_TERM))), new Notice(lease));
         queueEvent(leaseTo, new Complete(lease));
 
+        queueMaintenanceRequests(lease);
+
         try {
             while (hasNextEvent()) {
                 processNextEvent();
             }
         } finally {
             cleanUp();
+        }
+    }
+
+    private void queueMaintenanceRequests(Lease lease) {
+        GregorianCalendar current = new GregorianCalendar();
+        current.setTime(lease.currentTerm().termFrom().getValue());
+        LogicalDate end = lease.currentTerm().termTo().getValue();
+        while (current.getTime().before(end)) {
+            for (int i = 0; i < maintenanceRequestsPerMonth; ++i) {
+                queueEvent(new LogicalDate(current.getTime()), new MaintenanceRequestSubmission(lease));
+                current.add(Calendar.DAY_OF_MONTH, 1);
+            }
+            current.set(Calendar.DAY_OF_MONTH, current.getActualMaximum(Calendar.DAY_OF_MONTH));
+            current.add(Calendar.MONTH, 1);
         }
     }
 
@@ -183,6 +209,25 @@ public class LeaseLifecycleSimulator {
     }
 
     // EVENTS
+    private class MaintenanceRequestSubmission extends AbstractLeaseEvent {
+
+        public MaintenanceRequestSubmission(Lease lease) {
+            super(1, lease);
+        }
+
+        @Override
+        public void exec() {
+            MaintenanceRequest maintenanceRequest = EntityFactory.create(MaintenanceRequest.class);
+            maintenanceRequest.submitted().setValue(now());
+            maintenanceRequest.updated().setValue(now());
+            maintenanceRequest.status().setValue(MaintenanceRequestStatus.Submitted);
+            maintenanceRequest.description().setValue(RandomUtil.randomLetters(50));
+            maintenanceRequest.leaseCustomer().setPrimaryKey(lease.leaseCustomers().iterator().next().getPrimaryKey());
+            maintenanceRequest.issueClassification().set(issueClassifications.get(RandomUtil.randomInt(issueClassifications.size())));
+            Persistence.service().persist(maintenanceRequest);
+
+        }
+    }
 
     private class Create extends AbstractLeaseEvent {
 
@@ -197,6 +242,7 @@ public class LeaseLifecycleSimulator {
             lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
             lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, lease.unit());
             lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
+            Persistence.service().retrieveMember(lease.leaseCustomers());
 
             Tenant mainTenant = lease.currentTerm().version().tenants().get(0);
             mainTenant.leaseCustomer().preauthorizedPayment().set(mainTenant.leaseCustomer().customer().paymentMethods().iterator().next());

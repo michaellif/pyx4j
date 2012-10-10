@@ -56,7 +56,7 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
             throw new Error("Got null instead of gadget metadata");
         }
         if (gadgetMetadata.gadgetId().isNull()) {
-            throw new Error("got gadget metadata with no defined id:" + gadgetMetadata.toString());
+            throw new Error("Got gadget metadata with no defined id:" + gadgetMetadata.toString());
         }
         if (gadgetMetadata.getInstanceValueClass().equals(AccessDeniedGagetMetadata.class)) {
             throw new Error("Access Denied");
