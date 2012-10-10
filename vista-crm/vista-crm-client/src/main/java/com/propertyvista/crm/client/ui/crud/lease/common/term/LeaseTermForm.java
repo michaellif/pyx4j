@@ -236,15 +236,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         super.addValidations();
 
         crossValidate(get(proto().termFrom()), get(proto().termTo()), null);
-// TODO _2 incomment then:        
-//        crossValidate(get(proto().leaseFrom()), get(proto().actualLeaseTo()), null);
-//        crossValidate(get(proto().actualMoveIn()), get(proto().actualMoveOut()), null);
-
-//        DatesWithinMonth(get(proto().version().actualLeaseTo()), get(proto().leaseTo()), "Actual Lease To Date Should Be Within 30 Days Of Lease To Date");
-//        DatesWithinMonth(get(proto().version().actualMoveIn()), get(proto().version().expectedMoveIn()),
-//                "Actual Move In Date Should Be Within 30 Days Of Expected Move In Date");
-//        DatesWithinMonth(get(proto().version().actualMoveOut()), get(proto().version().expectedMoveOut()),
-//                "Actual Move Out Date Should Be Within 30 Days Of Expected Move Out Date");
 
         get(proto().termFrom()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
@@ -262,16 +253,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             }
         });
 
-// TODO _2 incomment then:        
-//        new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().expectedMoveIn()), get(proto().leaseTo()),
-//                i18n.tr("The Date Should Be Within The Lease Period"));
-//
-//        get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveIn())));
         get(proto().termFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
         get(proto().termFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
 
-// TODO _2 incomment then:        
-//        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveIn())));
         get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
         get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
 

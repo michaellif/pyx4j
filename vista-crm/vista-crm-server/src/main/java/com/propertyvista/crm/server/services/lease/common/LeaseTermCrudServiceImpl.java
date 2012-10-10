@@ -47,6 +47,8 @@ import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
 public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<LeaseTerm, LeaseTermDTO> implements LeaseTermCrudService {
 
+    private RetrieveTraget retrieveTraget;
+
     public LeaseTermCrudServiceImpl() {
         super(LeaseTerm.class, LeaseTermDTO.class);
     }
@@ -54,6 +56,12 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     @Override
     protected void bind() {
         bindCompleateDBO();
+    }
+
+    @Override
+    public void retrieve(AsyncCallback<LeaseTermDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
+        this.retrieveTraget = retrieveTraget;
+        super.retrieve(callback, entityId, retrieveTraget);
     }
 
     @Override
@@ -97,12 +105,6 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     protected void enhanceRetrieved(LeaseTerm in, LeaseTermDTO dto) {
         super.enhanceRetrieved(in, dto);
 
-        Persistence.service().retrieve(dto.version().leaseProducts().serviceItem().item().product());
-
-        for (BillableItem item : dto.version().leaseProducts().featureItems()) {
-            Persistence.service().retrieve(item.item().product());
-        }
-
         if (in.getPrimaryKey() != null) {
             Persistence.service().retrieve(dto.version().tenants());
         }
@@ -117,11 +119,19 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(item, AttachLevel.ToStringMembers);
         }
 
+        loadDetachedProducts(dto);
+
         Persistence.service().retrieve(dto.lease());
         if (!dto.lease().unit().isNull()) {
-            // fill runtime editor data:
-            fillServiceEligibilityData(dto);
-            fillserviceItems(dto);
+            if (dto.lease().unit().building().isValueDetached()) {
+                Persistence.service().retrieve(dto.lease().unit().building());
+            }
+
+            if (retrieveTraget == RetrieveTraget.Edit) {
+                // fill runtime editor data:
+                fillServiceEligibilityData(dto);
+                fillserviceItems(dto);
+            }
         }
     }
 
@@ -185,6 +195,11 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         currentValue.selectedConcessions().clear();
 
         assert !currentValue.lease().unit().isNull();
+
+        if (currentValue.lease().unit().building().isValueDetached()) {
+            Persistence.service().retrieve(currentValue.lease().unit().building());
+        }
+
         Building building = currentValue.lease().unit().building();
         if (building == null || building.isNull()) {
             return false;
@@ -230,7 +245,10 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     private void fillserviceItems(LeaseTermDTO currentValue) {
         currentValue.selectedServiceItems().clear();
 
-        Persistence.service().retrieve(currentValue.lease().unit().building());
+        if (currentValue.lease().unit().building().isValueDetached()) {
+            Persistence.service().retrieve(currentValue.lease().unit().building());
+        }
+
         EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), currentValue.lease().unit().building().productCatalog()));
         criteria.add(PropertyCriterion.eq(criteria.proto().version().serviceType(), currentValue.lease().type()));
