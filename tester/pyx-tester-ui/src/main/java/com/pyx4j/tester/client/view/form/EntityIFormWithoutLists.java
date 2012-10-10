@@ -71,9 +71,7 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         // Personal Identity
-        CPersonalIdentityField personalId = new CPersonalIdentityField();
-        personalId.setPersonalIdentityFormat("XXX-XXX-xxx");
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().personalId(), personalId)));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().personalId(), new CPersonalIdentityField("XXX-XXX-xxx;XX-XX-xxxx", "Personal Info"))));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().textBox())));
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().integerBox())));
 

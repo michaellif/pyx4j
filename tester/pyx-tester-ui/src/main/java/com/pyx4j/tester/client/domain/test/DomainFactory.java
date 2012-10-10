@@ -25,6 +25,7 @@ import java.sql.Time;
 import java.util.Date;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IPersonalIdentity;
 
 public class DomainFactory {
 
@@ -98,6 +99,12 @@ public class DomainFactory {
         return retVal;
     }
 
+    private static IPersonalIdentity createPersonalIdentity() {
+        IPersonalIdentity retVal = EntityFactory.create(IPersonalIdentity.class);
+        retVal.obfuscatedNumber().setValue("XXXXXX123");
+        return retVal;
+    }
+
     private static EntityI createEntityI(int pos) {
         EntityI retVal = EntityFactory.create(EntityI.class);
 
@@ -141,6 +148,8 @@ public class DomainFactory {
         retVal.entityIVList().add(createEntityIV());
         retVal.entityIVList().add(createEntityIV());
         retVal.entityIVList().add(createEntityIV());
+
+        retVal.personalId().set(createPersonalIdentity());
 
         return retVal;
     }

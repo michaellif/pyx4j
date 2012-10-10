@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.validators.RegexValidator;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
@@ -56,7 +57,7 @@ public class CPersonalIdentityField extends CTextFieldBase<IPersonalIdentity, NP
 
     // Possible formats - 'XXX-XXX-xxx', 'XXXX XXXX XXXX xxxx', 'xxx XXX XXX xxx'
     public void setPersonalIdentityFormat(String pattern) {
-        super.setWatermark(pattern.toUpperCase());
+// TODO remove when watermark fixed        super.setWatermark(pattern.toUpperCase());
         setFormat(new PersonalIdentityFormat(pattern));
         addValueValidator(new TextBoxParserValidator<IPersonalIdentity>());
     }
@@ -95,23 +96,29 @@ public class CPersonalIdentityField extends CTextFieldBase<IPersonalIdentity, NP
 
     class PersonalIdentityFormat implements IFormat<IPersonalIdentity> {
 
-        private String pattern;
+        private final String FORMAT_DELIM = ";";
 
-        private int dataLength;
+        private final String[] patternArr;
 
-        public PersonalIdentityFormat() {
-        }
+        private final int[] dataLengthArr;
+
+        private int patternIdx = -1;
 
         public PersonalIdentityFormat(String pattern) {
             // pattern is interpreted as follows:
             //   X - input character in this position will be translated to 'X' (hidden data)
             //   x - input character in this position will not be modified (open data)
             //   any other chars will be treated as decorators and will not be modified
-            this.pattern = pattern;
-            for (int pos = 0; pos < pattern.length(); pos++) {
-                char c = pattern.charAt(pos);
-                if (c == 'x' || c == 'X') {
-                    dataLength += 1;
+            // multiple applicable formats can be specified using ';' as a delimiter
+            patternArr = pattern.split(FORMAT_DELIM);
+            dataLengthArr = new int[patternArr.length];
+            for (int idx = 0; idx < patternArr.length; idx++) {
+                String pat = patternArr[idx];
+                for (int pos = 0; pos < pat.length(); pos++) {
+                    char c = pat.charAt(pos);
+                    if (c == 'x' || c == 'X') {
+                        dataLengthArr[idx] += 1;
+                    }
                 }
             }
         }
@@ -136,18 +143,36 @@ public class CPersonalIdentityField extends CTextFieldBase<IPersonalIdentity, NP
                 return value;
             } else {
                 String data = string.replaceAll("[\\W_]", "");
-                if (data.length() == dataLength) {
-                    if (value != null && data.equals(value.newNumber().getValue())) {
+                if (getPatternIdx(data) == -1) {
+                    throw new ParseException(i18n.tr("Identity value is invalid for the given format."), 0);
+                }
+                if (value != null) {
+                    boolean clearMatch = !value.newNumber().isNull() && data.equals(value.newNumber().getValue());
+                    boolean obfscMatch = !value.obfuscatedNumber().isNull() && data.equals(value.obfuscatedNumber().getValue());
+                    if (clearMatch || obfscMatch) {
                         // input didn't change - return as is
                         return value;
-                    } else {
-                        value.newNumber().setValue(data);
-                        value.obfuscatedNumber().setValue(null);
-                        return value;
                     }
+                } else {
+                    value = EntityFactory.create(IPersonalIdentity.class);
                 }
-                throw new ParseException(i18n.tr("Identity value is invalid for the given format."), 0);
+                // set new input
+                value.newNumber().setValue(data);
+                value.obfuscatedNumber().setValue(null);
+                return value;
             }
+        }
+
+        private int getPatternIdx(String data) {
+            int dataLength = data.length();
+            patternIdx = -1;
+            for (int idx = 0; idx < patternArr.length; idx++) {
+                if (dataLength == dataLengthArr[idx]) {
+                    patternIdx = idx;
+                    break;
+                }
+            }
+            return patternIdx;
         }
 
         private String format(String input, boolean clearText) {
@@ -155,9 +180,13 @@ public class CPersonalIdentityField extends CTextFieldBase<IPersonalIdentity, NP
                 return "";
             }
             String data = input.replaceAll("[\\W_]", "");
-            if (data.length() != dataLength) {
+
+            // search for pattern based on user input
+            if (getPatternIdx(data) == -1) {
                 return "";
             }
+
+            String pattern = patternArr[patternIdx];
             StringBuilder output = new StringBuilder();
             for (int pos = 0, dataPos = 0; pos < pattern.length(); pos++) {
                 char c = pattern.charAt(pos);
@@ -174,9 +203,10 @@ public class CPersonalIdentityField extends CTextFieldBase<IPersonalIdentity, NP
         }
 
         protected String obfuscate(String data) {
-            if (data.length() != dataLength) {
+            if (patternIdx == -1) {
                 return "";
             }
+            String pattern = patternArr[patternIdx];
             StringBuilder output = new StringBuilder();
             for (int pos = 0, dataPos = 0; pos < pattern.length(); pos++) {
                 char c = pattern.charAt(pos);
