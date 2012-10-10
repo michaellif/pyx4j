@@ -26,6 +26,7 @@ import java.util.Random;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
@@ -119,7 +120,12 @@ public class LeaseLifecycleSimulator {
             }
         });
         leaseTo = null;
-        issueClassifications = Persistence.service().query(EntityQueryCriteria.create(IssueClassification.class));
+
+        issueClassifications = CacheService.get(LeaseLifecycleSimulator.class.getName() + "issueClassifications");
+        if (issueClassifications == null) {
+            issueClassifications = Persistence.service().query(EntityQueryCriteria.create(IssueClassification.class));
+            CacheService.put(LeaseLifecycleSimulator.class.getName() + "issueClassifications", issueClassifications);
+        }
     }
 
     public static LeaseLifecycleSimulatorBuilder sim() {
