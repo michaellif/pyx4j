@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
-import java.security.InvalidParameterException;
-
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -86,7 +84,7 @@ public class TenantApprovalFolder extends VistaBoxFolder<LeaseApprovalParticipan
                                     } else if (getValue().leaseParticipant().isInstanceOf(Guarantor.class)) {
                                         return AppPlaceEntityMapper.resolvePlace(Guarantor.class, getValue().leaseParticipant().getPrimaryKey());
                                     } else {
-                                        throw new InvalidParameterException("Incorrect LeaseParticipant value!");
+                                        throw new IllegalArgumentException("Incorrect LeaseParticipant value!");
                                     }
                                 }
                             })), 20).build());

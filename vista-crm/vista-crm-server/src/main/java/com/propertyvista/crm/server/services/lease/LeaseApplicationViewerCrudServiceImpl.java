@@ -32,6 +32,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
+import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
@@ -42,7 +43,6 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
-import com.propertyvista.dto.LeaseApprovalDTO.SuggestedDecision;
 import com.propertyvista.dto.LeaseApprovalParticipantDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
@@ -87,14 +87,8 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             loadLeaseParticipant(dto, guarantorId);
         }
 
-        // TODO move to ScreeningFacade
-        {
-            dto.leaseApproval().rentAmount().setValue(BigDecimal.valueOf(1000));
-
-            dto.leaseApproval().suggestedDecision().setValue(SuggestedDecision.RequestInfo);
-            dto.leaseApproval().totalAmountApproved().setValue(BigDecimal.valueOf(500));
-            dto.leaseApproval().percenrtageApproved().setValue(50.0);
-        }
+        ServerSideFactory.create(ScreeningFacade.class).calculateSuggestedDecision(
+                dto.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue(), dto.leaseApproval());
 
         dto.masterApplicationStatus().set(
                 ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(dto.leaseApplication().onlineApplication()));
@@ -115,6 +109,9 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             criteria.add(PropertyCriterion.eq(criteria.proto().screening().screene(), leaseParticipant.leaseCustomer().customer()));
             criteria.desc(criteria.proto().creditCheckDate());
             approval.creditCheck().set(Persistence.service().retrieve(criteria));
+            if (!approval.creditCheck().isNull()) {
+                Persistence.service().retrieve(approval.creditCheck().screening(), AttachLevel.ToStringMembers);
+            }
 
             dto.leaseApproval().participants().add(approval);
         }
@@ -200,7 +197,12 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
     @Override
     public void creditCheck(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant<?>> users) {
-        String successMessage = i18n.tr("Credit check has been proceeded successfully (DEMO)");
+        // TODO get the value
+        BigDecimal rentAmount = new BigDecimal("1000.00");
+        for (LeaseParticipant<?> leaseParticipant : users) {
+            ServerSideFactory.create(ScreeningFacade.class).runCreditCheck(rentAmount, leaseParticipant);
+        }
+        String successMessage = i18n.tr("Credit check has been proceeded successfully.");
         callback.onSuccess(successMessage);
     }
 

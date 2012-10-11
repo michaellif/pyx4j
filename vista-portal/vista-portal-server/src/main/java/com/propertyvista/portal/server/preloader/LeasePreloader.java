@@ -79,13 +79,12 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             // Create normal Active Lease first for Shortcut users
             if (i <= DemoData.UserType.TENANT.getDefaultMax()) {
-                LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-                lease = leaseFacade.persist(lease);
+                lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
                 for (Tenant tenant : lease.currentTerm().version().tenants()) {
                     tenant.leaseCustomer().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
                     Persistence.service().persist(tenant.leaseCustomer().customer().personScreening());
                 }
-                leaseFacade.approveApplication(lease, null, null);
+                ServerSideFactory.create(LeaseFacade.class).approveApplication(lease, null, null);
                 //TODO
                 // leaseFacade.activate(lease.getPrimaryKey());
             } else {
@@ -165,6 +164,10 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             Persistence.service().setTransactionSystemTime(lease.currentTerm().termFrom().getValue());
             ServerSideFactory.create(LeaseFacade.class).persist(lease);
+            for (Tenant tenant : lease.currentTerm().version().tenants()) {
+                tenant.leaseCustomer().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
+                Persistence.service().persist(tenant.leaseCustomer().customer().personScreening());
+            }
             if (RandomUtil.randomBoolean()) {
                 ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease);
             }

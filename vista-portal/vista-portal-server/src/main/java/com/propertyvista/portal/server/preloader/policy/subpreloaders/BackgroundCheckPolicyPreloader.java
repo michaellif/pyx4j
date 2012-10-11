@@ -33,6 +33,7 @@ public class BackgroundCheckPolicyPreloader extends AbstractPolicyPreloader<Back
         policy.version().judgment().setValue(BjccEntry.m12);
         policy.version().collection().setValue(BjccEntry.m12);
         policy.version().chargeOff().setValue(BjccEntry.m12);
+        policy.strategyNumber().setValue(1);
 
         return policy;
     }

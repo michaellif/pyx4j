@@ -38,6 +38,8 @@ public interface LeaseApprovalDTO extends IEntity {
         @Translate("Request for Guarantor or further information")
         RequestInfo,
 
+        Review,
+
         Decline;
 
         @Override
