@@ -47,7 +47,7 @@ public class LeadsAndRentalsGadget extends CounterGadgetInstanceBase<LeadsAndRen
     }
 
     @Override
-    protected Vector<Building> prepareSummaryQuery() {
+    protected Vector<Building> makeSummaryQuery() {
         return new Vector<Building>(buildingsFilterContainer.getSelectedBuildingsStubs());
     }
 

@@ -54,7 +54,7 @@ public class CollectionsGaget extends CounterGadgetInstanceBase<CollectionsGadge
     }
 
     @Override
-    protected Vector<Building> prepareSummaryQuery() {
+    protected Vector<Building> makeSummaryQuery() {
         return new Vector<Building>(buildingsFilterContainer.getSelectedBuildingsStubs());
     }
 

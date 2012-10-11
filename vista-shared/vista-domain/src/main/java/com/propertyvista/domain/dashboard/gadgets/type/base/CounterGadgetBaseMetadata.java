@@ -14,7 +14,6 @@
 package com.propertyvista.domain.dashboard.gadgets.type.base;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 
@@ -24,8 +23,5 @@ import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 @AbstractEntity
 @I18n(strategy = I18nStrategy.IgnoreAll)
 public interface CounterGadgetBaseMetadata extends GadgetMetadata {
-
-    /** Holds path of value for which details are presented, or <code>null</code> when in summary mode */
-    IPrimitive<String> activeDetails();
 
 }

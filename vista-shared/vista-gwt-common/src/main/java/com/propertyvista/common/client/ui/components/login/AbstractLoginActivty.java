@@ -60,8 +60,8 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-
         if (HTML5Storage.isSupported()) {
+            HTML5Storage.getSessionStorage().clear();
             String userIdFromStorage = HTML5Storage.getLocalStorage().getItem(AbstractLoginActivty.HTML5_KEY);
             if (CommonsStringUtils.isStringSet(userIdFromStorage)) {
                 userId = userIdFromStorage;

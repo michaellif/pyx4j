@@ -44,7 +44,7 @@ public class LeaseExpirationGadget extends CounterGadgetInstanceBase<LeaseExpira
     }
 
     @Override
-    protected Vector<Building> prepareSummaryQuery() {
+    protected Vector<Building> makeSummaryQuery() {
         return new Vector<Building>(getSelectedBuildingsStubs());
     }
 

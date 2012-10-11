@@ -91,7 +91,7 @@ public class CounterGadget extends CounterGadgetInstanceBase<CounterGadgetDemoDT
     }
 
     @Override
-    protected VoidSerializable prepareSummaryQuery() {
+    protected VoidSerializable makeSummaryQuery() {
         return null;
     }
 

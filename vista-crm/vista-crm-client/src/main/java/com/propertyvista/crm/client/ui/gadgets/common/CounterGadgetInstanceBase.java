@@ -26,6 +26,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -71,6 +72,8 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
 
     private static final I18n i18n = I18n.get(CounterGadgetInstanceBase.class);
 
+    private static final String ACTIVE_DETALS_KEY_PREFIX = "ActiveDetails:";
+
     private final Class<Data> dataClass;
 
     private FlowPanel titlePanel;
@@ -83,11 +86,15 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
 
     private final Map<String, CounterDetailsFactory> detailsFactories;
 
+    /** holds path of the member that was zoomed in (if browser doesn't support html5 session storage) */
+    private String localActiveDetails;
+
     private static SimpleEventBus eventBus;
 
     public CounterGadgetInstanceBase(Class<Data> dataClass, final AbstractCounterGadgetBaseService<Data, Query> service, ZoomableViewForm<Data> summaryForm,
             GadgetMetadata metadata, Class<GadgetType> metadataClass) {
         this(dataClass, service, summaryForm, metadata, metadataClass, new CounterGadgetSetupForm<GadgetType>(metadataClass));
+        this.localActiveDetails = null;
     }
 
     public CounterGadgetInstanceBase(Class<Data> dataClass, final AbstractCounterGadgetBaseService<Data, Query> service, ZoomableViewForm<Data> summaryForm,
@@ -109,7 +116,7 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
         this.summaryForm.initZoomIn(new ZoominRequestHandler() {
             @Override
             public void onZoomIn(IObject<?> member) {
-                displayDetails(member);
+                switchToDisplayMode(member.getPath().toString());
             }
         }, zoomableMembers);
         this.summaryForm.initContent();
@@ -118,28 +125,25 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
 
             @Override
             public void populate() {
-                CounterGadgetInstanceBase.this.titlePanel.setVisible(!getMetadata().activeDetails().isNull());
-                CounterGadgetInstanceBase.this.summaryForm.setVisible(getMetadata().activeDetails().isNull());
-                CounterGadgetInstanceBase.this.detailsPanel.setVisible(!getMetadata().activeDetails().isNull());
+                String activeDetails = activeDetails();
+                boolean isZoomInModeActive = activeDetails != null;
+                CounterGadgetInstanceBase.this.summaryForm.setVisible(!isZoomInModeActive);
+                CounterGadgetInstanceBase.this.titlePanel.setVisible(isZoomInModeActive);
+                CounterGadgetInstanceBase.this.detailsPanel.setVisible(isZoomInModeActive);
 
-                if (getMetadata().activeDetails().isNull()) {
-
+                if (!isZoomInModeActive) {
                     service.countData(new DefaultAsyncCallback<Data>() {
-
                         @Override
                         public void onSuccess(Data result) {
                             CounterGadgetInstanceBase.this.summaryForm.populate(result);
                             populateSucceded();
                         }
-
-                    }, prepareSummaryQuery());
+                    }, makeSummaryQuery());
                 } else {
-                    Path detailsPath = new Path(getMetadata().activeDetails().getValue());
-                    title.setHTML(new SafeHtmlBuilder().appendEscaped(
-                            EntityFactory.getEntityPrototype(CounterGadgetInstanceBase.this.dataClass).getMember(detailsPath).getMeta().getCaption())
-                            .toSafeHtml());
-
-                    detailsPanel.setWidget(detailsFactories.get(detailsPath.toString()).createDetailsWidget());
+                    String currentDetailsCaption = EntityFactory.getEntityPrototype(CounterGadgetInstanceBase.this.dataClass)
+                            .getMember(new Path(activeDetails)).getMeta().getCaption();
+                    title.setHTML(new SafeHtmlBuilder().appendEscaped(currentDetailsCaption).toSafeHtml());
+                    detailsPanel.setWidget(detailsFactories.get(activeDetails).createDetailsWidget());
                     populateSucceded();
                 }
             }
@@ -149,7 +153,7 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
 
     @Override
     public CounterGadgetFilter getFilterData() {
-        return new CounterGadgetFilter(buildingsFilterContainer.getSelectedBuildingsStubs(), getMetadata().activeDetails().getValue());
+        return new CounterGadgetFilter(buildingsFilterContainer.getSelectedBuildingsStubs(), activeDetails());
     }
 
     @Override
@@ -158,7 +162,7 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
             buildingsFilterContainer.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
                 @Override
                 public void onBuildingSelectionChanged(BuildingSelectionChangedEvent event) {
-                    handler.handleFilterDataChange(new CounterGadgetFilter(event.getBuildings(), getMetadata().activeDetails().getValue()));
+                    handler.handleFilterDataChange(new CounterGadgetFilter(event.getBuildings(), activeDetails()));
                 }
             });
         }
@@ -206,9 +210,7 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
         Button returnButton = new Button(i18n.tr("return to summary"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                getMetadata().activeDetails().setValue(null);
-                saveMetadata();
-                populate();
+                switchToDisplayMode(null);
             }
         });
         returnButton.getElement().getStyle().setFloat(Float.LEFT);
@@ -234,7 +236,7 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
         return content;
     }
 
-    protected abstract Query prepareSummaryQuery();
+    protected abstract Query makeSummaryQuery();
 
     protected abstract void bindDetailsFactories();
 
@@ -250,10 +252,32 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
         return detailsFactories.containsKey(member.getPath().toString());
     }
 
-    void displayDetails(IObject<?> member) {
-        getMetadata().activeDetails().setValue(member.getPath().toString());
-        saveMetadata();
+    /**
+     * Switches the gadget to either summary or to zoom-in to details mode.
+     * 
+     * @param activeDetailsMemberPath
+     *            <code>null</code> to switch to zoom-in mode, or path of zoomed-in memember
+     */
+    void switchToDisplayMode(String activeDetailsMemberPath) {
+        Storage storage = Storage.getSessionStorageIfSupported();
+        if (storage != null) {
+            if (activeDetailsMemberPath != null) {
+                storage.setItem(activeDetailsKey(), activeDetailsMemberPath);
+            } else {
+                storage.removeItem(activeDetailsKey());
+            }
+        } else {
+            localActiveDetails = activeDetailsMemberPath;
+        }
         populate();
     }
 
+    private String activeDetails() {
+        Storage storage = Storage.getSessionStorageIfSupported();
+        return storage != null ? storage.getItem(activeDetailsKey()) : localActiveDetails;
+    }
+
+    private String activeDetailsKey() {
+        return ACTIVE_DETALS_KEY_PREFIX + getMetadata().gadgetId().getValue();
+    }
 }

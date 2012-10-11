@@ -40,7 +40,7 @@ public class ApplicationsGadget extends CounterGadgetInstanceBase<ApplicationsGa
     }
 
     @Override
-    protected Vector<Building> prepareSummaryQuery() {
+    protected Vector<Building> makeSummaryQuery() {
         return new Vector<Building>(buildingsFilterContainer.getSelectedBuildingsStubs());
     }
 

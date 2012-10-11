@@ -41,7 +41,7 @@ public class MaintenanceGadget extends CounterGadgetInstanceBase<MaintenanceGadg
     }
 
     @Override
-    protected Vector<Building> prepareSummaryQuery() {
+    protected Vector<Building> makeSummaryQuery() {
         return new Vector<Building>();
     }
 

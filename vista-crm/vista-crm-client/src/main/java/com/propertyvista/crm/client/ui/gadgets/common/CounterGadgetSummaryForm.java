@@ -71,7 +71,7 @@ public abstract class CounterGadgetSummaryForm<E extends IEntity> extends CEntit
 
                 @Override
                 public void execute() {
-                    gadget.displayDetails(member);
+                    gadget.switchToDisplayMode(member.getPath().toString());
                 }
 
             });
