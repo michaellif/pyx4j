@@ -15,6 +15,7 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -44,10 +45,13 @@ public abstract class AddressSimpleEditorImpl<A extends AddressSimple> extends C
         CComponent<Province, ?> province = (CComponent<Province, ?>) inject(proto().province());
         main.setWidget(++row, 0, new DecoratorBuilder(province, 17).build());
 
-        CComponent<Country, ?> country = (CComponent<Country, ?>) inject(proto().country());
+        final CComponent<Country, ?> country = (CComponent<Country, ?>) inject(proto().country());
         main.setWidget(++row, 0, new DecoratorBuilder(country, 15).build());
 
         CComponent<String, ?> postalCode = (CComponent<String, ?>) inject(proto().postalCode());
+        if (postalCode instanceof CTextFieldBase) {
+            ((CTextFieldBase<String, ?>) postalCode).setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
+        }
         main.setWidget(++row, 0, new DecoratorBuilder(postalCode, 7).build());
 
         attachFilters(proto(), province, country, postalCode);

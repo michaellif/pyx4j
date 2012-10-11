@@ -24,6 +24,7 @@ import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -79,6 +80,10 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         left.setWidget(row++, 0, new DecoratorBuilder(inject(proto().city()), 20).build());
 
         final CComponent<String, ?> postalCode = (CComponent<String, ?>) inject(proto().postalCode());
+        if (postalCode instanceof CTextFieldBase) {
+            ((CTextFieldBase<String, ?>) postalCode).setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
+        }
+
         left.setWidget(row++, 0, new DecoratorBuilder(postalCode, 7).build());
 
         FormFlexPanel right = new FormFlexPanel();
