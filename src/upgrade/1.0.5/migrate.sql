@@ -363,7 +363,8 @@ BEGIN
                                     'DROP COLUMN lease_on_application_for';
         -- legal_questions
         
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions DROP CONSTRAINT legal_questions_pk CASCADE';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions DROP CONSTRAINT IF EXISTS legal_questions_pk CASCADE';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions DROP CONSTRAINT IF EXISTS legal_questions_pkey CASCADE';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions RENAME TO person_screening_legal_questions';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_legal_questions ADD CONSTRAINT person_screening_legal_questions_pk PRIMARY KEY(id) ';
 
@@ -434,6 +435,7 @@ BEGIN
         -- personal_income - just in case rename to person_screening_personal_income
         
         EXECUTE 'ALTER TABLE '||v_schema_name||'.personal_income DROP CONSTRAINT IF EXISTS personal_income_pk,'||
+                                                'DROP CONSTRAINT IF EXISTS personal_income_pkey,'||
                                                 'DROP CONSTRAINT IF EXISTS personal_income_employer_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS personal_income_other_income_information_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS personal_income_owner_fk,'||
