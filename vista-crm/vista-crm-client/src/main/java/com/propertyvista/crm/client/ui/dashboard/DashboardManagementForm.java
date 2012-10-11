@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
-import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -37,13 +36,17 @@ public class DashboardManagementForm extends CrmEntityForm<DashboardMetadata> {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 40).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isShared()), 3).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ownerUser().name()), 15).customLabel(i18n.tr("Owner")).build());
         (get(proto().ownerUser().name())).setViewable(true);
-
         selectTab(addTab(content));
+    }
+
+    public void setNewDashboardMode(boolean isNewDashboard) {
+        (get(proto().type())).setViewable(!isNewDashboard);
+        (get(proto().ownerUser().name())).setVisible(!isNewDashboard);
     }
 }

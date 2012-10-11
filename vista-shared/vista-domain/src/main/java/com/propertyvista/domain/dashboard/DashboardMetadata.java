@@ -71,6 +71,7 @@ public interface DashboardMetadata extends IEntity {
         }
     }
 
+    @NotNull
     @MemberColumn(name = "dashboardType")
     IPrimitive<DashboardType> type();
 

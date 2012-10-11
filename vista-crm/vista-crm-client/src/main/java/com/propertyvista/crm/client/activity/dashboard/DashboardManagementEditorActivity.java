@@ -19,7 +19,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -32,7 +31,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class DashboardManagementEditorActivity extends EditorActivityBase<DashboardMetadata> {
@@ -46,16 +44,15 @@ public class DashboardManagementEditorActivity extends EditorActivityBase<Dashbo
 
     @Override
     protected void createNewEntity(final AsyncCallback<DashboardMetadata> callback) {
-        ((DashboardManagementEditorView) getView()).showSelectTypePopUp(new DefaultAsyncCallback<DashboardMetadata.DashboardType>() {
-            @Override
-            public void onSuccess(DashboardType type) {
-                DashboardMetadata entity = EntityFactory.create(getEntityClass());
-                entity.type().setValue(type);
-                entity.encodedLayout().setValue(new DashboardColumnLayoutFormat.Builder(LayoutType.Two11).build().getSerializedForm());
+        DashboardMetadata entity = EntityFactory.create(getEntityClass());
+        entity.encodedLayout().setValue(new DashboardColumnLayoutFormat.Builder(LayoutType.Two11).build().getSerializedForm());
+        callback.onSuccess(entity);
+    }
 
-                callback.onSuccess(entity);
-            }
-        });
+    @Override
+    public void onPopulateSuccess(DashboardMetadata result) {
+        super.onPopulateSuccess(result);
+        ((DashboardManagementEditorView) getView()).setNewDashboardMode(result.getPrimaryKey() == null);
     }
 
     @Override
