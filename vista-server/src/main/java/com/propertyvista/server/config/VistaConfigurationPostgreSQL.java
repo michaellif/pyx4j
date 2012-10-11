@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.config;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 
 import com.propertyvista.config.VistaDBNamingConvention;
@@ -72,5 +73,14 @@ public class VistaConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Confi
     @Override
     public NamingConvention namingConvention() {
         return new VistaDBNamingConvention();
+    }
+
+    @Override
+    public int unreturnedConnectionTimeout() {
+        if (ServerSideConfiguration.isStartedUnderJvmDebugMode() && ServerSideConfiguration.isStartedUnderEclipse()) {
+            return 0;
+        } else {
+            return super.unreturnedConnectionTimeout();
+        }
     }
 }
