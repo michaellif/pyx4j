@@ -218,15 +218,15 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_debit_credit_link ADD COLUMN credit_itemdiscriminator VARCHAR(50),'||
                                         'ADD COLUMN debit_itemdiscriminator VARCHAR(50)';
         
-         SELECT * INTO v_void FROM _dba_.exec_sql('UPDATE '||v_schema_name||'.billing_debit_credit_link AS a '||
-                                                '       SET     credit_itemdiscriminator = b.iddiscriminator '||
-                                                '       FROM    (SELECT id,iddiscriminator FROM '||v_schema_name||'.billing_invoice_line_item ) AS b '||
-                                                'WHERE  a.credit_item = b.id ');
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_debit_credit_link AS a '||
+                'SET     credit_itemdiscriminator = b.iddiscriminator '||
+                'FROM    (SELECT id,iddiscriminator FROM '||v_schema_name||'.billing_invoice_line_item ) AS b '||
+                'WHERE  a.credit_item = b.id ';
         
-        SELECT * INTO v_void FROM _dba_.exec_sql('UPDATE '||v_schema_name||'.billing_debit_credit_link AS a '||
-                                                '       SET     debit_itemdiscriminator = b.iddiscriminator '||
-                                                '       FROM    (SELECT id,iddiscriminator FROM '||v_schema_name||'.billing_invoice_line_item ) AS b '||
-                                                'WHERE  a.debit_item = b.id ');
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_debit_credit_link AS a '||
+        '       SET     debit_itemdiscriminator = b.iddiscriminator '||
+        '       FROM    (SELECT id,iddiscriminator FROM '||v_schema_name||'.billing_invoice_line_item ) AS b '||
+        '       WHERE  a.debit_item = b.id ';
         
 
         -- billing_invoice_line_item
@@ -245,12 +245,16 @@ BEGIN
         -- dashboard_metadata
         EXECUTE 'ALTER TABLE '||v_schema_name||'.dashboard_metadata DROP COLUMN is_favorite,'||
                                 'DROP COLUMN layout_type,'||
-                                'ADD COLUMN encoded_layout VARCHAR(500),'||
-                                'RENAME COLUMN user_id TO owner_user_id';
+                                'ADD COLUMN encoded_layout VARCHAR(500)';
+       EXECUTE 'ALTER TABLE '||v_schema_name||'.dashboard_metadata RENAME COLUMN user_id TO owner_user_id';
+       
         -- test of _dba_.exec_sql function
-        SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.dashboard_metadata '||
-                                                'ADD CONSTRAINT dashboard_metadata_owner_user_id_fk FOREIGN KEY(owner_user_id) '||
-                                                'REFERENCES '||v_schema_name||'.crm_user(id)');
+        EXECUTE 'TRUNCATE TABLE '||v_schema_name||'.dashboard_metadata';
+        
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.dashboard_metadata '||
+        '       ADD CONSTRAINT dashboard_metadata_owner_user_id_fk FOREIGN KEY(owner_user_id) REFERENCES '||v_schema_name||'.crm_user(id)';
+                                                
+        
 
         -- employee
         EXECUTE 'ALTER TABLE '||v_schema_name||'.employee ADD COLUMN employee_id_s VARCHAR(26)';
@@ -273,11 +277,9 @@ BEGIN
 
         -- identification_document_type
         
-        SET search_path = v_schema_name;
-        
-        ALTER TABLE identification_document_type DROP COLUMN document_id,
-                                                DROP COLUMN document_issuer,
-                                                DROP COLUMN drivers_license_state;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.identification_document_type DROP COLUMN document_id, '||
+                                                'DROP COLUMN document_issuer,'||
+                                                'DROP COLUMN drivers_license_state';
         
 
         -- income_info
@@ -344,8 +346,7 @@ BEGIN
                                     'DROP COLUMN lease_on_application_for';
         -- legal_questions
 
-        SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.legal_questions RENAME TO '||
-                                                'person_screening_legal_questions');
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions RENAME TO person_screening_legal_questions';
 
         -- master_online_application
         EXECUTE 'ALTER TABLE '||v_schema_name||'.master_online_application ADD COLUMN online_application_id_s VARCHAR(26)';
@@ -410,7 +411,7 @@ BEGIN
         -- SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'personal_income',FALSE);
 
         -- person_screening
-        SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.person_screening '||
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening '||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_pk CASCADE,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_pkey CASCADE,'||            -- Very special case for pangroup
                                                 'DROP CONSTRAINT IF EXISTS person_screening_current_address_country_fk,'||
@@ -419,16 +420,15 @@ BEGIN
                                                 'DROP CONSTRAINT IF EXISTS person_screening_legal_questions_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_previous_address_country_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_previous_address_province_fk,'||
-                                                'DROP CONSTRAINT IF EXISTS person_screening_screene_fk');
+                                                'DROP CONSTRAINT IF EXISTS person_screening_screene_fk';
 
-        SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.person_screening RENAME TO person_screening_v');
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening RENAME TO person_screening_v';
 
-        SELECT * INTO v_void FROM _dba_.exec_sql('CREATE TABLE '||v_schema_name||'.person_screening ( '||
-                                                '       id              BIGINT          NOT NULL,'||
-                                                '       screene         BIGINT,'||
-                                                '       CONSTRAINT person_screening_pk PRIMARY KEY(id),'||
-                                                '       CONSTRAINT person_screening_screene_fk FOREIGN KEY(screene) '||
-                                                '               REFERENCES '||v_schema_name||'.customer(id))');
+        EXECUTE 'CREATE TABLE '||v_schema_name||'.person_screening ( '||
+                '       id              BIGINT          NOT NULL,'||
+                '       screene         BIGINT,'||
+                '       CONSTRAINT person_screening_pk PRIMARY KEY(id),'||
+                '       CONSTRAINT person_screening_screene_fk FOREIGN KEY(screene) REFERENCES '||v_schema_name||'.customer(id))';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening OWNER TO vista';
 
@@ -538,14 +538,14 @@ BEGIN
         '   JOIN '||v_schema_name||'.product b ON (a.old_holder = b.old_id AND a.iddiscriminator = b.iddiscriminator)) AS a '||
         '   WHERE b.id = a.id ';
 
-        SELECT * INTO v_void FROM _dba_.exec_sql('UPDATE '||v_schema_name||'.product_v AS a '
-                                                'SET holderdiscriminator = b.iddiscriminator '
-                                                'FROM (SELECT a.id,a.iddiscriminator '||
-                                                '      FROM '||v_schema_name||'.product a '||
-                                                '      JOIN '||v_schema_name||'.product_v b ON (a.id = b.holder)) AS b '||
-                                                'WHERE a.holder = b.id');
+        EXECUTE 'UPDATE '||v_schema_name||'.product_v AS a '
+                'SET holderdiscriminator = b.iddiscriminator '
+                'FROM (SELECT a.id,a.iddiscriminator '||
+                '      FROM '||v_schema_name||'.product a '||
+                '      JOIN '||v_schema_name||'.product_v b ON (a.id = b.holder)) AS b '||
+                'WHERE a.holder = b.id';
 
-        SELECT * INTO v_void FROM _dba_.exec_sql('ALTER TABLE '||v_schema_name||'.product_v ALTER COLUMN holderdiscriminator SET NOT NULL');
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ALTER COLUMN holderdiscriminator SET NOT NULL';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ADD CONSTRAINT product_v_holder_fk FOREIGN KEY(holder) REFERENCES '||v_schema_name||'.product(id)';
 
@@ -980,9 +980,10 @@ BEGIN
 
         END LOOP;
 
-
-
     END LOOP;
+    
+    EXCEPTION WHEN OTHERS THEN
+                RAISE EXCEPTION 'Failed executing statement, code: %, error message: %',SQLSTATE,SQLERRM ;
 END;
 $$
 LANGUAGE plpgsql VOLATILE;
