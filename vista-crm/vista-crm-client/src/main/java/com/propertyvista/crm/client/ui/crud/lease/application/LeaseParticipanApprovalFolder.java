@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
@@ -94,21 +95,24 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             FormFlexPanel right = new FormFlexPanel();
             row = -1;
             right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckResult()), 10).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().declineReason()), 20).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().declineReason()), 25).build());
             right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().amountApproved()), 10).build());
 
+            right.setBR(++row, 0, 1);
+
             right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckDate()), 10).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckReport(), new CLabel<Key>()), 10).build());
             right.setWidget(
                     ++row,
                     0,
                     new DecoratorBuilder(inject(proto().creditCheck().screening(),
                             new CEntityCrudHyperlink<PersonScreening>(AppPlaceEntityMapper.resolvePlace(PersonScreening.class))), 10).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckReport(), new CLabel<Key>()), 10).build());
 
             // assemble main panel:
             main.setWidget(0, 0, left);
             main.setWidget(0, 1, right);
 
+            main.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
             main.getColumnFormatter().setWidth(0, "30%");
             main.getColumnFormatter().setWidth(1, "70%");
 
