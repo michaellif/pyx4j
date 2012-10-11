@@ -32,7 +32,6 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.Notes;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
-import com.propertyvista.misc.EquifaxApproval;
 
 public interface LeaseApplication extends IEntity {
 
@@ -105,7 +104,4 @@ public interface LeaseApplication extends IEntity {
     IPrimitive<String> decisionReason();
 
     Notes notes();
-
-    @Deprecated
-    EquifaxApproval equifaxApproval();
 }

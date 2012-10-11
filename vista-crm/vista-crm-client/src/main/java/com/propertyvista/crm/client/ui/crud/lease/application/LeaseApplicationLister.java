@@ -58,10 +58,6 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
             
             new Builder(proto().mainApplicant()).sortable(!VistaTODO.complextQueryCriteria).searchable(!VistaTODO.complextQueryCriteria).build(),
             
-
-            new Builder(proto().leaseApplication().equifaxApproval().percenrtageApproved(), false).build(),
-            new Builder(proto().leaseApplication().equifaxApproval().suggestedDecision(), false).build(),
-
             new Builder(proto().numberOfOccupants(), false).sortable(false).searchable(false).title(i18n.tr("Occupants")).build(),
             new Builder(proto().numberOfApplicants(), true).sortable(false).searchable(false).title(i18n.tr("Applicants")).build(),
             new Builder(proto().numberOfGuarantors(), true).sortable(false).searchable(false).title(i18n.tr("Guarantors")).build(),

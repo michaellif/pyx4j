@@ -15,17 +15,13 @@ package com.propertyvista.generator;
 
 import java.util.Random;
 
-
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
-import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Pet.WeightUnit;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.generator.util.RandomUtil;
-import com.propertyvista.misc.EquifaxApproval.Decision;
-import com.propertyvista.misc.EquifaxResult;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 
 public class PTGenerator {
@@ -78,30 +74,5 @@ public class PTGenerator {
         vehicle.country().set(vehicle.province().country());
 
         return vehicle;
-    }
-
-    void createEquifaxApproival(PersonScreening ts) {
-        // TODO: currently - just some mockup stuff:
-        ts.version().equifaxApproval().suggestedDecision().setValue(RandomUtil.randomEnum(Decision.class));
-        switch (ts.version().equifaxApproval().suggestedDecision().getValue()) {
-        case Approve:
-            ts.version().equifaxApproval().percenrtageApproved().setValue(80 + RandomUtil.randomDouble(40));
-            ts.version().equifaxApproval().suggestedDecision().setValue(Decision.Approve);
-            break;
-        case RequestInfo:
-            ts.version().equifaxApproval().percenrtageApproved().setValue(40 + RandomUtil.randomDouble(20));
-            ts.version().equifaxApproval().suggestedDecision().setValue(Decision.RequestInfo);
-            break;
-        case Decline:
-            ts.version().equifaxApproval().percenrtageApproved().setValue(RandomUtil.randomDouble(20));
-            ts.version().equifaxApproval().suggestedDecision().setValue(Decision.Decline);
-            break;
-
-        default:
-            ts.version().equifaxApproval().suggestedDecision().setValue(Decision.Pending);
-        }
-
-        ts.version().equifaxApproval().checkResultDetails().set(EntityFactory.create(EquifaxResult.class));
-        ts.version().equifaxApproval().checkResultDetails().suggestedDecision().setValue(ts.version().equifaxApproval().suggestedDecision().getValue());
     }
 }

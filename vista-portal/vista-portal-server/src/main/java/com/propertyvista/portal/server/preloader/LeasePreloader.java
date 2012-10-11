@@ -35,6 +35,7 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.generator.LeaseGenerator;
+import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.server.preloader.util.AptUnitSource;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSimulator;
@@ -164,7 +165,9 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             Persistence.service().setTransactionSystemTime(lease.currentTerm().termFrom().getValue());
             ServerSideFactory.create(LeaseFacade.class).persist(lease);
-            ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease);
+            if (RandomUtil.randomBoolean()) {
+                ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease);
+            }
             Persistence.service().setTransactionSystemTime(null);
         }
 

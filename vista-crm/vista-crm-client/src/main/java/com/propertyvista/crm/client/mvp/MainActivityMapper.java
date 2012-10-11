@@ -80,7 +80,6 @@ import com.propertyvista.crm.client.activity.crud.customer.lead.LeadListerActivi
 import com.propertyvista.crm.client.activity.crud.customer.lead.LeadViewerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.lead.ShowingEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.lead.ShowingViewerActivity;
-import com.propertyvista.crm.client.activity.crud.customer.screening.EquifaxResultViewerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.screening.PersonScreeningEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.screening.PersonScreeningViewerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.FutureTenantListerActivity;
@@ -145,10 +144,10 @@ import com.propertyvista.crm.client.activity.crud.unit.UnitListerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitOccupancyViewerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitViewerActivity;
+import com.propertyvista.crm.client.activity.dashboard.DashboardActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementEditorActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementListerActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementViewerActivity;
-import com.propertyvista.crm.client.activity.dashboard.DashboardActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerActivity;
@@ -497,13 +496,6 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new LeaseApplicationViewerActivity(crudPlace);
-                            break;
-                        }
-
-                    } else if (place instanceof CrmSiteMap.Tenants.EquifaxResult) {
-                        switch (crudPlace.getType()) {
-                        case viewer:
-                            activity = new EquifaxResultViewerActivity(crudPlace);
                             break;
                         }
 

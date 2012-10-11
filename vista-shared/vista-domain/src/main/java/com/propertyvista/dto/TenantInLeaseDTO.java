@@ -19,7 +19,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.income.IncomeSource;
-import com.propertyvista.misc.EquifaxApproval;
 
 @Transient
 @ExtendsDBO
@@ -34,6 +33,4 @@ public interface TenantInLeaseDTO extends Tenant {
     IPrimitive<IncomeSource> incomeSource();
 
     IPrimitive<ChangeStatus> changeStatus();
-
-    EquifaxApproval equifaxApproval();
 }

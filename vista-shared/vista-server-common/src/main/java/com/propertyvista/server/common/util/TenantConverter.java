@@ -76,7 +76,6 @@ public class TenantConverter {
             bind(dtoProto.version().previousAddress(), dboProto.version().previousAddress());
             bind(dtoProto.documents(), dboProto.documents());
             bind(dtoProto.version().legalQuestions(), dboProto.version().legalQuestions());
-            bind(dtoProto.version().equifaxApproval(), dboProto.version().equifaxApproval());
         }
     }
 
@@ -90,7 +89,6 @@ public class TenantConverter {
         protected void bind() {
             bind(dtoProto.incomes(), dboProto.version().incomes());
             bind(dtoProto.assets(), dboProto.version().assets());
-            bind(dtoProto.equifaxApproval(), dboProto.version().equifaxApproval());
         }
     }
 }

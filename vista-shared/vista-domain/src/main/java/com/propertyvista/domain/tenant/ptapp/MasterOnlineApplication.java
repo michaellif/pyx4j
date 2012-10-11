@@ -35,7 +35,6 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
-import com.propertyvista.misc.EquifaxApproval;
 
 public interface MasterOnlineApplication extends IEntity {
 
@@ -77,7 +76,4 @@ public interface MasterOnlineApplication extends IEntity {
 
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createDate();
-
-    @Deprecated
-    EquifaxApproval equifaxApproval();
 }

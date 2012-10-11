@@ -43,7 +43,6 @@ import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.tenant.PersonScreening.PersonScreeningV;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
-import com.propertyvista.misc.EquifaxApproval;
 
 @DiscriminatorValue("PersonScreening")
 public interface PersonScreening extends IVersionedEntity<PersonScreeningV>, ApplicationDocumentHolder<IdentificationDocument> {
@@ -97,11 +96,5 @@ public interface PersonScreening extends IVersionedEntity<PersonScreeningV>, App
         @Detached
         @Length(3)
         IList<PersonalAsset> assets();
-
-        //=============== Approval =============//
-
-        @Deprecated
-        EquifaxApproval equifaxApproval();
-
     }
 }
