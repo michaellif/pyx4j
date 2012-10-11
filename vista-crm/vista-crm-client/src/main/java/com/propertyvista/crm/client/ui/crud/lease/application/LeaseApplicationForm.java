@@ -111,19 +111,24 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         FormFlexPanel main = new FormFlexPanel(i18n.tr("Approval"));
 
         int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Information"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().status(), new CEnumLabel()), 15).build());
 //        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().decidedBy()), 25).build());
 //        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().decisionDate()), 9).build());
 //        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().decisionReason()), 40).build());
+
         main.setHR(++row, 0, 1);
-
         main.setBR(++row, 0, 1);
-        main.setH1(++row, 0, 1, i18n.tr("Equifax check results"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().equifaxApproval().percenrtageApproved()), 5).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().equifaxApproval().suggestedDecision()), 25).build());
 
+        main.setH1(++row, 0, 1, i18n.tr("Credit Check Results"));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApproval().percenrtageApproved()), 5).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApproval().totalAmountApproved()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApproval().rentAmount()), 10).build());
         main.setBR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApproval().suggestedDecision()), 40).build());
+
+        main.setHR(++row, 0, 1);
+        main.setBR(++row, 0, 1);
+
         main.setWidget(++row, 0, inject(proto().leaseApproval().participants(), new TenantApprovalFolder(false)));
 
         return main;

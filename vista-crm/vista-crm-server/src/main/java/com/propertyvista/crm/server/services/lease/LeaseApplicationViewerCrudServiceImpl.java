@@ -110,12 +110,12 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         {
             LeaseApprovalParticipantDTO approval = EntityFactory.create(LeaseApprovalParticipantDTO.class);
             approval.leaseParticipant().set(leaseParticipant.duplicate());
-            approval.leaseParticipant().setAttachLevel(AttachLevel.ToStringMembers);
 
             EntityQueryCriteria<PersonCreditCheck> criteria = EntityQueryCriteria.create(PersonCreditCheck.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().screening().screene(), leaseParticipant.leaseCustomer().customer()));
             criteria.desc(criteria.proto().creditCheckDate());
             approval.creditCheck().set(Persistence.service().retrieve(criteria));
+
             dto.leaseApproval().participants().add(approval);
         }
 

@@ -13,23 +13,33 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.security.InvalidParameterException;
 
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.IsWidget;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.CEntityHyperlink;
+import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
+import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.person.Person;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.PersonCreditCheck.CreditCheckResult;
+import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApprovalParticipantDTO;
-import com.propertyvista.misc.EquifaxResult;
 
-public class TenantApprovalFolder extends VistaTableFolder<LeaseApprovalParticipantDTO> {
+public class TenantApprovalFolder extends VistaBoxFolder<LeaseApprovalParticipantDTO> {
 
     private static final I18n i18n = I18n.get(TenantApprovalFolder.class);
 
@@ -38,23 +48,81 @@ public class TenantApprovalFolder extends VistaTableFolder<LeaseApprovalParticip
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().person(), "20em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().equifaxApproval().percenrtageApproved(), "5em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().equifaxApproval().suggestedDecision(), "25em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().equifaxApproval().checkResultDetails(), "10em"));
-        return columns;
-    }
-
-    @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member.getValueClass().equals(EquifaxResult.class)) {
-            //TODO::
-            return new CEntityCrudHyperlink<EquifaxResult>(AppPlaceEntityMapper.resolvePlace(EquifaxResult.class));
-        } else if (member.getValueClass().equals(Person.class)) {
-            return new CEntityLabel<Person>();
+        if (member instanceof LeaseApprovalParticipantDTO) {
+            return new LeaseApprovalParticipantViewer();
         }
         return super.create(member);
+    }
+
+    private class LeaseApprovalParticipantViewer extends CEntityDecoratableForm<LeaseApprovalParticipantDTO> {
+
+        public LeaseApprovalParticipantViewer() {
+            super(LeaseApprovalParticipantDTO.class);
+            setEditable(false);
+            setViewable(true);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            FormFlexPanel main = new FormFlexPanel();
+
+            FormFlexPanel left = new FormFlexPanel();
+            int row = -1;
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().leaseCustomer().participantId()), 7).build());
+            left.setWidget(
+                    ++row,
+                    0,
+                    new DecoratorBuilder(inject(proto().leaseParticipant().leaseCustomer().customer().person(), new CEntityHyperlink<LeaseParticipant<?>>(null,
+                            new Command() {
+                                @Override
+                                public void execute() {
+                                    AppSite.getPlaceController().goTo(getTargetPlace());
+                                }
+
+                                private AppPlace getTargetPlace() {
+                                    if (getValue().leaseParticipant().isInstanceOf(Tenant.class)) {
+                                        return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().leaseParticipant().getPrimaryKey());
+                                    } else if (getValue().leaseParticipant().isInstanceOf(Guarantor.class)) {
+                                        return AppPlaceEntityMapper.resolvePlace(Guarantor.class, getValue().leaseParticipant().getPrimaryKey());
+                                    } else {
+                                        throw new InvalidParameterException("Incorrect LeaseParticipant value!");
+                                    }
+                                }
+                            })), 20).build());
+
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().role()), 15).build());
+
+            FormFlexPanel right = new FormFlexPanel();
+            row = -1;
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckResult()), 10).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().declineReason()), 20).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().amountApproved()), 10).build());
+
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckDate()), 10).build());
+            right.setWidget(
+                    ++row,
+                    0,
+                    new DecoratorBuilder(inject(proto().creditCheck().screening(),
+                            new CEntityCrudHyperlink<PersonScreening>(AppPlaceEntityMapper.resolvePlace(PersonScreening.class))), 10).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckReport(), new CLabel<Key>()), 10).build());
+
+            // assemble main panel:
+            main.setWidget(0, 0, left);
+            main.setWidget(0, 1, right);
+
+            main.getColumnFormatter().setWidth(0, "30%");
+            main.getColumnFormatter().setWidth(1, "70%");
+
+            return main;
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+
+            get(proto().creditCheck().amountApproved()).setVisible(getValue().creditCheck().creditCheckResult().getValue() == CreditCheckResult.Accept);
+            get(proto().creditCheck().declineReason()).setVisible(getValue().creditCheck().creditCheckResult().getValue() != CreditCheckResult.Accept);
+        }
     }
 }

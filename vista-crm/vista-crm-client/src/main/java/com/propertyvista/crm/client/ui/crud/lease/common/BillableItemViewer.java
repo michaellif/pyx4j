@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
+import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -85,7 +86,7 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
                     Feature feature = ((Feature.FeatureV) getValue().item().product().cast()).holder();
                     return AppPlaceEntityMapper.resolvePlace(Feature.class, feature.getPrimaryKey());
                 } else {
-                    return null;
+                    throw new InvalidParameterException("Incorrect Product value!");
                 }
             }
         })), 25).build());
