@@ -15,9 +15,15 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import java.text.ParseException;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.i18n.shared.I18n;
+
+import com.propertyvista.domain.util.ValidationUtils;
 
 public class PostalCodeFormat implements IFormat<String> {
+
+    private static final I18n i18n = I18n.get(PostalCodeFormat.class);
 
     /** returns country name in English converted to lower case */
     interface ICountryContextProvider {
@@ -34,11 +40,15 @@ public class PostalCodeFormat implements IFormat<String> {
 
     @Override
     public String format(String value) {
+        if (value == null) {
+            return null;
+        }
+
         String country = countryContextProvider.getCountry();
         String formattedValue;
 
         if ("canada".equals(country)) {
-            String trimmed = value.replaceAll("\\s", "");
+            String trimmed = removeWhitespace(value);
             if (trimmed.length() == 6) {
                 formattedValue = (trimmed.substring(0, 3) + " " + trimmed.substring(3, 6)).toUpperCase();
             } else {
@@ -52,7 +62,26 @@ public class PostalCodeFormat implements IFormat<String> {
 
     @Override
     public String parse(String postalCode) throws ParseException {
-        return postalCode;
+        if (CommonsStringUtils.isEmpty(postalCode)) {
+            return null;
+        }
+
+        String country = countryContextProvider.getCountry();
+
+        String unformattedPostalCode = postalCode;
+        if ("canada".equals(country)) {
+            unformattedPostalCode = removeWhitespace(unformattedPostalCode);
+            if (!ValidationUtils.isCanadianPostalCodeValid(unformattedPostalCode)) {
+                // TODO there already should be a an attached validator so this is redundant and in case of wrong format the field will complain about "field is empty"
+                // throw new ParseException(i18n.tr("Canadian postal code must have ANA NAN format (A - alphabetic character, N - numeric character)"), 0);
+            }
+        }
+
+        return format(unformattedPostalCode);
+    }
+
+    private static String removeWhitespace(String str) {
+        return str.replaceAll("\\s", "");
     }
 
 }
