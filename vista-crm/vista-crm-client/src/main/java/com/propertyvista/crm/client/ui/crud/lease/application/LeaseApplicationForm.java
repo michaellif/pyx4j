@@ -129,7 +129,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         main.setHR(++row, 0, 1);
         main.setBR(++row, 0, 1);
 
-        main.setWidget(++row, 0, inject(proto().leaseApproval().participants(), new TenantApprovalFolder(false)));
+        main.setWidget(++row, 0, inject(proto().leaseApproval().participants(), new LeaseParticipanApprovalFolder(false)));
 
         return main;
     }

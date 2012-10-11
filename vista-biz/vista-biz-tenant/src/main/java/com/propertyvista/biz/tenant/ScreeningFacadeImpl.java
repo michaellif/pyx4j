@@ -34,7 +34,7 @@ import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApprovalDTO;
 import com.propertyvista.dto.LeaseApprovalDTO.SuggestedDecision;
-import com.propertyvista.dto.LeaseApprovalParticipantDTO;
+import com.propertyvista.dto.LeaseParticipanApprovalDTO;
 import com.propertyvista.equifax.EquifaxCreditCheck;
 
 public class ScreeningFacadeImpl implements ScreeningFacade {
@@ -49,7 +49,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         BigDecimal amountApproved = BigDecimal.ZERO;
         int noCreditCheckCount = 0;
 
-        for (LeaseApprovalParticipantDTO participant : leaseApproval.participants()) {
+        for (LeaseParticipanApprovalDTO participant : leaseApproval.participants()) {
             if (participant.creditCheck().isNull()) {
                 noCreditCheckCount++;
                 continue;

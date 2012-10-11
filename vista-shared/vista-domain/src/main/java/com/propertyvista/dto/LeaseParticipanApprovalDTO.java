@@ -22,7 +22,7 @@ import com.propertyvista.domain.tenant.PersonCreditCheck;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 @Transient
-public interface LeaseApprovalParticipantDTO extends IEntity {
+public interface LeaseParticipanApprovalDTO extends IEntity {
 
     @SuppressWarnings("rawtypes")
     @Detached(level = AttachLevel.ToStringMembers)

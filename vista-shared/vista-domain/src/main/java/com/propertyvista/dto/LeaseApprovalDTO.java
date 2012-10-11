@@ -60,5 +60,5 @@ public interface LeaseApprovalDTO extends IEntity {
 
     IPrimitive<SuggestedDecision> suggestedDecision();
 
-    IList<LeaseApprovalParticipantDTO> participants();
+    IList<LeaseParticipanApprovalDTO> participants();
 }

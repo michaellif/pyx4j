@@ -43,7 +43,7 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
-import com.propertyvista.dto.LeaseApprovalParticipantDTO;
+import com.propertyvista.dto.LeaseParticipanApprovalDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
@@ -102,7 +102,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
         // approval data
         {
-            LeaseApprovalParticipantDTO approval = EntityFactory.create(LeaseApprovalParticipantDTO.class);
+            LeaseParticipanApprovalDTO approval = EntityFactory.create(LeaseParticipanApprovalDTO.class);
             approval.leaseParticipant().set(leaseParticipant.duplicate());
 
             EntityQueryCriteria<PersonCreditCheck> criteria = EntityQueryCriteria.create(PersonCreditCheck.class);

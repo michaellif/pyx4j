@@ -35,28 +35,28 @@ import com.propertyvista.domain.tenant.PersonCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.dto.LeaseApprovalParticipantDTO;
+import com.propertyvista.dto.LeaseParticipanApprovalDTO;
 
-public class TenantApprovalFolder extends VistaBoxFolder<LeaseApprovalParticipantDTO> {
+public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipanApprovalDTO> {
 
-    private static final I18n i18n = I18n.get(TenantApprovalFolder.class);
+    private static final I18n i18n = I18n.get(LeaseParticipanApprovalFolder.class);
 
-    public TenantApprovalFolder(boolean modifyable) {
-        super(LeaseApprovalParticipantDTO.class, modifyable);
+    public LeaseParticipanApprovalFolder(boolean modifyable) {
+        super(LeaseParticipanApprovalDTO.class, modifyable);
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof LeaseApprovalParticipantDTO) {
-            return new LeaseApprovalParticipantViewer();
+        if (member instanceof LeaseParticipanApprovalDTO) {
+            return new LeaseParticipanApprovalViewer();
         }
         return super.create(member);
     }
 
-    private class LeaseApprovalParticipantViewer extends CEntityDecoratableForm<LeaseApprovalParticipantDTO> {
+    private class LeaseParticipanApprovalViewer extends CEntityDecoratableForm<LeaseParticipanApprovalDTO> {
 
-        public LeaseApprovalParticipantViewer() {
-            super(LeaseApprovalParticipantDTO.class);
+        public LeaseParticipanApprovalViewer() {
+            super(LeaseParticipanApprovalDTO.class);
             setEditable(false);
             setViewable(true);
         }
