@@ -56,7 +56,8 @@
     <properties>
         <gwtModule>portal</gwtModule>
         <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
-        <gwtDestinationWarFolder>${basedir}/../../vista-server/src/main/webapp</gwtDestinationWarFolder>
+        <warFolder>${basedir}/../../vista-server/src/main/webapp</warFolder>
+        <gwtDestinationWarFolder>${warFolder}/portal</gwtDestinationWarFolder>
     </properties>
 
     <profiles>
@@ -80,8 +81,8 @@
                             <module>${gwtModuleCompile}</module>
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
-                            <webappDirectory>${gwtDestinationWarFolder}/portal</webappDirectory>
-                            <deploy>${gwtDestinationWarFolder}/WEB-INF/deploy</deploy>
+                            <webappDirectory>${gwtDestinationWarFolder}</webappDirectory>
+                            <deploy>${warFolder}/WEB-INF/deploy</deploy>
                             <generated>${project.build.directory}/gwt-generated</generated>
                             <extra>${project.build.directory}/gwt-extra</extra>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
