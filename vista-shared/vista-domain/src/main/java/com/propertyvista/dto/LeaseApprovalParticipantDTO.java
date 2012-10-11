@@ -13,17 +13,28 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.tenant.PersonCreditCheck;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.misc.EquifaxApproval;
 
 @Transient
 public interface LeaseApprovalParticipantDTO extends IEntity {
 
+    @Deprecated
     Person person();
 
+    @Deprecated
     EquifaxApproval equifaxApproval();
 
+    @SuppressWarnings("rawtypes")
+    @Detached(level = AttachLevel.ToStringMembers)
+    LeaseParticipant leaseParticipant();
+
+    PersonCreditCheck creditCheck();
 }

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.lease;
 
+import java.math.BigDecimal;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -23,6 +24,8 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -34,10 +37,12 @@ import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudServic
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.PersonCreditCheck;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
+import com.propertyvista.dto.LeaseApprovalDTO.SuggestedDecision;
 import com.propertyvista.dto.LeaseApprovalParticipantDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
@@ -58,33 +63,63 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         enhanceRetrievedCommon(in, dto);
 
         for (Tenant tenantId : dto.currentTerm().version().tenants()) {
-            Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
-            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(tenant, AttachLevel.Attached);
 
-            {
-                Persistence.service().retrieve(tenant.leaseCustomer().customer().emergencyContacts());
-                TenantInfoDTO tenantInfoDTO = new TenantConverter.Tenant2TenantInfo().createDTO(tenant);
-                new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tenant.effectiveScreening(), tenantInfoDTO);
-                dto.tenantInfo().add(tenantInfoDTO);
+            Tenant tenant = (Tenant) loadLeaseParticipant(dto, tenantId);
+            // TODO This should be removed and function loadLeaseParticipant used.
+            if (true) {
+                {
+                    Persistence.service().retrieve(tenant.leaseCustomer().customer().emergencyContacts());
+                    TenantInfoDTO tenantInfoDTO = new TenantConverter.Tenant2TenantInfo().createDTO(tenant);
+                    new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tenant.effectiveScreening(), tenantInfoDTO);
+                    dto.tenantInfo().add(tenantInfoDTO);
+                }
+
+                {
+                    TenantFinancialDTO tenantFinancial = new TenantConverter.TenantFinancialEditorConverter().createDTO(tenant.effectiveScreening());
+                    tenantFinancial.person().set(tenant.leaseCustomer().customer().person());
+                    dto.tenantFinancials().add(tenantFinancial);
+                }
             }
 
-            {
-                TenantFinancialDTO tenantFinancial = new TenantConverter.TenantFinancialEditorConverter().createDTO(tenant.effectiveScreening());
-                tenantFinancial.person().set(tenant.leaseCustomer().customer().person());
-                dto.tenantFinancials().add(tenantFinancial);
-            }
+        }
 
-            {
-                LeaseApprovalParticipantDTO approval = EntityFactory.create(LeaseApprovalParticipantDTO.class);
-                approval.person().set(tenant.leaseCustomer().customer().person());
+        for (Guarantor guarantorId : dto.currentTerm().version().guarantors()) {
+            loadLeaseParticipant(dto, guarantorId);
+        }
 
-                approval.equifaxApproval().set(tenant.effectiveScreening().version().equifaxApproval());
-                dto.leaseApproval().participants().add(approval);
-            }
+        // TODO move to ScreeningFacade
+        {
+            dto.leaseApproval().rentAmount().setValue(BigDecimal.valueOf(1000));
+
+            dto.leaseApproval().suggestedDecision().setValue(SuggestedDecision.RequestInfo);
+            dto.leaseApproval().totalAmountApproved().setValue(BigDecimal.valueOf(500));
+            dto.leaseApproval().percenrtageApproved().setValue(50.0);
         }
 
         dto.masterApplicationStatus().set(
                 ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(dto.leaseApplication().onlineApplication()));
+    }
+
+    private LeaseParticipant<?> loadLeaseParticipant(LeaseApplicationDTO dto, LeaseParticipant<?> leaseParticipantId) {
+        LeaseParticipant<?> leaseParticipant = (LeaseParticipant<?>) Persistence.service().retrieve(leaseParticipantId.getValueClass(),
+                leaseParticipantId.getPrimaryKey());
+
+        LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(leaseParticipant, AttachLevel.Attached);
+
+        // approval data
+        {
+            LeaseApprovalParticipantDTO approval = EntityFactory.create(LeaseApprovalParticipantDTO.class);
+            approval.leaseParticipant().set(leaseParticipant.duplicate());
+            approval.leaseParticipant().setAttachLevel(AttachLevel.ToStringMembers);
+
+            EntityQueryCriteria<PersonCreditCheck> criteria = EntityQueryCriteria.create(PersonCreditCheck.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().screening().screene(), leaseParticipant.leaseCustomer().customer()));
+            criteria.desc(criteria.proto().creditCheckDate());
+            approval.creditCheck().set(Persistence.service().retrieve(criteria));
+            dto.leaseApproval().participants().add(approval);
+        }
+
+        return leaseParticipant;
     }
 
     @Override

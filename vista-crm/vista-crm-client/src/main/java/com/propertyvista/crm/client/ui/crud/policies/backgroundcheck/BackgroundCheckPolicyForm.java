@@ -45,10 +45,10 @@ public class BackgroundCheckPolicyForm extends PolicyDTOTabPanelBasedForm<Backgr
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("Policy"));
         int row = -1;
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankruptcy()), 5).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().judgment()), 5).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().collection()), 5).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeOff()), 5).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().bankruptcy()), 5).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().judgment()), 5).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().collection()), 5).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().chargeOff()), 5).build());
 
         return panel;
     }

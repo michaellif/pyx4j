@@ -19,6 +19,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.misc.EquifaxApproval.Decision;
 
+@Deprecated
 public interface EquifaxResult extends IEntity {
 
     @ToString

@@ -16,7 +16,9 @@ package com.propertyvista.domain.policy.policies;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -47,17 +49,24 @@ public interface BackgroundCheckPolicy extends Policy {
         }
     }
 
-    @NotNull
-    IPrimitive<BjccEntry> bankruptcy();
+    interface BackgroundCheckPolicyV extends IEntity {
 
-    @NotNull
-    IPrimitive<BjccEntry> judgment();
+        @NotNull
+        IPrimitive<BjccEntry> bankruptcy();
 
-    @NotNull
-    IPrimitive<BjccEntry> collection();
+        @NotNull
+        IPrimitive<BjccEntry> judgment();
 
-    @NotNull
-    IPrimitive<BjccEntry> chargeOff();
+        @NotNull
+        IPrimitive<BjccEntry> collection();
+
+        @NotNull
+        IPrimitive<BjccEntry> chargeOff();
+
+    }
+
+    @Owned
+    BackgroundCheckPolicy.BackgroundCheckPolicyV version();
 
     IPrimitive<Integer> strategyNumber();
 }

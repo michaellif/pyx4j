@@ -23,6 +23,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+@Deprecated
 public interface EquifaxApproval extends IEntity {
 
     @I18n

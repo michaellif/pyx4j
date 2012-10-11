@@ -29,8 +29,10 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 
@@ -53,6 +55,10 @@ public interface PersonScreening extends IVersionedEntity<PersonScreeningV>, App
     @Detached
     @JoinColumn
     Customer screene();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<PersonCreditCheck> creditChecks();
 
     public interface PersonScreeningV extends IVersionData<PersonScreening> {
 

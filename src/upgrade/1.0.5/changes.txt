@@ -50,3 +50,8 @@ VISTA-1964,VISTA-1922 	27/09/2012 22:59:12  vlads
 
 VISTA-2023 28/09/2012  michael
 Use IPersonalIdentity instead TokenizedAccountNumber, TokenizedCreditCardNumber
+
+
+VISTA-478 11/10/2012  vlads
+   Not final! Work in progress: Changes to BackgroundCheckPolicy, BackgroundCheckPolicyV, PersonCreditCheck
+   rm: EquifaxApproval, EquifaxResult

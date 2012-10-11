@@ -13,12 +13,50 @@
  */
 package com.propertyvista.dto;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 @Transient
 public interface LeaseApprovalDTO extends IEntity {
+
+    @I18n
+    public enum SuggestedDecision {
+
+        RunCreditCheck,
+
+        Approve,
+
+        @Translate("Request for Guarantor or further information")
+        RequestInfo,
+
+        Decline;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    @Format("#0.00")
+    IPrimitive<BigDecimal> rentAmount();
+
+    @Format("#0.00")
+    IPrimitive<BigDecimal> totalAmountApproved();
+
+    @Format("#0.00")
+    @Caption(name = "% Rent Approved")
+    IPrimitive<Double> percenrtageApproved();
+
+    IPrimitive<SuggestedDecision> suggestedDecision();
 
     IList<LeaseApprovalParticipantDTO> participants();
 }

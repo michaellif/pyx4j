@@ -37,7 +37,10 @@ import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.media.ProofOfEmploymentDocument;
+import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy.BjccEntry;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.tenant.PersonCreditCheck;
+import com.propertyvista.domain.tenant.PersonCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
@@ -79,6 +82,8 @@ public class ScreeningGenerator {
         // Assets
         int minAssets = (screening.version().incomes().size() == 0) ? 1 : 0;
         screening.version().assets().addAll(createAssets(minAssets));
+
+        screening.creditChecks().addAll(createPersonCreditCheck());
 
         return screening;
     }
@@ -204,6 +209,37 @@ public class ScreeningGenerator {
             assets.add(asset);
         }
         return assets;
+    }
+
+    private Collection<PersonCreditCheck> createPersonCreditCheck() {
+        List<PersonCreditCheck> list = new ArrayList<PersonCreditCheck>();
+        for (int i = 0; i < RandomUtil.randomInt(2); i++) {
+            PersonCreditCheck pcc = EntityFactory.create(PersonCreditCheck.class);
+
+            pcc.creditCheckDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
+
+            pcc.backgroundCheckPolicy().bankruptcy().setValue(RandomUtil.randomEnum(BjccEntry.class));
+            pcc.backgroundCheckPolicy().judgment().setValue(RandomUtil.randomEnum(BjccEntry.class));
+            pcc.backgroundCheckPolicy().collection().setValue(RandomUtil.randomEnum(BjccEntry.class));
+            pcc.backgroundCheckPolicy().chargeOff().setValue(RandomUtil.randomEnum(BjccEntry.class));
+
+            pcc.amountCheked().setValue(BigDecimal.valueOf(500 + RandomUtil.randomDouble(500)));
+
+            pcc.creditCheckResult().setValue(RandomUtil.randomEnum(CreditCheckResult.class));
+
+            switch (pcc.creditCheckResult().getValue()) {
+            case Accept:
+                pcc.amountApproved().setValue(BigDecimal.valueOf(pcc.amountCheked().getValue().doubleValue() - RandomUtil.randomDouble(500)));
+                break;
+            case Decline:
+            case SoftDecline:
+                pcc.declineReason().setValue(CommonsGenerator.lipsumShort());
+                break;
+            }
+
+            list.add(pcc);
+        }
+        return list;
     }
 
     private IdentificationDocument createIdentificationDocument() {

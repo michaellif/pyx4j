@@ -29,10 +29,10 @@ public class BackgroundCheckPolicyPreloader extends AbstractPolicyPreloader<Back
     protected BackgroundCheckPolicy createPolicy(StringBuilder log) {
         BackgroundCheckPolicy policy = EntityFactory.create(BackgroundCheckPolicy.class);
 
-        policy.bankruptcy().setValue(BjccEntry.m12);
-        policy.judgment().setValue(BjccEntry.m12);
-        policy.collection().setValue(BjccEntry.m12);
-        policy.chargeOff().setValue(BjccEntry.m12);
+        policy.version().bankruptcy().setValue(BjccEntry.m12);
+        policy.version().judgment().setValue(BjccEntry.m12);
+        policy.version().collection().setValue(BjccEntry.m12);
+        policy.version().chargeOff().setValue(BjccEntry.m12);
 
         return policy;
     }
