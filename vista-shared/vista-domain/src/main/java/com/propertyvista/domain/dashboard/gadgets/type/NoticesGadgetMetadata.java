@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
@@ -23,8 +24,8 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("Notices Gadget")
 @Transient
+@Caption(name = "Notices")
 @GadgetDescription(//@formatter:off
-        name = "Notices",
         description = "Display the number of notices grouped by move-out date, and lets view their details",
         keywords = { "Leases", "Notices" },
         allowedBehaviors = {

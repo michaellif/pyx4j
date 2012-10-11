@@ -26,9 +26,6 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 public @interface GadgetDescription {
 
     @I18n
-    String name() default "";
-
-    @I18n
     String description() default "";
 
     @I18n

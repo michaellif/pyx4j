@@ -89,7 +89,7 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
                     ) {//@formatter:on
                 GadgetMetadata proto = EntityFactory.getEntityPrototype(gadgetMetadataClass);
                 descriptors.add(new GadgetDescriptorDTO(//@formatter:off
-                        i18n.translate(null, gadgetDescription.name()),
+                        i18n.translate(null, proto.getEntityMeta().getCaption()),
                         i18n.translate(null, gadgetDescription.description()),
                         translate(null, gadgetDescription.keywords()),
                         proto

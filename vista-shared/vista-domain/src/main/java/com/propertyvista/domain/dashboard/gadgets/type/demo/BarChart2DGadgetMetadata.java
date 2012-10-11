@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type.demo;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
@@ -22,8 +23,8 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("BarChart2D")
 @Transient
-@GadgetDescription(//@formatter:off
-        name = "Bar Chart 2D Demo",
+@Caption(name = "Bar Chart 2D Demo")
+@GadgetDescription(//@formatter:off        
         description = "Demo that displays a 2D Bar Chart",
         keywords = {"Demo", "Chart"},
         allowedBehaviors = {

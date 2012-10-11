@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
@@ -22,8 +23,8 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("BuildingLister")
 @Transient
+@Caption(name = "Listing of Buildings")
 @GadgetDescription(//@formatter:off
-        name = "Listing of Buildings",
         description = "Table-list-like gadget which displays building data according to prefered rules. Query and display data can be set up",
         keywords = "Buildings",
         allowedBehaviors = {

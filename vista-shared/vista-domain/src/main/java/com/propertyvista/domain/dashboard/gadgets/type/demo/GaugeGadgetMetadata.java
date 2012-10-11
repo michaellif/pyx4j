@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type.demo;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
@@ -22,8 +23,8 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("Gauge")
 @Transient
+@Caption(name = "Gauge Chart Demo")
 @GadgetDescription(//@formatter:off
-        name = "Gauge Chart Demo",
         description = "Demo of a gauge based gadget",
         keywords = {"Demo", "Chart" },
         allowedBehaviors = {

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitiveSet;
@@ -26,8 +27,8 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("PaymentsSummaryGadgetMetadata")
 @Transient
-@GadgetDescription(//@formatter:off
-        name = "Payment Records Summary",
+@Caption(name = "Payment Records Summary")
+@GadgetDescription(//@formatter:off        
         description = "Displays payments aggregated by merchant account",
         keywords = { "Payments", "Collections", "Money"},
         allowedBehaviors = {

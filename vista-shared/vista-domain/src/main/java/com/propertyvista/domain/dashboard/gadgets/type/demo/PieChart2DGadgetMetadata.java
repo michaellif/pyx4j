@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type.demo;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
@@ -22,8 +23,8 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("PieChart2D")
 @Transient
-@GadgetDescription(//@formatter:off
-        name = "Pie Chart 2D",        
+@Caption(name = "Pie Chart 2D")
+@GadgetDescription(//@formatter:off      
         description = "Demo of a pie chart based gadget.",
         keywords = { "Demo", "Chart" },
         allowedBehaviors = {

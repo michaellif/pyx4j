@@ -152,7 +152,7 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
         } else {
             AccessDeniedGagetMetadata accessDenied = EntityFactory.create(AccessDeniedGagetMetadata.class);
             accessDenied.gadgetId().setValue(gm.gadgetId().getValue());
-            accessDenied.gadgetName().setValue(i18n.translate(null, description.name()));
+            accessDenied.gadgetName().setValue(i18n.translate(null, accessDenied.getEntityMeta().getCaption()));
             return accessDenied;
         }
 

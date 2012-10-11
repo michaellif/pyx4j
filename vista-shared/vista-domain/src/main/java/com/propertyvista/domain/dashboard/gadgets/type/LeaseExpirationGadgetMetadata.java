@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
@@ -23,8 +24,8 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("Lease Expiration Gadget")
 @Transient
+@Caption(name = "Lease Expiration")
 @GadgetDescription(//@formatter:off
-        name = "Lease Expiration",
         description = "Displays summary of leases that about to expire grouped by expiration date.",
         keywords = { "Leases" },
         allowedBehaviors = {

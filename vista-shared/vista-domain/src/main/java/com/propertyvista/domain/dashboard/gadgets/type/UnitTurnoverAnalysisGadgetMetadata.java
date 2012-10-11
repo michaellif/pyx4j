@@ -27,9 +27,8 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("TurnoverAnalysisSettings")
 @Transient
-@Caption(name = "Turnover Analysis")
+@Caption(name = "Unit Turnover Analysis")
 @GadgetDescription(//@formatter:off
-        name = "Unit Turnover Analysis",
         description = "A graph that visually demonstrates the turnover rate in either percentage or quantity over the course of multiple years",
         keywords = { "Units", "Chart", "Turnover", "Availability", "Occupancy" },
         allowedBehaviors = {

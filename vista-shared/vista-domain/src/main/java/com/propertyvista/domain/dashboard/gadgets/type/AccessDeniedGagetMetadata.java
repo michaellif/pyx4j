@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -20,7 +21,8 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 @Transient
-@GadgetDescription(name = "Access Denied", description = "access denied gadget", keywords = { "forbidden" })
+@Caption(name = "Access Denied")
+@GadgetDescription(description = "access denied gadget", keywords = { "forbidden" })
 /** This is metadata of a special gadget that should be displayed to user in case he's not allowed to access a gadget */
 public interface AccessDeniedGagetMetadata extends GadgetMetadata {
 

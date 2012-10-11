@@ -24,11 +24,10 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
-@Caption(name = "Arrears YOY Analysis Chart")
 @DiscriminatorValue("ArrearsYOYAnalysisChartMetadata")
 @Transient
+@Caption(name = "Arrears YOY Analysis Chart")
 @GadgetDescription(//@formatter:off
-        name = "Arrears YOY Analysis Chart",
         description = "A graph that visually demonstrates the arrear balance each month over the course of multiple years", 
         keywords = {"Arrears", "Chart" },
         allowedBehaviors = {

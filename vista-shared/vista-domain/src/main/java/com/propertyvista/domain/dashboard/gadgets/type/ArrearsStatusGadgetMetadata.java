@@ -33,8 +33,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 @DiscriminatorValue("ArrearsGadgetMeta")
 @Transient
 @Caption(name = "Arrears Status")
-@GadgetDescription(//@formatter:off
-        name = "Arrears Status",
+@GadgetDescription(//@formatter:off        
         description = "Shows the information about lease arrears, including how long it is overdue, total balance, legal status information etc. This gadget can either show total arrears or arrears of specific type (i.e. rent, parking or other)",
         keywords = "Arrears",
         allowedBehaviors = {

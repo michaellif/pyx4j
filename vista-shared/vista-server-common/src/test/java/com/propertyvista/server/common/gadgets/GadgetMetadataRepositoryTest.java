@@ -15,6 +15,7 @@ package com.propertyvista.server.common.gadgets;
 
 import java.util.UUID;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -102,8 +103,9 @@ public class GadgetMetadataRepositoryTest extends GadgetMetadataRepositoryTestBa
                             return "is not annotated with '" + GadgetDescription.class.getSimpleName() + "'";
                         }
                         String error = "";
-                        if (d.name().equals("")) {
-                            error += "doesn't have a name; ";
+                        Caption caption = klass.getAnnotation(Caption.class);
+                        if (caption == null || caption.name().equals("")) {
+                            error += "doesn't have a name (name must be set via @" + Caption.class.getSimpleName() + ";";
                         }
                         if (d.description().equals("")) {
                             // TODO maybe worth to add some kind of spell check?

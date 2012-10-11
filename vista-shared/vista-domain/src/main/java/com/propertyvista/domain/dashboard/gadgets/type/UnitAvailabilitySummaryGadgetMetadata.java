@@ -27,7 +27,6 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 @Transient
 @Caption(name = "Unit Availability Summary")
 @GadgetDescription(//@formatter:off
-        name = "Unit Availability Summary",
         description = "Shows a summary of information about all units, including the total number of units, vacancy, notice and net exposure information in both percentages and quantity",
         keywords = {"Units", "Availability", "Occupancy", "Vacancy"},
         allowedBehaviors = {

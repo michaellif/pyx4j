@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
@@ -23,10 +24,10 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("Arrears Gadget Metadata")
 @Transient
-@GadgetDescription(//@formatter:off
-        name = "Arrears",
+@Caption(name = "Arrears")
+@GadgetDescription(//@formatter:off       
         description = "Displays arrears. Can be configured to display different categories of arrears",
-        keywords = { "Arrears" },
+        keywords = { "Arrears", "Collections" },
         allowedBehaviors = {
                 VistaCrmBehavior.PropertyManagement,
                 VistaCrmBehavior.Mechanicals,

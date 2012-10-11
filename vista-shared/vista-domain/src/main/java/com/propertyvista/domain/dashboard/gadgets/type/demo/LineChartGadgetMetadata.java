@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type.demo;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
@@ -22,8 +23,8 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("LineChart")
 @Transient
-@GadgetDescription(//@formatter:off
-        name = "Line Chart Demo",
+@Caption(name = "Line Chart Demo")
+@GadgetDescription(//@formatter:off       
         description = "Demo of a Line Chart gadget",
         keywords = { "Demo", "Chart" },
         allowedBehaviors = {

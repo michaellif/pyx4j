@@ -14,6 +14,7 @@
 package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -29,8 +30,8 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("PaymentRecordsGadgetMetadata")
 @Transient
+@Caption(name = "Payment Records")
 @GadgetDescription(//@formatter:off
-        name = "Payment Records",
         description = "Displays payment records that changed today.",
         keywords = { "Payments", "Collections", "Money"},
         allowedBehaviors = {

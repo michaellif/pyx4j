@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type.demo;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
@@ -22,8 +23,8 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("DemoCounterGadget")
 @Transient
-@GadgetDescription(//@formatter:off
-        name = "Counter Gadget Demo",
+@Caption(name = "Counter Gadget Demo")
+@GadgetDescription(//@formatter:off        
         description = "A gadget that displays counters and allows to zoom-in into details",
         keywords = {"Demo"},
         allowedBehaviors = {

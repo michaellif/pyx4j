@@ -26,7 +26,6 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 @Transient
 @Caption(name = "Maintenance - Work Orders")
 @GadgetDescription(//@formatter:off        
-        name = "Maintenance - Work Orders",
         description = "Displays summary of maintenance orders grouped by priorty and lets to view details of grouped orders",
         keywords = { "Maintenance", "Work Orders" },
         allowedBehaviors = {

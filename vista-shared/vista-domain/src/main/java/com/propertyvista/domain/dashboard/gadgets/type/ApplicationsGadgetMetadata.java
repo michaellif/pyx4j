@@ -26,8 +26,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 @Transient
 @Caption(name = "Applications")
 @GadgetDescription(//@formatter:off
-        name = "Applications",
-        description = "TBD",
+        description = "Displays summary of applications",
         keywords = { "Applications" },
         allowedBehaviors = {                               
                 VistaCrmBehavior.Tenants,
