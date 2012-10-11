@@ -117,7 +117,7 @@ public class NamingConventionOracle implements NamingConvention {
         } else {
             nameConverted = makeName(name, true);
             if (nameConverted.length() > maximumLength) {
-                throw new Error("Can't make name '" + nameConverted + "' shorter");
+                throw new Error("Can't make name '" + name + "' -> '" + nameConverted + "'(" + nameConverted.length() + ") shorter then " + maximumLength);
             }
             return nameConverted;
         }
