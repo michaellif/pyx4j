@@ -245,10 +245,12 @@ BEGIN
         -- dashboard_metadata
         EXECUTE 'ALTER TABLE '||v_schema_name||'.dashboard_metadata DROP COLUMN is_favorite,'||
                                 'DROP COLUMN layout_type,'||
-                                'ADD COLUMN encoded_layout VARCHAR(500)';
-       EXECUTE 'ALTER TABLE '||v_schema_name||'.dashboard_metadata RENAME COLUMN user_id TO owner_user_id';
+                                'ADD COLUMN encoded_layout VARCHAR(500),'||
+                                'DROP CONSTRAINT dashboard_metadata_user_id_fk ';
+                                
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.dashboard_metadata RENAME COLUMN user_id TO owner_user_id';
        
-        -- test of _dba_.exec_sql function
+       
         EXECUTE 'TRUNCATE TABLE '||v_schema_name||'.dashboard_metadata';
         
         EXECUTE 'ALTER TABLE '||v_schema_name||'.dashboard_metadata '||
@@ -327,15 +329,30 @@ BEGIN
         EXECUTE 'CREATE INDEX invoice_adjustment_sub_line_item_line_itemdiscriminator_idx ON '||v_schema_name||'.invoice_adjustment_sub_line_item '||
         'USING btree (line_itemdiscriminator) ';
 
+        EXECUTE 'UPDATE '||v_schema_name||'.invoice_adjustment_sub_line_item AS a '||
+                'SET    line_itemdiscriminator = b.iddiscriminator '||
+                'FROM   '||v_schema_name||'.billing_invoice_line_item AS b '||
+                'WHERE  a.line_item = b.id ';
+                
         -- invoice_charge_sub_line_item
         EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_charge_sub_line_item ADD COLUMN line_itemdiscriminator VARCHAR(50)';
         EXECUTE 'CREATE INDEX  invoice_charge_sub_line_item_line_itemdiscriminator_idx ON '||v_schema_name||'.invoice_charge_sub_line_item '||
         'USING btree (line_itemdiscriminator) ';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.invoice_charge_sub_line_item AS a '||
+                'SET    line_itemdiscriminator = b.iddiscriminator '||
+                'FROM   '||v_schema_name||'.billing_invoice_line_item AS b '||
+                'WHERE  a.line_item = b.id ';
 
         -- invoice_concession_sub_line_item
         EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_concession_sub_line_item ADD COLUMN line_itemdiscriminator VARCHAR(50)';
         EXECUTE 'CREATE INDEX  invoice_concession_sub_line_item_line_itemdiscriminator_idx ON '||v_schema_name||'.invoice_concession_sub_line_item '||
         'USING btree (line_itemdiscriminator) ';
+        
+         EXECUTE 'UPDATE '||v_schema_name||'.invoice_concession_sub_line_item AS a '||
+                'SET    line_itemdiscriminator = b.iddiscriminator '||
+                'FROM   '||v_schema_name||'.billing_invoice_line_item AS b '||
+                'WHERE  a.line_item = b.id ';
 
         -- lead
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lead ADD COLUMN lead_id_s VARCHAR(26)';
@@ -345,8 +362,10 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_application DROP COLUMN lease_on_application,'||
                                     'DROP COLUMN lease_on_application_for';
         -- legal_questions
-
+        
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions DROP CONSTRAINT legal_questions_pk CASCADE';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions RENAME TO person_screening_legal_questions';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_legal_questions ADD CONSTRAINT person_screening_legal_questions_pk PRIMARY KEY(id) ';
 
         -- master_online_application
         EXECUTE 'ALTER TABLE '||v_schema_name||'.master_online_application ADD COLUMN online_application_id_s VARCHAR(26)';
@@ -392,7 +411,13 @@ BEGIN
 
         --  notes_and_attachments$notes -- drop
         SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'notes_and_attachments$notes',FALSE);
-
+        
+        -- payment_information 
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_information DROP COLUMN payment_method_phone ';
+        
+        -- payment_method
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_method DROP COLUMN phone ';
+        
         -- payment_payment_details
 
 
@@ -403,17 +428,43 @@ BEGIN
                                         'ALTER COLUMN card_obfuscated_number TYPE VARCHAR(16)';
 
         EXECUTE 'UPDATE '||v_schema_name||'.payment_payment_details '||
-        '   SET     account_no_obfuscated_number = LPAD(account_no_obfuscated_number,12,''X''),
-                card_obfuscated_number = LPAD(card_obfuscated_number,16,''X'') ';
+        '   SET     account_no_obfuscated_number = LPAD(account_no_obfuscated_number,12,''X''),'||
+        '       card_obfuscated_number = LPAD(card_obfuscated_number,16,''X'') ';
 
-        -- personal_income - bye-bye
-
-        -- SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'personal_income',FALSE);
+        -- personal_income - just in case rename to person_screening_personal_income
+        
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.personal_income DROP CONSTRAINT IF EXISTS personal_income_pk,'||
+                                                'DROP CONSTRAINT IF EXISTS personal_income_employer_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS personal_income_other_income_information_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS personal_income_owner_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS personal_income_seasonally_employed_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS personal_income_self_employed_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS personal_income_social_services_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS personal_income_student_income_fk';
+                                                
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.personal_income RENAME TO person_screening_personal_income';
+        
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income DROP COLUMN other_income_information,'||
+                                                'DROP COLUMN employer,'||
+                                                'DROP COLUMN self_employed,'||
+                                                'DROP COLUMN seasonally_employed,'||
+                                                'DROP COLUMN social_services,'||
+                                                'DROP COLUMN student_income';
+        
+                                              
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ADD COLUMN detailsdiscriminator VARCHAR(50),'||
+                                                'ADD COLUMN details BIGINT';
+        
+                                                                                             
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ADD CONSTRAINT  person_screening_personal_income_pk PRIMARY KEY(id),'||
+        'ADD CONSTRAINT person_screening_personal_income_details_fk FOREIGN KEY(details) REFERENCES '||v_schema_name||'.income_info(id)' ;         
+        
 
         -- person_screening
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening '||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_pk CASCADE,'||
-                                                'DROP CONSTRAINT IF EXISTS person_screening_pkey CASCADE,'||            -- Very special case for pangroup
+                                                'DROP CONSTRAINT IF EXISTS person_screening_pkey CASCADE,'||                    -- Very special case for pangroup
                                                 'DROP CONSTRAINT IF EXISTS person_screening_current_address_country_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_current_address_province_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_equifax_approval_fk,'||
@@ -421,16 +472,38 @@ BEGIN
                                                 'DROP CONSTRAINT IF EXISTS person_screening_previous_address_country_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_previous_address_province_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_screene_fk';
-
+        
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening RENAME TO person_screening_v';
-
+        
         EXECUTE 'CREATE TABLE '||v_schema_name||'.person_screening ( '||
                 '       id              BIGINT          NOT NULL,'||
                 '       screene         BIGINT,'||
                 '       CONSTRAINT person_screening_pk PRIMARY KEY(id),'||
                 '       CONSTRAINT person_screening_screene_fk FOREIGN KEY(screene) REFERENCES '||v_schema_name||'.customer(id))';
+               
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening OWNER TO vista';    
+        
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_v ADD COLUMN created_by_user_key BIGINT,'||
+                                                                'ADD COLUMN from_date TIMESTAMP,'||
+                                                                'ADD COLUMN to_date TIMESTAMP,'||
+                                                                'ADD COLUMN holder BIGINT,'||
+                                                                'ADD COLUMN Version_number INT,'||
+                                                                'DROP COLUMN screene,'||
+                        'ADD CONSTRAINT person_screening_v_pk PRIMARY KEY(id),'|| 
+                        'ADD CONSTRAINT person_screening_v_current_address_country_fk FOREIGN KEY(current_address_country) REFERENCES '||v_schema_name||'.country(id),'||
+                        'ADD CONSTRAINT person_screening_v_current_address_province_fk FOREIGN KEY(current_address_province) REFERENCES '||v_schema_name||'.province(id),'||
+                        'ADD CONSTRAINT person_screening_v_equifax_approval_fk FOREIGN KEY(equifax_approval) REFERENCES '||v_schema_name||'.equifax_approval(id),'|| 
+                        'ADD CONSTRAINT person_screening_v_holder_fk FOREIGN KEY(holder) REFERENCES '||v_schema_name||'.person_screening(id),'|| 
+                        'ADD CONSTRAINT person_screening_v_legal_questions_fk FOREIGN KEY(legal_questions) REFERENCES '||v_schema_name||'.person_screening_legal_questions(id),'||
+                        'ADD CONSTRAINT person_screening_v_previous_address_country_fk FOREIGN KEY(previous_address_country) REFERENCES '||v_schema_name||'.country(id),'|| 
+                        'ADD CONSTRAINT person_screening_v_previous_address_province_fk FOREIGN KEY(previous_address_province) REFERENCES '||v_schema_name||'.province(id)';
+        
+        EXECUTE 'CREATE INDEX person_screening_v_holder_from_date_to_date_idx ON '||v_schema_name||'.person_screening_v USING btree(holder, from_date, to_date)';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening OWNER TO vista';
+        /*
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income '||
+        'ADD CONSTRAINT person_screening_personal_income_owner_fk FOREIGN KEY(owner) REFERENCES '||v_schema_name||'.person_screening_v(id)';
+        */
 
         -- reports_settings_holder
         EXECUTE 'CREATE TABLE '||v_schema_name||'.reports_settings_holder ('||
@@ -444,7 +517,6 @@ BEGIN
         v_schema_name||'.reports_settings_holder USING btree (class_name, identifier_key)';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.reports_settings_holder OWNER TO vista';
-
 
         -- tenant_charge
         EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge ADD COLUMN tenantdiscriminator VARCHAR(50)';
@@ -544,8 +616,9 @@ BEGIN
                 '      FROM '||v_schema_name||'.product a '||
                 '      JOIN '||v_schema_name||'.product_v b ON (a.id = b.holder)) AS b '||
                 'WHERE a.holder = b.id';
-
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ALTER COLUMN holderdiscriminator SET NOT NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.product_v '||
+                'SET visibility = ''global'' ';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ADD CONSTRAINT product_v_holder_fk FOREIGN KEY(holder) REFERENCES '||v_schema_name||'.product(id)';
 
@@ -979,6 +1052,93 @@ BEGIN
             SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,v_table_name,TRUE);
 
         END LOOP;
+        
+                
+        
+        /**
+        ***     ======================================================================================
+        ***
+        ***             Set NOT NULL constraints
+        ***
+        ***     ======================================================================================
+        **/
+        
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.application_wizard_substep ALTER COLUMN step SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.appointment ALTER COLUMN lead SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit ALTER COLUMN building SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit_item ALTER COLUMN apt_unit SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit_occupancy_segment ALTER COLUMN unit SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billable_item_adjustment ALTER COLUMN billable_item SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_bill ALTER COLUMN billing_account SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle ALTER COLUMN building SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_debit_credit_link ALTER COLUMN credit_item SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_debit_credit_link ALTER COLUMN credit_itemdiscriminator SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_invoice_line_item ALTER COLUMN billing_account SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.boiler ALTER COLUMN building SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.building_amenity ALTER COLUMN building SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.building_merchant_account ALTER COLUMN building SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.concession ALTER COLUMN catalog SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.concession_v ALTER COLUMN holder SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_accepted_terms ALTER COLUMN customer SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.deposit_policy_item ALTER COLUMN policy SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.elevator ALTER COLUMN building SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.email_template ALTER COLUMN policy SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.emergency_contact ALTER COLUMN customer SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.floorplan ALTER COLUMN building SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.floorplan_amenity ALTER COLUMN floorplan SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.gl_code ALTER COLUMN gl_code_category SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.id_assignment_item ALTER COLUMN policy SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.identification_document_type ALTER COLUMN policy SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_adjustment_sub_line_item ALTER COLUMN line_item SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_adjustment_sub_line_item ALTER COLUMN line_itemdiscriminator SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_charge_sub_line_item ALTER COLUMN line_item SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_charge_sub_line_item ALTER COLUMN line_itemdiscriminator SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_concession_sub_line_item ALTER COLUMN line_item SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_concession_sub_line_item ALTER COLUMN line_itemdiscriminator SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.issue_classification ALTER COLUMN subject_details SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.issue_repair_subject ALTER COLUMN issue_element SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.issue_subject_details ALTER COLUMN subject SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.late_fee_item ALTER COLUMN policy SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lead_guest ALTER COLUMN lead SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_adjustment_policy_item ALTER COLUMN policy SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_customer ALTER COLUMN customer SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_customer ALTER COLUMN lease SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ALTER COLUMN lease_customer SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ALTER COLUMN lease_customerdiscriminator SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ALTER COLUMN lease_term_v SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term ALTER COLUMN lease SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_v ALTER COLUMN holder SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.locker ALTER COLUMN locker_area SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.locker_area ALTER COLUMN building SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request ALTER COLUMN lease_customer SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request ALTER COLUMN lease_customerdiscriminator SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.nsf_fee_item ALTER COLUMN policy SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.online_application ALTER COLUMN master_online_application SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.page_content ALTER COLUMN descriptor SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.page_descriptor ALTER COLUMN parent SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.page_descriptor ALTER COLUMN parentdiscriminator SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.parking ALTER COLUMN building SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.parking_spot ALTER COLUMN parking SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_information ALTER COLUMN payment_method_customer SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_method ALTER COLUMN customer SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record ALTER COLUMN billing_account SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record_processing ALTER COLUMN payment_record SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening ALTER COLUMN screene SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_asset ALTER COLUMN owner SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ALTER COLUMN owner SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_v ALTER COLUMN holder SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product ALTER COLUMN catalog SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product_catalog ALTER COLUMN building SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product_item ALTER COLUMN product SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product_item ALTER COLUMN productdiscriminator SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product_tax_policy_item ALTER COLUMN policy SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ALTER COLUMN holder SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ALTER COLUMN holderdiscriminator SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.roof ALTER COLUMN building SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.roof_segment ALTER COLUMN roof SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.showing ALTER COLUMN appointment SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.unit_turnover_stats ALTER COLUMN building SET NOT NULL' ;     
+               
 
     END LOOP;
     
