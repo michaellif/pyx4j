@@ -186,9 +186,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         assert !currentValue.lease().unit().isNull();
 
-        if (currentValue.lease().unit().building().isValueDetached()) {
-            Persistence.service().retrieve(currentValue.lease().unit().building());
-        }
+        Persistence.ensureRetrieve(currentValue.lease().unit().building(), AttachLevel.Attached);
 
         Building building = currentValue.lease().unit().building();
         if (building == null || building.isNull()) {
@@ -235,9 +233,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     private void fillserviceItems(LeaseTermDTO currentValue) {
         currentValue.selectedServiceItems().clear();
 
-        if (currentValue.lease().unit().building().isValueDetached()) {
-            Persistence.service().retrieve(currentValue.lease().unit().building());
-        }
+        Persistence.ensureRetrieve(currentValue.lease().unit().building(), AttachLevel.Attached);
 
         EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), currentValue.lease().unit().building().productCatalog()));

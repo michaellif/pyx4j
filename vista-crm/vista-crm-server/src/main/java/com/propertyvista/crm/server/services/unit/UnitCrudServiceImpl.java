@@ -75,14 +75,14 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         retrieveServicePrices(dto);
 
         // check unit catalog/lease readiness:
-        {
+        if (retrieveTraget == RetrieveTraget.View) {
             EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().type(), ServiceItemType.class));
             criteria.add(PropertyCriterion.eq(criteria.proto().element(), in));
             dto.isPresentInCatalog().setValue(Persistence.service().exists(criteria));
-        }
 
-        dto.isAvailableForExistingLease().setValue(ServerSideFactory.create(OccupancyFacade.class).isAvailableForExistingLease(in.getPrimaryKey()));
+            dto.isAvailableForExistingLease().setValue(ServerSideFactory.create(OccupancyFacade.class).isAvailableForExistingLease(in.getPrimaryKey()));
+        }
     }
 
     @Override

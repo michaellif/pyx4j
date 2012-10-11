@@ -67,11 +67,17 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         Persistence.service().retrieve(dto.contacts().organizationContacts());
         Persistence.service().retrieve(dto.marketing().adBlurbs());
 
-        retrieveDashboards(dto);
+        if (retrieveTraget == RetrieveTraget.View) {
+            EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.building));
+            dto.dashboards().addAll(Persistence.secureQuery(criteria, AttachLevel.ToStringMembers));
+        }
 
-        EntityQueryCriteria<FeatureItemType> featureItemCriteria = EntityQueryCriteria.create(FeatureItemType.class);
-        featureItemCriteria.add(PropertyCriterion.in(featureItemCriteria.proto().featureType(), Feature.Type.addOn, Feature.Type.utility));
-        dto.availableUtilities().addAll(Persistence.service().query(featureItemCriteria));
+        if (retrieveTraget == RetrieveTraget.Edit) {
+            EntityQueryCriteria<FeatureItemType> featureItemCriteria = EntityQueryCriteria.create(FeatureItemType.class);
+            featureItemCriteria.add(PropertyCriterion.in(featureItemCriteria.proto().featureType(), Feature.Type.addOn, Feature.Type.utility));
+            dto.availableUtilities().addAll(Persistence.service().query(featureItemCriteria));
+        }
 
         // Geotagging:
         dto.geoLocation().set(EntityFactory.create(GeoLocation.class));
@@ -149,11 +155,4 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         Persistence.service().merge(dbo);
         PublicDataUpdater.updateIndexData(dbo);
     }
-
-    private void retrieveDashboards(BuildingDTO dto) {
-        EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.building));
-        dto.dashboards().addAll(Persistence.secureQuery(criteria, AttachLevel.ToStringMembers));
-    }
-
 }

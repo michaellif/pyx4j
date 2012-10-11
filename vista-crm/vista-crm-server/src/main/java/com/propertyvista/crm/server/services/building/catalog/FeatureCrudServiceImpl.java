@@ -39,7 +39,6 @@ public class FeatureCrudServiceImpl extends AbstractVersionedCrudServiceImpl<Fea
          * catalog retrieving is necessary for building element filtering by catalog().building() in @link FeatureItemEditor
          */
         Persistence.service().retrieve(dto.catalog());
-
         Persistence.service().retrieve(dto.version().items());
         // next level:
         for (ProductItem item : dto.version().items()) {

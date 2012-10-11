@@ -19,7 +19,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -49,7 +48,6 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
     protected void enhanceRetrieved(Tenant entity, TenantDTO dto, RetrieveTraget retrieveTraget) {
         // load detached data:
         Persistence.service().retrieve(dto.leaseTermV());
-        Persistence.service().retrieve(dto.leaseTermV().holder(), AttachLevel.ToStringMembers);
         Persistence.service().retrieve(dto.leaseCustomer().customer().emergencyContacts());
 
         LeaseParticipantUtils.retrieveCustomerScreeningPointer(dto.leaseCustomer().customer());
@@ -77,7 +75,6 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
     @Override
     protected void enhanceListRetrieved(Tenant entity, TenantDTO dto) {
         Persistence.service().retrieve(dto.leaseTermV());
-        Persistence.service().retrieve(dto.leaseTermV().holder(), AttachLevel.ToStringMembers);
     }
 
     @Override

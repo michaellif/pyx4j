@@ -59,21 +59,19 @@ public class ComplexCrudServiceImpl extends AbstractCrudServiceDtoImpl<Complex, 
     @Override
     protected void enhanceRetrieved(Complex entity, ComplexDTO dto, RetrieveTraget retrieveTraget) {
         // add dashboards
-        {
+        if (retrieveTraget == RetrieveTraget.View) {
             EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.building));
             dto.dashboards().addAll(Persistence.secureQuery(criteria, AttachLevel.ToStringMembers));
         }
 
-        {
-            // fill transient data:
-            // TODO use Persistence.service().retrieve(in.buildings(), new BuildingBinder());
-            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().complex(), entity));
-            criteria.asc(criteria.proto().orderInComplex());
-            for (Building building : Persistence.service().query(criteria)) {
-                dto.buildings().add(new BuildingBinder().createDTO(building));
-            }
+        // fill transient data:
+        // TODO use Persistence.service().retrieve(in.buildings(), new BuildingBinder());
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().complex(), entity));
+        criteria.asc(criteria.proto().orderInComplex());
+        for (Building building : Persistence.service().query(criteria)) {
+            dto.buildings().add(new BuildingBinder().createDTO(building));
         }
     }
 
