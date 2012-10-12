@@ -28,8 +28,13 @@ public interface ScreeningFacade {
 
     void runCreditCheck(BigDecimal rentAmount, LeaseParticipant<?> leaseParticipantId);
 
-    /*
+    /**
      * Retrieve draft if there are no final version
      */
     PersonScreening retrivePersonScreeningFinalOrDraft(Customer customerId, AttachLevel attachLevel);
+
+    /**
+     * Find if Draft exists, if not find final version
+     */
+    PersonScreening retrivePersonScreeningDraftOrFinal(Customer customerId, AttachLevel attachLevel);
 }

@@ -138,7 +138,6 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
 
     @Override
     public PersonScreening retrivePersonScreeningFinalOrDraft(Customer customerId, AttachLevel attachLevel) {
-        attachLevel = AttachLevel.Attached;
         EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customerId));
         criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
@@ -147,6 +146,20 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
             return screening;
         }
         criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
+        screening = Persistence.service().retrieve(criteria, attachLevel);
+        return screening;
+    }
+
+    @Override
+    public PersonScreening retrivePersonScreeningDraftOrFinal(Customer customerId, AttachLevel attachLevel) {
+        EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customerId));
+        criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
+        PersonScreening screening = Persistence.service().retrieve(criteria, attachLevel);
+        if (screening != null) {
+            return screening;
+        }
+        criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
         screening = Persistence.service().retrieve(criteria, attachLevel);
         return screening;
     }

@@ -18,6 +18,7 @@ import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.dto.TenantInfoDTO;
@@ -36,6 +37,20 @@ public class TenantConverter {
             bind(dtoProto.relationship(), dboProto.relationship());
             bind(dtoProto.role(), dboProto.role());
             bind(dtoProto.takeOwnership(), dboProto.takeOwnership());
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static class LeaseParticipant2TenantInfo extends EntityDtoBinder<LeaseParticipant, TenantInfoDTO> {
+
+        public LeaseParticipant2TenantInfo() {
+            super(LeaseParticipant.class, TenantInfoDTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            bind(dtoProto.person(), dboProto.leaseCustomer().customer().person());
+            bind(dtoProto.emergencyContacts(), dboProto.leaseCustomer().customer().emergencyContacts());
         }
     }
 

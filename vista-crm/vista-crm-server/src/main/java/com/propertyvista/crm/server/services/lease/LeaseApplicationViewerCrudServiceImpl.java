@@ -63,24 +63,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         enhanceRetrievedCommon(in, dto);
 
         for (Tenant tenantId : dto.currentTerm().version().tenants()) {
-
-            Tenant tenant = (Tenant) loadLeaseParticipant(dto, tenantId);
-            // TODO This should be removed and function loadLeaseParticipant used.
-            if (true) {
-                {
-                    Persistence.service().retrieve(tenant.leaseCustomer().customer().emergencyContacts());
-                    TenantInfoDTO tenantInfoDTO = new TenantConverter.Tenant2TenantInfo().createDTO(tenant);
-                    new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tenant.effectiveScreening(), tenantInfoDTO);
-                    dto.tenantInfo().add(tenantInfoDTO);
-                }
-
-                {
-                    TenantFinancialDTO tenantFinancial = new TenantConverter.TenantFinancialEditorConverter().createDTO(tenant.effectiveScreening());
-                    tenantFinancial.person().set(tenant.leaseCustomer().customer().person());
-                    dto.tenantFinancials().add(tenantFinancial);
-                }
-            }
-
+            loadLeaseParticipant(dto, tenantId);
         }
 
         for (Guarantor guarantorId : dto.currentTerm().version().guarantors()) {
@@ -94,11 +77,24 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
                 ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(dto.leaseApplication().onlineApplication()));
     }
 
-    private LeaseParticipant<?> loadLeaseParticipant(LeaseApplicationDTO dto, LeaseParticipant<?> leaseParticipantId) {
+    private void loadLeaseParticipant(LeaseApplicationDTO dto, LeaseParticipant<?> leaseParticipantId) {
         LeaseParticipant<?> leaseParticipant = (LeaseParticipant<?>) Persistence.service().retrieve(leaseParticipantId.getValueClass(),
                 leaseParticipantId.getPrimaryKey());
 
         LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(leaseParticipant, AttachLevel.Attached);
+
+        {
+            Persistence.service().retrieve(leaseParticipant.leaseCustomer().customer().emergencyContacts());
+            TenantInfoDTO tenantInfoDTO = new TenantConverter.LeaseParticipant2TenantInfo().createDTO(leaseParticipant);
+            new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(leaseParticipant.effectiveScreening(), tenantInfoDTO);
+            dto.tenantInfo().add(tenantInfoDTO);
+        }
+
+        {
+            TenantFinancialDTO tenantFinancial = new TenantConverter.TenantFinancialEditorConverter().createDTO(leaseParticipant.effectiveScreening());
+            tenantFinancial.person().set(leaseParticipant.leaseCustomer().customer().person());
+            dto.tenantFinancials().add(tenantFinancial);
+        }
 
         // approval data
         {
@@ -118,8 +114,6 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
             dto.leaseApproval().participants().add(approval);
         }
-
-        return leaseParticipant;
     }
 
     @Override

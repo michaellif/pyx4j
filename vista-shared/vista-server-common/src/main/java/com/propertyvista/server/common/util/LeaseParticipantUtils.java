@@ -20,7 +20,6 @@ import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public class LeaseParticipantUtils {
@@ -33,21 +32,10 @@ public class LeaseParticipantUtils {
 
     public static void retrieveLeaseTermEffectiveScreening(LeaseParticipant<?> leaseParticipant, AttachLevel attachLevel) {
         if (VersionedEntityUtils.isDraft(leaseParticipant.leaseTermV())) {
-            // Take customer's Screening.
-            Persistence.service().retrieveMember(leaseParticipant.leaseCustomer().customer().personScreening(), AttachLevel.IdOnly);
-            PersonScreening personScreening = leaseParticipant.leaseCustomer().customer().personScreening();
-            if (!personScreening.isNull()) {
-                // Find if Draft exists, retrieve pointer to it
-                PersonScreening draft = Persistence.service().retrieve(PersonScreening.class, personScreening.getPrimaryKey().asDraftKey(), AttachLevel.IdOnly);
-                if (draft != null) {
-                    leaseParticipant.effectiveScreening().set(draft);
-                } else {
-                    leaseParticipant.effectiveScreening().set(personScreening);
-                }
-                if (!leaseParticipant.effectiveScreening().isNull()) {
-                    Persistence.service().retrieve(leaseParticipant.effectiveScreening(), attachLevel);
-                }
-            }
+            // Take customer's Screening, Prefers draft version.
+            leaseParticipant.effectiveScreening().set(
+                    ServerSideFactory.create(ScreeningFacade.class)
+                            .retrivePersonScreeningFinalOrDraft(leaseParticipant.leaseCustomer().customer(), attachLevel));
         } else {
             leaseParticipant.effectiveScreening().set(leaseParticipant.screening());
             if (!leaseParticipant.effectiveScreening().isNull()) {
