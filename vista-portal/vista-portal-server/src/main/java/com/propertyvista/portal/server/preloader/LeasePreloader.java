@@ -162,7 +162,9 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 mainTenant.leaseCustomer().customer().set(dualPotentialCustomer);
             }
 
-            Persistence.service().setTransactionSystemTime(lease.currentTerm().termFrom().getValue());
+            if (lease.currentTerm().termFrom().getValue().before(new Date())) {
+                Persistence.service().setTransactionSystemTime(lease.currentTerm().termFrom().getValue());
+            }
             ServerSideFactory.create(LeaseFacade.class).persist(lease);
             for (Tenant tenant : lease.currentTerm().version().tenants()) {
                 tenant.leaseCustomer().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
