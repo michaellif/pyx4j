@@ -574,86 +574,54 @@ $$
 LANGUAGE SQL VOLATILE;
 
 /**
-***	---------------------------------------------------------------------
+***	-----------------------------------------------------------------------
+***
 ***		Compares schema table constraints
-***		This function works only with regular 1-to-1 constraints,
-***		which is mostly the sort used in crm. Many-to-many constraints
-***		used only in quartz tables in public schema.
-***	----------------------------------------------------------------------
+***		New and improved version, now works on primary and foreign keys
+***		as well as check constraints.
+***		
+***	------------------------------------------------------------------------
 **/
-
+DROP FUNCTION _dba_.compare_schema_constraints(text,text);
 CREATE OR REPLACE FUNCTION _dba_.compare_schema_constraints(text,text)
-RETURNS TABLE (	constraint_name 	pg_catalog.name,
-		constraint_type 	CHAR(1),
-		table_name 		pg_catalog.name,
-		ref_table_name		pg_catalog.name,
-		column_name		pg_catalog.name,
-		ref_column_name		pg_catalog.name,
-		schema_version		VARCHAR(64)) AS
+RETURNS TABLE (	constraint_name         pg_catalog.name,
+                constraint_type         CHAR(1),
+                table_name              pg_catalog.name,
+                ref_table_name          pg_catalog.name,
+                column_name             TEXT,
+                ref_column_name         TEXT,
+                constraint_text         TEXT,
+                schema_version          VARCHAR(64)) AS
 $$
-	SELECT a.*,$2 AS schema_version
-	FROM
-		(SELECT 	a.conname AS constraint_name,
-				a.contype::char AS constraint_type,
-				b.relname AS table_name,
-				c.relname AS ref_table_name,
-				d.attname AS column_name,
-				e.attname AS ref_column_name
-		FROM    pg_constraint a
-        	JOIN 	pg_class b ON (a.conrelid = b.oid)
-        	JOIN 	pg_class c ON (a.confrelid = c.oid)
-        	JOIN 	pg_attribute d ON (a.conrelid = d.attrelid AND array_to_string(a.conkey,' ')::integer = d.attnum)
-        	JOIN 	pg_attribute e ON (a.confrelid = e.attrelid AND array_to_string(a.confkey,' ')::integer = e.attnum)
-        	JOIN 	pg_namespace f ON (a.connamespace = f.oid)
-		WHERE   f.nspname = $2
-		AND	(array_length(a.conkey,1) = 1 AND array_length(a.confkey,1) = 1)
-		EXCEPT
-		SELECT 		a.conname AS constraint_name,
-				a.contype::char AS constraint_type,
-				b.relname AS table_name,
-				c.relname AS ref_table_name,
-				d.attname AS column_name,
-				e.attname AS ref_column_name
-		FROM    pg_constraint a
-        	JOIN 	pg_class b ON (a.conrelid = b.oid)
-        	JOIN 	pg_class c ON (a.confrelid = c.oid)
-        	JOIN 	pg_attribute d ON (a.conrelid = d.attrelid AND array_to_string(a.conkey,' ')::integer = d.attnum)
-        	JOIN 	pg_attribute e ON (a.confrelid = e.attrelid AND array_to_string(a.confkey,' ')::integer = e.attnum)
-        	JOIN 	pg_namespace f ON (a.connamespace = f.oid)
-		WHERE   f.nspname = $1
-		AND	(array_length(a.conkey,1) = 1 AND array_length(a.confkey,1) = 1)) AS a
-	UNION
-	SELECT a.*,$1 AS schema_version
-	FROM
-		(SELECT 	a.conname AS constraint_name,
-				a.contype::char AS constraint_type,
-				b.relname AS table_name,
-				c.relname AS ref_table_name,
-				d.attname AS column_name,
-				e.attname AS ref_column_name
-		FROM    pg_constraint a
-        	JOIN 	pg_class b ON (a.conrelid = b.oid)
-        	JOIN 	pg_class c ON (a.confrelid = c.oid)
-        	JOIN 	pg_attribute d ON (a.conrelid = d.attrelid AND array_to_string(a.conkey,' ')::integer = d.attnum)
-        	JOIN 	pg_attribute e ON (a.confrelid = e.attrelid AND array_to_string(a.confkey,' ')::integer = e.attnum)
-        	JOIN 	pg_namespace f ON (a.connamespace = f.oid)
-		WHERE   f.nspname = $1
-		AND	(array_length(a.conkey,1) = 1 AND array_length(a.confkey,1) = 1)
-		EXCEPT
-		SELECT 	a.conname AS constraint_name,
-				a.contype::char AS constraint_type,
-				b.relname AS table_name,
-				c.relname AS ref_table_name,
-				d.attname AS column_name,
-				e.attname AS ref_column_name
-		FROM    pg_constraint a
-        	JOIN 	pg_class b ON (a.conrelid = b.oid)
-        	JOIN 	pg_class c ON (a.confrelid = c.oid)
-        	JOIN 	pg_attribute d ON (a.conrelid = d.attrelid AND array_to_string(a.conkey,' ')::integer = d.attnum)
-        	JOIN 	pg_attribute e ON (a.confrelid = e.attrelid AND array_to_string(a.confkey,' ')::integer = e.attnum)
-        	JOIN 	pg_namespace f ON (a.connamespace = f.oid)
-		WHERE   f.nspname = $2
-		AND	(array_length(a.conkey,1) = 1 AND array_length(a.confkey,1) = 1)) AS a;
+        WITH t AS (     SELECT 	a.conname AS constraint_name,
+	                        a.contype::char AS constraint_type,
+	                        b.relname AS table_name,
+		                c.relname AS ref_table_name,
+		                d.colname AS column_name,
+        		        e.ref_colname AS ref_column_name,
+        		        a.consrc AS constraint_text,
+        		        f.nspname AS schema_name
+	                FROM            pg_constraint a
+                        JOIN 	        pg_class b ON (a.conrelid = b.oid)
+                        LEFT JOIN 	pg_class c ON (a.confrelid = c.oid)
+                        JOIN 	        (SELECT a.oid,array_to_string(array_agg(b.attname),',') AS colname
+                                        FROM    (SELECT oid,conrelid,unnest(conkey) AS conkey FROM pg_constraint) AS a
+                                        JOIN    pg_attribute b ON (a.conrelid = b.attrelid AND a.conkey = b.attnum) 
+                                        GROUP BY a.oid) AS d ON (a.oid = d.oid)
+                        LEFT JOIN       (SELECT a.oid,array_to_string(array_agg(b.attname),',') AS ref_colname
+                                        FROM    (SELECT oid,confrelid,unnest(confkey) AS confkey FROM pg_constraint) AS a
+                                        LEFT JOIN    pg_attribute b ON (a.confrelid = b.attrelid AND a.confkey = b.attnum) 
+                                        GROUP BY a.oid) AS e ON (a.oid = e.oid)
+                        JOIN 	pg_namespace f ON (a.connamespace = f.oid) )
+        SELECT a.*,$1 AS schema_name FROM 
+        (SELECT constraint_name,constraint_type,table_name,ref_table_name,column_name,ref_column_name,constraint_text FROM t WHERE  schema_name = $1       
+        EXCEPT 
+        SELECT constraint_name,constraint_type,table_name,ref_table_name,column_name,ref_column_name,constraint_text FROM t WHERE schema_name = $2) AS a
+        UNION
+        SELECT a.*,$2 AS schema_name FROM 
+        (SELECT constraint_name,constraint_type,table_name,ref_table_name,column_name,ref_column_name,constraint_text FROM t WHERE  schema_name = $2     
+        EXCEPT 
+        SELECT constraint_name,constraint_type,table_name,ref_table_name,column_name,ref_column_name,constraint_text FROM t WHERE schema_name = $1) AS a;
 $$
 LANGUAGE SQL VOLATILE;
 

@@ -34,7 +34,7 @@ ALTER TABLE admin_pmc_equifax_info
 
 SET search_path = 'public';
 
--- Remove sequences for tables to be deleted - 53 in total
+-- Remove sequences for tables to be deleted - 55 in total
 
 DROP SEQUENCE arrears_status_gadget_metadata$column_descriptors_seq;
 DROP SEQUENCE arrears_status_gadget_metadata_seq;
@@ -51,6 +51,8 @@ DROP SEQUENCE demo_demo_seq;
 DROP SEQUENCE demo_gauge_seq;
 DROP SEQUENCE demo_line_chart_seq;
 DROP SEQUENCE demo_pie_chart2_d_seq;
+DROP SEQUENCE equifax_approval_seq;
+DROP SEQUENCE equifax_result_seq;
 DROP SEQUENCE feature_seq;
 DROP SEQUENCE feature_v_seq;
 DROP SEQUENCE gadget_docking_meta_seq;
@@ -90,8 +92,9 @@ DROP SEQUENCE unit_availability_gadget_meta_seq;
 DROP SEQUENCE unit_availability_summary_gmeta$column_descriptors_seq;
 DROP SEQUENCE unit_availability_summary_gmeta_seq;
 
--- Create new sequences - 17 total
-
+-- Create new sequences - 19 total
+CREATE SEQUENCE background_check_policy_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ALTER SEQUENCE background_check_policy_v_seq OWNER TO vista;
 CREATE SEQUENCE gadget_metadata_holder_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE gadget_metadata_holder_seq OWNER TO vista;
 CREATE SEQUENCE income_info_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -110,6 +113,8 @@ CREATE SEQUENCE lease_term_vlease_products$feature_items_seq START WITH 1 INCREM
 ALTER SEQUENCE lease_term_vlease_products$feature_items_seq OWNER TO vista;
 CREATE SEQUENCE notes_and_attachments$attachments_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE notes_and_attachments$attachments_seq OWNER TO vista;
+CREATE SEQUENCE person_credit_check_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ALTER SEQUENCE person_credit_check_seq OWNER TO vista;
 CREATE SEQUENCE person_screening_legal_questions_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE person_screening_legal_questions_seq OWNER TO vista;
 CREATE SEQUENCE person_screening_personal_income_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -126,6 +131,9 @@ CREATE SEQUENCE product_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALU
 ALTER SEQUENCE product_v_seq OWNER TO vista;
 CREATE SEQUENCE reports_settings_holder_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE reports_settings_holder_seq OWNER TO vista;
+
+--  _c3p0_connection_test is not used anymore
+DROP TABLE  _c3p0_connection_test; 
 
 /**
 *** For the rest of migration plpsql function is required
@@ -210,8 +218,15 @@ BEGIN
         -- apt_unit table
         EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit ADD COLUMN info_number_s VARCHAR(32), DROP COLUMN notes_and_attachments';
         EXECUTE 'UPDATE '||v_schema_name||'.apt_unit SET info_number_s = _dba_.convert_id_to_string(info_unit_number)';
+        
+        -- billing_arrears_snapshot 
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_arrears_snapshot ADD CONSTRAINT billing_arrears_snapshot_billing_account_ck '||
+        'CHECK (((iddiscriminator = ''LeaseArrearsSnapshot'') AND (billing_account IS NOT NULL)) OR ((iddiscriminator != ''LeaseArrearsSnapshot'') AND (billing_account IS NULL))),'||
+        'ADD CONSTRAINT billing_arrears_snapshot_building_ck CHECK (((iddiscriminator = ''BuildingArrearsSnapshot'') AND (building IS NOT NULL)) '||
+        'OR ((iddiscriminator != ''BuildingArrearsSnapshot'') AND (building IS NULL)))';
 
-        -- billing_bill
+ 
+         -- billing_bill
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_bill DROP COLUMN lease_for';
 
         -- billing_debit_credit_link
@@ -360,7 +375,8 @@ BEGIN
 
         -- lease_application
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_application DROP COLUMN lease_on_application,'||
-                                    'DROP COLUMN lease_on_application_for';
+                                    'DROP COLUMN lease_on_application_for,'||
+                                    'DROP COLUMN equifax_approval';
         -- legal_questions
         
         EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions DROP CONSTRAINT IF EXISTS legal_questions_pk CASCADE';
@@ -369,7 +385,8 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_legal_questions ADD CONSTRAINT person_screening_legal_questions_pk PRIMARY KEY(id) ';
 
         -- master_online_application
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.master_online_application ADD COLUMN online_application_id_s VARCHAR(26)';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.master_online_application ADD COLUMN online_application_id_s VARCHAR(26),'||
+                                                                        'DROP COLUMN equifax_approval';
         EXECUTE 'UPDATE '||v_schema_name||'.master_online_application SET online_application_id_s = _dba_.convert_id_to_string(online_application_id) ';
 
         -- notes_and_attachments
@@ -768,6 +785,8 @@ BEGIN
         'AND    holder NOT IN (SELECT holder FROM t))) AS b '||
         'WHERE  a.id = b.holder ';
 
+        EXECUTE 'UPDATE '||v_schema_name||'.lease '||
+                'SET    lease_id_s = LPAD(lease_id,7,''0'') ';
 
         -- lease_term
 
