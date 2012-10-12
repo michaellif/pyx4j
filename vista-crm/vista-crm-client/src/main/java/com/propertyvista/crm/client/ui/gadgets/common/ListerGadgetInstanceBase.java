@@ -29,6 +29,7 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
@@ -48,8 +49,10 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
 
     private int pageNumber;
 
+    private final boolean enableColumnSelector;
+
     /**
-     * @param gadgetMetadata
+     * @param gadgetMetadataet
      *            instance of gadget metadata that defines gadget type and holds the state of the gadget (can be <code>null</code>), it's type is
      *            {@link GadgetMetadata} because it has to be provided via factory that doesn't have an option to provide with a concrete type
      * @param gadgetTypeClass
@@ -65,7 +68,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
     public ListerGadgetInstanceBase(GadgetMetadata gadgetMetadata, Class<GADGET_TYPE> gadgetTypeClass, CEntityContainer<GADGET_TYPE> setupForm,
             Class<E> listedEntityClass, boolean isSearchFilterEnabled) {
         super(gadgetMetadata, gadgetTypeClass, setupForm);
-
+        this.enableColumnSelector = ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(gadgetMetadata.ownerUser().getPrimaryKey());
         this.pageNumber = 0;
 
         this.isSearchFilterEnabled = isSearchFilterEnabled;
@@ -140,8 +143,6 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
                         break;
                     }
                 }
-                // TODO: warning: both calls are async
-                saveMetadata();
                 populate(false);
             }
         });
@@ -174,6 +175,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         dataTablePanel.getDataTable().setHasColumnClickSorting(true);
         dataTablePanel.getDataTable().setHasCheckboxColumn(false);
         dataTablePanel.getDataTable().setMarkSelectedRow(false);
+        dataTablePanel.getDataTable().setColumnSelectorVisible(enableColumnSelector);
         dataTablePanel.getDataTable().setAutoColumnsWidth(true);
         dataTablePanel.getDataTable().setHasDetailsNavigation(true);
         dataTablePanel.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.ListerListPanel.name());
