@@ -685,7 +685,7 @@ BEGIN
         '   SET     product = a.product '||
         '   FROM    (SELECT a.old_id, a.id AS product '||
         '       FROM '||v_schema_name||'.product_v a '||
-        '       JOIN '||v_schema_name||'.product_item b ON (a.old_id = b.product AND a.iddiscriminator = b.item_typediscriminator )) AS a '||
+        '       JOIN '||v_schema_name||'.product_item b ON (a.old_id = b.product AND a.iddiscriminator = b.productdiscriminator )) AS a '||
         '   WHERE   b.product = a.old_id ';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_item ADD CONSTRAINT product_item_product_fk FOREIGN KEY(product) '||
