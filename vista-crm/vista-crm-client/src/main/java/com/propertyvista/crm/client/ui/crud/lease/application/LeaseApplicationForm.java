@@ -123,7 +123,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
         main.setBR(++row, 0, 1);
 
-        main.setH1(++row, 0, 1, i18n.tr("Credit Check Results"));
+        main.setH1(++row, 0, 1, i18n.tr("Credit Check"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApproval().percenrtageApproved()), 5).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApproval().totalAmountApproved()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApproval().rentAmount()), 10).build());
