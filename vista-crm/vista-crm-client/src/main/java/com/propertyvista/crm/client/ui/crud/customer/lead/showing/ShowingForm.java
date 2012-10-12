@@ -60,7 +60,7 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
 
         int row = -1;
 
-        content.setH3(++row, 0, 1, i18n.tr("Desired:"));
+        content.setH4(++row, 0, 1, i18n.tr("Desired:"));
 
         if (isEditable()) {
             content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntityLabel<Building>()), 20).build());
@@ -77,7 +77,7 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
                             20).build());
         }
 
-        content.setH3(++row, 0, 1, i18n.tr("Suggested:"));
+        content.setH3(++row, 0, 2, i18n.tr("Suggested:"));
 
         if (isEditable()) {
             content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit().building(), new CEntityLabel<Building>()), 20).build());
@@ -139,7 +139,7 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
             }
         }), 20).build());
 
-        row = -1;
+        row = 3;
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status()), 12).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().result()), 12).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().reason()), 12).build());
@@ -171,6 +171,8 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
 
             get(proto().result()).setEditable(getValue().status().getValue() != Showing.Status.seen);
             get(proto().reason()).setEditable(getValue().status().getValue() != Showing.Status.seen);
+        } else {
+            get(proto().result()).setVisible(!getValue().result().isNull());
         }
     }
 }

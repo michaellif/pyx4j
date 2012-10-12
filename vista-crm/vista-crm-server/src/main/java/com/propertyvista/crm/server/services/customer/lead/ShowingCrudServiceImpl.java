@@ -58,6 +58,14 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Showing, 
     }
 
     @Override
+    protected void create(Showing entity, ShowingDTO dto) {
+        if (!entity.result().isNull()) {
+            entity.status().setValue(Showing.Status.seen);
+        }
+        super.create(entity, dto);
+    }
+
+    @Override
     protected void save(Showing entity, ShowingDTO dto) {
         if (!entity.result().isNull()) {
             entity.status().setValue(Showing.Status.seen);
