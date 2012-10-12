@@ -95,7 +95,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             FormFlexPanel right = new FormFlexPanel();
             row = -1;
             right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckResult()), 10).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().declineReason()), 25).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().reason()), 25).build());
             right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().amountApproved()), 10).build());
 
             right.setBR(++row, 0, 1);
@@ -124,7 +124,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             super.onValueSet(populate);
 
             get(proto().creditCheck().amountApproved()).setVisible(getValue().creditCheck().creditCheckResult().getValue() == CreditCheckResult.Accept);
-            get(proto().creditCheck().declineReason()).setVisible(getValue().creditCheck().creditCheckResult().getValue() != CreditCheckResult.Accept);
+            get(proto().creditCheck().reason()).setVisible(getValue().creditCheck().creditCheckResult().getValue() != CreditCheckResult.Accept);
         }
     }
 }

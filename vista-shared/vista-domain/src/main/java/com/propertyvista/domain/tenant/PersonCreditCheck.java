@@ -44,7 +44,7 @@ public interface PersonCreditCheck extends IEntity {
 
         Accept,
 
-        SoftDecline,
+        Review,
 
         Decline;
 
@@ -87,6 +87,6 @@ public interface PersonCreditCheck extends IEntity {
 
     IPrimitive<CreditCheckResult> creditCheckResult();
 
-    IPrimitive<String> declineReason();
+    IPrimitive<String> reason();
 
 }

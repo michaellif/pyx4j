@@ -232,8 +232,8 @@ public class ScreeningGenerator {
                 pcc.amountApproved().setValue(BigDecimal.valueOf(pcc.amountCheked().getValue().doubleValue() - RandomUtil.randomDouble(500)));
                 break;
             case Decline:
-            case SoftDecline:
-                pcc.declineReason().setValue(CommonsGenerator.lipsumShort());
+            case Review:
+                pcc.reason().setValue(CommonsGenerator.lipsumShort());
                 break;
             }
 

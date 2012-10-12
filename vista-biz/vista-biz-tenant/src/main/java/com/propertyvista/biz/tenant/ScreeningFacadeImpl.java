@@ -61,7 +61,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
             case Decline:
                 leaseApproval.suggestedDecision().setValue(SuggestedDecision.Decline);
                 break;
-            case SoftDecline:
+            case Review:
                 leaseApproval.suggestedDecision().setValue(SuggestedDecision.RequestInfo);
                 break;
             }
@@ -125,7 +125,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         criteria.desc(criteria.proto().version().fromDate());
         screening = Persistence.service().retrieve(criteria);
         if (screening == null) {
-            throw new UserRuntimeException("Screening nod not exists");
+            throw new UserRuntimeException("Screening does not exists");
         } else {
             return screening;
         }
