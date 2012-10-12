@@ -26,7 +26,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -40,6 +39,7 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.webstorage.client.HTML5Storage;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
@@ -259,12 +259,11 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
      *            <code>null</code> to switch to zoom-in mode, or path of zoomed-in memember
      */
     void switchToDisplayMode(String activeDetailsMemberPath) {
-        Storage storage = Storage.getSessionStorageIfSupported();
-        if (storage != null) {
+        if (HTML5Storage.isSupported()) {
             if (activeDetailsMemberPath != null) {
-                storage.setItem(activeDetailsKey(), activeDetailsMemberPath);
+                HTML5Storage.getSessionStorage().setItem(activeDetailsKey(), activeDetailsMemberPath);
             } else {
-                storage.removeItem(activeDetailsKey());
+                HTML5Storage.getSessionStorage().removeItem(activeDetailsKey());
             }
         } else {
             localActiveDetails = activeDetailsMemberPath;
@@ -273,8 +272,7 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
     }
 
     private String activeDetails() {
-        Storage storage = Storage.getSessionStorageIfSupported();
-        return storage != null ? storage.getItem(activeDetailsKey()) : localActiveDetails;
+        return HTML5Storage.isSupported() ? HTML5Storage.getSessionStorage().getItem(activeDetailsKey()) : localActiveDetails;
     }
 
     private String activeDetailsKey() {
