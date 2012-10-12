@@ -66,7 +66,7 @@ public interface LeaseApplication extends IEntity {
             return EnumSet.of(Approved);
         }
 
-        public static Collection<Status> former() {
+        public static Collection<Status> processed() {
             return EnumSet.of(Approved, Declined, Cancelled);
         }
 
@@ -80,8 +80,8 @@ public interface LeaseApplication extends IEntity {
             return current().contains(this);
         }
 
-        public boolean isFormer() {
-            return former().contains(this);
+        public boolean isProcessed() {
+            return processed().contains(this);
         }
     }
 

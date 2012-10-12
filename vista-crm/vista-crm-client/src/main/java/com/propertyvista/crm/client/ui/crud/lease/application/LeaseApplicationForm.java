@@ -63,6 +63,11 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         if (VistaFeatures.instance().onlineApplication()) {
             setTabVisible(onlineStatusTab, !getValue().leaseApplication().onlineApplication().isNull());
         }
+
+        // show processing result:
+        get(proto().leaseApplication().decidedBy()).setVisible(getValue().leaseApplication().status().getValue().isProcessed());
+        get(proto().leaseApplication().decisionDate()).setVisible(getValue().leaseApplication().status().getValue().isProcessed());
+        get(proto().leaseApplication().decisionReason()).setVisible(getValue().leaseApplication().status().getValue().isProcessed());
     }
 
     private FormFlexPanel createInfoTab() {
@@ -116,7 +121,6 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().decisionDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().decisionReason()), 40).build());
 
-        main.setHR(++row, 0, 1);
         main.setBR(++row, 0, 1);
 
         main.setH1(++row, 0, 1, i18n.tr("Credit Check Results"));
@@ -126,7 +130,6 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApproval().suggestedDecision()), 40).build());
 
-        main.setHR(++row, 0, 1);
         main.setBR(++row, 0, 1);
 
         main.setWidget(++row, 0, inject(proto().leaseApproval().participants(), new LeaseParticipanApprovalFolder(false)));
