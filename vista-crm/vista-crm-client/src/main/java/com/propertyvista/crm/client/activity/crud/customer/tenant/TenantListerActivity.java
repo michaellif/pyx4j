@@ -34,7 +34,7 @@ public class TenantListerActivity extends ListerActivityBase<TenantDTO> {
         // filter out just current tenants:
         TenantDTO proto = EntityFactory.getEntityPrototype(TenantDTO.class);
         addPreDefinedFilter(PropertyCriterion.in(proto.leaseCustomer().lease().status(), Lease.Status.current()));
-        // and finalize version term only:
+        // and finalized version term only:
         addPreDefinedFilter(PropertyCriterion.isNotNull(proto.leaseTermV().fromDate()));
         addPreDefinedFilter(PropertyCriterion.isNull(proto.leaseTermV().toDate()));
     }
