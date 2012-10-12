@@ -26,6 +26,7 @@ import java.util.List;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rdb.PersistenceContext;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
@@ -92,7 +93,7 @@ public class TableModleVersioned {
         draftCriteria.add(PropertyCriterion.eq(draftCriteria.proto().holder(), entity));
         draftCriteria.add(PropertyCriterion.isNull(draftCriteria.proto().fromDate()));
         draftCriteria.add(PropertyCriterion.isNull(draftCriteria.proto().toDate()));
-        List<? extends IVersionData<IVersionedEntity<?>>> draftsExisting = tm.query(persistenceContext, draftCriteria, 2);
+        List<? extends IVersionData<IVersionedEntity<?>>> draftsExisting = tm.query(persistenceContext, draftCriteria, 2, AttachLevel.IdOnly);
         if (draftsExisting.size() > 1) {
             throw new Error("Duplicate Draft versions found in " + entity.getDebugExceptionInfoString());
         } else if (draftsExisting.size() > 0) {
@@ -150,7 +151,7 @@ public class TableModleVersioned {
             criteriaCurrent.add(PropertyCriterion.isNotNull(criteriaCurrent.proto().fromDate()));
             criteriaCurrent.add(PropertyCriterion.isNull(criteriaCurrent.proto().toDate()));
 
-            List<? extends IVersionData<IVersionedEntity<?>>> existing = tm.query(persistenceContext, criteriaCurrent, 1);
+            List<? extends IVersionData<IVersionedEntity<?>>> existing = tm.query(persistenceContext, criteriaCurrent, 1, AttachLevel.Attached);
             if (existing.size() > 0) {
                 IVersionData<IVersionedEntity<?>> memberEntityExisting = existing.get(0);
 

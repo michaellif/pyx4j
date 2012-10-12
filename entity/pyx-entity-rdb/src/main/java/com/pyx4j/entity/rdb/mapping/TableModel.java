@@ -709,7 +709,7 @@ public class TableModel {
         }
     }
 
-    private void retrieveExternal(PersistenceContext persistenceContext, IEntity entity) {
+    private void retrieveExternal(PersistenceContext persistenceContext, IEntity entity, AttachLevel attachLevel) {
         for (MemberCollectionOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
             if (member.getMemberMeta().getAttachLevel() != AttachLevel.Detached) {
                 TableModelCollections.retrieve(persistenceContext, entity, member);
@@ -724,7 +724,15 @@ public class TableModel {
             if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
                 continue;
             }
-            TableModelExternal.retrieve(persistenceContext, entity, member);
+            if (attachLevel == AttachLevel.ToStringMembers) {
+                if (member.getMemberMeta().isToStringMember()) {
+                    TableModelExternal.retrieve(persistenceContext, entity, member);
+                } else {
+                    member.getMember(entity).setAttachLevel(AttachLevel.Detached);
+                }
+            } else {
+                TableModelExternal.retrieve(persistenceContext, entity, member);
+            }
         }
 
         for (MemberOperationsMeta member : entityOperationsMeta.getVersionInfoMembers()) {
@@ -744,7 +752,7 @@ public class TableModel {
         TableModelCollections.retrieve(persistenceContext, entity, (MemberCollectionOperationsMeta) member);
     }
 
-    public boolean retrieve(PersistenceContext persistenceContext, Key primaryKey, IEntity entity) {
+    public boolean retrieve(PersistenceContext persistenceContext, Key primaryKey, IEntity entity, AttachLevel attachLevel) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         StringBuilder sql = new StringBuilder();
@@ -782,8 +790,10 @@ public class TableModel {
                 // Preserve version when retrieving key
                 entity.setPrimaryKey(primaryKey);
                 TableModel subclassModel = retrieveDiscriminator(persistenceContext, rs, entity);
-                subclassModel.retrieveValues(rs, entity.cast());
-                subclassModel.retrieveExternal(persistenceContext, entity.cast());
+                if (attachLevel.ordinal() > AttachLevel.IdOnly.ordinal()) {
+                    subclassModel.retrieveValues(rs, entity.cast());
+                    subclassModel.retrieveExternal(persistenceContext, entity.cast(), attachLevel);
+                }
                 return true;
             }
         } catch (SQLException e) {
@@ -797,7 +807,7 @@ public class TableModel {
         }
     }
 
-    public <T extends IEntity> List<T> query(PersistenceContext persistenceContext, EntityQueryCriteria<T> criteria, int limit) {
+    public <T extends IEntity> List<T> query(PersistenceContext persistenceContext, EntityQueryCriteria<T> criteria, int limit, AttachLevel attachLevel) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         String sql = null;
@@ -855,9 +865,10 @@ public class TableModel {
                     throw new RuntimeException("namespace access error");
                 }
                 TableModel subclassModel = retrieveDiscriminator(persistenceContext, rs, entity);
-                subclassModel.retrieveValues(rs, entity.cast());
-                subclassModel.retrieveExternal(persistenceContext, entity.cast());
-
+                if (attachLevel.ordinal() > AttachLevel.IdOnly.ordinal()) {
+                    subclassModel.retrieveValues(rs, entity.cast());
+                    subclassModel.retrieveExternal(persistenceContext, entity.cast(), attachLevel);
+                }
                 rc.add(entity);
             }
             return rc;
@@ -872,7 +883,8 @@ public class TableModel {
         }
     }
 
-    public <T extends IEntity> ResultSetIterator<T> queryIterable(final PersistenceContext persistenceContext, final EntityQueryCriteria<T> criteria) {
+    public <T extends IEntity> ResultSetIterator<T> queryIterable(final PersistenceContext persistenceContext, final EntityQueryCriteria<T> criteria,
+            final AttachLevel attachLevel) {
         String sql = null;
         QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteria);
         PreparedStatement stmt = null;
@@ -933,12 +945,16 @@ public class TableModel {
                         entity.setPrimaryKey(entity.getPrimaryKey().asDraftKey());
                     }
                     subclassModel = retrieveDiscriminator(persistenceContext, rs, entity);
-                    subclassModel.retrieveValues(rs, entity.cast());
+                    if (attachLevel.ordinal() > AttachLevel.IdOnly.ordinal()) {
+                        subclassModel.retrieveValues(rs, entity.cast());
+                    }
                 } catch (SQLException e) {
                     log.error("{} SQL select error", tableName, e);
                     throw new RuntimeException(e);
                 }
-                subclassModel.retrieveExternal(persistenceContext, entity.cast());
+                if (attachLevel.ordinal() > AttachLevel.IdOnly.ordinal()) {
+                    subclassModel.retrieveExternal(persistenceContext, entity.cast(), attachLevel);
+                }
                 return entity;
             }
         };
@@ -1411,7 +1427,7 @@ public class TableModel {
                 entity.setPrimaryKey(key);
                 TableModel subclassModel = retrieveDiscriminator(persistenceContext, rs, entity);
                 subclassModel.retrieveValues(rs, entity.cast());
-                subclassModel.retrieveExternal(persistenceContext, entity.cast());
+                subclassModel.retrieveExternal(persistenceContext, entity.cast(), AttachLevel.Attached);
             }
             return true;
         } catch (SQLException e) {

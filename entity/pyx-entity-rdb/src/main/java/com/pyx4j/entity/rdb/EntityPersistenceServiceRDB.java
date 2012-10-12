@@ -880,7 +880,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private boolean retrieveAndApplyModifications(TableModel tm, IEntity baseEntity, IEntity entity) {
-        if (!tm.retrieve(getPersistenceContext(), entity.getPrimaryKey(), baseEntity)) {
+        if (!tm.retrieve(getPersistenceContext(), entity.getPrimaryKey(), baseEntity, AttachLevel.Attached)) {
             if (tm.getPrimaryKeyStrategy() != Table.PrimaryKeyStrategy.ASSIGNED) {
                 throw new RuntimeException("Entity '" + tm.entityMeta().getCaption() + "' " + entity.getPrimaryKey() + " NotFound");
             } else {
@@ -1186,7 +1186,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
 
         TableModel tm = tableModel(entity.getEntityMeta());
-        if (tm.retrieve(getPersistenceContext(), entity.getPrimaryKey(), entity)) {
+        if (tm.retrieve(getPersistenceContext(), entity.getPrimaryKey(), entity, attachLevel)) {
             entity = cascadeRetrieveMembers(entity, attachLevel);
             entity.setAttachLevel(attachLevel);
             if (attachLevel == AttachLevel.Attached) {
@@ -1200,6 +1200,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     private <T extends IEntity> T cascadeRetrieveMembers(T entity, AttachLevel attachLevel) {
         entity = entity.cast();
+        if (attachLevel == AttachLevel.IdOnly) {
+            return entity;
+        }
         TableModel tm = tableModel(entity.getEntityMeta());
         for (MemberOperationsMeta member : tm.operationsMeta().getCascadeRetrieveMembers()) {
             if ((attachLevel == AttachLevel.ToStringMembers) && (!member.getMemberMeta().isToStringMember())) {
@@ -1270,7 +1273,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         startContext(ConnectionTarget.forRead);
         try {
             TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
-            List<T> rs = tm.query(getPersistenceContext(), criteria, 1);
+            List<T> rs = tm.query(getPersistenceContext(), criteria, 1, attachLevel);
             if (rs.isEmpty()) {
                 return null;
             } else {
@@ -1367,7 +1370,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         startContext(ConnectionTarget.forRead);
         try {
             TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
-            List<T> l = tm.query(getPersistenceContext(), criteria, -1);
+            List<T> l = tm.query(getPersistenceContext(), criteria, -1, attachLevel);
             for (T entity : l) {
                 cascadeRetrieveMembers(entity, attachLevel);
             }
@@ -1386,7 +1389,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             // TODO
         }
         try {
-            final ResultSetIterator<T> iterable = tm.queryIterable(getPersistenceContext(), criteria);
+            final ResultSetIterator<T> iterable = tm.queryIterable(getPersistenceContext(), criteria, attachLevel);
 
             return new ICursorIterator<T>() {
 
@@ -1558,8 +1561,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         try {
             TableModel tm = tableModel(entityMeta);
             IEntity cascadedeleteDataEntity = EntityFactory.create(entityMeta.getEntityClass());
-            if (tm.retrieve(getPersistenceContext(), primaryKey, cascadedeleteDataEntity)) {
-                cascadeRetrieveMembers(cascadedeleteDataEntity, AttachLevel.IdOnly);
+            if (tm.retrieve(getPersistenceContext(), primaryKey, cascadedeleteDataEntity, AttachLevel.Attached)) {
+                cascadeRetrieveMembers(cascadedeleteDataEntity, AttachLevel.Attached);
             } else {
                 throw new RuntimeException("Entity '" + entityMeta.getCaption() + "' " + primaryKey + " NotFound");
             }
