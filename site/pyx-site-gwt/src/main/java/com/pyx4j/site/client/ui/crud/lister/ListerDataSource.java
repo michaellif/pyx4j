@@ -41,7 +41,7 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
 
     private Criterion parentFiltering;
 
-    private List<Criterion> preDefinedFilters = new LinkedList<Criterion>();;
+    private List<Criterion> preDefinedFilters = new LinkedList<Criterion>();
 
     public ListerDataSource(Class<E> entityClass, AbstractListService<E> service) {
         this.entityClass = entityClass;
