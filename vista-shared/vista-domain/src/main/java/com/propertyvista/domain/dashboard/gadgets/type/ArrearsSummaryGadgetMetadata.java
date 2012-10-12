@@ -24,7 +24,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("Arrears Gadget Metadata")
 @Transient
-@Caption(name = "Arrears")
+@Caption(name = "Arrears Summary")
 @GadgetDescription(//@formatter:off       
         description = "Displays summary of arrears, has an option to zoom-in to view list of relevant leases.",
         keywords = { "Arrears", "Collections" },

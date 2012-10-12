@@ -32,9 +32,9 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class ArrearsGadget extends CounterGadgetInstanceBase<ArrearsGadgetDataDTO, Vector<Building>, ArrearsSummaryGadgetMetadata> {
+public class ArrearsSummaryGadget extends CounterGadgetInstanceBase<ArrearsGadgetDataDTO, Vector<Building>, ArrearsSummaryGadgetMetadata> {
 
-    public ArrearsGadget(ArrearsSummaryGadgetMetadata metadata) {
+    public ArrearsSummaryGadget(ArrearsSummaryGadgetMetadata metadata) {
         super(//@formatter:off
                 ArrearsGadgetDataDTO.class,
                 GWT.<ArrearsGadgetService> create(ArrearsGadgetService.class),
