@@ -105,6 +105,9 @@ public class PersistenceContext {
 
     void setTimeNow(Date date) {
         timeNow = date;
+        if ((date != null) && date.after(new Date())) {
+            log.warn("Set system date in future {}", date);
+        }
     }
 
     public Date getTimeNow() {
