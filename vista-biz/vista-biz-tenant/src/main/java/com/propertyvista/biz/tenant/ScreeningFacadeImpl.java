@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
@@ -38,6 +39,8 @@ import com.propertyvista.dto.LeaseParticipanApprovalDTO;
 import com.propertyvista.equifax.EquifaxCreditCheck;
 
 public class ScreeningFacadeImpl implements ScreeningFacade {
+
+    private final static I18n i18n = I18n.get(ScreeningFacadeImpl.class);
 
     @Override
     public void calculateSuggestedDecision(BigDecimal rentAmount, LeaseApprovalDTO leaseApproval) {
@@ -118,14 +121,14 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
                 Persistence.service().persist(screening);
                 return screening;
             } else {
-                throw new UserRuntimeException("Unfinalized Screening exists");
+                throw new UserRuntimeException(i18n.tr("Unfinalized Screening exists"));
             }
         }
         criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
         criteria.desc(criteria.proto().version().fromDate());
         screening = Persistence.service().retrieve(criteria);
         if (screening == null) {
-            throw new UserRuntimeException("Screening does not exists");
+            throw new UserRuntimeException(i18n.tr("Screening does not exists"));
         } else {
             return screening;
         }
