@@ -31,14 +31,14 @@ public interface LeaseApprovalDTO extends IEntity {
     @I18n
     public enum SuggestedDecision {
 
+        @Translate("Can not be calulated - Credit Check is missing or obsolete for one or more person")
         RunCreditCheck,
 
         Approve,
 
-        @Translate("Request for Guarantor or further information")
-        RequestInfo,
+        RequestGuarantor,
 
-        Review,
+        ManualReview,
 
         Decline;
 
@@ -59,6 +59,8 @@ public interface LeaseApprovalDTO extends IEntity {
     IPrimitive<Double> percenrtageApproved();
 
     IPrimitive<SuggestedDecision> suggestedDecision();
+
+    IPrimitive<String> reason();
 
     IList<LeaseParticipanApprovalDTO> participants();
 }

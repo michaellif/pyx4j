@@ -193,11 +193,9 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     }
 
     @Override
-    public void creditCheck(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant<?>> users) {
-        // TODO get the value
-        BigDecimal rentAmount = new BigDecimal("1000.00");
+    public void creditCheck(AsyncCallback<String> callback, Key entityId, BigDecimal creditCheckAmount, Vector<LeaseParticipant<?>> users) {
         for (LeaseParticipant<?> leaseParticipant : users) {
-            ServerSideFactory.create(ScreeningFacade.class).runCreditCheck(rentAmount, leaseParticipant);
+            ServerSideFactory.create(ScreeningFacade.class).runCreditCheck(creditCheckAmount, leaseParticipant);
         }
         String successMessage = i18n.tr("Credit check has been proceeded successfully.");
         callback.onSuccess(successMessage);

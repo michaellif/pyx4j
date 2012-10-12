@@ -15,12 +15,10 @@ package com.propertyvista.equifax.model;
 
 /**
  * Value is in months
- * 
- * @author dmitry
  */
 public class TimeAtPresentAddress implements EquifaxParameter {
 
-    private int numMonths;
+    private final int numMonths;
 
     public TimeAtPresentAddress(int numMonths) {
         if (numMonths < 1) {
@@ -29,11 +27,13 @@ public class TimeAtPresentAddress implements EquifaxParameter {
         this.numMonths = numMonths;
     }
 
+    @Override
     public String getId() {
         return "P0017";
     }
 
+    @Override
     public String getValue() {
-        return "" + numMonths;
+        return String.valueOf(numMonths);
     }
 }

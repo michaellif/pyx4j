@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.activity.crud.lease.application;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Vector;
 
@@ -37,10 +38,18 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
 
     private static final I18n i18n = I18n.get(LeaseApplicationViewerActivity.class);
 
+    private BigDecimal creditCheckAmount;
+
     @SuppressWarnings("unchecked")
     public LeaseApplicationViewerActivity(CrudAppPlace place) {
         super(place, LeaseViewFactory.instance(LeaseApplicationViewerView.class), (AbstractCrudService<LeaseApplicationDTO>) GWT
                 .create(LeaseApplicationViewerCrudService.class));
+    }
+
+    @Override
+    protected void populateView(LeaseApplicationDTO result) {
+        super.populateView(result);
+        creditCheckAmount = result.leaseApproval().rentAmount().getValue();
     }
 
     // Actions:
@@ -76,7 +85,7 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
                 populate();
                 ((LeaseApplicationViewerView) getView()).reportCreditCheckActionResult(message);
             }
-        }, getEntityId(), new Vector<LeaseParticipant<?>>(users));
+        }, getEntityId(), creditCheckAmount, new Vector<LeaseParticipant<?>>(users));
     }
 
     @Override

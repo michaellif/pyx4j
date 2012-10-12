@@ -17,19 +17,20 @@ package com.propertyvista.equifax.model;
  * B - Not given
  * M - Miscellaneous
  * O - Owns/Buying
- * P -Parents/Relative
+ * P - Parents/Relative
  * Q - Not asked
  * R - Rents
- * 
- * @author dmitry
  */
 public enum ResidentialStatus implements EquifaxParameter {
+
     B, M, O, P, Q, R;
 
+    @Override
     public String getId() {
         return "P0016";
     }
 
+    @Override
     public String getValue() {
         return name();
     }

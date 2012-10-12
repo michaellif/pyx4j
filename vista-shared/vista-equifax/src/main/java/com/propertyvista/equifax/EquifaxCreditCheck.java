@@ -13,31 +13,126 @@
  */
 package com.propertyvista.equifax;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ca.equifax.uat.from.CNConsumerCreditReportType;
+import ca.equifax.uat.from.CNScoreType;
+import ca.equifax.uat.from.CodeType;
+import ca.equifax.uat.from.EfxReportType;
 import ca.equifax.uat.from.EfxTransmit;
 import ca.equifax.uat.to.CNConsAndCommRequestType;
 
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
+import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
+
+import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonCreditCheck;
 import com.propertyvista.domain.tenant.PersonCreditCheck.CreditCheckResult;
+import com.propertyvista.equifax.request.EquifaxHttpClient;
+import com.propertyvista.equifax.request.EquifaxModelMapper;
 
 public class EquifaxCreditCheck {
 
-    public static PersonCreditCheck runCreditCheck(Customer customer, PersonCreditCheck pcc, int strategyNumber) {
-        CNConsAndCommRequestType requestMessage = createRequest(customer, pcc, strategyNumber);
-        EfxTransmit efxResponse = execute(requestMessage);
+    private final static Logger log = LoggerFactory.getLogger(EquifaxCreditCheck.class);
 
-        // TODO
-        pcc.creditCheckResult().setValue(CreditCheckResult.Decline);
+    private final static I18n i18n = I18n.get(EquifaxCreditCheck.class);
+
+    private final static Map<String, CreditCheckResult> riskCodeMapping = new HashMap<String, CreditCheckResult>();
+
+    private final static Map<String, Integer> riskCodeAmountMapping = new HashMap<String, Integer>();
+
+    static {
+        riskCodeAmountMapping.put("01", 100);
+        riskCodeAmountMapping.put("02", 80);
+        riskCodeAmountMapping.put("03", 70);
+        riskCodeAmountMapping.put("04", 60);
+        riskCodeAmountMapping.put("05", 50);
+        riskCodeAmountMapping.put("06", 40);
+        riskCodeAmountMapping.put("07", 30);
+        riskCodeAmountMapping.put("08", 20);
+        riskCodeAmountMapping.put("09", 10);
+
+        riskCodeMapping.put("01", CreditCheckResult.Accept);
+        riskCodeMapping.put("02", CreditCheckResult.Accept);
+        riskCodeMapping.put("03", CreditCheckResult.Accept);
+        riskCodeMapping.put("04", CreditCheckResult.Accept);
+        riskCodeMapping.put("05", CreditCheckResult.Accept);
+        riskCodeMapping.put("06", CreditCheckResult.Accept);
+        riskCodeMapping.put("07", CreditCheckResult.Accept);
+        riskCodeMapping.put("08", CreditCheckResult.Accept);
+        riskCodeMapping.put("09", CreditCheckResult.Accept);
+
+        riskCodeMapping.put("S9", CreditCheckResult.ReviewNoInformationAvalable);
+
+        riskCodeMapping.put("10", CreditCheckResult.Review);
+        riskCodeMapping.put("11", CreditCheckResult.Review);
+        riskCodeMapping.put("U9", CreditCheckResult.Review);
+        riskCodeMapping.put("D1", CreditCheckResult.Review);
+        riskCodeMapping.put("H2", CreditCheckResult.Review);
+        riskCodeMapping.put("H3", CreditCheckResult.Review);
+
+        riskCodeMapping.put("B5", CreditCheckResult.Decline);
+        riskCodeMapping.put("J8", CreditCheckResult.Decline);
+        riskCodeMapping.put("C5", CreditCheckResult.Decline);
+        riskCodeMapping.put("R8", CreditCheckResult.Decline);
+    }
+
+    public static PersonCreditCheck runCreditCheck(Customer customer, PersonCreditCheck pcc, int strategyNumber) {
+        CNConsAndCommRequestType requestMessage = EquifaxModelMapper.createRequest(customer, pcc, strategyNumber);
+        EfxTransmit efxResponse;
+        if (VistaSystemsSimulationConfig.getConfiguration().useEquifaxSimulator().getValue(Boolean.FALSE)) {
+            efxResponse = EquifaxSimulation.simulateResponce(requestMessage, customer, pcc, strategyNumber);
+        } else {
+            try {
+                efxResponse = EquifaxHttpClient.execute(requestMessage);
+            } catch (Exception e) {
+                log.error("Equifax error", e);
+                if (ApplicationMode.isDevelopment()) {
+                    throw new DevInfoUnRecoverableRuntimeException(e);
+                } else {
+                    throw new UnRecoverableRuntimeException(i18n.tr("Equifax communication error"));
+                }
+            }
+        }
+
+        reportsLoop: for (EfxReportType efxReportType : efxResponse.getEfxReport()) {
+            for (CNConsumerCreditReportType creditReport : efxReportType.getCNConsumerCreditReports().getCNConsumerCreditReport()) {
+                for (CNScoreType score : creditReport.getCNScores().getCNScore()) {
+                    if ("10301".equals(score.getProductId())) {
+                        for (CodeType codeType : score.getRejectCodes().getRejectCode()) {
+                            pcc.riskCode().setValue(codeType.getCode());
+                            pcc.reason().setValue(codeType.getDescription());
+                            break reportsLoop;
+                        }
+                    }
+                }
+            }
+        }
+
+        CreditCheckResult creditCheckResult = riskCodeMapping.get(pcc.riskCode().getValue());
+        if (creditCheckResult == null) {
+            creditCheckResult = CreditCheckResult.Error;
+        }
+
+        if (creditCheckResult == CreditCheckResult.Accept) {
+            Integer prc = riskCodeAmountMapping.get(pcc.riskCode().getValue());
+            if (prc == null) {
+                creditCheckResult = CreditCheckResult.Error;
+            } else {
+                pcc.amountApproved().setValue(pcc.amountCheked().getValue().multiply(new BigDecimal(prc)).divide(new BigDecimal("100")));
+            }
+        }
+
+        pcc.creditCheckResult().setValue(creditCheckResult);
 
         return pcc;
-    }
-
-    private static EfxTransmit execute(CNConsAndCommRequestType requestMessage) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    private static CNConsAndCommRequestType createRequest(Customer customer, PersonCreditCheck pcc, int strategyNumber) {
-        return null;
     }
 }

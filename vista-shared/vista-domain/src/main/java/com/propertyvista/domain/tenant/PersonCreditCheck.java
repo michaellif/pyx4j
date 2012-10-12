@@ -29,6 +29,7 @@ import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
@@ -44,9 +45,14 @@ public interface PersonCreditCheck extends IEntity {
 
         Accept,
 
+        @Translate("Review")
+        ReviewNoInformationAvalable,
+
         Review,
 
-        Decline;
+        Decline,
+
+        Error;
 
         @Override
         public String toString() {
@@ -78,14 +84,16 @@ public interface PersonCreditCheck extends IEntity {
 
     // --- Results from Equifax  ---
 
+    IPrimitive<String> riskCode();
+
+    IPrimitive<CreditCheckResult> creditCheckResult();
+
     @Format("#0.00")
     @ReadOnly
     IPrimitive<BigDecimal> amountApproved();
 
     // TODO pointerTo fullReportSored in second special schema...
     IPrimitive<Key> creditCheckReport();
-
-    IPrimitive<CreditCheckResult> creditCheckResult();
 
     IPrimitive<String> reason();
 

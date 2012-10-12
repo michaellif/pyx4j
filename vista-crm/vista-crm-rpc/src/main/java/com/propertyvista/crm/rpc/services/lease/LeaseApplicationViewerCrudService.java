@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.rpc.services.lease;
 
+import java.math.BigDecimal;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -34,7 +35,7 @@ public interface LeaseApplicationViewerCrudService extends LeaseViewerCrudServic
      */
     void inviteUsers(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant<?>> users);
 
-    void creditCheck(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant<?>> users);
+    void creditCheck(AsyncCallback<String> callback, Key entityId, BigDecimal creditCheckAmount, Vector<LeaseParticipant<?>> users);
 
     void applicationAction(AsyncCallback<VoidSerializable> callback, LeaseApplicationActionDTO actionDTO);
 }
