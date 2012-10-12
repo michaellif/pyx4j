@@ -29,18 +29,18 @@ import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
 import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetDataDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentTenantDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class ArrearsGadget extends CounterGadgetInstanceBase<ArrearsGadgetDataDTO, Vector<Building>, ArrearsGadgetMetadata> {
+public class ArrearsGadget extends CounterGadgetInstanceBase<ArrearsGadgetDataDTO, Vector<Building>, ArrearsSummaryGadgetMetadata> {
 
-    public ArrearsGadget(ArrearsGadgetMetadata metadata) {
+    public ArrearsGadget(ArrearsSummaryGadgetMetadata metadata) {
         super(//@formatter:off
                 ArrearsGadgetDataDTO.class,
                 GWT.<ArrearsGadgetService> create(ArrearsGadgetService.class),
                 new ArrearsGadgetSummaryForm(),
                 metadata,
-                ArrearsGadgetMetadata.class
+                ArrearsSummaryGadgetMetadata.class
        );//@formatter:on
     }
 

@@ -22,8 +22,10 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 
 @Transient
 @Caption(name = "Access Denied")
-@GadgetDescription(description = "access denied gadget", keywords = { "forbidden" })
-/** This is metadata of a special gadget that should be displayed to user in case he's not allowed to access a gadget */
+@GadgetDescription(//@formatter:off
+        description = "A special gadget that is displayed to users instead of a gadget that is restricted due to lack of access permissions",
+        keywords = { "forbidden" }
+)//@formatter:on
 public interface AccessDeniedGagetMetadata extends GadgetMetadata {
 
     IPrimitive<String> gadgetName();

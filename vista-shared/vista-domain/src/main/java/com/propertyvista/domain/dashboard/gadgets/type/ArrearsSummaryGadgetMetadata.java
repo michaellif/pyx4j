@@ -26,7 +26,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 @Transient
 @Caption(name = "Arrears")
 @GadgetDescription(//@formatter:off       
-        description = "Displays arrears. Can be configured to display different categories of arrears",
+        description = "Displays summary of arrears, has an option to zoom-in to view list of relevant leases.",
         keywords = { "Arrears", "Collections" },
         allowedBehaviors = {
                 VistaCrmBehavior.PropertyManagement,
@@ -49,6 +49,6 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
                 VistaCrmBehavior.PropertyVistaSupport
         }
 )//@formatter:on
-public interface ArrearsGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
+public interface ArrearsSummaryGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 
 }

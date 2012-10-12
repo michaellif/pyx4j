@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 import com.propertyvista.domain.dashboard.gadgets.type.AccessDeniedGagetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ApplicationsGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
@@ -55,7 +55,7 @@ public final class GadgetMetadataRepository extends GadgetMetadataRepositoryBase
         // bind gadget metadata settings here
         super(Arrays.<GadgetDefaultSettingsBinding<?>> asList(//@formatter:off
                 
-                bind(ArrearsGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
+                bind(ArrearsSummaryGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
                 bind(ArrearsStatusGadgetMetadata.class, ArrearsStatusGadgetMetadataDefaultSettings.class),
                 bind(ArrearsYOYAnalysisChartGadgetMetadata.class, ArrearsYOYAnalysisChartGadgetMetadataDefaultSettings.class),
                 

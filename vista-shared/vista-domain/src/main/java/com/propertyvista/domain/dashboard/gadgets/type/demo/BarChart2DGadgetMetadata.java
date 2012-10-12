@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
+import com.propertyvista.domain.dashboard.gadgets.type.base.DemoGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -48,6 +49,6 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
                 VistaCrmBehavior.PropertyVistaSupport
         }
 )//@formatter:on
-public interface BarChart2DGadgetMetadata extends GadgetMetadata {
+public interface BarChart2DGadgetMetadata extends GadgetMetadata, DemoGadget {
 
 }

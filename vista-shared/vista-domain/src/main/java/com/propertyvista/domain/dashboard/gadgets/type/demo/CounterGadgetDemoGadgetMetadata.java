@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.DemoGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
@@ -48,6 +49,6 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
                 VistaCrmBehavior.PropertyVistaSupport
         }
 )//@formatter:on
-public interface CounterGadgetDemoGadgetMetadata extends CounterGadgetBaseMetadata {
+public interface CounterGadgetDemoGadgetMetadata extends CounterGadgetBaseMetadata, DemoGadget {
 
 }
