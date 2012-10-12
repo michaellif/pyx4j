@@ -337,7 +337,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Lease lease = load(leaseId, false);
 
         // TODO Review the status
-        lease.status().setValue(Lease.Status.Closed);
+        lease.status().setValue(Lease.Status.Cancelled);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Declined);
         lease.leaseApplication().decidedBy().set(decidedBy);
         lease.leaseApplication().decisionReason().setValue(decisionReason);
@@ -361,7 +361,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Lease lease = load(leaseId, false);
 
         // TODO Review the status
-        lease.status().setValue(Lease.Status.Closed);
+        lease.status().setValue(Lease.Status.Cancelled);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Cancelled);
         lease.leaseApplication().decidedBy().set(decidedBy);
         lease.leaseApplication().decisionReason().setValue(decisionReason);
