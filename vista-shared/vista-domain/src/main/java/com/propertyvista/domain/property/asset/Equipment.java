@@ -29,13 +29,12 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.Notes;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.vendor.LicensedWarrantedMaintained;
 
 @AbstractEntity
 @ToStringFormat("{0}, {1}")
-public interface Equipment extends LicensedWarrantedMaintained, Notes {
+public interface Equipment extends LicensedWarrantedMaintained {
 
     @Owner
     @NotNull

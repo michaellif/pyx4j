@@ -53,10 +53,6 @@ public class ElevatorForm extends MechBaseForm<ElevatorDTO> {
         main.setWidget(++row, 0, inject(proto().license(), new LicenseEditor()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setH1(++row, 0, 2, i18n.tr("Extras"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notes()), 57).build());
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
-
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
