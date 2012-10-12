@@ -623,6 +623,10 @@ BEGIN
                 'SET visibility = ''global'' ';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ADD CONSTRAINT product_v_holder_fk FOREIGN KEY(holder) REFERENCES '||v_schema_name||'.product(id)';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ADD CONSTRAINT product_v_feature_type_ck CHECK (iddiscriminator = ''feature'' '||
+        ' AND feature_type IS NOT NULL OR iddiscriminator != ''feature'' AND feature_type IS NULL) ';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ADD CONSTRAINT product_v_service_type_ck CHECK (iddiscriminator = ''service'' '||
+        ' AND service_type IS NOT NULL OR iddiscriminator != ''service'' AND service_type IS NULL) ';
 
         EXECUTE 'CREATE INDEX product_v_holder_holderdiscriminator_from_date_to_date_idx ON '||v_schema_name||'.product_v '||
         'USING btree (holder, holderdiscriminator, from_date, to_date) ';
@@ -681,7 +685,7 @@ BEGIN
         '   SET     product = a.product '||
         '   FROM    (SELECT a.old_id, a.id AS product '||
         '       FROM '||v_schema_name||'.product_v a '||
-        '       JOIN '||v_schema_name||'.product_item b ON (a.old_id = b.product)) AS a '||
+        '       JOIN '||v_schema_name||'.product_item b ON (a.old_id = b.product AND a.iddiscriminator = b.item_typediscriminator )) AS a '||
         '   WHERE   b.product = a.old_id ';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_item ADD CONSTRAINT product_item_product_fk FOREIGN KEY(product) '||
