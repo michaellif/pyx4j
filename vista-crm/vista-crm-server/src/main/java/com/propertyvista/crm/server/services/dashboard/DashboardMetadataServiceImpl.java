@@ -15,7 +15,11 @@ package com.propertyvista.crm.server.services.dashboard;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -30,6 +34,7 @@ import com.pyx4j.site.server.services.customization.CustomizationPersistenceHelp
 
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat.Builder;
+import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -41,68 +46,44 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
 
     private static final I18n i18n = I18n.get(DashboardMetadataServiceImpl.class);
 
+    private final Logger logger = LoggerFactory.getLogger(DashboardMetadataServiceImpl.class);
+
     @Override
-    public void retrieveMetadata(AsyncCallback<DashboardMetadata> callback, Key entityId) {
-        DashboardMetadata dm;
-        if (entityId == null) {
-            dm = null;
-        } else if (entityId.asLong() == -1) {
-            dm = retrieveDefaultDashboardMetadata();
+    public void retrieveMetadata(AsyncCallback<DashboardMetadata> callback, Key dashboardId) {
+        assert (dashboardId != null);
+        DashboardMetadata dashboardMetadata;
+        if (dashboardId.asLong() != -1) {
+            dashboardMetadata = Persistence.secureRetrieve(DashboardMetadata.class, dashboardId);
         } else {
-            dm = Persistence.secureRetrieve(DashboardMetadata.class, entityId);
+            dashboardMetadata = retrieveDefaultDashboardMetadata();
         }
-        if (dm == null) {
+        if (dashboardMetadata == null) {
             callback.onSuccess(null);
+            logger.warn("Dashboard '" + dashboardId + "' that was requested by user '" + CrmAppContext.getCurrentUser().getPrimaryKey() + "' was not found");
             return;
         }
 
-        DashboardColumnLayoutFormat format = new DashboardColumnLayoutFormat(dm.encodedLayout().getValue());
-        List<String> lostIds = new ArrayList<String>();
-        for (String id : format.gadgetIds()) {
-            GadgetMetadata gm = null;
-            // for shared dashboards we use a shadow of gadget metadata with effective-id = id + :userKey (but on server side it's transparent)
-            if (dm.isShared().isBooleanTrue() & !CrmAppContext.getCurrentUserPrimaryKey().equals(dm.ownerUser().getPrimaryKey())) {
-                String shadowId = Util.makeShadowId(id);
-                gm = Util.gadgetStorage().load(shadowId);
-            }
-            if (gm == null) {
-                gm = Util.gadgetStorage().load(id);
-            }
-            if (gm != null) {
-                dm.gadgetMetadataList().add(enforcePermissions(gm));
-            } else {
-                lostIds.add(id);
-            }
+        List<String> gadgetIds = new LinkedList<String>(new DashboardColumnLayoutFormat(dashboardMetadata.encodedLayout().getValue()).gadgetIds());
+        dashboardMetadata.gadgetMetadataList().addAll(retrieveGadgets(gadgetIds));
+        if (!gadgetIds.isEmpty()) {
+            logger.warn("gadgets with IDs '" + gadgetIds + "' were not found, and they are going to be removed form dashboard layout of dashboard '"
+                    + dashboardMetadata.getPrimaryKey() + "'");
+            cleanupLostGadgets(gadgetIds, dashboardMetadata);
         }
 
-        // actually this is not supposted to happen but for percation (i.e. bad db migration or something) 
-        if (!lostIds.isEmpty()) {
-            Builder updatedFormatBuilder = new DashboardColumnLayoutFormat.Builder(format.getLayoutType());
-            for (String id : format.gadgetIds()) {
-                if (!lostIds.contains(id)) {
-                    updatedFormatBuilder.bind(id, format.getGadgetColumn(id));
-                }
-            }
-            dm.encodedLayout().setValue(updatedFormatBuilder.build().getSerializedForm());
-            throw new Error("gadgets with IDs: " + lostIds + "could not be loaded and were removed from the dashboard");
-        }
-
-        callback.onSuccess(dm);
+        callback.onSuccess(dashboardMetadata);
     }
 
-    /**
-     * Compute the difference of gadgets new/deleted and save the result
-     */
     @Override
     public void saveDashboardMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata dm) {
-
-        // this function should not be used to create new dashboards/reports (new dashboards/reports should be created via CRUD service) 
         if (dm.getPrimaryKey() == null) {
-            throw new Error("trying to save new dashboard metadata");
+            throw new Error("trying to save new dashboard metadata: '" + DashboardMetadataCrudService.class.getSimpleName()
+                    + "' must be used to create new dashboards");
         }
 
-        DashboardMetadata oldDm = Persistence.secureRetrieve(DashboardMetadata.class, dm.getPrimaryKey());
-        DashboardColumnLayoutFormat oldLayout = new DashboardColumnLayoutFormat(oldDm.encodedLayout().getValue());
+        // Compute the difference of gadgets: new vs. deleted and save the result        
+        DashboardMetadata oldDashboardMetadata = Persistence.secureRetrieve(DashboardMetadata.class, dm.getPrimaryKey());
+        DashboardColumnLayoutFormat oldLayout = new DashboardColumnLayoutFormat(oldDashboardMetadata.encodedLayout().getValue());
         DashboardColumnLayoutFormat newLayout = new DashboardColumnLayoutFormat(dm.encodedLayout().getValue());
 
         // find deleted gadgets
@@ -119,16 +100,13 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
                 deletedGadgetIds.add(oldGadgetId);
             }
         }
-
         Persistence.secureSave(dm);
 
+        // delete gadgets that were deleted from the dashboad
         CustomizationPersistenceHelper<GadgetMetadata> gadgetStorage = Util.gadgetStorage();
-
-        // delete deleted gadgets
         for (String gadgetId : deletedGadgetIds) {
             gadgetStorage.delete(gadgetId);
         }
-        // TODO add gadget -> dashboard reference
 
         Persistence.service().commit();
 
@@ -142,19 +120,59 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
     }
 
     /**
-     * @param gm
+     * This is a destructive function that changes <code>gadgetIds</code>.
+     * 
+     * @param gadgetIds
+     *            gadgets that should be retrieved, when upon return it all the gadgets that were retrieved will be removed
+     * @return list of retrieved gadgets
+     */
+    private List<GadgetMetadata> retrieveGadgets(Collection<String> gadgetIds) {
+        java.util.Iterator<String> gadgetIterator = gadgetIds.iterator();
+        List<GadgetMetadata> gadgetMetadataList = new ArrayList<GadgetMetadata>();
+        while (gadgetIterator.hasNext()) {
+            GadgetMetadata gadgetMetadata = Util.gadgetStorage().load(gadgetIterator.next());
+            if (gadgetMetadata != null) {
+                gadgetMetadataList.add(enforcePermissions(gadgetMetadata));
+                gadgetIterator.remove();
+            }
+        }
+        return gadgetMetadataList;
+    }
+
+    /**
+     * @param gadgetMetadata
      * @return if provided gadgetMetadata is not accessible by current user, returns instance of {@link AccessDeniedGagetMetadata }
      */
-    private GadgetMetadata enforcePermissions(GadgetMetadata gm) {
-        GadgetDescription description = gm.getInstanceValueClass().getAnnotation(GadgetDescription.class);
+    private GadgetMetadata enforcePermissions(GadgetMetadata gadgetMetadata) {
+        GadgetDescription description = gadgetMetadata.getInstanceValueClass().getAnnotation(GadgetDescription.class);
         if (SecurityController.checkAnyBehavior(description.allowedBehaviors())) {
-            return gm;
+            return gadgetMetadata;
         } else {
             AccessDeniedGagetMetadata accessDenied = EntityFactory.create(AccessDeniedGagetMetadata.class);
-            accessDenied.gadgetId().setValue(gm.gadgetId().getValue());
+            accessDenied.gadgetId().setValue(gadgetMetadata.gadgetId().getValue());
             accessDenied.gadgetName().setValue(i18n.translate(null, accessDenied.getEntityMeta().getCaption()));
             return accessDenied;
         }
 
+    }
+
+    /**
+     * Removes gadgets that coulnd't be loaded from dashboard layout.
+     * Actually this is not supposed to happen but for precaution (i.e. bad db migration or something)
+     * 
+     * @param lostIds
+     * @param dashboardMetadata
+     */
+    private void cleanupLostGadgets(List<String> lostIds, DashboardMetadata dashboardMetadata) {
+        DashboardColumnLayoutFormat layoutFormat = new DashboardColumnLayoutFormat(dashboardMetadata.encodedLayout().getValue());
+        Builder updatedFormatBuilder = new DashboardColumnLayoutFormat.Builder(layoutFormat.getLayoutType());
+        for (String id : layoutFormat.gadgetIds()) {
+            if (!lostIds.contains(id)) {
+                updatedFormatBuilder.bind(id, layoutFormat.getGadgetColumn(id));
+            }
+        }
+        dashboardMetadata.encodedLayout().setValue(updatedFormatBuilder.build().getSerializedForm());
+        Persistence.secureSave(dashboardMetadata);
+        Persistence.service().commit();
     }
 }

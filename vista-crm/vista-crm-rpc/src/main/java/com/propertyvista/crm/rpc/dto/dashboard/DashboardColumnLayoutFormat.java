@@ -21,6 +21,11 @@ import java.util.Map;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
+/**
+ * Represents layout of the gadgets in a dashboard.
+ * Should be use to as a convinence to access layout information which is stored as plain text in {@link DashboardMetadata#encodedLayout()}
+ */
+//TODO think about better name for this class
 public class DashboardColumnLayoutFormat {
 
     public static class Builder {
@@ -95,7 +100,7 @@ public class DashboardColumnLayoutFormat {
         return gadgetBinding.get(gadgetId);
     }
 
-    public Iterable<String> gadgetIds() {
+    public List<String> gadgetIds() {
         return gadgetOrder;
     }
 

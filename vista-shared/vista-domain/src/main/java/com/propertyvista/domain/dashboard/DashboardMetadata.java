@@ -89,11 +89,12 @@ public interface DashboardMetadata extends IEntity {
     @MemberColumn(name = "owner_user_id")
     CrmUser ownerUser();
 
+    @Caption(name = "Shared")
     IPrimitive<Boolean> isShared();
 
     /** Only used for transporting gadgets from server to client, when dashboard adds a new gadget it add it's id to: encoded layout */
     @Transient
-    // TODO it's supposed to be set
+    // TODO it's supposed to be a set
     IList<GadgetMetadata> gadgetMetadataList();
 
     /**

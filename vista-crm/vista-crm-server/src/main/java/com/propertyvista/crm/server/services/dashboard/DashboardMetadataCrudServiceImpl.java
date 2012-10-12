@@ -58,24 +58,11 @@ public class DashboardMetadataCrudServiceImpl extends AbstractCrudServiceImpl<Da
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, DashboardMetadata dashboardMetadata) {
-        DashboardMetadata oldDashboardMetadata = Persistence.secureRetrieve(DashboardMetadata.class, dashboardMetadata.getPrimaryKey());
-
-        // delete all shadow settings if required
-        if (oldDashboardMetadata.isShared().isBooleanTrue() & !dashboardMetadata.isShared().isBooleanTrue()) {
-            for (String gadgetId : new DashboardColumnLayoutFormat(dashboardMetadata.encodedLayout().getValue()).gadgetIds()) {
-                Util.gadgetStorage().deleteMatching(gadgetId + ":%");
-            }
-        }
-        super.save(callback, dashboardMetadata);
-    }
-
-    @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         // delete all child gadgets
         DashboardMetadata dm = Persistence.secureRetrieve(DashboardMetadata.class, entityId);
         for (String gadgetId : new DashboardColumnLayoutFormat(dm.encodedLayout().getValue()).gadgetIds()) {
-            Util.gadgetStorage().deleteMatching(gadgetId + "%");
+            Util.gadgetStorage().delete(gadgetId);
         }
         super.delete(callback, entityId);
     }

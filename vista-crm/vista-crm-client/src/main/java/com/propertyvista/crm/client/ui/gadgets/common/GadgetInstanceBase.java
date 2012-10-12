@@ -33,6 +33,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
@@ -126,16 +127,18 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
         this.containerBoard = board;
     }
 
-    /** final is to validatate the security */
+    /** this function was made final in order to ensure the validation of permissions */
     protected final void saveMetadata() {
-        GADGET_METADATA_SERVICE.saveGadgetMetadata(new DefaultAsyncCallback<GadgetMetadata>() {
+        if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey())) {
+            GADGET_METADATA_SERVICE.saveGadgetMetadata(new DefaultAsyncCallback<GadgetMetadata>() {
 
-            @Override
-            public void onSuccess(GadgetMetadata result) {
-                getMetadata().set(result);
-            }
+                @Override
+                public void onSuccess(GadgetMetadata result) {
+                    getMetadata().set(result);
+                }
 
-        }, getMetadata());
+            }, getMetadata());
+        }
     }
 
     /**
