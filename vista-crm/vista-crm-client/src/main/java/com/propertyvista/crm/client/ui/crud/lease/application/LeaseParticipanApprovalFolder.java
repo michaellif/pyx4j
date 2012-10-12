@@ -105,7 +105,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             right.setWidget(
                     ++row,
                     0,
-                    new DecoratorBuilder(inject(proto().creditCheck().screening(),
+                    new DecoratorBuilder(inject(proto().screening(),
                             new CEntityCrudHyperlink<PersonScreening>(AppPlaceEntityMapper.resolvePlace(PersonScreening.class))), 10).build());
 
             // assemble main panel:

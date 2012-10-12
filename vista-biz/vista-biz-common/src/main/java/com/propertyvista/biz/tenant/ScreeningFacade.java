@@ -15,6 +15,10 @@ package com.propertyvista.biz.tenant;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.shared.AttachLevel;
+
+import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApprovalDTO;
 
@@ -24,4 +28,8 @@ public interface ScreeningFacade {
 
     void runCreditCheck(BigDecimal rentAmount, LeaseParticipant<?> leaseParticipantId);
 
+    /*
+     * Retrieve draft if there are no final version
+     */
+    PersonScreening retrivePersonScreeningFinalOrDraft(Customer customerId, AttachLevel attachLevel);
 }

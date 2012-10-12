@@ -110,7 +110,10 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             criteria.desc(criteria.proto().creditCheckDate());
             approval.creditCheck().set(Persistence.service().retrieve(criteria));
             if (!approval.creditCheck().isNull()) {
-                Persistence.service().retrieve(approval.creditCheck().screening(), AttachLevel.ToStringMembers);
+                approval.screening().set(approval.creditCheck().screening());
+                Persistence.service().retrieve(approval.screening(), AttachLevel.ToStringMembers);
+            } else {
+                approval.screening().set(leaseParticipant.effectiveScreening());
             }
 
             dto.leaseApproval().participants().add(approval);

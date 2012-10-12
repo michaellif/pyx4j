@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -133,5 +134,20 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
             return screening;
         }
 
+    }
+
+    @Override
+    public PersonScreening retrivePersonScreeningFinalOrDraft(Customer customerId, AttachLevel attachLevel) {
+        attachLevel = AttachLevel.Attached;
+        EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customerId));
+        criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
+        PersonScreening screening = Persistence.service().retrieve(criteria, attachLevel);
+        if (screening != null) {
+            return screening;
+        }
+        criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
+        screening = Persistence.service().retrieve(criteria, attachLevel);
+        return screening;
     }
 }
