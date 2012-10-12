@@ -76,6 +76,13 @@ public class VistaConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Confi
     }
 
     @Override
+    public Ddl ddl() {
+        //Uncomment for DB migration tests
+        //return Ddl.disabled;
+        return super.ddl();
+    }
+
+    @Override
     public int unreturnedConnectionTimeout() {
         if (ServerSideConfiguration.isStartedUnderJvmDebugMode() && ServerSideConfiguration.isStartedUnderEclipse()) {
             return 0;
