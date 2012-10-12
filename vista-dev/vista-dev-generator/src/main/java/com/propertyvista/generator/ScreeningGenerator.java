@@ -112,7 +112,6 @@ public class ScreeningGenerator {
 
         address.payment().setValue(new BigDecimal(1000 + RandomUtil.randomInt(1000)));
 
-        address.phone().setValue(CommonsGenerator.createPhone());
         address.rented().setValue(RandomUtil.randomEnum(PriorAddress.OwnedRented.class));
         address.propertyCompany().setValue(DataGenerator.randomLastName() + " Inc.");
         address.managerName().setValue("Mr. " + DataGenerator.randomLastName());

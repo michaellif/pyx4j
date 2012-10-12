@@ -46,7 +46,6 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
 
         main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().moveInDate()), 9).build());
         main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().moveOutDate()), 9).build());
-        main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().phone()), 15).build());
 
         CComponent<?, ?> rentedComponent = inject(proto().rented());
         rentedComponent.addValueChangeHandler(new ValueChangeHandler() {

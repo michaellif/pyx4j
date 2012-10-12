@@ -58,9 +58,6 @@ public interface PriorAddress extends AddressStructured {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> payment();
 
-    @Editor(type = EditorType.phone)
-    IPrimitive<String> phone();
-
     @NotNull
     @Caption(name = "Owned/Rented")
     @Editor(type = EditorType.radiogroup)
