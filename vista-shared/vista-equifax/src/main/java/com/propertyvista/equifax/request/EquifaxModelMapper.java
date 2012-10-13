@@ -15,6 +15,7 @@ package com.propertyvista.equifax.request;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -47,6 +48,7 @@ import ca.equifax.uat.to.SubjectsType.Subject;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonCreditCheck;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
@@ -107,8 +109,8 @@ public class EquifaxModelMapper {
             // subject name
             CNSubjectNameType subjectName = factory.createCNSubjectNameType();
             subject.setSubjectName(subjectName);
-            subjectName.setFirstName("TESTDATA");
-            subjectName.setLastName("SOLO");
+            subjectName.setFirstName(customer.person().name().firstName().getValue());
+            subjectName.setLastName(customer.person().name().lastName().getValue());
 
             // addresses
             AddressesType addresses = factory.createAddressesType();
@@ -119,23 +121,28 @@ public class EquifaxModelMapper {
                 Address address = factory.createAddressesTypeAddress();
                 addresses.getAddress().add(address);
                 address.setAddressType("CURR");
-                address.setCivicNumber("5099");
-                address.setStreetName("CREEKBANK");
-                address.setSuite("221b");
+
+                PriorAddress currentAddress = pcc.screening().version().currentAddress();
+
+                address.setCivicNumber(currentAddress.streetNumber().getValue());
+                address.setStreetName(currentAddress.streetName().getValue());
+                address.setSuite(currentAddress.suiteNumber().getValue());
                 CityType city = factory.createCityType();
-                city.setValue("MISSISSAUGA");
+                city.setValue(currentAddress.city().getValue());
                 address.setCity(city);
                 CodeType province = factory.createCodeType();
-                province.setCode("ON");
-                province.setDescription("Ontario");
+                province.setCode(currentAddress.province().code().getValue());
+                province.setDescription(currentAddress.province().name().getValue());
                 address.setProvince(province);
-                address.setPostalCode("L4W5N2");
+                address.setPostalCode(currentAddress.postalCode().getValue());
             }
 
-            // date of birth
-            DateOfBirth dob = factory.createDateOfBirth();
-            dob.setValue("1950-01-01");
-            subject.setDateOfBirth(dob);
+            if (!customer.person().birthDate().isNull()) {
+                // date of birth
+                DateOfBirth dob = factory.createDateOfBirth();
+                dob.setValue(new SimpleDateFormat("YYYY-MM-dd").format(customer.person().birthDate().getValue()));
+                subject.setDateOfBirth(dob);
+            }
         }
 
         // customer info

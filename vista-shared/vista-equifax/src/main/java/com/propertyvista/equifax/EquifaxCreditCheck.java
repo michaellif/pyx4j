@@ -21,13 +21,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ca.equifax.uat.from.CNConsumerCreditReportType;
+import ca.equifax.uat.from.CNErrorReportType;
 import ca.equifax.uat.from.CNScoreType;
 import ca.equifax.uat.from.CodeType;
 import ca.equifax.uat.from.EfxReportType;
 import ca.equifax.uat.from.EfxTransmit;
 import ca.equifax.uat.to.CNConsAndCommRequestType;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.server.dev.EntityFileLogger;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
@@ -39,6 +43,8 @@ import com.propertyvista.domain.tenant.PersonCreditCheck.CreditCheckResult;
 import com.propertyvista.equifax.request.EquifaxConsts;
 import com.propertyvista.equifax.request.EquifaxHttpClient;
 import com.propertyvista.equifax.request.EquifaxModelMapper;
+import com.propertyvista.equifax.request.XmlCreator;
+import com.propertyvista.server.domain.PersonCreditCheckReport;
 
 public class EquifaxCreditCheck {
 
@@ -92,6 +98,11 @@ public class EquifaxCreditCheck {
 
     public static PersonCreditCheck runCreditCheck(Customer customer, PersonCreditCheck pcc, int strategyNumber) {
         CNConsAndCommRequestType requestMessage = EquifaxModelMapper.createRequest(customer, pcc, strategyNumber);
+
+        if (ApplicationMode.isDevelopment()) {
+            EntityFileLogger.logXml("equifax", "request", XmlCreator.devToXMl(requestMessage));
+        }
+
         EfxTransmit efxResponse;
         if (VistaSystemsSimulationConfig.getConfiguration().useEquifaxSimulator().getValue(Boolean.FALSE)) {
             efxResponse = EquifaxSimulation.simulateResponce(requestMessage, customer, pcc, strategyNumber);
@@ -106,6 +117,16 @@ public class EquifaxCreditCheck {
                     throw new UnRecoverableRuntimeException(i18n.tr("Equifax communication error"));
                 }
             }
+        }
+
+        if (ApplicationMode.isDevelopment()) {
+            EntityFileLogger.logXml("equifax", "response", XmlCreator.devToXMl(efxResponse));
+        }
+
+        //TODO
+        if (false) {
+            PersonCreditCheckReport report = EntityFactory.create(PersonCreditCheckReport.class);
+            report.data().setValue(null);
         }
 
         reportsLoop: for (EfxReportType efxReportType : efxResponse.getEfxReport()) {
@@ -125,6 +146,16 @@ public class EquifaxCreditCheck {
         CreditCheckResult creditCheckResult = riskCodeMapping.get(pcc.riskCode().getValue());
         if (creditCheckResult == null) {
             creditCheckResult = CreditCheckResult.Error;
+            if (efxResponse.getCNErrorReport() != null) {
+                for (CNErrorReportType.Errors.Error error : efxResponse.getCNErrorReport().getErrors().getError()) {
+                    pcc.reason().setValue(
+                            error.getErrorCode()
+                                    + " "
+                                    + CommonsStringUtils.nvl_concat(CommonsStringUtils.nvl_concat(error.getDescription(), error.getActionDescription(), " "),
+                                            error.getAdditionalInformation(), " "));
+                    break;
+                }
+            }
         }
 
         String overrideDescription = riskCodeOverrideDescription.get(pcc.riskCode().getValue());

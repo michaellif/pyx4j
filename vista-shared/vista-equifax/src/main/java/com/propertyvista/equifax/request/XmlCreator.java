@@ -13,6 +13,18 @@
  */
 package com.propertyvista.equifax.request;
 
+import java.io.StringWriter;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ca.equifax.uat.from.EfxTransmit;
+import ca.equifax.uat.to.CNConsAndCommRequestType;
 import ca.equifax.uat.to.CNOutputParametersType.OutputParameter;
 import ca.equifax.uat.to.CNOutputParametersType.OutputParameter.GenericOutputCode;
 import ca.equifax.uat.to.ObjectFactory;
@@ -24,6 +36,8 @@ import ca.equifax.uat.to.ScoringProductType.Parameters.Parameter;
 import com.propertyvista.equifax.model.EquifaxParameter;
 
 public class XmlCreator {
+
+    private final static Logger log = LoggerFactory.getLogger(XmlCreator.class);
 
     private static ObjectFactory factory = new ObjectFactory();
 
@@ -94,5 +108,41 @@ public class XmlCreator {
             outputParameter.setCustomizationCode("VVVVVVVV");
         }
         return outputParameter;
+    }
+
+    public static String devToXMl(CNConsAndCommRequestType requestMessage) {
+        try {
+            QName qname = new QName("http://www.equifax.ca/XMLSchemas/CustToEfx", "CNCustTransmitToEfx");
+            JAXBElement<CNConsAndCommRequestType> element = new JAXBElement<CNConsAndCommRequestType>(qname, CNConsAndCommRequestType.class, requestMessage);
+
+            JAXBContext context = JAXBContext.newInstance(CNConsAndCommRequestType.class);
+            Marshaller m = context.createMarshaller();
+            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+            StringWriter xml = new StringWriter();
+            m.marshal(element, xml);
+            return xml.toString();
+        } catch (Throwable e) {
+            log.error("to XML Error", e);
+            return e.getMessage();
+        }
+    }
+
+    public static String devToXMl(EfxTransmit efxResponse) {
+        try {
+            QName qname = new QName("http://www.equifax.ca/XMLSchemas/EfxToCust", "CNEfxTransmitToCust");
+            JAXBElement<EfxTransmit> element = new JAXBElement<EfxTransmit>(qname, EfxTransmit.class, efxResponse);
+
+            JAXBContext context = JAXBContext.newInstance(EfxTransmit.class);
+            Marshaller m = context.createMarshaller();
+            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+            StringWriter xml = new StringWriter();
+            m.marshal(element, xml);
+            return xml.toString();
+        } catch (Throwable e) {
+            log.error("to XML Error", e);
+            return e.getMessage();
+        }
     }
 }

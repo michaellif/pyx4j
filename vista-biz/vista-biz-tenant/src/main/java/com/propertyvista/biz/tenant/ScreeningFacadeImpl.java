@@ -120,6 +120,9 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
                 leaseParticipant.leaseTermV().holder().lease().unit(), BackgroundCheckPolicy.class);
         pcc.backgroundCheckPolicy().set(EntityGraph.businessDuplicate(backgroundCheckPolicy.version()));
 
+        Persistence.service().retrieve(screening.version().incomes());
+        Persistence.service().retrieve(screening.version().assets());
+
         pcc = EquifaxCreditCheck.runCreditCheck(leaseParticipant.leaseCustomer().customer(), pcc, backgroundCheckPolicy.strategyNumber().getValue());
 
         Persistence.service().persist(pcc);

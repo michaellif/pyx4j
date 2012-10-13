@@ -216,7 +216,7 @@ public class ScreeningGenerator {
         for (int i = 0; i < 1 + RandomUtil.randomInt(3); i++) {
             PersonCreditCheck pcc = EntityFactory.create(PersonCreditCheck.class);
 
-            pcc.creditCheckDate().setValue(RandomUtil.randomDateDaysShifted(40));
+            pcc.creditCheckDate().setValue(RandomUtil.randomDateDaysShifted(-40));
 
             pcc.backgroundCheckPolicy().bankruptcy().setValue(RandomUtil.randomEnum(BjccEntry.class));
             pcc.backgroundCheckPolicy().judgment().setValue(RandomUtil.randomEnum(BjccEntry.class));
