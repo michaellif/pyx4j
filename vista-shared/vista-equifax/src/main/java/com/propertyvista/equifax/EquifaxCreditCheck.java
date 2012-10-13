@@ -47,18 +47,20 @@ public class EquifaxCreditCheck {
 
     private final static Map<String, CreditCheckResult> riskCodeMapping = new HashMap<String, CreditCheckResult>();
 
-    private final static Map<String, Integer> riskCodeAmountMapping = new HashMap<String, Integer>();
+    private final static Map<String, Integer> riskCodeAmountPrcMapping = new HashMap<String, Integer>();
+
+    private final static Map<String, String> riskCodeOverrideDescription = new HashMap<String, String>();
 
     static {
-        riskCodeAmountMapping.put("01", 100);
-        riskCodeAmountMapping.put("02", 80);
-        riskCodeAmountMapping.put("03", 70);
-        riskCodeAmountMapping.put("04", 60);
-        riskCodeAmountMapping.put("05", 50);
-        riskCodeAmountMapping.put("06", 40);
-        riskCodeAmountMapping.put("07", 30);
-        riskCodeAmountMapping.put("08", 20);
-        riskCodeAmountMapping.put("09", 10);
+        riskCodeAmountPrcMapping.put("01", 100);
+        riskCodeAmountPrcMapping.put("02", 80);
+        riskCodeAmountPrcMapping.put("03", 70);
+        riskCodeAmountPrcMapping.put("04", 60);
+        riskCodeAmountPrcMapping.put("05", 50);
+        riskCodeAmountPrcMapping.put("06", 40);
+        riskCodeAmountPrcMapping.put("07", 30);
+        riskCodeAmountPrcMapping.put("08", 20);
+        riskCodeAmountPrcMapping.put("09", 10);
 
         riskCodeMapping.put("01", CreditCheckResult.Accept);
         riskCodeMapping.put("02", CreditCheckResult.Accept);
@@ -83,6 +85,8 @@ public class EquifaxCreditCheck {
         riskCodeMapping.put("J8", CreditCheckResult.Decline);
         riskCodeMapping.put("C5", CreditCheckResult.Decline);
         riskCodeMapping.put("R8", CreditCheckResult.Decline);
+
+        riskCodeOverrideDescription.put("11", i18n.ntr("Review - Decline Applicant received an unacceptably low score"));
     }
 
     public static PersonCreditCheck runCreditCheck(Customer customer, PersonCreditCheck pcc, int strategyNumber) {
@@ -122,8 +126,13 @@ public class EquifaxCreditCheck {
             creditCheckResult = CreditCheckResult.Error;
         }
 
+        String overrideDescription = riskCodeOverrideDescription.get(pcc.riskCode().getValue());
+        if (overrideDescription != null) {
+            pcc.reason().setValue(overrideDescription);
+        }
+
         if (creditCheckResult == CreditCheckResult.Accept) {
-            Integer prc = riskCodeAmountMapping.get(pcc.riskCode().getValue());
+            Integer prc = riskCodeAmountPrcMapping.get(pcc.riskCode().getValue());
             if (prc == null) {
                 creditCheckResult = CreditCheckResult.Error;
             } else {
