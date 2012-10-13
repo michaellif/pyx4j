@@ -22,11 +22,35 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 public class TransientListHelpers {
 
-    public static <E extends IEntity> void save(IList<E> list, Class<E> entityClass) {
-        save(list, entityClass, EntityQueryCriteria.create(entityClass));
+    public interface WorkflowAdapter<E> {
+        boolean doBefore(E item);
+
+        boolean doAfter(E item);
     }
 
-    public static <E extends IEntity> void save(IList<E> list, Class<E> entityClass, EntityQueryCriteria<E> criteria) {
+    public static class DefaultWorkflowAdapter<E> implements WorkflowAdapter<E> {
+
+        @Override
+        public boolean doBefore(E item) {
+            return true;
+        }
+
+        @Override
+        public boolean doAfter(E item) {
+            return true;
+        }
+
+    }
+
+    public static <E extends IEntity> void save(IList<E> list, Class<E> entityClass) {
+        save(list, entityClass, EntityQueryCriteria.create(entityClass), null);
+    }
+
+    public static <E extends IEntity> void save(IList<E> list, Class<E> entityClass, WorkflowAdapter<E> onDeleteItem) {
+        save(list, entityClass, EntityQueryCriteria.create(entityClass), onDeleteItem);
+    }
+
+    public static <E extends IEntity> void save(IList<E> list, Class<E> entityClass, EntityQueryCriteria<E> criteria, WorkflowAdapter<E> onDeleteItem) {
 
         // load current:
         List<E> current = Persistence.service().query(criteria);
@@ -42,7 +66,9 @@ public class TransientListHelpers {
 
         // remove orphaned ones:
         for (E item : current) {
-            Persistence.service().delete(item);
+            if (onDeleteItem == null || onDeleteItem.doBefore(item)) {
+                Persistence.service().delete(item);
+            }
         }
     }
 }

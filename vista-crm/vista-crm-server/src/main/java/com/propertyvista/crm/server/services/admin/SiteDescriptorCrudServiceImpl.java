@@ -13,7 +13,9 @@
  */
 package com.propertyvista.crm.server.services.admin;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -23,13 +25,24 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.admin.SiteDescriptorCrudService;
 import com.propertyvista.crm.server.util.TransientListHelpers;
+import com.propertyvista.crm.server.util.TransientListHelpers.DefaultWorkflowAdapter;
 import com.propertyvista.domain.site.AvailableLocale;
+import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.domain.site.News;
+import com.propertyvista.domain.site.PageCaption;
+import com.propertyvista.domain.site.PageContent;
+import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PortalImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.site.Testimonial;
+import com.propertyvista.domain.site.gadgets.CustomGadgetContent;
+import com.propertyvista.domain.site.gadgets.NewsGadgetContent;
+import com.propertyvista.domain.site.gadgets.TestimonialsGadgetContent;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class SiteDescriptorCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteDescriptor, SiteDescriptorDTO> implements SiteDescriptorCrudService {
@@ -58,28 +71,110 @@ public class SiteDescriptorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Si
     }
 
     @Override
-    protected void persist(SiteDescriptor dbo, SiteDescriptorDTO in) {
-        // save transient data:
-        TransientListHelpers.save(in.news(), News.class);
-        TransientListHelpers.save(in.testimonials(), Testimonial.class);
-
-        //TODO keep the sort order, Remove context for removed Locale
-        TransientListHelpers.save(in.locales(), AvailableLocale.class);
+    protected void persist(final SiteDescriptor dbo, final SiteDescriptorDTO in) {
+        // keep the sort order
+        for (int idx = 0; idx < in.locales().size(); idx++) {
+            in.locales().get(idx).displayOrder().setValue(idx);
+        }
+        final List<AvailableLocale> removedLocales = new ArrayList<AvailableLocale>();
+        TransientListHelpers.save(in.locales(), AvailableLocale.class, new DefaultWorkflowAdapter<AvailableLocale>() {
+            @Override
+            public boolean doBefore(AvailableLocale item) {
+                removedLocales.add(item);
+                // don't delete just yet - will do it after all other nodes are saved
+                return false;
+            }
+        });
 
         dbo._updateFlag().updated().setValue(new Date());
         super.persist(dbo, in);
+
+        for (AvailableLocale locale : removedLocales) {
+            onDeleteLocale(locale);
+            Persistence.service().delete(locale);
+        }
     }
 
     @Override
     protected void enhanceRetrieved(SiteDescriptor in, SiteDescriptorDTO dto, RetrieveTraget retrieveTraget) {
         // load transient data:
-        dto.news().addAll(Persistence.service().query(EntityQueryCriteria.create(News.class)));
-        dto.testimonials().addAll(Persistence.service().query(EntityQueryCriteria.create(Testimonial.class)));
-        {
-            EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
-            criteria.asc(criteria.proto().displayOrder().getPath().toString());
-            dto.locales().addAll(Persistence.service().query(criteria));
-        }
+        EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
+        criteria.asc(criteria.proto().displayOrder().getPath().toString());
+        dto.locales().addAll(Persistence.service().query(criteria));
     }
 
+    private void onDeleteLocale(AvailableLocale locale) {
+        // check for dependents in Gadgets
+        // News
+        for (NewsGadgetContent content : Persistence.service().query(EntityQueryCriteria.create(NewsGadgetContent.class))) {
+            Iterator<News> itNews = content.news().iterator();
+            while (itNews.hasNext()) {
+                News item = itNews.next();
+                if (item.locale().isEmpty() || item.locale().businessEquals(locale)) {
+                    itNews.remove();
+                }
+            }
+            Persistence.service().persist(content);
+        }
+        // Testimonials
+        for (TestimonialsGadgetContent content : Persistence.service().query(EntityQueryCriteria.create(TestimonialsGadgetContent.class))) {
+            Iterator<Testimonial> itTestim = content.testimonials().iterator();
+            while (itTestim.hasNext()) {
+                Testimonial item = itTestim.next();
+                if (item.locale().isEmpty() || item.locale().businessEquals(locale)) {
+                    itTestim.remove();
+                }
+            }
+            Persistence.service().persist(content);
+        }
+        // Custom
+        EntityQueryCriteria<CustomGadgetContent> criteria = EntityQueryCriteria.create(CustomGadgetContent.class);
+        criteria.or(PropertyCriterion.eq(criteria.proto().htmlContent().locale(), locale), PropertyCriterion.isNull(criteria.proto().htmlContent().locale()));
+        Persistence.service().delete(criteria);
+
+        // remove titles, logos and slogans from SiteDescriptor
+        SiteDescriptor site = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
+        Iterator<SiteTitles> itTitles = site.siteTitles().iterator();
+        while (itTitles.hasNext()) {
+            SiteTitles item = itTitles.next();
+            if (item.locale().isEmpty() || item.locale().businessEquals(locale)) {
+                itTitles.remove();
+            }
+        }
+        Iterator<PortalImageResource> itLogos = site.logo().iterator();
+        while (itLogos.hasNext()) {
+            PortalImageResource item = itLogos.next();
+            if (item.locale().isEmpty() || item.locale().businessEquals(locale)) {
+                itLogos.remove();
+            }
+        }
+        Iterator<HtmlContent> itSlog = site.slogan().iterator();
+        while (itSlog.hasNext()) {
+            HtmlContent item = itSlog.next();
+            if (item.locale().isEmpty() || item.locale().businessEquals(locale)) {
+                itSlog.remove();
+            }
+        }
+
+        // remove page content and caption from PageDescriptors
+        Iterator<PageDescriptor> itPage = site.childPages().iterator();
+        while (itPage.hasNext()) {
+            PageDescriptor page = itPage.next();
+            Iterator<PageContent> itCont = page.content().iterator();
+            while (itCont.hasNext()) {
+                PageContent item = itCont.next();
+                if (item.locale().isEmpty() || item.locale().businessEquals(locale)) {
+                    itCont.remove();
+                }
+            }
+            Iterator<PageCaption> itCapt = page.caption().iterator();
+            while (itCapt.hasNext()) {
+                PageCaption item = itCapt.next();
+                if (item.locale().isEmpty() || item.locale().businessEquals(locale)) {
+                    itCapt.remove();
+                }
+            }
+        }
+        Persistence.service().persist(site);
+    }
 }
