@@ -47,7 +47,7 @@ public class GadgetFactoryGenerator extends Generator {
             if (gadgetImplClasses.isEmpty()) {
                 logger.log(Type.WARN, "the gadget factory generator hasn't found any gadgets");
             } else {
-                logger.log(Type.INFO, "generating gadget factory for the following gadgets: " + toString(gadgetImplClasses));
+                logger.log(Type.DEBUG, "generating gadget factory for the following gadgets: " + toString(gadgetImplClasses));
             }
 
             String implSimpleName = (factoryInterfaceType.getSimpleSourceName() + "Impl").replaceFirst("^I", "");
