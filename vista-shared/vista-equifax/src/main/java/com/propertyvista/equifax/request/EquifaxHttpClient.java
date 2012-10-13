@@ -46,11 +46,10 @@ import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.config.SystemConfig;
-import com.propertyvista.equifax.utils.ExampleClient;
 
 public class EquifaxHttpClient {
 
-    private final static Logger log = LoggerFactory.getLogger(ExampleClient.class);
+    private final static Logger log = LoggerFactory.getLogger(EquifaxHttpClient.class);
 
     public static String serverUrl = "https://uat.equifax.ca/sts/processinquiry.asp";
 
