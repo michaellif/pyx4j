@@ -24,6 +24,7 @@ import ca.equifax.uat.to.ScoringProductType.Parameters.Parameter;
 import com.propertyvista.equifax.model.EquifaxParameter;
 
 public class XmlCreator {
+
     private static ObjectFactory factory = new ObjectFactory();
 
     public static void addParameter(EquifaxParameter ep, Parameters parameters) {
@@ -53,7 +54,7 @@ public class XmlCreator {
         scoringProduct.setProductType("MODL");
 
         //10301 for iDecision Power Consumer 
-        scoringProduct.setScoringNumber("10301");
+        scoringProduct.setScoringNumber(EquifaxConsts.scoringProductId_iDecisionPower);
         scoringProduct.setReportAttribute("N");
 
         return scoringProduct;

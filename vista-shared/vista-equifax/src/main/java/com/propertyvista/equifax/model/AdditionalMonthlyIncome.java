@@ -13,12 +13,9 @@
  */
 package com.propertyvista.equifax.model;
 
-/**
- * @author dmitry
- */
 public class AdditionalMonthlyIncome implements EquifaxParameter {
 
-    private int amount;
+    private final int amount;
 
     public AdditionalMonthlyIncome(int amount) {
         if (amount < 1) {
@@ -27,11 +24,13 @@ public class AdditionalMonthlyIncome implements EquifaxParameter {
         this.amount = amount;
     }
 
+    @Override
     public String getId() {
         return "P0012";
     }
 
+    @Override
     public String getValue() {
-        return "" + amount;
+        return String.valueOf(amount);
     }
 }

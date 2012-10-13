@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,23 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 18, 2011
- * @author dmitry
+ * Created on 2012-10-13
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.equifax.model;
+package com.propertyvista.equifax.request;
 
-public enum ChallengerMode implements EquifaxParameter {
+public class EquifaxConsts {
 
-    Y, N;
+    public static final String scoringProductId_iDecisionPower = "10301";
 
-    @Override
-    public String getId() {
-        return "P0002";
-    }
-
-    @Override
-    public String getValue() {
-        return name();
-    }
 }

@@ -23,7 +23,23 @@ package com.propertyvista.equifax.model;
  */
 public enum ResidentialStatus implements EquifaxParameter {
 
-    B, M, O, P, Q, R;
+    NotGiven("B"),
+
+    Miscellaneous("M"),
+
+    OwnsOrBuying("O"),
+
+    ParentsRelative("P"),
+
+    NotAsked("Q"),
+
+    Rents("R");
+
+    public final String value;
+
+    ResidentialStatus(String value) {
+        this.value = value;
+    }
 
     @Override
     public String getId() {
@@ -32,6 +48,6 @@ public enum ResidentialStatus implements EquifaxParameter {
 
     @Override
     public String getValue() {
-        return name();
+        return value;
     }
 }

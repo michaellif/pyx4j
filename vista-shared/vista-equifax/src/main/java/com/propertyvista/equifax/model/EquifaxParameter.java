@@ -14,6 +14,7 @@
 package com.propertyvista.equifax.model;
 
 public interface EquifaxParameter {
+
     String getId();
 
     String getValue();

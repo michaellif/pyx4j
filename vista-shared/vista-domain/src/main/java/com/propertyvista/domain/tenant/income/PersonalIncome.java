@@ -45,9 +45,11 @@ public interface PersonalIncome extends IEntity, ApplicationDocumentHolder<Proof
 
     @ToString
     @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<IncomeSource> incomeSource();
 
     @Owned
+    @MemberColumn(notNull = true)
     IncomeInfo details();
 
     @OrderColumn

@@ -18,7 +18,7 @@ package com.propertyvista.equifax.model;
  */
 public class MonthlyHousingCosts implements EquifaxParameter {
 
-    private int amount;
+    private final int amount;
 
     public MonthlyHousingCosts(int amount) {
         if (amount < 1) {
@@ -27,11 +27,13 @@ public class MonthlyHousingCosts implements EquifaxParameter {
         this.amount = amount;
     }
 
+    @Override
     public String getId() {
         return "P0013";
     }
 
+    @Override
     public String getValue() {
-        return "" + amount;
+        return String.valueOf(amount);
     }
 }

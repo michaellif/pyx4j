@@ -13,7 +13,10 @@
  */
 package com.propertyvista.equifax.request;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,11 +49,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonCreditCheck;
+import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.equifax.model.ChallengerMode;
 import com.propertyvista.equifax.model.EmploymentStatus;
 import com.propertyvista.equifax.model.MonthlyHousingCosts;
 import com.propertyvista.equifax.model.MonthlyIncome;
-import com.propertyvista.equifax.model.PresentPosition;
 import com.propertyvista.equifax.model.ResidentialStatus;
 import com.propertyvista.equifax.model.StrategyNumber;
 import com.propertyvista.equifax.model.TimeAtPresentAddress;
@@ -245,23 +248,122 @@ public class EquifaxModelMapper {
         // add parameters
         XmlCreator.addParameter(new StrategyNumber(strategyNumber), parameters);
         XmlCreator.addParameter(ChallengerMode.N, parameters);
-        XmlCreator.addParameter(EmploymentStatus.Q, parameters);
-        XmlCreator.addParameter(PresentPosition.C, parameters);
-        XmlCreator.addParameter(new TimeAtPresentEmployer(10), parameters);
-        XmlCreator.addParameter(new MonthlyIncome(2000), parameters);
-        XmlCreator.addParameter(new MonthlyIncome(400), parameters);
+
+        //TODO
+        //XmlCreator.addParameter(PresentPosition.C, parameters);
+
+        //Find PresentEmployer and calculate Income
+        PersonalIncome presentPersonalIncome = null;
+        for (PersonalIncome personalIncome : pcc.screening().version().incomes()) {
+            if (isCurrentDate(personalIncome.details().ends())) {
+                addMonthlyIncome(personalIncome, parameters);
+                if (presentPersonalIncome == null) {
+                    presentPersonalIncome = personalIncome;
+                }
+            }
+        }
+        if (presentPersonalIncome != null) {
+            EmploymentStatus employmentStatus = EmploymentStatus.NotAsked;
+            switch (presentPersonalIncome.incomeSource().getValue()) {
+            case fulltime:
+                employmentStatus = EmploymentStatus.Employed;
+                break;
+            case parttime:
+                employmentStatus = EmploymentStatus.Employed;
+                break;
+            case selfemployed:
+                employmentStatus = EmploymentStatus.SelfEmployed;
+                break;
+            case seasonallyEmployed:
+                employmentStatus = EmploymentStatus.Employed;
+                break;
+            case socialServices:
+                employmentStatus = EmploymentStatus.UnemployedPlusIncome;
+                break;
+            case pension:
+                employmentStatus = EmploymentStatus.UnemployedPlusIncome;
+                break;
+            case retired:
+                employmentStatus = EmploymentStatus.Retired;
+                break;
+            case student:
+                employmentStatus = EmploymentStatus.FullTimeStudent;
+                break;
+            case disabilitySupport:
+                employmentStatus = EmploymentStatus.UnemployedPlusIncome;
+                break;
+            case dividends:
+                employmentStatus = EmploymentStatus.UnemployedPlusIncome;
+                break;
+            case unemployed:
+            case other:
+                if (isZero(presentPersonalIncome.details().monthlyAmount())) {
+                    employmentStatus = EmploymentStatus.UnemployedNoIncome;
+                } else {
+                    employmentStatus = EmploymentStatus.UnemployedPlusIncome;
+                }
+                break;
+            }
+            XmlCreator.addParameter(employmentStatus, parameters);
+            if (!presentPersonalIncome.details().starts().isNull()) {
+                XmlCreator.addParameter(new TimeAtPresentEmployer(monthSince(presentPersonalIncome.details().starts())), parameters);
+            }
+        } else {
+            XmlCreator.addParameter(EmploymentStatus.NotAsked, parameters);
+        }
+
         XmlCreator.addParameter(new MonthlyHousingCosts(pcc.amountCheked().getValue().intValue()), parameters);
         //XmlCreator.addParameter(new MonthlyCostsOther(300), parameters);
-        XmlCreator.addParameter(ResidentialStatus.Q, parameters);
 
         if (!pcc.screening().version().currentAddress().moveInDate().isNull()) {
             XmlCreator.addParameter(new TimeAtPresentAddress(monthSince(pcc.screening().version().currentAddress().moveInDate())), parameters);
         }
 
+        if (!pcc.screening().version().currentAddress().rented().isNull()) {
+            switch (pcc.screening().version().currentAddress().rented().getValue()) {
+            case owned:
+                XmlCreator.addParameter(ResidentialStatus.OwnsOrBuying, parameters);
+                break;
+            case rented:
+                XmlCreator.addParameter(ResidentialStatus.Rents, parameters);
+                break;
+            }
+        } else {
+            XmlCreator.addParameter(ResidentialStatus.NotAsked, parameters);
+        }
+
         return transmit;
     }
 
+    private static boolean isZero(IPrimitive<BigDecimal> monthlyAmount) {
+        if (monthlyAmount.isNull()) {
+            return true;
+        } else {
+            return monthlyAmount.getValue().compareTo(BigDecimal.ZERO) != 0;
+        }
+    }
+
+    private static void addMonthlyIncome(PersonalIncome personalIncome, Parameters parameters) {
+        if (!personalIncome.details().monthlyAmount().isNull()) {
+            XmlCreator.addParameter(new MonthlyIncome(personalIncome.details().monthlyAmount().getValue().intValue()), parameters);
+        }
+    }
+
+    private static boolean isCurrentDate(IPrimitive<LogicalDate> date) {
+        if (date.isNull()) {
+            return true;
+        } else {
+            return monthSince(date) >= 1;
+        }
+    }
+
     private static int monthSince(IPrimitive<LogicalDate> moveInDate) {
-        return 2;
+        Calendar cal = new GregorianCalendar();
+        int toMonth = cal.get(Calendar.MONTH);
+        int toYear = cal.get(Calendar.YEAR);
+        cal.setTime(moveInDate.getValue());
+        int fromMonth = cal.get(Calendar.MONTH);
+        int fromYear = cal.get(Calendar.YEAR);
+        return ((toYear - fromYear) * cal.getMaximum(Calendar.MONTH)) + (toMonth - fromMonth);
     }
 }

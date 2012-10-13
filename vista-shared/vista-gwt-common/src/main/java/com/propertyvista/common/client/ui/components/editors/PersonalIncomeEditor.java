@@ -100,6 +100,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
             CEntityForm editor = null;
             IncomeInfo details = getValue().details();
 
+            boolean hackOtherInitialization = false;
             switch (type) {
             case fulltime:
             case parttime:
@@ -124,7 +125,9 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
                 break;
             default:
                 editor = createOtherIncomeInfoEditor();
-                applyOtherLables(type, editor);
+                // TODO review: Avoid Exception "Member name is not bound"
+                hackOtherInitialization = true;
+                //applyOtherLables(type, editor);
             }
 
             if (details.getInstanceValueClass() != editor.proto().getValueClass()) {
@@ -133,6 +136,11 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
             this.inject(proto().details(), editor);
             editor.populate(details.cast());
             detailsHolder.setWidget(editor);
+
+            // TODO review see above : Avoid Exception "Member name is not bound"
+            if (hackOtherInitialization) {
+                applyOtherLables(type, editor);
+            }
 
         }
 

@@ -25,26 +25,26 @@ package com.propertyvista.equifax.model;
  */
 public enum EmploymentStatus implements EquifaxParameter {
 
-    C("Self-Employed"),
+    SelfEmployed("C"),
 
-    E("Employed"),
+    Employed("E"),
 
-    H("Homemaker"),
+    Homemaker("H"),
 
-    K("Unemployed + No Income"),
+    UnemployedNoIncome("K"),
 
-    Q("Not Asked"),
+    NotAsked("Q"),
 
-    R("Retired"),
+    Retired("R"),
 
-    S("Full Time Student"),
+    FullTimeStudent("S"),
 
-    U("Unemployed + Income");
+    UnemployedPlusIncome("U");
 
-    public final String description;
+    public final String value;
 
-    EmploymentStatus(String description) {
-        this.description = description;
+    EmploymentStatus(String value) {
+        this.value = value;
     }
 
     @Override
@@ -54,6 +54,6 @@ public enum EmploymentStatus implements EquifaxParameter {
 
     @Override
     public String getValue() {
-        return name();
+        return value;
     }
 }

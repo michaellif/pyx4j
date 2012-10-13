@@ -251,14 +251,14 @@ public class ModelTest {
         // add parameters
         XmlCreator.addParameter(new StrategyNumber(1), parameters);
         XmlCreator.addParameter(ChallengerMode.N, parameters);
-        XmlCreator.addParameter(EmploymentStatus.C, parameters);
+        XmlCreator.addParameter(EmploymentStatus.SelfEmployed, parameters);
         XmlCreator.addParameter(PresentPosition.C, parameters);
         XmlCreator.addParameter(new TimeAtPresentEmployer(10), parameters);
         XmlCreator.addParameter(new MonthlyIncome(2000), parameters);
         XmlCreator.addParameter(new MonthlyIncome(400), parameters);
         XmlCreator.addParameter(new MonthlyHousingCosts(1000), parameters);
         XmlCreator.addParameter(new MonthlyCostsOther(300), parameters);
-        XmlCreator.addParameter(ResidentialStatus.O, parameters);
+        XmlCreator.addParameter(ResidentialStatus.OwnsOrBuying, parameters);
         XmlCreator.addParameter(new TimeAtPresentAddress(21), parameters);
 
         // marshalling

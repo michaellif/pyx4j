@@ -30,18 +30,17 @@ package com.propertyvista.equifax.model;
  * T - Construction Trade
  * W - Sales
  * Y - Manager
- * 
- * @author dmitry
- * 
  */
 public enum PresentPosition implements EquifaxParameter {
 
     C, D, E, F, G, I, J, L, N, O, P, R, S, T, W, Y;
 
+    @Override
     public String getId() {
         return "P0004";
     }
 
+    @Override
     public String getValue() {
         return name();
     }

@@ -14,7 +14,8 @@
 package com.propertyvista.equifax.model;
 
 public class StrategyNumber implements EquifaxParameter {
-    private int number;
+
+    private final int number;
 
     public StrategyNumber(int number) {
         if (number < 1 || number > 99) {
@@ -23,13 +24,17 @@ public class StrategyNumber implements EquifaxParameter {
         this.number = number;
     }
 
+    @Override
     public String getId() {
         return "P0001";
     }
 
+    @Override
     public String getValue() {
-        if (number < 10)
-            return "0" + number;
-        return "" + number;
+        if (number < 10) {
+            return "0" + String.valueOf(number);
+        } else {
+            return String.valueOf(number);
+        }
     }
 }

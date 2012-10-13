@@ -36,6 +36,7 @@ import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonCreditCheck;
 import com.propertyvista.domain.tenant.PersonCreditCheck.CreditCheckResult;
+import com.propertyvista.equifax.request.EquifaxConsts;
 import com.propertyvista.equifax.request.EquifaxHttpClient;
 import com.propertyvista.equifax.request.EquifaxModelMapper;
 
@@ -110,7 +111,7 @@ public class EquifaxCreditCheck {
         reportsLoop: for (EfxReportType efxReportType : efxResponse.getEfxReport()) {
             for (CNConsumerCreditReportType creditReport : efxReportType.getCNConsumerCreditReports().getCNConsumerCreditReport()) {
                 for (CNScoreType score : creditReport.getCNScores().getCNScore()) {
-                    if ("10301".equals(score.getProductId())) {
+                    if (EquifaxConsts.scoringProductId_iDecisionPower.equals(score.getProductId())) {
                         for (CodeType codeType : score.getRejectCodes().getRejectCode()) {
                             pcc.riskCode().setValue(codeType.getCode());
                             pcc.reason().setValue(codeType.getDescription());
