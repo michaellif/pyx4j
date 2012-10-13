@@ -54,7 +54,7 @@ public interface LeaseApprovalDTO extends IEntity {
     @Format("#0.00")
     IPrimitive<BigDecimal> totalAmountApproved();
 
-    @Format("#0.00")
+    @Format("#0")
     @Caption(name = "% Rent Approved")
     IPrimitive<Double> percenrtageApproved();
 

@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.shared.AttachLevel;
 
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -26,7 +27,7 @@ public interface ScreeningFacade {
 
     void calculateSuggestedDecision(BigDecimal rentAmount, LeaseApprovalDTO leaseApproval);
 
-    void runCreditCheck(BigDecimal rentAmount, LeaseParticipant<?> leaseParticipantId);
+    void runCreditCheck(BigDecimal rentAmount, LeaseParticipant<?> leaseParticipantId, Employee currentUserEmployee);
 
     /**
      * Retrieve draft if there are no final version

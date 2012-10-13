@@ -14,6 +14,8 @@
 package com.propertyvista.biz.tenant;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -29,9 +31,11 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonCreditCheck;
+import com.propertyvista.domain.tenant.PersonCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApprovalDTO;
@@ -51,43 +55,51 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         }
 
         BigDecimal amountApproved = BigDecimal.ZERO;
-        int noCreditCheckCount = 0;
+        int creditCheckCount = 0;
+
+        Set<CreditCheckResult> creditCheckResults = new HashSet<CreditCheckResult>();
 
         for (LeaseParticipanApprovalDTO participant : leaseApproval.participants()) {
             if (participant.creditCheck().isNull()) {
-                noCreditCheckCount++;
                 continue;
             }
-            switch (participant.creditCheck().creditCheckResult().getValue()) {
-            case Accept:
-                amountApproved.add(participant.creditCheck().amountApproved().getValue());
-                break;
-            case Decline:
-                leaseApproval.suggestedDecision().setValue(SuggestedDecision.Decline);
-                break;
-            case Review:
-                leaseApproval.suggestedDecision().setValue(SuggestedDecision.RequestGuarantor);
-                break;
+            creditCheckCount++;
+            if (participant.creditCheck().creditCheckResult().getValue() == CreditCheckResult.Accept) {
+                amountApproved = amountApproved.add(participant.creditCheck().amountApproved().getValue());
             }
-
+            creditCheckResults.add(participant.creditCheck().creditCheckResult().getValue());
         }
 
-        leaseApproval.totalAmountApproved().setValue(amountApproved);
-        leaseApproval.percenrtageApproved().setValue(amountApproved.divide(rentAmount).multiply(new BigDecimal("100.00")).doubleValue());
+        if (creditCheckCount == 0) {
+            leaseApproval.suggestedDecision().setValue(SuggestedDecision.RunCreditCheck);
+        } else {
+            leaseApproval.totalAmountApproved().setValue(amountApproved);
+            leaseApproval.percenrtageApproved().setValue(amountApproved.divide(rentAmount).multiply(new BigDecimal("100.00")).doubleValue());
 
-        if (amountApproved.compareTo(rentAmount) >= 0) {
-            leaseApproval.suggestedDecision().setValue(SuggestedDecision.Approve);
-        } else if (leaseApproval.suggestedDecision().isNull()) {
-            if (noCreditCheckCount > 0) {
-                leaseApproval.suggestedDecision().setValue(SuggestedDecision.RunCreditCheck);
-            } else {
+            if (creditCheckResults.contains(CreditCheckResult.Decline)) {
                 leaseApproval.suggestedDecision().setValue(SuggestedDecision.Decline);
+            } else {
+                if (amountApproved.compareTo(rentAmount) >= 0) {
+                    if (creditCheckResults.contains(CreditCheckResult.Review)) {
+                        leaseApproval.suggestedDecision().setValue(SuggestedDecision.ManualReview);
+                    } else {
+                        leaseApproval.suggestedDecision().setValue(SuggestedDecision.Approve);
+                    }
+                } else {
+                    if (creditCheckResults.contains(CreditCheckResult.Review)) {
+                        leaseApproval.suggestedDecision().setValue(SuggestedDecision.ManualReview);
+                    } else if (creditCheckResults.contains(CreditCheckResult.ReviewNoInformationAvalable)) {
+                        leaseApproval.suggestedDecision().setValue(SuggestedDecision.ManualReview);
+                    } else {
+                        leaseApproval.suggestedDecision().setValue(SuggestedDecision.RequestGuarantor);
+                    }
+                }
             }
         }
     }
 
     @Override
-    public void runCreditCheck(BigDecimal rentAmount, LeaseParticipant<?> leaseParticipantId) {
+    public void runCreditCheck(BigDecimal rentAmount, LeaseParticipant<?> leaseParticipantId, Employee currentUserEmployee) {
         LeaseParticipant<?> leaseParticipant = (LeaseParticipant<?>) Persistence.service().retrieve(leaseParticipantId.getValueClass(),
                 leaseParticipantId.getPrimaryKey());
         PersonScreening screening = retrivePersonScreening(leaseParticipant.leaseCustomer().customer());
@@ -95,6 +107,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         PersonCreditCheck pcc = EntityFactory.create(PersonCreditCheck.class);
         pcc.amountCheked().setValue(rentAmount);
         pcc.screening().set(screening);
+        pcc.createdBy().set(currentUserEmployee);
 
         Persistence.service().retrieve(leaseParticipant.leaseTermV());
         Persistence.service().retrieve(leaseParticipant.leaseTermV().holder().lease());

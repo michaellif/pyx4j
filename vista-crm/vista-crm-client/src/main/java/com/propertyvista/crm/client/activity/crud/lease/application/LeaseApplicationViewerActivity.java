@@ -25,6 +25,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.common.client.ui.components.HandledErrorAsyncCallback;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
@@ -79,7 +80,7 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
 
     @Override
     public void creditCheck(List<LeaseParticipant<?>> users) {
-        ((LeaseApplicationViewerCrudService) getService()).creditCheck(new DefaultAsyncCallback<String>() {
+        ((LeaseApplicationViewerCrudService) getService()).creditCheck(new HandledErrorAsyncCallback<String>() {
             @Override
             public void onSuccess(String message) {
                 populate();

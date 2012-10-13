@@ -30,20 +30,28 @@ public class EquifaxSimulation {
         ObjectFactory factory = new ObjectFactory();
         EfxTransmit response = factory.createEfxTransmit();
 
-        // TODO
-        reportsLoop: for (EfxReportType efxReportType : response.getEfxReport()) {
-            for (CNConsumerCreditReportType creditReport : efxReportType.getCNConsumerCreditReports().getCNConsumerCreditReport()) {
-                for (CNScoreType score : creditReport.getCNScores().getCNScore()) {
-                    if ("10301".equals(score.getProductId())) {
-                        for (CodeType codeType : score.getRejectCodes().getRejectCode()) {
-                            pcc.riskCode().setValue(codeType.getCode());
-                            pcc.reason().setValue(codeType.getDescription());
-                            break reportsLoop;
-                        }
-                    }
-                }
-            }
+        EfxReportType efxReportType = factory.createEfxReportType();
+        response.getEfxReport().add(efxReportType);
+
+        efxReportType.setCNConsumerCreditReports(factory.createEfxReportTypeCNConsumerCreditReports());
+        CNConsumerCreditReportType creditReport = factory.createCNConsumerCreditReportType();
+        efxReportType.getCNConsumerCreditReports().getCNConsumerCreditReport().add(creditReport);
+
+        CNScoreType score = factory.createCNScoreType();
+        creditReport.setCNScores(factory.createCNScoresType());
+        creditReport.getCNScores().getCNScore().add(score);
+        score.setProductId("10301");
+
+        CodeType codeType = factory.createCodeType();
+        score.setRejectCodes(factory.createCNScoreTypeRejectCodes());
+        score.getRejectCodes().getRejectCode().add(codeType);
+
+        String riskCode = pcc.screening().version().currentAddress().suiteNumber().getValue();
+        if (riskCode == null) {
+            riskCode = "01";
         }
+        codeType.setCode(riskCode);
+        codeType.setDescription("Simulation reason Description");
 
         return response;
     }

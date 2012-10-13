@@ -14,9 +14,9 @@
 package com.propertyvista.domain.tenant;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -32,6 +32,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
 
 /**
@@ -39,7 +40,6 @@ import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
  */
 public interface PersonCreditCheck extends IEntity {
 
-    //Suggested Decision
     @I18n
     public enum CreditCheckResult {
 
@@ -67,10 +67,14 @@ public interface PersonCreditCheck extends IEntity {
     @JoinColumn
     PersonScreening screening();
 
+    /**
+     * TimeStamp used for selecting the last one and recording actual event
+     */
     @Format("MM/dd/yyyy")
-    // TimeStamp ?
     @Timestamp(Update.Created)
-    IPrimitive<LogicalDate> creditCheckDate();
+    IPrimitive<Date> creditCheckDate();
+
+    Employee createdBy();
 
     /**
      * TODO make a reference to versioned policy: remove @Owned add @Versioned

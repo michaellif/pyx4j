@@ -37,6 +37,7 @@ import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonCreditCheck;
 import com.propertyvista.domain.tenant.Tenant;
@@ -194,8 +195,9 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
     @Override
     public void creditCheck(AsyncCallback<String> callback, Key entityId, BigDecimal creditCheckAmount, Vector<LeaseParticipant<?>> users) {
+        Employee currentUserEmployee = CrmAppContext.getCurrentUserEmployee();
         for (LeaseParticipant<?> leaseParticipant : users) {
-            ServerSideFactory.create(ScreeningFacade.class).runCreditCheck(creditCheckAmount, leaseParticipant);
+            ServerSideFactory.create(ScreeningFacade.class).runCreditCheck(creditCheckAmount, leaseParticipant, currentUserEmployee);
         }
         String successMessage = i18n.tr("Credit check has been proceeded successfully.");
         callback.onSuccess(successMessage);
