@@ -19,6 +19,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.PersonCreditCheck;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApprovalDTO;
@@ -38,4 +39,6 @@ public interface ScreeningFacade {
      * Find if Draft exists, if not find final version
      */
     PersonScreening retrivePersonScreeningDraftOrFinal(Customer customerId, AttachLevel attachLevel);
+
+    PersonCreditCheck retrivePersonCreditCheck(Customer customerId);
 }

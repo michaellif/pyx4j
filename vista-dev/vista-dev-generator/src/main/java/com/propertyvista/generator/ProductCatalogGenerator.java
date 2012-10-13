@@ -262,8 +262,8 @@ public class ProductCatalogGenerator {
         item.version().condition().setValue(RandomUtil.random(Concession.Condition.values()));
         item.version().mixable().setValue(RandomUtil.randomBoolean());
 
-        item.version().effectiveDate().setValue(DataGenerator.randomDate(2));
-        item.version().expirationDate().setValue(DataGenerator.randomDate(4));
+        item.version().effectiveDate().setValue(DataGenerator.randomDateInLastYearMonthShifted(2));
+        item.version().expirationDate().setValue(DataGenerator.randomDateInLastYearMonthShifted(4));
         return item;
     }
 

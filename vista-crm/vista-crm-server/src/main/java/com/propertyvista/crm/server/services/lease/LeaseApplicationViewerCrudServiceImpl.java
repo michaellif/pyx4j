@@ -24,8 +24,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -39,7 +37,6 @@ import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudService
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.PersonCreditCheck;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -102,10 +99,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             LeaseParticipanApprovalDTO approval = EntityFactory.create(LeaseParticipanApprovalDTO.class);
             approval.leaseParticipant().set(leaseParticipant.duplicate());
 
-            EntityQueryCriteria<PersonCreditCheck> criteria = EntityQueryCriteria.create(PersonCreditCheck.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().screening().screene(), leaseParticipant.leaseCustomer().customer()));
-            criteria.desc(criteria.proto().creditCheckDate());
-            approval.creditCheck().set(Persistence.service().retrieve(criteria));
+            approval.creditCheck().set(ServerSideFactory.create(ScreeningFacade.class).retrivePersonCreditCheck(leaseParticipant.leaseCustomer().customer()));
             if (!approval.creditCheck().isNull()) {
                 approval.screening().set(approval.creditCheck().screening());
                 Persistence.service().retrieve(approval.screening(), AttachLevel.ToStringMembers);

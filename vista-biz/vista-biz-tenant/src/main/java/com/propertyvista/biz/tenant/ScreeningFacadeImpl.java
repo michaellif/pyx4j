@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -14,8 +14,11 @@
 package com.propertyvista.biz.tenant;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.commons.lang.time.DateUtils;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -173,5 +176,14 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
         screening = Persistence.service().retrieve(criteria, attachLevel);
         return screening;
+    }
+
+    @Override
+    public PersonCreditCheck retrivePersonCreditCheck(Customer customerId) {
+        EntityQueryCriteria<PersonCreditCheck> criteria = EntityQueryCriteria.create(PersonCreditCheck.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().screening().screene(), customerId));
+        criteria.add(PropertyCriterion.eq(criteria.proto().creditCheckDate(), DateUtils.addDays(new Date(), -30)));
+        criteria.desc(criteria.proto().creditCheckDate());
+        return Persistence.service().retrieve(criteria);
     }
 }
