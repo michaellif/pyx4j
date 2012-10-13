@@ -282,9 +282,9 @@ public class DataGenerator {
         return array[index];
     }
 
-    public static LogicalDate randomDate(int month) {
+    public static LogicalDate randomDateInLastYearMonthShifted(int month) {
         Calendar c = new GregorianCalendar();
-        c.set(Calendar.YEAR, 2011);
+        c.set(Calendar.YEAR, c.get(Calendar.YEAR) - 1);
         c.set(Calendar.MONTH, 1);
         c.set(Calendar.DATE, 1);
 
@@ -293,6 +293,19 @@ public class DataGenerator {
         c.set(Calendar.HOUR_OF_DAY, 0);
 
         c.add(Calendar.MONTH, (month > 0) ? random().nextInt(month) : -random().nextInt(-month));
+        // DB does not store Milliseconds
+        c.set(Calendar.MILLISECOND, 0);
+        return new LogicalDate(c.getTime());
+    }
+
+    public static LogicalDate randomDateDaysShifted(int days) {
+        Calendar c = new GregorianCalendar();
+
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+
+        c.add(Calendar.DAY_OF_MONTH, (days > 0) ? random().nextInt(days) : -random().nextInt(-days));
         // DB does not store Milliseconds
         c.set(Calendar.MILLISECOND, 0);
         return new LogicalDate(c.getTime());

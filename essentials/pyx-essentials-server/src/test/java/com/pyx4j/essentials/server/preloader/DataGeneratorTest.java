@@ -51,7 +51,7 @@ public class DataGeneratorTest extends TestCase {
         void generate() {
             postalCode = DataGenerator.randomPostalCode();
             phone = DataGenerator.randomPhone();
-            date = DataGenerator.randomDate(100);
+            date = DataGenerator.randomDateInLastYearMonthShifted(100);
             lastName1 = DataGenerator.randomLastName();
 
             AddressInfo address = DataGenerator.randomAddressInfo();
