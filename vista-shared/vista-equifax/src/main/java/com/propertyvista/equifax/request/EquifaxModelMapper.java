@@ -134,7 +134,7 @@ public class EquifaxModelMapper {
                 province.setCode(currentAddress.province().code().getValue());
                 province.setDescription(currentAddress.province().name().getValue());
                 address.setProvince(province);
-                address.setPostalCode(currentAddress.postalCode().getValue());
+                address.setPostalCode(efxPostalCodeFormat(currentAddress.postalCode().getValue()));
             }
 
             if (!customer.person().birthDate().isNull()) {
@@ -340,6 +340,14 @@ public class EquifaxModelMapper {
         }
 
         return transmit;
+    }
+
+    private static String efxPostalCodeFormat(String value) {
+        if (value == null) {
+            return null;
+        } else {
+            return value.trim().replaceAll(" ", "");
+        }
     }
 
     private static boolean isZero(IPrimitive<BigDecimal> monthlyAmount) {
