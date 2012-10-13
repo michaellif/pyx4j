@@ -71,7 +71,11 @@ public class EntityFileLogger {
 
         Entity,
 
-        EntityList
+        EntityList,
+
+        String,
+
+        XML
     }
 
     public static void log(String baseDirectory, String type, List<? extends IEntity> entList) {
@@ -80,6 +84,14 @@ public class EntityFileLogger {
 
     public static void log(String baseDirectory, String type, IEntity ent) {
         logAny(baseDirectory, type, ent, DataType.Entity);
+    }
+
+    public static void log(String baseDirectory, String type, String object) {
+        logAny(baseDirectory, type, object, DataType.String);
+    }
+
+    public static void logXml(String baseDirectory, String type, String object) {
+        logAny(baseDirectory, type, object, DataType.XML);
     }
 
     @SuppressWarnings("unchecked")
@@ -120,6 +132,12 @@ public class EntityFileLogger {
                 ent = (IEntity) item;
                 ext = ".xml";
                 break;
+            case XML:
+                ext = ".xml";
+                break;
+            case String:
+                ext = ".txt";
+                break;
             default:
                 if (item != null) {
                     name.append(item.getClass().getSimpleName());
@@ -155,6 +173,8 @@ public class EntityFileLogger {
                 } else if (item instanceof IEntity) {
                     xmlWriter.write((IEntity) item);
                     w.write(xml.toString());
+                } else {
+                    w.write(item.toString());
                 }
             }
             w.flush();
