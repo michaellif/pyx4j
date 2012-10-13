@@ -14,6 +14,7 @@
 package com.propertyvista.biz.tenant;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -77,7 +78,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
             leaseApproval.suggestedDecision().setValue(SuggestedDecision.RunCreditCheck);
         } else {
             leaseApproval.totalAmountApproved().setValue(amountApproved);
-            leaseApproval.percenrtageApproved().setValue(amountApproved.divide(rentAmount).multiply(new BigDecimal("100.00")).doubleValue());
+            leaseApproval.percenrtageApproved().setValue(amountApproved.divide(rentAmount, RoundingMode.DOWN).multiply(new BigDecimal("100.00")).doubleValue());
 
             if (creditCheckResults.contains(CreditCheckResult.Decline)) {
                 leaseApproval.suggestedDecision().setValue(SuggestedDecision.Decline);
@@ -182,7 +183,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
     public PersonCreditCheck retrivePersonCreditCheck(Customer customerId) {
         EntityQueryCriteria<PersonCreditCheck> criteria = EntityQueryCriteria.create(PersonCreditCheck.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().screening().screene(), customerId));
-        criteria.add(PropertyCriterion.eq(criteria.proto().creditCheckDate(), DateUtils.addDays(new Date(), -30)));
+        criteria.add(PropertyCriterion.ge(criteria.proto().creditCheckDate(), DateUtils.addDays(new Date(), -30)));
         criteria.desc(criteria.proto().creditCheckDate());
         return Persistence.service().retrieve(criteria);
     }

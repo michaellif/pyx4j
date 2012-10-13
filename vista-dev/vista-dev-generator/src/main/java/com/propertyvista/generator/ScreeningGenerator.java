@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
@@ -212,10 +213,10 @@ public class ScreeningGenerator {
 
     private Collection<PersonCreditCheck> createPersonCreditCheck() {
         List<PersonCreditCheck> list = new ArrayList<PersonCreditCheck>();
-        for (int i = 0; i < RandomUtil.randomInt(2); i++) {
+        for (int i = 0; i < 1 + RandomUtil.randomInt(3); i++) {
             PersonCreditCheck pcc = EntityFactory.create(PersonCreditCheck.class);
 
-            pcc.creditCheckDate().setValue(RandomUtil.randomDateDaysShifted(50));
+            pcc.creditCheckDate().setValue(RandomUtil.randomDateDaysShifted(40));
 
             pcc.backgroundCheckPolicy().bankruptcy().setValue(RandomUtil.randomEnum(BjccEntry.class));
             pcc.backgroundCheckPolicy().judgment().setValue(RandomUtil.randomEnum(BjccEntry.class));
@@ -224,14 +225,18 @@ public class ScreeningGenerator {
 
             pcc.amountCheked().setValue(BigDecimal.valueOf(500 + RandomUtil.randomDouble(500)));
 
-            pcc.creditCheckResult().setValue(RandomUtil.randomEnum(CreditCheckResult.class));
+            List<CreditCheckResult> options = new ArrayList<CreditCheckResult>(EnumSet.allOf(CreditCheckResult.class));
+            options.remove(CreditCheckResult.Error);
+            // Make Accept more frequent
+            options.add(CreditCheckResult.Accept);
+
+            pcc.creditCheckResult().setValue(RandomUtil.random(options));
 
             switch (pcc.creditCheckResult().getValue()) {
             case Accept:
                 pcc.amountApproved().setValue(BigDecimal.valueOf(pcc.amountCheked().getValue().doubleValue() - RandomUtil.randomDouble(500)));
                 break;
-            case Decline:
-            case Review:
+            default:
                 pcc.reason().setValue(CommonsGenerator.lipsumShort());
                 break;
             }
