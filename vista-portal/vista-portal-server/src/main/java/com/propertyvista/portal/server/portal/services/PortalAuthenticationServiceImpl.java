@@ -120,23 +120,18 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
 
     @Override
     protected void sendPasswordRetrievalToken(CustomerUser user) {
-        {
-            // See if active Lease exists
-            List<Lease> leases = ServerSideFactory.create(CustomerFacade.class).getActiveLeases(user);
-            if (leases.size() == 0) {
-                throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
-            }
+        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
+        Customer customer = Persistence.service().retrieve(criteria);
+        if (customer == null) {
+            throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
         }
-
-        {
-            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
-            Customer customer = Persistence.service().retrieve(criteria);
-            if (customer == null) {
-                throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
-            }
+        // See if active Lease exists
+        List<Lease> leases = ServerSideFactory.create(CustomerFacade.class).getActiveLeases(user);
+        if (leases.size() > 0) {
+            ServerSideFactory.create(CommunicationFacade.class).sendTenantPasswordRetrievalToken(customer);
+        } else {
             ServerSideFactory.create(CommunicationFacade.class).sendProspectPasswordRetrievalToken(customer);
         }
-
     }
 }
