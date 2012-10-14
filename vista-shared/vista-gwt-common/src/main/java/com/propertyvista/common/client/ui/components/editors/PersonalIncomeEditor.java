@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -88,6 +89,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
         super.onValuePropagation(value, fireEvent, populate);
     }
 
+    @SuppressWarnings("unchecked")
     protected void selectDetailsEditor(IncomeSource type) {
         if (this.contains(proto().details())) {
             this.unbind(proto().details());
@@ -100,7 +102,6 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
             CEntityForm editor = null;
             IncomeInfo details = getValue().details();
 
-            boolean hackOtherInitialization = false;
             switch (type) {
             case fulltime:
             case parttime:
@@ -124,45 +125,17 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
                 fileUpload.setVisible(true);
                 break;
             default:
-                editor = createOtherIncomeInfoEditor();
-                // TODO review: Avoid Exception "Member name is not bound"
-                hackOtherInitialization = true;
-                //applyOtherLables(type, editor);
+                editor = createOtherIncomeInfoEditor(type);
             }
 
             if (details.getInstanceValueClass() != editor.proto().getValueClass()) {
                 details.set(EntityFactory.create(editor.proto().getValueClass()));
             }
-            this.inject(proto().details(), editor);
-            editor.populate(details.cast());
-            detailsHolder.setWidget(editor);
-
-            // TODO review see above : Avoid Exception "Member name is not bound"
-            if (hackOtherInitialization) {
-                applyOtherLables(type, editor);
+            if (editor != null) {
+                this.inject(proto().details(), editor);
+                editor.populate(details.cast());
+                detailsHolder.setWidget(editor);
             }
-
-        }
-
-    }
-
-    private void applyOtherLables(IncomeSource incomeSource, CEntityForm<IncomeInfoOther> comp) {
-        switch (incomeSource) {
-        case pension:
-        case retired:
-            comp.get(comp.proto().name()).setVisible(false);
-            comp.get(comp.proto().ends()).setVisible(false);
-            break;
-        case disabilitySupport:
-        case dividends:
-        case other:
-            comp.get(comp.proto().name()).setVisible(true);
-            comp.get(comp.proto().ends()).setVisible(false);
-            break;
-
-        default:
-            comp.get(comp.proto().name()).setVisible(true);
-            comp.get(comp.proto().ends()).setVisible(true);
         }
     }
 
@@ -170,7 +143,6 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
         new StartEndDateValidation(comp.get(comp.proto().starts()), comp.get(comp.proto().ends()));
         comp.get(comp.proto().starts()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(comp.get(comp.proto().ends())));
         comp.get(comp.proto().ends()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(comp.get(comp.proto().starts())));
-
     }
 
     //
@@ -370,17 +342,39 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
         };
     }
 
-    private CEntityForm<IncomeInfoOther> createOtherIncomeInfoEditor() {
+    private CEntityForm<IncomeInfoOther> createOtherIncomeInfoEditor(final IncomeSource incomeSource) {
         return new CEntityDecoratableForm<IncomeInfoOther>(IncomeInfoOther.class) {
+
             @Override
             public IsWidget createContent() {
                 FormFlexPanel main = new FormFlexPanel();
 
-                int row = -1;
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().monthlyAmount()), 9).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 9).build());
+                CComponent<?, ?> name, ends;
 
+                int row = -1;
+                main.setWidget(++row, 0, new DecoratorBuilder(name = inject(proto().name()), 25).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().monthlyAmount()), 9).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(ends = inject(proto().ends()), 9).build());
+
+                // some tune-up:
+                switch (incomeSource) {
+                case pension:
+                case retired:
+                    name.setVisible(false);
+                    ends.setVisible(false);
+                    break;
+
+                case disabilitySupport:
+                case dividends:
+                case other:
+                    name.setVisible(true);
+                    ends.setVisible(false);
+                    break;
+
+                default:
+                    name.setVisible(true);
+                    ends.setVisible(true);
+                }
                 return main;
             }
         };
