@@ -55,3 +55,15 @@ Use IPersonalIdentity instead TokenizedAccountNumber, TokenizedCreditCardNumber
 VISTA-478 11/10/2012  vlads
    Not final! Work in progress: Changes to BackgroundCheckPolicy, BackgroundCheckPolicyV, PersonCreditCheck
    rm: EquifaxApproval, EquifaxResult
+
+
+VISTA-1709 14/10/2012 vlads
+    Add missing indexes in _admin_
+
+CREATE UNIQUE INDEX admin_pmc_equifax_info_pmc_idx ON admin_pmc_equifax_info (pmc);
+CREATE UNIQUE INDEX admin_pmc_payment_type_info_pmc_idx ON admin_pmc_payment_type_info (pmc);
+CREATE INDEX pad_batch_pad_file_idx ON pad_batch (pad_file);
+CREATE INDEX pad_debit_record_pad_batch_idx ON pad_debit_record (pad_batch);
+CREATE INDEX pad_reconciliation_debit_record_reconciliation_summary_idx ON pad_reconciliation_debit_record (reconciliation_summary);
+CREATE INDEX pad_reconciliation_summary_reconciliation_file_idx ON pad_reconciliation_summary (reconciliation_file);
+CREATE INDEX pad_sim_batch_pad_file_idx ON pad_sim_batch (pad_file);

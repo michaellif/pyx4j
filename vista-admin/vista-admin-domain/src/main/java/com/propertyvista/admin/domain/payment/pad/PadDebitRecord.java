@@ -36,6 +36,7 @@ public interface PadDebitRecord extends IEntity {
 
     @Owner
     @JoinColumn
+    @Indexed
     PadBatch padBatch();
 
     @Override

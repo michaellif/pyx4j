@@ -16,6 +16,7 @@ package com.propertyvista.admin.domain.pmc;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -34,6 +35,7 @@ public interface PmcPaymentTypeInfo extends IEntity {
     @ReadOnly
     @Owner
     @JoinColumn
+    @Indexed(uniqueConstraint = true)
     Pmc pmc();
 
     IPrimitive<Boolean> ccVisaPaymentAvailable();

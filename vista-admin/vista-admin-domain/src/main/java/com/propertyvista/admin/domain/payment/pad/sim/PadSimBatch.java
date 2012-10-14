@@ -42,6 +42,7 @@ public interface PadSimBatch extends IEntity {
 
     @Owner
     @JoinColumn
+    @Indexed
     PadSimFile padFile();
 
     @Length(3)

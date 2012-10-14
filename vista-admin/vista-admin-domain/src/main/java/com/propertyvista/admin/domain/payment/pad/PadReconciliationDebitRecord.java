@@ -19,6 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.GwtBlacklist;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderColumn;
@@ -37,6 +38,7 @@ public interface PadReconciliationDebitRecord extends IEntity {
 
     @Owner
     @JoinColumn
+    @Indexed
     PadReconciliationSummary reconciliationSummary();
 
     @OrderColumn

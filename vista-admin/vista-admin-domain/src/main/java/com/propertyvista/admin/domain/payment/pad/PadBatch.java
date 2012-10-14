@@ -48,6 +48,7 @@ public interface PadBatch extends IEntity {
 
     @Owner
     @JoinColumn
+    @Indexed
     PadFile padFile();
 
     IPrimitive<Integer> batchNumber();

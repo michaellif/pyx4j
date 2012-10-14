@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.GwtBlacklist;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
@@ -39,6 +40,7 @@ public interface PadReconciliationSummary extends IEntity {
 
     @Owner
     @JoinColumn
+    @Indexed
     PadReconciliationFile reconciliationFile();
 
     @OrderColumn
