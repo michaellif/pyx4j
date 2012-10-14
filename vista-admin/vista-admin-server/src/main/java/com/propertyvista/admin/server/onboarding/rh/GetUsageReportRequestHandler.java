@@ -13,27 +13,29 @@
  */
 package com.propertyvista.admin.server.onboarding.rh;
 
-import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.PersonCreditCheck;
 import com.propertyvista.onboarding.GetUsageRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.onboarding.UsageRecordIO;
 import com.propertyvista.onboarding.UsageReportResponseIO;
 import com.propertyvista.onboarding.UsageType;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class GetUsageReportRequestHandler extends AbstractRequestHandler<GetUsageRequestIO> {
 
@@ -60,63 +62,76 @@ public class GetUsageReportRequestHandler extends AbstractRequestHandler<GetUsag
         }
     }
 
-    private UsageReportResponseIO getEquifaxUsageResponse(GetUsageRequestIO request) {
-        UsageReportResponseIO response = EntityFactory.create(UsageReportResponseIO.class);
+    private UsageReportResponseIO getEquifaxUsageResponse(final GetUsageRequestIO request) {
+        final UsageReportResponseIO response = EntityFactory.create(UsageReportResponseIO.class);
         response.success().setValue(Boolean.TRUE);
         response.format().setValue(request.format().getValue());
 
-        UsageRecordIO record = EntityFactory.create(UsageRecordIO.class);
+        EntityQueryCriteria<Pmc> pmcCret = EntityQueryCriteria.create(Pmc.class);
+        pmcCret.add(PropertyCriterion.eq(pmcCret.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
+        Pmc pmc = Persistence.service().retrieve(pmcCret);
+        if (pmc == null) {
+            response.success().setValue(Boolean.FALSE);
+            response.errorMessage().setValue("PMC not found");
+            return response;
+        }
+
+        final UsageRecordIO record = EntityFactory.create(UsageRecordIO.class);
         record.from().setValue(request.from().getValue());
         record.to().setValue(request.to().getValue());
         record.usageType().setValue(request.usageType().getValue());
 
-        if (ApplicationMode.isDevelopment()) {
-            record.value().setValue(55);
-        } else {
-            record.value().setValue(0);
-        }
+        TaskRunner.runInTargetNamespace(pmc.namespace().getValue(), new Callable<Void>() {
+            @Override
+            public Void call() {
+                EntityQueryCriteria<PersonCreditCheck> criteria = EntityQueryCriteria.create(PersonCreditCheck.class);
+                criteria.add(PropertyCriterion.ge(criteria.proto().creditCheckDate(), request.from().getValue()));
+                criteria.add(PropertyCriterion.le(criteria.proto().creditCheckDate(), request.to().getValue()));
+                record.value().setValue(Persistence.service().count(criteria));
+                return null;
+            }
+        });
 
         response.records().add(record);
 
         return response;
     }
 
-    private UsageReportResponseIO getBuildingUnitCountResponse(GetUsageRequestIO request) {
-        UsageReportResponseIO response = EntityFactory.create(UsageReportResponseIO.class);
+    private UsageReportResponseIO getBuildingUnitCountResponse(final GetUsageRequestIO request) {
+        final UsageReportResponseIO response = EntityFactory.create(UsageReportResponseIO.class);
         response.success().setValue(Boolean.TRUE);
         response.format().setValue(request.format().getValue());
 
         EntityQueryCriteria<Pmc> pmcCret = EntityQueryCriteria.create(Pmc.class);
         pmcCret.add(PropertyCriterion.eq(pmcCret.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
-        List<Pmc> pmcs = Persistence.service().query(pmcCret);
-
-        if (pmcs.size() == 0) {
+        Pmc pmc = Persistence.service().retrieve(pmcCret);
+        if (pmc == null) {
             response.success().setValue(Boolean.FALSE);
+            response.errorMessage().setValue("PMC not found");
             return response;
         }
 
-        final String cuurentNamespace = NamespaceManager.getNamespace();
-        NamespaceManager.setNamespace(pmcs.get(0).namespace().getValue());
+        TaskRunner.runInTargetNamespace(pmc.namespace().getValue(), new Callable<Void>() {
+            @Override
+            public Void call() {
+                EntityQueryCriteria<Building> buildingCret = EntityQueryCriteria.create(Building.class);
+                ICursorIterator<Building> buildings = Persistence.service().query(null, buildingCret, AttachLevel.Attached);
+                while (buildings.hasNext()) {
+                    Building building = buildings.next();
+                    UsageRecordIO record = EntityFactory.create(UsageRecordIO.class);
 
-        try {
-            EntityQueryCriteria<Building> buildingCret = EntityQueryCriteria.create(Building.class);
-            List<Building> buildings = Persistence.service().query(buildingCret);
+                    EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+                    criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
 
-            for (Building building : buildings) {
-                UsageRecordIO record = EntityFactory.create(UsageRecordIO.class);
+                    record.text().setValue(building.propertyCode().getValue());
+                    record.value().setValue(Persistence.service().count(criteria));
+                    record.usageType().setValue(request.usageType().getValue());
 
-                EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
-
-                record.text().setValue(building.propertyCode().getValue());
-                record.value().setValue(Persistence.service().count(criteria));
-                record.usageType().setValue(request.usageType().getValue());
-
-                response.records().add(record);
+                    response.records().add(record);
+                }
+                return null;
             }
-        } finally {
-            NamespaceManager.setNamespace(cuurentNamespace);
-        }
+        });
 
         return response;
     }
