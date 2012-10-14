@@ -51,6 +51,8 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
         selectTab(addTab(createGeneralTab()));
         Tab tab = addTab(createOnboardingMerchantAccountsTab());
         setTabEnabled(tab, !isEditable());
+
+        selectTab(addTab(createEquifaxlTab()));
     }
 
     public void setOnboardingMerchantAccountsSource(ListerDataSource<OnboardingMerchantAccountDTO> onboardingMerchantAccountsSource) {
@@ -148,8 +150,24 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
     }
 
     private FormFlexPanel createOnboardingMerchantAccountsTab() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Onboarding Merchant Accounts"));
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Merchant Accounts"));
         panel.setWidget(0, 0, onboardingMerchantAccountsLister = new OnboardingMerchantAccountsLister());
         return panel;
+    }
+
+    private FormFlexPanel createEquifaxlTab() {
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("Equifax"));
+
+        int row = -1;
+        content.setH1(++row, 0, 2, i18n.tr("Equifax"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().approved()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().reportType()), 15).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().customerNumber()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().securityCode()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().customerCode()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().customerReferenceNumber()), 15).build());
+
+        return content;
     }
 }

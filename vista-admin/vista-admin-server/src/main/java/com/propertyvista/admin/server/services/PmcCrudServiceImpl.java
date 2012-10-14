@@ -73,6 +73,9 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     protected void enhanceRetrieved(Pmc entity, PmcDTO dto, RetrieveTraget retrieveTraget) {
         super.enhanceRetrieved(entity, dto, retrieveTraget);
 
+        Persistence.service().retrieveMember(entity.equifaxInfo());
+        dto.equifaxInfo().set(entity.equifaxInfo().duplicate());
+
         dto.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.CRM, true));
         dto.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.TenantPortal, false));
         dto.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.ProspectiveApp, true));
@@ -106,6 +109,12 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
                 cred.onboardingAccountId().setValue(entity.onboardingAccountId().getValue());
                 Persistence.service().persist(cred);
             }
+        }
+
+        if (!dto.equifaxInfo().isNull()) {
+            Persistence.service().retrieveMember(entity.equifaxInfo());
+            entity.equifaxInfo().set(dto.equifaxInfo());
+            Persistence.service().persist(entity.equifaxInfo());
         }
 
         CacheService.reset();

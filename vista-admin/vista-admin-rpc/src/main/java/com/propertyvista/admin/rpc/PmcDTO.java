@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.pmc.PmcDnsName;
+import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
@@ -35,10 +36,10 @@ import com.propertyvista.domain.settings.PmcVistaFeatures;
 @Caption(name = "Property Management Company (PMC)")
 public interface PmcDTO extends IEntity {
 
-	OnboardingUser createPmcForExistingOnboardingUserRequest();
-	
+    OnboardingUser createPmcForExistingOnboardingUserRequest();
+
     IPrimitive<PmcStatus> status();
-    
+
     @NotNull
     @Caption(name = "Company name")
     IPrimitive<String> name();
@@ -83,5 +84,7 @@ public interface PmcDTO extends IEntity {
 
     @ReadOnly
     IPrimitive<Date> updated();
+
+    PmcEquifaxInfo equifaxInfo();
 
 }
