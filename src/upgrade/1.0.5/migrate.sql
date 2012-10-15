@@ -133,7 +133,7 @@ CREATE SEQUENCE reports_settings_holder_seq START WITH 1 INCREMENT BY 1 NO MAXVA
 ALTER SEQUENCE reports_settings_holder_seq OWNER TO vista;
 
 --  _c3p0_connection_test is not used anymore
-DROP TABLE  _c3p0_connection_test;
+DROP TABLE IF EXISTS _c3p0_connection_test;
 
 /**
 *** For the rest of migration plpsql function is required
@@ -246,6 +246,11 @@ BEGIN
 
         -- billing_invoice_line_item
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_invoice_line_item ADD COLUMN product_chargediscriminator VARCHAR(50)';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_invoice_line_item AS a '||
+        '       SET     product_chargediscriminator = b.iddiscriminator '||
+        '       FROM    '||v_schema_name||'.billing_invoice_line_item b '||
+        '       WHERE   a.product_charge = b.id ';
 
         -- building
         EXECUTE 'ALTER TABLE '||v_schema_name||'.building DROP COLUMN dashboard, DROP COLUMN notes_and_attachments';
@@ -949,6 +954,8 @@ BEGIN
         '               FROM '||v_schema_name||'.lease a '||
         '               JOIN '||v_schema_name||'.lease_v c ON (a.id = c.holder) '||
         '               JOIN '||v_schema_name||'.tenant b ON (a.id = b.lease_v) '||
+        '               JOIN    (SELECT MAX(id) AS id,customer FROM '||v_schema_name||'.tenant '||
+        '                       GROUP BY customer) d ON (b.id = d.id) '||
         '               WHERE b.preauthorized_payment IS NOT NULL ) AS b '||
         '       WHERE   a.lease = b.lease '||
         '       AND     a.customer = b.customer ';
@@ -996,11 +1003,13 @@ BEGIN
         'application,screening,relationship,tenantdiscriminator,tenant) '||
         '(SELECT nextval(''public.lease_participant_seq'') AS id,''Guarantor'' AS iddiscriminator, ''Guarantor'' AS lease_customerdiscriminator,'||
         'c.id AS lease_customer,a.participant_role,b.id AS lease_term_v,a.order_in_lease,a.application,a.screening,a.relationship,'||
-        '''Tenant'',d.id AS tenant '||
+        '''Tenant'',f.id AS tenant '||
         'FROM '||v_schema_name||'.guarantor a '||
         'JOIN '||v_schema_name||'.lease_term_v b ON (a.lease_v = b.old_id) '||
-        'JOIN '||v_schema_name||'.lease_customer c ON (a.customer = c.customer) '||
-        'LEFT JOIN '||v_schema_name||'.lease_participant d ON (d.tenant_id = a.tenant) '||
+        'JOIN '||v_schema_name||'.lease_v d ON (a.lease_v = d.id) '||
+        'JOIN '||v_schema_name||'.lease e ON (d.holder = e.id) '||
+        'JOIN '||v_schema_name||'.lease_customer c ON (a.customer = c.customer AND e.id = c.lease) '||
+        'LEFT JOIN '||v_schema_name||'.lease_participant f ON (f.tenant_id = a.tenant) '||
         'ORDER BY a.id )';
 
         EXECUTE 'INSERT INTO '||v_schema_name||'.lease_participant '||
@@ -1011,7 +1020,9 @@ BEGIN
         'a.take_ownership,a.percentage '||
         'FROM '||v_schema_name||'.tenant a '||
         'JOIN '||v_schema_name||'.lease_term_v b ON (a.lease_v = b.old_id) '||
-        'JOIN '||v_schema_name||'.lease_customer c ON (a.customer = c.customer) '||
+        'JOIN '||v_schema_name||'.lease_v d ON (a.lease_v = d.id) '||
+        'JOIN '||v_schema_name||'.lease e ON (d.holder = e.id) '||
+        'JOIN '||v_schema_name||'.lease_customer c ON (a.customer = c.customer AND e.id = c.lease ) '||
         'ORDER BY a.id )';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant OWNER TO vista';
@@ -1065,7 +1076,7 @@ BEGIN
 
 
         -- Delete all extra tables
-
+        
         FOREACH v_table_name IN ARRAY
         ARRAY[  'guarantor',
                 'lease_v',
@@ -1078,7 +1089,7 @@ BEGIN
 
         END LOOP;
 
-
+        
 
         /**
         ***     ======================================================================================
