@@ -133,7 +133,7 @@ CREATE SEQUENCE reports_settings_holder_seq START WITH 1 INCREMENT BY 1 NO MAXVA
 ALTER SEQUENCE reports_settings_holder_seq OWNER TO vista;
 
 --  _c3p0_connection_test is not used anymore
-DROP TABLE  _c3p0_connection_test; 
+DROP TABLE  _c3p0_connection_test;
 
 /**
 *** For the rest of migration plpsql function is required
@@ -218,31 +218,31 @@ BEGIN
         -- apt_unit table
         EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit ADD COLUMN info_number_s VARCHAR(32), DROP COLUMN notes_and_attachments';
         EXECUTE 'UPDATE '||v_schema_name||'.apt_unit SET info_number_s = _dba_.convert_id_to_string(info_unit_number)';
-        
-        -- billing_arrears_snapshot 
+
+        -- billing_arrears_snapshot
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_arrears_snapshot ADD CONSTRAINT billing_arrears_snapshot_billing_account_ck '||
         'CHECK (((iddiscriminator = ''LeaseArrearsSnapshot'') AND (billing_account IS NOT NULL)) OR ((iddiscriminator != ''LeaseArrearsSnapshot'') AND (billing_account IS NULL))),'||
         'ADD CONSTRAINT billing_arrears_snapshot_building_ck CHECK (((iddiscriminator = ''BuildingArrearsSnapshot'') AND (building IS NOT NULL)) '||
         'OR ((iddiscriminator != ''BuildingArrearsSnapshot'') AND (building IS NULL)))';
 
- 
+
          -- billing_bill
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_bill DROP COLUMN lease_for';
 
         -- billing_debit_credit_link
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_debit_credit_link ADD COLUMN credit_itemdiscriminator VARCHAR(50),'||
                                         'ADD COLUMN debit_itemdiscriminator VARCHAR(50)';
-        
+
         EXECUTE 'UPDATE '||v_schema_name||'.billing_debit_credit_link AS a '||
                 'SET     credit_itemdiscriminator = b.iddiscriminator '||
                 'FROM    (SELECT id,iddiscriminator FROM '||v_schema_name||'.billing_invoice_line_item ) AS b '||
                 'WHERE  a.credit_item = b.id ';
-        
+
         EXECUTE 'UPDATE '||v_schema_name||'.billing_debit_credit_link AS a '||
         '       SET     debit_itemdiscriminator = b.iddiscriminator '||
         '       FROM    (SELECT id,iddiscriminator FROM '||v_schema_name||'.billing_invoice_line_item ) AS b '||
         '       WHERE  a.debit_item = b.id ';
-        
+
 
         -- billing_invoice_line_item
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_invoice_line_item ADD COLUMN product_chargediscriminator VARCHAR(50)';
@@ -262,16 +262,16 @@ BEGIN
                                 'DROP COLUMN layout_type,'||
                                 'ADD COLUMN encoded_layout VARCHAR(500),'||
                                 'DROP CONSTRAINT dashboard_metadata_user_id_fk ';
-                                
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.dashboard_metadata RENAME COLUMN user_id TO owner_user_id';
-       
-       
+
+
         EXECUTE 'TRUNCATE TABLE '||v_schema_name||'.dashboard_metadata';
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.dashboard_metadata '||
         '       ADD CONSTRAINT dashboard_metadata_owner_user_id_fk FOREIGN KEY(owner_user_id) REFERENCES '||v_schema_name||'.crm_user(id)';
-                                                
-        
+
+
 
         -- employee
         EXECUTE 'ALTER TABLE '||v_schema_name||'.employee ADD COLUMN employee_id_s VARCHAR(26)';
@@ -293,11 +293,11 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.gadget_metadata_holder OWNER TO vista';
 
         -- identification_document_type
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.identification_document_type DROP COLUMN document_id, '||
                                                 'DROP COLUMN document_issuer,'||
                                                 'DROP COLUMN drivers_license_state';
-        
+
 
         -- income_info
 
@@ -348,12 +348,12 @@ BEGIN
                 'SET    line_itemdiscriminator = b.iddiscriminator '||
                 'FROM   '||v_schema_name||'.billing_invoice_line_item AS b '||
                 'WHERE  a.line_item = b.id ';
-                
+
         -- invoice_charge_sub_line_item
         EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_charge_sub_line_item ADD COLUMN line_itemdiscriminator VARCHAR(50)';
         EXECUTE 'CREATE INDEX  invoice_charge_sub_line_item_line_itemdiscriminator_idx ON '||v_schema_name||'.invoice_charge_sub_line_item '||
         'USING btree (line_itemdiscriminator) ';
-        
+
         EXECUTE 'UPDATE '||v_schema_name||'.invoice_charge_sub_line_item AS a '||
                 'SET    line_itemdiscriminator = b.iddiscriminator '||
                 'FROM   '||v_schema_name||'.billing_invoice_line_item AS b '||
@@ -363,7 +363,7 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_concession_sub_line_item ADD COLUMN line_itemdiscriminator VARCHAR(50)';
         EXECUTE 'CREATE INDEX  invoice_concession_sub_line_item_line_itemdiscriminator_idx ON '||v_schema_name||'.invoice_concession_sub_line_item '||
         'USING btree (line_itemdiscriminator) ';
-        
+
          EXECUTE 'UPDATE '||v_schema_name||'.invoice_concession_sub_line_item AS a '||
                 'SET    line_itemdiscriminator = b.iddiscriminator '||
                 'FROM   '||v_schema_name||'.billing_invoice_line_item AS b '||
@@ -378,7 +378,7 @@ BEGIN
                                     'DROP COLUMN lease_on_application_for,'||
                                     'DROP COLUMN equifax_approval';
         -- legal_questions
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions DROP CONSTRAINT IF EXISTS legal_questions_pk CASCADE';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions DROP CONSTRAINT IF EXISTS legal_questions_pkey CASCADE';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions RENAME TO person_screening_legal_questions';
@@ -429,13 +429,13 @@ BEGIN
 
         --  notes_and_attachments$notes -- drop
         SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'notes_and_attachments$notes',FALSE);
-        
-        -- payment_information 
+
+        -- payment_information
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_information DROP COLUMN payment_method_phone ';
-        
+
         -- payment_method
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_method DROP COLUMN phone ';
-        
+
         -- payment_payment_details
 
 
@@ -450,7 +450,7 @@ BEGIN
         '       card_obfuscated_number = LPAD(card_obfuscated_number,16,''X'') ';
 
         -- personal_income - just in case rename to person_screening_personal_income
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.personal_income DROP CONSTRAINT IF EXISTS personal_income_pk,'||
                                                 'DROP CONSTRAINT IF EXISTS personal_income_pkey,'||
                                                 'DROP CONSTRAINT IF EXISTS personal_income_employer_fk,'||
@@ -460,24 +460,24 @@ BEGIN
                                                 'DROP CONSTRAINT IF EXISTS personal_income_self_employed_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS personal_income_social_services_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS personal_income_student_income_fk';
-                                                
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.personal_income RENAME TO person_screening_personal_income';
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income DROP COLUMN other_income_information,'||
                                                 'DROP COLUMN employer,'||
                                                 'DROP COLUMN self_employed,'||
                                                 'DROP COLUMN seasonally_employed,'||
                                                 'DROP COLUMN social_services,'||
                                                 'DROP COLUMN student_income';
-        
-                                              
+
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ADD COLUMN detailsdiscriminator VARCHAR(50),'||
                                                 'ADD COLUMN details BIGINT';
-        
-                                                                                             
+
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ADD CONSTRAINT  person_screening_personal_income_pk PRIMARY KEY(id),'||
-        'ADD CONSTRAINT person_screening_personal_income_details_fk FOREIGN KEY(details) REFERENCES '||v_schema_name||'.income_info(id)' ;         
-        
+        'ADD CONSTRAINT person_screening_personal_income_details_fk FOREIGN KEY(details) REFERENCES '||v_schema_name||'.income_info(id)' ;
+
 
         -- person_screening
 
@@ -491,32 +491,32 @@ BEGIN
                                                 'DROP CONSTRAINT IF EXISTS person_screening_previous_address_country_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_previous_address_province_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_screene_fk';
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening RENAME TO person_screening_v';
-        
+
         EXECUTE 'CREATE TABLE '||v_schema_name||'.person_screening ( '||
                 '       id              BIGINT          NOT NULL,'||
                 '       screene         BIGINT,'||
                 '       CONSTRAINT person_screening_pk PRIMARY KEY(id),'||
                 '       CONSTRAINT person_screening_screene_fk FOREIGN KEY(screene) REFERENCES '||v_schema_name||'.customer(id))';
-               
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening OWNER TO vista';    
-        
+
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening OWNER TO vista';
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_v ADD COLUMN created_by_user_key BIGINT,'||
                                                                 'ADD COLUMN from_date TIMESTAMP,'||
                                                                 'ADD COLUMN to_date TIMESTAMP,'||
                                                                 'ADD COLUMN holder BIGINT,'||
                                                                 'ADD COLUMN Version_number INT,'||
                                                                 'DROP COLUMN screene,'||
-                        'ADD CONSTRAINT person_screening_v_pk PRIMARY KEY(id),'|| 
+                        'ADD CONSTRAINT person_screening_v_pk PRIMARY KEY(id),'||
                         'ADD CONSTRAINT person_screening_v_current_address_country_fk FOREIGN KEY(current_address_country) REFERENCES '||v_schema_name||'.country(id),'||
                         'ADD CONSTRAINT person_screening_v_current_address_province_fk FOREIGN KEY(current_address_province) REFERENCES '||v_schema_name||'.province(id),'||
-                        'ADD CONSTRAINT person_screening_v_equifax_approval_fk FOREIGN KEY(equifax_approval) REFERENCES '||v_schema_name||'.equifax_approval(id),'|| 
-                        'ADD CONSTRAINT person_screening_v_holder_fk FOREIGN KEY(holder) REFERENCES '||v_schema_name||'.person_screening(id),'|| 
+                        'ADD CONSTRAINT person_screening_v_equifax_approval_fk FOREIGN KEY(equifax_approval) REFERENCES '||v_schema_name||'.equifax_approval(id),'||
+                        'ADD CONSTRAINT person_screening_v_holder_fk FOREIGN KEY(holder) REFERENCES '||v_schema_name||'.person_screening(id),'||
                         'ADD CONSTRAINT person_screening_v_legal_questions_fk FOREIGN KEY(legal_questions) REFERENCES '||v_schema_name||'.person_screening_legal_questions(id),'||
-                        'ADD CONSTRAINT person_screening_v_previous_address_country_fk FOREIGN KEY(previous_address_country) REFERENCES '||v_schema_name||'.country(id),'|| 
+                        'ADD CONSTRAINT person_screening_v_previous_address_country_fk FOREIGN KEY(previous_address_country) REFERENCES '||v_schema_name||'.country(id),'||
                         'ADD CONSTRAINT person_screening_v_previous_address_province_fk FOREIGN KEY(previous_address_province) REFERENCES '||v_schema_name||'.province(id)';
-        
+
         EXECUTE 'CREATE INDEX person_screening_v_holder_from_date_to_date_idx ON '||v_schema_name||'.person_screening_v USING btree(holder, from_date, to_date)';
 
         /*
@@ -635,7 +635,7 @@ BEGIN
                 '      FROM '||v_schema_name||'.product a '||
                 '      JOIN '||v_schema_name||'.product_v b ON (a.id = b.holder)) AS b '||
                 'WHERE a.holder = b.id';
-                
+
         EXECUTE 'UPDATE '||v_schema_name||'.product_v '||
                 'SET visibility = ''global'' ';
 
@@ -1077,9 +1077,9 @@ BEGIN
             SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,v_table_name,TRUE);
 
         END LOOP;
-        
-                
-        
+
+
+
         /**
         ***     ======================================================================================
         ***
@@ -1087,7 +1087,7 @@ BEGIN
         ***
         ***     ======================================================================================
         **/
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.application_wizard_substep ALTER COLUMN step SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.appointment ALTER COLUMN lead SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit ALTER COLUMN building SET NOT NULL' ;
@@ -1162,11 +1162,11 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.roof ALTER COLUMN building SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.roof_segment ALTER COLUMN roof SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.showing ALTER COLUMN appointment SET NOT NULL' ;
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.unit_turnover_stats ALTER COLUMN building SET NOT NULL' ;     
-               
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.unit_turnover_stats ALTER COLUMN building SET NOT NULL' ;
+
 
     END LOOP;
-    
+
     EXCEPTION WHEN OTHERS THEN
                 RAISE EXCEPTION 'Failed executing statement, code: %, error message: %',SQLSTATE,SQLERRM ;
 END;
