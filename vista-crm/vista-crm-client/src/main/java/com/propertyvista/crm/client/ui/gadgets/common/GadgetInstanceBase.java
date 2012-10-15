@@ -262,7 +262,6 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
         errorMessage.getElement().getStyle().setPaddingBottom(2, Unit.EM);
         errorPanel.add(errorMessage);
         errorPanel.add(new Button(i18n.tr("Try to reload"), new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
                 populate();

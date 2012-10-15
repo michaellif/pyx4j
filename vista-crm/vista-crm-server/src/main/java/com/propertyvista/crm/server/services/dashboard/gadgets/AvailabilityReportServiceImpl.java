@@ -15,13 +15,8 @@ package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -37,12 +32,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.services.dashboard.util.Util;
-import com.propertyvista.crm.server.util.SortingFactory;
-import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
@@ -51,233 +43,85 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO.AnalysisResolution;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata.FilterPreset;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class AvailabilityReportServiceImpl implements AvailabilityReportService {
 
-    private static SortingFactory<UnitAvailabilityStatus> SORTING_FACTORY = new SortingFactory<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
-
     @Override
     public void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>> callback, Vector<Building> buildingsFilter,
-            UnitAvailabilityGadgetMetadata.FilterPreset filterPreset, LogicalDate on, Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
+            UnitAvailabilityGadgetMetadata.FilterPreset filterPreset, LogicalDate asOf, Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
         buildingsFilter = Util.enforcePortfolio(buildingsFilter);
 
         EntityListCriteria<UnitAvailabilityStatus> criteria = new EntityListCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
+        criteria.setPageNumber(pageNumber);
+        criteria.setPageSize(pageSize);
+        criteria.setSorts(sortingCriteria);
 
-        ArrayList<UnitAvailabilityStatus> allUnitStatuses = new ArrayList<UnitAvailabilityStatus>();
+        criteria.add(PropertyCriterion.in(criteria.proto().unit().building(), buildingsFilter));
+        criteria.add(PropertyCriterion.ne(criteria.proto().vacancyStatus(), null));
+        criteria.add(PropertyCriterion.le(criteria.proto().statusFrom(), asOf));
+        criteria.add(PropertyCriterion.ge(criteria.proto().statusUntil(), asOf));
 
-        if (!buildingsFilter.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().building(), buildingsFilter));
+        switch (filterPreset) {
+        case Vacant:
+            criteria.add(PropertyCriterion.in(criteria.proto().vacancyStatus(), Vacancy.Vacant));
+            break;
+        case Notice:
+            criteria.add(PropertyCriterion.in(criteria.proto().vacancyStatus(), Vacancy.Notice));
+            break;
+        case NetExposure:
+            criteria.add(PropertyCriterion.in(criteria.proto().vacancyStatus(), Vacancy.Notice, Vacancy.Vacant));
+            criteria.add(PropertyCriterion.ne(criteria.proto().rentedStatus(), RentedStatus.Rented));
+            break;
+        case VacantAndNotice:
+        default:
+            // nothing special here
         }
-        if (on == null) {
-            throw new IllegalArgumentException("the report date cannot be null");
+        EntitySearchResult<UnitAvailabilityStatus> result = Persistence.secureQuery(criteria);
+        for (UnitAvailabilityStatus avaialabilityStatus : result.getData()) {
+            computeTransientFields(avaialabilityStatus, asOf);
+            clearUnrequiredData(avaialabilityStatus);
         }
-        criteria.add(PropertyCriterion.le(criteria.proto().statusFrom(), on));
-
-        // use descending order of the status date in order to select the most recent statuses first
-        // use unit pk sorting in order to make tacking of already added unit statuses
-        criteria.setSorts(Arrays.asList(new Sort(criteria.proto().unit().getPath().toString(), true), new Sort(criteria.proto().statusFrom().getPath()
-                .toString(), true), new Sort(criteria.proto().id().getPath().toString(), true)));
-        List<UnitAvailabilityStatus> unfiltered = Persistence.service().query(criteria);
-
-        Key pervUnitPK = null;
-        for (UnitAvailabilityStatus unitStatus : unfiltered) {
-            Key thisUnitPK = unitStatus.unit().getPrimaryKey();
-            if (!thisUnitPK.equals(pervUnitPK)) {
-                allUnitStatuses.add(computeTransientFields(unitStatus, on));
-                pervUnitPK = thisUnitPK;
-            }
-        }
-
-        if (!sortingCriteria.isEmpty()) {
-            Collections.sort(allUnitStatuses, SORTING_FACTORY.createDtoComparator(sortingCriteria));
-        }
-
-        int currentPage = 0;
-        int currentPagePosition = 0;
-        int totalRows = 0;
-        boolean hasMoreRows = false;
-        Vector<UnitAvailabilityStatus> unitsStatusPage = new Vector<UnitAvailabilityStatus>();
-
-        Iterator<UnitAvailabilityStatus> i = allUnitStatuses.iterator();
-        StatusFilter filter = filterFor(filterPreset);
-
-        while (i.hasNext()) {
-            UnitAvailabilityStatus unitStatus = i.next();
-            if (filter.isAcceptable(unitStatus)) {
-                ++currentPagePosition;
-                ++totalRows;
-                if (currentPagePosition > pageSize) {
-                    ++currentPage;
-                    currentPagePosition = 1;
-                }
-                if (currentPage < pageNumber) {
-                    continue;
-                } else if (currentPage == pageNumber) {
-                    unitsStatusPage.add(unitStatus);
-                } else {
-                    hasMoreRows = true;
-                    break;
-                }
-            }
-        }
-        while (i.hasNext()) {
-            if (filter.isAcceptable(i.next())) {
-                ++totalRows;
-            }
-        }
-
-        clearUnrequiredData(unitsStatusPage);
-
-        EntitySearchResult<UnitAvailabilityStatus> result = new EntitySearchResult<UnitAvailabilityStatus>();
-
-        result.setData(unitsStatusPage);
-        result.setTotalRows(totalRows);
-        result.hasMoreData(hasMoreRows);
-
         callback.onSuccess(result);
-    }
-
-    @Override
-    public void summary(AsyncCallback<UnitAvailabilityReportSummaryDTO> callback, Vector<Building> buildingsFilter, LogicalDate toDate) {
-        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
-
-        EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
-
-        if (toDate == null) {
-            toDate = new LogicalDate(SysDateManager.getSysDate());
-        }
-        criteria.add(PropertyCriterion.le(criteria.proto().statusFrom(), toDate));
-        // use descending order of the status date in order to select the most recent statuses first
-        criteria.setSorts(Arrays.asList(new Sort(criteria.proto().unit().getPath().toString(), true), new Sort(criteria.proto().statusFrom().getPath()
-                .toString(), true), new Sort(criteria.proto().id().getPath().toString(), true)));
-
-        List<UnitAvailabilityStatus> unitStatuses = Persistence.service().query(criteria);
-
-        UnitAvailabilityReportSummaryDTO summary = EntityFactory.create(UnitAvailabilityReportSummaryDTO.class);
-
-        int total = 0;
-
-        int vacant = 0;
-        int vacantRented = 0;
-
-        int occupied = 0;
-
-        int notice = 0;
-        int noticeRented = 0;
-
-        int netExposure = 0;
-
-        Key pervUnitPK = null;
-        for (UnitAvailabilityStatus unitStatus : unitStatuses) {
-            Key thisUnitPK = unitStatus.unit().getPrimaryKey();
-            if (!thisUnitPK.equals(pervUnitPK)) {
-                pervUnitPK = thisUnitPK;
-                ++total;
-
-                // check that we have vacancy status, and don't waste the cpu cycles if we don't have it
-                Vacancy vacancyStatus = unitStatus.vacancyStatus().getValue();
-                if (vacancyStatus == null) {
-                    continue;
-
-                } else if (vacancyStatus == Vacancy.Vacant) {
-                    ++vacant;
-                    if (unitStatus.rentedStatus().getValue() == RentedStatus.Rented) {
-                        ++vacantRented;
-                    }
-                } else if (Vacancy.Notice.equals(vacancyStatus)) {
-                    ++notice;
-                    if (unitStatus.rentedStatus().getValue() == RentedStatus.Rented) {
-                        ++noticeRented;
-                    }
-                }
-            }
-        }
-
-        summary.total().setValue(total);
-
-        summary.vacancyAbsolute().setValue(vacant);
-        summary.vacancyRelative().setValue(vacant / ((double) total) * 100d);
-        summary.vacantRented().setValue(vacantRented);
-
-        occupied = total - vacant;
-        summary.occupancyAbsolute().setValue(occupied);
-        summary.occupancyRelative().setValue(occupied / ((double) total) * 100d);
-
-        summary.noticeAbsolute().setValue(notice);
-        summary.noticeRelative().setValue(notice / ((double) total) * 100d);
-        summary.noticeRented().setValue(noticeRented);
-
-        netExposure = vacant + notice - (vacantRented + noticeRented);
-        summary.netExposureAbsolute().setValue(netExposure);
-        summary.netExposureRelative().setValue(netExposure / ((double) total) * 100d);
-        callback.onSuccess(summary);
     }
 
     @Override
     public void unitStatusSummary(AsyncCallback<Vector<UnitAvailabilityStatusSummaryLineDTO>> callback, Vector<Building> buildingsFilter, LogicalDate asOf) {
         buildingsFilter = Util.enforcePortfolio(buildingsFilter);
-
         Vector<UnitAvailabilityStatusSummaryLineDTO> summary = new Vector<UnitAvailabilityStatusSummaryLineDTO>();
 
-        if (buildingsFilter == null) {
-            callback.onFailure(new Error("the set of buildings was not provided."));
-            return;
-        }
+        EntityQueryCriteria<UnitAvailabilityStatus> totalCriteria = makeAvaiabilityStatusCriteria(buildingsFilter, asOf);
+        int total = Persistence.service().count(totalCriteria);
 
-        EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
-        if (!buildingsFilter.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().building(), buildingsFilter));
-        }
-        criteria.add(PropertyCriterion.le(criteria.proto().statusFrom(), asOf));
-        // use descending order of the status date in order to select the most recent statuses first
-        criteria.setSorts(Arrays.asList(new Sort(criteria.proto().unit().getPath().toString(), true), new Sort(criteria.proto().statusFrom().getPath()
-                .toString(), true), new Sort(criteria.proto().id().getPath().toString(), true)));
+        EntityQueryCriteria<UnitAvailabilityStatus> occupiedCriteria = makeAvaiabilityStatusCriteria(buildingsFilter, asOf);
+        occupiedCriteria.add(PropertyCriterion.eq(occupiedCriteria.proto().vacancyStatus(), (Vacancy) null));
+        int occupied = Persistence.service().count(occupiedCriteria);
 
-        List<UnitAvailabilityStatus> unitStatuses = Persistence.service().query(criteria);
+        EntityQueryCriteria<UnitAvailabilityStatus> vacantCriteria = makeAvaiabilityStatusCriteria(buildingsFilter, asOf);
+        vacantCriteria.add(PropertyCriterion.eq(vacantCriteria.proto().vacancyStatus(), Vacancy.Vacant));
+        int vacant = Persistence.service().count(vacantCriteria);
 
-        int total = 0;
+        EntityQueryCriteria<UnitAvailabilityStatus> vacantRentedCriteria = makeAvaiabilityStatusCriteria(buildingsFilter, asOf);
+        vacantRentedCriteria.add(PropertyCriterion.eq(vacantCriteria.proto().vacancyStatus(), Vacancy.Vacant));
+        vacantRentedCriteria.add(PropertyCriterion.eq(vacantCriteria.proto().rentedStatus(), RentedStatus.Rented));
+        int vacantRented = Persistence.service().count(vacantRentedCriteria);
 
-        int vacant = 0;
-        int vacantRented = 0;
+        EntityQueryCriteria<UnitAvailabilityStatus> noticeCriteria = makeAvaiabilityStatusCriteria(buildingsFilter, asOf);
+        noticeCriteria.add(PropertyCriterion.eq(vacantCriteria.proto().vacancyStatus(), Vacancy.Notice));
+        int notice = Persistence.service().count(noticeCriteria);
 
-        int occupied = 0;
+        EntityQueryCriteria<UnitAvailabilityStatus> noticeRentedCriteria = makeAvaiabilityStatusCriteria(buildingsFilter, asOf);
+        noticeRentedCriteria.add(PropertyCriterion.eq(vacantCriteria.proto().vacancyStatus(), Vacancy.Notice));
+        noticeRentedCriteria.add(PropertyCriterion.eq(vacantCriteria.proto().rentedStatus(), RentedStatus.Rented));
+        int noticeRented = Persistence.service().count(noticeRentedCriteria);
 
-        int notice = 0;
-        int noticeRented = 0;
-
-        int netExposure = 0;
-
-        Key pervUnitPK = null;
-        for (UnitAvailabilityStatus unitStatus : unitStatuses) {
-            Key thisUnitPK = unitStatus.unit().getPrimaryKey();
-            if (!thisUnitPK.equals(pervUnitPK)) {
-                pervUnitPK = thisUnitPK;
-                ++total;
-
-                // check that we have vacancy status, and don't waste the cpu cycles if we don't have it
-                Vacancy vacancyStatus = unitStatus.vacancyStatus().getValue();
-                if (vacancyStatus == null) {
-                    continue;
-
-                } else if (vacancyStatus == Vacancy.Vacant) {
-                    ++vacant;
-                    if (unitStatus.rentedStatus().getValue() == RentedStatus.Rented) {
-                        ++vacantRented;
-                    }
-                } else if (Vacancy.Notice.equals(vacancyStatus)) {
-                    ++notice;
-                    if (unitStatus.rentedStatus().getValue() == RentedStatus.Rented) {
-                        ++noticeRented;
-                    }
-                }
-            }
-        }
-        occupied = total - vacant;
-        netExposure = vacant + notice - (vacantRented + noticeRented);
+        EntityQueryCriteria<UnitAvailabilityStatus> netExposureCriteria = makeAvaiabilityStatusCriteria(buildingsFilter, asOf);
+        netExposureCriteria.or(PropertyCriterion.eq(vacantCriteria.proto().vacancyStatus(), Vacancy.Vacant),
+                PropertyCriterion.eq(vacantCriteria.proto().vacancyStatus(), Vacancy.Notice));
+        netExposureCriteria.add(PropertyCriterion.ne(vacantCriteria.proto().rentedStatus(), RentedStatus.Rented));
+        int netExposure = Persistence.service().count(netExposureCriteria);
 
         summary.add(makeSummaryRecord(AvailabilityCategory.total, total, 1d));
         summary.add(makeSummaryRecord(AvailabilityCategory.occupied, occupied, percentile(occupied, total)));
@@ -390,79 +234,37 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         }
     }
 
-    private static interface StatusFilter {
+    private static void clearUnrequiredData(UnitAvailabilityStatus status) {
 
-        boolean isAcceptable(UnitAvailabilityStatus status);
+        Building building = EntityFactory.create(Building.class);
+        building.id().setValue(status.building().id().getValue());
+        building.propertyCode().setValue(status.building().propertyCode().getValue());
+        building.externalId().setValue(status.building().externalId().getValue());
+        building.info().name().setValue(status.building().info().name().getValue());
+        building.info().address().setValue(status.building().info().address().getValue());
+        building.propertyManager().name().setValue(status.building().propertyManager().name().getValue());
+        building.complex().name().setValue(status.building().complex().name().getValue());
+        status.building().set(building);
 
-    }
+        AptUnit unit = EntityFactory.create(AptUnit.class);
+        unit.id().setValue(status.unit().id().getValue());
+        unit.info().number().setValue(status.unit().info().number().getValue());
+        status.unit().set(unit);
 
-    private void clearUnrequiredData(Vector<UnitAvailabilityStatus> unitsStatusPage) {
-        for (UnitAvailabilityStatus status : unitsStatusPage) {
-            Building building = EntityFactory.create(Building.class);
-            building.id().setValue(status.building().id().getValue());
-            building.propertyCode().setValue(status.building().propertyCode().getValue());
-            building.externalId().setValue(status.building().externalId().getValue());
-            building.info().name().setValue(status.building().info().name().getValue());
-            building.info().address().setValue(status.building().info().address().getValue());
-            building.propertyManager().name().setValue(status.building().propertyManager().name().getValue());
-            building.complex().name().setValue(status.building().complex().name().getValue());
-            status.building().set(building);
-
-            AptUnit unit = EntityFactory.create(AptUnit.class);
-            unit.id().setValue(status.unit().id().getValue());
-            unit.info().number().setValue(status.unit().info().number().getValue());
-            status.unit().set(unit);
-
-            Floorplan floorplan = EntityFactory.create(Floorplan.class);
-            floorplan.id().setValue(status.floorplan().id().getValue());
-            floorplan.name().setValue(status.floorplan().name().getValue());
-            floorplan.marketingName().setValue(status.floorplan().marketingName().getValue());
-            status.floorplan().set(floorplan);
-
-        }
+        Floorplan floorplan = EntityFactory.create(Floorplan.class);
+        floorplan.id().setValue(status.floorplan().id().getValue());
+        floorplan.name().setValue(status.floorplan().name().getValue());
+        floorplan.marketingName().setValue(status.floorplan().marketingName().getValue());
+        status.floorplan().set(floorplan);
 
     }
 
-    private StatusFilter filterFor(FilterPreset filterPreset) {
-        switch (filterPreset) {
-        case NetExposure:
-            return new StatusFilter() {
-                @Override
-                public boolean isAcceptable(UnitAvailabilityStatus status) {
-                    return !status.vacancyStatus().isNull() & status.rentedStatus().getValue() != RentedStatus.Rented;
-                }
-            };
-        case Notice:
-            return new StatusFilter() {
-                @Override
-                public boolean isAcceptable(UnitAvailabilityStatus status) {
-                    return !status.vacancyStatus().isNull() & status.vacancyStatus().getValue() == Vacancy.Notice;
-                }
-            };
-        case Rented:
-            return new StatusFilter() {
-                @Override
-                public boolean isAcceptable(UnitAvailabilityStatus status) {
-                    return !status.vacancyStatus().isNull() & status.rentedStatus().getValue() == RentedStatus.Rented;
-                }
-            };
-        case Vacant:
-            return new StatusFilter() {
-                @Override
-                public boolean isAcceptable(UnitAvailabilityStatus status) {
-                    return !status.vacancyStatus().isNull() & status.vacancyStatus().getValue() == Vacancy.Vacant;
-                }
-            };
-        case VacantAndNotice:
-            return new StatusFilter() {
-                @Override
-                public boolean isAcceptable(UnitAvailabilityStatus status) {
-                    return status.vacancyStatus().getValue() != null;
-                }
-            };
-        default:
-            throw new IllegalStateException("unknown filter preset: " + filterPreset);
-        }
+    private static EntityQueryCriteria<UnitAvailabilityStatus> makeAvaiabilityStatusCriteria(Vector<Building> buildingsFilter, LogicalDate asOf) {
+        EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
+        criteria.add(PropertyCriterion.in(criteria.proto().building(), buildingsFilter));
+        criteria.add(PropertyCriterion.le(criteria.proto().statusFrom(), asOf));
+        criteria.add(PropertyCriterion.ge(criteria.proto().statusUntil(), asOf));
+        return criteria;
     }
 
 }

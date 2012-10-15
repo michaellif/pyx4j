@@ -63,9 +63,9 @@ public class UnitAvailabilityGadgetMetadataDefaultSettings extends AbstractGadge
                 defColumn(proto.rentDeltaRelative()).visible(false).build(),
                 defColumn(proto.rentEndDay()).visible(true).build(),
                 defColumn(proto.moveInDay()).visible(true).build(),
-                defColumn(proto.rentedFromDay()).visible(true).build(),
-                defColumn(proto.daysVacant()).build(),
-                defColumn(proto.revenueLost()).build()
+                defColumn(proto.rentedFromDay()).visible(true).build(),                
+                defColumn(proto.daysVacant()).sortable(false).build(),
+                defColumn(proto.revenueLost()).sortable(false).build()
         );//@formatter:on
     }
 

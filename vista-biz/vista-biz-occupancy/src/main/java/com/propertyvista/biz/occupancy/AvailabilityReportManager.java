@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -65,7 +66,7 @@ public class AvailabilityReportManager {
      *            Start the computation of statuses on this date.
      */
     public void generateUnitAvailablity(LogicalDate startingOn) {
-        removeStatuses(startingOn);
+        removeFuture(startingOn);
         generateStatuses(occcpancy(startingOn));
     }
 
@@ -303,11 +304,27 @@ public class AvailabilityReportManager {
         }
     }
 
-    private void removeStatuses(LogicalDate startingOn) {
-        EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
-        criteria.add(PropertyCriterion.ge(criteria.proto().statusFrom(), startingOn));
-        Persistence.service().delete(criteria);
+    private void removeFuture(LogicalDate startingOn) {
+        // update current's status date to
+        EntityQueryCriteria<UnitAvailabilityStatus> criteriaCurrrent = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
+        criteriaCurrrent.add(PropertyCriterion.eq(criteriaCurrrent.proto().unit(), unit));
+        criteriaCurrrent.add(PropertyCriterion.ge(criteriaCurrrent.proto().statusUntil(), startingOn));
+        criteriaCurrrent.add(PropertyCriterion.le(criteriaCurrrent.proto().statusFrom(), startingOn));
+        UnitAvailabilityStatus currentStatus = Persistence.service().retrieve(criteriaCurrrent);
+        if (currentStatus != null) {
+            GregorianCalendar cal = new GregorianCalendar();
+            cal.setTime(startingOn);
+            cal.add(GregorianCalendar.DAY_OF_YEAR, -1);
+            currentStatus.statusUntil().setValue(new LogicalDate(cal.getTime()));
+            Persistence.service().merge(currentStatus);
+        }
+
+        // remove all future statuses
+        EntityQueryCriteria<UnitAvailabilityStatus> criteriaFuture = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
+        criteriaFuture.add(PropertyCriterion.eq(criteriaFuture.proto().unit(), unit));
+        criteriaFuture.add(PropertyCriterion.ge(criteriaFuture.proto().statusFrom(), startingOn));
+        Persistence.service().delete(criteriaFuture);
+
     }
 
     private BigDecimal getMarketRent() {

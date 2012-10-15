@@ -13,8 +13,10 @@
  */
 package com.propertyvista.server.common.util.occupancy;
 
+import java.security.InvalidParameterException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -83,7 +85,7 @@ public class AvailabilityReportManagerTestBase {
         new AvailabilityReportManager(unit).generateUnitAvailablity(asDate(dateRepr));
     }
 
-    protected AvailabilityStatusBuilder expectAvailability() {
+    protected AvailabilityStatusBuilder expect() {
         return new AvailabilityStatusBuilder();
     }
 
@@ -220,6 +222,8 @@ public class AvailabilityReportManagerTestBase {
 
         private LogicalDate statusDate = null;
 
+        private LogicalDate statusDateTo = null;
+
         private Vacancy vacancy = null;
 
         private Scoping scoping = null;
@@ -236,8 +240,18 @@ public class AvailabilityReportManagerTestBase {
 
         private LogicalDate vacantSince;
 
-        public AvailabilityStatusBuilder on(String dateRepr) {
+        public AvailabilityStatusBuilder from(String dateRepr) {
             statusDate = asDate(dateRepr);
+            return this;
+        }
+
+        public AvailabilityStatusBuilder to(String date) {
+            statusDateTo = asDate(date);
+            return this;
+        }
+
+        public AvailabilityStatusBuilder toTheEndOfTime() {
+            statusDateTo = new LogicalDate(OccupancyFacade.MAX_DATE);
             return this;
         }
 
@@ -306,6 +320,7 @@ public class AvailabilityReportManagerTestBase {
 
             EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().statusFrom(), statusDate));
+            criteria.add(PropertyCriterion.eq(criteria.proto().statusUntil(), statusDateTo));
             criteria.add(PropertyCriterion.eq(criteria.proto().vacancyStatus(), vacancy));
             criteria.add(PropertyCriterion.eq(criteria.proto().vacantSince(), vacantSince));
             criteria.add(PropertyCriterion.eq(criteria.proto().rentEndDay(), rentEndsOn));
@@ -316,12 +331,18 @@ public class AvailabilityReportManagerTestBase {
             criteria.add(PropertyCriterion.eq(criteria.proto().rentedFromDay(), rentStartsOn));
 
             UnitAvailabilityStatus actual = Persistence.service().retrieve(criteria);
-            Assert.assertNotNull("Expected status " + expected.toString() + " was not found in the DB", actual);
+
+            EntityQueryCriteria<UnitAvailabilityStatus> criteriaAll = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
+            criteriaAll.asc(criteria.proto().statusFrom());
+            List<UnitAvailabilityStatus> actualUnitAvailabilityStatuses = Persistence.service().query(criteriaAll);
+            Assert.assertNotNull("Expected status " + expected.toString() + " was not found in the DB\nStatuses:\n" + actualUnitAvailabilityStatuses, actual);
+
         }
 
         private void assertValid() {
-            // TODO i think i'm too lazy for this right now
+            if (statusDateTo == null)
+                throw new InvalidParameterException("Status date To cannot be null");
+            // TODO add rest of assertions here
         }
-
     }
 }
