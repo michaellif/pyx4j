@@ -97,23 +97,24 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     protected void enhanceRetrieved(LeaseTerm in, LeaseTermDTO dto, RetrieveTraget retrieveTraget) {
         super.enhanceRetrieved(in, dto, retrieveTraget);
 
+        Persistence.service().retrieve(dto.lease());
+
         if (in.getPrimaryKey() != null) {
             Persistence.service().retrieve(dto.version().tenants());
         }
         for (Tenant item : dto.version().tenants()) {
-            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(item, AttachLevel.ToStringMembers);
+            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(dto.lease(), item, AttachLevel.ToStringMembers);
         }
 
         if (in.getPrimaryKey() != null) {
             Persistence.service().retrieve(dto.version().guarantors());
         }
         for (Guarantor item : dto.version().guarantors()) {
-            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(item, AttachLevel.ToStringMembers);
+            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(dto.lease(), item, AttachLevel.ToStringMembers);
         }
 
         loadDetachedProducts(dto);
 
-        Persistence.service().retrieve(dto.lease());
         if (!dto.lease().unit().isNull()) {
             Persistence.ensureRetrieve(dto.lease().unit().building(), AttachLevel.ToStringMembers);
 

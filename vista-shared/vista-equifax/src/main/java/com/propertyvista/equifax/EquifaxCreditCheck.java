@@ -36,6 +36,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
+import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonCreditCheck;
@@ -96,7 +97,7 @@ public class EquifaxCreditCheck {
         riskCodeOverrideDescription.put("11", i18n.ntr("Review - Decline Applicant received an unacceptably low score"));
     }
 
-    public static PersonCreditCheck runCreditCheck(Customer customer, PersonCreditCheck pcc, int strategyNumber) {
+    public static PersonCreditCheck runCreditCheck(PmcEquifaxInfo equifaxInfo, Customer customer, PersonCreditCheck pcc, int strategyNumber) {
         CNConsAndCommRequestType requestMessage = EquifaxModelMapper.createRequest(customer, pcc, strategyNumber);
 
         if (ApplicationMode.isDevelopment()) {

@@ -27,13 +27,13 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.domain.company.Employee;
@@ -140,16 +140,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                         "{0}, behaviors {1} updated to {2} ", user.email(), behaviorsOriginal, behaviorsUpdated);
             }
 
-            final String namespace = NamespaceManager.getNamespace();
-            final Pmc pmc = TaskRunner.runInAdminNamespace(new Callable<Pmc>() {
-                @Override
-                public Pmc call() {
-                    EntityQueryCriteria<Pmc> pmcCret = EntityQueryCriteria.create(Pmc.class);
-                    pmcCret.add(PropertyCriterion.eq(pmcCret.proto().namespace(), namespace));
-
-                    return Persistence.service().retrieve(pmcCret);
-                }
-            });
+            final Pmc pmc = VistaDeployment.getCurrentPmc();
 
             final OnboardingUser onbUser;
             final OnboardingUserCredential onbUserCred;

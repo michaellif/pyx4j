@@ -18,6 +18,7 @@ import java.math.RoundingMode;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.time.DateUtils;
 
@@ -33,8 +34,11 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
 import com.propertyvista.domain.tenant.Customer;
@@ -46,10 +50,32 @@ import com.propertyvista.dto.LeaseApprovalDTO;
 import com.propertyvista.dto.LeaseApprovalDTO.SuggestedDecision;
 import com.propertyvista.dto.LeaseParticipanApprovalDTO;
 import com.propertyvista.equifax.EquifaxCreditCheck;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class ScreeningFacadeImpl implements ScreeningFacade {
 
     private final static I18n i18n = I18n.get(ScreeningFacadeImpl.class);
+
+    @Override
+    public boolean isCreditCheckActivated() {
+        return isCreditCheckActivated(getCurrentPmcEquifaxInfo());
+    }
+
+    private boolean isCreditCheckActivated(PmcEquifaxInfo equifaxInfo) {
+        return equifaxInfo.approved().getValue(Boolean.FALSE) && !equifaxInfo.reportType().isNull();
+    }
+
+    private static PmcEquifaxInfo getCurrentPmcEquifaxInfo() {
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
+        TaskRunner.runInAdminNamespace(new Callable<Void>() {
+            @Override
+            public Void call() {
+                Persistence.service().retrieveMember(pmc.equifaxInfo());
+                return null;
+            }
+        });
+        return pmc.equifaxInfo();
+    }
 
     @Override
     public void calculateSuggestedDecision(BigDecimal rentAmount, LeaseApprovalDTO leaseApproval) {
@@ -104,6 +130,11 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
 
     @Override
     public void runCreditCheck(BigDecimal rentAmount, LeaseParticipant<?> leaseParticipantId, Employee currentUserEmployee) {
+        PmcEquifaxInfo equifaxInfo = getCurrentPmcEquifaxInfo();
+        if (!isCreditCheckActivated(equifaxInfo)) {
+            throw new UserRuntimeException(i18n.tr("Credit Check interface was not activated in Onboarding"));
+        }
+
         LeaseParticipant<?> leaseParticipant = (LeaseParticipant<?>) Persistence.service().retrieve(leaseParticipantId.getValueClass(),
                 leaseParticipantId.getPrimaryKey());
         PersonScreening screening = retrivePersonScreening(leaseParticipant.leaseCustomer().customer());
@@ -123,7 +154,8 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         Persistence.service().retrieve(screening.version().incomes());
         Persistence.service().retrieve(screening.version().assets());
 
-        pcc = EquifaxCreditCheck.runCreditCheck(leaseParticipant.leaseCustomer().customer(), pcc, backgroundCheckPolicy.strategyNumber().getValue());
+        pcc = EquifaxCreditCheck.runCreditCheck(equifaxInfo, leaseParticipant.leaseCustomer().customer(), pcc, backgroundCheckPolicy.strategyNumber()
+                .getValue());
 
         Persistence.service().persist(pcc);
         Persistence.service().commit();

@@ -26,6 +26,8 @@ import com.propertyvista.dto.LeaseApprovalDTO;
 
 public interface ScreeningFacade {
 
+    boolean isCreditCheckActivated();
+
     void calculateSuggestedDecision(BigDecimal rentAmount, LeaseApprovalDTO leaseApproval);
 
     void runCreditCheck(BigDecimal rentAmount, LeaseParticipant<?> leaseParticipantId, Employee currentUserEmployee);

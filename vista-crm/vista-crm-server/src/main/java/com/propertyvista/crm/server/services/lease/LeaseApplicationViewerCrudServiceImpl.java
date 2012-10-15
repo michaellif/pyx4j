@@ -56,16 +56,16 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     }
 
     @Override
-    protected void enhanceRetrieved(Lease in, LeaseApplicationDTO dto, RetrieveTraget retrieveTraget) {
-        super.enhanceRetrieved(in, dto, retrieveTraget);
-        enhanceRetrievedCommon(in, dto);
+    protected void enhanceRetrieved(Lease lease, LeaseApplicationDTO dto, RetrieveTraget retrieveTraget) {
+        super.enhanceRetrieved(lease, dto, retrieveTraget);
+        enhanceRetrievedCommon(lease, dto);
 
         for (Tenant tenantId : dto.currentTerm().version().tenants()) {
-            loadLeaseParticipant(dto, tenantId);
+            loadLeaseParticipant(lease, dto, tenantId);
         }
 
         for (Guarantor guarantorId : dto.currentTerm().version().guarantors()) {
-            loadLeaseParticipant(dto, guarantorId);
+            loadLeaseParticipant(lease, dto, guarantorId);
         }
 
         ServerSideFactory.create(ScreeningFacade.class).calculateSuggestedDecision(
@@ -75,11 +75,11 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
                 ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(dto.leaseApplication().onlineApplication()));
     }
 
-    private void loadLeaseParticipant(LeaseApplicationDTO dto, LeaseParticipant<?> leaseParticipantId) {
+    private void loadLeaseParticipant(Lease lease, LeaseApplicationDTO dto, LeaseParticipant<?> leaseParticipantId) {
         LeaseParticipant<?> leaseParticipant = (LeaseParticipant<?>) Persistence.service().retrieve(leaseParticipantId.getValueClass(),
                 leaseParticipantId.getPrimaryKey());
 
-        LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(leaseParticipant, AttachLevel.Attached);
+        LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(lease, leaseParticipant, AttachLevel.Attached);
 
         {
             Persistence.service().retrieve(leaseParticipant.leaseCustomer().customer().emergencyContacts());
@@ -99,7 +99,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             LeaseParticipanApprovalDTO approval = EntityFactory.create(LeaseParticipanApprovalDTO.class);
             approval.leaseParticipant().set(leaseParticipant.duplicate());
 
-            if (LeaseParticipantUtils.isApplicationInPogress(leaseParticipant.leaseTermV())) {
+            if (LeaseParticipantUtils.isApplicationInPogress(lease, leaseParticipant.leaseTermV())) {
                 approval.creditCheck().set(
                         ServerSideFactory.create(ScreeningFacade.class).retrivePersonCreditCheck(leaseParticipant.leaseCustomer().customer()));
             } else {
