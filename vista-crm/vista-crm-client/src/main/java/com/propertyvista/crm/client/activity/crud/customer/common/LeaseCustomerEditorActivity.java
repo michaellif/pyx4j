@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.activity.crud.customer.common;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -27,11 +27,11 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.dto.LeaseCustomerDTO;
 
-public class LeaseCustomerEditorActivity<DTO extends LeaseCustomerDTO, CS extends LeaseCustomerCrudServiceBase<DTO>> extends CrmEditorActivity<DTO> implements
-        LeaseCustomerEditorPresenter {
+public abstract class LeaseCustomerEditorActivity<DTO extends LeaseCustomerDTO, CS extends LeaseCustomerCrudServiceBase<DTO>> extends CrmEditorActivity<DTO>
+        implements LeaseCustomerEditorPresenter {
 
-    public LeaseCustomerEditorActivity(CrudAppPlace place, IEditorView<DTO> view, Class<CS> csClass, Class<DTO> dtoClass) {
-        super(place, view, GWT.<CS> create(csClass), dtoClass);
+    public LeaseCustomerEditorActivity(CrudAppPlace place, IEditorView<DTO> view, AbstractCrudService<DTO> service, Class<DTO> dtoClass) {
+        super(place, view, service, dtoClass);
     }
 
     @SuppressWarnings("unchecked")

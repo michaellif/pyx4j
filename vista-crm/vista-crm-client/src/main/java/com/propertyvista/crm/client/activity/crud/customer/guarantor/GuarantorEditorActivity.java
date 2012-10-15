@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.crud.customer.guarantor;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.customer.common.LeaseCustomerEditorActivity;
@@ -24,6 +26,6 @@ import com.propertyvista.dto.GuarantorDTO;
 public class GuarantorEditorActivity extends LeaseCustomerEditorActivity<GuarantorDTO, GuarantorCrudService> {
 
     public GuarantorEditorActivity(CrudAppPlace place) {
-        super(place, CustomerViewFactory.instance(GuarantorEditorView.class), GuarantorCrudService.class, GuarantorDTO.class);
+        super(place, CustomerViewFactory.instance(GuarantorEditorView.class), GWT.<GuarantorCrudService> create(GuarantorCrudService.class), GuarantorDTO.class);
     }
 }

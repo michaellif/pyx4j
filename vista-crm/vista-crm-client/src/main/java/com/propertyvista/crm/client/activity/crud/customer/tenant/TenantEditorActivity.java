@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.crud.customer.tenant;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.customer.common.LeaseCustomerEditorActivity;
@@ -24,6 +26,6 @@ import com.propertyvista.dto.TenantDTO;
 public class TenantEditorActivity extends LeaseCustomerEditorActivity<TenantDTO, TenantCrudService> {
 
     public TenantEditorActivity(CrudAppPlace place) {
-        super(place, CustomerViewFactory.instance(TenantEditorView.class), TenantCrudService.class, TenantDTO.class);
+        super(place, CustomerViewFactory.instance(TenantEditorView.class), GWT.<TenantCrudService> create(TenantCrudService.class), TenantDTO.class);
     }
 }
