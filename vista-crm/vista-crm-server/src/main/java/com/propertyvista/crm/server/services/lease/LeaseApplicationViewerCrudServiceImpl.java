@@ -99,7 +99,13 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             LeaseParticipanApprovalDTO approval = EntityFactory.create(LeaseParticipanApprovalDTO.class);
             approval.leaseParticipant().set(leaseParticipant.duplicate());
 
-            approval.creditCheck().set(ServerSideFactory.create(ScreeningFacade.class).retrivePersonCreditCheck(leaseParticipant.leaseCustomer().customer()));
+            if (LeaseParticipantUtils.isApplicationInPogress(leaseParticipant.leaseTermV())) {
+                approval.creditCheck().set(
+                        ServerSideFactory.create(ScreeningFacade.class).retrivePersonCreditCheck(leaseParticipant.leaseCustomer().customer()));
+            } else {
+                approval.creditCheck().set(leaseParticipant.creditCheck());
+            }
+
             if (!approval.creditCheck().isNull()) {
                 approval.screening().set(approval.creditCheck().screening());
                 Persistence.service().retrieve(approval.screening(), AttachLevel.ToStringMembers);

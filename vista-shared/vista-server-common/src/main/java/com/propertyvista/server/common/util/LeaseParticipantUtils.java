@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 
 public class LeaseParticipantUtils {
 
@@ -31,7 +32,7 @@ public class LeaseParticipantUtils {
     }
 
     public static void retrieveLeaseTermEffectiveScreening(LeaseParticipant<?> leaseParticipant, AttachLevel attachLevel) {
-        if (VersionedEntityUtils.isDraft(leaseParticipant.leaseTermV())) {
+        if (isApplicationInPogress(leaseParticipant.leaseTermV())) {
             // Take customer's Screening, Prefers draft version.
             leaseParticipant.effectiveScreening().set(
                     ServerSideFactory.create(ScreeningFacade.class)
@@ -46,5 +47,9 @@ public class LeaseParticipantUtils {
             Persistence.service().retrieve(leaseParticipant.effectiveScreening().version().incomes());
             Persistence.service().retrieve(leaseParticipant.effectiveScreening().version().assets());
         }
+    }
+
+    public static boolean isApplicationInPogress(LeaseTermV leaseTermV) {
+        return VersionedEntityUtils.isDraft(leaseTermV) && leaseTermV.holder().lease().status().getValue().isDraft();
     }
 }

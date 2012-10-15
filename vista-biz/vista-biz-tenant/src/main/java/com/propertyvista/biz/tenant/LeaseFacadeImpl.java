@@ -285,6 +285,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.leaseApplication().decisionReason().setValue(decisionReason);
         lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
 
+        recordApplicationData(lease.currentTerm());
+
         finalize(lease);
 
         ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
@@ -306,6 +308,21 @@ public class LeaseFacadeImpl implements LeaseFacade {
                     ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(tenant);
                 }
             }
+        }
+    }
+
+    void recordApplicationData(LeaseTerm leaseTerm) {
+        // Confider adding screening().set() to this function
+        Persistence.ensureRetrieve(leaseTerm.version().tenants(), AttachLevel.Attached);
+        for (Tenant leaseParticipant : leaseTerm.version().tenants()) {
+            leaseParticipant.creditCheck().set(
+                    ServerSideFactory.create(ScreeningFacade.class).retrivePersonCreditCheck(leaseParticipant.leaseCustomer().customer()));
+        }
+
+        Persistence.ensureRetrieve(leaseTerm.version().guarantors(), AttachLevel.Attached);
+        for (Guarantor leaseParticipant : leaseTerm.version().guarantors()) {
+            leaseParticipant.creditCheck().set(
+                    ServerSideFactory.create(ScreeningFacade.class).retrivePersonCreditCheck(leaseParticipant.leaseCustomer().customer()));
         }
     }
 
@@ -342,6 +359,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.leaseApplication().decidedBy().set(decidedBy);
         lease.leaseApplication().decisionReason().setValue(decisionReason);
         lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+
+        recordApplicationData(lease.currentTerm());
 
         Persistence.secureSave(lease);
 
