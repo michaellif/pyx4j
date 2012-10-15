@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.customer.common;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -30,7 +29,7 @@ import com.propertyvista.dto.LeaseCustomerDTO;
 public abstract class LeaseCustomerEditorActivity<DTO extends LeaseCustomerDTO, CS extends LeaseCustomerCrudServiceBase<DTO>> extends CrmEditorActivity<DTO>
         implements LeaseCustomerEditorPresenter {
 
-    public LeaseCustomerEditorActivity(CrudAppPlace place, IEditorView<DTO> view, AbstractCrudService<DTO> service, Class<DTO> dtoClass) {
+    public LeaseCustomerEditorActivity(CrudAppPlace place, IEditorView<DTO> view, CS service, Class<DTO> dtoClass) {
         super(place, view, service, dtoClass);
     }
 
