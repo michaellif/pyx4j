@@ -445,6 +445,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
             Key key = getMetadata().id().getValue();
             getMetadata().set(metadata);
             getMetadata().id().setValue(key);
+            saveMetadata();
 
             // restart the gadget:            
             stop();
