@@ -46,6 +46,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
 import com.propertyvista.domain.util.ValidationUtils;
@@ -169,10 +170,10 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
             FormFlexPanel left = new FormFlexPanel();
             int row = -1;
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().participantId()), 7).build());
-            left.setWidget(++row, 0, inject(proto().leaseCustomer().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
+            left.setWidget(++row, 0, inject(proto().leaseCustomer().customer().person().name(), new NameEditor(i18n.tr("Tenant"), LeaseCustomerTenant.class) {
                 @Override
                 public Key getLinkKey() {
-                    return TenantInLeaseEditor.this.getValue().getPrimaryKey();
+                    return TenantInLeaseEditor.this.getValue().leaseCustomer().getPrimaryKey();
                 }
             }));
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().sex()), 7).build());

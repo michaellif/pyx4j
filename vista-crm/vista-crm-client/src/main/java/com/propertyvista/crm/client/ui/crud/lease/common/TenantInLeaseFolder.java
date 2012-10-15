@@ -30,6 +30,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public class TenantInLeaseFolder extends VistaTableFolder<Tenant> {
@@ -74,7 +75,8 @@ public class TenantInLeaseFolder extends VistaTableFolder<Tenant> {
                     @Override
                     public void execute() {
                         AppSite.getPlaceController().goTo(
-                                AppPlaceEntityMapper.resolvePlace(Tenant.class).formViewerPlace(TenantInLeaseViewer.this.getValue().getPrimaryKey()));
+                                AppPlaceEntityMapper.resolvePlace(LeaseCustomerTenant.class).formViewerPlace(
+                                        TenantInLeaseViewer.this.getValue().leaseCustomer().getPrimaryKey()));
                     }
                 }));
             }

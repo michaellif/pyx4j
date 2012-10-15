@@ -13,112 +13,80 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
-import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
-import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseCustomer;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.TenantDTO;
-import com.propertyvista.server.common.util.AddressRetriever;
-import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
-public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, TenantDTO> implements TenantCrudService {
+public class TenantCrudServiceImpl extends LeaseCustomerCrudServiceBaseImpl<LeaseCustomerTenant, TenantDTO> implements TenantCrudService {
 
     public TenantCrudServiceImpl() {
-        super(Tenant.class, TenantDTO.class);
+        super(LeaseCustomerTenant.class, TenantDTO.class);
     }
 
     @Override
-    protected void bind() {
-        bindCompleateDBO();
-    }
+    protected void enhanceRetrieved(LeaseCustomerTenant entity, TenantDTO dto, RetrieveTraget retrieveTraget) {
+        super.enhanceRetrieved(entity, dto, retrieveTraget);
 
-    @Override
-    protected void enhanceRetrieved(Tenant entity, TenantDTO dto, RetrieveTraget retrieveTraget) {
-        // load detached data:
-        Persistence.service().retrieve(dto.leaseTermV());
-        Persistence.service().retrieve(dto.leaseCustomer().customer().emergencyContacts());
+        dto.role().setValue(retrieveTenant(dto.leaseTermV(), entity).role().getValue());
 
-        LeaseParticipantUtils.retrieveCustomerScreeningPointer(dto.leaseCustomer().customer());
-
-        // fill/update payment methods: 
-        dto.paymentMethods().clear();
-        dto.paymentMethods().addAll(ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(entity));
-        if (retrieveTraget == RetrieveTraget.Edit) {
-            for (PaymentMethod method : dto.paymentMethods()) {
-                Persistence.service().retrieve(method.details());
-            }
-        }
+        Persistence.service().retrieve(dto.customer().emergencyContacts());
 
         // mark pre-authorized one:
         for (PaymentMethod paymentMethod : dto.paymentMethods()) {
-            if (paymentMethod.equals(entity.leaseCustomer().preauthorizedPayment())) {
+            if (paymentMethod.equals(entity.preauthorizedPayment())) {
                 paymentMethod.isPreauthorized().setValue(Boolean.TRUE);
                 break;
             }
         }
-
-        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(dto.leaseTermV().holder()));
     }
 
     @Override
-    protected void enhanceListRetrieved(Tenant entity, TenantDTO dto) {
-        Persistence.service().retrieve(dto.leaseTermV());
+    protected void enhanceListRetrieved(LeaseCustomerTenant entity, TenantDTO dto) {
+        super.enhanceListRetrieved(entity, dto);
+
+        dto.role().setValue(retrieveTenant(dto.leaseTermV(), entity).role().getValue());
     }
 
     @Override
-    protected void persist(Tenant entity, TenantDTO dto) {
-        ServerSideFactory.create(CustomerFacade.class).persistCustomer(entity.leaseCustomer().customer());
+    protected void persist(LeaseCustomerTenant entity, TenantDTO dto) {
+        super.persist(entity, dto);
 
-        // persist payment methods:
+        Tenant tenant = retrieveTenant(dto.leaseTermV(), entity);
+
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().currentTerm().versions(), entity.leaseTermV()));
+        criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().currentTerm().versions(), tenant.leaseTermV()));
         Building building = Persistence.service().retrieve(criteria);
-
-        // delete removed in UI:
-        for (PaymentMethod paymentMethod : ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(entity)) {
-            if (!dto.paymentMethods().contains(paymentMethod)) {
-                ServerSideFactory.create(PaymentFacade.class).deletePaymentMethod(paymentMethod);
-            }
-        }
 
         // save new/edited ones (and memorize pre-authorized method):
         for (PaymentMethod paymentMethod : dto.paymentMethods()) {
-            paymentMethod.customer().set(entity.leaseCustomer().customer());
+            paymentMethod.customer().set(entity.customer());
             paymentMethod.isOneTimePayment().setValue(false);
             ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(building, paymentMethod);
+
             if (paymentMethod.isPreauthorized().isBooleanTrue()) {
-                if (!entity.leaseCustomer().preauthorizedPayment().equals(paymentMethod)) {
-                    entity.leaseCustomer().preauthorizedPayment().set(paymentMethod);
-                    Persistence.service().merge(entity.leaseCustomer());
+                if (!entity.preauthorizedPayment().equals(paymentMethod)) {
+                    entity.preauthorizedPayment().set(paymentMethod);
+                    Persistence.service().merge(entity);
                 }
             }
         }
-
-        super.persist(entity, dto);
     }
 
-    @Override
-    public void deletePaymentMethod(AsyncCallback<Boolean> callback, PaymentMethod paymentMethod) {
-        Persistence.service().retrieve(paymentMethod);
-        ServerSideFactory.create(PaymentFacade.class).deletePaymentMethod(paymentMethod);
-        Persistence.service().commit();
-        callback.onSuccess(Boolean.TRUE);
-    }
-
-    @Override
-    public void getCurrentAddress(AsyncCallback<AddressStructured> callback, Key entityId) {
-        AddressRetriever.getLeaseParticipantCurrentAddress(callback, Persistence.service().retrieve(Tenant.class, entityId));
+    private Tenant retrieveTenant(LeaseTerm.LeaseTermV termV, LeaseCustomer leaseCustomer) {
+        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseCustomer(), leaseCustomer));
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseTermV(), termV));
+        return Persistence.service().retrieve(criteria);
     }
 }

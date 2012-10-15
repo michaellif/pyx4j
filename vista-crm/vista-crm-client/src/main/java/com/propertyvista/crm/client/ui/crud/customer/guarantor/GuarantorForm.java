@@ -13,16 +13,22 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.dto.GuarantorDTO;
@@ -43,21 +49,19 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
     public void createTabs() {
 
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
-
-        if (isEditable()) {
-            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().leaseCustomer().participantId()), getValue().getPrimaryKey());
-        }
+        addTab(createPaymentMethodsTab(i18n.tr("Payment Methods")));
     }
 
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().leaseCustomer().customer().person().email()).setMandatory(!getValue().leaseCustomer().customer().user().isNull());
+        get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
 
-        if (!isEditable()) {
-            get(proto().leaseCustomer().customer().personScreening()).setVisible(
-                    getValue().leaseCustomer().customer().personScreening().getPrimaryKey() != null);
+        if (isEditable()) {
+            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().participantId()), getValue().getPrimaryKey());
+        } else {
+            get(proto().customer().personScreening()).setVisible(getValue().customer().personScreening().getPrimaryKey() != null);
         }
     }
 
@@ -65,17 +69,17 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().participantId()), 7).build());
-        main.setWidget(++row, 0, inject(proto().leaseCustomer().customer().person().name(), new NameEditor(i18n.tr("Guarantor"))));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().sex()), 7).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().birthDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().participantId()), 7).build());
+        main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Guarantor"))));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
 
         main.setBR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().homePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().mobilePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().workPhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().email()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
 
         if (!isEditable()) {
             main.setBR(++row, 0, 1);
@@ -85,15 +89,47 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
             main.setWidget(
                     ++row,
                     0,
-                    new DecoratorBuilder(inject(proto().leaseCustomer().customer().personScreening(), new CEntityCrudHyperlink<PersonScreening>(
-                            AppPlaceEntityMapper.resolvePlace(PersonScreening.class))), 15).build());
+                    new DecoratorBuilder(inject(proto().customer().personScreening(),
+                            new CEntityCrudHyperlink<PersonScreening>(AppPlaceEntityMapper.resolvePlace(PersonScreening.class))), 15).build());
         }
+
+        return main;
+    }
+
+    private FormFlexPanel createPaymentMethodsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
+
+        main.setWidget(0, 0, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
+            @Override
+            protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
+                if (set) {
+                    ((GuarantorEditorView.Presenter) ((GuarantorEditorView) getParentView()).getPresenter())
+                            .getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+                                @Override
+                                public void onSuccess(AddressStructured result) {
+                                    comp.setValue(result, false);
+                                }
+                            });
+                } else {
+                    comp.setValue(EntityFactory.create(AddressStructured.class), false);
+                }
+            }
+
+            @Override
+            protected void addItem() {
+                if (GuarantorForm.this.getValue().electronicPaymentsAllowed().isBooleanTrue()) {
+                    super.addItem();
+                } else {
+                    MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Merchant account is not setup to receive Electronic Payments"));
+                }
+            }
+        }));
 
         return main;
     }
 
     @Override
     public void addValidations() {
-        new PastDateValidation(get(proto().leaseCustomer().customer().person().birthDate()));
+        new PastDateValidation(get(proto().customer().person().birthDate()));
     }
 }

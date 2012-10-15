@@ -31,27 +31,28 @@ public class GuarantorLister extends ListerBase<GuarantorDTO> {
         super(GuarantorDTO.class, false);
 
         setColumnDescriptors(//@formatter:off
-            new Builder(proto().leaseCustomer().participantId()).build(),
+            new Builder(proto().participantId()).build(),
             
-            new Builder(proto().leaseCustomer().customer().person().name()).searchable(false).build(),
-            new Builder(proto().leaseCustomer().customer().person().name().firstName(), false).build(),
-            new Builder(proto().leaseCustomer().customer().person().name().lastName(), false).build(),
-            new Builder(proto().leaseCustomer().customer().person().sex()).build(),
-            new Builder(proto().leaseCustomer().customer().person().birthDate()).build(),
+            new Builder(proto().customer().person().name()).searchable(false).build(),
+            new Builder(proto().customer().person().name().firstName(), false).build(),
+            new Builder(proto().customer().person().name().lastName(), false).build(),
+            new Builder(proto().customer().person().sex()).build(),
+            new Builder(proto().customer().person().birthDate()).build(),
             
-            new Builder(proto().leaseCustomer().customer().person().homePhone()).build(),
-            new Builder(proto().leaseCustomer().customer().person().mobilePhone()).build(),
-            new Builder(proto().leaseCustomer().customer().person().workPhone()).build(),
-            new Builder(proto().leaseCustomer().customer().person().email()).title("E-mail address").build(),
+            new Builder(proto().customer().person().homePhone()).build(),
+            new Builder(proto().customer().person().mobilePhone()).build(),
+            new Builder(proto().customer().person().workPhone()).build(),
+            new Builder(proto().customer().person().email()).build(),
             
-            new Builder(proto().leaseTermV().holder()).columnTitle(i18n.tr("Lease Term")).searchable(false).build(),
-            new Builder(proto().leaseTermV().holder().lease().leaseId()).searchableOnly().build()
+            new Builder(proto().lease()).searchable(false).build(),
+            new Builder(proto().lease().leaseId()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build(),
+            
+            new Builder(proto().lease().unit().info().number()).columnTitle(i18n.tr("Unit #")).searchableOnly().build()
         );//@formatter:on
     }
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().leaseTermV().holder().lease().leaseId().getPath().toString(), false), new Sort(proto().leaseCustomer()
-                .participantId().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().lease().leaseId().getPath().toString(), false), new Sort(proto().participantId().getPath().toString(), false));
     }
 }

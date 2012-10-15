@@ -39,6 +39,7 @@ import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -141,10 +142,15 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public List<PaymentMethod> retrievePaymentMethods(LeaseParticipant participant) {
+    public List<PaymentMethod> retrievePaymentMethods(LeaseParticipant<?> participant) {
         assert !participant.leaseCustomer().customer().isValueDetached();
+        return retrievePaymentMethods(participant.leaseCustomer().customer());
+    }
+
+    @Override
+    public List<PaymentMethod> retrievePaymentMethods(Customer customer) {
         EntityQueryCriteria<PaymentMethod> criteria = new EntityQueryCriteria<PaymentMethod>(PaymentMethod.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), participant.leaseCustomer().customer()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), customer));
         criteria.add(PropertyCriterion.eq(criteria.proto().isOneTimePayment(), Boolean.FALSE));
         criteria.add(PropertyCriterion.eq(criteria.proto().isDeleted(), Boolean.FALSE));
 

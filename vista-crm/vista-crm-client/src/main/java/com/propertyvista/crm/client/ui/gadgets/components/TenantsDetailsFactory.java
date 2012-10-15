@@ -35,19 +35,19 @@ public class TenantsDetailsFactory extends AbstractListerDetailsFactory<TenantDT
         public TenantsDetailsLister() {
             super(TenantDTO.class);
             setColumnDescriptors(//@formatter:off
-                    new Builder(proto().leaseCustomer().participantId()).build(),
+                    new Builder(proto().participantId()).build(),
                     new Builder(proto().role()).build(),
                     
-                    new Builder(proto().leaseCustomer().customer().person().name()).searchable(false).build(),
-                    new Builder(proto().leaseCustomer().customer().person().name().firstName(), false).build(),
-                    new Builder(proto().leaseCustomer().customer().person().name().lastName(), false).build(),
-                    new Builder(proto().leaseCustomer().customer().person().sex(), false).build(),
-                    new Builder(proto().leaseCustomer().customer().person().birthDate()).build(),
+                    new Builder(proto().customer().person().name()).searchable(false).build(),
+                    new Builder(proto().customer().person().name().firstName(), false).build(),
+                    new Builder(proto().customer().person().name().lastName(), false).build(),
+                    new Builder(proto().customer().person().sex(), false).build(),
+                    new Builder(proto().customer().person().birthDate()).build(),
                     
-                    new Builder(proto().leaseCustomer().customer().person().homePhone()).build(),
-                    new Builder(proto().leaseCustomer().customer().person().mobilePhone(), false).build(),
-                    new Builder(proto().leaseCustomer().customer().person().workPhone(), false).build(),
-                    new Builder(proto().leaseCustomer().customer().person().email()).build(),
+                    new Builder(proto().customer().person().homePhone()).build(),
+                    new Builder(proto().customer().person().mobilePhone(), false).build(),
+                    new Builder(proto().customer().person().workPhone(), false).build(),
+                    new Builder(proto().customer().person().email()).build(),
                     
                     new Builder(proto().leaseTermV().holder()).columnTitle(i18n.tr("Lease Term")).searchable(false).build(),
                     new Builder(proto().leaseTermV().holder().lease().leaseId()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build()

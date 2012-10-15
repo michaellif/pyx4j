@@ -62,8 +62,8 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     public void onPopulateSuccess(TenantDTO result) {
         super.onPopulateSuccess(result);
 
-        notesParentPrimaryKey = result.leaseCustomer().getPrimaryKey();
-        screeningParentPrimaryKey = result.leaseCustomer().customer().getPrimaryKey();
+        notesParentPrimaryKey = result.getPrimaryKey();
+        screeningParentPrimaryKey = result.customer().getPrimaryKey();
     }
 
     @Override

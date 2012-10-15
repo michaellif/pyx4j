@@ -13,7 +13,18 @@
  */
 package com.propertyvista.crm.rpc.services.customer;
 
-import com.propertyvista.dto.GuarantorDTO;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface GuarantorCrudService extends LeaseCustomerCrudServiceBase<GuarantorDTO> {
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService;
+
+import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.dto.LeaseCustomerDTO;
+
+public interface LeaseCustomerCrudServiceBase<DTO extends LeaseCustomerDTO> extends AbstractCrudService<DTO> {
+
+    void deletePaymentMethod(AsyncCallback<Boolean> callback, PaymentMethod paymentMethod);
+
+    void getCurrentAddress(AsyncCallback<AddressStructured> callback, Key entityId);
 }

@@ -64,8 +64,8 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     public void onPopulateSuccess(GuarantorDTO result) {
         super.onPopulateSuccess(result);
 
-        notesParentPrimaryKey = result.leaseCustomer().getPrimaryKey();
-        screeningParentPrimaryKey = result.leaseCustomer().customer().getPrimaryKey();
+        notesParentPrimaryKey = result.getPrimaryKey();
+        screeningParentPrimaryKey = result.customer().getPrimaryKey();
     }
 
     @Override

@@ -33,10 +33,7 @@ public class PastTenantListerActivity extends ListerActivityBase<TenantDTO> {
 
         // filter out just former tenants:
         TenantDTO proto = EntityFactory.getEntityPrototype(TenantDTO.class);
-        addPreDefinedFilter(PropertyCriterion.in(proto.leaseCustomer().lease().status(), Lease.Status.former()));
-        // and finalized version term only:
-        addPreDefinedFilter(PropertyCriterion.isNotNull(proto.leaseTermV().fromDate()));
-        addPreDefinedFilter(PropertyCriterion.isNull(proto.leaseTermV().toDate()));
+        addPreDefinedFilter(PropertyCriterion.in(proto.lease().status(), Lease.Status.former()));
     }
 
     @Override

@@ -16,9 +16,11 @@ package com.propertyvista.server.common.util;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.tenant.lease.LeaseCustomer;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public class AddressRetriever {
@@ -32,12 +34,28 @@ public class AddressRetriever {
 
         Persistence.service().retrieve(participant.leaseTermV());
         Persistence.service().retrieve(participant.leaseTermV().holder().lease());
-        Persistence.service().retrieve(participant.leaseTermV().holder().lease().unit());
         Persistence.service().retrieve(participant.leaseTermV().holder().lease().unit().building());
 
         AddressStructured address = EntityFactory.create(AddressStructured.class);
         address.set(participant.leaseTermV().holder().lease().unit().building().info().address());
         address.suiteNumber().set(participant.leaseTermV().holder().lease().unit().info().number());
+
+        callback.onSuccess(address);
+    }
+
+    public static void getLeaseParticipantCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseCustomer participant) {
+        Persistence.service().retrieve(participant);
+        if ((participant == null) || (participant.isNull())) {
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseParticipant.class).getCaption() + "' " + participant.getPrimaryKey()
+                    + " NotFound");
+        }
+
+        Persistence.ensureRetrieve(participant.lease(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(participant.lease().unit().building(), AttachLevel.Attached);
+
+        AddressStructured address = EntityFactory.create(AddressStructured.class);
+        address.set(participant.lease().unit().building().info().address());
+        address.suiteNumber().set(participant.lease().unit().info().number());
 
         callback.onSuccess(address);
     }

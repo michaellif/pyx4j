@@ -63,7 +63,9 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
 
     @Override
     public void makeTenantCriteria(AsyncCallback<EntityListCriteria<TenantDTO>> callback, Vector<Building> buildingsFilter, String criteriaPreset) {
-        callback.onSuccess(tenantCriteria(EntityListCriteria.create(TenantDTO.class), buildingsFilter));
+//        callback.onSuccess(tenantCriteria(EntityListCriteria.create(TenantDTO.class), buildingsFilter));
+// TODO restore functionality with different (your own) TenantDTO!!!         
+        callback.onFailure(new Error());
     }
 
     /**
