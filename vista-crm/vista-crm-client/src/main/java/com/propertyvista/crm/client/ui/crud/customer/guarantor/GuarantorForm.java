@@ -27,6 +27,7 @@ import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
+import com.propertyvista.crm.client.ui.crud.customer.common.LeaseCustomerEditorPresenter;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
@@ -103,7 +104,7 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
             @Override
             protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
                 if (set) {
-                    ((GuarantorEditorView.Presenter) ((GuarantorEditorView) getParentView()).getPresenter())
+                    ((LeaseCustomerEditorPresenter) ((GuarantorEditorView) getParentView()).getPresenter())
                             .getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
                                 @Override
                                 public void onSuccess(AddressStructured result) {

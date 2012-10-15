@@ -13,45 +13,17 @@
  */
 package com.propertyvista.crm.client.activity.crud.customer.guarantor;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
+import com.propertyvista.crm.client.activity.crud.customer.common.LeaseCustomerEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
-import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.dto.GuarantorDTO;
 
-public class GuarantorEditorActivity extends CrmEditorActivity<GuarantorDTO> implements GuarantorEditorView.Presenter {
+public class GuarantorEditorActivity extends LeaseCustomerEditorActivity<GuarantorDTO, GuarantorCrudService> {
 
-    @SuppressWarnings("unchecked")
     public GuarantorEditorActivity(CrudAppPlace place) {
-        super(place, CustomerViewFactory.instance(GuarantorEditorView.class), (AbstractCrudService<GuarantorDTO>) GWT.create(GuarantorCrudService.class),
-                GuarantorDTO.class);
-    }
-
-    @Override
-    public void deletePaymentMethod(PaymentMethod paymentMethod) {
-        ((GuarantorCrudService) getService()).deletePaymentMethod(new DefaultAsyncCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean result) {
-            }
-        }, paymentMethod);
-    }
-
-    @Override
-    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback) {
-        ((GuarantorCrudService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
-            @Override
-            public void onSuccess(AddressStructured result) {
-                callback.onSuccess(result);
-            }
-        }, getEntityId());
+        super(place, CustomerViewFactory.instance(GuarantorEditorView.class), GuarantorCrudService.class, GuarantorDTO.class);
     }
 }
