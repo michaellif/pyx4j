@@ -26,7 +26,9 @@ BEGIN
 			   'income_info_social_services',
 			   'income_info_seasonally_employed',
 			   'income_info_student_income',
-			   'income_info_employer']
+			   'income_info_employer',
+			   'personal_income',
+			   'person_screening_personal_asset']
 		LOOP
 			SELECT * INTO v_void FROM _dba_.truncate_schema_table(v_schema_name,v_table_name, TRUE) ;
 		END LOOP;
