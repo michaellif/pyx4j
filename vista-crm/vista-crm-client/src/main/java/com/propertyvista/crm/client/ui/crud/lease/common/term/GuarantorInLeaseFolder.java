@@ -41,6 +41,7 @@ import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseTermDTO;
 
@@ -98,12 +99,13 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
             FormFlexPanel left = new FormFlexPanel();
             int row = -1;
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().participantId()), 7).build());
-            left.setWidget(++row, 0, inject(proto().leaseCustomer().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class) {
-                @Override
-                public Key getLinkKey() {
-                    return GuarantorInLeaseEditor.this.getValue().getPrimaryKey();
-                }
-            }));
+            left.setWidget(++row, 0,
+                    inject(proto().leaseCustomer().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), LeaseCustomerGuarantor.class) {
+                        @Override
+                        public Key getLinkKey() {
+                            return GuarantorInLeaseEditor.this.getValue().leaseCustomer().getPrimaryKey();
+                        }
+                    }));
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().sex()), 7).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().birthDate()), 9).build());
             if (isEditable()) {

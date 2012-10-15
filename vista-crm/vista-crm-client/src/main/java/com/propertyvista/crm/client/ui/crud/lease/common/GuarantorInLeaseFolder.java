@@ -32,6 +32,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerGuarantor;
 
 public class GuarantorInLeaseFolder extends VistaTableFolder<Guarantor> {
 
@@ -75,7 +76,8 @@ public class GuarantorInLeaseFolder extends VistaTableFolder<Guarantor> {
                     @Override
                     public void execute() {
                         AppSite.getPlaceController().goTo(
-                                AppPlaceEntityMapper.resolvePlace(Guarantor.class).formViewerPlace(GuarantorInLeaseViewer.this.getValue().getPrimaryKey()));
+                                AppPlaceEntityMapper.resolvePlace(LeaseCustomerGuarantor.class).formViewerPlace(
+                                        GuarantorInLeaseViewer.this.getValue().leaseCustomer().getPrimaryKey()));
                     }
                 }));
             } else if (proto().tenant() == column.getObject()) {
