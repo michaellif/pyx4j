@@ -13,20 +13,29 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.forms;
 
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm;
 import com.propertyvista.crm.rpc.dto.gadgets.CollectionsGadgetDataDTO;
 
 public class CollectionsSummaryForm extends ZoomableViewForm<CollectionsGadgetDataDTO> {
 
-    private static final I18n i18n = I18n.get(CollectionsSummaryForm.class);
+    private final NumberFormat currencyFormat;
+
+    /**
+     * @param currencyFormat
+     *            this format will be used to format labels that show the money
+     */
+    public CollectionsSummaryForm(NumberFormat currencyFormat) {
+        super(CollectionsGadgetDataDTO.class);
+        this.currencyFormat = currencyFormat;
+    }
 
     public CollectionsSummaryForm() {
-        super(CollectionsGadgetDataDTO.class);
+        this(NumberFormat.getFormat("$#,##0.00"));
     }
 
     @Override
@@ -42,8 +51,7 @@ public class CollectionsSummaryForm extends ZoomableViewForm<CollectionsGadgetDa
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-
-        get(proto().fundsCollectedThisMonthLabel()).setValue(i18n.tr("${0,number}", getValue().fundsCollectedThisMonth().getValue()));
-        get(proto().fundsInProcessingLabel()).setValue(i18n.tr("${0,number}", getValue().fundsInProcessing().getValue()));
+        get(proto().fundsCollectedThisMonthLabel()).setValue(currencyFormat.format(getValue().fundsCollectedThisMonth().getValue()));
+        get(proto().fundsInProcessingLabel()).setValue(currencyFormat.format(getValue().fundsInProcessing().getValue()));
     }
 }

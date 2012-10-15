@@ -52,21 +52,27 @@ public class ColumnDescriptorConverter {
         }
     }
 
-    public static ColumnDescriptorEntity saveColumnDescriptorToEntity(ColumnDescriptor columnDescriptor, ColumnDescriptorEntity entity) {
+    public static <E extends IEntity> ColumnDescriptorEntity saveColumnDescriptorToEntity(Class<E> describedEntityClass, ColumnDescriptor columnDescriptor,
+            ColumnDescriptorEntity entity) {
         entity.propertyPath().setValue(columnDescriptor.getColumnName());
         entity.isSortable().setValue(columnDescriptor.isSortable());
-        entity.title().setValue(columnDescriptor.getColumnTitle());
+        if (!EntityFactory.getEntityPrototype(describedEntityClass).getMember(new Path(entity.propertyPath().getValue())).getMeta().getCaption()
+                .equals(columnDescriptor.getColumnTitle())) {
+            entity.title().setValue(columnDescriptor.getColumnTitle());
+        }
+
         entity.width().setValue(columnDescriptor.getWidth());
         entity.wrapWords().setValue(columnDescriptor.isWordWrap());
         entity.isVisible().setValue(columnDescriptor.isVisible());
         return entity;
     }
 
-    public static List<ColumnDescriptorEntity> asColumnDesciptorEntityList(List<ColumnDescriptor> columnDescriptorList) {
+    public static <E extends IEntity> List<ColumnDescriptorEntity> asColumnDesciptorEntityList(Class<E> describedEntityClass,
+            List<ColumnDescriptor> columnDescriptorList) {
         List<ColumnDescriptorEntity> columnDescriptorEntityList = new ArrayList<ColumnDescriptorEntity>();
         for (ColumnDescriptor columnDescriptor : columnDescriptorList) {
             ColumnDescriptorEntity columnDescriptorEntity = EntityFactory.create(ColumnDescriptorEntity.class);
-            saveColumnDescriptorToEntity(columnDescriptor, columnDescriptorEntity);
+            saveColumnDescriptorToEntity(describedEntityClass, columnDescriptor, columnDescriptorEntity);
             columnDescriptorEntityList.add(columnDescriptorEntity);
         }
         return columnDescriptorEntityList;

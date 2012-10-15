@@ -89,16 +89,15 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
     }
 
     private void calculateArrearsSummary(AgingBuckets aggregatedBuckets, Vector<Building> buildings) {
-        BigDecimal zero = new BigDecimal("0.0");
-        aggregatedBuckets.bucketThisMonth().setValue(zero);
-        aggregatedBuckets.bucketCurrent().setValue(zero);
-        aggregatedBuckets.bucket30().setValue(zero);
-        aggregatedBuckets.bucket60().setValue(zero);
-        aggregatedBuckets.bucket90().setValue(zero);
-        aggregatedBuckets.bucketOver90().setValue(zero);
-        aggregatedBuckets.arrearsAmount().setValue(zero);
-        aggregatedBuckets.totalBalance().setValue(zero);
-        aggregatedBuckets.creditAmount().setValue(zero);
+        aggregatedBuckets.bucketThisMonth().setValue(BigDecimal.ZERO);
+        aggregatedBuckets.bucketCurrent().setValue(BigDecimal.ZERO);
+        aggregatedBuckets.bucket30().setValue(BigDecimal.ZERO);
+        aggregatedBuckets.bucket60().setValue(BigDecimal.ZERO);
+        aggregatedBuckets.bucket90().setValue(BigDecimal.ZERO);
+        aggregatedBuckets.bucketOver90().setValue(BigDecimal.ZERO);
+        aggregatedBuckets.arrearsAmount().setValue(BigDecimal.ZERO);
+        aggregatedBuckets.totalBalance().setValue(BigDecimal.ZERO);
+        aggregatedBuckets.creditAmount().setValue(BigDecimal.ZERO);
 
         ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
         for (Building b : buildings) {

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.forms;
 
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -25,8 +26,15 @@ public class ArrearsGadgetSummaryForm extends ZoomableViewForm<ArrearsGadgetData
 
     private static final I18n i18n = I18n.get(ArrearsGadgetSummaryForm.class);
 
-    public ArrearsGadgetSummaryForm() {
+    private final NumberFormat currencyFormat;
+
+    public ArrearsGadgetSummaryForm(NumberFormat currencyFormat) {
         super(ArrearsGadgetDataDTO.class);
+        this.currencyFormat = currencyFormat;
+    }
+
+    public ArrearsGadgetSummaryForm() {
+        this(NumberFormat.getFormat("$#,##0.00"));
     }
 
     @Override
@@ -54,12 +62,12 @@ public class ArrearsGadgetSummaryForm extends ZoomableViewForm<ArrearsGadgetData
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().outstandingThisMonth()).setValue(i18n.tr("${0}", getValue().buckets().bucketThisMonth().getValue()));
-        get(proto().outstanding1to30Days()).setValue(i18n.tr("${0}", getValue().buckets().bucket30().getValue()));
-        get(proto().outstanding31to60Days()).setValue(i18n.tr("${0}", getValue().buckets().bucket60().getValue()));
-        get(proto().outstanding61to90Days()).setValue(i18n.tr("${0}", getValue().buckets().bucket90().getValue()));
-        get(proto().outstanding91andMoreDays()).setValue(i18n.tr("${0}", getValue().buckets().bucketOver90().getValue()));
-        get(proto().outstandingTotal()).setValue(i18n.tr("${0}", getValue().buckets().arrearsAmount().getValue()));
+        get(proto().outstandingThisMonth()).setValue(currencyFormat.format(getValue().buckets().bucketThisMonth().getValue()));
+        get(proto().outstanding1to30Days()).setValue(currencyFormat.format(getValue().buckets().bucket30().getValue()));
+        get(proto().outstanding31to60Days()).setValue(currencyFormat.format(getValue().buckets().bucket60().getValue()));
+        get(proto().outstanding61to90Days()).setValue(currencyFormat.format(getValue().buckets().bucket90().getValue()));
+        get(proto().outstanding91andMoreDays()).setValue(currencyFormat.format(getValue().buckets().bucketOver90().getValue()));
+        get(proto().outstandingTotal()).setValue(currencyFormat.format(getValue().buckets().arrearsAmount().getValue()));
     }
 
 }

@@ -114,23 +114,24 @@ public interface UnitAvailabilityStatus extends IEntity {
     @Caption(name = "Physical Condition")
     IPrimitive<RentReadiness> rentReadinessStatus();
 
-    @Format("#0.00")
-    @Editor(type = EditorType.money)
+    @Format("#,##0.00")
+    @Caption(name = "Unit Rent ($)")
     IPrimitive<BigDecimal> unitRent();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
+    @Caption(name = "Money Rent ($)")
     IPrimitive<BigDecimal> marketRent();
 
     /** <code>unitRent - marketRent</code> */
-    @Caption(name = "Delta, in $")
-    @Format("#0.00")
+    @Caption(name = "Delta ($)")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> rentDeltaAbsolute();
 
     /** <code>(unitRent - unitMarketRent)/marketRent</code> */
-    @Caption(name = "Delta, in %")
-    @Format("#0.00")
+    @Caption(name = "Delta (%)")
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> rentDeltaRelative();
 
     /**
@@ -166,7 +167,7 @@ public interface UnitAvailabilityStatus extends IEntity {
 
     /** days_vacant * marketRent / 30 */
     @Caption(name = "Revenue Lost ($)")
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     @Transient
     IPrimitive<BigDecimal> revenueLost();

@@ -154,7 +154,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
                 while (columnDescriptors.hasNext()) {
                     assert columnDescriptorEntities.hasNext() : "DataTable's column descriptors and gadget metadata's column descriptor arrays don't match";
                     ColumnDescriptorEntity entity = columnDescriptorEntities.next();
-                    ColumnDescriptorConverter.saveColumnDescriptorToEntity(columnDescriptors.next(), entity);
+                    ColumnDescriptorConverter.saveColumnDescriptorToEntity(listedEntityClass, columnDescriptors.next(), entity);
                 }
                 saveMetadata();
             }
