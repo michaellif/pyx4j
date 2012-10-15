@@ -27,6 +27,8 @@ SET search_path = '_admin_';
 ALTER TABLE admin_pmc_equifax_info
     ADD COLUMN report_type VARCHAR(50),
     ADD COLUMN approved BOOLEAN;
+    
+ALTER TABLE vista_terms_v ALTER COLUMN holder DROP NOT NULL;
 
 
 
@@ -34,7 +36,7 @@ ALTER TABLE admin_pmc_equifax_info
 
 SET search_path = 'public';
 
--- Remove sequences for tables to be deleted - 55 in total
+-- Remove sequences for tables to be deleted - 56 in total
 
 DROP SEQUENCE arrears_status_gadget_metadata$column_descriptors_seq;
 DROP SEQUENCE arrears_status_gadget_metadata_seq;
@@ -72,6 +74,7 @@ DROP SEQUENCE lister_gadget_base_metadata$column_descriptors_seq;
 DROP SEQUENCE lister_gadget_base_metadata_seq;
 DROP SEQUENCE note$attachments_seq;
 DROP SEQUENCE note_seq;
+DROP SEQUENCE notes_seq;
 DROP SEQUENCE notes_and_attachments$notes_seq;
 DROP SEQUENCE payment_records_gadget_metadata$column_descriptors_seq;
 DROP SEQUENCE payment_records_gadget_metadata$payment_method_filter_seq;
@@ -97,8 +100,7 @@ CREATE SEQUENCE background_check_policy_v_seq START WITH 1 INCREMENT BY 1 NO MAX
 ALTER SEQUENCE background_check_policy_v_seq OWNER TO vista;
 CREATE SEQUENCE gadget_metadata_holder_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE gadget_metadata_holder_seq OWNER TO vista;
-CREATE SEQUENCE income_info_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-ALTER SEQUENCE income_info_seq OWNER TO vista;
+
 CREATE SEQUENCE lease_customer_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE lease_customer_seq OWNER TO vista;
 CREATE SEQUENCE lease_participant_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -115,6 +117,8 @@ CREATE SEQUENCE notes_and_attachments$attachments_seq START WITH 1 INCREMENT BY 
 ALTER SEQUENCE notes_and_attachments$attachments_seq OWNER TO vista;
 CREATE SEQUENCE person_credit_check_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE person_credit_check_seq OWNER TO vista;
+CREATE SEQUENCE person_screening_income_info_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ALTER SEQUENCE person_screening_income_info_seq OWNER TO vista;
 CREATE SEQUENCE person_screening_legal_questions_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE person_screening_legal_questions_seq OWNER TO vista;
 CREATE SEQUENCE person_screening_personal_income_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -251,6 +255,10 @@ BEGIN
         '       SET     product_chargediscriminator = b.iddiscriminator '||
         '       FROM    '||v_schema_name||'.billing_invoice_line_item b '||
         '       WHERE   a.product_charge = b.id ';
+        
+        -- boiler
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.boiler DROP COLUMN notes';
+        
 
         -- building
         EXECUTE 'ALTER TABLE '||v_schema_name||'.building DROP COLUMN dashboard, DROP COLUMN notes_and_attachments';
@@ -277,6 +285,8 @@ BEGIN
         '       ADD CONSTRAINT dashboard_metadata_owner_user_id_fk FOREIGN KEY(owner_user_id) REFERENCES '||v_schema_name||'.crm_user(id)';
 
 
+        -- elevator
+         EXECUTE 'ALTER TABLE '||v_schema_name||'.elevator DROP COLUMN notes';
 
         -- employee
         EXECUTE 'ALTER TABLE '||v_schema_name||'.employee ADD COLUMN employee_id_s VARCHAR(26)';
@@ -303,46 +313,6 @@ BEGIN
                                                 'DROP COLUMN document_issuer,'||
                                                 'DROP COLUMN drivers_license_state';
 
-
-        -- income_info
-
-        EXECUTE 'CREATE TABLE '||v_schema_name||'.income_info ('||
-                '   id              BIGINT          NOT NULL,'||
-                '   iddiscriminator         VARCHAR(64)         NOT NULL,'||
-                '   name                VARCHAR(500),'||
-                '   monthly_amount          NUMERIC(18,2),'||
-                '   starts              DATE,'||
-                '   ends                DATE,'||
-                '   position            VARCHAR(500),'||
-                '   address_suite_number        VARCHAR(500),'||
-                '   address_street_number       VARCHAR(500),'||
-                '   address_street_number_suffix    VARCHAR(500),'||
-                '   address_street_name         VARCHAR(500),'||
-                '   address_street_type         VARCHAR(50),'||
-                '   address_street_direction    VARCHAR(50),'||
-                '   address_city            VARCHAR(500),'||
-                '   address_county          VARCHAR(500),'||
-                '   address_province        BIGINT,'||
-                '   address_country         BIGINT,'||
-                '   address_postal_code         VARCHAR(500),'||
-                '   address_location_lat        DOUBLE PRECISION,'||
-                '   address_location_lng        DOUBLE PRECISION,'||
-                '   employed_for_years      DOUBLE PRECISION,'||
-                '   supervisor_name         VARCHAR(500),'||
-                '   supervisor_phone        VARCHAR(500),'||
-                '   fully_owned             BOOLEAN,'||
-                '   monthly_revenue         NUMERIC(18,2),'||
-                '   number_of_employees         INT,'||
-                '   program             VARCHAR(50),'||
-                '   field_of_study          VARCHAR(500),'||
-                '   funding_choices         VARCHAR(50),'||
-            '   CONSTRAINT income_info_pk PRIMARY KEY (id),'||
-            '   CONSTRAINT income_info_address_country_fk FOREIGN KEY (address_country) '||
-            '       REFERENCES '||v_schema_name||'.country(id),'||
-            '   CONSTRAINT income_info_address_province_fk FOREIGN KEY (address_province) '||
-            '       REFERENCES '||v_schema_name||'.province(id))';
-
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.income_info OWNER TO vista';
 
         -- invoice_adjustment_sub_line_item
         EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_adjustment_sub_line_item ADD COLUMN line_itemdiscriminator VARCHAR(50)';
@@ -381,7 +351,8 @@ BEGIN
         -- lease_application
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_application DROP COLUMN lease_on_application,'||
                                     'DROP COLUMN lease_on_application_for,'||
-                                    'DROP COLUMN equifax_approval';
+                                    'DROP COLUMN equifax_approval,'||
+                                    'DROP COLUMN notes';
         -- legal_questions
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions DROP CONSTRAINT IF EXISTS legal_questions_pk CASCADE';
@@ -394,6 +365,7 @@ BEGIN
                                                                         'DROP COLUMN equifax_approval';
         EXECUTE 'UPDATE '||v_schema_name||'.master_online_application SET online_application_id_s = _dba_.convert_id_to_string(online_application_id) ';
 
+        
         -- notes_and_attachments
         EXECUTE 'ALTER TABLE '||v_schema_name||'.notes_and_attachments DROP COLUMN x,'||
                             'ADD COLUMN owner_id BIGINT,'||
@@ -413,6 +385,10 @@ BEGIN
 
         -- note table - drop
         SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'note',FALSE);
+        
+        -- notes
+        SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'notes',FALSE);
+
 
         -- note$attachments  - drop
         SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'note$attachments',FALSE);
@@ -453,6 +429,46 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.payment_payment_details '||
         '   SET     account_no_obfuscated_number = LPAD(account_no_obfuscated_number,12,''X''),'||
         '       card_obfuscated_number = LPAD(card_obfuscated_number,16,''X'') ';
+        
+        -- person_screening_income_info
+
+        EXECUTE 'CREATE TABLE '||v_schema_name||'.person_screening_income_info ('||
+                '   id              BIGINT          NOT NULL,'||
+                '   iddiscriminator         VARCHAR(64)         NOT NULL,'||
+                '   name                VARCHAR(500),'||
+                '   monthly_amount          NUMERIC(18,2),'||
+                '   starts              DATE,'||
+                '   ends                DATE,'||
+                '   position            VARCHAR(500),'||
+                '   address_suite_number        VARCHAR(500),'||
+                '   address_street_number       VARCHAR(500),'||
+                '   address_street_number_suffix    VARCHAR(500),'||
+                '   address_street_name         VARCHAR(500),'||
+                '   address_street_type         VARCHAR(50),'||
+                '   address_street_direction    VARCHAR(50),'||
+                '   address_city            VARCHAR(500),'||
+                '   address_county          VARCHAR(500),'||
+                '   address_province        BIGINT,'||
+                '   address_country         BIGINT,'||
+                '   address_postal_code         VARCHAR(500),'||
+                '   address_location_lat        DOUBLE PRECISION,'||
+                '   address_location_lng        DOUBLE PRECISION,'||
+                '   employed_for_years      DOUBLE PRECISION,'||
+                '   supervisor_name         VARCHAR(500),'||
+                '   supervisor_phone        VARCHAR(500),'||
+                '   fully_owned             BOOLEAN,'||
+                '   monthly_revenue         NUMERIC(18,2),'||
+                '   number_of_employees         INT,'||
+                '   program             VARCHAR(50),'||
+                '   field_of_study          VARCHAR(500),'||
+                '   funding_choices         VARCHAR(50),'||
+            '   CONSTRAINT person_screening_income_info_pk PRIMARY KEY (id),'||
+            '   CONSTRAINT person_screening_income_info_address_country_fk FOREIGN KEY (address_country) '||
+            '       REFERENCES '||v_schema_name||'.country(id),'||
+            '   CONSTRAINT person_screening_income_info_address_province_fk FOREIGN KEY (address_province) '||
+            '       REFERENCES '||v_schema_name||'.province(id))';
+
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_income_info OWNER TO vista';
 
         -- personal_income - just in case rename to person_screening_personal_income
 
@@ -481,7 +497,7 @@ BEGIN
 
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ADD CONSTRAINT  person_screening_personal_income_pk PRIMARY KEY(id),'||
-        'ADD CONSTRAINT person_screening_personal_income_details_fk FOREIGN KEY(details) REFERENCES '||v_schema_name||'.income_info(id)' ;
+        'ADD CONSTRAINT person_screening_personal_income_details_fk FOREIGN KEY(details) REFERENCES '||v_schema_name||'.person_screening_income_info(id)' ;
 
 
         -- person_screening
@@ -541,6 +557,9 @@ BEGIN
         v_schema_name||'.reports_settings_holder USING btree (class_name, identifier_key)';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.reports_settings_holder OWNER TO vista';
+
+        -- roof
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.roof DROP COLUMN notes';
 
         -- tenant_charge
         EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge ADD COLUMN tenantdiscriminator VARCHAR(50)';
