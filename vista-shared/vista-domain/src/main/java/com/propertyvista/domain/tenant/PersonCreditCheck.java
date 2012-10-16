@@ -105,6 +105,6 @@ public interface PersonCreditCheck extends IEntity {
     // TODO pointerTo fullReportSored in second special schema...
     IPrimitive<Key> creditCheckReport();
 
+    @Editor(type = EditorType.textarea)
     IPrimitive<String> reason();
-
 }

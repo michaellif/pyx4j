@@ -13,7 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
+import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -104,28 +107,59 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                     new DecoratorBuilder(inject(proto().screening(),
                             new CEntityCrudHyperlink<PersonScreening>(AppPlaceEntityMapper.resolvePlace(PersonScreening.class))), 10).build());
 
-            FormFlexPanel right = new FormFlexPanel();
-            row = -1;
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckResult()), 10).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().reason()), 25).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().amountApproved()), 10).build());
-
-            right.setBR(++row, 0, 1);
-
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckDate()), 10).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckReport(), new CLabel<Key>()), 10).build());
-
-            creditCheckResultPanel = right;
+            creditCheckResultPanel = createCreditCheckResultPanel();
 
             // assemble main panel:
             main.setWidget(0, 0, left);
-            main.setWidget(0, 1, right);
+            main.setWidget(0, 1, creditCheckResultPanel);
 
             main.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
+            main.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+
             main.getColumnFormatter().setWidth(0, "30%");
             main.getColumnFormatter().setWidth(1, "70%");
 
             return main;
+        }
+
+        Widget createCreditCheckResultPanel() {
+            FormFlexPanel panel = new FormFlexPanel();
+
+            FormFlexPanel left = new FormFlexPanel();
+
+            int row = -1;
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckResult()), 10).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().reason()), 15).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().amountApproved()), 15).build());
+
+            left.setBR(++row, 0, 1);
+
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckDate()), 10).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckReport(), new CLabel<Key>()), 10).build());
+
+            FormFlexPanel right = new FormFlexPanel();
+            row = -1;
+
+            right.setWidget(++row, 0, new HTML("<i>" + i18n.tr("Credit Check Parameters:") + "</i>"));
+            right.getWidget(row, 0).getElement().getStyle().setFontWeight(FontWeight.NORMAL);
+            right.getWidget(row, 0).getElement().getStyle().setMarginLeft(2, Unit.EM);
+
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().bankruptcy()), 5).labelWidth(10).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().judgment()), 5).labelWidth(10).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().collection()), 5).labelWidth(10).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().chargeOff()), 5).labelWidth(10).build());
+
+            // assemble main panel:
+            panel.setWidget(0, 0, left);
+            panel.setWidget(0, 1, right);
+
+            panel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
+            panel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+
+            panel.getColumnFormatter().setWidth(0, "50%");
+            panel.getColumnFormatter().setWidth(1, "50%");
+
+            return panel;
         }
 
         @Override
