@@ -107,6 +107,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             }
 
             if (!approval.creditCheck().isNull()) {
+                Persistence.ensureRetrieve(approval.creditCheck(), AttachLevel.Attached);
                 approval.screening().set(approval.creditCheck().screening());
                 Persistence.service().retrieve(approval.screening(), AttachLevel.ToStringMembers);
             } else {

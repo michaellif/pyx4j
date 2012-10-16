@@ -25,6 +25,7 @@ import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo.EquifaxReportType;
 import com.propertyvista.admin.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.DemoData;
@@ -50,6 +51,8 @@ public class PmcCreatorDev {
         pmc.features().leases().setValue(Boolean.TRUE);
         pmc.features().onlineApplication().setValue(Boolean.TRUE);
         pmc.features().xmlSiteExport().setValue(Boolean.TRUE);
+        pmc.equifaxInfo().approved().setValue(true);
+        pmc.equifaxInfo().reportType().setValue(EquifaxReportType.longReport);
 
         Persistence.service().persist(pmc);
 
