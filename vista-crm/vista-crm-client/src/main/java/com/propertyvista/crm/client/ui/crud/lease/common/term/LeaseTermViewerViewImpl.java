@@ -47,14 +47,16 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
             }
         }));
 
-        addHeaderToolbarItem(new Button(i18n.tr("Print"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
+        if (false) {
+            addHeaderToolbarItem(new Button(i18n.tr("Print"), new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
 //              Print.it(getForm().toStringForPrint());
-                Print.preview(getForm().toStringForPrint());
+                    Print.preview(getForm().toStringForPrint());
 
-            }
-        }));
+                }
+            }));
+        }
 
         addHeaderToolbarItem(offerAcceptButton = new Button(i18n.tr("Accept"), new ClickHandler() {
             @Override
