@@ -18,6 +18,8 @@ import java.util.Date;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owned;
@@ -83,8 +85,9 @@ public interface PersonCreditCheck extends IEntity {
     @Owned
     BackgroundCheckPolicy.BackgroundCheckPolicyV backgroundCheckPolicy();
 
-    @Format("#0.00")
     @ReadOnly
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amountCheked();
 
     // --- Results from Equifax  ---
@@ -94,8 +97,9 @@ public interface PersonCreditCheck extends IEntity {
     @ToString(index = 0)
     IPrimitive<CreditCheckResult> creditCheckResult();
 
-    @Format("#0.00")
     @ReadOnly
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amountApproved();
 
     // TODO pointerTo fullReportSored in second special schema...
