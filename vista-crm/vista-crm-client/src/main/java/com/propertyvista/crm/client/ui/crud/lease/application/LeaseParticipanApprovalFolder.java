@@ -27,15 +27,16 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.dto.LeaseParticipanApprovalDTO;
 
 public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipanApprovalDTO> {
@@ -72,18 +73,18 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             left.setWidget(
                     ++row,
                     0,
-                    new DecoratorBuilder(inject(proto().leaseParticipant().leaseCustomer().customer().person(), new CEntityHyperlink<LeaseParticipant<?>>(null,
+                    new DecoratorBuilder(inject(proto().leaseParticipant().leaseCustomer().customer().person().name(), new CEntityHyperlink<Name>(null,
                             new Command() {
                                 @Override
                                 public void execute() {
-                                    AppSite.getPlaceController().goTo(getTargetPlace());
-                                }
-
-                                private AppPlace getTargetPlace() {
                                     if (getValue().leaseParticipant().isInstanceOf(Tenant.class)) {
-                                        return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().leaseParticipant().getPrimaryKey());
+                                        AppSite.getPlaceController().goTo(
+                                                AppPlaceEntityMapper.resolvePlace(LeaseCustomerTenant.class, getValue().leaseParticipant().leaseCustomer()
+                                                        .getPrimaryKey()));
                                     } else if (getValue().leaseParticipant().isInstanceOf(Guarantor.class)) {
-                                        return AppPlaceEntityMapper.resolvePlace(Guarantor.class, getValue().leaseParticipant().getPrimaryKey());
+                                        AppSite.getPlaceController().goTo(
+                                                AppPlaceEntityMapper.resolvePlace(LeaseCustomerGuarantor.class, getValue().leaseParticipant().leaseCustomer()
+                                                        .getPrimaryKey()));
                                     } else {
                                         throw new IllegalArgumentException("Incorrect LeaseParticipant value!");
                                     }
