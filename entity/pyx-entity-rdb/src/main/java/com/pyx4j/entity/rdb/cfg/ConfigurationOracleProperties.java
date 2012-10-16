@@ -22,19 +22,22 @@ package com.pyx4j.entity.rdb.cfg;
 
 import java.util.Map;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.PropertiesConfiguration;
 
 public class ConfigurationOracleProperties extends ConfigurationOracle {
+
+    protected String jdbcConnectionUrl;
+
+    protected String tnsName;
 
     protected String host;
 
     protected int port = 1521;
 
-    protected String sid;
-
     protected String serviceName;
 
-    protected String tnsName;
+    protected String sid;
 
     protected String user;
 
@@ -67,6 +70,15 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
     private boolean createForeignKeys = true;
 
     private Ddl ddl = Ddl.auto;
+
+    @Override
+    public String connectionUrl() {
+        if (CommonsStringUtils.isStringSet(jdbcConnectionUrl)) {
+            return jdbcConnectionUrl;
+        } else {
+            return super.connectionUrl();
+        }
+    }
 
     @Override
     public String dbHost() {
@@ -175,6 +187,9 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
 
     public void readProperties(String prefix, Map<String, String> properties) {
         PropertiesConfiguration c = new PropertiesConfiguration(prefix, properties);
+
+        this.jdbcConnectionUrl = c.getValue("jdbcConnectionUrl", this.jdbcConnectionUrl);
+
         this.host = c.getValue("host", this.host);
         this.port = c.getIntegerValue("port", this.port);
         this.sid = c.getValue("sid", this.sid);
