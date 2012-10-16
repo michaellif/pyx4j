@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.cfg;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 
@@ -39,9 +40,29 @@ public abstract class ConfigurationOracle implements Configuration {
         return 1521;
     }
 
+    /**
+     * This will override sid;
+     */
+    public String serviceName() {
+        return null;
+    }
+
+    /**
+     * This will override host and sid|serviceName; connection would be established using TNSNames
+     */
+    public String tnsName() {
+        return null;
+    }
+
     @Override
     public String connectionUrl() {
-        return "jdbc:oracle:thin:@" + dbHost() + ":" + dbPort() + ":" + dbName();
+        if (CommonsStringUtils.isStringSet(tnsName())) {
+            return "jdbc:oracle:thin:@" + tnsName();
+        } else if (CommonsStringUtils.isStringSet(serviceName())) {
+            return "jdbc:oracle:thin:@//" + dbHost() + ":" + dbPort() + "/" + serviceName();
+        } else {
+            return "jdbc:oracle:thin:@" + dbHost() + ":" + dbPort() + ":" + dbName();
+        }
     }
 
     @Override

@@ -32,6 +32,10 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
 
     protected String sid;
 
+    protected String serviceName;
+
+    protected String tnsName;
+
     protected String user;
 
     protected String password;
@@ -77,6 +81,16 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
     @Override
     public String dbName() {
         return sid;
+    }
+
+    @Override
+    public String serviceName() {
+        return serviceName;
+    }
+
+    @Override
+    public String tnsName() {
+        return tnsName;
     }
 
     @Override
@@ -164,6 +178,8 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
         this.host = c.getValue("host", this.host);
         this.port = c.getIntegerValue("port", this.port);
         this.sid = c.getValue("sid", this.sid);
+        this.tnsName = c.getValue("tnsName", this.tnsName);
+        this.serviceName = c.getValue("serviceName", this.serviceName);
 
         this.user = c.getValue("user", this.user);
         this.password = c.getValue("password", this.password);
