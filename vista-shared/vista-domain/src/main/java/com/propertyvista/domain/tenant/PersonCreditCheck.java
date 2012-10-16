@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -90,6 +91,7 @@ public interface PersonCreditCheck extends IEntity {
 
     IPrimitive<String> riskCode();
 
+    @ToString(index = 0)
     IPrimitive<CreditCheckResult> creditCheckResult();
 
     @Format("#0.00")

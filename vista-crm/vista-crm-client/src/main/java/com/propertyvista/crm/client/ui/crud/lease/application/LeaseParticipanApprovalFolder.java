@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease.application;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IObject;
@@ -57,6 +58,8 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
     private class LeaseParticipanApprovalViewer extends CEntityDecoratableForm<LeaseParticipanApprovalDTO> {
 
+        private Widget creditCheckResultPanel;
+
         public LeaseParticipanApprovalViewer() {
             super(LeaseParticipanApprovalDTO.class);
             setEditable(false);
@@ -93,6 +96,14 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().role()), 15).build());
 
+            left.setBR(++row, 0, 1);
+
+            left.setWidget(
+                    ++row,
+                    0,
+                    new DecoratorBuilder(inject(proto().screening(),
+                            new CEntityCrudHyperlink<PersonScreening>(AppPlaceEntityMapper.resolvePlace(PersonScreening.class))), 10).build());
+
             FormFlexPanel right = new FormFlexPanel();
             row = -1;
             right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckResult()), 10).build());
@@ -103,11 +114,8 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
             right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckDate()), 10).build());
             right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckReport(), new CLabel<Key>()), 10).build());
-            right.setWidget(
-                    ++row,
-                    0,
-                    new DecoratorBuilder(inject(proto().screening(),
-                            new CEntityCrudHyperlink<PersonScreening>(AppPlaceEntityMapper.resolvePlace(PersonScreening.class))), 10).build());
+
+            creditCheckResultPanel = right;
 
             // assemble main panel:
             main.setWidget(0, 0, left);
@@ -123,6 +131,9 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
+
+            get(proto().screening()).setVisible(!getValue().screening().isNull());
+            creditCheckResultPanel.setVisible(!getValue().creditCheck().isNull());
 
             get(proto().creditCheck().amountApproved()).setVisible(getValue().creditCheck().creditCheckResult().getValue() == CreditCheckResult.Accept);
             get(proto().creditCheck().reason()).setVisible(getValue().creditCheck().creditCheckResult().getValue() != CreditCheckResult.Accept);

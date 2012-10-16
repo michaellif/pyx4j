@@ -918,6 +918,20 @@ public class LeaseFacadeImpl implements LeaseFacade {
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), unit.building().productCatalog()));
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().version().serviceType(), leaseType));
         serviceCriteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
+
+//        switch (leaseTerm.lease().status().getValue()) {
+//        case Active:
+//        case Approved:
+//        case ExistingLease:
+//            serviceCriteria.add(PropertyCriterion.in(serviceCriteria.proto().version().visibility(), PublicVisibilityType.visibleToExistingTenant()));
+//            break;
+//        case Application:
+//            serviceCriteria.add(PropertyCriterion.in(serviceCriteria.proto().version().visibility(), PublicVisibilityType.visibleToTenant()));
+//            break;
+//        default:
+//            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", leaseTerm.lease().status().getValue()));
+//        }
+
         for (Service service : Persistence.service().query(serviceCriteria)) {
             if (isProductAvailable(leaseTerm.lease(), service)) {
                 EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);

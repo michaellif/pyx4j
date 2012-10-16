@@ -14,6 +14,8 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
@@ -23,8 +25,10 @@ import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 @Transient
+@ToStringFormat("{0}, {1}")
 public interface LeaseParticipanApprovalDTO extends IEntity {
 
+    @ToString(index = 0)
     @SuppressWarnings("rawtypes")
     @Detached(level = AttachLevel.ToStringMembers)
     LeaseParticipant leaseParticipant();
@@ -32,5 +36,6 @@ public interface LeaseParticipanApprovalDTO extends IEntity {
     @Detached(level = AttachLevel.ToStringMembers)
     PersonScreening screening();
 
+    @ToString(index = 1)
     PersonCreditCheck creditCheck();
 }
