@@ -11,11 +11,6 @@
 **/
 
 
-/** For development environment only **/
-/*
-CREATE SCHEMA _dba_ ;
-*/
-
 BEGIN TRANSACTION;
 
 SET client_min_messages = 'WARNING';
@@ -27,8 +22,20 @@ SET search_path = '_admin_';
 ALTER TABLE admin_pmc_equifax_info
     ADD COLUMN report_type VARCHAR(50),
     ADD COLUMN approved BOOLEAN;
-    
+  
 ALTER TABLE vista_terms_v ALTER COLUMN holder DROP NOT NULL;
+
+DROP INDEX admin_pmc_dns_name_idx;
+CREATE UNIQUE INDEX admin_pmc_dns_name_idx ON admin_pmc USING btree (LOWER(dns_name));
+
+CREATE UNIQUE INDEX admin_pmc_equifax_info_pmc_idx ON admin_pmc_equifax_info USING btree (pmc);
+CREATE UNIQUE INDEX admin_pmc_payment_type_info_pmc_idx ON admin_pmc_payment_type_info USING btree (pmc);
+CREATE INDEX pad_batch_pad_file_idx ON pad_batch USING btree (pad_file);
+CREATE INDEX pad_debit_record_pad_batch_idx ON pad_debit_record USING btree (pad_batch);
+CREATE INDEX pad_reconciliation_debit_record_reconciliation_summary_idx ON pad_reconciliation_debit_record USING btree (reconciliation_summary);
+CREATE INDEX pad_reconciliation_summary_reconciliation_file_idx ON pad_reconciliation_summary USING btree (reconciliation_file);
+CREATE INDEX pad_sim_batch_pad_file_idx ON pad_sim_batch USING btree (pad_file);
+
 
 
 
@@ -991,33 +998,36 @@ BEGIN
         -- lease_participant
 
         EXECUTE 'CREATE TABLE '||v_schema_name||'.lease_participant ( '||
-        '   id                      BIGINT      NOT NULL,'||
-        '   tenant_id               BIGINT,'||
-        '   iddiscriminator         VARCHAR(64)     NOT NULL,'||
-        '   lease_customerdiscriminator VARCHAR(50),'||
-        '   lease_customer          BIGINT,'||
-        '   participant_role        VARCHAR(50),'||
-        '   lease_term_v            BIGINT,'||
-        '   order_in_lease          INT,'||
-        '   application             BIGINT,'||
-        '   screening               BIGINT,'||
-        '   screening_for           TIMESTAMP WITHOUT TIME ZONE,'||
-        '   relationship            VARCHAR(50),'||
-        '   tenantdiscriminator     VARCHAR(50),'||
-        '   tenant                  BIGINT,'||
-        '   take_ownership          BOOLEAN,'||
-        '   percentage              NUMERIC(18,2),'||
-        '   CONSTRAINT lease_participant_pk PRIMARY KEY(id),'||
-        '   CONSTRAINT lease_participant_application_fk FOREIGN KEY(application) '||
-        '       REFERENCES '||v_schema_name||'.online_application(id),'||
-            '   CONSTRAINT lease_participant_lease_customer_fk FOREIGN KEY(lease_customer) '||
-        '       REFERENCES '||v_schema_name||'.lease_customer(id), '||
-            '   CONSTRAINT lease_participant_lease_term_v_fk FOREIGN KEY(lease_term_v) '||
-        '       REFERENCES '||v_schema_name||'.lease_term_v(id), '||
-            '   CONSTRAINT lease_participant_screening_fk FOREIGN KEY(screening) '||
-        '       REFERENCES '||v_schema_name||'.person_screening(id), '||
-            '   CONSTRAINT lease_participant_tenant_fk FOREIGN KEY(tenant) '||
-        '       REFERENCES '||v_schema_name||'.lease_participant(id))';
+        '       id                      BIGINT      NOT NULL,'||
+        '       tenant_id               BIGINT,'||
+        '       iddiscriminator         VARCHAR(64)     NOT NULL,'||
+        '       lease_customerdiscriminator VARCHAR(50),'||
+        '       lease_customer          BIGINT,'||
+        '       participant_role        VARCHAR(50),'||
+        '       lease_term_v            BIGINT,'||
+        '       order_in_lease          INT,'||
+        '       application             BIGINT,'||
+        '       credit_check            BIGINT,'||
+        '       screening               BIGINT,'||
+        '       screening_for           TIMESTAMP WITHOUT TIME ZONE,'||
+        '       relationship            VARCHAR(50),'||
+        '       tenantdiscriminator     VARCHAR(50),'||
+        '       tenant                  BIGINT,'||
+        '       take_ownership          BOOLEAN,'||
+        '       percentage              NUMERIC(18,2),'||
+        '       CONSTRAINT lease_participant_pk PRIMARY KEY(id),'||
+        '       CONSTRAINT lease_participant_application_fk FOREIGN KEY(application) '||
+        '               REFERENCES '||v_schema_name||'.online_application(id),'||
+        '       CONSTRAINT lease_participant_lease_customer_fk FOREIGN KEY(lease_customer) '||
+        '               REFERENCES '||v_schema_name||'.lease_customer(id), '||
+        '       CONSTRAINT lease_participant_lease_term_v_fk FOREIGN KEY(lease_term_v) '||
+        '               REFERENCES '||v_schema_name||'.lease_term_v(id), '||
+       -- '       CONSTRAINT lease_participant_credit_check_fk FOREIGN KEY (credit_check) '||
+       -- '               REFERENCES '||v_schema_name||'.person_credit_check(id),'||
+        '       CONSTRAINT lease_participant_screening_fk FOREIGN KEY(screening) '||
+        '               REFERENCES '||v_schema_name||'.person_screening(id), '||
+        '       CONSTRAINT lease_participant_tenant_fk FOREIGN KEY(tenant) '||
+        '               REFERENCES '||v_schema_name||'.lease_participant(id))';
 
         EXECUTE 'INSERT INTO '||v_schema_name||'.lease_participant '||
         '(id,iddiscriminator,lease_customerdiscriminator,lease_customer,participant_role,lease_term_v,order_in_lease,'||
