@@ -28,6 +28,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -35,25 +36,26 @@ import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstan
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.forms.UnitAvailabilityGadgetMetatadaForm;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class UnitAvailabilityReportGadget extends ListerGadgetInstanceBase<UnitAvailabilityStatus, UnitAvailabilityGadgetMetadata> implements
+public class UnitAvailabilityGadget extends ListerGadgetInstanceBase<UnitAvailabilityStatus, UnitAvailabilityGadgetMetadata> implements
         IBuildingBoardGadgetInstance {
 
     private VerticalPanel gadgetPanel;
 
     private HTML filterDisplayPanel;
 
-    private final AvailabilityReportService service;
+    private final UnitAvailabilityGadgetService service;
 
     private CDatePicker asOf;
 
-    public UnitAvailabilityReportGadget(UnitAvailabilityGadgetMetadata gmd) {
+    public UnitAvailabilityGadget(UnitAvailabilityGadgetMetadata gmd) {
         super(gmd, UnitAvailabilityGadgetMetadata.class, new UnitAvailabilityGadgetMetatadaForm(), UnitAvailabilityStatus.class, false);
-        service = GWT.create(AvailabilityReportService.class);
+        service = GWT.create(UnitAvailabilityGadgetService.class);
     }
 
     @Override
@@ -65,6 +67,11 @@ public class UnitAvailabilityReportGadget extends ListerGadgetInstanceBase<UnitA
                 populate();
             }
         });
+    }
+
+    @Override
+    protected void onItemSelect(UnitAvailabilityStatus item) {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Properties.Unit().formViewerPlace(item.unit().getPrimaryKey()));
     }
 
     @Override
@@ -88,7 +95,7 @@ public class UnitAvailabilityReportGadget extends ListerGadgetInstanceBase<UnitA
             return;
         }
 
-        service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>>() {
+        service.unitAvailabilityStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>>() {
             @Override
             public void onSuccess(EntitySearchResult<UnitAvailabilityStatus> result) {
                 setPageData(result.getData(), pageNumber, result.getTotalRows(), result.hasMoreData());

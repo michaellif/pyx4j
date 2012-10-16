@@ -26,7 +26,7 @@ import com.pyx4j.rpc.server.LocalService;
 import com.pyx4j.svg.j2se.SvgFactoryForBatik;
 
 import com.propertyvista.biz.financial.SysDateManager;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitTurnoverAnalysisGadgetService;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
 import com.propertyvista.crm.server.services.reports.StaticTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.util.SvgRasterizer;
@@ -60,7 +60,7 @@ public class TurnoverAnalysisChartReportModelCreator implements GadgetReportMode
         final LogicalDate asOf = turnoverAnalysisMetadata.customizeDate().isBooleanTrue() ? turnoverAnalysisMetadata.asOf().getValue() : new LogicalDate(
                 SysDateManager.getSysDate());
 
-        LocalService.create(AvailabilityReportService.class).turnoverAnalysis(new AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>>() {
+        LocalService.create(UnitTurnoverAnalysisGadgetService.class).turnoverAnalysis(new AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>>() {
 
             @Override
             public void onSuccess(Vector<UnitTurnoversPerIntervalDTO> data) {

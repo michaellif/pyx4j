@@ -46,16 +46,16 @@ import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEven
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitTurnoverAnalysisGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO.AnalysisResolution;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.svg.gadgets.TurnoverAnalysisChartFactory;
 
-public class UnitTurnoverAnalysisGraphGadget extends GadgetInstanceBase<UnitTurnoverAnalysisGadgetMetadata> implements IBuildingBoardGadgetInstance {
+public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurnoverAnalysisGadgetMetadata> implements IBuildingBoardGadgetInstance {
 
-    private static final I18n i18n = I18n.get(UnitTurnoverAnalysisGraphGadget.class);
+    private static final I18n i18n = I18n.get(UnitTurnoverAnalysisChartGadget.class);
 
     /** Sets graph height in <i>EMs</i>. */
     private static double GRAPH_HEIGHT = 20.0;
@@ -81,13 +81,13 @@ public class UnitTurnoverAnalysisGraphGadget extends GadgetInstanceBase<UnitTurn
 
     private RadioButton number;
 
-    private final AvailabilityReportService service;
+    private final UnitTurnoverAnalysisGadgetService service;
 
     private CDatePicker asOf;
 
-    public UnitTurnoverAnalysisGraphGadget(UnitTurnoverAnalysisGadgetMetadata gmd) {
+    public UnitTurnoverAnalysisChartGadget(UnitTurnoverAnalysisGadgetMetadata gmd) {
         super(gmd, UnitTurnoverAnalysisGadgetMetadata.class);
-        service = GWT.create(AvailabilityReportService.class);
+        service = GWT.create(UnitTurnoverAnalysisGadgetService.class);
         setDefaultPopulator(new Populator() {
             @Override
             public void populate() {

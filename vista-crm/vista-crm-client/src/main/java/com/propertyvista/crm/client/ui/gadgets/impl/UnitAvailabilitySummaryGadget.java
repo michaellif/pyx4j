@@ -37,7 +37,7 @@ import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.forms.UnitAvailabilitySummaryGadgetMetadataForm;
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilitySummaryGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatusSummaryLineDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -52,12 +52,12 @@ public class UnitAvailabilitySummaryGadget extends GadgetInstanceBase<UnitAvaila
 
     private DataTableModel<UnitAvailabilityStatusSummaryLineDTO> tableModel;
 
-    private final AvailabilityReportService service;
+    private final UnitAvailabilitySummaryGadgetService service;
 
     public UnitAvailabilitySummaryGadget(UnitAvailabilitySummaryGadgetMetadata gadgetMetadata) {
         super(gadgetMetadata, UnitAvailabilitySummaryGadgetMetadata.class, new UnitAvailabilitySummaryGadgetMetadataForm());
 
-        service = GWT.<AvailabilityReportService> create(AvailabilityReportService.class);
+        service = GWT.<UnitAvailabilitySummaryGadgetService> create(UnitAvailabilitySummaryGadgetService.class);
 
         setDefaultPopulator(new Populator() {
             @Override
@@ -105,7 +105,7 @@ public class UnitAvailabilitySummaryGadget extends GadgetInstanceBase<UnitAvaila
     }
 
     private void doPopulate() {
-        service.unitStatusSummary(new AsyncCallback<Vector<UnitAvailabilityStatusSummaryLineDTO>>() {
+        service.summary(new AsyncCallback<Vector<UnitAvailabilityStatusSummaryLineDTO>>() {
 
             @Override
             public void onSuccess(Vector<UnitAvailabilityStatusSummaryLineDTO> result) {

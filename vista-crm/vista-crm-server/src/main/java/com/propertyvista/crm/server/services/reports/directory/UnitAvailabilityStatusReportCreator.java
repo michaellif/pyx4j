@@ -26,7 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.server.LocalService;
 
 import com.propertyvista.biz.financial.SysDateManager;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityGadgetService;
 import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
 import com.propertyvista.crm.server.services.reports.ReportsCommon;
@@ -52,7 +52,7 @@ public class UnitAvailabilityStatusReportCreator implements GadgetReportModelCre
         final UnitAvailabilityGadgetMetadata metadata = gadgetMetadata.duplicate(UnitAvailabilityGadgetMetadata.class);
         final LogicalDate asOf = metadata.customizeDate().isBooleanTrue() ? metadata.asOf().getValue() : new LogicalDate(SysDateManager.getSysDate());
 
-        LocalService.create(AvailabilityReportService.class).unitStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>>() {
+        LocalService.create(UnitAvailabilityGadgetService.class).unitAvailabilityStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>>() {
 
             @Override
             public void onSuccess(EntitySearchResult<UnitAvailabilityStatus> result) {//@formatter:off                
