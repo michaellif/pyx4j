@@ -969,12 +969,14 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.lease_customer AS a '||
         '       SET preauthorized_payment = b.preauthorized_payment '||
         '       FROM '||
-        '       (SELECT a.id AS lease, b.customer, b.preauthorized_payment '||
+        '       (SELECT DISTINCT a.id AS lease, b.customer, b.preauthorized_payment '||
         '               FROM '||v_schema_name||'.lease a '||
         '               JOIN '||v_schema_name||'.lease_v c ON (a.id = c.holder) '||
-        '               JOIN '||v_schema_name||'.tenant b ON (a.id = b.lease_v) '||
-        '               JOIN    (SELECT MAX(id) AS id,customer FROM '||v_schema_name||'.tenant '||
-        '                       GROUP BY customer) d ON (b.id = d.id) '||
+        '               JOIN '||v_schema_name||'.tenant b ON (c.id = b.lease_v) '||
+        '               JOIN    (SELECT MAX(a.id) AS id,a.customer,b.id AS lease  FROM '||v_schema_name||'.tenant a '||
+        '                       JOIN '||v_schema_name||'.lease_v c ON (a.lease_v = c.id) '||
+        '                       JOIN '||v_schema_name||'.lease b ON (b.id = c.holder) '||
+        '                       GROUP BY a.customer,b.id ) AS d ON (b.id = d.id) '||
         '               WHERE b.preauthorized_payment IS NOT NULL ) AS b '||
         '       WHERE   a.lease = b.lease '||
         '       AND     a.customer = b.customer ';
