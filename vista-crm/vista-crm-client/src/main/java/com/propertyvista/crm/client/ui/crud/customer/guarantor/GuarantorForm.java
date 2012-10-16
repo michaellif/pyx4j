@@ -26,8 +26,8 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseCustomerEditorPresenter;
+import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
@@ -100,7 +100,7 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
     private FormFlexPanel createPaymentMethodsTab(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
 
-        main.setWidget(0, 0, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
+        main.setWidget(0, 0, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable(), false) {
             @Override
             protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
                 if (set) {

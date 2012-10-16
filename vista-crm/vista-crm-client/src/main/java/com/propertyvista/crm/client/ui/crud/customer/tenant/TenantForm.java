@@ -116,7 +116,7 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
     private FormFlexPanel createPaymentMethodsTab(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
 
-        main.setWidget(0, 0, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
+        main.setWidget(0, 0, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable(), true) {
             @Override
             protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
                 if (set) {

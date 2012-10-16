@@ -33,8 +33,11 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> 
 
     private static final I18n i18n = I18n.get(PaymentMethodFolder.class);
 
-    public PaymentMethodFolder(boolean modifiable) {
+    private final boolean showPreauthorized;
+
+    public PaymentMethodFolder(boolean modifiable, boolean showPreauthorized) {
         super(PaymentMethod.class, modifiable);
+        this.showPreauthorized = showPreauthorized;
     }
 
     @Override
@@ -72,7 +75,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> 
             // tune-up:
             setTypeSelectionVisible(false);
             setBillingAddressVisible(false);
-            setIsPreauthorizedVisible(true);
+            setIsPreauthorizedVisible(showPreauthorized);
 
             return w;
         }

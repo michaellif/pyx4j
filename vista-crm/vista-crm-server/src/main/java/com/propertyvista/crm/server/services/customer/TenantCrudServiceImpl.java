@@ -13,15 +13,12 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseCustomer;
 import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
@@ -62,22 +59,13 @@ public class TenantCrudServiceImpl extends LeaseCustomerCrudServiceBaseImpl<Leas
     protected void persist(LeaseCustomerTenant entity, TenantDTO dto) {
         super.persist(entity, dto);
 
-        Tenant tenant = retrieveTenant(dto.leaseTermV(), entity);
-
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().currentTerm().versions(), tenant.leaseTermV()));
-        Building building = Persistence.service().retrieve(criteria);
-
-        // save new/edited ones (and memorize pre-authorized method):
+        // memorize pre-authorized method:
         for (PaymentMethod paymentMethod : dto.paymentMethods()) {
-            paymentMethod.customer().set(entity.customer());
-            paymentMethod.isOneTimePayment().setValue(false);
-            ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(building, paymentMethod);
-
             if (paymentMethod.isPreauthorized().isBooleanTrue()) {
-                if (!entity.preauthorizedPayment().equals(paymentMethod)) {
+                if (!paymentMethod.equals(entity.preauthorizedPayment())) {
                     entity.preauthorizedPayment().set(paymentMethod);
                     Persistence.service().merge(entity);
+                    break;
                 }
             }
         }

@@ -29,6 +29,7 @@ import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.LeaseCustomerCrudServiceBase;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseCustomer;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseCustomerDTO;
@@ -50,8 +51,6 @@ public class LeaseCustomerCrudServiceBaseImpl<DBO extends LeaseCustomer, DTO ext
     @Override
     protected void enhanceRetrieved(DBO entity, DTO dto, RetrieveTraget retrieveTraget) {
         dto.leaseTermV().set(retrieveLeaseTerm(entity));
-
-        // load detached data:
         Persistence.service().retrieve(dto.leaseTermV());
 
         LeaseParticipantUtils.retrieveCustomerScreeningPointer(dto.customer());
@@ -83,6 +82,17 @@ public class LeaseCustomerCrudServiceBaseImpl<DBO extends LeaseCustomer, DTO ext
             if (!dto.paymentMethods().contains(paymentMethod)) {
                 ServerSideFactory.create(PaymentFacade.class).deletePaymentMethod(paymentMethod);
             }
+        }
+
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().currentTerm().versions(), dto.leaseTermV()));
+        Building building = Persistence.service().retrieve(criteria);
+
+        // save new/edited ones:
+        for (PaymentMethod paymentMethod : dto.paymentMethods()) {
+            paymentMethod.customer().set(entity.customer());
+            paymentMethod.isOneTimePayment().setValue(false);
+            ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(building, paymentMethod);
         }
 
         super.persist(entity, dto);
