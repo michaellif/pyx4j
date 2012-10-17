@@ -249,7 +249,6 @@ public class BuildingsGenerator {
         owner._LockerAreas().add(lockerArea);
 
         lockerArea.name().setValue("LockerArea" + index);
-        lockerArea.isPrivate().setValue(RandomUtil.randomBoolean());
         lockerArea.levels().setValue((double) RandomUtil.randomInt(3));
         lockerArea.description().setValue(lockerArea.levels().getValue() + "-level locker" + index + " at " + owner.info().name().getValue());
 

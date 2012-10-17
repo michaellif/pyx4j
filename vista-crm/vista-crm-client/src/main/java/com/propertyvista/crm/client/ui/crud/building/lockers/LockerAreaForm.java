@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.building.lockers;
 
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -22,7 +21,6 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.dto.LockerAreaDTO;
-import com.propertyvista.misc.VistaTODO;
 
 public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
 
@@ -45,11 +43,6 @@ public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
 
         tab = addTab(isEditable() ? new HTML() : ((LockerAreaViewerView) getParentView()).getLockerView().asWidget(), i18n.tr("Lockers"));
         setTabEnabled(tab, !isEditable());
-
-        if (!VistaTODO.removedForProduction) {
-            tab = addTab(new Label("Notes and attachments goes here... "), i18n.tr("Notes & Attachments"));
-            setTabEnabled(tab, !isEditable());
-        }
     }
 
     private FormFlexPanel createDetailsTab(String title) {
@@ -58,7 +51,6 @@ public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isPrivate()), 3).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().levels()), 3).build());
 
         row = -1;

@@ -38,8 +38,6 @@ public interface LockerArea extends BuildingElement {
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
-    IPrimitive<Boolean> isPrivate();
-
     @Format("#0.#")
     IPrimitive<Double> levels();
 
