@@ -31,6 +31,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.security.shared.SecurityViolationException;
 import com.pyx4j.site.server.services.customization.CustomizationPersistenceHelper;
 
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
@@ -42,6 +43,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.AccessDeniedGagetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class DashboardMetadataServiceImpl implements DashboardMetadataService {
@@ -104,7 +106,7 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
         }
         Persistence.secureSave(dm);
 
-        // delete gadgets that were deleted from the dashboad
+        // delete gadgets that were deleted from the dashboard
         CustomizationPersistenceHelper<GadgetMetadata> gadgetStorage = Util.gadgetStorage();
         for (String gadgetId : deletedGadgetIds) {
             gadgetStorage.delete(gadgetId);
@@ -122,23 +124,42 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
         SecurityController.assertBehavior(VistaCrmBehavior.DashboardManager);
         DashboardMetadata dashboardMetadata = Persistence.service().retrieve(DashboardMetadata.class, dashboardMetadataStub.getPrimaryKey());
         if (dashboardMetadata == null) {
-            throw new Error("Dashboard Metadata was not found");
+            throw new Error("dashboard metadata '" + dashboardMetadataStub.getPrimaryKey() + "' was not found");
         }
 
         Key managersPk = CrmAppContext.getCurrentUserPrimaryKey();
 
-        for (String gadgetId : new DashboardColumnLayoutFormat(dashboardMetadata.encodedLayout().getValue()).gadgetIds()) {
-            GadgetMetadata gadgetMetadata = Util.gadgetStorage().load(gadgetId);
-            if (gadgetMetadata != null) {
-                gadgetMetadata.ownerUser().setPrimaryKey(managersPk);
-                Util.gadgetStorage().save(gadgetId, gadgetMetadata, true, true);
-            }
-        }
-        dashboardMetadata.ownerUser().setPrimaryKey(managersPk);
-        Persistence.service().persist(dashboardMetadata);
+        setDashboardOwner(dashboardMetadata, managersPk);
 
         Persistence.service().commit();
         callback.onSuccess(null);
+    }
+
+    // FIXME: prone to race conditions due to 'read uncommitted' transactions
+    @Override
+    public void changeOwnership(AsyncCallback<VoidSerializable> callback, DashboardMetadata dashboardMetadataStub, CrmUser updatedOwnerStub) {
+        DashboardMetadata dashboardMetadata = Persistence.service().retrieve(DashboardMetadata.class, dashboardMetadataStub.getPrimaryKey());
+        if (dashboardMetadata == null) {
+            throw new Error("dashboard metadata '" + dashboardMetadataStub.getPrimaryKey() + "' was not found");
+        }
+        if (!CrmAppContext.getCurrentUserPrimaryKey().equals(dashboardMetadata.ownerUser().getPrimaryKey())) {
+            throw new SecurityViolationException("changing owner of a dashboard by not owner is forbidden");
+        }
+        setDashboardOwner(dashboardMetadata, updatedOwnerStub.getPrimaryKey());
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    private void setDashboardOwner(DashboardMetadata dashboardMetadata, Key newOwnerPk) {
+        for (String gadgetId : new DashboardColumnLayoutFormat(dashboardMetadata.encodedLayout().getValue()).gadgetIds()) {
+            GadgetMetadata gadgetMetadata = Util.gadgetStorage().load(gadgetId);
+            if (gadgetMetadata != null) {
+                gadgetMetadata.ownerUser().setPrimaryKey(newOwnerPk);
+                Util.gadgetStorage().save(gadgetId, gadgetMetadata, true, true);
+            }
+        }
+        dashboardMetadata.ownerUser().setPrimaryKey(newOwnerPk);
+        Persistence.service().persist(dashboardMetadata);
     }
 
     private DashboardMetadata retrieveDefaultDashboardMetadata() {

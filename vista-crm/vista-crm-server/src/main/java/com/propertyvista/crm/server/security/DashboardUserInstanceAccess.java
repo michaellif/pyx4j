@@ -15,8 +15,10 @@ package com.propertyvista.crm.server.security;
 
 import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class DashboardUserInstanceAccess implements InstanceAccess {
 
@@ -24,6 +26,6 @@ public class DashboardUserInstanceAccess implements InstanceAccess {
 
     @Override
     public boolean allow(IEntity entity) {//@formatter:off       
-        return (entity instanceof DashboardMetadata) && ((DashboardMetadata) entity).isShared().isBooleanTrue(); 
+        return SecurityController.checkBehavior(VistaCrmBehavior.DashboardManager) | ((entity instanceof DashboardMetadata) && ((DashboardMetadata) entity).isShared().isBooleanTrue()); 
     }//@formatter:on
 }

@@ -16,16 +16,12 @@ package com.propertyvista.crm.server.services.dashboard;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
-import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.server.common.security.VistaContext;
 
@@ -38,13 +34,6 @@ public class DashboardMetadataCrudServiceImpl extends AbstractCrudServiceImpl<Da
     @Override
     protected void bind() {
         bindCompleateDBO();
-    }
-
-    @Override
-    public void list(AsyncCallback<EntitySearchResult<DashboardMetadata>> callback, EntityListCriteria<DashboardMetadata> criteria) {
-        criteria.or().left(PropertyCriterion.eq(criteria.proto().ownerUser(), CrmAppContext.getCurrentUserPrimaryKey()))
-                .right(PropertyCriterion.eq(criteria.proto().isShared(), true));
-        super.list(callback, criteria);
     }
 
     @Override

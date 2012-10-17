@@ -20,6 +20,7 @@ import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.security.CrmUser;
 
 public interface DashboardMetadataService extends IService {
 
@@ -27,6 +28,8 @@ public interface DashboardMetadataService extends IService {
 
     public void saveDashboardMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata editableEntity);
 
-    public void takeOwnership(AsyncCallback<VoidSerializable> defaultAsyncCallback, DashboardMetadata dashboardMetadataStub);
+    public void takeOwnership(AsyncCallback<VoidSerializable> callback, DashboardMetadata dashboardMetadataStub);
+
+    public void changeOwnership(AsyncCallback<VoidSerializable> callback, DashboardMetadata dashboardMetadataStub, CrmUser updatedOwnerStub);
 
 }

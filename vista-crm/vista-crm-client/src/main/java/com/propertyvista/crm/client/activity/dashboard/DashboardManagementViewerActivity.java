@@ -19,14 +19,17 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.dashboard.DashboardManagementViewerView;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class DashboardManagementViewerActivity extends CrmViewerActivity<DashboardMetadata> implements DashboardManagementViewerView.Presenter {
@@ -50,6 +53,7 @@ public class DashboardManagementViewerActivity extends CrmViewerActivity<Dashboa
         canEdit = isAccessedByOwner;
         ((DashboardManagementViewerView) getView()).setTakeOwnershipEnabled(SecurityController.checkBehavior(VistaCrmBehavior.DashboardManager)
                 & !isAccessedByOwner);
+        ((DashboardManagementViewerView) getView()).setChangeOwnershipEnabled(isAccessedByOwner);
         super.onPopulateSuccess(result);
     }
 
@@ -61,5 +65,15 @@ public class DashboardManagementViewerActivity extends CrmViewerActivity<Dashboa
                 populate();
             }
         }, dashboardMetadataStub);
+    }
+
+    @Override
+    public void changeOwnership(DashboardMetadata dashboardMetadataStub, CrmUser newOwnerStub) {
+        GWT.<DashboardMetadataService> create(DashboardMetadataService.class).changeOwnership(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Dashboard.Manage().formListerPlace());
+            }
+        }, dashboardMetadataStub, newOwnerStub);
     }
 }

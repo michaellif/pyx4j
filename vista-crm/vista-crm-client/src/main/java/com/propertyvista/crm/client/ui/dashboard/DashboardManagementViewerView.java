@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.dashboard;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.security.CrmUser;
 
 public interface DashboardManagementViewerView extends IViewerView<DashboardMetadata> {
 
@@ -23,8 +24,12 @@ public interface DashboardManagementViewerView extends IViewerView<DashboardMeta
 
         void takeOwnership(DashboardMetadata dashboardMetadatStub);
 
+        void changeOwnership(DashboardMetadata createIdentityStub, CrmUser newOwner);
+
     }
 
     void setTakeOwnershipEnabled(boolean isEnabled);
+
+    void setChangeOwnershipEnabled(boolean isEnabled);
 
 }

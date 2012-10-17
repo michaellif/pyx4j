@@ -13,21 +13,73 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
+import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.selections.SelectCrmUserListService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.security.CrmUser;
 
 public class DashboardManagementViewerViewImpl extends CrmViewerViewImplBase<DashboardMetadata> implements DashboardManagementViewerView {
 
     private static final I18n i18n = I18n.get(DashboardManagementViewerViewImpl.class);
 
+    public class NewDashboardOwnerSelectionDialog extends EntitySelectorTableDialog<CrmUser> {
+
+        public NewDashboardOwnerSelectionDialog() {
+            super(CrmUser.class, false, new ArrayList<CrmUser>(), i18n.tr("Choose a new dashboard owner"));
+        }
+
+        @Override
+        public boolean onClickOk() {
+            if (!getSelectedItems().isEmpty()) {
+                MessageDialog.confirm("", i18n.tr("Are you sure you want to pass your dashboard to {0}?", getSelectedItems().get(0).getStringView()),
+                        new Command() {
+                            @Override
+                            public void execute() {
+                                ((DashboardManagementViewerView.Presenter) getPresenter()).changeOwnership(getForm().getValue()
+                                        .<DashboardMetadata> createIdentityStub(), getSelectedItems().get(0).<CrmUser> createIdentityStub());
+                            }
+                        });
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        protected List<ColumnDescriptor> defineColumnDescriptors() {
+            return Arrays.asList(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().name()).build()
+            );//@formatter:on
+        }
+
+        @Override
+        protected AbstractListService<CrmUser> getSelectService() {
+            return GWT.<SelectCrmUserListService> create(SelectCrmUserListService.class);
+        }
+
+    }
+
     private Button takeOwnershipButton;
+
+    private Button changeOwnershipButton;
 
     public DashboardManagementViewerViewImpl() {
         super(CrmSiteMap.Dashboard.Manage.class);
@@ -39,11 +91,22 @@ public class DashboardManagementViewerViewImpl extends CrmViewerViewImplBase<Das
                 ((DashboardManagementViewerView.Presenter) getPresenter()).takeOwnership(getForm().getValue().<DashboardMetadata> createIdentityStub());
             }
         }));
+        addHeaderToolbarItem(changeOwnershipButton = new Button(i18n.tr("Change Ownership"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                new NewDashboardOwnerSelectionDialog().show();
+            }
+        }));
     }
 
     @Override
     public void setTakeOwnershipEnabled(boolean isEnabled) {
         takeOwnershipButton.setVisible(isEnabled);
+    }
+
+    @Override
+    public void setChangeOwnershipEnabled(boolean isEnabled) {
+        changeOwnershipButton.setVisible(isEnabled);
     }
 
 }
