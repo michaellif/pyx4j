@@ -61,6 +61,7 @@ public interface Floorplan extends PolicyNode {
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
+    @Caption(name = "Number of Storeys")
     IPrimitive<Integer> floorCount();
 
     @NotNull
