@@ -164,6 +164,10 @@ class TableDDL {
             }
         }
 
+        if (tableModel.classModel != ModelType.regular) {
+            sqls.add(createDiscriminatorColumnConstraint(dialect, tableModel));
+        }
+
         // create Polymorphic Value and NotNull constraint
         for (MemberOperationsMeta member : tableModel.operationsMeta().getColumnMembers()) {
             for (String sqlName : member.getValueAdapter().getColumnNames(member.sqlName())) {
@@ -180,6 +184,27 @@ class TableDDL {
             sqls.add(sqlAlterIdentity(dialect, tableModel.tableName));
         }
         return sqls;
+    }
+
+    private static String createDiscriminatorColumnConstraint(Dialect dialect, TableModel tableModel) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("ALTER TABLE ").append(getFullTableName(dialect, tableModel.tableName));
+        sql.append(" ADD CONSTRAINT ");
+        sql.append(dialect.getNamingConvention().sqlConstraintName(tableModel.tableName, dialect.sqlDiscriminatorColumnName()));
+        sql.append(" CHECK ");
+        sql.append(" (").append(dialect.sqlDiscriminatorColumnName()).append(" IN (");
+        boolean first = true;
+        for (String discriminator : tableModel.operationsMeta().impClasses.keySet()) {
+            if (first) {
+                first = false;
+            } else {
+                sql.append(", ");
+            }
+            sql.append(" '").append(discriminator).append("'");
+        }
+        sql.append("))");
+
+        return sql.toString();
     }
 
     private static String createPolymorphicDiscriminatorConstraint(Dialect dialect, String tableName, MemberOperationsMeta member) {
