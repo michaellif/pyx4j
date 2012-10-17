@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -90,10 +91,18 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
         }
     }
 
+    public String getDiscriminatorColumnName(String memberSqlName) {
+        return memberSqlName + discriminatorColumnNameSufix;
+    }
+
+    public Set<String> getDiscriminatorValues() {
+        return impClasses.keySet();
+    }
+
     @Override
     public List<String> getColumnNames(String memberSqlName) {
         List<String> columnNames = new Vector<String>();
-        columnNames.add(memberSqlName + discriminatorColumnNameSufix);
+        columnNames.add(getDiscriminatorColumnName(memberSqlName));
         columnNames.add(memberSqlName);
         return columnNames;
     }

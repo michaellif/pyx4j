@@ -164,12 +164,15 @@ class TableDDL {
             }
         }
 
-        // create Polymorphic NotNull constraint
+        // create Polymorphic Value and NotNull constraint
         for (MemberOperationsMeta member : tableModel.operationsMeta().getColumnMembers()) {
             for (String sqlName : member.getValueAdapter().getColumnNames(member.sqlName())) {
                 if (member.hasNotNullConstraint() && (member.getSubclassDiscriminators() != null)) {
                     sqls.add(createPolymorphicNotNullConstraint(dialect, tableModel.tableName, sqlName, member));
                 }
+            }
+            if (member.getValueAdapter() instanceof ValueAdapterEntityPolymorphic) {
+                sqls.add(createPolymorphicDiscriminatorConstraint(dialect, tableModel.tableName, member));
             }
         }
 
@@ -177,6 +180,30 @@ class TableDDL {
             sqls.add(sqlAlterIdentity(dialect, tableModel.tableName));
         }
         return sqls;
+    }
+
+    private static String createPolymorphicDiscriminatorConstraint(Dialect dialect, String tableName, MemberOperationsMeta member) {
+        ValueAdapterEntityPolymorphic adapter = (ValueAdapterEntityPolymorphic) member.getValueAdapter();
+        String sqlName = adapter.getDiscriminatorColumnName(member.sqlName());
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("ALTER TABLE ").append(getFullTableName(dialect, tableName));
+        sql.append(" ADD CONSTRAINT ");
+        sql.append(dialect.getNamingConvention().sqlConstraintName(tableName, sqlName + "_d"));
+        sql.append(" CHECK ");
+        sql.append(" (").append(sqlName).append(" IN (");
+        boolean first = true;
+        for (String discriminator : adapter.getDiscriminatorValues()) {
+            if (first) {
+                first = false;
+            } else {
+                sql.append(", ");
+            }
+            sql.append(" '").append(discriminator).append("'");
+        }
+        sql.append("))");
+
+        return sql.toString();
     }
 
     private static String createPolymorphicNotNullConstraint(Dialect dialect, String tableName, String sqlName, MemberOperationsMeta member) {
