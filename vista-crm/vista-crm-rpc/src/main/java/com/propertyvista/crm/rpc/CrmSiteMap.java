@@ -383,6 +383,17 @@ public class CrmSiteMap implements SiteMap {
 
         }
 
+        @PlaceProperties(caption = "Credit Checks")
+        @NavigationItem(navigLabel = "Credit Checks")
+        public static class CreditChecks extends AppPlace {
+
+            @PlaceProperties(caption = "Person Credit Checks")
+            @NavigationItem(navigLabel = "Person Credit Checks")
+            public static class PersonCreditCheck extends CrmCrudAppPlace {
+            }
+
+        }
+
         @NavigationItem(navigLabel = "Policies")
         public static class Policies extends AppPlace {
 

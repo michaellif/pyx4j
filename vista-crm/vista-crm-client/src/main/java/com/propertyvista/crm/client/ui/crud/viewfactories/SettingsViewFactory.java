@@ -28,6 +28,10 @@ import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteEditorImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteViewer;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteViewerImpl;
+import com.propertyvista.crm.client.ui.crud.settings.creditchecks.PersonCreditCheckListerView;
+import com.propertyvista.crm.client.ui.crud.settings.creditchecks.PersonCreditCheckListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.creditchecks.PersonCreditCheckViewerView;
+import com.propertyvista.crm.client.ui.crud.settings.creditchecks.PersonCreditCheckViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryEditorView;
 import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryListerView;
@@ -136,6 +140,10 @@ public class SettingsViewFactory extends ViewFactoryBase {
             } else if (LeaseAdjustmentReasonViewerView.class.equals(type)) {
                 map.put(type, new LeaseAdjustmentReasonViewerViewImpl());
 
+            } else if (PersonCreditCheckListerView.class.equals(type)) {
+                map.put(type, new PersonCreditCheckListerViewImpl());
+            } else if (PersonCreditCheckViewerView.class.equals(type)) {
+                map.put(type, new PersonCreditCheckViewerViewImpl());
             }
         }
         @SuppressWarnings("unchecked")

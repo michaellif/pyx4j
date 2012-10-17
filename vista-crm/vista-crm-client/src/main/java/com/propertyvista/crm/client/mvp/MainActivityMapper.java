@@ -20,6 +20,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -117,6 +118,8 @@ import com.propertyvista.crm.client.activity.crud.settings.content.PageViewerAct
 import com.propertyvista.crm.client.activity.crud.settings.content.SiteActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.SiteEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.SiteViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.creditcheck.PersonCreditCheckListerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.creditcheck.PersonCreditCheckViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.dictionary.FeatureItemTypeEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.dictionary.FeatureItemTypeViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.dictionary.ProductDictionaryViewActivity;
@@ -655,6 +658,22 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             ((CrmSiteMap.Account.AccountData) place).formViewerPlace(new Key(1));
                             activity = new AccountViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof CrmSiteMap.Settings.CreditChecks.PersonCreditCheck) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new PersonCreditCheckListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new PersonCreditCheckViewerActivity(crudPlace);
+                            break;
+                        case editor:
+                        default:
+                            if (ApplicationMode.isDevelopment()) {
+                                throw new Error("view is not defined");
+                            }
                             break;
                         }
 

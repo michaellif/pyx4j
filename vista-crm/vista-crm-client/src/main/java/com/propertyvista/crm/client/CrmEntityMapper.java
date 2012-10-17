@@ -20,6 +20,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
+import com.propertyvista.crm.rpc.dto.PersonCreditCheckDTO;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
@@ -136,6 +137,8 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(GlCodeCategory.class, CrmSiteMap.Settings.GlCodeCategory.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseAdjustmentReason.class, CrmSiteMap.Settings.LeaseAdjustmentReason.class, defaultImage);
         AppPlaceEntityMapper.register(Tax.class, CrmSiteMap.Settings.Tax.class, defaultImage);
+
+        AppPlaceEntityMapper.register(PersonCreditCheckDTO.class, CrmSiteMap.Settings.CreditChecks.PersonCreditCheck.class, defaultImage);
 
         AppPlaceEntityMapper.register(CrmRole.class, CrmSiteMap.Settings.UserRole.class, defaultImage);
         AppPlaceEntityMapper.register(Employee.class, CrmSiteMap.Organization.Employee.class, defaultImage);
