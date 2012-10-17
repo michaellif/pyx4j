@@ -54,6 +54,9 @@ public enum VistaCrmBehavior implements Behavior {
 
     Reports,
 
+    /** this behaviour can take control of other's people dashboards */
+    DashboardManager,
+
     //Onboarding
     PropertyVistaAccountOwner,
 

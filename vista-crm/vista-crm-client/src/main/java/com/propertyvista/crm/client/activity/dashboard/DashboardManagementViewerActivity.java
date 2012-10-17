@@ -15,16 +15,21 @@ package com.propertyvista.crm.client.activity.dashboard;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.dashboard.DashboardManagementViewerView;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
+import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
-public class DashboardManagementViewerActivity extends CrmViewerActivity<DashboardMetadata> {
+public class DashboardManagementViewerActivity extends CrmViewerActivity<DashboardMetadata> implements DashboardManagementViewerView.Presenter {
 
     private boolean canEdit;
 
@@ -41,7 +46,20 @@ public class DashboardManagementViewerActivity extends CrmViewerActivity<Dashboa
 
     @Override
     protected void onPopulateSuccess(DashboardMetadata result) {
-        canEdit = ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(result.ownerUser().getPrimaryKey());
+        boolean isAccessedByOwner = ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(result.ownerUser().getPrimaryKey());
+        canEdit = isAccessedByOwner;
+        ((DashboardManagementViewerView) getView()).setTakeOwnershipEnabled(SecurityController.checkBehavior(VistaCrmBehavior.DashboardManager)
+                & !isAccessedByOwner);
         super.onPopulateSuccess(result);
+    }
+
+    @Override
+    public void takeOwnership(DashboardMetadata dashboardMetadataStub) {
+        GWT.<DashboardMetadataService> create(DashboardMetadataService.class).takeOwnership(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, dashboardMetadataStub);
     }
 }

@@ -19,4 +19,12 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public interface DashboardManagementViewerView extends IViewerView<DashboardMetadata> {
 
+    interface Presenter extends IViewerView.Presenter {
+
+        void takeOwnership(DashboardMetadata dashboardMetadatStub);
+
+    }
+
+    void setTakeOwnershipEnabled(boolean isEnabled);
+
 }

@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
@@ -25,5 +26,7 @@ public interface DashboardMetadataService extends IService {
     public void retrieveMetadata(AsyncCallback<DashboardMetadata> callback, Key entityId);
 
     public void saveDashboardMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata editableEntity);
+
+    public void takeOwnership(AsyncCallback<VoidSerializable> defaultAsyncCallback, DashboardMetadata dashboardMetadataStub);
 
 }
