@@ -17,7 +17,9 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentTenantDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.DelinquentTenantListService;
 
@@ -46,18 +48,22 @@ public class DelinquentTenantsDetailsFactory extends AbstractListerDetailsFactor
                     
                     new Builder(proto().leaseTermV().holder().lease()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build(),
                     
-                    new Builder(proto().arrears().bucketThisMonth()).searchable(false).build(),
-                    new Builder(proto().arrears().bucket30()).searchable(false).build(),
-                    new Builder(proto().arrears().bucket60()).searchable(false).build(),
-                    new Builder(proto().arrears().bucket90()).searchable(false).build(),
-                    new Builder(proto().arrears().bucketOver90()).searchable(false).build(),
-                    new Builder(proto().arrears().arrearsAmount(), false).searchable(false).build(),
-                    new Builder(proto().arrears().creditAmount(), false).searchable(false).build(),
-                    new Builder(proto().arrears().totalBalance()).searchable(false).build()
+                    new Builder(proto().arrears().bucketThisMonth()).searchable(false).sortable(false).build(),
+                    new Builder(proto().arrears().bucket30()).searchable(false).sortable(false).build(),
+                    new Builder(proto().arrears().bucket60()).searchable(false).sortable(false).build(),
+                    new Builder(proto().arrears().bucket90()).searchable(false).sortable(false).build(),
+                    new Builder(proto().arrears().bucketOver90()).searchable(false).sortable(false).build(),
+                    new Builder(proto().arrears().arrearsAmount(), false).searchable(false).sortable(false).build(),
+                    new Builder(proto().arrears().creditAmount(), false).searchable(false).sortable(false).build(),
+                    new Builder(proto().arrears().totalBalance()).searchable(false).sortable(false).build()
                     
              );// @formatter:on
         }
 
+        @Override
+        protected void onItemSelect(DelinquentTenantDTO item) {
+            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Tenant().formViewerPlace(item.getPrimaryKey()));
+        }
     }
 
     public DelinquentTenantsDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider,
