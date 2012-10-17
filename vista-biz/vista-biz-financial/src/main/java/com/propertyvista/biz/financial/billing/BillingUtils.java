@@ -22,9 +22,12 @@ package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -48,7 +51,9 @@ import com.propertyvista.domain.financial.billing.InvoiceWithdrawal;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.BillDTO;
 
 public class BillingUtils {
@@ -189,5 +194,36 @@ public class BillingUtils {
             counter.setValue(0L);
         }
         counter.setValue(counter.getValue() - 1);
+    }
+
+    public static BigDecimal getMaxLeaseTermMonthlyTotal(LeaseTerm leaseTerm) {
+        BigDecimal total = new BigDecimal("0.00");
+
+        LogicalDate from, to, leaseEnd;
+        Calendar calendar = new GregorianCalendar();
+        to = leaseTerm.termFrom().getValue();
+        leaseEnd = leaseTerm.termTo().getValue();
+        while (to.before(leaseEnd)) {
+            calendar.setTime(to);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            from = new LogicalDate(calendar.getTime());
+            calendar.add(Calendar.MONTH, 1);
+            to = new LogicalDate(calendar.getTime());
+            // add up price for service and all applicable features for the from-to period
+            BigDecimal monthly = new BigDecimal("0.00");
+            monthly = monthly.add(leaseTerm.version().leaseProducts().serviceItem().agreedPrice().getValue());
+            for (BillableItem feature : leaseTerm.version().leaseProducts().featureItems()) {
+                // add feature monthly price if active within current from-to period (not prorated)
+                if (feature.effectiveDate().getValue().before(to) && feature.expirationDate().getValue().after(from)) {
+                    monthly = monthly.add(feature.agreedPrice().getValue());
+                }
+            }
+
+            if (monthly.compareTo(total) > 0) {
+                total = monthly;
+            }
+        }
+
+        return total;
     }
 }
