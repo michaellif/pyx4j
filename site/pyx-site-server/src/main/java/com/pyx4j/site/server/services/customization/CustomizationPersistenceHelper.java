@@ -79,12 +79,21 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
     }
 
     /**
+     * Overloaded version of {@link #save(String, IEntity, boolean, boolean)} with <code>allowOverwriteReadonlyMembers</code> set to false
+     */
+    public void save(String id, E entity, boolean allowOverwriteEntity) {
+        save(id, entity, allowOverwriteEntity, false);
+    }
+
+    /**
      * @param id
      * @param entity
-     * @param allowOverwrite
+     * @param allowOverwriteEntity
      *            defines whether we can save an entity with the same id (doesn't have anything to do with {@link ReadOnly})
+     * @param allowOverwriteReadonlyMembers
+     *            defines if members marked with {@link ReadOnly} can be overridden during save
      */
-    public void save(String id, E entity, boolean allowOverwrite) {
+    public void save(String id, E entity, boolean allowOverwriteEntity, boolean allowOverwriteReadonlyMembers) {
         EntityQueryCriteria<? extends CustomizationHolder> criteria = EntityQueryCriteria.create(customizationHolderEntityClass);
         if (baseClass != null) {
             criteria.add(PropertyCriterion.eq(criteria.proto().baseClass(), baseClass.getSimpleName()));
@@ -93,10 +102,10 @@ public class CustomizationPersistenceHelper<E extends IEntity> {
         criteria.add(PropertyCriterion.eq(criteria.proto().identifierKey(), id));
 
         CustomizationHolder oldVersionHolder = Persistence.service().retrieve(criteria);
-        if (!allowOverwrite & oldVersionHolder != null) {
+        if (!allowOverwriteEntity & oldVersionHolder != null) {
             throw new CustomizationOverwriteAttemptException();
         }
-        if (oldVersionHolder != null) {
+        if (!allowOverwriteReadonlyMembers & oldVersionHolder != null) {
             E oldVersion = deserialize(oldVersionHolder, (E) EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
 
             for (String memberName : oldVersion.getEntityMeta().getMemberNames()) {
