@@ -36,7 +36,8 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.CollectionsGadgetSer
 import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.lease.LeaseCustomer;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
@@ -47,7 +48,7 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
 
         CollectionsGadgetDataDTO data = EntityFactory.create(CollectionsGadgetDataDTO.class);
 
-        count(data.tenantsPaidThisMonth(), buildingsFilter);
+        count(data.leasesPaidThisMonth(), buildingsFilter);
 
         summarize(data.fundsCollectedThisMonth(), buildingsFilter);
         summarize(data.fundsInProcessing(), buildingsFilter);
@@ -60,21 +61,25 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
         callback.onSuccess(paymentRecordsCriteria(EntityListCriteria.create(PaymentRecordDTO.class), buildingsFilter, filter));
     }
 
+    @Override
+    public void makeLeaseFilterCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, Vector<Building> buildingsFilter, String filter) {
+        callback.onSuccess(leasesCriteria(EntityListCriteria.create(LeaseDTO.class), buildingsFilter));
+    }
+
     /**
      * @return a criteria that should find all the tenants who payed during the month defined by the transaction time
      */
-    private <Criteria extends EntityQueryCriteria<? extends LeaseCustomer>> Criteria tenantCriteria(Criteria criteria, Vector<Building> buildingsFilter) {
+    private <Criteria extends EntityQueryCriteria<? extends Lease>> Criteria leasesCriteria(Criteria criteria, Vector<Building> buildingsFilter) {
         LogicalDate today = Util.dayOfCurrentTransaction();
         LogicalDate thisMonthStartDay = Util.beginningOfMonth(today);
 
-        criteria.add(PropertyCriterion.ne(criteria.proto().lease().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Submitted));
-        criteria.add(PropertyCriterion.ne(criteria.proto().lease().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Canceled));
-        criteria.add(PropertyCriterion.ge(criteria.proto().lease().billingAccount().payments().$().createdDate(), thisMonthStartDay));
-        criteria.add(PropertyCriterion.le(criteria.proto().lease().billingAccount().payments().$().createdDate(), today));
-
         if (buildingsFilter != null && !buildingsFilter.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().lease().unit().building(), buildingsFilter));
+            criteria.add(PropertyCriterion.in(criteria.proto().unit().building(), buildingsFilter));
         }
+        criteria.add(PropertyCriterion.ne(criteria.proto().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Submitted));
+        criteria.add(PropertyCriterion.ne(criteria.proto().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Canceled));
+        criteria.add(PropertyCriterion.ge(criteria.proto().billingAccount().payments().$().createdDate(), thisMonthStartDay));
+        criteria.add(PropertyCriterion.le(criteria.proto().billingAccount().payments().$().createdDate(), today));
 
         return criteria;
     }
@@ -113,10 +118,8 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
         CollectionsGadgetDataDTO proto = EntityFactory.getEntityPrototype(CollectionsGadgetDataDTO.class);
         IObject<?> filter = proto.getMember(member.getPath());
 
-        if (proto.tenantsPaidThisMonth() == filter) {
-            member.setValue(Persistence.service().count(
-                    paymentRecordsCriteria(EntityQueryCriteria.create(PaymentRecord.class), buildingsFilter,
-                            EntityFactory.getEntityPrototype(CollectionsGadgetDataDTO.class).fundsCollectedThisMonth().getPath().toString())));
+        if (proto.leasesPaidThisMonth() == filter) {
+            member.setValue(Persistence.service().count(leasesCriteria(EntityQueryCriteria.create(Lease.class), buildingsFilter)));
         } else {
             throw new RuntimeException("unknown filter preset: " + member.getPath().toString());
         }

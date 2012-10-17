@@ -20,16 +20,22 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.dto.gadgets.CollectionsGadgetDataDTO;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.LeaseCriteriaProvider;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.PaymentCriteriaProvider;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public interface CollectionsGadgetService extends AbstractCounterGadgetBaseService<CollectionsGadgetDataDTO, Vector<Building>>, PaymentCriteriaProvider {
+public interface CollectionsGadgetService extends AbstractCounterGadgetBaseService<CollectionsGadgetDataDTO, Vector<Building>>, PaymentCriteriaProvider,
+        LeaseCriteriaProvider {
 
     @Override
     public void countData(AsyncCallback<CollectionsGadgetDataDTO> callback, Vector<Building> queryParams);
 
     @Override
     public void makePaymentCriteria(AsyncCallback<EntityListCriteria<PaymentRecordDTO>> callback, Vector<Building> buildingsFilter, String filter);
+
+    @Override
+    public void makeLeaseFilterCriteria(AsyncCallback<EntityListCriteria<LeaseDTO>> callback, Vector<Building> buildingsFilter, String leaseFilter);
 
 }

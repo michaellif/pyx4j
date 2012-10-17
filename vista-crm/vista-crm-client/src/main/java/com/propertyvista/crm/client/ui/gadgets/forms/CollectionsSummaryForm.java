@@ -42,7 +42,7 @@ public class CollectionsSummaryForm extends ZoomableViewForm<CollectionsGadgetDa
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenantsPaidThisMonth())).componentWidth(10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leasesPaidThisMonth())).componentWidth(10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fundsCollectedThisMonthLabel())).componentWidth(10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fundsInProcessingLabel())).componentWidth(10).build());
         return content;

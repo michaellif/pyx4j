@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface CollectionsGadgetDataDTO extends IEntity {
 
-    IPrimitive<Integer> tenantsPaidThisMonth();
+    IPrimitive<Integer> leasesPaidThisMonth();
 
     IPrimitive<BigDecimal> fundsCollectedThisMonth();
 
