@@ -22,11 +22,15 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
+import com.propertyvista.domain.security.AbstractUser;
+
 public class VistaContext {
 
     private final static Logger log = LoggerFactory.getLogger(VistaContext.class);
 
     private static final I18n i18n = I18n.get(VistaContext.class);
+
+    private final static String userAttr = "vistaUser";
 
     public static Key getCurrentUserPrimaryKey() {
         Visit v = Context.getVisit();
@@ -35,6 +39,19 @@ public class VistaContext {
             throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
         }
         return v.getUserVisit().getPrincipalPrimaryKey();
+    }
+
+    public static void setCurrentUser(AbstractUser abstractUser) {
+        Context.getVisit().setAttribute(userAttr, abstractUser);
+    }
+
+    public static AbstractUser getCurrentUser() {
+        Visit v = Context.getVisit();
+        if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
+            log.trace("no session");
+            throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
+        }
+        return (AbstractUser) v.getAttribute(userAttr);
     }
 
 }
