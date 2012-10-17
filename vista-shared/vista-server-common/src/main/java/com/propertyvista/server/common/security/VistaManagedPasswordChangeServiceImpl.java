@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AbstractPasswordChangeService;
@@ -48,8 +49,10 @@ public abstract class VistaManagedPasswordChangeServiceImpl<E extends AbstractUs
 
     @Override
     public void changePassword(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request) {
-        if (Context.getVisit().getUserVisit().getPrincipalPrimaryKey().equals(request.userPk().getValue())) {
-            throw new SecurityViolationException(i18n.tr("Permission denied"));
+        if (EntityFactory.getEntityPrototype(credentialClass).user().getValueClass().equals(VistaContext.getCurrentUser().getValueClass())) {
+            if (Context.getVisit().getUserVisit().getPrincipalPrimaryKey().equals(request.userPk().getValue())) {
+                throw new SecurityViolationException(i18n.tr("Permission denied"));
+            }
         }
         E credential = Persistence.service().retrieve(credentialClass, request.userPk().getValue());
         credential.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
