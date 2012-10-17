@@ -248,7 +248,8 @@ public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurn
 
     @Override
     public ISetup getSetup() {
-        return new SetupFormWrapper(new CEntityDecoratableForm<UnitTurnoverAnalysisGadgetMetadata>(UnitTurnoverAnalysisGadgetMetadata.class) {
+        CEntityDecoratableForm<UnitTurnoverAnalysisGadgetMetadata> form = new CEntityDecoratableForm<UnitTurnoverAnalysisGadgetMetadata>(
+                UnitTurnoverAnalysisGadgetMetadata.class) {
             @Override
             public IsWidget createContent() {
                 FormFlexPanel p = new FormFlexPanel();
@@ -271,12 +272,12 @@ public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurn
             @Override
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
-
                 get(proto().asOf()).setVisible(getValue().customizeDate().isBooleanTrue());
             }
 
-        });
-
+        };
+        form.initContent();
+        return new SetupFormWrapper(form);
     }
 
     @Override
