@@ -36,9 +36,8 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.CollectionsGadgetSer
 import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseCustomer;
 import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.dto.TenantDTO;
 
 public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
 
@@ -61,29 +60,20 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
         callback.onSuccess(paymentRecordsCriteria(EntityListCriteria.create(PaymentRecordDTO.class), buildingsFilter, filter));
     }
 
-    @Override
-    public void makeTenantCriteria(AsyncCallback<EntityListCriteria<TenantDTO>> callback, Vector<Building> buildingsFilter, String criteriaPreset) {
-//        callback.onSuccess(tenantCriteria(EntityListCriteria.create(TenantDTO.class), buildingsFilter));
-// TODO restore functionality with different (your own) TenantDTO!!!         
-        callback.onFailure(new Error());
-    }
-
     /**
      * @return a criteria that should find all the tenants who payed during the month defined by the transaction time
      */
-    private <Criteria extends EntityQueryCriteria<? extends Tenant>> Criteria tenantCriteria(Criteria criteria, Vector<Building> buildingsFilter) {
+    private <Criteria extends EntityQueryCriteria<? extends LeaseCustomer>> Criteria tenantCriteria(Criteria criteria, Vector<Building> buildingsFilter) {
         LogicalDate today = Util.dayOfCurrentTransaction();
         LogicalDate thisMonthStartDay = Util.beginningOfMonth(today);
 
-        criteria.add(PropertyCriterion.ne(criteria.proto().leaseTermV().holder().lease().billingAccount().payments().$().paymentStatus(),
-                PaymentRecord.PaymentStatus.Submitted));
-        criteria.add(PropertyCriterion.ne(criteria.proto().leaseTermV().holder().lease().billingAccount().payments().$().paymentStatus(),
-                PaymentRecord.PaymentStatus.Canceled));
-        criteria.add(PropertyCriterion.ge(criteria.proto().leaseTermV().holder().lease().billingAccount().payments().$().createdDate(), thisMonthStartDay));
-        criteria.add(PropertyCriterion.le(criteria.proto().leaseTermV().holder().lease().billingAccount().payments().$().createdDate(), today));
+        criteria.add(PropertyCriterion.ne(criteria.proto().lease().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Submitted));
+        criteria.add(PropertyCriterion.ne(criteria.proto().lease().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Canceled));
+        criteria.add(PropertyCriterion.ge(criteria.proto().lease().billingAccount().payments().$().createdDate(), thisMonthStartDay));
+        criteria.add(PropertyCriterion.le(criteria.proto().lease().billingAccount().payments().$().createdDate(), today));
 
         if (buildingsFilter != null && !buildingsFilter.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().leaseTermV().holder().lease().unit().building(), buildingsFilter));
+            criteria.add(PropertyCriterion.in(criteria.proto().lease().unit().building(), buildingsFilter));
         }
 
         return criteria;
@@ -124,7 +114,9 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
         IObject<?> filter = proto.getMember(member.getPath());
 
         if (proto.tenantsPaidThisMonth() == filter) {
-            member.setValue(Persistence.service().count(tenantCriteria(EntityQueryCriteria.create(Tenant.class), buildingsFilter)));
+            member.setValue(Persistence.service().count(
+                    paymentRecordsCriteria(EntityQueryCriteria.create(PaymentRecord.class), buildingsFilter,
+                            EntityFactory.getEntityPrototype(CollectionsGadgetDataDTO.class).fundsCollectedThisMonth().getPath().toString())));
         } else {
             throw new RuntimeException("unknown filter preset: " + member.getPath().toString());
         }

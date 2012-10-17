@@ -23,7 +23,6 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.PaymentDetailsFactory;
-import com.propertyvista.crm.client.ui.gadgets.components.TenantsDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
 import com.propertyvista.crm.client.ui.gadgets.forms.CollectionsSummaryForm;
@@ -32,11 +31,10 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.CollectionsGadgetSer
 import com.propertyvista.domain.dashboard.gadgets.type.CollectionsGadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.dto.TenantDTO;
 
-public class CollectionsGaget extends CounterGadgetInstanceBase<CollectionsGadgetDataDTO, Vector<Building>, CollectionsGadgetMetadata> {
+public class CollectionsGadget extends CounterGadgetInstanceBase<CollectionsGadgetDataDTO, Vector<Building>, CollectionsGadgetMetadata> {
 
-    public CollectionsGaget(CollectionsGadgetMetadata metadata) {
+    public CollectionsGadget(CollectionsGadgetMetadata metadata) {
         super(//@formatter:off
                 CollectionsGadgetDataDTO.class,
                 GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class),
@@ -48,7 +46,6 @@ public class CollectionsGaget extends CounterGadgetInstanceBase<CollectionsGadge
 
     @Override
     protected void bindDetailsFactories() {
-        bindTenantsDetailsFactory(proto().tenantsPaidThisMonth());
         bindPaymentDetailsFactory(proto().fundsCollectedThisMonthLabel(), proto().fundsCollectedThisMonth());
         bindPaymentDetailsFactory(proto().fundsInProcessingLabel(), proto().fundsInProcessing());
     }
@@ -56,18 +53,6 @@ public class CollectionsGaget extends CounterGadgetInstanceBase<CollectionsGadge
     @Override
     protected Vector<Building> makeSummaryQuery() {
         return new Vector<Building>(buildingsFilterContainer.getSelectedBuildingsStubs());
-    }
-
-    private void bindTenantsDetailsFactory(IObject<?> member) {
-
-        ICriteriaProvider<TenantDTO, CounterGadgetFilter> criteriaProvider = new ICriteriaProvider<TenantDTO, CounterGadgetFilter>() {
-            @Override
-            public void makeCriteria(AsyncCallback<EntityListCriteria<TenantDTO>> callback, CounterGadgetFilter filterData) {
-                GWT.<CollectionsGadgetService> create(CollectionsGadgetService.class).makeTenantCriteria(callback, filterData.getBuildings(),
-                        filterData.getCounterMember().toString());
-            }
-        };
-        bindDetailsFactory(member, new TenantsDetailsFactory(this, criteriaProvider));
     }
 
     private void bindPaymentDetailsFactory(IObject<?> member, IObject<?> bindingFilter) {
