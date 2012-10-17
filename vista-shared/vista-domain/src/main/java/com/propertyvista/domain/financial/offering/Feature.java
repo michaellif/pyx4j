@@ -32,6 +32,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.offering.Feature.FeatureV;
 
+@ToStringFormat("{0}, {1}")
 @DiscriminatorValue("feature")
 public interface Feature extends Product<FeatureV> {
 
@@ -79,14 +80,13 @@ public interface Feature extends Product<FeatureV> {
     @Timestamp
     IPrimitive<Date> updated();
 
-    @ToStringFormat("{0}, {1}")
+    @NotNull
+    @ToString(index = 0)
+    @MemberColumn(notNull = true)
+    IPrimitive<Type> featureType();
+
     @DiscriminatorValue("feature")
     public interface FeatureV extends Product.ProductV<Feature> {
-
-        @NotNull
-        @MemberColumn(notNull = true)
-        @ToString(index = 0)
-        IPrimitive<Type> featureType();
 
         IPrimitive<Boolean> recurring();
 

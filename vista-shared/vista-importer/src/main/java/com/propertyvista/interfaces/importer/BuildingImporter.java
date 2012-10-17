@@ -272,7 +272,7 @@ public class BuildingImporter extends ImportPersister {
         if (VistaFeatures.instance().productCatalog()) {
             List<Service> services = new ArrayList<Service>();
             Service service = EntityFactory.create(Service.class);
-            service.version().serviceType().setValue(Service.ServiceType.residentialUnit);
+            service.serviceType().setValue(Service.ServiceType.residentialUnit);
             service.version().items().addAll(products);
             service.catalog().set(building.productCatalog());
             services.add(service);

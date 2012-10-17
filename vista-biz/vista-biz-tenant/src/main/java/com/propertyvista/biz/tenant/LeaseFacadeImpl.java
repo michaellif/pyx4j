@@ -916,7 +916,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), unit.building().productCatalog()));
-        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().version().serviceType(), leaseType));
+        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().serviceType(), leaseType));
         serviceCriteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
 
 //        switch (leaseTerm.lease().status().getValue()) {

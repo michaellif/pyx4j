@@ -53,7 +53,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().version().featureType(), "15em"),
+                new EntityFolderColumnDescriptor(proto().featureType(), "15em"),
                 new EntityFolderColumnDescriptor(proto().version().name(), "20em"),
                 new EntityFolderColumnDescriptor(proto().version().recurring(), "5em"),
                 new EntityFolderColumnDescriptor(proto().version().mandatory(), "5em"),
@@ -80,7 +80,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
             CComponent<?, ?> comp = null;
-            if (member.equals(proto().version().featureType())) {
+            if (member.equals(proto().featureType())) {
                 if (ServiceFeatureFolder.this.isEditable()) {
                     comp = new CEnumLabel();
                 } else {
@@ -126,7 +126,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().version().featureType()).build(),
+                    new MemberColumnDescriptor.Builder(proto().featureType()).build(),
                     new MemberColumnDescriptor.Builder(proto().version().name()).build(),
                     new MemberColumnDescriptor.Builder(proto().version().mandatory()).build(),
                     new MemberColumnDescriptor.Builder(proto().version().recurring()).build()

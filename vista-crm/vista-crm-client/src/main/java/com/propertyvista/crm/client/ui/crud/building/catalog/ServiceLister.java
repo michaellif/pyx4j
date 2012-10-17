@@ -36,7 +36,7 @@ public class ServiceLister extends VersionedLister<Service> {
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().serviceType()).build(),
+            new MemberColumnDescriptor.Builder(proto().serviceType()).build(),
             new MemberColumnDescriptor.Builder(proto().version().name()).build(),
             new MemberColumnDescriptor.Builder(proto().version().visibility(), true).build()
         );//@formatter:on
@@ -44,7 +44,7 @@ public class ServiceLister extends VersionedLister<Service> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().version().serviceType().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().serviceType().getPath().toString(), false));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ServiceLister extends VersionedLister<Service> {
             @Override
             public boolean onClickOk() {
                 Service newService = EntityFactory.create(Service.class);
-                newService.version().serviceType().setValue(getSelectedType());
+                newService.serviceType().setValue(getSelectedType());
                 newService.catalog().setPrimaryKey(getPresenter().getParent());
                 getPresenter().editNew(getItemOpenPlaceClass(), newService);
                 return true;

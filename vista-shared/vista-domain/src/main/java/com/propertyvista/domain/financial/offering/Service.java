@@ -31,6 +31,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.offering.Service.ServiceV;
 
+@ToStringFormat("{0}, {1}")
 @DiscriminatorValue("service")
 public interface Service extends Product<ServiceV> {
 
@@ -64,16 +65,14 @@ public interface Service extends Product<ServiceV> {
     @Timestamp
     IPrimitive<Date> updated();
 
-    @ToStringFormat("{0}, {1}")
+    @NotNull
+    @ToString(index = 0)
+    @MemberColumn(notNull = true)
+    IPrimitive<ServiceType> serviceType();
+
     @DiscriminatorValue("service")
     public interface ServiceV extends Product.ProductV<Service> {
 
-        @NotNull
-        @MemberColumn(notNull = true)
-        @ToString(index = 0)
-        IPrimitive<ServiceType> serviceType();
-
-        // ----------------------------------------------------
         // eligibility matrix:
 
         @Detached
