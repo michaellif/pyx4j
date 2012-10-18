@@ -163,7 +163,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
                             filters.add(PropertyCriterion.in(proto().productItems().$().product().visibility(), PublicVisibilityType.visibleToTenant()));
                             // TODO: filter by lease type also!!!
-//                            filters.add(PropertyCriterion.in(proto().productItems().$().product().holder().s(), PublicVisibilityType.visibleToTenant()));
+//                            filters.add(PropertyCriterion.in(proto().productItems().$().product().holder().serviceType(), currentValue.lease().type()));
 
                         } else {
                             assert false : "Incorrect situation! Value shouln'd be edited in this lease status!";
