@@ -57,7 +57,10 @@ public class PersonCreditCheckForm extends CrmEntityForm<PersonCreditCheckDTO> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
+
         CreditCheckResult creditCheckResult = getValue().creditCheckResult().getValue();
+
+        get(proto().creditCheckResult()).setVisible(creditCheckResult != CreditCheckResult.Accept);
         get(proto().amountApproved()).setVisible(creditCheckResult == CreditCheckResult.Accept);
         get(proto().reason()).setVisible(creditCheckResult != CreditCheckResult.Accept);
     }
