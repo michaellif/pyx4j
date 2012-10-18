@@ -1208,6 +1208,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             if ((attachLevel == AttachLevel.ToStringMembers) && (!member.getMemberMeta().isToStringMember())) {
                 continue;
             }
+            // Use memberMeta AttachLevel
             cascadeRetrieveMember(entity, null, member);
         }
         for (MemberOperationsMeta member : tm.operationsMeta().getDetachedMembers()) {
