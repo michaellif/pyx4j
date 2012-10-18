@@ -19,6 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
@@ -52,7 +53,6 @@ public class LeaseCustomerCrudServiceBaseImpl<E extends LeaseParticipant<?>, DBO
     @Override
     protected void enhanceRetrieved(DBO entity, DTO dto, RetrieveTraget retrieveTraget) {
         dto.leaseTermV().set(retrieveLeaseTerm(entity));
-        Persistence.service().retrieve(dto.leaseTermV());
 
         LeaseParticipantUtils.retrieveCustomerScreeningPointer(dto.customer());
 
@@ -71,7 +71,6 @@ public class LeaseCustomerCrudServiceBaseImpl<E extends LeaseParticipant<?>, DBO
     @Override
     protected void enhanceListRetrieved(DBO entity, DTO dto) {
         dto.leaseTermV().set(retrieveLeaseTerm(entity));
-        Persistence.service().retrieve(dto.leaseTermV());
     }
 
     @Override
@@ -112,15 +111,15 @@ public class LeaseCustomerCrudServiceBaseImpl<E extends LeaseParticipant<?>, DBO
         AddressRetriever.getLeaseParticipantCurrentAddress(callback, EntityFactory.createIdentityStub(entityClass, entityId));
     }
 
-    private LeaseTerm.LeaseTermV retrieveLeaseTerm(LeaseCustomer leaseCustomer) {
-        LeaseTerm term;
+    private LeaseTerm.LeaseTermV retrieveLeaseTerm(LeaseCustomer<E> leaseCustomer) {
+        LeaseTerm.LeaseTermV term = null;
 
         // case of 'current' Tenants for applications: 
         if (leaseCustomer.lease().status().getValue().isDraft()) {
             EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().id(), leaseCustomer.lease().currentTerm().id()));
             criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
-            term = Persistence.service().retrieve(criteria);
+            term = Persistence.service().retrieve(criteria).version();
         } else {
             // case of 'current' Tenants: 
             {
@@ -128,18 +127,24 @@ public class LeaseCustomerCrudServiceBaseImpl<E extends LeaseParticipant<?>, DBO
                 criteria.add(PropertyCriterion.eq(criteria.proto().id(), leaseCustomer.lease().currentTerm().id()));
                 criteria.add(PropertyCriterion.eq(criteria.proto().version().tenants().$().leaseCustomer(), leaseCustomer));
                 criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
-                term = Persistence.service().retrieve(criteria);
+                LeaseTerm leaseTerm = Persistence.service().retrieve(criteria);
+                if (leaseTerm != null) {
+                    term = leaseTerm.version();
+                }
             }
             // case of 'Former' Tenants: 
             if (term == null) {
-                EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().lease(), leaseCustomer.lease()));
-                criteria.add(PropertyCriterion.eq(criteria.proto().versions().$().tenants().$().leaseCustomer(), leaseCustomer));
+                EntityQueryCriteria<LeaseTerm.LeaseTermV> criteria = EntityQueryCriteria.create(LeaseTerm.LeaseTermV.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().holder().lease(), leaseCustomer.lease()));
+                criteria.add(PropertyCriterion.eq(criteria.proto().tenants().$().leaseCustomer(), leaseCustomer));
                 criteria.desc(criteria.proto().id());
                 term = Persistence.service().retrieve(criteria);
             }
         }
 
-        return term.version();
+        //This is wrong!  TODO debug this.
+        Persistence.service().retrieve(term.holder(), AttachLevel.ToStringMembers);
+
+        return term;
     }
 }
