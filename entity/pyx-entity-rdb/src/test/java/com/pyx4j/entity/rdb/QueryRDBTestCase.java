@@ -26,6 +26,7 @@ import java.util.Vector;
 import junit.framework.Assert;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.AndCriterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -132,6 +133,38 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
 
             List<Employee> empsRetrived = srv.query(criteria);
             Assert.assertEquals("result set size", 2, empsRetrived.size());
+        }
+    }
+
+    public void testCriterionAnd() {
+        String setId = uniqueString();
+        Employee emp1 = EntityFactory.create(Employee.class);
+        emp1.firstName().setValue(uniqueString());
+        emp1.workAddress().streetName().setValue(setId);
+        srv.persist(emp1);
+
+        Employee emp2 = EntityFactory.create(Employee.class);
+        emp2.firstName().setValue(uniqueString());
+        emp2.workAddress().streetName().setValue(setId);
+        srv.persist(emp2);
+
+        {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+
+            boolean thisIsEquvalents = true;
+            if (thisIsEquvalents) {
+                AndCriterion and = new AndCriterion();
+                and.eq(criteria.proto().id(), emp1.id());
+                and.eq(criteria.proto().firstName(), emp1.firstName());
+
+                criteria.add(and);
+            } else {
+                criteria.eq(criteria.proto().id(), emp1.id());
+                criteria.eq(criteria.proto().firstName(), emp1.firstName());
+            }
+
+            List<Employee> empsRetrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, empsRetrived.size());
         }
     }
 

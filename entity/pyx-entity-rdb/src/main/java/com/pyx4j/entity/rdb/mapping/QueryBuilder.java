@@ -45,6 +45,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.criterion.AndCriterion;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
@@ -177,6 +178,10 @@ public class QueryBuilder<T extends IEntity> {
             }
             if (cr instanceof PropertyCriterion) {
                 appendPropertyCriterion((PropertyCriterion) cr, required);
+            } else if (cr instanceof AndCriterion) {
+                sql.append(" ( ");
+                appendFilters(((AndCriterion) cr).getFilters(), true, required);
+                sql.append(" ) ");
             } else if (cr instanceof OrCriterion) {
                 sql.append(" (( ");
                 appendFilters(((OrCriterion) cr).getFiltersLeft(), true, false);

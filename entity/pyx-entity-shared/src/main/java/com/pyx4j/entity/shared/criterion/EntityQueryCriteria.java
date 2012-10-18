@@ -37,7 +37,7 @@ import com.pyx4j.entity.shared.IObject;
  * 
  * Translates to org.hibernate.Criteria in RDBMS or Query in GAE
  */
-public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHaveServiceCallMarker, ICloneable<EntityQueryCriteria<E>> {
+public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder implements Serializable, IHaveServiceCallMarker, ICloneable<EntityQueryCriteria<E>> {
 
     private static final long serialVersionUID = -6101566214650608853L;
 
@@ -129,6 +129,11 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
         return this;
     }
 
+    @Override
+    protected FiltersBuilder addCriterion(Criterion criterion) {
+        return add(criterion);
+    }
+
     public EntityQueryCriteria<E> addAll(Collection<Criterion> filters) {
         if (this.filters == null) {
             this.filters = new Vector<Criterion>();
@@ -139,6 +144,12 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
 
     public OrCriterion or() {
         OrCriterion criterion = new OrCriterion();
+        add(criterion);
+        return criterion;
+    }
+
+    public AndCriterion and() {
+        AndCriterion criterion = new AndCriterion();
         add(criterion);
         return criterion;
     }

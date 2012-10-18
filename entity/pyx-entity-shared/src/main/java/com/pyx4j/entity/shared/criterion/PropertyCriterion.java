@@ -123,6 +123,10 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member.getPath().toString(), Restriction.NOT_EXISTS, (Serializable) null);
     }
 
+    public static PropertyCriterion notExists(IObject<?> member, Criterion criterion) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.NOT_EXISTS, criterion);
+    }
+
     public static PropertyCriterion isNotNull(IObject<?> member) {
         return new PropertyCriterion(member.getPath().toString(), Restriction.NOT_EQUAL, (Serializable) null);
     }
