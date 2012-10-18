@@ -314,9 +314,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             setActionVisible(sendMailAction, true);
             setActionVisible(runBillAction, status.isCurrent());
             setActionVisible(noticeAction, status == Status.Active && completion == null);
-            setActionVisible(cancelNoticeAction, completion == CompletionType.Notice && status != Status.Closed);
+            setActionVisible(cancelNoticeAction, completion == CompletionType.Notice && !status.isFormer());
             setActionVisible(evictAction, status == Status.Active && completion == null);
-            setActionVisible(cancelEvictAction, completion == CompletionType.Eviction && status != Status.Closed);
+            setActionVisible(cancelEvictAction, completion == CompletionType.Eviction && !status.isFormer());
             setActionVisible(activateAction, status == Status.ExistingLease);
             setActionVisible(completeAction, status == Status.Active && completion != null);
             setActionVisible(closeAction, status == Status.Completed);
