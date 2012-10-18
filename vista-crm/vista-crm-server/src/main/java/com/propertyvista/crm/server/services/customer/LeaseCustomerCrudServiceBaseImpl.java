@@ -126,6 +126,7 @@ public class LeaseCustomerCrudServiceBaseImpl<E extends LeaseParticipant<?>, DBO
             {
                 EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().id(), leaseCustomer.lease().currentTerm().id()));
+                criteria.add(PropertyCriterion.eq(criteria.proto().version().tenants().$().leaseCustomer(), leaseCustomer));
                 criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
                 term = Persistence.service().retrieve(criteria);
             }
@@ -133,7 +134,7 @@ public class LeaseCustomerCrudServiceBaseImpl<E extends LeaseParticipant<?>, DBO
             if (term == null) {
                 EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().lease(), leaseCustomer.lease()));
-                criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
+                criteria.add(PropertyCriterion.eq(criteria.proto().versions().$().tenants().$().leaseCustomer(), leaseCustomer));
                 criteria.desc(criteria.proto().id());
                 term = Persistence.service().retrieve(criteria);
             }

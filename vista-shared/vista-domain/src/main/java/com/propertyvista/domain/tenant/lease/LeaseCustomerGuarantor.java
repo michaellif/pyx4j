@@ -13,7 +13,11 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.tenant.Guarantor;
@@ -22,4 +26,9 @@ import com.propertyvista.domain.tenant.Guarantor;
 @DiscriminatorValue("Guarantor")
 public interface LeaseCustomerGuarantor extends LeaseCustomer<Guarantor> {
 
+    //TODO move
+    @Override
+    @Detached(level = AttachLevel.Detached)
+    @JoinTable(value = Guarantor.class, mappedBy = LeaseParticipant.LeaseCustomerHolderId.class)
+    ISet<Guarantor> leaseParticipants();
 }

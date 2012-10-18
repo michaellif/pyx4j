@@ -51,7 +51,4 @@ public interface VistaTODO {
     public final boolean UploadedBlobSecurity = true;
 
     public final boolean ApplicationDocumentationPolicyRefacotring = true;
-
-    public final boolean FormerParticipant_VISTA_2059 = true;
-
 }
