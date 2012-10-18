@@ -31,13 +31,14 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseCustomer;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseCustomerDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
-public class LeaseCustomerCrudServiceBaseImpl<DBO extends LeaseCustomer, DTO extends LeaseCustomerDTO> extends AbstractCrudServiceDtoImpl<DBO, DTO> implements
-        LeaseCustomerCrudServiceBase<DTO> {
+public class LeaseCustomerCrudServiceBaseImpl<E extends LeaseParticipant<?>, DBO extends LeaseCustomer<E>, DTO extends LeaseCustomerDTO<E>> extends
+        AbstractCrudServiceDtoImpl<DBO, DTO> implements LeaseCustomerCrudServiceBase<E, DTO> {
 
     public LeaseCustomerCrudServiceBaseImpl(Class<DBO> dboClass, Class<DTO> dtoClass) {
         super(dboClass, dtoClass);

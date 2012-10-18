@@ -25,6 +25,7 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class TenantListerActivity extends ListerActivityBase<TenantDTO> {
 
@@ -34,6 +35,9 @@ public class TenantListerActivity extends ListerActivityBase<TenantDTO> {
         // filter out just current tenants:
         TenantDTO proto = EntityFactory.getEntityPrototype(TenantDTO.class);
         addPreDefinedFilter(PropertyCriterion.in(proto.lease().status(), Lease.Status.current()));
+        if (!VistaTODO.FormerParticipant_VISTA_2059) {
+            addPreDefinedFilter(PropertyCriterion.eq(proto.leaseParticipants().$().leaseTermV().holder(), proto.lease().currentTerm()));
+        }
     }
 
     @Override

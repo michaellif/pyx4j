@@ -27,8 +27,10 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.tenant.Customer;
@@ -37,7 +39,7 @@ import com.propertyvista.domain.tenant.Customer;
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface LeaseCustomer extends IEntity {
+public interface LeaseCustomer<E extends LeaseParticipant<?>> extends IEntity {
 
     @Owner
     @NotNull
@@ -62,4 +64,7 @@ public interface LeaseCustomer extends IEntity {
     @Indexed(uniqueConstraint = true, group = { "discriminator+id,1" })
     @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> participantId();
+
+    @Detached(level = AttachLevel.Detached)
+    ISet<E> leaseParticipants();
 }

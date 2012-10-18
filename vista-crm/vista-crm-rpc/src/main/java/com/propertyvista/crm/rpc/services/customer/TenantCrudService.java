@@ -13,8 +13,9 @@
  */
 package com.propertyvista.crm.rpc.services.customer;
 
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
 
-public interface TenantCrudService extends LeaseCustomerCrudServiceBase<TenantDTO> {
+public interface TenantCrudService extends LeaseCustomerCrudServiceBase<Tenant, TenantDTO> {
 
 }

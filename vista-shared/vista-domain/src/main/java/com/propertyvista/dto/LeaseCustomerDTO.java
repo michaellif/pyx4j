@@ -22,11 +22,12 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseCustomer;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 
 @Transient
 @AbstractEntity
-public interface LeaseCustomerDTO extends LeaseCustomer {
+public interface LeaseCustomerDTO<E extends LeaseParticipant<?>> extends LeaseCustomer<E> {
 
     @Override
     Lease lease();

@@ -26,6 +26,7 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.GuarantorDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class GuarantorListerActivity extends ListerActivityBase<GuarantorDTO> {
 
@@ -37,6 +38,9 @@ public class GuarantorListerActivity extends ListerActivityBase<GuarantorDTO> {
         // filter out just current tenants:
         GuarantorDTO proto = EntityFactory.getEntityPrototype(GuarantorDTO.class);
         addPreDefinedFilter(PropertyCriterion.in(proto.lease().status(), Lease.Status.current()));
+        if (!VistaTODO.FormerParticipant_VISTA_2059) {
+            addPreDefinedFilter(PropertyCriterion.eq(proto.leaseParticipants().$().leaseTermV().holder(), proto.lease().currentTerm()));
+        }
     }
 
     @Override

@@ -25,7 +25,7 @@ import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.TenantDTO;
 
-public class TenantCrudServiceImpl extends LeaseCustomerCrudServiceBaseImpl<LeaseCustomerTenant, TenantDTO> implements TenantCrudService {
+public class TenantCrudServiceImpl extends LeaseCustomerCrudServiceBaseImpl<Tenant, LeaseCustomerTenant, TenantDTO> implements TenantCrudService {
 
     public TenantCrudServiceImpl() {
         super(LeaseCustomerTenant.class, TenantDTO.class);

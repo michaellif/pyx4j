@@ -16,8 +16,10 @@ package com.propertyvista.domain.tenant.lease;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.tenant.Guarantor;
+
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @DiscriminatorValue("Guarantor")
-public interface LeaseCustomerGuarantor extends LeaseCustomer {
+public interface LeaseCustomerGuarantor extends LeaseCustomer<Guarantor> {
 
 }

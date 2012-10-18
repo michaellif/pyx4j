@@ -24,10 +24,11 @@ import com.propertyvista.crm.client.ui.crud.customer.common.LeaseCustomerEditorP
 import com.propertyvista.crm.rpc.services.customer.LeaseCustomerCrudServiceBase;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseCustomerDTO;
 
-public abstract class LeaseCustomerEditorActivity<DTO extends LeaseCustomerDTO, CS extends LeaseCustomerCrudServiceBase<DTO>> extends CrmEditorActivity<DTO>
-        implements LeaseCustomerEditorPresenter {
+public abstract class LeaseCustomerEditorActivity<E extends LeaseParticipant<?>, DTO extends LeaseCustomerDTO<E>, CS extends LeaseCustomerCrudServiceBase<E, DTO>>
+        extends CrmEditorActivity<DTO> implements LeaseCustomerEditorPresenter {
 
     public LeaseCustomerEditorActivity(CrudAppPlace place, IEditorView<DTO> view, CS service, Class<DTO> dtoClass) {
         super(place, view, service, dtoClass);

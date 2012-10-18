@@ -22,10 +22,11 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.tenant.Tenant;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @DiscriminatorValue("Tenant")
-public interface LeaseCustomerTenant extends LeaseCustomer {
+public interface LeaseCustomerTenant extends LeaseCustomer<Tenant> {
 
     PaymentMethod preauthorizedPayment();
 
@@ -35,4 +36,5 @@ public interface LeaseCustomerTenant extends LeaseCustomer {
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     ISet<MaintenanceRequest> _MaintenanceRequests();
+
 }
