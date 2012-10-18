@@ -447,4 +447,34 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
             Assert.assertEquals("sort Ok", "A10", r.get(1).sortByEmbedded().alphanum().getValue());
         }
     }
+
+    public void testCriterionWithPathReference() {
+        String testId = uniqueString();
+        String value = uniqueString();
+        {
+            SortSortable item = EntityFactory.create(SortSortable.class);
+            item.testId().setValue(testId);
+            item.name().setValue("A");
+            item.sortByOwned().name().setValue(value);
+            srv.persist(item);
+        }
+        {
+            SortSortable item = EntityFactory.create(SortSortable.class);
+            item.testId().setValue(testId);
+            item.name().setValue(value);
+            item.sortByOwned().name().setValue(value);
+            srv.persist(item);
+        }
+
+        {
+            EntityQueryCriteria<SortSortable> criteria = EntityQueryCriteria.create(SortSortable.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().sortByOwned().name(), criteria.proto().name()));
+
+            List<SortSortable> r = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, r.size());
+
+            Assert.assertEquals("sort Ok", value, r.get(0).name().getValue());
+        }
+    }
 }

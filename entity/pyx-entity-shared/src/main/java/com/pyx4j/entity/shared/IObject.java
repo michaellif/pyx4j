@@ -30,6 +30,8 @@ public interface IObject<VALUE_TYPE> extends IStringView {
      */
     public boolean isNull();
 
+    public boolean isPrototype();
+
     public void setValue(VALUE_TYPE value) throws ClassCastException;
 
     public VALUE_TYPE getValue();
@@ -92,6 +94,7 @@ public interface IObject<VALUE_TYPE> extends IStringView {
      * @see com.pyx4j.entity.annotations.Format
      * @see com.pyx4j.entity.annotations.ToString
      */
+    @Override
     public String getStringView();
 
 }

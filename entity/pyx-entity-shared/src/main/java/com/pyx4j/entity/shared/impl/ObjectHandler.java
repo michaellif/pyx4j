@@ -69,6 +69,11 @@ public abstract class ObjectHandler<VALUE_TYPE> implements IObject<VALUE_TYPE>, 
     }
 
     @Override
+    public boolean isPrototype() {
+        return getOwner().isPrototype();
+    }
+
+    @Override
     public Path getPath() {
         return new Path(this);
     }

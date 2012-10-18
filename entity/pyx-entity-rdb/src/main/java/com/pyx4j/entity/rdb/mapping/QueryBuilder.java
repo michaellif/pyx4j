@@ -235,7 +235,56 @@ public class QueryBuilder<T extends IEntity> {
 
         }
 
-        if (bindHolder.bindValue == null) {
+        if (bindHolder.bindValue instanceof Path) {
+            switch (propertyCriterion.getRestriction()) {
+            case LESS_THAN:
+                sql.append(" < ");
+                break;
+            case LESS_THAN_OR_EQUAL:
+                sql.append(" <= ");
+                break;
+            case GREATER_THAN:
+                sql.append(" > ");
+                break;
+            case GREATER_THAN_OR_EQUAL:
+                sql.append(" >= ");
+                break;
+            case EQUAL:
+                sql.append(" = ");
+                break;
+            case NOT_EQUAL:
+                sql.append(" != ");
+                break;
+            default:
+                throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction() + " for PathReference");
+            }
+
+            String property2Path = bindHolder.bindValue.toString();
+
+            boolean leftJoin = false;
+            if (!required) {
+                leftJoin = true;
+            }
+            QueryMember queryMember2 = queryJoin.buildQueryMember(property2Path, leftJoin, false);
+            if (queryMember2 == null) {
+                throw new RuntimeException("Unknown member " + property2Path + " in " + queryJoin.operationsMeta.entityMeta().getEntityClass().getName());
+            }
+            ValueBindAdapter adapter = queryMember2.memberOper.getValueAdapter().getQueryValueBindAdapter(propertyCriterion.getRestriction(),
+                    bindHolder.bindValue);
+
+            // TODO P3. support more then two columns
+            boolean firstValue = true;
+            for (String name : adapter.getColumnNames(queryMember2.memberSqlName)) {
+                if (firstValue) {
+                    sql.append(name);
+                    firstValue = false;
+                } else {
+                    secondPersistenceName = name;
+                    throw new Error("TODO support more then two columns in value join");
+                }
+            }
+
+        } else if (bindHolder.bindValue == null) {
             switch (propertyCriterion.getRestriction()) {
             case NOT_EXISTS:
             case EQUAL:

@@ -56,7 +56,9 @@ public class PropertyCriterion implements Criterion {
     public PropertyCriterion(String propertyPath, Restriction restriction, Serializable value) {
         this.propertyPath = propertyPath;
         this.restriction = restriction;
-        if (value instanceof IEntity) {
+        if ((value instanceof IObject) && (((IObject<?>) value).isPrototype())) {
+            this.value = ((IObject<?>) value).getPath();
+        } else if (value instanceof IEntity) {
             this.value = ((IEntity) value).createIdentityStub();
         } else {
             this.value = value;
@@ -66,7 +68,11 @@ public class PropertyCriterion implements Criterion {
     public PropertyCriterion(String propertyPath, Restriction restriction, IPrimitive<?> value) {
         this.propertyPath = propertyPath;
         this.restriction = restriction;
-        this.value = (Serializable) value.getValue();
+        if (value.isPrototype()) {
+            this.value = value.getPath();
+        } else {
+            this.value = (Serializable) value.getValue();
+        }
     }
 
     public PropertyCriterion(String propertyPath, Restriction restriction, Class<? extends IEntity> value) {

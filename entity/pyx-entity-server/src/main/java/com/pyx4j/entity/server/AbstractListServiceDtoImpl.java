@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.server;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
@@ -81,7 +82,7 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
                 if (path == null) {
                     path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyPath(), dboProto, dtoProto);
                 }
-                dboFilters.add(new PropertyCriterion(path.toString(), propertyCriterion.getRestriction(), propertyCriterion.getValue()));
+                dboFilters.add(new PropertyCriterion(path.toString(), propertyCriterion.getRestriction(), convertValue(propertyCriterion)));
             } else if (cr instanceof OrCriterion) {
                 OrCriterion criterion = new OrCriterion();
                 criterion.addRight(convertFilters(((OrCriterion) cr).getFiltersRight()));
@@ -92,6 +93,19 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
             }
         }
         return dboFilters;
+    }
+
+    public Serializable convertValue(PropertyCriterion propertyCriterion) {
+        Serializable value = propertyCriterion.getValue();
+        if (value instanceof Path) {
+            Path path = getBoundDboMemberPath((Path) value);
+            if (path == null) {
+                path = convertPropertyDTOPathToDBOPath(value.toString(), dboProto, dtoProto);
+            }
+            return path;
+        } else {
+            return value;
+        }
     }
 
     protected void enhanceListCriteria(EntityListCriteria<E> dbCriteria, EntityListCriteria<DTO> dtoCriteria) {

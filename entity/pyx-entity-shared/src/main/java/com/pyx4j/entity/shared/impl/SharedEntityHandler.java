@@ -78,7 +78,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
      */
     private transient boolean delegateValue;
 
-    private transient final boolean isTemplateEntity;
+    private transient final boolean isPrototypeEntity;
 
     /**
      * Creation of stand alone or member Entity
@@ -90,7 +90,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     public SharedEntityHandler(Class<? extends IObject<?>> clazz, IObject<?> parent, String fieldName) {
         super(clazz, parent, fieldName);
         delegateValue = (parent != null) && (getOwner() == parent);
-        isTemplateEntity = ".".equals(fieldName);
+        isPrototypeEntity = ".".equals(fieldName);
     }
 
     @Override
@@ -115,7 +115,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public Class<? extends IEntity> getInstanceValueClass() {
-        if (isTemplateEntity) {
+        if (isPrototypeEntity) {
             return getObjectClass();
         } else {
             Map<String, Object> entityValue = getValue();
@@ -125,6 +125,11 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
                 return ((IEntity) entityValue.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR)).getObjectClass();
             }
         }
+    }
+
+    @Override
+    public boolean isPrototype() {
+        return isPrototypeEntity || ((getOwner() != null) && getOwner().isPrototype());
     }
 
     @Override
@@ -221,7 +226,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @SuppressWarnings("unchecked")
     private Map<String, Object> getValue(boolean assertDetached) {
-        assert !isTemplateEntity : "Template Entity '" + getObjectClass().getName() + "' data manipulations disabled";
+        assert !isPrototypeEntity : "Prototype Entity '" + getObjectClass().getName() + "' data manipulations disabled";
         if (delegateValue) {
             Map<String, Object> ownerValue = ((SharedEntityHandler) getOwner()).getValue(assertDetached);
             if (ownerValue == null) {
@@ -273,7 +278,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public void setValue(Map<String, Object> value) {
-        assert !isTemplateEntity : "Template Entity '" + getObjectClass().getName() + "' data manipulations disabled";
+        assert !isPrototypeEntity : "Prototype Entity '" + getObjectClass().getName() + "' data manipulations disabled";
         if ((value != null) && !(value instanceof EntityValueMap)) {
             throw new ClassCastException("Entity expects EntityValueMap as value");
         }
@@ -390,7 +395,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             }
             setValue(null);
         } else {
-            assert !((SharedEntityHandler) entity).isTemplateEntity : "Template Entity '" + getObjectClass().getName() + "' data manipulations disabled";
+            assert !((SharedEntityHandler) entity).isPrototypeEntity : "Prototype Entity '" + getObjectClass().getName() + "' data manipulations disabled";
             assert this.getEntityMeta().isEntityClassAssignableFrom(entity) : this.getEntityMeta().getCaption() + " is not assignable from "
                     + entity.getEntityMeta().getCaption();
             Map<String, Object> value = ((SharedEntityHandler) entity).ensureValue();
@@ -422,10 +427,10 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         if (other == this) {
             return true;
         }
-        if (isTemplateEntity) {
+        if (isPrototypeEntity) {
             return (other != null) && this.getClass().equals(other.getClass());
         } else {
-            if ((other == null) || (!(other instanceof SharedEntityHandler)) || (((SharedEntityHandler) other).isTemplateEntity)) {
+            if ((other == null) || (!(other instanceof SharedEntityHandler)) || (((SharedEntityHandler) other).isPrototypeEntity)) {
                 return false;
             }
             Map<String, Object> thisValue = this.getValue(false);
@@ -470,7 +475,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public int hashCode() {
-        if (isTemplateEntity) {
+        if (isPrototypeEntity) {
             return super.hashCode();
         } else {
             Map<String, Object> thisValue = this.getValue(false);
@@ -965,7 +970,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     public String debugString() {
         StringBuilder b = new StringBuilder();
         b.append(getObjectClass().getName()).append(" ");
-        if (isTemplateEntity) {
+        if (isPrototypeEntity) {
             b.append("{meta}");
             return b.toString();
         } else {

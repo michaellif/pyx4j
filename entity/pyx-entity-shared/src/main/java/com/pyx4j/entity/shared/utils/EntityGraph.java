@@ -422,4 +422,5 @@ public class EntityGraph {
             currentEntity = (IEntity) castedEntity.getMember(ownerMember);
         } while (method.apply(currentEntity));
     }
+
 }
