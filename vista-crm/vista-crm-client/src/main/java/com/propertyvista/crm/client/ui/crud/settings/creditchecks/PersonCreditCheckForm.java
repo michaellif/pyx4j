@@ -17,10 +17,12 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
+import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.PersonCreditCheckDTO;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.tenant.PersonCreditCheck.CreditCheckResult;
 
 public class PersonCreditCheckForm extends CrmEntityForm<PersonCreditCheckDTO> {
 
@@ -35,8 +37,7 @@ public class PersonCreditCheckForm extends CrmEntityForm<PersonCreditCheckDTO> {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
         content.setH1(++row, 0, 1, i18n.tr("Screene"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().screening().screene().person().name().firstName())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().screening().screene().person().name().lastName())).build());
+        content.setWidget(++row, 0, inject(proto().screening().screene().person().name(), new NameEditor()));
 
         content.setH1(++row, 0, 1, i18n.tr("Details"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheckDate())).build());
@@ -51,5 +52,13 @@ public class PersonCreditCheckForm extends CrmEntityForm<PersonCreditCheckDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reason())).build());
 
         selectTab(addTab(content));
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        CreditCheckResult creditCheckResult = getValue().creditCheckResult().getValue();
+        get(proto().amountApproved()).setVisible(creditCheckResult == CreditCheckResult.Accept);
+        get(proto().reason()).setVisible(creditCheckResult != CreditCheckResult.Accept);
     }
 }
