@@ -37,6 +37,9 @@ public class TenantListerActivity extends ListerActivityBase<TenantDTO> {
         addPreDefinedFilter(PropertyCriterion.in(proto.lease().status(), Lease.Status.current()));
         if (!VistaTODO.FormerParticipant_VISTA_2059) {
             addPreDefinedFilter(PropertyCriterion.eq(proto.leaseParticipants().$().leaseTermV().holder(), proto.lease().currentTerm()));
+            // and finalized e.g. last only:
+            addPreDefinedFilter(PropertyCriterion.isNotNull(proto.leaseParticipants().$().leaseTermV().fromDate()));
+            addPreDefinedFilter(PropertyCriterion.isNull(proto.leaseParticipants().$().leaseTermV().toDate()));
         }
     }
 
