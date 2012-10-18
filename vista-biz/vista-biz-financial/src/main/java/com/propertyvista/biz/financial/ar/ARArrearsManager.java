@@ -247,7 +247,7 @@ public class ARArrearsManager {
     static AgingBuckets calculateTotalAgingBuckets(Collection<AgingBuckets> agingBucketsCollection) {
         AgingBuckets agingBuckets = createAgingBuckets(DebitType.total);
         for (AgingBuckets typedBuckets : agingBucketsCollection) {
-            agingBuckets.bucketThisMonth().setValue(agingBuckets.bucketCurrent().getValue().add(typedBuckets.bucketCurrent().getValue()));
+            agingBuckets.bucketThisMonth().setValue(agingBuckets.bucketThisMonth().getValue().add(typedBuckets.bucketThisMonth().getValue()));
             agingBuckets.bucketCurrent().setValue(agingBuckets.bucketCurrent().getValue().add(typedBuckets.bucketCurrent().getValue()));
             agingBuckets.bucket30().setValue(agingBuckets.bucket30().getValue().add(typedBuckets.bucket30().getValue()));
             agingBuckets.bucket60().setValue(agingBuckets.bucket60().getValue().add(typedBuckets.bucket60().getValue()));

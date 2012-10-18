@@ -26,36 +26,53 @@ public interface AgingBuckets extends IEntity {
 
     IPrimitive<DebitType> debitType();
 
+    /** sum of money that is owed but which time is not yet overdue */
+    @Format("#,##0.00")
     @Caption(name = "Current")
     IPrimitive<BigDecimal> bucketCurrent();
 
+    /** sum of payments that is due from 1 day to the day when the month and were not payed */
+    @Format("#,##0.00")
     @Caption(name = "This Month")
     IPrimitive<BigDecimal> bucketThisMonth();
 
+    /** sum of payments that haven't been received from client 1 to 30 days ago */
+    @Format("#,##0.00")
     @Caption(name = "1 to 30")
     IPrimitive<BigDecimal> bucket30();
 
+    /** sum of payments that haven't been received from client 31 to 60 days ago */
+    @Format("#,##0.00")
     @Caption(name = "31 to 60")
     IPrimitive<BigDecimal> bucket60();
 
+    /** sum of payments that haven't been received from client 61 to 90 days ago */
+    @Format("#,##0.00")
     @Caption(name = "61 to 90")
     IPrimitive<BigDecimal> bucket90();
 
+    /** sum of payments that haven't been received from client 91 and more days ago */
+    @Format("#,##0.00")
     @Caption(name = "91 and more")
     IPrimitive<BigDecimal> bucketOver90();
 
     /**
-     * the cumulative amount of all arrears (sum of all arrears (not current) buckets of totalAgingBuckets)
+     * sum of all the money that is owed by client (arrears + not arrears)
      */
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Caption(name = "AR Balance")
+    // TODO rename column arrearsAmount to 'AR Balance' (this is AR Balance not just arrears)
     IPrimitive<BigDecimal> arrearsAmount();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Caption(name = "Prepayments")
+    // TODO rename column to prepayments
     IPrimitive<BigDecimal> creditAmount();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
+    /**
+     *  {@link #arrearsAmount} - {@link #creditAmount} 
+     */
     IPrimitive<BigDecimal> totalBalance();
 
 }

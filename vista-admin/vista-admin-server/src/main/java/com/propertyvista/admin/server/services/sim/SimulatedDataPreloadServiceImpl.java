@@ -166,11 +166,13 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
 
                 UpdateArrearsProcess updateArrearsProcess = new UpdateArrearsProcess();
                 PmcProcessContext context = new PmcProcessContext(EntityFactory.create(RunStats.class), new Date());
+                final LogicalDate today = new LogicalDate();
+
                 GregorianCalendar cal = new GregorianCalendar();
-                int numOfYearsBack = 3;
-                cal.add(Calendar.YEAR, -numOfYearsBack);
+                int numOfYearsBack = 1;
+                cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+                cal.add(Calendar.MONTH, -1);
                 setProgress(0, numOfYearsBack * 12);
-                LogicalDate today = new LogicalDate();
                 LogicalDate simToday = new LogicalDate(cal.getTime());
 
                 while (!isInterrupted() & !simToday.after(today)) {
@@ -187,7 +189,7 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
                     } else {
                         log.error("simulated data preloader: failed up update arrears for {}", new LogicalDate(cal.getTime()));
                     }
-                    cal.add(Calendar.MONTH, 1);
+                    cal.add(Calendar.DAY_OF_YEAR, 1);
                     simToday = new LogicalDate(cal.getTime());
                     incProgress();
                 }

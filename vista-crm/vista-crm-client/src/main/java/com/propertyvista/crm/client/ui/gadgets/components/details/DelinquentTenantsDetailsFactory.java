@@ -48,14 +48,16 @@ public class DelinquentTenantsDetailsFactory extends AbstractListerDetailsFactor
                     
                     new Builder(proto().leaseTermV().holder().lease()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build(),
                     
+                    new Builder(proto().arrears().bucketCurrent()).searchable(false).sortable(false).build(),
                     new Builder(proto().arrears().bucketThisMonth()).searchable(false).sortable(false).build(),
                     new Builder(proto().arrears().bucket30()).searchable(false).sortable(false).build(),
                     new Builder(proto().arrears().bucket60()).searchable(false).sortable(false).build(),
                     new Builder(proto().arrears().bucket90()).searchable(false).sortable(false).build(),
                     new Builder(proto().arrears().bucketOver90()).searchable(false).sortable(false).build(),
-                    new Builder(proto().arrears().arrearsAmount(), false).searchable(false).sortable(false).build(),
-                    new Builder(proto().arrears().creditAmount(), false).searchable(false).sortable(false).build(),
-                    new Builder(proto().arrears().totalBalance()).searchable(false).sortable(false).build()
+                    new Builder(proto().arrears().arrearsAmount()).searchable(false).sortable(false).build()
+// TODO the following two are implemented since prepayments are not yet implemented                    
+//                    new Builder(proto().arrears().creditAmount(), false).searchable(false).sortable(false).build(),
+//                    new Builder(proto().arrears().totalBalance()).searchable(false).sortable(false).build()
                     
              );// @formatter:on
         }
