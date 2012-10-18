@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
@@ -46,7 +47,7 @@ import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
-public interface LeaseParticipant<LC extends LeaseCustomer> extends IEntity {
+public interface LeaseParticipant<LC extends LeaseCustomer<?>> extends IEntity {
 
     @I18n
     @XmlType(name = "TenantRole")
@@ -71,6 +72,10 @@ public interface LeaseParticipant<LC extends LeaseCustomer> extends IEntity {
         }
     }
 
+    interface LeaseCustomerHolderId extends ColumnId {
+    }
+
+    @JoinColumn(LeaseCustomerHolderId.class)
     @NotNull
     @MemberColumn(notNull = true)
     @ReadOnly

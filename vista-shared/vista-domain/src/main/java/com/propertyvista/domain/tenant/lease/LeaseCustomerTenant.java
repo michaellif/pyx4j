@@ -15,6 +15,7 @@ package com.propertyvista.domain.tenant.lease;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.ISet;
@@ -37,4 +38,9 @@ public interface LeaseCustomerTenant extends LeaseCustomer<Tenant> {
     @Detached(level = AttachLevel.Detached)
     ISet<MaintenanceRequest> _MaintenanceRequests();
 
+    //TODO move
+    @Override
+    @Detached(level = AttachLevel.Detached)
+    @JoinTable(value = Tenant.class, mappedBy = LeaseParticipant.LeaseCustomerHolderId.class)
+    ISet<Tenant> leaseParticipants();
 }

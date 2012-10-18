@@ -20,12 +20,14 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
@@ -65,6 +67,9 @@ public interface LeaseCustomer<E extends LeaseParticipant<?>> extends IEntity {
     @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> participantId();
 
+    //TODO
+    @Transient
     @Detached(level = AttachLevel.Detached)
+    @JoinTable(value = LeaseParticipant.class, mappedBy = LeaseParticipant.LeaseCustomerHolderId.class)
     ISet<E> leaseParticipants();
 }
