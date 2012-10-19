@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb.mapping;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -194,7 +195,9 @@ class TableDDL {
         sql.append(" CHECK ");
         sql.append(" (").append(dialect.sqlDiscriminatorColumnName()).append(" IN (");
         boolean first = true;
-        for (String discriminator : tableModel.operationsMeta().impClasses.keySet()) {
+        List<String> discriminators = new ArrayList<String>(tableModel.operationsMeta().impClasses.keySet());
+        Collections.sort(discriminators);
+        for (String discriminator : discriminators) {
             if (first) {
                 first = false;
             } else {
@@ -218,7 +221,9 @@ class TableDDL {
         sql.append(" CHECK ");
         sql.append(" (").append(sqlName).append(" IN (");
         boolean first = true;
-        for (String discriminator : adapter.getDiscriminatorValues()) {
+        List<String> discriminators = new ArrayList<String>(adapter.getDiscriminatorValues());
+        Collections.sort(discriminators);
+        for (String discriminator : discriminators) {
             if (first) {
                 first = false;
             } else {
@@ -238,7 +243,9 @@ class TableDDL {
         sql.append(dialect.getNamingConvention().sqlConstraintName(tableName, sqlName));
         sql.append(" CHECK ");
         sql.append(" (");
-        for (String discriminator : member.getSubclassDiscriminators()) {
+        List<String> discriminators = new ArrayList<String>(member.getSubclassDiscriminators());
+        Collections.sort(discriminators);
+        for (String discriminator : discriminators) {
             sql.append(" (");
             sql.append(dialect.sqlDiscriminatorColumnName()).append(" = '").append(discriminator).append("'");
             sql.append(" AND ");
