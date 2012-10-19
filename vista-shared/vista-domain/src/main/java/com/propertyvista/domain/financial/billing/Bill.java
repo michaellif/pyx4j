@@ -20,6 +20,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -169,6 +170,7 @@ public interface Bill extends IEntity {
      */
 
     @Caption(name = "Balance from last bill")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> pastDueAmount();
 
     IPrimitive<BigDecimal> serviceCharge();
@@ -201,6 +203,7 @@ public interface Bill extends IEntity {
      * totalDueAmount = pastDueAmount + currentAmount + taxes
      */
     @ToString(index = 1)
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> totalDueAmount();
 
 }
