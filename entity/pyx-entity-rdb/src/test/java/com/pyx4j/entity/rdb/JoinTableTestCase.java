@@ -336,6 +336,47 @@ public abstract class JoinTableTestCase extends DatastoreTestBase {
 
     }
 
+    public void testOneToOneCascadeUpdatePersist() {
+        testOneToOneCascadeUpdate(TestCaseMethod.Persist);
+    }
+
+    public void testOneToOneCascadeUpdateMerge() {
+        testOneToOneCascadeUpdate(TestCaseMethod.Merge);
+    }
+
+    public void testOneToOneCascadeUpdate(TestCaseMethod testCaseMethod) {
+        String testId = uniqueString();
+
+        OneToOneReadOwner o = EntityFactory.create(OneToOneReadOwner.class);
+        o.name().setValue(uniqueString());
+        o.testId().setValue(testId);
+        srvSave(o, testCaseMethod);
+
+        //Test table initialization
+        {
+            OneToOneReadOwner o1r = srv.retrieve(OneToOneReadOwner.class, o.getPrimaryKey());
+            Assert.assertNull("Got child object", o1r.child().getPrimaryKey());
+            // There are no data e.g. Value is null, consider it Attached
+            Assert.assertEquals("Got child object Attached", AttachLevel.Attached, o1r.child().getAttachLevel());
+        }
+
+        {
+            OneToOneReadOwner o1r = srv.retrieve(OneToOneReadOwner.class, o.getPrimaryKey());
+            o1r.child().name().setValue(uniqueString());
+            o1r.child().testId().setValue(testId);
+
+            srvSave(o1r, testCaseMethod);
+
+            {
+                OneToOneReadOwner o1r2 = srv.retrieve(OneToOneReadOwner.class, o.getPrimaryKey());
+                Assert.assertNotNull("Did not load child object", o1r2.child().getPrimaryKey());
+                // There are no data e.g. Value is null, consider it Attached
+                Assert.assertEquals("Got child object Attached", AttachLevel.IdOnly, o1r2.child().getAttachLevel());
+            }
+        }
+
+    }
+
     public void testOneToOneQuery() {
         String testId = uniqueString();
 
