@@ -37,6 +37,15 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
     }
 
     @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        if (getValue().isEmpty()) {
+            addItem(); // at lease one guest should be added!
+        }
+    }
+
+    @Override
     public void addItem() {
         super.addItem();
     }
