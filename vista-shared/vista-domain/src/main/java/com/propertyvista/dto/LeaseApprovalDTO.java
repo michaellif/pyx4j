@@ -16,6 +16,8 @@ package com.propertyvista.dto;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -49,14 +51,17 @@ public interface LeaseApprovalDTO extends IEntity {
     }
 
     @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> rentAmount();
 
     @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> totalAmountApproved();
 
     @Format("#0")
-    @Caption(name = "% Rent Approved")
-    IPrimitive<Double> percenrtageApproved();
+    @Caption(name = "Rent Approved")
+    @Editor(type = EditorType.percentage)
+    IPrimitive<BigDecimal> percenrtageApproved();
 
     IPrimitive<SuggestedDecision> suggestedDecision();
 

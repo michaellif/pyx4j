@@ -104,7 +104,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
             leaseApproval.suggestedDecision().setValue(SuggestedDecision.RunCreditCheck);
         } else {
             leaseApproval.totalAmountApproved().setValue(amountApproved);
-            leaseApproval.percenrtageApproved().setValue(amountApproved.divide(rentAmount, RoundingMode.DOWN).multiply(new BigDecimal("100.00")).doubleValue());
+            leaseApproval.percenrtageApproved().setValue(amountApproved.divide(rentAmount, RoundingMode.DOWN));
 
             if (creditCheckResults.contains(CreditCheckResult.Decline)) {
                 leaseApproval.suggestedDecision().setValue(SuggestedDecision.Decline);
