@@ -17,6 +17,7 @@ import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.adapters.ReferenceAdapter;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 public class CountryReferenceAdapter implements ReferenceAdapter<Country> {
 
@@ -27,7 +28,7 @@ public class CountryReferenceAdapter implements ReferenceAdapter<Country> {
         if (name.equals("us") || name.equals("usa")) {
             name = "united states";
         }
-        c.add(PropertyCriterion.eq(c.proto().name().getFieldName() + IndexAdapter.SECONDARY_PRROPERTY_SUFIX, name));
+        c.add(new PropertyCriterion(c.proto().name().getFieldName() + IndexAdapter.SECONDARY_PRROPERTY_SUFIX, Restriction.EQUAL, name));
         return c;
     }
 

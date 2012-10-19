@@ -73,7 +73,7 @@ public class EntityDto2DboCriteriaConverter<DBO extends IEntity, DTO extends IEn
                 if (mapper == null) {
                     throw new IllegalStateException("DTO property " + propertyCriterion.getPropertyPath().toString() + " is not bound to DBO property");
                 }
-                dboFilters.add(new PropertyCriterion(mapper.getDboMemberPath(dtoPath).toString(), propertyCriterion.getRestriction(), mapper
+                dboFilters.add(new PropertyCriterion(mapper.getDboMemberPath(dtoPath), propertyCriterion.getRestriction(), mapper
                         .convertValue(propertyCriterion.getValue())));
 
             } else if (cr instanceof OrCriterion) {

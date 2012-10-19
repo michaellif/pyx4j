@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.activity.crud.lease;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -22,8 +21,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.Criterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.EntityFiltersBuilder;
 import com.pyx4j.essentials.client.DeferredProcessDialog;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
@@ -96,10 +94,9 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     protected void populateBills(Lease result) {
-        List<Criterion> preDefinedFilters = new ArrayList<Criterion>();
-        preDefinedFilters.add(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillDataDTO.class).bill().billingAccount().id(), result.billingAccount()
-                .getPrimaryKey()));
-        billLister.setPreDefinedFilters(preDefinedFilters);
+        EntityFiltersBuilder<BillDataDTO> filters = EntityFiltersBuilder.create(BillDataDTO.class);
+        filters.eq(filters.proto().bill().billingAccount().id(), result.billingAccount().getPrimaryKey());
+        billLister.setPreDefinedFilters(filters.getFilters());
         billLister.populate();
     }
 

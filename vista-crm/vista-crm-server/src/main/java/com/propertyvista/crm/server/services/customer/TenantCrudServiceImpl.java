@@ -20,7 +20,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.LeaseCustomer;
 import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.TenantDTO;
@@ -71,7 +70,7 @@ public class TenantCrudServiceImpl extends LeaseCustomerCrudServiceBaseImpl<Tena
         }
     }
 
-    private Tenant retrieveTenant(LeaseTerm.LeaseTermV termV, LeaseCustomer leaseCustomer) {
+    private Tenant retrieveTenant(LeaseTerm.LeaseTermV termV, LeaseCustomerTenant leaseCustomer) {
         EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseCustomer(), leaseCustomer));
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseTermV(), termV));

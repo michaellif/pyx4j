@@ -32,6 +32,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseCustomer;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseCustomerDTO;
@@ -125,7 +126,11 @@ public class LeaseCustomerCrudServiceBaseImpl<E extends LeaseParticipant<?>, DBO
             {
                 EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().id(), leaseCustomer.lease().currentTerm().id()));
-                criteria.add(PropertyCriterion.eq(criteria.proto().version().tenants().$().leaseCustomer(), leaseCustomer));
+                if (leaseCustomer instanceof LeaseCustomerTenant) {
+                    criteria.add(PropertyCriterion.eq(criteria.proto().version().tenants().$().leaseCustomer(), leaseCustomer));
+                } else {
+                    criteria.add(PropertyCriterion.eq(criteria.proto().version().guarantors().$().leaseCustomer(), leaseCustomer));
+                }
                 criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
                 LeaseTerm leaseTerm = Persistence.service().retrieve(criteria);
                 if (leaseTerm != null) {
@@ -136,7 +141,11 @@ public class LeaseCustomerCrudServiceBaseImpl<E extends LeaseParticipant<?>, DBO
             if (term == null) {
                 EntityQueryCriteria<LeaseTerm.LeaseTermV> criteria = EntityQueryCriteria.create(LeaseTerm.LeaseTermV.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().holder().lease(), leaseCustomer.lease()));
-                criteria.add(PropertyCriterion.eq(criteria.proto().tenants().$().leaseCustomer(), leaseCustomer));
+                if (leaseCustomer instanceof LeaseCustomerTenant) {
+                    criteria.add(PropertyCriterion.eq(criteria.proto().tenants().$().leaseCustomer(), leaseCustomer));
+                } else {
+                    criteria.add(PropertyCriterion.eq(criteria.proto().guarantors().$().leaseCustomer(), leaseCustomer));
+                }
                 criteria.desc(criteria.proto().id());
                 term = Persistence.service().retrieve(criteria);
             }
