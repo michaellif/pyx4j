@@ -46,11 +46,6 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
     }
 
     @Override
-    public void addItem() {
-        super.addItem();
-    }
-
-    @Override
     public void addValidations() {
         super.addValidations();
 
