@@ -204,14 +204,14 @@ public class IndexedEntitySearch<E extends IEntity> {
                     }
                 }
             } else if (Date.class.isAssignableFrom(mm.getValueClass())) {
-                Date day = (Date) searchCriteria.getValue(new PathSearch(mm, path.getPathString(), "day"));
+                Date day = (Date) searchCriteria.getValue(new PathSearch(mm, path.toString(), "day"));
                 if (day != null) {
                     queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, TimeUtils.dayStart(day)));
                     // Add in case index criteria is dropped by search 
                     inMemoryFilters.add(new DayInMemoryFilter(path, day));
                 } else {
-                    Date from = (Date) searchCriteria.getValue(new PathSearch(mm, path.getPathString(), "from"));
-                    Date to = (Date) searchCriteria.getValue(new PathSearch(mm, path.getPathString(), "to"));
+                    Date from = (Date) searchCriteria.getValue(new PathSearch(mm, path.toString(), "from"));
+                    Date to = (Date) searchCriteria.getValue(new PathSearch(mm, path.toString(), "to"));
                     if ((from != null) || (to != null)) {
                         inMemoryFilters.add(new DayRangeInMemoryFilter(path, from, to));
                         if (!hasInequalityFilter) {
@@ -257,7 +257,7 @@ public class IndexedEntitySearch<E extends IEntity> {
                     queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, value));
                 }
             } else if (GeoCriteria.class.isAssignableFrom(mm.getValueClass())) {
-                String pathWithGeoPointData = path.getPathString();
+                String pathWithGeoPointData = path.toString();
                 pathWithGeoPointData = pathWithGeoPointData.substring(0, pathWithGeoPointData.length() - ("Criteria".length() + 1)) + Path.PATH_SEPARATOR;
                 Path geoPath = new Path(pathWithGeoPointData);
                 Integer areaRadius = null;
@@ -265,7 +265,7 @@ public class IndexedEntitySearch<E extends IEntity> {
                 GeoCriteria value = (GeoCriteria) me.getValue();
                 if (value != null) {
                     geoPointFrom = value.geoPoint().getValue();
-                    areaRadius = (Integer) searchCriteria.getValue(new PathSearch(mm, path.getPathString() + "radius" + Path.PATH_SEPARATOR, null));
+                    areaRadius = (Integer) searchCriteria.getValue(new PathSearch(mm, path.toString() + "radius" + Path.PATH_SEPARATOR, null));
                 }
                 if ((areaRadius != null) && (geoPointFrom != null)) {
                     List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(geoPointFrom, areaRadius.intValue()));
@@ -287,7 +287,7 @@ public class IndexedEntitySearch<E extends IEntity> {
                     hasInequalityFilter = true;
                 }
             } else if (GeoPoint.class.isAssignableFrom(mm.getValueClass())) {
-                String pathWithGeoPointData = path.getPathString();
+                String pathWithGeoPointData = path.toString();
                 Integer areaRadius = (Integer) searchCriteria.getValue(new PathSearch(mm, pathWithGeoPointData, "radius"));
                 GeoPoint geoPointFrom = (GeoPoint) searchCriteria.getValue(new PathSearch(mm, pathWithGeoPointData, "from"));
                 if ((areaRadius != null) && (geoPointFrom != null)) {

@@ -24,6 +24,7 @@ import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.adapters.ReferenceAdapter;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.test.shared.domain.Province;
 
 public class ProvinceReferenceAdapter implements ReferenceAdapter<Province> {
@@ -31,7 +32,8 @@ public class ProvinceReferenceAdapter implements ReferenceAdapter<Province> {
     @Override
     public EntityQueryCriteria<Province> getMergeCriteria(Province newEntity) {
         EntityQueryCriteria<Province> c = EntityQueryCriteria.create(Province.class);
-        c.add(PropertyCriterion.eq(c.proto().name().getFieldName() + IndexAdapter.SECONDARY_PRROPERTY_SUFIX, newEntity.name().getValue().toLowerCase()));
+        c.add(new PropertyCriterion(c.proto().name().getFieldName() + IndexAdapter.SECONDARY_PRROPERTY_SUFIX, Restriction.EQUAL, newEntity.name().getValue()
+                .toLowerCase()));
         return c;
     }
 

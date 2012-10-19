@@ -33,6 +33,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.criterion.AndCriterion;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
@@ -82,12 +83,14 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
                 if (path == null) {
                     path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyPath(), dboProto, dtoProto);
                 }
-                dboFilters.add(new PropertyCriterion(path.toString(), propertyCriterion.getRestriction(), convertValue(propertyCriterion)));
+                dboFilters.add(new PropertyCriterion(path, propertyCriterion.getRestriction(), convertValue(propertyCriterion)));
             } else if (cr instanceof OrCriterion) {
                 OrCriterion criterion = new OrCriterion();
                 criterion.addRight(convertFilters(((OrCriterion) cr).getFiltersRight()));
                 criterion.addLeft(convertFilters(((OrCriterion) cr).getFiltersLeft()));
                 dboFilters.add(criterion);
+            } else if (cr instanceof AndCriterion) {
+                dboFilters.addAll(convertFilters(((AndCriterion) cr).getFilters()));
             } else {
                 throw new IllegalArgumentException("Can't convert " + cr.getClass() + " criteria");
             }

@@ -23,7 +23,7 @@ package com.pyx4j.entity.shared.criterion;
 import java.util.Vector;
 
 /**
- * For usage examples @see com.pyx4j.entity.rdb.QueryRDBTestCase#testCriterionOr()
+ * For usage examples @see com.pyx4j.entity.rdb.QueryRDBTestCase#testCriterionAnd()
  */
 public class AndCriterion extends FiltersBuilder implements Criterion {
 

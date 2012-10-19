@@ -31,6 +31,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.Path;
 
 @SuppressWarnings("serial")
 public class PropertyCriterion implements Criterion {
@@ -53,6 +54,17 @@ public class PropertyCriterion implements Criterion {
 
     }
 
+    public PropertyCriterion(IObject<?> member, Restriction restriction, Serializable value) {
+        this(member.getPath(), restriction, value);
+        //TODO do we need to validate this?
+        //assert member.isPrototype();
+    }
+
+    public PropertyCriterion(Path path, Restriction restriction, Serializable value) {
+        this(path.toString(), restriction, value);
+    }
+
+    @Deprecated
     public PropertyCriterion(String propertyPath, Restriction restriction, Serializable value) {
         this.propertyPath = propertyPath;
         this.restriction = restriction;
@@ -65,8 +77,8 @@ public class PropertyCriterion implements Criterion {
         }
     }
 
-    public PropertyCriterion(String propertyPath, Restriction restriction, IPrimitive<?> value) {
-        this.propertyPath = propertyPath;
+    public PropertyCriterion(IObject<?> member, Restriction restriction, IPrimitive<?> value) {
+        this.propertyPath = member.getPath().toString();
         this.restriction = restriction;
         if (value.isPrototype()) {
             this.value = value.getPath();
@@ -75,18 +87,12 @@ public class PropertyCriterion implements Criterion {
         }
     }
 
-    public PropertyCriterion(String propertyPath, Restriction restriction, Class<? extends IEntity> value) {
-        this.propertyPath = propertyPath;
-        this.restriction = restriction;
-        this.value = EntityFactory.create(value);
-    }
-
-    public PropertyCriterion(IObject<?> member, Restriction restriction, Serializable value) {
-        this(member.getPath().toString(), restriction, value);
+    public PropertyCriterion(IObject<?> member, Restriction restriction, Class<? extends IEntity> value) {
+        this(member, restriction, EntityFactory.create(value));
     }
 
     public PropertyCriterion(IObject<?> member, Restriction restriction, Collection<?> value) {
-        this(member.getPath().toString(), restriction, createSerializableCollection(value));
+        this(member, restriction, createSerializableCollection(value));
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -104,44 +110,39 @@ public class PropertyCriterion implements Criterion {
     }
 
     public static PropertyCriterion eq(IObject<?> member, Class<? extends IEntity> value) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, value);
+        return new PropertyCriterion(member, Restriction.EQUAL, value);
     }
 
     public static PropertyCriterion eq(IObject<?> member, IPrimitive<?> value) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, value);
+        return new PropertyCriterion(member, Restriction.EQUAL, value);
     }
 
     public static PropertyCriterion eq(IObject<?> member, Serializable value) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, value);
+        return new PropertyCriterion(member, Restriction.EQUAL, value);
     }
 
     public static PropertyCriterion isNull(IObject<?> member) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, (Serializable) null);
+        return new PropertyCriterion(member, Restriction.EQUAL, (Serializable) null);
     }
 
     public static PropertyCriterion notExists(IObject<?> member) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.NOT_EXISTS, (Serializable) null);
+        return new PropertyCriterion(member, Restriction.NOT_EXISTS, (Serializable) null);
     }
 
     public static PropertyCriterion notExists(IObject<?> member, Criterion criterion) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.NOT_EXISTS, criterion);
+        return new PropertyCriterion(member, Restriction.NOT_EXISTS, criterion);
     }
 
     public static PropertyCriterion isNotNull(IObject<?> member) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.NOT_EQUAL, (Serializable) null);
+        return new PropertyCriterion(member, Restriction.NOT_EQUAL, (Serializable) null);
     }
 
     public static PropertyCriterion like(IObject<?> member, String value) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.RDB_LIKE, value);
-    }
-
-    @Deprecated
-    public static PropertyCriterion eq(String propertyName, Serializable value) {
-        return new PropertyCriterion(propertyName, Restriction.EQUAL, value);
+        return new PropertyCriterion(member, Restriction.RDB_LIKE, value);
     }
 
     public static PropertyCriterion ne(IObject<?> member, Serializable value) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.NOT_EQUAL, value);
+        return new PropertyCriterion(member, Restriction.NOT_EQUAL, value);
     }
 
     public static <T extends Collection<?>> PropertyCriterion in(IObject<?> member, T values) {
@@ -157,35 +158,35 @@ public class PropertyCriterion implements Criterion {
     }
 
     public static PropertyCriterion gt(IObject<?> member, Serializable value) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.GREATER_THAN, value);
+        return new PropertyCriterion(member, Restriction.GREATER_THAN, value);
     }
 
     public static PropertyCriterion gt(IObject<?> member, IPrimitive<?> value) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.GREATER_THAN, value);
+        return new PropertyCriterion(member, Restriction.GREATER_THAN, value);
     }
 
     public static PropertyCriterion ge(IObject<?> member, Serializable value) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.GREATER_THAN_OR_EQUAL, value);
+        return new PropertyCriterion(member, Restriction.GREATER_THAN_OR_EQUAL, value);
     }
 
     public static PropertyCriterion ge(IObject<?> member, IPrimitive<?> value) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.GREATER_THAN_OR_EQUAL, value);
+        return new PropertyCriterion(member, Restriction.GREATER_THAN_OR_EQUAL, value);
     }
 
     public static PropertyCriterion lt(IObject<?> member, Serializable value) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.LESS_THAN, value);
+        return new PropertyCriterion(member, Restriction.LESS_THAN, value);
     }
 
     public static PropertyCriterion lt(IObject<?> member, IPrimitive<?> value) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.LESS_THAN, value);
+        return new PropertyCriterion(member, Restriction.LESS_THAN, value);
     }
 
     public static PropertyCriterion le(IObject<?> member, Serializable value) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.LESS_THAN_OR_EQUAL, value);
+        return new PropertyCriterion(member, Restriction.LESS_THAN_OR_EQUAL, value);
     }
 
     public static PropertyCriterion le(IObject<?> member, IPrimitive<?> value) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.LESS_THAN_OR_EQUAL, value);
+        return new PropertyCriterion(member, Restriction.LESS_THAN_OR_EQUAL, value);
     }
 
     public String getPropertyPath() {

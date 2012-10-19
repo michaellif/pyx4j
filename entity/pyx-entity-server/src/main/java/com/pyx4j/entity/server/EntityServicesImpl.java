@@ -176,9 +176,9 @@ public class EntityServicesImpl {
                         c.add((PropertyCriterion) me.getValue());
                         continue;
                     } else if ((value instanceof IEntity) || (value instanceof Enum)) {
-                        c.add(PropertyCriterion.eq(path.getPathString(), value));
+                        c.add(new PropertyCriterion(path, Restriction.EQUAL, value));
                     } else if ((value instanceof String)) {
-                        c.add(new PropertyCriterion(path.getPathString(), Restriction.RDB_LIKE, value));
+                        c.add(new PropertyCriterion(path, Restriction.RDB_LIKE, value));
                     } else {
                         log.warn("Unsupported SearchCriteria filter");
                     }

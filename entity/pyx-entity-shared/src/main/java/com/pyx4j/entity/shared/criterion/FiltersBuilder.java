@@ -30,100 +30,135 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 
+/**
+ * 
+ * The name criteria_proto_member was used to simplify typing in Eclipse
+ * 
+ * Start with:
+ * 
+ * {@code EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class); }
+ * 
+ * Now type: {@code criteria.eq } You will get suggestion:
+ * 
+ * {@code criteria.eq(criteria_proto_member, values); }
+ * 
+ * Then just replace underscore with dot and you will have Criterion:
+ * 
+ * {@code criteria.eq(criteria.proto().id(), emp1.id()); }
+ * 
+ */
 public abstract class FiltersBuilder {
 
     protected abstract FiltersBuilder addCriterion(Criterion criterion);
 
-    public void eq(IObject<?> member, Class<? extends IEntity> value) {
-        addCriterion(PropertyCriterion.eq(member, value));
+    public final void eq(IObject<?> criteria_proto_member, Class<? extends IEntity> value) {
+        addCriterion(PropertyCriterion.eq(criteria_proto_member, value));
     }
 
-    public void eq(IObject<?> member, IPrimitive<?> value) {
-        addCriterion(PropertyCriterion.eq(member, value));
+    public final void eq(IObject<?> criteria_proto_member, IPrimitive<?> value) {
+        addCriterion(PropertyCriterion.eq(criteria_proto_member, value));
     }
 
-    public void eq(IObject<?> member, Serializable value) {
-        addCriterion(PropertyCriterion.eq(member, value));
+    public final void eq(IObject<?> criteria_proto_member, Serializable value) {
+        addCriterion(PropertyCriterion.eq(criteria_proto_member, value));
     }
 
-    public void isNull(IObject<?> member) {
-        addCriterion(PropertyCriterion.isNull(member));
+    public final void isNull(IObject<?> criteria_proto_member) {
+        addCriterion(PropertyCriterion.isNull(criteria_proto_member));
     }
 
-    public void notExists(IObject<?> member) {
-        addCriterion(PropertyCriterion.notExists(member));
+    public final void notExists(IObject<?> criteria_proto_member) {
+        addCriterion(PropertyCriterion.notExists(criteria_proto_member));
     }
 
-    public void notExists(IObject<?> member, Criterion criterion) {
-        addCriterion(PropertyCriterion.notExists(member, criterion));
+    public final void notExists(IObject<?> criteria_proto_member, Criterion criterion) {
+        addCriterion(PropertyCriterion.notExists(criteria_proto_member, criterion));
     }
 
-    public void isNotNull(IObject<?> member) {
-        addCriterion(PropertyCriterion.isNotNull(member));
+    public final void isNotNull(IObject<?> criteria_proto_member) {
+        addCriterion(PropertyCriterion.isNotNull(criteria_proto_member));
     }
 
-    public void like(IObject<?> member, String value) {
-        addCriterion(PropertyCriterion.like(member, value));
+    public final void like(IObject<?> criteria_proto_member, String value) {
+        addCriterion(PropertyCriterion.like(criteria_proto_member, value));
     }
 
-    public void ne(IObject<?> member, Serializable value) {
-        addCriterion(PropertyCriterion.ne(member, value));
+    public final void ne(IObject<?> criteria_proto_member, Serializable value) {
+        addCriterion(PropertyCriterion.ne(criteria_proto_member, value));
     }
 
-    public <T extends Collection<?>> void in(IObject<?> member, T values) {
-        addCriterion(PropertyCriterion.in(member, values));
+    public final <T extends Collection<?>> void in(IObject<?> criteria_proto_member, T values) {
+        addCriterion(PropertyCriterion.in(criteria_proto_member, values));
     }
 
-    public <T extends Enum<T>> void in(IObject<T> member, EnumSet<T> values) {
-        addCriterion(PropertyCriterion.in(member, values));
+    public final <T extends Enum<T>> void in(IObject<T> criteria_proto_member, EnumSet<T> values) {
+        addCriterion(PropertyCriterion.in(criteria_proto_member, values));
     }
 
-    public void in(IObject<?> member, Serializable... values) {
-        addCriterion(PropertyCriterion.in(member, values));
+    public final void in(IObject<?> criteria_proto_member, Serializable... values) {
+        addCriterion(PropertyCriterion.in(criteria_proto_member, values));
     }
 
-    public void gt(IObject<?> member, Serializable value) {
-        addCriterion(PropertyCriterion.gt(member, value));
+    public final void gt(IObject<?> criteria_proto_member, Serializable value) {
+        addCriterion(PropertyCriterion.gt(criteria_proto_member, value));
     }
 
-    public void gt(IObject<?> member, IPrimitive<?> value) {
-        addCriterion(PropertyCriterion.gt(member, value));
+    public final void gt(IObject<?> criteria_proto_member, IPrimitive<?> value) {
+        addCriterion(PropertyCriterion.gt(criteria_proto_member, value));
     }
 
-    public void ge(IObject<?> member, Serializable value) {
-        addCriterion(PropertyCriterion.ge(member, value));
+    public final void ge(IObject<?> criteria_proto_member, Serializable value) {
+        addCriterion(PropertyCriterion.ge(criteria_proto_member, value));
     }
 
-    public void ge(IObject<?> member, IPrimitive<?> value) {
-        addCriterion(PropertyCriterion.ge(member, value));
+    public final void ge(IObject<?> criteria_proto_member, IPrimitive<?> value) {
+        addCriterion(PropertyCriterion.ge(criteria_proto_member, value));
     }
 
-    public void lt(IObject<?> member, Serializable value) {
-        addCriterion(PropertyCriterion.lt(member, value));
+    public final void lt(IObject<?> criteria_proto_member, Serializable value) {
+        addCriterion(PropertyCriterion.lt(criteria_proto_member, value));
     }
 
-    public void lt(IObject<?> member, IPrimitive<?> value) {
-        addCriterion(PropertyCriterion.lt(member, value));
+    public final void lt(IObject<?> criteria_proto_member, IPrimitive<?> value) {
+        addCriterion(PropertyCriterion.lt(criteria_proto_member, value));
     }
 
-    public void le(IObject<?> member, Serializable value) {
-        addCriterion(PropertyCriterion.le(member, value));
+    public final void le(IObject<?> criteria_proto_member, Serializable value) {
+        addCriterion(PropertyCriterion.le(criteria_proto_member, value));
     }
 
-    public void le(IObject<?> member, IPrimitive<?> value) {
-        addCriterion(PropertyCriterion.le(member, value));
+    public final void le(IObject<?> criteria_proto_member, IPrimitive<?> value) {
+        addCriterion(PropertyCriterion.le(criteria_proto_member, value));
     }
 
-    public <T extends IVersionedEntity<?>> void isFinal(T entity) {
-//         (entity.getPrimaryKey() != null) && !entity.getPrimaryKey().isDraft() && entity.version().toDate().isNull()
-//                && !entity.version().fromDate().isNull();
+    public final <T extends IVersionedEntity<?>> void hasCurrentVersion(T criteria_proto_member) {
+        isNotNull(criteria_proto_member.version().fromDate());
+        isNull(criteria_proto_member.version().toDate());
     }
 
-    public static <T extends IVersionedEntity<?>> void isDraft(T entity) {
-//        return (entity.getPrimaryKey() == null) || entity.getPrimaryKey().isDraft();
+    public final <T extends IVersionData<?>> void isCurrent(T criteria_proto_member) {
+        isNotNull(criteria_proto_member.fromDate());
+        isNull(criteria_proto_member.toDate());
     }
 
-    public <T extends IVersionData<?>> void isDraft(T entity) {
-        //      return (entity.getPrimaryKey() == null) || entity.fromDate().isNull();
+    /**
+     * Current or previous versions. e.g. Not Draft.
+     */
+    public final <T extends IVersionedEntity<?>> void hasFinalizedVersion(T criteria_proto_member) {
+        isNotNull(criteria_proto_member.version().fromDate());
+    }
+
+    public final <T extends IVersionData<?>> void isFinalized(T criteria_proto_member) {
+        isNotNull(criteria_proto_member.fromDate());
+    }
+
+    public final <T extends IVersionedEntity<?>> void hasDraftVersion(T criteria_proto_member) {
+        isNull(criteria_proto_member.version().toDate());
+        isNull(criteria_proto_member.version().fromDate());
+    }
+
+    public final <T extends IVersionData<?>> void isDraft(T criteria_proto_member) {
+        isNull(criteria_proto_member.toDate());
+        isNull(criteria_proto_member.fromDate());
     }
 }

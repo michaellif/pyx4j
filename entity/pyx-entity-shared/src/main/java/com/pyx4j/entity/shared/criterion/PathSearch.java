@@ -21,12 +21,13 @@
 package com.pyx4j.entity.shared.criterion;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public class PathSearch extends Path implements Comparable<PathSearch> {
+public class PathSearch extends Path implements IFullDebug, Comparable<PathSearch> {
 
     private static final long serialVersionUID = -7287478852586750914L;
 
@@ -75,11 +76,6 @@ public class PathSearch extends Path implements Comparable<PathSearch> {
         return pathProperty;
     }
 
-    //TODO use better function name and probably in Path itself.
-    public String getPathString() {
-        return super.toString();
-    }
-
     public int getCardinality() {
         return cardinality;
     }
@@ -123,7 +119,7 @@ public class PathSearch extends Path implements Comparable<PathSearch> {
     }
 
     @Override
-    public String toString() {
+    public String debugString() {
         if (pathProperty == null) {
             return super.toString();
         } else {
