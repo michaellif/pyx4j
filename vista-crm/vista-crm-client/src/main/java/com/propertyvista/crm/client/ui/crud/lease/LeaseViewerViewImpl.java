@@ -76,6 +76,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final IListerView<LeaseAdjustment> adjustmentLister;
 
+    private final MenuItem viewApplication;
+
     private final MenuItem sendMailAction;
 
     private final MenuItem runBillAction;
@@ -102,8 +104,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem viewOfferedTerms;
 
-    private final MenuItem viewApplication;
-
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
 
@@ -115,7 +115,15 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         // set main form here:
         setForm(new LeaseForm());
 
-        // Actions: -----------------------------------------------------------------------------------------------------------
+        // Actions:
+
+        viewApplication = new MenuItem(i18n.tr("View Application"), new Command() {
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(getForm().getValue().getPrimaryKey()));
+            }
+        });
+        addAction(viewApplication);
 
         sendMailAction = new MenuItem(i18n.tr("Send Mail..."), new Command() {
             @Override
@@ -250,14 +258,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addAction(cancelAction);
 
-        viewApplication = new MenuItem(i18n.tr("View Application"), new Command() {
-            @Override
-            public void execute() {
-                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(getForm().getValue().getPrimaryKey()));
-            }
-        });
-        addAction(viewApplication);
-
         // Renewing stuff : ---------------------------------------------------------------------------------------------------
 
         renewButton = new Button(i18n.tr("Renew"));
@@ -303,6 +303,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     @Override
     public void reset() {
+        setActionVisible(viewApplication, false);
         setActionVisible(sendMailAction, false);
         setActionVisible(runBillAction, false);
         setActionVisible(noticeAction, false);
@@ -313,7 +314,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(completeAction, false);
         setActionVisible(closeAction, false);
         setActionVisible(cancelAction, false);
-        setActionVisible(viewApplication, false);
 
         super.reset();
     }
@@ -327,6 +327,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         // set buttons state:
         CompletionType completion = value.completion().getValue();
 
+        setActionVisible(viewApplication, !value.leaseApplication().status().isNull());
         setActionVisible(sendMailAction, true);
         setActionVisible(runBillAction, status.isCurrent());
         setActionVisible(noticeAction, status == Status.Active && completion == null);
@@ -337,7 +338,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(completeAction, status == Status.Active && completion != null);
         setActionVisible(closeAction, status == Status.Completed);
         setActionVisible(cancelAction, !status.isFormer());
-        setActionVisible(viewApplication, !value.leaseApplication().status().isNull());
 
         renewButton.setVisible(status == Status.Active && completion == null && value.nextTerm().isNull());
     }

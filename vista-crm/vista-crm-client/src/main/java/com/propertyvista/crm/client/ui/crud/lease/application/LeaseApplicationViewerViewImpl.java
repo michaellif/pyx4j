@@ -40,6 +40,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
     private static final I18n i18n = I18n.get(LeaseApplicationViewerViewImpl.class);
 
+    private final MenuItem viewLease;
+
     private final MenuItem onlineApplication;
 
     private final MenuItem inviteAction;
@@ -53,8 +55,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     private final MenuItem declineAction;
 
     private final MenuItem cancelAction;
-
-    private final MenuItem viewLease;
 
     private static final String INVITE = i18n.tr("Invite");
 
@@ -73,6 +73,14 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setForm(new LeaseApplicationForm());
 
         // Actions:
+
+        viewLease = new MenuItem(i18n.tr("View Lease"), new Command() {
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease().formViewerPlace(getForm().getValue().getPrimaryKey()));
+            }
+        });
+        addAction(viewLease);
 
         onlineApplication = new MenuItem(i18n.tr("Start Online Application"), new Command() {
             @Override
@@ -189,18 +197,11 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             }
         });
         addAction(cancelAction);
-
-        viewLease = new MenuItem(i18n.tr("View Lease"), new Command() {
-            @Override
-            public void execute() {
-                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease().formViewerPlace(getForm().getValue().getPrimaryKey()));
-            }
-        });
-        addAction(viewLease);
     }
 
     @Override
     public void reset() {
+        setActionVisible(viewLease, false);
         setActionVisible(onlineApplication, false);
         setActionVisible(inviteAction, false);
         setActionVisible(checkAction, false);
@@ -208,7 +209,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(moreInfoAction, false);
         setActionVisible(declineAction, false);
         setActionVisible(cancelAction, false);
-        setActionVisible(viewLease, false);
 
         super.reset();
     }
@@ -220,6 +220,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         Status status = value.leaseApplication().status().getValue();
 
         // set buttons state:
+        setActionVisible(viewLease, status.isCurrent());
         setActionVisible(onlineApplication, status == Status.Created);
         setActionVisible(inviteAction, status == Status.OnlineApplication);
         setActionVisible(checkAction, status.isDraft());
@@ -227,7 +228,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(moreInfoAction, status.isDraft() && status != Status.Created);
         setActionVisible(declineAction, status.isDraft());
         setActionVisible(cancelAction, status != Status.Cancelled);
-        setActionVisible(viewLease, status.isCurrent());
     }
 
     private abstract class ActionBox extends ReasonBox {
