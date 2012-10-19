@@ -26,6 +26,8 @@ ALTER TABLE admin_pmc_equifax_info
 -- ALTER TABLE vista_terms_v ALTER COLUMN holder DROP NOT NULL;
 ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_detailsdiscriminator_d_ck
         CHECK (trigger_detailsdiscriminator IN ('pad','default','test'));
+ALTER TABLE scheduler_trigger_details ADD CONSTRAINT scheduler_trigger_details_iddiscriminator_ck
+        CHECK (iddiscriminator IN ('pad','default','test'));
 
 DROP INDEX admin_pmc_dns_name_idx;
 CREATE UNIQUE INDEX admin_pmc_dns_name_idx ON admin_pmc USING btree (LOWER(dns_name));
@@ -370,6 +372,10 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions DROP CONSTRAINT IF EXISTS legal_questions_pkey CASCADE';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions RENAME TO person_screening_legal_questions';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_legal_questions ADD CONSTRAINT person_screening_legal_questions_pk PRIMARY KEY(id) ';
+        
+        -- locker_area
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.locker_area DROP COLUMN is_private';
+        
 
         -- master_online_application
         EXECUTE 'ALTER TABLE '||v_schema_name||'.master_online_application ADD COLUMN online_application_id_s VARCHAR(26),'||
@@ -438,124 +444,10 @@ BEGIN
                                         'ALTER COLUMN card_obfuscated_number TYPE VARCHAR(16)';
 
         EXECUTE 'UPDATE '||v_schema_name||'.payment_payment_details '||
-        '   SET     account_no_obfuscated_number = LPAD(account_no_obfuscated_number,12,''X''),'||
-        '       card_obfuscated_number = LPAD(card_obfuscated_number,16,''X'') ';
+                '   SET     account_no_obfuscated_number = LPAD(account_no_obfuscated_number,12,''X''),'||
+                '       card_obfuscated_number = LPAD(card_obfuscated_number,16,''X'') ';
         
-        -- person_screening_income_info
-
-        EXECUTE 'CREATE TABLE '||v_schema_name||'.person_screening_income_info ('||
-                '   id              BIGINT          NOT NULL,'||
-                '   iddiscriminator         VARCHAR(64)         NOT NULL,'||
-                '   name                VARCHAR(500),'||
-                '   monthly_amount          NUMERIC(18,2),'||
-                '   starts              DATE,'||
-                '   ends                DATE,'||
-                '   position            VARCHAR(500),'||
-                '   address_suite_number        VARCHAR(500),'||
-                '   address_street_number       VARCHAR(500),'||
-                '   address_street_number_suffix    VARCHAR(500),'||
-                '   address_street_name         VARCHAR(500),'||
-                '   address_street_type         VARCHAR(50),'||
-                '   address_street_direction    VARCHAR(50),'||
-                '   address_city            VARCHAR(500),'||
-                '   address_county          VARCHAR(500),'||
-                '   address_province        BIGINT,'||
-                '   address_country         BIGINT,'||
-                '   address_postal_code         VARCHAR(500),'||
-                '   address_location_lat        DOUBLE PRECISION,'||
-                '   address_location_lng        DOUBLE PRECISION,'||
-                '   employed_for_years      DOUBLE PRECISION,'||
-                '   supervisor_name         VARCHAR(500),'||
-                '   supervisor_phone        VARCHAR(500),'||
-                '   fully_owned             BOOLEAN,'||
-                '   monthly_revenue         NUMERIC(18,2),'||
-                '   number_of_employees         INT,'||
-                '   program             VARCHAR(50),'||
-                '   field_of_study          VARCHAR(500),'||
-                '   funding_choices         VARCHAR(50),'||
-            '   CONSTRAINT person_screening_income_info_pk PRIMARY KEY (id),'||
-            '   CONSTRAINT person_screening_income_info_address_country_fk FOREIGN KEY (address_country) '||
-            '       REFERENCES '||v_schema_name||'.country(id),'||
-            '   CONSTRAINT person_screening_income_info_address_province_fk FOREIGN KEY (address_province) '||
-            '       REFERENCES '||v_schema_name||'.province(id))';
-
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_income_info OWNER TO vista';
-
-        -- personal_income - just in case rename to person_screening_personal_income
-
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.personal_income DROP CONSTRAINT IF EXISTS personal_income_pk,'||
-                                                'DROP CONSTRAINT IF EXISTS personal_income_pkey,'||
-                                                'DROP CONSTRAINT IF EXISTS personal_income_employer_fk,'||
-                                                'DROP CONSTRAINT IF EXISTS personal_income_other_income_information_fk,'||
-                                                'DROP CONSTRAINT IF EXISTS personal_income_owner_fk,'||
-                                                'DROP CONSTRAINT IF EXISTS personal_income_seasonally_employed_fk,'||
-                                                'DROP CONSTRAINT IF EXISTS personal_income_self_employed_fk,'||
-                                                'DROP CONSTRAINT IF EXISTS personal_income_social_services_fk,'||
-                                                'DROP CONSTRAINT IF EXISTS personal_income_student_income_fk';
-
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.personal_income RENAME TO person_screening_personal_income';
-
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income DROP COLUMN other_income_information,'||
-                                                'DROP COLUMN employer,'||
-                                                'DROP COLUMN self_employed,'||
-                                                'DROP COLUMN seasonally_employed,'||
-                                                'DROP COLUMN social_services,'||
-                                                'DROP COLUMN student_income';
-
-
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ADD COLUMN detailsdiscriminator VARCHAR(50),'||
-                                                'ADD COLUMN details BIGINT';
-
-
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ADD CONSTRAINT  person_screening_personal_income_pk PRIMARY KEY(id),'||
-        'ADD CONSTRAINT person_screening_personal_income_details_fk FOREIGN KEY(details) REFERENCES '||v_schema_name||'.person_screening_income_info(id)' ;
-
-
-        -- person_screening
-
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening '||
-                                                'DROP CONSTRAINT IF EXISTS person_screening_pk CASCADE,'||
-                                                'DROP CONSTRAINT IF EXISTS person_screening_pkey CASCADE,'||                    -- Very special case for pangroup
-                                                'DROP CONSTRAINT IF EXISTS person_screening_current_address_country_fk,'||
-                                                'DROP CONSTRAINT IF EXISTS person_screening_current_address_province_fk,'||
-                                                'DROP CONSTRAINT IF EXISTS person_screening_equifax_approval_fk,'||
-                                                'DROP CONSTRAINT IF EXISTS person_screening_legal_questions_fk,'||
-                                                'DROP CONSTRAINT IF EXISTS person_screening_previous_address_country_fk,'||
-                                                'DROP CONSTRAINT IF EXISTS person_screening_previous_address_province_fk,'||
-                                                'DROP CONSTRAINT IF EXISTS person_screening_screene_fk';
-
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening RENAME TO person_screening_v';
-
-        EXECUTE 'CREATE TABLE '||v_schema_name||'.person_screening ( '||
-                '       id              BIGINT          NOT NULL,'||
-                '       screene         BIGINT,'||
-                '       CONSTRAINT person_screening_pk PRIMARY KEY(id),'||
-                '       CONSTRAINT person_screening_screene_fk FOREIGN KEY(screene) REFERENCES '||v_schema_name||'.customer(id))';
-
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening OWNER TO vista';
-
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_v ADD COLUMN created_by_user_key BIGINT,'||
-                                                                'ADD COLUMN from_date TIMESTAMP,'||
-                                                                'ADD COLUMN to_date TIMESTAMP,'||
-                                                                'ADD COLUMN holder BIGINT,'||
-                                                                'ADD COLUMN Version_number INT,'||
-                                                                'DROP COLUMN screene,'||
-                        'ADD CONSTRAINT person_screening_v_pk PRIMARY KEY(id),'||
-                        'ADD CONSTRAINT person_screening_v_current_address_country_fk FOREIGN KEY(current_address_country) REFERENCES '||v_schema_name||'.country(id),'||
-                        'ADD CONSTRAINT person_screening_v_current_address_province_fk FOREIGN KEY(current_address_province) REFERENCES '||v_schema_name||'.province(id),'||
-                        'ADD CONSTRAINT person_screening_v_equifax_approval_fk FOREIGN KEY(equifax_approval) REFERENCES '||v_schema_name||'.equifax_approval(id),'||
-                        'ADD CONSTRAINT person_screening_v_holder_fk FOREIGN KEY(holder) REFERENCES '||v_schema_name||'.person_screening(id),'||
-                        'ADD CONSTRAINT person_screening_v_legal_questions_fk FOREIGN KEY(legal_questions) REFERENCES '||v_schema_name||'.person_screening_legal_questions(id),'||
-                        'ADD CONSTRAINT person_screening_v_previous_address_country_fk FOREIGN KEY(previous_address_country) REFERENCES '||v_schema_name||'.country(id),'||
-                        'ADD CONSTRAINT person_screening_v_previous_address_province_fk FOREIGN KEY(previous_address_province) REFERENCES '||v_schema_name||'.province(id)';
-
-        EXECUTE 'CREATE INDEX person_screening_v_holder_from_date_to_date_idx ON '||v_schema_name||'.person_screening_v USING btree(holder, from_date, to_date)';
-
-        /*
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income '||
-        'ADD CONSTRAINT person_screening_personal_income_owner_fk FOREIGN KEY(owner) REFERENCES '||v_schema_name||'.person_screening_v(id)';
-        */
-
+        
         -- reports_settings_holder
         EXECUTE 'CREATE TABLE '||v_schema_name||'.reports_settings_holder ('||
             '   id      BIGINT      NOT NULL,'||
@@ -630,13 +522,13 @@ BEGIN
                 'FROM   (SELECT DISTINCT holder,service_type FROM '||v_schema_name||'.service_v ) AS b '||
                 'WHERE  a.old_id = b.holder '
                 'AND    a.iddiscriminator = ''service'' ';
-        /*        
+             
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product ADD CONSTRAINT product_feature_type_ck CHECK ((iddiscriminator = ''feature'' '||
                                                 ' AND feature_type IS NOT NULL) OR (iddiscriminator != ''feature'' AND feature_type IS NULL)) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product ADD CONSTRAINT product_service_type_ck CHECK ((iddiscriminator = ''service'' '||
                                                 ' AND service_type IS NOT NULL) OR (iddiscriminator != ''service'' AND service_type IS NULL)) ';
      
-        */   
+    
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product OWNER TO vista';
 
 
@@ -1108,15 +1000,150 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge ADD COLUMN tenant BIGINT';
 
         EXECUTE 'UPDATE '||v_schema_name||'.tenant_charge AS a '||
-        '   SET     tenant = b.id '
-        '   FROM    (SELECT id,tenant_id '||
-                'FROM '||v_schema_name||'.lease_participant ) AS b '||
+        '   SET         tenant = b.id, '||
+        '               tenantdiscriminator = b.tenantdiscriminator '||
+        '   FROM        (SELECT id,tenant_id,tenantdiscriminator '||
+        '               FROM '||v_schema_name||'.lease_participant ) AS b '||
         '   WHERE   a.old_tenant = b.tenant_id ';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge ADD CONSTRAINT tenant_charge_tenant_fk FOREIGN KEY(tenant) '||
                             'REFERENCES '||v_schema_name||'.lease_participant(id), '||
                             'DROP COLUMN old_tenant';
 
+
+        /**
+        ***     ===============================================================================================================
+        ***     
+        ***             Screening part - just to be sure that everything is migrated
+        ***     
+        ***     ===============================================================================================================
+        **/        
+                
+        -- equifax_approval
+        SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'equifax_approval');
+        
+        -- equifax_result
+        SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'equifax_result');
+              
+        
+        -- person_screening_income_info
+
+        EXECUTE 'CREATE TABLE '||v_schema_name||'.person_screening_income_info ('||
+                '   id              BIGINT          NOT NULL,'||
+                '   iddiscriminator         VARCHAR(64)         NOT NULL,'||
+                '   name                VARCHAR(500),'||
+                '   monthly_amount          NUMERIC(18,2),'||
+                '   starts              DATE,'||
+                '   ends                DATE,'||
+                '   position            VARCHAR(500),'||
+                '   address_suite_number        VARCHAR(500),'||
+                '   address_street_number       VARCHAR(500),'||
+                '   address_street_number_suffix    VARCHAR(500),'||
+                '   address_street_name         VARCHAR(500),'||
+                '   address_street_type         VARCHAR(50),'||
+                '   address_street_direction    VARCHAR(50),'||
+                '   address_city            VARCHAR(500),'||
+                '   address_county          VARCHAR(500),'||
+                '   address_province        BIGINT,'||
+                '   address_country         BIGINT,'||
+                '   address_postal_code         VARCHAR(500),'||
+                '   address_location_lat        DOUBLE PRECISION,'||
+                '   address_location_lng        DOUBLE PRECISION,'||
+                '   employed_for_years      DOUBLE PRECISION,'||
+                '   supervisor_name         VARCHAR(500),'||
+                '   supervisor_phone        VARCHAR(500),'||
+                '   fully_owned             BOOLEAN,'||
+                '   monthly_revenue         NUMERIC(18,2),'||
+                '   number_of_employees         INT,'||
+                '   program             VARCHAR(50),'||
+                '   field_of_study          VARCHAR(500),'||
+                '   funding_choices         VARCHAR(50),'||
+            '   CONSTRAINT person_screening_income_info_pk PRIMARY KEY (id),'||
+            '   CONSTRAINT person_screening_income_info_address_country_fk FOREIGN KEY (address_country) '||
+            '       REFERENCES '||v_schema_name||'.country(id),'||
+            '   CONSTRAINT person_screening_income_info_address_province_fk FOREIGN KEY (address_province) '||
+            '       REFERENCES '||v_schema_name||'.province(id))';
+
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_income_info OWNER TO vista';
+
+        -- personal_income - just in case rename to person_screening_personal_income
+
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.personal_income DROP CONSTRAINT IF EXISTS personal_income_pk,'||
+                                                'DROP CONSTRAINT IF EXISTS personal_income_pkey,'||
+                                                'DROP CONSTRAINT IF EXISTS personal_income_employer_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS personal_income_other_income_information_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS personal_income_owner_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS personal_income_seasonally_employed_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS personal_income_self_employed_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS personal_income_social_services_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS personal_income_student_income_fk';
+
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.personal_income RENAME TO person_screening_personal_income';
+
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income DROP COLUMN other_income_information,'||
+                                                'DROP COLUMN employer,'||
+                                                'DROP COLUMN self_employed,'||
+                                                'DROP COLUMN seasonally_employed,'||
+                                                'DROP COLUMN social_services,'||
+                                                'DROP COLUMN student_income';
+
+
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ADD COLUMN detailsdiscriminator VARCHAR(50),'||
+                                                'ADD COLUMN details BIGINT';
+
+
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ADD CONSTRAINT  person_screening_personal_income_pk PRIMARY KEY(id),'||
+        'ADD CONSTRAINT person_screening_personal_income_details_fk FOREIGN KEY(details) REFERENCES '||v_schema_name||'.person_screening_income_info(id)' ;
+
+
+        -- person_screening
+
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening '||
+                                                'DROP CONSTRAINT IF EXISTS person_screening_pk CASCADE,'||
+                                                'DROP CONSTRAINT IF EXISTS person_screening_pkey CASCADE,'||                    -- Very special case for pangroup
+                                                'DROP CONSTRAINT IF EXISTS person_screening_current_address_country_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS person_screening_current_address_province_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS person_screening_equifax_approval_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS person_screening_legal_questions_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS person_screening_previous_address_country_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS person_screening_previous_address_province_fk,'||
+                                                'DROP CONSTRAINT IF EXISTS person_screening_screene_fk';
+
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening RENAME TO person_screening_v';
+
+        EXECUTE 'CREATE TABLE '||v_schema_name||'.person_screening ( '||
+                '       id              BIGINT          NOT NULL,'||
+                '       screene         BIGINT,'||
+                '       CONSTRAINT person_screening_pk PRIMARY KEY(id),'||
+                '       CONSTRAINT person_screening_screene_fk FOREIGN KEY(screene) REFERENCES '||v_schema_name||'.customer(id))';
+
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_v OWNER TO vista';
+
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_v ADD COLUMN created_by_user_key BIGINT,'||
+                                                                'ADD COLUMN from_date TIMESTAMP,'||
+                                                                'ADD COLUMN to_date TIMESTAMP,'||
+                                                                'ADD COLUMN holder BIGINT,'||
+                                                                'ADD COLUMN Version_number INT,'||
+                                                                'DROP COLUMN screene,'||
+                                                                'DROP COLUMN current_address_phone,'||
+                                                                'DROP COLUMN equifax_approval,'||
+                                                                'DROP COLUMN previous_address_phone,'||
+                        'ADD CONSTRAINT person_screening_v_pk PRIMARY KEY(id),'||
+                        'ADD CONSTRAINT person_screening_v_current_address_country_fk FOREIGN KEY(current_address_country) REFERENCES '||v_schema_name||'.country(id),'||
+                        'ADD CONSTRAINT person_screening_v_current_address_province_fk FOREIGN KEY(current_address_province) REFERENCES '||v_schema_name||'.province(id),'||
+                        'ADD CONSTRAINT person_screening_v_holder_fk FOREIGN KEY(holder) REFERENCES '||v_schema_name||'.person_screening(id),'||
+                        'ADD CONSTRAINT person_screening_v_legal_questions_fk FOREIGN KEY(legal_questions) REFERENCES '||v_schema_name||'.person_screening_legal_questions(id),'||
+                        'ADD CONSTRAINT person_screening_v_previous_address_country_fk FOREIGN KEY(previous_address_country) REFERENCES '||v_schema_name||'.country(id),'||
+                        'ADD CONSTRAINT person_screening_v_previous_address_province_fk FOREIGN KEY(previous_address_province) REFERENCES '||v_schema_name||'.province(id)';
+
+        EXECUTE 'CREATE INDEX person_screening_v_holder_from_date_to_date_idx ON '||v_schema_name||'.person_screening_v USING btree(holder, from_date, to_date)';
+
+        
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income '||
+        'ADD CONSTRAINT person_screening_personal_income_owner_fk FOREIGN KEY(owner) REFERENCES '||v_schema_name||'.person_screening_v(id)';
+        
+  
+        
 
         /** Cleanup **/
 
@@ -1210,6 +1237,9 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record_processing ALTER COLUMN payment_record SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening ALTER COLUMN screene SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_asset ALTER COLUMN owner SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ALTER COLUMN details SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ALTER COLUMN detailsdiscriminator SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ALTER COLUMN income_source SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ALTER COLUMN owner SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_v ALTER COLUMN holder SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product ALTER COLUMN catalog SET NOT NULL' ;
