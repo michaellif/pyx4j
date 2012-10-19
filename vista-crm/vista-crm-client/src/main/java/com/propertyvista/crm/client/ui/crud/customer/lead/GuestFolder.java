@@ -15,9 +15,12 @@ package com.propertyvista.crm.client.ui.crud.customer.lead;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -31,6 +34,26 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
 
     public GuestFolder(boolean modifyable) {
         super(Guest.class, modifyable);
+    }
+
+    @Override
+    public void addItem() {
+        super.addItem();
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        this.addValueValidator(new EditableValueValidator<IList<Guest>>() {
+            @Override
+            public ValidationError isValid(CComponent<IList<Guest>, ?> component, IList<Guest> value) {
+                if (value != null) {
+                    return (value.isEmpty() ? new ValidationError(component, i18n.tr("At least one guest data should be entered")) : null);
+                }
+                return null;
+            }
+        });
     }
 
     @Override

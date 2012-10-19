@@ -47,6 +47,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
     private static final I18n i18n = I18n.get(LeadForm.class);
 
+    private GuestFolder guestFolder;
+
     public LeadForm() {
         this(false);
     }
@@ -72,7 +74,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
         FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().guests(), new GuestFolder(isEditable())));
+        main.setWidget(++row, 0, inject(proto().guests(), guestFolder = new GuestFolder(isEditable())));
 
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refSource()), 20).build());
@@ -161,6 +163,10 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
         if (isEditable()) {
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lead, get(proto().leadId()), getValue().getPrimaryKey());
+
+            if (getValue().getPrimaryKey() == null) {
+                guestFolder.addItem(); // at lease one guest should be added!
+            }
         }
     }
 
