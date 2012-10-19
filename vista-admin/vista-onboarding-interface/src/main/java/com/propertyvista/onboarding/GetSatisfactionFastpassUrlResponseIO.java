@@ -13,9 +13,11 @@
  */
 package com.propertyvista.onboarding;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Transient
 public interface GetSatisfactionFastpassUrlResponseIO extends ResponseIO {
 
     @NotNull

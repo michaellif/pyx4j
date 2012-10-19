@@ -14,9 +14,11 @@
 package com.propertyvista.onboarding;
 
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Transient
 public interface BankAccountInfoApproval extends BankAccountInfo {
 
     @Length(8)

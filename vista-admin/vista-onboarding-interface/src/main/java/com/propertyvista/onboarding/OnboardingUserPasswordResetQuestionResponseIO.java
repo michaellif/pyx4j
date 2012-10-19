@@ -13,8 +13,10 @@
  */
 package com.propertyvista.onboarding;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Transient
 public interface OnboardingUserPasswordResetQuestionResponseIO extends ResponseIO {
 
     IPrimitive<String> securityQuestion();
