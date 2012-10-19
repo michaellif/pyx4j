@@ -13,68 +13,97 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.impl;
 
-import java.util.Vector;
+import java.util.Arrays;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 
-import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.forms.BuildingListerGadgetMetadataForm;
+import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils;
+import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils.ItemSelectCommand;
+import com.propertyvista.crm.client.ui.gadgets.util.Provider;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingListerGadget extends ListerGadgetInstanceBase<BuildingDTO, BuildingListerGadgetMetadata> {
+public class BuildingListerGadget extends GadgetInstanceBase<BuildingListerGadgetMetadata> {
 
-    private final AbstractListService<BuildingDTO> service;
+    private static final I18n i18n = I18n.get(BuildingListerGadget.class);
 
-    @SuppressWarnings("unchecked")
-    public BuildingListerGadget(BuildingListerGadgetMetadata gmd) {
-        super(gmd, BuildingListerGadgetMetadata.class, null, BuildingDTO.class, false);
-        service = (AbstractListService<BuildingDTO>) GWT.create(BuildingCrudService.class);
-        initView();
+    static List<ColumnDescriptor> DEFAULT_COLUMN_DESCRIPTORS;
+    static {
+        BuildingDTO proto = EntityFactory.getEntityPrototype(BuildingDTO.class);
+        DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto.complex()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto.propertyCode()).build(),
+                new MemberColumnDescriptor.Builder(proto.propertyManager()).build(),
+                new MemberColumnDescriptor.Builder(proto.marketing().name()).title(i18n.ntr("Marketing Name")).build(),
+                new MemberColumnDescriptor.Builder(proto.info().name()).build(),
+                new MemberColumnDescriptor.Builder(proto.info().type()).build(),
+                new MemberColumnDescriptor.Builder(proto.info().shape()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto.info().address().streetName()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto.info().address().city()).build(),
+                new MemberColumnDescriptor.Builder(proto.info().address().province()).build(),
+                new MemberColumnDescriptor.Builder(proto.info().address().country()).build()
+        );//@formatter:on
+    }
+
+    private BasicLister<BuildingDTO> lister;
+
+    public BuildingListerGadget(BuildingListerGadgetMetadata metadata) {
+        super(metadata, BuildingListerGadgetMetadata.class, new BuildingListerGadgetMetadataForm());
+        setDefaultPopulator(new Populator() {
+            @Override
+            public void populate() {
+                lister.getDataTablePanel().setPageSize(getMetadata().buildingListerSettings().pageSize().getValue());
+                lister.obtain(0);
+                populateSucceded();
+            }
+        });
     }
 
     @Override
     protected Widget initContentPanel() {
-        return initListerWidget();
-    }
+        lister = new BasicLister<BuildingDTO>(BuildingDTO.class, true, false);
+        lister.setSize("100%", "100%");
 
-    @Override
-    protected void populatePage(final int pageNumber) {
-        EntityListCriteria<BuildingDTO> criteria = new EntityListCriteria<BuildingDTO>(BuildingDTO.class);
-        criteria.setPageSize(getPageSize());
-        criteria.setPageNumber(pageNumber);
-        // apply sorts:
-        criteria.setSorts(new Vector<Sort>(getListerSortingCriteria()));
-
-        service.list(new AsyncCallback<EntitySearchResult<BuildingDTO>>() {
-            @Override
-            public void onSuccess(EntitySearchResult<BuildingDTO> result) {
-                setPageData(result.getData(), pageNumber, result.getTotalRows(), result.hasMoreData());
-                populateSucceded();
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                populateFailed(caught);
-            }
-        }, criteria);
-    }
-
-    @Override
-    protected void onItemSelect(BuildingDTO item) {
-        if ((item != null) && (item.getPrimaryKey() != null)) {
-            AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Building.class, item.getPrimaryKey()));
-        }
+        ListerUtils.bind(lister)//@formatter:off
+            .columnDescriptors(DEFAULT_COLUMN_DESCRIPTORS)
+            .service(GWT.<BuildingCrudService> create(BuildingCrudService.class))
+            .setupable(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey()))
+            .userSettingsProvider(new Provider<ListerUserSettings>() {
+                @Override
+                public ListerUserSettings get() {
+                    return getMetadata().buildingListerSettings();
+                }
+             })
+            .onColumnSelectionChanged(new Command() {
+                @Override
+                public void execute() {
+                    saveMetadata();
+                }
+            })
+            .onItemSelectedCommand(new ItemSelectCommand<BuildingDTO>() {                
+                @Override
+                public void execute(BuildingDTO item) {
+                    AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(item.getInstanceValueClass()).formViewerPlace(item.getPrimaryKey()));                    
+                }
+            })
+            .init();//@formatter:on       
+        return lister;
     }
 
 }

@@ -17,8 +17,8 @@ import java.util.Arrays;
 
 import com.propertyvista.domain.dashboard.gadgets.type.AccessDeniedGagetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ApplicationsGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.CollectionsGadgetMetadata;
@@ -39,7 +39,6 @@ import com.propertyvista.domain.dashboard.gadgets.type.demo.LineChartGadgetMetad
 import com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2DGadgetMetadata;
 import com.propertyvista.server.common.gadgets.defaultsettings.ArrearsStatusGadgetMetadataDefaultSettings;
 import com.propertyvista.server.common.gadgets.defaultsettings.ArrearsYOYAnalysisChartGadgetMetadataDefaultSettings;
-import com.propertyvista.server.common.gadgets.defaultsettings.BuildingListerGadgetMetadataDefaultSettings;
 import com.propertyvista.server.common.gadgets.defaultsettings.GadgetMetadataCommonDefaultSettings;
 import com.propertyvista.server.common.gadgets.defaultsettings.PaymentRecordsGadgetMetadataDefaultSettings;
 import com.propertyvista.server.common.gadgets.defaultsettings.PaymentsSummaryGadgetMetadataDefaultSettings;
@@ -74,7 +73,7 @@ public final class GadgetMetadataRepository extends GadgetMetadataRepositoryBase
                 bind(ApplicationsGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
                 
                 // STUPID GADGETS
-                bind(BuildingListerGadgetMetadata.class, BuildingListerGadgetMetadataDefaultSettings.class),
+                bind(BuildingListerGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
                 
                 // DEMO GADGETS (in lexicographic order)
                 bind(BarChart2DGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),

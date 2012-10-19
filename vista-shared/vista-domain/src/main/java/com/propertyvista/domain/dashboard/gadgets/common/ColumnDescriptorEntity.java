@@ -17,7 +17,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 /**
- * Entity for persisting state of table columns in lister based gadgets.
+ * Entity for persisting state of table columns in lister based gadgets or for transferring state of columns from client to the server.
  * 
  * @author artyom
  * 

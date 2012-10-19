@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
+import com.propertyvista.domain.dashboard.gadgets.util.ColumnUserSettings;
 
 public class ColumnDescriptorConverter {
 
@@ -86,4 +87,12 @@ public class ColumnDescriptorConverter {
         }
         return descriptors;
     }
+
+    public static <E extends IEntity> ColumnUserSettings getUserSettings(ColumnDescriptor columnDescriptor) {
+        ColumnUserSettings entity = EntityFactory.create(ColumnUserSettings.class);
+        entity.property().setValue(columnDescriptor.getColumnName());
+        entity.isVisible().setValue(columnDescriptor.isVisible());
+        return entity;
+    }
+
 }
