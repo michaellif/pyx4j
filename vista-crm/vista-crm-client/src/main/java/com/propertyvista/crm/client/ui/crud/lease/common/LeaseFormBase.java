@@ -32,16 +32,14 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     protected static final I18n i18n = I18n.get(LeaseFormBase.class);
 
-    private Tab chargesTab, depositsTab;
+    private Tab chargesTab;
 
     protected LeaseFormBase(Class<DTO> clazz) {
         super(clazz, true);
     }
 
-    @SuppressWarnings("unchecked")
     protected void createCommonContent() {
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
-        depositsTab = addTab(((LeaseViewerViewBase<DTO>) getParentView()).getDepositListerView().asWidget(), i18n.tr("Deposits"));
         chargesTab = addTab(createChargesTab(i18n.tr("Charges")));
     }
 
@@ -50,7 +48,6 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         super.onValueSet(populate);
 
         setTabVisible(chargesTab, getValue().status().getValue().isDraft());
-        setTabVisible(depositsTab, !getValue().status().getValue().isDraft());
 
         get(proto().approvalDate()).setVisible(!getValue().approvalDate().isNull());
 

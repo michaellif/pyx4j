@@ -25,6 +25,7 @@ import com.propertyvista.common.client.ui.components.editors.dto.InfoViewForm;
 import com.propertyvista.common.client.ui.components.folders.ApplicationStatusFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
+import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
@@ -65,9 +66,11 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         }
 
         // show processing result:
-        get(proto().leaseApplication().decidedBy()).setVisible(getValue().leaseApplication().status().getValue().isProcessed());
-        get(proto().leaseApplication().decisionDate()).setVisible(getValue().leaseApplication().status().getValue().isProcessed());
-        get(proto().leaseApplication().decisionReason()).setVisible(getValue().leaseApplication().status().getValue().isProcessed());
+        LeaseApplication.Status status = getValue().leaseApplication().status().getValue();
+
+        get(proto().leaseApplication().decidedBy()).setVisible(status.isProcessed());
+        get(proto().leaseApplication().decisionDate()).setVisible(status.isProcessed());
+        get(proto().leaseApplication().decisionReason()).setVisible(status.isProcessed());
     }
 
     private FormFlexPanel createInfoTab() {

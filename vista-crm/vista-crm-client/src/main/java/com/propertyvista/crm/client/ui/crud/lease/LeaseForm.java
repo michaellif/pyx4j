@@ -24,7 +24,7 @@ import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
-    private Tab adjustmentsTab, billsTab, paymentsTab, financialTab;
+    private Tab depositsTab, adjustmentsTab, billsTab, paymentsTab, financialTab;
 
     public LeaseForm() {
         super(LeaseDTO.class);
@@ -34,6 +34,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     public void createTabs() {
         createCommonContent();
 
+        depositsTab = addTab(((LeaseViewerView) getParentView()).getDepositListerView().asWidget(), i18n.tr("Deposits"));
         adjustmentsTab = addTab(((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(), i18n.tr("Adjustments"));
         billsTab = addTab(((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
         paymentsTab = addTab(((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
@@ -44,6 +45,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
+        setTabVisible(depositsTab, !getValue().status().getValue().isDraft());
         setTabVisible(adjustmentsTab, !getValue().status().getValue().isDraft());
         setTabVisible(billsTab, !getValue().status().getValue().isDraft());
         setTabVisible(paymentsTab, !getValue().status().getValue().isDraft());

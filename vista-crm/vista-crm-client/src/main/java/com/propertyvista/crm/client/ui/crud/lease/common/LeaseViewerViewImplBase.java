@@ -18,31 +18,23 @@ import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleLister;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerViewImplBase<DTO> implements LeaseViewerViewBase<DTO> {
 
     private static final I18n i18n = I18n.get(LeaseViewerViewImpl.class);
 
-    protected final IListerView<DepositLifecycleDTO> depositLister;
-
     protected final MenuItem viewFutureTerm;
 
     public LeaseViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         super(placeClass, true);
-
-        depositLister = new ListerInternalViewImplBase<DepositLifecycleDTO>(new DepositLifecycleLister());
 
         Button viewsButton = new Button(i18n.tr("View Term"));
         Button.ButtonMenuBar viewsMenu = viewsButton.createMenu();
@@ -85,11 +77,6 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
             }
         });
         viewsMenu.addItem(viewHistoricTerms);
-    }
-
-    @Override
-    public IListerView<DepositLifecycleDTO> getDepositListerView() {
-        return depositLister;
     }
 
     @Override

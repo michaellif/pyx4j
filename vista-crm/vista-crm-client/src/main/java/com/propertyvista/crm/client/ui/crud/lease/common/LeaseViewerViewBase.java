@@ -18,11 +18,9 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseViewerViewBase<DTO extends LeaseDTO> extends IViewerView<DTO> {
@@ -33,6 +31,4 @@ public interface LeaseViewerViewBase<DTO extends LeaseDTO> extends IViewerView<D
 
         void viewTerm(LeaseTerm leaseTermId);
     }
-
-    IListerView<DepositLifecycleDTO> getDepositListerView();
 }

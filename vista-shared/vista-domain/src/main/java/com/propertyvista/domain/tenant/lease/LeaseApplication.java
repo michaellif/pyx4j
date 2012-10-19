@@ -98,6 +98,7 @@ public interface LeaseApplication extends IEntity {
 
     Employee decidedBy();
 
+    @ToString(index = 1)
     IPrimitive<LogicalDate> decisionDate();
 
     IPrimitive<String> decisionReason();

@@ -31,6 +31,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
@@ -49,20 +50,25 @@ import com.propertyvista.crm.client.ui.crud.billing.bill.BillLister;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> implements LeaseViewerView {
 
     private static final I18n i18n = I18n.get(LeaseViewerViewImpl.class);
+
+    private final IListerView<DepositLifecycleDTO> depositLister;
 
     private final IListerView<BillDataDTO> billLister;
 
@@ -96,13 +102,14 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem viewOfferedTerms;
 
+    private final MenuItem viewApplication;
+
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
 
+        depositLister = new ListerInternalViewImplBase<DepositLifecycleDTO>(new DepositLifecycleLister());
         billLister = new ListerInternalViewImplBase<BillDataDTO>(new BillLister());
-
         paymentLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentLister());
-
         adjustmentLister = new ListerInternalViewImplBase<LeaseAdjustment>(new LeaseAdjustmentLister());
 
         // set main form here:
@@ -243,6 +250,14 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addAction(cancelAction);
 
+        viewApplication = new MenuItem(i18n.tr("View Application"), new Command() {
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(getForm().getValue().getPrimaryKey()));
+            }
+        });
+        addAction(viewApplication);
+
         // Renewing stuff : ---------------------------------------------------------------------------------------------------
 
         renewButton = new Button(i18n.tr("Renew"));
@@ -298,6 +313,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(completeAction, false);
         setActionVisible(closeAction, false);
         setActionVisible(cancelAction, false);
+        setActionVisible(viewApplication, false);
+
         super.reset();
     }
 
@@ -305,25 +322,29 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     public void populate(LeaseDTO value) {
         super.populate(value);
 
-        Status status = value.status().getValue();
+        Lease.Status status = value.status().getValue();
 
         // set buttons state:
-        if (!value.unit().isNull()) {
-            CompletionType completion = value.completion().getValue();
+        CompletionType completion = value.completion().getValue();
 
-            setActionVisible(sendMailAction, true);
-            setActionVisible(runBillAction, status.isCurrent());
-            setActionVisible(noticeAction, status == Status.Active && completion == null);
-            setActionVisible(cancelNoticeAction, completion == CompletionType.Notice && !status.isFormer());
-            setActionVisible(evictAction, status == Status.Active && completion == null);
-            setActionVisible(cancelEvictAction, completion == CompletionType.Eviction && !status.isFormer());
-            setActionVisible(activateAction, status == Status.ExistingLease);
-            setActionVisible(completeAction, status == Status.Active && completion != null);
-            setActionVisible(closeAction, status == Status.Completed);
-            setActionVisible(cancelAction, !status.isFormer());
+        setActionVisible(sendMailAction, true);
+        setActionVisible(runBillAction, status.isCurrent());
+        setActionVisible(noticeAction, status == Status.Active && completion == null);
+        setActionVisible(cancelNoticeAction, completion == CompletionType.Notice && !status.isFormer());
+        setActionVisible(evictAction, status == Status.Active && completion == null);
+        setActionVisible(cancelEvictAction, completion == CompletionType.Eviction && !status.isFormer());
+        setActionVisible(activateAction, status == Status.ExistingLease);
+        setActionVisible(completeAction, status == Status.Active && completion != null);
+        setActionVisible(closeAction, status == Status.Completed);
+        setActionVisible(cancelAction, !status.isFormer());
+        setActionVisible(viewApplication, !value.leaseApplication().status().isNull());
 
-            renewButton.setVisible(status == Status.Active && completion == null && value.nextTerm().isNull());
-        }
+        renewButton.setVisible(status == Status.Active && completion == null && value.nextTerm().isNull());
+    }
+
+    @Override
+    public IListerView<DepositLifecycleDTO> getDepositListerView() {
+        return depositLister;
     }
 
     @Override

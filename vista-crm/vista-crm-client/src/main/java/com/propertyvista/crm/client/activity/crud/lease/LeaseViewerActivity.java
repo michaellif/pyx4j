@@ -33,6 +33,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
+import com.propertyvista.crm.client.activity.crud.lease.common.deposit.DepositLifecycleListerActivity;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -55,6 +56,8 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     private static final I18n i18n = I18n.get(LeaseViewerActivity.class);
 
+    private final DepositLifecycleListerActivity depositLister;
+
     private final IListerView.Presenter<BillDataDTO> billLister;
 
     private final IListerView.Presenter<PaymentRecordDTO> paymentLister;
@@ -65,6 +68,8 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     public LeaseViewerActivity(CrudAppPlace place) {
         super(place, LeaseViewFactory.instance(LeaseViewerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class));
+
+        depositLister = new DepositLifecycleListerActivity(place, ((LeaseViewerView) getView()).getDepositListerView());
 
         billLister = new ListerActivityBase<BillDataDTO>(place, ((LeaseViewerView) getView()).getBillListerView(),
                 GWT.<BillCrudService> create(BillCrudService.class), BillDataDTO.class);
@@ -78,6 +83,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void onStop() {
+        ((AbstractActivity) depositLister).onStop();
         ((AbstractActivity) billLister).onStop();
         ((AbstractActivity) paymentLister).onStop();
         ((AbstractActivity) leaseAdjustmentLister).onStop();
@@ -88,9 +94,17 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     protected void onPopulateSuccess(LeaseDTO result) {
         super.onPopulateSuccess(result);
 
-        populateBills(currentValue = result);
+        currentValue = result;
+
+        populateDeposits(result);
+        populateBills(result);
         populatePayments(result);
         populateLeaseAdjustments(result);
+    }
+
+    protected void populateDeposits(Lease result) {
+        depositLister.setParent(result.billingAccount().getPrimaryKey());
+        depositLister.populate();
     }
 
     protected void populateBills(Lease result) {

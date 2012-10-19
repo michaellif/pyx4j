@@ -24,6 +24,7 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -53,6 +54,8 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void createOffer(LeaseTerm.Type type);
     }
+
+    IListerView<DepositLifecycleDTO> getDepositListerView();
 
     IListerView<BillDataDTO> getBillListerView();
 

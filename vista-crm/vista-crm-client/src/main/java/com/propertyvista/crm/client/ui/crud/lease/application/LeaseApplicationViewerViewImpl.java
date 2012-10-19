@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -52,6 +53,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     private final MenuItem declineAction;
 
     private final MenuItem cancelAction;
+
+    private final MenuItem viewLease;
 
     private static final String INVITE = i18n.tr("Invite");
 
@@ -186,6 +189,14 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             }
         });
         addAction(cancelAction);
+
+        viewLease = new MenuItem(i18n.tr("View Lease"), new Command() {
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease().formViewerPlace(getForm().getValue().getPrimaryKey()));
+            }
+        });
+        addAction(viewLease);
     }
 
     @Override
@@ -197,6 +208,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(moreInfoAction, false);
         setActionVisible(declineAction, false);
         setActionVisible(cancelAction, false);
+        setActionVisible(viewLease, false);
+
         super.reset();
     }
 
@@ -207,15 +220,14 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         Status status = value.leaseApplication().status().getValue();
 
         // set buttons state:
-        if (!value.unit().isNull()) {
-            setActionVisible(onlineApplication, status == Status.Created);
-            setActionVisible(inviteAction, status == Status.OnlineApplication);
-            setActionVisible(checkAction, status.isDraft());
-            setActionVisible(approveAction, status.isDraft());
-            setActionVisible(moreInfoAction, status.isDraft() && status != Status.Created);
-            setActionVisible(declineAction, status.isDraft());
-            setActionVisible(cancelAction, status != Status.Cancelled);
-        }
+        setActionVisible(onlineApplication, status == Status.Created);
+        setActionVisible(inviteAction, status == Status.OnlineApplication);
+        setActionVisible(checkAction, status.isDraft());
+        setActionVisible(approveAction, status.isDraft());
+        setActionVisible(moreInfoAction, status.isDraft() && status != Status.Created);
+        setActionVisible(declineAction, status.isDraft());
+        setActionVisible(cancelAction, status != Status.Cancelled);
+        setActionVisible(viewLease, status.isCurrent());
     }
 
     private abstract class ActionBox extends ReasonBox {
