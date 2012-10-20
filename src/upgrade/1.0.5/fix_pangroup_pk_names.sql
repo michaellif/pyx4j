@@ -76,4 +76,4 @@ BEGIN TRANSACTION;
         SELECT * FROM _dba_.fix_pangroup_pk_names();
         SET client_min_messages = 'NOTICE';
         DROP FUNCTION _dba_.fix_pangroup_pk_names();
--- COMMIT;
+COMMIT;
