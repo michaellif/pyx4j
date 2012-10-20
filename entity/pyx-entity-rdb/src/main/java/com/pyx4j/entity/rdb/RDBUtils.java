@@ -186,7 +186,7 @@ public class RDBUtils implements Closeable {
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient() || (entityClass.getAnnotation(AbstractEntity.class) != null) || (entityClass.getAnnotation(AbstractEntity.class) != null)) {
+            if (meta.isTransient() || (entityClass.getAnnotation(AbstractEntity.class) != null) || (entityClass.getAnnotation(EmbeddedEntity.class) != null)) {
                 continue;
             }
             if (srv.isTableExists(meta.getEntityClass())) {
@@ -206,7 +206,7 @@ public class RDBUtils implements Closeable {
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient() || (entityClass.getAnnotation(AbstractEntity.class) != null) || (entityClass.getAnnotation(AbstractEntity.class) != null)) {
+            if (meta.isTransient() || (entityClass.getAnnotation(AbstractEntity.class) != null) || (entityClass.getAnnotation(EmbeddedEntity.class) != null)) {
                 continue;
             }
             if (srv.isTableExists(meta.getEntityClass())) {
@@ -226,7 +226,7 @@ public class RDBUtils implements Closeable {
             }
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null || entityClass.getAnnotation(EmbeddedEntity.class) != null) {
+            if (meta.isTransient() || (entityClass.getAnnotation(AbstractEntity.class) != null) || (entityClass.getAnnotation(EmbeddedEntity.class) != null)) {
                 continue;
             }
             if (!EntityPersistenceServiceRDB.allowNamespaceUse(entityClass)) {
@@ -247,7 +247,7 @@ public class RDBUtils implements Closeable {
             }
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null || entityClass.getAnnotation(EmbeddedEntity.class) != null) {
+            if (meta.isTransient() || (entityClass.getAnnotation(AbstractEntity.class) != null) || (entityClass.getAnnotation(EmbeddedEntity.class) != null)) {
                 continue;
             }
             Table table = entityClass.getAnnotation(Table.class);
@@ -266,7 +266,7 @@ public class RDBUtils implements Closeable {
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null) {
+            if (meta.isTransient() || (entityClass.getAnnotation(AbstractEntity.class) != null) || (entityClass.getAnnotation(EmbeddedEntity.class) != null)) {
                 continue;
             }
             if (!EntityPersistenceServiceRDB.allowNamespaceUse(entityClass)) {
