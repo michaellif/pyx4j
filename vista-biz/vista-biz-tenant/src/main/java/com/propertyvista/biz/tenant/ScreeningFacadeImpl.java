@@ -140,7 +140,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         PersonScreening screening = retrivePersonScreening(leaseParticipant.leaseCustomer().customer());
 
         PersonCreditCheck pcc = EntityFactory.create(PersonCreditCheck.class);
-        pcc.amountCheked().setValue(rentAmount);
+        pcc.amountChecked().setValue(rentAmount);
         pcc.screening().set(screening);
         pcc.createdBy().set(currentUserEmployee);
 

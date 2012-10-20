@@ -319,7 +319,7 @@ public class EquifaxModelMapper {
             XmlCreator.addParameter(EmploymentStatus.NotAsked, parameters);
         }
 
-        XmlCreator.addParameter(new MonthlyHousingCosts(pcc.amountCheked().getValue().intValue()), parameters);
+        XmlCreator.addParameter(new MonthlyHousingCosts(pcc.amountChecked().getValue().intValue()), parameters);
         //XmlCreator.addParameter(new MonthlyCostsOther(300), parameters);
 
         if (!pcc.screening().version().currentAddress().moveInDate().isNull()) {

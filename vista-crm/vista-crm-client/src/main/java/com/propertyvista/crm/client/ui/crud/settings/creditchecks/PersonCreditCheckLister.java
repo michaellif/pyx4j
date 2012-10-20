@@ -33,7 +33,7 @@ public class PersonCreditCheckLister extends ListerBase<PersonCreditCheckDTO> {
                 new MemberColumnDescriptor.Builder(proto().createdBy().name()).title(i18n.tr("Created By")).build(),
                 new MemberColumnDescriptor.Builder(proto().createdBy().name().firstName()).searchableOnly().build(),
                 new MemberColumnDescriptor.Builder(proto().createdBy().name().lastName()).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().amountCheked()).build(),
+                new MemberColumnDescriptor.Builder(proto().amountChecked()).build(),
                 new MemberColumnDescriptor.Builder(proto().riskCode()).build(),
                 new MemberColumnDescriptor.Builder(proto().creditCheckResult()).build(),
                 new MemberColumnDescriptor.Builder(proto().amountApproved()).build(),

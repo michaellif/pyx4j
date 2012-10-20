@@ -223,7 +223,7 @@ public class ScreeningGenerator {
             pcc.backgroundCheckPolicy().collection().setValue(RandomUtil.randomEnum(BjccEntry.class));
             pcc.backgroundCheckPolicy().chargeOff().setValue(RandomUtil.randomEnum(BjccEntry.class));
 
-            pcc.amountCheked().setValue(BigDecimal.valueOf(500 + RandomUtil.randomDouble(500)));
+            pcc.amountChecked().setValue(BigDecimal.valueOf(500 + RandomUtil.randomDouble(500)));
 
             List<CreditCheckResult> options = new ArrayList<CreditCheckResult>(EnumSet.allOf(CreditCheckResult.class));
             options.remove(CreditCheckResult.Error);
@@ -234,7 +234,7 @@ public class ScreeningGenerator {
 
             switch (pcc.creditCheckResult().getValue()) {
             case Accept:
-                pcc.amountApproved().setValue(BigDecimal.valueOf(pcc.amountCheked().getValue().doubleValue() - RandomUtil.randomDouble(500)));
+                pcc.amountApproved().setValue(BigDecimal.valueOf(pcc.amountChecked().getValue().doubleValue() - RandomUtil.randomDouble(500)));
                 break;
             default:
                 pcc.reason().setValue(CommonsGenerator.lipsumShort());

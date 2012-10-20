@@ -43,7 +43,7 @@ public class PersonCreditCheckForm extends CrmEntityForm<PersonCreditCheckDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheckDate())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(
                 inject(proto().createdBy(), new CEntityCrudHyperlink<Employee>(new CrmSiteMap.Organization.Employee()))).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amountCheked())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amountChecked())).build());
 
         content.setH1(++row, 0, 1, i18n.tr("Results From Equifax"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().riskCode())).build());

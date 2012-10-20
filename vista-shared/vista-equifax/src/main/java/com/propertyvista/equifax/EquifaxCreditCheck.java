@@ -169,7 +169,7 @@ public class EquifaxCreditCheck {
             if (prc == null) {
                 creditCheckResult = CreditCheckResult.Error;
             } else {
-                pcc.amountApproved().setValue(pcc.amountCheked().getValue().multiply(new BigDecimal(prc)).divide(new BigDecimal("100")));
+                pcc.amountApproved().setValue(pcc.amountChecked().getValue().multiply(new BigDecimal(prc)).divide(new BigDecimal("100")));
             }
         }
 
