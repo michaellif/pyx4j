@@ -50,7 +50,7 @@ public interface PaymentFeesDTO extends IEntity {
 
     IPrimitive<BigDecimal> cheque();
 
-    @Caption(name = "ECheque")
+    @Caption(name = "eCheque")
     IPrimitive<BigDecimal> eCheque();
 
     @Caption(name = "EFT")
