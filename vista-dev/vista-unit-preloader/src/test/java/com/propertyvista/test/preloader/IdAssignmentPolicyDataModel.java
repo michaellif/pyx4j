@@ -31,7 +31,7 @@ public class IdAssignmentPolicyDataModel {
     }
 
     public void generate() {
-        policy.itmes().clear();
+        policy.items().clear();
         for (IdTarget target : IdTarget.values()) {
             if (target == IdTarget.accountNumber) {
                 continue;
@@ -41,7 +41,7 @@ public class IdAssignmentPolicyDataModel {
             item.target().setValue(target);
             item.type().setValue(IdAssignmentType.generatedNumber);
 
-            policy.itmes().add(item);
+            policy.items().add(item);
         }
 
         OrganizationPoliciesNode orgNode = EntityFactory.create(OrganizationPoliciesNode.class);

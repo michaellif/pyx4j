@@ -157,7 +157,7 @@ public class ClientPolicyManager {
                     @Override
                     public void onSuccess(IdAssignmentPolicy result) {
                         IdAssignmentItem targetItem = null;
-                        for (IdAssignmentItem item : result.itmes()) {
+                        for (IdAssignmentItem item : result.items()) {
                             if (item.target().getValue() == idTarget) {
                                 targetItem = item;
                                 break;

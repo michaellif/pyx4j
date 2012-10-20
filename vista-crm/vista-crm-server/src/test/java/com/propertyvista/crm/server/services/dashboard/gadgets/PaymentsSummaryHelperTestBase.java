@@ -60,22 +60,22 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
         IdAssignmentPolicy idAssignmentPolicy = EntityFactory.create(IdAssignmentPolicy.class);
         idAssignmentPolicy.node().set(policyNode);
         {
-            IdAssignmentItem leaseAssignmentItem = idAssignmentPolicy.itmes().$();
+            IdAssignmentItem leaseAssignmentItem = idAssignmentPolicy.items().$();
             leaseAssignmentItem.target().setValue(IdTarget.lease);
             leaseAssignmentItem.type().setValue(IdAssignmentType.generatedNumber);
-            idAssignmentPolicy.itmes().add(leaseAssignmentItem);
+            idAssignmentPolicy.items().add(leaseAssignmentItem);
         }
         {
-            IdAssignmentItem tenantAssignmentItem = idAssignmentPolicy.itmes().$();
+            IdAssignmentItem tenantAssignmentItem = idAssignmentPolicy.items().$();
             tenantAssignmentItem.target().setValue(IdTarget.tenant);
             tenantAssignmentItem.type().setValue(IdAssignmentType.generatedNumber);
-            idAssignmentPolicy.itmes().add(tenantAssignmentItem);
+            idAssignmentPolicy.items().add(tenantAssignmentItem);
         }
         {
-            IdAssignmentItem tenantAssignmentItem = idAssignmentPolicy.itmes().$();
+            IdAssignmentItem tenantAssignmentItem = idAssignmentPolicy.items().$();
             tenantAssignmentItem.target().setValue(IdTarget.customer);
             tenantAssignmentItem.type().setValue(IdAssignmentType.generatedNumber);
-            idAssignmentPolicy.itmes().add(tenantAssignmentItem);
+            idAssignmentPolicy.items().add(tenantAssignmentItem);
         }
 
         Persistence.service().persist(idAssignmentPolicy);

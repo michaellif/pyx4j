@@ -29,7 +29,7 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 public interface IdAssignmentPolicy extends Policy {
 
     @Owned
-    IList<IdAssignmentItem> itmes();
+    IList<IdAssignmentItem> items();
 
     /** This is required only to let the persistence engine to create a table */
     @Deprecated

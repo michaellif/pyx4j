@@ -130,7 +130,7 @@ public class AptUnitOccupancyManagerTestBase {
         item.target().setValue(IdTarget.lease);
         item.type().setValue(IdAssignmentType.generatedNumber);
 
-        policy.itmes().add(item);
+        policy.items().add(item);
         Persistence.service().persist(policy);
     }
 

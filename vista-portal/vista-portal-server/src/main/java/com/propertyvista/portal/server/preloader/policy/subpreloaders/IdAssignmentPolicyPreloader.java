@@ -39,7 +39,7 @@ public class IdAssignmentPolicyPreloader extends AbstractPolicyPreloader<IdAssig
             item.target().setValue(target);
             item.type().setValue(IdAssignmentType.generatedNumber);
 
-            policy.itmes().add(item);
+            policy.items().add(item);
         }
 
         log.append(policy.getStringView());

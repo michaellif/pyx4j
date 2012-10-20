@@ -694,7 +694,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             item.target().setValue(target);
             item.type().setValue(IdAssignmentType.generatedNumber);
 
-            policy.itmes().add(item);
+            policy.items().add(item);
         }
 
         Persistence.service().persist(policy);

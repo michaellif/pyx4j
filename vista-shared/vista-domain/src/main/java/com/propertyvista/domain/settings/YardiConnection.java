@@ -15,9 +15,12 @@ package com.propertyvista.domain.settings;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+//TODO implement this, remove Transient 
+@Transient
 public interface YardiConnection extends IEntity {
 
     public enum Platform {
@@ -25,7 +28,7 @@ public interface YardiConnection extends IEntity {
     }
 
     @Caption(name = "Web Service URL")
-    IPrimitive<String> serveviceURL();
+    IPrimitive<String> serviceURL();
 
     @Caption(name = "Web Service User")
     IPrimitive<String> username();

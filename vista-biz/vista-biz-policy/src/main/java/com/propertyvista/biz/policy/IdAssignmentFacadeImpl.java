@@ -160,7 +160,7 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
         }
 
         IdAssignmentItem targetItem = null;
-        for (IdAssignmentItem item : policy.itmes()) {
+        for (IdAssignmentItem item : policy.items()) {
             if (item.target().getValue() == target) {
                 targetItem = item;
                 break;
