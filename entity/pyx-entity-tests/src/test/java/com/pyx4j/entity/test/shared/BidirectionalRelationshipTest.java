@@ -95,8 +95,8 @@ public class BidirectionalRelationshipTest extends InitializerTestBase {
         Assert.assertTrue("Child is still null", m.ownedLeaf().isNull());
     }
 
-    // This function exhibit difference in behavior of Bidirectional reffrences
-    //  The value or @Owner Member Entity Object in child is initialized when you try to assign any value to child object!
+    // This function exhibit difference in behavior of Bidirectional references
+    //  The value or @Owner Member Entity Object in child is initialized when you try to assign any value(even null) to child object!
     public void testOwnedBidirectionalValueInitialization() {
         Master m = EntityFactory.create(Master.class);
         m.name().setValue("m1");
