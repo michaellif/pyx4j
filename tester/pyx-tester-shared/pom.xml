@@ -54,6 +54,13 @@
             <version>${project.version}</version>
 		</dependency>
 
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-tests</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+        
     </dependencies>
 
     <properties>

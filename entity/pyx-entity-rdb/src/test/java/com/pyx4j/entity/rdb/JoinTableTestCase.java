@@ -350,9 +350,12 @@ public abstract class JoinTableTestCase extends DatastoreTestBase {
         OneToOneReadOwner o = EntityFactory.create(OneToOneReadOwner.class);
         o.name().setValue(uniqueString());
         o.testId().setValue(testId);
+
+        // This will initialize child and it will be created
+        //o.child().name().setValue(null);
         srvSave(o, testCaseMethod);
 
-        //Test table initialization
+        //Test child table initialization
         {
             OneToOneReadOwner o1r = srv.retrieve(OneToOneReadOwner.class, o.getPrimaryKey());
             Assert.assertNull("Got child object", o1r.child().getPrimaryKey());
@@ -373,6 +376,24 @@ public abstract class JoinTableTestCase extends DatastoreTestBase {
                 // There are no data e.g. Value is null, consider it Attached
                 Assert.assertEquals("Got child object Attached", AttachLevel.IdOnly, o1r2.child().getAttachLevel());
             }
+        }
+
+        // ----  Child creation even with null values
+
+        OneToOneReadOwner o2 = EntityFactory.create(OneToOneReadOwner.class);
+        o2.name().setValue(uniqueString());
+        o2.testId().setValue(testId);
+
+        // This will initialize child and it will be created
+        o2.child().name().setValue(null);
+        srvSave(o2, testCaseMethod);
+
+        //Test child table initialization
+        {
+            OneToOneReadOwner o2r = srv.retrieve(OneToOneReadOwner.class, o.getPrimaryKey());
+            Assert.assertNotNull("Got child object", o2r.child().getPrimaryKey());
+            // There are no data e.g. Value is null, consider it Attached
+            Assert.assertEquals("Got child object Attached", AttachLevel.IdOnly, o2r.child().getAttachLevel());
         }
 
     }

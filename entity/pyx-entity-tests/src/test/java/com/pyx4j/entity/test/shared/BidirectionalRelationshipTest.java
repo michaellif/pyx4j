@@ -29,6 +29,7 @@ import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Organization;
 import com.pyx4j.entity.test.shared.domain.bidir.Child;
 import com.pyx4j.entity.test.shared.domain.bidir.Master;
+import com.pyx4j.entity.test.shared.domain.ownership.RootEnity;
 import com.pyx4j.entity.test.shared.domain.ownership.creation.ForceCreationOneToOneParentDTO;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyChild;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyParentDTO;
@@ -82,6 +83,28 @@ public class BidirectionalRelationshipTest extends InitializerTestBase {
         m.child().set(c);
         Assert.assertFalse("Master is null", m.isNull());
         Assert.assertFalse("Child is null", c.isNull());
+    }
+
+    public void testOwnedUnidirectionalValueInitialization() {
+        RootEnity m = EntityFactory.create(RootEnity.class);
+        m.name().setValue("m1");
+
+        Assert.assertTrue("Child is null", m.ownedLeaf().isNull());
+
+        m.ownedLeaf().name().setValue(null);
+        Assert.assertTrue("Child is still null", m.ownedLeaf().isNull());
+    }
+
+    // This function exhibit difference in behavior of Bidirectional reffrences
+    //  The value or @Owner Member Entity Object in child is initialized when you try to assign any value to child object!
+    public void testOwnedBidirectionalValueInitialization() {
+        Master m = EntityFactory.create(Master.class);
+        m.name().setValue("m1");
+
+        Assert.assertTrue("Child is null", m.child().isNull());
+
+        m.child().name().setValue(null);
+        Assert.assertFalse("Child is NOT null", m.child().isNull());
     }
 
     public void testOwnedSetValue() {
