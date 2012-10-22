@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
-import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
@@ -56,7 +56,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
                 VistaCrmBehavior.PropertyVistaSupport
         }
 )//@formatter:on
-public interface UnitAvailabilityGadgetMetadata extends ListerGadgetBaseMetadata, BuildingGadget {
+public interface UnitAvailabilityGadgetMetadata extends GadgetMetadata, BuildingGadget {
 
     @I18n
     enum FilterPreset {

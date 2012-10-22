@@ -19,7 +19,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
-import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
@@ -50,7 +50,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
                 VistaCrmBehavior.PropertyVistaSupport
         }        
 )//@formatter:on
-public interface BuildingListerGadgetMetadata extends ListerGadgetBaseMetadata {
+public interface BuildingListerGadgetMetadata extends GadgetMetadata {
 
     @Owned
     ListerUserSettings buildingListerSettings();

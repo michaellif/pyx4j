@@ -34,7 +34,7 @@ public class UnitAvailabilityGadgetMetatadaForm extends CEntityDecoratableForm<U
         FormFlexPanel p = new FormFlexPanel();
         int row = -1;
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pageSize())).build());
+        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitStatusListerSettings().pageSize())).build());
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterPreset())).build());
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
