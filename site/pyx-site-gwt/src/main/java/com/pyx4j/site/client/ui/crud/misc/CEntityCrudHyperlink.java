@@ -20,13 +20,10 @@
  */
 package com.pyx4j.site.client.ui.crud.misc;
 
-import java.text.ParseException;
-
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
-import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -43,17 +40,7 @@ public class CEntityCrudHyperlink<E extends IEntity> extends CEntityHyperlink<E>
                 }
             }
         });
-        setFormat(new IFormat<E>() {
-            @Override
-            public String format(E value) {
-                return getValue().getStringView();
-            }
 
-            @Override
-            public E parse(String string) throws ParseException {
-                return null;
-            }
-        });
     }
 
 }

@@ -50,7 +50,7 @@ public class CHyperlink<E> extends CComponent<E, INativeHyperlink<E>> {
     }
 
     @Override
-    protected NHyperlink<E> createWidget() {
+    protected INativeHyperlink<E> createWidget() {
         NHyperlink<E> widget = new NHyperlink<E>(this);
         return widget;
     }
