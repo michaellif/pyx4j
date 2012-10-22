@@ -17,12 +17,12 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @ToStringFormat("{0} {1,size}")
-public interface File extends IEntity {
+public interface File extends IFile {
 
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     IPrimitive<String> accessKey();
@@ -36,6 +36,7 @@ public interface File extends IEntity {
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     IPrimitive<Integer> cacheVersion();
 
+    @Override
     @ToString(index = 0)
     IPrimitive<String> fileName();
 

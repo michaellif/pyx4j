@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.components.media;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -20,7 +21,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
 
-import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
@@ -33,8 +33,8 @@ public class MediaFileViewDialog extends VerticalPanel implements OkOption {
 
     public void show() {
         Dialog dialog = new Dialog(title, this, this);
-        this.add(new Image(ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaId.toString() + "/"
-                + ThumbnailSize.large.name() + "." + ImageConsts.THUMBNAIL_TYPE));
+        this.add(new Image(GWT.getModuleBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaId.toString() + "/" + ThumbnailSize.large.name() + "."
+                + ImageConsts.THUMBNAIL_TYPE));
         dialog.show();
     }
 

@@ -30,7 +30,6 @@ import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -91,8 +90,6 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
                 utubeEditor.setFormat(new YouTubeVideoIdFormat());
 
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().url()), 25, 10).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file(), new FileUploadHyperlink(CrmMediaFolder.this.isEditable(), imageTarget)),
-                        25, 10).build());
             } else {
                 Command showMediaCommand = new Command() {
                     @Override
@@ -102,8 +99,14 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
                 };
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().youTubeVideoID(), new CHyperlink(showMediaCommand)), 25, 10).build());
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().url(), new CHyperlink(showMediaCommand)), 25, 10).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file(), new CEntityHyperlink(null, showMediaCommand)), 25, 10).build());
             }
+
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file(), new FileUploadHyperlink(imageTarget, new Command() {
+                @Override
+                public void execute() {
+                    showMedia();
+                }
+            })), 25, 10).build());
 
             row = -1;
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().caption()), 15, 10).build());
