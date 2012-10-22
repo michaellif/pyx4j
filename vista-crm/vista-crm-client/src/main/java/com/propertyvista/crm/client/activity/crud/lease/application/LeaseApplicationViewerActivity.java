@@ -19,6 +19,7 @@ import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -96,8 +97,18 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
             public void onSuccess(VoidSerializable result) {
                 if (action.action().getValue() == Action.Approve) {
                     setEntityIdAsCurrentKey();
+                    ((LeaseApplicationViewerView) getView()).reportApplicationApprovalSuccess();
                 }
                 populate();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (action.action().getValue() == Action.Approve & (caught instanceof UserRuntimeException)) {
+                    ((LeaseApplicationViewerView) getView()).reportApplicationApprovalFailure((UserRuntimeException) caught);
+                } else {
+                    super.onFailure(caught);
+                }
             }
         }, action);
     }

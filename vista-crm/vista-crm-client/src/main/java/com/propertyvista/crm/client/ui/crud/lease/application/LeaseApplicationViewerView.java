@@ -15,6 +15,8 @@ package com.propertyvista.crm.client.ui.crud.lease.application;
 
 import java.util.List;
 
+import com.pyx4j.commons.UserRuntimeException;
+
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -38,4 +40,8 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
     void reportInviteUsersActionResult(String message);
 
     void reportCreditCheckActionResult(String message);
+
+    void reportApplicationApprovalSuccess();
+
+    void reportApplicationApprovalFailure(UserRuntimeException caught);
 }

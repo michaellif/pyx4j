@@ -18,6 +18,7 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -258,5 +259,16 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     @Override
     public void reportCreditCheckActionResult(String message) {
         MessageDialog.info(message);
+    }
+
+    @Override
+    public void reportApplicationApprovalSuccess() {
+        MessageDialog.info(i18n.tr("Application has been approved successfully"));
+    }
+
+    @Override
+    public void reportApplicationApprovalFailure(UserRuntimeException caught) {
+        MessageDialog.info(caught.getMessage());
+
     }
 }
