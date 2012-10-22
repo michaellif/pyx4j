@@ -55,6 +55,7 @@ import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.note.NotesAndAttachmentsDTO;
 import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.misc.VistaTODO;
 
 public class NotesAndAttachmentsVisorView extends ScrollPanel {
 
@@ -219,8 +220,11 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                     comp.setViewable(true);
                     content.setWidget(++row, 0, new DecoratorBuilder(comp).build());
 
-                    content.setH3(++row, 0, 1, i18n.tr("Attachments"));
-                    content.setWidget(++row, 0, inject(proto().attachments(), new AttachmentsEditorFolder()));
+                    // TODO Removed for 1.05
+                    if (!VistaTODO.VISTA_2127_Attachments_For_Notes) {
+                        content.setH3(++row, 0, 1, i18n.tr("Attachments"));
+                        content.setWidget(++row, 0, inject(proto().attachments(), new AttachmentsEditorFolder()));
+                    }
 
                     Toolbar tb = new Toolbar();
 

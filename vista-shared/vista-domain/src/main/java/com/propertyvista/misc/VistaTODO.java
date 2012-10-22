@@ -51,4 +51,6 @@ public interface VistaTODO {
     public final boolean UploadedBlobSecurity = true;
 
     public final boolean ApplicationDocumentationPolicyRefacotring = true;
+
+    public final boolean VISTA_2127_Attachments_For_Notes = true;
 }

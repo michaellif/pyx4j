@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -54,6 +55,9 @@ public interface NotesAndAttachments extends IEntity {
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> note();
 
+    // TODO Removed for 1.05
+    // @see VistaTODO.VISTA_2127_Attachments_For_Notes
+    @Transient
     @Owned
     IList<NoteAttachment> attachments();
 

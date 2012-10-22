@@ -15,12 +15,16 @@ package com.propertyvista.domain.note;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.File;
 
+//TODO Removed for 1.05
+// @see VistaTODO.VISTA_2127_Attachments_For_Notes
+@Transient
 public interface NoteAttachment extends IEntity {
 
     @NotNull
