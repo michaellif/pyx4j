@@ -19,8 +19,8 @@ import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.HasCustomizableDateGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("UnitAvailbilitySummaryGadgetMetadata")
@@ -50,6 +50,6 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
                 VistaCrmBehavior.PropertyVistaSupport
         }
 )//@formatter:on
-public interface UnitAvailabilitySummaryGadgetMetadata extends ListerGadgetBaseMetadata, HasCustomizableDateGadgetMetadata, BuildingGadget {
+public interface UnitAvailabilitySummaryGadgetMetadata extends GadgetMetadata, HasCustomizableDateGadgetMetadata, BuildingGadget {
 
 }

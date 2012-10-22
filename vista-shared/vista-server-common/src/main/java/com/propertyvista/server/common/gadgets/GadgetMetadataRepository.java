@@ -43,7 +43,6 @@ import com.propertyvista.server.common.gadgets.defaultsettings.GadgetMetadataCom
 import com.propertyvista.server.common.gadgets.defaultsettings.PaymentRecordsGadgetMetadataDefaultSettings;
 import com.propertyvista.server.common.gadgets.defaultsettings.PaymentsSummaryGadgetMetadataDefaultSettings;
 import com.propertyvista.server.common.gadgets.defaultsettings.UnitAvailabilityGadgetMetadataDefaultSettings;
-import com.propertyvista.server.common.gadgets.defaultsettings.UnitAvailabilitySummaryGadgetMetadataDefaultSettings;
 import com.propertyvista.server.common.gadgets.defaultsettings.UnitTurnoverAnalysisGadgetMetadataDefaultSettings;
 
 public final class GadgetMetadataRepository extends GadgetMetadataRepositoryBase {
@@ -62,7 +61,7 @@ public final class GadgetMetadataRepository extends GadgetMetadataRepositoryBase
                 bind(PaymentsSummaryGadgetMetadata.class, PaymentsSummaryGadgetMetadataDefaultSettings.class),
                 
                 bind(UnitAvailabilityGadgetMetadata.class, UnitAvailabilityGadgetMetadataDefaultSettings.class),
-                bind(UnitAvailabilitySummaryGadgetMetadata.class, UnitAvailabilitySummaryGadgetMetadataDefaultSettings.class),
+                bind(UnitAvailabilitySummaryGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
                 bind(UnitTurnoverAnalysisGadgetMetadata.class, UnitTurnoverAnalysisGadgetMetadataDefaultSettings.class),
                 
                 bind(LeaseExpirationGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
