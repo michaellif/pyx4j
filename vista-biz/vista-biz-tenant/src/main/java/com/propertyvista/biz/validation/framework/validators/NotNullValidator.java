@@ -19,6 +19,7 @@ import java.util.Set;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.validation.framework.MemberValidator;
@@ -29,12 +30,29 @@ public class NotNullValidator implements MemberValidator {
 
     private static final I18n i18n = I18n.get(NotNullValidator.class);
 
+    private final String validationFailedMessage;
+
+    public NotNullValidator() {
+        this(null);
+    }
+
+    public NotNullValidator(String validationFailedMessage) {
+        this.validationFailedMessage = validationFailedMessage;
+    }
+
     @Override
     public Set<ValidationFailure> validate(IObject<?> member) {
         if (member.isNull()) {
-            String caption = (member instanceof IEntity) ? ((IEntity) member).getEntityMeta().getCaption() : member.getMeta().getCaption();
+            String message = null;
+            if (validationFailedMessage != null) {
+                message = validationFailedMessage;
+            } else {
+                MemberMeta metadata = member.getMeta();
+                String caption = metadata != null ? metadata.getCaption() : ((IEntity) member).getEntityMeta().getCaption();
+                message = i18n.tr("{0} is mandatory", caption);
+            }
             Set<ValidationFailure> result = new HashSet<ValidationFailure>();
-            result.add(new SimpleValidationFailure(member, i18n.tr("{0} is mandatory", caption)));
+            result.add(new SimpleValidationFailure(member, message));
             return result;
         } else {
             return Collections.emptySet();
