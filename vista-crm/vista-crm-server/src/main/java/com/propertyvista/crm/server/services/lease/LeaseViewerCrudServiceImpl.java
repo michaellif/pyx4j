@@ -42,7 +42,6 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
-import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseTermDTO;
 
@@ -100,15 +99,12 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         if ((lease == null) || (lease.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
         }
-        if (!Lease.Status.current().contains(lease.status().getValue())) {
-            throw new UserRuntimeException(i18n.tr("Can't send tenant email for inactive Lease2"));
+        if (!lease.status().getValue().isCurrent()) {
+            throw new UserRuntimeException(i18n.tr("Can't send tenant email for inactive Lease"));
         }
         if (users.isEmpty()) {
             throw new UserRuntimeException(i18n.tr("No customer was selected to send email"));
         }
-
-        MasterOnlineApplication app = lease.leaseApplication().onlineApplication();
-        Persistence.service().retrieve(app);
 
         // check that all lease participants have an associated user entity (email)
         for (LeaseParticipant<?> user : users) {

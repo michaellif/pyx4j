@@ -327,8 +327,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         // set buttons state:
         CompletionType completion = value.completion().getValue();
 
-        setActionVisible(viewApplication, !value.leaseApplication().status().isNull());
-        setActionVisible(sendMailAction, true);
+        setActionVisible(viewApplication, !value.leaseApplication().isNull());
+        setActionVisible(sendMailAction, status.isCurrent());
         setActionVisible(runBillAction, status.isCurrent());
         setActionVisible(noticeAction, status == Status.Active && completion == null);
         setActionVisible(cancelNoticeAction, completion == CompletionType.Notice && !status.isFormer());
