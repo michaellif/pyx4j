@@ -29,9 +29,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -111,73 +110,41 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResourc
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale(), locale), 10).build());
-            if (PortalImageResourceFolder.this.isEditable()) {
 
-                CEntityHyperlink<File> link = new CEntityHyperlink<File>(null, new Command() {
-                    @Override
-                    public void execute() {
-                        SiteImageResourceProvider provider = new SiteImageResourceProvider();
-                        provider.selectResource(new AsyncCallback<SiteImageResource>() {
-                            @Override
-                            public void onFailure(Throwable caught) {
-                                MessageDialog.error(i18n.tr("Action Failed"), caught.getMessage());
-                            }
-
-                            @Override
-                            public void onSuccess(SiteImageResource rc) {
-                                getValue().imageResource().set(rc);
-                                thumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().imageResource()));
-                            }
-                        });
-                    }
-                });
-                link.setFormat(new IFormat<File>() {
-                    @Override
-                    public String format(File value) {
-                        if (value.blobKey().isNull()) {
-                            return i18n.tr("Add Image");
-                        } else {
-                            return i18n.tr("Change Image");
+            CFile<File> link = new CFile<File>(new Command() {
+                @Override
+                public void execute() {
+                    OkDialog dialog = new OkDialog(getValue().imageResource().fileName().getValue()) {
+                        @Override
+                        public boolean onClickOk() {
+                            return true;
                         }
-                    }
+                    };
+                    dialog.setBody(new Image(MediaUtils.createSiteImageResourceUrl(getValue().imageResource())));
+                    dialog.center();
+                }
+            }) {
 
-                    @Override
-                    public File parse(String string) {
-                        return null;
-                    }
-                });
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().imageResource(), link), 10).build());
-            } else {
-                CEntityHyperlink<File> link = new CEntityHyperlink<File>(null, new Command() {
-                    @Override
-                    public void execute() {
-                        OkDialog dialog = new OkDialog(getValue().imageResource().fileName().getValue()) {
-                            @Override
-                            public boolean onClickOk() {
-                                return true;
-                            }
-                        };
-                        dialog.setBody(new Image(MediaUtils.createSiteImageResourceUrl(getValue().imageResource())));
-                        dialog.center();
-                    }
-                });
-                link.setFormat(new IFormat<File>() {
-                    @Override
-                    public String format(File value) {
-                        if (value.blobKey().isNull()) {
-                            return i18n.tr("Not set");
-                        } else {
-                            return value.fileName().getStringView();
+                @Override
+                public void showFileSelectionDialog() {
+                    SiteImageResourceProvider provider = new SiteImageResourceProvider();
+                    provider.selectResource(new AsyncCallback<SiteImageResource>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            MessageDialog.error(i18n.tr("Action Failed"), caught.getMessage());
                         }
-                    }
 
-                    @Override
-                    public File parse(String string) {
-                        return null;
-                    }
-                });
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().imageResource(), link), 10).build());
-            }
+                        @Override
+                        public void onSuccess(SiteImageResource rc) {
+                            setValue(rc);
+                            thumb.setUrl(MediaUtils.createSiteImageResourceUrl(PortalImageResourceEditor.this.getValue().imageResource()));
+                        }
+                    });
+                }
+            };
+
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().imageResource(), link), 20).build());
+
             main.setWidget(0, 1, thumb);
             main.getFlexCellFormatter().setRowSpan(0, 1, row + 1);
 
