@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
-import static com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter.makeMapper;
-
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -59,31 +57,31 @@ import com.propertyvista.server.jobs.TaskRunner;
 
 public class PaymentReportServiceImpl implements PaymentReportService {
 
-    private final EntityDtoBinder<PaymentRecord, PaymentRecordForReportDTO> dtoBinder;
+    private EntityDtoBinder<PaymentRecord, PaymentRecordForReportDTO> dtoBinder;
 
-    private final EntityDto2DboCriteriaConverter<PaymentRecord, PaymentRecordForReportDTO> dto2dboCriteriaConverter;
+    private EntityDto2DboCriteriaConverter<PaymentRecord, PaymentRecordForReportDTO> dto2dboCriteriaConverter;
 
     public PaymentReportServiceImpl() {
 
-        dtoBinder = new EntityDtoBinder<PaymentRecord, PaymentRecordForReportDTO>(PaymentRecord.class, PaymentRecordForReportDTO.class) {
-            @Override
-            protected void bind() {
-                bind(dtoProto.merchantAccount().accountNumber(), dboProto.merchantAccount().accountNumber());
-                bind(dtoProto.billingAccount().lease().unit().building().propertyCode(), dboProto.billingAccount().lease().unit().building().propertyCode());
-                bind(dtoProto.billingAccount().lease().leaseId(), dboProto.billingAccount().lease().leaseId());
-                bind(dtoProto.paymentMethod().type(), dboProto.paymentMethod().type());
-                bind(dtoProto.paymentMethod().customer(), dboProto.paymentMethod().customer());
-                bind(dtoProto.paymentStatus(), dboProto.paymentStatus());
-                bind(dtoProto.createdDate(), dboProto.createdDate());
-                bind(dtoProto.receivedDate(), dboProto.receivedDate());
-                bind(dtoProto.finalizeDate(), dboProto.finalizeDate());
-                bind(dtoProto.targetDate(), dboProto.targetDate());
-                bind(dtoProto.amount(), dboProto.amount());
-            }
-        };
-
-        dto2dboCriteriaConverter = new EntityDto2DboCriteriaConverter<PaymentRecord, PaymentRecordForReportDTO>(PaymentRecord.class,
-                PaymentRecordForReportDTO.class, makeMapper(dtoBinder));
+//        dtoBinder = new EntityDtoBinder<PaymentRecord, PaymentRecordForReportDTO>(PaymentRecord.class, PaymentRecordForReportDTO.class) {
+//            @Override
+//            protected void bind() {
+//                bind(dtoProto.merchantAccount().merchantAccount(), dboProto.merchantAccount().accountNumber());
+//                bind(dtoProto.billingAccount().lease().unit().building().propertyCode(), dboProto.billingAccount().lease().unit().building().propertyCode());
+//                bind(dtoProto.billingAccount().lease().leaseId(), dboProto.billingAccount().lease().leaseId());
+//                bind(dtoProto.paymentMethod().type(), dboProto.paymentMethod().type());
+//                bind(dtoProto.paymentMethod().customer(), dboProto.paymentMethod().customer());
+//                bind(dtoProto.paymentStatus(), dboProto.paymentStatus());
+//                bind(dtoProto.createdDate(), dboProto.createdDate());
+//                bind(dtoProto.receivedDate(), dboProto.receivedDate());
+//                bind(dtoProto.finalizeDate(), dboProto.finalizeDate());
+//                bind(dtoProto.targetDate(), dboProto.targetDate());
+//                bind(dtoProto.amount(), dboProto.amount());
+//            }
+//        };
+//
+//        dto2dboCriteriaConverter = new EntityDto2DboCriteriaConverter<PaymentRecord, PaymentRecordForReportDTO>(PaymentRecord.class,
+//                PaymentRecordForReportDTO.class, makeMapper(dtoBinder));
     }
 
     @Override

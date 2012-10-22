@@ -13,11 +13,45 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.payments;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.Customer;
 
 @Transient
-public interface PaymentRecordForReportDTO extends PaymentRecord {
+public interface PaymentRecordForReportDTO extends IEntity {
+
+    IPrimitive<String> merchantAccount();
+
+    IPrimitive<String> building();
+
+    IPrimitive<String> lease();
+
+    Customer tenant();
+
+    IPrimitive<PaymentType> method();
+
+    IPrimitive<PaymentRecord.PaymentStatus> status();
+
+    IPrimitive<LogicalDate> lastStatusChangeDate();
+
+    IPrimitive<LogicalDate> created();
+
+    IPrimitive<LogicalDate> received();
+
+    IPrimitive<LogicalDate> finalized();
+
+    IPrimitive<LogicalDate> target();
+
+    IPrimitive<BigDecimal> amount();
+
+    Building buildingFilterAnchor();
 
 }
