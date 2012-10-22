@@ -26,16 +26,17 @@ import java.util.concurrent.atomic.AtomicReference;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.test.shared.domain.join.OneToOneReadOwner;
 import com.pyx4j.entity.test.shared.domain.join.OneToOneReadOwnerDTO;
 import com.pyx4j.tester.server.crud.DBTestsSetup;
 import com.pyx4j.tester.shared.crud.oneToOne.OneToOneDTOCrudService;
+import com.pyx4j.unit.server.AsyncCallbackAssertion;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
@@ -56,7 +57,7 @@ public class TestCrudServiceDTOImpl extends TestCase {
     public void testPersit() {
         String testId = UUID.randomUUID().toString();
 
-        OneToOneReadOwnerDTO o = EntityFactory.create(OneToOneReadOwnerDTO.class);
+        final OneToOneReadOwnerDTO o = EntityFactory.create(OneToOneReadOwnerDTO.class);
         o.name().setValue(UUID.randomUUID().toString());
         o.testId().setValue(testId);
 
@@ -64,16 +65,13 @@ public class TestCrudServiceDTOImpl extends TestCase {
 
         final AtomicReference<Key> entityPk = new AtomicReference<Key>(null);
 
-        service.create(new AsyncCallback<Key>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                fail(caught.getMessage());
-            }
+        service.create(new AsyncCallbackAssertion<Key>() {
 
             @Override
             public void onSuccess(Key result) {
                 assertNotNull("Service execution results", result);
                 entityPk.set(result);
+                o.setPrimaryKey(result);
             }
         }, o);
 
@@ -84,5 +82,42 @@ public class TestCrudServiceDTOImpl extends TestCase {
             // There are no data e.g. Value is null, consider it Attached
             Assert.assertEquals("Got child object Attached", AttachLevel.Attached, o1r.child().getAttachLevel());
         }
+
+        // --- Retrieve
+        final AtomicReference<OneToOneReadOwnerDTO> entityR1 = new AtomicReference<OneToOneReadOwnerDTO>(null);
+
+        service.retrieve(new AsyncCallbackAssertion<OneToOneReadOwnerDTO>() {
+
+            @Override
+            public void onSuccess(OneToOneReadOwnerDTO result) {
+                entityR1.set(result);
+            }
+        }, entityPk.get(), RetrieveTraget.Edit);
+
+        assertTrue("Not Same data", EntityGraph.fullyEqual(entityR1.get(), o));
+
+        // --- Update
+
+        entityR1.get().name().setValue(UUID.randomUUID().toString());
+
+        service.save(new AsyncCallbackAssertion<Key>() {
+
+            @Override
+            public void onSuccess(Key result) {
+                Assert.assertEquals("", entityPk.get(), result);
+            }
+        }, entityR1.get());
+
+        final AtomicReference<OneToOneReadOwnerDTO> entityR2 = new AtomicReference<OneToOneReadOwnerDTO>(null);
+
+        service.retrieve(new AsyncCallbackAssertion<OneToOneReadOwnerDTO>() {
+
+            @Override
+            public void onSuccess(OneToOneReadOwnerDTO result) {
+                entityR2.set(result);
+            }
+        }, entityPk.get(), RetrieveTraget.View);
+
+        assertTrue("Not Same data", EntityGraph.fullyEqual(entityR2.get(), entityR1.get()));
     }
 }
