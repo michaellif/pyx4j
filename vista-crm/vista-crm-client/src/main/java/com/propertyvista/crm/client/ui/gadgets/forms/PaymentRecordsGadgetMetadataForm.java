@@ -49,7 +49,7 @@ public class PaymentRecordsGadgetMetadataForm extends CEntityDecoratableForm<Pay
         int row = -1;
 
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pageSize())).build());
+        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentRecordsListerSettings().pageSize())).build());
         p.setWidget(++row, 0, new HTML("&nbsp"));
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeTargetDate())).build());
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().targetDate())).build());

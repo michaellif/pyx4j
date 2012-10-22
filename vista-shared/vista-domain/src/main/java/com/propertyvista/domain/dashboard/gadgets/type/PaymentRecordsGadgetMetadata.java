@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
-import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
@@ -56,7 +56,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
                 VistaCrmBehavior.PropertyVistaSupport
         }
 )//@formatter:on
-public interface PaymentRecordsGadgetMetadata extends ListerGadgetBaseMetadata, BuildingGadget {
+public interface PaymentRecordsGadgetMetadata extends GadgetMetadata, BuildingGadget {
 
     /**
      * Payment type filter.
