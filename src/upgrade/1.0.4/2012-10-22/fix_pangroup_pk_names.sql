@@ -65,7 +65,15 @@ BEGIN
                         EXECUTE v_sql;
                 END LOOP;
                 
-        END LOOP;        
+        END LOOP;  
+        
+       /**
+       ***      Fix billing_billing_cycle_billing_cycle_start_date_building_bil_idx
+       ***      rename to billing_cycle_start_date_building_type_idx
+       **/
+       
+       EXECUTE 'DROP INDEX pangroup.billing_billing_cycle_billing_cycle_start_date_building_bil_idx';
+       EXECUTE 'CREATE UNIQUE INDEX billing_cycle_start_date_building_type_idx ON pangroup.billing_billing_cycle USING btree (billing_cycle_start_date, building, billing_type)';       
 
 END;
 $$
