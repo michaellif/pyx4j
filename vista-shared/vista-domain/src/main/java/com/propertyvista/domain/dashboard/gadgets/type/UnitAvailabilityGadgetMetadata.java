@@ -26,6 +26,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("UnitAvailability")
@@ -85,5 +86,7 @@ public interface UnitAvailabilityGadgetMetadata extends ListerGadgetBaseMetadata
 
     /** <code>null</code> means now */
     IPrimitive<LogicalDate> asOf();
+
+    ListerUserSettings unitStatusListerSettings();
 
 }

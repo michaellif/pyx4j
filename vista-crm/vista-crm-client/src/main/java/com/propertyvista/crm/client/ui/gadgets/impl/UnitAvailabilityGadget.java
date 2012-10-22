@@ -13,49 +13,127 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.impl;
 
-import java.util.Vector;
+import java.util.Arrays;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CDatePicker;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
+import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
-import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.forms.UnitAvailabilityGadgetMetatadaForm;
-import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityGadgetService;
-import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
+import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils;
+import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils.ItemSelectCommand;
+import com.propertyvista.crm.client.ui.gadgets.util.Provider;
+import com.propertyvista.crm.rpc.dto.gadgets.UnitAvailabilityStatusDTO;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityStatusListService;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentedStatus;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public class UnitAvailabilityGadget extends ListerGadgetInstanceBase<UnitAvailabilityStatus, UnitAvailabilityGadgetMetadata> implements
-        IBuildingBoardGadgetInstance {
+public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityGadgetMetadata> implements IBuildingBoardGadgetInstance {
+
+    private static final List<ColumnDescriptor> DEFAULT_COLUMN_DESCRIPTORS;
+    static {
+        UnitAvailabilityStatusDTO proto = EntityFactory.create(UnitAvailabilityStatusDTO.class);
+        DEFAULT_COLUMN_DESCRIPTORS = Arrays.<ColumnDescriptor> asList(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto.propertyCode()).build(),
+                new MemberColumnDescriptor.Builder(proto.externalId()).visible(false).build(),                
+                new MemberColumnDescriptor.Builder(proto.buildingName()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto.address()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto.propertyManager()).build(),                    
+                new MemberColumnDescriptor.Builder(proto.complex()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto.unit()).build(),
+                new MemberColumnDescriptor.Builder(proto.floorplanName()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto.floorplanMarketingName()).visible(false).build(),
+                
+                // status
+                new MemberColumnDescriptor.Builder(proto.vacancyStatus()).build(),
+                new MemberColumnDescriptor.Builder(proto.rentedStatus()).visible(true).build(),
+                new MemberColumnDescriptor.Builder(proto.scoping()).visible(true).build(),
+                new MemberColumnDescriptor.Builder(proto.rentReadinessStatus()).visible(true).build(),
+                new MemberColumnDescriptor.Builder(proto.unitRent()).build(),
+                new MemberColumnDescriptor.Builder(proto.marketRent()).build(),
+                new MemberColumnDescriptor.Builder(proto.rentDeltaAbsolute()).visible(true).build(),
+                new MemberColumnDescriptor.Builder(proto.rentDeltaRelative()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto.rentEndDay()).visible(true).build(),
+                new MemberColumnDescriptor.Builder(proto.moveInDay()).visible(true).build(),
+                new MemberColumnDescriptor.Builder(proto.rentedFromDay()).visible(true).build(),                
+                new MemberColumnDescriptor.Builder(proto.daysVacant()).sortable(false).build(),
+                new MemberColumnDescriptor.Builder(proto.revenueLost()).sortable(false).build()
+        );//@formatter:on
+    }
 
     private VerticalPanel gadgetPanel;
 
     private HTML filterDisplayPanel;
 
-    private final UnitAvailabilityGadgetService service;
-
     private CDatePicker asOf;
 
+    private BasicLister<UnitAvailabilityStatusDTO> lister;
+
     public UnitAvailabilityGadget(UnitAvailabilityGadgetMetadata gmd) {
-        super(gmd, UnitAvailabilityGadgetMetadata.class, new UnitAvailabilityGadgetMetatadaForm(), UnitAvailabilityStatus.class, false);
-        service = GWT.create(UnitAvailabilityGadgetService.class);
+        super(gmd, UnitAvailabilityGadgetMetadata.class, new UnitAvailabilityGadgetMetatadaForm());
+        setDefaultPopulator(new Populator() {
+            @Override
+            public void populate() {
+                lister.getDataSource().clearPreDefinedFilters();
+                lister.getDataSource().addPreDefinedFilter(PropertyCriterion.le(lister.proto().statusFrom(), getStatusDate()));
+                lister.getDataSource().addPreDefinedFilter(PropertyCriterion.ge(lister.proto().statusUntil(), getStatusDate()));
+
+                if (!containerBoard.getSelectedBuildingsStubs().isEmpty()) {
+                    lister.getDataSource().addPreDefinedFilter(
+                            PropertyCriterion.in(lister.proto().buildingsFilterAnchor(), containerBoard.getSelectedBuildingsStubs()));
+                }
+
+                switch (getMetadata().filterPreset().getValue()) {
+                case Vacant:
+                    lister.getDataSource().addPreDefinedFilter(PropertyCriterion.eq(lister.proto().vacancyStatus(), Vacancy.Vacant));
+                    break;
+                case Notice:
+                    lister.getDataSource().addPreDefinedFilter(PropertyCriterion.eq(lister.proto().vacancyStatus(), Vacancy.Notice));
+                    break;
+                case VacantAndNotice:
+                    lister.getDataSource().addPreDefinedFilter(PropertyCriterion.in(lister.proto().vacancyStatus(), Vacancy.Vacant, Vacancy.Notice));
+                    break;
+                case NetExposure:
+                    lister.getDataSource().addPreDefinedFilter(PropertyCriterion.in(lister.proto().vacancyStatus(), Vacancy.Vacant, Vacancy.Notice));
+                    lister.getDataSource().addPreDefinedFilter(PropertyCriterion.eq(lister.proto().rentedStatus(), RentedStatus.Unrented));
+                    break;
+                case Rented:
+                    lister.getDataSource().addPreDefinedFilter(PropertyCriterion.in(lister.proto().vacancyStatus(), Vacancy.Vacant, Vacancy.Notice));
+                    lister.getDataSource().addPreDefinedFilter(PropertyCriterion.eq(lister.proto().rentedStatus(), RentedStatus.Rented));
+                    break;
+                }
+
+                lister.obtain(0);
+
+                redrawFilterDisplayPanel();
+                redrawAsOfBannerPanel();
+                populateSucceded();
+            }
+        });
     }
 
     @Override
@@ -70,49 +148,42 @@ public class UnitAvailabilityGadget extends ListerGadgetInstanceBase<UnitAvailab
     }
 
     @Override
-    protected void onItemSelect(UnitAvailabilityStatus item) {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Properties.Unit().formViewerPlace(item.unit().getPrimaryKey()));
-    }
-
-    @Override
     protected Widget initContentPanel() {
 
         gadgetPanel = new VerticalPanel();
         gadgetPanel.add(initAsOfBannerPanel());
         gadgetPanel.add(initFilterDisplayPanel());
-        gadgetPanel.add(initListerWidget());
+
+        lister = new BasicLister<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class);
+        ListerUtils.bind(lister)//@formatter:off
+            .columnDescriptors(DEFAULT_COLUMN_DESCRIPTORS)
+            .service(GWT.<UnitAvailabilityStatusListService> create(UnitAvailabilityStatusListService.class))
+            .setupable(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey()))
+            .userSettingsProvider(new Provider<ListerUserSettings>() {
+                @Override
+                public ListerUserSettings get() {
+                    return getMetadata().unitStatusListerSettings();
+                }
+             })
+            .onColumnSelectionChanged(new Command() {
+                @Override
+                public void execute() {
+                    saveMetadata();
+                }
+            })
+            .onItemSelectedCommand(new ItemSelectCommand<UnitAvailabilityStatusDTO>() {                
+                @Override
+                public void execute(UnitAvailabilityStatusDTO item) {
+                    AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(AptUnit.class).formViewerPlace(item.unitId().getValue()));
+                }
+            })
+            .init();
+        ///@formatter:on
+
+        gadgetPanel.add(lister);
         gadgetPanel.setWidth("100%");
 
         return gadgetPanel;
-    }
-
-    @Override
-    protected void populatePage(final int pageNumber) {
-        if (containerBoard.getSelectedBuildingsStubs() == null) {
-            setAsOf(getStatusDate());
-            setPageData(new Vector<UnitAvailabilityStatus>(), 0, 0, false);
-            populateSucceded();
-            return;
-        }
-
-        service.unitAvailabilityStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>>() {
-            @Override
-            public void onSuccess(EntitySearchResult<UnitAvailabilityStatus> result) {
-                setPageData(result.getData(), pageNumber, result.getTotalRows(), result.hasMoreData());
-                redrawFilterDisplayPanel();
-                populateSucceded();
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                populateFailed(caught);
-            }
-        }, new Vector<Building>(containerBoard.getSelectedBuildingsStubs()), getMetadata().filterPreset().getValue(), getStatusDate(), new Vector<Sort>(
-                getListerSortingCriteria()), pageNumber, getPageSize());
-    }
-
-    private void setAsOf(LogicalDate statusDate) {
-        asOf.setValue(statusDate);
     }
 
     private LogicalDate getStatusDate() {
@@ -141,5 +212,9 @@ public class UnitAvailabilityGadget extends ListerGadgetInstanceBase<UnitAvailab
 
     private void redrawFilterDisplayPanel() {
         filterDisplayPanel.setHTML(new SafeHtmlBuilder().appendEscaped(getMetadata().filterPreset().getValue().toString()).toSafeHtml());
+    }
+
+    private void redrawAsOfBannerPanel() {
+        asOf.setValue(getStatusDate());
     }
 }
