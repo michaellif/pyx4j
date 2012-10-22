@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.components.media;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -36,7 +37,6 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdFormat;
@@ -181,8 +181,8 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
                     get(proto().file()).setVisible(true);
                     if (!getValue().file().blobKey().isNull()) {
                         thumbnail.setVisible(true);
-                        thumbnail.setUrl(ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping
-                                + getValue().getPrimaryKey().toString() + "/" + ThumbnailSize.small.name() + "." + ImageConsts.THUMBNAIL_TYPE);
+                        thumbnail.setUrl(GWT.getModuleBaseURL() + DeploymentConsts.mediaImagesServletMapping + getValue().getPrimaryKey().toString() + "/"
+                                + ThumbnailSize.small.name() + "." + ImageConsts.THUMBNAIL_TYPE);
                     }
                     break;
                 case externalUrl:
