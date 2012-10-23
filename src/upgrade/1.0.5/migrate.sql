@@ -47,7 +47,7 @@ CREATE INDEX pad_sim_batch_pad_file_idx ON pad_sim_batch USING btree (pad_file);
 
 SET search_path = 'public';
 
--- Remove sequences for tables to be deleted - 60 in total
+-- Remove sequences for tables to be deleted - 61 in total
 
 DROP SEQUENCE arrears_status_gadget_metadata$column_descriptors_seq;
 DROP SEQUENCE arrears_status_gadget_metadata_seq;
@@ -85,6 +85,7 @@ DROP SEQUENCE lease$documents_seq;
 DROP SEQUENCE legal_questions_seq;
 DROP SEQUENCE lister_gadget_base_metadata$column_descriptors_seq;
 DROP SEQUENCE lister_gadget_base_metadata_seq;
+DROP SEQUENCE note_attachment_seq;
 DROP SEQUENCE note$attachments_seq;
 DROP SEQUENCE note_seq;
 DROP SEQUENCE notes_seq;
@@ -110,7 +111,7 @@ DROP SEQUENCE unit_availability_summary_gmeta$column_descriptors_seq;
 DROP SEQUENCE unit_availability_summary_gmeta_seq;
 DROP SEQUENCE yardi_connection_seq;
 
--- Create new sequences - 19 total
+-- Create new sequences - 18 total
 CREATE SEQUENCE background_check_policy_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE background_check_policy_v_seq OWNER TO vista;
 CREATE SEQUENCE gadget_metadata_holder_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -128,8 +129,8 @@ CREATE SEQUENCE lease_term_vlease_products$concessions_seq START WITH 1 INCREMEN
 ALTER SEQUENCE lease_term_vlease_products$concessions_seq OWNER TO vista;
 CREATE SEQUENCE lease_term_vlease_products$feature_items_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE lease_term_vlease_products$feature_items_seq OWNER TO vista;
-CREATE SEQUENCE notes_and_attachments$attachments_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-ALTER SEQUENCE notes_and_attachments$attachments_seq OWNER TO vista;
+--CREATE SEQUENCE notes_and_attachments$attachments_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+--ALTER SEQUENCE notes_and_attachments$attachments_seq OWNER TO vista;
 CREATE SEQUENCE person_credit_check_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE person_credit_check_seq OWNER TO vista;
 CREATE SEQUENCE person_screening_income_info_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -165,16 +166,13 @@ $$
 $$
 LANGUAGE SQL IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION _dba_.migrate_to_105() RETURNS VOID AS
+CREATE OR REPLACE FUNCTION _dba_.migrate_to_105(v_schema_name VARCHAR(64)) RETURNS VOID AS
 $$
 DECLARE
-    v_schema_name               VARCHAR(64);
     v_table_name                VARCHAR(64);
     v_void                      CHAR(1);
 BEGIN
-    FOR v_schema_name IN
-    SELECT namespace FROM _admin_.admin_pmc WHERE status IN ('Active','Suspended')
-    LOOP
+    
         -- DROP all gadget tables
         /**
         *** We will use new and progressive way of dropping tables
@@ -246,7 +244,8 @@ BEGIN
 
 
          -- billing_bill
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_bill DROP COLUMN lease_for';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_bill DROP COLUMN lease_for,'
+                                                        ||'ADD COLUMN previous_charge_refunds NUMERIC(18,2)';
 
         -- billing_debit_credit_link
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_debit_credit_link ADD COLUMN credit_itemdiscriminator VARCHAR(50),'||
@@ -406,6 +405,7 @@ BEGIN
 
         
         -- notes_and_attachments
+        
         EXECUTE 'ALTER TABLE '||v_schema_name||'.notes_and_attachments DROP COLUMN x,'||
                             'ADD COLUMN owner_id BIGINT,'||
                             'ADD COLUMN owner_class VARCHAR(80),'||
@@ -421,7 +421,9 @@ BEGIN
 
         EXECUTE 'CREATE INDEX notes_and_attachments_owner_id_owner_class_idx ON '||v_schema_name||'.notes_and_attachments '||
         'USING btree (owner_id, owner_class) ';
-
+       
+        
+        
         -- note table - drop
         SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'note',FALSE);
         
@@ -432,7 +434,11 @@ BEGIN
         -- note$attachments  - drop
         SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'note$attachments',FALSE);
 
+        -- note_attachment
+        SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'note_attachment');
+
         --  notes_and_attachments$attachments
+        /*
         EXECUTE 'CREATE TABLE '||v_schema_name||'.notes_and_attachments$attachments ( '||
         '   id      BIGINT          NOT NULL,'||
         '   owner       BIGINT,'||
@@ -446,7 +452,7 @@ BEGIN
 
         EXECUTE 'CREATE INDEX notes_and_attachments$attachments_owner_idx ON '||v_schema_name||'.notes_and_attachments$attachments '||
         'USING btree (owner) ';
-
+        */
         --  notes_and_attachments$notes -- drop
         SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'notes_and_attachments$notes',FALSE);
 
@@ -634,7 +640,7 @@ BEGIN
         '   CONSTRAINT product_v$features_pk PRIMARY KEY(id))';
 
         EXECUTE 'INSERT INTO '||v_schema_name||'.product_v$features (id,owner,valuediscriminator,value,seq) '||
-        '(SELECT nextval(''product_v$features_seq'') AS id,b.id AS owner,''feature'',c.id AS value,a.seq '||
+        '(SELECT nextval(''public.product_v$features_seq'') AS id,b.id AS owner,''feature'',c.id AS value,a.seq '||
         'FROM '||v_schema_name||'.service_v$features a '||
         'JOIN '||v_schema_name||'.product_v b ON (a.owner = b.old_id) '||
         'JOIN '||v_schema_name||'.product c ON (a.value = c.old_id))';
@@ -1462,16 +1468,17 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge ADD CONSTRAINT tenant_charge_tenantdiscriminator_d_ck CHECK (tenantdiscriminator = ''Tenant'') '; 
 
 
-    END LOOP;
-
     EXCEPTION WHEN OTHERS THEN
                 RAISE EXCEPTION 'Failed executing statement, code: %, error message: %',SQLSTATE,SQLERRM ;
 END;
 $$
 LANGUAGE plpgsql VOLATILE;
 
-SELECT * FROM _dba_.migrate_to_105();
-DROP FUNCTION _dba_.migrate_to_105();
+SELECT  namespace,_dba_.migrate_to_105(namespace) AS migration
+FROM    _admin_.admin_pmc
+WHERE   status IN ('Active','Suspended');
+
+DROP FUNCTION _dba_.migrate_to_105(VARCHAR(64));
 
 SET client_min_messages = 'NOTICE';
 
