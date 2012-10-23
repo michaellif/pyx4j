@@ -79,7 +79,7 @@ public class CPersonalIdentityField extends CTextFieldBase<IPersonalIdentity, NP
 
     @Override
     public boolean isValueEmpty() {
-        return super.isValueEmpty();// || CommonsStringUtils.isEmpty(getValue().obfuscatedNumber().getStringView());
+        return getValue() == null || getValue().isNull();
     }
 
     @Override
