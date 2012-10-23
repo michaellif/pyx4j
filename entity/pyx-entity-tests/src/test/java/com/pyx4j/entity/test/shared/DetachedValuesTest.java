@@ -44,7 +44,6 @@ public class DetachedValuesTest extends InitializerTestBase {
 
     public void assertDepartmentFieldsAccess(final Employee emp) {
 
-        assertTrue("Can access isEmpty and is properly set", emp.department().isEmpty());
         assertNotNull("Can access toString", emp.department().toString());
         assertFalse("Can access equals", emp.department().equals(null));
         assertNotNull("Can access member name()", emp.department().name().getFieldName());
@@ -108,6 +107,7 @@ public class DetachedValuesTest extends InitializerTestBase {
         emp.department().setValueDetached();
 
         assertFalse("Can access isNull", emp.department().isNull());
+        assertTrue("Can access isEmpty and is properly set", emp.department().isEmpty());
 
         assertDepartmentFieldsAccess(emp);
     }
@@ -118,7 +118,9 @@ public class DetachedValuesTest extends InitializerTestBase {
         emp.department().name().setValue("somthing");
         emp.department().setAttachLevel(AttachLevel.ToStringMembers);
 
-        assertFalse("Can access isNull", emp.department().isNull());
+        assertEquals("AttachLevel", AttachLevel.ToStringMembers, emp.department().getAttachLevel());
+        assertEquals("Value of isNull", false, emp.department().isNull());
+        assertEquals("Value of isEmpty", false, emp.department().isEmpty());
 
         assertDepartmentFieldsAccess(emp);
     }
@@ -130,6 +132,8 @@ public class DetachedValuesTest extends InitializerTestBase {
         assertEquals("AttachLevel", AttachLevel.Detached, emp.department().getAttachLevel());
         assertTrue("isValuesDetached", emp.department().isValueDetached());
         assertTrue("Can access isNull", emp.department().isNull());
+        assertTrue("Can access isEmpty and is properly set", emp.department().isEmpty());
+
         assertDepartmentFieldsAccess(emp);
 
         if (isJavaAssertEnabled()) {
@@ -178,4 +182,5 @@ public class DetachedValuesTest extends InitializerTestBase {
             }
         });
     }
+
 }

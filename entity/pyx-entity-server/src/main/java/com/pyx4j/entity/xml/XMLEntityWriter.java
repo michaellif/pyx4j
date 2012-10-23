@@ -24,7 +24,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -241,15 +240,19 @@ public class XMLEntityWriter {
             }
         }
 
+        AttachLevel attachLevel = entity.getAttachLevel();
         if (isEmitAttachLevel()) {
-            AttachLevel level = entity.getAttachLevel();
-            if (level != AttachLevel.Attached) {
-                entityAttributes.put("attachLevel", level.name());
+            if (attachLevel != AttachLevel.Attached) {
+                entityAttributes.put("attachLevel", attachLevel.name());
             }
         }
 
-        if (emitted || EnumSet.of(AttachLevel.Detached, AttachLevel.IdOnly).contains(entity.getAttachLevel())) {
-            xml.writeEmpty(name, entityAttributes);
+        if (emitted || (attachLevel != AttachLevel.Attached)) {
+            if (attachLevel == AttachLevel.ToStringMembers) {
+                xml.write(name, entityAttributes, entity.getStringView());
+            } else {
+                xml.writeEmpty(name, entityAttributes);
+            }
             return;
         }
         graph.emitting(entity);

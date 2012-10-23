@@ -502,6 +502,14 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         if ((thisValue == null) || (thisValue.isEmpty())) {
             return true;
         }
+        switch (getAttachLevel()) {
+        case ToStringMembers:
+            return !thisValue.containsKey(PRIMARY_KEY);
+        case IdOnly:
+            return true;
+        default:
+            break;
+        }
         // Just one field is present and is PK
         if ((1 == thisValue.size()) && (thisValue.containsKey(PRIMARY_KEY))) {
             return true;
