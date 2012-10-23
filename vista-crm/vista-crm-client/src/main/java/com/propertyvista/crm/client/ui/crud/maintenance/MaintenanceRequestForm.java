@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -35,16 +33,16 @@ import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO> {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestForm.class);
 
-    private final FormFlexPanel statusPanel = new FormFlexPanel();
+    private FormFlexPanel statusPanel;
 
-    private final FormFlexPanel surveyPanel = new FormFlexPanel();
+    private FormFlexPanel surveyPanel;
 
     IssueClassificationChoice<?> mainChoice;
 
@@ -64,18 +62,20 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     @Override
     public void createTabs() {
-        selectTab(addTab(createGeneralTab(i18n.tr("General"))));
+        selectTab(addTab(createGeneralTab()));
 
     }
 
-    private FormFlexPanel createGeneralTab(String title) {
-        FormFlexPanel topLeft = new FormFlexPanel(title);
+    private FormFlexPanel createGeneralTab() {
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
 
-        topLeft.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntitySelectorHyperlink<Tenant>() {
+        panel.setH1(++row, 0, 2, i18n.tr("Issue Details"));
+
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer(), new CEntitySelectorHyperlink<LeaseCustomerTenant>() {
             @Override
             protected AppPlace getTargetPlace() {
-                return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().getPrimaryKey());
+                return AppPlaceEntityMapper.resolvePlace(LeaseCustomerTenant.class, getValue().getPrimaryKey());
             }
 
             @Override
@@ -93,6 +93,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 };
             }
         }), 25).build());
+        panel.setWidget(row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
 
         if (isEditable()) {
             // create selectors
@@ -137,47 +138,38 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             comp3 = new CEntityLabel();
             comp4 = new CEntityLabel();
         }
-        topLeft.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject().issueElement(), comp1), 20).build());
-        topLeft.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject(), comp2), 20).build());
-        topLeft.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().subjectDetails(), comp3), 20).build());
-        topLeft.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification(), comp4), 20).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject().issueElement(), comp1), 20).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject(), comp2), 20).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().subjectDetails(), comp3), 20).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification(), comp4), 20).build());
 
-        FormFlexPanel topRight = new FormFlexPanel();
-        row = -1;
-        topRight.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 20).build());
+        statusPanel = new FormFlexPanel();
+        panel.getFlexCellFormatter().setColSpan(++row, 0, 2);
+        panel.setWidget(row, 0, statusPanel);
+        {
+            int innerRow = -1;
+            statusPanel.setH1(++innerRow, 0, 2, i18n.tr("Status"));
+            statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 10).build());
+            statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
+            statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().scheduledTime(), new CTimeLabel()), 10).build());
+            statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
+            statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
+        }
 
-        row = -1;
-        statusPanel.setH1(++row, 0, 1, i18n.tr("Status"));
-        statusPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 10).build());
-        statusPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
-        statusPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().scheduledTime(), new CTimeLabel()), 10).build());
-        statusPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
-        statusPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
+        surveyPanel = new FormFlexPanel();
+        panel.getFlexCellFormatter().setColSpan(++row, 0, 2);
+        panel.setWidget(row, 0, surveyPanel);
+        {
+            int innerRow = -1;
+            surveyPanel.setH1(++innerRow, 0, 2, proto().surveyResponse().getMeta().getCaption());
+            surveyPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel<Integer>()), 10).build());
+            surveyPanel.setWidget(innerRow, 1, new DecoratorBuilder(inject(proto().surveyResponse().description(), new CLabel<String>()), 10).build());
+        }
 
-        row = -1;
-        surveyPanel.setH1(++row, 0, 2, proto().surveyResponse().getMeta().getCaption());
-        surveyPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel<Integer>()), 10).build());
-        surveyPanel.setWidget(row, 1, new DecoratorBuilder(inject(proto().surveyResponse().description(), new CLabel<String>()), 10).build());
+        panel.getColumnFormatter().setWidth(0, "50%");
+        panel.getColumnFormatter().setWidth(1, "50%");
 
-        // assemble main panel:
-        FormFlexPanel main = new FormFlexPanel();
-
-        main.setH1(0, 0, 2, i18n.tr("Issue Details"));
-        main.getFlexCellFormatter().setColSpan(0, 0, 2);
-        main.setWidget(1, 0, topLeft);
-        main.setWidget(1, 1, topRight);
-        main.getFlexCellFormatter().setVerticalAlignment(1, 1, HasVerticalAlignment.ALIGN_TOP);
-
-        main.setWidget(2, 0, statusPanel);
-        main.getFlexCellFormatter().setColSpan(2, 0, 2);
-
-        main.setWidget(3, 0, surveyPanel);
-        main.getFlexCellFormatter().setColSpan(3, 0, 2);
-
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
-
-        return main;
+        return panel;
     }
 
     @Override

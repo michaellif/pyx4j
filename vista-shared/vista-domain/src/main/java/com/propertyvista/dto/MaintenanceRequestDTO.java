@@ -17,11 +17,9 @@ import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.tenant.Tenant;
 
 @Transient
 @ExtendsDBO
 public interface MaintenanceRequestDTO extends MaintenanceRequest {
 
-    Tenant tenant();
 }

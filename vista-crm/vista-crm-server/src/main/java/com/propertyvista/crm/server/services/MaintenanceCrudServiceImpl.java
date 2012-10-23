@@ -18,8 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
@@ -27,7 +26,6 @@ import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.SurveyResponse;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements MaintenanceCrudService {
@@ -44,12 +42,6 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     @Override
     protected void enhanceRetrieved(MaintenanceRequest entity, MaintenanceRequestDTO dto, RetrieveTraget retrieveTraget) {
         enhanceAll(dto);
-
-        // Get latest Tenant
-        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseCustomer(), entity.leaseCustomer()));
-        criteria.desc(criteria.proto().id());
-        dto.tenant().set(Persistence.service().retrieve(criteria));
     }
 
     @Override
@@ -58,14 +50,8 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     protected void enhanceAll(MaintenanceRequestDTO dto) {
-        Persistence.service().retrieve(dto.leaseCustomer());
+        Persistence.service().retrieve(dto.leaseCustomer(), AttachLevel.ToStringMembers);
         Persistence.service().retrieve(dto.issueClassification());
-    }
-
-    @Override
-    protected void persist(MaintenanceRequest entity, MaintenanceRequestDTO dto) {
-        entity.leaseCustomer().set(dto.tenant().leaseCustomer());
-        super.persist(entity, dto);
     }
 
     @Override

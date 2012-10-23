@@ -16,41 +16,37 @@ package com.propertyvista.crm.server.services.selections;
 import com.pyx4j.entity.server.AbstractListServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 
-public class SelectTenantListServiceImpl extends AbstractListServiceImpl<Tenant> implements SelectTenantListService {
+public class SelectTenantListServiceImpl extends AbstractListServiceImpl<LeaseCustomerTenant> implements SelectTenantListService {
 
     public SelectTenantListServiceImpl() {
-        super(Tenant.class);
+        super(LeaseCustomerTenant.class);
     }
 
     @Override
     protected void bind() {
-        bind(dtoProto.id(), dboProto.id());
         bindCompleateDBO();
     }
 
     @Override
-    protected void enhanceListCriteria(EntityListCriteria<Tenant> dbCriteria, EntityListCriteria<Tenant> dtoCriteria) {
+    protected void enhanceListCriteria(EntityListCriteria<LeaseCustomerTenant> dbCriteria, EntityListCriteria<LeaseCustomerTenant> dtoCriteria) {
         super.enhanceListCriteria(dbCriteria, dtoCriteria);
 
         // filter out just current tenants:
-        Tenant proto = EntityFactory.getEntityPrototype(Tenant.class);
-        dbCriteria.add(PropertyCriterion.in(proto.leaseTermV().holder().lease().status(), Lease.Status.current()));
-        // and current lease version only:
-        dbCriteria.add(PropertyCriterion.isNotNull(proto.leaseTermV().fromDate()));
-        dbCriteria.add(PropertyCriterion.isNull(proto.leaseTermV().toDate()));
+        dbCriteria.in(dbCriteria.proto().lease().status(), Lease.Status.current());
+        dbCriteria.eq(dbCriteria.proto().leaseParticipants().$().leaseTermV().holder(), dbCriteria.proto().lease().currentTerm());
+        // and finalized e.g. last only:
+        dbCriteria.isCurrent(dbCriteria.proto().leaseParticipants().$().leaseTermV());
+
     }
 
     @Override
-    protected void enhanceListRetrieved(Tenant entity, Tenant dto) {
-        Persistence.service().retrieve(dto.leaseTermV());
-        Persistence.service().retrieve(dto.leaseTermV().holder(), AttachLevel.ToStringMembers);
+    protected void enhanceListRetrieved(LeaseCustomerTenant entity, LeaseCustomerTenant dto) {
+        Persistence.service().retrieve(dto.lease(), AttachLevel.ToStringMembers);
     }
 }

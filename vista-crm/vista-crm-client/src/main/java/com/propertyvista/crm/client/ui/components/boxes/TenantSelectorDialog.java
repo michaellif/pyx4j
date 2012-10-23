@@ -26,56 +26,55 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 
-public abstract class TenantSelectorDialog extends EntitySelectorTableDialog<Tenant> {
+public abstract class TenantSelectorDialog extends EntitySelectorTableDialog<LeaseCustomerTenant> {
 
     private final static I18n i18n = I18n.get(TenantSelectorDialog.class);
 
     public TenantSelectorDialog() {
-        this(Collections.<Tenant> emptyList());
+        this(Collections.<LeaseCustomerTenant> emptyList());
     }
 
     public TenantSelectorDialog(boolean isMultiselect) {
-        this(isMultiselect, Collections.<Tenant> emptyList());
+        this(isMultiselect, Collections.<LeaseCustomerTenant> emptyList());
     }
 
-    public TenantSelectorDialog(List<Tenant> alreadySelected) {
+    public TenantSelectorDialog(List<LeaseCustomerTenant> alreadySelected) {
         this(true, alreadySelected);
     }
 
-    public TenantSelectorDialog(boolean isMultiselect, List<Tenant> alreadySelected) {
+    public TenantSelectorDialog(boolean isMultiselect, List<LeaseCustomerTenant> alreadySelected) {
         this(isMultiselect, alreadySelected, i18n.tr("Select Tenant"));
     }
 
-    public TenantSelectorDialog(boolean isMultiselect, List<Tenant> alreadySelected, String caption) {
-        super(Tenant.class, isMultiselect, alreadySelected, caption);
+    public TenantSelectorDialog(boolean isMultiselect, List<LeaseCustomerTenant> alreadySelected, String caption) {
+        super(LeaseCustomerTenant.class, isMultiselect, alreadySelected, caption);
         setWidth("700px");
     }
 
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().customerId()).build(),
-                new MemberColumnDescriptor.Builder(proto().role()).build(),
+                new MemberColumnDescriptor.Builder(proto().participantId()).build(),
                 
-                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().name()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().name().firstName()).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().name().lastName()).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().sex()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().birthDate(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().email(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().homePhone()).build(),
-                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().mobilePhone()).build(),
-                new MemberColumnDescriptor.Builder(proto().leaseCustomer().customer().person().workPhone()).build(),
+                new MemberColumnDescriptor.Builder(proto().customer().person().name()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().customer().person().name().firstName()).searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto().customer().person().name().lastName()).searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto().customer().person().sex()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto().customer().person().birthDate(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().customer().person().email(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().customer().person().homePhone()).build(),
+                new MemberColumnDescriptor.Builder(proto().customer().person().mobilePhone()).build(),
+                new MemberColumnDescriptor.Builder(proto().customer().person().workPhone()).build(),
                 
-                new MemberColumnDescriptor.Builder(proto().leaseTermV().holder()).columnTitle(i18n.tr("Lease Term")).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().leaseTermV().holder().lease().leaseId()).searchableOnly().build()
+                new MemberColumnDescriptor.Builder(proto().lease()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().lease().leaseId()).searchableOnly().build()
         );//@formatter:on
     }
 
     @Override
-    protected AbstractListService<Tenant> getSelectService() {
+    protected AbstractListService<LeaseCustomerTenant> getSelectService() {
         return GWT.<SelectTenantListService> create(SelectTenantListService.class);
     }
 }

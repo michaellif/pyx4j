@@ -37,7 +37,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.tenant.Customer;
 
-@ToStringFormat("{0}, {1}")
+@ToStringFormat("{0}")
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
@@ -55,12 +55,11 @@ public interface LeaseCustomer<E extends LeaseParticipant<?>> extends IEntity {
     @NotNull
     @MemberColumn(notNull = true)
     @ReadOnly
-    @ToString(index = 1)
+    @ToString(index = 0)
     @Indexed(uniqueConstraint = true, group = { "discriminator+lc,2" })
     Customer customer();
 
     @NotNull
-    @ToString(index = 0)
     @Caption(name = "Id")
     @Length(14)
     @Indexed(uniqueConstraint = true, group = { "discriminator+id,1" })
