@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.policies.leasebilling;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -22,17 +21,15 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.forms.client.ui.CMoneyField;
+import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.i18n.annotations.I18nContext;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
@@ -49,78 +46,9 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
     private final static I18n i18n = I18n.get(LeaseBillingPolicyForm.class);
 
-    class MoneyFormat implements IFormat<BigDecimal> {
+    private SimplePanel baseFeeHolder;
 
-        private final NumberFormat nf;
-
-        @I18nContext(javaFormatFlag = true)
-        MoneyFormat() {
-            nf = NumberFormat.getFormat(i18n.tr("#,##0.00"));
-        }
-
-        @Override
-        public String format(BigDecimal value) {
-            if (value == null) {
-                return "";
-            } else {
-                return "$" + nf.format(value);
-            }
-        }
-
-        @Override
-        public BigDecimal parse(String string) throws ParseException {
-            if (CommonsStringUtils.isEmpty(string)) {
-                return null; // empty value case
-            }
-            try {
-                string = string.trim();
-                if (string.startsWith("$")) {
-                    string = string.substring(1);
-                }
-                if (string.endsWith("%")) {
-                    throw new NumberFormatException();
-                }
-                return new BigDecimal(nf.parse(string));
-            } catch (NumberFormatException e) {
-                throw new ParseException(i18n.tr("Invalid money format. Enter valid number"), 0);
-            }
-        }
-
-    }
-
-    class PercentFormat implements IFormat<BigDecimal> {
-
-        private final NumberFormat nf = NumberFormat.getFormat(i18n.tr("#,##0.00"));
-
-        @Override
-        public String format(BigDecimal value) {
-            if (value == null) {
-                return "";
-            } else {
-                return nf.format(value) + "%";
-            }
-
-        }
-
-        @Override
-        public BigDecimal parse(String string) throws ParseException {
-            if (CommonsStringUtils.isEmpty(string)) {
-                return null;
-            } else {
-                try {
-                    string = string.trim();
-                    if (string.endsWith("%")) {
-                        string = string.substring(0, string.length() - 1);
-                    }
-                    return new BigDecimal(string);
-                } catch (NumberFormatException e) {
-                    throw new ParseException(i18n.tr("Invalid percent format"), 0);
-                }
-
-            }
-        }
-
-    }
+    private SimplePanel maxFeeHolder;
 
     public LeaseBillingPolicyForm() {
         this(false);
@@ -173,43 +101,20 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         get(proto().lateFee().baseFeeType()).addValueChangeHandler(new ValueChangeHandler<LateFeeItem.BaseFeeType>() {
             @Override
             public void onValueChange(ValueChangeEvent<BaseFeeType> event) {
-                CComponent<BigDecimal, ?> comp = get(proto().lateFee().baseFee());
-                if (comp instanceof CTextFieldBase) {
-                    CTextFieldBase<BigDecimal, ?> castedComp = ((CTextFieldBase<BigDecimal, ?>) comp);
-                    if (event.getValue() == BaseFeeType.FlatAmount) {
-                        castedComp.setWatermark(i18n.tr("$0.00"));
-                        castedComp.setFormat(new MoneyFormat());
-                    } else {
-                        castedComp.setWatermark(i18n.tr("0.00%"));
-                        castedComp.setFormat(new PercentFormat());
-                    }
-                }
-                comp.revalidate();
+                bindBaseFeeEditor(event.getValue(), false);
             }
         });
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lateFee().baseFee()), 6).build());
+        panel.setWidget(++row, 0, baseFeeHolder = new SimplePanel());
 
         row = -1;
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().lateFee().maxTotalFeeType()), 10).build());
         get(proto().lateFee().maxTotalFeeType()).addValueChangeHandler(new ValueChangeHandler<LateFeeItem.MaxTotalFeeType>() {
             @Override
             public void onValueChange(ValueChangeEvent<MaxTotalFeeType> event) {
-                CComponent<BigDecimal, ?> comp = get(proto().lateFee().maxTotalFee());
-                comp.setVisible(event.getValue() != MaxTotalFeeType.Unlimited);
-                if (comp instanceof CTextFieldBase) {
-                    CTextFieldBase<BigDecimal, ?> castedComp = ((CTextFieldBase<BigDecimal, ?>) comp);
-                    if (event.getValue() == MaxTotalFeeType.FlatAmount) {
-                        castedComp.setWatermark(i18n.tr("$0.00"));
-                        castedComp.setFormat(new MoneyFormat());
-                    } else {
-                        castedComp.setWatermark(i18n.tr("0.00%"));
-                        castedComp.setFormat(new PercentFormat());
-                    }
-                }
-                comp.revalidate();
+                bindMaxFeeEditor(event.getValue(), false);
             }
         });
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().lateFee().maxTotalFee()), 6).build());
+        panel.setWidget(++row, 1, maxFeeHolder = new SimplePanel());
 
         panel.getColumnFormatter().setWidth(0, "50%");
         panel.getColumnFormatter().setWidth(1, "50%");
@@ -230,6 +135,67 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         super.onValueSet(populate);
 
         get(proto().defaultBillingCycleSartDay()).setEnabled(getValue().useDefaultBillingCycleSartDay().getValue());
+        bindBaseFeeEditor(getValue().lateFee().baseFeeType().getValue(), true);
+        bindMaxFeeEditor(getValue().lateFee().maxTotalFeeType().getValue(), true);
+    }
+
+    private void bindBaseFeeEditor(BaseFeeType baseFeeType, boolean repopulatevalue) {
+        if (baseFeeType == null) {
+            return; // New item
+        }
+
+        CComponent<?, ?> comp = null;
+        switch (baseFeeType) {
+        case FlatAmount:
+            comp = new CMoneyField();
+            break;
+
+        case PercentMonthlyRent:
+        case PercentOwedTotal:
+            comp = new CPercentageField();
+            break;
+        }
+
+        unbind(proto().lateFee().baseFee());
+
+        if (comp != null) {
+            baseFeeHolder.setWidget(new DecoratorBuilder(inject(proto().lateFee().baseFee(), comp), 6).build());
+
+            if (repopulatevalue) {
+                get(proto().lateFee().baseFee()).populate(getValue().lateFee().baseFee().getValue(BigDecimal.ZERO));
+            }
+        }
+    }
+
+    private void bindMaxFeeEditor(MaxTotalFeeType maxFeeType, boolean repopulatevalue) {
+        if (maxFeeType == null) {
+            return; // New item
+        }
+
+        CComponent<?, ?> comp = null;
+        switch (maxFeeType) {
+        case Unlimited:
+        case FlatAmount:
+            comp = new CMoneyField();
+            break;
+
+        case PercentMonthlyRent:
+            comp = new CPercentageField();
+            break;
+        }
+
+        unbind(proto().lateFee().baseFee());
+
+        if (comp != null) {
+            maxFeeHolder.setWidget(new DecoratorBuilder(inject(proto().lateFee().baseFee(), comp), 6).build());
+
+            if (repopulatevalue) {
+                get(proto().lateFee().baseFee()).populate(getValue().lateFee().baseFee().getValue(BigDecimal.ZERO));
+            }
+
+            comp.setVisible(maxFeeType != MaxTotalFeeType.Unlimited);
+        }
+
     }
 
     private class NsfFeeItemFolder extends VistaTableFolder<NsfFeeItem> {
