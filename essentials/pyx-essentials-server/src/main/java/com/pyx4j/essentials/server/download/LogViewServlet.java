@@ -57,6 +57,11 @@ public class LogViewServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        initRootDirectory(config);
+        attachment = "true".equalsIgnoreCase(config.getInitParameter("attachment"));
+    }
+
+    protected void initRootDirectory(ServletConfig config) {
         File containerHome = new File(LoggerConfig.getContainerHome());
         String root = config.getInitParameter("root");
         if (!CommonsStringUtils.isStringSet(root)) {
@@ -69,7 +74,6 @@ public class LogViewServlet extends HttpServlet {
         } else {
             this.rootDirectory = new File(containerHome, root);
         }
-        attachment = "true".equalsIgnoreCase(config.getInitParameter("attachment"));
     }
 
     private void verifyPath(String path) throws ServletException {
