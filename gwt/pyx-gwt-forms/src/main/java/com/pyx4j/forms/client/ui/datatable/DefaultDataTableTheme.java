@@ -96,7 +96,8 @@ public class DefaultDataTableTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableRow, "-", StyleDependent.selected);
-        style.addProperty("background-color", ThemeColor.foreground, 0.3);
+        style.addProperty("background-color", ThemeColor.object1, 0.8);
+        style.addProperty("color", ThemeColor.foreground, 0);
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableActionsBar);
