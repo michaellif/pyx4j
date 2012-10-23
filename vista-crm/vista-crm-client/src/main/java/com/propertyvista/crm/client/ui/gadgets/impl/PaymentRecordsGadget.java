@@ -38,6 +38,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.BasicLister;
+import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -123,9 +124,10 @@ public class PaymentRecordsGadget extends GadgetInstanceBase<PaymentRecordsGadge
         contentPanel.add(initTitleWidget());
 
         lister = new BasicLister<PaymentRecordForReportDTO>(PaymentRecordForReportDTO.class);
-        ListerUtils.bind(lister)//@formatter:off
+        lister.setDataSource(new ListerDataSource<PaymentRecordForReportDTO>(PaymentRecordForReportDTO.class, GWT
+                .<PaymentRecordListService> create(PaymentRecordListService.class)));
+        ListerUtils.bind(lister.getDataTablePanel())//@formatter:off
         .columnDescriptors(DEFAULT_COLUMN_DESCRIPTORS)
-        .service(GWT.<PaymentRecordListService> create(PaymentRecordListService.class))
         .setupable(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey()))
         .userSettingsProvider(new Provider<ListerUserSettings>() {
             @Override

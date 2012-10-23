@@ -28,6 +28,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.BasicLister;
+import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.forms.BuildingListerGadgetMetadataForm;
@@ -79,10 +80,9 @@ public class BuildingListerGadget extends GadgetInstanceBase<BuildingListerGadge
     protected Widget initContentPanel() {
         lister = new BasicLister<BuildingDTO>(BuildingDTO.class, true, false);
         lister.setSize("100%", "100%");
-
-        ListerUtils.bind(lister)//@formatter:off
-            .columnDescriptors(DEFAULT_COLUMN_DESCRIPTORS)
-            .service(GWT.<BuildingCrudService> create(BuildingCrudService.class))
+        lister.setDataSource(new ListerDataSource<BuildingDTO>(BuildingDTO.class, GWT.<BuildingCrudService> create(BuildingCrudService.class)));
+        ListerUtils.bind(lister.getDataTablePanel())//@formatter:off
+            .columnDescriptors(DEFAULT_COLUMN_DESCRIPTORS)            
             .setupable(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey()))
             .userSettingsProvider(new Provider<ListerUserSettings>() {
                 @Override

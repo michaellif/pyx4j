@@ -17,13 +17,11 @@ import java.util.List;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ColumnSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
-import com.pyx4j.site.client.ui.crud.lister.BasicLister;
-import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 
 import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 
@@ -35,13 +33,9 @@ public class ListerUtils {
 
     }
 
-    public static class ListerInitializer<E extends IEntity> {
-
-        private final BasicLister<E> lister;
+    public static class DataTablePanelInitializer<E extends IEntity> {
 
         private List<ColumnDescriptor> columnDescriptors;
-
-        private AbstractListService<E> service;
 
         private Boolean isSetupable;
 
@@ -51,71 +45,66 @@ public class ListerUtils {
 
         private ItemSelectCommand<E> onItemSelectedCommand;
 
-        public ListerInitializer(BasicLister<E> lister) {
-            this.lister = lister;
+        private final DataTablePanel<E> dataTablePanel;
+
+        public DataTablePanelInitializer(DataTablePanel<E> dataTablePanel) {
+            this.dataTablePanel = dataTablePanel;
             onItemSelectedCommand = null;
         }
 
-        public ListerInitializer<E> columnDescriptors(List<ColumnDescriptor> columnDescriptors) {
+        public DataTablePanelInitializer<E> columnDescriptors(List<ColumnDescriptor> columnDescriptors) {
             this.columnDescriptors = columnDescriptors;
             return this;
         }
 
-        public ListerInitializer<E> service(AbstractListService<E> service) {
-            this.service = service;
-            return this;
-        }
-
-        public ListerInitializer<E> setupable(boolean isSetupable) {
+        public DataTablePanelInitializer<E> setupable(boolean isSetupable) {
             this.isSetupable = isSetupable;
             return this;
         }
 
-        public ListerInitializer<E> userSettingsProvider(Provider<ListerUserSettings> userSettingsProvider) {
+        public DataTablePanelInitializer<E> userSettingsProvider(Provider<ListerUserSettings> userSettingsProvider) {
             this.userSettingsProvider = userSettingsProvider;
             return this;
         }
 
-        public ListerInitializer<E> onColumnSelectionChanged(Command command) {
+        public DataTablePanelInitializer<E> onColumnSelectionChanged(Command command) {
             this.onColumnSelectionChanged = command;
             return this;
         }
 
-        public ListerInitializer<E> onItemSelectedCommand(ListerUtils.ItemSelectCommand<E> command) {
+        public DataTablePanelInitializer<E> onItemSelectedCommand(ListerUtils.ItemSelectCommand<E> command) {
             this.onItemSelectedCommand = command;
             return this;
         }
 
         public void init() {
-            assert lister != null;
+            assert dataTablePanel != null;
             assert columnDescriptors != null;
-            assert service != null;
             assert isSetupable != null;
             assert userSettingsProvider != null;
             assert onColumnSelectionChanged != null;
 
-            lister.setDataSource(new ListerDataSource<E>((Class<E>) lister.proto().getInstanceValueClass(), service));
+            dataTablePanel.setColumnDescriptors(ColumnDescriptorDiffUtil.applyDiff((Class<E>) dataTablePanel.proto().getInstanceValueClass(),
+                    columnDescriptors, userSettingsProvider.get()));
 
-            lister.getDataTablePanel().setColumnDescriptors(
-                    ColumnDescriptorDiffUtil.applyDiff((Class<E>) lister.proto().getInstanceValueClass(), columnDescriptors, userSettingsProvider.get()));
-            lister.getDataTablePanel().getDataTable().addColumnSelectionChangeHandler(new ColumnSelectionHandler() {
+            dataTablePanel.getDataTable().addColumnSelectionChangeHandler(new ColumnSelectionHandler() {
                 @Override
                 public void onColumSelectionChanged() {
-                    ListerUserSettings diff = ColumnDescriptorDiffUtil.getDescriptorsDiff(columnDescriptors, lister.getDataTablePanel().getDataTable()
-                            .getDataTableModel().getColumnDescriptors());
+                    ListerUserSettings diff = ColumnDescriptorDiffUtil.getDescriptorsDiff(columnDescriptors, dataTablePanel.getDataTable().getDataTableModel()
+                            .getColumnDescriptors());
                     userSettingsProvider.get().set(diff);
 
                     onColumnSelectionChanged.execute();
                 }
             });
 
-            lister.getDataTablePanel().getDataTable().setHasDetailsNavigation(onItemSelectedCommand != null);
+            dataTablePanel.getDataTable().setHasDetailsNavigation(onItemSelectedCommand != null);
             if (onItemSelectedCommand != null) {
-                lister.getDataTablePanel().getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
+                dataTablePanel.getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
 
                     @Override
                     public void onSelect(int selectedRow) {
-                        E item = lister.getDataTablePanel().getDataTable().getSelectedItem();
+                        E item = dataTablePanel.getDataTable().getSelectedItem();
                         if (item != null) {
                             onItemSelectedCommand.execute(item);
                         }
@@ -123,21 +112,21 @@ public class ListerUtils {
                 });
             }
 
-            lister.getDataTablePanel().setPageSize(userSettingsProvider.get().pageSize().isNull() ? 10 : userSettingsProvider.get().pageSize().getValue());
-            lister.getDataTablePanel().getDataTable().setColumnSelectorVisible(isSetupable);
+            dataTablePanel.setPageSize(userSettingsProvider.get().pageSize().isNull() ? 10 : userSettingsProvider.get().pageSize().getValue());
+            dataTablePanel.getDataTable().setColumnSelectorVisible(isSetupable);
 
-            lister.getDataTablePanel().setFilteringEnabled(false);
-            lister.getDataTablePanel().setPageSizeOptions(null); // turn off page size selection control 
-            lister.getDataTablePanel().getDataTable().setHasColumnClickSorting(true);
-            lister.getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
-            lister.getDataTablePanel().getDataTable().setMarkSelectedRow(false);
-            lister.getDataTablePanel().getDataTable().setAutoColumnsWidth(true);
+            dataTablePanel.setFilteringEnabled(false);
+            dataTablePanel.setPageSizeOptions(null); // turn off page size selection control 
+            dataTablePanel.getDataTable().setHasColumnClickSorting(true);
+            dataTablePanel.getDataTable().setHasCheckboxColumn(false);
+            dataTablePanel.getDataTable().setMarkSelectedRow(false);
+            dataTablePanel.getDataTable().setAutoColumnsWidth(true);
 
         }
     }
 
-    public static <E extends IEntity> ListerInitializer<E> bind(BasicLister<E> lister) {
-        return new ListerInitializer<E>(lister);
+    public static <E extends IEntity> DataTablePanelInitializer<E> bind(DataTablePanel<E> dataTablePanel) {
+        return new DataTablePanelInitializer<E>(dataTablePanel);
     }
 
 }
