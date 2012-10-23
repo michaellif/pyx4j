@@ -82,6 +82,7 @@ public class AdminTheme extends VistaTheme {
 
         initGeneralStyles();
         initBodyStyles();
+        initCellListStyle();
 
         intitNavigationStyles();
         intitShortCutStyles();

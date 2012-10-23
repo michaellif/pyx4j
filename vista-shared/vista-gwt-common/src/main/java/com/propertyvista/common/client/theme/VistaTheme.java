@@ -581,16 +581,18 @@ public class VistaTheme extends Theme {
         // cellListSelectedItem
 
         Style style = new Style(".cellListEvenItem");
-        style.addProperty("color", "black");
+        style.addProperty("background-color", ThemeColor.foreground, 0.05);
+        style.addProperty("color", ThemeColor.foreground, 0.9);
         addStyle(style);
 
         style = new Style(".cellListOddItem");
-        style.addProperty("color", "black");
+        style.addProperty("background-color", "white");
+        style.addProperty("color", ThemeColor.foreground, 0.9);
         addStyle(style);
 
         style = new Style(".cellListSelectedItem");
-        style.addProperty("background", "");
-        style.addGradient(ThemeColor.object1, 0.1, ThemeColor.object1, 1.0);
+        style.addProperty("background-color", ThemeColor.object1, 0.8);
+        style.addProperty("color", ThemeColor.foreground, 0);
         addStyle(style);
 
     }

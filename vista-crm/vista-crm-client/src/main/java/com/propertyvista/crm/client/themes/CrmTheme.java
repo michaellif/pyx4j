@@ -103,6 +103,7 @@ public class CrmTheme extends VistaTheme {
 
         initGeneralStyles();
         initBodyStyles();
+        initCellListStyle();
 
         intitNavigationStyles();
         intitShortCutStyles();

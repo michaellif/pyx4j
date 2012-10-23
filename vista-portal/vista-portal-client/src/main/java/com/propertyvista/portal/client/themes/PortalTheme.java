@@ -150,6 +150,8 @@ public class PortalTheme extends VistaTheme {
 
         addTheme(new DefaultDialogTheme());
 
+        initCellListStyle();
+
         initCheckBoxStyle();
         initHyperlinkStyle();
         initGroupBoxStyle();
