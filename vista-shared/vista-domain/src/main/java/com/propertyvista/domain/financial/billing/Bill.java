@@ -181,6 +181,8 @@ public interface Bill extends IEntity {
 
     IPrimitive<BigDecimal> pendingAccountAdjustments();
 
+    IPrimitive<BigDecimal> previousChargeRefunds();
+
     IPrimitive<BigDecimal> latePaymentFees();
 
     IPrimitive<BigDecimal> depositAmount();

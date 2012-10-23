@@ -129,8 +129,8 @@ public class BillingUtils {
         dto.depositRefundLineItems().total().set(bill.depositRefundAmount());
         dto.immediateAccountAdjustmentLineItems().total().set(bill.immediateAccountAdjustments());
         dto.pendingAccountAdjustmentLineItems().total().set(bill.pendingAccountAdjustments());
+        dto.previousChargeAdjustmentLineItems().total().set(bill.previousChargeRefunds());
         dto.nsfChargeLineItems().total().set(bill.nsfCharges());
-        dto.pendingAccountAdjustmentLineItems().total().set(bill.pendingAccountAdjustments());
         dto.withdrawalLineItems().total().set(bill.withdrawalAmount());
         dto.rejectedPaymentLineItems().total().set(bill.paymentRejectedAmount());
         dto.paymentLineItems().total().set(bill.paymentReceivedAmount());
@@ -151,7 +151,12 @@ public class BillingUtils {
                     dto.onetimeFeatureChargeLineItems().lineItems().add(charge);
                 }
             } else if (lineItem.isInstanceOf(InvoiceProductCredit.class)) {
-                dto.productCreditLineItems().lineItems().add(lineItem);
+                InvoiceProductCredit credit = (InvoiceProductCredit) lineItem;
+                if (InvoiceProductCharge.Period.next.equals(credit.productCharge().period().getValue())) {
+                    dto.productCreditLineItems().lineItems().add(lineItem);
+                } else {
+                    dto.previousChargeAdjustmentLineItems().lineItems().add(lineItem);
+                }
             } else if (lineItem.isInstanceOf(InvoiceDeposit.class)) {
                 dto.depositLineItems().lineItems().add(lineItem);
             } else if (lineItem.isInstanceOf(InvoiceDepositRefund.class)) {

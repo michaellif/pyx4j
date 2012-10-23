@@ -173,6 +173,7 @@ class BillProducer {
         nextPeriodBill.recurringFeatureCharges().setValue(new BigDecimal("0.00"));
         nextPeriodBill.oneTimeFeatureCharges().setValue(new BigDecimal("0.00"));
         nextPeriodBill.pendingAccountAdjustments().setValue(new BigDecimal("0.00"));
+        nextPeriodBill.previousChargeRefunds().setValue(new BigDecimal("0.00"));
         nextPeriodBill.latePaymentFees().setValue(new BigDecimal("0.00"));
         nextPeriodBill.depositAmount().setValue(new BigDecimal("0.00"));
         nextPeriodBill.productCreditAmount().setValue(new BigDecimal("0.00"));
@@ -255,10 +256,11 @@ class BillProducer {
                 add(nextPeriodBill.recurringFeatureCharges().getValue()).
                 add(nextPeriodBill.oneTimeFeatureCharges().getValue()).
                 add(nextPeriodBill.pendingAccountAdjustments().getValue()).
+                add(nextPeriodBill.previousChargeRefunds().getValue()).
                 add(nextPeriodBill.latePaymentFees().getValue()).
                 add(nextPeriodBill.depositAmount().getValue()).
                 add(nextPeriodBill.carryForwardCredit().getValue()));
-        
+
         BigDecimal taxCombinedAmount = TaxUtils.calculateCombinedTax(nextPeriodBill.lineItems());
         if (taxCombinedAmount.subtract(nextPeriodBill.taxes().getValue()).abs().compareTo(BigDecimal.ZERO) >= 0.01) {
             TaxUtils.pennyFix(taxCombinedAmount.subtract(nextPeriodBill.taxes().getValue()), nextPeriodBill.lineItems());

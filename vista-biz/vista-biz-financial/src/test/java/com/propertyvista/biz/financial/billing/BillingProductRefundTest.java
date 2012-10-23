@@ -29,7 +29,7 @@ import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 
 @Category(RegressionTests.class)
 public class BillingProductRefundTest extends FinancialTestBase {
@@ -52,24 +52,6 @@ public class BillingProductRefundTest extends FinancialTestBase {
         setDepositBatchProcess(); // background deposit processing
         //==================== RUN 1 ======================//
 
-        Bill billPreview = runBillingPreview();
-        // @formatter:off
-        new BillTester(billPreview).
-        billSequenceNumber(0).
-        previousBillSequenceNumber(null).
-        billType(Bill.BillType.First).
-        billingPeriodStartDate("23-Mar-2011").
-        billingPeriodEndDate("31-Mar-2011").
-        numOfProductCharges(2).
-        paymentReceivedAmount("0.00").
-        serviceCharge("270.09").
-        recurringFeatureCharges("23.23").
-        oneTimeFeatureCharges("0.00").
-        depositAmount("1010.30").
-        taxes("35.20").
-        totalDueAmount("1338.82");
-        // @formatter:on
-
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -84,6 +66,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
         serviceCharge("270.09").
         recurringFeatureCharges("23.23").
         oneTimeFeatureCharges("0.00").
+        previousChargeAdjustments("0.00").
         depositAmount("1010.30").
         taxes("35.20").
         totalDueAmount("1338.82");
@@ -108,6 +91,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
         paymentReceivedAmount("-1338.82").
         serviceCharge("930.30").
         recurringFeatureCharges("80.00").
+        previousChargeAdjustments("0.00").
         taxes("121.24").
         totalDueAmount("1131.54");
         // @formatter:on
@@ -116,7 +100,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
 
         // Current period adjustment
         advanceDate("20-Mar-2011");
-        addFeatureAdjustment(parking.uid().getValue(), "-10", Type.monetary, "20-Mar-2011", "10-Apr-2011");
+        addFeatureAdjustment(parking.uid().getValue(), "-10", BillableItemAdjustment.Type.monetary, "20-Mar-2011", "10-Apr-2011");
 
         //==================== RUN 3 ======================//
 
@@ -133,15 +117,16 @@ public class BillingProductRefundTest extends FinancialTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
-        numOfProductCharges(4).
+        numOfProductCharges(4). // lease and 3 x parking (next, curr, prev)
         paymentReceivedAmount("-1131.54").
         serviceCharge("930.30").
-        recurringFeatureCharges("177.00").
-        taxes("132.88").
-        totalDueAmount("1240.18");
+        recurringFeatureCharges("177.00"). // 80.00 + 76.67 (apr) + 20.33 (mar)
+        previousChargeAdjustments("-115.62"). // 80.00 (apr) + 23.23 (mar) + 12%
+        taxes("132.88"). // 12% of (930.30 + 177.00)
+        totalDueAmount("1124.56");
         // @formatter:on
 
-        receiveAndPostPayment("19-Apr-2011", "1240.18");
+        receiveAndPostPayment("19-Apr-2011", "1124.56");
 
         // cancel feature for previous period
         advanceDate("20-Apr-2011");
@@ -160,15 +145,17 @@ public class BillingProductRefundTest extends FinancialTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-June-2011").
         billingPeriodEndDate("30-June-2011").
-        numOfProductCharges(2).
-        paymentReceivedAmount("-1240.18").
+        numOfProductCharges(2). // lease + parking (prev)
+        paymentReceivedAmount("-1124.56").
         serviceCharge("930.30").
-        recurringFeatureCharges("52.67").
-        taxes("117.96").
-        totalDueAmount("1020.13");
+        recurringFeatureCharges("52.67"). // revised parking (prev)
+        depositRefundAmount("-80.80"). // parking cancellation
+        previousChargeAdjustments("-175.47"). // parking 80.00 (may) + 76.67 (apr) + 12%
+        taxes("117.96"). // 12% of (930.30 + 52.67)
+        totalDueAmount("844.66");
         // @formatter:on
 
-        receiveAndPostPayment("19-May-2011", "1020.13");
+        receiveAndPostPayment("19-May-2011", "844.66");
 
         //==================== RUN 5 ======================//
 
@@ -184,9 +171,10 @@ public class BillingProductRefundTest extends FinancialTestBase {
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
         numOfProductCharges(1).
-        paymentReceivedAmount("-1020.13").
+        paymentReceivedAmount("-844.66").
         serviceCharge("930.30").
         recurringFeatureCharges("0.00").
+        previousChargeAdjustments("0.00").
         taxes("111.64").
         totalDueAmount("1041.94");
         // @formatter:on
@@ -210,6 +198,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
         paymentReceivedAmount("-1041.94").
         serviceCharge("90.03").
         recurringFeatureCharges("0.00").
+        previousChargeAdjustments("0.00").
         depositRefundAmount("-968.07").
         taxes("10.80").
         totalDueAmount("-867.24");
@@ -226,7 +215,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
         billSequenceNumber(7).
         previousBillSequenceNumber(6).
         billType(Bill.BillType.Final).
-        immediateAccountAdjustments("156.80").
+        immediateAccountAdjustments("0.00").
         billingPeriodStartDate(null).
         billingPeriodEndDate(null);
         // @formatter:on

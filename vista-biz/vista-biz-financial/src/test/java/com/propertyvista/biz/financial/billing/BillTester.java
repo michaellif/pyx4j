@@ -116,6 +116,11 @@ public class BillTester extends Tester {
         return this;
     }
 
+    public BillTester previousChargeAdjustments(String value) {
+        assertEquals("Previous Charge Adjustments", new BigDecimal(value), bill.previousChargeRefunds().getValue());
+        return this;
+    }
+
     public BillTester taxes(String value) {
         assertEquals("Taxes", new BigDecimal(value), bill.taxes().getValue());
         return this;

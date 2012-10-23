@@ -333,8 +333,8 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
             getBillingManager().getNextPeriodBill().oneTimeFeatureCharges()
                     .setValue(getBillingManager().getNextPeriodBill().oneTimeFeatureCharges().getValue().add(charge.amount().getValue()));
         }
-        getBillingManager().getNextPeriodBill().lineItems().add(charge);
         getBillingManager().getNextPeriodBill().taxes().setValue(getBillingManager().getNextPeriodBill().taxes().getValue().add(charge.taxTotal().getValue()));
+        getBillingManager().getNextPeriodBill().lineItems().add(charge);
     }
 
     private void reviseChargeForPeriod(BillableItem billableItem, InvoiceProductCharge.Period period) {
@@ -370,20 +370,31 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
         }
 
         if (InvoiceProductCharge.Period.previous.equals(period)) {
-            // revised charge could have been already added in current period bill
+            // original charge from previous period could have already been revised in current period bill as follows:
+            // case 1 - new amount: issue a credit for the original amount and a charge from the new amount
+            // case 2 - full refund: simply credit for the original amount
             Bill currBill = getBillingManager().getCurrentPeriodBill();
             // Look for corresponding charge in currBill where charge.period() = previous and use that as original charge if found
+            InvoiceProductCharge found = null;
             for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(currBill, InvoiceProductCharge.class)) {
                 if (sameBillableItem(billableItem, charge.chargeSubLineItem().billableItem())
                         && InvoiceProductCharge.Period.current.equals(charge.period().getValue())) {
-                    originalCharge = charge;
+                    originalCharge = found = charge;
                     break;
+                }
+            }
+            if (found == null) {
+                // no new charge found; now if we find a credit for the original charge then it was a full refund
+                for (InvoiceProductCredit credit : BillingUtils.getLineItemsForType(currBill, InvoiceProductCredit.class)) {
+                    if (credit.productCharge().equals(originalCharge)) {
+                        // original charge was refunded - set to null
+                        originalCharge = null;
+                    }
                 }
             }
         }
 
-//        int no = getBillingManager().getNextPeriodBill().billSequenceNumber().getValue();
-//        System.out.println("=0=> Revising " + no + ": found " + period.name() + " charge for " + billableItem.item().description().getValue() + ": "
+//        System.out.println("=0=> Revising: found " + period.name() + " charge for " + billableItem.item().description().getValue() + ": "
 //                + (originalCharge == null ? "none" : originalCharge.amount().getValue()) + " -> "
 //                + (revisedCharge == null ? "none" : revisedCharge.amount().getValue()));
 
@@ -392,12 +403,12 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
         }
 
         if (originalCharge != null) {
-//            System.out.println("=1=> Revising " + no + ": credit for " + originalCharge.amount().getValue());
+//            System.out.println("=1=> Revising " + period.name() + " period: credit for " + originalCharge.amount().getValue());
             addCredit(originalCharge);
         }
 
         if (revisedCharge != null) {
-//            System.out.println("=2=> Revising " + no + ": charge for " + revisedCharge.amount().getValue());
+//            System.out.println("=2=> Revising " + period.name() + " period: charge for " + revisedCharge.amount().getValue());
             addCharge(revisedCharge);
         }
     }
@@ -405,9 +416,11 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
     private void addCredit(InvoiceProductCharge charge) {
         InvoiceProductCredit credit = EntityFactory.create(InvoiceProductCredit.class);
         credit.productCharge().set(charge);
-        credit.amount().setValue(charge.amount().getValue().negate());
+        credit.amount().setValue(charge.amount().getValue().add(charge.taxTotal().getValue()).negate());
         credit.billingAccount().set(charge.billingAccount());
         credit.description().setValue(i18n.tr("Revised {0} Credit", charge.description().getValue()));
-        credit.claimed().setValue(false);
+        getBillingManager().getNextPeriodBill().previousChargeRefunds()
+                .setValue(getBillingManager().getNextPeriodBill().previousChargeRefunds().getValue().add(credit.amount().getValue()));
+        getBillingManager().getNextPeriodBill().lineItems().add(credit);
     }
 }

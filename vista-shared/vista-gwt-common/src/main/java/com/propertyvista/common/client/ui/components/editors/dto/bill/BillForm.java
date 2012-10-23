@@ -77,6 +77,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
             billPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balanceForwardAmount())).build());
             billPanel.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new LineItemCollapsibleViewer()));
             billPanel.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsibleViewer()));
+            billPanel.setWidget(++row, 0, inject(proto().previousChargeAdjustmentLineItems(), new LineItemCollapsibleViewer()));
             billPanel.setWidget(++row, 0, inject(proto().nsfChargeLineItems(), new LineItemCollapsibleViewer()));
             billPanel.setWidget(++row, 0, inject(proto().withdrawalLineItems(), new LineItemCollapsibleViewer()));
             billPanel.setWidget(++row, 0, inject(proto().rejectedPaymentLineItems(), new LineItemCollapsibleViewer()));
