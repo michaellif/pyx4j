@@ -16,13 +16,22 @@ package com.propertyvista.crm.client.ui.crud.billing.bill;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.ConfirmDecline;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 
 public class BillLister extends ListerBase<BillDataDTO> {
+
+    private static final I18n i18n = I18n.get(BillLister.class);
 
     public BillLister() {
         super(BillDataDTO.class, false);
@@ -54,8 +63,26 @@ public class BillLister extends ListerBase<BillDataDTO> {
             new MemberColumnDescriptor.Builder(proto().bill().serviceCharge(),false).build(),
             new MemberColumnDescriptor.Builder(proto().bill().recurringFeatureCharges(),false).build(),
             new MemberColumnDescriptor.Builder(proto().bill().oneTimeFeatureCharges(),false).build()
-            
         );//@formatter:on
+
+        getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
+        addActionItem(new Button(i18n.tr("Confirm Checked"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (!getLister().getDataTablePanel().getDataTable().getCheckedItems().isEmpty()) {
+                    MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to Confirm checked bills?"), new ConfirmDecline() {
+                        @Override
+                        public void onConfirmed() {
+                            ((BillListerPresenter) getPresenter()).confirm(getDataTablePanel().getDataTable().getCheckedItems());
+                        }
+
+                        @Override
+                        public void onDeclined() {
+                        }
+                    });
+                }
+            }
+        }));
     }
 
     @Override

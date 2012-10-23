@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.billing;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -21,12 +23,14 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 
 public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDataDTO> implements BillCrudService {
 
@@ -59,6 +63,17 @@ public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDa
         ServerSideFactory.create(BillingFacade.class).confirmBill(EntityFactory.createIdentityStub(Bill.class, entityId));
         Persistence.service().commit();
         super.retrieve(callback, entityId, RetrieveTraget.View);
+    }
+
+    @Override
+    public void confirm(AsyncCallback<VoidSerializable> callback, Vector<BillDataDTO> bills) {
+        for (BillDataDTO billData : bills) {
+            if (billData.bill().billStatus().getValue() == BillStatus.Finished) {
+                ServerSideFactory.create(BillingFacade.class).confirmBill(EntityFactory.createIdentityStub(Bill.class, billData.bill().getPrimaryKey()));
+            }
+        }
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
     @Override

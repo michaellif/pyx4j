@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.billing;
+package com.propertyvista.crm.client.activity.crud.billing.bill;
 
 import com.google.gwt.core.client.GWT;
 

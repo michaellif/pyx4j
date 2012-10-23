@@ -13,16 +13,21 @@
  */
 package com.propertyvista.crm.rpc.services.billing;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 
 public interface BillCrudService extends AbstractCrudService<BillDataDTO> {
 
     void confirm(AsyncCallback<BillDataDTO> callback, Key entityId);
+
+    void confirm(AsyncCallback<VoidSerializable> callback, Vector<BillDataDTO> bills);
 
     void reject(AsyncCallback<BillDataDTO> callback, Key entityId, String reason);
 

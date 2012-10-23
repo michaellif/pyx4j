@@ -32,9 +32,9 @@ import com.propertyvista.crm.client.activity.crud.account.AccountRecoveryOptions
 import com.propertyvista.crm.client.activity.crud.account.AccountViewerActivity;
 import com.propertyvista.crm.client.activity.crud.account.LoginAttemptsListerActivity;
 import com.propertyvista.crm.client.activity.crud.auditrecords.CrmAuditRecordsListerActivity;
-import com.propertyvista.crm.client.activity.crud.billing.BillViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.adjustment.LeaseAdjustmentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.billing.adjustment.LeaseAdjustmentViewerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.bill.BillViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleBillListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleLeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleViewerActivity;
