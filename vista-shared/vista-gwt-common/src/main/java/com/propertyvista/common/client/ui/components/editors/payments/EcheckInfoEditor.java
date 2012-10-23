@@ -59,7 +59,11 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankId()), 3).build());
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNo(), new CPersonalIdentityField("XXXX XXXX xxxx", null)), 20).build());
+        panel.setWidget(
+                ++row,
+                0,
+                new DecoratorBuilder(inject(proto().accountNo(), new CPersonalIdentityField("XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx",
+                        null)), 20).build());
         panel.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         if (isEditable()) {
