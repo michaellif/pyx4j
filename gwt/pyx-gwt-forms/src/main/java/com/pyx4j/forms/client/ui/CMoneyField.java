@@ -38,7 +38,6 @@ public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>
         super();
         setFormat(new MoneyFormat());
         addValueValidator(new TextBoxParserValidator<BigDecimal>());
-        setWatermark(i18n.tr("$0.00"));
     }
 
     @Override
