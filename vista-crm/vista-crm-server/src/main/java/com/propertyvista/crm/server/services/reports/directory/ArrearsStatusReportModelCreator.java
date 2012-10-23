@@ -18,22 +18,11 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.report.JasperReportModel;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.SysDateManager;
-import com.propertyvista.crm.server.services.dashboard.gadgets.ArrearsReportServiceImpl;
-import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
-import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
-import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class ArrearsStatusReportModelCreator implements GadgetReportModelCreator {
@@ -50,50 +39,51 @@ public class ArrearsStatusReportModelCreator implements GadgetReportModelCreator
 
     @Override
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Building> buildingsFilter) {
-        final ArrearsStatusGadgetMetadata metadata = gadgetMetadata.duplicate(ArrearsStatusGadgetMetadata.class);
-        final LogicalDate asOf = metadata.customizeDate().isBooleanTrue() ? metadata.asOf().getValue() : new LogicalDate(SysDateManager.getSysDate());
-        final DebitType arrearsCategory = metadata.category().getValue();
-        final Vector<Sort> sortingCriteria = new Vector<Sort>();
-        if (!metadata.primarySortColumn().isNull()) {
-            sortingCriteria.add(new Sort(metadata.primarySortColumn().propertyPath().getValue(), !metadata.sortAscending().isBooleanTrue()));
-        }
-
-        AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> serviceCallback = new AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>>() {
-
-            @Override
-            public void onSuccess(EntitySearchResult<LeaseArrearsSnapshotDTO> result) {
-                //@formatter:off
-                String template = new DynamicColumnWidthReportTableTemplateBuilder(EntityFactory.create(LeaseArrearsSnapshotDTO.class), metadata)
-                        .defSubTitle(Param.ARREARS_CATEGORY.name())
-                        .defSubTitle(Param.AS_OF.name())
-                        .build();
-                
-                JasperReportModel model = new DynamicTableTemplateReportModelBuilder()
-                        .template(template)
-                        .param(Param.TITLE.name(), metadata.getEntityMeta().getCaption())
-                        .param(Param.ARREARS_CATEGORY.name(), i18n.tr("Arrears Category: {0}", arrearsCategory.toString()))
-                        .param(Param.AS_OF.name(), i18n.tr("As of Date: {0}", DATE_FORMAT.format(asOf)))
-                        .data(result.getData().iterator())
-                        .build();
-                //@formatter:on
-                callback.onSuccess(model);
-
-            }
-
-            @Override
-            public void onFailure(Throwable arg0) {
-                callback.onFailure(arg0);
-            }
-
-        };
-
-        new ArrearsReportServiceImpl().leaseArrearsRoster(//@formatter:off
-                serviceCallback,
-                buildingsFilter,
-                asOf,
-                arrearsCategory,
-                sortingCriteria,
-                0,
-                Integer.MAX_VALUE);//@formatter:on
+        callback.onFailure(new Error("not implemented"));
+//        final ArrearsStatusGadgetMetadata metadata = gadgetMetadata.duplicate(ArrearsStatusGadgetMetadata.class);
+//        final LogicalDate asOf = metadata.customizeDate().isBooleanTrue() ? metadata.asOf().getValue() : new LogicalDate(SysDateManager.getSysDate());
+//        final DebitType arrearsCategory = metadata.category().getValue();
+//        final Vector<Sort> sortingCriteria = new Vector<Sort>();
+//        if (!metadata.primarySortColumn().isNull()) {
+//            sortingCriteria.add(new Sort(metadata.primarySortColumn().propertyPath().getValue(), !metadata.sortAscending().isBooleanTrue()));
+//        }
+//
+//        AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> serviceCallback = new AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>>() {
+//
+//            @Override
+//            public void onSuccess(EntitySearchResult<LeaseArrearsSnapshotDTO> result) {
+//                //@formatter:off
+//                String template = new DynamicColumnWidthReportTableTemplateBuilder(EntityFactory.create(LeaseArrearsSnapshotDTO.class), metadata)
+//                        .defSubTitle(Param.ARREARS_CATEGORY.name())
+//                        .defSubTitle(Param.AS_OF.name())
+//                        .build();
+//                
+//                JasperReportModel model = new DynamicTableTemplateReportModelBuilder()
+//                        .template(template)
+//                        .param(Param.TITLE.name(), metadata.getEntityMeta().getCaption())
+//                        .param(Param.ARREARS_CATEGORY.name(), i18n.tr("Arrears Category: {0}", arrearsCategory.toString()))
+//                        .param(Param.AS_OF.name(), i18n.tr("As of Date: {0}", DATE_FORMAT.format(asOf)))
+//                        .data(result.getData().iterator())
+//                        .build();
+//                //@formatter:on
+//                callback.onSuccess(model);
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable arg0) {
+//                callback.onFailure(arg0);
+//            }
+//
+//        };
+//
+//        new ArrearsReportServiceImpl().leaseArrearsRoster(//@formatter:off
+//                serviceCallback,
+//                buildingsFilter,
+//                asOf,
+//                arrearsCategory,
+//                sortingCriteria,
+//                0,
+//                Integer.MAX_VALUE);//@formatter:on
     }
 }

@@ -33,7 +33,7 @@ public class ArrearsStatusGadgetMetadataForm extends CEntityDecoratableForm<Arre
         FormFlexPanel p = new FormFlexPanel();
         int row = -1;
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pageSize())).build());
+        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().arrearsStatusListerSettings().pageSize())).build());
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category())).build());
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {

@@ -22,7 +22,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
-import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
@@ -57,7 +58,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
                 VistaCrmBehavior.PropertyVistaSupport
         }
 )//@formatter:on
-public interface ArrearsStatusGadgetMetadata extends ListerGadgetBaseMetadata, BuildingGadget {
+public interface ArrearsStatusGadgetMetadata extends GadgetMetadata, BuildingGadget {
 
     @Caption(description = "Choose which category of arrears to display")
     @NotNull
@@ -67,4 +68,6 @@ public interface ArrearsStatusGadgetMetadata extends ListerGadgetBaseMetadata, B
 
     @NotNull
     IPrimitive<LogicalDate> asOf();
+
+    ListerUserSettings arrearsStatusListerSettings();
 }
