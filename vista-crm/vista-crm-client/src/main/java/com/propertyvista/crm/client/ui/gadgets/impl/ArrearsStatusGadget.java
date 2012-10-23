@@ -150,12 +150,6 @@ public class ArrearsStatusGadget extends GadgetInstanceBase<ArrearsStatusGadgetM
                 saveMetadata();
             }
         })
-//        .onItemSelectedCommand(new ItemSelectCommand<PaymentRecordForReportDTO>() {                
-//            @Override
-//            public void execute(PaymentRecordForReportDTO item) {
-//                AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(PaymentRecord.class).formViewerPlace(item.getPrimaryKey()));
-//            }
-//        })
         .init();
         //@formatter:on
 

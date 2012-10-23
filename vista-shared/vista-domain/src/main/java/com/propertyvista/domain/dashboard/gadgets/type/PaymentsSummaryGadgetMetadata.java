@@ -20,8 +20,9 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
+import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.HasCustomizableDateGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
@@ -52,8 +53,10 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
                 VistaCrmBehavior.PropertyVistaSupport
         }
 )//@formatter:on
-public interface PaymentsSummaryGadgetMetadata extends ListerGadgetBaseMetadata, HasCustomizableDateGadgetMetadata, BuildingGadget {
+public interface PaymentsSummaryGadgetMetadata extends GadgetMetadata, HasCustomizableDateGadgetMetadata, BuildingGadget {
 
     IPrimitiveSet<PaymentRecord.PaymentStatus> paymentStatus();
+
+    ListerUserSettings paymentsSummaryListerSettings();
 
 }

@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services.reports.directory;
 
-import static com.propertyvista.crm.server.services.reports.Util.getSortingCriteria;
-
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Vector;
@@ -23,28 +21,15 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.report.JasperReportModel;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.server.LocalService;
 
-import com.propertyvista.biz.financial.SysDateManager;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
-import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
-import com.propertyvista.crm.server.services.reports.ReportsCommon;
-import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO.PaymentFeeMeasure;
-import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
-import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
-import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.svg.gadgets.util.LabelHelper;
 
 public class PaymentsSummaryReportModelCreator implements GadgetReportModelCreator {
 
@@ -58,69 +43,70 @@ public class PaymentsSummaryReportModelCreator implements GadgetReportModelCreat
 
     @Override
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Building> selectedBuildings) {
-        final PaymentsSummaryGadgetMetadata paymentsSummaryGadgetMetadata = gadgetMetadata.duplicate(PaymentsSummaryGadgetMetadata.class);
-        final LogicalDate targetDate = paymentsSummaryGadgetMetadata.customizeDate().isBooleanTrue() ? paymentsSummaryGadgetMetadata.asOf().getValue()
-                : new LogicalDate(SysDateManager.getSysDate());
-        final Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria = new Vector<PaymentRecord.PaymentStatus>(paymentsSummaryGadgetMetadata.paymentStatus()
-                .getValue());
-        final Vector<PaymentFeesDTO> paymentFees = new Vector<PaymentFeesDTO>();
-
-        LocalService.create(PaymentReportService.class).paymentsFees(//@formatter:off
-                new AsyncCallback<Vector<PaymentFeesDTO>>() {
-                    
-                    @Override
-                    public void onSuccess(Vector<PaymentFeesDTO> result) {
-                            paymentFees.addAll(result);
-                    }
-                    
-                    @Override
-                    public void onFailure(Throwable error) {
-                        throw new RuntimeException(error);
-                    }
-
-                }
-        );//@formatter:on
-
-        LocalService.create(PaymentReportService.class).paymentsSummary(//@formatter:off                
-                new AsyncCallback<EntitySearchResult<PaymentsSummary>>() {
-
-                    @Override
-                    public void onSuccess(EntitySearchResult<PaymentsSummary> result) {
-                        String template = new DynamicColumnWidthReportTableTemplateBuilder(EntityFactory.getEntityPrototype(PaymentsSummary.class), paymentsSummaryGadgetMetadata)                                
-                                .defSubTitle(Params.AS_OF.name())
-                                .defSubTitle(Params.PAYMENT_STATUS_FILTER.name())
-                                .defSubTitle(Params.PAYMENT_FEES.name())
-                                .build();
-                        
-                        DynamicTableTemplateReportModelBuilder builder = new DynamicTableTemplateReportModelBuilder()
-                                .template(template)
-                                .data(result.getData().iterator())
-                                .param(Params.TITLE.name(), paymentsSummaryGadgetMetadata.getEntityMeta().getCaption())
-                                .param(Params.AS_OF.name(), i18n.tr("As of Date: {0}", ReportsCommon.instance().getAsOfDateFormat().format(targetDate)))
-                                .param(Params.PAYMENT_STATUS_FILTER.name(), i18n.tr("Payment Status Filter: {0}", LabelHelper.makeListView(paymentStatusCriteria)));
-                        
-                        if (!paymentFees.isEmpty()) {
-                            builder.param(Params.PAYMENT_FEES.name(), i18n.tr("The following payment fees are applied (per transaction): {0}", makePaymentFeesLabel(paymentFees)));
-                        } else {
-                            builder.param(Params.PAYMENT_FEES.name(), "");
-                        }
-                        
-                        JasperReportModel model = builder.build();
-                        callback.onSuccess(model);
-                    }
-                    
-                    @Override
-                    public void onFailure(Throwable error) {
-                        callback.onFailure(error);
-                    }
-                },
-                selectedBuildings,
-                targetDate,
-                paymentStatusCriteria,
-                0,
-                -1,
-                getSortingCriteria(paymentsSummaryGadgetMetadata)
-        );//@formatter:on
+        callback.onFailure(new Error("not implemented"));
+//        final PaymentsSummaryGadgetMetadata paymentsSummaryGadgetMetadata = gadgetMetadata.duplicate(PaymentsSummaryGadgetMetadata.class);
+//        final LogicalDate targetDate = paymentsSummaryGadgetMetadata.customizeDate().isBooleanTrue() ? paymentsSummaryGadgetMetadata.asOf().getValue()
+//                : new LogicalDate(SysDateManager.getSysDate());
+//        final Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria = new Vector<PaymentRecord.PaymentStatus>(paymentsSummaryGadgetMetadata.paymentStatus()
+//                .getValue());
+//        final Vector<PaymentFeesDTO> paymentFees = new Vector<PaymentFeesDTO>();
+//
+//        LocalService.create(PaymentReportService.class).paymentsFees(//@formatter:off
+//                new AsyncCallback<Vector<PaymentFeesDTO>>() {
+//                    
+//                    @Override
+//                    public void onSuccess(Vector<PaymentFeesDTO> result) {
+//                            paymentFees.addAll(result);
+//                    }
+//                    
+//                    @Override
+//                    public void onFailure(Throwable error) {
+//                        throw new RuntimeException(error);
+//                    }
+//
+//                }
+//        );//@formatter:on
+//
+//        LocalService.create(PaymentReportService.class).paymentsSummary(//@formatter:off                
+//                new AsyncCallback<EntitySearchResult<PaymentsSummary>>() {
+//
+//                    @Override
+//                    public void onSuccess(EntitySearchResult<PaymentsSummary> result) {
+//                        String template = new DynamicColumnWidthReportTableTemplateBuilder(EntityFactory.getEntityPrototype(PaymentsSummary.class), paymentsSummaryGadgetMetadata)                                
+//                                .defSubTitle(Params.AS_OF.name())
+//                                .defSubTitle(Params.PAYMENT_STATUS_FILTER.name())
+//                                .defSubTitle(Params.PAYMENT_FEES.name())
+//                                .build();
+//                        
+//                        DynamicTableTemplateReportModelBuilder builder = new DynamicTableTemplateReportModelBuilder()
+//                                .template(template)
+//                                .data(result.getData().iterator())
+//                                .param(Params.TITLE.name(), paymentsSummaryGadgetMetadata.getEntityMeta().getCaption())
+//                                .param(Params.AS_OF.name(), i18n.tr("As of Date: {0}", ReportsCommon.instance().getAsOfDateFormat().format(targetDate)))
+//                                .param(Params.PAYMENT_STATUS_FILTER.name(), i18n.tr("Payment Status Filter: {0}", LabelHelper.makeListView(paymentStatusCriteria)));
+//                        
+//                        if (!paymentFees.isEmpty()) {
+//                            builder.param(Params.PAYMENT_FEES.name(), i18n.tr("The following payment fees are applied (per transaction): {0}", makePaymentFeesLabel(paymentFees)));
+//                        } else {
+//                            builder.param(Params.PAYMENT_FEES.name(), "");
+//                        }
+//                        
+//                        JasperReportModel model = builder.build();
+//                        callback.onSuccess(model);
+//                    }
+//                    
+//                    @Override
+//                    public void onFailure(Throwable error) {
+//                        callback.onFailure(error);
+//                    }
+//                },
+//                selectedBuildings,
+//                targetDate,
+//                paymentStatusCriteria,
+//                0,
+//                -1,
+//                getSortingCriteria(paymentsSummaryGadgetMetadata)
+//        );//@formatter:on
 
     }
 

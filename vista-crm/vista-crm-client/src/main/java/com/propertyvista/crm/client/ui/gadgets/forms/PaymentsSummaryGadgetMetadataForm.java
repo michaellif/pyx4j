@@ -47,7 +47,7 @@ public class PaymentsSummaryGadgetMetadataForm extends CEntityDecoratableForm<Pa
         int row = -1;
 
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pageSize())).build());
+        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentsSummaryListerSettings().pageSize())).build());
         p.setWidget(++row, 0, new HTML("&nbsp"));
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).build());

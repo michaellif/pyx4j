@@ -22,6 +22,7 @@ import java.util.Vector;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -32,28 +33,52 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataItem;
 import com.pyx4j.forms.client.ui.datatable.DataTable;
+import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
-import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.forms.PaymentsSummaryGadgetMetadataForm;
+import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils;
+import com.propertyvista.crm.client.ui.gadgets.util.Provider;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class PaymentsSummaryGadget extends ListerGadgetInstanceBase<PaymentsSummary, PaymentsSummaryGadgetMetadata> {
+public class PaymentsSummaryGadget extends GadgetInstanceBase<PaymentsSummaryGadgetMetadata> {
 
     private final static I18n i18n = I18n.get(PaymentsSummaryGadget.class);
+
+    private final static List<ColumnDescriptor> DEFAULT_PAYMENTS_SUMMARY_COLUMN_DESCRIPTORS;
+    static {
+        PaymentsSummary proto = EntityFactory.getEntityPrototype(PaymentsSummary.class);
+        DEFAULT_PAYMENTS_SUMMARY_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
+                (PaymentsSummary.summaryByBuilding)?
+                        new MemberColumnDescriptor.Builder(proto.building()).build():
+                        new MemberColumnDescriptor.Builder(proto.merchantAccount().accountNumber()).title(i18n.ntr("Merchant Account")).build(),
+                        new MemberColumnDescriptor.Builder(proto.status()).build(),
+                        new MemberColumnDescriptor.Builder(proto.cash()).build(),
+                        new MemberColumnDescriptor.Builder(proto.cheque()).build(),
+                        new MemberColumnDescriptor.Builder(proto.eCheque()).build(),
+                        new MemberColumnDescriptor.Builder(proto.eft()).build(),
+                        new MemberColumnDescriptor.Builder(proto.cc()).build(),
+                        new MemberColumnDescriptor.Builder(proto.interac()).build()
+                
+        );//@formatter:on
+    }
 
     private final PaymentReportService service;
 
@@ -61,9 +86,20 @@ public class PaymentsSummaryGadget extends ListerGadgetInstanceBase<PaymentsSumm
 
     private HTML summaryTitlePanel;
 
+    private DataTablePanel<PaymentsSummary> paymentsSummaryTablePanel;
+
+    private int pageNumber;
+
     public PaymentsSummaryGadget(PaymentsSummaryGadgetMetadata gadgetMetadata) {
-        super(gadgetMetadata, PaymentsSummaryGadgetMetadata.class, new PaymentsSummaryGadgetMetadataForm(), PaymentsSummary.class, false);
+        super(gadgetMetadata, PaymentsSummaryGadgetMetadata.class, new PaymentsSummaryGadgetMetadataForm());
         service = GWT.<PaymentReportService> create(PaymentReportService.class);
+        pageNumber = 0;
+        setDefaultPopulator(new Populator() {
+            @Override
+            public void populate() {
+                populatePage(pageNumber);
+            }
+        });
     }
 
     @Override
@@ -77,14 +113,14 @@ public class PaymentsSummaryGadget extends ListerGadgetInstanceBase<PaymentsSumm
         });
     }
 
-    @Override
-    protected void populatePage(final int pageNumber) {
+    private void populatePage(final int pageNumber) {
         service.paymentsSummary(//@formatter:off
                 new AsyncCallback<EntitySearchResult<PaymentsSummary>>() {
                     
                     @Override
                     public void onSuccess(EntitySearchResult<PaymentsSummary> result) {
-                        setPageData(result.getData(), pageNumber, result.getTotalRows(), result.hasMoreData());
+                        paymentsSummaryTablePanel.setPageSize(getMetadata().paymentsSummaryListerSettings().pageSize().getValue());
+                        paymentsSummaryTablePanel.populateData(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
                         populateFeesPanel();
                     }
                     
@@ -98,8 +134,8 @@ public class PaymentsSummaryGadget extends ListerGadgetInstanceBase<PaymentsSumm
                 getStatusDate(),
                 new Vector<PaymentRecord.PaymentStatus>(getMetadata().paymentStatus()),
                 pageNumber,
-                getPageSize(),
-                new Vector<Sort>(getListerSortingCriteria())
+                getMetadata().paymentsSummaryListerSettings().pageSize().getValue(),
+                new Vector<Sort>(paymentsSummaryTablePanel.getDataTable().getDataTableModel().getSortCriteria())
         );//@formatter:on
     }
 
@@ -124,9 +160,76 @@ public class PaymentsSummaryGadget extends ListerGadgetInstanceBase<PaymentsSumm
         summaryTitlePanel.getElement().getStyle().setProperty("textAlign", "center");
         summaryPanel.add(summaryTitlePanel);
 
-        summaryPanel.add(initListerWidget());
+        summaryPanel.add(initPaymentSummaryTableWidget());
 
         return summaryPanel;
+    }
+
+    private Widget initPaymentSummaryTableWidget() {
+        paymentsSummaryTablePanel = new DataTablePanel<PaymentsSummary>(PaymentsSummary.class);
+        ListerUtils.bind(paymentsSummaryTablePanel)//@formatter:off
+        .columnDescriptors(DEFAULT_PAYMENTS_SUMMARY_COLUMN_DESCRIPTORS)
+        .setupable(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey()))
+        .userSettingsProvider(new Provider<ListerUserSettings>() {
+            @Override
+            public ListerUserSettings get() {
+                return getMetadata().paymentsSummaryListerSettings();
+            }
+         })
+        .onColumnSelectionChanged(new Command() {
+            @Override
+            public void execute() {
+                saveMetadata();
+            }
+        })
+        .init();
+        //@formatter:on
+
+        paymentsSummaryTablePanel.setFilterApplyCommand(new Command() {
+            @Override
+            public void execute() {
+                populate(false);
+            }
+        });
+        paymentsSummaryTablePanel.setFirstActionHandler(new Command() {
+            @Override
+            public void execute() {
+                pageNumber = 0;
+                populate(false);
+            }
+        });
+        paymentsSummaryTablePanel.setPrevActionHandler(new Command() {
+            @Override
+            public void execute() {
+                if (pageNumber != 0) {
+                    --pageNumber;
+                    populate(false);
+                }
+            }
+        });
+        paymentsSummaryTablePanel.setNextActionHandler(new Command() {
+            @Override
+            public void execute() {
+                pageNumber += 1;
+                populate(false);
+            }
+        });
+        paymentsSummaryTablePanel.setLastActionHandler(new Command() {
+            @Override
+            public void execute() {
+                pageNumber = (paymentsSummaryTablePanel.getDataTableModel().getTotalRows() - 1)
+                        / getMetadata().paymentsSummaryListerSettings().pageSize().getValue();
+                populate(false);
+            }
+        });
+        paymentsSummaryTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<PaymentsSummary>() {
+            @Override
+            public void onChange(ColumnDescriptor column) {
+                populate(false);
+            }
+        });
+
+        return paymentsSummaryTablePanel;
     }
 
     private Widget initFeesPanel() {
