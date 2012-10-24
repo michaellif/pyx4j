@@ -209,13 +209,13 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
-    public void completeLease(String decisionReason) {
+    public void completeLease(LogicalDate from) {
         ((LeaseViewerCrudService) getService()).completeLease(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, getEntityId(), decisionReason);
+        }, getEntityId(), from);
     }
 
     @Override

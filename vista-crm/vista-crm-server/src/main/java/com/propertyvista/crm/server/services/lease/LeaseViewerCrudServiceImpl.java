@@ -155,10 +155,10 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     @Override
-    public void completeLease(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason) {
+    public void completeLease(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate from) {
         Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
 
-        ServerSideFactory.create(LeaseFacade.class).complete(leaseId);
+        ServerSideFactory.create(LeaseFacade.class).complete(leaseId, from);
 
         Persistence.service().commit();
         callback.onSuccess(null);

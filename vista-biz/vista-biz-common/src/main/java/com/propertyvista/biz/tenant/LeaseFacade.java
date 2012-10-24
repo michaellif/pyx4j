@@ -69,6 +69,8 @@ public interface LeaseFacade {
 
     void complete(Lease leaseId);
 
+    void complete(Lease leaseId, LogicalDate from);
+
     void close(Lease leaseId);
 
     // DB-data LeaseTerm state interfaces:

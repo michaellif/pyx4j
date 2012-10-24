@@ -476,6 +476,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public void complete(Lease leaseId) {
+        complete(leaseId, new LogicalDate(Persistence.service().getTransactionSystemTime()));
+    }
+
+    @Override
+    public void complete(Lease leaseId, LogicalDate from) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
 
         // Verify the status
@@ -487,12 +492,14 @@ public class LeaseFacadeImpl implements LeaseFacade {
             throw new IllegalStateException(SimpleMessageFormat.format("Lease has next term ready"));
         }
 
-        lease.actualLeaseTo().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        lease.actualLeaseTo().setValue(from);
         lease.status().setValue(Status.Completed);
 
         Persistence.secureSave(lease);
 
         ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey());
+        // TODO:
+//        ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey(), from);
     }
 
     @Override

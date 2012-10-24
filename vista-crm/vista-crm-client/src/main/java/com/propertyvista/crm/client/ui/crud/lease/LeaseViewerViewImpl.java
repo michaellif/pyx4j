@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -27,6 +28,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -231,10 +233,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         completeAction = new MenuItem(i18n.tr("Complete"), new Command() {
             @Override
             public void execute() {
-                new ReasonBox(i18n.tr("Complete Lease")) {
+                new CompletionBox(i18n.tr("Complete Lease")) {
                     @Override
                     public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) getPresenter()).completeLease(getReason());
+                        ((LeaseViewerView.Presenter) getPresenter()).completeLease(getDate());
                         return true;
                     }
                 }.show();
@@ -387,6 +389,11 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         return adjustmentLister;
     }
 
+    @Override
+    public void reportSendMailActionResult(String message) {
+        MessageDialog.info(message);
+    }
+
     private abstract class TermLeaseBox extends OkCancelDialog {
 
         private final CompletionType action;
@@ -502,8 +509,33 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         }
     }
 
-    @Override
-    public void reportSendMailActionResult(String message) {
-        MessageDialog.info(message);
+    private abstract class CompletionBox extends OkCancelDialog {
+
+        private final CDatePicker date = new CDatePicker();
+
+        public CompletionBox(String title) {
+            super(title);
+            setBody(createBody());
+            setHeight("100px");
+        }
+
+        protected Widget createBody() {
+            HorizontalPanel content = new HorizontalPanel();
+
+            content.add(new HTML(i18n.tr("From") + ":"));
+            content.add(date);
+
+            date.setValue(ClientContext.getServerDate());
+            date.setWidth("10em");
+
+            content.setWidth("100%");
+            content.setSpacing(8);
+
+            return content.asWidget();
+        }
+
+        public LogicalDate getDate() {
+            return new LogicalDate(date.getValue());
+        }
     }
 }
