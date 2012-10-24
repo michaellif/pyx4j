@@ -35,6 +35,7 @@ import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<LeaseApplicationDTO> implements LeaseApplicationViewerView {
@@ -81,7 +82,9 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease().formViewerPlace(getForm().getValue().getPrimaryKey()));
             }
         });
-        addAction(viewLease);
+        if (VistaTODO.VISTA_2108_View_Lease_Application) {
+            addAction(viewLease);
+        }
 
         onlineApplication = new MenuItem(i18n.tr("Start Online Application"), new Command() {
             @Override
@@ -202,7 +205,9 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
     @Override
     public void reset() {
-        setActionVisible(viewLease, false);
+        if (VistaTODO.VISTA_2108_View_Lease_Application) {
+            setActionVisible(viewLease, false);
+        }
         setActionVisible(onlineApplication, false);
         setActionVisible(inviteAction, false);
         setActionVisible(checkAction, false);
@@ -221,7 +226,9 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         Status status = value.leaseApplication().status().getValue();
 
         // set buttons state:
-        setActionVisible(viewLease, status.isCurrent());
+        if (VistaTODO.VISTA_2108_View_Lease_Application) {
+            setActionVisible(viewLease, status.isCurrent());
+        }
         setActionVisible(onlineApplication, status == Status.Created);
         setActionVisible(inviteAction, status == Status.OnlineApplication);
         setActionVisible(checkAction, status.isDraft());

@@ -53,4 +53,6 @@ public interface VistaTODO {
     public final boolean ApplicationDocumentationPolicyRefacotring = true;
 
     public final boolean VISTA_2127_Attachments_For_Notes = true;
+
+    public final boolean VISTA_2108_View_Lease_Application = false;
 }

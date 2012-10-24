@@ -63,6 +63,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> implements LeaseViewerView {
 
@@ -123,7 +124,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(getForm().getValue().getPrimaryKey()));
             }
         });
-        addAction(viewApplication);
+        if (VistaTODO.VISTA_2108_View_Lease_Application) {
+            addAction(viewApplication);
+        }
 
         sendMailAction = new MenuItem(i18n.tr("Send Mail..."), new Command() {
             @Override
@@ -303,7 +306,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     @Override
     public void reset() {
-        setActionVisible(viewApplication, false);
+        if (VistaTODO.VISTA_2108_View_Lease_Application) {
+            setActionVisible(viewApplication, false);
+        }
         setActionVisible(sendMailAction, false);
         setActionVisible(runBillAction, false);
         setActionVisible(noticeAction, false);
@@ -327,7 +332,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         // set buttons state:
         CompletionType completion = value.completion().getValue();
 
-        setActionVisible(viewApplication, !value.leaseApplication().isNull());
+        if (VistaTODO.VISTA_2108_View_Lease_Application) {
+            setActionVisible(viewApplication, !value.leaseApplication().isNull());
+        }
         setActionVisible(sendMailAction, status.isCurrent());
         setActionVisible(runBillAction, status.isCurrent());
         setActionVisible(noticeAction, status == Status.Active && completion == null);
