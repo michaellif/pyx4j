@@ -21,6 +21,7 @@ import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.retr
 import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.split;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Vector;
@@ -346,26 +347,48 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     @Override
     public void unreserve(Key unitPk) {
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
-        AptUnitOccupancySegment nowSegment = retrieveOccupancySegment(unitPk, now);
-        if (nowSegment == null) {
-            throw new IllegalStateException("unable to find current occupancy for 'unreserve' operation");
-        } else if (nowSegment.status().getValue() == Status.reserved) {
-            split(unitPk, now, new SplittingHandler() {
-                @Override
-                public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
-
-                }
-
-                @Override
-                public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
-                }
-            });
+        List<AptUnitOccupancySegment> futureOccupancy = retrieveOccupancy(unitPk, now);
+        AptUnitOccupancySegment reservedSegment = null;
+        for (AptUnitOccupancySegment futureSegment : futureOccupancy) {
+            if (futureSegment.status().getValue() == Status.reserved) {
+                reservedSegment = futureSegment;
+                break;
+            }
         }
-        merge(unitPk, now, Arrays.asList(Status.available, Status.reserved), new MergeHandler() {
+        if (reservedSegment == null) {
+            throw new UserRuntimeException(i18n.tr("This unit is not reserved!"));
+        }
+
+        LogicalDate unreserveFrom = reservedSegment.dateFrom().getValue().after(now) ? reservedSegment.dateFrom().getValue() : now;
+
+        split(reservedSegment, unreserveFrom, new SplittingHandler() {
+            @Override
+            public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
+            }
+
+            @Override
+            public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
+            }
+        });
+        EntityQueryCriteria<AptUnitOccupancySegment> criteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
+        criteria.add(PropertyCriterion.ge(criteria.proto().dateFrom(), unreserveFrom));
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unitPk));
+        Persistence.service().delete(criteria);
+
+        AptUnitOccupancySegment availableSegment = EntityFactory.create(AptUnitOccupancySegment.class);
+        availableSegment.unit().setPrimaryKey(unitPk);
+        availableSegment.status().setValue(Status.available);
+        availableSegment.dateFrom().setValue(unreserveFrom);
+        availableSegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
+        Persistence.service().persist(availableSegment);
+
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.setTime(unreserveFrom);
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        merge(unitPk, new LogicalDate(calendar.getTime()), Arrays.asList(Status.available), new MergeHandler() {
             @Override
             public void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
                 merged.status().setValue(Status.available);
-                merged.lease().set(null);
             }
 
             @Override
@@ -374,6 +397,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             }
         });
         new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
+        updateUnitAvailableFrom(unitPk, unreserveFrom);
     }
 
     @Override

@@ -327,18 +327,19 @@ public class AptUnitOccupancyManagerTestBase {
             EntityQueryCriteria<AptUnitOccupancySegment> actualOccupancyCriteria = new EntityQueryCriteria<AptUnitOccupancySegment>(
                     AptUnitOccupancySegment.class);
             actualOccupancyCriteria.add(PropertyCriterion.eq(actualOccupancyCriteria.proto().unit(), unit));
+            actualOccupancyCriteria.asc(actualOccupancyCriteria.proto().dateFrom());
             List<AptUnitOccupancySegment> actualSegments = Persistence.service().query(actualOccupancyCriteria);
             String actualSegmentsView = createSegmentsView(actualSegments);
 
-            EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
+            EntityQueryCriteria<AptUnitOccupancySegment> actualSegmentCriteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
 
-            criteria.add(PropertyCriterion.eq(criteria.proto().dateFrom(), segment.dateFrom().getValue()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().dateTo(), segment.dateTo().getValue()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().status(), segment.status().getValue()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().offMarket(), segment.offMarket().getValue()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), segment.lease().isNull() ? null : segment.lease()));
+            actualSegmentCriteria.add(PropertyCriterion.eq(actualSegmentCriteria.proto().dateFrom(), segment.dateFrom().getValue()));
+            actualSegmentCriteria.add(PropertyCriterion.eq(actualSegmentCriteria.proto().dateTo(), segment.dateTo().getValue()));
+            actualSegmentCriteria.add(PropertyCriterion.eq(actualSegmentCriteria.proto().status(), segment.status().getValue()));
+            actualSegmentCriteria.add(PropertyCriterion.eq(actualSegmentCriteria.proto().offMarket(), segment.offMarket().getValue()));
+            actualSegmentCriteria.add(PropertyCriterion.eq(actualSegmentCriteria.proto().lease(), segment.lease().isNull() ? null : segment.lease()));
 
-            AptUnitOccupancySegment actual = Persistence.service().retrieve(criteria);
+            AptUnitOccupancySegment actual = Persistence.service().retrieve(actualSegmentCriteria);
             Assert.assertNotNull(SimpleMessageFormat.format("the expected occupancy segment was not found in the DB:\n {0}\n the actual DB occupancy is:\n{1}",
                     createSegmentView(segment), actualSegmentsView), actual);
         }
