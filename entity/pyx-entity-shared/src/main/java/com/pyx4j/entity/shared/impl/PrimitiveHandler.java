@@ -35,6 +35,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.annotations.I18nComment;
+import com.pyx4j.i18n.annotations.I18nContext;
 import com.pyx4j.i18n.shared.I18n;
 
 public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrimitive<TYPE> {
@@ -52,6 +53,8 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
 
     private static final String falseText = defaultNoText();
 
+    private static final String dateFormat = defaultDateFormat();
+
     public PrimitiveHandler(IEntity parent, String fieldName, Class<TYPE> valueClass) {
         super(IPrimitive.class, parent, fieldName);
         this.valueClass = valueClass;
@@ -65,6 +68,11 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
     @I18nComment("As an answer to a question")
     private static final String defaultYesText() {
         return i18n.tr("Yes");
+    }
+
+    @I18nContext(javaFormatFlag = true)
+    private static final String defaultDateFormat() {
+        return i18n.tr("MM/dd/yyyy");
     }
 
     @SuppressWarnings("unchecked")
@@ -283,6 +291,9 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
         } else if (format == null) {
             if (valueClass.equals(Boolean.class)) {
                 return isBooleanTrue() ? trueText : falseText;
+            } else if (thisValue instanceof Date) {
+                // TODO Add global variable for user preference
+                format = dateFormat;
             } else {
                 return String.valueOf(thisValue);
             }
