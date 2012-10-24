@@ -19,6 +19,8 @@ SET client_min_messages = 'WARNING';
 
 SET search_path = '_admin_';
 
+ALTER TABLE admin_pmc ADD COLUMN schema_version VARCHAR(500);
+
 ALTER TABLE admin_pmc_equifax_info
     ADD COLUMN report_type VARCHAR(50),
     ADD COLUMN approved BOOLEAN;
@@ -307,6 +309,11 @@ BEGIN
 
         -- elevator
          EXECUTE 'ALTER TABLE '||v_schema_name||'.elevator DROP COLUMN notes';
+         
+         -- email_template
+         
+         EXECUTE 'CREATE UNIQUE INDEX email_template_policy_template_type_idx ON '||v_schema_name||'.email_template (policy,template_type)';
+         
 
         -- employee
         EXECUTE 'ALTER TABLE '||v_schema_name||'.employee ADD COLUMN employee_id_s VARCHAR(26)';
@@ -1467,14 +1474,20 @@ BEGIN
                 'CHECK (policy_nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge ADD CONSTRAINT tenant_charge_tenantdiscriminator_d_ck CHECK (tenantdiscriminator = ''Tenant'') '; 
 
+        -- Final touch - update admin_pmc table
+        
+        UPDATE  _admin_.admin_pmc
+        SET     schema_version = '1.0.5-SNAPSHOT'
+        WHERE   namespace = v_schema_name;
 
-    EXCEPTION WHEN OTHERS THEN
+        EXCEPTION WHEN OTHERS THEN
                 RAISE EXCEPTION 'Failed executing statement, code: %, error message: %',SQLSTATE,SQLERRM ;
+                
 END;
 $$
 LANGUAGE plpgsql VOLATILE;
 
-SELECT  namespace,_dba_.migrate_to_105(namespace) AS migration
+SELECT  _dba_.migrate_to_105(namespace) AS migration
 FROM    _admin_.admin_pmc
 WHERE   status IN ('Active','Suspended');
 

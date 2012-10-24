@@ -800,3 +800,41 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql VOLATILE; 
+
+/**
+***     ========================================================================
+***
+***             Count rows in a specified table accross all pmc's
+***     
+***     ========================================================================
+**/
+CREATE OR REPLACE FUNCTION _dba_.count_rows_all_pmc(v_table_name VARCHAR(64),v_query_condition TEXT[] DEFAULT NULL) 
+RETURNS TABLE ( pmc             VARCHAR(120),
+                row_count       BIGINT) AS
+$$
+DECLARE
+        v_schema_name           VARCHAR(64);
+        v_sql_array             TEXT[];
+        v_sql                   TEXT;
+BEGIN
+        FOR v_schema_name IN
+        SELECT namespace FROM _admin_.admin_pmc
+        WHERE status IN ('Active','Suspended')
+        ORDER BY 1
+        LOOP
+                v_sql :=  'SELECT '||quote_literal(v_schema_name)||' AS pmc,COUNT(id) '
+                ||' FROM '||v_schema_name||'.'||v_table_name||' ';
+                
+                IF (v_query_condition IS NOT NULL)
+                THEN
+                        v_sql := v_sql||' WHERE '||array_to_string(v_query_condition,' AND ');
+                END IF;
+             
+                EXECUTE  v_sql INTO pmc,row_count;
+                RETURN NEXT;
+
+        END LOOP; 
+END;
+$$
+LANGUAGE plpgsql VOLATILE;
+
