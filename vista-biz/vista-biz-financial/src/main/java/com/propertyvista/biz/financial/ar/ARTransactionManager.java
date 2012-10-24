@@ -35,6 +35,7 @@ import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
+import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
@@ -113,8 +114,7 @@ public class ARTransactionManager {
         Collection<AgingBuckets> agingBucketsCollection = ARArrearsManager.getAgingBuckets(billingAccount);
 
         th.agingBuckets().addAll(agingBucketsCollection);
-
-        th.totalAgingBuckets().set(ARArrearsManager.calculateTotalAgingBuckets(agingBucketsCollection));
+        th.totalAgingBuckets().set(ARArrearsManagerHelper.addInPlace(ARArrearsManagerHelper.createAgingBuckets(DebitType.total), agingBucketsCollection));
 
         return th;
     }

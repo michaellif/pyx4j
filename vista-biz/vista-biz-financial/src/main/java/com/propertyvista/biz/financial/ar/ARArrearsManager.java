@@ -52,7 +52,8 @@ public class ARArrearsManager {
     private static LeaseArrearsSnapshot createArrearsSnapshot(BillingAccount billingAccount) {
         LeaseArrearsSnapshot arrearsSnapshot = createZeroArrearsSnapshot(LeaseArrearsSnapshot.class);
         arrearsSnapshot.agingBuckets().addAll(getAgingBuckets(billingAccount));
-        arrearsSnapshot.totalAgingBuckets().set(calculateTotalAgingBuckets(arrearsSnapshot.agingBuckets()));
+        arrearsSnapshot.totalAgingBuckets().set(
+                ARArrearsManagerHelper.addInPlace(ARArrearsManagerHelper.createAgingBuckets(DebitType.total), arrearsSnapshot.agingBuckets()));
 
         arrearsSnapshot.fromDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         arrearsSnapshot.fromDate().setValue(arrearsSnapshot.toDate().getValue());
@@ -78,16 +79,16 @@ public class ARArrearsManager {
         BuildingArrearsSnapshot arrearsSnapshotAcc = createZeroArrearsSnapshot(BuildingArrearsSnapshot.class);
         EnumMap<DebitType, AgingBuckets> agingBucketsAcc = new EnumMap<InvoiceDebit.DebitType, AgingBuckets>(DebitType.class);
         for (DebitType debitType : DebitType.values()) {
-            agingBucketsAcc.put(debitType, createAgingBuckets(debitType));
+            agingBucketsAcc.put(debitType, ARArrearsManagerHelper.createAgingBuckets(debitType));
         }
 
         // accumulate
         while (billingAccountsIter.hasNext()) {
             ArrearsSnapshot arrearsSnapshot = createArrearsSnapshot(billingAccountsIter.next());
             for (AgingBuckets agingBuckets : arrearsSnapshot.agingBuckets()) {
-                addInPlace(agingBucketsAcc.get(agingBuckets.debitType().getValue()), agingBuckets);
+                ARArrearsManagerHelper.addInPlace(agingBucketsAcc.get(agingBuckets.debitType().getValue()), agingBuckets);
             }
-            addInPlace(arrearsSnapshotAcc.totalAgingBuckets(), arrearsSnapshot.totalAgingBuckets());
+            ARArrearsManagerHelper.addInPlace(arrearsSnapshotAcc.totalAgingBuckets(), arrearsSnapshot.totalAgingBuckets());
         }
 
         // put accumulated agingBuckets by category back to the general snapshot acccumulator
@@ -142,6 +143,7 @@ public class ARArrearsManager {
         return Persistence.service().retrieve(criteria);
     }
 
+    // TODO get this function out of this class
     /**
      * @param sortCriteria
      * @param searchCriteria
@@ -207,7 +209,7 @@ public class ARArrearsManager {
 
         for (InvoiceDebit debit : debits) {
             if (!agingBucketsMap.containsKey(debit.debitType().getValue())) {
-                agingBucketsMap.put(debit.debitType().getValue(), createAgingBuckets(debit.debitType().getValue()));
+                agingBucketsMap.put(debit.debitType().getValue(), ARArrearsManagerHelper.createAgingBuckets(debit.debitType().getValue()));
             }
             AgingBuckets agingBuckets = agingBucketsMap.get(debit.debitType().getValue());
 
@@ -244,54 +246,10 @@ public class ARArrearsManager {
         return agingBucketsMap.values();
     }
 
-    static AgingBuckets calculateTotalAgingBuckets(Collection<AgingBuckets> agingBucketsCollection) {
-        AgingBuckets agingBuckets = createAgingBuckets(DebitType.total);
-        for (AgingBuckets typedBuckets : agingBucketsCollection) {
-            agingBuckets.bucketThisMonth().setValue(agingBuckets.bucketThisMonth().getValue().add(typedBuckets.bucketThisMonth().getValue()));
-            agingBuckets.bucketCurrent().setValue(agingBuckets.bucketCurrent().getValue().add(typedBuckets.bucketCurrent().getValue()));
-            agingBuckets.bucket30().setValue(agingBuckets.bucket30().getValue().add(typedBuckets.bucket30().getValue()));
-            agingBuckets.bucket60().setValue(agingBuckets.bucket60().getValue().add(typedBuckets.bucket60().getValue()));
-            agingBuckets.bucket90().setValue(agingBuckets.bucket90().getValue().add(typedBuckets.bucket90().getValue()));
-            agingBuckets.bucketOver90().setValue(agingBuckets.bucketOver90().getValue().add(typedBuckets.bucketOver90().getValue()));
-            agingBuckets.arrearsAmount().setValue(agingBuckets.arrearsAmount().getValue().add(typedBuckets.arrearsAmount().getValue()));
-            agingBuckets.creditAmount().setValue(agingBuckets.creditAmount().getValue().add(typedBuckets.creditAmount().getValue()));
-            agingBuckets.totalBalance().setValue(agingBuckets.totalBalance().getValue().add(typedBuckets.totalBalance().getValue()));
-        }
-        return agingBuckets;
-    }
-
-    private static AgingBuckets createAgingBuckets(DebitType debitType) {
-        AgingBuckets agingBuckets = EntityFactory.create(AgingBuckets.class);
-        agingBuckets.bucketThisMonth().setValue(new BigDecimal("0.00"));
-        agingBuckets.bucketCurrent().setValue(new BigDecimal("0.00"));
-        agingBuckets.bucket30().setValue(new BigDecimal("0.00"));
-        agingBuckets.bucket60().setValue(new BigDecimal("0.00"));
-        agingBuckets.bucket90().setValue(new BigDecimal("0.00"));
-        agingBuckets.bucketOver90().setValue(new BigDecimal("0.00"));
-        agingBuckets.arrearsAmount().setValue(new BigDecimal("0.00"));
-        agingBuckets.creditAmount().setValue(new BigDecimal("0.00"));
-        agingBuckets.totalBalance().setValue(new BigDecimal("0.00"));
-        agingBuckets.debitType().setValue(debitType);
-        return agingBuckets;
-    }
-
     private static <ARREARS_SNAPSHOT extends ArrearsSnapshot> ARREARS_SNAPSHOT createZeroArrearsSnapshot(Class<ARREARS_SNAPSHOT> arrearsSnapshotClass) {
         ARREARS_SNAPSHOT snapshot = EntityFactory.create(arrearsSnapshotClass);
-        snapshot.totalAgingBuckets().set(createAgingBuckets(DebitType.total));
+        snapshot.totalAgingBuckets().set(ARArrearsManagerHelper.createAgingBuckets(DebitType.total));
         return snapshot;
-    }
-
-    private static void addInPlace(AgingBuckets buckets1, AgingBuckets buckets2) {
-        buckets1.bucketThisMonth().setValue(buckets1.bucketThisMonth().getValue().add(buckets2.bucketThisMonth().getValue()));
-        buckets1.bucketCurrent().setValue(buckets1.bucketCurrent().getValue().add(buckets2.bucketCurrent().getValue()));
-        buckets1.bucket30().setValue(buckets1.bucket30().getValue().add(buckets2.bucket30().getValue()));
-        buckets1.bucket60().setValue(buckets1.bucket60().getValue().add(buckets2.bucket60().getValue()));
-        buckets1.bucket90().setValue(buckets1.bucket90().getValue().add(buckets2.bucket90().getValue()));
-        buckets1.bucketOver90().setValue(buckets1.bucketOver90().getValue().add(buckets2.bucketOver90().getValue()));
-
-        buckets1.arrearsAmount().setValue(buckets1.arrearsAmount().getValue().add(buckets2.arrearsAmount().getValue()));
-        buckets1.creditAmount().setValue(buckets1.creditAmount().getValue().add(buckets2.creditAmount().getValue()));
-        buckets1.totalBalance().setValue(buckets1.totalBalance().getValue().add(buckets2.totalBalance().getValue()));
     }
 
     private static boolean areDifferent(ArrearsSnapshot currentSnapshot, ArrearsSnapshot previousSnapshot) {
