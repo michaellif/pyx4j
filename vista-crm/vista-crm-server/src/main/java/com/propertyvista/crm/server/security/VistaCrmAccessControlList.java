@@ -78,10 +78,12 @@ import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
+import com.propertyvista.crm.server.security.gadgets.UnitAvailabilityStatusDatasetAccessRule;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -297,6 +299,9 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.BuildingsAssigned, new LeaseDatasetAccessRule(), Lease.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new Lease2DatasetAccessRule(), Lease.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new TenantDatasetAccessRule(), Customer.class);
+
+        // Data Access for Gadgets
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new UnitAvailabilityStatusDatasetAccessRule(), UnitAvailabilityStatus.class);
 
         freeze();
     }

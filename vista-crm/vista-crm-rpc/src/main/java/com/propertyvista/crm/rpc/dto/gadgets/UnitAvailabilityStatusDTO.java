@@ -31,10 +31,10 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Scoping;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 @Transient
 public interface UnitAvailabilityStatusDTO extends IEntity {
+
     // REFERENCES
     IPrimitive<String> propertyCode();
 
@@ -79,32 +79,23 @@ public interface UnitAvailabilityStatusDTO extends IEntity {
     @Caption(name = "Market Rent ($)")
     IPrimitive<BigDecimal> marketRent();
 
-    /** <code>unitRent - marketRent</code> */
     @Caption(name = "Delta ($)")
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> rentDeltaAbsolute();
 
-    /** <code>(unitRent - unitMarketRent)/marketRent</code> */
     @Caption(name = "Delta (%)")
     @Format("#,##0.00")
     IPrimitive<BigDecimal> rentDeltaRelative();
 
-    /**
-     * Applicable for 'Notice'
-     */
     @Format("MM/dd/yyyy")
     @Caption(name = "Rent End")
     IPrimitive<LogicalDate> rentEndDay();
 
-    /**
-     * Applicable for 'Vacant', must be the same as {@link AptUnit#_availableForRent()} but stored here for efficiency. used to calculate days vacant
-     */
     @Format("MM/dd/yyyy")
     @Caption(name = "Vacant Since")
     IPrimitive<LogicalDate> vacantSince();
 
-    /** Applicable only for 'Rented': denotes lease start of the following tenant, maybe different than move in date */
     @Format("MM/dd/yyyy")
     @Caption(name = "Rented From")
     IPrimitive<LogicalDate> rentedFromDay();
@@ -127,7 +118,9 @@ public interface UnitAvailabilityStatusDTO extends IEntity {
     IPrimitive<BigDecimal> revenueLost();
 
     // USED FOR BUINESS LOGIC
+    /** used to implement link from list entry to unit */
     IPrimitive<Key> unitId();
 
+    /** used to attach buildings filter */
     Building buildingsFilterAnchor();
 }

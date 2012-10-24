@@ -13,21 +13,29 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
-import java.util.Vector;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.util.Iterator;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.gadgets.UnitAvailabilityStatusDTO;
-import com.propertyvista.crm.server.services.dashboard.util.Util;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityStatusListService;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
+import com.propertyvista.domain.dashboard.gadgets.common.AsOfDateCriterion;
 
-public class UnitAvailabilityStatusListServiceImpl extends AbstractListServiceDtoImpl<UnitAvailabilityStatus, UnitAvailabilityStatusDTO> {
+public class UnitAvailabilityStatusListServiceImpl extends AbstractListServiceDtoImpl<UnitAvailabilityStatus, UnitAvailabilityStatusDTO> implements
+        UnitAvailabilityStatusListService {
+
+    private LogicalDate asOfDate;
 
     public UnitAvailabilityStatusListServiceImpl() {
         super(UnitAvailabilityStatus.class, UnitAvailabilityStatusDTO.class);
@@ -69,9 +77,43 @@ public class UnitAvailabilityStatusListServiceImpl extends AbstractListServiceDt
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>> callback, EntityListCriteria<UnitAvailabilityStatusDTO> dtoCriteria) {
+        // TODO this is not good way (horrible) for transferring to enhancelistRetrieved
+        asOfDate = null;
+        Iterator<Criterion> criteriaIterator = dtoCriteria.getFilters().iterator();
+        while (criteriaIterator.hasNext()) {
+            Criterion criterion = criteriaIterator.next();
+            if (criterion instanceof AsOfDateCriterion) {
+                criteriaIterator.remove();
+                asOfDate = ((AsOfDateCriterion) criterion).getAsOfDate();
+                break;
+            }
+        }
+        if (asOfDate == null) {
+            throw new IllegalArgumentException("Criteria must contain " + AsOfDateCriterion.class.getName());
+        }
+
+        dtoCriteria.add(PropertyCriterion.le(dtoCriteria.proto().statusFrom(), asOfDate));
+        dtoCriteria.add(PropertyCriterion.ge(dtoCriteria.proto().statusUntil(), asOfDate));
+
         dtoCriteria.add(PropertyCriterion.isNotNull(dtoCriteria.proto().vacancyStatus()));
-        dtoCriteria.add(PropertyCriterion.in(dtoCriteria.proto().buildingsFilterAnchor(), Util.enforcePortfolio(new Vector<Building>())));
+
         super.list(callback, dtoCriteria);
     }
 
+    @Override
+    protected void enhanceListRetrieved(UnitAvailabilityStatus entity, UnitAvailabilityStatusDTO dto) {
+        super.enhanceListRetrieved(entity, dto);
+
+        // calculate 'days vacant' and 'revenue lost'
+        if (dto.vacancyStatus().getValue() == Vacancy.Vacant & !dto.vacantSince().isNull()) {
+            LogicalDate vacantSince = dto.vacantSince().getValue();
+            dto.daysVacant().setValue(1 + (int) Math.ceil(((asOfDate.getTime() - vacantSince.getTime())) / (1000.0 * 60.0 * 60.0 * 24.0)));
+
+            if (!dto.marketRent().isNull()) {
+                BigDecimal revenueLost = new BigDecimal(dto.daysVacant().getValue()).multiply(dto.marketRent().getValue(), MathContext.DECIMAL128).divide(
+                        new BigDecimal(30), MathContext.DECIMAL128);
+                dto.revenueLost().setValue(revenueLost);
+            }
+        }
+    }
 }

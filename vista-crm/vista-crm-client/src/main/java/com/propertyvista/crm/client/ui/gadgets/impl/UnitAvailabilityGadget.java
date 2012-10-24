@@ -49,6 +49,7 @@ import com.propertyvista.crm.rpc.dto.gadgets.UnitAvailabilityStatusDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityStatusListService;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
+import com.propertyvista.domain.dashboard.gadgets.common.AsOfDateCriterion;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -80,7 +81,8 @@ public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityG
                 new MemberColumnDescriptor.Builder(proto.rentDeltaRelative()).visible(false).build(),
                 new MemberColumnDescriptor.Builder(proto.rentEndDay()).visible(true).build(),
                 new MemberColumnDescriptor.Builder(proto.moveInDay()).visible(true).build(),
-                new MemberColumnDescriptor.Builder(proto.rentedFromDay()).visible(true).build(),                
+                new MemberColumnDescriptor.Builder(proto.rentedFromDay()).visible(true).build(),
+                new MemberColumnDescriptor.Builder(proto.vacantSince()).visible(true).build(),
                 new MemberColumnDescriptor.Builder(proto.daysVacant()).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto.revenueLost()).sortable(false).build()
         );//@formatter:on
@@ -100,8 +102,8 @@ public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityG
             @Override
             public void populate() {
                 lister.getDataSource().clearPreDefinedFilters();
-                lister.getDataSource().addPreDefinedFilter(PropertyCriterion.le(lister.proto().statusFrom(), getStatusDate()));
-                lister.getDataSource().addPreDefinedFilter(PropertyCriterion.ge(lister.proto().statusUntil(), getStatusDate()));
+
+                lister.getDataSource().addPreDefinedFilter(new AsOfDateCriterion(getStatusDate()));
 
                 if (!containerBoard.getSelectedBuildingsStubs().isEmpty()) {
                     lister.getDataSource().addPreDefinedFilter(

@@ -71,9 +71,7 @@ public class AvailabilityReportFactory implements HasAdvancedModeReportFactory<A
                 new MemberColumnDescriptor.Builder(proto.rentDeltaRelative()).visible(false).build(),
                 new MemberColumnDescriptor.Builder(proto.rentEndDay()).visible(true).build(),
                 new MemberColumnDescriptor.Builder(proto.moveInDay()).visible(true).build(),
-                new MemberColumnDescriptor.Builder(proto.rentedFromDay()).visible(true).build(),
-                new MemberColumnDescriptor.Builder(proto.daysVacant()).build(),
-                new MemberColumnDescriptor.Builder(proto.revenueLost()).build()
+                new MemberColumnDescriptor.Builder(proto.rentedFromDay()).visible(true).build()
         };//@formatter:on
     }
 

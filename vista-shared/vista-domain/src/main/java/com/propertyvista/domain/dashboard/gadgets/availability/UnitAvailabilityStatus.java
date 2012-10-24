@@ -21,7 +21,6 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -141,7 +140,7 @@ public interface UnitAvailabilityStatus extends IEntity {
     IPrimitive<LogicalDate> rentEndDay();
 
     /**
-     * Applicable for 'Vacant', must be the same as {@link AptUnit#_availableForRent()} but stored here for efficiency. used to calculate days vacant
+     * Applicable for 'Vacant', stores the first day when the unit has become vacant, used to calculate {@link #daysVacant()}
      */
     @Caption(name = "Vacant Since")
     IPrimitive<LogicalDate> vacantSince();
@@ -156,15 +155,4 @@ public interface UnitAvailabilityStatus extends IEntity {
     @Caption(name = "Move In")
     IPrimitive<LogicalDate> moveInDay();
 
-    @Caption(name = "Days Vacant")
-    /** For Vacant units numberOfDays between today and availableForRent date */
-    @Transient
-    IPrimitive<Integer> daysVacant();
-
-    /** days_vacant * marketRent / 30 */
-    @Caption(name = "Revenue Lost ($)")
-    @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    @Transient
-    IPrimitive<BigDecimal> revenueLost();
 }
