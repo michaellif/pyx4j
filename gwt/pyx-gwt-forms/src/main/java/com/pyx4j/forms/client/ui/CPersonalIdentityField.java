@@ -33,32 +33,39 @@ import com.pyx4j.i18n.shared.I18n;
 
 /**
  * This field is used to protect personal identity by hiding part of ID
+ * 
+ * NOTE - It's made generic to allow for properly typed new entity creation (see CPersonalIdentityField#parse())
+ * This however should not be considered as a final solution as the new entity may also require some additional
+ * business-related initialization steps...
  */
-public class CPersonalIdentityField extends CTextFieldBase<IPersonalIdentity, NPersonalIdentityField> {
+public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFieldBase<IPersonalIdentity, NPersonalIdentityField> {
 
     private static final I18n i18n = I18n.get(CPersonalIdentityField.class);
 
-    public CPersonalIdentityField() {
-        this(null);
+    private final Class<T> entityClass;
+
+    public CPersonalIdentityField(Class<T> entityClass) {
+        this(entityClass, null);
     }
 
-    public CPersonalIdentityField(String title) {
-        this(null, title, false);
+    public CPersonalIdentityField(Class<T> entityClass, String title) {
+        this(entityClass, null, title, false);
     }
 
-    public CPersonalIdentityField(String pattern, String title) {
-        this(pattern, title, false);
+    public CPersonalIdentityField(Class<T> entityClass, String pattern, String title) {
+        this(entityClass, pattern, title, false);
     }
 
-    public CPersonalIdentityField(String pattern, String title, boolean mandatory) {
+    public CPersonalIdentityField(Class<T> entityClass, String pattern, String title, boolean mandatory) {
         super(title);
+        this.entityClass = entityClass;
         setMandatory(mandatory);
         setPersonalIdentityFormat(pattern == null ? "" : pattern);
     }
 
     // Possible formats - 'XXX-XXX-xxx', 'XXXX XXXX XXXX xxxx', 'xxx XXX XXX xxx'
     public void setPersonalIdentityFormat(String pattern) {
-// TODO remove when watermark fixed        super.setWatermark(pattern.toUpperCase());
+// TODO remove comments when watermark fixed        super.setWatermark(pattern.toUpperCase());
         setFormat(new PersonalIdentityFormat(pattern));
         addValueValidator(new TextBoxParserValidator<IPersonalIdentity>());
     }
@@ -168,7 +175,7 @@ public class CPersonalIdentityField extends CTextFieldBase<IPersonalIdentity, NP
                 boolean userInput = (value == null || value.obfuscatedNumber().isNull());
                 // populate resulting value
                 if (value == null) {
-                    value = EntityFactory.create(IPersonalIdentity.class);
+                    value = EntityFactory.create(entityClass);
                 }
                 if (userInput) {
                     // if no obfuscated value then we are getting new user input

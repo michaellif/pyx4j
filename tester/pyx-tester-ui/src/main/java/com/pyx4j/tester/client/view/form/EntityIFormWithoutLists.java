@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -71,7 +72,11 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         // Personal Identity
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().personalId(), new CPersonalIdentityField("XXX-XXX-xxx;XX-XX-xxxx", "Personal Info"))));
+        main.setWidget(
+                ++row,
+                0,
+                new TesterWidgetDecorator(inject(proto().personalId(), new CPersonalIdentityField<IPersonalIdentity>(IPersonalIdentity.class,
+                        "XXX-XXX-xxx;XX-XX-xxxx", "Personal Info"))));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().textBox())));
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().integerBox())));
 
