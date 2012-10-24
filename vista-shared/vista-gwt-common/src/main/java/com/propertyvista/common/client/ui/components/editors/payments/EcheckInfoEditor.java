@@ -33,6 +33,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberValidator;
+import com.propertyvista.domain.payment.CreditCardNumberIdentity;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.util.ValidationUtils;
 
@@ -62,8 +63,8 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         panel.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().accountNo(), new CPersonalIdentityField("XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx",
-                        null)), 20).build());
+                new DecoratorBuilder(inject(proto().accountNo(), new CPersonalIdentityField<CreditCardNumberIdentity>(CreditCardNumberIdentity.class,
+                        "XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx", null)), 20).build());
         panel.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         if (isEditable()) {

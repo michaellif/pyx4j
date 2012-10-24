@@ -43,6 +43,7 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.moveinwizardmockup.InsurancePaymentMethodDTO;
 import com.propertyvista.domain.moveinwizardmockup.InsurancePaymentMethodDTO.PaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.CreditCardNumberIdentity;
 import com.propertyvista.domain.payment.PaymentType;
 
 public class InsurancePaymentMethodForm extends CEntityDecoratableForm<InsurancePaymentMethodDTO> {
@@ -167,7 +168,8 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
             @Override
             public IsWidget createContent() {
                 FlowPanel panel = new FlowPanel();
-                panel.add(new InnerPanelWidgetDecorator(inject(proto().card(), new CPersonalIdentityField("X XXXX XXXX xxxx;XXXX XXXX XXXX xxxx", null))));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().card(), new CPersonalIdentityField<CreditCardNumberIdentity>(
+                        CreditCardNumberIdentity.class, "X XXXX XXXX xxxx;XXXX XXXX XXXX xxxx", null))));
                 addNotMandatory(panel, proto().expiryDate());
                 addNotMandatory(panel, proto().nameOn());
                 addNotMandatory(panel, proto().securityCode());
