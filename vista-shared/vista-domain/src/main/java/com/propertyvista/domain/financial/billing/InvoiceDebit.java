@@ -47,7 +47,6 @@ public interface InvoiceDebit extends InvoiceLineItem {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> outstandingDebit();
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> dueDate();
 
     @Owned

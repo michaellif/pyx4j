@@ -16,7 +16,6 @@ package com.propertyvista.domain.financial.billing;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -56,7 +55,6 @@ public interface BillingCycle extends IEntity {
     IPrimitive<LogicalDate> billingCycleEndDate();
 
     @ReadOnly
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> executionTargetDate();
 
     // Statistics:

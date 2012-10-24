@@ -169,7 +169,6 @@ public interface AptUnitItem extends IEntity {
 
     IPrimitive<FlooringType> flooringType();
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> flooringInstallDate();
 
     @Format("#0.00")
@@ -178,7 +177,6 @@ public interface AptUnitItem extends IEntity {
 
     IPrimitive<CounterTopType> counterTopType();
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> counterTopInstallDate();
 
     @Format("#0.00")
@@ -187,7 +185,6 @@ public interface AptUnitItem extends IEntity {
 
     IPrimitive<CabinetsType> cabinetsType();
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> cabinetsInstallDate();
 
     @Format("#0.00")

@@ -16,7 +16,6 @@ package com.propertyvista.domain.financial.billing;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -30,7 +29,6 @@ public interface InvoiceAccountCharge extends InvoiceCharge {
 
     LeaseAdjustment adjustment();
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> targetDate();
 
 }

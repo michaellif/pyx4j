@@ -18,7 +18,6 @@ import java.sql.Date;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -237,10 +236,8 @@ public interface UnitTurnoversPerIntervalDTO extends IEntity {
         }
     }
 
-    @Format("MM/dd/yyyy")
     IPrimitive<AnalysisResolution> intervalSize();
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> intervalValue();
 
     /**

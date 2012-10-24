@@ -41,9 +41,9 @@ public interface Roof extends LicensedWarrantedMaintained, BuildingElement {
     IPrimitive<String> type();
 
     @ToString(index = 1)
-    @MemberColumn(name = "roofYear")
-    @Editor(type = EditorType.yearpicker)
     @Format("yyyy")
+    @Editor(type = EditorType.yearpicker)
+    @MemberColumn(name = "roofYear")
     IPrimitive<LogicalDate> year();
 
     @Timestamp

@@ -18,7 +18,6 @@ import javax.xml.bind.annotation.XmlType;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
@@ -109,13 +108,11 @@ public interface AptUnitOccupancySegment extends IEntity {
 
     @OrderColumn
     @NotNull
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> dateFrom();
 
     /**
      * What if there is no limit to this date, what should it be then?
      */
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> dateTo();
 
     @NotNull

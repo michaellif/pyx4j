@@ -19,7 +19,6 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -62,6 +61,5 @@ public interface Person extends IEntity {
     IPrimitive<String> email();
 
     @NotNull
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> birthDate();
 }

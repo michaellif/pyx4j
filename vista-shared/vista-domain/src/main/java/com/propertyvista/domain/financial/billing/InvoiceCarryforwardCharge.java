@@ -16,13 +16,10 @@ package com.propertyvista.domain.financial.billing;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @DiscriminatorValue("CarryforwardCharge")
 public interface InvoiceCarryforwardCharge extends InvoiceCharge {
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> targetDate();
-
 }

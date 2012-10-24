@@ -18,7 +18,6 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -61,12 +60,10 @@ public interface PersonScreening extends IVersionedEntity<PersonScreeningV>, App
 
     public interface PersonScreeningV extends IVersionData<PersonScreening> {
 
-        @Format("MM/dd/yyyy")
         @Timestamp(Update.Created)
         IPrimitive<LogicalDate> createDate();
 
         @ToString(index = 0)
-        @Format("MM/dd/yyyy")
         @Timestamp(Update.Updated)
         IPrimitive<LogicalDate> updateDate();
 

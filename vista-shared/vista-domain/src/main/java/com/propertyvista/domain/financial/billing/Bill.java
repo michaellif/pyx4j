@@ -21,7 +21,6 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -107,17 +106,13 @@ public interface Bill extends IEntity {
 
     Bill previousCycleBill();
 
-    @Format("MM/dd/yyyy")
     @ToString(index = 0)
     IPrimitive<LogicalDate> dueDate();
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> billingPeriodStartDate();
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> billingPeriodEndDate();
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> executionDate();
 
     @ToString(index = 2)

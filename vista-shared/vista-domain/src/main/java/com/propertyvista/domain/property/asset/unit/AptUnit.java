@@ -22,7 +22,6 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
@@ -105,7 +104,6 @@ public interface AptUnit extends BuildingElement, PolicyNode {
      * Denormalized field used for search, managed by @see AptUnitOccupancyManagerImpl
      */
     @Indexed
-    @Format("MM/dd/yyyy")
     @Caption(name = "Availability")
     IPrimitive<LogicalDate> _availableForRent();
 

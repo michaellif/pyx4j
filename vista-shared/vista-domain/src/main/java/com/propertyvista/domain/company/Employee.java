@@ -20,7 +20,6 @@ import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -54,7 +53,6 @@ public interface Employee extends Person {
     IPrimitive<String> description();
 
     @Override
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> birthDate();
 
     @NotNull

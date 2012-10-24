@@ -17,7 +17,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18nComment;
@@ -61,7 +60,6 @@ public interface Pet extends BillableItemExtraData {
     public IPrimitive<WeightUnit> weightUnit();
 
     @NotNull
-    @Format("MM/dd/yyyy")
     @BusinessEqualValue
     public IPrimitive<LogicalDate> birthDate();
 }

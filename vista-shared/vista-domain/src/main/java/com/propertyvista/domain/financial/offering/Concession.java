@@ -148,10 +148,8 @@ public interface Concession extends IVersionedEntity<ConcessionV> {
 
         IPrimitive<Boolean> mixable();
 
-        @Format("MM/dd/yyyy")
         IPrimitive<LogicalDate> effectiveDate();
 
-        @Format("MM/dd/yyyy")
         IPrimitive<LogicalDate> expirationDate();
     }
 }

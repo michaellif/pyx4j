@@ -86,11 +86,9 @@ public interface BillableItemAdjustment extends IEntity {
     @MemberColumn(name = "adjustmentValue")
     IPrimitive<BigDecimal> value();
 
-    @Format("MM/dd/yyyy")
     @Caption(description = "Empty value assumes Billable Item effective date")
     IPrimitive<LogicalDate> effectiveDate();
 
-    @Format("MM/dd/yyyy")
     @Caption(description = "Empty value assumes Billable Item expiration date")
     IPrimitive<LogicalDate> expirationDate();
 

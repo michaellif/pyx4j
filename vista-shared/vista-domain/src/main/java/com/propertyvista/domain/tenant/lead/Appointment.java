@@ -19,7 +19,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
@@ -62,7 +61,6 @@ public interface Appointment extends IEntity {
     Lead lead();
 
     @NotNull
-    @Format("MM/dd/yyyy")
     @ToString(index = 0)
     @MemberColumn(name = "appointmentDate")
     IPrimitive<LogicalDate> date();

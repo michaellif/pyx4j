@@ -43,12 +43,10 @@ public interface Contract extends IEntity {
 
     @Caption(name = "Start Date")
     @MemberColumn(name = "contractStart")
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> start();
 
     @Caption(name = "Expiry Date")
     @MemberColumn(name = "contractEnd")
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> end();
 
     Document document();

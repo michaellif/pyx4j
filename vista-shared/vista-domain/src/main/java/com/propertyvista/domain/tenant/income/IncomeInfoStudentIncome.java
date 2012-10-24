@@ -67,12 +67,10 @@ public interface IncomeInfoStudentIncome extends IncomeInfo {
 
     @Override
     @Caption(name = "Program Start")
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> starts();
 
     @Override
     @Caption(name = "Program (Planned) to be completed on")
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> ends();
 
     @Caption(name = "Program")

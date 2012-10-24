@@ -60,11 +60,9 @@ public interface BillableItem extends IEntity {
     @Owned
     BillableItemExtraData extraData();
 
-    @Format("MM/dd/yyyy")
     @Caption(description = "Empty value assumes Lease start date")
     IPrimitive<LogicalDate> effectiveDate();
 
-    @Format("MM/dd/yyyy")
     @Caption(description = "Empty value assumes Lease end date")
     IPrimitive<LogicalDate> expirationDate();
 

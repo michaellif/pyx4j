@@ -37,7 +37,6 @@ public interface ReservationSchedule extends IEntity {
     IPrimitive<String> comment();
 
     @MemberColumn(name = "reservationDate")
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> date();
 
     @Editor(type = Editor.EditorType.timepicker)

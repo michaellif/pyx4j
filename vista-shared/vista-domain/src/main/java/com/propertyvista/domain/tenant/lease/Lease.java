@@ -22,7 +22,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -189,31 +188,23 @@ public interface Lease extends IEntity {
      * Note: the dates are Transient and has being re-calculated in {@link LeaseFacade#load(Lease lease, boolean forEdit)} method
      */
     @NotNull
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseFrom();
 
     @NotNull
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseTo();
 
     // other dates:
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> actualLeaseTo();
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> expectedMoveIn();
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> expectedMoveOut();
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> actualMoveIn();
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> actualMoveOut();
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> moveOutNotice();
 
     @JoinColumn
@@ -231,10 +222,8 @@ public interface Lease extends IEntity {
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> creationDate();
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> approvalDate();
 
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> activationDate();
 
     @Timestamp(Update.Updated)

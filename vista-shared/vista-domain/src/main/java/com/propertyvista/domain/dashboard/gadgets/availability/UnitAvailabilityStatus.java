@@ -137,26 +137,22 @@ public interface UnitAvailabilityStatus extends IEntity {
     /**
      * Applicable for 'Notice'
      */
-    @Format("MM/dd/yyyy")
     @Caption(name = "Rent End")
     IPrimitive<LogicalDate> rentEndDay();
 
     /**
      * Applicable for 'Vacant', must be the same as {@link AptUnit#_availableForRent()} but stored here for efficiency. used to calculate days vacant
      */
-    @Format("MM/dd/yyyy")
     @Caption(name = "Vacant Since")
     IPrimitive<LogicalDate> vacantSince();
 
     /** Applicable only for 'Rented': denotes lease start of the following tenant, maybe different than move in date */
-    @Format("MM/dd/yyyy")
     @Caption(name = "Rented From")
     IPrimitive<LogicalDate> rentedFromDay();
 
     /**
      * Applicable only for 'Rented': denotes move in day of the following tenant
      */
-    @Format("MM/dd/yyyy")
     @Caption(name = "Move In")
     IPrimitive<LogicalDate> moveInDay();
 
