@@ -16,7 +16,9 @@ package com.propertyvista.crm.client.ui.crud.billing.bill;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -68,6 +70,10 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> imple
                 new ReasonBox(DECLINE) {
                     @Override
                     public boolean onClickOk() {
+                        if (CommonsStringUtils.isEmpty(getReason())) {
+                            MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
+                            return false;
+                        }
                         ((BillViewerView.Presenter) getPresenter()).reject(getReason());
                         return true;
                     }

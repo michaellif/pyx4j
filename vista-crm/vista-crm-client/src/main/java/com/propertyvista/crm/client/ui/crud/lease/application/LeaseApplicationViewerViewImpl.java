@@ -18,6 +18,7 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
@@ -194,6 +195,10 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 new ActionBox(CANCEL) {
                     @Override
                     public boolean onClickOk() {
+                        if (CommonsStringUtils.isEmpty(getReason())) {
+                            MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
+                            return false;
+                        }
                         ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Cancel));
                         return true;
                     }

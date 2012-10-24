@@ -16,7 +16,9 @@ package com.propertyvista.crm.client.ui.crud.customer.lead.appointment;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -45,6 +47,10 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
                 new ReasonBox(i18n.tr("Close Appointment")) {
                     @Override
                     public boolean onClickOk() {
+                        if (CommonsStringUtils.isEmpty(getReason())) {
+                            MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
+                            return false;
+                        }
                         ((AppointmentViewerView.Presenter) getPresenter()).close(getReason());
                         return true;
                     }

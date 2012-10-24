@@ -16,8 +16,10 @@ package com.propertyvista.crm.client.ui.crud.billing.cycle;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
@@ -57,6 +59,10 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
                     new ReasonBox(i18n.tr("Reject Selected")) {
                         @Override
                         public boolean onClickOk() {
+                            if (CommonsStringUtils.isEmpty(getReason())) {
+                                MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
+                                return false;
+                            }
                             ((BillingCycleBillListerView.Presenter) getPresenter()).reject(getLister().getDataTablePanel().getDataTable().getCheckedItems(),
                                     getReason());
                             return true;

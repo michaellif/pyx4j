@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -175,6 +176,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 new ReasonBox(i18n.tr("Cancel Notice")) {
                     @Override
                     public boolean onClickOk() {
+                        if (CommonsStringUtils.isEmpty(getReason())) {
+                            MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
+                            return false;
+                        }
                         ((LeaseViewerView.Presenter) getPresenter()).cancelNotice(getReason());
                         return true;
                     }
@@ -203,6 +208,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 new ReasonBox(i18n.tr("Cancel Evict")) {
                     @Override
                     public boolean onClickOk() {
+                        if (CommonsStringUtils.isEmpty(getReason())) {
+                            MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
+                            return false;
+                        }
                         ((LeaseViewerView.Presenter) getPresenter()).cancelEvict(getReason());
                         return true;
                     }
@@ -239,6 +248,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 new ReasonBox(i18n.tr("Close Lease")) {
                     @Override
                     public boolean onClickOk() {
+                        if (CommonsStringUtils.isEmpty(getReason())) {
+                            MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
+                            return false;
+                        }
                         ((LeaseViewerView.Presenter) getPresenter()).closeLease(getReason());
                         return true;
                     }
@@ -253,6 +266,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 new ReasonBox(i18n.tr("Cancel Lease")) {
                     @Override
                     public boolean onClickOk() {
+                        if (CommonsStringUtils.isEmpty(getReason())) {
+                            MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
+                            return false;
+                        }
                         ((LeaseViewerView.Presenter) getPresenter()).cancelLease(getReason());
                         return true;
                     }
