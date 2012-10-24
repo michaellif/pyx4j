@@ -27,6 +27,7 @@ import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -109,16 +110,7 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().sex()), 7).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().birthDate()), 9).build());
             if (isEditable()) {
-                left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CComboBox<Tenant>() {
-                    @Override
-                    public String getItemName(Tenant o) {
-                        if (o == null) {
-                            return getNoSelectionText();
-                        } else {
-                            return o.getStringView();
-                        }
-                    }
-                }), 25).build());
+                left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CSimpleEntityComboBox<Tenant>()), 25).build());
             } else {
                 left.setWidget(++row, 0,
                         new DecoratorBuilder(inject(proto().tenant(), new CEntityCrudHyperlink<Tenant>(AppPlaceEntityMapper.resolvePlace(Tenant.class))))
@@ -165,7 +157,6 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
                     @SuppressWarnings("unchecked")
                     CComboBox<Tenant> combo = (CComboBox<Tenant>) get(proto().tenant());
                     combo.setOptions(leaseTerm.getValue().version().tenants());
-                    combo.getOptions();
                 }
             }
         }

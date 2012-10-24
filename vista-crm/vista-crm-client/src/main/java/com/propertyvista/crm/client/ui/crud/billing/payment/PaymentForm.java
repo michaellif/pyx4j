@@ -23,12 +23,12 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
+import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -54,25 +54,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private Widget paymentMethodEditorSeparator;
 
-    private final CComboBox<PaymentMethod> profiledPaymentMethodsCombo = new CComboBox<PaymentMethod>() {
-        @Override
-        public String getItemName(PaymentMethod o) {
-            if (o == null) {
-                return super.getItemName(o);
-            } else {
-                return o.getStringView();
-            }
-        }
-
-        @Override
-        public boolean isValuesEquals(PaymentMethod value1, PaymentMethod value2) {
-            if (((value1 == null) || value1.isNull()) && ((value2 == null) || value2.isNull())) {
-                return true;
-            } else {
-                return EqualsHelper.equals(value1, value2);
-            }
-        }
-    };
+    private final CComboBox<PaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<PaymentMethod>();
 
     private final PaymentMethodEditor paymentMethodEditor = new PaymentMethodEditor() {
         @Override

@@ -28,6 +28,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
+import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -50,16 +51,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 
     private Widget paymentMethodEditorSeparator;
 
-    private final CComboBox<PaymentMethod> profiledPaymentMethodsCombo = new CComboBox<PaymentMethod>() {
-        @Override
-        public String getItemName(PaymentMethod o) {
-            if (o == null) {
-                return super.getItemName(o);
-            } else {
-                return o.getStringView();
-            }
-        }
-    };
+    private final CComboBox<PaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<PaymentMethod>();
 
     private final PaymentMethodForm paymentMethodEditor = new PaymentMethodForm() {
         @Override
