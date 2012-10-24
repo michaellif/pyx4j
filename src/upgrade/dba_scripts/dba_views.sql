@@ -30,5 +30,4 @@ CREATE OR REPLACE VIEW _dba_.pmc_stats AS
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('lease')) c ON (a.pmc = c.pmc)
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('payment_record')) d ON (a.pmc = d.pmc)
 );
-
-
+        

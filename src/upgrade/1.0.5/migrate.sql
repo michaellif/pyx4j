@@ -248,6 +248,10 @@ BEGIN
          -- billing_bill
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_bill DROP COLUMN lease_for,'
                                                         ||'ADD COLUMN previous_charge_refunds NUMERIC(18,2)';
+                                                        
+        -- billing_billing_type
+        EXECUTE 'CREATE UNIQUE INDEX billing_type_payment_frequency_billing_cycle_start_day_idx ON '||v_schema_name
+        ||'.billing_billing_type USING btree (payment_frequency, billing_cycle_start_day) ';
 
         -- billing_debit_credit_link
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_debit_credit_link ADD COLUMN credit_itemdiscriminator VARCHAR(50),'||
@@ -983,14 +987,14 @@ BEGIN
         '       CONSTRAINT lease_participant_screening_fk FOREIGN KEY(screening) '||
         '               REFERENCES '||v_schema_name||'.person_screening(id), '||
         '       CONSTRAINT lease_participant_tenant_fk FOREIGN KEY(tenant) '||
-        '               REFERENCES '||v_schema_name||'.lease_participant(id))';
+        '               REFERENCES '||v_schema_name||'.lease_customer(id))';
 
         EXECUTE 'INSERT INTO '||v_schema_name||'.lease_participant '||
         '(id,iddiscriminator,lease_customerdiscriminator,lease_customer,participant_role,lease_term_v,order_in_lease,'||
         'application,screening,relationship,tenantdiscriminator,tenant) '||
         '(SELECT nextval(''public.lease_participant_seq'') AS id,''Guarantor'' AS iddiscriminator, ''Guarantor'' AS lease_customerdiscriminator,'||
         'c.id AS lease_customer,a.participant_role,b.id AS lease_term_v,a.order_in_lease,a.application,a.screening,a.relationship,'||
-        '''Tenant'',f.id AS tenant '||
+        '''Tenant'',f.lease_customer AS tenant '||
         'FROM '||v_schema_name||'.guarantor a '||
         'JOIN '||v_schema_name||'.lease_term_v b ON (a.lease_v = b.old_id) '||
         'JOIN '||v_schema_name||'.lease_v d ON (a.lease_v = d.id) '||
@@ -1286,6 +1290,8 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billable_item_adjustment ALTER COLUMN billable_item SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_bill ALTER COLUMN billing_account SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle ALTER COLUMN building SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_type ALTER COLUMN billing_cycle_start_day SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_type ALTER COLUMN payment_frequency SET NOT NULL' ; 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_debit_credit_link ALTER COLUMN credit_item SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_debit_credit_link ALTER COLUMN credit_itemdiscriminator SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_invoice_line_item ALTER COLUMN billing_account SET NOT NULL' ;
