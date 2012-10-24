@@ -112,45 +112,30 @@ public class BillDateUtils {
         return billingPeriodStartDay;
     }
 
-    static LogicalDate calculateInitialBillingCycleStartDate(BillingType billingType, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
+    static LogicalDate calculateInitialBillingCycleStartDate(BillingType billingType, LogicalDate leaseStartDate) {
         LogicalDate billingCycleStartDate = null;
-        if (useCyclePeriodStartDay) {
-            switch (billingType.paymentFrequency().getValue()) {
-            case Monthly:
-                Calendar calendar = new GregorianCalendar();
-                calendar.setTime(leaseStartDate);
-                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-                if (billingType.billingCycleStartDay().getValue() < 1 || billingType.billingCycleStartDay().getValue() > 28) {
-                    throw new BillingException("Wrong billing period start day");
-                }
-                while (dayOfMonth != billingType.billingCycleStartDay().getValue()) {
-                    calendar.add(Calendar.DATE, -1);
-                    dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-                }
-                billingCycleStartDate = new LogicalDate(calendar.getTime());
-                break;
-            case Weekly:
-            case BiWeekly:
-            case SemiMonthly:
-            case SemiAnnyally:
-            case Annually:
-                //TODO
-                throw new Error("Not implemented");
+        switch (billingType.paymentFrequency().getValue()) {
+        case Monthly:
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(leaseStartDate);
+            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+            if (billingType.billingCycleStartDay().getValue() < 1 || billingType.billingCycleStartDay().getValue() > 28) {
+                throw new BillingException("Wrong billing period start day");
             }
-        } else {
-            if (PaymentFrequency.Monthly.equals(billingType.paymentFrequency().getValue())) {
-                Calendar calendar = new GregorianCalendar();
-                calendar.setTime(leaseStartDate);
-                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-                if (dayOfMonth > 28) {
-                    calendar.add(Calendar.DATE, -dayOfMonth + 1);
-                }
-                billingCycleStartDate = new LogicalDate(calendar.getTime());
-            } else {
-                billingCycleStartDate = leaseStartDate;
+            while (dayOfMonth != billingType.billingCycleStartDay().getValue()) {
+                calendar.add(Calendar.DATE, -1);
+                dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
             }
+            billingCycleStartDate = new LogicalDate(calendar.getTime());
+            break;
+        case Weekly:
+        case BiWeekly:
+        case SemiMonthly:
+        case SemiAnnyally:
+        case Annually:
+            //TODO
+            throw new Error("Not implemented");
         }
-
         return billingCycleStartDate;
     }
 

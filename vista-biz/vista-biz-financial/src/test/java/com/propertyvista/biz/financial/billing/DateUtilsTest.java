@@ -15,14 +15,19 @@ package com.propertyvista.biz.financial.billing;
 
 import org.junit.experimental.categories.Category;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.EntityFactory;
+
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.config.tests.VistaDBTestBase;
+import com.propertyvista.domain.financial.billing.BillingType;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 @Category(FunctionalTests.class)
 public class DateUtilsTest extends VistaDBTestBase {
 
-    public void testOverlap() {
+    public void testOverlappingRange() {
         {
             DateRange dateRange = BillDateUtils.getOverlappingRange(
                     new DateRange(FinancialTestsUtils.getDate("1-Jul-2011"), FinancialTestsUtils.getDate("31-Jul-2011")),
@@ -82,6 +87,30 @@ public class DateUtilsTest extends VistaDBTestBase {
                     new DateRange(FinancialTestsUtils.getDate("12-Jul-2011"), FinancialTestsUtils.getDate("12-Jul-2011")));
             assertEquals(FinancialTestsUtils.getDate("12-Jul-2011"), dateRange.getFromDate());
             assertEquals(FinancialTestsUtils.getDate("12-Jul-2011"), dateRange.getToDate());
+        }
+
+    }
+
+    public void testInitialBillingCycleStartDatecalculation() {
+        BillingType billingType = EntityFactory.create(BillingType.class);
+        billingType.paymentFrequency().setValue(PaymentFrequency.Monthly);
+
+        {
+            billingType.billingCycleStartDay().setValue(1);
+            LogicalDate date = BillDateUtils.calculateInitialBillingCycleStartDate(billingType, FinancialTestsUtils.getDate("8-Jul-2011"));
+            assertEquals(FinancialTestsUtils.getDate("01-Jul-2011"), date);
+        }
+
+        {
+            billingType.billingCycleStartDay().setValue(2);
+            LogicalDate date = BillDateUtils.calculateInitialBillingCycleStartDate(billingType, FinancialTestsUtils.getDate("8-Jul-2011"));
+            assertEquals(FinancialTestsUtils.getDate("02-Jul-2011"), date);
+        }
+
+        {
+            billingType.billingCycleStartDay().setValue(2);
+            LogicalDate date = BillDateUtils.calculateInitialBillingCycleStartDate(billingType, FinancialTestsUtils.getDate("30-Jul-2011"));
+            assertEquals(FinancialTestsUtils.getDate("02-Jul-2011"), date);
         }
 
     }

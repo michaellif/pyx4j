@@ -13,9 +13,12 @@
  */
 package com.propertyvista.domain.financial.billing;
 
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -30,9 +33,15 @@ import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 public interface BillingType extends IEntity {
 
     @ToString
+    @NotNull
+    @MemberColumn(notNull = true)
+    @Indexed(uniqueConstraint = true, group = { "A,1" })
     IPrimitive<PaymentFrequency> paymentFrequency();
 
     @ToString
+    @NotNull
+    @MemberColumn(notNull = true)
+    @Indexed(uniqueConstraint = true, group = { "A,2" })
     IPrimitive<Integer> billingCycleStartDay();
 
     IPrimitive<Integer> billingCycleTargetDay();

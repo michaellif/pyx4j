@@ -256,12 +256,11 @@ public class BillingManager {
 
         if (previousBill == null) {
             if (billingAccount.carryforwardBalance().isNull()) {
-                return getNewLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().building(), lease.currentTerm().termFrom().getValue(),
-                        !billingAccount.billingType().billingCycleStartDay().isNull());
+                return getNewLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().building(), lease.currentTerm().termFrom().getValue());
 
             } else {
                 return getExistingLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().building(), lease.currentTerm().termFrom().getValue(),
-                        lease.creationDate().getValue(), !billingAccount.billingType().billingCycleStartDay().isNull());
+                        lease.creationDate().getValue());
             }
         } else {
             return getSubsiquentBillingCycle(previousBill.billingCycle());
@@ -290,12 +289,41 @@ public class BillingManager {
         return !Persistence.service().exists(criteria);
     }
 
-    static BillingType ensureBillingType(Lease lease) {
+    static BillingType ensureBillingType(final PaymentFrequency paymentFrequency, final Integer billingCycleStartDay) {
+        return TaskRunner.runAutonomousTransation(new Callable<BillingType>() {
+            @Override
+            public BillingType call() {
+
+                //try to find existing billing cycle    
+                EntityQueryCriteria<BillingType> criteria = EntityQueryCriteria.create(BillingType.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().paymentFrequency(), paymentFrequency));
+                criteria.add(PropertyCriterion.eq(criteria.proto().billingCycleStartDay(), billingCycleStartDay));
+                BillingType billingType = Persistence.service().retrieve(criteria);
+
+                if (billingType == null) {
+                    billingType = EntityFactory.create(BillingType.class);
+                    billingType.paymentFrequency().setValue(paymentFrequency);
+                    billingType.billingCycleStartDay().setValue(billingCycleStartDay);
+                    billingType.billingCycleTargetDay().setValue(
+                            (billingCycleStartDay + paymentFrequency.getNumOfCycles() - paymentFrequency.getBillRunTargetDayOffset())
+                                    % paymentFrequency.getNumOfCycles());
+
+                    Persistence.service().persist(billingType);
+                    Persistence.service().commit();
+                }
+                return billingType;
+            }
+        });
+
+    }
+
+    static BillingType ensureBillingType(final Lease lease) {
         BillingType billingType = lease.billingAccount().billingType();
 
-        if (billingType.isNull()) {
+        if (!billingType.isNull()) {
+            return billingType;
+        } else {
             PaymentFrequency paymentFrequency = lease.paymentFrequency().getValue();
-
             LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(),
                     LeaseBillingPolicy.class);
             Integer billingCycleStartDay = leaseBillingPolicy.defaultBillingCycleSartDay().getValue();
@@ -303,38 +331,20 @@ public class BillingManager {
                 billingCycleStartDay = BillDateUtils.calculateBillingTypeStartDay(lease.paymentFrequency().getValue(), lease.currentTerm().termFrom()
                         .getValue());
             }
-
-            //try to find existing billing cycle    
-            EntityQueryCriteria<BillingType> criteria = EntityQueryCriteria.create(BillingType.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().paymentFrequency(), paymentFrequency));
-            criteria.add(PropertyCriterion.eq(criteria.proto().billingCycleStartDay(), billingCycleStartDay));
-            billingType = Persistence.service().retrieve(criteria);
-
-            if (billingType == null) {
-                billingType = EntityFactory.create(BillingType.class);
-                billingType.paymentFrequency().setValue(paymentFrequency);
-                billingType.billingCycleStartDay().setValue(billingCycleStartDay);
-                billingType.billingCycleTargetDay().setValue(
-                        (billingCycleStartDay + lease.paymentFrequency().getValue().getNumOfCycles() - paymentFrequency.getBillRunTargetDayOffset())
-                                % lease.paymentFrequency().getValue().getNumOfCycles());
-
-                Persistence.service().persist(billingType);
-            }
+            return ensureBillingType(paymentFrequency, billingCycleStartDay);
         }
-        return billingType;
     }
 
-    static BillingCycle getNewLeaseInitialBillingCycle(BillingType billingType, Building building, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
-        return ensureBillingCycle(billingType, building,
-                BillDateUtils.calculateInitialBillingCycleStartDate(billingType, leaseStartDate, useCyclePeriodStartDay));
+    static BillingCycle getNewLeaseInitialBillingCycle(BillingType billingType, Building building, LogicalDate leaseStartDate) {
+        return ensureBillingCycle(billingType, building, BillDateUtils.calculateInitialBillingCycleStartDate(billingType, leaseStartDate));
     }
 
     static BillingCycle getExistingLeaseInitialBillingCycle(BillingType billingType, Building building, LogicalDate leaseStartDate,
-            LogicalDate leaseCreationDate, boolean useCyclePeriodStartDay) {
+            LogicalDate leaseCreationDate) {
         if (!leaseStartDate.before(leaseCreationDate)) {
             throw new BillingException("Existing lease start date should be earlier than creation date");
         }
-        LogicalDate firstBillingCycleStartDate = BillDateUtils.calculateInitialBillingCycleStartDate(billingType, leaseStartDate, useCyclePeriodStartDay);
+        LogicalDate firstBillingCycleStartDate = BillDateUtils.calculateInitialBillingCycleStartDate(billingType, leaseStartDate);
         LogicalDate billingCycleStartDate = null;
         LogicalDate nextBillingCycleStartDate = firstBillingCycleStartDate;
         do {
@@ -355,39 +365,32 @@ public class BillingManager {
         return TaskRunner.runAutonomousTransation(new Callable<BillingCycle>() {
             @Override
             public BillingCycle call() {
-                BillingCycle billingCycle = ensureBillingCycleTransaction(billingType, building, billingCycleStartDate);
-                Persistence.service().commit();
+                EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().billingType(), billingType));
+                criteria.add(PropertyCriterion.eq(criteria.proto().billingCycleStartDate(), billingCycleStartDate));
+                criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
+                BillingCycle billingCycle = Persistence.service().retrieve(criteria);
+
+                if (billingCycle == null) {
+                    billingCycle = EntityFactory.create(BillingCycle.class);
+                    billingCycle.billingType().set(billingType);
+                    billingCycle.building().set(building);
+                    billingCycle.billingCycleStartDate().setValue(billingCycleStartDate);
+                    billingCycle.billingCycleEndDate().setValue(
+                            BillDateUtils.calculateBillingCycleEndDate(billingType.paymentFrequency().getValue(), billingCycleStartDate));
+                    billingCycle.executionTargetDate().setValue(BillDateUtils.calculateBillingCycleTargetExecutionDate(billingType, billingCycleStartDate));
+
+                    billingCycle.notConfirmed().setValue(0L);
+                    billingCycle.failed().setValue(0L);
+                    billingCycle.rejected().setValue(0L);
+                    billingCycle.confirmed().setValue(0L);
+
+                    Persistence.service().persist(billingCycle);
+                    Persistence.service().commit();
+                }
                 return billingCycle;
             }
         });
-    }
-
-    private synchronized static BillingCycle ensureBillingCycleTransaction(BillingType billingType, Building building, LogicalDate billingCycleStartDate) {
-
-        EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingType(), billingType));
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingCycleStartDate(), billingCycleStartDate));
-        criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
-        BillingCycle billingCycle = Persistence.service().retrieve(criteria);
-
-        if (billingCycle == null) {
-            billingCycle = EntityFactory.create(BillingCycle.class);
-            billingCycle.billingType().set(billingType);
-            billingCycle.building().set(building);
-            billingCycle.billingCycleStartDate().setValue(billingCycleStartDate);
-            billingCycle.billingCycleEndDate().setValue(
-                    BillDateUtils.calculateBillingCycleEndDate(billingType.paymentFrequency().getValue(), billingCycleStartDate));
-            billingCycle.executionTargetDate().setValue(BillDateUtils.calculateBillingCycleTargetExecutionDate(billingType, billingCycleStartDate));
-
-            billingCycle.notConfirmed().setValue(0L);
-            billingCycle.failed().setValue(0L);
-            billingCycle.rejected().setValue(0L);
-            billingCycle.confirmed().setValue(0L);
-
-            Persistence.service().persist(billingCycle);
-        }
-        return billingCycle;
-
     }
 
     static void initializeFutureBillingCycles() {

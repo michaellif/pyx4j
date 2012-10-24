@@ -64,50 +64,53 @@ public class TaskRunner {
         final InheritableUserContext inheritableUserContext = Context.getInheritableUserContext();
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         try {
-            Future<T> futureResult = executorService.submit(new Callable<T>() {
-                @Override
-                public T call() throws Exception {
-                    Lifecycle.inheritUserContext(inheritableUserContext);
-                    boolean success = false;
-                    try {
-                        if (targetNamespace != null) {
-                            NamespaceManager.setNamespace(targetNamespace);
-                        }
-                        Persistence.service().startTransaction();
+            synchronized (task.getClass()) {
+                Future<T> futureResult = executorService.submit(new Callable<T>() {
+                    @Override
+                    public T call() throws Exception {
+                        Lifecycle.inheritUserContext(inheritableUserContext);
+                        boolean success = false;
                         try {
-                            T rv = task.call();
-                            success = true;
-                            return rv;
-                        } finally {
-                            if (!success) {
-                                try {
-                                    Persistence.service().rollback();
-                                } catch (Throwable e) {
-                                    log.error("error during task {} rollback", task, e);
+                            if (targetNamespace != null) {
+                                NamespaceManager.setNamespace(targetNamespace);
+                            }
+                            Persistence.service().startTransaction();
+                            try {
+                                T rv = task.call();
+                                success = true;
+                                return rv;
+                            } finally {
+                                if (!success) {
+                                    try {
+                                        Persistence.service().rollback();
+                                    } catch (Throwable e) {
+                                        log.error("error during task {} rollback", task, e);
+                                    }
                                 }
                             }
-                        }
-                    } finally {
-                        try {
-                            Persistence.service().endTransaction();
                         } finally {
-                            Lifecycle.endContext();
+                            try {
+                                Persistence.service().endTransaction();
+                            } finally {
+                                Lifecycle.endContext();
+                            }
                         }
                     }
-                }
-            });
 
-            try {
-                return futureResult.get();
-            } catch (InterruptedException e) {
-                throw new Error(e);
-            } catch (ExecutionException e) {
-                if (e.getCause() instanceof RuntimeException) {
-                    throw (RuntimeException) e.getCause();
-                } else if (e.getCause() instanceof Error) {
-                    throw (Error) e.getCause();
-                } else {
+                });
+
+                try {
+                    return futureResult.get();
+                } catch (InterruptedException e) {
                     throw new Error(e);
+                } catch (ExecutionException e) {
+                    if (e.getCause() instanceof RuntimeException) {
+                        throw (RuntimeException) e.getCause();
+                    } else if (e.getCause() instanceof Error) {
+                        throw (Error) e.getCause();
+                    } else {
+                        throw new Error(e);
+                    }
                 }
             }
 
