@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
@@ -27,6 +28,7 @@ import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo.EquifaxReportType;
 import com.propertyvista.admin.domain.pmc.PmcPaymentTypeInfo;
+import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.DemoData.DemoPmc;
@@ -41,7 +43,6 @@ public class PmcCreatorDev {
     public static Pmc createPmc(String pmcName) {
         Pmc pmc = EntityFactory.create(Pmc.class);
         pmc.name().setValue(pmcName + " Demo");
-        pmc.status().setValue(PmcStatus.Active);
         pmc.dnsName().setValue(pmcName);
         pmc.namespace().setValue(pmcName.replace('-', '_'));
         pmc.onboardingAccountId().setValue("onb_" + pmc.namespace().getValue());
@@ -54,6 +55,9 @@ public class PmcCreatorDev {
         pmc.equifaxInfo().approved().setValue(true);
         pmc.equifaxInfo().reportType().setValue(EquifaxReportType.longReport);
 
+        ServerSideFactory.create(PmcFacade.class).create(pmc);
+
+        pmc.status().setValue(PmcStatus.Active);
         Persistence.service().persist(pmc);
 
         if (accountImport == null) {

@@ -95,4 +95,6 @@ public interface Pmc extends IEntity {
     IPrimitive<Date> updated();
 
     IPrimitive<Date> termination();
+
+    IPrimitive<String> schemaVersion();
 }

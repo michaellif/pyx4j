@@ -124,11 +124,10 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     protected void create(Pmc entity, PmcDTO dto) {
         entity.dnsName().setValue(entity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         entity.namespace().setValue(entity.dnsName().getValue().replace('-', '_'));
-        entity.status().setValue(PmcStatus.Created);
         if (!PmcNameValidator.canCreatePmcName(entity.dnsName().getValue(), null)) {
             throw new UserRuntimeException("PMC DNS name is reserved of forbidden");
         }
-        super.create(entity, dto);
+        ServerSideFactory.create(PmcFacade.class).create(entity);
 
         OnboardingUserCredential cred;
         if (dto.createPmcForExistingOnboardingUserRequest().isNull()) {

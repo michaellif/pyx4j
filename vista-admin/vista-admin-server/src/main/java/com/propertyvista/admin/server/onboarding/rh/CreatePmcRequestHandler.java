@@ -19,17 +19,19 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ApplicationVersion;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.pmc.ReservedPmcNames;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
+import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.onboarding.AccountInfoResponseIO;
 import com.propertyvista.onboarding.CreatePMCRequestIO;
 import com.propertyvista.onboarding.GetAccountInfoRequestIO;
@@ -73,6 +75,7 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
         pmc.namespace().setValue(dnsName.replace('-', '_'));
         pmc.name().setValue(request.name().getValue());
         pmc.onboardingAccountId().setValue(request.onboardingAccountId().getValue());
+        pmc.schemaVersion().setValue(ApplicationVersion.getProductVersion());
 
         pmc.features().occupancyModel().setValue(Boolean.TRUE);
         pmc.features().productCatalog().setValue(Boolean.TRUE);
@@ -85,12 +88,10 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
 //
 //        }
 
-        pmc.status().setValue(PmcStatus.Created);
-
         OnboardingUserCredential firstUser = creds.iterator().next();
         pmc.interfaceUidBase().setValue(UserAccessUtils.getPmcInterfaceUidBase(firstUser));
 
-        Persistence.service().persist(pmc);
+        ServerSideFactory.create(PmcFacade.class).create(pmc);
 
         // Remove name reservation
         {

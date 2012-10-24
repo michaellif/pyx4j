@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ApplicationVersion;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -38,6 +39,13 @@ import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.portal.server.preloader.PmcCreator;
 
 public class PmcFacadeImpl implements PmcFacade {
+
+    @Override
+    public void create(Pmc pmc) {
+        pmc.status().setValue(PmcStatus.Created);
+        pmc.schemaVersion().setValue(ApplicationVersion.getProductVersion());
+        Persistence.service().persist(pmc);
+    }
 
     @Override
     public boolean isOnboardingEnabled(Pmc pmc) {
@@ -119,6 +127,7 @@ public class PmcFacadeImpl implements PmcFacade {
             return true;
         }
     }
+
     @Override
     public void activatePmc(Pmc pmcId) {
         Pmc pmc = Persistence.service().retrieve(Pmc.class, pmcId.getPrimaryKey());

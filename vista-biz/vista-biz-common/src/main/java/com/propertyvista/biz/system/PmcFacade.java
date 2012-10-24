@@ -20,6 +20,8 @@ import com.propertyvista.admin.domain.pmc.Pmc;
  */
 public interface PmcFacade {
 
+    public void create(Pmc pmc);
+
     public boolean isOnboardingEnabled(Pmc pmc);
 
     public void activatePmc(Pmc pmcId);
