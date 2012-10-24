@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
@@ -28,6 +29,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -43,6 +45,7 @@ import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseCustomerGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseTermDTO;
 
@@ -87,6 +90,14 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
         return super.create(member);
     }
 
+    void updateTenantList() {
+        for (CComponent<?, ?> c : getComponents()) {
+            @SuppressWarnings("rawtypes")
+            CEntityFolderItem i = (CEntityFolderItem) c;
+            ((GuarantorInLeaseEditor) i.getComponents().iterator().next()).updateTenantList();
+        }
+    }
+
     private class GuarantorInLeaseEditor extends CEntityDecoratableForm<Guarantor> {
 
         public GuarantorInLeaseEditor() {
@@ -110,11 +121,13 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().sex()), 7).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().birthDate()), 9).build());
             if (isEditable()) {
-                left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CSimpleEntityComboBox<Tenant>()), 25).build());
+                left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CSimpleEntityComboBox<LeaseCustomerTenant>()), 25).build());
             } else {
-                left.setWidget(++row, 0,
-                        new DecoratorBuilder(inject(proto().tenant(), new CEntityCrudHyperlink<Tenant>(AppPlaceEntityMapper.resolvePlace(Tenant.class))))
-                                .build());
+                left.setWidget(
+                        ++row,
+                        0,
+                        new DecoratorBuilder(inject(proto().tenant(),
+                                new CEntityCrudHyperlink<LeaseCustomerTenant>(AppPlaceEntityMapper.resolvePlace(LeaseCustomerTenant.class)))).build());
             }
 
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
@@ -153,12 +166,24 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
 
                 get(proto().leaseCustomer().customer().person().email()).setMandatory(!getValue().leaseCustomer().customer().user().isNull());
 
-                if (get(proto().tenant()) instanceof CComboBox<?>) {
-                    @SuppressWarnings("unchecked")
-                    CComboBox<Tenant> combo = (CComboBox<Tenant>) get(proto().tenant());
-                    combo.setOptions(leaseTerm.getValue().version().tenants());
-                }
+                updateTenantList();
             }
+        }
+
+        void updateTenantList() {
+            if (get(proto().tenant()) instanceof CComboBox<?>) {
+                @SuppressWarnings("unchecked")
+                CComboBox<LeaseCustomerTenant> combo = (CComboBox<LeaseCustomerTenant>) get(proto().tenant());
+                combo.setOptions(getLeaseCustomerTenants());
+            }
+        }
+
+        private List<LeaseCustomerTenant> getLeaseCustomerTenants() {
+            List<LeaseCustomerTenant> l = new ArrayList<LeaseCustomerTenant>();
+            for (Tenant t : leaseTerm.getValue().version().tenants()) {
+                l.add(t.leaseCustomer());
+            }
+            return l;
         }
 
         @Override

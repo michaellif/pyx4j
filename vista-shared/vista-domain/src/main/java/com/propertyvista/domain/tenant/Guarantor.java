@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.tenant.lease.LeaseCustomerGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 @ToStringFormat("{0} - {1}")
@@ -36,5 +37,5 @@ public interface Guarantor extends LeaseParticipant<LeaseCustomerGuarantor> {
      * Who invited this Guarantor to lease
      */
     @Caption(name = "Referred by Tenant")
-    Tenant tenant();
+    LeaseCustomerTenant tenant();
 }

@@ -16,8 +16,12 @@ package com.propertyvista.crm.client.ui.crud.lease.common.term;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -200,7 +204,19 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
     private FormFlexPanel createTenantsTab(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
 
-        main.setWidget(0, 0, inject(proto().version().tenants(), new TenantInLeaseFolder(this, isEditable())));
+        TenantInLeaseFolder tf;
+        main.setWidget(0, 0, inject(proto().version().tenants(), tf = new TenantInLeaseFolder(this, isEditable())));
+
+        tf.addValueChangeHandler(new ValueChangeHandler<IList<Tenant>>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<IList<Tenant>> event) {
+                @SuppressWarnings("rawtypes")
+                CComponent gf = get(proto().version().guarantors());
+                ((GuarantorInLeaseFolder) gf).updateTenantList();
+            }
+
+        });
 
         return main;
     }

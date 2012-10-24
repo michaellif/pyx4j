@@ -31,8 +31,8 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseCustomerGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 
 public class GuarantorInLeaseFolder extends VistaTableFolder<Guarantor> {
 
@@ -81,7 +81,7 @@ public class GuarantorInLeaseFolder extends VistaTableFolder<Guarantor> {
                     }
                 }));
             } else if (proto().tenant() == column.getObject()) {
-                return inject(proto().tenant(), new CEntityCrudHyperlink<Tenant>(AppPlaceEntityMapper.resolvePlace(Tenant.class)));
+                return inject(proto().tenant(), new CEntityCrudHyperlink<LeaseCustomerTenant>(AppPlaceEntityMapper.resolvePlace(LeaseCustomerTenant.class)));
             }
             return super.createCell(column);
         }

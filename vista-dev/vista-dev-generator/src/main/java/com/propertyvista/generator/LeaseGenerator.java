@@ -108,7 +108,7 @@ public class LeaseGenerator extends DataGenerator {
         guarantor.leaseCustomer().customer().personScreening().set(screeningGenerator.createScreening());
         guarantor.role().setValue(LeaseParticipant.Role.Guarantor);
         guarantor.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
-        guarantor.tenant().set(mainTenant);
+        guarantor.tenant().set(mainTenant.leaseCustomer());
         lease.currentTerm().version().guarantors().add(guarantor);
 
         int maxTenants = RandomUtil.randomInt(config.numTenantsInLease);

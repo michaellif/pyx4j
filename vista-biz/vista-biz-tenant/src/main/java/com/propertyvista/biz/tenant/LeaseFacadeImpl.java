@@ -809,7 +809,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
     }
 
-    private <E extends LeaseCustomer, P extends LeaseParticipant<?>> void persistLeaseCustomer(LeaseTerm leaseTerm, P leaseParticipant,
+    private <E extends LeaseCustomer<?>, P extends LeaseParticipant<?>> void persistLeaseCustomer(LeaseTerm leaseTerm, P leaseParticipant,
             Class<E> leaseCustomerClass) {
         boolean newCustomer = leaseParticipant.leaseCustomer().customer().id().isNull();
         if (!leaseParticipant.leaseCustomer().customer().isValueDetached()) {
@@ -832,7 +832,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 ServerSideFactory.create(IdAssignmentFacade.class).assignId(leaseCustomer);
                 Persistence.service().persist(leaseCustomer);
             }
-            leaseParticipant.leaseCustomer().set(leaseCustomer);
+            // Copy value to member and update other references in graph
+            leaseParticipant.leaseCustomer().id().set(leaseCustomer.id());
+            leaseParticipant.leaseCustomer().lease().set(leaseTerm.lease());
+            leaseParticipant.leaseCustomer().participantId().set(leaseCustomer.participantId());
+
         }
     }
 

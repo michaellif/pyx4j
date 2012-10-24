@@ -24,7 +24,7 @@ import com.propertyvista.crm.client.ui.crud.lease.common.YesNoCancelDialog;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
-public abstract class LeaseParticipantFolder<E extends LeaseParticipant> extends VistaBoxFolder<E> {
+public abstract class LeaseParticipantFolder<E extends LeaseParticipant<?>> extends VistaBoxFolder<E> {
 
     static final I18n i18n = I18n.get(LeaseParticipantFolder.class);
 

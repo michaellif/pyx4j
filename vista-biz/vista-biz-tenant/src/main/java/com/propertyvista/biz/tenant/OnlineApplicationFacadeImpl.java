@@ -279,7 +279,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     private void inviteGuarantors(Lease lease, Customer tenant) {
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
         for (Guarantor guarantor : lease.currentTerm().version().guarantors()) {
-            if (guarantor.tenant().leaseCustomer().customer().equals(tenant)) {
+            if (guarantor.tenant().customer().equals(tenant)) {
                 if (guarantor.leaseCustomer().customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Guarantor must have an e-mail to start Online Application."));
                 }
