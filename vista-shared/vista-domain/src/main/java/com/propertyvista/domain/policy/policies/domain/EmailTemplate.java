@@ -15,6 +15,7 @@ package com.propertyvista.domain.policy.policies.domain;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -38,6 +39,7 @@ public interface EmailTemplate extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
+    @Indexed(uniqueConstraint = true, group = { "UPT,1" })
     EmailTemplatesPolicy policy();
 
     @OrderColumn
@@ -58,5 +60,6 @@ public interface EmailTemplate extends IEntity {
 
     @MemberColumn(name = "templateType")
     @ToString
+    @Indexed(uniqueConstraint = true, group = { "UPT,2" })
     IPrimitive<EmailTemplateType> type();
 }
