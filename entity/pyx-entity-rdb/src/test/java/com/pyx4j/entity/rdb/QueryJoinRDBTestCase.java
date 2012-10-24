@@ -307,14 +307,15 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
     public void testOneToManyQueryNotExists() {
         String testId = uniqueString();
         String searchBy = uniqueString();
+        String searchBy2 = uniqueString();
 
         Employee emp1 = EntityFactory.create(Employee.class);
         emp1.workAddress().streetName().setValue(testId);
         emp1.firstName().setValue("T1" + uniqueString());
 
-        Task task = EntityFactory.create(Task.class);
-        task.description().setValue(searchBy);
-        emp1.tasks().add(task);
+        Task task1 = EntityFactory.create(Task.class);
+        task1.description().setValue(searchBy);
+        emp1.tasks().add(task1);
         srv.persist(emp1);
 
         Employee emp2 = EntityFactory.create(Employee.class);
@@ -325,11 +326,36 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         {
             EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().workAddress().streetName(), testId));
+            criteria.notExists(criteria.proto().tasks());
+
+            List<Employee> emps = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, emps.size());
+        }
+
+        {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().workAddress().streetName(), testId));
             criteria.or(PropertyCriterion.notExists(criteria.proto().tasks()), PropertyCriterion.eq(criteria.proto().tasks().$().description(), searchBy));
 
             List<Employee> emps = srv.query(criteria);
             Assert.assertEquals("result set size", 2, emps.size());
         }
+
+        Task task2 = EntityFactory.create(Task.class);
+        task2.description().setValue(searchBy2);
+        emp2.tasks().add(task2);
+        srv.persist(emp2);
+
+        //TODO new notExists
+        if (false) {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().workAddress().streetName(), testId));
+            criteria.notExists(criteria.proto().tasks(), PropertyCriterion.eq(criteria.proto().tasks().$().description(), searchBy));
+
+            List<Employee> emps = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, emps.size());
+        }
+
     }
 
     public void testOneToManyQueryJoinTableNotExists() {
