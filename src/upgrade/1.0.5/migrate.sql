@@ -989,6 +989,20 @@ BEGIN
         '       CONSTRAINT lease_participant_tenant_fk FOREIGN KEY(tenant) '||
         '               REFERENCES '||v_schema_name||'.lease_customer(id))';
 
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.lease_participant '||
+        '(id,tenant_id,iddiscriminator,lease_customerdiscriminator,lease_customer,participant_role,lease_term_v,order_in_lease,'||
+        'application,screening,relationship,take_ownership,percentage) '||
+        '(SELECT nextval(''public.lease_participant_seq'') AS id,a.id AS tenant_id,''Tenant'' AS iddiscriminator, ''Tenant'' AS lease_customerdiscriminator,'||
+        'c.id AS lease_customer,a.participant_role,b.id AS lease_term_v,a.order_in_lease,a.application,a.screening,a.relationship,'||
+        'a.take_ownership,a.percentage '||
+        'FROM '||v_schema_name||'.tenant a '||
+        'JOIN '||v_schema_name||'.lease_term_v b ON (a.lease_v = b.old_id) '||
+        'JOIN '||v_schema_name||'.lease_v d ON (a.lease_v = d.id) '||
+        'JOIN '||v_schema_name||'.lease e ON (d.holder = e.id) '||
+        'JOIN '||v_schema_name||'.lease_customer c ON (a.customer = c.customer AND e.id = c.lease ) '||
+        'ORDER BY a.id )';
+        
         EXECUTE 'INSERT INTO '||v_schema_name||'.lease_participant '||
         '(id,iddiscriminator,lease_customerdiscriminator,lease_customer,participant_role,lease_term_v,order_in_lease,'||
         'application,screening,relationship,tenantdiscriminator,tenant) '||
@@ -1001,19 +1015,6 @@ BEGIN
         'JOIN '||v_schema_name||'.lease e ON (d.holder = e.id) '||
         'JOIN '||v_schema_name||'.lease_customer c ON (a.customer = c.customer AND e.id = c.lease) '||
         'LEFT JOIN '||v_schema_name||'.lease_participant f ON (f.tenant_id = a.tenant) '||
-        'ORDER BY a.id )';
-
-        EXECUTE 'INSERT INTO '||v_schema_name||'.lease_participant '||
-        '(id,tenant_id,iddiscriminator,lease_customerdiscriminator,lease_customer,participant_role,lease_term_v,order_in_lease,'||
-        'application,screening,relationship,take_ownership,percentage) '||
-        '(SELECT nextval(''public.lease_participant_seq'') AS id,a.id AS tenant_id,''Tenant'' AS iddiscriminator, ''Tenant'' AS lease_customerdiscriminator,'||
-        'c.id AS lease_customer,a.participant_role,b.id AS lease_term_v,a.order_in_lease,a.application,a.screening,a.relationship,'||
-        'a.take_ownership,a.percentage '||
-        'FROM '||v_schema_name||'.tenant a '||
-        'JOIN '||v_schema_name||'.lease_term_v b ON (a.lease_v = b.old_id) '||
-        'JOIN '||v_schema_name||'.lease_v d ON (a.lease_v = d.id) '||
-        'JOIN '||v_schema_name||'.lease e ON (d.holder = e.id) '||
-        'JOIN '||v_schema_name||'.lease_customer c ON (a.customer = c.customer AND e.id = c.lease ) '||
         'ORDER BY a.id )';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant OWNER TO vista';
