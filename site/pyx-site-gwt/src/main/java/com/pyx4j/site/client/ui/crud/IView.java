@@ -46,4 +46,6 @@ public interface IView extends IsWidget {
 
     void hideVisor();
 
+    boolean isVisorShown();
+
 }

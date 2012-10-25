@@ -169,6 +169,10 @@ public class VisorLayoutPanel extends ComplexPanel implements RequiresResize, Pr
         }
     }
 
+    public boolean isVisorShown() {
+        return (visorPaneWidget != null);
+    }
+
     public int getAnimationDuration() {
         return animationDuration;
     }

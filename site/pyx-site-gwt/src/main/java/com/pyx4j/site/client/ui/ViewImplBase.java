@@ -144,6 +144,11 @@ public abstract class ViewImplBase extends DockLayoutPanel implements IView {
         visorPane.hideVisorPane();
     }
 
+    @Override
+    public boolean isVisorShown() {
+        return visorPane.isVisorShown();
+    }
+
     public void setCaption(String caption) {
         captionLabel.setText(caption);
     }

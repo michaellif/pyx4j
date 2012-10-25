@@ -139,4 +139,9 @@ public class ListerInternalViewImplBase<E extends IEntity> extends SimplePanel i
 
     }
 
+    @Override
+    public boolean isVisorShown() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

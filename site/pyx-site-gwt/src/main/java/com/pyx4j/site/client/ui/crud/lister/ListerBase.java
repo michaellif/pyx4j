@@ -128,4 +128,11 @@ public abstract class ListerBase<E extends IEntity> extends BasicLister<E> imple
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public boolean isVisorShown() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }
