@@ -126,7 +126,7 @@ public interface OccupancyFacade {
     EndLeaseConstraintsDTO getEndLeaseConstraints(Key unitId);
 
     /** Cancels the definition of a lease that is currently active and has a defined end date in the future */
-    void cancelEndLease(Key unitId);
+    void cancelEndLease(Key unitId) throws OccupancyOperationException;
 
     boolean isCancelEndLeaseAvaialble(Key unitId);
 

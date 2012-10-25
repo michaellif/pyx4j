@@ -20,6 +20,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityFiltersBuilder;
 import com.pyx4j.essentials.client.DeferredProcessDialog;
@@ -162,6 +163,13 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
+                    ((LeaseViewerView) getView()).reportCancelNoticeFailed((UserRuntimeException) caught);
+                }
             }
         }, getEntityId(), decisionReason);
     }

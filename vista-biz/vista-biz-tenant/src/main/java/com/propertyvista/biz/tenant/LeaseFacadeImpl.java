@@ -45,6 +45,7 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.biz.occupancy.OccupancyOperationException;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
@@ -576,6 +577,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.expectedMoveOut().setValue(moveOutDay);
 
         Persistence.secureSave(lease);
+
+        ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey(), lease.leaseTo().getValue());
+
     }
 
     @Override
@@ -592,6 +596,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Persistence.secureSave(lease);
 
         // TODO: add notes with decisionReason!!!
+
+        try {
+            ServerSideFactory.create(OccupancyFacade.class).cancelEndLease(lease.unit().getPrimaryKey());
+        } catch (OccupancyOperationException e) {
+            throw new UserRuntimeException(i18n.tr("Failed to cancel lease completion: please make sure that the unit is not reserved for another lease"));
+        }
     }
 
     @Override

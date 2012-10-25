@@ -460,11 +460,12 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public void cancelEndLease(Key unitPk) {
+    public void cancelEndLease(Key unitPk) throws OccupancyOperationException {
         assert unitPk != null;
 
         if (!isCancelEndLeaseAvaialble(unitPk)) {
-            throw new IllegalStateException("'cancelEndLease' operation is impossible (the unit must be leased with a defined lease end date)");
+            throw new OccupancyOperationException(
+                    "'cancelEndLease' operation is impossible (the unit must be leased with a defined lease end date and not reserved in the future)");
         }
 
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());

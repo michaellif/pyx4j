@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
@@ -394,6 +395,11 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         MessageDialog.info(message);
     }
 
+    @Override
+    public void reportCancelNoticeFailed(UserRuntimeException caught) {
+        MessageDialog.error(i18n.tr("Cancel Notice Failed"), caught.getMessage());
+    }
+
     private abstract class TermLeaseBox extends OkCancelDialog {
 
         private final CompletionType action;
@@ -538,4 +544,5 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             return new LogicalDate(date.getValue());
         }
     }
+
 }

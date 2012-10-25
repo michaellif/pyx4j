@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
@@ -64,4 +65,6 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
     IListerView<LeaseAdjustment> getLeaseAdjustmentListerView();
 
     void reportSendMailActionResult(String message);
+
+    void reportCancelNoticeFailed(UserRuntimeException caught);
 }

@@ -364,7 +364,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     }
 
     @Test
-    public void testCancelEndLease() {
+    public void testCancelEndLease() throws Exception {
         Lease lease = createLease("2011-05-20", "2012-12-31");
         setup().fromTheBeginning().to("2011-05-19").status(Status.pending).x();
         setup().from("2011-05-20").to("2012-12-31").status(Status.leased).withLease(lease).x();
