@@ -208,6 +208,7 @@ public class LeaseLifecycleSimulator {
         LeaseEventContainer container = events.poll();
         Persistence.service().setTransactionSystemTime(container.date());
         container.event().exec();
+        Persistence.service().commit();
     }
 
     private boolean hasNextEvent() {
