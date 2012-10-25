@@ -22,7 +22,6 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 
@@ -32,7 +31,6 @@ public interface SiteDescriptor extends Descriptor {
     //TODO make single instance objects part of framework
     public final String cacheKey = "SiteDescriptor";
 
-    @I18n
     public enum Skin {
 
         skin1(23, 12, 37, 89, 100, 100, 100, 100, 0, 10, 0, 100),
@@ -57,7 +55,18 @@ public interface SiteDescriptor extends Descriptor {
 
         @Override
         public String toString() {
-            return I18nEnum.toString(this);
+            switch (this) {
+            case skin1:
+                return "Starlight";
+            case skin2:
+                return "Power";
+            case skin3:
+                return "Strict";
+            case skin4:
+                return "Simple";
+            default:
+                return super.toString();
+            }
         }
 
         public int[] getColorProperties() {

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content.site;
 
-import java.util.Collection;
 import java.util.EnumSet;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -22,7 +21,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -67,13 +65,7 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast2()), 10).build());
 
         if (skinComp instanceof CComboBox) {
-            Collection<SiteDescriptor.Skin> skinOpt;
-            if (ApplicationMode.isDevelopment()) {
-                skinOpt = EnumSet.of(SiteDescriptor.Skin.skin1, SiteDescriptor.Skin.skin2, SiteDescriptor.Skin.skin3, SiteDescriptor.Skin.skin4);
-            } else {
-                skinOpt = EnumSet.of(SiteDescriptor.Skin.skin2, SiteDescriptor.Skin.skin3, SiteDescriptor.Skin.skin4);
-            }
-            ((CComboBox<SiteDescriptor.Skin>) skinComp).setOptions(skinOpt);
+            ((CComboBox<SiteDescriptor.Skin>) skinComp).setOptions(EnumSet.of(SiteDescriptor.Skin.skin2, SiteDescriptor.Skin.skin3, SiteDescriptor.Skin.skin4));
         }
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableMapView()), 10).build());
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableBuildingDetails()), 10).build());
