@@ -44,7 +44,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
     private final IListerView.Presenter<?> unitItemsLister;
 
-    private final IListerView.Presenter<?> OccupanciesLister;
+    private final IListerView.Presenter<?> occupanciesLister;
 
     private final UnitOccupancyManagerService occupancyManagerService;
 
@@ -55,7 +55,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
         unitItemsLister = new ListerActivityBase<AptUnitItem>(place, ((UnitViewerView) getView()).getUnitItemsListerView(),
                 (AbstractCrudService<AptUnitItem>) GWT.create(UnitItemCrudService.class), AptUnitItem.class);
 
-        OccupanciesLister = new ListerActivityBase<AptUnitOccupancySegment>(place, ((UnitViewerView) getView()).getOccupanciesListerView(),
+        occupanciesLister = new ListerActivityBase<AptUnitOccupancySegment>(place, ((UnitViewerView) getView()).getOccupanciesListerView(),
                 (AbstractCrudService<AptUnitOccupancySegment>) GWT.create(UnitOccupancyCrudService.class), AptUnitOccupancySegment.class);
 
         occupancyManagerService = GWT.create(UnitOccupancyManagerService.class);
@@ -73,8 +73,8 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
     }
 
     private void populateOccupancy(Key entityId) {
-        OccupanciesLister.setParent(entityId);
-        OccupanciesLister.populate();
+        occupanciesLister.setParent(entityId);
+        occupanciesLister.populate();
 
         final UnitViewerView myView = (UnitViewerView) getView();
 
@@ -115,7 +115,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
     @Override
     public void onStop() {
         ((AbstractActivity) unitItemsLister).onStop();
-        ((AbstractActivity) OccupanciesLister).onStop();
+        ((AbstractActivity) occupanciesLister).onStop();
         super.onStop();
     }
 
