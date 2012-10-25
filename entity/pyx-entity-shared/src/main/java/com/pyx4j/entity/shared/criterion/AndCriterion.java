@@ -31,21 +31,31 @@ public class AndCriterion extends FiltersBuilder implements Criterion {
 
     private static final long serialVersionUID = 1L;
 
+    //N.B. this is should final; but it is not to enable GWT serialization 
     private Vector<Criterion> filters;
 
     public AndCriterion() {
+        this(new Vector<Criterion>());
+    }
+
+    AndCriterion(Vector<Criterion> filters) {
+        this.filters = filters;
     }
 
     public AndCriterion(Criterion... criterions) {
+        this();
         for (Criterion criterion : criterions) {
             add(criterion);
         }
     }
 
+    //N.B. this is hack to avoid adding 'final' to filters; To enable GWT serialization
+    @SuppressWarnings("unused")
+    private final void setFilters() {
+        this.filters = null;
+    }
+
     public AndCriterion add(Criterion criterion) {
-        if (filters == null) {
-            filters = new Vector<Criterion>();
-        }
         filters.add(criterion);
         return this;
     }

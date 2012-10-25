@@ -159,18 +159,6 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
         return this;
     }
 
-    public OrCriterion or() {
-        OrCriterion criterion = new OrCriterion();
-        add(criterion);
-        return criterion;
-    }
-
-    public AndCriterion and() {
-        AndCriterion criterion = new AndCriterion();
-        add(criterion);
-        return criterion;
-    }
-
     public EntityQueryCriteria<E> or(Criterion criterionL, Criterion criterionR) {
         return add(new OrCriterion(criterionL, criterionR));
     }

@@ -32,46 +32,54 @@ public class OrCriterion implements Criterion {
 
     private static final long serialVersionUID = 1L;
 
+    //N.B. this is should final; but it is not to enable GWT serialization 
     private Vector<Criterion> filtersLeft;
 
+    //N.B. this is should final; but it is not to enable GWT serialization 
     private Vector<Criterion> filtersRight;
 
     public OrCriterion() {
+        this.filtersLeft = new Vector<Criterion>();
+        this.filtersRight = new Vector<Criterion>();
     }
 
     public OrCriterion(Criterion criterionL, Criterion criterionR) {
+        this();
         left(criterionL);
         right(criterionR);
     }
 
+    public FiltersBuilder left() {
+        return new AndCriterion(filtersLeft);
+    }
+
+    public FiltersBuilder right() {
+        return new AndCriterion(filtersRight);
+    }
+
+    //N.B. this is hack to avoid adding 'final' to filters; To enable GWT serialization
+    @SuppressWarnings("unused")
+    private final void setFilters() {
+        this.filtersLeft = null;
+        this.filtersRight = null;
+    }
+
     public OrCriterion left(Criterion criterion) {
-        if (filtersLeft == null) {
-            filtersLeft = new Vector<Criterion>();
-        }
         filtersLeft.add(criterion);
         return this;
     }
 
     public OrCriterion addLeft(Collection<Criterion> filters) {
-        if (filtersLeft == null) {
-            filtersLeft = new Vector<Criterion>();
-        }
         filtersLeft.addAll(filters);
         return this;
     }
 
     public OrCriterion right(Criterion criterion) {
-        if (filtersRight == null) {
-            filtersRight = new Vector<Criterion>();
-        }
         filtersRight.add(criterion);
         return this;
     }
 
     public OrCriterion addRight(Collection<Criterion> filters) {
-        if (filtersRight == null) {
-            filtersRight = new Vector<Criterion>();
-        }
         filtersRight.addAll(filters);
         return this;
     }

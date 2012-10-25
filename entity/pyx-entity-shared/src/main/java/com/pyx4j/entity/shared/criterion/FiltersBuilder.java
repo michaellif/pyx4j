@@ -51,6 +51,18 @@ public abstract class FiltersBuilder {
 
     protected abstract FiltersBuilder addCriterion(Criterion criterion);
 
+    public OrCriterion or() {
+        OrCriterion criterion = new OrCriterion();
+        addCriterion(criterion);
+        return criterion;
+    }
+
+    public AndCriterion and() {
+        AndCriterion criterion = new AndCriterion();
+        addCriterion(criterion);
+        return criterion;
+    }
+
     public final void eq(IObject<?> criteria_proto_member, Class<? extends IEntity> value) {
         addCriterion(PropertyCriterion.eq(criteria_proto_member, value));
     }
