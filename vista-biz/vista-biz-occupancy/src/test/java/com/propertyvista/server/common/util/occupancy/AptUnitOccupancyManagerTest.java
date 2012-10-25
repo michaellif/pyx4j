@@ -32,6 +32,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-01-01").to("2011-02-02").status(Status.pending).x();
         expect().from("2011-02-03").toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
+        assertUnitIsAvailableFrom("2011-02-03");
     }
 
     @Test
@@ -46,6 +47,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
         assertExpectedTimeline();
+        assertUnitIsNotAvailable();
     }
 
     @Test
@@ -64,20 +66,25 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-02-02").to("2011-10-02").status(Status.leased).withLease(lease1).x();
         expect().from("2011-10-03").toTheEndOfTime().status(Status.reserved).withLease(lease2).x();
         assertExpectedTimeline();
+        assertUnitIsNotAvailable();
     }
 
     @Test
     public void testUnreserveFutureReserved() {
         Lease lease = createLease("2011-02-15", "2011-10-25");
-        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        setup().fromTheBeginning().to("2011-02-01").status(Status.available).x();
+        setup().from("2011-02-02").to("2011-02-02").status(Status.renovation).x();
         setup().from("2011-02-03").toTheEndOfTime().status(Status.reserved).withLease(lease).x();
 
         now("2011-02-01");
 
         getUOM().unreserve(unitId);
 
-        expect().fromTheBeginning().toTheEndOfTime().status(Status.available).x();
+        expect().fromTheBeginning().to("2011-02-01").status(Status.available).x();
+        expect().from("2011-02-02").to("2011-02-02").status(Status.renovation).x();
+        expect().from("2011-02-03").toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
+        assertUnitIsAvailableFrom("2011-02-03");
     }
 
     @Test
@@ -94,6 +101,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-02-03").to("2011-02-04").status(Status.reserved).withLease(lease).x();
         expect().from("2011-02-05").toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
+        assertUnitIsAvailableFrom("2011-02-05");
     }
 
     @Test
@@ -111,6 +119,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-02-03").to("2011-02-04").status(Status.reserved).withLease(lease).x();
         expect().from("2011-02-05").toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
+        assertUnitIsAvailableFrom("2011-02-05");
     }
 
     @Test
@@ -126,6 +135,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         expect().fromTheBeginning().toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
+        assertUnitIsAvailableFrom("2011-02-03");
     }
 
     @Test
@@ -142,6 +152,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
         expect().from("2011-02-15").toTheEndOfTime().status(Status.leased).withLease(lease).x();
         assertExpectedTimeline();
+        assertUnitIsNotAvailable();
     }
 
     @Test
@@ -161,6 +172,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-01-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
         expect().from("2011-10-26").toTheEndOfTime().status(Status.pending).x();
         assertExpectedTimeline();
+        assertUnitIsNotAvailable();
     }
 
     /** Ends lease before end date */
@@ -181,6 +193,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-01-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
         expect().from("2011-10-21").toTheEndOfTime().status(Status.pending).x();
         assertExpectedTimeline();
+        assertUnitIsNotAvailable();
     }
 
     @Test
@@ -200,6 +213,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-01-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
         expect().from("2011-10-26").toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
+        assertUnitIsAvailableFrom("2011-10-26");
     }
 
     @Test
@@ -213,6 +227,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         expect().fromTheBeginning().toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
+        assertUnitIsAvailableFrom("2011-02-03");
     }
 
     @Test
@@ -233,6 +248,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-10-26").to("2011-11-10").status(Status.renovation).x();
         expect().from("2011-11-11").toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
+        assertUnitIsAvailableFrom("2011-11-11");
     }
 
     @Test
@@ -254,6 +270,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-11-05").to("2011-11-10").status(Status.renovation).x();
         expect().from("2011-11-11").toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
+        assertUnitIsAvailableFrom("2011-11-11");
     }
 
     @Test
@@ -270,6 +287,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-01-03").to("2011-02-20").status(Status.renovation).x();
         expect().from("2011-02-21").toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
+        assertUnitIsAvailableFrom("2011-02-21");
     }
 
     @Test
@@ -283,6 +301,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().fromTheBeginning().to("2011-05-01").status(Status.pending).x();
         expect().from("2011-05-02").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
         assertExpectedTimeline();
+        assertUnitIsNotAvailable();
     }
 
     @Test
@@ -299,6 +318,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-05-20").to("2011-07-19").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
         expect().from("2011-07-20").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.model).x();
         assertExpectedTimeline();
+        assertUnitIsNotAvailable();
     }
 
     @Test
@@ -315,6 +335,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-05-20").to("2011-06-14").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
         expect().from("2011-06-15").toTheEndOfTime().status(Status.pending).x();
         assertExpectedTimeline();
+        assertUnitIsNotAvailable();
     }
 
     @Test
@@ -331,6 +352,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-05-20").to("2011-06-14").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
         expect().from("2011-06-15").toTheEndOfTime().status(Status.pending).x();
         assertExpectedTimeline();
+        assertUnitIsNotAvailable();
     }
 
     @Test
@@ -347,6 +369,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-05-20").to("2011-07-19").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
         expect().from("2011-07-20").toTheEndOfTime().status(Status.pending).x();
         assertExpectedTimeline();
+        assertUnitIsNotAvailable();
     }
 
     @Test
@@ -361,6 +384,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         expect().fromTheBeginning().toTheEndOfTime().status(Status.pending).x();
         assertExpectedTimeline();
+        assertUnitIsNotAvailable();
     }
 
     @Test
@@ -376,6 +400,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         expect().fromTheBeginning().to("2011-05-19").status(Status.pending).x();
         expect().from("2011-05-20").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+        assertUnitIsNotAvailable();
     }
 
     @Test
@@ -389,6 +414,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         expect().fromTheBeginning().to("2001-01-04").status(Status.pending).x();
         expect().from("2001-01-05").toTheEndOfTime().status(Status.migrated).withLease(lease).x();
+        assertUnitIsNotAvailable();
     }
 
     @Test
@@ -403,6 +429,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().fromTheBeginning().to("2001-01-04").status(Status.pending).x();
         expect().from("2001-01-05").to("2001-01-19").status(Status.migrated).withLease(lease).x();
         expect().from("2001-01-20").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+        assertUnitIsNotAvailable();
     }
 
     @Test
@@ -416,6 +443,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         expect().fromTheBeginning().to("2001-01-04").status(Status.pending).x();
         expect().from("2001-01-05").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+        assertUnitIsNotAvailable();
     }
 
     @Test
@@ -430,6 +458,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().fromTheBeginning().to("2001-01-04").status(Status.pending).x();
         expect().from("2001-01-05").to("2001-01-19").status(Status.migrated).withLease(lease).x();
         expect().from("2001-01-20").toTheEndOfTime().status(Status.pending).x();
+        assertUnitIsNotAvailable();
     }
 
     @Test
@@ -442,7 +471,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         getUOM().migratedCancel(unitStub());
 
         expect().fromTheBeginning().toTheEndOfTime().status(Status.pending).x();
-        // TODO test unit is available from specific date
+        assertUnitIsNotAvailable();
     }
 
 }

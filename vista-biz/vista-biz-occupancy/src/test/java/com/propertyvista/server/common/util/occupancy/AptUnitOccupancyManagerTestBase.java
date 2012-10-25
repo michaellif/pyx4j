@@ -211,6 +211,18 @@ public class AptUnitOccupancyManagerTestBase {
         }
     }
 
+    protected void assertUnitIsAvailableFrom(LogicalDate date) {
+        Assert.assertEquals(date, Persistence.service().retrieve(AptUnit.class, unit.getPrimaryKey())._availableForRent().getValue());
+    }
+
+    protected void assertUnitIsAvailableFrom(String dateRepr) {
+        assertUnitIsAvailableFrom(new LogicalDate(asDate(dateRepr)));
+    }
+
+    protected void assertUnitIsNotAvailable() {
+        assertUnitIsAvailableFrom((LogicalDate) null);
+    }
+
     protected static void assertEqualSegments(AptUnitOccupancySegment expected, AptUnitOccupancySegment actual) {
         String msg = "The actual and expected segments equality does not hold";
         Assert.assertEquals(msg, expected.unit().getPrimaryKey(), actual.unit().getPrimaryKey());
