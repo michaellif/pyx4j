@@ -79,6 +79,23 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
             return getPropertyPath() + (isDescending() ? " Desc" : " Asc");
         }
 
+        @Override
+        public int hashCode() {
+            int hashCode = 0;
+            hashCode += this.propertyPath.hashCode();
+            hashCode *= 0x1F;
+            hashCode += Boolean.valueOf(descending).hashCode();
+            return hashCode;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof Sort)) {
+                return false;
+            } else {
+                return ((Sort) o).propertyPath.equals(this.propertyPath) && (((Sort) o).descending == this.descending);
+            }
+        }
     }
 
     public enum VersionedCriteria {

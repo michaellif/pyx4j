@@ -23,6 +23,8 @@ package com.pyx4j.entity.shared.criterion;
 import java.util.Collection;
 import java.util.Vector;
 
+import com.pyx4j.commons.EqualsHelper;
+
 /**
  * For usage examples @see com.pyx4j.entity.rdb.QueryRDBTestCase#testCriterionOr()
  */
@@ -80,5 +82,28 @@ public class OrCriterion implements Criterion {
 
     public Vector<Criterion> getFiltersRight() {
         return filtersRight;
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 0;
+        if (this.filtersLeft != null) {
+            hashCode += this.filtersLeft.hashCode();
+        }
+        hashCode *= 0x1F;
+        if (this.filtersRight != null) {
+            hashCode += this.filtersRight.hashCode();
+        }
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof OrCriterion)) {
+            return false;
+        } else {
+            return EqualsHelper.equals(this.filtersLeft, ((OrCriterion) o).filtersLeft)
+                    && EqualsHelper.equals(this.filtersRight, ((OrCriterion) o).filtersRight);
+        }
     }
 }

@@ -22,6 +22,8 @@ package com.pyx4j.entity.shared.criterion;
 
 import java.util.Vector;
 
+import com.pyx4j.commons.EqualsHelper;
+
 /**
  * For usage examples @see com.pyx4j.entity.rdb.QueryRDBTestCase#testCriterionAnd()
  */
@@ -57,4 +59,21 @@ public class AndCriterion extends FiltersBuilder implements Criterion {
         return filters;
     }
 
+    @Override
+    public int hashCode() {
+        int hashCode = 0;
+        if (this.filters != null) {
+            hashCode += this.filters.hashCode();
+        }
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof AndCriterion)) {
+            return false;
+        } else {
+            return EqualsHelper.equals(this.filters, ((AndCriterion) o).filters);
+        }
+    }
 }
