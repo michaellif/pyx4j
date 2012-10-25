@@ -380,10 +380,10 @@ public class BillingManager {
                             BillDateUtils.calculateBillingCycleEndDate(billingType.paymentFrequency().getValue(), billingCycleStartDate));
                     billingCycle.executionTargetDate().setValue(BillDateUtils.calculateBillingCycleTargetExecutionDate(billingType, billingCycleStartDate));
 
-                    billingCycle.notConfirmed().setValue(0L);
-                    billingCycle.failed().setValue(0L);
-                    billingCycle.rejected().setValue(0L);
-                    billingCycle.confirmed().setValue(0L);
+                    billingCycle.stats().notConfirmed().setValue(0L);
+                    billingCycle.stats().failed().setValue(0L);
+                    billingCycle.stats().rejected().setValue(0L);
+                    billingCycle.stats().confirmed().setValue(0L);
 
                     Persistence.service().persist(billingCycle);
                     Persistence.service().commit();
@@ -426,18 +426,18 @@ public class BillingManager {
 
         switch (bill.billStatus().getValue()) {
         case Failed:
-            BillingUtils.increment(bill.billingCycle().failed());
+            BillingUtils.increment(bill.billingCycle().stats().failed());
             break;
         case Finished:
-            BillingUtils.increment(bill.billingCycle().notConfirmed());
+            BillingUtils.increment(bill.billingCycle().stats().notConfirmed());
             break;
         case Confirmed:
-            BillingUtils.increment(bill.billingCycle().confirmed());
-            BillingUtils.decrement(bill.billingCycle().notConfirmed());
+            BillingUtils.increment(bill.billingCycle().stats().confirmed());
+            BillingUtils.decrement(bill.billingCycle().stats().notConfirmed());
             break;
         case Rejected:
-            BillingUtils.increment(bill.billingCycle().rejected());
-            BillingUtils.decrement(bill.billingCycle().notConfirmed());
+            BillingUtils.increment(bill.billingCycle().stats().rejected());
+            BillingUtils.decrement(bill.billingCycle().stats().notConfirmed());
             break;
         default:
             throw new Error("Unexpected billStatus");
@@ -459,10 +459,10 @@ public class BillingManager {
 
                 switch (previousBill.billStatus().getValue()) {
                 case Failed:
-                    BillingUtils.decrement(bill.billingCycle().failed());
+                    BillingUtils.decrement(bill.billingCycle().stats().failed());
                     break;
                 case Rejected:
-                    BillingUtils.decrement(bill.billingCycle().rejected());
+                    BillingUtils.decrement(bill.billingCycle().stats().rejected());
                     break;
 
                 default:

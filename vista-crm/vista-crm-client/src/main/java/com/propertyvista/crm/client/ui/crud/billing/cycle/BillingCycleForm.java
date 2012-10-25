@@ -48,16 +48,16 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionTargetDate())).build());
 
         content.setH2(++row, 0, 2, i18n.tr("Statistics"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().failed())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().failed())).build());
         content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Failed));
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rejected())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().rejected())).build());
         content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Rejected));
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notConfirmed())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().notConfirmed())).build());
         content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Finished));
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmed())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().confirmed())).build());
         content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Confirmed));
 
         content.setBR(++row, 0, 2);

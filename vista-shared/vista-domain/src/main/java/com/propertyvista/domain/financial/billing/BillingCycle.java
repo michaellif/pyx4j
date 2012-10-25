@@ -14,11 +14,11 @@
 package com.propertyvista.domain.financial.billing;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
@@ -57,18 +57,6 @@ public interface BillingCycle extends IEntity {
     @ReadOnly
     IPrimitive<LogicalDate> executionTargetDate();
 
-    // Statistics:
-    //TODO 1 add stats
-
-    @Caption(name = "Failed Bills Number")
-    IPrimitive<Long> failed();
-
-    @Caption(name = "Rejected Bills Number")
-    IPrimitive<Long> rejected();
-
-    @Caption(name = "Non Confirmed Bills Number")
-    IPrimitive<Long> notConfirmed();
-
-    @Caption(name = "Confirmed Bills Number")
-    IPrimitive<Long> confirmed();
+    @Owned(forceCreation = true)
+    BillingCycleStats stats();
 }

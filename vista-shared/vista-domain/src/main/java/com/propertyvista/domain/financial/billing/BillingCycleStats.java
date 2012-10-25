@@ -1,0 +1,39 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on Oct 25, 2012
+ * @author michaellif
+ * @version $Id$
+ */
+package com.propertyvista.domain.financial.billing;
+
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+
+@Table(prefix = "billing")
+public interface BillingCycleStats extends IEntity {
+
+    // Statistics:
+    //TODO 1 add stats
+
+    @Caption(name = "Failed Bills Number")
+    IPrimitive<Long> failed();
+
+    @Caption(name = "Rejected Bills Number")
+    IPrimitive<Long> rejected();
+
+    @Caption(name = "Non Confirmed Bills Number")
+    IPrimitive<Long> notConfirmed();
+
+    @Caption(name = "Confirmed Bills Number")
+    IPrimitive<Long> confirmed();
+
+}

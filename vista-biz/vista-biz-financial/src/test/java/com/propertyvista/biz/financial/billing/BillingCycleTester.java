@@ -30,22 +30,22 @@ public class BillingCycleTester extends Tester {
     }
 
     public BillingCycleTester notConfirmedBills(Long ammount) {
-        assertEquals("Not Confirmed Bills", ammount, billingCycle.notConfirmed().getValue());
+        assertEquals("Not Confirmed Bills", ammount, billingCycle.stats().notConfirmed().getValue());
         return this;
     }
 
     public BillingCycleTester failedBills(Long ammount) {
-        assertEquals("Failed Bills", ammount, billingCycle.failed().getValue());
+        assertEquals("Failed Bills", ammount, billingCycle.stats().failed().getValue());
         return this;
     }
 
     public BillingCycleTester rejectedBills(Long ammount) {
-        assertEquals("Rejected Bills", ammount, billingCycle.rejected().getValue());
+        assertEquals("Rejected Bills", ammount, billingCycle.stats().rejected().getValue());
         return this;
     }
 
     public BillingCycleTester confirmedBills(Long ammount) {
-        assertEquals("Confirmed Bills", ammount, billingCycle.confirmed().getValue());
+        assertEquals("Confirmed Bills", ammount, billingCycle.stats().confirmed().getValue());
         return this;
     }
 

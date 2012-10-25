@@ -32,10 +32,10 @@ public class BillingCycleLister extends ListerBase<BillingCycleDTO> {
             new MemberColumnDescriptor.Builder(proto().billingCycleEndDate()).build(),
             new MemberColumnDescriptor.Builder(proto().executionTargetDate()).build(),
             new MemberColumnDescriptor.Builder(proto().notRun()).build(),      
-            new MemberColumnDescriptor.Builder(proto().notConfirmed()).build(),        
-            new MemberColumnDescriptor.Builder(proto().failed()).build(), 
-            new MemberColumnDescriptor.Builder(proto().rejected()).build(),  
-            new MemberColumnDescriptor.Builder(proto().confirmed()).build(), 
+            new MemberColumnDescriptor.Builder(proto().stats().notConfirmed()).build(),        
+            new MemberColumnDescriptor.Builder(proto().stats().failed()).build(), 
+            new MemberColumnDescriptor.Builder(proto().stats().rejected()).build(),  
+            new MemberColumnDescriptor.Builder(proto().stats().confirmed()).build(), 
             new MemberColumnDescriptor.Builder(proto().total()).build()           
         );//@formatter:on
     }
