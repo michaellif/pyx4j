@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.activity.crud.customer.tenant;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.AndCriterion;
+import com.pyx4j.entity.shared.criterion.EntityFiltersBuilder;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.customer.tenant.PastTenantListerView;
@@ -33,18 +33,21 @@ public class PastTenantListerActivity extends ListerActivityBase<TenantDTO> {
         super(place, CustomerViewFactory.instance(PastTenantListerView.class), GWT.<TenantCrudService> create(TenantCrudService.class), TenantDTO.class);
 
         // filter out just former tenants:
-        TenantDTO proto = EntityFactory.getEntityPrototype(TenantDTO.class);
 
-        OrCriterion or = new OrCriterion();
-        or.left(PropertyCriterion.in(proto.lease().status(), Lease.Status.former()));
+        EntityFiltersBuilder<TenantDTO> filters = EntityFiltersBuilder.create(TenantDTO.class);
 
-        or.right(PropertyCriterion.notExists(proto.leaseParticipants().$().leaseTermV()));
-        or.right(PropertyCriterion.eq(proto.leaseParticipants().$().leaseTermV().holder(), proto.lease().currentTerm()));
+        OrCriterion or = filters.or();
+
+        or.left().in(filters.proto().lease().status(), Lease.Status.former());
+
+        AndCriterion currentTermCriterion = new AndCriterion();
+        currentTermCriterion.eq(filters.proto().leaseParticipants().$().leaseTermV().holder(), filters.proto().lease().currentTerm());
         // and finalized e.g. last only:
-        or.right(PropertyCriterion.isNotNull(proto.leaseParticipants().$().leaseTermV().fromDate()));
-        or.right(PropertyCriterion.isNull(proto.leaseParticipants().$().leaseTermV().toDate()));
+        currentTermCriterion.isCurrent(filters.proto().leaseParticipants().$().leaseTermV());
 
-        addPreDefinedFilter(or);
+        or.right().notExists(filters.proto().leaseParticipants().$().leaseTermV(), currentTermCriterion);
+
+        addPreDefinedFilter(filters);
 
     }
 
