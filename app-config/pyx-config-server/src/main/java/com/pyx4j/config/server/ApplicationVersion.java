@@ -102,10 +102,8 @@ public class ApplicationVersion {
         buildLabel = properties.getProperty(BUILD_NUMBER, "n/a");
         if (buildLabel.startsWith("${") || buildLabel.endsWith("-SNAPSHOT")) {
             buildLabel = "n/a";
-            productVersion = properties.getProperty(POM_VERSION, "n/a");
-        } else {
-            productVersion = buildLabel;
         }
+        productVersion = properties.getProperty(POM_VERSION, buildLabel);
         scmRevision = properties.getProperty("scm.revision", "");
         try {
             String bildTimeString = properties.getProperty(BUILD_TIME);
