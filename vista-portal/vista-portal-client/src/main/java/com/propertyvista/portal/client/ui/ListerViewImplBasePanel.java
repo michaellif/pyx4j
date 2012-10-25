@@ -149,4 +149,10 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public boolean isVisorShown() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

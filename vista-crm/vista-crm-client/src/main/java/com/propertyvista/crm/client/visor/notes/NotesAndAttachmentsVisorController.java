@@ -54,6 +54,16 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
     }
 
     @Override
+    public void hide(IView parentView) {
+        parentView.hideVisor();
+    }
+
+    @Override
+    public boolean isShown(IView parentView) {
+        return parentView.isVisorShown();
+    }
+
+    @Override
     public IsWidget getView() {
         return view;
     }

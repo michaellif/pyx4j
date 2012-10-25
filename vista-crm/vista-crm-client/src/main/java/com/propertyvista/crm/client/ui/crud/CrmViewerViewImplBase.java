@@ -63,6 +63,8 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     private Button actionsButton;
 
+    private Button notesButton;
+
     private Button.ButtonMenuBar actionsMenu;
 
     private int actionHighlightCounter = 0;
@@ -82,7 +84,9 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
             @SuppressWarnings("unchecked")
             @Override
             public void onClick(ClickEvent event) {
-                ((CrmViewerActivity<E>) getPresenter()).getNotesAndAttachmentsController().show(CrmViewerViewImplBase.this);
+                if (!isVisorShown()) {
+                    ((CrmViewerActivity<E>) getPresenter()).getNotesAndAttachmentsController().show(CrmViewerViewImplBase.this);
+                }
             }
         }).asWidget());
 

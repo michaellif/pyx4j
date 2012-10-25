@@ -43,7 +43,9 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
         addHeaderToolbarItem(new Button(i18n.tr("Charges"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseTermViewerView.Presenter) getPresenter()).getChargesVisorController().show(LeaseTermViewerViewImpl.this);
+                if (!isVisorShown()) {
+                    ((LeaseTermViewerView.Presenter) getPresenter()).getChargesVisorController().show(LeaseTermViewerViewImpl.this);
+                }
             }
         }));
 

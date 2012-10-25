@@ -59,6 +59,16 @@ public class DashboardVisorController implements IDashboardVisorController {
     }
 
     @Override
+    public void hide(final IView parentView) {
+        parentView.hideVisor();
+    }
+
+    @Override
+    public boolean isShown(IView parentView) {
+        return parentView.isVisorShown();
+    }
+
+    @Override
     public void saveDashboardMetadata() {
         DashboardMetadata dm = view.getDashboardMetadata();
 

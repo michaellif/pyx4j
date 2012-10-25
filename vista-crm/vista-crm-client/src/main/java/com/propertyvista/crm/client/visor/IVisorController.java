@@ -23,4 +23,7 @@ public interface IVisorController {
 
     void show(IView view);
 
+    void hide(IView view);
+
+    boolean isShown(IView view);
 }

@@ -40,7 +40,6 @@ import com.propertyvista.crm.client.ui.crud.building.mech.ElevatorLister;
 import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
-import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -198,8 +197,9 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
                 public void execute() {
                     List<Building> buildingsFilter = new ArrayList<Building>();
                     buildingsFilter.add(getForm().getValue());
-                    IDashboardVisorController controller = ((BuildingViewerView.Presenter) getPresenter()).getDashboardController(dashboard, buildingsFilter);
-                    controller.show(BuildingViewerViewImpl.this);
+                    if (!isVisorShown()) {
+                        ((BuildingViewerView.Presenter) getPresenter()).getDashboardController(dashboard, buildingsFilter).show(BuildingViewerViewImpl.this);
+                    }
                 }
 
             });
