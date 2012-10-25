@@ -60,10 +60,6 @@ import com.propertyvista.test.helper.LightWeightLeaseManagement;
 
 public class AptUnitOccupancyManagerTestBase {
 
-    protected static final String MAX_DATE = "MAX_DATE";
-
-    protected static final String MIN_DATE = "MIN_DATE";
-
     private AptUnit unit = null;
 
     protected Key unitId = null;

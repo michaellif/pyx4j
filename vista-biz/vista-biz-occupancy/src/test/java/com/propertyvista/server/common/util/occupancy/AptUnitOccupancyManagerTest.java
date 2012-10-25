@@ -19,6 +19,7 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+// TODO add "unit available from" 
 public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase {
 
     @Test
@@ -153,16 +154,32 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
 
         now("2011-08-01");
 
-        lease.moveOutNotice().setValue(asDate("2011-08-01"));
-        lease.expectedMoveOut().setValue(asDate("2011-10-23")); // two days before leaseTo() date
-        updateLease(lease);
-
-        getUOM().endLease(unitId);
+        getUOM().endLease(unitId, asDate("2011-10-25"));
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
         expect().from("2011-01-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
         expect().from("2011-10-26").toTheEndOfTime().status(Status.pending).x();
+        assertExpectedTimeline();
+    }
+
+    /** Ends lease before end date */
+    @Test
+    public void testEndLeaseScenario2() {
+        Lease lease = createLease("2011-02-15", "2011-10-25");
+
+        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        setup().from("2011-01-15").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+
+        now("2011-08-01");
+
+        getUOM().endLease(unitId, asDate("2011-10-20"));
+
+        expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        expect().from("2011-01-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        expect().from("2011-10-21").toTheEndOfTime().status(Status.pending).x();
         assertExpectedTimeline();
     }
 

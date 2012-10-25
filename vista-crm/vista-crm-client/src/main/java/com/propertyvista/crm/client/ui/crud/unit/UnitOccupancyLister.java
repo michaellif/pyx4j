@@ -37,7 +37,7 @@ public class UnitOccupancyLister extends ListerBase<AptUnitOccupancySegment> {
             new MemberColumnDescriptor.Builder(proto().lease().leaseId()).build(),
             new MemberColumnDescriptor.Builder(proto().lease().leaseFrom()).build(),
             new MemberColumnDescriptor.Builder(proto().lease().leaseTo()).build()
-        );//@formatter:on
+        );//@formatter:on        
     }
 
     @Override

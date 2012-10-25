@@ -145,22 +145,6 @@ public class AptUnitOccupancyManagerHelper {
         }
     }
 
-//    /**
-//     * Find a segment <code>s</code> in a occupancy that contains <code>splitDay</code> and then split it to two parts <code>s1</code> and <code>s2</code>,
-//     * where <code>s1.dateFrom = s.dateFrom, s1.dateTo = splitDay - day, s2.dateFrom = splitDay, s2.dateTo = s1.dateTo</code>.
-//     * 
-//     * @param occupancyTimeline
-//     * @param splitDay
-//     *            The beginning of a newly inserted segment: <b>note</b> if the date of <code>splitDay</code> falls on some segments start date, then it's going
-//     *            to be replaced by the new one, and if it falls on some segments end date, it will not be changed, also in those cases handler for the
-//     *            new/altered segment, will not be called.
-//     * @param handler
-//     *            A handler that performs operations on the split segment, i.e. updates status of the new part.
-//     * @return index of the new segment in the <code>occupancyTimeline</code> list.
-//     * @throws IllegalStateException
-//     *             Might be thrown by the {@code handler} methods when the handler is requested to update the wrong occupancy state.
-//     */
-
     /**
      * 
      * @param unit

@@ -497,9 +497,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         Persistence.secureSave(lease);
 
-        ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey());
-        // TODO:
-//        ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey(), from);
+        ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey(), from);
     }
 
     @Override
@@ -619,7 +617,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
             break;
 
         case Active:
-            ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey());
+            ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey(),
+                    new LogicalDate(Persistence.service().getTransactionSystemTime()));
             break;
 
         default:

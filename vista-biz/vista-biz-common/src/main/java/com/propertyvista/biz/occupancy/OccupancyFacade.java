@@ -19,9 +19,11 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
+import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.EndLeaseConstraintsDTO;
 import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+// TODO add explicit exceptions
 public interface OccupancyFacade {
 
     public static final LogicalDate MIN_DATE = new LogicalDate(0, 0, 1); // 1900-1-1
@@ -108,12 +110,22 @@ public interface OccupancyFacade {
     boolean isApproveLeaseAvaialble(Key unitId);
 
     /**
-     * Source: CRM/Lease form/Button or Portal (becomes {@link Status#pending})).
+     * Defines the ending date of a lease, and sets the rest of unit occupancy as {@link Status#pending}
+     * 
+     * @param leaseEndDate
+     *            a last day of of the lease: a <code>leased</code> occupancy segment that is connected to current lease will end on this date (inclusive)
      */
-    void endLease(Key unitId);
+    void endLease(Key unitId, LogicalDate leaseEndDate);
 
-    boolean isEndLeaseAvailable(Key unitId);
+    /**
+     * Check whether the {@link #endLease(Key, LogicalDate)} operation can be performed
+     * 
+     * @param leaseEndDate
+     *            a last day of of the lease: a <code>leased</code> occupancy segment that is connected to current lease will end on this date (inclusive)
+     */
+    EndLeaseConstraintsDTO getEndLeaseConstraints(Key unitId);
 
+    /** Cancels the definition of a lease that is currently active and has a defined end date in the future */
     void cancelEndLease(Key unitId);
 
     boolean isCancelEndLeaseAvaialble(Key unitId);

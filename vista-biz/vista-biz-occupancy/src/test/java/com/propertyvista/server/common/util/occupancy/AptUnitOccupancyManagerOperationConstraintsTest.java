@@ -16,6 +16,7 @@ package com.propertyvista.server.common.util.occupancy;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
@@ -319,19 +320,45 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
     }
 
     @Test
-    public void testIsEndLeaseAvailable() {
+    public void testGetEndLeaseConstraints() {
         Lease lease = createLease("2010-01-11", "2011-11-11");
         setup().from("2010-01-01").to("2010-01-10").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
         setup().from("2010-01-11").toTheEndOfTime().status(Status.leased).withLease(lease).x();
 
         now("2010-01-01");
-        Assert.assertFalse(getUOM().isEndLeaseAvailable(unitId));
+        Assert.assertEquals(null, getUOM().getEndLeaseConstraints(unitId).minleaseEndDate().getValue());
+        Assert.assertEquals(null, getUOM().getEndLeaseConstraints(unitId).maxleaseEndDate().getValue());
 
         now("2010-01-11");
-        Assert.assertTrue(getUOM().isEndLeaseAvailable(unitId));
+        Assert.assertEquals(asDate("2010-01-11"), getUOM().getEndLeaseConstraints(unitId).minleaseEndDate().getValue());
+        Assert.assertEquals(OccupancyFacade.MAX_DATE, getUOM().getEndLeaseConstraints(unitId).maxleaseEndDate().getValue());
 
         now("2010-01-15");
-        Assert.assertTrue(getUOM().isEndLeaseAvailable(unitId));
+        Assert.assertEquals(asDate("2010-01-15"), getUOM().getEndLeaseConstraints(unitId).minleaseEndDate().getValue());
+        Assert.assertEquals(OccupancyFacade.MAX_DATE, getUOM().getEndLeaseConstraints(unitId).maxleaseEndDate().getValue());
+    }
+
+    /**
+     * This scenario tests end lease constraints for lease that already has a defined end date: it must never be available
+     */
+    @Test
+    public void testgetEndLeaseConstraintsScenario2() {
+        Lease lease = createLease("2010-01-11", "2011-11-11");
+        setup().from("2010-01-01").to("2010-01-10").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        setup().from("2010-01-11").to("2010-05-01").status(Status.leased).withLease(lease).x();
+        setup().from("2010-05-02").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+
+        now("2010-01-01");
+        Assert.assertEquals(null, getUOM().getEndLeaseConstraints(unitId).minleaseEndDate().getValue());
+        Assert.assertEquals(null, getUOM().getEndLeaseConstraints(unitId).maxleaseEndDate().getValue());
+
+        now("2010-01-11");
+        Assert.assertEquals(null, getUOM().getEndLeaseConstraints(unitId).minleaseEndDate().getValue());
+        Assert.assertEquals(null, getUOM().getEndLeaseConstraints(unitId).maxleaseEndDate().getValue());
+
+        now("2010-01-15");
+        Assert.assertEquals(null, getUOM().getEndLeaseConstraints(unitId).minleaseEndDate().getValue());
+        Assert.assertEquals(null, getUOM().getEndLeaseConstraints(unitId).maxleaseEndDate().getValue());
     }
 
     @Test

@@ -43,6 +43,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
+import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.EndLeaseConstraintsDTO;
 import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.misc.VistaTODO;
@@ -56,7 +57,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public void setupNewUnit(AptUnit unit) {
-        updateUnitAvailableFrom(unit.getPrimaryKey(), null);
+        setUnitAvailableFrom(unit.getPrimaryKey(), null);
 
         // for new unit, create a vacant occupancy segment:
         AptUnitOccupancySegment vacant = EntityFactory.create(AptUnitOccupancySegment.class);
@@ -133,7 +134,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             prevSegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
             Persistence.service().persist(prevSegment);
         }
-        updateUnitAvailableFrom(unitPk, splittingDay);
+        setUnitAvailableFrom(unitPk, splittingDay);
 
         new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
     }
@@ -238,7 +239,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                     prevSegment.dateTo().setValue(renovationEndDate);
                     Persistence.service().persist(prevSegment);
                 }
-                updateUnitAvailableFrom(unitPk, addDay(renovationEndDate));
+                setUnitAvailableFrom(unitPk, addDay(renovationEndDate));
                 new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
                 return;
             }
@@ -301,7 +302,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             Persistence.service().delete(deleteCriteria);
         }
 
-        updateUnitAvailableFrom(unitPk, null);
+        setUnitAvailableFrom(unitPk, null);
         new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
     }
 
@@ -310,6 +311,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         LogicalDate leaseFrom = lease.currentTerm().termFrom().getValue();
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
 
+        // FIXME 
         if (VistaTODO.checkLeaseDatesOnUnitReservation & leaseFrom.before(now)) {
             throw new IllegalStateException(i18n.tr("Operation 'reserve unit' is not permitted, the lease from date ({0}) is before the present date ({1})",
                     leaseFrom, now));
@@ -324,7 +326,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             throw new UserRuntimeException(i18n.tr("Operation 'reserve unit' is not permitted, the unit is not available after {0}", leaseFrom));
         }
         AptUnitOccupancySegment segment = occupancy.get(0);
-        assertStatus(occupancy.get(0), Status.available);
+        assertStatus(segment, Status.available);
 
         LogicalDate reservedFrom = now.before(segment.dateFrom().getValue()) ? segment.dateFrom().getValue() : now;
 
@@ -340,7 +342,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                 segment.lease().set(lease);
             }
         });
-        updateUnitAvailableFrom(unitPk, null);
+        setUnitAvailableFrom(unitPk, null);
         new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
     }
 
@@ -397,7 +399,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             }
         });
         new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
-        updateUnitAvailableFrom(unitPk, unreserveFrom);
+        setUnitAvailableFrom(unitPk, unreserveFrom);
     }
 
     @Override
@@ -425,22 +427,25 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public void endLease(Key unitPk) {
+    public void endLease(Key unitPk, LogicalDate leaseEndDate) {
+        assert unitPk != null;
+        assert leaseEndDate != null;
+
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
+        EndLeaseConstraintsDTO endLeaseConstraints = getEndLeaseConstraints(unitPk);
+        if (endLeaseConstraints.minleaseEndDate().isNull() || endLeaseConstraints.maxleaseEndDate().isNull() || //
+                !(endLeaseConstraints.minleaseEndDate().getValue().getTime() <= leaseEndDate.getTime() //
+                & leaseEndDate.getTime() <= endLeaseConstraints.maxleaseEndDate().getValue().getTime())) {
+            throw new IllegalStateException("'endLease' operation is not permitted");
+        }
+
         AptUnitOccupancySegment segment = retrieveOccupancySegment(unitPk, now);
         assertStatus(segment, Status.leased);
 
-        // TODO : check the logic for Notice/Evict. + renewed lease!!!
-        LogicalDate uitFreeDate = segment.lease().currentTerm().termTo().getValue();
-        if (!segment.lease().actualLeaseTo().isNull()) {
-            uitFreeDate = segment.lease().actualLeaseTo().getValue();
-        }
-
-        split(unitPk, addDay(uitFreeDate), new SplittingHandler() {
+        split(unitPk, addDay(leaseEndDate), new SplittingHandler() {
 
             @Override
             public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
-                // already checked we splitting the correct status
             }
 
             @Override
@@ -449,16 +454,17 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                 segment.lease().setValue(null);
             }
         });
-        new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
 
-// TODO: review with Artyom        
-        updateUnitAvailableFrom(unitPk, null);
+        new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
+        setUnitAvailableFrom(unitPk, null);
     }
 
     @Override
     public void cancelEndLease(Key unitPk) {
+        assert unitPk != null;
+
         if (!isCancelEndLeaseAvaialble(unitPk)) {
-            throw new IllegalStateException("cancel end lease operation is impossible in the current state of occupancy");
+            throw new IllegalStateException("'cancelEndLease' operation is impossible (the unit must be leased with a defined lease end date)");
         }
 
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
@@ -469,9 +475,8 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         leasedSegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
         Persistence.secureSave(leasedSegment);
 
-// TODO: review with Artyom        
-//        updateUnitAvailableFrom(unitPk, null);
         new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
+        setUnitAvailableFrom(unitPk, null);
     }
 
     @Override
@@ -637,11 +642,17 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public boolean isEndLeaseAvailable(Key unitPk) {
-        LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
-        AptUnitOccupancySegment segment = retrieveOccupancySegment(unitPk, start);
-        return segment != null && segment.status().getValue() == Status.leased && segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE);
+    public EndLeaseConstraintsDTO getEndLeaseConstraints(Key unitPk) {
+        LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
+        AptUnitOccupancySegment segment = retrieveOccupancySegment(unitPk, now);
 
+        EndLeaseConstraintsDTO constraints = EntityFactory.create(EndLeaseConstraintsDTO.class);
+        if (segment != null && segment.status().getValue() == Status.leased && segment.dateFrom().getValue().getTime() <= now.getTime()
+                && segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE)) {
+            constraints.minleaseEndDate().setValue(now);
+            constraints.maxleaseEndDate().setValue(OccupancyFacade.MAX_DATE);
+        }
+        return constraints;
     }
 
     @Override
@@ -680,7 +691,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                 segment.lease().set(leaseStub);
             }
         });
-        updateUnitAvailableFrom(unitStub.getPrimaryKey(), null);
+        setUnitAvailableFrom(unitStub.getPrimaryKey(), null);
     }
 
     @Override
@@ -765,7 +776,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                 && ((unitOccupancySegment.status().getValue() == Status.migrated) & unitOccupancySegment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE));
     }
 
-    private void updateUnitAvailableFrom(Key unitPk, LogicalDate newAvaialbleFrom) {
+    private void setUnitAvailableFrom(Key unitPk, LogicalDate newAvaialbleFrom) {
         AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitPk);
         unit._availableForRent().setValue(newAvaialbleFrom);
         unit.financial()._unitRent().setValue(null);
@@ -805,7 +816,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         segment.dateTo().setValue(OccupancyFacade.MAX_DATE);
         segment.lease().setValue(null);
         segment.unit().setPrimaryKey(unitPk);
-        updateUnitAvailableFrom(unitPk, segment.dateFrom().getValue());
+        setUnitAvailableFrom(unitPk, segment.dateFrom().getValue());
         Persistence.service().merge(segment);
     }
 
