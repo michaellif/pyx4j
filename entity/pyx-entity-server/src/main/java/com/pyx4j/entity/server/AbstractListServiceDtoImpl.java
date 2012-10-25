@@ -77,25 +77,31 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
     private Collection<Criterion> convertFilters(Collection<Criterion> dtoFilters) {
         Collection<Criterion> dboFilters = new ArrayList<Criterion>();
         for (Criterion cr : dtoFilters) {
-            if (cr instanceof PropertyCriterion) {
-                PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
-                Path path = getBoundDboMemberPath(new Path(propertyCriterion.getPropertyPath()));
-                if (path == null) {
-                    path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyPath(), dboProto, dtoProto);
-                }
-                dboFilters.add(new PropertyCriterion(path, propertyCriterion.getRestriction(), convertValue(propertyCriterion)));
-            } else if (cr instanceof OrCriterion) {
-                OrCriterion criterion = new OrCriterion();
-                criterion.addRight(convertFilters(((OrCriterion) cr).getFiltersRight()));
-                criterion.addLeft(convertFilters(((OrCriterion) cr).getFiltersLeft()));
-                dboFilters.add(criterion);
-            } else if (cr instanceof AndCriterion) {
-                dboFilters.addAll(convertFilters(((AndCriterion) cr).getFilters()));
-            } else {
-                throw new IllegalArgumentException("Can't convert " + cr.getClass() + " criteria");
-            }
+            dboFilters.add(convertCriterion(cr));
         }
         return dboFilters;
+    }
+
+    public Criterion convertCriterion(Criterion cr) {
+        if (cr instanceof PropertyCriterion) {
+            PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
+            Path path = getBoundDboMemberPath(new Path(propertyCriterion.getPropertyPath()));
+            if (path == null) {
+                path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyPath(), dboProto, dtoProto);
+            }
+            return new PropertyCriterion(path, propertyCriterion.getRestriction(), convertValue(propertyCriterion));
+        } else if (cr instanceof OrCriterion) {
+            OrCriterion criterion = new OrCriterion();
+            criterion.addRight(convertFilters(((OrCriterion) cr).getFiltersRight()));
+            criterion.addLeft(convertFilters(((OrCriterion) cr).getFiltersLeft()));
+            return criterion;
+        } else if (cr instanceof AndCriterion) {
+            AndCriterion criterion = new AndCriterion();
+            criterion.addAll(convertFilters(((AndCriterion) cr).getFilters()));
+            return criterion;
+        } else {
+            throw new IllegalArgumentException("Can't convert " + cr.getClass() + " criteria");
+        }
     }
 
     public Serializable convertValue(PropertyCriterion propertyCriterion) {
@@ -106,6 +112,8 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
                 path = convertPropertyDTOPathToDBOPath(value.toString(), dboProto, dtoProto);
             }
             return path;
+        } else if (value instanceof Criterion) {
+            return convertCriterion((Criterion) value);
         } else {
             return value;
         }

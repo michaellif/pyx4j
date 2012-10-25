@@ -40,6 +40,7 @@ import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.rdb.mapping.QueryJoinBuilder.JoinDef;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionedEntity;
@@ -99,17 +100,17 @@ public class QueryBuilder<T extends IEntity> {
             IVersionedEntity<?> versionedProto = (IVersionedEntity<?>) criteria.proto();
             switch (criteria.getVersionedCriteria()) {
             case onlyFinalized:
-                appendPropertyCriterion(PropertyCriterion.isNotNull(versionedProto.version().fromDate()), firstCriteria, true);
+                appendPropertyCriterion(sql, queryJoin, PropertyCriterion.isNotNull(versionedProto.version().fromDate()), firstCriteria, true);
                 firstCriteria = false;
-                appendPropertyCriterion(PropertyCriterion.isNull(versionedProto.version().toDate()), firstCriteria, true);
+                appendPropertyCriterion(sql, queryJoin, PropertyCriterion.isNull(versionedProto.version().toDate()), firstCriteria, true);
                 break;
             case onlyDraft:
-                appendPropertyCriterion(PropertyCriterion.isNull(versionedProto.version().fromDate()), firstCriteria, true);
+                appendPropertyCriterion(sql, queryJoin, PropertyCriterion.isNull(versionedProto.version().fromDate()), firstCriteria, true);
                 firstCriteria = false;
-                appendPropertyCriterion(PropertyCriterion.isNull(versionedProto.version().toDate()), firstCriteria, true);
+                appendPropertyCriterion(sql, queryJoin, PropertyCriterion.isNull(versionedProto.version().toDate()), firstCriteria, true);
                 break;
             case finalizedAsOfNow:
-                appendPropertyCriterion(PropertyCriterion.isNotNull(versionedProto.version()), firstCriteria, true);
+                appendPropertyCriterion(sql, queryJoin, PropertyCriterion.isNotNull(versionedProto.version()), firstCriteria, true);
                 firstCriteria = false;
                 break;
             default:
@@ -118,8 +119,8 @@ public class QueryBuilder<T extends IEntity> {
         }
 
         if (operationsMeta.impClasses != null) {
-            appendPropertyCriterion(new PropertyCriterion(criteria.proto().instanceValueClass(), Restriction.IN, operationsMeta.impClasses.values()),
-                    firstCriteria, true);
+            appendPropertyCriterion(sql, queryJoin,
+                    new PropertyCriterion(criteria.proto().instanceValueClass(), Restriction.IN, operationsMeta.impClasses.values()), firstCriteria, true);
             firstCriteria = false;
         }
 
@@ -131,7 +132,7 @@ public class QueryBuilder<T extends IEntity> {
         }
 
         if ((criteria.getFilters() != null) && (!criteria.getFilters().isEmpty())) {
-            appendFilters(criteria.getFilters(), firstCriteria, true);
+            appendFilters(sql, queryJoin, criteria.getFilters(), firstCriteria, true);
         }
         if ((criteria.getSorts() != null) && (!criteria.getSorts().isEmpty())) {
             log.trace("sort by {}", criteria.getSorts());
@@ -169,61 +170,71 @@ public class QueryBuilder<T extends IEntity> {
         return value.contains("*");
     }
 
-    private void appendFilters(List<Criterion> filters, boolean firstInSentence, boolean required) {
-        for (Criterion cr : filters) {
+    private void appendFilters(StringBuilder criterionSql, QueryJoinBuilder joinBuilder, List<Criterion> filters, boolean firstInSentence, boolean required) {
+        for (Criterion criterion : filters) {
             if (firstInSentence) {
                 firstInSentence = false;
             } else {
-                sql.append(" AND ");
+                criterionSql.append(" AND ");
             }
-            if (cr instanceof PropertyCriterion) {
-                appendPropertyCriterion((PropertyCriterion) cr, required);
-            } else if (cr instanceof AndCriterion) {
-                sql.append(" ( ");
-                appendFilters(((AndCriterion) cr).getFilters(), true, required);
-                sql.append(" ) ");
-            } else if (cr instanceof OrCriterion) {
-                sql.append(" (( ");
-                appendFilters(((OrCriterion) cr).getFiltersLeft(), true, false);
-                sql.append(" ) OR ( ");
-                appendFilters(((OrCriterion) cr).getFiltersRight(), true, false);
-                sql.append(" )) ");
-            } else {
-                throw new RuntimeException("Unsupported Operator " + cr.getClass());
-            }
+            appendCriterion(criterionSql, joinBuilder, criterion, required);
         }
     }
 
-    private void appendPropertyCriterion(PropertyCriterion propertyCriterion, boolean firstInSentence, boolean required) {
+    private void appendCriterion(StringBuilder criterionSql, QueryJoinBuilder joinBuilder, Criterion criterion, boolean required) {
+        if (criterion instanceof PropertyCriterion) {
+            appendPropertyCriterion(criterionSql, joinBuilder, (PropertyCriterion) criterion, required);
+        } else if (criterion instanceof AndCriterion) {
+            criterionSql.append(" ( ");
+            appendFilters(criterionSql, joinBuilder, ((AndCriterion) criterion).getFilters(), true, required);
+            criterionSql.append(" ) ");
+        } else if (criterion instanceof OrCriterion) {
+            criterionSql.append(" (( ");
+            appendFilters(criterionSql, joinBuilder, ((OrCriterion) criterion).getFiltersLeft(), true, false);
+            criterionSql.append(" ) OR ( ");
+            appendFilters(criterionSql, joinBuilder, ((OrCriterion) criterion).getFiltersRight(), true, false);
+            criterionSql.append(" )) ");
+        } else {
+            throw new RuntimeException("Unsupported Operator " + criterion.getClass());
+        }
+    }
+
+    private void appendPropertyCriterion(StringBuilder criterionSql, QueryJoinBuilder joinBuilder, PropertyCriterion propertyCriterion,
+            boolean firstInSentence, boolean required) {
         if (firstInSentence) {
             firstInSentence = false;
         } else {
-            sql.append(" AND ");
+            criterionSql.append(" AND ");
         }
-        appendPropertyCriterion(propertyCriterion, required);
+        appendPropertyCriterion(criterionSql, joinBuilder, propertyCriterion, required);
     }
 
-    private void appendPropertyCriterion(PropertyCriterion propertyCriterion, boolean required) {
+    private void appendPropertyCriterion(StringBuilder criterionSql, QueryJoinBuilder joinBuilder, PropertyCriterion propertyCriterion, boolean required) {
         BindHolder bindHolder = new BindHolder();
         bindHolder.bindValue = propertyCriterion.getValue();
 
         String secondPersistenceName = null;
         if (propertyCriterion.getPropertyPath().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX)) {
             // TODO create index binders and value adapters
-            sql.append(mainTableSqlAlias).append('.').append(dialect.getNamingConvention().sqlFieldName(propertyCriterion.getPropertyPath()));
+            criterionSql.append(mainTableSqlAlias).append('.').append(dialect.getNamingConvention().sqlFieldName(propertyCriterion.getPropertyPath()));
         } else {
             boolean leftJoin = false;
             if (!required) {
                 leftJoin = true;
             }
             // "LEFT JOIN / IS NULL" works as "NOT EXISTS", make the LEFT join
-            if ((bindHolder.bindValue == null) && (propertyCriterion.getRestriction() == Restriction.NOT_EXISTS)) {
-                leftJoin = true;
+            if (propertyCriterion.getRestriction() == Restriction.NOT_EXISTS) {
+                if (bindHolder.bindValue == null) {
+                    leftJoin = true;
+                } else if (bindHolder.bindValue instanceof Criterion) {
+                    buildSubQuery(criterionSql, joinBuilder, propertyCriterion.getPropertyPath(), (Criterion) bindHolder.bindValue);
+                    return;
+                }
             }
-            QueryMember queryMember = queryJoin.buildQueryMember(propertyCriterion.getPropertyPath(), leftJoin, false);
+            QueryMember queryMember = joinBuilder.buildQueryMember(propertyCriterion.getPropertyPath(), leftJoin, false);
             if (queryMember == null) {
                 throw new RuntimeException("Unknown member " + propertyCriterion.getPropertyPath() + " in "
-                        + queryJoin.operationsMeta.entityMeta().getEntityClass().getName());
+                        + joinBuilder.operationsMeta.entityMeta().getEntityClass().getName());
             }
             bindHolder.adapter = queryMember.memberOper.getValueAdapter().getQueryValueBindAdapter(propertyCriterion.getRestriction(), bindHolder.bindValue);
 
@@ -231,7 +242,7 @@ public class QueryBuilder<T extends IEntity> {
             boolean firstValue = true;
             for (String name : bindHolder.adapter.getColumnNames(queryMember.memberSqlName)) {
                 if (firstValue) {
-                    sql.append(name);
+                    criterionSql.append(name);
                     firstValue = false;
                 } else {
                     secondPersistenceName = name;
@@ -243,22 +254,22 @@ public class QueryBuilder<T extends IEntity> {
         if (bindHolder.bindValue instanceof Path) {
             switch (propertyCriterion.getRestriction()) {
             case LESS_THAN:
-                sql.append(" < ");
+                criterionSql.append(" < ");
                 break;
             case LESS_THAN_OR_EQUAL:
-                sql.append(" <= ");
+                criterionSql.append(" <= ");
                 break;
             case GREATER_THAN:
-                sql.append(" > ");
+                criterionSql.append(" > ");
                 break;
             case GREATER_THAN_OR_EQUAL:
-                sql.append(" >= ");
+                criterionSql.append(" >= ");
                 break;
             case EQUAL:
-                sql.append(" = ");
+                criterionSql.append(" = ");
                 break;
             case NOT_EQUAL:
-                sql.append(" != ");
+                criterionSql.append(" != ");
                 break;
             default:
                 throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction() + " for PathReference");
@@ -270,9 +281,9 @@ public class QueryBuilder<T extends IEntity> {
             if (!required) {
                 leftJoin = true;
             }
-            QueryMember queryMember2 = queryJoin.buildQueryMember(property2Path, leftJoin, false);
+            QueryMember queryMember2 = joinBuilder.buildQueryMember(property2Path, leftJoin, false);
             if (queryMember2 == null) {
-                throw new RuntimeException("Unknown member " + property2Path + " in " + queryJoin.operationsMeta.entityMeta().getEntityClass().getName());
+                throw new RuntimeException("Unknown member " + property2Path + " in " + joinBuilder.operationsMeta.entityMeta().getEntityClass().getName());
             }
             ValueBindAdapter adapter = queryMember2.memberOper.getValueAdapter().getQueryValueBindAdapter(propertyCriterion.getRestriction(),
                     bindHolder.bindValue);
@@ -281,7 +292,7 @@ public class QueryBuilder<T extends IEntity> {
             boolean firstValue = true;
             for (String name : adapter.getColumnNames(queryMember2.memberSqlName)) {
                 if (firstValue) {
-                    sql.append(name);
+                    criterionSql.append(name);
                     firstValue = false;
                 } else {
                     secondPersistenceName = name;
@@ -293,10 +304,10 @@ public class QueryBuilder<T extends IEntity> {
             switch (propertyCriterion.getRestriction()) {
             case NOT_EXISTS:
             case EQUAL:
-                sql.append(" IS NULL ");
+                criterionSql.append(" IS NULL ");
                 break;
             case NOT_EQUAL:
-                sql.append(" IS NOT NULL ");
+                criterionSql.append(" IS NOT NULL ");
                 break;
             default:
                 throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction() + " for NULL value");
@@ -323,7 +334,7 @@ public class QueryBuilder<T extends IEntity> {
                 sqlOperator = " != ? ";
                 break;
             case IN:
-                sql.append(" IN (");
+                criterionSql.append(" IN (");
                 Collection<?> items;
                 if (bindHolder.bindValue.getClass().isArray()) {
                     items = Arrays.asList((Object[]) bindHolder.bindValue);
@@ -337,16 +348,16 @@ public class QueryBuilder<T extends IEntity> {
                     if (first) {
                         first = false;
                     } else {
-                        sql.append(",");
+                        criterionSql.append(",");
                     }
-                    sql.append(" ? ");
+                    criterionSql.append(" ? ");
 
                     BindHolder itemBindHolder = new BindHolder();
                     itemBindHolder.adapter = bindHolder.adapter;
                     itemBindHolder.bindValue = item;
                     bindParams.add(itemBindHolder);
                 }
-                sql.append(")");
+                criterionSql.append(")");
                 return;
             case RDB_LIKE:
                 if (bindHolder.bindValue != null) {
@@ -362,14 +373,46 @@ public class QueryBuilder<T extends IEntity> {
                 throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction());
             }
 
-            sql.append(sqlOperator);
+            criterionSql.append(sqlOperator);
 
             if (secondPersistenceName != null) {
-                sql.append(" AND ").append(secondPersistenceName).append(sqlOperator);
+                criterionSql.append(" AND ").append(secondPersistenceName).append(sqlOperator);
             }
 
             bindParams.add(bindHolder);
         }
+    }
+
+    private void buildSubQuery(StringBuilder sql, QueryJoinBuilder joinBuilder, String propertyPath, Criterion criterion) {
+
+        QueryJoinBuilderSubQuery subQueryJoinBuilder = new QueryJoinBuilderSubQuery(joinBuilder);
+        JoinDef memberJoin = subQueryJoinBuilder.buildSubQueryJoin(propertyPath, true);
+
+        StringBuilder criterionSql = new StringBuilder();
+        appendCriterion(criterionSql, subQueryJoinBuilder, criterion, true);
+
+        StringBuilder subQuerySql = new StringBuilder();
+        subQuerySql.append(" NOT EXISTS ( SELECT 1 FROM ");
+
+        if (dialect.isMultitenantSeparateSchemas()) {
+            subQuerySql.append(NamespaceManager.getNamespace()).append('.');
+        }
+        subQuerySql.append(memberJoin.sqlTableName);
+        subQuerySql.append(' ');
+        // AS
+        subQuerySql.append(memberJoin.alias);
+
+        subQueryJoinBuilder.appendJoins(subQuerySql);
+
+        subQuerySql.append(" WHERE ").append(memberJoin.condition);
+
+        subQuerySql.append(" AND ");
+
+        subQuerySql.append(criterionSql);
+
+        subQuerySql.append(")");
+
+        sql.append(subQuerySql);
     }
 
     private List<Sort> expandToStringMembers(List<Sort> sorts) {

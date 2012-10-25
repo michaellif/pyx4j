@@ -346,8 +346,8 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         emp2.tasks().add(task2);
         srv.persist(emp2);
 
-        //TODO new notExists
-        if (false) {
+        //Test notExists as sub query
+        {
             EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().workAddress().streetName(), testId));
             criteria.notExists(criteria.proto().tasks(), PropertyCriterion.eq(criteria.proto().tasks().$().description(), searchBy));
@@ -387,6 +387,16 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
 
             List<BRefReadOwner> emps = srv.query(criteria);
             Assert.assertEquals("result set size", 2, emps.size());
+
+        }
+
+        {
+            EntityQueryCriteria<BRefReadOwner> criteria = EntityQueryCriteria.create(BRefReadOwner.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.notExists(criteria.proto().children(), PropertyCriterion.eq(criteria.proto().children().$().name(), searchBy));
+
+            List<BRefReadOwner> emps = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, emps.size());
 
         }
 

@@ -23,6 +23,7 @@ package com.pyx4j.entity.rdb.mapping;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
@@ -39,19 +40,21 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 class QueryJoinBuilder {
 
-    private final PersistenceContext persistenceContext;
+    protected final PersistenceContext persistenceContext;
 
-    private final Dialect dialect;
+    protected final Dialect dialect;
 
-    private final Mappings mappings;
+    protected final Mappings mappings;
 
-    final EntityOperationsMeta operationsMeta;
+    protected EntityOperationsMeta operationsMeta;
 
-    private final String mainTableSqlAlias;
+    protected final String mainTableSqlAlias;
 
-    private final VersionedCriteria versionedCriteria;
+    protected final VersionedCriteria versionedCriteria;
 
-    private static class JoinDef {
+    static class JoinDef {
+
+        MemberOperationsMeta memberOper;
 
         String alias;
 
@@ -61,7 +64,8 @@ class QueryJoinBuilder {
 
         String sqlTableName;
 
-        JoinDef(String alias, boolean leftJoin) {
+        JoinDef(MemberOperationsMeta memberOper, String alias, boolean leftJoin) {
+            this.memberOper = memberOper;
             this.alias = alias;
             this.leftJoin = leftJoin;
         }
@@ -89,6 +93,8 @@ class QueryJoinBuilder {
     //keep the keys in the order they were inserted.
     private final Map<String, JoinDef> memberJoinAliases = new LinkedHashMap<String, JoinDef>();
 
+    private int nextJoinAliaseId = 0;
+
     private int nowParameters = 0;
 
     boolean addDistinct = false;
@@ -104,29 +110,37 @@ class QueryJoinBuilder {
     }
 
     QueryMember buildQueryMember(String propertyPath, boolean leftJoin, boolean usedInSort) {
-        return buildJoin(operationsMeta, mainTableSqlAlias, propertyPath, leftJoin, usedInSort);
+        JoinDef join = buildJoin(operationsMeta, mainTableSqlAlias, propertyPath, leftJoin, usedInSort, false);
+        if (join != null) {
+            return new QueryMember(join.alias, join.memberOper);
+        } else {
+            return null;
+        }
     }
 
-    private QueryMember buildJoin(EntityOperationsMeta fromEntityOperMeta, String fromAlias, String propertyPath, boolean leftJoin, boolean usedInSort) {
+    protected JoinDef buildJoin(EntityOperationsMeta fromEntityOperMeta, String fromAlias, String propertyPath, boolean leftJoin, boolean usedInSort,
+            boolean targetSubQuery) {
         MemberOperationsMeta memberOper = fromEntityOperMeta.getMember(propertyPath);
         if (memberOper != null) {
             if ((memberOper instanceof MemberCollectionOperationsMeta) && (!((MemberCollectionOperationsMeta) memberOper).isJoinTableSameAsTarget())) {
                 // Relationship is managed via joinTable
-                return new QueryMember(createJoinBackReference((MemberCollectionOperationsMeta) memberOper, fromAlias, leftJoin, usedInSort).alias, memberOper);
+                return createJoinBackReference((MemberCollectionOperationsMeta) memberOper, fromAlias, leftJoin, usedInSort);
             } else if (memberOper instanceof MemberExternalOperationsMeta) {
                 // Relationship is managed in CHILD table using PARENT column
-                return new QueryMember(createJoinBackReference((MemberExternalOperationsMeta) memberOper, fromAlias, leftJoin, usedInSort).alias, memberOper);
+                return createJoinBackReference((MemberExternalOperationsMeta) memberOper, fromAlias, leftJoin, usedInSort);
             } else {
                 // Relationship is managed in PARENT table using CHILD column.
-                return new QueryMember(fromAlias, memberOper);
+                // Not actually a join
+                return new JoinDef(memberOper, fromAlias, leftJoin);
             }
         } else {
             // Find path to this member
-            return buildRecurciveJoin(fromEntityOperMeta, fromAlias, propertyPath, leftJoin, usedInSort);
+            return buildRecurciveJoin(fromEntityOperMeta, fromAlias, propertyPath, leftJoin, usedInSort, targetSubQuery);
         }
     }
 
-    private QueryMember buildRecurciveJoin(EntityOperationsMeta fromEntityOperMeta, String fromAlias, String propertyPath, boolean leftJoin, boolean usedInSort) {
+    private JoinDef buildRecurciveJoin(EntityOperationsMeta fromEntityOperMeta, String fromAlias, String propertyPath, boolean leftJoin, boolean usedInSort,
+            boolean targetSubQuery) {
         MemberOperationsMeta memberOper = fromEntityOperMeta.getFirstDirectMember(propertyPath);
         if (memberOper == null) {
             return null;
@@ -147,21 +161,29 @@ class QueryJoinBuilder {
         }
         String shorterPath = GWTJava5Helper.getSimpleName(targetEntityClass) + Path.PATH_SEPARATOR + pathFragmet;
 
-        return buildJoin(targetEntityOperationsMeta, join.alias, shorterPath, join.leftJoin, usedInSort);
+        return buildJoin(targetEntityOperationsMeta, join.alias, shorterPath, join.leftJoin, usedInSort, targetSubQuery);
     }
 
-    private JoinDef getMemberJoin(String path) {
+    protected JoinDef getMemberJoin(String path) {
         return memberJoinAliases.get(path);
     }
 
-    private void putMemberJoin(String path, JoinDef memberJoin) {
+    protected Collection<JoinDef> getMemberJoinAliases() {
+        return memberJoinAliases.values();
+    }
+
+    protected void putMemberJoin(String path, JoinDef memberJoin) {
         memberJoinAliases.put(path, memberJoin);
+    }
+
+    protected String nextJoinAliaseId() {
+        return String.valueOf(++nextJoinAliaseId);
     }
 
     private JoinDef createDirectJoin(MemberOperationsMeta memberOper, String fromAlias, boolean leftJoin) {
         JoinDef memberJoin = getMemberJoin(memberOper.getMemberPath());
         if (memberJoin == null) {
-            memberJoin = new JoinDef("jd" + String.valueOf(memberJoinAliases.size() + 1), leftJoin);
+            memberJoin = new JoinDef(memberOper, "jd" + nextJoinAliaseId(), leftJoin);
 
             @SuppressWarnings("unchecked")
             Class<? extends IEntity> entityClass = (Class<IEntity>) memberOper.getMemberMeta().getValueClass();
@@ -191,7 +213,8 @@ class QueryJoinBuilder {
     private JoinDef createJoinBackReference(MemberExternalOperationsMeta memberOper, String fromAlias, boolean leftJoin, boolean usedInSort) {
         JoinDef memberJoin = getMemberJoin(memberOper.getMemberPath());
         if (memberJoin == null) {
-            memberJoin = new JoinDef("jbr" + String.valueOf(memberJoinAliases.size() + 1), leftJoin);
+            memberJoin = new JoinDef(memberOper, "jbr" + nextJoinAliaseId(), leftJoin);
+
             putMemberJoin(memberOper.getMemberPath(), memberJoin);
 
             memberJoin.sqlTableName = memberOper.sqlName();
@@ -248,11 +271,10 @@ class QueryJoinBuilder {
 
     private JoinDef createJoinViaJoinTable(MemberCollectionOperationsMeta memberOper, String fromAlias, boolean leftJoin, boolean usedInSort) {
         JoinDef collectionJoin = createJoinBackReference(memberOper, fromAlias, leftJoin, usedInSort);
-
         String path = memberOper.getMemberPath() + Path.COLLECTION_SEPARATOR;
         JoinDef memberJoin = getMemberJoin(path);
         if (memberJoin == null) {
-            memberJoin = new JoinDef("jc" + String.valueOf(memberJoinAliases.size() + 1), collectionJoin.leftJoin);
+            memberJoin = new JoinDef(memberOper, "jc" + nextJoinAliaseId(), collectionJoin.leftJoin);
             putMemberJoin(path, memberJoin);
 
             @SuppressWarnings("unchecked")
@@ -277,7 +299,7 @@ class QueryJoinBuilder {
         String path = memberOper.getMemberPath() + '&';
         JoinDef memberJoin = getMemberJoin(path);
         if (memberJoin == null) {
-            memberJoin = new JoinDef("jr" + String.valueOf(memberJoinAliases.size() + 1), collectionJoin.leftJoin);
+            memberJoin = new JoinDef(memberOper, "jr" + nextJoinAliaseId(), collectionJoin.leftJoin);
             putMemberJoin(path, memberJoin);
 
             @SuppressWarnings("unchecked")
@@ -293,24 +315,29 @@ class QueryJoinBuilder {
         return memberJoin;
     }
 
-    void appendJoins(StringBuilder sql) {
-        for (Map.Entry<String, JoinDef> me : memberJoinAliases.entrySet()) {
-            JoinDef memberJoin = me.getValue();
-            sql.append('\n');
-            if (memberJoin.leftJoin) {
-                sql.append(" LEFT JOIN ");
-            } else {
-                sql.append(" INNER JOIN ");
-            }
-            if (dialect.isMultitenantSeparateSchemas()) {
-                sql.append(NamespaceManager.getNamespace()).append('.');
-            }
-            sql.append(memberJoin.sqlTableName);
+    protected boolean appenFromJoin(JoinDef memberJoin) {
+        return true;
+    }
 
-            sql.append(' ');
-            // AS
-            sql.append(memberJoin.alias);
-            sql.append(" ON ").append(memberJoin.condition);
+    void appendJoins(StringBuilder sql) {
+        for (JoinDef memberJoin : getMemberJoinAliases()) {
+            if (appenFromJoin(memberJoin)) {
+                sql.append('\n');
+                if (memberJoin.leftJoin) {
+                    sql.append(" LEFT JOIN ");
+                } else {
+                    sql.append(" INNER JOIN ");
+                }
+                if (dialect.isMultitenantSeparateSchemas()) {
+                    sql.append(NamespaceManager.getNamespace()).append('.');
+                }
+                sql.append(memberJoin.sqlTableName);
+
+                sql.append(' ');
+                // AS
+                sql.append(memberJoin.alias);
+                sql.append(" ON ").append(memberJoin.condition);
+            }
         }
     }
 

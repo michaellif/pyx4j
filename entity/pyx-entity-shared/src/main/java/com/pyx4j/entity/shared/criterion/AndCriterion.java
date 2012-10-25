@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared.criterion;
 
+import java.util.Collection;
 import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
@@ -56,7 +57,12 @@ public class AndCriterion extends FiltersBuilder implements Criterion {
     }
 
     public AndCriterion add(Criterion criterion) {
-        filters.add(criterion);
+        this.filters.add(criterion);
+        return this;
+    }
+
+    public AndCriterion addAll(Collection<Criterion> filters) {
+        this.filters.addAll(filters);
         return this;
     }
 
