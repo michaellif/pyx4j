@@ -56,6 +56,12 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
         AptUnitSource aptUnitSource = new AptUnitSource(1);
 
+        //ensure LeaseLifecycleSimulator is fired during tests
+        int numTenantsJustApplication = DemoData.UserType.TENANT.getDefaultMax();
+        if (numTenantsJustApplication >= config().numTenants) {
+            numTenantsJustApplication = config().numTenants - config().minSimulatedLeases;
+        }
+
         Customer dualTenantCustomer = null;
         for (int i = 0; i < config().numTenants; i++) {
             AptUnit unit = makeAvailable(aptUnitSource.next());
@@ -78,7 +84,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             }
 
             // Create normal Active Lease first for Shortcut users
-            if (i <= DemoData.UserType.TENANT.getDefaultMax()) {
+            if (i < numTenantsJustApplication) {
                 lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
                 for (Tenant tenant : lease.currentTerm().version().tenants()) {
                     tenant.leaseCustomer().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);

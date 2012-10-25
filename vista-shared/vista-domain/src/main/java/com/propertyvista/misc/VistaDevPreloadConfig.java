@@ -38,6 +38,8 @@ public final class VistaDevPreloadConfig implements Serializable {
 
     public int numTenants = DemoData.UserType.TENANT.getDefaultMax() + 50;
 
+    public int minSimulatedLeases = 1;
+
     public int numPotentialTenants = DemoData.UserType.PTENANT.getDefaultMax() + 5;
 
     public int numUnAssigendTenants = DemoData.UserType.NEW_TENANT.getDefaultMax();
