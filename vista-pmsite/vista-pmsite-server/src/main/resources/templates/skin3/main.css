@@ -53,7 +53,7 @@ body {
 }
 
 input,select,textarea {
-	color: ${foreground_100};
+	color: ${background_100};
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 13px;
 }
@@ -79,7 +79,7 @@ a:hover {
 select {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
-	color: ${foreground_100};
+	color: ${background_100};
 }
 
 .header {
