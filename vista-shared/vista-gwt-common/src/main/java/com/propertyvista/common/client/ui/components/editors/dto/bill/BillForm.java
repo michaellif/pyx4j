@@ -66,6 +66,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
             infoPanel.setH1(++row, 0, 2, i18n.tr("Status"));
             infoPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billSequenceNumber())).build());
             infoPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billType())).build());
+            infoPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dueDate())).build());
             infoPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billStatus())).build());
             infoPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rejectReason())).build());
         }
@@ -77,7 +78,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
             billPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balanceForwardAmount())).build());
             billPanel.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new LineItemCollapsibleViewer()));
             billPanel.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsibleViewer()));
-            billPanel.setWidget(++row, 0, inject(proto().previousChargeAdjustmentLineItems(), new LineItemCollapsibleViewer()));
+            billPanel.setWidget(++row, 0, inject(proto().previousChargeRefundLineItems(), new LineItemCollapsibleViewer()));
             billPanel.setWidget(++row, 0, inject(proto().nsfChargeLineItems(), new LineItemCollapsibleViewer()));
             billPanel.setWidget(++row, 0, inject(proto().withdrawalLineItems(), new LineItemCollapsibleViewer()));
             billPanel.setWidget(++row, 0, inject(proto().rejectedPaymentLineItems(), new LineItemCollapsibleViewer()));
@@ -124,14 +125,15 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         if (!justPreviewBill) {
             get(proto().rejectReason()).setVisible(getValue().billStatus().getValue() == BillStatus.Rejected);
             get(proto().productCreditAmount()).setVisible(
-                    getValue().productCreditAmount().isNull() || getValue().productCreditAmount().getValue().compareTo(BigDecimal.ZERO) == 0);
+                    !getValue().productCreditAmount().isNull() && getValue().productCreditAmount().getValue().compareTo(BigDecimal.ZERO) != 0);
             get(proto().latePaymentFees()).setVisible(
-                    getValue().latePaymentFees().isNull() || getValue().latePaymentFees().getValue().compareTo(BigDecimal.ZERO) == 0);
+                    !getValue().latePaymentFees().isNull() && getValue().latePaymentFees().getValue().compareTo(BigDecimal.ZERO) != 0);
             get(proto().carryForwardCredit()).setVisible(
-                    getValue().carryForwardCredit().isNull() || getValue().carryForwardCredit().getValue().compareTo(BigDecimal.ZERO) == 0);
+                    !getValue().carryForwardCredit().isNull() && getValue().carryForwardCredit().getValue().compareTo(BigDecimal.ZERO) != 0);
 
             hideLines(getValue().depositRefundLineItems(), proto().depositRefundLineItems());
             hideLines(getValue().immediateAccountAdjustmentLineItems(), proto().immediateAccountAdjustmentLineItems());
+            hideLines(getValue().previousChargeRefundLineItems(), proto().previousChargeRefundLineItems());
             hideLines(getValue().nsfChargeLineItems(), proto().nsfChargeLineItems());
             hideLines(getValue().withdrawalLineItems(), proto().withdrawalLineItems());
             hideLines(getValue().rejectedPaymentLineItems(), proto().rejectedPaymentLineItems());

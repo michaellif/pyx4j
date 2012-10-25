@@ -129,7 +129,7 @@ public class BillingUtils {
         dto.depositRefundLineItems().total().set(bill.depositRefundAmount());
         dto.immediateAccountAdjustmentLineItems().total().set(bill.immediateAccountAdjustments());
         dto.pendingAccountAdjustmentLineItems().total().set(bill.pendingAccountAdjustments());
-        dto.previousChargeAdjustmentLineItems().total().set(bill.previousChargeRefunds());
+        dto.previousChargeRefundLineItems().total().set(bill.previousChargeRefunds());
         dto.nsfChargeLineItems().total().set(bill.nsfCharges());
         dto.withdrawalLineItems().total().set(bill.withdrawalAmount());
         dto.rejectedPaymentLineItems().total().set(bill.paymentRejectedAmount());
@@ -155,7 +155,7 @@ public class BillingUtils {
                 if (InvoiceProductCharge.Period.next.equals(credit.productCharge().period().getValue())) {
                     dto.productCreditLineItems().lineItems().add(lineItem);
                 } else {
-                    dto.previousChargeAdjustmentLineItems().lineItems().add(lineItem);
+                    dto.previousChargeRefundLineItems().lineItems().add(lineItem);
                 }
             } else if (lineItem.isInstanceOf(InvoiceDeposit.class)) {
                 dto.depositLineItems().lineItems().add(lineItem);
