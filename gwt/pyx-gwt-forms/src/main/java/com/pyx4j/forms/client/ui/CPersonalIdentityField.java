@@ -65,14 +65,8 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     // Possible formats - 'XXX-XXX-xxx', 'XXXX XXXX XXXX xxxx', 'xxx XXX XXX xxx'
     public void setPersonalIdentityFormat(String pattern) {
-// TODO remove comments when watermark fixed        super.setWatermark(pattern.toUpperCase());
         setFormat(new PersonalIdentityFormat(pattern));
         addValueValidator(new TextBoxParserValidator<IPersonalIdentity>());
-    }
-
-    @Override
-    public void setWatermark(String watermark) {
-        //do nothing, watermark is set by component
     }
 
     @Override
