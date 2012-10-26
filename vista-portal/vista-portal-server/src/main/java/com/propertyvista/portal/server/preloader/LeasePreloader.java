@@ -43,8 +43,6 @@ import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSimulator.Le
 
 public class LeasePreloader extends BaseVistaDevDataPreloader {
 
-    private static final int MAX_NUM_OF_LEASES_WITH_SIM_BILLING = 3;
-
     private static Random RND = new Random(1l);
 
     @Override
@@ -57,9 +55,9 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         AptUnitSource aptUnitSource = new AptUnitSource(1);
 
         //ensure LeaseLifecycleSimulator is fired during tests
-        int numTenantsJustApplication = DemoData.UserType.TENANT.getDefaultMax();
-        if (numTenantsJustApplication >= config().numTenants) {
-            numTenantsJustApplication = config().numTenants - config().minSimulatedLeases;
+        int numLeasesWithNoSimulation = DemoData.UserType.TENANT.getDefaultMax();
+        if (numLeasesWithNoSimulation >= config().numTenants) {
+            numLeasesWithNoSimulation = config().numTenants - config().minSimulatedLeases;
         }
 
         Customer dualTenantCustomer = null;
@@ -84,7 +82,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             }
 
             // Create normal Active Lease first for Shortcut users
-            if (i < numTenantsJustApplication) {
+            if (i < numLeasesWithNoSimulation) {
                 lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
                 for (Tenant tenant : lease.currentTerm().version().tenants()) {
                     tenant.leaseCustomer().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
@@ -96,7 +94,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             } else {
                 LeaseLifecycleSimulatorBuilder simBuilder = LeaseLifecycleSimulator.sim();
 
-                if (numCreatedWithBilling < MAX_NUM_OF_LEASES_WITH_SIM_BILLING) {
+                if (numCreatedWithBilling < config().numOfPseudoRandomLeasesWithSimulatedBilling) {
                     // create simulation events that happen between 4 years ago, and and the end of the previous month 
                     Calendar cal = new GregorianCalendar();
                     cal.setTime(new Date());
