@@ -13,11 +13,14 @@ CREATE TABLE _dba_.tmp_portfolio
 	analyst 			VARCHAR(50)
 );
 
-\COPY _dba_.tmp_portfolio FROM import/starlight_building.codes.csv CSV HEADER;
+\COPY _dba_.tmp_portfolio FROM import/starlight_building_codes.csv CSV HEADER;
 
 UPDATE _dba_.tmp_portfolio
-SET	property_code = TRIM(property_code),
+SET	property_code = LOWER(TRIM(property_code)),
 	analyst = TRIM(analyst);
+
+UPDATE _dba_.tmp_portfolio
+SET	property_code = regexp_replace(property_code,' ','','g');
 
 CREATE OR REPLACE FUNCTION _dba_.insert_starlight_portfolio() RETURNS VOID AS
 $$
@@ -35,7 +38,7 @@ BEGIN
 		INSERT INTO starlight.portfolio$buildings (id,owner,value,seq)
 		(SELECT NEXTVAL('public.portfolio$buildings_seq'),v_portfolio_id,a.id,0
 		FROM starlight.building a
-		JOIN _dba_.tmp_portfolio b ON (a.property_code = b.property_code)
+		JOIN _dba_.tmp_portfolio b ON (LOWER(a.property_code) = b.property_code)
 		WHERE b.analyst = v_analyst);
 	END LOOP;
 END;
