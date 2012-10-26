@@ -36,6 +36,7 @@ import com.pyx4j.essentials.server.report.SearchReportDeferredProcess;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.server.upgrade.PmcUpgrade;
 import com.propertyvista.domain.VistaNamespace;
 
 public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess<Pmc> {
@@ -84,6 +85,7 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
             NamespaceManager.setNamespace(entity.namespace().getValue());
             RDBUtils.initAllEntityTables();
             commonNamespaceIntegrityCheck();
+            PmcUpgrade.upgradeDate(entity);
         } finally {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
         }

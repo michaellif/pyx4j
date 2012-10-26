@@ -97,4 +97,6 @@ public interface Pmc extends IEntity {
     IPrimitive<Date> termination();
 
     IPrimitive<String> schemaVersion();
+
+    IPrimitive<Integer> schemaDataUpgradeSteps();
 }
