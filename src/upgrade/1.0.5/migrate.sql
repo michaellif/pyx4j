@@ -113,12 +113,13 @@ DROP SEQUENCE unit_availability_summary_gmeta$column_descriptors_seq;
 DROP SEQUENCE unit_availability_summary_gmeta_seq;
 DROP SEQUENCE yardi_connection_seq;
 
--- Create new sequences - 18 total
+-- Create new sequences - 19 total
 CREATE SEQUENCE background_check_policy_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE background_check_policy_v_seq OWNER TO vista;
+CREATE SEQUENCE billing_billing_cycle_stats_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ALTER SEQUENCE billing_billing_cycle_stats_seq OWNER TO vista;
 CREATE SEQUENCE gadget_metadata_holder_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE gadget_metadata_holder_seq OWNER TO vista;
-
 CREATE SEQUENCE lease_customer_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE lease_customer_seq OWNER TO vista;
 CREATE SEQUENCE lease_participant_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -248,6 +249,42 @@ BEGIN
          -- billing_bill
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_bill DROP COLUMN lease_for,'
                                                         ||'ADD COLUMN previous_charge_refunds NUMERIC(18,2)';
+                                                        
+        -- billing_billing_cycle
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle ADD COLUMN stats BIGINT';
+        
+        -- billing_billing_cycle_stats
+        EXECUTE 'CREATE TABLE '||v_schema_name||'.billing_billing_cycle_stats '
+        ||'( '
+        ||'     id              BIGINT          NOT NULL,'
+        ||'     failed          BIGINT,'
+        ||'     rejected        BIGINT,'
+        ||'     not_confirmed   BIGINT,'
+        ||'     confirmed       BIGINT,'
+        ||'     cycle_id        BIGINT,'                 -- temporary
+        ||'     CONSTRAINT billing_billing_cycle_stats_pk PRIMARY KEY(id) '              
+        ||') ';
+               
+               
+        EXECUTE 'INSERT INTO '||v_schema_name||'.billing_billing_cycle_stats (id,failed,rejected,not_confirmed,confirmed,cycle_id) '
+        ||'(SELECT nextval(''public.billing_billing_cycle_stats_seq'') AS id,failed,rejected,not_confirmed,confirmed,id AS cycle_id '
+        ||'FROM '||v_schema_name||'.billing_billing_cycle '
+        ||'ORDER BY id )';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_billing_cycle AS a '
+        ||'     SET     stats = b.id '
+        ||'     FROM    '||v_schema_name||'.billing_billing_cycle_stats AS b '
+        ||'     WHERE   a.id = b.cycle_id ';
+                                                                        
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle ADD CONSTRAINT billing_billing_cycle_stats_fk FOREIGN KEY(stats) '||
+        'REFERENCES '||v_schema_name||'.billing_billing_cycle_stats(id)';
+        
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle DROP COLUMN failed,'
+                                                                ||'     DROP COLUMN rejected,'
+                                                                ||'     DROP COLUMN not_confirmed,'
+                                                                ||'     DROP COLUMN confirmed';
+                                                                
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle_stats DROP COLUMN cycle_id';
                                                         
         -- billing_billing_type
         EXECUTE 'CREATE UNIQUE INDEX billing_type_payment_frequency_billing_cycle_start_day_idx ON '||v_schema_name
