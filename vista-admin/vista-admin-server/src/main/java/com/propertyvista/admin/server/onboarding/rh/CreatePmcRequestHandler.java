@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -31,6 +31,7 @@ import com.propertyvista.admin.domain.pmc.ReservedPmcNames;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.onboarding.AccountInfoResponseIO;
 import com.propertyvista.onboarding.CreatePMCRequestIO;
@@ -55,6 +56,7 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
 
         EntityQueryCriteria<OnboardingUserCredential> credentialCrt = EntityQueryCriteria.create(OnboardingUserCredential.class);
         credentialCrt.add(PropertyCriterion.eq(credentialCrt.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
+        Persistence.service().retrieve(credentialCrt.proto().user());
         List<OnboardingUserCredential> creds = Persistence.service().query(credentialCrt);
 
         if (creds.size() == 0) {
@@ -112,6 +114,9 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
 
         GetAccountInfoRequestIO r = EntityFactory.create(GetAccountInfoRequestIO.class);
         r.onboardingAccountId().setValue(request.onboardingAccountId().getValue());
+
+        ServerSideFactory.create(CommunicationFacade.class).sendNewPmcEmail(firstUser.user(), pmc);
+
         return new GetAccountInfoRequestHandler().execute(r);
     }
 }

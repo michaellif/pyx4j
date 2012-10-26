@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -34,6 +35,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
 import com.propertyvista.biz.communication.mail.template.EmailTemplateRootObjectLoader;
@@ -48,6 +50,7 @@ import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -251,6 +254,23 @@ public class MessageTemplates {
         return email;
     }
 
+    public static MailMessage createNewPmcEmail(OnboardingUser user, Pmc pmc) {
+        EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
+        context.user().set(user);
+
+        EmailTemplate emailTemplate = emailTemplateNewPmc(pmc);
+
+        ArrayList<IEntity> data = new ArrayList<IEntity>();
+
+        MailMessage email = new MailMessage();
+        email.setTo(user.email().getValue());
+        email.setSender(getSender());
+        // set email subject and body from the template
+        buildEmail(email, emailTemplate, data);
+
+        return email;
+    }
+
     private static String bodyRaw;
 
     public static String getEmailHTMLBody() {
@@ -329,6 +349,26 @@ public class MessageTemplates {
                 EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
         )));//@formatter:on
         return template;
+    }
+
+    private static EmailTemplate emailTemplateNewPmc(Pmc pmc) {
+        OnboardingUser user = EntityFactory.create(OnboardingUser.class);
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.subject().setValue(i18n.tr("New PMC Created"));
+        try {
+            String body = IOUtils.getTextResource("new-pmc.html");
+            body = body.replace("${ownerName}", EmailTemplateManager.getVarname(user.name()));
+            body = body.replace("${crmLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true));
+            body = body.replace("${portalLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.TenantPortal, true));
+
+            template.content().setValue(wrapAdminHtml(i18n.tr(//@formatter:off
+                body
+        )));//@formatter:on
+            return template;
+
+        } catch (IOException e) {
+            throw new UserRuntimeException("Unable to send invitation email");
+        }
     }
 
     private static String passwordResetUrl(String onboardingSystemBaseUrl, String authToken) {
