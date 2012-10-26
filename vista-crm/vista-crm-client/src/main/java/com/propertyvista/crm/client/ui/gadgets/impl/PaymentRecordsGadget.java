@@ -86,6 +86,8 @@ public class PaymentRecordsGadget extends GadgetInstanceBase<PaymentRecordsGadge
         setDefaultPopulator(new Populator() {
             @Override
             public void populate() {
+                lister.getDataTablePanel().setPageSize(getMetadata().paymentRecordsListerSettings().pageSize().getValue());
+
                 lister.getDataSource().clearPreDefinedFilters();
                 List<Criterion> criteria = new ArrayList<Criterion>();
                 criteria.add(PropertyCriterion.eq(lister.proto().lastStatusChangeDate(), getTargetDate()));

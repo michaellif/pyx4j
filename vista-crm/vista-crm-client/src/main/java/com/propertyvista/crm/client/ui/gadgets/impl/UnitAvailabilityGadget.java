@@ -101,6 +101,8 @@ public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityG
         setDefaultPopulator(new Populator() {
             @Override
             public void populate() {
+                lister.getDataTablePanel().setPageSize(getMetadata().unitStatusListerSettings().pageSize().getValue());
+
                 lister.getDataSource().clearPreDefinedFilters();
 
                 lister.getDataSource().addPreDefinedFilter(new AsOfDateCriterion(getStatusDate()));
