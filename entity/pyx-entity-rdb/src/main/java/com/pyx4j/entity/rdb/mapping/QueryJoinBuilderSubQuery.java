@@ -24,13 +24,12 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.pyx4j.entity.rdb.QueryJoinRDBTestCase;
 import com.pyx4j.entity.shared.Path;
 
 /**
  * TODO change the way joins are constructed:
  * 
- * @see QueryJoinRDBTestCase#testOneToOneUnidirectional2XQueryNotExists
+ * @see om.pyx4j.entity.rdb.QueryJoinRDBTestCase#testOneToOneUnidirectional2XQueryNotExists
  * 
  *      now:
  * 
