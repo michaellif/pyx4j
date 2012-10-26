@@ -37,6 +37,7 @@ import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Organization;
 import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.entity.test.shared.domain.detached.MainHolderEnity;
 import com.pyx4j.entity.test.shared.domain.join.AccPrincipal;
 import com.pyx4j.entity.test.shared.domain.join.AccSubject;
 import com.pyx4j.entity.test.shared.domain.join.AccSubjectPrincipal;
@@ -470,8 +471,9 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         }
     }
 
-    public void testOneToOneQueryNotExists() {
+    public void testOneToOneJTQueryNotExists() {
         String testId = uniqueString();
+        String searchBy = uniqueString();
 
         OneToOneReadOwner o1 = EntityFactory.create(OneToOneReadOwner.class);
         o1.name().setValue("C1;" + uniqueString());
@@ -479,7 +481,7 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         srv.persist(o1);
 
         OneToOneReadChild c1 = EntityFactory.create(OneToOneReadChild.class);
-        c1.name().setValue(uniqueString());
+        c1.name().setValue(searchBy);
         c1.testId().setValue(testId);
         c1.o2oOwner().set(o1);
         srv.persist(c1);
@@ -495,12 +497,115 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
             //TODO OR implementation for joins
             //criteria.or(PropertyCriterion.eq(criteria.proto().child().name(), c1.name()), PropertyCriterion.isNull(criteria.proto().child()));
-            criteria.or(PropertyCriterion.notExists(criteria.proto().child()), PropertyCriterion.eq(criteria.proto().child().name(), c1.name()));
+            criteria.or(PropertyCriterion.notExists(criteria.proto().child()), PropertyCriterion.eq(criteria.proto().child().name(), searchBy));
 
             List<OneToOneReadOwner> data = srv.query(criteria);
             Assert.assertEquals("Found using JoinTable", 2, data.size());
         }
 
+        //Test notExists as sub query
+        {
+            EntityQueryCriteria<OneToOneReadOwner> criteria = EntityQueryCriteria.create(OneToOneReadOwner.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.notExists(criteria.proto().child(), PropertyCriterion.eq(criteria.proto().child().name(), searchBy));
+
+            List<OneToOneReadOwner> data = srv.query(criteria);
+            Assert.assertEquals("Found using JoinTable", 1, data.size());
+            Assert.assertEquals("Found correct object", o2, data.get(0));
+        }
+
     }
 
+    public void testOneToOneUnidirectionalQueryNotExists() {
+        String testId = uniqueString();
+        String searchBy = uniqueString();
+
+        MainHolderEnity o1 = EntityFactory.create(MainHolderEnity.class);
+        o1.name().setValue(testId);
+        o1.ownedEntity().name().setValue(searchBy);
+        srv.persist(o1);
+
+        MainHolderEnity o2 = EntityFactory.create(MainHolderEnity.class);
+        o2.name().setValue(testId);
+        srv.persist(o2);
+
+        //Test notExists as sub query
+        {
+            EntityQueryCriteria<MainHolderEnity> criteria = EntityQueryCriteria.create(MainHolderEnity.class);
+            criteria.eq(criteria.proto().name(), testId);
+            criteria.notExists(criteria.proto().ownedEntity(), PropertyCriterion.eq(criteria.proto().ownedEntity().name(), searchBy));
+
+            List<MainHolderEnity> data = srv.query(criteria);
+            Assert.assertEquals("Found using reference", 1, data.size());
+            Assert.assertEquals("Found correct object", o2, data.get(0));
+        }
+
+        o2.ownedEntity().name().setValue(searchBy);
+        srv.persist(o2);
+        {
+            EntityQueryCriteria<MainHolderEnity> criteria = EntityQueryCriteria.create(MainHolderEnity.class);
+            criteria.eq(criteria.proto().name(), testId);
+            criteria.notExists(criteria.proto().ownedEntity(), PropertyCriterion.eq(criteria.proto().ownedEntity().name(), searchBy));
+
+            List<MainHolderEnity> data = srv.query(criteria);
+            Assert.assertEquals("Found using reference", 0, data.size());
+        }
+    }
+
+    public void testOneToOneUnidirectional2XQueryNotExists() {
+        String testId = uniqueString();
+        String searchBy = uniqueString();
+
+        MainHolderEnity o1 = EntityFactory.create(MainHolderEnity.class);
+        o1.name().setValue(testId);
+        o1.ownedEntity().detachedEntity().name().setValue(searchBy);
+        srv.persist(o1);
+
+        MainHolderEnity o2 = EntityFactory.create(MainHolderEnity.class);
+        o2.name().setValue(testId);
+        srv.persist(o2);
+
+        //Test notExists as sub query
+        {
+            EntityQueryCriteria<MainHolderEnity> criteria = EntityQueryCriteria.create(MainHolderEnity.class);
+            criteria.eq(criteria.proto().name(), testId);
+            criteria.notExists(criteria.proto().ownedEntity(), PropertyCriterion.eq(criteria.proto().ownedEntity().detachedEntity().name(), searchBy));
+
+            List<MainHolderEnity> data = srv.query(criteria);
+            Assert.assertEquals("Found using reference", 1, data.size());
+            Assert.assertEquals("Found correct object", o2, data.get(0));
+        }
+
+        {
+            EntityQueryCriteria<MainHolderEnity> criteria = EntityQueryCriteria.create(MainHolderEnity.class);
+            criteria.eq(criteria.proto().name(), testId);
+            criteria.notExists(criteria.proto().ownedEntity().detachedEntity(),
+                    PropertyCriterion.eq(criteria.proto().ownedEntity().detachedEntity().name(), searchBy));
+
+            List<MainHolderEnity> data = srv.query(criteria);
+            Assert.assertEquals("Found using reference", 1, data.size());
+            Assert.assertEquals("Found correct object", o2, data.get(0));
+        }
+
+        o2.ownedEntity().detachedEntity().name().setValue(searchBy);
+        srv.persist(o2);
+        {
+            EntityQueryCriteria<MainHolderEnity> criteria = EntityQueryCriteria.create(MainHolderEnity.class);
+            criteria.eq(criteria.proto().name(), testId);
+            criteria.notExists(criteria.proto().ownedEntity(), PropertyCriterion.eq(criteria.proto().ownedEntity().detachedEntity().name(), searchBy));
+
+            List<MainHolderEnity> data = srv.query(criteria);
+            Assert.assertEquals("Found using reference", 0, data.size());
+        }
+
+        {
+            EntityQueryCriteria<MainHolderEnity> criteria = EntityQueryCriteria.create(MainHolderEnity.class);
+            criteria.eq(criteria.proto().name(), testId);
+            criteria.notExists(criteria.proto().ownedEntity().detachedEntity(),
+                    PropertyCriterion.eq(criteria.proto().ownedEntity().detachedEntity().name(), searchBy));
+
+            List<MainHolderEnity> data = srv.query(criteria);
+            Assert.assertEquals("Found using reference", 0, data.size());
+        }
+    }
 }

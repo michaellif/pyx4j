@@ -385,14 +385,14 @@ public class QueryBuilder<T extends IEntity> {
 
     private void buildSubQuery(StringBuilder sql, QueryJoinBuilder joinBuilder, String propertyPath, Criterion criterion) {
 
-        QueryJoinBuilderSubQuery subQueryJoinBuilder = new QueryJoinBuilderSubQuery(joinBuilder);
-        JoinDef memberJoin = subQueryJoinBuilder.buildSubQueryJoin(propertyPath, true);
+        QueryJoinBuilderSubQuery subQueryJoinBuilder = new QueryJoinBuilderSubQuery(joinBuilder, propertyPath, true);
+        JoinDef memberJoin = subQueryJoinBuilder.getMainTable();
 
         StringBuilder criterionSql = new StringBuilder();
         appendCriterion(criterionSql, subQueryJoinBuilder, criterion, true);
 
         StringBuilder subQuerySql = new StringBuilder();
-        subQuerySql.append(" NOT EXISTS ( SELECT 1 FROM ");
+        subQuerySql.append(" \n NOT EXISTS ( SELECT 1 FROM ");
 
         if (dialect.isMultitenantSeparateSchemas()) {
             subQuerySql.append(NamespaceManager.getNamespace()).append('.');
@@ -404,13 +404,13 @@ public class QueryBuilder<T extends IEntity> {
 
         subQueryJoinBuilder.appendJoins(subQuerySql);
 
-        subQuerySql.append(" WHERE ").append(memberJoin.condition);
+        subQuerySql.append(" \n WHERE ").append(memberJoin.condition);
 
         subQuerySql.append(" AND ");
 
         subQuerySql.append(criterionSql);
 
-        subQuerySql.append(")");
+        subQuerySql.append(")\n");
 
         sql.append(subQuerySql);
     }

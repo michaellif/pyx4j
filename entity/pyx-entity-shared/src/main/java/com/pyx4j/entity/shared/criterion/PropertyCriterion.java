@@ -39,7 +39,7 @@ public class PropertyCriterion implements Criterion {
     public static final char WILDCARD_CHAR = '*';
 
     public static enum Restriction {
-        LESS_THAN, LESS_THAN_OR_EQUAL, GREATER_THAN, GREATER_THAN_OR_EQUAL, EQUAL, NOT_EQUAL, IN,
+        LESS_THAN, LESS_THAN_OR_EQUAL, GREATER_THAN, GREATER_THAN_OR_EQUAL, EQUAL, NOT_EQUAL, IN, NOT_IN,
 
         RDB_LIKE, NOT_EXISTS
     }

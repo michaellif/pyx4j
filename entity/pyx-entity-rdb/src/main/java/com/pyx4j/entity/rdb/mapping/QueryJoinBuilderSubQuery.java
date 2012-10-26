@@ -2,7 +2,7 @@
  * Pyx4j framework
  * Copyright (C) 2008-2011 pyx4j.com.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * Licensed under the Apache* License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
  *
@@ -24,17 +24,48 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.pyx4j.entity.rdb.QueryJoinRDBTestCase;
+import com.pyx4j.entity.shared.Path;
+
+/**
+ * TODO change the way joins are constructed:
+ * 
+ * @see QueryJoinRDBTestCase#testOneToOneUnidirectional2XQueryNotExists
+ * 
+ *      now:
+ * 
+ * 
+ *      need to be:
+ * 
+ *      <pre>
+ * 
+ *  SELECT  m1.* FROM test_main_holder_enity m1
+ *  WHERE NOT EXISTS 
+ *  ( SELECT 1 FROM test_detached_entity jd2
+ *  LEFT JOIN test_main_enity jd1 ON jd2.id = jd1.detached_entity WHERE jd1.id = m1.owned_entity  AND jd2.name = 'A' )
+ * 
+ * </pre>
+ */
+
 class QueryJoinBuilderSubQuery extends QueryJoinBuilder {
 
     private final QueryJoinBuilder mainBuilder;
 
-    private JoinDef mainTableJoin;
+    private final String mainPropertyPath;
+
+    private final JoinDef mainTableJoin;
 
     protected final Map<String, JoinDef> subQueryMemberJoinAliases = new LinkedHashMap<String, JoinDef>();
 
-    QueryJoinBuilderSubQuery(QueryJoinBuilder mainBuilder) {
+    QueryJoinBuilderSubQuery(QueryJoinBuilder mainBuilder, String propertyPath, boolean leftJoin) {
         super(mainBuilder.persistenceContext, mainBuilder.mappings, mainBuilder.operationsMeta, mainBuilder.mainTableSqlAlias, mainBuilder.versionedCriteria);
         this.mainBuilder = mainBuilder;
+        this.mainPropertyPath = propertyPath;
+        this.mainTableJoin = buildJoin(null, operationsMeta, mainTableSqlAlias, propertyPath, leftJoin, false, true);
+    }
+
+    JoinDef getMainTable() {
+        return mainTableJoin;
     }
 
     @Override
@@ -43,28 +74,28 @@ class QueryJoinBuilderSubQuery extends QueryJoinBuilder {
     }
 
     @Override
-    protected JoinDef getMemberJoin(String path) {
-        JoinDef memberJoin = subQueryMemberJoinAliases.get(path);
-        if (memberJoin != null) {
-            return memberJoin;
-        } else {
-            return mainBuilder.getMemberJoin(path);
-        }
-    }
-
-    @Override
     protected Collection<JoinDef> getMemberJoinAliases() {
         return subQueryMemberJoinAliases.values();
     }
 
     @Override
-    protected void putMemberJoin(String path, JoinDef memberJoin) {
-        subQueryMemberJoinAliases.put(path, memberJoin);
+    protected JoinDef getMemberJoin(String accessPath, String path) {
+        JoinDef memberJoin = subQueryMemberJoinAliases.get(path);
+        if (memberJoin != null) {
+            return memberJoin;
+        } else {
+            return mainBuilder.getMemberJoin(accessPath, path);
+        }
     }
 
-    JoinDef buildSubQueryJoin(String propertyPath, boolean leftJoin) {
-        mainTableJoin = buildJoin(operationsMeta, mainTableSqlAlias, propertyPath, leftJoin, false, true);
-        return mainTableJoin;
+    @Override
+    protected void putMemberJoin(String accessPath, String path, JoinDef memberJoin) {
+        accessPath += path.substring(path.indexOf(Path.PATH_SEPARATOR) + 1);
+        if (accessPath.startsWith(mainPropertyPath)) {
+            subQueryMemberJoinAliases.put(path, memberJoin);
+        } else {
+            mainBuilder.putMemberJoin(accessPath, path, memberJoin);
+        }
     }
 
     @Override
