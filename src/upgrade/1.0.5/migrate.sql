@@ -285,6 +285,8 @@ BEGIN
                                                                 ||'     DROP COLUMN confirmed';
                                                                 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle_stats DROP COLUMN cycle_id';
+        
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle_stats OWNER TO vista';
                                                         
         -- billing_billing_type
         EXECUTE 'CREATE UNIQUE INDEX billing_type_payment_frequency_billing_cycle_start_day_idx ON '||v_schema_name
