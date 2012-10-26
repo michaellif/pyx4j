@@ -28,16 +28,16 @@ import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 
 public class ColumnDescriptorDiffUtil {
 
-    public static ListerUserSettings getDescriptorsDiff(List<ColumnDescriptor> defaultColumnDescriptors, List<ColumnDescriptor> columnDescriptors) {
-        ListerUserSettings listDescriptor = EntityFactory.create(ListerUserSettings.class);
+    public static List<ColumnUserSettings> getDescriptorsDiff(List<ColumnDescriptor> defaultColumnDescriptors, List<ColumnDescriptor> columnDescriptors) {
+        List<ColumnUserSettings> diff = new ArrayList<ColumnUserSettings>();
         for (ColumnDescriptor defaultColumnDescriptor : defaultColumnDescriptors) {
             for (ColumnDescriptor columnDescriptor : columnDescriptors) {
                 if (columnDescriptor.getColumnName().equals(defaultColumnDescriptor.getColumnName()) & hasDiff(defaultColumnDescriptor, columnDescriptor)) {
-                    listDescriptor.overriddenColumns().add(ColumnDescriptorConverter.getUserSettings(columnDescriptor));
+                    diff.add(ColumnDescriptorConverter.getUserSettings(columnDescriptor));
                 }
             }
         }
-        return listDescriptor;
+        return diff;
     }
 
     /** makes a new column descriptors list applying differences from ListDescriptor */

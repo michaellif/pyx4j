@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.ui.datatable.DataTable.ColumnSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 
+import com.propertyvista.domain.dashboard.gadgets.util.ColumnUserSettings;
 import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 
 public class ListerUtils {
@@ -90,9 +91,10 @@ public class ListerUtils {
             dataTablePanel.getDataTable().addColumnSelectionChangeHandler(new ColumnSelectionHandler() {
                 @Override
                 public void onColumSelectionChanged() {
-                    ListerUserSettings diff = ColumnDescriptorDiffUtil.getDescriptorsDiff(columnDescriptors, dataTablePanel.getDataTable().getDataTableModel()
-                            .getColumnDescriptors());
-                    userSettingsProvider.get().set(diff);
+                    List<ColumnUserSettings> diff = ColumnDescriptorDiffUtil.getDescriptorsDiff(columnDescriptors, dataTablePanel.getDataTable()
+                            .getDataTableModel().getColumnDescriptors());
+                    userSettingsProvider.get().overriddenColumns().clear();
+                    userSettingsProvider.get().overriddenColumns().addAll(diff);
 
                     onColumnSelectionChanged.execute();
                 }

@@ -15,7 +15,7 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
@@ -52,7 +52,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 )//@formatter:on
 public interface BuildingListerGadgetMetadata extends GadgetMetadata {
 
-    @Owned
+    @EmbeddedEntity
     ListerUserSettings buildingListerSettings();
 
 }
