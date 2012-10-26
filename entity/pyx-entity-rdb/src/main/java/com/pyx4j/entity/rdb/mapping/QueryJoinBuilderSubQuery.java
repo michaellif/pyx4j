@@ -26,26 +26,6 @@ import java.util.Map;
 
 import com.pyx4j.entity.shared.Path;
 
-/**
- * TODO change the way joins are constructed:
- * 
- * @see om.pyx4j.entity.rdb.QueryJoinRDBTestCase#testOneToOneUnidirectional2XQueryNotExists
- * 
- *      now:
- * 
- * 
- *      need to be:
- * 
- *      <pre>
- * 
- *  SELECT  m1.* FROM test_main_holder_enity m1
- *  WHERE NOT EXISTS 
- *  ( SELECT 1 FROM test_detached_entity jd2
- *  LEFT JOIN test_main_enity jd1 ON jd2.id = jd1.detached_entity WHERE jd1.id = m1.owned_entity  AND jd2.name = 'A' )
- * 
- * </pre>
- */
-
 class QueryJoinBuilderSubQuery extends QueryJoinBuilder {
 
     private final QueryJoinBuilder mainBuilder;
