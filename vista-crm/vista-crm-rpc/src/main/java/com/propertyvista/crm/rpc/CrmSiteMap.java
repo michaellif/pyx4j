@@ -452,8 +452,8 @@ public class CrmSiteMap implements SiteMap {
             public static class BackgroundCheck extends CrmCrudAppPlace {
             }
 
-            @PlaceProperties(caption = "Late/NSF Fee Setup")
-            @NavigationItem(navigLabel = "Late/NSF Fee Setup")
+            @PlaceProperties(caption = "Billing")
+            @NavigationItem(navigLabel = "Billing")
             public static class LeaseBilling extends CrmCrudAppPlace {
             }
 
