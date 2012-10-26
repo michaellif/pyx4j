@@ -17,26 +17,19 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.PastGuarantorListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
-import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.crm.rpc.services.customer.PastGuarantorCrudService;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class PastGuarantorListerActivity extends ListerActivityBase<GuarantorDTO> {
 
     @SuppressWarnings("unchecked")
     public PastGuarantorListerActivity(Place place) {
-        super(place, CustomerViewFactory.instance(PastGuarantorListerView.class), (AbstractCrudService<GuarantorDTO>) GWT.create(GuarantorCrudService.class),
-                GuarantorDTO.class);
-
-        // filter out just current tenants:
-        GuarantorDTO proto = EntityFactory.getEntityPrototype(GuarantorDTO.class);
-        addPreDefinedFilter(PropertyCriterion.in(proto.lease().status(), Lease.Status.former()));
+        super(place, CustomerViewFactory.instance(PastGuarantorListerView.class), (AbstractCrudService<GuarantorDTO>) GWT
+                .create(PastGuarantorCrudService.class), GuarantorDTO.class);
     }
 
     @Override

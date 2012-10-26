@@ -16,29 +16,18 @@ package com.propertyvista.crm.client.activity.crud.customer.tenant;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.shared.criterion.EntityFiltersBuilder;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
+import com.propertyvista.crm.rpc.services.customer.ActiveTenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantListerActivity extends ListerActivityBase<TenantDTO> {
 
     public TenantListerActivity(Place place) {
-        super(place, CustomerViewFactory.instance(TenantListerView.class), GWT.<TenantCrudService> create(TenantCrudService.class), TenantDTO.class);
-
-        // filter out just current tenants:
-
-        EntityFiltersBuilder<TenantDTO> filters = EntityFiltersBuilder.create(TenantDTO.class);
-        filters.in(filters.proto().lease().status(), Lease.Status.current());
-        filters.eq(filters.proto().leaseParticipants().$().leaseTermV().holder(), filters.proto().lease().currentTerm());
-        // and finalized e.g. last only:
-        filters.isCurrent(filters.proto().leaseParticipants().$().leaseTermV());
-
-        addPreDefinedFilter(filters);
+        super(place, CustomerViewFactory.instance(TenantListerView.class), GWT.<TenantCrudService> create(ActiveTenantCrudService.class), TenantDTO.class);
     }
 
     @Override
