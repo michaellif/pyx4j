@@ -96,7 +96,9 @@ public class EntityValueMap extends HashMap<String, Object> {
                 }
             } else if (me.getValue() instanceof Collection<?>) {
                 // Not empty collection
-                return ((Collection<?>) me.getValue()).isEmpty();
+                if (!((Collection<?>) me.getValue()).isEmpty()) {
+                    return false;
+                }
             } else if (me.getValue() != null) {
                 return false;
             }
