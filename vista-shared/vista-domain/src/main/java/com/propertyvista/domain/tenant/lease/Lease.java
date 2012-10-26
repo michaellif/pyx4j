@@ -205,6 +205,7 @@ public interface Lease extends IEntity {
 
     IPrimitive<LogicalDate> actualMoveOut();
 
+    @Caption(name = "Notice Submission Date")
     IPrimitive<LogicalDate> moveOutNotice();
 
     @JoinColumn

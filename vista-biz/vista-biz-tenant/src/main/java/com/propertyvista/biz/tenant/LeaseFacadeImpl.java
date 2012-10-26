@@ -498,7 +498,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         Persistence.secureSave(lease);
 
-        // TODO not sure about correctness of this approach need to ask VladL [Artyom]
         if (lease.moveOutNotice().isNull()) {
             ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey(), from);
         }
