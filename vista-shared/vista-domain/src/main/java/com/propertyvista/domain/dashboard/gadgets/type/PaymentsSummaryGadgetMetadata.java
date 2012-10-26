@@ -15,6 +15,7 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
@@ -57,6 +58,7 @@ public interface PaymentsSummaryGadgetMetadata extends GadgetMetadata, HasCustom
 
     IPrimitiveSet<PaymentRecord.PaymentStatus> paymentStatus();
 
+    @EmbeddedEntity
     ListerUserSettings paymentsSummaryListerSettings();
 
 }

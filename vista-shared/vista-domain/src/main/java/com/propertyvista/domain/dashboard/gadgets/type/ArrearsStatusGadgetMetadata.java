@@ -16,6 +16,7 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -69,5 +70,6 @@ public interface ArrearsStatusGadgetMetadata extends GadgetMetadata, BuildingGad
     @NotNull
     IPrimitive<LogicalDate> asOf();
 
+    @EmbeddedEntity
     ListerUserSettings arrearsStatusListerSettings();
 }
