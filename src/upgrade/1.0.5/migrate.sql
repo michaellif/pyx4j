@@ -20,11 +20,12 @@ SET client_min_messages = 'WARNING';
 SET search_path = '_admin_';
 
 ALTER TABLE admin_pmc ADD COLUMN schema_version VARCHAR(500);
+ALTER TABLE admin_pmc ADD COLUMN schema_data_upgrade_steps INT;
 
 ALTER TABLE admin_pmc_equifax_info
     ADD COLUMN report_type VARCHAR(50),
     ADD COLUMN approved BOOLEAN;
-  
+
 ALTER TABLE vista_terms_v ALTER COLUMN holder SET NOT NULL;
 ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_detailsdiscriminator_d_ck
         CHECK (trigger_detailsdiscriminator IN ('default','pad','test'));
@@ -175,7 +176,7 @@ DECLARE
     v_table_name                VARCHAR(64);
     v_void                      CHAR(1);
 BEGIN
-    
+
         -- DROP all gadget tables
         /**
         *** We will use new and progressive way of dropping tables
@@ -249,10 +250,10 @@ BEGIN
          -- billing_bill
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_bill DROP COLUMN lease_for,'
                                                         ||'ADD COLUMN previous_charge_refunds NUMERIC(18,2)';
-                                                        
+
         -- billing_billing_cycle
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle ADD COLUMN stats BIGINT';
-        
+
         -- billing_billing_cycle_stats
         EXECUTE 'CREATE TABLE '||v_schema_name||'.billing_billing_cycle_stats '
         ||'( '
@@ -262,32 +263,32 @@ BEGIN
         ||'     not_confirmed   BIGINT,'
         ||'     confirmed       BIGINT,'
         ||'     cycle_id        BIGINT,'                 -- temporary
-        ||'     CONSTRAINT billing_billing_cycle_stats_pk PRIMARY KEY(id) '              
+        ||'     CONSTRAINT billing_billing_cycle_stats_pk PRIMARY KEY(id) '
         ||') ';
-               
-               
+
+
         EXECUTE 'INSERT INTO '||v_schema_name||'.billing_billing_cycle_stats (id,failed,rejected,not_confirmed,confirmed,cycle_id) '
         ||'(SELECT nextval(''public.billing_billing_cycle_stats_seq'') AS id,failed,rejected,not_confirmed,confirmed,id AS cycle_id '
         ||'FROM '||v_schema_name||'.billing_billing_cycle '
         ||'ORDER BY id )';
-        
+
         EXECUTE 'UPDATE '||v_schema_name||'.billing_billing_cycle AS a '
         ||'     SET     stats = b.id '
         ||'     FROM    '||v_schema_name||'.billing_billing_cycle_stats AS b '
         ||'     WHERE   a.id = b.cycle_id ';
-                                                                        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle ADD CONSTRAINT billing_billing_cycle_stats_fk FOREIGN KEY(stats) '||
         'REFERENCES '||v_schema_name||'.billing_billing_cycle_stats(id)';
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle DROP COLUMN failed,'
                                                                 ||'     DROP COLUMN rejected,'
                                                                 ||'     DROP COLUMN not_confirmed,'
                                                                 ||'     DROP COLUMN confirmed';
-                                                                
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle_stats DROP COLUMN cycle_id';
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle_stats OWNER TO vista';
-                                                        
+
         -- billing_billing_type
         EXECUTE 'CREATE UNIQUE INDEX billing_type_payment_frequency_billing_cycle_start_day_idx ON '||v_schema_name
         ||'.billing_billing_type USING btree (payment_frequency, billing_cycle_start_day) ';
@@ -309,23 +310,23 @@ BEGIN
 
         -- billing_invoice_line_item
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_invoice_line_item ADD COLUMN product_chargediscriminator VARCHAR(50)';
-        
+
         EXECUTE 'UPDATE '||v_schema_name||'.billing_invoice_line_item AS a '||
         '       SET     product_chargediscriminator = b.iddiscriminator '||
         '       FROM    '||v_schema_name||'.billing_invoice_line_item b '||
         '       WHERE   a.product_charge = b.id ';
-        
+
         -- boiler
         EXECUTE 'ALTER TABLE '||v_schema_name||'.boiler DROP COLUMN notes';
-        
+
 
         -- building
         EXECUTE 'ALTER TABLE '||v_schema_name||'.building DROP COLUMN dashboard, DROP COLUMN notes_and_attachments';
 
         -- complex
         EXECUTE 'ALTER TABLE '||v_schema_name||'.complex DROP COLUMN dashboard';
-        
-        -- crm_role$behaviors 
+
+        -- crm_role$behaviors
         EXECUTE 'INSERT INTO '||v_schema_name||'.crm_role$behaviors (id,owner,value) '||
         '(SELECT nextval(''public.crm_role$behaviors_seq'') AS id, id AS owner,''DashboardManager'' '||
         'FROM '||v_schema_name||'.crm_role '||
@@ -352,11 +353,11 @@ BEGIN
 
         -- elevator
          EXECUTE 'ALTER TABLE '||v_schema_name||'.elevator DROP COLUMN notes';
-         
+
          -- email_template
-         
+
          EXECUTE 'CREATE UNIQUE INDEX email_template_policy_template_type_idx ON '||v_schema_name||'.email_template (policy,template_type)';
-         
+
 
         -- employee
         EXECUTE 'ALTER TABLE '||v_schema_name||'.employee ADD COLUMN employee_id_s VARCHAR(26)';
@@ -376,10 +377,10 @@ BEGIN
         '.gadget_metadata_holder USING btree (class_name,identifier_key)';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.gadget_metadata_holder OWNER TO vista';
-        
+
         -- get_satisfaction_fastpass_url_response_io
          SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'get_satisfaction_fastpass_url_response_io');
-        
+
 
         -- identification_document_type
 
@@ -427,35 +428,35 @@ BEGIN
                                     'DROP COLUMN lease_on_application_for,'||
                                     'DROP COLUMN equifax_approval,'||
                                     'DROP COLUMN notes';
-      
+
         EXECUTE 'DELETE FROM '||v_schema_name||'.lease_application '
         '       WHERE id IN     (SELECT a.id '||
         '                       FROM '||v_schema_name||'.lease_application a '||
         '                       JOIN '||v_schema_name||'.lease c ON (a.lease = c.id) '||
         '                       JOIN '||v_schema_name||'.lease_v b ON (b.holder = c.id) '||
         '                       WHERE a.status = ''Created'' AND b.status != ''Application'') ';
-  
-                                     
-       
+
+
+
         -- legal_questions
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions DROP CONSTRAINT IF EXISTS legal_questions_pk CASCADE';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions DROP CONSTRAINT IF EXISTS legal_questions_pkey CASCADE';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions RENAME TO person_screening_legal_questions';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_legal_questions ADD CONSTRAINT person_screening_legal_questions_pk PRIMARY KEY(id) ';
-        
+
         -- locker_area
         EXECUTE 'ALTER TABLE '||v_schema_name||'.locker_area DROP COLUMN is_private';
-        
+
 
         -- master_online_application
         EXECUTE 'ALTER TABLE '||v_schema_name||'.master_online_application ADD COLUMN online_application_id_s VARCHAR(26),'||
                                                                         'DROP COLUMN equifax_approval';
         EXECUTE 'UPDATE '||v_schema_name||'.master_online_application SET online_application_id_s = _dba_.convert_id_to_string(online_application_id) ';
 
-        
+
         -- notes_and_attachments
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.notes_and_attachments DROP COLUMN x,'||
                             'ADD COLUMN owner_id BIGINT,'||
                             'ADD COLUMN owner_class VARCHAR(80),'||
@@ -471,12 +472,12 @@ BEGIN
 
         EXECUTE 'CREATE INDEX notes_and_attachments_owner_id_owner_class_idx ON '||v_schema_name||'.notes_and_attachments '||
         'USING btree (owner_id, owner_class) ';
-       
-        
-        
+
+
+
         -- note table - drop
         SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'note',FALSE);
-        
+
         -- notes
         SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'notes',FALSE);
 
@@ -520,18 +521,18 @@ BEGIN
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_payment_details ALTER COLUMN account_no_obfuscated_number TYPE VARCHAR(12),'||
                                         'ALTER COLUMN card_obfuscated_number TYPE VARCHAR(16)';
-                                        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_payment_details RENAME COLUMN incomming_interac_trasaction TO incomming_interac_transaction';
 
         EXECUTE 'UPDATE '||v_schema_name||'.payment_payment_details '||
                 '   SET     account_no_obfuscated_number = LPAD(account_no_obfuscated_number,12,''X''),'||
                 '       card_obfuscated_number = LPAD(card_obfuscated_number,16,''X'') ';
-        
-      
+
+
         -- onboarding_user_password_reset_question_response_io
          SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'onboarding_user_password_reset_question_response_io');
-        
-        
+
+
         -- reports_settings_holder
         EXECUTE 'CREATE TABLE '||v_schema_name||'.reports_settings_holder ('||
             '   id      BIGINT      NOT NULL,'||
@@ -550,7 +551,7 @@ BEGIN
 
         -- tenant_charge
         EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge ADD COLUMN tenantdiscriminator VARCHAR(50)';
-        
+
 
         -- unit_availability_status
 
@@ -568,10 +569,10 @@ BEGIN
             'ELSE ''3000-01-01'' END AS date_til FROM t AS a '||
             'LEFT JOIN t AS b ON (a.unit = b.unit AND a.rownum +1 = b.rownum) ) AS b '
             'WHERE a.id = b.id ';
-            
+
         -- yardi_connection
         SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'yardi_connection');
-        
+
 
 
         /**
@@ -599,25 +600,25 @@ BEGIN
         '((SELECT nextval(''public.product_seq''),id AS old_id,''feature'',catalog,updated FROM '||v_schema_name||'.feature ORDER BY id) '||
         'UNION '||
         '(SELECT nextval(''public.product_seq''),id AS old_id,''service'',catalog,updated FROM '||v_schema_name||'.service ORDER BY id ))';
-        
+
         EXECUTE 'UPDATE '||v_schema_name||'.product AS a '||
                 'SET    feature_type = b.feature_type '||
                 'FROM   (SELECT DISTINCT holder,feature_type FROM '||v_schema_name||'.feature_v ) AS b '||
                 'WHERE  a.old_id = b.holder '||
                 'AND    a.iddiscriminator = ''feature'' ';
-                
+
         EXECUTE 'UPDATE '||v_schema_name||'.product AS a '||
                 'SET    service_type = b.service_type '||
                 'FROM   (SELECT DISTINCT holder,service_type FROM '||v_schema_name||'.service_v ) AS b '||
                 'WHERE  a.old_id = b.holder '
                 'AND    a.iddiscriminator = ''service'' ';
-             
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product ADD CONSTRAINT product_feature_type_ck CHECK ((iddiscriminator = ''feature'' '||
                                                 ' AND feature_type IS NOT NULL) OR (iddiscriminator != ''feature'' AND feature_type IS NULL)) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product ADD CONSTRAINT product_service_type_ck CHECK ((iddiscriminator = ''service'' '||
                                                 ' AND service_type IS NOT NULL) OR (iddiscriminator != ''service'' AND service_type IS NULL)) ';
-     
-    
+
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product OWNER TO vista';
 
 
@@ -674,7 +675,7 @@ BEGIN
                 'SET visibility = ''global'' ';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ADD CONSTRAINT product_v_holder_fk FOREIGN KEY(holder) REFERENCES '||v_schema_name||'.product(id)';
-       
+
         EXECUTE 'CREATE INDEX product_v_holder_holderdiscriminator_from_date_to_date_idx ON '||v_schema_name||'.product_v '||
         'USING btree (holder, holderdiscriminator, from_date, to_date) ';
 
@@ -1028,7 +1029,7 @@ BEGIN
         '       CONSTRAINT lease_participant_tenant_fk FOREIGN KEY(tenant) '||
         '               REFERENCES '||v_schema_name||'.lease_customer(id))';
 
-        
+
         EXECUTE 'INSERT INTO '||v_schema_name||'.lease_participant '||
         '(id,tenant_id,iddiscriminator,lease_customerdiscriminator,lease_customer,participant_role,lease_term_v,order_in_lease,'||
         'application,screening,relationship,take_ownership,percentage) '||
@@ -1041,7 +1042,7 @@ BEGIN
         'JOIN '||v_schema_name||'.lease e ON (d.holder = e.id) '||
         'JOIN '||v_schema_name||'.lease_customer c ON (a.customer = c.customer AND e.id = c.lease ) '||
         'ORDER BY a.id )';
-        
+
         EXECUTE 'INSERT INTO '||v_schema_name||'.lease_participant '||
         '(id,iddiscriminator,lease_customerdiscriminator,lease_customer,participant_role,lease_term_v,order_in_lease,'||
         'application,screening,relationship,tenantdiscriminator,tenant) '||
@@ -1103,19 +1104,19 @@ BEGIN
 
         /**
         ***     ===============================================================================================================
-        ***     
+        ***
         ***             Screening part - just to be sure that everything is migrated
-        ***     
+        ***
         ***     ===============================================================================================================
-        **/        
-                
+        **/
+
         -- equifax_approval
         SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'equifax_approval');
-        
+
         -- equifax_result
         SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'equifax_result');
-              
-        
+
+
         -- person_screening_income_info
 
         EXECUTE 'CREATE TABLE '||v_schema_name||'.person_screening_income_info ('||
@@ -1228,24 +1229,24 @@ BEGIN
 
         EXECUTE 'CREATE INDEX person_screening_v_holder_from_date_to_date_idx ON '||v_schema_name||'.person_screening_v USING btree(holder, from_date, to_date)';
 
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income '||
         'ADD CONSTRAINT person_screening_personal_income_owner_fk FOREIGN KEY(owner) REFERENCES '||v_schema_name||'.person_screening_v(id)';
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening OWNER TO vista';
-                  
+
         -- bank_account_info_approval
-        SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'bank_account_info_approval');    
-        
+        SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'bank_account_info_approval');
+
         -- background_check_policy
         EXECUTE 'ALTER TABLE '||v_schema_name||'.background_check_policy ADD COLUMN version BIGINT,'||
                                         'DROP COLUMN bankruptcy,'||
                                         'DROP COLUMN judgment,'||
                                         'DROP COLUMN collection,'||
                                         'DROP COLUMN charge_off';
-        
+
         -- background_check_policy_v
-        
+
         EXECUTE 'CREATE TABLE '||v_schema_name||'.background_check_policy_v ( '||
         '       id              BIGINT          NOT NULL,'||
         '       bankruptcy      VARCHAR(50),'||
@@ -1253,13 +1254,13 @@ BEGIN
         '       collection      VARCHAR(50),'||
         '       charge_off      VARCHAR(50),'||
         '       CONSTRAINT background_check_policy_v_pk PRIMARY KEY(id))';
-        
-        
+
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.background_check_policy_v OWNER TO vista';
-       
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.background_check_policy ADD CONSTRAINT background_check_policy_version_fk '||
-        'FOREIGN KEY(version) REFERENCES '||v_schema_name||'.background_check_policy_v(id)';      
-        
+        'FOREIGN KEY(version) REFERENCES '||v_schema_name||'.background_check_policy_v(id)';
+
         -- person_credit_check
         EXECUTE 'CREATE TABLE '||v_schema_name||'.person_credit_check ( '||
         '       id                      BIGINT          NOT NULL,'||
@@ -1281,16 +1282,16 @@ BEGIN
         '               REFERENCES '||v_schema_name||'.employee(id),'||
         '       CONSTRAINT person_credit_check_screening_fk FOREIGN KEY(screening) '||
         '               REFERENCES '||v_schema_name||'.person_screening(id))';
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_credit_check OWNER TO vista';
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ADD CONSTRAINT lease_participant_credit_check_fk '||
         'FOREIGN KEY(credit_check) REFERENCES '||v_schema_name||'.person_credit_check(id),'||
         'ADD CONSTRAINT lease_participant_screening_fk FOREIGN KEY(screening) REFERENCES '||v_schema_name||'.person_screening(id)';
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_asset ADD CONSTRAINT person_screening_personal_asset_owner_fk '||
         'FOREIGN KEY(owner) REFERENCES '||v_schema_name||'.person_screening_v(id)';
-        
+
 
         /** Cleanup **/
 
@@ -1299,7 +1300,7 @@ BEGIN
 
 
         -- Delete all extra tables
-        
+
         FOREACH v_table_name IN ARRAY
         ARRAY[  'guarantor',
                 'lease_v',
@@ -1312,7 +1313,7 @@ BEGIN
 
         END LOOP;
 
-        
+
 
         /**
         ***     ======================================================================================
@@ -1331,7 +1332,7 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_bill ALTER COLUMN billing_account SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle ALTER COLUMN building SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_type ALTER COLUMN billing_cycle_start_day SET NOT NULL' ;
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_type ALTER COLUMN payment_frequency SET NOT NULL' ; 
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_type ALTER COLUMN payment_frequency SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_debit_credit_link ALTER COLUMN credit_item SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_debit_credit_link ALTER COLUMN credit_itemdiscriminator SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_invoice_line_item ALTER COLUMN billing_account SET NOT NULL' ;
@@ -1412,56 +1413,56 @@ BEGIN
         ***
         ***     ============================================================================================================
         **/
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.application_document_file ADD CONSTRAINT application_document_file_ownerdiscriminator_d_ck '||
-                'CHECK (ownerdiscriminator IN (''IdentificationDocument'',''InsuranceCertificate'',''ProofOfEmploymentDocument'')) '; 
+                'CHECK (ownerdiscriminator IN (''IdentificationDocument'',''InsuranceCertificate'',''ProofOfEmploymentDocument'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.application_documentation_policy ADD CONSTRAINT application_documentation_policy_nodediscriminator_d_ck '||
-                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) '; 
+                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.arpolicy ADD CONSTRAINT arpolicy_nodediscriminator_d_ck '||
-                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) '; 
+                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.background_check_policy ADD CONSTRAINT background_check_policy_nodediscriminator_d_ck '||
                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_arrears_snapshot ADD CONSTRAINT billing_arrears_snapshot_iddiscriminator_ck '||
                 'CHECK (iddiscriminator IN (''BuildingArrearsSnapshot'', ''LeaseArrearsSnapshot'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billable_item ADD CONSTRAINT billable_item_extra_datadiscriminator_d_ck '||
-                'CHECK (extra_datadiscriminator IN (''Pet_ChargeItemExtraData'',''Vehicle_ChargeItemExtraData'')) '; 
+                'CHECK (extra_datadiscriminator IN (''Pet_ChargeItemExtraData'',''Vehicle_ChargeItemExtraData'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_debit_credit_link ADD CONSTRAINT billing_debit_credit_link_credit_itemdiscriminator_d_ck '||
-                'CHECK (credit_itemdiscriminator IN (''AccountCredit'',''CarryforwardCredit'',''DepositRefund'',''Payment'',''ProductCredit'')) '; 
+                'CHECK (credit_itemdiscriminator IN (''AccountCredit'',''CarryforwardCredit'',''DepositRefund'',''Payment'',''ProductCredit'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_debit_credit_link ADD CONSTRAINT billing_debit_credit_link_debit_itemdiscriminator_d_ck '||
-                'CHECK (debit_itemdiscriminator IN (''AccountCharge'',''CarryforwardCharge'',''Deposit'',''LatePaymentFee'',''NSF'',''PaymentBackOut'',''ProductCharge'',''Withdrawal'')) '; 
+                'CHECK (debit_itemdiscriminator IN (''AccountCharge'',''CarryforwardCharge'',''Deposit'',''LatePaymentFee'',''NSF'',''PaymentBackOut'',''ProductCharge'',''Withdrawal'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_invoice_line_item ADD CONSTRAINT billing_invoice_line_item_product_chargediscriminator_d_ck '||
                 'CHECK (product_chargediscriminator = ''ProductCharge'') ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_invoice_line_item ADD CONSTRAINT billing_invoice_line_item_iddiscriminator_ck '||
                 'CHECK (iddiscriminator IN (''AccountCharge'',''AccountCredit'',''CarryforwardCharge'',''CarryforwardCredit'',''Deposit'',''DepositRefund'',''LatePaymentFee'','||
-                '''NSF'', ''Payment'',''PaymentBackOut'',''ProductCharge'',''ProductCredit'',''Withdrawal'')) '; 
+                '''NSF'', ''Payment'',''PaymentBackOut'',''ProductCharge'',''ProductCredit'',''Withdrawal'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.concession_v ADD CONSTRAINT concession_v_product_item_typediscriminator_d_ck '||
-                'CHECK (product_item_typediscriminator IN (''feature'',''service'')) '; 
+                'CHECK (product_item_typediscriminator IN (''feature'',''service'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.dates_policy ADD CONSTRAINT dates_policy_nodediscriminator_d_ck '||
-                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) '; 
+                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.deposit_policy ADD CONSTRAINT deposit_policy_nodediscriminator_d_ck '||
-                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) '; 
+                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.deposit_policy_item ADD CONSTRAINT deposit_policy_item_product_typediscriminator_d_ck '||
-                'CHECK (product_typediscriminator IN (''feature'',''service'')) '; 
+                'CHECK (product_typediscriminator IN (''feature'',''service'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.email_templates_policy ADD CONSTRAINT email_templates_policy_nodediscriminator_d_ck '||
-                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) '; 
+                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.gadget_content ADD CONSTRAINT gadget_content_iddiscriminator_ck '||
                 'CHECK (iddiscriminator IN (''Custom'',''News'',''Promo'',''Testimonials'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.home_page_gadget ADD CONSTRAINT home_page_gadget_contentdiscriminator_d_ck '||
-                'CHECK (contentdiscriminator IN (''Custom'',''News'',''Promo'',''Testimonials'')) '; 
+                'CHECK (contentdiscriminator IN (''Custom'',''News'',''Promo'',''Testimonials'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.id_assignment_policy ADD CONSTRAINT id_assignment_policy_nodediscriminator_d_ck '||
-                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) '; 
+                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.identification_document ADD CONSTRAINT identification_document_ownerdiscriminator_d_ck '||
-                'CHECK (ownerdiscriminator IN (''ExistingInsurance'',''PersonScreening'',''PersonalIncome'')) '; 
+                'CHECK (ownerdiscriminator IN (''ExistingInsurance'',''PersonScreening'',''PersonalIncome'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.insurance_certificate ADD CONSTRAINT insurance_certificate_ownerdiscriminator_d_ck '||
-                'CHECK (ownerdiscriminator IN (''ExistingInsurance'',''PersonScreening'',''PersonalIncome'')) '; 
+                'CHECK (ownerdiscriminator IN (''ExistingInsurance'',''PersonScreening'',''PersonalIncome'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_adjustment_sub_line_item ADD CONSTRAINT invoice_adjustment_sub_line_item_line_itemdiscriminator_d_ck '||
-                'CHECK (line_itemdiscriminator = ''ProductCharge'') '; 
+                'CHECK (line_itemdiscriminator = ''ProductCharge'') ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_charge_sub_line_item ADD CONSTRAINT invoice_charge_sub_line_item_line_itemdiscriminator_d_ck '||
-                'CHECK (line_itemdiscriminator = ''ProductCharge'') '; 
+                'CHECK (line_itemdiscriminator = ''ProductCharge'') ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_concession_sub_line_item ADD CONSTRAINT invoice_concession_sub_line_item_line_itemdiscriminator_d_ck '||
-                'CHECK (line_itemdiscriminator = ''ProductCharge'') '; 
+                'CHECK (line_itemdiscriminator = ''ProductCharge'') ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_adjustment_policy ADD CONSTRAINT lease_adjustment_policy_nodediscriminator_d_ck '||
-                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) '; 
+                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_billing_policy ADD CONSTRAINT lease_billing_policy_nodediscriminator_d_ck '||
                 'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_customer ADD CONSTRAINT lease_customer_iddiscriminator_ck '||
@@ -1470,72 +1471,73 @@ BEGIN
                 'CHECK (lease_customerdiscriminator IN (''Guarantor'',''Tenant'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ADD CONSTRAINT lease_participant_iddiscriminator_ck '||
                 'CHECK (iddiscriminator IN (''Guarantor'',''Tenant'')) ';
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ADD CONSTRAINT lease_participant_tenantdiscriminator_d_ck CHECK (tenantdiscriminator = ''Tenant'') '; 
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ADD CONSTRAINT lease_participant_tenantdiscriminator_d_ck CHECK (tenantdiscriminator = ''Tenant'') ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_documentation ADD CONSTRAINT legal_documentation_nodediscriminator_d_ck '||
-               'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) '; 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request ADD CONSTRAINT maintenance_request_lease_customerdiscriminator_d_ck CHECK (lease_customerdiscriminator = ''Tenant'') '; 
+               'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request ADD CONSTRAINT maintenance_request_lease_customerdiscriminator_d_ck CHECK (lease_customerdiscriminator = ''Tenant'') ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.page_descriptor ADD CONSTRAINT page_descriptor_parentdiscriminator_d_ck '||
-                'CHECK (parentdiscriminator IN (''PageDescriptor'',''SiteDescriptor'')) '; 
+                'CHECK (parentdiscriminator IN (''PageDescriptor'',''SiteDescriptor'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_information ADD CONSTRAINT payment_information_payment_method_detailsdiscriminator_d_ck '||
-                'CHECK (payment_method_detailsdiscriminator IN (''CashInfo'',''CheckInfo'',''CreditCard'',''EcheckInfo'',''InteracInfo'')) '; 
+                'CHECK (payment_method_detailsdiscriminator IN (''CashInfo'',''CheckInfo'',''CreditCard'',''EcheckInfo'',''InteracInfo'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_method ADD CONSTRAINT payment_method_detailsdiscriminator_d_ck '||
                 'CHECK (detailsdiscriminator IN (''CashInfo'',''CheckInfo'',''CreditCard'',''EcheckInfo'',''InteracInfo'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_payment_details ADD CONSTRAINT payment_payment_details_iddiscriminator_ck '||
                 'CHECK (iddiscriminator IN (''CashInfo'',''CheckInfo'',''CreditCard'',''EcheckInfo'',''InteracInfo'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record ADD CONSTRAINT payment_record_lease_participantdiscriminator_d_ck '||
-                'CHECK (lease_participantdiscriminator IN (''Guarantor'',''Tenant'')) '; 
+                'CHECK (lease_participantdiscriminator IN (''Guarantor'',''Tenant'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_transactions_policy ADD CONSTRAINT payment_transactions_policy_nodediscriminator_d_ck '||
-                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) '; 
+                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_income_info ADD CONSTRAINT person_screening_income_info_iddiscriminator_ck '||
                 'CHECK (iddiscriminator IN (''employee'',''other'',''seasonalEmployee'',''selfEmployed'',''socialServices'',''student'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ADD CONSTRAINT person_screening_personal_income_detailsdiscriminator_d_ck '||
-                'CHECK (detailsdiscriminator IN (''employee'',''other'',''seasonalEmployee'',''selfEmployed'',''socialServices'',''student'')) '; 
+                'CHECK (detailsdiscriminator IN (''employee'',''other'',''seasonalEmployee'',''selfEmployed'',''socialServices'',''student'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.pet_constraints ADD CONSTRAINT pet_constraints_petdiscriminator_d_ck '||
-                'CHECK (petdiscriminator IN (''feature'',''service'')) '; 
+                'CHECK (petdiscriminator IN (''feature'',''service'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.pet_policy ADD CONSTRAINT pet_policy_nodediscriminator_d_ck '||
                 'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product ADD CONSTRAINT product_iddiscriminator_ck '||
                 'CHECK (iddiscriminator IN (''feature'',''service'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_item ADD CONSTRAINT product_item_elementdiscriminator_d_ck '||
-                'CHECK (elementdiscriminator IN (''LockerArea_BuildingElement'',''Parking_BuildingElement'',''Roof_BuildingElement'',''Unit_BuildingElement'')) '; 
+                'CHECK (elementdiscriminator IN (''LockerArea_BuildingElement'',''Parking_BuildingElement'',''Roof_BuildingElement'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_item ADD CONSTRAINT product_item_item_typediscriminator_d_ck '||
-                'CHECK (item_typediscriminator IN (''feature'',''service'')) '; 
+                'CHECK (item_typediscriminator IN (''feature'',''service'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_item ADD CONSTRAINT product_item_productdiscriminator_d_ck '||
-                'CHECK (productdiscriminator IN (''feature'',''service'')) '; 
+                'CHECK (productdiscriminator IN (''feature'',''service'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_item_type ADD CONSTRAINT product_item_type_iddiscriminator_ck '||
                 'CHECK (iddiscriminator IN (''feature'',''service'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_tax_policy ADD CONSTRAINT product_tax_policy_nodediscriminator_d_ck '||
-                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) '; 
+                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_tax_policy_item ADD CONSTRAINT product_tax_policy_item_product_item_typediscriminator_d_ck '||
-                'CHECK (product_item_typediscriminator IN (''feature'',''service'')) '; 
+                'CHECK (product_item_typediscriminator IN (''feature'',''service'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ADD CONSTRAINT product_v_iddiscriminator_ck '||
                 'CHECK (iddiscriminator IN (''feature'',''service'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ADD CONSTRAINT product_v_holderdiscriminator_d_ck '||
-                'CHECK (holderdiscriminator IN (''feature'',''service'')) '; 
+                'CHECK (holderdiscriminator IN (''feature'',''service'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.proof_of_employment_document ADD CONSTRAINT proof_of_employment_document_ownerdiscriminator_d_ck '||
-                'CHECK (ownerdiscriminator IN (''ExistingInsurance'',''PersonScreening'',''PersonalIncome'')) '; 
+                'CHECK (ownerdiscriminator IN (''ExistingInsurance'',''PersonScreening'',''PersonalIncome'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.restrictions_policy ADD CONSTRAINT restrictions_policy_nodediscriminator_d_ck '||
-                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) '; 
+                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.tax ADD CONSTRAINT tax_policy_nodediscriminator_d_ck '||
                 'CHECK (policy_nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge ADD CONSTRAINT tenant_charge_tenantdiscriminator_d_ck CHECK (tenantdiscriminator = ''Tenant'') '; 
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge ADD CONSTRAINT tenant_charge_tenantdiscriminator_d_ck CHECK (tenantdiscriminator = ''Tenant'') ';
 
         -- Final touch - update admin_pmc table
-        
+
         UPDATE  _admin_.admin_pmc
-        SET     schema_version = '1.0.5-SNAPSHOT'
+        SET     schema_version = '1.0.5',
+                schema_data_upgrade_steps = NULL
         WHERE   namespace = v_schema_name;
 
         EXCEPTION WHEN OTHERS THEN
                 RAISE EXCEPTION 'Failed executing statement, code: %, error message: %',SQLSTATE,SQLERRM ;
-                
+
 END;
 $$
 LANGUAGE plpgsql VOLATILE;
 
 SELECT  _dba_.migrate_to_105(namespace) AS migration
 FROM    _admin_.admin_pmc
-WHERE   status IN ('Active','Suspended');
+WHERE   status != 'Created' AND schema_version IS NULL;
 
 DROP FUNCTION _dba_.migrate_to_105(VARCHAR(64));
 

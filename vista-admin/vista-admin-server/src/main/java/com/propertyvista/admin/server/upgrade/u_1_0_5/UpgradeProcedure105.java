@@ -14,18 +14,28 @@
 package com.propertyvista.admin.server.upgrade.u_1_0_5;
 
 import com.propertyvista.admin.server.upgrade.UpgradeProcedure;
+import com.propertyvista.portal.server.preloader.DashboardPreloader;
 
 public class UpgradeProcedure105 implements UpgradeProcedure {
 
     @Override
     public int getUpgradeStepsCount() {
-        // TODO Auto-generated method stub
-        return 0;
+        return 1;
     }
 
     @Override
     public void runUpgradeStep(int upgradeStep) {
-        // TODO Auto-generated method stub
+        switch (upgradeStep) {
+        case 1:
+            runDashboardPreload();
+            break;
+        default:
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private void runDashboardPreload() {
+        new DashboardPreloader().create();
     }
 
 }

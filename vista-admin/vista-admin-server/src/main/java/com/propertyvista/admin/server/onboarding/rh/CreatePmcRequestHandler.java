@@ -19,7 +19,6 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.server.ApplicationVersion;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -77,7 +76,6 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
         pmc.namespace().setValue(dnsName.replace('-', '_'));
         pmc.name().setValue(request.name().getValue());
         pmc.onboardingAccountId().setValue(request.onboardingAccountId().getValue());
-        pmc.schemaVersion().setValue(ApplicationVersion.getProductVersion());
 
         pmc.features().occupancyModel().setValue(Boolean.TRUE);
         pmc.features().productCatalog().setValue(Boolean.TRUE);

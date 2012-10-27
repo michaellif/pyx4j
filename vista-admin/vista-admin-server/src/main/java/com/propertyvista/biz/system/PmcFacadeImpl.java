@@ -34,6 +34,7 @@ import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.pmc.ReservedPmcNames;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
+import com.propertyvista.admin.server.upgrade.VistaUpgrade;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.portal.server.preloader.PmcCreator;
@@ -44,6 +45,7 @@ public class PmcFacadeImpl implements PmcFacade {
     public void create(Pmc pmc) {
         pmc.status().setValue(PmcStatus.Created);
         pmc.schemaVersion().setValue(ApplicationVersion.getProductVersion());
+        pmc.schemaDataUpgradeSteps().setValue(VistaUpgrade.getPreloadSchemaDataUpgradeSteps());
         Persistence.service().persist(pmc);
     }
 

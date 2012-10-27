@@ -96,7 +96,14 @@ public interface Pmc extends IEntity {
 
     IPrimitive<Date> termination();
 
+    /**
+     * Used by DB upgrade process to ensure that schema is upgraded only once.
+     * String "1.2.3" or "1.2.3.4"
+     */
     IPrimitive<String> schemaVersion();
 
+    /**
+     * Executed UpgradeSteps for each major version.
+     */
     IPrimitive<Integer> schemaDataUpgradeSteps();
 }

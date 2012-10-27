@@ -13,14 +13,19 @@
  */
 package com.propertyvista.admin.server.upgrade;
 
-/**
- * Executed by DB integrity "DB integrity check".
- * Each step is run in its own transaction only once.
- */
-public interface UpgradeProcedure {
+import com.pyx4j.config.server.ApplicationVersion;
 
-    public int getUpgradeStepsCount();
+import com.propertyvista.admin.server.upgrade.u_1_0_5.UpgradeProcedure105;
 
-    public void runUpgradeStep(int upgradeStep);
+class VistaUpgradeVersionSelector {
+
+    static UpgradeProcedure getUpgradeProcedure(String schemaVersion) {
+        String majorVersion = ApplicationVersion.extractVersionMajor(schemaVersion);
+        if ("1.0.5".equals(majorVersion)) {
+            return new UpgradeProcedure105();
+        } else {
+            return null;
+        }
+    }
 
 }
