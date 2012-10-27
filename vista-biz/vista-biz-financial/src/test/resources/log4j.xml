@@ -59,6 +59,14 @@
 		<level value="info" />
 	</logger>
 
+    <logger name="com.propertyvista.server.jobs">
+        <level value="error" />
+    </logger>
+    
+    <logger name="com.mchange">
+        <level value="error" />
+    </logger>
+
 	<root>
 		<level value="info" />
 		<appender-ref ref="ConsoleAppender-info" />

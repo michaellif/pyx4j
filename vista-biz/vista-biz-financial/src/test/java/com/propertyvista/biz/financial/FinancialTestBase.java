@@ -71,8 +71,10 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.TransactionHistoryDTO;
+import com.propertyvista.server.jobs.BillingProcess;
 import com.propertyvista.server.jobs.DepositInterestAdjustmentProcess;
 import com.propertyvista.server.jobs.DepositRefundProcess;
+import com.propertyvista.server.jobs.FutureBillingCycleInitializationProcess;
 import com.propertyvista.server.jobs.LeaseActivationProcess;
 import com.propertyvista.server.jobs.LeaseCompletionProcess;
 import com.propertyvista.server.jobs.LeaseRenewalProcess;
@@ -758,6 +760,11 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
             }
         }
         SysDateManager.setSysDate(setDate);
+    }
+
+    protected void setBillingBatchProcess() {
+        schedulePmcProcess(new BillingProcess(), new Schedule());
+        schedulePmcProcess(new FutureBillingCycleInitializationProcess(), new Schedule());
     }
 
     protected void setDepositBatchProcess() {

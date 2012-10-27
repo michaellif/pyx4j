@@ -85,23 +85,38 @@ public class BillingManager {
     }
 
     /**
+     * Runs all Billing Cycles which executionTargetDate is the same as date.
      * 
      * @param date
      *            - executionTargetDate
      * @param dynamicStatisticsRecord
      */
     static void runBilling(LogicalDate date, StatisticsRecord dynamicStatisticsRecord) {
-        for (BillingType billingType : Persistence.service().query(EntityQueryCriteria.create(BillingType.class))) {
+        EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().executionTargetDate(), date));
+        ICursorIterator<BillingCycle> billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        while (billingCycleIterator.hasNext()) {
+            final BillingCycle cycle = billingCycleIterator.next();
+            if (cycle.triggerDate().isNull()) {
+                cycle.triggerDate().setValue(date);
 
-            EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().billingType(), billingType));
-            criteria.add(PropertyCriterion.eq(criteria.proto().executionTargetDate(), date));
+                TaskRunner.runAutonomousTransation(new Callable<Void>() {
+                    @Override
+                    public Void call() {
+                        Persistence.service().persist(cycle);
+                        Persistence.service().commit();
+                        return null;
+                    }
+                });
 
-            ICursorIterator<BillingCycle> billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
-            while (billingCycleIterator.hasNext()) {
-                BillingCycle billingCycle = billingCycleIterator.next();
-                runBilling(billingCycle, dynamicStatisticsRecord);
+                //TODO remove after test - vlads
+                BillingCycle billingCycle2 = Persistence.service().retrieve(BillingCycle.class, cycle.getPrimaryKey());
+                if (billingCycle2.triggerDate().isNull()) {
+                    throw new Error("Read commited not working");
+                }
             }
+
+            runBilling(cycle, dynamicStatisticsRecord);
         }
     }
 
@@ -119,6 +134,7 @@ public class BillingManager {
                     validateBillingRunPreconditions(billingCycle, lease, false);
                     return true;
                 } catch (BillingException e) {
+                    log.error(i18n.tr("Billing Run Preconditions failed"), e);
                     return false;
                 }
             }
@@ -129,6 +145,7 @@ public class BillingManager {
     private static void validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease, boolean preview) {
 
         if (!getNextBillingCycle(lease).equals(billingCycle)) {
+            getNextBillingCycle(lease);
             throw new BillingException(i18n.tr("Bill can't be created for a given billing cycle"));
         }
 

@@ -26,12 +26,10 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
-import com.propertyvista.biz.financial.SysDateManager;
-import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 
 @Category(FunctionalTests.class)
-public class BillingLeaseOnlyScenarioTest extends FinancialTestBase {
+public class BillExecutionTest extends FinancialTestBase {
 
     @Override
     protected void setUp() throws Exception {
@@ -41,14 +39,19 @@ public class BillingLeaseOnlyScenarioTest extends FinancialTestBase {
 
     public void testScenario() {
 
-        SysDateManager.setSysDate("15-Feb-2011");
+        setLeaseBatchProcess();
+        setBillingBatchProcess();
+
+        setDate("15-Feb-2011");
 
         createLease("1-Mar-2011", "31-Aug-2011");
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("17-Feb-2011");
-        Bill bill = approveApplication(true);
+        advanceDate("17-Feb-2011");
+        approveApplication(true);
+
+        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
 
         // @formatter:off
         new BillTester(bill).
@@ -57,24 +60,17 @@ public class BillingLeaseOnlyScenarioTest extends FinancialTestBase {
         billType(Bill.BillType.First).
         billingPeriodStartDate("1-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
-        numOfProductCharges(1).
-        paymentReceivedAmount("0.00").
-        serviceCharge("930.30").
-        recurringFeatureCharges("0.00").
-        oneTimeFeatureCharges("0.00").
-        depositAmount("930.30").
-        taxes("111.64").
-        totalDueAmount("1972.24");
+        numOfProductCharges(1);
         // @formatter:on
 
         //==================== RUN 2 ======================//
 
-        SysDateManager.setSysDate("18-Mar-2011");
-        receiveAndPostPayment("18-Mar-2011", "1972.24");
+        advanceDate("02-Mar-2011");
+        receiveAndPostPayment("02-Mar-2011", "1972.24");
 
-        activateLease();
-
-        bill = runBilling(true, true);
+        advanceDate("18-Mar-2011");
+        bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
+        confirmBill(bill, true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -83,23 +79,18 @@ public class BillingLeaseOnlyScenarioTest extends FinancialTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
-        numOfProductCharges(1).
-        paymentReceivedAmount("-1972.24").
-        serviceCharge("930.30").
-        recurringFeatureCharges("0.00").
-        oneTimeFeatureCharges("0.00").
-        taxes("111.64").
-        totalDueAmount("1091.94");
+        numOfProductCharges(1);
         // @formatter:on
 
-        SysDateManager.setSysDate("25-Mar-2011");
+        advanceDate("25-Mar-2011");
         receiveAndPostPayment("25-Mar-2011", "1041.94");
 
         //==================== RUN 3 ======================//
 
-        SysDateManager.setSysDate("18-Apr-2011");
+        advanceDate("18-Apr-2011");
 
-        bill = runBilling(true, true);
+        bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
+        confirmBill(bill, true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -116,11 +107,6 @@ public class BillingLeaseOnlyScenarioTest extends FinancialTestBase {
         taxes("111.64").
         totalDueAmount("1141.94");
         // @formatter:on
-
-        SysDateManager.setSysDate("25-Apr-2011");
-        receiveAndPostPayment("25-Apr-2011", "1041.94");
-
-        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
 

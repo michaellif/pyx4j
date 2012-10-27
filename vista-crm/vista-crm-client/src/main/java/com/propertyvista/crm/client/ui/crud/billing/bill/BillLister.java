@@ -46,11 +46,11 @@ public class BillLister extends ListerBase<BillDataDTO> {
             
             new MemberColumnDescriptor.Builder(proto().bill().currentAmount()).build(),
             new MemberColumnDescriptor.Builder(proto().bill().taxes()).build(),
+            new MemberColumnDescriptor.Builder(proto().bill().balanceForwardAmount()).build(),
             new MemberColumnDescriptor.Builder(proto().bill().totalDueAmount()).build(),
             
             new MemberColumnDescriptor.Builder(proto().bill().billStatus()).build(),
             
-            new MemberColumnDescriptor.Builder(proto().bill().balanceForwardAmount(),false).build(),
             new MemberColumnDescriptor.Builder(proto().bill().paymentReceivedAmount(),false).build(),
             new MemberColumnDescriptor.Builder(proto().bill().depositRefundAmount(),false).build(),
             new MemberColumnDescriptor.Builder(proto().bill().immediateAccountAdjustments(),false).build(),
