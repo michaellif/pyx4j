@@ -1,6 +1,6 @@
 package com.pyx4j.svg.common;
 
-import java.text.DecimalFormat;
+//import com.google.gwt.i18n.client.NumberFormat;;
 
 public class Tick {
 
@@ -8,7 +8,7 @@ public class Tick {
         MAJOR, MINOR, MICRO
     }
 
-    private static final DecimalFormat format = new DecimalFormat("#.###");
+//    private static final NumberFormat format = new NumberFormat("#.###");
 
     private final double value;
 
@@ -29,9 +29,9 @@ public class Tick {
         return value;
     }
 
-    public String getLabel() {
-         return format.format(value);
-    }
+//    public String getLabel() {
+//         return format.format(value);
+//    }
 
     public Rank getRank() {
         return rank;
