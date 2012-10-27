@@ -48,6 +48,8 @@ public class ApplicationVersion {
 
     private static final String BUILD_TIME = "build.time";
 
+    private static final String PATCH_NUMBER = "patch.number";
+
     private static final String BUILD_TIME_FORMAT = "yyyy-MM-dd HH:mm";
 
     private static final String BUILD_TIMESTAMP = "build.timestamp";
@@ -55,6 +57,8 @@ public class ApplicationVersion {
     private static final String BUILD_TIMESTAMP_FORMAT = "yyyyMMddHHmmss";
 
     private static String productVersion = null;
+
+    private static String patchNumber;
 
     private static String buildLabel;
 
@@ -104,6 +108,11 @@ public class ApplicationVersion {
             buildLabel = "n/a";
         }
         productVersion = properties.getProperty(POM_VERSION, buildLabel);
+        if (productVersion.endsWith("-SNAPSHOT")) {
+            productVersion = productVersion.substring(0, productVersion.indexOf("-SNAPSHOT"));
+        }
+
+        patchNumber = properties.getProperty(PATCH_NUMBER);
         scmRevision = properties.getProperty("scm.revision", "");
         try {
             String bildTimeString = properties.getProperty(BUILD_TIME);
@@ -179,7 +188,20 @@ public class ApplicationVersion {
 
     public static String getProductVersion() {
         initVersionInfo();
+        if (patchNumber != null) {
+            return productVersion + "." + patchNumber;
+        } else {
+            return productVersion;
+        }
+    }
+
+    public static String getProductVersionMajor() {
+        initVersionInfo();
         return productVersion;
+    }
+
+    public static String getPatchNumber() {
+        return patchNumber;
     }
 
     public static String getBuildLabel() {
