@@ -51,8 +51,6 @@ public class LineChart extends GridBasedChart {
     protected final void drawChart() {
         SvgFactory factory = configurator.getFactory();
         List<Double> metricPoints = getMetricPoints();
-        double valueIncrement = getValueIncrement();
-        double valueSpacing = getValueSpacing();
         Group container = getContainer();
         int numOfSeries = getNumOfSeries();
         int ystart = getCanvas().getY();
@@ -81,8 +79,8 @@ public class LineChart extends GridBasedChart {
                 }
                 //draw series data
                 double x = Utils.round(metricPoints.get(metricIdx), 2);
-                double y = Utils.round((ystart - value / valueIncrement * valueSpacing), 2);
-
+                double y = Utils.round((ystart - getTickProducer().getValuePosition(value)), 2);
+ 
                 Circle dot = factory.createCircle((int) x, (int) y, DOT_RADIUS);
                 dot.setFill(color);
                 dot.setStroke(color);

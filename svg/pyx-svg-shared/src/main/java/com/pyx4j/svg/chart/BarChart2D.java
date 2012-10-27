@@ -29,6 +29,7 @@ import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.Rect;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.Text;
+import com.pyx4j.svg.basic.TickProducer;
 import com.pyx4j.svg.chart.DataSource.Metric;
 import com.pyx4j.svg.util.Utils;
 
@@ -49,8 +50,6 @@ public class BarChart2D extends GridBasedChart {
 
         SvgFactory factory = configurator.getFactory();
         List<Double> metricPoints = getMetricPoints();
-        double valueIncrement = getValueIncrement();
-        double valueSpacing = getValueSpacing();
         Group container = getContainer();
         int numOfSeries = getNumOfSeries();
         int ystart = getCanvas().getY();
@@ -82,8 +81,9 @@ public class BarChart2D extends GridBasedChart {
                 }
                 //draw series data
                 double x = Utils.round(metricPoints.get(metricIdx) - (numOfSeries - idx - hShift) * barWidth, 2);
-                double height = Utils.round(value / valueIncrement * valueSpacing, 2);
-                double y = ystart - height;
+
+                double height = getTickProducer().getValuePosition(value);
+                double y = Utils.round((ystart - height), 2);
                 //TODO does not work as inline html element 
 /*
  * Animator anim = new Animator(Type.set);

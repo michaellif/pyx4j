@@ -33,8 +33,11 @@ import com.pyx4j.svg.basic.Rect;
 import com.pyx4j.svg.basic.SvgElement;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.Text;
+import com.pyx4j.svg.basic.TickProducer;
 import com.pyx4j.svg.chart.DataSource.Metric;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
+import com.pyx4j.svg.common.Tick;
+import com.pyx4j.svg.common.Tick.Rank;
 
 public abstract class GridBasedChart implements IsSvgElement {
     /**
@@ -51,7 +54,11 @@ public abstract class GridBasedChart implements IsSvgElement {
 
     protected static final String GRID_COLOR = "lightgray";
 
-    private static final int TICK_LENGTH = 5;
+    private static final int MAJOR_TICK_LENGTH = 5;
+    
+    private static final int MINOR_TICK_LENGTH = 3;
+    
+    private static final int MICRO_TICK_LENGTH = 1;
 
     private static int NUM_OF_VALUE_TICKS = 10;
 
@@ -80,6 +87,8 @@ public abstract class GridBasedChart implements IsSvgElement {
     private MetricPrefix valuePostfix;
 
     private final GridBasedChartConfigurator configurator;
+    
+    private final BasicTickProducer tickProducer;
 
     private double metricSpacing;
 
@@ -170,6 +179,7 @@ public abstract class GridBasedChart implements IsSvgElement {
         factory = configurator.getFactory();
         datasource = configurator.getDatasourse();
         container = factory.createGroup();
+        tickProducer = new BasicTickProducer();
         drawBasics();
     }
 
@@ -212,6 +222,10 @@ public abstract class GridBasedChart implements IsSvgElement {
         return numOfSeries;
     }
 
+    protected BasicTickProducer getTickProducer() {
+        return tickProducer;
+    }
+    
     public int getNumOfMetrics() {
         return numOfMetrics;
     }
@@ -219,13 +233,12 @@ public abstract class GridBasedChart implements IsSvgElement {
     public double getMaxValue() {
         return maxValue;
     }
-
+    
     private void drawBasics() {
         numOfMetrics = datasource.getDataSet().size();
         metricPoints = new ArrayList<Double>(20);
         maxValue = calculateMaxValue();
-        List<Double> valuePoints = new ArrayList<Double>(NUM_OF_VALUE_TICKS + 1);
-
+        
         //adjust width for value labels
         if (maxValue % MetricPrefix.T.getFactor() != maxValue)
             valuePostfix = MetricPrefix.T;
@@ -273,6 +286,8 @@ public abstract class GridBasedChart implements IsSvgElement {
             container.add(legend);
         }
 
+        tickProducer.updateTicks(0, maxValue, ystart - yend);
+        
         //adjust the canvas dimension after the calculations above are done 
         canvas = new Area(xstart, ystart, xend - xstart, ystart - yend);
         metricSpacing = canvas.getWidth() / (configurator.isZeroBased() ? numOfMetrics - 1 : numOfMetrics + 1);
@@ -282,14 +297,10 @@ public abstract class GridBasedChart implements IsSvgElement {
         for (int i = 1; i <= times; i++)
             metricPoints.add(xstart + metricSpacing * i);
 
-        valueSpacing = canvas.getHeight() / NUM_OF_VALUE_TICKS;
-        for (int i = 1; i <= NUM_OF_VALUE_TICKS; i++) {
-            valuePoints.add(ystart - valueSpacing * i);
-        }
         //draw metrics axis
         String metricA = "M" + xstart + "," + ystart + "L" + xend + "," + ystart;
         //draw metric ticks 
-        int tickEnd = ystart + TICK_LENGTH;
+        int tickEnd = ystart + MAJOR_TICK_LENGTH;
         boolean firstPass = !configurator.isZeroBased();
         Iterator<Metric> metriciterator = datasource.getDataSet().keySet().iterator();
         for (Double xx : metricPoints) {
@@ -313,35 +324,34 @@ public abstract class GridBasedChart implements IsSvgElement {
             }
         }
 
-        //
-        String valueA = "M" + xstart + "," + ystart + "L" + xstart + "," + yend;
-        //draw value ticks
-        tickEnd = xstart - TICK_LENGTH;
-        valueIncrement = maxValue / NUM_OF_VALUE_TICKS;
-        double value = valueIncrement;
-
         int lblxstart = xstart - VALUE_LABEL_PADDING;
-        Text lblfirst = factory.createText("0", lblxstart, ystart);
-        lblfirst.setAttribute("font-size", String.valueOf(DEFAULT_FONT_SIZE));
-        lblfirst.setAttribute("text-anchor", "end");
-        container.add(lblfirst);
-        for (Double yy : valuePoints) {
-            valueA += "M" + xstart + "," + yy + "L" + tickEnd + "," + yy;
-            // GWT doesn't implement String.format(), so we have to use our own function 
-            String valueRepr = formatDouble(value / valuePostfix.getFactor(), configurator.getLabelPrecision()) + valuePostfix.getName();
-            Text lbl = factory.createText(valueRepr, lblxstart, yy.intValue());
-            lbl.setAttribute("font-size", String.valueOf(DEFAULT_FONT_SIZE));
-            lbl.setAttribute("text-anchor", "end");
-            container.add(lbl);
-            value += valueIncrement;
-        }
-        //draw value grid lines
+        
         String valueGL = "";
-        if (configurator.getGridType() == GridType.Both || configurator.getGridType() == GridType.Value) {
-            for (Double yy : valuePoints)
-                valueGL += "M" + xstart + "," + yy + "L" + xend + "," + yy;
+        String valueA = "M" + xstart + "," + ystart + "L" + xstart + "," + yend;
+        List<Tick> ticks = tickProducer.getTicks();
+        for (Tick tick : ticks) {
+            if (Rank.MAJOR.equals(tick.getRank())) {
+                int scaledPosition = ystart - tick.getScaledPosition();
+                valueA += "M" + xstart + "," + scaledPosition + "L" + (xstart - MAJOR_TICK_LENGTH) + "," + scaledPosition;
+                String valueRepr = formatDouble(tick.getValue() / valuePostfix.getFactor(), configurator.getLabelPrecision()) + valuePostfix.getName();
+                Text lbl = factory.createText(valueRepr, lblxstart, scaledPosition);
+                lbl.setAttribute("font-size", String.valueOf(DEFAULT_FONT_SIZE));
+                lbl.setAttribute("text-anchor", "end");
+                container.add(lbl);
+                if (configurator.getGridType() == GridType.Both || configurator.getGridType() == GridType.Value) {
+                    valueGL += "M" + xstart + "," + scaledPosition + "L" + xend + "," + scaledPosition;               	
+                }
+            }
+            else if (Rank.MINOR.equals(tick.getRank())) {
+                int scaledPosition = ystart - tick.getScaledPosition();
+                valueA += "M" + xstart + "," + scaledPosition + "L" + (xstart - MINOR_TICK_LENGTH) + "," + scaledPosition;
+            }
+            else if (Rank.MICRO.equals(tick.getRank())) {
+                int scaledPosition = ystart - tick.getScaledPosition();
+                valueA += "M" + xstart + "," + scaledPosition + "L" + (xstart - MICRO_TICK_LENGTH) + "," + scaledPosition;
+            }
         }
-
+        
         if (metricGL.length() > 0) {
             Path metricGLP = factory.createPath(metricGL);
             metricGLP.setStroke(GRID_COLOR);
