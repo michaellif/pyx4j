@@ -195,6 +195,22 @@ public class ApplicationVersion {
         }
     }
 
+    /**
+     * Extract major part of version
+     * 
+     * @param version
+     *            String "1.2.3" or "1.2.3.4"
+     * @return 1.2.3
+     */
+    public static String extractVersionMajor(String version) {
+        String[] vparts = version.split("\\.");
+        if (vparts.length > 3) {
+            return vparts[0] + "." + vparts[1] + "." + vparts[2];
+        } else {
+            return version;
+        }
+    }
+
     public static String getProductVersionMajor() {
         initVersionInfo();
         return productVersion;
