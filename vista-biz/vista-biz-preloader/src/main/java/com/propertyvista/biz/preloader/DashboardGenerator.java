@@ -11,7 +11,10 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.generator;
+package com.propertyvista.biz.preloader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
@@ -21,8 +24,8 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.gadgets.type.ApplicationsGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.CollectionsGadgetMetadata;
@@ -39,7 +42,11 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
 
 @SuppressWarnings("unchecked")
-public class DashboardGenerator extends Dashboards {
+public class DashboardGenerator {
+
+    public final List<DashboardMetadata> systemDashboards = new ArrayList<DashboardMetadata>();
+
+    public final List<DashboardMetadata> buildingDashboards = new ArrayList<DashboardMetadata>();
 
     private final static I18n i18n = I18n.get(DashboardGenerator.class);
 

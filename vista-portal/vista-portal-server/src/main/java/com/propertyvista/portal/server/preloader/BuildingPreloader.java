@@ -33,7 +33,6 @@ import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.company.Portfolio;
-import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -60,7 +59,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.generator.BuildingsGenerator;
-import com.propertyvista.generator.Dashboards;
 import com.propertyvista.generator.MediaGenerator;
 import com.propertyvista.generator.PreloadData;
 import com.propertyvista.generator.ProductCatalogGenerator;
@@ -106,23 +104,11 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
         ProductCatalogGenerator productCatalogGenerator = new ProductCatalogGenerator(productItemTypes);
 
-        Dashboards availableDashboards = new Dashboards();
-        {
-            EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.building));
-            availableDashboards.buildingDashboards.addAll(Persistence.service().query(criteria));
-        }
-
         // create some complexes:
         List<Complex> complexes = new Vector<Complex>();
         complexes.add(generator.createComplex("Complex #1"));
         complexes.add(generator.createComplex("Complex #2"));
         complexes.add(generator.createComplex("Complex #3"));
-
-// TODO : let's leave dashboard empty - in runtime the first Building dashboard will be used by default!
-//        for (Complex complex : complexes) {
-//            complex.dashboard().set(DataGenerator.random(availableDashboards.buildingDashboards));
-//        }
 
         Persistence.service().persist(complexes);
         List<Complex> complexesWithBuildings = new Vector<Complex>();
