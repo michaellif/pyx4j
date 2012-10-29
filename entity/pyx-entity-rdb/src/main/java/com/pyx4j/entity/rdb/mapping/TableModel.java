@@ -644,6 +644,9 @@ public class TableModel {
                 b.append(member.getMemberMeta().getCaption());
             }
         }
+        if (b.length() == 0) {
+            b.append(i18n.tr("Record"));
+        }
         return b.toString();
     }
 
