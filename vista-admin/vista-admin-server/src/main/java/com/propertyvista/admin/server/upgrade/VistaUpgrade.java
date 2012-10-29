@@ -18,6 +18,7 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ApplicationVersion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.Lifecycle;
@@ -31,13 +32,22 @@ public class VistaUpgrade {
 
     private final static Logger log = LoggerFactory.getLogger(VistaUpgrade.class);
 
-    public static void upgradeDate(Pmc pmc) {
+    public static void upgradePmcData(Pmc pmc) {
         UpgradeProcedure procedure = VistaUpgradeVersionSelector.getUpgradeProcedure(pmc.schemaVersion().getValue());
         if (procedure != null) {
             int stepsTotal = procedure.getUpgradeStepsCount();
             int startFrom = pmc.schemaDataUpgradeSteps().getValue(0) + 1;
             for (int step = startFrom; step <= stepsTotal; step++) {
-                runOneStepInTransaction(pmc, procedure, step);
+                try {
+                    runOneStepInTransaction(pmc, procedure, step);
+                } catch (Throwable e) {
+                    log.error("upgrade error", e);
+                    if (e instanceof UserRuntimeException) {
+                        throw (UserRuntimeException) e;
+                    } else {
+                        throw new UserRuntimeException(e.getMessage());
+                    }
+                }
             }
         }
     }
