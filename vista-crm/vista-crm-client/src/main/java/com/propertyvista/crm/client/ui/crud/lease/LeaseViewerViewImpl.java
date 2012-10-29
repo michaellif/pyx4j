@@ -300,7 +300,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }.show();
             }
         });
-        renewMenu.addItem(offerAction);
+        if (VistaTODO.VISTA_1789_RenewLease) {
+            renewMenu.addItem(offerAction);
+        }
 
         viewOfferedTerms = new MenuItem(i18n.tr("View Offers..."), new Command() {
             @Override
@@ -367,7 +369,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(closeAction, status == Status.Completed);
         setActionVisible(cancelAction, !status.isFormer());
 
-        renewButton.setVisible(status == Status.Active && completion == null && value.nextTerm().isNull());
+        if (VistaTODO.VISTA_1789_RenewLease) {
+            renewButton.setVisible(status == Status.Active && completion == null && value.nextTerm().isNull());
+        }
     }
 
     @Override
