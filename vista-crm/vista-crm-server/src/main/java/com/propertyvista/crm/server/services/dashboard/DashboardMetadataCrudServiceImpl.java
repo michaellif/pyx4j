@@ -16,10 +16,12 @@ package com.propertyvista.crm.server.services.dashboard;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.SecurityViolationException;
 
+import com.propertyvista.biz.dashboard.GadgetStorageFacade;
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -50,8 +52,10 @@ public class DashboardMetadataCrudServiceImpl extends AbstractCrudServiceImpl<Da
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         // delete all child gadgets
         DashboardMetadata dm = Persistence.secureRetrieve(DashboardMetadata.class, entityId);
+
+        GadgetStorageFacade gadgetStorageFacadeFacade = ServerSideFactory.create(GadgetStorageFacade.class);
         for (String gadgetId : new DashboardColumnLayoutFormat(dm.encodedLayout().getValue()).gadgetIds()) {
-            Util.gadgetStorage().delete(gadgetId);
+            gadgetStorageFacadeFacade.delete(gadgetId);
         }
         super.delete(callback, entityId);
     }

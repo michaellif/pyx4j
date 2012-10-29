@@ -19,12 +19,14 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.SecurityViolationException;
 
+import com.propertyvista.biz.dashboard.GadgetStorageFacade;
 import com.propertyvista.crm.rpc.dto.dashboard.GadgetDescriptorDTO;
 import com.propertyvista.crm.rpc.services.dashboard.GadgetMetadataService;
 import com.propertyvista.crm.server.util.CrmAppContext;
@@ -35,7 +37,6 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
 
-// TODO check that translation works
 public class GadgetMetadataServiceImpl implements GadgetMetadataService {
 
     private static final I18n i18n = I18n.get(GadgetMetadataServiceImpl.class);
@@ -45,7 +46,8 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
         GadgetMetadata gadgetMetadata = GadgetMetadataRepository.get().createGadgetMetadata(proto);
         gadgetMetadata.ownerUser().setPrimaryKey(CrmAppContext.getCurrentUserPrimaryKey());
 
-        Util.gadgetStorage().save(gadgetMetadata.gadgetId().getValue(), gadgetMetadata, false);
+        ServerSideFactory.create(GadgetStorageFacade.class).save(gadgetMetadata, false);
+
         Persistence.service().commit();
 
         callback.onSuccess(gadgetMetadata);
@@ -64,7 +66,8 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
             throw new SecurityViolationException("Access Denied");
         }
 
-        Util.gadgetStorage().save(gadgetMetadata.gadgetId().getValue(), gadgetMetadata, true);
+        ServerSideFactory.create(GadgetStorageFacade.class).save(gadgetMetadata, true);
+
         Persistence.service().commit();
 
         callback.onSuccess(gadgetMetadata);
