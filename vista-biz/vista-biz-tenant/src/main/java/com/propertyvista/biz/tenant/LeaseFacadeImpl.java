@@ -54,6 +54,7 @@ import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.Bill.BillType;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -418,6 +419,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
         if (bill.billStatus().getValue() != Bill.BillStatus.Failed) {
             ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
+
+            // for zero cycle bill also create the next bill if we are past the triggerDate of the cycle
+            if (BillType.ZeroCycle.equals(bill.billType().getValue()) && !bill.billingCycle().triggerDate().isNull()) {
+                ServerSideFactory.create(BillingFacade.class).runBilling(lease);
+            }
         } else {
             throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to failed first time bill"));
         }
