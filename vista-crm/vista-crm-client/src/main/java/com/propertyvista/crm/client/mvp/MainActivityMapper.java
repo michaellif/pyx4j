@@ -926,7 +926,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new BackgroundCheckPolicyViewerActivity(crudPlace);
                             break;
                         }
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.LeaseBilling) {
+                    } else if (place instanceof CrmSiteMap.Settings.Policies.Billing) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new LeaseBillingPolicyListerActivity(crudPlace);

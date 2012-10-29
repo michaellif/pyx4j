@@ -21,7 +21,7 @@ import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 public class LeaseBillingPolicyListerViewImpl extends CrmListerViewImplBase<LeaseBillingPolicyDTO> implements LeaseBillingPolicyListerView {
 
     public LeaseBillingPolicyListerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.LeaseBilling.class);
+        super(CrmSiteMap.Settings.Policies.Billing.class);
         setLister(new LateFeePolicyLister());
     }
 

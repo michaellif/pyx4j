@@ -157,7 +157,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(EmailTemplatesPolicy.class, CrmSiteMap.Settings.Policies.EmailTemplates.class, defaultImage);
         AppPlaceEntityMapper.register(IdAssignmentPolicy.class, CrmSiteMap.Settings.Policies.IdAssignment.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseAdjustmentPolicy.class, CrmSiteMap.Settings.Policies.LeaseAdjustmentPolicy.class, defaultImage);
-        AppPlaceEntityMapper.register(LeaseBillingPolicy.class, CrmSiteMap.Settings.Policies.LeaseBilling.class, defaultImage);
+        AppPlaceEntityMapper.register(LeaseBillingPolicy.class, CrmSiteMap.Settings.Policies.Billing.class, defaultImage);
         AppPlaceEntityMapper.register(LegalDocumentation.class, CrmSiteMap.Settings.Policies.LegalDocumentation.class, defaultImage);
         AppPlaceEntityMapper.register(DatesPolicy.class, CrmSiteMap.Settings.Policies.Dates.class, defaultImage);
         AppPlaceEntityMapper.register(RestrictionsPolicy.class, CrmSiteMap.Settings.Policies.Restrictions.class, defaultImage);

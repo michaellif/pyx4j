@@ -454,7 +454,7 @@ public class CrmSiteMap implements SiteMap {
 
             @PlaceProperties(caption = "Billing")
             @NavigationItem(navigLabel = "Billing")
-            public static class LeaseBilling extends CrmCrudAppPlace {
+            public static class Billing extends CrmCrudAppPlace {
             }
 
             @PlaceProperties(caption = "ID Assignment")

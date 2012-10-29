@@ -86,16 +86,16 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.AR());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.ApplicationDocumentation());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.BackgroundCheck());
+        folder.addNavigItem(new CrmSiteMap.Settings.Policies.Billing());
+        folder.addNavigItem(new CrmSiteMap.Settings.Policies.Dates());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.Deposits());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.EmailTemplates());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.IdAssignment());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseAdjustmentPolicy());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseBilling());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.LegalDocumentation());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.Dates());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.Restrictions());
 //      folder.addNavigItem(new CrmSiteMap.Settings.Policies.PetPolicy());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.ProductTax());
+        folder.addNavigItem(new CrmSiteMap.Settings.Policies.Restrictions());
         list.add(folder);
 
         return list;
