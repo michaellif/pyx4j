@@ -57,9 +57,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         get(proto().expectedMoveIn()).setVisible(!getValue().expectedMoveIn().isNull());
         get(proto().expectedMoveOut()).setVisible(!getValue().expectedMoveOut().isNull());
 
-        get(proto().actualLeaseTo()).setVisible(!getValue().actualLeaseTo().isNull());
-        get(proto().actualMoveIn()).setVisible(!getValue().actualMoveIn().isNull());
-        get(proto().actualMoveOut()).setVisible(!getValue().actualMoveOut().isNull());
+//        get(proto().actualMoveIn()).setVisible(!getValue().actualMoveIn().isNull());
+//        get(proto().actualMoveOut()).setVisible(!getValue().actualMoveOut().isNull());
     }
 
     private FormFlexPanel createDetailsTab(String title) {
@@ -103,11 +102,9 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         int datesRow = -1; // first column:
         datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 9).build());
-        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseTo()), 9).build());
 
         datesRow = -1; // second column:
-        datesPanel.setBR(++datesRow, 1, 1);
-        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualLeaseTo()), 9).build());
+        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().leaseTo()), 9).build());
 
         datesPanel.getColumnFormatter().setWidth(0, "40%");
         datesPanel.getColumnFormatter().setWidth(1, "60%");
@@ -119,13 +116,13 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         datesRow = -1; // first column:
         datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().expectedMoveIn()), 9).build());
-        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
         datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).build());
 
         datesRow = -1; // second column:
-        datesPanel.setBR(++datesRow, 1, 1);
-        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveIn()), 9).build());
-        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveOut()), 9).build());
+//        datesPanel.setBR(++datesRow, 1, 1);
+        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
+//        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveIn()), 9).build());
+//        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveOut()), 9).build());
 
         datesPanel.getColumnFormatter().setWidth(0, "40%");
         datesPanel.getColumnFormatter().setWidth(1, "60%");

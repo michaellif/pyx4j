@@ -589,7 +589,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         case LegalVacate:
             break;
         case Notice:
-            complete(leaseId, moveOutDay);
+//            complete(leaseId, moveOutDay);
             break;
         case Skip:
             break;
@@ -928,6 +928,10 @@ public class LeaseFacadeImpl implements LeaseFacade {
         case FixedEx:
             lease.leaseTo().set(null); // special case for automatically renewed leases
             break;
+        }
+        // if lease closed already:
+        if (!lease.actualLeaseTo().isNull()) {
+            lease.leaseTo().setValue(lease.actualLeaseTo().getValue());
         }
     }
 

@@ -48,7 +48,7 @@ public class PastLeaseLister extends ListerBase<LeaseDTO> {
             new Builder(proto().leaseFrom()).build(),
             new Builder(proto().leaseTo()).build(),
             
-            new Builder(proto().expectedMoveIn()).build(),
+            new Builder(proto().expectedMoveIn(), false).build(),
             new Builder(proto().expectedMoveOut(), false).build(),
             new Builder(proto().actualMoveIn(), false).build(),
             new Builder(proto().actualMoveOut(), false).build(),
