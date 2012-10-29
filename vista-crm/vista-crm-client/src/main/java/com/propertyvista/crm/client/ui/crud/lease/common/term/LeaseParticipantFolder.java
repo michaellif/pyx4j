@@ -54,7 +54,7 @@ public abstract class LeaseParticipantFolder<E extends LeaseParticipant<?>> exte
 
             @Override
             public boolean onClickNo() {
-                LeaseParticipantFolder.super.addItem();
+                addParticipant();
                 return true;
             }
         }.show();
@@ -66,9 +66,11 @@ public abstract class LeaseParticipantFolder<E extends LeaseParticipant<?>> exte
 
     protected abstract void addParticipants(List<Customer> customers);
 
+    protected abstract void addParticipant();
+
     private List<Customer> retrieveExistingCustomers() {
         List<Customer> customers = new ArrayList<Customer>(getValue().size());
-        for (LeaseParticipant wrapper : getValue()) {
+        for (LeaseParticipant<?> wrapper : getValue()) {
             customers.add(wrapper.leaseCustomer().customer());
         }
         return customers;

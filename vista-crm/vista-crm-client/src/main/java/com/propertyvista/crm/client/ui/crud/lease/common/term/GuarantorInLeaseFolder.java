@@ -62,7 +62,7 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
 
     @Override
     protected String getAddItemDialogCaption() {
-        return i18n.tr("Add New Guarantor_2");
+        return i18n.tr("Add New Guarantor");
     }
 
     @Override
@@ -73,13 +73,25 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
     @Override
     protected void addParticipants(List<Customer> customers) {
         for (Customer customer : customers) {
-            Guarantor newGuarantorInLease = EntityFactory.create(Guarantor.class);
-            newGuarantorInLease.leaseTermV().setPrimaryKey(leaseTerm.getValue().version().getPrimaryKey());
-            newGuarantorInLease.leaseCustomer().customer().set(customer);
-            newGuarantorInLease.role().setValue(LeaseParticipant.Role.Guarantor);
-            newGuarantorInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
-            addItem(newGuarantorInLease);
+            Guarantor newGuarantor = createGuarantor();
+            newGuarantor.leaseCustomer().customer().set(customer);
+            addItem(newGuarantor);
         }
+    }
+
+    @Override
+    protected void addParticipant() {
+        addItem(createGuarantor());
+    }
+
+    private Guarantor createGuarantor() {
+        Guarantor guarantor = EntityFactory.create(Guarantor.class);
+
+        guarantor.leaseTermV().setPrimaryKey(leaseTerm.getValue().version().getPrimaryKey());
+        guarantor.role().setValue(LeaseParticipant.Role.Guarantor);
+        guarantor.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
+
+        return guarantor;
     }
 
     @Override

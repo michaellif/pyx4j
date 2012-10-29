@@ -76,25 +76,37 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
     @Override
     protected void addParticipants(List<Customer> customers) {
         for (Customer customer : customers) {
-            Tenant newTenantInLease = EntityFactory.create(Tenant.class);
-            newTenantInLease.leaseTermV().setPrimaryKey(leaseTerm.getValue().version().getPrimaryKey());
-            newTenantInLease.leaseCustomer().customer().set(customer);
-            if (!isApplicantPresent()) {
-                newTenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
-                newTenantInLease.relationship().setValue(PersonRelationship.Other); // just do not leave it empty - it's mandatory field!
-            }
-            newTenantInLease.percentage().setValue(calcPercentage());
-            addItem(newTenantInLease);
+            Tenant newTenant = createTenant();
+            newTenant.leaseCustomer().customer().set(customer);
+            addItem(newTenant);
         }
     }
 
+    @Override
+    protected void addParticipant() {
+        addItem(createTenant());
+    }
+
     private boolean isApplicantPresent() {
-        for (Tenant til : getValue()) {
-            if (til.role().getValue() == LeaseParticipant.Role.Applicant) {
+        for (Tenant tenant : getValue()) {
+            if (tenant.role().getValue() == LeaseParticipant.Role.Applicant) {
                 return true;
             }
         }
         return false;
+    }
+
+    Tenant createTenant() {
+        Tenant tenant = EntityFactory.create(Tenant.class);
+
+        tenant.leaseTermV().setPrimaryKey(leaseTerm.getValue().version().getPrimaryKey());
+        if (!isApplicantPresent()) {
+            tenant.role().setValue(LeaseParticipant.Role.Applicant);
+            tenant.relationship().setValue(PersonRelationship.Other); // just do not leave it empty - it's mandatory field!
+        }
+        tenant.percentage().setValue(calcPercentage());
+
+        return tenant;
     }
 
     private BigDecimal calcPercentage() {
