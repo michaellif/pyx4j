@@ -67,5 +67,9 @@ public class TesterSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "RichTextEditor")
         public static class RichTextEditor extends AppPlace {
         }
+
+        @NavigationItem(navigLabel = "Lister")
+        public static class Lister extends AppPlace {
+        }
     }
 }

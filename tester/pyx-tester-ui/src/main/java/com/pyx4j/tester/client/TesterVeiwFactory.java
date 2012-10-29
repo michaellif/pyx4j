@@ -34,6 +34,8 @@ import com.pyx4j.tester.client.view.form.folder.FolderLayoutView;
 import com.pyx4j.tester.client.view.form.folder.FolderLayoutViewImpl;
 import com.pyx4j.tester.client.view.form.folder.FolderValidationView;
 import com.pyx4j.tester.client.view.form.folder.FolderValidationViewImpl;
+import com.pyx4j.tester.client.view.widget.ListerView;
+import com.pyx4j.tester.client.view.widget.ListerViewImpl;
 import com.pyx4j.tester.client.view.widget.NativeWidgetBasicView;
 import com.pyx4j.tester.client.view.widget.NativeWidgetBasicViewImpl;
 import com.pyx4j.tester.client.view.widget.RichTextEditorView;
@@ -57,6 +59,8 @@ public class TesterVeiwFactory {
                 map.put(type, new NativeWidgetBasicViewImpl());
             } else if (RichTextEditorView.class.equals(type)) {
                 map.put(type, new RichTextEditorViewImpl());
+            } else if (ListerView.class.equals(type)) {
+                map.put(type, new ListerViewImpl());
             } else if (FormTesterView.class.equals(type)) {
                 map.put(type, new FormTesterViewImpl());
             }

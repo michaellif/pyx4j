@@ -22,10 +22,13 @@ package com.pyx4j.tester.client.domain.test;
 
 import java.math.BigDecimal;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPersonalIdentity;
+import com.pyx4j.tester.client.TesterUtils;
 
 public class DomainFactory {
 
@@ -152,5 +155,17 @@ public class DomainFactory {
         retVal.personalId().set(createPersonalIdentity());
 
         return retVal;
+    }
+
+    public static List<ListerDataItem> createListerData(int cols, int rows) {
+        List<ListerDataItem> listerData = new ArrayList<ListerDataItem>();
+        for (int row = 0; row < rows; row++) {
+            ListerDataItem item = EntityFactory.create(ListerDataItem.class);
+            for (int col = 0; col < cols; col++) {
+                item.setMemberValue("field" + col, row + ":" + col + " - " + TesterUtils.getRandomString(8));
+            }
+            listerData.add(item);
+        }
+        return listerData;
     }
 }
