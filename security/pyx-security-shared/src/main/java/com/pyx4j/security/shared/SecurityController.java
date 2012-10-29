@@ -35,7 +35,7 @@ public abstract class SecurityController {
     private static final SecurityController controller = init();
 
     private static final SecurityController init() {
-        if (GWT.isClient()) {
+        if (ApplicationMode.isGWTClient()) {
             // Use Controller defined in module "pyx-security-gwt"
             return GWT.create(SecurityController.class);
         } else {

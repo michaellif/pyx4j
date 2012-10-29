@@ -53,6 +53,19 @@ public class ApplicationMode {
         }
     }
 
+    /**
+     * Server side helper to avoid missing GWTBridge
+     * 
+     * @see GWT#isClient()
+     */
+    public static final boolean isGWTClient() {
+        if (hasGWT()) {
+            return GWT.isClient();
+        } else {
+            return false;
+        }
+    }
+
     public static final boolean hasGWT() {
         try {
             GWT.isClient();

@@ -20,8 +20,7 @@
  */
 package com.pyx4j.entity.test.shared;
 
-import com.google.gwt.core.client.GWT;
-
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.meta.EntityMeta;
@@ -78,7 +77,7 @@ public class EntityGenericTest extends InitializerTestBase {
         GenericAbstract<GenericBaseImplementation> abstactVar = explicitVar;
         assertEquals("abstact.super.valueClass", GenericBaseImplementation.class, abstactVar.abstractMember().getValueClass());
 
-        if (GWT.isClient()) {
+        if (ApplicationMode.isGWTClient()) {
             assertEquals("abstact.overriden.valueClass", GenericBaseImplementation.class, abstactVar.abstractMember4Override().getValueClass());
         } else {
             try {
