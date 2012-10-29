@@ -24,10 +24,12 @@ CREATE OR REPLACE VIEW _dba_.pmc_stats AS
 (       SELECT  a.pmc AS pmc_name,a.row_count AS buildings,
                 b.row_count AS units,
                 c.row_count AS leases,
-                d.row_count AS payment_records
+                d.row_count AS payment_records,
+                e.row_count AS customers_accepted_terms
         FROM    (SELECT * FROM _dba_.count_rows_all_pmc('building')) a
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('apt_unit')) b ON (a.pmc = b.pmc)
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('lease')) c ON (a.pmc = c.pmc)
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('payment_record')) d ON (a.pmc = d.pmc)
+        JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('customer_accepted_terms')) e ON (a.pmc = e.pmc)
 );
         

@@ -163,6 +163,8 @@ DROP TABLE IF EXISTS _c3p0_connection_test;
 *** For the rest of migration plpsql function is required
 **/
 
+COMMIT;
+
 CREATE OR REPLACE FUNCTION _dba_.convert_id_to_string(TEXT) RETURNS TEXT AS
 $$
     SELECT  CASE WHEN $1 ~ '^[0-9]+$' THEN LPAD($1,7,'0')
@@ -252,7 +254,16 @@ BEGIN
                                                         ||'ADD COLUMN previous_charge_refunds NUMERIC(18,2)';
 
         -- billing_billing_cycle
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle ADD COLUMN stats BIGINT';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle ADD COLUMN stats BIGINT,'
+                                                        ||'ADD COLUMN trigger_date DATE ';
+                                                        
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_billing_cycle AS a '
+        ||'     SET     trigger_date = b.trigger_date '
+        ||'     FROM    (SELECT billing_cycle,MIN(execution_date) AS trigger_date '
+        ||'             FROM    '||v_schema_name||'.billing_bill '
+        ||'             GROUP BY billing_cycle) AS b '
+        ||'     WHERE   a.id = b.billing_cycle ';
+        
 
         -- billing_billing_cycle_stats
         EXECUTE 'CREATE TABLE '||v_schema_name||'.billing_billing_cycle_stats '
@@ -728,19 +739,20 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v$concessions OWNER TO vista';
 
         -- product_item
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product_item RENAME COLUMN product TO old_product';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product_item ADD COLUMN product BIGINT';
 
-        EXECUTE 'UPDATE '||v_schema_name||'.product_item AS b '||
-        '   SET     product = a.product '||
-        '   FROM    (SELECT a.old_id, a.id AS product, b.productdiscriminator '||
-        '       FROM '||v_schema_name||'.product_v a '||
-        '       JOIN '||v_schema_name||'.product_item b ON (a.old_id = b.product AND a.iddiscriminator = b.productdiscriminator )) AS a '||
-        '   WHERE   (b.product = a.old_id AND a.productdiscriminator = b.productdiscriminator) ';
+        EXECUTE 'UPDATE '||v_schema_name||'.product_item AS a '||
+        '   SET     product = b.id '||
+        '   FROM    '||v_schema_name||'.product_v b '
+        '   WHERE   (a.old_product = b.old_id AND a.productdiscriminator = b.iddiscriminator) ';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.product_item ADD CONSTRAINT product_item_product_fk FOREIGN KEY(product) '||
-        'REFERENCES '||v_schema_name||'.product_v(id)';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product_item ADD CONSTRAINT product_item_product_fk FOREIGN KEY(product) '
+        ||'REFERENCES '||v_schema_name||'.product_v(id),'
+        ||'DROP COLUMN old_product ';
 
         -- cleanup
-
+        
         FOREACH v_table_name IN ARRAY
         ARRAY[  'service_v$concessions',
                 'service_v$features',
@@ -752,10 +764,10 @@ BEGIN
             SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,v_table_name,TRUE);
 
         END LOOP;
-
+        
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v DROP COLUMN old_id, DROP COLUMN old_holder';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product DROP COLUMN old_id';
-
+       
         /**
         *** -----------------------------------------------------------------------------------------
         ***
@@ -1529,19 +1541,92 @@ BEGIN
         WHERE   namespace = v_schema_name;
 
         EXCEPTION WHEN OTHERS THEN
-                RAISE EXCEPTION 'Failed executing statement, code: %, error message: %',SQLSTATE,SQLERRM ;
+                RAISE EXCEPTION 'Failed executing statement in schema %, code: %, error message: %',v_schema_name,SQLSTATE,SQLERRM ;
 
 END;
 $$
 LANGUAGE plpgsql VOLATILE;
 
-SELECT  _dba_.migrate_to_105(namespace) AS migration
-FROM    _admin_.admin_pmc
-WHERE   status != 'Created' AND schema_version IS NULL;
+/**
+***     Split schema update into several transactions 
+***     to avoid increasing max_locks_per_transaction 
+**/
+
+BEGIN TRANSACTION;
+        SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
+        FROM    _admin_.admin_pmc
+        WHERE   status != 'Created' 
+        AND     schema_version IS NULL
+        AND     namespace ~ '^[abc]';
+COMMIT;
+
+BEGIN TRANSACTION;
+        SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
+        FROM    _admin_.admin_pmc
+        WHERE   status != 'Created' 
+        AND     schema_version IS NULL
+        AND     namespace ~ '^[def]';
+COMMIT;
+
+BEGIN TRANSACTION;
+        SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
+        FROM    _admin_.admin_pmc
+        WHERE   status != 'Created' 
+        AND     schema_version IS NULL
+        AND     namespace ~ '^[ghi]';
+COMMIT;
+
+BEGIN TRANSACTION;
+        SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
+        FROM    _admin_.admin_pmc
+        WHERE   status != 'Created' 
+        AND     schema_version IS NULL
+        AND     namespace ~ '^[jkl]';
+COMMIT;
+
+BEGIN TRANSACTION;
+        SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
+        FROM    _admin_.admin_pmc
+        WHERE   status != 'Created' 
+        AND     schema_version IS NULL
+        AND     namespace ~ '^[mno]';
+COMMIT;
+
+BEGIN TRANSACTION;
+        SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
+        FROM    _admin_.admin_pmc
+        WHERE   status != 'Created' 
+        AND     schema_version IS NULL
+        AND     namespace ~ '^[pqr]';
+COMMIT;
+
+BEGIN TRANSACTION;
+        SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
+        FROM    _admin_.admin_pmc
+        WHERE   status != 'Created' 
+        AND     schema_version IS NULL
+        AND     namespace ~ '^[stu]';
+COMMIT;
+
+BEGIN TRANSACTION;
+        SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
+        FROM    _admin_.admin_pmc
+        WHERE   status != 'Created' 
+        AND     schema_version IS NULL
+        AND     namespace ~ '^[vwx]';
+COMMIT;
+
+BEGIN TRANSACTION;
+        SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
+        FROM    _admin_.admin_pmc
+        WHERE   status != 'Created' 
+        AND     schema_version IS NULL
+        AND     namespace ~ '^[yz]';
+COMMIT;
 
 DROP FUNCTION _dba_.migrate_to_105(VARCHAR(64));
 
 SET client_min_messages = 'NOTICE';
 
-COMMIT;
+
 
