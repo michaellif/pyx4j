@@ -501,6 +501,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.actualLeaseTo().setValue(from);
         lease.status().setValue(Status.Completed);
 
+        updateLeaseDates(lease);
+
         Persistence.secureSave(lease);
 
         ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey(), from);
@@ -581,6 +583,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.moveOutNotice().setValue(noticeDay);
         lease.expectedMoveOut().setValue(moveOutDay);
 
+        updateLeaseDates(lease);
+
         Persistence.secureSave(lease);
 
         switch (completionType) {
@@ -609,6 +613,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.moveOutNotice().setValue(null);
         lease.expectedMoveOut().setValue(null);
 
+        updateLeaseDates(lease);
+
         Persistence.secureSave(lease);
 
         // TODO: add notes with decisionReason!!!
@@ -624,6 +630,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (status != Status.ExistingLease) {
             lease.actualLeaseTo().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         }
+
+        updateLeaseDates(lease);
 
         Persistence.secureSave(lease);
 
@@ -923,7 +931,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
         // term type corrections:
         switch (lease.currentTerm().type().getValue()) {
         case Fixed:
-            lease.expectedMoveOut().setValue(lease.currentTerm().termTo().getValue());
+            if (lease.completion().isNull()) {
+                lease.expectedMoveOut().setValue(lease.currentTerm().termTo().getValue());
+            }
             break;
         case FixedEx:
             lease.leaseTo().set(null); // special case for automatically renewed leases

@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
@@ -535,7 +536,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             content.add(new HTML(i18n.tr("From") + ":"));
             content.add(date);
 
-            date.setValue(ClientContext.getServerDate());
+            IPrimitive<LogicalDate> moveOutDate = getForm().getValue().expectedMoveOut();
+            date.setValue(moveOutDate.isNull() ? ClientContext.getServerDate() : moveOutDate.getValue());
             date.setWidth("10em");
 
             content.setWidth("100%");
