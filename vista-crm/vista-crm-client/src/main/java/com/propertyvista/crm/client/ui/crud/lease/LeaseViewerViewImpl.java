@@ -286,7 +286,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         renewButton = new Button(i18n.tr("Renew"));
         Button.ButtonMenuBar renewMenu = renewButton.createMenu();
         renewButton.setMenu(renewMenu);
-        addHeaderToolbarItem(renewButton.asWidget());
+        if (VistaTODO.VISTA_1789_RenewLease) {
+            addHeaderToolbarItem(renewButton.asWidget());
+        }
 
         offerAction = new MenuItem(i18n.tr("Create Offer"), new Command() {
             @Override
@@ -300,9 +302,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }.show();
             }
         });
-        if (VistaTODO.VISTA_1789_RenewLease) {
-            renewMenu.addItem(offerAction);
-        }
+        renewMenu.addItem(offerAction);
 
         viewOfferedTerms = new MenuItem(i18n.tr("View Offers..."), new Command() {
             @Override
