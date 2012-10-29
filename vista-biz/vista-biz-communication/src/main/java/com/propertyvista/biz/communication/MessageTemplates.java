@@ -258,7 +258,7 @@ public class MessageTemplates {
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
         context.user().set(user);
 
-        EmailTemplate emailTemplate = emailTemplateNewPmc(pmc);
+        EmailTemplate emailTemplate = emailTemplateNewPmc(user, pmc);
 
         ArrayList<IEntity> data = new ArrayList<IEntity>();
 
@@ -351,8 +351,7 @@ public class MessageTemplates {
         return template;
     }
 
-    private static EmailTemplate emailTemplateNewPmc(Pmc pmc) {
-        OnboardingUser user = EntityFactory.create(OnboardingUser.class);
+    private static EmailTemplate emailTemplateNewPmc(OnboardingUser user, Pmc pmc) {
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.subject().setValue(i18n.tr("New PMC Created"));
         try {
