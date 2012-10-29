@@ -58,5 +58,6 @@ public interface AuditRecord extends IEntity {
 
     IPrimitive<String> entityClass();
 
+    @Length(1024)
     IPrimitive<String> details();
 }
