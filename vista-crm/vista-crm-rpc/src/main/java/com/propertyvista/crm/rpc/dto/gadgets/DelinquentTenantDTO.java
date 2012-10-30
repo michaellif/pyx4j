@@ -17,11 +17,11 @@ import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.financial.billing.AgingBuckets;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 
 @Transient
 @ExtendsDBO
-public interface DelinquentTenantDTO extends Tenant {
+public interface DelinquentTenantDTO extends LeaseCustomerTenant {
 
     AgingBuckets arrears();
 

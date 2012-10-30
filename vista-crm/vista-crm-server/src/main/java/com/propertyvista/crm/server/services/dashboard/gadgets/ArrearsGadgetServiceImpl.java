@@ -37,7 +37,7 @@ import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 
 public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
 
@@ -57,33 +57,30 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
         callback.onSuccess(delinquentTenantsCriteria(EntityListCriteria.create(DelinquentTenantDTO.class), buildingsFilter, criteriaPreset));
     }
 
-    <Criteria extends EntityQueryCriteria<? extends Tenant>> Criteria delinquentTenantsCriteria(Criteria criteria, Vector<Building> buildingsFilter,
-            String criteriaPreset) {
+    <Criteria extends EntityQueryCriteria<? extends LeaseCustomerTenant>> Criteria delinquentTenantsCriteria(Criteria criteria,
+            Vector<Building> buildingsFilter, String criteriaPreset) {
 
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseTermV().holder().lease().billingAccount().arrearsSnapshots().$().toDate(),
-                OccupancyFacade.MAX_DATE));
+//        criteria.isCurrent(criteria.proto().leaseTermV());
+        criteria.add(PropertyCriterion.eq(criteria.proto().lease().billingAccount().arrearsSnapshots().$().toDate(), OccupancyFacade.MAX_DATE));
 
         ArrearsGadgetDataDTO proto = EntityFactory.getEntityPrototype(ArrearsGadgetDataDTO.class);
         IObject<?> member = proto.getMember(new Path(criteriaPreset));
 
         if (proto.outstandingTotal() == member | proto.delinquentTenants() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().leaseTermV().holder().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets()
-                    .arrearsAmount(), BigDecimal.ZERO));
+            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets().arrearsAmount(),
+                    BigDecimal.ZERO));
         } else if (proto.outstandingThisMonth() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().leaseTermV().holder().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets()
-                    .bucketThisMonth(), BigDecimal.ZERO));
+            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets().bucketThisMonth(),
+                    BigDecimal.ZERO));
         } else if (proto.outstanding1to30Days() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().leaseTermV().holder().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets()
-                    .bucket30(), BigDecimal.ZERO));
+            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets().bucket30(), BigDecimal.ZERO));
         } else if (proto.outstanding31to60Days() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().leaseTermV().holder().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets()
-                    .bucket60(), BigDecimal.ZERO));
+            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets().bucket60(), BigDecimal.ZERO));
         } else if (proto.outstanding61to90Days() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().leaseTermV().holder().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets()
-                    .bucket90(), BigDecimal.ZERO));
+            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets().bucket90(), BigDecimal.ZERO));
         } else if (proto.outstanding91andMoreDays() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().leaseTermV().holder().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets()
-                    .bucketOver90(), BigDecimal.ZERO));
+            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets().bucketOver90(),
+                    BigDecimal.ZERO));
         }
         return criteria;
     }
@@ -120,7 +117,7 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
 
     private void countDelinquentTenants(IPrimitive<Integer> delinquentTenants, Vector<Building> queryParams) {
         delinquentTenants.setValue(Persistence.service().count(//@formatter:off
-                delinquentTenantsCriteria(EntityQueryCriteria.create(Tenant.class),
+                delinquentTenantsCriteria(EntityQueryCriteria.create(LeaseCustomerTenant.class),
                 queryParams,
                 EntityFactory.getEntityPrototype(ArrearsGadgetDataDTO.class).delinquentTenants().getPath().toString())
         ));//@formatter:on

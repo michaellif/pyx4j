@@ -20,12 +20,13 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentTenantDTO;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
-public class DelinquentTenantListServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, DelinquentTenantDTO> {
+public class DelinquentTenantListServiceImpl extends AbstractCrudServiceDtoImpl<LeaseCustomerTenant, DelinquentTenantDTO> {
 
     public DelinquentTenantListServiceImpl() {
-        super(Tenant.class, DelinquentTenantDTO.class);
+        super(LeaseCustomerTenant.class, DelinquentTenantDTO.class);
 
     }
 
@@ -35,14 +36,12 @@ public class DelinquentTenantListServiceImpl extends AbstractCrudServiceDtoImpl<
     }
 
     @Override
-    protected void enhanceListRetrieved(Tenant entity, DelinquentTenantDTO dto) {
-        super.enhanceListRetrieved(entity, dto);
+    protected void enhanceListRetrieved(LeaseCustomerTenant leaseCustomerTenant, DelinquentTenantDTO dto) {
+        super.enhanceListRetrieved(leaseCustomerTenant, dto);
 
-        Persistence.service().retrieveMember(dto.leaseTermV());
-        Persistence.service().retrieveMember(dto.leaseTermV().holder().lease());
+        Persistence.service().retrieveMember(dto.lease());
 
-        TransactionHistoryDTO transactionsHistory = ServerSideFactory.create(ARFacade.class).getTransactionHistory(
-                dto.leaseTermV().holder().lease().billingAccount());
+        TransactionHistoryDTO transactionsHistory = ServerSideFactory.create(ARFacade.class).getTransactionHistory(dto.lease().billingAccount());
         dto.arrears().set(transactionsHistory.totalAgingBuckets().detach());
     }
 }
