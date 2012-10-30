@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
@@ -29,7 +28,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
@@ -55,8 +53,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 public class ArrearsStatusGadget extends GadgetInstanceBase<ArrearsStatusGadgetMetadata> {
 
     private static final I18n i18n = I18n.get(ArrearsStatusGadget.class);
-
-    private static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getFormat(CDatePicker.defaultDateFormat);
 
     private static final List<ColumnDescriptor> DEFAULT_COLUMN_DESCRIPTORS;
     static {
@@ -238,7 +234,7 @@ public class ArrearsStatusGadget extends GadgetInstanceBase<ArrearsStatusGadgetM
     }
 
     private void redrawTitleBanner() {
-        String unescaptedBanner = i18n.tr("{0} arrears as of {1}", getMetadata().category().getValue(), DATE_FORMAT.format(getStatusDate()));
+        String unescaptedBanner = i18n.tr("{0} arrears as of {1,date,short}", getMetadata().category().getValue(), getStatusDate());
         titleBannerLabel.setHTML(new SafeHtmlBuilder().appendEscaped(unescaptedBanner).toSafeHtml());
     }
 }

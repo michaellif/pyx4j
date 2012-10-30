@@ -25,16 +25,17 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
@@ -53,7 +54,8 @@ import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadge
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.svg.gadgets.TurnoverAnalysisChartFactory;
 
-public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurnoverAnalysisGadgetMetadata> implements IBuildingBoardGadgetInstance {
+public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurnoverAnalysisGadgetMetadata> implements IBuildingBoardGadgetInstance,
+        ProvidesResize {
 
     private static final I18n i18n = I18n.get(UnitTurnoverAnalysisChartGadget.class);
 
@@ -75,15 +77,13 @@ public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurn
 
     private HorizontalPanel controls;
 
-    private LayoutPanel layoutPanel;
-
     private RadioButton percent;
 
     private RadioButton number;
 
-    private final UnitTurnoverAnalysisGadgetService service;
+    private Label asOf;
 
-    private CDatePicker asOf;
+    private final UnitTurnoverAnalysisGadgetService service;
 
     public UnitTurnoverAnalysisChartGadget(UnitTurnoverAnalysisGadgetMetadata gmd) {
         super(gmd, UnitTurnoverAnalysisGadgetMetadata.class);
@@ -124,6 +124,7 @@ public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurn
     }
 
     private void redraw() {
+        asOf.setText(i18n.tr("As of Date: {0,date,short}", getStatusDate()));
         chartPanel.clear();
 
         if ((data == null || data.size() == 0)) {
@@ -172,22 +173,20 @@ public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurn
     }
 
     private Widget initAsOfBannerPanel() {
-        HorizontalPanel asForBannerPanel = new HorizontalPanel();
-        asForBannerPanel.setWidth("100%");
-        asForBannerPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+        FlowPanel asOfBannerPanel = new FlowPanel();
+        asOfBannerPanel.setWidth("100%");
+        asOf = new Label();
+        asOf.getElement().getStyle().setProperty("marginLeft", "auto");
+        asOf.getElement().getStyle().setProperty("marginRight", "auto");
+        asOfBannerPanel.add(asOf);
 
-        asOf = new CDatePicker();
-        asOf.setValue(getStatusDate());
-        asOf.setViewable(true);
-
-        asForBannerPanel.add(asOf);
-        return asForBannerPanel.asWidget();
+        return asOfBannerPanel;
     }
 
     @Override
     public Widget initContentPanel() {
         chartPanel = new SimplePanel();
-        chartPanel.setSize("100%", "100%");
+        chartPanel.setSize("100%", "" + GRAPH_HEIGHT + "em");
 
         controls = new HorizontalPanel();
         controls.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
@@ -220,30 +219,15 @@ public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurn
         w.getElement().getStyle().setMarginLeft(2, Unit.EM);
         controls.add(measureSelection);
 
-        layoutPanel = new LayoutPanel() {
-            // FIXME this supposed to cause automatic resizing of the graph, but unfortunately it doesn't: fix auto-resizing 
-            @Override
-            public void onResize() {
-                super.onResize();
-                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        redraw();
-                    }
-                });
-            }
-        };
+        VerticalPanel panel = new VerticalPanel();
+        panel.setWidth("100%");
+        panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
-        layoutPanel.setSize("100%", defineHeight());
+        panel.add(initAsOfBannerPanel());
+        panel.add(chartPanel);
+        panel.add(controls);
 
-        layoutPanel.add(initAsOfBannerPanel());
-        layoutPanel.add(chartPanel);
-        layoutPanel.setWidgetTopHeight(chartPanel, 0, Unit.EM, GRAPH_HEIGHT, Unit.EM);
-        layoutPanel.setWidgetLeftWidth(chartPanel, 0, Unit.PCT, 100, Unit.PCT);
-        layoutPanel.add(controls);
-        layoutPanel.setWidgetTopHeight(controls, GRAPH_HEIGHT, Unit.EM, CONTROLS_HEIGHT, Unit.EM);
-        layoutPanel.setWidgetLeftWidth(controls, 0, Unit.PCT, 100, Unit.PCT);
-        return layoutPanel;
+        return panel;
     }
 
     @Override
@@ -278,11 +262,6 @@ public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurn
         };
         form.initContent();
         return new SetupFormWrapper(form);
-    }
-
-    @Override
-    protected String defineHeight() {
-        return "" + (GRAPH_HEIGHT + CONTROLS_HEIGHT) + "em";
     }
 
     @Override

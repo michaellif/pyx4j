@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -61,7 +61,7 @@ public class UnitAvailabilitySummaryGadget extends GadgetInstanceBase<UnitAvaila
 
     private DataTable<UnitAvailabilityStatusSummaryLineDTO> table;
 
-    private HTML asOf;
+    private Label asOf;
 
     private DataTableModel<UnitAvailabilityStatusSummaryLineDTO> tableModel;
 
@@ -129,7 +129,7 @@ public class UnitAvailabilitySummaryGadget extends GadgetInstanceBase<UnitAvaila
                     dataItems.add(new DataItem<UnitAvailabilityStatusSummaryLineDTO>(statusRecord));
                 }
 
-                asOf.setHTML(new SafeHtmlBuilder().appendEscaped(i18n.tr("As of Date: {0}", getStatusDate())).toSafeHtml());
+                asOf.setText(i18n.tr("As of Date: {0,date,short}", getStatusDate()));
                 tableModel.populateData(dataItems, 0, false, 0);
 
                 populateSucceded();

@@ -274,7 +274,7 @@ public class PaymentsSummaryGadget extends GadgetInstanceBase<PaymentsSummaryGad
 
         summaryTitlePanel.setHTML(new SafeHtmlBuilder()//@formatter:off                     
                 .appendHtmlConstant("<div>")
-                    .appendEscaped(i18n.tr("Target Date: {0}", getStatusDate()))
+                    .appendEscaped(i18n.tr("Target Date: {0,date,short}", getStatusDate()))
                 .appendHtmlConstant("</div>")
                                     
                 .appendHtmlConstant("<div>")                    

@@ -173,7 +173,7 @@ public class PaymentRecordsGadget extends GadgetInstanceBase<PaymentRecordsGadge
 
         titlePanel.setHTML(new SafeHtmlBuilder()//@formatter:off                     
                 .appendHtmlConstant("<div>")
-                    .appendEscaped(i18n.tr("Target Date: {0}", getTargetDate()))
+                    .appendEscaped(i18n.tr("Target Date: {0,date,short}", getTargetDate()))
                 .appendHtmlConstant("</div>")
                 
                 .appendHtmlConstant("<div>")                    
