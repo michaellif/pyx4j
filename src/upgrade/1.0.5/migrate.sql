@@ -26,6 +26,8 @@ ALTER TABLE admin_pmc_equifax_info
     ADD COLUMN report_type VARCHAR(50),
     ADD COLUMN approved BOOLEAN;
 
+ALTER TABLE audit_record ALTER COLUMN details TYPE VARCHAR(1024);
+
 ALTER TABLE vista_terms_v ALTER COLUMN holder SET NOT NULL;
 ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_detailsdiscriminator_d_ck
         CHECK (trigger_detailsdiscriminator IN ('default','pad','test'));
@@ -187,35 +189,35 @@ BEGIN
 
         FOREACH v_table_name IN ARRAY
         ARRAY[  'demo_gauge',
-            'demo_pie_chart2_d',
-            'building_lister$column_descriptors',
-            'payments_summary_gadget_metadata$column_descriptors',
-            'unit_availability_summary_gmeta$column_descriptors',
-            'arrears_status_gadget_metadata$column_descriptors',
-            'payment_records_gadget_metadata$column_descriptors',
-            'common_gadget_columnsportfolio$buildings',
-            'payment_records_gadget_metadata$payment_status_filter',
-            'demo_line_chart',
-            'arrears_summary_gadget_metadata$column_descriptors',
-            'demo_demo',
-            'payments_summary_gadget_metadata$payment_status',
-            'demo_bar_chart2_d',
-            'payment_records_gadget_metadata$payment_method_filter',
-            'lister_gadget_base_metadata$column_descriptors',
-            'unit_availability_gadget_meta$column_descriptors',
-            'dashboard_metadata$gadgets',
-            'arrears_status_gadget_metadata',
-            'payment_records_gadget_metadata',
-            'arrears_yoyanalysis_chart_metadata',
-            'arrears_summary_gadget_metadata',
-            'unit_availability_gadget_meta',
-            'lister_gadget_base_metadata',
-            'common_gadget_columns',
-            'unit_availability_summary_gmeta',
-            'payments_summary_gadget_metadata',
-            'turnover_analysis_metadata',
-            'building_lister',
-            'gadget_docking_meta']
+                'demo_pie_chart2_d',
+                'building_lister$column_descriptors',
+                'payments_summary_gadget_metadata$column_descriptors',
+                'unit_availability_summary_gmeta$column_descriptors',
+                'arrears_status_gadget_metadata$column_descriptors',
+                'payment_records_gadget_metadata$column_descriptors',
+                'common_gadget_columnsportfolio$buildings',
+                'payment_records_gadget_metadata$payment_status_filter',
+                'demo_line_chart',
+                'arrears_summary_gadget_metadata$column_descriptors',
+                'demo_demo',
+                'payments_summary_gadget_metadata$payment_status',
+                'demo_bar_chart2_d',
+                'payment_records_gadget_metadata$payment_method_filter',
+                'lister_gadget_base_metadata$column_descriptors',
+                'unit_availability_gadget_meta$column_descriptors',
+                'dashboard_metadata$gadgets',
+                'arrears_status_gadget_metadata',
+                'payment_records_gadget_metadata',
+                'arrears_yoyanalysis_chart_metadata',
+                'arrears_summary_gadget_metadata',
+                'unit_availability_gadget_meta',
+                'lister_gadget_base_metadata',
+                'common_gadget_columns',
+                'unit_availability_summary_gmeta',
+                'payments_summary_gadget_metadata',
+                'turnover_analysis_metadata',
+                'building_lister',
+                'gadget_docking_meta']
         LOOP
             -- DROPS NON-EMPTY TABLES!
             SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,v_table_name,TRUE) ;
