@@ -446,8 +446,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                     case Eviction:
                         main.setWidget(0, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).customLabel(i18n.tr("Evict Submission Date")).build());
                         break;
-                    case LegalVacate:
-                        break;
                     case Skip:
                         break;
                     default:

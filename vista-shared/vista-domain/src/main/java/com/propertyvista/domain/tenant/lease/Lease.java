@@ -112,13 +112,16 @@ public interface Lease extends IEntity {
     @XmlType(name = "LeaseCompletionType")
     public enum CompletionType {
 
+        /*
+         * Notice can be given for the Fixed term lease (i.e. Legal Vacate)
+         */
         Notice,
-
-        LegalVacate,
 
         Skip,
 
-        Eviction;
+        Eviction,
+
+        Termination;
 
         @Override
         public String toString() {

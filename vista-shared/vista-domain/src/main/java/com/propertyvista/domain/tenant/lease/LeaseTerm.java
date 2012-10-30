@@ -36,6 +36,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.tenant.Guarantor;
@@ -51,6 +52,7 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
 
         Fixed,
 
+        @Translate("Fixed with Extention")
         FixedEx,
 
         Periodic;
