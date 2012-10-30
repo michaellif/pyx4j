@@ -134,23 +134,19 @@ public interface Lead extends IEntity {
     @Caption(name = "Move-in date")
     IPrimitive<LogicalDate> moveInDate();
 
-    @NotNull
     @ToString(index = 2)
     @Caption(name = "Lease Length")
     IPrimitive<LeaseTerm> leaseTerm();
 
-    @NotNull
     @ToString(index = 3)
     IPrimitive<Service.ServiceType> leaseType();
 
-    @NotNull
     Floorplan floorplan();
 
     @Caption(name = "Questions/Comments")
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> comments();
 
-    @NotNull
     @Caption(name = "How did you hear about us")
     IPrimitive<RefSource> refSource();
 
@@ -172,7 +168,6 @@ public interface Lead extends IEntity {
     @NotNull
     IPrimitive<Status> status();
 
-    @NotNull
     Employee agent();
 
     @Detached

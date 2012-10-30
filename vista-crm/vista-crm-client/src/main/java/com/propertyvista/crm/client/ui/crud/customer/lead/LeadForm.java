@@ -22,10 +22,13 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
@@ -40,6 +43,7 @@ import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -53,6 +57,27 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
     public LeadForm(boolean viewMode) {
         super(Lead.class, viewMode);
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        get(proto().guests()).addValueValidator(new EditableValueValidator<List<Guest>>() {
+            @Override
+            public ValidationError isValid(CComponent<List<Guest>, ?> component, List<Guest> value) {
+                Boolean hasContact = false;
+                if (value != null) {
+                    for (Guest g : value) {
+                        if (!g.person().homePhone().isNull() || !g.person().workPhone().isNull() || !g.person().email().isNull()) {
+                            hasContact = true;
+                            break;
+                        }
+                    }
+                }
+                return hasContact ? null : new ValidationError(component, i18n.tr("No contact info provided"));
+            }
+        });
     }
 
     @Override
