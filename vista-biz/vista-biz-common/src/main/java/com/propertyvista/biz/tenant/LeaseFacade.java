@@ -85,7 +85,11 @@ public interface LeaseFacade {
 
     void cancelCompletionEvent(Lease leaseId, Employee decidedBy, String decisionReason);
 
+    void endLease(Lease leaseId, LogicalDate from);
+
     void cancelLease(Lease leaseId, Employee decidedBy, String decisionReason);
+
+    
 
     // Utils:
 

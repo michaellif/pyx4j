@@ -499,7 +499,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         lease.actualLeaseTo().setValue(from);
-        lease.status().setValue(Status.Completed);
+        if (!new LogicalDate(Persistence.service().getTransactionSystemTime()).before(from)) {
+            lease.status().setValue(Status.Completed);
+        }
 
         updateLeaseDates(lease);
 
@@ -604,6 +606,30 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Persistence.secureSave(lease);
 
         // TODO: add notes with decisionReason!!!
+    }
+
+    // internals:
+
+    @Override
+    public void endLease(Lease leaseId, LogicalDate from) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+
+        // Verify the status
+        if (lease.status().getValue() != Lease.Status.Active) {
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+        }
+        // if renewed and or forcibly moving out:  
+        if (!lease.nextTerm().isNull() && lease.completion().isNull()) {
+            throw new IllegalStateException(SimpleMessageFormat.format("Lease has next term ready"));
+        }
+
+        lease.actualLeaseTo().setValue(from);
+
+        updateLeaseDates(lease);
+
+        Persistence.secureSave(lease);
+
+        ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey(), from);
     }
 
     @Override
