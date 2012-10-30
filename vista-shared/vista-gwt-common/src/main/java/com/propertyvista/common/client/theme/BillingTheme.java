@@ -8,7 +8,7 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Apr 17, 2012
- * @author dev_vista
+ * @author stanp
  * @version $Id$
  */
 package com.propertyvista.common.client.theme;
@@ -16,6 +16,7 @@ package com.propertyvista.common.client.theme;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
+import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 
 public class BillingTheme extends Theme {
 
@@ -32,7 +33,9 @@ public class BillingTheme extends Theme {
         
         BillingDetailTotal, 
         BillingDetailTotalTitle, 
-        BillingDetailTotalAmount
+        BillingDetailTotalAmount,
+        
+        BillingBillTotal
         //@formatter:on
     }
 
@@ -88,6 +91,18 @@ public class BillingTheme extends Theme {
         style.addProperty("padding-top", "4px");
         style.addProperty("font-style", "normal");
         style.addProperty("text-align", "right");
+        addStyle(style);
+
+        style = new Style(".", StyleName.BillingBillTotal, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel);
+        style.addProperty("color", "#666");
+        style.addProperty("font-size", "13px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.BillingBillTotal, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorComponent);
+        style.addProperty("color", "#666");
+        style.addProperty("font-size", "13px");
+        style.addProperty("border-top", "2px solid #bbb");
+        style.addProperty("padding-top", "4px");
         addStyle(style);
     }
 }

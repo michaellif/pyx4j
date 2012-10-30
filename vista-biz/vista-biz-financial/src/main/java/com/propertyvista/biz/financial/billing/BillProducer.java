@@ -249,7 +249,8 @@ class BillProducer {
                 add(nextPeriodBill.immediateAccountAdjustments().getValue()).
                 add(nextPeriodBill.nsfCharges().getValue()).
                 add(nextPeriodBill.depositRefundAmount().getValue()).
-                add(nextPeriodBill.withdrawalAmount().getValue()));
+                add(nextPeriodBill.withdrawalAmount().getValue()).
+                add(nextPeriodBill.carryForwardCredit().getValue()));
 
         nextPeriodBill.currentAmount().setValue(
                 nextPeriodBill.serviceCharge().getValue().
@@ -258,8 +259,7 @@ class BillProducer {
                 add(nextPeriodBill.pendingAccountAdjustments().getValue()).
                 add(nextPeriodBill.previousChargeRefunds().getValue()).
                 add(nextPeriodBill.latePaymentFees().getValue()).
-                add(nextPeriodBill.depositAmount().getValue()).
-                add(nextPeriodBill.carryForwardCredit().getValue()));
+                add(nextPeriodBill.depositAmount().getValue()));
 
         BigDecimal taxCombinedAmount = TaxUtils.calculateCombinedTax(nextPeriodBill.lineItems());
         if (taxCombinedAmount.subtract(nextPeriodBill.taxes().getValue()).abs().compareTo(BigDecimal.ZERO) >= 0.01) {

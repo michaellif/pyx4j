@@ -16,12 +16,14 @@ package com.propertyvista.common.client.ui.components.editors.dto.bill;
 import java.math.BigDecimal;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.dto.BillDTO;
@@ -76,6 +78,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         if (!justPreviewBill) {
             billPanel.setH1(++row, 0, 2, i18n.tr("Last Bill"));
             billPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balanceForwardAmount())).build());
+            billPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().carryForwardCredit())).build());
             billPanel.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new LineItemCollapsibleViewer()));
             billPanel.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsibleViewer()));
             billPanel.setWidget(++row, 0, inject(proto().previousChargeRefundLineItems(), new LineItemCollapsibleViewer()));
@@ -84,8 +87,10 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
             billPanel.setWidget(++row, 0, inject(proto().rejectedPaymentLineItems(), new LineItemCollapsibleViewer()));
             billPanel.setWidget(++row, 0, inject(proto().paymentLineItems(), new LineItemCollapsibleViewer()));
 
-            billPanel.setHR(++row, 0, 2);
-            billPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pastDueAmount())).build());
+//            billPanel.setHR(++row, 0, 1);
+            Widget lastBillTotal = new DecoratorBuilder(inject(proto().pastDueAmount())).build();
+            lastBillTotal.addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
+            billPanel.setWidget(++row, 0, lastBillTotal);
         }
 
         billPanel.setH1(++row, 0, 2, i18n.tr("Current Bill"));
@@ -96,14 +101,15 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         billPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().latePaymentFees())).build());
         billPanel.setWidget(++row, 0, inject(proto().depositLineItems(), new LineItemCollapsibleViewer()));
         billPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productCreditAmount())).build());
-        billPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().carryForwardCredit())).build());
 
         billPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentAmount())).build());
         billPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().taxes())).build());
 
         // Dues:
-        billPanel.setHR(++row, 0, 2);
-        billPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalDueAmount())).build());
+//        billPanel.setHR(++row, 0, 1);
+        Widget grandTotal = new DecoratorBuilder(inject(proto().totalDueAmount())).build();
+        grandTotal.addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
+        billPanel.setWidget(++row, 0, grandTotal);
 
         billPanel.getColumnFormatter().setWidth(0, "50%");
         billPanel.getColumnFormatter().setWidth(1, "50%");
