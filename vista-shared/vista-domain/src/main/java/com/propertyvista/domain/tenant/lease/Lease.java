@@ -85,12 +85,6 @@ public interface Lease extends IEntity {
             return EnumSet.of(Approved, Active, Completed);
         }
 
-        public static EnumSet<Status> currentNew() {
-            EnumSet<Status> set = current();
-            set.add(ExistingLease);
-            return set;
-        }
-
         public static EnumSet<Status> former() {
             return EnumSet.of(Cancelled, Completed, Closed);
         }
@@ -217,6 +211,7 @@ public interface Lease extends IEntity {
     @ToString(index = 3)
     IPrimitive<Status> status();
 
+    @Caption(name = "Reason")
     IPrimitive<CompletionType> completion();
 
     @ReadOnly
