@@ -586,20 +586,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         updateLeaseDates(lease);
 
         Persistence.secureSave(lease);
-
-        switch (completionType) {
-        case Eviction:
-            break;
-        case LegalVacate:
-            break;
-        case Notice:
-//            complete(leaseId, moveOutDay);
-            break;
-        case Skip:
-            break;
-        default:
-            break;
-        }
     }
 
     @Override

@@ -439,6 +439,10 @@ public class LeaseLifecycleSimulator {
                     // the following code is copies the calculations inside the billing facade privates 
                     Persistence.service().retrieve(lease.billingAccount());
                     Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
+                    if (lastBill.billingPeriodStartDate().isNull()) {
+                        // lease ended
+                        return;
+                    }
 
                     Calendar billingPeriodStartDate = new GregorianCalendar();
                     billingPeriodStartDate.setTime(lastBill.billingPeriodStartDate().getValue());
@@ -447,6 +451,7 @@ public class LeaseLifecycleSimulator {
                         // lease ended
                         return;
                     }
+
                     LogicalDate billingCycleDay = calculateBillingCycleTargetExecutionDate(lease.billingAccount().billingType(), new LogicalDate(
                             billingPeriodStartDate.getTime()));
                     // CREEPY PART ENDS HERE *******************************************************************************************************************
@@ -486,6 +491,7 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, now(), lease.currentTerm().termTo().getValue());
+            ServerSideFactory.create(LeaseFacade.class).complete(lease, lease.currentTerm().termTo().getValue());
         }
     }
 
@@ -497,7 +503,9 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            ServerSideFactory.create(LeaseFacade.class).complete(lease);
+            if (lease.status().getValue() == Lease.Status.Active) {
+                ServerSideFactory.create(LeaseFacade.class).complete(lease);
+            }
         }
     }
 

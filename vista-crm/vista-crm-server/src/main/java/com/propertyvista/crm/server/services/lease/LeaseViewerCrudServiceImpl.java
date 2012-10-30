@@ -64,6 +64,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     public void notice(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut) {
         ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId), CompletionType.Notice, date,
                 moveOut);
+
         Persistence.service().commit();
         callback.onSuccess(null);
     }
@@ -72,15 +73,27 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     public void cancelNotice(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason) {
         ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId),
                 CrmAppContext.getCurrentUserEmployee(), decisionReason);
+
         Persistence.service().commit();
         callback.onSuccess(null);
+    }
 
+    @Override
+    public void noticeComplete(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut, LogicalDate completeFrom) {
+        LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
+
+        leaseFacade.createCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId), CompletionType.Notice, date, moveOut);
+        leaseFacade.complete(EntityFactory.createIdentityStub(Lease.class, entityId), completeFrom);
+
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
     @Override
     public void evict(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut) {
         ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId), CompletionType.Eviction,
                 date, moveOut);
+
         Persistence.service().commit();
         callback.onSuccess(null);
     }
@@ -89,6 +102,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     public void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason) {
         ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId),
                 CrmAppContext.getCurrentUserEmployee(), decisionReason);
+
         Persistence.service().commit();
         callback.onSuccess(null);
     }
@@ -137,9 +151,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         }
 
         Persistence.service().commit();
-
         String message = users.size() > 1 ? i18n.tr("Emails were sent successfully") : i18n.tr("Email was sent successfully");
-
         callback.onSuccess(message);
     }
 

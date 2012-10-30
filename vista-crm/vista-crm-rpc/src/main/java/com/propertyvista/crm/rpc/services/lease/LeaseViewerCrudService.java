@@ -36,6 +36,8 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
 
     void cancelNotice(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
 
+    void noticeComplete(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut, LogicalDate completeFrom);
+
     void evict(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut);
 
     void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);

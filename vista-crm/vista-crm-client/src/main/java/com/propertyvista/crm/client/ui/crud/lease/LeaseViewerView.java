@@ -39,6 +39,8 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void cancelNotice(String decisionReason);
 
+        void noticeComplete(LogicalDate date, LogicalDate moveOut, LogicalDate completeFrom);
+
         void evict(LogicalDate date, LogicalDate moveOut);
 
         void cancelEvict(String decisionReason);

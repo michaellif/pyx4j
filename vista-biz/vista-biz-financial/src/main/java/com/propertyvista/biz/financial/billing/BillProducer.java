@@ -302,10 +302,14 @@ class BillProducer {
                     return Bill.BillType.Final;
                 } else {
                     return Bill.BillType.Regular;
-
                 }
             }
         case Completed: // final bill should be issued
+            if (currentPeriodBill != null) {
+                if (currentPeriodBill.billingPeriodEndDate().getValue().compareTo(lease.leaseTo().getValue()) < 0) {
+                    return Bill.BillType.Regular;
+                }
+            }
             return Bill.BillType.Final;
         default:
             throw new BillingException(i18n.tr("Billing can't run when lease is in status ''{0}''", lease.status().getValue()));

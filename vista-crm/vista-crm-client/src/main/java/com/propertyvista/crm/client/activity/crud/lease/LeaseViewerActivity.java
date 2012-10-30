@@ -175,6 +175,16 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
+    public void noticeComplete(LogicalDate date, LogicalDate moveOut, LogicalDate completeFrom) {
+        ((LeaseViewerCrudService) getService()).noticeComplete(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, getEntityId(), date, moveOut, completeFrom);
+    }
+
+    @Override
     public void evict(LogicalDate date, LogicalDate moveOut) {
         ((LeaseViewerCrudService) getService()).evict(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
