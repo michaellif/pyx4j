@@ -56,5 +56,7 @@ public interface VistaTODO {
 
     public final boolean VISTA_2108_View_Lease_Application = false;
 
-    public final boolean VISTA_1789_RenewLease = false;
+    public final boolean VISTA_1789_Renew_Lease = false;
+
+    public final boolean VISTA_2011_Visibility_Of_ProductItems = false;
 }

@@ -29,7 +29,6 @@ import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
@@ -46,11 +45,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
         addTab(createInfoTab());
         addTab(createFinancialTab());
-
-        // TODO : credit check (Equifax) isn't implemented yet (see LeaseApplicationViewerViewImpl)!        
-        if (!VistaTODO.Equifax_Short_VISTA_478) {
-            addTab(createApprovalTab());
-        }
+        addTab(createApprovalTab());
 
         if (VistaFeatures.instance().onlineApplication()) {
             onlineStatusTab = addTab(createOnlineStatusTab());

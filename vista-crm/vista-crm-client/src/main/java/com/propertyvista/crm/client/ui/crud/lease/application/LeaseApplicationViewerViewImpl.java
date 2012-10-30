@@ -135,7 +135,9 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 });
             }
         });
-        addAction(checkAction);
+        if (VistaTODO.Equifax_Short_VISTA_478) {
+            addAction(checkAction);
+        }
 
         // TODO Move Lease
         {
