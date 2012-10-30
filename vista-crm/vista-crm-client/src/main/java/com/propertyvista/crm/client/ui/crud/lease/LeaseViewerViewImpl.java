@@ -166,6 +166,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 new TermLeaseBox(CompletionType.Notice, true) {
                     @Override
                     public boolean onClickOk() {
+                        if (!isValid()) {
+                            return false;
+                        }
 //                        ((LeaseViewerView.Presenter) getPresenter()).notice(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut().getValue());
                         ((LeaseViewerView.Presenter) getPresenter()).noticeComplete(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut()
                                 .getValue(), getValue().actualLeaseTo().getValue());
@@ -200,6 +203,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 new TermLeaseBox(CompletionType.Eviction) {
                     @Override
                     public boolean onClickOk() {
+                        if (!isValid()) {
+                            return false;
+                        }
                         ((LeaseViewerView.Presenter) getPresenter()).evict(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut().getValue());
                         return true;
                     }
@@ -505,8 +511,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             };
 
             content.initContent();
-            content.populate(getForm().getValue());
+            content.populate((LeaseDTO) getForm().getValue().duplicate());
             return content.asWidget();
+        }
+
+        public boolean isValid() {
+            return content.isValid();
         }
 
         public LeaseDTO getValue() {
