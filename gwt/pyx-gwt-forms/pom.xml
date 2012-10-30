@@ -56,6 +56,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-svg-gwt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
