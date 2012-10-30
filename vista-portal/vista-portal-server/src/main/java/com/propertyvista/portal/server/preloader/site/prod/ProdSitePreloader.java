@@ -40,7 +40,7 @@ public class ProdSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected Skin skin() {
-        return Skin.skin1;
+        return Skin.skin4;
     }
 
     @SuppressWarnings("deprecation")
