@@ -16,6 +16,8 @@ package com.propertyvista.biz.financial;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import com.propertyvista.biz.financial.billing.BillExecutionWithAutoApprovalTest;
+import com.propertyvista.biz.financial.billing.BillExecutionWithManualApprovalTest;
 import com.propertyvista.biz.financial.billing.BillableItemAdjustmentTest;
 import com.propertyvista.biz.financial.billing.BillingAllFeaturesAdjustmentsFirstMonthProrationTest;
 import com.propertyvista.biz.financial.billing.BillingBulkRunTest;
@@ -27,7 +29,6 @@ import com.propertyvista.biz.financial.billing.BillingFullCycleScenarioTest;
 import com.propertyvista.biz.financial.billing.BillingFullCycleServAdjMonScenarioTest;
 import com.propertyvista.biz.financial.billing.BillingLatePaymentScenarioTest;
 import com.propertyvista.biz.financial.billing.BillingLeaseOnlyAgingScenarioTest;
-import com.propertyvista.biz.financial.billing.BillExecutionTest;
 import com.propertyvista.biz.financial.billing.BillingModelTest;
 import com.propertyvista.biz.financial.billing.BillingPeriodsTest;
 import com.propertyvista.biz.financial.billing.BillingRejectedPaymentScenarioTest;
@@ -53,7 +54,8 @@ import com.propertyvista.biz.financial.deposit.DepositFullCycleScenarioTest;
         BillingFullCycleServAdjMonScenarioTest.class,
         BillingLatePaymentScenarioTest.class, 
         BillingLeaseOnlyAgingScenarioTest.class, 
-        BillExecutionTest.class, 
+        BillExecutionWithManualApprovalTest.class, 
+        BillExecutionWithAutoApprovalTest.class, 
         BillingModelTest.class,
         BillingPeriodsTest.class, 
         BillingRejectedPaymentScenarioTest.class, 

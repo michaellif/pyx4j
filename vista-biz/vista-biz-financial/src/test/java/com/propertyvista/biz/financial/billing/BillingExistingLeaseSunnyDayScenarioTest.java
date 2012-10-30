@@ -31,7 +31,6 @@ import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.test.preloader.PreloadConfig;
 
 @Category(FunctionalTests.class)
 public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase {
@@ -39,8 +38,7 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        PreloadConfig config = new PreloadConfig();
-        preloadData(config);
+        preloadData();
     }
 
     public void testScenario() {

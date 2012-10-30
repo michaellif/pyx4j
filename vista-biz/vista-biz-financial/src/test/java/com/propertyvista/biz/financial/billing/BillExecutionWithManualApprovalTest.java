@@ -29,7 +29,7 @@ import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.domain.financial.billing.Bill;
 
 @Category(FunctionalTests.class)
-public class BillExecutionTest extends FinancialTestBase {
+public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
     @Override
     protected void setUp() throws Exception {
@@ -37,16 +37,16 @@ public class BillExecutionTest extends FinancialTestBase {
         preloadData();
     }
 
-    public void testScenario() {
+    public void testNewLease() {
 
         setLeaseBatchProcess();
         setBillingBatchProcess();
 
         setDate("15-Feb-2011");
 
-        createLease("1-Mar-2011", "31-Aug-2011");
+        createLease("1-Mar-2011", "31-May-2011");
 
-        //==================== RUN 1 ======================//
+        //==================== CYCLE 1 ======================//
 
         advanceDate("17-Feb-2011");
         approveApplication(true);
@@ -63,10 +63,7 @@ public class BillExecutionTest extends FinancialTestBase {
         numOfProductCharges(1);
         // @formatter:on
 
-        //==================== RUN 2 ======================//
-
-        advanceDate("02-Mar-2011");
-        receiveAndPostPayment("02-Mar-2011", "1972.24");
+        //==================== CYCLE 2 ======================//
 
         advanceDate("18-Mar-2011");
         bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
@@ -82,13 +79,9 @@ public class BillExecutionTest extends FinancialTestBase {
         numOfProductCharges(1);
         // @formatter:on
 
-        advanceDate("25-Mar-2011");
-        receiveAndPostPayment("25-Mar-2011", "1041.94");
-
-        //==================== RUN 3 ======================//
+        //==================== CYCLE 3 ======================//
 
         advanceDate("18-Apr-2011");
-
         bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
         confirmBill(bill, true, true);
 
@@ -99,14 +92,40 @@ public class BillExecutionTest extends FinancialTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
-        numOfProductCharges(1).
-        paymentReceivedAmount("-1041.94").
-        serviceCharge("930.30").
-        recurringFeatureCharges("0.00").
-        oneTimeFeatureCharges("0.00").
-        taxes("111.64").
-        totalDueAmount("1141.94");
+        numOfProductCharges(1);
         // @formatter:on
+
+        //==================== CYCLE 4 ======================//
+
+        advanceDate("18-May-2011");
+        bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
+
+        //Billing does't run in the last cycle of lease term
+        // @formatter:off
+        new BillTester(bill).
+        billSequenceNumber(3).
+        previousBillSequenceNumber(2).
+        billType(Bill.BillType.Regular).
+        billingPeriodStartDate("1-May-2011").
+        billingPeriodEndDate("31-May-2011").
+        numOfProductCharges(1);
+        // @formatter:on
+
+        //==================== FINAL ======================//
+
+        advanceDate("05-Jun-2011");
+        bill = runBilling(true, true);
+
+        // @formatter:off
+        new BillTester(bill).
+        billSequenceNumber(4).
+        previousBillSequenceNumber(3).
+        billType(Bill.BillType.Final);
+        // @formatter:on
+
+    }
+
+    public void testExistingLease() {
 
     }
 
