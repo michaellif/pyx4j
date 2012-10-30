@@ -64,7 +64,7 @@ public class DelinquentTenantsDetailsFactory extends AbstractListerDetailsFactor
 
         @Override
         protected void onItemSelect(DelinquentTenantDTO item) {
-            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Tenant().formViewerPlace(item.getPrimaryKey()));
+            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Tenant().formViewerPlace(item.leaseCustomer().getPrimaryKey()));
         }
     }
 
