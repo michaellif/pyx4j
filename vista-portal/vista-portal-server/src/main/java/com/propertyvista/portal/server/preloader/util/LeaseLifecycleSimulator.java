@@ -159,7 +159,7 @@ public class LeaseLifecycleSimulator {
 
         queueEvent(reservedOn, new Create(lease));
         queueEvent(max(leaseFrom, sub(leaseTo, rndBetween(MIN_NOTICE_TERM, MAX_NOTICE_TERM))), new Notice(lease));
-        queueEvent(leaseTo, new Complete(lease));
+//        queueEvent(leaseTo, new Complete(lease));
 
         queueMaintenanceRequests(lease);
 

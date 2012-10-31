@@ -499,7 +499,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         lease.actualLeaseTo().setValue(from);
-        if (!new LogicalDate(Persistence.service().getTransactionSystemTime()).before(from)) {
+        if (!from.after(Persistence.service().getTransactionSystemTime())) {
             lease.status().setValue(Status.Completed);
         }
 
