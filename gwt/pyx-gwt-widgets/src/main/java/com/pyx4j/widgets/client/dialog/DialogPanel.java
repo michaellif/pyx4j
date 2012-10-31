@@ -126,7 +126,11 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
 
         container = new DockPanel();
         DOM.setStyleAttribute(container.getElement(), "cursor", "default");
-
+        if (BrowserType.isIE()) {
+            // limit min size for safe resizing
+            DOM.setStyleAttribute(container.getElement(), "minWidth", "300px");
+            DOM.setStyleAttribute(container.getElement(), "minHeight", "200px");
+        }
         captionPanel = new CaptionPanel();
         container.add(captionPanel, DockPanel.NORTH);
 
