@@ -27,14 +27,15 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -55,6 +56,8 @@ import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityGadgetMetadata> implements IBuildingBoardGadgetInstance {
+
+    private static final I18n i18n = I18n.get(UnitAvailabilityGadget.class);
 
     private static final List<ColumnDescriptor> DEFAULT_COLUMN_DESCRIPTORS;
     static {
@@ -92,7 +95,7 @@ public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityG
 
     private HTML filterDisplayPanel;
 
-    private CDatePicker asOf;
+    private Label asOf;
 
     private BasicLister<UnitAvailabilityStatusDTO> lister;
 
@@ -201,9 +204,7 @@ public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityG
         asForBannerPanel.setWidth("100%");
         asForBannerPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 
-        asOf = new CDatePicker();
-        asOf.setValue(getStatusDate());
-        asOf.setViewable(true);
+        asOf = new Label();
 
         asForBannerPanel.add(asOf);
         return asForBannerPanel.asWidget();
@@ -221,6 +222,6 @@ public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityG
     }
 
     private void redrawAsOfBannerPanel() {
-        asOf.setValue(getStatusDate());
+        asOf.setText(i18n.tr("As of Date: {0,date,short}", getStatusDate()));
     }
 }
