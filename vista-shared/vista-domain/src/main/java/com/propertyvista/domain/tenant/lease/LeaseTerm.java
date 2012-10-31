@@ -106,6 +106,8 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
     @ToString(index = 1)
     IPrimitive<LogicalDate> termTo();
 
+    IPrimitive<LogicalDate> actualTermTo();
+
     @ReadOnly
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> creationDate();

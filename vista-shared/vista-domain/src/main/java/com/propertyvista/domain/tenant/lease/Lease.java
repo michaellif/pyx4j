@@ -182,7 +182,7 @@ public interface Lease extends IEntity {
 
     /**
      * lease begin/end:
-     * Note: the dates are Transient and has being re-calculated in {@link LeaseFacade#load(Lease lease, boolean forEdit)} method
+     * Note: the dates are Transient and has being re-calculated in {@link LeaseFacade#updateLeaseDates(Lease lease)} method
      */
     @NotNull
     IPrimitive<LogicalDate> leaseFrom();
@@ -192,7 +192,16 @@ public interface Lease extends IEntity {
 
     // other dates:
 
+    /*
+     * equals to null for active lease
+     * or set to real end lease date for completed lease
+     */
     IPrimitive<LogicalDate> actualLeaseTo();
+
+    /*
+     * set to custom date in case of termination
+     */
+    IPrimitive<LogicalDate> terminationLeaseTo();
 
     IPrimitive<LogicalDate> expectedMoveIn();
 
@@ -214,7 +223,7 @@ public interface Lease extends IEntity {
     @ToString(index = 3)
     IPrimitive<Status> status();
 
-    @Caption(name = "Reason")
+    @Caption(name = "Completion Reason")
     IPrimitive<CompletionType> completion();
 
     @ReadOnly
