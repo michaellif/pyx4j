@@ -25,6 +25,8 @@ SELECT array(SELECT a.relname FROM pg_class a JOIN pg_constraint b ON (a.oid = b
 $$
 LANGUAGE SQL;
 
+DROP TYPE schema_depndencies_type;
+
 CREATE TYPE schema_depndencies_type AS
 (
 	schema_name			name,
@@ -819,7 +821,7 @@ DECLARE
 BEGIN
         FOR v_schema_name IN
         SELECT namespace FROM _admin_.admin_pmc
-        WHERE status IN ('Active','Suspended')
+        WHERE status != 'Created'
         ORDER BY 1
         LOOP
                 v_sql :=  'SELECT '||quote_literal(v_schema_name)||' AS pmc,COUNT(id) '
@@ -838,3 +840,53 @@ END;
 $$
 LANGUAGE plpgsql VOLATILE;
 
+/**
+***     ================================================================================
+***
+***             Function to determine if pmc schema differs from an example pmc schema
+***             Example schema is last created active or suspended pmc
+***             Uses _dba_.compare_schema_tables,_dba_.compare_schema_constraints
+***             and _dba_.compare_schema_tables and is quite slow as a result
+***
+***     ================================================================================
+**/
+
+CREATE OR REPLACE FUNCTION _dba_.check_all_pmc_schemas() RETURNS TABLE
+(       pmc_name                VARCHAR(64),
+        compared_to             VARCHAR(64),
+        modified_table_columns  INT,
+        modified_constraints    INT,
+        modified_indexes        INT)
+AS
+$$
+DECLARE
+        v_example_schema_name   VARCHAR(64);
+        v_schema_name           VARCHAR(64);
+BEGIN
+        SELECT  namespace
+        INTO    v_example_schema_name
+        FROM    _admin_.admin_pmc 
+        WHERE   created = (     SELECT  MAX(created) 
+                                FROM    _admin_.admin_pmc
+                                WHERE   status != 'Created');
+                                
+        FOR     v_schema_name IN 
+        SELECT  namespace FROM _admin_.admin_pmc
+        WHERE   status != 'Created'
+        AND     namespace != v_example_schema_name   
+        LOOP
+                SELECT  v_schema_name,v_example_schema_name,a.count,
+                        b.count,c.count
+                INTO    pmc_name,compared_to,modified_table_columns,
+                        modified_constraints,modified_indexes
+                FROM    (SELECT COUNT(*) FROM _dba_.compare_schema_tables(v_schema_name,v_example_schema_name)) a,
+                        (SELECT COUNT(*) FROM _dba_.compare_schema_constraints(v_schema_name,v_example_schema_name)) b,
+                        (SELECT COUNT(*) FROM _dba_.compare_schema_indexes(v_schema_name,v_example_schema_name)) c;
+                
+                RETURN NEXT;
+        
+        END LOOP;
+        
+END;
+$$
+LANGUAGE plpgsql VOLATILE;
