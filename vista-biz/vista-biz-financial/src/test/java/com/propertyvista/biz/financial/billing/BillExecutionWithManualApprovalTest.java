@@ -20,6 +20,8 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import java.math.BigDecimal;
+
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -126,6 +128,29 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
     }
 
     public void testExistingLease() {
+        setLeaseBatchProcess();
+        setBillingBatchProcess();
+
+        setDate("15-Feb-2011");
+
+        createLease("1-Mar-2009", "31-Aug-2011", null, new BigDecimal("300.00"));
+
+        //==================== CYCLE 1 ======================//
+
+        advanceDate("22-Feb-2011");
+        approveExistingLease(true);
+
+        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
+
+        // @formatter:off
+        new BillTester(bill).
+        billSequenceNumber(1).
+        previousBillSequenceNumber(null).
+        billType(Bill.BillType.ZeroCycle).
+        billingPeriodStartDate("1-Feb-2011").
+        billingPeriodEndDate("28-Feb-2011").
+        numOfProductCharges(1);
+        // @formatter:on
 
     }
 
