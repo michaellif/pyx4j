@@ -255,8 +255,6 @@ public class MessageTemplates {
     }
 
     public static MailMessage createNewPmcEmail(OnboardingUser user, Pmc pmc) {
-        EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
-        context.user().set(user);
 
         EmailTemplate emailTemplate = emailTemplateNewPmc(user, pmc);
 
@@ -267,6 +265,8 @@ public class MessageTemplates {
         email.setSender(getSender());
         // set email subject and body from the template
         buildEmail(email, emailTemplate, data);
+		// log entries for debugging, will remove later -- yuriy
+        log.error("EMAIL CREATED:", email);
 
         return email;
     }
@@ -356,13 +356,18 @@ public class MessageTemplates {
         template.subject().setValue(i18n.tr("New PMC Created"));
         try {
             String body = IOUtils.getTextResource("new-pmc.html");
+            log.error(body);
             body = body.replace("${ownerName}", EmailTemplateManager.getVarname(user.name()));
             body = body.replace("${crmLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true));
             body = body.replace("${portalLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.TenantPortal, true));
+            // log entries for debugging, will remove later -- yuriy
+			log.error("STRINGS REPLACED");
 
             template.content().setValue(wrapAdminHtml(i18n.tr(//@formatter:off
                 body
         )));//@formatter:on
+			// log entries for debugging, will remove later -- yuriy
+            log.error("MESSAGE WRAPPED");
             return template;
 
         } catch (IOException e) {

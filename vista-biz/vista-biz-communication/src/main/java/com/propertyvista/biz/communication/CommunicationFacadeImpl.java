@@ -234,12 +234,18 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         }
     }
 
+    @Override
     public void sendNewPmcEmail(OnboardingUser user, Pmc pmc) {
         if (disabled) {
             return;
         }
 
         final MailMessage m = MessageTemplates.createNewPmcEmail(user, pmc);
+
+        CrmUserCredential credential = Persistence.service().retrieve(CrmUserCredential.class, user.getPrimaryKey());
+        if (!credential.recoveryEmail().isNull()) {
+            m.setTo(credential.recoveryEmail().getValue());
+        }
 
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
