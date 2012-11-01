@@ -175,6 +175,9 @@ import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjus
 import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerminationPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerminationPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerminationPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LegalDocumentationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LegalDocumentationPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LegalDocumentationPolicyViewerActivity;
@@ -886,6 +889,19 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new ProductTaxPolicyViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof CrmSiteMap.Settings.Policies.LeaseTermination) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new LeaseTerminationPolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new LeaseTerminationPolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new LeaseTerminationPolicyViewerActivity(crudPlace);
                             break;
                         }
 

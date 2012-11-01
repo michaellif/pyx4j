@@ -442,6 +442,12 @@ public class CrmSiteMap implements SiteMap {
             public static class LeaseAdjustmentPolicy extends CrmCrudAppPlace {
             }
 
+            @PlaceProperties(caption = "Lease Termination")
+            @NavigationItem(navigLabel = "Lease Termination")
+            public static class LeaseTermination extends CrmCrudAppPlace {
+
+            }
+
             @PlaceProperties(caption = "Deposits")
             @NavigationItem(navigLabel = "Deposits")
             public static class Deposits extends CrmCrudAppPlace {

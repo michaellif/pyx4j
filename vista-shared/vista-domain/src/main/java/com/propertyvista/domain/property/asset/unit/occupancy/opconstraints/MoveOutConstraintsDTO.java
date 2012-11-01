@@ -19,15 +19,18 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface EndLeaseConstraintsDTO extends IEntity {
+public interface MoveOutConstraintsDTO extends IEntity {
 
     /**
-     * @return <code>null</code> if 'EndLease' operation cannot be performed
+     * @return <code>null</code> if 'setMoveOutDate' operation cannot be performed
      */
-    IPrimitive<LogicalDate> minleaseEndDate();
+    IPrimitive<LogicalDate> minMoveOutDate();
 
     /**
-     * @return <code>null</code> if 'EndLease' operation cannot be performed
+     * @return <code>null</code> if 'setMoveOutDate' operation cannot be performed
      */
-    IPrimitive<LogicalDate> maxleaseEndDate();
+    IPrimitive<LogicalDate> maxMoveOutDate();
+
+    /** if 'setMoveOutDate' operation cannot be performed returns a message that describes why */
+    IPrimitive<String> errorMessage();
 }

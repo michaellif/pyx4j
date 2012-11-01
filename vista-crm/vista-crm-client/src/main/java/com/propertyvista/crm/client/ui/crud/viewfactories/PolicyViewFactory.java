@@ -62,6 +62,12 @@ import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPo
 import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.leasetermination.LeaseTerminationPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.leasetermination.LeaseTerminationPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.leasetermination.LeaseTerminationPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.leasetermination.LeaseTerminationPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.leasetermination.LeaseTerminationPolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.leasetermination.LeaseTerminationPolicyViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LegalDocumentationPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LegalDocumentationPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LegalDocumentationPolicyListerView;
@@ -166,6 +172,13 @@ public class PolicyViewFactory extends ViewFactoryBase {
                 map.put(LeaseBillingPolicyEditorView.class, new LeaseBillingPolicyEditorViewImpl());
             } else if (LeaseBillingPolicyViewerView.class.equals(type)) {
                 map.put(LeaseBillingPolicyViewerView.class, new LeaseBillingPolicyViewerViewImpl());
+
+            } else if (LeaseTerminationPolicyListerView.class.equals(type)) {
+                map.put(type, new LeaseTerminationPolicyListerViewImpl());
+            } else if (LeaseTerminationPolicyViewerView.class.equals(type)) {
+                map.put(type, new LeaseTerminationPolicyViewerViewImpl());
+            } else if (LeaseTerminationPolicyEditorView.class.equals(type)) {
+                map.put(type, new LeaseTerminationPolicyEditorViewImpl());
 
             } else if (IdAssignmentPolicyListerView.class.equals(type)) {
                 map.put(IdAssignmentPolicyListerView.class, new IdAssignmentPolicyListerViewImpl());
