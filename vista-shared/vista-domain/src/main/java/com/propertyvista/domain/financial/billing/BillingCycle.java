@@ -57,8 +57,6 @@ public interface BillingCycle extends IEntity {
     @ReadOnly
     IPrimitive<LogicalDate> executionTargetDate();
 
-    IPrimitive<LogicalDate> triggerDate();
-
     @Owned(forceCreation = true)
     BillingCycleStats stats();
 

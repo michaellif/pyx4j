@@ -15,6 +15,7 @@ package com.propertyvista.biz.tenant;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -418,8 +419,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (bill.billStatus().getValue() != Bill.BillStatus.Failed) {
             ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
 
-            // for zero cycle bill also create the next bill if we are past the triggerDate of the cycle
-            if (BillType.ZeroCycle.equals(bill.billType().getValue()) && !bill.billingCycle().triggerDate().isNull()) {
+            // for zero cycle bill also create the next bill if we are past the executionTargetDate of the cycle
+            Date curDate = Persistence.service().getTransactionSystemTime();
+            if (BillType.ZeroCycle.equals(bill.billType().getValue()) && !curDate.before(bill.billingCycle().executionTargetDate().getValue())) {
                 ServerSideFactory.create(BillingFacade.class).runBilling(lease);
             }
         } else {

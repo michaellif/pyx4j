@@ -96,27 +96,7 @@ public class BillingManager {
         criteria.add(PropertyCriterion.eq(criteria.proto().executionTargetDate(), date));
         ICursorIterator<BillingCycle> billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         while (billingCycleIterator.hasNext()) {
-            final BillingCycle cycle = billingCycleIterator.next();
-            if (cycle.triggerDate().isNull()) {
-                cycle.triggerDate().setValue(date);
-
-                TaskRunner.runAutonomousTransation(new Callable<Void>() {
-                    @Override
-                    public Void call() {
-                        Persistence.service().persist(cycle);
-                        Persistence.service().commit();
-                        return null;
-                    }
-                });
-
-                //TODO remove after test - vlads
-                BillingCycle billingCycle2 = Persistence.service().retrieve(BillingCycle.class, cycle.getPrimaryKey());
-                if (billingCycle2.triggerDate().isNull()) {
-                    throw new Error("Read commited not working");
-                }
-            }
-
-            runBilling(cycle, dynamicStatisticsRecord);
+            runBilling(billingCycleIterator.next(), dynamicStatisticsRecord);
         }
     }
 
