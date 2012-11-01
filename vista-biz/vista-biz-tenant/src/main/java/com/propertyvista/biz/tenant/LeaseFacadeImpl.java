@@ -512,12 +512,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         updateLeaseDates(lease);
 
         Persistence.secureSave(lease);
-
-        try {
-            ServerSideFactory.create(OccupancyFacade.class).moveOut(lease.unit().getPrimaryKey(), lease.actualLeaseTo().getValue());
-        } catch (OccupancyOperationException e) {
-            throw new IllegalStateException(e.getMessage());
-        }
     }
 
     @Override
