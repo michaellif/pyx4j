@@ -46,6 +46,7 @@ import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
+import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
@@ -153,6 +154,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         startTime = System.currentTimeMillis();
 
         TestLifecycle.testSession(null, VistaBasicBehavior.CRM);
+        TestLifecycle.testNamespace(VistaTestsNamespaceResolver.demoNamespace);
         TestLifecycle.beginRequest();
     }
 
