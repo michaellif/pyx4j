@@ -109,7 +109,7 @@ public class AvailabilityReportManager {
             case reserved:
                 reserved(status, current, current.dateFrom().getValue());
                 break;
-            case leased:
+            case occupied:
                 leased(status, current, future);
                 break;
             case renovation:
@@ -155,7 +155,7 @@ public class AvailabilityReportManager {
         // implicit: status.rentedFromDate().setValue(null);
 
         for (AptUnitOccupancySegment segment : future) {
-            if (segment.status().getValue() == Status.leased | segment.status().getValue() == Status.reserved) {
+            if (segment.status().getValue() == Status.occupied | segment.status().getValue() == Status.reserved) {
                 status.rentedStatus().setValue(RentedStatus.Rented);
                 status.rentedFromDay().setValue(segment.lease().currentTerm().termFrom().getValue());
                 status.moveInDay().setValue(segment.lease().expectedMoveIn().getValue());
@@ -219,7 +219,7 @@ public class AvailabilityReportManager {
                 }
                 break;
             case reserved:
-            case leased:
+            case occupied:
                 if (status.rentedStatus() != null) {
                     if (status.scoping().getValue() == null) {
                         status.scoping().setValue(Scoping.Scoped);
@@ -250,7 +250,7 @@ public class AvailabilityReportManager {
         // implicit: status.rentedFromDate().setValue(null);
 
         for (AptUnitOccupancySegment segment : future) {
-            if (segment.status().getValue() == Status.leased | segment.status().getValue() == Status.reserved) {
+            if (segment.status().getValue() == Status.occupied | segment.status().getValue() == Status.reserved) {
                 status.rentedStatus().setValue(RentedStatus.Rented);
                 status.rentedFromDay().setValue(segment.lease().currentTerm().termFrom().getValue());
                 status.moveInDay().setValue(segment.lease().expectedMoveIn().getValue());

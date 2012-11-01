@@ -131,7 +131,7 @@ public class UnitTurnoverAnalysisManagerTestBase {
 
             @Override
             public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
-                segment.status().setValue(Status.leased);
+                segment.status().setValue(Status.occupied);
                 segment.lease().set(lease);
             }
         });

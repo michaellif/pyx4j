@@ -28,7 +28,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-02-15").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+        setup().from("2011-02-15").toTheEndOfTime().status(Status.occupied).withLease(lease).x();
 
         now("2011-08-01");
 
@@ -36,7 +36,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-02-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-25").status(Status.occupied).withLease(lease).x();
         expect().from("2011-10-26").toTheEndOfTime().status(Status.pending).x();
 
         assertExpectedTimeline();
@@ -50,7 +50,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-01-15").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+        setup().from("2011-01-15").toTheEndOfTime().status(Status.occupied).withLease(lease).x();
 
         now("2011-08-01");
 
@@ -58,7 +58,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-01-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        expect().from("2011-01-15").to("2011-10-20").status(Status.occupied).withLease(lease).x();
         expect().from("2011-10-21").toTheEndOfTime().status(Status.pending).x();
         assertExpectedTimeline();
         assertUnitIsNotAvailable();
@@ -70,7 +70,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-01-15").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+        setup().from("2011-01-15").toTheEndOfTime().status(Status.occupied).withLease(lease).x();
 
         now("2011-08-01");
 
@@ -83,7 +83,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.occupied).withLease(lease).x();
         setup().from("2011-10-21").toTheEndOfTime().status(Status.pending).x();
 
         now("2011-08-01");
@@ -92,7 +92,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-02-15").to("2011-10-24").status(Status.leased).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-24").status(Status.occupied).withLease(lease).x();
         expect().from("2011-10-25").toTheEndOfTime().status(Status.pending).x();
         assertExpectedTimeline();
         assertUnitIsNotAvailable();
@@ -104,7 +104,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.occupied).withLease(lease).x();
         setup().from("2011-10-21").to("2011-10-23").status(Status.pending).x();
         setup().from("2011-10-24").to("2011-10-25").status(Status.renovation).x();
         setup().from("2011-10-26").toTheEndOfTime().status(Status.available).x();
@@ -115,7 +115,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-02-15").to("2011-10-24").status(Status.leased).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-24").status(Status.occupied).withLease(lease).x();
         expect().from("2011-10-24").to("2011-10-25").status(Status.renovation).x();
         expect().from("2011-10-26").toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
@@ -131,7 +131,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.occupied).withLease(lease).x();
         setup().from("2011-10-21").to("2011-10-23").status(Status.pending).x();
         setup().from("2011-10-24").to("2011-10-25").status(Status.renovation).x();
         setup().from("2011-10-26").toTheEndOfTime().status(Status.available).x();
@@ -142,7 +142,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-02-15").to("2011-10-22").status(Status.leased).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-22").status(Status.occupied).withLease(lease).x();
         expect().from("2011-10-23").to("2011-10-23").status(Status.pending).x();
         expect().from("2011-10-24").to("2011-10-25").status(Status.renovation).x();
         expect().from("2011-10-26").toTheEndOfTime().status(Status.available).x();
@@ -160,9 +160,9 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.occupied).withLease(lease).x();
         setup().from("2011-10-21").to("2011-10-23").status(Status.reserved).withLease(leaseFuture).x();
-        setup().from("2011-10-24").toTheEndOfTime().status(Status.leased).withLease(leaseFuture).x();
+        setup().from("2011-10-24").toTheEndOfTime().status(Status.occupied).withLease(leaseFuture).x();
 
         now("2011-08-01");
 
@@ -170,9 +170,9 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-02-15").to("2011-10-22").status(Status.leased).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-22").status(Status.occupied).withLease(lease).x();
         expect().from("2011-10-23").to("2011-10-23").status(Status.reserved).withLease(leaseFuture).x();
-        expect().from("2011-10-24").toTheEndOfTime().status(Status.leased).withLease(leaseFuture).x();
+        expect().from("2011-10-24").toTheEndOfTime().status(Status.occupied).withLease(leaseFuture).x();
 
         assertExpectedTimeline();
         assertUnitIsNotAvailable();
@@ -188,9 +188,9 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.occupied).withLease(lease).x();
         setup().from("2011-10-21").to("2011-10-23").status(Status.reserved).withLease(leaseFuture).x();
-        setup().from("2011-10-24").toTheEndOfTime().status(Status.leased).withLease(leaseFuture).x();
+        setup().from("2011-10-24").toTheEndOfTime().status(Status.occupied).withLease(leaseFuture).x();
 
         now("2011-08-01");
 
@@ -198,8 +198,8 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-02-15").to("2011-10-23").status(Status.leased).withLease(lease).x();
-        expect().from("2011-10-24").toTheEndOfTime().status(Status.leased).withLease(leaseFuture).x();
+        expect().from("2011-02-15").to("2011-10-23").status(Status.occupied).withLease(lease).x();
+        expect().from("2011-10-24").toTheEndOfTime().status(Status.occupied).withLease(leaseFuture).x();
 
         assertExpectedTimeline();
         assertUnitIsNotAvailable();
@@ -215,9 +215,9 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.occupied).withLease(lease).x();
         setup().from("2011-10-21").to("2011-10-23").status(Status.reserved).withLease(leaseFuture).x();
-        setup().from("2011-10-24").toTheEndOfTime().status(Status.leased).withLease(leaseFuture).x();
+        setup().from("2011-10-24").toTheEndOfTime().status(Status.occupied).withLease(leaseFuture).x();
 
         now("2011-08-01");
 
@@ -234,7 +234,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.occupied).withLease(lease).x();
         setup().from("2011-10-21").toTheEndOfTime().status(Status.reserved).withLease(leaseFuture).x();
 
         now("2011-08-01");
@@ -251,7 +251,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.occupied).withLease(lease).x();
         setup().from("2011-10-21").toTheEndOfTime().status(Status.pending).x();
 
         now("2011-08-01");
@@ -260,7 +260,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-02-15").to("2011-10-19").status(Status.leased).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-19").status(Status.occupied).withLease(lease).x();
         expect().from("2011-10-20").toTheEndOfTime().status(Status.pending).x();
 
         assertExpectedTimeline();
@@ -274,8 +274,8 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-01-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
-        setup().from("2011-10-26").toTheEndOfTime().status(Status.leased).withLease(nextlease).x();
+        setup().from("2011-01-15").to("2011-10-25").status(Status.occupied).withLease(lease).x();
+        setup().from("2011-10-26").toTheEndOfTime().status(Status.occupied).withLease(nextlease).x();
 
         now("2011-08-01");
 
@@ -283,9 +283,9 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-01-15").to("2011-10-23").status(Status.leased).withLease(lease).x();
+        expect().from("2011-01-15").to("2011-10-23").status(Status.occupied).withLease(lease).x();
         expect().from("2011-10-24").to("2011-10-25").status(Status.reserved).withLease(nextlease).x();
-        expect().from("2011-10-26").toTheEndOfTime().status(Status.leased).withLease(nextlease).x();
+        expect().from("2011-10-26").toTheEndOfTime().status(Status.occupied).withLease(nextlease).x();
 
         assertExpectedTimeline();
         assertUnitIsNotAvailable();
@@ -297,7 +297,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.occupied).withLease(lease).x();
         setup().from("2011-10-21").toTheEndOfTime().status(Status.pending).x();
 
         now("2011-02-15");
@@ -306,7 +306,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-02-15").to("2011-02-15").status(Status.leased).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-02-15").status(Status.occupied).withLease(lease).x();
         expect().from("2011-02-16").toTheEndOfTime().status(Status.pending).x();
 
         assertExpectedTimeline();
@@ -319,7 +319,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-01-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-01-15").to("2011-10-20").status(Status.occupied).withLease(lease).x();
         setup().from("2011-10-21").toTheEndOfTime().status(Status.pending).x();
 
         now("2011-02-15");
@@ -331,7 +331,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
     public void testCancelMoveOut() throws Exception {
         Lease lease = createLease("2011-05-20", "2012-12-31");
         setup().fromTheBeginning().to("2011-05-19").status(Status.pending).x();
-        setup().from("2011-05-20").to("2012-12-31").status(Status.leased).withLease(lease).x();
+        setup().from("2011-05-20").to("2012-12-31").status(Status.occupied).withLease(lease).x();
         setup().from("2013-01-01").toTheEndOfTime().status(Status.available).x();
 
         now("2011-11-01");
@@ -339,7 +339,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
         getUOM().cancelMoveOut(unitId);
 
         expect().fromTheBeginning().to("2011-05-19").status(Status.pending).x();
-        expect().from("2011-05-20").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+        expect().from("2011-05-20").toTheEndOfTime().status(Status.occupied).withLease(lease).x();
         assertUnitIsNotAvailable();
     }
 

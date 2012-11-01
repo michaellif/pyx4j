@@ -38,7 +38,7 @@ public interface AptUnitOccupancySegment extends IEntity {
     @XmlType(name = "AptUnitOccupancySegmentStatus")
     public enum Status {
 
-        leased,
+        occupied,
 
         available,
 

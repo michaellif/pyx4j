@@ -42,7 +42,7 @@ public class UnitOccupancyLister extends ListerBase<AptUnitOccupancySegment> {
 
     @Override
     protected void onItemSelect(AptUnitOccupancySegment item) {
-        if (item.status().getValue() == Status.leased) {
+        if (item.status().getValue() == Status.occupied) {
             AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Lease.class).formViewerPlace(item.lease().getPrimaryKey()));
         } else if (item.status().getValue() == Status.reserved) {
             AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(item.lease().getPrimaryKey()));

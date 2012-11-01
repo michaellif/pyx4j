@@ -98,7 +98,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
     @Test
     public void testgetMakeVacantConstraintsWhenMaxIsLimitedByAvaialble() {
         Lease lease = createLease("2010-01-01", "2010-01-02");
-        setup().from("2010-01-01").to("2010-01-02").status(Status.leased).withLease(lease).x();
+        setup().from("2010-01-01").to("2010-01-02").status(Status.occupied).withLease(lease).x();
         setup().from("2010-01-03").to("2010-02-05").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
         setup().from("2010-02-06").toTheEndOfTime().status(Status.available).x();
 
@@ -126,7 +126,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
     @Test
     public void testGetMakeVacantConstraintsWhenRenovated() {
         Lease lease = createLease("2010-01-01", "2010-01-02");
-        setup().from("2010-01-01").to("2010-01-02").status(Status.leased).withLease(lease).x();
+        setup().from("2010-01-01").to("2010-01-02").status(Status.occupied).withLease(lease).x();
         setup().from("2010-01-03").to("2010-02-05").status(Status.renovation).x();
         setup().from("2010-02-06").toTheEndOfTime().status(Status.available).x();
 
@@ -154,7 +154,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
     @Test
     public void testgetMakeVacantConstraintsWhenMaxIsLimitedByVacant() {
         Lease lease = createLease("2010-01-01", "2010-01-02");
-        setup().from("2010-01-01").to("2010-01-02").status(Status.leased).withLease(lease).x();
+        setup().from("2010-01-01").to("2010-01-02").status(Status.occupied).withLease(lease).x();
         setup().from("2010-01-03").to("2010-02-05").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
         setup().from("2010-02-06").toTheEndOfTime().status(Status.pending).x();
 
@@ -180,7 +180,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
     @Test
     public void testgetMakeVacantConstraintsWhenMaxIsNotLimited() {
         Lease lease = createLease("2010-01-01", "2010-01-02");
-        setup().from("2010-01-01").to("2010-01-02").status(Status.leased).withLease(lease).x();
+        setup().from("2010-01-01").to("2010-01-02").status(Status.occupied).withLease(lease).x();
         setup().from("2010-01-03").to("2010-02-05").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
         setup().from("2010-02-06").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.employee).x();
 
@@ -209,7 +209,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
     public void testIsMakeVacantAvailableWhenNotAvailableBecauseLeased() {
         Lease lease = createLease("2010-02-02", "2011-02-02");
         setup().from("2010-01-03").to("2010-02-01").status(Status.available).x();
-        setup().from("2010-02-02").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+        setup().from("2010-02-02").toTheEndOfTime().status(Status.occupied).withLease(lease).x();
 
         now("2010-01-01");
         Assert.assertNull(getUOM().getMakeVacantConstraints(unitId));
@@ -322,7 +322,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
     public void testIsCancelEndLeaseAvaialbleWhenAvaialble() {
         Lease lease = createLease("2010-01-11", "2011-11-11");
         setup().from("2010-01-01").to("2010-01-10").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
-        setup().from("2010-01-11").to("2011-11-11").status(Status.leased).withLease(lease).x();
+        setup().from("2010-01-11").to("2011-11-11").status(Status.occupied).withLease(lease).x();
         setup().from("2010-01-12").toTheEndOfTime().status(Status.available).x();
 
         now("2010-01-12");
@@ -335,8 +335,8 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         Lease lease2 = createLease("2011-01-12", "2012-01-01");
 
         setup().from("2010-01-01").to("2010-01-10").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
-        setup().from("2010-01-11").to("2011-11-11").status(Status.leased).withLease(lease).x();
-        setup().from("2011-01-12").toTheEndOfTime().status(Status.leased).withLease(lease2).x();
+        setup().from("2010-01-11").to("2011-11-11").status(Status.occupied).withLease(lease).x();
+        setup().from("2011-01-12").toTheEndOfTime().status(Status.occupied).withLease(lease2).x();
 
         now("2010-01-12");
         Assert.assertFalse(getUOM().isCancelMoveOutAvaialble(unitId));

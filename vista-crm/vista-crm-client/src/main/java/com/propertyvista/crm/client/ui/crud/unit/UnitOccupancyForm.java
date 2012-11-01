@@ -52,7 +52,7 @@ public class UnitOccupancyForm extends CrmEntityForm<AptUnitOccupancySegment> {
             @Override
             public void onValueChange(ValueChangeEvent<Status> event) {
                 get(proto().offMarket()).setVisible(Status.offMarket.equals(getValue().status().getValue()));
-                get(proto().lease()).setVisible(Status.leased.equals(getValue().status().getValue()));
+                get(proto().lease()).setVisible(Status.occupied.equals(getValue().status().getValue()));
             };
         });
 
@@ -72,7 +72,7 @@ public class UnitOccupancyForm extends CrmEntityForm<AptUnitOccupancySegment> {
             get(proto().lease()).setVisible(false);
         } else {
             get(proto().offMarket()).setVisible(Status.offMarket.equals(getValue().status().getValue()));
-            get(proto().lease()).setVisible(Status.leased.equals(getValue().status().getValue()));
+            get(proto().lease()).setVisible(Status.occupied.equals(getValue().status().getValue()));
         }
     }
 

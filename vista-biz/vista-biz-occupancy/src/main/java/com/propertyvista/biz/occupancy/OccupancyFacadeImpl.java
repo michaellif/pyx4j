@@ -415,7 +415,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
                     @Override
                     public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
-                        segment.status().setValue(Status.leased);
+                        segment.status().setValue(Status.occupied);
                     }
                 });
                 new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
@@ -433,7 +433,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
 
         AptUnitOccupancySegment occupiedSegment = retrieveOccupancySegment(unitPk, now);
-        assertStatus(occupiedSegment, Status.leased);
+        assertStatus(occupiedSegment, Status.occupied);
         if (moveOutDate.getTime() < occupiedSegment.lease().leaseFrom().getValue().getTime()) {
             throw new OccupancyOperationException(i18n.tr("Impossible to move out: move out date is before lease start date"));
         }
@@ -474,7 +474,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             nextSegment.dateFrom().setValue(dayAfterMoveOutDate);
             Persistence.service().merge(nextSegment);
             break;
-        case leased:
+        case occupied:
             if (nextSegment.dateFrom().getValue().before(dayAfterMoveOutDate)) {
                 throw new OccupancyOperationException(i18n.tr("It's imposible to move out, since the unit is leased on move out date"));
             } else {
@@ -611,7 +611,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         LogicalDate maxVacantFromCandidate = null;
         for (AptUnitOccupancySegment segment : occupancy) {
             Status segStatus = segment.status().getValue();
-            if ((segStatus == Status.reserved | segStatus == Status.leased) & minVacantFromCandidate != null) {
+            if ((segStatus == Status.reserved | segStatus == Status.occupied) & minVacantFromCandidate != null) {
                 return null;
             }
             if (minVacantFromCandidate == null) {
@@ -704,10 +704,10 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public boolean isCancelMoveOutAvaialble(Key unitPk) {
         LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
         AptUnitOccupancySegment segment = retrieveOccupancySegment(unitPk, start);
-        if (segment != null && segment.status().getValue() == Status.leased && !segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE)) {
+        if (segment != null && segment.status().getValue() == Status.occupied && !segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE)) {
             List<AptUnitOccupancySegment> rest = retrieveOccupancy(unitPk, addDay(segment.dateTo().getValue()));
             for (AptUnitOccupancySegment seg : rest) {
-                if (seg.status().getValue() == Status.leased | seg.status().getValue() == Status.reserved) {
+                if (seg.status().getValue() == Status.occupied | seg.status().getValue() == Status.reserved) {
                     return false;
                 }
             }
@@ -754,7 +754,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
             @Override
             public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
-                segment.status().setValue(Status.leased);
+                segment.status().setValue(Status.occupied);
             }
         });
         new AvailabilityReportManager(unitStub.getPrimaryKey()).generateUnitAvailablity(now);

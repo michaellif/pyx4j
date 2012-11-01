@@ -272,7 +272,7 @@ public class AptUnitOccupancyManagerTestBase {
         }
 
         public T withLease(Lease lease) {
-            if (segment.status().getValue().equals(Status.leased) | segment.status().getValue().equals(Status.reserved)
+            if (segment.status().getValue().equals(Status.occupied) | segment.status().getValue().equals(Status.reserved)
                     | segment.status().getValue().equals(Status.migrated)) {
                 segment.lease().set(lease);
                 return self();
@@ -300,17 +300,17 @@ public class AptUnitOccupancyManagerTestBase {
             if (segment.dateTo().isNull()) {
                 throw new IllegalStateException(SimpleMessageFormat.format("{0} was not set", segment.dateTo().getMeta().getCaption()));
             }
-            if (segment.status().getValue().equals(Status.leased) & segment.lease().isNull()) {
+            if (segment.status().getValue().equals(Status.occupied) & segment.lease().isNull()) {
                 throw new IllegalStateException(SimpleMessageFormat.format("{0} was not set for {1} unit", segment.lease().getMeta().getCaption(),
-                        Status.leased));
+                        Status.occupied));
             }
             if (segment.status().getValue().equals(Status.reserved) & segment.lease().isNull()) {
                 throw new IllegalStateException(SimpleMessageFormat.format("{0} was not set for {1} unit", segment.lease().getMeta().getCaption(),
-                        Status.leased));
+                        Status.occupied));
             }
             if (segment.status().getValue().equals(Status.migrated) & segment.lease().isNull()) {
                 throw new IllegalStateException(SimpleMessageFormat.format("{0} was not set for {1} unit", segment.lease().getMeta().getCaption(),
-                        Status.leased));
+                        Status.occupied));
             }
             if (segment.status().getValue().equals(Status.offMarket) & segment.offMarket().isNull()) {
                 throw new IllegalStateException("off market type was not set");

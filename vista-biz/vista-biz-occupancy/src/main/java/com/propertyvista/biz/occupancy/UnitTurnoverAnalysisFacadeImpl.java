@@ -67,7 +67,7 @@ public class UnitTurnoverAnalysisFacadeImpl implements UnitTurnoverAnalysisFacad
         criteria.add(PropertyCriterion.eq(criteria.proto().unit(), lease.unit()));
         criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), beginningOfTheMonth));
         criteria.add(PropertyCriterion.lt(criteria.proto().dateTo(), leaseFrom));
-        criteria.add(PropertyCriterion.eq(criteria.proto().status(), AptUnitOccupancySegment.Status.leased));
+        criteria.add(PropertyCriterion.eq(criteria.proto().status(), AptUnitOccupancySegment.Status.occupied));
 
         return Persistence.service().count(criteria) != 0;
     }
