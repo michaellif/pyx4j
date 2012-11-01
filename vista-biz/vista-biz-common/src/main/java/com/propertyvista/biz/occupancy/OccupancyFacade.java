@@ -20,7 +20,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
-import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MoveOutConstraintsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 // TODO add explicit exceptions
@@ -116,11 +115,6 @@ public interface OccupancyFacade {
      *            a last day of of the lease: a <code>leased</code> occupancy segment that is connected to current lease will end on this date (inclusive)
      */
     void moveOut(Key unitId, LogicalDate moveOutDate) throws OccupancyOperationException;
-
-    /**
-     * Check whether the {@link #moveOut(Key, LogicalDate)} operation can be performed
-     */
-    MoveOutConstraintsDTO getMoveOutConstraints(Key unitId);
 
     /** Cancels the definition of a lease that is currently active and has a defined end date in the future */
     void cancelMoveOut(Key unitId) throws OccupancyOperationException;

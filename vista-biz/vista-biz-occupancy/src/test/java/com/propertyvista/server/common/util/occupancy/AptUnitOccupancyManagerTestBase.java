@@ -153,7 +153,9 @@ public class AptUnitOccupancyManagerTestBase {
         if (unit != null) {
             Lease lease = LightWeightLeaseManagement.create(Lease.Status.Application);
             lease.unit().set(unit);
+            lease.leaseFrom().setValue(asDate(leaseFrom));
             lease.currentTerm().termFrom().setValue(asDate(leaseFrom));
+            lease.leaseTo().setValue(asDate(leaseTo));
             lease.currentTerm().termTo().setValue(asDate(leaseTo));
             LightWeightLeaseManagement.persist(lease, false);
             return lease;
@@ -184,7 +186,8 @@ public class AptUnitOccupancyManagerTestBase {
         criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
         criteria.asc(criteria.proto().dateFrom());
         List<AptUnitOccupancySegment> actualTimeline = Persistence.service().query(criteria);
-        Assert.assertEquals("expected and actual timelines' number of segments don't match", expectedTimeline.size(), actualTimeline.size());
+        Assert.assertEquals("expected and actual timelines' number of segments don't match:\n actual timeline is:\n" + createSegmentsView(actualTimeline)
+                + "\n", expectedTimeline.size(), actualTimeline.size());
 
         Iterator<AptUnitOccupancySegment> a = actualTimeline.iterator();
         Iterator<AptUnitOccupancySegment> e = expectedTimeline.iterator();
@@ -316,6 +319,23 @@ public class AptUnitOccupancyManagerTestBase {
 
     }
 
+    private static String createSegmentsView(List<AptUnitOccupancySegment> actualSegments) {
+        List<String> segmentViews = new ArrayList<String>();
+        for (AptUnitOccupancySegment segment : actualSegments) {
+            segmentViews.add(createSegmentView(segment));
+        }
+        return StringUtils.join(segmentViews, "\n");
+    }
+
+    private static String createSegmentView(AptUnitOccupancySegment segment) {
+        String date = "[" + segment.dateFrom().getValue() + ", " + segment.dateTo().getValue() + "] ";
+        String status = segment.status().getValue().toString();
+        if (segment.status().getValue() == Status.offMarket) {
+            status += " - " + segment.offMarket().getValue().toString();
+        }
+        return date + status;
+    }
+
     protected class ExpectBuilder extends SegmentBuilder<ExpectBuilder> {
 
         private final List<AptUnitOccupancySegment> expectedTimeline;
@@ -350,23 +370,6 @@ public class AptUnitOccupancyManagerTestBase {
             AptUnitOccupancySegment actual = Persistence.service().retrieve(actualSegmentCriteria);
             Assert.assertNotNull(SimpleMessageFormat.format("the expected occupancy segment was not found in the DB:\n {0}\n the actual DB occupancy is:\n{1}",
                     createSegmentView(segment), actualSegmentsView), actual);
-        }
-
-        private String createSegmentsView(List<AptUnitOccupancySegment> actualSegments) {
-            List<String> segmentViews = new ArrayList<String>();
-            for (AptUnitOccupancySegment segment : actualSegments) {
-                segmentViews.add(createSegmentView(segment));
-            }
-            return StringUtils.join(segmentViews, "\n");
-        }
-
-        private String createSegmentView(AptUnitOccupancySegment segment) {
-            String date = "[" + segment.dateFrom().getValue() + ", " + segment.dateTo().getValue() + "] ";
-            String status = segment.status().getValue().toString();
-            if (segment.status().getValue() == Status.offMarket) {
-                status += " - " + segment.offMarket().getValue().toString();
-            }
-            return date + status;
         }
 
         @Override

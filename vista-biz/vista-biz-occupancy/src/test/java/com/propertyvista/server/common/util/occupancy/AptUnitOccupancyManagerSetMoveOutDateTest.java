@@ -13,23 +13,22 @@
  */
 package com.propertyvista.server.common.util.occupancy;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.propertyvista.biz.occupancy.OccupancyOperationException;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-@Ignore
 public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyManagerTestBase {
 
+    /** test set move out date for occupied segment without move out date */
     @Test
-    public void testSetMoveOut() throws OccupancyOperationException {
+    public void testMoveOutOnLeaseEndDate() throws OccupancyOperationException {
         Lease lease = createLease("2011-02-15", "2011-10-25");
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-01-15").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+        setup().from("2011-02-15").toTheEndOfTime().status(Status.leased).withLease(lease).x();
 
         now("2011-08-01");
 
@@ -37,20 +36,16 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-01-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
         expect().from("2011-10-26").toTheEndOfTime().status(Status.pending).x();
 
         assertExpectedTimeline();
         assertUnitIsNotAvailable();
     }
 
-    /**
-     * sets move out before lease end date
-     * 
-     * @throws OccupancyOperationException
-     */
+    /** test set move out date for occupied segment without move out date: move out date is BEFORE lease end date */
     @Test
-    public void testSetMoveOut2() throws OccupancyOperationException {
+    public void testMoveOutBeforeLeaseEnd() throws OccupancyOperationException {
         Lease lease = createLease("2011-02-15", "2011-10-25");
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
@@ -69,18 +64,26 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
         assertUnitIsNotAvailable();
     }
 
-    /**
-     * tries to reschedule move out
-     * 
-     * @throws OccupancyOperationException
-     */
-    @Test
-    public void testSetMoveOutRescheduleToFuture() throws OccupancyOperationException {
+    @Test(expected = OccupancyOperationException.class)
+    public void testMoveOutAfterLeaseEndMustFail() throws OccupancyOperationException {
         Lease lease = createLease("2011-02-15", "2011-10-25");
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-01-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-01-15").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+
+        now("2011-08-01");
+
+        getUOM().moveOut(unitId, asDate("2011-10-26"));
+    }
+
+    @Test
+    public void testMoveOutRescheduleForward() throws OccupancyOperationException {
+        Lease lease = createLease("2011-02-15", "2011-10-25");
+
+        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
         setup().from("2011-10-21").toTheEndOfTime().status(Status.pending).x();
 
         now("2011-08-01");
@@ -89,24 +92,19 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-01-15").to("2011-10-24").status(Status.leased).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-24").status(Status.leased).withLease(lease).x();
         expect().from("2011-10-25").toTheEndOfTime().status(Status.pending).x();
         assertExpectedTimeline();
         assertUnitIsNotAvailable();
     }
 
-    /**
-     * tries to reschedule move out with future renovation
-     * 
-     * @throws OccupancyOperationException
-     */
     @Test
-    public void testSetMoveOutRescheduleToFuture2() throws OccupancyOperationException {
+    public void testMoveOutRescheduleForwardWithDissappearingSegment() throws OccupancyOperationException {
         Lease lease = createLease("2011-02-15", "2011-10-25");
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-01-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
         setup().from("2011-10-21").to("2011-10-23").status(Status.pending).x();
         setup().from("2011-10-24").to("2011-10-25").status(Status.renovation).x();
         setup().from("2011-10-26").toTheEndOfTime().status(Status.available).x();
@@ -117,7 +115,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-01-15").to("2011-10-24").status(Status.leased).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-24").status(Status.leased).withLease(lease).x();
         expect().from("2011-10-24").to("2011-10-25").status(Status.renovation).x();
         expect().from("2011-10-26").toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
@@ -126,16 +124,14 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
     /**
      * tries to reschedule move out with future renovation (must not erase pending segment)
-     * 
-     * @throws OccupancyOperationException
      */
     @Test
-    public void testSetMoveOutRescheduleToFuture3() throws OccupancyOperationException {
+    public void testMoveOutRescheduleForward3() throws OccupancyOperationException {
         Lease lease = createLease("2011-02-15", "2011-10-25");
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-01-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
         setup().from("2011-10-21").to("2011-10-23").status(Status.pending).x();
         setup().from("2011-10-24").to("2011-10-25").status(Status.renovation).x();
         setup().from("2011-10-26").toTheEndOfTime().status(Status.available).x();
@@ -146,7 +142,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-01-15").to("2011-10-22").status(Status.leased).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-22").status(Status.leased).withLease(lease).x();
         expect().from("2011-10-23").to("2011-10-23").status(Status.pending).x();
         expect().from("2011-10-24").to("2011-10-25").status(Status.renovation).x();
         expect().from("2011-10-26").toTheEndOfTime().status(Status.available).x();
@@ -155,17 +151,16 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
     }
 
     /**
-     * tries to reschedule move out with future reservation (must not erase pending segment)
-     * 
-     * @throws OccupancyOperationException
+     * tries to reschedule move out with future reservation (must not erase reserved segment)
      */
-    public void testSetMoveOutRescheduleToFutureWhenUnitIsReservedInFuture() throws OccupancyOperationException {
+    @Test
+    public void testMoveOutRescheduleForward4() throws OccupancyOperationException {
         Lease lease = createLease("2011-02-15", "2011-10-25");
-        Lease leaseFuture = createLease("2011-02-24", "2011-10-25");
+        Lease leaseFuture = createLease("2011-10-24", "2011-10-25");
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-01-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
         setup().from("2011-10-21").to("2011-10-23").status(Status.reserved).withLease(leaseFuture).x();
         setup().from("2011-10-24").toTheEndOfTime().status(Status.leased).withLease(leaseFuture).x();
 
@@ -175,7 +170,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-01-15").to("2011-10-22").status(Status.leased).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-22").status(Status.leased).withLease(lease).x();
         expect().from("2011-10-23").to("2011-10-23").status(Status.reserved).withLease(leaseFuture).x();
         expect().from("2011-10-24").toTheEndOfTime().status(Status.leased).withLease(leaseFuture).x();
 
@@ -184,17 +179,16 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
     }
 
     /**
-     * tries to reschedule move out with future reservation (must erase pending segment)
-     * 
-     * @throws OccupancyOperationException
+     * tries to reschedule move out with future reservation (must erase reserved segment)
      */
-    public void testSetMoveOutRescheduleToFutureWhenUnitIsReservedInFuture2() throws OccupancyOperationException {
+    @Test
+    public void testMoveOutRescheduleForwardWidthDisapperaingSegment2() throws OccupancyOperationException {
         Lease lease = createLease("2011-02-15", "2011-10-25");
-        Lease leaseFuture = createLease("2011-02-24", "2011-10-25");
+        Lease leaseFuture = createLease("2011-10-24", "2011-10-25");
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-01-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
         setup().from("2011-10-21").to("2011-10-23").status(Status.reserved).withLease(leaseFuture).x();
         setup().from("2011-10-24").toTheEndOfTime().status(Status.leased).withLease(leaseFuture).x();
 
@@ -204,7 +198,7 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        expect().from("2011-01-15").to("2011-10-23").status(Status.leased).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-23").status(Status.leased).withLease(lease).x();
         expect().from("2011-10-24").toTheEndOfTime().status(Status.leased).withLease(leaseFuture).x();
 
         assertExpectedTimeline();
@@ -212,38 +206,129 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
     }
 
     /**
-     * tries to reschedule move out with future reservation must fail because move out date is greater than lease start
-     * 
-     * @throws OccupancyOperationException
+     * tries to reschedule move out with future reservation must fail because move out date is greater than lease start date of the next lease
      */
     @Test(expected = OccupancyOperationException.class)
-    public void testSetMoveOutRescheduleToFutureFailsWhenUnitIsReservedInFuture() throws OccupancyOperationException {
+    public void testMoveOutRescheduleForwardFailsWhenUnitIsReservedInForward() throws OccupancyOperationException {
         Lease lease = createLease("2011-02-15", "2011-10-25");
         Lease leaseFuture = createLease("2011-02-24", "2011-10-25");
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-01-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
         setup().from("2011-10-21").to("2011-10-23").status(Status.reserved).withLease(leaseFuture).x();
         setup().from("2011-10-24").toTheEndOfTime().status(Status.leased).withLease(leaseFuture).x();
 
         now("2011-08-01");
 
         getUOM().moveOut(unitId, asDate("2011-10-25"));
+    }
+
+    /**
+     * tries to reschedule move out with future reservation must fail because move out date is greater than lease start date of the next not approved lease.
+     */
+    @Test(expected = OccupancyOperationException.class)
+    public void testMoveOutRescheduleForwardFailsWhenUnitIsReservedForward() throws OccupancyOperationException {
+        Lease lease = createLease("2011-02-15", "2011-10-25");
+        Lease leaseFuture = createLease("2011-02-24", "2011-10-25");
 
         setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
-        setup().from("2011-01-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
-        setup().from("2011-10-21").to("2011-10-23").status(Status.reserved).withLease(leaseFuture).x();
-        setup().from("2011-10-24").toTheEndOfTime().status(Status.leased).withLease(leaseFuture).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-10-21").toTheEndOfTime().status(Status.reserved).withLease(leaseFuture).x();
+
+        now("2011-08-01");
+
+        getUOM().moveOut(unitId, asDate("2011-10-25"));
 
         assertExpectedTimeline();
         assertUnitIsNotAvailable();
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
     @Test
-    public void testCancelEndLease() throws Exception {
+    public void testMoveOutRescheduleBack() throws OccupancyOperationException {
+        Lease lease = createLease("2011-02-15", "2011-10-25");
+
+        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-10-21").toTheEndOfTime().status(Status.pending).x();
+
+        now("2011-08-01");
+
+        getUOM().moveOut(unitId, asDate("2011-10-19"));
+
+        expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-19").status(Status.leased).withLease(lease).x();
+        expect().from("2011-10-20").toTheEndOfTime().status(Status.pending).x();
+
+        assertExpectedTimeline();
+        assertUnitIsNotAvailable();
+    }
+
+    @Test
+    public void testMoveOutRescheduleBackWhenHasNextLease() throws OccupancyOperationException {
+        Lease lease = createLease("2011-02-15", "2011-10-25");
+        Lease nextlease = createLease("2011-10-26", "2011-10-28");
+
+        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        setup().from("2011-01-15").to("2011-10-25").status(Status.leased).withLease(lease).x();
+        setup().from("2011-10-26").toTheEndOfTime().status(Status.leased).withLease(nextlease).x();
+
+        now("2011-08-01");
+
+        getUOM().moveOut(unitId, asDate("2011-10-23"));
+
+        expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        expect().from("2011-01-15").to("2011-10-23").status(Status.leased).withLease(lease).x();
+        expect().from("2011-10-24").to("2011-10-25").status(Status.reserved).withLease(nextlease).x();
+        expect().from("2011-10-26").toTheEndOfTime().status(Status.leased).withLease(nextlease).x();
+
+        assertExpectedTimeline();
+        assertUnitIsNotAvailable();
+    }
+
+    @Test
+    public void testMoveOutRescheduleBackToTheBeginningOfTheLease() throws OccupancyOperationException {
+        Lease lease = createLease("2011-02-15", "2011-10-25");
+
+        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-10-21").toTheEndOfTime().status(Status.pending).x();
+
+        now("2011-02-15");
+
+        getUOM().moveOut(unitId, asDate("2011-02-15"));
+
+        expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-02-15").status(Status.leased).withLease(lease).x();
+        expect().from("2011-02-16").toTheEndOfTime().status(Status.pending).x();
+
+        assertExpectedTimeline();
+        assertUnitIsNotAvailable();
+    }
+
+    @Test(expected = OccupancyOperationException.class)
+    public void testMoveOutRescheduleBackMustFailWhenMoveOutIsBeforeLeaseStart() throws OccupancyOperationException {
+        Lease lease = createLease("2011-02-15", "2011-10-25");
+
+        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        setup().from("2011-01-15").to("2011-10-20").status(Status.leased).withLease(lease).x();
+        setup().from("2011-10-21").toTheEndOfTime().status(Status.pending).x();
+
+        now("2011-02-15");
+
+        getUOM().moveOut(unitId, asDate("2011-02-14"));
+    }
+
+    @Test
+    public void testCancelMoveOut() throws Exception {
         Lease lease = createLease("2011-05-20", "2012-12-31");
         setup().fromTheBeginning().to("2011-05-19").status(Status.pending).x();
         setup().from("2011-05-20").to("2012-12-31").status(Status.leased).withLease(lease).x();

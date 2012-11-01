@@ -43,7 +43,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
-import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MoveOutConstraintsDTO;
 import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.misc.VistaTODO;
@@ -427,34 +426,93 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public void moveOut(Key unitPk, LogicalDate leaseEndDate) {
+    public void moveOut(Key unitPk, LogicalDate moveOutDate) throws OccupancyOperationException {
         assert unitPk != null;
-        assert leaseEndDate != null;
+        assert moveOutDate != null;
 
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
-        MoveOutConstraintsDTO endLeaseConstraints = getMoveOutConstraints(unitPk);
-        if (endLeaseConstraints.minMoveOutDate().isNull() || endLeaseConstraints.maxMoveOutDate().isNull() || //
-                !(endLeaseConstraints.minMoveOutDate().getValue().getTime() <= leaseEndDate.getTime() //
-                & leaseEndDate.getTime() <= endLeaseConstraints.maxMoveOutDate().getValue().getTime())) {
-            throw new IllegalStateException("'endLease' operation is not permitted");
+
+        AptUnitOccupancySegment occupiedSegment = retrieveOccupancySegment(unitPk, now);
+        assertStatus(occupiedSegment, Status.leased);
+        if (moveOutDate.getTime() < occupiedSegment.lease().leaseFrom().getValue().getTime()) {
+            throw new OccupancyOperationException(i18n.tr("Impossible to move out: move out date is before lease start date"));
+        }
+        if (!occupiedSegment.lease().leaseTo().isNull() & moveOutDate.getTime() > occupiedSegment.lease().leaseTo().getValue().getTime()) {
+            throw new OccupancyOperationException(i18n.tr("Impossilbe to move out: move out date after before lease end date"));
         }
 
-        AptUnitOccupancySegment segment = retrieveOccupancySegment(unitPk, now);
-        assertStatus(segment, Status.leased);
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(occupiedSegment.dateTo().getValue());
+        cal.add(GregorianCalendar.DAY_OF_YEAR, 1);
+        LogicalDate nextSegmentStartDay = new LogicalDate(cal.getTime());
 
-        split(unitPk, addDay(leaseEndDate), new SplittingHandler() {
+        occupiedSegment.dateTo().setValue(moveOutDate);
+        Persistence.service().merge(occupiedSegment);
 
-            @Override
-            public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
+        AptUnitOccupancySegment nextSegment = retrieveOccupancySegment(unitPk, nextSegmentStartDay);
+        if (nextSegment == null) {
+            nextSegment = EntityFactory.create(AptUnitOccupancySegment.class);
+            nextSegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
+            nextSegment.unit().setPrimaryKey(unitPk);
+            nextSegment.status().setValue(Status.pending);
+        }
+        cal.setTime(moveOutDate);
+        cal.add(GregorianCalendar.DAY_OF_YEAR, 1);
+        LogicalDate dayAfterMoveOutDate = new LogicalDate(cal.getTime());
+
+        switch (nextSegment.status().getValue()) {
+        case available:
+        case pending:
+        case migrated:
+            nextSegment.dateFrom().setValue(dayAfterMoveOutDate);
+            Persistence.service().merge(nextSegment);
+            break;
+        case reserved:
+            if (nextSegment.lease().leaseFrom().getValue().getTime() < dayAfterMoveOutDate.getTime()) {
+                throw new OccupancyOperationException(i18n.tr("It's imposible to move out, since the unit is reserved on move out date"));
             }
+            nextSegment.dateFrom().setValue(dayAfterMoveOutDate);
+            Persistence.service().merge(nextSegment);
+            break;
+        case leased:
+            if (nextSegment.dateFrom().getValue().before(dayAfterMoveOutDate)) {
+                throw new OccupancyOperationException(i18n.tr("It's imposible to move out, since the unit is leased on move out date"));
+            } else {
+                AptUnitOccupancySegment reservedSegment = EntityFactory.create(AptUnitOccupancySegment.class);
+                reservedSegment.status().setValue(Status.reserved);
+                reservedSegment.dateFrom().setValue(dayAfterMoveOutDate);
 
-            @Override
-            public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
-                segment.status().setValue(Status.pending);
-                segment.lease().setValue(null);
+                cal.setTime(nextSegment.dateFrom().getValue());
+                cal.add(GregorianCalendar.DAY_OF_YEAR, -1);
+                reservedSegment.dateTo().setValue(new LogicalDate(cal.getTime()));
+                reservedSegment.unit().setPrimaryKey(unitPk);
+                reservedSegment.lease().setPrimaryKey(nextSegment.lease().getPrimaryKey());
+
+                Persistence.service().merge(reservedSegment);
             }
-        });
+            break;
+        case offMarket:
+        case renovation:
+            if (nextSegment.dateFrom().getValue().before(dayAfterMoveOutDate)) {
+                throw new OccupancyOperationException(i18n.tr("It's imposible to move out, since the unit is either offMarket or renovated"));
+            } else {
+                AptUnitOccupancySegment pendingSegment = EntityFactory.create(AptUnitOccupancySegment.class);
+                pendingSegment.status().setValue(Status.pending);
+                pendingSegment.dateFrom().setValue(dayAfterMoveOutDate);
 
+                cal.setTime(nextSegment.dateFrom().getValue());
+                cal.add(GregorianCalendar.DAY_OF_YEAR, -1);
+                pendingSegment.dateTo().setValue(new LogicalDate(cal.getTime()));
+                pendingSegment.unit().setPrimaryKey(unitPk);
+                Persistence.service().merge(pendingSegment);
+            }
+            break;
+        default:
+            break;
+        }
+        if (nextSegment.dateTo().getValue().getTime() <= occupiedSegment.dateTo().getValue().getTime()) {
+            Persistence.service().delete(nextSegment);
+        }
         new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
         setUnitAvailableFrom(unitPk, null);
     }
@@ -640,20 +698,6 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         }
 
         return false;
-    }
-
-    @Override
-    public MoveOutConstraintsDTO getMoveOutConstraints(Key unitPk) {
-        LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
-        AptUnitOccupancySegment segment = retrieveOccupancySegment(unitPk, now);
-
-        MoveOutConstraintsDTO constraints = EntityFactory.create(MoveOutConstraintsDTO.class);
-        if (segment != null && segment.status().getValue() == Status.leased && segment.dateFrom().getValue().getTime() <= now.getTime()
-                && segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE)) {
-            constraints.minMoveOutDate().setValue(now);
-            constraints.maxMoveOutDate().setValue(OccupancyFacade.MAX_DATE);
-        }
-        return constraints;
     }
 
     @Override
