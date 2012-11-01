@@ -143,7 +143,6 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
             hideLines(getValue().nsfChargeLineItems(), proto().nsfChargeLineItems());
             hideLines(getValue().withdrawalLineItems(), proto().withdrawalLineItems());
             hideLines(getValue().rejectedPaymentLineItems(), proto().rejectedPaymentLineItems());
-            hideLines(getValue().paymentLineItems(), proto().paymentLineItems());
         }
 
         hideLines(getValue().serviceChargeLineItems(), proto().serviceChargeLineItems());
