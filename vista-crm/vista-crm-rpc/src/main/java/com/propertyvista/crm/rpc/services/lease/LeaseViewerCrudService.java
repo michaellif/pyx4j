@@ -23,6 +23,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO;
@@ -32,15 +33,12 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
 
     // TODO Move to new Service  LeaseOperationService
 
-    void notice(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut);
+    void createCompletionEvent(AsyncCallback<VoidSerializable> callback, Key entityId, Lease.CompletionType completionType, LogicalDate eventDate,
+            LogicalDate moveOutDate);
 
-    void cancelNotice(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
+    void cancelCompletionEvent(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
 
-    void noticeComplete(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut, LogicalDate completeFrom);
-
-    void evict(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut);
-
-    void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
+    void moveOut(AsyncCallback<VoidSerializable> callback, Key entityId);
 
     /**
      * <code>callback</code> returns a message that should be display to the users (i.e. e-mails were send successfully);
@@ -48,8 +46,6 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
     void sendMail(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant<?>> users, EmailTemplateType emailType);
 
     void activate(AsyncCallback<VoidSerializable> callback, Key entityId);
-
-    void completeLease(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate from);
 
     void closeLease(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
 

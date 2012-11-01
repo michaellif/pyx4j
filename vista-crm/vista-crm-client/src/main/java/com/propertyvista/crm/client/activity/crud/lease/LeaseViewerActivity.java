@@ -148,18 +148,18 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
-    public void notice(LogicalDate date, LogicalDate moveOut) {
-        ((LeaseViewerCrudService) getService()).notice(new DefaultAsyncCallback<VoidSerializable>() {
+    public void createCompletionEvent(Lease.CompletionType completionType, LogicalDate eventDate, LogicalDate moveOutDate) {
+        ((LeaseViewerCrudService) getService()).createCompletionEvent(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, getEntityId(), date, moveOut);
+        }, getEntityId(), completionType, eventDate, moveOutDate);
     }
 
     @Override
-    public void cancelNotice(String decisionReason) {
-        ((LeaseViewerCrudService) getService()).cancelNotice(new DefaultAsyncCallback<VoidSerializable>() {
+    public void cancelCompletionEvent(String decisionReason) {
+        ((LeaseViewerCrudService) getService()).cancelCompletionEvent(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
@@ -175,33 +175,13 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
-    public void noticeComplete(LogicalDate date, LogicalDate moveOut, LogicalDate completeFrom) {
-        ((LeaseViewerCrudService) getService()).noticeComplete(new DefaultAsyncCallback<VoidSerializable>() {
+    public void moveOut() {
+        ((LeaseViewerCrudService) getService()).moveOut(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, getEntityId(), date, moveOut, completeFrom);
-    }
-
-    @Override
-    public void evict(LogicalDate date, LogicalDate moveOut) {
-        ((LeaseViewerCrudService) getService()).evict(new DefaultAsyncCallback<VoidSerializable>() {
-            @Override
-            public void onSuccess(VoidSerializable result) {
-                populate();
-            }
-        }, getEntityId(), date, moveOut);
-    }
-
-    @Override
-    public void cancelEvict(String decisionReason) {
-        ((LeaseViewerCrudService) getService()).cancelEvict(new DefaultAsyncCallback<VoidSerializable>() {
-            @Override
-            public void onSuccess(VoidSerializable result) {
-                populate();
-            }
-        }, getEntityId(), decisionReason);
+        }, getEntityId());
     }
 
     @Override
@@ -224,16 +204,6 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
                 populate();
             }
         }, getEntityId());
-    }
-
-    @Override
-    public void completeLease(LogicalDate from) {
-        ((LeaseViewerCrudService) getService()).completeLease(new DefaultAsyncCallback<VoidSerializable>() {
-            @Override
-            public void onSuccess(VoidSerializable result) {
-                populate();
-            }
-        }, getEntityId(), from);
     }
 
     @Override

@@ -21,6 +21,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.MenuItemSeparator;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.AbstractVersionDataListService;
@@ -122,6 +123,10 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form, boolean viewOnly) {
         this(placeClass, viewOnly);
         setForm(form);
+    }
+
+    public MenuItemSeparator addActionSeparator() {
+        return actionsMenu.addSeparator();
     }
 
     public void addAction(MenuItem action) {

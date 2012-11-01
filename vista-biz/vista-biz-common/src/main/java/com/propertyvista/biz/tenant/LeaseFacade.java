@@ -68,8 +68,6 @@ public interface LeaseFacade {
 
     void complete(Lease leaseId);
 
-    void complete(Lease leaseId, LogicalDate from);
-
     void close(Lease leaseId);
 
     // DB-data LeaseTerm state interfaces:
@@ -78,15 +76,15 @@ public interface LeaseFacade {
 
     void acceptOffer(Lease leaseId, LeaseTerm leaseTermId);
 
-    // Start notice/evict...
+    // Start notice/evict, cancel/terminate/etc...
 
-    void createCompletionEvent(Lease leaseId, Lease.CompletionType completionType, LogicalDate noticeDay, LogicalDate moveOutDay);
+    void createCompletionEvent(Lease leaseId, Lease.CompletionType completionType, LogicalDate eventDate, LogicalDate moveOutDate);
 
     void cancelCompletionEvent(Lease leaseId, Employee decidedBy, String decisionReason);
 
-    void endLease(Lease leaseId, LogicalDate from);
-
     void cancelLease(Lease leaseId, Employee decidedBy, String decisionReason);
+
+    void moveOut(Lease leaseId);
 
     // Utils:
 

@@ -182,7 +182,7 @@ public interface Lease extends IEntity {
 
     /**
      * lease begin/end:
-     * Note: the dates are Transient and has being re-calculated in {@link LeaseFacade#updateLeaseDates(Lease lease)} method
+     * Note: the dates have being re-calculated in {@link LeaseFacade#updateLeaseDates(Lease lease)} method
      */
     @NotNull
     IPrimitive<LogicalDate> leaseFrom();

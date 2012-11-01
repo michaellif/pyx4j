@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -27,10 +26,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -42,6 +39,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -96,9 +94,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem cancelEvictAction;
 
+    private final MenuItem terminateAction;
+
+    private final MenuItem cancelTerminateAction;
+
     private final MenuItem activateAction;
 
-    private final MenuItem completeAction;
+    private final MenuItem moveOutAction;
 
     private final MenuItem closeAction;
 
@@ -160,18 +162,19 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addAction(runBillAction);
 
+        addActionSeparator();
+
         noticeAction = new MenuItem(i18n.tr("Notice..."), new Command() {
             @Override
             public void execute() {
-                new TermLeaseBox(CompletionType.Notice, true) {
+                new TermLeaseBox(CompletionType.Notice) {
                     @Override
                     public boolean onClickOk() {
                         if (!isValid()) {
                             return false;
                         }
-//                        ((LeaseViewerView.Presenter) getPresenter()).notice(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut().getValue());
-                        ((LeaseViewerView.Presenter) getPresenter()).noticeComplete(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut()
-                                .getValue(), getValue().actualLeaseTo().getValue());
+                        ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Notice, getValue().moveOutNotice().getValue(),
+                                getValue().expectedMoveOut().getValue());
                         return true;
                     }
                 }.show();
@@ -189,7 +192,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                             MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
                             return false;
                         }
-                        ((LeaseViewerView.Presenter) getPresenter()).cancelNotice(getReason());
+                        ((LeaseViewerView.Presenter) getPresenter()).cancelCompletionEvent(getReason());
                         return true;
                     }
                 }.show();
@@ -206,7 +209,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                         if (!isValid()) {
                             return false;
                         }
-                        ((LeaseViewerView.Presenter) getPresenter()).evict(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut().getValue());
+                        ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Eviction, getValue().moveOutNotice().getValue(),
+                                getValue().expectedMoveOut().getValue());
                         return true;
                     }
                 }.show();
@@ -224,13 +228,49 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                             MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
                             return false;
                         }
-                        ((LeaseViewerView.Presenter) getPresenter()).cancelEvict(getReason());
+                        ((LeaseViewerView.Presenter) getPresenter()).cancelCompletionEvent(getReason());
                         return true;
                     }
                 }.show();
             }
         });
         addAction(cancelEvictAction);
+
+        terminateAction = new MenuItem(i18n.tr("Terminate..."), new Command() {
+            @Override
+            public void execute() {
+                new TermLeaseBox(CompletionType.Termination) {
+                    @Override
+                    public boolean onClickOk() {
+                        if (!isValid()) {
+                            return false;
+                        }
+                        ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Termination, getValue().moveOutNotice().getValue(),
+                                getValue().expectedMoveOut().getValue());
+                        return true;
+                    }
+                }.show();
+            }
+        });
+        addAction(terminateAction);
+
+        cancelTerminateAction = new MenuItem(i18n.tr("Cancel Terminate"), new Command() {
+            @Override
+            public void execute() {
+                new ReasonBox(i18n.tr("Cancel Terminate")) {
+                    @Override
+                    public boolean onClickOk() {
+                        if (CommonsStringUtils.isEmpty(getReason())) {
+                            MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
+                            return false;
+                        }
+                        ((LeaseViewerView.Presenter) getPresenter()).cancelCompletionEvent(getReason());
+                        return true;
+                    }
+                }.show();
+            }
+        });
+        addAction(cancelTerminateAction);
 
         activateAction = new MenuItem(i18n.tr("Activate"), new Command() {
             @Override
@@ -240,19 +280,23 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addAction(activateAction);
 
-        completeAction = new MenuItem(i18n.tr("Complete"), new Command() {
+        moveOutAction = new MenuItem(i18n.tr("Move Out"), new Command() {
             @Override
             public void execute() {
-                new CompletionBox(i18n.tr("Complete Lease")) {
+                MessageDialog.confirm(i18n.tr("Move Out"), i18n.tr("Do you really want to mark the lease as moved out?"), new ConfirmDecline() {
                     @Override
-                    public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) getPresenter()).completeLease(getDate());
-                        return true;
+                    public void onConfirmed() {
+                        ((LeaseViewerView.Presenter) getPresenter()).moveOut();
                     }
-                }.show();
+
+                    @Override
+                    public void onDeclined() {
+                        // TODO Auto-generated method stub
+                    }
+                });
             }
         });
-        addAction(completeAction);
+        addAction(moveOutAction);
 
         closeAction = new MenuItem(i18n.tr("Close"), new Command() {
             @Override
@@ -346,8 +390,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(cancelNoticeAction, false);
         setActionVisible(evictAction, false);
         setActionVisible(cancelEvictAction, false);
+        setActionVisible(terminateAction, false);
+        setActionVisible(cancelTerminateAction, false);
         setActionVisible(activateAction, false);
-        setActionVisible(completeAction, false);
+        setActionVisible(moveOutAction, false);
         setActionVisible(closeAction, false);
         setActionVisible(cancelAction, false);
 
@@ -368,15 +414,23 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         }
         setActionVisible(sendMailAction, status.isCurrent());
         setActionVisible(runBillAction, status.isCurrent());
+
         setActionVisible(noticeAction, status == Status.Active && completion == null);
-        setActionVisible(cancelNoticeAction, completion == CompletionType.Notice && !status.isFormer());
+        setActionVisible(cancelNoticeAction, completion == CompletionType.Notice && value.actualMoveOut().isNull() && !status.isFormer());
+
         setActionVisible(evictAction, status == Status.Active && completion == null);
-        setActionVisible(cancelEvictAction, completion == CompletionType.Eviction && !status.isFormer());
+        setActionVisible(cancelEvictAction, completion == CompletionType.Eviction && value.actualMoveOut().isNull() && !status.isFormer());
+
+        setActionVisible(terminateAction, status == Status.Active && completion == null);
+        setActionVisible(cancelTerminateAction, completion == CompletionType.Termination && value.actualMoveOut().isNull() && !status.isFormer());
+
+        setActionVisible(moveOutAction, status == Status.Active && completion != null && value.actualMoveOut().isNull() && !status.isFormer());
+
         setActionVisible(activateAction, status == Status.ExistingLease);
         setActionHighlighted(activateAction, activateAction.isVisible());
-        setActionVisible(completeAction, status == Status.Active && completion != null);
+
         setActionVisible(closeAction, status == Status.Completed);
-        setActionVisible(cancelAction, status.isDraft());
+        setActionVisible(cancelAction, status.isDraft() || status == Status.Approved);
 
         if (VistaTODO.VISTA_1789_Renew_Lease) {
             renewButton.setVisible(status == Status.Active && completion == null && value.nextTerm().isNull());
@@ -426,7 +480,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         }
 
         public TermLeaseBox(CompletionType action, boolean showCompletion) {
-            super(i18n.tr("Please select"));
+            super(i18n.tr("Please fill"));
             this.action = action;
             this.showCompletion = showCompletion;
             setBody(createBody());
@@ -439,21 +493,14 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 @Override
                 public IsWidget createContent() {
                     FormFlexPanel main = new FormFlexPanel();
-                    switch (action) {
-                    case Notice:
-                        main.setWidget(0, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).customLabel(i18n.tr("Notice Submission Date")).build());
-                        break;
-                    case Eviction:
-                        main.setWidget(0, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).customLabel(i18n.tr("Evict Submission Date")).build());
-                        break;
-                    case Skip:
-                        break;
-                    default:
-                        break;
-                    }
+
+                    main.setWidget(0, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).customLabel(action.toString() + i18n.tr(" Submission Date"))
+                            .build());
                     main.setWidget(1, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
+
                     if (showCompletion) {
-                        main.setWidget(2, 0, new DecoratorBuilder(inject(proto().actualLeaseTo()), 9).customLabel(i18n.tr("Lease Completion Date")).build());
+                        main.setWidget(2, 0, new DecoratorBuilder(inject(proto().terminationLeaseTo()), 9).customLabel(i18n.tr("Lease Termination Date"))
+                                .build());
                     }
 
                     // just for validation purpose:
@@ -474,8 +521,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                         get(proto().expectedMoveOut()).setValue(new LogicalDate(ClientContext.getServerDate()));
                     }
                     if (showCompletion) {
-                        if (getValue().actualLeaseTo().isNull()) {
-                            get(proto().actualLeaseTo()).setValue(getValue().currentTerm().termTo().getValue());
+                        if (getValue().terminationLeaseTo().isNull()) {
+                            get(proto().terminationLeaseTo()).setValue(getValue().currentTerm().termTo().getValue());
                         }
                     }
                 }
@@ -497,13 +544,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                     get(proto().expectedMoveOut()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().moveOutNotice())));
 
                     if (showCompletion) {
-                        new DateInPeriodValidation(get(proto().currentTerm().termFrom()), get(proto().actualLeaseTo()), get(proto().currentTerm().termTo()),
-                                i18n.tr("The Date Should Be Within The Lease Period"));
+                        new DateInPeriodValidation(get(proto().currentTerm().termFrom()), get(proto().terminationLeaseTo()),
+                                get(proto().currentTerm().termTo()), i18n.tr("The Date Should Be Within The Lease Period"));
 
-                        new StartEndDateValidation(get(proto().expectedMoveOut()), get(proto().actualLeaseTo()),
-                                i18n.tr("The Completiion Date Can't Be Earlier Than The Expected Move Out date"));
+                        new StartEndDateValidation(get(proto().expectedMoveOut()), get(proto().terminationLeaseTo()),
+                                i18n.tr("The Terminationi Date Can't Be Earlier Than The Expected Move Out date"));
 
-                        get(proto().actualLeaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveOut())));
+                        get(proto().terminationLeaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveOut())));
                     }
                 }
             };
@@ -555,36 +602,4 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             return emailType.getValue();
         }
     }
-
-    private abstract class CompletionBox extends OkCancelDialog {
-
-        private final CDatePicker date = new CDatePicker();
-
-        public CompletionBox(String title) {
-            super(title);
-            setBody(createBody());
-            setHeight("100px");
-        }
-
-        protected Widget createBody() {
-            HorizontalPanel content = new HorizontalPanel();
-
-            content.add(new HTML(i18n.tr("From") + ":"));
-            content.add(date);
-
-            IPrimitive<LogicalDate> moveOutDate = getForm().getValue().expectedMoveOut();
-            date.setValue(moveOutDate.isNull() ? ClientContext.getServerDate() : moveOutDate.getValue());
-            date.setWidth("10em");
-
-            content.setWidth("100%");
-            content.setSpacing(8);
-
-            return content.asWidget();
-        }
-
-        public LogicalDate getDate() {
-            return new LogicalDate(date.getValue());
-        }
-    }
-
 }

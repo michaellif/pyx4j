@@ -159,7 +159,7 @@ public class LeaseLifecycleSimulator {
 
         queueEvent(reservedOn, new Create(lease));
         queueEvent(max(leaseFrom, sub(leaseTo, rndBetween(MIN_NOTICE_TERM, MAX_NOTICE_TERM))), new Notice(lease));
-//        queueEvent(leaseTo, new Complete(lease));
+        queueEvent(leaseTo, new Complete(lease));
 
         queueMaintenanceRequests(lease);
 
@@ -491,7 +491,6 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, now(), lease.currentTerm().termTo().getValue());
-            ServerSideFactory.create(LeaseFacade.class).complete(lease, lease.currentTerm().termTo().getValue());
         }
     }
 
@@ -504,6 +503,7 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             if (lease.status().getValue() == Lease.Status.Active) {
+                ServerSideFactory.create(LeaseFacade.class).moveOut(lease);
                 ServerSideFactory.create(LeaseFacade.class).complete(lease);
             }
         }

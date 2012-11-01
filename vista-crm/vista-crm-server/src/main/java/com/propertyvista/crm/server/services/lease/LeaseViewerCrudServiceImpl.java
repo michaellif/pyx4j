@@ -38,7 +38,6 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
@@ -61,16 +60,17 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     @Override
-    public void notice(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut) {
-        ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId), CompletionType.Notice, date,
-                moveOut);
+    public void createCompletionEvent(AsyncCallback<VoidSerializable> callback, Key entityId, Lease.CompletionType completionType, LogicalDate eventDate,
+            LogicalDate moveOutDate) {
+        ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId), completionType, eventDate,
+                moveOutDate);
 
         Persistence.service().commit();
         callback.onSuccess(null);
     }
 
     @Override
-    public void cancelNotice(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason) {
+    public void cancelCompletionEvent(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason) {
         ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId),
                 CrmAppContext.getCurrentUserEmployee(), decisionReason);
 
@@ -79,29 +79,10 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     @Override
-    public void noticeComplete(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut, LogicalDate completeFrom) {
+    public void moveOut(AsyncCallback<VoidSerializable> callback, Key entityId) {
         LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
 
-        leaseFacade.createCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId), CompletionType.Notice, date, moveOut);
-        leaseFacade.complete(EntityFactory.createIdentityStub(Lease.class, entityId), completeFrom);
-
-        Persistence.service().commit();
-        callback.onSuccess(null);
-    }
-
-    @Override
-    public void evict(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate date, LogicalDate moveOut) {
-        ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId), CompletionType.Eviction,
-                date, moveOut);
-
-        Persistence.service().commit();
-        callback.onSuccess(null);
-    }
-
-    @Override
-    public void cancelEvict(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason) {
-        ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId),
-                CrmAppContext.getCurrentUserEmployee(), decisionReason);
+        leaseFacade.moveOut(EntityFactory.createIdentityStub(Lease.class, entityId));
 
         Persistence.service().commit();
         callback.onSuccess(null);
@@ -161,16 +142,6 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
         ServerSideFactory.create(LeaseFacade.class).approveExistingLease(leaseId);
         ServerSideFactory.create(LeaseFacade.class).activate(leaseId);
-
-        Persistence.service().commit();
-        callback.onSuccess(null);
-    }
-
-    @Override
-    public void completeLease(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate from) {
-        Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
-
-        ServerSideFactory.create(LeaseFacade.class).complete(leaseId, from);
 
         Persistence.service().commit();
         callback.onSuccess(null);

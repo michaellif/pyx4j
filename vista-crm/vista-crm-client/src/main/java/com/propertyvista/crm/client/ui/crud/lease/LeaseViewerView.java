@@ -22,6 +22,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -33,23 +34,17 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
     interface Presenter extends LeaseViewerViewBase.Presenter {
 
-        void startBilling();
-
-        void notice(LogicalDate date, LogicalDate moveOut);
-
-        void cancelNotice(String decisionReason);
-
-        void noticeComplete(LogicalDate date, LogicalDate moveOut, LogicalDate completeFrom);
-
-        void evict(LogicalDate date, LogicalDate moveOut);
-
-        void cancelEvict(String decisionReason);
-
         void sendMail(List<LeaseParticipant<?>> users, EmailTemplateType emailType);
 
-        void activate();
+        void startBilling();
 
-        void completeLease(LogicalDate from);
+        void createCompletionEvent(Lease.CompletionType completionType, LogicalDate eventDate, LogicalDate moveOutDate);
+
+        void cancelCompletionEvent(String decisionReason);
+
+        void moveOut();
+
+        void activate();
 
         void closeLease(String decisionReason);
 
