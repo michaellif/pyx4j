@@ -55,7 +55,6 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
 
         EntityQueryCriteria<OnboardingUserCredential> credentialCrt = EntityQueryCriteria.create(OnboardingUserCredential.class);
         credentialCrt.add(PropertyCriterion.eq(credentialCrt.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
-        Persistence.service().retrieve(credentialCrt.proto().user());
         List<OnboardingUserCredential> creds = Persistence.service().query(credentialCrt);
 
         if (creds.size() == 0) {
@@ -113,6 +112,7 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
         GetAccountInfoRequestIO r = EntityFactory.create(GetAccountInfoRequestIO.class);
         r.onboardingAccountId().setValue(request.onboardingAccountId().getValue());
 
+        Persistence.service().retrieveMember(firstUser.user());
         ServerSideFactory.create(CommunicationFacade.class).sendNewPmcEmail(firstUser.user(), pmc);
 
         return new GetAccountInfoRequestHandler().execute(r);
