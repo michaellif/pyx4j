@@ -52,7 +52,6 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         row = 0;
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().mandatory()), 4).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().recurring()), 4).build());
-        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().visibility()), 10).build());
 
         content.getColumnFormatter().setWidth(0, "50%");
         content.getColumnFormatter().setWidth(1, "50%");

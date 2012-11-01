@@ -37,8 +37,7 @@ public class ServiceLister extends VersionedLister<Service> {
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
             new MemberColumnDescriptor.Builder(proto().serviceType()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().name()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().visibility(), true).build()
+            new MemberColumnDescriptor.Builder(proto().version().name()).build()
         );//@formatter:on
     }
 

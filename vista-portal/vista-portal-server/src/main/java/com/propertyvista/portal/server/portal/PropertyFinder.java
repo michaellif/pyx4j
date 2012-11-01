@@ -126,9 +126,7 @@ public class PropertyFinder {
         if (maxPrice != null && maxPrice > 0) {
             auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.LESS_THAN_OR_EQUAL, new BigDecimal(maxPrice)));
         }
-        // filter units by product visibility
-        auCriteria.add(PropertyCriterion.in(auCriteria.proto().productItems().$().product().visibility(), PublicVisibilityType.visibleToTenant()));
-        // and finalized products only:
+        // filter units by finalized products only:
         auCriteria.add(PropertyCriterion.isNotNull(auCriteria.proto().productItems().$().product().fromDate()));
         auCriteria.add(PropertyCriterion.isNull(auCriteria.proto().productItems().$().product().toDate()));
 

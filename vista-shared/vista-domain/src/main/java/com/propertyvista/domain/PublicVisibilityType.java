@@ -14,8 +14,6 @@
 package com.propertyvista.domain;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.EnumSet;
 
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
@@ -28,18 +26,8 @@ public enum PublicVisibilityType implements Serializable {
 
     tenant,
 
-    existingTenant,
-
     @Translate("Public")
     global;
-
-    public static Collection<PublicVisibilityType> visibleToTenant() {
-        return EnumSet.of(tenant, global);
-    }
-
-    public static Collection<PublicVisibilityType> visibleToExistingTenant() {
-        return EnumSet.of(existingTenant, global);
-    }
 
     @Override
     public String toString() {

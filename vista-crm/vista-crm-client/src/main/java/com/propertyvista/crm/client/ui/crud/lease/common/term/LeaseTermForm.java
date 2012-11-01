@@ -44,7 +44,6 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -153,8 +152,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
                             filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
 
-                            filters.add(PropertyCriterion.in(proto().productItems().$().product().visibility(), PublicVisibilityType.visibleToExistingTenant()));
-
                         } else if (currentValue.lease().status().getValue() == Lease.Status.Application) { // lease application:
 
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
@@ -165,7 +162,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                                 filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
                             }
 
-                            filters.add(PropertyCriterion.in(proto().productItems().$().product().visibility(), PublicVisibilityType.visibleToTenant()));
                             // TODO: filter by lease type also!!!
 //                            filters.add(PropertyCriterion.in(proto().productItems().$().product().holder().serviceType(), currentValue.lease().type()));
 

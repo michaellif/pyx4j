@@ -50,12 +50,10 @@ import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.validators.lease.LeaseApprovalValidator;
 import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
-import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.Service.ServiceType;
@@ -656,11 +654,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
             ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
             break;
 
-        case Active:
-            ServerSideFactory.create(OccupancyFacade.class).endLease(lease.unit().getPrimaryKey(),
-                    new LogicalDate(Persistence.service().getTransactionSystemTime()));
-            break;
-
         default:
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
@@ -748,10 +741,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
         assert service != null;
 
-        if (!isProductAvailable(lease, service.holder())) {
-            throw new IllegalArgumentException(i18n.tr("Unavailable Service"));
-        }
-
         // clear current dependable data:
         leaseTerm.version().leaseProducts().featureItems().clear();
         leaseTerm.version().leaseProducts().concessions().clear();
@@ -760,13 +749,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Persistence.service().retrieve(service.features());
         for (Feature feature : service.features()) {
             if (feature.version().mandatory().isBooleanTrue()) {
-                if (isProductAvailable(lease, feature)) {
-                    Persistence.service().retrieve(feature.version().items());
-                    for (ProductItem item : feature.version().items()) {
-                        if (item.isDefault().isBooleanTrue()) {
-                            leaseTerm.version().leaseProducts().featureItems().add(createBillableItem(item, node));
-                            break;
-                        }
+                Persistence.service().retrieve(feature.version().items());
+                for (ProductItem item : feature.version().items()) {
+                    if (item.isDefault().isBooleanTrue()) {
+                        leaseTerm.version().leaseProducts().featureItems().add(createBillableItem(item, node));
+                        break;
                     }
                 }
             }
@@ -989,17 +976,15 @@ public class LeaseFacadeImpl implements LeaseFacade {
 //        }
 
         for (Service service : Persistence.service().query(serviceCriteria)) {
-            if (isProductAvailable(leaseTerm.lease(), service)) {
-                EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);
-                productCriteria.add(PropertyCriterion.eq(productCriteria.proto().type(), ServiceItemType.class));
-                productCriteria.add(PropertyCriterion.eq(productCriteria.proto().product(), service.version()));
-                productCriteria.add(PropertyCriterion.eq(productCriteria.proto().element(), unit));
-                ProductItem serviceItem = Persistence.service().retrieve(productCriteria);
-                if (serviceItem != null) {
-                    setService(leaseTerm, serviceItem);
-                    succeeded = true;
-                    break;
-                }
+            EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);
+            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().type(), ServiceItemType.class));
+            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().product(), service.version()));
+            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().element(), unit));
+            ProductItem serviceItem = Persistence.service().retrieve(productCriteria);
+            if (serviceItem != null) {
+                setService(leaseTerm, serviceItem);
+                succeeded = true;
+                break;
             }
         }
 
@@ -1027,25 +1012,5 @@ public class LeaseFacadeImpl implements LeaseFacade {
             Persistence.service().merge(lease.unit());
             Persistence.service().commit();
         }
-    }
-
-    @Override
-    public boolean isProductAvailable(Lease lease, Product<? extends Product.ProductV<?>> product) {
-        // calculate visibility:
-        boolean visible = false;
-        switch (lease.status().getValue()) {
-        case Active:
-        case Approved:
-        case ExistingLease:
-            visible = PublicVisibilityType.visibleToExistingTenant().contains(product.version().visibility().getValue());
-            break;
-        case Application:
-            visible = PublicVisibilityType.visibleToTenant().contains(product.version().visibility().getValue());
-            break;
-        default:
-            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
-        }
-
-        return visible;
     }
 }

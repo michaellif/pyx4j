@@ -33,7 +33,6 @@ import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.financial.offering.Product.ProductV;
 
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
@@ -69,9 +68,5 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V> {
         @Length(250)
         @Editor(type = Editor.EditorType.textarea)
         IPrimitive<String> description();
-
-        @NotNull
-        @Caption(description = "Set building visibility for Tenant Portal")
-        IPrimitive<PublicVisibilityType> visibility();
     }
 }

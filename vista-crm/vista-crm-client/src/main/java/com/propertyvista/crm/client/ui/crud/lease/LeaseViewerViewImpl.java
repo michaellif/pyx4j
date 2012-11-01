@@ -376,7 +376,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionHighlighted(activateAction, activateAction.isVisible());
         setActionVisible(completeAction, status == Status.Active && completion != null);
         setActionVisible(closeAction, status == Status.Completed);
-        setActionVisible(cancelAction, !status.isFormer());
+        setActionVisible(cancelAction, status.isDraft());
 
         if (VistaTODO.VISTA_1789_Renew_Lease) {
             renewButton.setVisible(status == Status.Active && completion == null && value.nextTerm().isNull());

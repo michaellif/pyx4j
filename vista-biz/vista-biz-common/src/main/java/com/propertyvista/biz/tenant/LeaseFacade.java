@@ -16,7 +16,6 @@ package com.propertyvista.biz.tenant;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -89,13 +88,9 @@ public interface LeaseFacade {
 
     void cancelLease(Lease leaseId, Employee decidedBy, String decisionReason);
 
-    
-
     // Utils:
 
     Lease load(Lease leaseId, boolean forEdit);
 
     BillableItem createBillableItem(ProductItem itemId, PolicyNode node);
-
-    boolean isProductAvailable(Lease lease, Product<? extends Product.ProductV<?>> product);
 }

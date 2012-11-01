@@ -35,7 +35,6 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
-import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -129,8 +128,6 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
                         } else {
                             filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
                         }
-
-                        filters.add(PropertyCriterion.in(proto().productItems().$().product().visibility(), PublicVisibilityType.visibleToTenant()));
 
                         // and finalized current Product only:
                         filters.add(PropertyCriterion.isNotNull(proto().productItems().$().product().fromDate()));

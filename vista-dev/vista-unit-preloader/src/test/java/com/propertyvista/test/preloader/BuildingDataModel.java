@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
-import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -137,7 +136,6 @@ public class BuildingDataModel {
         standardResidentialService.serviceType().setValue(Service.ServiceType.residentialUnit);
         standardResidentialService.version().name().setValue("Standard Residential Unit");
         standardResidentialService.version().description().setValue("Standard Residential Unit Lease for 1 year term");
-        standardResidentialService.version().visibility().setValue(PublicVisibilityType.global);
 
         standardResidentialService.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.service().persist(standardResidentialService);
@@ -174,7 +172,6 @@ public class BuildingDataModel {
         feature.featureType().setValue(type);
         feature.version().name().setValue("Regular " + type.name());
         feature.version().description().setValue("Feature - " + type.name());
-        feature.version().visibility().setValue(PublicVisibilityType.global);
 
         switch (feature.featureType().getValue()) {
         case parking:

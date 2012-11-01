@@ -56,8 +56,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
                 new EntityFolderColumnDescriptor(proto().featureType(), "15em"),
                 new EntityFolderColumnDescriptor(proto().version().name(), "20em"),
                 new EntityFolderColumnDescriptor(proto().version().recurring(), "5em"),
-                new EntityFolderColumnDescriptor(proto().version().mandatory(), "5em"),
-                new EntityFolderColumnDescriptor(proto().version().visibility(), "10em")
+                new EntityFolderColumnDescriptor(proto().version().mandatory(), "5em")
         		);//@formatter:on	
     }
 
