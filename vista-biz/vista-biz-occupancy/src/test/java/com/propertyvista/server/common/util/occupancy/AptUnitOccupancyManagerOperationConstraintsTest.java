@@ -326,16 +326,16 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-01-11").toTheEndOfTime().status(Status.leased).withLease(lease).x();
 
         now("2010-01-01");
-        Assert.assertEquals(null, getUOM().getEndLeaseConstraints(unitId).minleaseEndDate().getValue());
-        Assert.assertEquals(null, getUOM().getEndLeaseConstraints(unitId).maxleaseEndDate().getValue());
+        Assert.assertEquals(null, getUOM().getMoveOutConstraints(unitId).minMoveOutDate().getValue());
+        Assert.assertEquals(null, getUOM().getMoveOutConstraints(unitId).maxMoveOutDate().getValue());
 
         now("2010-01-11");
-        Assert.assertEquals(asDate("2010-01-11"), getUOM().getEndLeaseConstraints(unitId).minleaseEndDate().getValue());
-        Assert.assertEquals(OccupancyFacade.MAX_DATE, getUOM().getEndLeaseConstraints(unitId).maxleaseEndDate().getValue());
+        Assert.assertEquals(asDate("2010-01-11"), getUOM().getMoveOutConstraints(unitId).minMoveOutDate().getValue());
+        Assert.assertEquals(OccupancyFacade.MAX_DATE, getUOM().getMoveOutConstraints(unitId).maxMoveOutDate().getValue());
 
         now("2010-01-15");
-        Assert.assertEquals(asDate("2010-01-15"), getUOM().getEndLeaseConstraints(unitId).minleaseEndDate().getValue());
-        Assert.assertEquals(OccupancyFacade.MAX_DATE, getUOM().getEndLeaseConstraints(unitId).maxleaseEndDate().getValue());
+        Assert.assertEquals(asDate("2010-01-15"), getUOM().getMoveOutConstraints(unitId).minMoveOutDate().getValue());
+        Assert.assertEquals(OccupancyFacade.MAX_DATE, getUOM().getMoveOutConstraints(unitId).maxMoveOutDate().getValue());
     }
 
     /**
@@ -349,16 +349,16 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-05-02").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
 
         now("2010-01-01");
-        Assert.assertEquals(null, getUOM().getEndLeaseConstraints(unitId).minleaseEndDate().getValue());
-        Assert.assertEquals(null, getUOM().getEndLeaseConstraints(unitId).maxleaseEndDate().getValue());
+        Assert.assertEquals(null, getUOM().getMoveOutConstraints(unitId).minMoveOutDate().getValue());
+        Assert.assertEquals(null, getUOM().getMoveOutConstraints(unitId).maxMoveOutDate().getValue());
 
         now("2010-01-11");
-        Assert.assertEquals(null, getUOM().getEndLeaseConstraints(unitId).minleaseEndDate().getValue());
-        Assert.assertEquals(null, getUOM().getEndLeaseConstraints(unitId).maxleaseEndDate().getValue());
+        Assert.assertEquals(null, getUOM().getMoveOutConstraints(unitId).minMoveOutDate().getValue());
+        Assert.assertEquals(null, getUOM().getMoveOutConstraints(unitId).maxMoveOutDate().getValue());
 
         now("2010-01-15");
-        Assert.assertEquals(null, getUOM().getEndLeaseConstraints(unitId).minleaseEndDate().getValue());
-        Assert.assertEquals(null, getUOM().getEndLeaseConstraints(unitId).maxleaseEndDate().getValue());
+        Assert.assertEquals(null, getUOM().getMoveOutConstraints(unitId).minMoveOutDate().getValue());
+        Assert.assertEquals(null, getUOM().getMoveOutConstraints(unitId).maxMoveOutDate().getValue());
     }
 
     @Test
@@ -369,7 +369,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2010-01-12").toTheEndOfTime().status(Status.available).x();
 
         now("2010-01-12");
-        Assert.assertTrue(getUOM().isCancelEndLeaseAvaialble(unitId));
+        Assert.assertTrue(getUOM().isCancelMoveOutAvaialble(unitId));
     }
 
     @Test
@@ -382,7 +382,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2011-01-12").toTheEndOfTime().status(Status.leased).withLease(lease2).x();
 
         now("2010-01-12");
-        Assert.assertFalse(getUOM().isCancelEndLeaseAvaialble(unitId));
+        Assert.assertFalse(getUOM().isCancelMoveOutAvaialble(unitId));
     }
 
 }

@@ -43,7 +43,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
-import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.EndLeaseConstraintsDTO;
+import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MoveOutConstraintsDTO;
 import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.misc.VistaTODO;
@@ -427,15 +427,15 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public void endLease(Key unitPk, LogicalDate leaseEndDate) {
+    public void moveOut(Key unitPk, LogicalDate leaseEndDate) {
         assert unitPk != null;
         assert leaseEndDate != null;
 
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
-        EndLeaseConstraintsDTO endLeaseConstraints = getEndLeaseConstraints(unitPk);
-        if (endLeaseConstraints.minleaseEndDate().isNull() || endLeaseConstraints.maxleaseEndDate().isNull() || //
-                !(endLeaseConstraints.minleaseEndDate().getValue().getTime() <= leaseEndDate.getTime() //
-                & leaseEndDate.getTime() <= endLeaseConstraints.maxleaseEndDate().getValue().getTime())) {
+        MoveOutConstraintsDTO endLeaseConstraints = getMoveOutConstraints(unitPk);
+        if (endLeaseConstraints.minMoveOutDate().isNull() || endLeaseConstraints.maxMoveOutDate().isNull() || //
+                !(endLeaseConstraints.minMoveOutDate().getValue().getTime() <= leaseEndDate.getTime() //
+                & leaseEndDate.getTime() <= endLeaseConstraints.maxMoveOutDate().getValue().getTime())) {
             throw new IllegalStateException("'endLease' operation is not permitted");
         }
 
@@ -460,10 +460,10 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public void cancelEndLease(Key unitPk) throws OccupancyOperationException {
+    public void cancelMoveOut(Key unitPk) throws OccupancyOperationException {
         assert unitPk != null;
 
-        if (!isCancelEndLeaseAvaialble(unitPk)) {
+        if (!isCancelMoveOutAvaialble(unitPk)) {
             throw new OccupancyOperationException(
                     "'cancelEndLease' operation is impossible (the unit must be leased with a defined lease end date and not reserved in the future)");
         }
@@ -643,21 +643,21 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public EndLeaseConstraintsDTO getEndLeaseConstraints(Key unitPk) {
+    public MoveOutConstraintsDTO getMoveOutConstraints(Key unitPk) {
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
         AptUnitOccupancySegment segment = retrieveOccupancySegment(unitPk, now);
 
-        EndLeaseConstraintsDTO constraints = EntityFactory.create(EndLeaseConstraintsDTO.class);
+        MoveOutConstraintsDTO constraints = EntityFactory.create(MoveOutConstraintsDTO.class);
         if (segment != null && segment.status().getValue() == Status.leased && segment.dateFrom().getValue().getTime() <= now.getTime()
                 && segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE)) {
-            constraints.minleaseEndDate().setValue(now);
-            constraints.maxleaseEndDate().setValue(OccupancyFacade.MAX_DATE);
+            constraints.minMoveOutDate().setValue(now);
+            constraints.maxMoveOutDate().setValue(OccupancyFacade.MAX_DATE);
         }
         return constraints;
     }
 
     @Override
-    public boolean isCancelEndLeaseAvaialble(Key unitPk) {
+    public boolean isCancelMoveOutAvaialble(Key unitPk) {
         LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
         AptUnitOccupancySegment segment = retrieveOccupancySegment(unitPk, start);
         if (segment != null && segment.status().getValue() == Status.leased && !segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE)) {
