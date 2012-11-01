@@ -429,11 +429,26 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public void moveOut(Key unitPk, LogicalDate moveOutDate) throws OccupancyOperationException {
         assert unitPk != null;
         assert moveOutDate != null;
-
+        LogicalDate unitAvailableFrom = null;
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
 
-        AptUnitOccupancySegment occupiedSegment = retrieveOccupancySegment(unitPk, now);
-        assertStatus(occupiedSegment, Status.occupied);
+        AptUnitOccupancySegment currentSegment = retrieveOccupancySegment(unitPk, now);
+        AptUnitOccupancySegment occupiedSegment = null;
+
+        if (currentSegment.status().getValue() == Status.occupied) {
+            occupiedSegment = currentSegment;
+        } else {
+            GregorianCalendar cal = new GregorianCalendar();
+            cal.setTime(currentSegment.dateFrom().getValue());
+            cal.add(GregorianCalendar.DAY_OF_YEAR, -1);
+            AptUnitOccupancySegment prevSegment = retrieveOccupancySegment(unitPk, new LogicalDate(cal.getTime()));
+            if (prevSegment != null && prevSegment.status().getValue() != Status.occupied) {
+                throw new OccupancyOperationException(
+                        i18n.tr("Occupied segment was not found. Please ensure that the unit is not leased, reserved or scheduled for renovation"));
+            }
+            occupiedSegment = prevSegment;
+        }
+
         if (moveOutDate.getTime() < occupiedSegment.lease().leaseFrom().getValue().getTime()) {
             throw new OccupancyOperationException(i18n.tr("Impossible to move out: move out date is before lease start date"));
         }
@@ -461,9 +476,11 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         LogicalDate dayAfterMoveOutDate = new LogicalDate(cal.getTime());
 
         switch (nextSegment.status().getValue()) {
-        case available:
-        case pending:
         case migrated:
+            throw new OccupancyOperationException(i18n.tr("It's impossible to move out, since this unit is leased in the future"));
+        case available:
+            unitAvailableFrom = dayAfterMoveOutDate;
+        case pending:
             nextSegment.dateFrom().setValue(dayAfterMoveOutDate);
             Persistence.service().merge(nextSegment);
             break;
@@ -508,13 +525,13 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             }
             break;
         default:
-            break;
+            throw new IllegalStateException("cannot perform move out operation: expected occupancy segment not found");
         }
         if (nextSegment.dateTo().getValue().getTime() <= occupiedSegment.dateTo().getValue().getTime()) {
             Persistence.service().delete(nextSegment);
         }
         new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
-        setUnitAvailableFrom(unitPk, null);
+        setUnitAvailableFrom(unitPk, unitAvailableFrom);
     }
 
     @Override

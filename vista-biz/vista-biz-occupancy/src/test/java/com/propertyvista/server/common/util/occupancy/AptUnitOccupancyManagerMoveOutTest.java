@@ -19,7 +19,7 @@ import com.propertyvista.biz.occupancy.OccupancyOperationException;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyManagerTestBase {
+public class AptUnitOccupancyManagerMoveOutTest extends AptUnitOccupancyManagerTestBase {
 
     /** test set move out date for occupied segment without move out date */
     @Test
@@ -75,6 +75,50 @@ public class AptUnitOccupancyManagerSetMoveOutDateTest extends AptUnitOccupancyM
         now("2011-08-01");
 
         getUOM().moveOut(unitId, asDate("2011-10-26"));
+    }
+
+    @Test
+    public void testMoveOutRescheduledWhenMoveOutDateIsOver() throws OccupancyOperationException {
+        Lease lease = createLease("2011-02-15", "2011-10-25");
+
+        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.occupied).withLease(lease).x();
+        setup().from("2011-10-21").toTheEndOfTime().status(Status.pending).x();
+
+        now("2011-10-24");
+
+        getUOM().moveOut(unitId, asDate("2011-10-24"));
+
+        expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-24").status(Status.occupied).withLease(lease).x();
+        expect().from("2011-10-25").toTheEndOfTime().status(Status.pending).x();
+        assertExpectedTimeline();
+        assertUnitIsNotAvailable();
+    }
+
+    /** move out renders unit as 'pending' because it means that unit has to be rescoped */
+    @Test
+    public void testMoveOutRescheduledWhenMoveOutDateIsOverAndAvailable() throws OccupancyOperationException {
+        Lease lease = createLease("2011-02-15", "2011-10-25");
+
+        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        setup().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        setup().from("2011-02-15").to("2011-10-20").status(Status.occupied).withLease(lease).x();
+        setup().from("2011-10-21").toTheEndOfTime().status(Status.available).x();
+
+        now("2011-10-24");
+
+        getUOM().moveOut(unitId, asDate("2011-10-24"));
+
+        expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        expect().from("2011-01-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
+        expect().from("2011-02-15").to("2011-10-24").status(Status.occupied).withLease(lease).x();
+        expect().from("2011-10-25").toTheEndOfTime().status(Status.available).x();
+
+        assertExpectedTimeline();
+        assertUnitIsAvailableFrom(asDate("2011-10-25"));
     }
 
     @Test

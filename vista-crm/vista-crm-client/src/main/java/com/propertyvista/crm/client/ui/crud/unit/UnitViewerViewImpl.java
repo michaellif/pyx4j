@@ -96,8 +96,16 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         scopeAction = new MenuItem(i18n.tr("Scope..."), new Command() {
             @Override
             public void execute() {
-                new ScopeDialog((UnitViewerView.Presenter) getPresenter(), canScopeAvailable, canScopeOffMarket, minRenovationEndDate) {
-                }.show();
+                if (getForm().getValue().lease().actualMoveOut().isNull()) {
+                    MessageDialog.confirm("", i18n.tr("Are you sure you want to scope occupied unit?"), new Command() {
+                        @Override
+                        public void execute() {
+                            new ScopeDialog((UnitViewerView.Presenter) getPresenter(), canScopeAvailable, canScopeOffMarket, minRenovationEndDate) {
+                            }.show();
+                        }
+                    });
+                }
+
             }
         });
         scopeAction.ensureDebugId(DebugIds.unitViewerViewScopeAction.debugId());
