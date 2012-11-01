@@ -86,11 +86,11 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
         List<AptUnitOccupancySegment> occupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(unitPk, now);
 
-        // Find the first pending segment and convert it
+        // Find the first pending segment with undefined end and convert it
         AptUnitOccupancySegment firstPendingSegment = null;
         LogicalDate splittingDay = null;
         for (AptUnitOccupancySegment segment : occupancy) {
-            if (segment.status().getValue() == Status.pending) {
+            if (segment.status().getValue() == Status.pending & segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE)) {
                 firstPendingSegment = segment;
                 splittingDay = firstPendingSegment.dateFrom().getValue().after(now) ? firstPendingSegment.dateFrom().getValue() : now;
                 break;
@@ -593,7 +593,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
             List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, start);
             for (AptUnitOccupancySegment segment : occupancy) {
-                if (segment.status().getValue() == Status.pending) {
+                if (segment.status().getValue() == Status.pending & segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE)) {
                     return true;
                 }
             }
