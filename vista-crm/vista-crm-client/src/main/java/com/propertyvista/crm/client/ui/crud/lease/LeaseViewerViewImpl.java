@@ -174,7 +174,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                             return false;
                         }
                         ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Notice, getValue().moveOutNotice().getValue(),
-                                getValue().expectedMoveOut().getValue());
+                                getValue().expectedMoveOut().getValue(), null);
                         return true;
                     }
                 }.show();
@@ -210,7 +210,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                             return false;
                         }
                         ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Eviction, getValue().moveOutNotice().getValue(),
-                                getValue().expectedMoveOut().getValue());
+                                getValue().expectedMoveOut().getValue(), null);
                         return true;
                     }
                 }.show();
@@ -246,7 +246,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                             return false;
                         }
                         ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Termination, getValue().moveOutNotice().getValue(),
-                                getValue().expectedMoveOut().getValue());
+                                getValue().expectedMoveOut().getValue(), getValue().terminationLeaseTo().getValue());
                         return true;
                     }
                 }.show();
@@ -283,17 +283,20 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         moveOutAction = new MenuItem(i18n.tr("Move Out"), new Command() {
             @Override
             public void execute() {
-                MessageDialog.confirm(i18n.tr("Move Out"), i18n.tr("Do you really want to mark the lease as moved out?"), new ConfirmDecline() {
-                    @Override
-                    public void onConfirmed() {
-                        ((LeaseViewerView.Presenter) getPresenter()).moveOut();
-                    }
+                MessageDialog.confirm(
+                        i18n.tr("Move Out"),
+                        i18n.tr("This will mark the unit as moved out (Tenant has brought the key).") + "<br/><br/>"
+                                + i18n.tr("Do you really want to do this?"), new ConfirmDecline() {
+                            @Override
+                            public void onConfirmed() {
+                                ((LeaseViewerView.Presenter) getPresenter()).moveOut();
+                            }
 
-                    @Override
-                    public void onDeclined() {
-                        // TODO Auto-generated method stub
-                    }
-                });
+                            @Override
+                            public void onDeclined() {
+                                // TODO Auto-generated method stub
+                            }
+                        });
             }
         });
         addAction(moveOutAction);
@@ -425,6 +428,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(cancelTerminateAction, completion == CompletionType.Termination && value.actualMoveOut().isNull() && !status.isFormer());
 
         setActionVisible(moveOutAction, status == Status.Active && completion != null && value.actualMoveOut().isNull() && !status.isFormer());
+        setActionHighlighted(moveOutAction, status == Status.Active && completion != null && value.actualMoveOut().isNull() && !status.isFormer());
 
         setActionVisible(activateAction, status == Status.ExistingLease);
         setActionHighlighted(activateAction, activateAction.isVisible());
@@ -471,18 +475,16 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         private final CompletionType action;
 
-        private final boolean showCompletion;
+        private final boolean showTermination;
 
         private CEntityDecoratableForm<LeaseDTO> content;
 
         public TermLeaseBox(CompletionType action) {
-            this(action, false);
-        }
-
-        public TermLeaseBox(CompletionType action, boolean showCompletion) {
             super(i18n.tr("Please fill"));
+
             this.action = action;
-            this.showCompletion = showCompletion;
+            this.showTermination = (action == CompletionType.Termination);
+
             setBody(createBody());
         }
 
@@ -498,7 +500,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                             .build());
                     main.setWidget(1, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
 
-                    if (showCompletion) {
+                    if (showTermination) {
                         main.setWidget(2, 0, new DecoratorBuilder(inject(proto().terminationLeaseTo()), 9).customLabel(i18n.tr("Lease Termination Date"))
                                 .build());
                     }
@@ -520,7 +522,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                     if (getValue().expectedMoveOut().isNull()) {
                         get(proto().expectedMoveOut()).setValue(new LogicalDate(ClientContext.getServerDate()));
                     }
-                    if (showCompletion) {
+                    if (showTermination) {
                         if (getValue().terminationLeaseTo().isNull()) {
                             get(proto().terminationLeaseTo()).setValue(getValue().currentTerm().termTo().getValue());
                         }
@@ -543,7 +545,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                     get(proto().moveOutNotice()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveOut())));
                     get(proto().expectedMoveOut()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().moveOutNotice())));
 
-                    if (showCompletion) {
+                    if (showTermination) {
                         new DateInPeriodValidation(get(proto().currentTerm().termFrom()), get(proto().terminationLeaseTo()),
                                 get(proto().currentTerm().termTo()), i18n.tr("The Date Should Be Within The Lease Period"));
 

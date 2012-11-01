@@ -190,15 +190,8 @@ public interface Lease extends IEntity {
     @NotNull
     IPrimitive<LogicalDate> leaseTo();
 
-    // other dates:
-
-    /*
+    /**
      * equals to null for active lease
-     * or set to real end lease date for completed lease
-     */
-    IPrimitive<LogicalDate> actualLeaseTo();
-
-    /*
      * set to custom date in case of termination
      */
     IPrimitive<LogicalDate> terminationLeaseTo();
@@ -211,7 +204,7 @@ public interface Lease extends IEntity {
 
     IPrimitive<LogicalDate> actualMoveOut();
 
-    @Caption(name = "Notice Submission Date")
+    @Caption(name = "Move Out Submission Date")
     IPrimitive<LogicalDate> moveOutNotice();
 
     @JoinColumn

@@ -490,7 +490,8 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, now(), lease.currentTerm().termTo().getValue());
+            ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, now(), lease.currentTerm().termTo().getValue(),
+                    null);
         }
     }
 

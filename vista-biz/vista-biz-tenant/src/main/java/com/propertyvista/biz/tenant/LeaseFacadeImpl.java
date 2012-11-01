@@ -506,10 +506,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             throw new IllegalStateException(SimpleMessageFormat.format("Lease has next term ready"));
         }
 
-        lease.actualLeaseTo().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         lease.status().setValue(Status.Completed);
-
-        updateLeaseDates(lease);
 
         Persistence.secureSave(lease);
     }
@@ -579,25 +576,15 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate noticeDay, LogicalDate moveOutDay) {
+    public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate eventDate, LogicalDate moveOutDay, LogicalDate leseEndDate) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
         if (lease.status().getValue() != Status.Active) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
         lease.completion().setValue(completionType);
-        lease.moveOutNotice().setValue(noticeDay);
+        lease.moveOutNotice().setValue(eventDate);
         lease.expectedMoveOut().setValue(moveOutDay);
-
-        updateLeaseDates(lease);
-
-        Persistence.secureSave(lease);
-
-        try {
-            ServerSideFactory.create(OccupancyFacade.class).moveOut(lease.unit().getPrimaryKey(), lease.expectedMoveOut().getValue());
-        } catch (OccupancyOperationException e) {
-            throw new IllegalStateException(e.getMessage());
-        }
 
         switch (completionType) {
         case Eviction:
@@ -607,9 +594,20 @@ public class LeaseFacadeImpl implements LeaseFacade {
         case Skip:
             break;
         case Termination:
+            lease.terminationLeaseTo().setValue(leseEndDate);
             break;
         default:
             break;
+        }
+
+        updateLeaseDates(lease);
+
+        Persistence.secureSave(lease);
+
+        try {
+            ServerSideFactory.create(OccupancyFacade.class).moveOut(lease.unit().getPrimaryKey(), lease.expectedMoveOut().getValue());
+        } catch (OccupancyOperationException e) {
+            throw new IllegalStateException(e.getMessage());
         }
     }
 
@@ -626,6 +624,20 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.moveOutNotice().setValue(null);
         lease.expectedMoveOut().setValue(null);
 
+        switch (completionType) {
+        case Eviction:
+            break;
+        case Notice:
+            break;
+        case Skip:
+            break;
+        case Termination:
+            lease.terminationLeaseTo().setValue(null);
+            break;
+        default:
+            break;
+        }
+
         updateLeaseDates(lease);
 
         Persistence.secureSave(lease);
@@ -636,19 +648,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
             ServerSideFactory.create(OccupancyFacade.class).cancelMoveOut(lease.unit().getPrimaryKey());
         } catch (OccupancyOperationException e) {
             throw new IllegalStateException(e.getMessage());
-        }
-
-        switch (completionType) {
-        case Eviction:
-            break;
-        case Notice:
-            break;
-        case Skip:
-            break;
-        case Termination:
-            break;
-        default:
-            break;
         }
     }
 
@@ -988,10 +987,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         // if lease to be terminated:
         if (!lease.terminationLeaseTo().isNull()) {
             lease.leaseTo().setValue(lease.terminationLeaseTo().getValue());
-        }
-        // if lease closed already:
-        if (!lease.actualLeaseTo().isNull()) {
-            lease.leaseTo().setValue(lease.actualLeaseTo().getValue());
         }
     }
 

@@ -34,7 +34,7 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
     // TODO Move to new Service  LeaseOperationService
 
     void createCompletionEvent(AsyncCallback<VoidSerializable> callback, Key entityId, Lease.CompletionType completionType, LogicalDate eventDate,
-            LogicalDate moveOutDate);
+            LogicalDate moveOutDate, LogicalDate leseEndDate);
 
     void cancelCompletionEvent(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
 

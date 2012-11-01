@@ -61,9 +61,9 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
     @Override
     public void createCompletionEvent(AsyncCallback<VoidSerializable> callback, Key entityId, Lease.CompletionType completionType, LogicalDate eventDate,
-            LogicalDate moveOutDate) {
+            LogicalDate moveOutDate, LogicalDate leseEndDate) {
         ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(EntityFactory.createIdentityStub(Lease.class, entityId), completionType, eventDate,
-                moveOutDate);
+                moveOutDate, leseEndDate);
 
         Persistence.service().commit();
         callback.onSuccess(null);
