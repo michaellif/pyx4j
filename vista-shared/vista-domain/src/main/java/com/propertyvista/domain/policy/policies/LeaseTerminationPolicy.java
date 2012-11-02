@@ -14,6 +14,7 @@
 package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
@@ -22,6 +23,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("LeaseTerminationPolicy")
 @LowestApplicableNode(value = Building.class)
+// TODO
+@Transient
 public interface LeaseTerminationPolicy extends Policy {
 
     IPrimitive<Integer> periodOfNotice();

@@ -249,7 +249,7 @@ BEGIN
         -- apt_unit_occupancy_segment
         EXECUTE 'UPDATE '||v_schema_name||'.apt_unit_occupancy_segment '
         ||'     SET     status = ''occupied'' '
-        ||'     WHERE   status = ''leased'' '; 
+        ||'     WHERE   status = ''leased'' ';
 
         -- billing_arrears_snapshot
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_arrears_snapshot ADD CONSTRAINT billing_arrears_snapshot_billing_account_ck '||
@@ -265,8 +265,8 @@ BEGIN
         -- billing_billing_cycle
         -- EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle ADD COLUMN stats BIGINT';
                                                      --   ||'ADD COLUMN trigger_date DATE ';   Add column, drop column, make up your mind already!
-        
-        /*                                                
+
+        /*
         EXECUTE 'UPDATE '||v_schema_name||'.billing_billing_cycle AS a '
         ||'     SET     trigger_date = b.trigger_date '
         ||'     FROM    (SELECT billing_cycle,MIN(execution_date) AS trigger_date '
@@ -279,7 +279,7 @@ BEGIN
         EXECUTE 'CREATE TABLE '||v_schema_name||'.billing_billing_cycle_stats '
         ||'( '
         ||'     id              BIGINT          NOT NULL,'
-        ||'     billing_cycle   BIGINT          NOT NULL,'                 
+        ||'     billing_cycle   BIGINT          NOT NULL,'
         ||'     failed          BIGINT,'
         ||'     rejected        BIGINT,'
         ||'     not_confirmed   BIGINT,'
@@ -292,10 +292,10 @@ BEGIN
         ||'(SELECT nextval(''public.billing_billing_cycle_stats_seq'') AS id,failed,rejected,not_confirmed,confirmed,id AS billing_cycle '
         ||'FROM '||v_schema_name||'.billing_billing_cycle '
         ||'ORDER BY id )';
-        
-        EXECUTE 'CREATE UNIQUE INDEX billing_billing_cycle_stats_billing_cycle_idx ON '||v_schema_name||'.billing_billing_cycle_stats USING btree(billing_cycle)'; 
 
-        
+        EXECUTE 'CREATE UNIQUE INDEX billing_billing_cycle_stats_billing_cycle_idx ON '||v_schema_name||'.billing_billing_cycle_stats USING btree(billing_cycle)';
+
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle_stats ADD CONSTRAINT billing_billing_cycle_stats_billing_cycle_fk FOREIGN KEY(billing_cycle) '||
         'REFERENCES '||v_schema_name||'.billing_billing_cycle(id)';
 
@@ -304,7 +304,7 @@ BEGIN
                                                                 ||'     DROP COLUMN not_confirmed,'
                                                                 ||'     DROP COLUMN confirmed';
 
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle_stats OWNER TO vista';
 
         -- billing_billing_type
@@ -540,7 +540,7 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_payment_details ALTER COLUMN account_no_obfuscated_number TYPE VARCHAR(12),'||
                                         'ALTER COLUMN card_obfuscated_number TYPE VARCHAR(16)';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_payment_details RENAME COLUMN incomming_interac_trasaction TO incomming_interac_transaction';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_payment_details RENAME COLUMN incoming_interac_trasaction TO incoming_interac_transaction';
 
         EXECUTE 'UPDATE '||v_schema_name||'.payment_payment_details '||
                 '   SET     account_no_obfuscated_number = LPAD(account_no_obfuscated_number,12,''X''),'||
@@ -755,7 +755,7 @@ BEGIN
         ||'DROP COLUMN old_product ';
 
         -- cleanup
-        
+
         FOREACH v_table_name IN ARRAY
         ARRAY[  'service_v$concessions',
                 'service_v$features',
@@ -767,10 +767,10 @@ BEGIN
             SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,v_table_name,TRUE);
 
         END LOOP;
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v DROP COLUMN old_id, DROP COLUMN old_holder';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product DROP COLUMN old_id';
-       
+
         /**
         *** -----------------------------------------------------------------------------------------
         ***
@@ -795,7 +795,7 @@ BEGIN
                                 'ADD COLUMN next_term BIGINT,'||
                                 'ADD COLUMN previous_term BIGINT,'||
                                 'ADD COLUMN termination_lease_to DATE';
-                                
+
 
 
         /**
@@ -946,7 +946,7 @@ BEGIN
         'ADD CONSTRAINT lease_current_term_fk FOREIGN KEY(current_term) REFERENCES '||v_schema_name||'.lease_term(id),'||
         'ADD CONSTRAINT lease_next_term_fk FOREIGN KEY(next_term) REFERENCES '||v_schema_name||'.lease_term(id),'||
         'ADD CONSTRAINT lease_previous_term_fk FOREIGN KEY(previous_term) REFERENCES '||v_schema_name||'.lease_term(id)';
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease DROP COLUMN actual_lease_to';
 
         -- lease_customer
@@ -1081,19 +1081,6 @@ BEGIN
         EXECUTE 'CREATE INDEX lease_participant_application_idx ON '||v_schema_name||'.lease_participant USING btree(application)';
         EXECUTE 'CREATE INDEX lease_participant_lease_term_v_idx ON '||v_schema_name||'.lease_participant USING btree(lease_term_v)';
 
-        -- lease_termination_policy
-        EXECUTE 'CREATE TABLE '||v_schema_name||'.lease_termination_policy '
-        ||'( '
-        ||'     id                      BIGINT          NOT NULL,'
-        ||'     updated                 TIMESTAMP,'
-        ||'     nodediscriminator       VARCHAR(50),'
-        ||'     node                    BIGINT,'
-        ||'     value                   VARCHAR(500),'
-        ||'     CONSTRAINT lease_termination_policy_pk PRIMARY KEY(id),'
-        ||'     CONSTRAINT lease_termination_policy_nodediscriminator_d_ck '
-        ||'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement''))'
-        ||')';
-        
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_termination_policy OWNER TO vista';
 
         -- maintenance_request - hope that there are no real maintenance requests!
@@ -1571,14 +1558,14 @@ $$
 LANGUAGE plpgsql VOLATILE;
 
 /**
-***     Split schema update into several transactions 
-***     to avoid increasing max_locks_per_transaction 
+***     Split schema update into several transactions
+***     to avoid increasing max_locks_per_transaction
 **/
 
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[abc]';
 COMMIT;
@@ -1586,7 +1573,7 @@ COMMIT;
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[def]';
 COMMIT;
@@ -1594,7 +1581,7 @@ COMMIT;
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[ghi]';
 COMMIT;
@@ -1602,7 +1589,7 @@ COMMIT;
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[jkl]';
 COMMIT;
@@ -1610,7 +1597,7 @@ COMMIT;
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[mno]';
 COMMIT;
@@ -1618,7 +1605,7 @@ COMMIT;
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[pqr]';
 COMMIT;
@@ -1626,7 +1613,7 @@ COMMIT;
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[stu]';
 COMMIT;
@@ -1634,7 +1621,7 @@ COMMIT;
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[vwx]';
 COMMIT;
@@ -1642,7 +1629,7 @@ COMMIT;
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[yz]';
 COMMIT;

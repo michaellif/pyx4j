@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface InteracInfo extends PaymentDetails {
 
     //TODO
-    IPrimitive<Key> incommingInteracTransaction();
+    IPrimitive<Key> incomingInteracTransaction();
 
     @ToString(index = 0)
     @Caption(name = "Bank Number")

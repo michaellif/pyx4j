@@ -52,19 +52,34 @@ public interface Lease extends IEntity {
     @XmlType(name = "LeaseStatus")
     public enum Status {
 
-        ExistingLease, // Existing/Imported lease which is created but pending approval to become 'Active' and participate in billing.
+        /**
+         * Existing/Imported lease which is created but pending approval to become 'Active' and participate in billing.
+         */
+        ExistingLease,
 
-        Application, // Typical flow lease start point
+        /**
+         * Typical flow lease start point
+         */
+        Application,
 
-        Approved, // Application
+        /**
+         * For Application
+         */
+        Approved,
 
         Cancelled,
 
         Active,
 
-        Completed, // Lease end date is passed
+        /**
+         * {@link #leaseTo} is passed
+         */
+        Completed,
 
-        Closed; // All the transactions completed and lease closed
+        /**
+         * All the transactions completed and lease closed
+         */
+        Closed;
 
         @Override
         public String toString() {
@@ -132,7 +147,18 @@ public interface Lease extends IEntity {
     @I18n(context = "Payment Frequency")
     @XmlType(name = "PaymentFrequency")
     public enum PaymentFrequency {
-        Monthly(28, 15), Weekly(7, 5), SemiMonthly(14, 10), BiWeekly(14, 10), SemiAnnyally(182, -1), Annually(365, -1);
+
+        Monthly(28, 15),
+
+        Weekly(7, 5),
+
+        SemiMonthly(14, 10),
+
+        BiWeekly(14, 10),
+
+        SemiAnnyally(182, -1),
+
+        Annually(365, -1);
 
         private final int numOfCycles;
 
