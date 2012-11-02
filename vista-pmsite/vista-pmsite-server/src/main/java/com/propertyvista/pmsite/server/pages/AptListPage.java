@@ -25,7 +25,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.ListenerInterfaceRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters.NamedPair;
@@ -137,11 +136,11 @@ public class AptListPage extends BasePage {
 
         add(form);
 
-        IRequestHandler curHandler = getRequestCycle().getActiveRequestHandler();
-        if (ListenerInterfaceRequestHandler.class.isAssignableFrom(curHandler.getClass())) {
-            // asked for the form - no need to render any data
+        // if asked for the form - no need to render any data
+        if (getRequestCycle().getActiveRequestHandler() instanceof ListenerInterfaceRequestHandler) {
             return;
         }
+
         ViewMode viewMode = ViewMode.map;
         if (searchResult != null && searchResult.size() > 0) {
             if (cm.isMapEnabled() && SystemMaintenance.getExternalConnectionsState().equals(SystemState.Online)) {
