@@ -46,17 +46,20 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
     public void testCarryForwardOwingScenario() {
 
-        SysDateManager.setSysDate("17-Mar-2011"); // create existing lease
+        setLeaseBatchProcess();
+        setBillingBatchProcess();
+
+        setDate("17-Mar-2011"); // create existing lease
 
         // When we create Existing Lease, the tenant is already living in the building
         createLease("3-Mar-2009", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("300.00"));
 
         //==================== RUN 1 ======================//
 
-        Bill bill = approveExistingLease(true);
+        approveExistingLease(true);
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getBill(1)).
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.ZeroCycle).
@@ -79,7 +82,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         receiveAndPostPayment("17-Mar-2011", "300.00");
 
         SysDateManager.setSysDate("18-Mar-2011");
-        bill = runBilling(true, true);
+        Bill bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -111,10 +114,10 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        Bill bill = approveExistingLease(true);
+        approveExistingLease(true);
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getBill(1)).
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.ZeroCycle).
@@ -135,7 +138,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         activateLease();
 
         SysDateManager.setSysDate("18-Mar-2011");
-        bill = runBilling(true, true);
+        Bill bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill).

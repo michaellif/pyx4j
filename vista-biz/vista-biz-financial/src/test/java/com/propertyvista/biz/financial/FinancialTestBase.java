@@ -331,6 +331,21 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         ServerSideFactory.create(LeaseFacade.class).acceptOffer(lease, term);
     }
 
+    protected Bill getBill(int billSequenceNumber) {
+        Bill bill = ServerSideFactory.create(BillingFacade.class).getBill(retrieveLease(), billSequenceNumber);
+        return bill;
+    }
+
+    protected Bill getLatestBill() {
+        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
+        return bill;
+    }
+
+    protected Bill getLatestConfirmedBill() {
+        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(retrieveLease());
+        return bill;
+    }
+
     protected Bill approveApplication(boolean printBill) {
         ServerSideFactory.create(LeaseFacade.class).approveApplication(retrieveLease(), null, null);
         Persistence.service().commit();
@@ -341,14 +356,9 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return bill;
     }
 
-    protected Bill approveExistingLease(boolean printBill) {
+    protected void approveExistingLease(boolean printBill) {
         ServerSideFactory.create(LeaseFacade.class).approveExistingLease(retrieveLease());
         Persistence.service().commit();
-        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
-        if (printBill) {
-            printBill(bill);
-        }
-        return bill;
     }
 
     protected void activateLease() {

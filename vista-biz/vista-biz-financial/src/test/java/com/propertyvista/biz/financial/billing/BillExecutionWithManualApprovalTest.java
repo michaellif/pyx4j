@@ -24,8 +24,6 @@ import java.math.BigDecimal;
 
 import org.junit.experimental.categories.Category;
 
-import com.pyx4j.config.server.ServerSideFactory;
-
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -50,13 +48,11 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
         //==================== CYCLE 1 ======================//
 
-        advanceDate("17-Feb-2011");
+        advanceDate("18-Feb-2011");
         approveApplication(true);
 
-        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
-
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getLatestBill()).
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -68,11 +64,10 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         //==================== CYCLE 2 ======================//
 
         advanceDate("18-Mar-2011");
-        bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
-        confirmBill(bill, true, true);
+        confirmBill(getLatestBill(), true, true);
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getLatestBill()).
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
@@ -84,11 +79,10 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         //==================== CYCLE 3 ======================//
 
         advanceDate("18-Apr-2011");
-        bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
-        confirmBill(bill, true, true);
+        confirmBill(getLatestBill(), true, true);
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getLatestBill()).
         billSequenceNumber(3).
         previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).
@@ -100,11 +94,11 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         //==================== CYCLE 4 ======================//
 
         advanceDate("18-May-2011");
-        bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
+        confirmBill(getLatestBill(), true, true);
 
         //Billing does't run in the last cycle of lease term
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getLatestBill()).
         billSequenceNumber(3).
         previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).
@@ -116,10 +110,10 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         //==================== FINAL ======================//
 
         advanceDate("05-Jun-2011");
-        bill = runBilling(true, true);
+        confirmBill(getLatestBill(), true, true);
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getLatestBill()).
         billSequenceNumber(4).
         previousBillSequenceNumber(3).
         billType(Bill.BillType.Final);
@@ -131,24 +125,51 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         setLeaseBatchProcess();
         setBillingBatchProcess();
 
-        setDate("15-Feb-2011");
+        setDate("15-May-2011");
 
         createLease("1-Mar-2009", "31-Aug-2011", null, new BigDecimal("300.00"));
 
-        //==================== CYCLE 1 ======================//
-
-        advanceDate("22-Feb-2011");
+        advanceDate("22-May-2011");
         approveExistingLease(true);
 
-        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
+        //==================== ZERO CYCLE ======================//
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getBill(1)).
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.ZeroCycle).
-        billingPeriodStartDate("1-Feb-2011").
-        billingPeriodEndDate("28-Feb-2011").
+        billingPeriodStartDate("1-May-2011").
+        billingPeriodEndDate("31-May-2011").
+        numOfProductCharges(1);
+        // @formatter:on
+
+        //==================== CYCLE 1 ======================//
+
+        confirmBill(getLatestBill(), true, true);
+
+        // @formatter:off
+        new BillTester(getLatestConfirmedBill()).
+        billSequenceNumber(2).
+        previousBillSequenceNumber(1).
+        billType(Bill.BillType.Regular).
+        billingPeriodStartDate("1-June-2011").
+        billingPeriodEndDate("30-June-2011").
+        numOfProductCharges(1);
+        // @formatter:on
+
+        //==================== CYCLE 2 ======================//
+
+        advanceDate("18-Jun-2011");
+        confirmBill(getLatestBill(), true, true);
+
+        // @formatter:off
+        new BillTester(getLatestConfirmedBill()).
+        billSequenceNumber(3).
+        previousBillSequenceNumber(2).
+        billType(Bill.BillType.Regular).
+        billingPeriodStartDate("1-July-2011").
+        billingPeriodEndDate("31-July-2011").
         numOfProductCharges(1);
         // @formatter:on
 

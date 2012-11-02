@@ -112,7 +112,7 @@ public class BillingManager {
             @Override
             public boolean accept(Lease lease) {
                 try {
-                    if (isBillingBeSkipped(billingCycle, lease)) {
+                    if (isLeaseLastBillingCycle(billingCycle, lease)) {
                         return false;
                     } else {
                         validateBillingRunPreconditions(billingCycle, lease, false);
@@ -127,19 +127,12 @@ public class BillingManager {
         runBilling(billingCycle, filteredLeaseIterator, dynamicStatisticsRecord);
     }
 
-    private static boolean isBillingBeSkipped(BillingCycle billingCycle, Lease lease) {
-        Bill previousConfirmedBill = getLatestConfirmedBill(lease);
-        if (previousConfirmedBill != null) {
-            Persistence.service().retrieve(previousConfirmedBill.billingAccount());
-            boolean isPreviousConfirmedBillTheLast = previousConfirmedBill.billingPeriodEndDate().getValue().compareTo(lease.currentTerm().termTo().getValue()) == 0;
-            //previous bill was the last one so we have to run a final bill but not before lease end date or lease move-out date whatever is first
-            if (isPreviousConfirmedBillTheLast && (SysDateManager.getSysDate().compareTo(lease.currentTerm().termTo().getValue()) < 0)
-                    && (lease.expectedMoveOut().isNull() || (SysDateManager.getSysDate().compareTo(lease.expectedMoveOut().getValue()) < 0))) {
-                return true;
-            }
-
-        }
-        return false;
+    /**
+     * Billing shoudn't run on a lease with
+     */
+    private static boolean isLeaseLastBillingCycle(BillingCycle billingCycle, Lease lease) {
+        return billingCycle.billingCycleStartDate().getValue().compareTo(lease.leaseTo().getValue()) <= 0
+                && billingCycle.billingCycleEndDate().getValue().compareTo(lease.leaseTo().getValue()) >= 0;
     }
 
     private static void validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease, boolean preview) {
@@ -283,6 +276,13 @@ public class BillingManager {
         } else {
             return getSubsiquentBillingCycle(previousBill.billingCycle());
         }
+    }
+
+    static Bill getBill(Lease lease, int billSequenceNumber) {
+        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), lease.billingAccount()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().billSequenceNumber(), billSequenceNumber));
+        return Persistence.service().retrieve(criteria);
     }
 
     static Bill getLatestConfirmedBill(Lease lease) {

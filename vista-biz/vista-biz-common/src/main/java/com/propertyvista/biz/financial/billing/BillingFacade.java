@@ -30,6 +30,8 @@ public interface BillingFacade {
 
     void runBilling(BillingCycle billingCycle, StatisticsRecord dynamicStatisticsRecord);
 
+    Bill getBill(Lease lease, int billSequenceNumber);
+
     Bill getLatestConfirmedBill(Lease lease);
 
     Bill getLatestBill(Lease lease);

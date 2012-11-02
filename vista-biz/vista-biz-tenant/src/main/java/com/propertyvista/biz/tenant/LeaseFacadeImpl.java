@@ -977,8 +977,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 lease.expectedMoveOut().setValue(lease.currentTerm().termTo().getValue());
             }
             break;
-        case FixedEx:
-            break;
         case Periodic:
             break;
         default:

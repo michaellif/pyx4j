@@ -45,6 +45,11 @@ public class BillingFacadeImpl implements BillingFacade {
     }
 
     @Override
+    public Bill getBill(Lease lease, int billSequenceNumber) {
+        return BillingManager.getBill(lease, billSequenceNumber);
+    }
+
+    @Override
     public Bill getLatestConfirmedBill(Lease lease) {
         return BillingManager.getLatestConfirmedBill(lease);
     }

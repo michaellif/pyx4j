@@ -20,7 +20,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.IEntity;
