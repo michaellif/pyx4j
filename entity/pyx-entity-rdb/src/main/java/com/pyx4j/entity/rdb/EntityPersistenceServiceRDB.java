@@ -107,6 +107,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     public static final boolean trace = false;
 
+    public static final boolean traceEntity = false;
+
+    public static final String[] traceEntities = new String[] { "ClassName" };
+
     public static final boolean traceSql = false;
 
     public static final boolean traceWarnings = false;
@@ -303,6 +307,19 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         return mappings.getDatabaseType();
     }
 
+    private boolean traceEntityFilter(IEntity entity) {
+        if (!traceEntity) {
+            return false;
+        } else {
+            for (String name : traceEntities) {
+                if (entity.getEntityMeta().getEntityClass().getName().endsWith("." + name)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     String getDatabaseName() {
         // Because mapping hods configuration ...
         return mappings.getDatabaseName();
@@ -470,6 +487,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (trace) {
             log.info(Trace.enter() + "insert {}", tm.getTableName());
         }
+        if (traceEntity) {
+            if (traceEntityFilter(entity)) {
+                log.info("Insert {} \n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            }
+        }
         MemberOperationsMeta createdTs = tm.operationsMeta().getCreatedTimestampMember();
         if ((createdTs != null) && (createdTs.getMemberValue(entity) == null)) {
             createdTs.setMemberValue(entity, DateUtils.getDBRounded(getPersistenceContext().getTimeNow()));
@@ -567,6 +589,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     private boolean update(TableModel tm, IEntity entity, boolean doMerge) {
         if (trace) {
             log.info(Trace.enter() + "update {} id={}", tm.getTableName(), entity.getPrimaryKey());
+        }
+        if (traceEntity) {
+            if (traceEntityFilter(entity)) {
+                log.info("Update {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            }
         }
         try {
             for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
