@@ -64,11 +64,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     private Button actionsButton;
 
-    private Button notesButton;
-
     private Button.ButtonMenuBar actionsMenu;
-
-    private int actionHighlightCounter = 0;
 
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         this(placeClass, false);
@@ -146,12 +142,18 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     public void setActionHighlighted(MenuItem action, boolean highlight) {
         if (highlight) {
             action.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
-            if (actionHighlightCounter++ == 0) {
-                actionsButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
-            }
+            actionsButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
         } else {
             action.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
-            if (--actionHighlightCounter == 0) {
+
+            boolean highlighted = false;
+            for (MenuItem a : actionsMenu.getItems()) {
+                highlighted = a.getStyleName().contains(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
+                if (highlighted) {
+                    break;
+                }
+            }
+            if (!highlighted) {
                 actionsButton.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
             }
         }
@@ -162,7 +164,6 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
             action.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
         }
         actionsButton.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
-        actionHighlightCounter = 0;
     }
 
     public void setEditingVisible(boolean visible) {
