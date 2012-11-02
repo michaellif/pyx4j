@@ -263,7 +263,7 @@ BEGIN
                                                         ||'ADD COLUMN previous_charge_refunds NUMERIC(18,2)';
 
         -- billing_billing_cycle
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle ADD COLUMN stats BIGINT';
+        -- EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle ADD COLUMN stats BIGINT';
                                                      --   ||'ADD COLUMN trigger_date DATE ';   Add column, drop column, make up your mind already!
         
         /*                                                
@@ -279,35 +279,32 @@ BEGIN
         EXECUTE 'CREATE TABLE '||v_schema_name||'.billing_billing_cycle_stats '
         ||'( '
         ||'     id              BIGINT          NOT NULL,'
+        ||'     billing_cycle   BIGINT          NOT NULL,'                 
         ||'     failed          BIGINT,'
         ||'     rejected        BIGINT,'
         ||'     not_confirmed   BIGINT,'
         ||'     confirmed       BIGINT,'
-        ||'     cycle_id        BIGINT,'                 -- temporary
         ||'     CONSTRAINT billing_billing_cycle_stats_pk PRIMARY KEY(id) '
         ||') ';
 
 
-        EXECUTE 'INSERT INTO '||v_schema_name||'.billing_billing_cycle_stats (id,failed,rejected,not_confirmed,confirmed,cycle_id) '
-        ||'(SELECT nextval(''public.billing_billing_cycle_stats_seq'') AS id,failed,rejected,not_confirmed,confirmed,id AS cycle_id '
+        EXECUTE 'INSERT INTO '||v_schema_name||'.billing_billing_cycle_stats (id,failed,rejected,not_confirmed,confirmed,billing_cycle) '
+        ||'(SELECT nextval(''public.billing_billing_cycle_stats_seq'') AS id,failed,rejected,not_confirmed,confirmed,id AS billing_cycle '
         ||'FROM '||v_schema_name||'.billing_billing_cycle '
         ||'ORDER BY id )';
+        
+        EXECUTE 'CREATE UNIQUE INDEX billing_billing_cycle_stats_billing_cycle_idx ON '||v_schema_name||'.billing_billing_cycle_stats USING btree(billing_cycle)'; 
 
-        EXECUTE 'UPDATE '||v_schema_name||'.billing_billing_cycle AS a '
-        ||'     SET     stats = b.id '
-        ||'     FROM    '||v_schema_name||'.billing_billing_cycle_stats AS b '
-        ||'     WHERE   a.id = b.cycle_id ';
-
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle ADD CONSTRAINT billing_billing_cycle_stats_fk FOREIGN KEY(stats) '||
-        'REFERENCES '||v_schema_name||'.billing_billing_cycle_stats(id)';
+        
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle_stats ADD CONSTRAINT billing_billing_cycle_stats_billing_cycle_fk FOREIGN KEY(billing_cycle) '||
+        'REFERENCES '||v_schema_name||'.billing_billing_cycle(id)';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle DROP COLUMN failed,'
                                                                 ||'     DROP COLUMN rejected,'
                                                                 ||'     DROP COLUMN not_confirmed,'
                                                                 ||'     DROP COLUMN confirmed';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle_stats DROP COLUMN cycle_id';
-
+        
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle_stats OWNER TO vista';
 
         -- billing_billing_type
