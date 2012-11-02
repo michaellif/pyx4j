@@ -81,7 +81,7 @@ public interface BillableItemAdjustment extends IEntity {
      * for monetary - amount
      */
     @NotNull
-    @Format("#0.00")
+    @Format("#,##0.00")
     @ToString(index = 1)
     @MemberColumn(name = "adjustmentValue")
     IPrimitive<BigDecimal> value();

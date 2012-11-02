@@ -28,7 +28,7 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 @Transient
 public interface InvoiceLineItemGroupDTO extends IEntity {
 
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> total();
 

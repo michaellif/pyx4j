@@ -35,7 +35,7 @@ public interface DebitCreditLink extends IEntity {
     @JoinColumn
     InvoiceCredit creditItem();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 

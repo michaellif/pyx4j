@@ -43,7 +43,7 @@ public interface InvoiceDebit extends InvoiceLineItem {
 
     IPrimitive<DebitType> debitType();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> outstandingDebit();
 
@@ -52,7 +52,7 @@ public interface InvoiceDebit extends InvoiceLineItem {
     @Owned
     IList<InvoiceChargeTax> taxes();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> taxTotal();
 }

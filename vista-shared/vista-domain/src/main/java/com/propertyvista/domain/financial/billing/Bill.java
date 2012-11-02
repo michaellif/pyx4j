@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -140,23 +141,30 @@ public interface Bill extends IEntity {
      * The total amount due from the previous bill.
      */
     @Caption(name = "Previous Balance")
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> balanceForwardAmount();
 
     /**
      * The total amount of payments received since the previous bill, up to the current
      * Bill day.
      */
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> paymentReceivedAmount();
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> paymentRejectedAmount();
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> depositRefundAmount();
 
     //immediateAccountAdjustments should include taxes
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> immediateAccountAdjustments();
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> nsfCharges();
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> withdrawalAmount();
 
     /**
@@ -166,24 +174,33 @@ public interface Bill extends IEntity {
 
     @Caption(name = "Balance from last bill")
     @Editor(type = EditorType.money)
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> pastDueAmount();
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> serviceCharge();
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> recurringFeatureCharges();
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> oneTimeFeatureCharges();
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> pendingAccountAdjustments();
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> previousChargeRefunds();
 
     IPrimitive<BigDecimal> latePaymentFees();
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> depositAmount();
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> productCreditAmount();
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> carryForwardCredit();
 
     /**
@@ -192,8 +209,10 @@ public interface Bill extends IEntity {
      */
 
     @Caption(name = "Total (before taxes)")
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> currentAmount();
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> taxes();
 
     /**
@@ -201,6 +220,7 @@ public interface Bill extends IEntity {
      */
     @ToString(index = 1)
     @Editor(type = EditorType.money)
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> totalDueAmount();
 
 }

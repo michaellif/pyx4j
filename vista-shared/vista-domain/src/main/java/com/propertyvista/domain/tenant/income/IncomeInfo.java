@@ -41,7 +41,7 @@ public interface IncomeInfo extends IEntity {
     IPrimitive<String> name();
 
     @NotNull
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> monthlyAmount();
 

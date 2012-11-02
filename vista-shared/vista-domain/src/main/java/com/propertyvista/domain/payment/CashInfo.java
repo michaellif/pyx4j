@@ -33,12 +33,12 @@ public interface CashInfo extends PaymentDetails {
 
     @ToString(index = 0)
     @NotNull
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Caption(name = "Received Amount")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> receivedAmount();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Caption(name = "Change Amount")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> changeAmount();

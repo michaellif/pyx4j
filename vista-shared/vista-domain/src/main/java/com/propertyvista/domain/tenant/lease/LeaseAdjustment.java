@@ -102,7 +102,7 @@ public interface LeaseAdjustment extends IEntity {
 
     @NotNull
     @ToString(index = 1)
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
@@ -113,7 +113,7 @@ public interface LeaseAdjustment extends IEntity {
      */
     @NotNull
     @ToString(index = 2)
-    @Format("#0.00")
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> tax();
 
     @NotNull
@@ -123,7 +123,7 @@ public interface LeaseAdjustment extends IEntity {
 
     @Transient
     @Caption(name = "Total")
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> _total();
 

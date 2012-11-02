@@ -19,6 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -32,6 +33,7 @@ public interface ExistingInsurance extends IEntity, ApplicationDocumentHolder<In
     IPrimitive<String> insuranceCertificateNumber();
 
     @Editor(type = EditorType.money)
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> personalLiability();
 
     IPrimitive<LogicalDate> insuranceStartDate();

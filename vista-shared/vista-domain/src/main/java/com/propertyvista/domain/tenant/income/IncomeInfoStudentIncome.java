@@ -61,7 +61,7 @@ public interface IncomeInfoStudentIncome extends IncomeInfo {
     @Override
     @Caption(name = "Gross Monthly Amount")
     @NotNull
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> monthlyAmount();
 

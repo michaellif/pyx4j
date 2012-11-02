@@ -88,7 +88,7 @@ public interface Deposit extends IEntity {
     IPrimitive<DepositType> type();
 
     @NotNull
-    @Format("#0.00")
+    @Format("#,##0.00")
     @ToString(index = 1)
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();

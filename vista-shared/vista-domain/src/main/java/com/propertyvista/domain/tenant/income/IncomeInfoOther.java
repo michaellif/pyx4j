@@ -27,9 +27,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 @DiscriminatorValue("other")
 @Caption(name = "Income Information Other")
 public interface IncomeInfoOther extends IEntity, IncomeInfo {
+
     @Override
     @NotNull
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> monthlyAmount();
+
 }

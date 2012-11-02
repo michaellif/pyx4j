@@ -44,6 +44,6 @@ public interface LeaseArrearsSnapshot extends ArrearsSnapshot {
      * LMR - last months rent deposit
      */
     // TODO add calculation of this value
-    @Format("#0.00")
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> lmrToUnitRentDifference();
 }

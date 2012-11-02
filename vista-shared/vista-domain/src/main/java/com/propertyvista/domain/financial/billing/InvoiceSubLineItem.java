@@ -36,7 +36,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 @AbstractEntity
 public interface InvoiceSubLineItem extends IEntity {
 
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 

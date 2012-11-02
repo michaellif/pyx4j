@@ -131,7 +131,7 @@ public interface Concession extends IVersionedEntity<ConcessionV> {
          * for monetaryOff/promotionalItem - value amount
          */
         @ToString(index = 1)
-        @Format("#0.00")
+        @Format("#,##0.00")
         @MemberColumn(name = "val")
         IPrimitive<BigDecimal> value();
 

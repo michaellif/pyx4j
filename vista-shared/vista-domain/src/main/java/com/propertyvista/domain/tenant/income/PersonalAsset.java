@@ -92,7 +92,7 @@ public interface PersonalAsset extends IEntity {
     IPrimitive<Double> percent();
 
     @NotNull
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Caption(name = "Current Value")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> assetValue();

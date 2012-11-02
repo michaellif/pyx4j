@@ -32,7 +32,7 @@ public interface DepositInterestAdjustment extends IEntity {
     IPrimitive<BigDecimal> interestRate();
 
     @NotNull
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 }
