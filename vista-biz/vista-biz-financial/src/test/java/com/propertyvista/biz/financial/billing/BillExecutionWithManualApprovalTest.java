@@ -120,7 +120,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
     }
 
-    public void testExistingLease() {
+    public void testExistingLeaseApprovedAfterBillRun() {
         setLeaseBatchProcess();
         setBillingBatchProcess();
 
@@ -200,4 +200,43 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
     }
 
+    public void testExistingLeaseApprovedBeforeBillRun() {
+        setLeaseBatchProcess();
+        setBillingBatchProcess();
+
+        setDate("02-May-2011");
+
+        createLease("01-Mar-2009", "31-Aug-2011", null, new BigDecimal("300.00"));
+
+        advanceDate("04-May-2011");
+        approveExistingLease(true);
+
+        //==================== ZERO CYCLE ======================//
+
+        // @formatter:off
+        new BillTester(getBill(1)).
+        billSequenceNumber(1).
+        previousBillSequenceNumber(null).
+        billType(Bill.BillType.ZeroCycle).
+        billingPeriodStartDate("1-May-2011").
+        billingPeriodEndDate("31-May-2011").
+        numOfProductCharges(1);
+        // @formatter:on
+
+        //==================== CYCLE 1 ======================//
+
+        advanceDate("18-May-2011");
+        confirmBill(getLatestBill(), true, true);
+
+        // @formatter:off
+        new BillTester(getLatestConfirmedBill()).
+        billSequenceNumber(2).
+        previousBillSequenceNumber(1).
+        billType(Bill.BillType.Regular).
+        billingPeriodStartDate("1-June-2011").
+        billingPeriodEndDate("30-June-2011").
+        numOfProductCharges(1);
+        // @formatter:on
+
+    }
 }
