@@ -265,8 +265,6 @@ public class MessageTemplates {
         email.setSender(getSender());
         // set email subject and body from the template
         buildEmail(email, emailTemplate, data);
-        // log entries for debugging, will remove later -- yuriy
-        log.error("EMAIL CREATED:", email);
 
         return email;
     }
@@ -360,14 +358,11 @@ public class MessageTemplates {
             body = body.replace("${ownerName}", EmailTemplateManager.getVarname(user.name()));
             body = body.replace("${crmLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true));
             body = body.replace("${portalLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.TenantPortal, true));
-            // log entries for debugging, will remove later -- yuriy
-            log.error("STRINGS REPLACED");
 
             template.content().setValue(wrapAdminHtml(i18n.tr(//@formatter:off
                 body
         )));//@formatter:on
-            // log entries for debugging, will remove later -- yuriy
-            log.error("MESSAGE WRAPPED");
+
             return template;
 
         } catch (IOException e) {
