@@ -116,7 +116,7 @@ DROP SEQUENCE unit_availability_summary_gmeta$column_descriptors_seq;
 DROP SEQUENCE unit_availability_summary_gmeta_seq;
 DROP SEQUENCE yardi_connection_seq;
 
--- Create new sequences - 19 total
+-- Create new sequences - 20 total
 CREATE SEQUENCE background_check_policy_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE background_check_policy_v_seq OWNER TO vista;
 CREATE SEQUENCE billing_billing_cycle_stats_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -127,6 +127,8 @@ CREATE SEQUENCE lease_customer_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MI
 ALTER SEQUENCE lease_customer_seq OWNER TO vista;
 CREATE SEQUENCE lease_participant_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE lease_participant_seq OWNER TO vista;
+CREATE SEQUENCE lease_termination_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ALTER SEQUENCE lease_termination_policy_seq OWNER TO vista;
 CREATE SEQUENCE lease_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE lease_term_seq OWNER TO vista;
 CREATE SEQUENCE lease_term_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -244,6 +246,11 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit ADD COLUMN info_number_s VARCHAR(32), DROP COLUMN notes_and_attachments';
         EXECUTE 'UPDATE '||v_schema_name||'.apt_unit SET info_number_s = _dba_.convert_id_to_string(info_unit_number)';
 
+        -- apt_unit_occupancy_segment
+        EXECUTE 'UPDATE '||v_schema_name||'.apt_unit_occupancy_segment '
+        ||'     SET     status = ''occupied'' '
+        ||'     WHERE   status = ''leased'' '; 
+
         -- billing_arrears_snapshot
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_arrears_snapshot ADD CONSTRAINT billing_arrears_snapshot_billing_account_ck '||
         'CHECK (((iddiscriminator = ''LeaseArrearsSnapshot'') AND (billing_account IS NOT NULL)) OR ((iddiscriminator != ''LeaseArrearsSnapshot'') AND (billing_account IS NULL))),'||
@@ -256,16 +263,17 @@ BEGIN
                                                         ||'ADD COLUMN previous_charge_refunds NUMERIC(18,2)';
 
         -- billing_billing_cycle
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle ADD COLUMN stats BIGINT,'
-                                                        ||'ADD COLUMN trigger_date DATE ';
-                                                        
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle ADD COLUMN stats BIGINT';
+                                                     --   ||'ADD COLUMN trigger_date DATE ';   Add column, drop column, make up your mind already!
+        
+        /*                                                
         EXECUTE 'UPDATE '||v_schema_name||'.billing_billing_cycle AS a '
         ||'     SET     trigger_date = b.trigger_date '
         ||'     FROM    (SELECT billing_cycle,MIN(execution_date) AS trigger_date '
         ||'             FROM    '||v_schema_name||'.billing_bill '
         ||'             GROUP BY billing_cycle) AS b '
         ||'     WHERE   a.id = b.billing_cycle ';
-        
+        */
 
         -- billing_billing_cycle_stats
         EXECUTE 'CREATE TABLE '||v_schema_name||'.billing_billing_cycle_stats '
@@ -650,7 +658,6 @@ BEGIN
             '   created_by_user_key BIGINT,'||
             '   name            VARCHAR(25),'||
             '   description     VARCHAR(250),'||
-            '   visibility      VARCHAR(50),'||
             '   recurring       BOOLEAN,'||
             '   mandatory       BOOLEAN,'||
             '   CONSTRAINT product_v_pk PRIMARY KEY (id))';
@@ -683,9 +690,6 @@ BEGIN
                 '      FROM '||v_schema_name||'.product a '||
                 '      JOIN '||v_schema_name||'.product_v b ON (a.id = b.holder)) AS b '||
                 'WHERE a.holder = b.id';
-
-        EXECUTE 'UPDATE '||v_schema_name||'.product_v '||
-                'SET visibility = ''global'' ';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ADD CONSTRAINT product_v_holder_fk FOREIGN KEY(holder) REFERENCES '||v_schema_name||'.product(id)';
 
@@ -792,7 +796,9 @@ BEGIN
                                 'ADD COLUMN lease_id_s VARCHAR(26),'||
                                 'ADD COLUMN move_out_notice DATE,'||
                                 'ADD COLUMN next_term BIGINT,'||
-                                'ADD COLUMN previous_term BIGINT';
+                                'ADD COLUMN previous_term BIGINT,'||
+                                'ADD COLUMN termination_lease_to DATE';
+                                
 
 
         /**
@@ -836,14 +842,15 @@ BEGIN
         -- lease_term
 
         EXECUTE 'CREATE TABLE '||v_schema_name||'.lease_term ( '||
-        '   id          BIGINT      NOT NULL,'||
-        '   lease_term_type     VARCHAR(50),'||
-        '   lease_term_status   VARCHAR(50),'||
-        '   term_from       DATE,'||
-        '   term_to         DATE,'||
-        '   creation_date       DATE,'||
-        '   lease           BIGINT,'||
-        '   order_in_owner      INT,'||
+        '       id                      BIGINT      NOT NULL,'||
+        '       lease_term_type         VARCHAR(50),'||
+        '       lease_term_status       VARCHAR(50),'||
+        '       term_from               DATE,'||
+        '       term_to                 DATE,'||
+        '       creation_date           DATE,'||
+        '       lease                   BIGINT,'||
+        '       order_in_owner          INT,'||
+        '       actual_term_to          DATE,'||
         '   CONSTRAINT lease_term_pk PRIMARY KEY(id),'||
         '   CONSTRAINT lease_term_lease_fk FOREIGN KEY(lease) '||
         '       REFERENCES '||v_schema_name||'.lease(id))';
@@ -942,6 +949,8 @@ BEGIN
         'ADD CONSTRAINT lease_current_term_fk FOREIGN KEY(current_term) REFERENCES '||v_schema_name||'.lease_term(id),'||
         'ADD CONSTRAINT lease_next_term_fk FOREIGN KEY(next_term) REFERENCES '||v_schema_name||'.lease_term(id),'||
         'ADD CONSTRAINT lease_previous_term_fk FOREIGN KEY(previous_term) REFERENCES '||v_schema_name||'.lease_term(id)';
+        
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease DROP COLUMN actual_lease_to';
 
         -- lease_customer
 
@@ -1074,6 +1083,21 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant OWNER TO vista';
         EXECUTE 'CREATE INDEX lease_participant_application_idx ON '||v_schema_name||'.lease_participant USING btree(application)';
         EXECUTE 'CREATE INDEX lease_participant_lease_term_v_idx ON '||v_schema_name||'.lease_participant USING btree(lease_term_v)';
+
+        -- lease_termination_policy
+        EXECUTE 'CREATE TABLE '||v_schema_name||'.lease_termination_policy '
+        ||'( '
+        ||'     id                      BIGINT          NOT NULL,'
+        ||'     updated                 TIMESTAMP,'
+        ||'     nodediscriminator       VARCHAR(50),'
+        ||'     node                    BIGINT,'
+        ||'     value                   VARCHAR(500),'
+        ||'     CONSTRAINT lease_termination_policy_pk PRIMARY KEY(id),'
+        ||'     CONSTRAINT lease_termination_policy_nodediscriminator_d_ck '
+        ||'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement''))'
+        ||')';
+        
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_termination_policy OWNER TO vista';
 
         -- maintenance_request - hope that there are no real maintenance requests!
 
