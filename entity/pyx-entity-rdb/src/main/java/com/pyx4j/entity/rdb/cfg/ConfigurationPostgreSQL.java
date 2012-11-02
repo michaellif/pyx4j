@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.rdb.cfg;
 
+import java.util.List;
+
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 
 public abstract class ConfigurationPostgreSQL implements Configuration {
@@ -63,6 +65,11 @@ public abstract class ConfigurationPostgreSQL implements Configuration {
     @Override
     public Ddl ddl() {
         return Ddl.auto;
+    }
+
+    @Override
+    public List<String> dbInitializationSqls() {
+        return null;
     }
 
     @Override

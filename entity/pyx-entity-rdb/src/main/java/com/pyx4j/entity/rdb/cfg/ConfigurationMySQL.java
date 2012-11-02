@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.rdb.cfg;
 
+import java.util.List;
+
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 
 public abstract class ConfigurationMySQL implements Configuration {
@@ -68,6 +70,11 @@ public abstract class ConfigurationMySQL implements Configuration {
     @Override
     public final boolean sequencesBaseIdentity() {
         return false;
+    }
+
+    @Override
+    public List<String> dbInitializationSqls() {
+        return null;
     }
 
     @Override

@@ -129,10 +129,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 log.error("RDB initialization error", e);
                 throw new RuntimeException(e.getMessage());
             }
-            boolean initialized = true;
+            boolean initialized = false;
             try {
                 mappings = new Mappings(connectionProvider, configuration);
                 databaseVersion();
+                databaseInitialization(configuration);
+                initialized = true;
             } finally {
                 if (!initialized) {
                     connectionProvider.dispose();
@@ -299,6 +301,20 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             throw new RuntimeExceptionSerializable(e);
         } finally {
             endContext();
+        }
+    }
+
+    private void databaseInitialization(Configuration configuration) {
+        List<String> sqls = configuration.dbInitializationSqls();
+        if (sqls != null) {
+            Connection connection = getAministrationConnection();
+            try {
+                SQLUtils.execute(connection, sqls);
+            } catch (SQLException e) {
+                throw new Error("DB initialization error", e);
+            } finally {
+                SQLUtils.closeQuietly(connection);
+            }
         }
     }
 

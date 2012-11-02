@@ -137,6 +137,7 @@ public class PersistenceContext {
             if (isExplicitTransaction()) {
                 try {
                     connection.setAutoCommit(false);
+                    connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
                 } catch (SQLException e) {
                     SQLUtils.closeQuietly(connection);
                     connection = null;

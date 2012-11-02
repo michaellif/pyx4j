@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.rdb.cfg;
 
+import java.util.List;
+
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 
@@ -82,6 +84,8 @@ public interface Configuration extends IPersistenceConfiguration {
      * @return 0 if all id starts with the same value 0
      */
     public int tablesItentityOffset();
+
+    public List<String> dbInitializationSqls();
 
     /**
      * This takes priority over connectionAutomaticTestTable

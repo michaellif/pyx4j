@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.rdb.cfg;
 
+import java.util.List;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
@@ -78,6 +80,11 @@ public abstract class ConfigurationOracle implements Configuration {
     @Override
     public final boolean sequencesBaseIdentity() {
         return true;
+    }
+
+    @Override
+    public List<String> dbInitializationSqls() {
+        return null;
     }
 
     @Override

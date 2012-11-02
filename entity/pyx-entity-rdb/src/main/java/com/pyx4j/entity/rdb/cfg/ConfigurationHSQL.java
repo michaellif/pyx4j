@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.rdb.cfg;
 
+import java.util.List;
+
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 
 public abstract class ConfigurationHSQL implements Configuration {
@@ -97,6 +99,12 @@ public abstract class ConfigurationHSQL implements Configuration {
     @Override
     public boolean readOnly() {
         return false;
+    }
+
+    @Override
+    public List<String> dbInitializationSqls() {
+        return null;
+        //return Arrays.asList(new String[] { "SET DATABASE TRANSACTION CONTROL MVCC" });
     }
 
     @Override
