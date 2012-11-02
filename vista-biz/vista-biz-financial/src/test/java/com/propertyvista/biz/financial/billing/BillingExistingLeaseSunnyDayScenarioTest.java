@@ -76,7 +76,7 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
         confirmBill(getLatestBill(), true, true);
 
         // @formatter:off
-        new BillTester(getLatestConfirmedBill()).
+        new BillTester(getLatestBill()).
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
@@ -101,7 +101,7 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
         confirmBill(getLatestBill(), true, true);
 
         // @formatter:off
-        new BillTester(getLatestConfirmedBill()).
+        new BillTester(getLatestBill()).
         billSequenceNumber(3).
         previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).

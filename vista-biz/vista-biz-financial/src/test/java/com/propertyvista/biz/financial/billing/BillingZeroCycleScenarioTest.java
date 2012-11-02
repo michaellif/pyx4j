@@ -28,7 +28,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.test.preloader.PreloadConfig;
@@ -54,7 +53,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         // When we create Existing Lease, the tenant is already living in the building
         createLease("3-Mar-2009", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("300.00"));
 
-        //==================== RUN 1 ======================//
+        //==================== CYCLE 1 ======================//
 
         approveExistingLease(true);
 
@@ -75,44 +74,71 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         totalDueAmount("300.00");
         // @formatter:on
 
-        //==================== RUN 2 ======================//
+        //==================== CYCLE 2 ======================//
 
-        activateLease();
+        advanceDate("18-Mar-2011");
+        receiveAndPostPayment("18-Mar-2011", "300.00");
 
-        receiveAndPostPayment("17-Mar-2011", "300.00");
-
-        SysDateManager.setSysDate("18-Mar-2011");
-        Bill bill = runBilling(true, true);
+        advanceDate("22-Mar-2011");
+        confirmBill(getLatestBill(), true, true);
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getLatestBill()).
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(1).
-        paymentReceivedAmount("-300.00").
+        paymentReceivedAmount("0.00").
         latePaymentFees("50.00"). // fined for 300.00 carry-forward owing
         serviceCharge("900.00").
         depositAmount("0.00").
         taxes("108.00").
-        totalDueAmount("1058.00");
+        totalDueAmount("1358.00");
         // @formatter:on
 
+        //==================== CYCLE 3 ======================//
+
+        advanceDate("28-Mar-2011");
+        receiveAndPostPayment("28-Mar-2011", "1058.00");
+
+        advanceDate("18-Apr-2011");
+        confirmBill(getLatestBill(), true, true);
+
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
+
+        // @formatter:off
+        new BillTester(getLatestBill()).
+        billSequenceNumber(3).
+        previousBillSequenceNumber(2).
+        billType(Bill.BillType.Regular).
+        billingPeriodStartDate("1-May-2011").
+        billingPeriodEndDate("31-May-2011").
+        numOfProductCharges(1).
+        paymentReceivedAmount("-1358.00").
+        latePaymentFees("0.00"). // fined for 300.00 carry-forward owing
+        serviceCharge("900.00").
+        depositAmount("0.00").
+        taxes("108.00").
+        totalDueAmount("1008.00");
+        // @formatter:on
+
     }
 
     public void testCarryForwardOwedScenario() {
 
-        SysDateManager.setSysDate("17-Mar-2011"); // create existing lease
+        setLeaseBatchProcess();
+        setBillingBatchProcess();
+
+        setDate("17-Mar-2011"); // create existing lease
 
         // try existing lease from just earlier this month
         createLease("3-Mar-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("-100.00"));
         addBooking("3-Mar-2011");
         finalizeLeaseAdendum();
 
-        //==================== RUN 1 ======================//
+        //==================== CYCLE 1 ======================//
 
         approveExistingLease(true);
 
@@ -135,13 +161,11 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        activateLease();
-
-        SysDateManager.setSysDate("18-Mar-2011");
-        Bill bill = runBilling(true, true);
+        advanceDate("18-Mar-2011");
+        confirmBill(getLatestBill(), true, true);
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getLatestBill()).
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
@@ -150,7 +174,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("900.00").
         taxes("108.00").
-        totalDueAmount("908.00"); // 1041.94 -100
+        totalDueAmount("908.00");
         // @formatter:on
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
