@@ -74,7 +74,6 @@ class BillProducer {
 
         Bill bill = EntityFactory.create(Bill.class);
         try {
-            bill.billStatus().setValue(Bill.BillStatus.Running);
             bill.billingAccount().set(lease.billingAccount());
 
             if (preview) {
@@ -88,6 +87,7 @@ class BillProducer {
             }
 
             bill.billingCycle().set(billingCycle);
+            BillingManager.setBillStatus(bill, Bill.BillStatus.Running, true);
 
             currentPeriodBill = BillingManager.getLatestConfirmedBill(lease);
             bill.previousCycleBill().set(currentPeriodBill);
@@ -126,10 +126,9 @@ class BillProducer {
 
             calculateTotals();
 
-            bill.billStatus().setValue(Bill.BillStatus.Finished);
+            BillingManager.setBillStatus(bill, Bill.BillStatus.Finished, true);
 
             if (!preview) {
-                BillingManager.updateBillingCycleStats(bill, true);
                 Persistence.service().persist(bill.lineItems());
                 Persistence.service().persist(bill);
 
@@ -143,7 +142,7 @@ class BillProducer {
 
         } catch (Throwable e) {
             log.error("Bill run error", e);
-            bill.billStatus().setValue(Bill.BillStatus.Failed);
+            BillingManager.setBillStatus(bill, Bill.BillStatus.Failed, true);
             String billCreationError = i18n.tr("Bill run error");
             if (BillingException.class.isAssignableFrom(e.getClass())) {
                 billCreationError = e.getMessage();
@@ -152,7 +151,6 @@ class BillProducer {
             bill.lineItems().clear();
 
             if (!preview) {
-                BillingManager.updateBillingCycleStats(bill, true);
                 Persistence.service().persist(bill);
             }
         }

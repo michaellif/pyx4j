@@ -224,7 +224,7 @@ public class BillingManager {
     private static Bill verifyBill(Bill billStub, BillStatus billStatus) {
         Bill bill = Persistence.service().retrieve(Bill.class, billStub.getPrimaryKey());
         if (BillStatus.Finished.equals(bill.billStatus().getValue())) {
-            bill.billStatus().setValue(billStatus);
+            setBillStatus(bill, billStatus, false);
 
             if (BillStatus.Confirmed == billStatus) {
                 Persistence.service().retrieve(bill.lineItems());
@@ -234,9 +234,6 @@ public class BillingManager {
             }
 
             Persistence.service().persist(bill);
-
-            updateBillingCycleStats(bill, false);
-
         } else {
             throw new BillingException("Bill is in status '" + bill.billStatus().getValue() + "'. Bill should be in 'Finished' state in order to verify it.");
         }
@@ -456,6 +453,15 @@ public class BillingManager {
         }
     }
 
+    public static void setBillStatus(Bill bill, BillStatus status, boolean newlyCreated) {
+        if (bill.billingCycle().isEmpty()) {
+            throw new Error("BillingCycle must have been set at this point.");
+        }
+
+        bill.billStatus().setValue(status);
+        updateBillingCycleStats(bill, newlyCreated);
+    }
+
     static void updateBillingCycleStats(Bill bill, boolean newlyCreated) {
 
         switch (bill.billStatus().getValue()) {
@@ -474,7 +480,7 @@ public class BillingManager {
             BillingUtils.decrement(bill.billingCycle().stats().notConfirmed());
             break;
         default:
-            throw new Error("Unexpected billStatus");
+            return;
 
         }
 

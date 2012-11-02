@@ -27,6 +27,10 @@ public class Tester {
         this(false);
     }
 
+    protected Object ifNull(Object in, Object out) {
+        return in == null ? out : in;
+    }
+
     protected void assertEquals(String message, Object expected, Object actual) {
         if ((expected == null) && (actual == null)) {
             return;
