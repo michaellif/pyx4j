@@ -29,13 +29,13 @@
             <artifactId>vista-biz-policy</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-biz-occupancy</artifactId>
             <version>${project.version}</version>
-        </dependency>      
-        
+        </dependency>
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-server-common</artifactId>
@@ -47,7 +47,7 @@
             <artifactId>vista-equifax</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -72,6 +72,7 @@
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
+            <classifier>jdk6debug</classifier>
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
