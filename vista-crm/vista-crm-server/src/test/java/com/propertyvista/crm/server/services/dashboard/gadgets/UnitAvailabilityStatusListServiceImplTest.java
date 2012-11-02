@@ -13,11 +13,20 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
+import com.pyx4j.commons.LogicalDate;
+
+import com.propertyvista.crm.server.services.dashboard.gadgets.UnitAvailabilityStatusListServiceImpl.LeasedStatusProvider;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class UnitAvailabilityStatusListServiceImplTest extends UnitAvailabilityStatusListServiceTestBase {
 
     public UnitAvailabilityStatusListServiceImplTest() {
-        super(new UnitAvailabilityStatusListServiceImpl());
+        super(new UnitAvailabilityStatusListServiceImpl(new LeasedStatusProvider() {
+            @Override
+            public boolean isLeasedOn(LogicalDate asOfDate, AptUnit unitStub) {
+                return false;
+            }
+        }));
     }
 
 }

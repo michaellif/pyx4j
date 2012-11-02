@@ -22,8 +22,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.gadgets.UnitAvailabilityStatusDTO;
@@ -31,14 +34,41 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityStat
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
 import com.propertyvista.domain.dashboard.gadgets.common.AsOfDateCriterion;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class UnitAvailabilityStatusListServiceImpl extends AbstractListServiceDtoImpl<UnitAvailabilityStatus, UnitAvailabilityStatusDTO> implements
         UnitAvailabilityStatusListService {
 
+    public interface LeasedStatusProvider {
+
+        boolean isLeasedOn(LogicalDate asOfDate, AptUnit unitStub);
+
+    }
+
+    private final LeasedStatusProvider leasedStatusProvider;
+
+    // TODO not a good thing but i'm afraid there was no other choice
     private LogicalDate asOfDate;
 
-    public UnitAvailabilityStatusListServiceImpl() {
+    public UnitAvailabilityStatusListServiceImpl(LeasedStatusProvider leasedStatusProvider) {
         super(UnitAvailabilityStatus.class, UnitAvailabilityStatusDTO.class);
+        this.leasedStatusProvider = leasedStatusProvider;
+    }
+
+    public UnitAvailabilityStatusListServiceImpl() {
+        this(new LeasedStatusProvider() {
+            @Override
+            public boolean isLeasedOn(LogicalDate asOfDate, AptUnit unitStub) {
+                EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unitStub));
+                criteria.add(PropertyCriterion.ge(criteria.proto().leaseFrom(), asOfDate));
+                criteria.add(new OrCriterion(PropertyCriterion.le(criteria.proto().leaseTo(), asOfDate), PropertyCriterion.isNull(criteria.proto().leaseTo())));
+                criteria.add(new OrCriterion(PropertyCriterion.eq(criteria.proto().completion(), Lease.CompletionType.Notice), PropertyCriterion
+                        .isNull(criteria.proto().completion())));
+                return Persistence.service().count(criteria) != 0;
+            }
+        });
     }
 
     @Override
@@ -106,14 +136,22 @@ public class UnitAvailabilityStatusListServiceImpl extends AbstractListServiceDt
 
         // calculate 'days vacant' and 'revenue lost'
         if (dto.vacancyStatus().getValue() == Vacancy.Vacant & !dto.vacantSince().isNull()) {
+
             LogicalDate vacantSince = dto.vacantSince().getValue();
             dto.daysVacant().setValue(1 + (int) Math.ceil(((asOfDate.getTime() - vacantSince.getTime())) / (1000.0 * 60.0 * 60.0 * 24.0)));
 
+            // if that unit is still leased, i.e. then it's not losing money            
+
             if (!dto.marketRent().isNull()) {
-                BigDecimal revenueLost = new BigDecimal(dto.daysVacant().getValue()).multiply(dto.marketRent().getValue(), MathContext.DECIMAL128).divide(
-                        new BigDecimal(30), MathContext.DECIMAL128);
-                dto.revenueLost().setValue(revenueLost);
+                if (!leasedStatusProvider.isLeasedOn(asOfDate, entity.unit().<AptUnit> createIdentityStub())) {
+                    BigDecimal revenueLost = new BigDecimal(dto.daysVacant().getValue()).multiply(dto.marketRent().getValue(), MathContext.DECIMAL128).divide(
+                            new BigDecimal(30), MathContext.DECIMAL128);
+                    dto.revenueLost().setValue(revenueLost);
+                } else {
+                    dto.revenueLost().setValue(BigDecimal.ZERO);
+                }
             }
         }
     }
+
 }

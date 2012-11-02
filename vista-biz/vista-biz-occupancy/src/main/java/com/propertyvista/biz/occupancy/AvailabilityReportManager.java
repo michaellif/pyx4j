@@ -146,13 +146,13 @@ public class AvailabilityReportManager {
     private void available(UnitAvailabilityStatus status, List<AptUnitOccupancySegment> future, LogicalDate vacantSince) {
         status.vacancyStatus().setValue(Vacancy.Vacant);
         status.vacantSince().setValue(vacantSince);
-        // implicit: status.moveOutDay().setValue(null);
+        status.rentEndDay().setValue(null);
 
         status.scoping().setValue(Scoping.Scoped);
         status.rentReadinessStatus().setValue(RentReadiness.RentReady);
 
         status.rentedStatus().setValue(RentedStatus.Unrented);
-        // implicit: status.rentedFromDate().setValue(null);
+        status.rentedFromDay().setValue(null);
 
         for (AptUnitOccupancySegment segment : future) {
             if (segment.status().getValue() == Status.occupied | segment.status().getValue() == Status.reserved) {
