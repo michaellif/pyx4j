@@ -432,8 +432,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
         if (bill.billStatus().getValue() != Bill.BillStatus.Failed) {
-            ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
-
+            if (bill.billStatus().getValue() != Bill.BillStatus.Confirmed) {
+                ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
+            }
             // for zero cycle bill also create the next bill if we are past the executionTargetDate of the cycle
             Date curDate = Persistence.service().getTransactionSystemTime();
             if (BillType.ZeroCycle.equals(bill.billType().getValue()) && !curDate.before(bill.billingCycle().executionTargetDate().getValue())) {

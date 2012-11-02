@@ -20,6 +20,8 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import java.math.BigDecimal;
+
 import org.junit.experimental.categories.Category;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
@@ -119,4 +121,80 @@ public class BillExecutionWithAutoApprovalTest extends FinancialTestBase {
 
     }
 
+    public void testExistingLease() {
+
+        setLeaseBatchProcess();
+        setBillingBatchProcess();
+
+        setDate("15-May-2011");
+
+        createLease("1-Mar-2009", "31-Aug-2011", null, new BigDecimal("300.00"));
+
+        advanceDate("22-May-2011");
+        approveExistingLease(true);
+
+        //==================== ZERO CYCLE ======================//
+
+        // @formatter:off
+        new BillTester(getBill(1)).
+        billSequenceNumber(1).
+        previousBillSequenceNumber(null).
+        billType(Bill.BillType.ZeroCycle).
+        billingPeriodStartDate("1-May-2011").
+        billingPeriodEndDate("31-May-2011").
+        numOfProductCharges(1);
+        // @formatter:on
+
+        //==================== CYCLE 1 ======================//
+
+        // @formatter:off
+        new BillTester(getLatestBill()).
+        billSequenceNumber(2).
+        previousBillSequenceNumber(1).
+        billType(Bill.BillType.Regular).
+        billingPeriodStartDate("1-June-2011").
+        billingPeriodEndDate("30-June-2011").
+        numOfProductCharges(1);
+        // @formatter:on
+
+        //==================== CYCLE 2 ======================//
+
+        advanceDate("18-Jun-2011");
+
+        // @formatter:off
+        new BillTester(getLatestBill()).
+        billSequenceNumber(3).
+        previousBillSequenceNumber(2).
+        billType(Bill.BillType.Regular).
+        billingPeriodStartDate("1-July-2011").
+        billingPeriodEndDate("31-July-2011").
+        numOfProductCharges(1);
+        // @formatter:on
+
+        //==================== CYCLE 3 ======================//
+
+        advanceDate("18-Jul-2011");
+
+        // @formatter:off
+        new BillTester(getLatestBill()).
+        billSequenceNumber(4).
+        previousBillSequenceNumber(3).
+        billType(Bill.BillType.Regular).
+        billingPeriodStartDate("1-Aug-2011").
+        billingPeriodEndDate("31-Aug-2011").
+        numOfProductCharges(1);
+        // @formatter:on
+
+        //==================== FINAL ======================//
+
+        advanceDate("05-Sep-2011");
+
+        // @formatter:off
+        new BillTester(runBilling()).
+        billSequenceNumber(5).
+        previousBillSequenceNumber(4).
+        billType(Bill.BillType.Final);
+        // @formatter:on
+
+    }
 }
