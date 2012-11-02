@@ -25,9 +25,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -178,6 +180,8 @@ class TableDDL {
             }
             if (member.getValueAdapter() instanceof ValueAdapterEntityPolymorphic) {
                 sqls.add(createPolymorphicDiscriminatorConstraint(dialect, tableModel.tableName, member));
+            } else if (member.getValueAdapter() instanceof ValueAdapterEnum) {
+                sqls.add(createEnumConstraint(dialect, tableModel.tableName, member));
             }
         }
 
@@ -230,6 +234,36 @@ class TableDDL {
                 sql.append(", ");
             }
             sql.append(" '").append(discriminator).append("'");
+        }
+        sql.append("))");
+
+        return sql.toString();
+    }
+
+    private static String createEnumConstraint(Dialect dialect, String tableName, MemberOperationsMeta member) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("ALTER TABLE ").append(getFullTableName(dialect, tableName));
+        sql.append(" ADD CONSTRAINT ");
+        sql.append(dialect.getNamingConvention().sqlConstraintName(tableName, member.sqlName() + "_e"));
+        sql.append(" CHECK ");
+        sql.append(" (").append(member.sqlName()).append(" IN (");
+        boolean first = true;
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        Class<Enum> valueClass = (Class<Enum>) member.getMemberMeta().getValueClass();
+        List<String> values = new ArrayList<String>();
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        Set<Enum> allValues = EnumSet.allOf(valueClass);
+        for (Enum<?> value : allValues) {
+            values.add(value.name());
+        }
+        Collections.sort(values);
+        for (String value : values) {
+            if (first) {
+                first = false;
+            } else {
+                sql.append(", ");
+            }
+            sql.append(" '").append(value).append("'");
         }
         sql.append("))");
 
