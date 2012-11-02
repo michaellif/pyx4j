@@ -452,9 +452,6 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         if (moveOutDate.getTime() < occupiedSegment.lease().leaseFrom().getValue().getTime()) {
             throw new OccupancyOperationException(i18n.tr("Impossible to move out: move out date is before lease start date"));
         }
-        if (!occupiedSegment.lease().leaseTo().isNull() & moveOutDate.getTime() > occupiedSegment.lease().leaseTo().getValue().getTime()) {
-            throw new OccupancyOperationException(i18n.tr("Impossilbe to move out: move out date after before lease end date"));
-        }
 
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(occupiedSegment.dateTo().getValue());
