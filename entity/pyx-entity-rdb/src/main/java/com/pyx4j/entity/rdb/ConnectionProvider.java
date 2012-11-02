@@ -109,7 +109,7 @@ public class ConnectionProvider {
 
         switch (cfg.databaseType()) {
         case HSQLDB:
-            dialect = new HSQLDialect(namingConvention, cfg.getMultitenancyType());
+            dialect = new HSQLDialect(namingConvention, cfg.getMultitenancyType(), cfg.sequencesBaseIdentity());
             break;
         case MySQL:
             dialect = new MySQLDialect(namingConvention, cfg.getMultitenancyType());

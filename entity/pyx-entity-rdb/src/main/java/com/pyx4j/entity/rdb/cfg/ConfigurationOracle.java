@@ -76,6 +76,11 @@ public abstract class ConfigurationOracle implements Configuration {
     }
 
     @Override
+    public final boolean sequencesBaseIdentity() {
+        return true;
+    }
+
+    @Override
     public Ddl ddl() {
         return Ddl.auto;
     }

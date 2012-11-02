@@ -46,6 +46,11 @@ public abstract class ConfigurationPostgreSQL implements Configuration {
     }
 
     @Override
+    public final boolean sequencesBaseIdentity() {
+        return true;
+    }
+
+    @Override
     public String dbAdministrationUserName() {
         return userName();
     }

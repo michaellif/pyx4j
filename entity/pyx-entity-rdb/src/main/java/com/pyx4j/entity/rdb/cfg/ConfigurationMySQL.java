@@ -66,6 +66,11 @@ public abstract class ConfigurationMySQL implements Configuration {
     }
 
     @Override
+    public final boolean sequencesBaseIdentity() {
+        return false;
+    }
+
+    @Override
     public Ddl ddl() {
         return Ddl.auto;
     }

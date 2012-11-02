@@ -65,6 +65,11 @@ public abstract class ConfigurationHSQL implements Configuration {
     }
 
     @Override
+    public boolean sequencesBaseIdentity() {
+        return false;
+    }
+
+    @Override
     public Ddl ddl() {
         return Ddl.auto;
     }

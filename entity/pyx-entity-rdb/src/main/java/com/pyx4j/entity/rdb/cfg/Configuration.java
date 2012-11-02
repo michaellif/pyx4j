@@ -94,6 +94,8 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public ConnectionPoolProvider connectionPool();
 
+    public boolean sequencesBaseIdentity();
+
     public int initialPoolSize();
 
     public int minPoolSize();
