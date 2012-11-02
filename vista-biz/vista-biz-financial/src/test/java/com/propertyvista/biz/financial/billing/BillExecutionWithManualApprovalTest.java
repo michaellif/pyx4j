@@ -172,6 +172,32 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         numOfProductCharges(1);
         // @formatter:on
 
+        //==================== CYCLE 3 ======================//
+
+        advanceDate("18-Jul-2011");
+        confirmBill(getLatestBill(), true, true);
+
+        // @formatter:off
+        new BillTester(getLatestBill()).
+        billSequenceNumber(4).
+        previousBillSequenceNumber(3).
+        billType(Bill.BillType.Regular).
+        billingPeriodStartDate("1-Aug-2011").
+        billingPeriodEndDate("31-Aug-2011").
+        numOfProductCharges(1);
+        // @formatter:on
+
+        //==================== FINAL ======================//
+
+        advanceDate("05-Sep-2011");
+
+        // @formatter:off
+        new BillTester(runBilling()).
+        billSequenceNumber(5).
+        previousBillSequenceNumber(4).
+        billType(Bill.BillType.Final);
+        // @formatter:on
+
     }
 
 }

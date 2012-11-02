@@ -126,9 +126,9 @@ class BillProducer {
 
             calculateTotals();
 
-            BillingManager.setBillStatus(bill, Bill.BillStatus.Finished, true);
-
             if (!preview) {
+                BillingManager.setBillStatus(bill, Bill.BillStatus.Finished, true);
+
                 Persistence.service().persist(bill.lineItems());
                 Persistence.service().persist(bill);
 
