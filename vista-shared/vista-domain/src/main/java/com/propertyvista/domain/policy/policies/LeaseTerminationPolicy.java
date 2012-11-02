@@ -24,5 +24,5 @@ import com.propertyvista.domain.property.asset.building.Building;
 @LowestApplicableNode(value = Building.class)
 public interface LeaseTerminationPolicy extends Policy {
 
-    IPrimitive<String> value();
+    IPrimitive<Integer> periodOfNotice();
 }

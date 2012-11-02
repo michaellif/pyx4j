@@ -34,7 +34,9 @@ public class LeaseTerminationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
     protected List<FormFlexPanel> createCustomTabPanels() {
         FormFlexPanel general = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
-        general.setWidget(++row, 0, new DecoratorBuilder(inject(proto().value())).build());
+
+        general.setWidget(++row, 0, new DecoratorBuilder(inject(proto().periodOfNotice()), 5).build());
+
         return Arrays.asList(general);
     }
 }
