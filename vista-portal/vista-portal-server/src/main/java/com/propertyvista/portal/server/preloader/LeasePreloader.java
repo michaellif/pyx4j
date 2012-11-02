@@ -116,9 +116,15 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
                     cal.setTime(new LogicalDate());
                     if (i % 2 == 0) {
+                        // produce lease completed by the day of the preload run
+                        cal.add(Calendar.MONTH, -1 - (RND.nextInt() % 4));
+                        simBuilder.leaseTo(new LogicalDate(cal.getTime()));
+                    } else {
+                        // produce a lease that ends after the day of the preload run 
                         cal.add(Calendar.MONTH, 1 + RND.nextInt() % 4);
                         simBuilder.leaseTo(new LogicalDate(cal.getTime()));
                     }
+
                     simBuilder.end(new LogicalDate());
 
                     simBuilder.availabilityTermConstraints(0l, 0l);

@@ -104,6 +104,9 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
                             }.show();
                         }
                     });
+                } else {
+                    new ScopeDialog((UnitViewerView.Presenter) getPresenter(), canScopeAvailable, canScopeOffMarket, minRenovationEndDate) {
+                    }.show();
                 }
 
             }

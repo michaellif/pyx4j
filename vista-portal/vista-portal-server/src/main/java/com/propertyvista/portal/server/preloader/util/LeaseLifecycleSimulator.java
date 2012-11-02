@@ -503,6 +503,7 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
+            lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
             if (lease.status().getValue() == Lease.Status.Active) {
                 ServerSideFactory.create(LeaseFacade.class).moveOut(lease);
                 ServerSideFactory.create(LeaseFacade.class).complete(lease);
