@@ -57,7 +57,8 @@ public interface BillingCycle extends IEntity {
     @ReadOnly
     IPrimitive<LogicalDate> executionTargetDate();
 
-    @Owned(forceCreation = true)
+    // Used as different entity to avoid transaction isolation problems in HDQLDB
+    @Owned
     BillingCycleStats stats();
 
 }

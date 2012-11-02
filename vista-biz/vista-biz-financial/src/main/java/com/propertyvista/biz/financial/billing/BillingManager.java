@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Filter;
 import com.pyx4j.commons.FilterIterator;
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
@@ -379,17 +380,22 @@ public class BillingManager {
     }
 
     private static BillingCycle ensureBillingCycle(final BillingType billingType, final Building building, final LogicalDate billingCycleStartDate) {
-        return TaskRunner.runAutonomousTransation(new Callable<BillingCycle>() {
+
+        // Avoid transaction isolation problems in HDQLDB, retrieve "stats" in different transaction.
+        // The @Detached(level = AttachLevel.Detached) on billingCycle.stats() would be a better option
+
+        BillingCycle billingCycle = TaskRunner.runAutonomousTransation(new Callable<BillingCycle>() {
             @Override
             public BillingCycle call() {
                 EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().billingType(), billingType));
                 criteria.add(PropertyCriterion.eq(criteria.proto().billingCycleStartDate(), billingCycleStartDate));
                 criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
-                BillingCycle billingCycle = Persistence.service().retrieve(criteria);
-
-                if (billingCycle == null) {
-                    billingCycle = EntityFactory.create(BillingCycle.class);
+                List<Key> keys = Persistence.service().queryKeys(criteria);
+                if (keys.size() != 0) {
+                    return EntityFactory.createIdentityStub(BillingCycle.class, keys.get(0));
+                } else {
+                    BillingCycle billingCycle = EntityFactory.create(BillingCycle.class);
                     billingCycle.billingType().set(billingType);
                     billingCycle.building().set(building);
                     billingCycle.billingCycleStartDate().setValue(billingCycleStartDate);
@@ -397,17 +403,28 @@ public class BillingManager {
                             BillDateUtils.calculateBillingCycleEndDate(billingType.paymentFrequency().getValue(), billingCycleStartDate));
                     billingCycle.executionTargetDate().setValue(BillDateUtils.calculateBillingCycleTargetExecutionDate(billingType, billingCycleStartDate));
 
-                    billingCycle.stats().notConfirmed().setValue(0L);
-                    billingCycle.stats().failed().setValue(0L);
-                    billingCycle.stats().rejected().setValue(0L);
-                    billingCycle.stats().confirmed().setValue(0L);
+// Can't initialize this table here! HDQLDB will lock. TODO fix HDQLDB                    
+//                    billingCycle.stats().notConfirmed().setValue(0L);
+//                    billingCycle.stats().failed().setValue(0L);
+//                    billingCycle.stats().rejected().setValue(0L);
+//                    billingCycle.stats().confirmed().setValue(0L);
 
                     Persistence.service().persist(billingCycle);
                     Persistence.service().commit();
+                    return billingCycle;
                 }
-                return billingCycle;
+
             }
         });
+
+        //? If @Detached(level = AttachLevel.Detached) on billingCycle.stats()
+        //Persistence.service().retrieveMember(billingCycle.stats(), AttachLevel.Attached);
+
+        if (billingCycle.isValueDetached()) {
+            return Persistence.service().retrieve(BillingCycle.class, billingCycle.getPrimaryKey());
+        } else {
+            return billingCycle;
+        }
     }
 
     static void initializeFutureBillingCycles() {
@@ -488,7 +505,7 @@ public class BillingManager {
             }
         }
 
-        Persistence.service().persist(bill.billingCycle());
+        Persistence.service().persist(bill.billingCycle().stats());
 
     }
 

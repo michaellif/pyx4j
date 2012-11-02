@@ -13,13 +13,30 @@
  */
 package com.propertyvista.domain.financial.billing;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Table(prefix = "billing")
 public interface BillingCycleStats extends IEntity {
+
+    @ReadOnly
+    @Owner
+    @MemberColumn(notNull = true)
+    @Detached
+    @JoinColumn
+    @Indexed(uniqueConstraint = true)
+    @XmlTransient
+    BillingCycle billingCycle();
 
     // Statistics:
     //TODO 1 add stats
