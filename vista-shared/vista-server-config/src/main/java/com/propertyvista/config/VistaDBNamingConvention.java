@@ -30,6 +30,9 @@ public class VistaDBNamingConvention extends NamingConventionOracle {
         ShortWords shortWords = new ShortWords();
         shortWords.add("billing_billing_cycle_billing_cycle_start_date_building_billing_type_idx", "billing_cycle_start_date_building_type_idx");
         shortWords.add("billing_billing_type_payment_frequency_billing_cycle_start_day_idx", "billing_type_payment_frequency_billing_cycle_start_day_idx");
+        shortWords.add("payment_information_payment_method_billing_address_street_type_e_ck", "payment_information_payment_method_billing_addr_str_type_e_ck");
+        shortWords.add("payment_information_payment_method_billing_address_street_direction_e_ck",
+                "payment_information_payment_method_billing_addr_str_dir_e_ck");
         return shortWords;
     }
 
