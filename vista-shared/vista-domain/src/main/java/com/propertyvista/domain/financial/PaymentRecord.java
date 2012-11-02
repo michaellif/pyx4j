@@ -127,7 +127,7 @@ public interface PaymentRecord extends IEntity {
     IPrimitive<LogicalDate> targetDate();
 
     @NotNull
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
