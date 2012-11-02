@@ -20,10 +20,7 @@
  */
 package com.propertyvista.biz.financial.billing;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
-
-import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
@@ -32,7 +29,6 @@ import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.test.preloader.PreloadConfig;
 
 @Category(FunctionalTests.class)
-@Ignore
 public class BillExecutionWithAutoApprovalTest extends FinancialTestBase {
 
     @Override
@@ -57,10 +53,8 @@ public class BillExecutionWithAutoApprovalTest extends FinancialTestBase {
         advanceDate("17-Feb-2011");
         approveApplication(true);
 
-        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
-
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getLatestBill()).
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -72,10 +66,9 @@ public class BillExecutionWithAutoApprovalTest extends FinancialTestBase {
         //==================== CYCLE 2 ======================//
 
         advanceDate("18-Mar-2011");
-        bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getLatestBill()).
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
@@ -87,10 +80,9 @@ public class BillExecutionWithAutoApprovalTest extends FinancialTestBase {
         //==================== CYCLE 3 ======================//
 
         advanceDate("18-Apr-2011");
-        bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getLatestBill()).
         billSequenceNumber(3).
         previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).
@@ -102,11 +94,10 @@ public class BillExecutionWithAutoApprovalTest extends FinancialTestBase {
         //==================== CYCLE 4 ======================//
 
         advanceDate("18-May-2011");
-        bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
 
         //Billing does't run in the last cycle of lease term
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getLatestBill()).
         billSequenceNumber(3).
         previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).
@@ -118,10 +109,9 @@ public class BillExecutionWithAutoApprovalTest extends FinancialTestBase {
         //==================== FINAL ======================//
 
         advanceDate("05-Jun-2011");
-        bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(runBilling()).
         billSequenceNumber(4).
         previousBillSequenceNumber(3).
         billType(Bill.BillType.Final);

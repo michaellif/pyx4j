@@ -112,7 +112,8 @@ public class BillingManager {
             @Override
             public boolean accept(Lease lease) {
                 try {
-                    if (isLeaseLastBillingCycle(billingCycle, lease)) {
+                    //Don't run bill on cycle that out of boundaries of lease end
+                    if (billingCycle.billingCycleStartDate().getValue().compareTo(lease.leaseTo().getValue()) > 0) {
                         return false;
                     } else {
                         validateBillingRunPreconditions(billingCycle, lease, false);
@@ -125,14 +126,6 @@ public class BillingManager {
             }
         });
         runBilling(billingCycle, filteredLeaseIterator, dynamicStatisticsRecord);
-    }
-
-    /**
-     * Billing shoudn't run on a lease with
-     */
-    private static boolean isLeaseLastBillingCycle(BillingCycle billingCycle, Lease lease) {
-        return billingCycle.billingCycleStartDate().getValue().compareTo(lease.leaseTo().getValue()) <= 0
-                && billingCycle.billingCycleEndDate().getValue().compareTo(lease.leaseTo().getValue()) >= 0;
     }
 
     private static void validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease, boolean preview) {

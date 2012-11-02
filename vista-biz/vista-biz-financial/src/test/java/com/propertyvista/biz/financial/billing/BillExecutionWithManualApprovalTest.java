@@ -94,7 +94,6 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         //==================== CYCLE 4 ======================//
 
         advanceDate("18-May-2011");
-        confirmBill(getLatestBill(), true, true);
 
         //Billing does't run in the last cycle of lease term
         // @formatter:off
@@ -110,7 +109,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         //==================== FINAL ======================//
 
         advanceDate("05-Jun-2011");
-        confirmBill(getLatestBill(), true, true);
+        runBilling(true, true);
 
         // @formatter:off
         new BillTester(getLatestBill()).

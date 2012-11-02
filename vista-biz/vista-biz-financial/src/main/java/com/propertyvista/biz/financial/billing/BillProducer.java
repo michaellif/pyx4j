@@ -136,7 +136,7 @@ class BillProducer {
                         LeaseBillingPolicy.class);
 
                 if (leaseBillingPolicy.confirmationMethod().getValue() == LeaseBillingPolicy.BillConfirmationMethod.automatic) {
-                    BillingManager.confirmBill(bill);
+                    bill = BillingManager.confirmBill(bill);
                 }
             }
 

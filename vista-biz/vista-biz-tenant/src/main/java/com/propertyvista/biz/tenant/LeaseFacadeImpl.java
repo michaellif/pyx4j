@@ -307,10 +307,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
         updateUnitRentPrice(lease);
 
         Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
-        if (bill.billStatus().getValue() != Bill.BillStatus.Failed) {
-            ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
-        } else {
+
+        if (bill.billStatus().getValue() == Bill.BillStatus.Failed) {
             throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to failed first time bill"));
+        }
+
+        if (bill.billStatus().getValue() != Bill.BillStatus.Confirmed) {
+            ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
         }
 
         if (!lease.leaseApplication().onlineApplication().isNull()) {

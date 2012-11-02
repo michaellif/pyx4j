@@ -228,11 +228,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     }
 
-    protected Bill runBilling(boolean confirm) {
-        return runBilling(confirm, false);
-    }
-
-    protected Bill runBilling(boolean confirm, boolean printBill) {
+    protected Bill runBilling() {
         Lease lease = retrieveLease();
 
         DataDump.dump("leaseT", lease);
@@ -241,7 +237,15 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         Persistence.service().commit();
 
-        return confirmBill(bill, confirm, printBill);
+        return bill;
+    }
+
+    protected Bill runBilling(boolean confirm) {
+        return runBilling(confirm, false);
+    }
+
+    protected Bill runBilling(boolean confirm, boolean printBill) {
+        return confirmBill(runBilling(), confirm, printBill);
     }
 
     protected Bill runBillingPreview() {
