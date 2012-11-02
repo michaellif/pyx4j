@@ -354,7 +354,6 @@ public class MessageTemplates {
         template.subject().setValue(i18n.tr("New PMC Created"));
         try {
             String body = IOUtils.getTextResource("email/new-pmc.html");
-            log.error(body);
             body = body.replace("${ownerName}", EmailTemplateManager.getVarname(user.name()));
             body = body.replace("${crmLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true));
             body = body.replace("${portalLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.TenantPortal, true));
