@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -51,6 +52,7 @@ public interface GeoLocation extends IEntity {
 
     @ToString(index = 0)
     @Format("#0.000000")
+    @Caption(description = "Automatically generated based on address. Can be manually adjusted after creation of the building.")
     IPrimitive<Double> latitude();
 
     @ToString(index = 1)
@@ -58,6 +60,7 @@ public interface GeoLocation extends IEntity {
 
     @ToString(index = 2)
     @Format("#0.000000")
+    @Caption(description = "Automatically generated based on address. Can be manually adjusted after creation of the building.")
     IPrimitive<Double> longitude();
 
     @ToString(index = 3)
