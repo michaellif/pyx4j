@@ -27,7 +27,7 @@ public class VistaConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Confi
 
     @Override
     public String dbName() {
-        return "vista2";
+        return "vista";
     }
 
     @Override
