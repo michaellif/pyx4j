@@ -48,8 +48,8 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Status;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.misc.VistaTODO;
@@ -203,10 +203,10 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         TenantInLeaseFolder tf;
         main.setWidget(0, 0, inject(proto().version().tenants(), tf = new TenantInLeaseFolder(this, isEditable())));
 
-        tf.addValueChangeHandler(new ValueChangeHandler<IList<Tenant>>() {
+        tf.addValueChangeHandler(new ValueChangeHandler<IList<LeaseTermTenant>>() {
 
             @Override
-            public void onValueChange(ValueChangeEvent<IList<Tenant>> event) {
+            public void onValueChange(ValueChangeEvent<IList<LeaseTermTenant>> event) {
                 @SuppressWarnings("rawtypes")
                 CComponent gf = get(proto().version().guarantors());
                 ((GuarantorInLeaseFolder) gf).updateTenantList();
@@ -273,9 +273,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
         get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
 
-        get(proto().version().tenants()).addValueValidator(new EditableValueValidator<List<Tenant>>() {
+        get(proto().version().tenants()).addValueValidator(new EditableValueValidator<List<LeaseTermTenant>>() {
             @Override
-            public ValidationError isValid(CComponent<List<Tenant>, ?> component, List<Tenant> value) {
+            public ValidationError isValid(CComponent<List<LeaseTermTenant>, ?> component, List<LeaseTermTenant> value) {
                 if (value != null) {
                     return (value.isEmpty() ? new ValidationError(component, i18n.tr("At least one tenant should be selected!")) : null);
                 }

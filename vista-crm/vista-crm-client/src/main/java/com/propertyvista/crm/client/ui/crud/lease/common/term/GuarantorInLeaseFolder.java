@@ -40,23 +40,23 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerGuarantor;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.Guarantor;
+import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseTermDTO;
 
-public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
+public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermGuarantor> {
 
     static final I18n i18n = I18n.get(GuarantorInLeaseFolder.class);
 
     private final CEntityForm<LeaseTermDTO> leaseTerm;
 
     public GuarantorInLeaseFolder(CEntityForm<LeaseTermDTO> parent, boolean modifiable) {
-        super(Guarantor.class, modifiable);
+        super(LeaseTermGuarantor.class, modifiable);
         this.leaseTerm = parent;
     }
 
@@ -73,8 +73,8 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
     @Override
     protected void addParticipants(List<Customer> customers) {
         for (Customer customer : customers) {
-            Guarantor newGuarantor = createGuarantor();
-            newGuarantor.leaseCustomer().customer().set(customer);
+            LeaseTermGuarantor newGuarantor = createGuarantor();
+            newGuarantor.leaseParticipant().customer().set(customer);
             addItem(newGuarantor);
         }
     }
@@ -84,11 +84,11 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
         addItem(createGuarantor());
     }
 
-    private Guarantor createGuarantor() {
-        Guarantor guarantor = EntityFactory.create(Guarantor.class);
+    private LeaseTermGuarantor createGuarantor() {
+        LeaseTermGuarantor guarantor = EntityFactory.create(LeaseTermGuarantor.class);
 
         guarantor.leaseTermV().setPrimaryKey(leaseTerm.getValue().version().getPrimaryKey());
-        guarantor.role().setValue(LeaseParticipant.Role.Guarantor);
+        guarantor.role().setValue(LeaseTermParticipant.Role.Guarantor);
         guarantor.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
 
         return guarantor;
@@ -96,7 +96,7 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Guarantor) {
+        if (member instanceof LeaseTermGuarantor) {
             return new GuarantorInLeaseEditor();
         }
         return super.create(member);
@@ -110,10 +110,10 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
         }
     }
 
-    private class GuarantorInLeaseEditor extends CEntityDecoratableForm<Guarantor> {
+    private class GuarantorInLeaseEditor extends CEntityDecoratableForm<LeaseTermGuarantor> {
 
         public GuarantorInLeaseEditor() {
-            super(Guarantor.class);
+            super(LeaseTermGuarantor.class);
         }
 
         @Override
@@ -122,24 +122,24 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
 
             FormFlexPanel left = new FormFlexPanel();
             int row = -1;
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().participantId()), 7).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().participantId()), 7).build());
             left.setWidget(++row, 0,
-                    inject(proto().leaseCustomer().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), LeaseCustomerGuarantor.class) {
+                    inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class) {
                         @Override
                         public Key getLinkKey() {
-                            return GuarantorInLeaseEditor.this.getValue().leaseCustomer().getPrimaryKey();
+                            return GuarantorInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();
                         }
                     }));
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().sex()), 7).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().birthDate()), 9).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().sex()), 7).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().birthDate()), 9).build());
             if (isEditable()) {
-                left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CSimpleEntityComboBox<LeaseCustomerTenant>()), 25).build());
+                left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CSimpleEntityComboBox<Tenant>()), 25).build());
             } else {
                 left.setWidget(
                         ++row,
                         0,
                         new DecoratorBuilder(inject(proto().tenant(),
-                                new CEntityCrudHyperlink<LeaseCustomerTenant>(AppPlaceEntityMapper.resolvePlace(LeaseCustomerTenant.class)))).build());
+                                new CEntityCrudHyperlink<Tenant>(AppPlaceEntityMapper.resolvePlace(Tenant.class)))).build());
             }
 
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
@@ -151,10 +151,10 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
 
             FormFlexPanel right = new FormFlexPanel();
             row = -1;
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().email()), 25).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().homePhone()), 15).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().mobilePhone()), 15).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer().customer().person().workPhone()), 15).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().email()), 25).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().homePhone()), 15).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().mobilePhone()), 15).build());
+            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().workPhone()), 15).build());
 
             // assemble main panel:
             main.setWidget(0, 0, left);
@@ -173,10 +173,10 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
             get(proto().effectiveScreening()).setVisible(!getValue().effectiveScreening().isNull());
 
             if (isEditable()) {
-                ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().leaseCustomer().participantId()), getValue()
+                ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().leaseParticipant().participantId()), getValue()
                         .getPrimaryKey());
 
-                get(proto().leaseCustomer().customer().person().email()).setMandatory(!getValue().leaseCustomer().customer().user().isNull());
+                get(proto().leaseParticipant().customer().person().email()).setMandatory(!getValue().leaseParticipant().customer().user().isNull());
 
                 updateTenantList();
             }
@@ -185,15 +185,15 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
         void updateTenantList() {
             if (get(proto().tenant()) instanceof CComboBox<?>) {
                 @SuppressWarnings("unchecked")
-                CComboBox<LeaseCustomerTenant> combo = (CComboBox<LeaseCustomerTenant>) get(proto().tenant());
+                CComboBox<Tenant> combo = (CComboBox<Tenant>) get(proto().tenant());
                 combo.setOptions(getLeaseCustomerTenants());
             }
         }
 
-        private List<LeaseCustomerTenant> getLeaseCustomerTenants() {
-            List<LeaseCustomerTenant> l = new ArrayList<LeaseCustomerTenant>();
-            for (Tenant t : leaseTerm.getValue().version().tenants()) {
-                l.add(t.leaseCustomer());
+        private List<Tenant> getLeaseCustomerTenants() {
+            List<Tenant> l = new ArrayList<Tenant>();
+            for (LeaseTermTenant t : leaseTerm.getValue().version().tenants()) {
+                l.add(t.leaseParticipant());
             }
             return l;
         }
@@ -215,10 +215,10 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
         }
 
         private void devGenerateTenant() {
-            NameEditor nameEditor = (NameEditor) get(proto().leaseCustomer().customer().person().name());
+            NameEditor nameEditor = (NameEditor) get(proto().leaseParticipant().customer().person().name());
             nameEditor.get(nameEditor.proto().firstName()).setValue("FirstnameG");
             nameEditor.get(nameEditor.proto().lastName()).setValue("LastnameG");
-            get(proto().leaseCustomer().customer().person().birthDate()).setValue(new LogicalDate(80, 1, 1));
+            get(proto().leaseParticipant().customer().person().birthDate()).setValue(new LogicalDate(80, 1, 1));
             get(proto().relationship()).setValue(PersonRelationship.Grandfather);
         }
     }

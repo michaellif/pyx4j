@@ -44,7 +44,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.PaymentRecordDTO.PaymentSelect;
 
@@ -71,7 +71,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                             public void onSuccess(AddressStructured result) {
                                 comp.setValue(result, false);
                             }
-                        }, PaymentForm.this.getValue().leaseParticipant());
+                        }, PaymentForm.this.getValue().leaseTermParticipant());
             } else {
                 comp.setValue(EntityFactory.create(AddressStructured.class), false);
             }
@@ -118,19 +118,19 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber())).build());
         get(proto().billingAccount().accountNumber()).setViewable(true);
 
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant(), new CEntitySelectorHyperlink<LeaseParticipant>() {
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntitySelectorHyperlink<LeaseTermParticipant>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(getValue().getInstanceValueClass(), getValue().getPrimaryKey());
             }
 
             @Override
-            protected AbstractEntitySelectorDialog<LeaseParticipant> getSelectorDialog() {
-                return new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenant To Pay"), false, PaymentForm.this.getValue().participants()) {
+            protected AbstractEntitySelectorDialog<LeaseTermParticipant> getSelectorDialog() {
+                return new EntitySelectorListDialog<LeaseTermParticipant>(i18n.tr("Select Tenant To Pay"), false, PaymentForm.this.getValue().participants()) {
 
                     @Override
                     public boolean onClickOk() {
-                        get(PaymentForm.this.proto().leaseParticipant()).setValue(getSelectedItems().get(0));
+                        get(PaymentForm.this.proto().leaseTermParticipant()).setValue(getSelectedItems().get(0));
                         return true;
                     }
                 };
@@ -175,9 +175,9 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         get(proto().addThisPaymentMethodToProfile()).setVisible(false);
 
-        get(proto().leaseParticipant()).addValueChangeHandler(new ValueChangeHandler<LeaseParticipant>() {
+        get(proto().leaseTermParticipant()).addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant>() {
             @Override
-            public void onValueChange(ValueChangeEvent<LeaseParticipant> event) {
+            public void onValueChange(ValueChangeEvent<LeaseTermParticipant> event) {
                 chageLeaseParticipant();
             }
         });
@@ -197,8 +197,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                         } else {
                             paymentMethodEditor.initNew(PaymentType.Cash);
                         }
-                        paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
-                        paymentMethodEditorSeparator.setVisible(!getValue().leaseParticipant().isNull());
+                        paymentMethodEditor.setVisible(!getValue().leaseTermParticipant().isNull());
+                        paymentMethodEditorSeparator.setVisible(!getValue().leaseTermParticipant().isNull());
 
                         paymentMethodEditor.getValue().isOneTimePayment().setValue(Boolean.TRUE);
 
@@ -253,10 +253,10 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().id()).setVisible(!isNew);
         if (isNew) {
             // Allow edit all values
-            get(proto().leaseParticipant()).setEditable(true);
+            get(proto().leaseTermParticipant()).setEditable(true);
         } else {
             // Disable most of modifications
-            get(proto().leaseParticipant()).setEditable(false);
+            get(proto().leaseTermParticipant()).setEditable(false);
 
             // Allow to change profiled Method, but do not edit its values.
             boolean allowtoChangeProfiledMethod = !isViewable() && (!getValue().paymentMethod().isOneTimePayment().isBooleanTrue());
@@ -322,7 +322,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                             callback.onSuccess(null);
                         }
                     }
-                }, getValue().leaseParticipant());
+                }, getValue().leaseTermParticipant());
     }
 
     private void chageLeaseParticipant() {

@@ -20,10 +20,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 
 @Transient
 public interface TenantFinancialDTO extends IEntity {
@@ -38,5 +38,5 @@ public interface TenantFinancialDTO extends IEntity {
 
     IList<CustomerScreeningPersonalAsset> assets();
 
-    IList<Guarantor> guarantors();
+    IList<LeaseTermGuarantor> guarantors();
 }

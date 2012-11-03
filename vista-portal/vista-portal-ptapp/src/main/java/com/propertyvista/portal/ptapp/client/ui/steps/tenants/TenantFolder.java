@@ -39,7 +39,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.common.client.ui.validators.OldAgeValidator;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.dto.TenantInLeaseDTO;
 
@@ -62,10 +62,10 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().leaseCustomer().customer().person().name().firstName(), "10em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().leaseCustomer().customer().person().name().lastName(), "15em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().leaseCustomer().customer().person().birthDate(), "9em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().leaseCustomer().customer().person().email(), "15em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().leaseParticipant().customer().person().name().firstName(), "10em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().leaseParticipant().customer().person().name().lastName(), "15em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().leaseParticipant().customer().person().birthDate(), "9em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().leaseParticipant().customer().person().email(), "15em"));
         columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
         columns.add(new EntityFolderColumnDescriptor(proto().role(), "8.5em"));
         columns.add(new EntityFolderColumnDescriptor(proto().takeOwnership(), "5em"));
@@ -87,12 +87,12 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            applicant = (getValue().role().getValue() == LeaseParticipant.Role.Applicant);
+            applicant = (getValue().role().getValue() == LeaseTermParticipant.Role.Applicant);
             if (applicant) {
                 get(proto().role()).setViewable(true);
                 get(proto().relationship()).setVisible(false);
                 get(proto().takeOwnership()).setVisible(false);
-                get(proto().leaseCustomer().customer().person().email()).setViewable(true);
+                get(proto().leaseParticipant().customer().person().email()).setViewable(true);
 
                 // correct folder item:
                 if (getParent() instanceof CEntityFolderItem) {
@@ -101,13 +101,13 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
                     item.setMovable(false);
                 }
             } else if (get(proto().role()) instanceof CComboBox) {
-                Collection<LeaseParticipant.Role> roles = EnumSet.allOf(LeaseParticipant.Role.class);
-                roles.remove(LeaseParticipant.Role.Applicant);
-                ((CComboBox<LeaseParticipant.Role>) get(proto().role())).setOptions(roles);
+                Collection<LeaseTermParticipant.Role> roles = EnumSet.allOf(LeaseTermParticipant.Role.class);
+                roles.remove(LeaseTermParticipant.Role.Applicant);
+                ((CComboBox<LeaseTermParticipant.Role>) get(proto().role())).setOptions(roles);
             }
 
-            if (!applicant && !getValue().leaseCustomer().customer().person().birthDate().isNull()) {
-                if (ValidationUtils.isOlderThen18(getValue().leaseCustomer().customer().person().birthDate().getValue())) {
+            if (!applicant && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
+                if (ValidationUtils.isOlderThen18(getValue().leaseParticipant().customer().person().birthDate().getValue())) {
                     enableRoleAndOwnership();
                 } else {
                     setMandatoryDependant();
@@ -118,16 +118,16 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
         @Override
         public void addValidations() {
 
-            get(proto().leaseCustomer().customer().person().birthDate()).addValueValidator(new OldAgeValidator());
-            get(proto().leaseCustomer().customer().person().birthDate()).addValueValidator(new BirthdayDateValidator());
-            get(proto().leaseCustomer().customer().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
+            get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new OldAgeValidator());
+            get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new BirthdayDateValidator());
+            get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
                 @Override
                 public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                     if (getValue() == null || getValue().isEmpty()) {
                         return null;
                     }
 
-                    if (getValue().role().getValue() == LeaseParticipant.Role.Applicant) {
+                    if (getValue().role().getValue() == LeaseTermParticipant.Role.Applicant) {
                         return ValidationUtils.isOlderThen18(value) ? null : new ValidationError(component, i18n.tr("Applicant must be at least 18 years old"));
                     } else {
                         return null;
@@ -136,7 +136,7 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
             });
 
             { // all this stuff isn't for primary applicant:  
-                get(proto().leaseCustomer().customer().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+                get(proto().leaseParticipant().customer().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<LogicalDate> event) {
                         if (applicant) {
@@ -149,7 +149,7 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
 
                         if (ValidationUtils.isOlderThen18(event.getValue())) {
                             enableRoleAndOwnership();
-                            get(proto().role()).setValue(LeaseParticipant.Role.CoApplicant, false);
+                            get(proto().role()).setValue(LeaseTermParticipant.Role.CoApplicant, false);
                             if (!takeOwnershipSetManually) {
                                 get(proto().takeOwnership()).setValue(false, false);
                             }
@@ -159,16 +159,16 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
                     }
                 });
 
-                get(proto().role()).addValueChangeHandler(new RevalidationTrigger<LeaseParticipant.Role>(get(proto().leaseCustomer().customer().person().birthDate())));
-                get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseParticipant.Role>() {
+                get(proto().role()).addValueChangeHandler(new RevalidationTrigger<LeaseTermParticipant.Role>(get(proto().leaseParticipant().customer().person().birthDate())));
+                get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant.Role>() {
                     @Override
-                    public void onValueChange(ValueChangeEvent<LeaseParticipant.Role> event) {
+                    public void onValueChange(ValueChangeEvent<LeaseTermParticipant.Role> event) {
                         if (getValue() == null || getValue().isEmpty()) {
                             return;
                         }
 
-                        if (LeaseParticipant.Role.Dependent == event.getValue()
-                                && !ValidationUtils.isOlderThen18(get(proto().leaseCustomer().customer().person().birthDate()).getValue())) {
+                        if (LeaseTermParticipant.Role.Dependent == event.getValue()
+                                && !ValidationUtils.isOlderThen18(get(proto().leaseParticipant().customer().person().birthDate()).getValue())) {
                             setMandatoryDependant();
                         }
                     }
@@ -198,7 +198,7 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
         }
 
         private void setMandatoryDependant() {
-            get(proto().role()).setValue(LeaseParticipant.Role.Dependent, false);
+            get(proto().role()).setValue(LeaseTermParticipant.Role.Dependent, false);
             get(proto().role()).setEditable(false);
 
             get(proto().takeOwnership()).setValue(true, false);

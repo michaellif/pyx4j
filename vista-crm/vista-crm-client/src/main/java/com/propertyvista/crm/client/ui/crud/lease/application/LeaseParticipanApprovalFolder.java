@@ -35,12 +35,12 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerGuarantor;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
+import com.propertyvista.domain.tenant.lease.Guarantor;
+import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseParticipanApprovalDTO;
 
 public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipanApprovalDTO> {
@@ -75,21 +75,21 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
             FormFlexPanel left = new FormFlexPanel();
             int row = -1;
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().leaseCustomer().participantId()), 7).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().leaseParticipant().participantId()), 7).build());
             left.setWidget(
                     ++row,
                     0,
-                    new DecoratorBuilder(inject(proto().leaseParticipant().leaseCustomer().customer().person().name(), new CEntityHyperlink<Name>(null,
+                    new DecoratorBuilder(inject(proto().leaseParticipant().leaseParticipant().customer().person().name(), new CEntityHyperlink<Name>(null,
                             new Command() {
                                 @Override
                                 public void execute() {
-                                    if (getValue().leaseParticipant().isInstanceOf(Tenant.class)) {
+                                    if (getValue().leaseParticipant().isInstanceOf(LeaseTermTenant.class)) {
                                         AppSite.getPlaceController().goTo(
-                                                AppPlaceEntityMapper.resolvePlace(LeaseCustomerTenant.class, getValue().leaseParticipant().leaseCustomer()
+                                                AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().leaseParticipant().leaseParticipant()
                                                         .getPrimaryKey()));
-                                    } else if (getValue().leaseParticipant().isInstanceOf(Guarantor.class)) {
+                                    } else if (getValue().leaseParticipant().isInstanceOf(LeaseTermGuarantor.class)) {
                                         AppSite.getPlaceController().goTo(
-                                                AppPlaceEntityMapper.resolvePlace(LeaseCustomerGuarantor.class, getValue().leaseParticipant().leaseCustomer()
+                                                AppPlaceEntityMapper.resolvePlace(Guarantor.class, getValue().leaseParticipant().leaseParticipant()
                                                         .getPrimaryKey()));
                                     } else {
                                         throw new IllegalArgumentException("Incorrect LeaseParticipant value!");

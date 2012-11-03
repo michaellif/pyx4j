@@ -23,8 +23,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantFinancialService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -50,12 +50,12 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
         // TODO: check new/deleted PersonalGuarantor and correct Guarantors accordingly!..
 
         Lease lease = PtAppContext.retrieveCurrentUserLease();
-        List<Guarantor> currentGuarantors = lease.currentTerm().version().guarantors();
+        List<LeaseTermGuarantor> currentGuarantors = lease.currentTerm().version().guarantors();
 
         TenantRetriever tr = new TenantRetriever(entity.getPrimaryKey(), true);
         new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(entity, tr.getScreening());
 
-        for (Guarantor pg : entity.guarantors()) {
+        for (LeaseTermGuarantor pg : entity.guarantors()) {
             int idx = currentGuarantors.indexOf(pg);
             if (idx >= 0) {
                 currentGuarantors.remove(idx);
@@ -68,7 +68,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
         }
 
         // remove deleted guarantors:
-        for (Guarantor orphan : currentGuarantors) {
+        for (LeaseTermGuarantor orphan : currentGuarantors) {
             Persistence.service().delete(orphan);
         }
 

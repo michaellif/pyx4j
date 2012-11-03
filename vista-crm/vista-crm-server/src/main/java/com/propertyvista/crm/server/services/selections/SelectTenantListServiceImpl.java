@@ -20,12 +20,12 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
-public class SelectTenantListServiceImpl extends AbstractListServiceImpl<LeaseCustomerTenant> implements SelectTenantListService {
+public class SelectTenantListServiceImpl extends AbstractListServiceImpl<Tenant> implements SelectTenantListService {
 
     public SelectTenantListServiceImpl() {
-        super(LeaseCustomerTenant.class);
+        super(Tenant.class);
     }
 
     @Override
@@ -34,19 +34,19 @@ public class SelectTenantListServiceImpl extends AbstractListServiceImpl<LeaseCu
     }
 
     @Override
-    protected void enhanceListCriteria(EntityListCriteria<LeaseCustomerTenant> dbCriteria, EntityListCriteria<LeaseCustomerTenant> dtoCriteria) {
+    protected void enhanceListCriteria(EntityListCriteria<Tenant> dbCriteria, EntityListCriteria<Tenant> dtoCriteria) {
         super.enhanceListCriteria(dbCriteria, dtoCriteria);
 
         // filter out just current tenants:
         dbCriteria.in(dbCriteria.proto().lease().status(), Lease.Status.current());
-        dbCriteria.eq(dbCriteria.proto().leaseParticipants().$().leaseTermV().holder(), dbCriteria.proto().lease().currentTerm());
+        dbCriteria.eq(dbCriteria.proto().leaseTermParticipants().$().leaseTermV().holder(), dbCriteria.proto().lease().currentTerm());
         // and finalized e.g. last only:
-        dbCriteria.isCurrent(dbCriteria.proto().leaseParticipants().$().leaseTermV());
+        dbCriteria.isCurrent(dbCriteria.proto().leaseTermParticipants().$().leaseTermV());
 
     }
 
     @Override
-    protected void enhanceListRetrieved(LeaseCustomerTenant entity, LeaseCustomerTenant dto) {
+    protected void enhanceListRetrieved(Tenant entity, Tenant dto) {
         Persistence.service().retrieve(dto.lease(), AttachLevel.ToStringMembers);
     }
 }

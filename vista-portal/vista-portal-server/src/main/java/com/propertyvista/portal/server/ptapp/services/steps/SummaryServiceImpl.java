@@ -38,8 +38,8 @@ import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.domain.tenant.ptapp.IAgree;
 import com.propertyvista.dto.LegalTermsDescriptorDTO;
@@ -111,7 +111,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 
         Lease lease = PtAppContext.retrieveCurrentUserLease();
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
-        for (Tenant tenantInLease : lease.currentTerm().version().tenants()) {
+        for (LeaseTermTenant tenantInLease : lease.currentTerm().version().tenants()) {
             Persistence.service().retrieve(tenantInLease);
             TenantRetriever tr = new TenantRetriever(tenantInLease.getPrimaryKey(), true);
 

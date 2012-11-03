@@ -112,11 +112,11 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 
 public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
@@ -222,7 +222,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Customer.class, EntityPermission.ALL));
 
-        grant(VistaBasicBehavior.CRM, new EntityPermission(Tenant.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(LeaseTermTenant.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(TenantCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ActiveTenantCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PastTenantCrudService.class));

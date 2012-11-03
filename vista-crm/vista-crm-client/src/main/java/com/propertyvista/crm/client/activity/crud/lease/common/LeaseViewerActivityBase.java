@@ -28,7 +28,7 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -39,10 +39,10 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
     }
 
     @Override
-    public void retrieveUsers(final AsyncCallback<List<LeaseParticipant<?>>> callback) {
-        ((LeaseViewerCrudServiceBase<DTO>) getService()).retrieveUsers(new DefaultAsyncCallback<Vector<LeaseParticipant<?>>>() {
+    public void retrieveUsers(final AsyncCallback<List<LeaseTermParticipant<?>>> callback) {
+        ((LeaseViewerCrudServiceBase<DTO>) getService()).retrieveUsers(new DefaultAsyncCallback<Vector<LeaseTermParticipant<?>>>() {
             @Override
-            public void onSuccess(Vector<LeaseParticipant<?>> result) {
+            public void onSuccess(Vector<LeaseTermParticipant<?>> result) {
                 callback.onSuccess(result);
             }
         }, getEntityId());

@@ -30,7 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
 public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
@@ -43,7 +43,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
     static {
         TenantCharge proto = EntityFactory.getEntityPrototype(TenantCharge.class);
-        COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenant().leaseCustomer().customer().person().name(), "33em"));
+        COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenant().leaseParticipant().customer().person().name(), "33em"));
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenant().percentage(), "7em"));
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.amount(), "7em"));
     }
@@ -74,7 +74,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
             public ValidationError isValid(CComponent<IList<TenantCharge>, ?> component, IList<TenantCharge> value) {
                 BigDecimal totalPrc = BigDecimal.ZERO;
                 for (TenantCharge charge : value) {
-                    if (charge.tenant().role().getValue() == LeaseParticipant.Role.Applicant) {
+                    if (charge.tenant().role().getValue() == LeaseTermParticipant.Role.Applicant) {
                         continue; // Ignore main applicant, since it is read-only!
                     }
                     if (charge.tenant().percentage().getValue() != null) {
@@ -100,7 +100,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
                 CComponent<?, ?> comp = inject(column.getObject());
                 comp.inheritViewable(false); // always not viewable!
                 return comp;
-            } else if (column.getObject() == proto().tenant().leaseCustomer().customer().person().name()) {
+            } else if (column.getObject() == proto().tenant().leaseParticipant().customer().person().name()) {
                 return inject(column.getObject(), new CEntityLabel<Name>());
             }
             return super.createCell(column);
@@ -125,7 +125,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         @Override
         protected void onValuePropagation(TenantCharge entity, boolean fireEvent, boolean populate) {
             super.onValuePropagation(entity, fireEvent, populate);
-            if ((getValue().tenant().role().getValue() == LeaseParticipant.Role.Applicant)) {
+            if ((getValue().tenant().role().getValue() == LeaseTermParticipant.Role.Applicant)) {
                 get(proto().tenant().percentage()).setEditable(false);
                 get(proto().tenant().percentage()).setViewable(true);
             }

@@ -28,7 +28,7 @@ import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
@@ -52,34 +52,34 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<Paymen
 
     @Override
     protected void enhanceListRetrieved(PaymentMethod entity, PaymentMethod dto) {
-        dto.isPreauthorized().setValue(entity.equals(TenantAppContext.getCurrentUserTenantInLease().leaseCustomer().preauthorizedPayment()));
+        dto.isPreauthorized().setValue(entity.equals(TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().preauthorizedPayment()));
         super.enhanceListRetrieved(entity, dto);
     }
 
     @Override
     protected void enhanceRetrieved(PaymentMethod entity, PaymentMethod dto, RetrieveTraget retrieveTraget) {
-        dto.isPreauthorized().setValue(entity.equals(TenantAppContext.getCurrentUserTenantInLease().leaseCustomer().preauthorizedPayment()));
+        dto.isPreauthorized().setValue(entity.equals(TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().preauthorizedPayment()));
         super.enhanceRetrieved(entity, dto, retrieveTraget);
     }
 
     @Override
     protected void persist(PaymentMethod entity, PaymentMethod dto) {
-        Tenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
+        LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenantInLease.leaseTermV());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit());
 
-        entity.customer().set(tenantInLease.leaseCustomer().customer());
+        entity.customer().set(tenantInLease.leaseParticipant().customer());
 
         Validate.isTrue(PaymentType.avalableInPortal().contains(entity.type().getValue()));
         entity.isOneTimePayment().setValue(Boolean.FALSE);
 
         ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(tenantInLease.leaseTermV().holder().lease().unit().building(), entity);
 
-        if (dto.isPreauthorized().isBooleanTrue() || tenantInLease.leaseCustomer().preauthorizedPayment().isNull()) {
-            if (!tenantInLease.leaseCustomer().preauthorizedPayment().equals(entity)) {
-                tenantInLease.leaseCustomer().preauthorizedPayment().set(entity);
-                Persistence.service().merge(tenantInLease.leaseCustomer());
+        if (dto.isPreauthorized().isBooleanTrue() || tenantInLease.leaseParticipant().preauthorizedPayment().isNull()) {
+            if (!tenantInLease.leaseParticipant().preauthorizedPayment().equals(entity)) {
+                tenantInLease.leaseParticipant().preauthorizedPayment().set(entity);
+                Persistence.service().merge(tenantInLease.leaseParticipant());
             }
         }
     }
@@ -94,7 +94,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<Paymen
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
-        Tenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
+        LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenantInLease.leaseTermV());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit());

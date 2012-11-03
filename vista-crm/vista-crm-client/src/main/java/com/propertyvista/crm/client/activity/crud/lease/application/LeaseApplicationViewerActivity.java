@@ -33,7 +33,7 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
 public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<LeaseApplicationDTO> implements LeaseApplicationViewerView.Presenter {
@@ -69,25 +69,25 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
     }
 
     @Override
-    public void inviteUsers(List<LeaseParticipant<?>> users) {
+    public void inviteUsers(List<LeaseTermParticipant<?>> users) {
         ((LeaseApplicationViewerCrudService) getService()).inviteUsers(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String message) {
                 populate();
                 ((LeaseApplicationViewerView) getView()).reportInviteUsersActionResult(message);
             }
-        }, getEntityId(), new Vector<LeaseParticipant<?>>(users));
+        }, getEntityId(), new Vector<LeaseTermParticipant<?>>(users));
     }
 
     @Override
-    public void creditCheck(List<LeaseParticipant<?>> users) {
+    public void creditCheck(List<LeaseTermParticipant<?>> users) {
         ((LeaseApplicationViewerCrudService) getService()).creditCheck(new HandledErrorAsyncCallback<String>() {
             @Override
             public void onSuccess(String message) {
                 populate();
                 ((LeaseApplicationViewerView) getView()).reportCreditCheckActionResult(message);
             }
-        }, getEntityId(), creditCheckAmount, new Vector<LeaseParticipant<?>>(users));
+        }, getEntityId(), creditCheckAmount, new Vector<LeaseTermParticipant<?>>(users));
     }
 
     @Override

@@ -46,9 +46,9 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.server.jobs.StatisticsUtils;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -301,7 +301,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
             Lease lease = bill.billingAccount().lease();
             Persistence.service().retrieve(lease.currentTerm().version().tenants());
 
-            tanantLoop: for (Tenant tenant : lease.currentTerm().version().tenants()) {
+            tanantLoop: for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
                 // do pre-authorized payments for main applicant for now
                 switch (tenant.role().getValue()) {
                 case Applicant:
@@ -325,10 +325,10 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         Persistence.service().commit();
     }
 
-    private void createPreAuthorizedPayment(LeaseParticipant leaseParticipant, BigDecimal amount, BillingAccount billingAccount, PaymentMethod method) {
+    private void createPreAuthorizedPayment(LeaseTermParticipant leaseParticipant, BigDecimal amount, BillingAccount billingAccount, PaymentMethod method) {
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
         paymentRecord.billingAccount().set(billingAccount);
-        paymentRecord.leaseParticipant().set(leaseParticipant);
+        paymentRecord.leaseTermParticipant().set(leaseParticipant);
         paymentRecord.amount().setValue(amount);
         paymentRecord.paymentMethod().set(method);
 

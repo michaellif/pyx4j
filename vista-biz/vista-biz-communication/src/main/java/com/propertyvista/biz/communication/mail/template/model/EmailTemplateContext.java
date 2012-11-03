@@ -20,7 +20,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
@@ -32,5 +32,5 @@ public interface EmailTemplateContext extends IEntity {
 
     Lease lease();
 
-    LeaseParticipant leaseParticipant();
+    LeaseTermParticipant leaseParticipant();
 }

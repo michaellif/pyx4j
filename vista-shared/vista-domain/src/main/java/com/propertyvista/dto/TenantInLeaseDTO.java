@@ -17,12 +17,12 @@ import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.income.IncomeSource;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 @Transient
 @ExtendsDBO
-public interface TenantInLeaseDTO extends Tenant {
+public interface TenantInLeaseDTO extends LeaseTermTenant {
 
     public static enum ChangeStatus {
         New, Updated;

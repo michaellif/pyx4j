@@ -24,7 +24,7 @@ import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -34,7 +34,7 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
     interface Presenter extends LeaseViewerViewBase.Presenter {
 
-        void sendMail(List<LeaseParticipant<?>> users, EmailTemplateType emailType);
+        void sendMail(List<LeaseTermParticipant<?>> users, EmailTemplateType emailType);
 
         void startBilling();
 

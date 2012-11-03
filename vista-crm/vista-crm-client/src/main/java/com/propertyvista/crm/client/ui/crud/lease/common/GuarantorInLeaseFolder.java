@@ -30,23 +30,23 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerGuarantor;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
+import com.propertyvista.domain.tenant.lease.Guarantor;
+import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 
-public class GuarantorInLeaseFolder extends VistaTableFolder<Guarantor> {
+public class GuarantorInLeaseFolder extends VistaTableFolder<LeaseTermGuarantor> {
 
     static final I18n i18n = I18n.get(GuarantorInLeaseFolder.class);
 
     public GuarantorInLeaseFolder() {
-        super(Guarantor.class, false);
+        super(LeaseTermGuarantor.class, false);
     }
 
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().leaseCustomer().participantId(), "7em"),
-                new EntityFolderColumnDescriptor(proto().leaseCustomer().customer().person().name(), "25em"),
+                new EntityFolderColumnDescriptor(proto().leaseParticipant().participantId(), "7em"),
+                new EntityFolderColumnDescriptor(proto().leaseParticipant().customer().person().name(), "25em"),
                 new EntityFolderColumnDescriptor(proto().role(), "10em"),
                 new EntityFolderColumnDescriptor(proto().tenant(), "25em"),
                 new EntityFolderColumnDescriptor(proto().relationship(), "15em"));
@@ -55,33 +55,33 @@ public class GuarantorInLeaseFolder extends VistaTableFolder<Guarantor> {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Guarantor) {
+        if (member instanceof LeaseTermGuarantor) {
             return new GuarantorInLeaseViewer();
         }
         return super.create(member);
     }
 
-    private class GuarantorInLeaseViewer extends CEntityFolderRowEditor<Guarantor> {
+    private class GuarantorInLeaseViewer extends CEntityFolderRowEditor<LeaseTermGuarantor> {
 
         public GuarantorInLeaseViewer() {
-            super(Guarantor.class, columns());
+            super(LeaseTermGuarantor.class, columns());
             setEditable(false);
             setViewable(true);
         }
 
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            if (proto().leaseCustomer().customer().person().name() == column.getObject()) {
-                return inject(proto().leaseCustomer().customer().person().name(), new CEntityHyperlink<Name>(null, new Command() {
+            if (proto().leaseParticipant().customer().person().name() == column.getObject()) {
+                return inject(proto().leaseParticipant().customer().person().name(), new CEntityHyperlink<Name>(null, new Command() {
                     @Override
                     public void execute() {
                         AppSite.getPlaceController().goTo(
-                                AppPlaceEntityMapper.resolvePlace(LeaseCustomerGuarantor.class).formViewerPlace(
-                                        GuarantorInLeaseViewer.this.getValue().leaseCustomer().getPrimaryKey()));
+                                AppPlaceEntityMapper.resolvePlace(Guarantor.class).formViewerPlace(
+                                        GuarantorInLeaseViewer.this.getValue().leaseParticipant().getPrimaryKey()));
                     }
                 }));
             } else if (proto().tenant() == column.getObject()) {
-                return inject(proto().tenant(), new CEntityCrudHyperlink<LeaseCustomerTenant>(AppPlaceEntityMapper.resolvePlace(LeaseCustomerTenant.class)));
+                return inject(proto().tenant(), new CEntityCrudHyperlink<Tenant>(AppPlaceEntityMapper.resolvePlace(Tenant.class)));
             }
             return super.createCell(column);
         }

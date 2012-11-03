@@ -21,8 +21,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.domain.dto.BillSummaryDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -35,7 +35,7 @@ public class BillSummaryServiceImpl implements BillSummaryService {
     }
 
     static BillSummaryDTO retrieve() {
-        Tenant tenant = TenantAppContext.getCurrentUserTenantInLease();
+        LeaseTermTenant tenant = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenant.leaseTermV());
         Persistence.service().retrieve(tenant.leaseTermV().holder().lease());
 

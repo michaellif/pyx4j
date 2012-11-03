@@ -35,11 +35,11 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseTermDTO;
@@ -102,14 +102,14 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         if (in.getPrimaryKey() != null) {
             Persistence.service().retrieve(dto.version().tenants());
         }
-        for (Tenant item : dto.version().tenants()) {
+        for (LeaseTermTenant item : dto.version().tenants()) {
             LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(dto.lease(), item, AttachLevel.ToStringMembers);
         }
 
         if (in.getPrimaryKey() != null) {
             Persistence.service().retrieve(dto.version().guarantors());
         }
-        for (Guarantor item : dto.version().guarantors()) {
+        for (LeaseTermGuarantor item : dto.version().guarantors()) {
             LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(dto.lease(), item, AttachLevel.ToStringMembers);
         }
 

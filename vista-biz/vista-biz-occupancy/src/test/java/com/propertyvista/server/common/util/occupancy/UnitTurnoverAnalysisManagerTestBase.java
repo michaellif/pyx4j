@@ -40,9 +40,9 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.test.helper.LightWeightLeaseManagement;
 
 // TODO enhance the test base to allow test cases with multiple buildings
@@ -115,10 +115,10 @@ public class UnitTurnoverAnalysisManagerTestBase {
         lease.currentTerm().termTo().setValue(asDate(dateTo));
         lease.expectedMoveIn().setValue(asDate(dateFrom));
 
-        Tenant tenantInLease = EntityFactory.create(Tenant.class);
-        tenantInLease.leaseCustomer().customer().set(customer);
+        LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
+        tenantInLease.leaseParticipant().customer().set(customer);
         tenantInLease.orderInLease().setValue(1);
-        tenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
+        tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
         lease.currentTerm().version().tenants().add(tenantInLease);
 
         LightWeightLeaseManagement.persist(lease, false);

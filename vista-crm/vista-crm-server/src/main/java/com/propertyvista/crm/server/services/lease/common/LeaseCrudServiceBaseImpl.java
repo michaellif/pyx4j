@@ -17,11 +17,11 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseDTO;
 
 public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractCrudServiceDtoImpl<Lease, DTO> {
@@ -45,11 +45,11 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
         loadDetachedProducts(dto);
 
-        for (Tenant item : dto.currentTerm().version().tenants()) {
+        for (LeaseTermTenant item : dto.currentTerm().version().tenants()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
         }
 
-        for (Guarantor item : dto.currentTerm().version().guarantors()) {
+        for (LeaseTermGuarantor item : dto.currentTerm().version().guarantors()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
         }
     }

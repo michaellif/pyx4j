@@ -20,17 +20,17 @@ import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
-import com.propertyvista.crm.client.ui.crud.customer.common.LeaseCustomerEditorPresenter;
-import com.propertyvista.crm.rpc.services.customer.LeaseCustomerCrudServiceBase;
+import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantEditorPresenter;
+import com.propertyvista.crm.rpc.services.customer.LeaseParticipantCrudServiceBase;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.dto.LeaseCustomerDTO;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.dto.LeaseParticipantDTO;
 
-public abstract class LeaseCustomerEditorActivity<E extends LeaseParticipant<?>, DTO extends LeaseCustomerDTO<E>, CS extends LeaseCustomerCrudServiceBase<E, DTO>>
-        extends CrmEditorActivity<DTO> implements LeaseCustomerEditorPresenter {
+public abstract class LeaseParticipantEditorActivity<E extends LeaseTermParticipant<?>, DTO extends LeaseParticipantDTO<E>, CS extends LeaseParticipantCrudServiceBase<E, DTO>>
+        extends CrmEditorActivity<DTO> implements LeaseParticipantEditorPresenter {
 
-    public LeaseCustomerEditorActivity(CrudAppPlace place, IEditorView<DTO> view, CS service, Class<DTO> dtoClass) {
+    public LeaseParticipantEditorActivity(CrudAppPlace place, IEditorView<DTO> view, CS service, Class<DTO> dtoClass) {
         super(place, view, service, dtoClass);
     }
 

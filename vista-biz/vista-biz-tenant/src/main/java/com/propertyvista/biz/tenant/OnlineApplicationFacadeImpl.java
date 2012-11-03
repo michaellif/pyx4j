@@ -34,13 +34,13 @@ import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
@@ -60,10 +60,10 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         ServerSideFactory.create(IdAssignmentFacade.class).assignId(masterOnlineApplication);
         Persistence.service().persist(masterOnlineApplication);
 
-        for (Tenant tenant : masterOnlineApplication.leaseApplication().lease().currentTerm().version().tenants()) {
+        for (LeaseTermTenant tenant : masterOnlineApplication.leaseApplication().lease().currentTerm().version().tenants()) {
             Persistence.service().retrieve(tenant);
-            if (LeaseParticipant.Role.Applicant == tenant.role().getValue()) {
-                if (tenant.leaseCustomer().customer().user().isNull()) {
+            if (LeaseTermParticipant.Role.Applicant == tenant.role().getValue()) {
+                if (tenant.leaseParticipant().customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Primary applicant must have an e-mail to start Online Application."));
                 }
                 tenant.application().set(createOnlineApplication(masterOnlineApplication, tenant, Role.Applicant));
@@ -102,9 +102,9 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         criteria.add(PropertyCriterion.eq(criteria.proto().lease().leaseApplication().onlineApplication().applications(), application));
         LeaseTerm leaseTerm = Persistence.service().retrieve(criteria);
 
-        for (Tenant tenant : leaseTerm.version().tenants()) {
+        for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
             Persistence.service().retrieve(tenant);
-            if (application.customer().equals(tenant.leaseCustomer().customer())) {
+            if (application.customer().equals(tenant.leaseParticipant().customer())) {
 
                 switch (tenant.role().getValue()) {
                 case Applicant:
@@ -124,9 +124,9 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
                 }
             }
         }
-        for (Guarantor guarantor : leaseTerm.version().guarantors()) {
+        for (LeaseTermGuarantor guarantor : leaseTerm.version().guarantors()) {
             Persistence.service().retrieve(guarantor);
-            if (application.customer().equals(guarantor.leaseCustomer().customer())) {
+            if (application.customer().equals(guarantor.leaseParticipant().customer())) {
                 if (application.status().getValue() == OnlineApplication.Status.Submitted) {
                     return VistaCustomerBehavior.GuarantorSubmitted;
                 } else {
@@ -202,7 +202,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     @Override
-    public void resendInvitationEmail(LeaseParticipant leaseParticipant) {
+    public void resendInvitationEmail(LeaseTermParticipant leaseParticipant) {
         // TODO Auto-generated method stub
 
     }
@@ -264,9 +264,9 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
     private void inviteCoApplicants(Lease lease) {
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
-        for (Tenant tenant : lease.currentTerm().version().tenants()) {
-            if ((tenant.role().getValue() == LeaseParticipant.Role.CoApplicant && (!tenant.takeOwnership().isBooleanTrue()))) {
-                if (tenant.leaseCustomer().customer().user().isNull()) {
+        for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
+            if ((tenant.role().getValue() == LeaseTermParticipant.Role.CoApplicant && (!tenant.takeOwnership().isBooleanTrue()))) {
+                if (tenant.leaseParticipant().customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Co-Applicant must have an e-mail to start Online Application."));
                 }
                 tenant.application().set(createOnlineApplication(lease.leaseApplication().onlineApplication(), tenant, Role.CoApplicant));
@@ -278,9 +278,9 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
     private void inviteGuarantors(Lease lease, Customer tenant) {
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
-        for (Guarantor guarantor : lease.currentTerm().version().guarantors()) {
+        for (LeaseTermGuarantor guarantor : lease.currentTerm().version().guarantors()) {
             if (guarantor.tenant().customer().equals(tenant)) {
-                if (guarantor.leaseCustomer().customer().user().isNull()) {
+                if (guarantor.leaseParticipant().customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Guarantor must have an e-mail to start Online Application."));
                 }
                 guarantor.application().set(createOnlineApplication(lease.leaseApplication().onlineApplication(), guarantor, Role.Guarantor));
@@ -290,19 +290,19 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         }
     }
 
-    private OnlineApplication createOnlineApplication(MasterOnlineApplication masterOnlineApplication, LeaseParticipant participant, Role role) {
+    private OnlineApplication createOnlineApplication(MasterOnlineApplication masterOnlineApplication, LeaseTermParticipant participant, Role role) {
         OnlineApplication app = EntityFactory.create(OnlineApplication.class);
         app.status().setValue(OnlineApplication.Status.Invited);
 
         switch (role) {
         case Applicant:
-            app.steps().addAll(createApplicantApplicationProgress((Tenant) participant));
+            app.steps().addAll(createApplicantApplicationProgress((LeaseTermTenant) participant));
             break;
         case CoApplicant:
-            app.steps().addAll(createCoApplicantApplicationProgress((Tenant) participant));
+            app.steps().addAll(createCoApplicantApplicationProgress((LeaseTermTenant) participant));
             break;
         case Guarantor:
-            app.steps().addAll(createGuarantorApplicationProgress((Guarantor) participant));
+            app.steps().addAll(createGuarantorApplicationProgress((LeaseTermGuarantor) participant));
             break;
         }
 
@@ -313,7 +313,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         }
 
         app.masterOnlineApplication().set(masterOnlineApplication);
-        app.customer().set(participant.leaseCustomer().customer());
+        app.customer().set(participant.leaseParticipant().customer());
         app.role().setValue(role);
         Persistence.service().persist(app);
         return app;
@@ -326,7 +326,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         return ws;
     }
 
-    private static List<ApplicationWizardStep> createApplicantApplicationProgress(Tenant applicant) {
+    private static List<ApplicationWizardStep> createApplicantApplicationProgress(LeaseTermTenant applicant) {
         List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
         if (VistaTODO.enableWelcomeWizardDemoMode) {
             for (Class<? extends AppPlace> place : Arrays.<Class<? extends AppPlace>> asList(//@formatter:off
@@ -357,7 +357,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         return progress;
     }
 
-    private static List<ApplicationWizardStep> createCoApplicantApplicationProgress(Tenant coApplicant) {
+    private static List<ApplicationWizardStep> createCoApplicantApplicationProgress(LeaseTermTenant coApplicant) {
         List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
         progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
         progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
@@ -378,7 +378,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         return progress;
     }
 
-    private static List<ApplicationWizardStep> createGuarantorApplicationProgress(Guarantor guarantor) {
+    private static List<ApplicationWizardStep> createGuarantorApplicationProgress(LeaseTermGuarantor guarantor) {
         List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
         progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
         progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
@@ -393,7 +393,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         return progress;
     }
 
-    private static boolean isTenantInSplitCharge(Tenant tenant) {
+    private static boolean isTenantInSplitCharge(LeaseTermTenant tenant) {
         return !(tenant.percentage().isNull() || tenant.percentage().getValue().signum() > 0);
     }
 }

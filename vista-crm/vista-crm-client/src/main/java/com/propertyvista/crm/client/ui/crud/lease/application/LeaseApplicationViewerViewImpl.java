@@ -34,7 +34,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -100,10 +100,10 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         inviteAction = new MenuItem(INVITE, new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant<?>>>() {
+                ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
                     @Override
-                    public void onSuccess(List<LeaseParticipant<?>> result) {
-                        new EntitySelectorListDialog<LeaseParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Send An Invitation To"), true, result) {
+                    public void onSuccess(List<LeaseTermParticipant<?>> result) {
+                        new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Send An Invitation To"), true, result) {
                             @Override
                             public boolean onClickOk() {
                                 ((LeaseApplicationViewerView.Presenter) getPresenter()).inviteUsers(getSelectedItems());
@@ -121,10 +121,10 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         checkAction = new MenuItem(i18n.tr("Credit Check"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant<?>>>() {
+                ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
                     @Override
-                    public void onSuccess(List<LeaseParticipant<?>> result) {
-                        new EntitySelectorListDialog<LeaseParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Check"), true, result) {
+                    public void onSuccess(List<LeaseTermParticipant<?>> result) {
+                        new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Check"), true, result) {
                             @Override
                             public boolean onClickOk() {
                                 ((LeaseApplicationViewerView.Presenter) getPresenter()).creditCheck(getSelectedItems());
@@ -159,10 +159,10 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             moreInfoAction = new MenuItem(MORE_INFO, new Command() {
                 @Override
                 public void execute() {
-                    ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant<?>>>() {
+                    ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
                         @Override
-                        public void onSuccess(List<LeaseParticipant<?>> result) {
-                            new EntitySelectorListDialog<LeaseParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Acquire Info"), true, result) {
+                        public void onSuccess(List<LeaseTermParticipant<?>> result) {
+                            new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Acquire Info"), true, result) {
 
                                 @Override
                                 public boolean onClickOk() {

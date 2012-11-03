@@ -39,9 +39,9 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
 
@@ -75,7 +75,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         Persistence.service().retrieve(dto.billingAccount().lease());
         Persistence.service().retrieve(dto.billingAccount().lease().unit());
         Persistence.service().retrieve(dto.billingAccount().lease().unit().building());
-        Persistence.service().retrieve(dto.leaseParticipant());
+        Persistence.service().retrieve(dto.leaseTermParticipant());
         Persistence.service().retrieve(dto.paymentMethod());
 
         dto.leaseId().set(dto.billingAccount().lease().leaseId());
@@ -87,7 +87,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     @Override
     protected void persist(PaymentRecord entity, PaymentRecordDTO dto) {
-        entity.paymentMethod().customer().set(dto.leaseParticipant().leaseCustomer().customer());
+        entity.paymentMethod().customer().set(dto.leaseTermParticipant().leaseParticipant().customer());
 
         // Do not change profile methods
         if (entity.paymentMethod().id().isNull()) {
@@ -146,15 +146,15 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
-    public void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseParticipant participant) {
+    public void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant participant) {
         AddressRetriever.getLeaseParticipantCurrentAddress(callback, participant);
     }
 
     @Override
-    public void getProfiledPaymentMethods(AsyncCallback<Vector<PaymentMethod>> callback, LeaseParticipant payer) {
+    public void getProfiledPaymentMethods(AsyncCallback<Vector<PaymentMethod>> callback, LeaseTermParticipant payer) {
         Persistence.service().retrieve(payer);
         if ((payer == null) || (payer.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseParticipant.class).getCaption() + "' " + payer.getPrimaryKey()
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseTermParticipant.class).getCaption() + "' " + payer.getPrimaryKey()
                     + " NotFound");
         }
         callback.onSuccess(new Vector<PaymentMethod>(ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(payer)));
@@ -198,11 +198,11 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     // internals:
-    private List<LeaseParticipant> retrieveUsers(Lease lease) {
-        List<LeaseParticipant> users = new LinkedList<LeaseParticipant>();
+    private List<LeaseTermParticipant> retrieveUsers(Lease lease) {
+        List<LeaseTermParticipant> users = new LinkedList<LeaseTermParticipant>();
 
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
-        for (Tenant tenant : lease.currentTerm().version().tenants()) {
+        for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
             switch (tenant.role().getValue()) {
             case Applicant:
             case CoApplicant:

@@ -17,12 +17,12 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
 public class DomainUtil {
 
-    public static TenantCharge createTenantCharge(Tenant.Role role, BigDecimal percentage, BigDecimal money) {
+    public static TenantCharge createTenantCharge(LeaseTermParticipant.Role role, BigDecimal percentage, BigDecimal money) {
         TenantCharge tc = EntityFactory.create(TenantCharge.class);
 
         tc.tenant().role().setValue(role);

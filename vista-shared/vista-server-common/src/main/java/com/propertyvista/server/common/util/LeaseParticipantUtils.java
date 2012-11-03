@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 
 public class LeaseParticipantUtils {
@@ -32,12 +32,12 @@ public class LeaseParticipantUtils {
                 ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningFinalOrDraft(customer, AttachLevel.ToStringMembers));
     }
 
-    public static void retrieveLeaseTermEffectiveScreening(Lease lease, LeaseParticipant<?> leaseParticipant, AttachLevel attachLevel) {
+    public static void retrieveLeaseTermEffectiveScreening(Lease lease, LeaseTermParticipant<?> leaseParticipant, AttachLevel attachLevel) {
         if (isApplicationInPogress(lease, leaseParticipant.leaseTermV())) {
             // Take customer's Screening, Prefers draft version.
             leaseParticipant.effectiveScreening().set(
                     ServerSideFactory.create(ScreeningFacade.class)
-                            .retrivePersonScreeningFinalOrDraft(leaseParticipant.leaseCustomer().customer(), attachLevel));
+                            .retrivePersonScreeningFinalOrDraft(leaseParticipant.leaseParticipant().customer(), attachLevel));
         } else {
             leaseParticipant.effectiveScreening().set(leaseParticipant.screening());
             if (!leaseParticipant.effectiveScreening().isNull()) {

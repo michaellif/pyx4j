@@ -15,7 +15,7 @@ package com.propertyvista.crm.rpc.services.selections;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 
-public interface SelectGuarantorListService extends AbstractListService<Guarantor> {
+public interface SelectGuarantorListService extends AbstractListService<LeaseTermGuarantor> {
 }

@@ -15,9 +15,9 @@ package com.propertyvista.biz.validation.validators.lease;
 
 import com.propertyvista.biz.validation.framework.validators.CompositeEntityValidator;
 import com.propertyvista.biz.validation.framework.validators.NotNullValidator;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
-public class LeaseParticipantInApprovedLeaseValidator<E extends LeaseParticipant<?>> extends CompositeEntityValidator<E> {
+public class LeaseParticipantInApprovedLeaseValidator<E extends LeaseTermParticipant<?>> extends CompositeEntityValidator<E> {
 
     public LeaseParticipantInApprovedLeaseValidator(Class<E> entityClassLiteral) {
         super(entityClassLiteral);
@@ -27,13 +27,13 @@ public class LeaseParticipantInApprovedLeaseValidator<E extends LeaseParticipant
     protected void init() {
         bind(proto().role(), new NotNullValidator());
 
-        bind(proto().leaseCustomer().customer().person().name().firstName(), new NotNullValidator());
-        bind(proto().leaseCustomer().customer().person().name().lastName(), new NotNullValidator());
-        bind(proto().leaseCustomer().customer().person().birthDate(), new NotNullValidator());
+        bind(proto().leaseParticipant().customer().person().name().firstName(), new NotNullValidator());
+        bind(proto().leaseParticipant().customer().person().name().lastName(), new NotNullValidator());
+        bind(proto().leaseParticipant().customer().person().birthDate(), new NotNullValidator());
 
         // Screening is automatically finalized
         if (!ScreeningValidator.screeningIsAutomaticallyFinalized) {
-            bind(proto().leaseCustomer().customer(), new ScreeningValidator());
+            bind(proto().leaseParticipant().customer(), new ScreeningValidator());
         }
     }
 

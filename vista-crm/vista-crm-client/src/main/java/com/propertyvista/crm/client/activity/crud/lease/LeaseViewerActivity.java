@@ -47,7 +47,7 @@ import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseTermDTO;
@@ -185,14 +185,14 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
-    public void sendMail(List<LeaseParticipant<?>> users, EmailTemplateType emailType) {
+    public void sendMail(List<LeaseTermParticipant<?>> users, EmailTemplateType emailType) {
         ((LeaseViewerCrudService) getService()).sendMail(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String message) {
                 populate();
                 ((LeaseViewerView) getView()).reportSendMailActionResult(message);
             }
-        }, getEntityId(), new Vector<LeaseParticipant<?>>(users), emailType);
+        }, getEntityId(), new Vector<LeaseTermParticipant<?>>(users), emailType);
     }
 
     @Override

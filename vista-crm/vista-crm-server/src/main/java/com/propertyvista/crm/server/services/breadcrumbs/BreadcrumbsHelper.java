@@ -28,7 +28,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMethod;
 
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
 public class BreadcrumbsHelper {
@@ -100,10 +100,10 @@ public class BreadcrumbsHelper {
         // Special case for no business owned
         if (startFromTarget instanceof CustomerScreening) {
             @SuppressWarnings("rawtypes")
-            EntityQueryCriteria<LeaseParticipant> criteria = EntityQueryCriteria.create(LeaseParticipant.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().leaseCustomer().customer().personScreening(), startFromTarget));
-            criteria.desc(criteria.proto().leaseCustomer().lease().updated());
-            LeaseParticipant<?> leaseParticipant = Persistence.service().retrieve(criteria);
+            EntityQueryCriteria<LeaseTermParticipant> criteria = EntityQueryCriteria.create(LeaseTermParticipant.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant().customer().personScreening(), startFromTarget));
+            criteria.desc(criteria.proto().leaseParticipant().lease().updated());
+            LeaseTermParticipant<?> leaseParticipant = Persistence.service().retrieve(criteria);
             trail.add(toStringDuplicate(leaseParticipant));
             Persistence.service().retrieve(leaseParticipant.leaseTermV());
             startFromTarget = leaseParticipant.leaseTermV();

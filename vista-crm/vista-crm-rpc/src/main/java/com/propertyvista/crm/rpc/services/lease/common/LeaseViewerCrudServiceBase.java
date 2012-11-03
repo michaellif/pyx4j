@@ -20,10 +20,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseViewerCrudServiceBase<DTO extends LeaseDTO> extends AbstractCrudService<DTO> {
 
-    void retrieveUsers(AsyncCallback<Vector<LeaseParticipant<?>>> callback, Key entityId);
+    void retrieveUsers(AsyncCallback<Vector<LeaseTermParticipant<?>>> callback, Key entityId);
 }

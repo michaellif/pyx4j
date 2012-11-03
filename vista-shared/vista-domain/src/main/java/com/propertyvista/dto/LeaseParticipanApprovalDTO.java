@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 @Transient
 @ToStringFormat("{0}, {1}")
@@ -31,7 +31,7 @@ public interface LeaseParticipanApprovalDTO extends IEntity {
     @ToString(index = 0)
     @SuppressWarnings("rawtypes")
     @Detached(level = AttachLevel.ToStringMembers)
-    LeaseParticipant leaseParticipant();
+    LeaseTermParticipant leaseParticipant();
 
     @Detached(level = AttachLevel.ToStringMembers)
     CustomerScreening screening();

@@ -29,23 +29,23 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
-public class TenantInLeaseFolder extends VistaTableFolder<Tenant> {
+public class TenantInLeaseFolder extends VistaTableFolder<LeaseTermTenant> {
 
     static final I18n i18n = I18n.get(TenantInLeaseFolder.class);
 
     public TenantInLeaseFolder() {
-        super(Tenant.class, false);
+        super(LeaseTermTenant.class, false);
     }
 
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().leaseCustomer().participantId(), "7em"),
-                new EntityFolderColumnDescriptor(proto().leaseCustomer().customer().person().name(), "25em"),
+                new EntityFolderColumnDescriptor(proto().leaseParticipant().participantId(), "7em"),
+                new EntityFolderColumnDescriptor(proto().leaseParticipant().customer().person().name(), "25em"),
                 new EntityFolderColumnDescriptor(proto().role(), "10em"),
                 new EntityFolderColumnDescriptor(proto().relationship(), "15em"),
                 new EntityFolderColumnDescriptor(proto().percentage(), "5em"));
@@ -54,29 +54,29 @@ public class TenantInLeaseFolder extends VistaTableFolder<Tenant> {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Tenant) {
+        if (member instanceof LeaseTermTenant) {
             return new TenantInLeaseViewer();
         }
         return super.create(member);
     }
 
-    private class TenantInLeaseViewer extends CEntityFolderRowEditor<Tenant> {
+    private class TenantInLeaseViewer extends CEntityFolderRowEditor<LeaseTermTenant> {
 
         public TenantInLeaseViewer() {
-            super(Tenant.class, columns());
+            super(LeaseTermTenant.class, columns());
             setEditable(false);
             setViewable(true);
         }
 
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            if (proto().leaseCustomer().customer().person().name() == column.getObject()) {
-                return inject(proto().leaseCustomer().customer().person().name(), new CEntityHyperlink<Name>(null, new Command() {
+            if (proto().leaseParticipant().customer().person().name() == column.getObject()) {
+                return inject(proto().leaseParticipant().customer().person().name(), new CEntityHyperlink<Name>(null, new Command() {
                     @Override
                     public void execute() {
                         AppSite.getPlaceController().goTo(
-                                AppPlaceEntityMapper.resolvePlace(LeaseCustomerTenant.class).formViewerPlace(
-                                        TenantInLeaseViewer.this.getValue().leaseCustomer().getPrimaryKey()));
+                                AppPlaceEntityMapper.resolvePlace(Tenant.class).formViewerPlace(
+                                        TenantInLeaseViewer.this.getValue().leaseParticipant().getPrimaryKey()));
                     }
                 }));
             }
@@ -87,7 +87,7 @@ public class TenantInLeaseFolder extends VistaTableFolder<Tenant> {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            if (getValue().role().getValue() == LeaseParticipant.Role.Applicant) {
+            if (getValue().role().getValue() == LeaseTermParticipant.Role.Applicant) {
                 get(proto().relationship()).setVisible(false);
             }
         }

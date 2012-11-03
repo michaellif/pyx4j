@@ -61,7 +61,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -138,9 +138,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         sendMailAction = new MenuItem(i18n.tr("Send Mail..."), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant<?>>>() {
+                ((LeaseViewerView.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
                     @Override
-                    public void onSuccess(List<LeaseParticipant<?>> result) {
+                    public void onSuccess(List<LeaseTermParticipant<?>> result) {
                         new SendMailBox(result) {
                             @Override
                             public boolean onClickOk() {
@@ -571,17 +571,17 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         }
     }
 
-    private abstract class SendMailBox extends EntitySelectorListDialog<LeaseParticipant<?>> {
+    private abstract class SendMailBox extends EntitySelectorListDialog<LeaseTermParticipant<?>> {
 
         private CComboBox<EmailTemplateType> emailType;
 
-        public SendMailBox(List<LeaseParticipant<?>> applicationUsers) {
+        public SendMailBox(List<LeaseTermParticipant<?>> applicationUsers) {
             super(i18n.tr("Send Mail"), true, applicationUsers);
             getOkButton().setText(i18n.tr("Send"));
         }
 
         @Override
-        protected Widget initBody(boolean isMultiselectAllowed, List<LeaseParticipant<?>> data) {
+        protected Widget initBody(boolean isMultiselectAllowed, List<LeaseTermParticipant<?>> data) {
             VerticalPanel body = new VerticalPanel();
             body.add(new HTML(i18n.tr("Select Tenants:")));
             body.add(super.initBody(isMultiselectAllowed, data));

@@ -39,7 +39,7 @@ import com.propertyvista.common.client.ui.components.editors.payments.PaymentMet
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.PaymentRecordDTO.PaymentSelect;
 
@@ -115,7 +115,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseStatus()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant(), new CEntityLabel<LeaseParticipant>()), 25).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant>()), 25).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitNumber()), 15).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createdDate()), 10).build());
 //        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentStatus()), 10).build());
@@ -153,8 +153,8 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                     case New:
                         paymentMethodEditor.setEnabled(true);
                         paymentMethodEditor.initNew(PaymentType.Echeck);
-                        paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
-                        paymentMethodEditorSeparator.setVisible(!getValue().leaseParticipant().isNull());
+                        paymentMethodEditor.setVisible(!getValue().leaseTermParticipant().isNull());
+                        paymentMethodEditorSeparator.setVisible(!getValue().leaseTermParticipant().isNull());
 
                         paymentMethodEditor.getValue().isOneTimePayment().setValue(Boolean.TRUE);
 
@@ -192,14 +192,14 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         super.onValueSet(populate);
 
         get(proto().id()).setVisible(!getValue().id().isNull());
-        get(proto().selectPaymentMethod()).setVisible(!isViewable() && !getValue().leaseParticipant().isNull());
+        get(proto().selectPaymentMethod()).setVisible(!isViewable() && !getValue().leaseTermParticipant().isNull());
         setProfiledPaymentMethodsVisible(false);
 
         checkProfiledPaymentMethods(true);
 
-        paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
-        paymentMethodEditorSeparator.setVisible(!getValue().leaseParticipant().isNull());
-        paymentMethodEditor.setBillingAddressAsCurrentEnabled(!getValue().leaseParticipant().isNull());
+        paymentMethodEditor.setVisible(!getValue().leaseTermParticipant().isNull());
+        paymentMethodEditorSeparator.setVisible(!getValue().leaseTermParticipant().isNull());
+        paymentMethodEditor.setBillingAddressAsCurrentEnabled(!getValue().leaseTermParticipant().isNull());
 
 //        if (isEditable()) {
 //            get(proto().transactionAuthorizationNumber()).setVisible(false);

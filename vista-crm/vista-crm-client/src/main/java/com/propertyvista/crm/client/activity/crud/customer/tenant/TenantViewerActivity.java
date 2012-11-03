@@ -29,7 +29,7 @@ import com.propertyvista.crm.client.visor.notes.NotesParentId;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implements TenantViewerView.Presenter {
@@ -68,7 +68,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
 
     @Override
     protected NotesParentId createNotesParentId() {
-        return new NotesParentId(Tenant.class, notesParentPrimaryKey);
+        return new NotesParentId(LeaseTermTenant.class, notesParentPrimaryKey);
     }
 
     @Override

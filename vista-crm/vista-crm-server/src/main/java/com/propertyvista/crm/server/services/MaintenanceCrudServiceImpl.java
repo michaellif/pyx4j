@@ -50,7 +50,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     protected void enhanceAll(MaintenanceRequestDTO dto) {
-        Persistence.service().retrieve(dto.leaseCustomer(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(dto.leaseParticipant(), AttachLevel.ToStringMembers);
         Persistence.service().retrieve(dto.issueClassification());
     }
 

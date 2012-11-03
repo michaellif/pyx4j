@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -27,7 +27,7 @@ public interface LeaseViewerViewBase<DTO extends LeaseDTO> extends IViewerView<D
 
     interface Presenter extends IViewerView.Presenter {
 
-        void retrieveUsers(AsyncCallback<List<LeaseParticipant<?>>> callback);
+        void retrieveUsers(AsyncCallback<List<LeaseTermParticipant<?>>> callback);
 
         void viewTerm(LeaseTerm leaseTermId);
     }

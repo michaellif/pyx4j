@@ -78,8 +78,8 @@ import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerGuarantor;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
+import com.propertyvista.domain.tenant.lease.Guarantor;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -115,8 +115,8 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(MaintenanceRequest.class, CrmSiteMap.Tenants.MaintenanceRequest.class, defaultImage);
 
         AppPlaceEntityMapper.register(Customer.class, CrmSiteMap.Tenants.Tenant.class, CrmImages.INSTANCE.tenant());
-        AppPlaceEntityMapper.register(LeaseCustomerTenant.class, CrmSiteMap.Tenants.Tenant.class, CrmImages.INSTANCE.tenant());
-        AppPlaceEntityMapper.register(LeaseCustomerGuarantor.class, CrmSiteMap.Tenants.Guarantor.class, CrmImages.INSTANCE.tenant());
+        AppPlaceEntityMapper.register(Tenant.class, CrmSiteMap.Tenants.Tenant.class, CrmImages.INSTANCE.tenant());
+        AppPlaceEntityMapper.register(Guarantor.class, CrmSiteMap.Tenants.Guarantor.class, CrmImages.INSTANCE.tenant());
         AppPlaceEntityMapper.register(CustomerScreening.class, CrmSiteMap.Tenants.Screening.class, defaultImage);
 
         AppPlaceEntityMapper.register(Lead.class, Marketing.Lead.class, defaultImage);

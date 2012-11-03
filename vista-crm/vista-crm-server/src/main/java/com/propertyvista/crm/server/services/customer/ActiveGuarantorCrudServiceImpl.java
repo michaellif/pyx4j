@@ -17,20 +17,20 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.services.customer.ActiveGuarantorCrudService;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerGuarantor;
+import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class ActiveGuarantorCrudServiceImpl extends GuarantorCrudServiceImpl implements ActiveGuarantorCrudService {
 
     @Override
-    protected void enhanceListCriteria(EntityListCriteria<LeaseCustomerGuarantor> dbCriteria, EntityListCriteria<GuarantorDTO> dtoCriteria) {
+    protected void enhanceListCriteria(EntityListCriteria<Guarantor> dbCriteria, EntityListCriteria<GuarantorDTO> dtoCriteria) {
         super.enhanceListCriteria(dbCriteria, dtoCriteria);
 
         // filter out just current tenants:
         dbCriteria.in(dbCriteria.proto().lease().status(), Lease.Status.current());
-        dbCriteria.eq(dbCriteria.proto().leaseParticipants().$().leaseTermV().holder(), dbCriteria.proto().lease().currentTerm());
+        dbCriteria.eq(dbCriteria.proto().leaseTermParticipants().$().leaseTermV().holder(), dbCriteria.proto().lease().currentTerm());
         // and finalized e.g. last only:
-        dbCriteria.isCurrent(dbCriteria.proto().leaseParticipants().$().leaseTermV());
+        dbCriteria.isCurrent(dbCriteria.proto().leaseTermParticipants().$().leaseTermV());
     }
 
 }

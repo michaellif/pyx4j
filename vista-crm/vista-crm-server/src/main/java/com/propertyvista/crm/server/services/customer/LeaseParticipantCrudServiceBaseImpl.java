@@ -27,28 +27,28 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.tenant.CustomerFacade;
-import com.propertyvista.crm.rpc.services.customer.LeaseCustomerCrudServiceBase;
+import com.propertyvista.crm.rpc.services.customer.LeaseParticipantCrudServiceBase;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.lease.LeaseCustomer;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.dto.LeaseCustomerDTO;
+import com.propertyvista.dto.LeaseParticipantDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
-public abstract class LeaseCustomerCrudServiceBaseImpl<E extends LeaseParticipant<?>, DBO extends LeaseCustomer<E>, DTO extends LeaseCustomerDTO<E>> extends
-        AbstractCrudServiceDtoImpl<DBO, DTO> implements LeaseCustomerCrudServiceBase<E, DTO> {
+public abstract class LeaseParticipantCrudServiceBaseImpl<E extends LeaseTermParticipant<?>, DBO extends LeaseParticipant<E>, DTO extends LeaseParticipantDTO<E>> extends
+        AbstractCrudServiceDtoImpl<DBO, DTO> implements LeaseParticipantCrudServiceBase<E, DTO> {
 
-    public LeaseCustomerCrudServiceBaseImpl(Class<DBO> dboClass, Class<DTO> dtoClass) {
+    public LeaseParticipantCrudServiceBaseImpl(Class<DBO> dboClass, Class<DTO> dtoClass) {
         super(dboClass, dtoClass);
     }
 
     @Override
     protected void bind() {
-        bind(LeaseCustomer.class, dtoProto, dboProto);
+        bind(LeaseParticipant.class, dtoProto, dboProto);
     }
 
     @Override
@@ -112,7 +112,7 @@ public abstract class LeaseCustomerCrudServiceBaseImpl<E extends LeaseParticipan
         AddressRetriever.getLeaseParticipantCurrentAddress(callback, EntityFactory.createIdentityStub(entityClass, entityId));
     }
 
-    private LeaseTerm.LeaseTermV retrieveLeaseTerm(LeaseCustomer<E> leaseCustomer) {
+    private LeaseTerm.LeaseTermV retrieveLeaseTerm(LeaseParticipant<E> leaseCustomer) {
         LeaseTerm.LeaseTermV term = null;
 
         // case of 'current' Tenants for applications: 
@@ -126,10 +126,10 @@ public abstract class LeaseCustomerCrudServiceBaseImpl<E extends LeaseParticipan
             {
                 EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().id(), leaseCustomer.lease().currentTerm().id()));
-                if (leaseCustomer instanceof LeaseCustomerTenant) {
-                    criteria.add(PropertyCriterion.eq(criteria.proto().version().tenants().$().leaseCustomer(), leaseCustomer));
+                if (leaseCustomer instanceof Tenant) {
+                    criteria.add(PropertyCriterion.eq(criteria.proto().version().tenants().$().leaseParticipant(), leaseCustomer));
                 } else {
-                    criteria.add(PropertyCriterion.eq(criteria.proto().version().guarantors().$().leaseCustomer(), leaseCustomer));
+                    criteria.add(PropertyCriterion.eq(criteria.proto().version().guarantors().$().leaseParticipant(), leaseCustomer));
                 }
                 criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
                 LeaseTerm leaseTerm = Persistence.service().retrieve(criteria);
@@ -141,10 +141,10 @@ public abstract class LeaseCustomerCrudServiceBaseImpl<E extends LeaseParticipan
             if (term == null) {
                 EntityQueryCriteria<LeaseTerm.LeaseTermV> criteria = EntityQueryCriteria.create(LeaseTerm.LeaseTermV.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().holder().lease(), leaseCustomer.lease()));
-                if (leaseCustomer instanceof LeaseCustomerTenant) {
-                    criteria.add(PropertyCriterion.eq(criteria.proto().tenants().$().leaseCustomer(), leaseCustomer));
+                if (leaseCustomer instanceof Tenant) {
+                    criteria.add(PropertyCriterion.eq(criteria.proto().tenants().$().leaseParticipant(), leaseCustomer));
                 } else {
-                    criteria.add(PropertyCriterion.eq(criteria.proto().guarantors().$().leaseCustomer(), leaseCustomer));
+                    criteria.add(PropertyCriterion.eq(criteria.proto().guarantors().$().leaseParticipant(), leaseCustomer));
                 }
                 criteria.desc(criteria.proto().id());
                 term = Persistence.service().retrieve(criteria);

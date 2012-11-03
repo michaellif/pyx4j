@@ -22,7 +22,7 @@ import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 public interface PaymentFacade {
@@ -39,7 +39,7 @@ public interface PaymentFacade {
 
     void deletePaymentMethod(PaymentMethod paymentMethod);
 
-    List<PaymentMethod> retrievePaymentMethods(LeaseParticipant<?> participant);
+    List<PaymentMethod> retrievePaymentMethods(LeaseTermParticipant<?> participant);
 
     List<PaymentMethod> retrievePaymentMethods(Customer customer);
 

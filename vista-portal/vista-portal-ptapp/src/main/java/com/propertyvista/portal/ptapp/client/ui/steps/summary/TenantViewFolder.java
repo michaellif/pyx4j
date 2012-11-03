@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.TenantInLeaseDTO;
 
 public class TenantViewFolder extends VistaTableFolder<TenantInLeaseDTO> {
@@ -46,9 +46,9 @@ public class TenantViewFolder extends VistaTableFolder<TenantInLeaseDTO> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().leaseCustomer().customer().person().name(), "20em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().leaseCustomer().customer().person().birthDate(), "9em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().leaseCustomer().customer().person().email(), "21em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().leaseParticipant().customer().person().name(), "20em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().leaseParticipant().customer().person().birthDate(), "9em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().leaseParticipant().customer().person().email(), "21em"));
         columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "10em"));
         columns.add(new EntityFolderColumnDescriptor(proto().role(), "10em"));
         return columns;
@@ -65,7 +65,7 @@ public class TenantViewFolder extends VistaTableFolder<TenantInLeaseDTO> {
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             CComponent<?, ?> comp = null;
-            if (proto().leaseCustomer().customer().person().name() == column.getObject()) {
+            if (proto().leaseParticipant().customer().person().name() == column.getObject()) {
                 comp = inject(column.getObject(), new CEntityLabel<Name>());
             } else {
                 comp = super.createCell(column);
@@ -82,7 +82,7 @@ public class TenantViewFolder extends VistaTableFolder<TenantInLeaseDTO> {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            if (getValue().role().getValue() == LeaseParticipant.Role.Applicant) {
+            if (getValue().role().getValue() == LeaseTermParticipant.Role.Applicant) {
                 relationship.setVisible(false);
             }
         }

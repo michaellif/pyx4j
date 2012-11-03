@@ -36,10 +36,10 @@ import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudServic
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseParticipanApprovalDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -60,11 +60,11 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         super.enhanceRetrieved(lease, dto, retrieveTraget);
         enhanceRetrievedCommon(lease, dto);
 
-        for (Tenant tenantId : dto.currentTerm().version().tenants()) {
+        for (LeaseTermTenant tenantId : dto.currentTerm().version().tenants()) {
             loadLeaseParticipant(lease, dto, tenantId);
         }
 
-        for (Guarantor guarantorId : dto.currentTerm().version().guarantors()) {
+        for (LeaseTermGuarantor guarantorId : dto.currentTerm().version().guarantors()) {
             loadLeaseParticipant(lease, dto, guarantorId);
         }
 
@@ -75,14 +75,14 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
                 ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(dto.leaseApplication().onlineApplication()));
     }
 
-    private void loadLeaseParticipant(Lease lease, LeaseApplicationDTO dto, LeaseParticipant<?> leaseParticipantId) {
-        LeaseParticipant<?> leaseParticipant = (LeaseParticipant<?>) Persistence.service().retrieve(leaseParticipantId.getValueClass(),
+    private void loadLeaseParticipant(Lease lease, LeaseApplicationDTO dto, LeaseTermParticipant<?> leaseParticipantId) {
+        LeaseTermParticipant<?> leaseParticipant = (LeaseTermParticipant<?>) Persistence.service().retrieve(leaseParticipantId.getValueClass(),
                 leaseParticipantId.getPrimaryKey());
 
         LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(lease, leaseParticipant, AttachLevel.Attached);
 
         {
-            Persistence.service().retrieve(leaseParticipant.leaseCustomer().customer().emergencyContacts());
+            Persistence.service().retrieve(leaseParticipant.leaseParticipant().customer().emergencyContacts());
             TenantInfoDTO tenantInfoDTO = new TenantConverter.LeaseParticipant2TenantInfo().createDTO(leaseParticipant);
             new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(leaseParticipant.effectiveScreening(), tenantInfoDTO);
             dto.tenantInfo().add(tenantInfoDTO);
@@ -90,7 +90,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
         {
             TenantFinancialDTO tenantFinancial = new TenantConverter.TenantFinancialEditorConverter().createDTO(leaseParticipant.effectiveScreening());
-            tenantFinancial.person().set(leaseParticipant.leaseCustomer().customer().person());
+            tenantFinancial.person().set(leaseParticipant.leaseParticipant().customer().person());
             dto.tenantFinancials().add(tenantFinancial);
         }
 
@@ -101,7 +101,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
             if (LeaseParticipantUtils.isApplicationInPogress(lease, leaseParticipant.leaseTermV())) {
                 approval.creditCheck().set(
-                        ServerSideFactory.create(ScreeningFacade.class).retrivePersonCreditCheck(leaseParticipant.leaseCustomer().customer()));
+                        ServerSideFactory.create(ScreeningFacade.class).retrivePersonCreditCheck(leaseParticipant.leaseParticipant().customer()));
             } else {
                 approval.creditCheck().set(leaseParticipant.creditCheck());
             }
@@ -129,14 +129,14 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         dto.numberOfGuarantors().setValue(dto.currentTerm().version().guarantors().size());
         dto.numberOfApplicants().setValue(0);
 
-        for (Tenant tenant : dto.currentTerm().version().tenants()) {
+        for (LeaseTermTenant tenant : dto.currentTerm().version().tenants()) {
             Persistence.service().retrieve(tenant);
             Persistence.service().retrieve(tenant.screening(), AttachLevel.ToStringMembers);
 
-            if (tenant.role().getValue() == LeaseParticipant.Role.Applicant) {
-                dto.mainApplicant().set(tenant.leaseCustomer().customer());
+            if (tenant.role().getValue() == LeaseTermParticipant.Role.Applicant) {
+                dto.mainApplicant().set(tenant.leaseParticipant().customer());
                 dto.numberOfApplicants().setValue(dto.numberOfApplicants().getValue() + 1);
-            } else if (tenant.role().getValue() == LeaseParticipant.Role.CoApplicant) {
+            } else if (tenant.role().getValue() == LeaseTermParticipant.Role.CoApplicant) {
                 dto.numberOfApplicants().setValue(dto.numberOfApplicants().getValue() + 1);
             }
         }
@@ -150,17 +150,17 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     }
 
     @Override
-    public void inviteUsers(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant<?>> users) {
+    public void inviteUsers(AsyncCallback<String> callback, Key entityId, Vector<LeaseTermParticipant<?>> users) {
         CommunicationFacade commFacade = ServerSideFactory.create(CommunicationFacade.class);
         if (users.isEmpty()) {
             throw new UserRuntimeException(i18n.tr("No users to send invitation"));
         }
 
         // check that we can send the e-mail before we actually try to send email
-        for (LeaseParticipant<?> user : users) {
+        for (LeaseTermParticipant<?> user : users) {
             // check that all lease participants have an associated user entity (email)            
-            if (user.leaseCustomer().customer().user().isNull()) {
-                throw new UserRuntimeException(i18n.tr("Failed to invite users, email of lease participant {0} was not found", user.leaseCustomer().customer()
+            if (user.leaseParticipant().customer().user().isNull()) {
+                throw new UserRuntimeException(i18n.tr("Failed to invite users, email of lease participant {0} was not found", user.leaseParticipant().customer()
                         .person().name().getStringView()));
             }
 
@@ -168,22 +168,22 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             if (user.application().isNull()) {
                 throw new UserRuntimeException(
                         i18n.tr("Failed to invite users, application invitation for {0} can be sent only after the main applicant will have finished his own applicaiton",
-                                user.leaseCustomer().customer().person().name().getStringView()));
+                                user.leaseParticipant().customer().person().name().getStringView()));
             }
         }
 
-        for (LeaseParticipant<?> user : users) {
-            if (user.isInstanceOf(Tenant.class)) {
-                Tenant tenant = user.duplicate(Tenant.class);
-                if (tenant.role().getValue() == LeaseParticipant.Role.Applicant) {
+        for (LeaseTermParticipant<?> user : users) {
+            if (user.isInstanceOf(LeaseTermTenant.class)) {
+                LeaseTermTenant tenant = user.duplicate(LeaseTermTenant.class);
+                if (tenant.role().getValue() == LeaseTermParticipant.Role.Applicant) {
                     commFacade.sendApplicantApplicationInvitation(tenant);
-                } else if (tenant.role().getValue() == LeaseParticipant.Role.CoApplicant) {
+                } else if (tenant.role().getValue() == LeaseTermParticipant.Role.CoApplicant) {
                     commFacade.sendCoApplicantApplicationInvitation(tenant);
                 } else {
                     throw new Error("It's unknown what to do with tenant role " + tenant.role().getValue() + " in this context");
                 }
-            } else if (user.isInstanceOf(Guarantor.class)) {
-                Guarantor guarantor = user.duplicate(Guarantor.class);
+            } else if (user.isInstanceOf(LeaseTermGuarantor.class)) {
+                LeaseTermGuarantor guarantor = user.duplicate(LeaseTermGuarantor.class);
                 commFacade.sendGuarantorApplicationInvitation(guarantor);
             }
         }
@@ -195,9 +195,9 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     }
 
     @Override
-    public void creditCheck(AsyncCallback<String> callback, Key entityId, BigDecimal creditCheckAmount, Vector<LeaseParticipant<?>> users) {
+    public void creditCheck(AsyncCallback<String> callback, Key entityId, BigDecimal creditCheckAmount, Vector<LeaseTermParticipant<?>> users) {
         Employee currentUserEmployee = CrmAppContext.getCurrentUserEmployee();
-        for (LeaseParticipant<?> leaseParticipant : users) {
+        for (LeaseTermParticipant<?> leaseParticipant : users) {
             ServerSideFactory.create(ScreeningFacade.class).runCreditCheck(creditCheckAmount, leaseParticipant, currentUserEmployee);
         }
         String successMessage = i18n.tr("Credit check has been proceeded successfully.");

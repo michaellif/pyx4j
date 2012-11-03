@@ -62,10 +62,10 @@ import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -88,9 +88,9 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
     private CrmUser crmUser;
 
-    private Tenant mainAplt;
+    private LeaseTermTenant mainAplt;
 
-    private Tenant coAplt;
+    private LeaseTermTenant coAplt;
 
     private Lease lease;
 
@@ -169,14 +169,14 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         type = EmailTemplateType.PasswordRetrievalTenant;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalTenant, mainAplt.leaseCustomer().customer().user(), token);
+        email = MessageTemplates.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalTenant, mainAplt.leaseParticipant().customer().user(), token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.info(type.toString() + " content: " + received);
 
         type = EmailTemplateType.PasswordRetrievalProspect;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalProspect, mainAplt.leaseCustomer().customer().user(), token);
+        email = MessageTemplates.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalProspect, mainAplt.leaseParticipant().customer().user(), token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.info(type.toString() + " content: " + received);
@@ -333,7 +333,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         case PasswordRetrievalTenant:
             if (asString) {
                 String[] args = {
-                    mainAplt.leaseCustomer().customer().user().name().getValue(),
+                    mainAplt.leaseParticipant().customer().user().name().getValue(),
                     VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL + '?' + AuthenticationService.AUTH_TOKEN_ARG + '='
                     + token
                 };
@@ -350,7 +350,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         case PasswordRetrievalProspect:
             if (asString) {
                 String[] args = {
-                    mainAplt.leaseCustomer().customer().user().name().getValue(),
+                    mainAplt.leaseParticipant().customer().user().name().getValue(),
                     AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), PtSiteMap.LoginWithToken.class,
                             AuthenticationService.AUTH_TOKEN_ARG, token)
                 };
@@ -367,7 +367,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         case ApplicationCreatedApplicant:
             if (asString) {
                 String[] args = {
-                    mainAplt.leaseCustomer().customer().user().name().getValue(),
+                    mainAplt.leaseParticipant().customer().user().name().getValue(),
                     mainApp.id().getStringView(),
                     appUrl,
                     officePhone,
@@ -393,7 +393,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         case ApplicationCreatedGuarantor:
             if (asString) {
                 String[] args = {
-                    coAplt.leaseCustomer().customer().user().name().getValue(),
+                    coAplt.leaseParticipant().customer().user().name().getValue(),
                     coApp.id().getStringView(),
                     appUrl,
                     officePhone,
@@ -418,7 +418,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         case ApplicationApproved:
             if (asString) {
                 String[] args = {
-                    mainAplt.leaseCustomer().customer().user().name().getValue(),
+                    mainAplt.leaseParticipant().customer().user().name().getValue(),
                     new SimpleDateFormat("EEEE").format(lease.currentTerm().termFrom().getValue()),
                     lease.currentTerm().termFrom().getStringView(),
                     portalHomeUrl,
@@ -447,7 +447,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         case ApplicationDeclined:
             if (asString) {
                 String[] args = {
-                    mainAplt.leaseCustomer().customer().user().name().getValue(),
+                    mainAplt.leaseParticipant().customer().user().name().getValue(),
                     mainApp.id().getStringView(),
                     ptappHomeUrl,
                     building.marketing().name().getValue(),
@@ -471,7 +471,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         case TenantInvitation:
             if (asString) {
                 String[] args = {
-                    mainAplt.leaseCustomer().customer().user().name().getValue(),
+                    mainAplt.leaseParticipant().customer().user().name().getValue(),
                     company,
                     VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL + '?' + AuthenticationService.AUTH_TOKEN_ARG + '='
                     + token,
@@ -629,9 +629,9 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         customer.person().name().lastName() + String.valueOf(uniqueForTestInt()) + "@" + customer.person().name().firstName().getValue()
                                 + ".com");
 
-        mainAplt = EntityFactory.create(Tenant.class);
-        mainAplt.leaseCustomer().customer().set(customer);
-        mainAplt.role().setValue(LeaseParticipant.Role.Applicant);
+        mainAplt = EntityFactory.create(LeaseTermTenant.class);
+        mainAplt.leaseParticipant().customer().set(customer);
+        mainAplt.role().setValue(LeaseTermParticipant.Role.Applicant);
         lease.currentTerm().version().tenants().add(mainAplt);
 
         // co-applicant
@@ -644,9 +644,9 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         customer.person().name().lastName() + String.valueOf(uniqueForTestInt()) + "@" + customer.person().name().firstName().getValue()
                                 + ".com");
 
-        coAplt = EntityFactory.create(Tenant.class);
-        coAplt.leaseCustomer().customer().set(customer);
-        coAplt.role().setValue(LeaseParticipant.Role.CoApplicant);
+        coAplt = EntityFactory.create(LeaseTermTenant.class);
+        coAplt.leaseParticipant().customer().set(customer);
+        coAplt.role().setValue(LeaseTermParticipant.Role.CoApplicant);
         coAplt.application().set(mainApp);
         lease.currentTerm().version().tenants().add(coAplt);
 
@@ -660,14 +660,14 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         Persistence.service().persist(mApp);
         mainApp = EntityFactory.create(OnlineApplication.class);
         mainApp.masterOnlineApplication().set(mApp);
-        mainApp.customer().set(mainAplt.leaseCustomer().customer());
+        mainApp.customer().set(mainAplt.leaseParticipant().customer());
         Persistence.service().persist(mainApp);
         mainAplt.application().set(mainApp);
         Persistence.service().merge(mainAplt);
 
         coApp = EntityFactory.create(OnlineApplication.class);
         coApp.masterOnlineApplication().set(mApp);
-        coApp.customer().set(coAplt.leaseCustomer().customer());
+        coApp.customer().set(coAplt.leaseParticipant().customer());
         Persistence.service().persist(coApp);
         coAplt.application().set(coApp);
         Persistence.service().merge(coAplt);

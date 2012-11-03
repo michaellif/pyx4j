@@ -20,7 +20,7 @@ import junit.framework.TestCase;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.util.DomainUtil;
@@ -32,9 +32,11 @@ public class ChargesSharedCalculationTest extends TestCase {
         Charges charges = EntityFactory.create(Charges.class);
         charges.monthlyCharges().total().setValue(new BigDecimal("10.6"));
 
-        charges.paymentSplitCharges().charges().add(DomainUtil.createTenantCharge(Tenant.Role.Applicant, BigDecimal.ZERO, BigDecimal.ZERO));
-        charges.paymentSplitCharges().charges().add(DomainUtil.createTenantCharge(Tenant.Role.CoApplicant, new BigDecimal(0.31), BigDecimal.ZERO));
-        charges.paymentSplitCharges().charges().add(DomainUtil.createTenantCharge(Tenant.Role.CoApplicant, new BigDecimal(0.25), BigDecimal.ZERO));
+        charges.paymentSplitCharges().charges().add(DomainUtil.createTenantCharge(LeaseTermParticipant.Role.Applicant, BigDecimal.ZERO, BigDecimal.ZERO));
+        charges.paymentSplitCharges().charges()
+                .add(DomainUtil.createTenantCharge(LeaseTermParticipant.Role.CoApplicant, new BigDecimal(0.31), BigDecimal.ZERO));
+        charges.paymentSplitCharges().charges()
+                .add(DomainUtil.createTenantCharge(LeaseTermParticipant.Role.CoApplicant, new BigDecimal(0.25), BigDecimal.ZERO));
 
         ChargesSharedCalculation.calculatePaymentSplitCharges(charges);
 

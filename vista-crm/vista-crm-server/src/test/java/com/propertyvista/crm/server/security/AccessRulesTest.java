@@ -31,8 +31,8 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserBuildings;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.test.helper.LightWeightLeaseManagement;
 
 public class AccessRulesTest extends VistaDBTestBase {
@@ -72,9 +72,9 @@ public class AccessRulesTest extends VistaDBTestBase {
 
             Lease lease = LightWeightLeaseManagement.create(Lease.Status.Application);
 
-            Tenant tl2 = EntityFactory.create(Tenant.class);
+            LeaseTermTenant tl2 = EntityFactory.create(LeaseTermTenant.class);
             tl2.leaseTermV().set(lease.currentTerm().version());
-            tl2.leaseCustomer().customer().set(t2);
+            tl2.leaseParticipant().customer().set(t2);
             lease.currentTerm().version().tenants().add(tl2);
 
             LightWeightLeaseManagement.persist(lease, true);
@@ -112,9 +112,9 @@ public class AccessRulesTest extends VistaDBTestBase {
 
         LightWeightLeaseManagement.persist(lease, true);
 
-        Tenant tl1 = EntityFactory.create(Tenant.class);
+        LeaseTermTenant tl1 = EntityFactory.create(LeaseTermTenant.class);
         tl1.leaseTermV().set(lease.currentTerm().version());
-        tl1.leaseCustomer().customer().set(t1);
+        tl1.leaseParticipant().customer().set(t1);
         Persistence.service().persist(tl1);
 
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);

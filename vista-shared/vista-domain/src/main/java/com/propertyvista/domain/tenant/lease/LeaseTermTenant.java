@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.tenant;
+package com.propertyvista.domain.tenant.lease;
 
 import java.math.BigDecimal;
 
@@ -25,13 +25,12 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.PersonRelationship;
 
 @ToStringFormat("{0} - {1}{2,choice,null#|!null#, {2}}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @DiscriminatorValue("Tenant")
-public interface Tenant extends LeaseParticipant<LeaseCustomerTenant> {
+public interface LeaseTermTenant extends LeaseTermParticipant<Tenant> {
 
     @NotNull
     @ToString(index = 2)

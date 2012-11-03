@@ -17,11 +17,11 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.SecurityViolationException;
 
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class TenantRetriever extends CustomerRetriever {
 
-    private Tenant tenant;
+    private LeaseTermTenant tenant;
 
     public TenantRetriever() {
         super();
@@ -37,17 +37,17 @@ public class TenantRetriever extends CustomerRetriever {
         retrieve(tenantId);
     }
 
-    public Tenant getTenant() {
+    public LeaseTermTenant getTenant() {
         return tenant;
     }
 
     @Override
     public void retrieve(Key tenantId) {
-        tenant = Persistence.service().retrieve(Tenant.class, tenantId);
+        tenant = Persistence.service().retrieve(LeaseTermTenant.class, tenantId);
         if (tenant == null) {
             throw new SecurityViolationException("Invalid data access");
         }
-        super.retrieve(tenant.leaseCustomer().customer());
+        super.retrieve(tenant.leaseParticipant().customer());
         super.retrieve(tenant.screening());
     }
 }

@@ -42,7 +42,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 /**
  * 
@@ -105,7 +105,7 @@ public interface PaymentRecord extends IEntity {
     @SuppressWarnings("rawtypes")
     @NotNull
     @Detached
-    LeaseParticipant leaseParticipant();
+    LeaseTermParticipant leaseTermParticipant();
 
     @Override
     @Indexed

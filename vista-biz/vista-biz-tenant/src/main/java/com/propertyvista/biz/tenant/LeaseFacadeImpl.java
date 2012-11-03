@@ -63,9 +63,7 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -73,11 +71,13 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
-import com.propertyvista.domain.tenant.lease.LeaseCustomer;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerGuarantor;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.Guarantor;
+import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 
 public class LeaseFacadeImpl implements LeaseFacade {
@@ -215,13 +215,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         // migrate participants:
         Persistence.ensureRetrieve(leaseTerm.version().tenants(), AttachLevel.Attached);
-        for (Tenant tenant : leaseTerm.version().tenants()) {
-            tenant.screening().set(retrivePersonScreeningId(tenant.leaseCustomer().customer()));
+        for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
+            tenant.screening().set(retrivePersonScreeningId(tenant.leaseParticipant().customer()));
         }
 
         Persistence.ensureRetrieve(leaseTerm.version().guarantors(), AttachLevel.Attached);
-        for (Guarantor guarantor : leaseTerm.version().guarantors()) {
-            guarantor.screening().set(retrivePersonScreeningId(guarantor.leaseCustomer().customer()));
+        for (LeaseTermGuarantor guarantor : leaseTerm.version().guarantors()) {
+            guarantor.screening().set(retrivePersonScreeningId(guarantor.leaseParticipant().customer()));
         }
 
         leaseTerm.saveAction().setValue(SaveAction.saveAsFinal);
@@ -318,7 +318,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         if (!lease.leaseApplication().onlineApplication().isNull()) {
             Persistence.service().retrieve(lease.currentTerm().version().tenants());
-            for (Tenant tenant : lease.currentTerm().version().tenants()) {
+            for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
                 if (!tenant.application().isNull()) { // co-applicants have no
                                                       // dedicated application
                     ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(tenant);
@@ -330,15 +330,15 @@ public class LeaseFacadeImpl implements LeaseFacade {
     void recordApplicationData(LeaseTerm leaseTerm) {
         // Confider adding screening().set() to this function
         Persistence.ensureRetrieve(leaseTerm.version().tenants(), AttachLevel.Attached);
-        for (Tenant leaseParticipant : leaseTerm.version().tenants()) {
+        for (LeaseTermTenant leaseParticipant : leaseTerm.version().tenants()) {
             leaseParticipant.creditCheck().set(
-                    ServerSideFactory.create(ScreeningFacade.class).retrivePersonCreditCheck(leaseParticipant.leaseCustomer().customer()));
+                    ServerSideFactory.create(ScreeningFacade.class).retrivePersonCreditCheck(leaseParticipant.leaseParticipant().customer()));
         }
 
         Persistence.ensureRetrieve(leaseTerm.version().guarantors(), AttachLevel.Attached);
-        for (Guarantor leaseParticipant : leaseTerm.version().guarantors()) {
+        for (LeaseTermGuarantor leaseParticipant : leaseTerm.version().guarantors()) {
             leaseParticipant.creditCheck().set(
-                    ServerSideFactory.create(ScreeningFacade.class).retrivePersonCreditCheck(leaseParticipant.leaseCustomer().customer()));
+                    ServerSideFactory.create(ScreeningFacade.class).retrivePersonCreditCheck(leaseParticipant.leaseParticipant().customer()));
         }
     }
 
@@ -383,7 +383,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
 
         if (!lease.leaseApplication().onlineApplication().isNull()) {
-            for (Tenant tenant : lease.currentTerm().version().tenants()) {
+            for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
                 if (!tenant.application().isNull()) { // co-applicants have no dedicated application
                     ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(tenant);
                 }
@@ -543,18 +543,18 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         // migrate participants:
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
-        for (Tenant tenant : lease.currentTerm().version().tenants()) {
+        for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
             term.version().tenants().add(businessDuplicate(tenant));
         }
         Persistence.service().retrieve(lease.currentTerm().version().guarantors());
-        for (Guarantor guarantor : lease.currentTerm().version().guarantors()) {
+        for (LeaseTermGuarantor guarantor : lease.currentTerm().version().guarantors()) {
             term.version().guarantors().add(businessDuplicate(guarantor));
         }
 
         return term;
     }
 
-    private <P extends LeaseParticipant<?>> P businessDuplicate(P leaseParticipant) {
+    private <P extends LeaseTermParticipant<?>> P businessDuplicate(P leaseParticipant) {
         // There are no own entities for now, 
         Persistence.retrieveOwned(leaseParticipant);
         P copy = EntityGraph.businessDuplicate(leaseParticipant);
@@ -879,35 +879,35 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     private void persistCustomers(LeaseTerm leaseTerm) {
-        for (Tenant tenant : leaseTerm.version().tenants()) {
+        for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
             if (!tenant.isValueDetached()) {
-                persistLeaseCustomer(leaseTerm, tenant, LeaseCustomerTenant.class);
+                persistLeaseCustomer(leaseTerm, tenant, Tenant.class);
             }
         }
-        for (Guarantor guarantor : leaseTerm.version().guarantors()) {
+        for (LeaseTermGuarantor guarantor : leaseTerm.version().guarantors()) {
             if (!guarantor.isValueDetached()) {
-                persistLeaseCustomer(leaseTerm, guarantor, LeaseCustomerGuarantor.class);
+                persistLeaseCustomer(leaseTerm, guarantor, Guarantor.class);
             }
         }
     }
 
-    private <E extends LeaseCustomer<?>, P extends LeaseParticipant<?>> void persistLeaseCustomer(LeaseTerm leaseTerm, P leaseParticipant,
+    private <E extends LeaseParticipant<?>, P extends LeaseTermParticipant<?>> void persistLeaseCustomer(LeaseTerm leaseTerm, P leaseParticipant,
             Class<E> leaseCustomerClass) {
-        boolean newCustomer = leaseParticipant.leaseCustomer().customer().id().isNull();
-        if (!leaseParticipant.leaseCustomer().customer().isValueDetached()) {
-            ServerSideFactory.create(CustomerFacade.class).persistCustomer(leaseParticipant.leaseCustomer().customer());
+        boolean newCustomer = leaseParticipant.leaseParticipant().customer().id().isNull();
+        if (!leaseParticipant.leaseParticipant().customer().isValueDetached()) {
+            ServerSideFactory.create(CustomerFacade.class).persistCustomer(leaseParticipant.leaseParticipant().customer());
         }
         // Is new LeaseCustomer find or create new
-        if (leaseParticipant.leaseCustomer().id().isNull()) {
+        if (leaseParticipant.leaseParticipant().id().isNull()) {
             E leaseCustomer = null;
             if (!newCustomer) {
                 EntityQueryCriteria<E> criteria = EntityQueryCriteria.create(leaseCustomerClass);
                 criteria.add(PropertyCriterion.eq(criteria.proto().lease(), leaseTerm.lease()));
-                criteria.add(PropertyCriterion.eq(criteria.proto().customer(), leaseParticipant.leaseCustomer().customer()));
+                criteria.add(PropertyCriterion.eq(criteria.proto().customer(), leaseParticipant.leaseParticipant().customer()));
                 leaseCustomer = Persistence.service().retrieve(criteria);
             }
             if (leaseCustomer == null) {
-                Customer customer = leaseParticipant.leaseCustomer().customer();
+                Customer customer = leaseParticipant.leaseParticipant().customer();
                 leaseCustomer = EntityFactory.create(leaseCustomerClass);
                 leaseCustomer.lease().set(leaseTerm.lease());
                 leaseCustomer.customer().set(customer);
@@ -915,9 +915,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 Persistence.service().persist(leaseCustomer);
             }
             // Copy value to member and update other references in graph
-            leaseParticipant.leaseCustomer().id().set(leaseCustomer.id());
-            leaseParticipant.leaseCustomer().lease().set(leaseTerm.lease());
-            leaseParticipant.leaseCustomer().participantId().set(leaseCustomer.participantId());
+            leaseParticipant.leaseParticipant().id().set(leaseCustomer.id());
+            leaseParticipant.leaseParticipant().lease().set(leaseTerm.lease());
+            leaseParticipant.leaseParticipant().participantId().set(leaseCustomer.participantId());
 
         }
     }

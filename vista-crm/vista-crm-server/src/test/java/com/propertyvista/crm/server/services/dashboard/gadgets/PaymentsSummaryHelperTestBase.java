@@ -38,8 +38,8 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssign
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
 
@@ -82,9 +82,9 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
 
         lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.Application);
 
-        Tenant tenant = lease.currentTerm().version().tenants().$();
-        tenant.leaseCustomer().customer().person().name().firstName().setValue("Foo");
-        tenant.leaseCustomer().customer().person().name().lastName().setValue("Foo");
+        LeaseTermTenant tenant = lease.currentTerm().version().tenants().$();
+        tenant.leaseParticipant().customer().person().name().firstName().setValue("Foo");
+        tenant.leaseParticipant().customer().person().name().lastName().setValue("Foo");
         lease.currentTerm().version().tenants().add(tenant);
         lease.status().setValue(Lease.Status.ExistingLease);
         lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
@@ -115,11 +115,11 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
             PaymentRecord.PaymentStatus paymentStatus) {
         PaymentMethod paymentMethod = EntityFactory.create(PaymentMethod.class);
         paymentMethod.type().setValue(paymentType);
-        Tenant tenant = lease.currentTerm().version().tenants().get(0);
+        LeaseTermTenant tenant = lease.currentTerm().version().tenants().get(0);
         if (tenant.isValueDetached()) {
             Persistence.service().retrieve(tenant);
         }
-        paymentMethod.customer().set(tenant.leaseCustomer().customer());
+        paymentMethod.customer().set(tenant.leaseParticipant().customer());
         Persistence.service().persist(paymentMethod);
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
@@ -129,7 +129,7 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
         paymentRecord.paymentStatus().setValue(paymentStatus);
         paymentRecord.billingAccount().set(lease.billingAccount());
         paymentRecord.merchantAccount().set(merchantAccount);
-        paymentRecord.leaseParticipant().set(lease.currentTerm().version().tenants().get(0));
+        paymentRecord.leaseTermParticipant().set(lease.currentTerm().version().tenants().get(0));
 
         Persistence.service().persist(paymentRecord);
 

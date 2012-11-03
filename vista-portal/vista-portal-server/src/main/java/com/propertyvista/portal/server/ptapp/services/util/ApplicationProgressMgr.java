@@ -31,9 +31,9 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
@@ -46,7 +46,7 @@ public class ApplicationProgressMgr {
 
     private final static Logger log = LoggerFactory.getLogger(ApplicationProgressMgr.class);
 
-    public static boolean shouldEnterInformation(Tenant tenant) {
+    public static boolean shouldEnterInformation(LeaseTermTenant tenant) {
         if (tenant.isNull()) {
             log.info("Received a null tenant when checking for eligibility");
             return false;
@@ -54,14 +54,14 @@ public class ApplicationProgressMgr {
 
         if (SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveApplicant)) {
             //@see http://jira.birchwoodsoftwaregroup.com/browse/VISTA-235
-            if (tenant.role().getValue() == LeaseParticipant.Role.Applicant) {
+            if (tenant.role().getValue() == LeaseTermParticipant.Role.Applicant) {
                 return true;
             }
             if (!tenant.takeOwnership().isBooleanTrue()) {
                 return false;
             }
-            return (TimeUtils.isOlderThan(tenant.leaseCustomer().customer().person().birthDate().getValue(), 18));
-        } else if (tenant.leaseCustomer().customer().equals(PtAppContext.retrieveCurrentUserCustomer())) {
+            return (TimeUtils.isOlderThan(tenant.leaseParticipant().customer().person().birthDate().getValue(), 18));
+        } else if (tenant.leaseParticipant().customer().equals(PtAppContext.retrieveCurrentUserCustomer())) {
             return true; // allow just his/her data...
         }
         return false;
@@ -99,9 +99,9 @@ public class ApplicationProgressMgr {
 
     public static void createTenantDataSteps(OnlineApplication application, Customer tenant) {
 
-        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseCustomer().customer(), tenant));
-        Tenant outer = Persistence.service().retrieve(criteria);
+        EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant().customer(), tenant));
+        LeaseTermTenant outer = Persistence.service().retrieve(criteria);
         if (outer == null) {
             throw new Error("TenantInLease for '" + tenant.getStringView() + "' not found");
         }
@@ -111,9 +111,9 @@ public class ApplicationProgressMgr {
 
     public static void createGurantorDataSteps(OnlineApplication application, Customer guarantor) {
 
-        EntityQueryCriteria<Guarantor> criteria = EntityQueryCriteria.create(Guarantor.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseCustomer().customer(), guarantor));
-        Guarantor outer = Persistence.service().retrieve(criteria);
+        EntityQueryCriteria<LeaseTermGuarantor> criteria = EntityQueryCriteria.create(LeaseTermGuarantor.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant().customer(), guarantor));
+        LeaseTermGuarantor outer = Persistence.service().retrieve(criteria);
         if (outer == null) {
             throw new Error("PersonGuarantor for '" + guarantor.getStringView() + "' not found");
         }
@@ -196,7 +196,7 @@ public class ApplicationProgressMgr {
             // create an new sub-step:
             subStep = EntityFactory.create(ApplicationWizardSubstep.class);
             subStep.placeArgument().setValue(tenant.getPrimaryKey().toString());
-            subStep.name().setValue(tenant.leaseCustomer().customer().person().name().getStringView());
+            subStep.name().setValue(tenant.leaseParticipant().customer().person().name().getStringView());
             subStep.status().setValue(ApplicationWizardStep.Status.notVisited);
         }
 

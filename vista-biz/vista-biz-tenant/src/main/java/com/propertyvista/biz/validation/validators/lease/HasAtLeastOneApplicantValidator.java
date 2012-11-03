@@ -23,18 +23,18 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.validation.framework.CollectionValidator;
 import com.propertyvista.biz.validation.framework.SimpleValidationFailure;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 
-public class HasAtLeastOneApplicantValidator implements CollectionValidator<Tenant> {
+public class HasAtLeastOneApplicantValidator implements CollectionValidator<LeaseTermTenant> {
 
     private static final I18n i18n = I18n.get(HasAtLeastOneApplicantValidator.class);
 
     @Override
-    public Set<ValidationFailure> validate(ICollection<Tenant, ?> collection) {
+    public Set<ValidationFailure> validate(ICollection<LeaseTermTenant, ?> collection) {
         boolean hasOneApplicant = false;
         if (!(collection.isNull() || collection.isEmpty())) {
-            for (Tenant tenant : collection) {
+            for (LeaseTermTenant tenant : collection) {
                 if (tenant.role().getValue() == Role.Applicant) {
                     hasOneApplicant = true;
                     break;

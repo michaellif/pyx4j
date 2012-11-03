@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -39,17 +39,17 @@ public class DigitalSignatureMgr {
         update(application, application.masterOnlineApplication().leaseApplication().lease().currentTerm().version().tenants());
     }
 
-    static public void update(OnlineApplication application, IList<Tenant> tenants) {
+    static public void update(OnlineApplication application, IList<LeaseTermTenant> tenants) {
         List<DigitalSignature> existingSignatures = new Vector<DigitalSignature>(application.signatures());
         application.signatures().clear();
 
         // check/create signature for every tenant which needs it: 
-        for (Tenant tenant : tenants) {
+        for (LeaseTermTenant tenant : tenants) {
             if (ApplicationProgressMgr.shouldEnterInformation(tenant)) {
                 boolean isExist = false;
                 for (Iterator<DigitalSignature> it = existingSignatures.iterator(); it.hasNext();) {
                     DigitalSignature sig = it.next();
-                    if (sig.person().equals(tenant.leaseCustomer().customer())) {
+                    if (sig.person().equals(tenant.leaseParticipant().customer())) {
                         isExist = true;
                         application.signatures().add(sig);
                         it.remove();
@@ -58,7 +58,7 @@ public class DigitalSignatureMgr {
                 }
 
                 if (!isExist) { // create signature if absent: 
-                    createDigitalSignature(application, tenant.leaseCustomer().customer());
+                    createDigitalSignature(application, tenant.leaseParticipant().customer());
                     ApplicationProgressMgr.invalidateSummaryStep(application);
                 }
             }

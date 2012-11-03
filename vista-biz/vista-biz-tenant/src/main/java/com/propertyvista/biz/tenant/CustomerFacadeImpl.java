@@ -90,14 +90,14 @@ public class CustomerFacadeImpl implements CustomerFacade {
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().currentTerm().version().tenants().$().leaseCustomer().customer(), customer));
+            criteria.add(PropertyCriterion.eq(criteria.proto().currentTerm().version().tenants().$().leaseParticipant().customer(), customer));
             leases.addAll(Persistence.service().query(criteria));
         }
         // TODO guarantors portal not supported for now
         if (false) {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().currentTerm().version().guarantors().$().leaseCustomer().customer(), customer));
+            criteria.add(PropertyCriterion.eq(criteria.proto().currentTerm().version().guarantors().$().leaseParticipant().customer(), customer));
             leases.addAll(Persistence.service().query(criteria));
         }
         return leases;

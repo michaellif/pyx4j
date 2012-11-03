@@ -16,19 +16,30 @@ package com.propertyvista.domain.tenant.lease;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.payment.PaymentMethod;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-@DiscriminatorValue("Guarantor")
-public interface LeaseCustomerGuarantor extends LeaseCustomer<Guarantor> {
+@DiscriminatorValue("Tenant")
+public interface Tenant extends LeaseParticipant<LeaseTermTenant> {
+
+    PaymentMethod preauthorizedPayment();
+
+    // ----------------------------------------------------
+    // parent <-> child relationship:
+
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
+    ISet<MaintenanceRequest> _MaintenanceRequests();
 
     //TODO move
     @Override
     @Detached(level = AttachLevel.Detached)
-    @JoinTable(value = Guarantor.class, mappedBy = LeaseParticipant.LeaseCustomerHolderId.class)
-    ISet<Guarantor> leaseParticipants();
+    @JoinTable(value = LeaseTermTenant.class, mappedBy = LeaseTermParticipant.LeaseParticipantHolderId.class)
+    ISet<LeaseTermTenant> leaseTermParticipants();
 }

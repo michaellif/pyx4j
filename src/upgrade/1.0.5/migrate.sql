@@ -123,10 +123,10 @@ CREATE SEQUENCE billing_billing_cycle_stats_seq START WITH 1 INCREMENT BY 1 NO M
 ALTER SEQUENCE billing_billing_cycle_stats_seq OWNER TO vista;
 CREATE SEQUENCE gadget_metadata_holder_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE gadget_metadata_holder_seq OWNER TO vista;
-CREATE SEQUENCE lease_customer_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-ALTER SEQUENCE lease_customer_seq OWNER TO vista;
 CREATE SEQUENCE lease_participant_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE lease_participant_seq OWNER TO vista;
+CREATE SEQUENCE lease_term_participant_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ALTER SEQUENCE lease_term_participant_seq OWNER TO vista;
 CREATE SEQUENCE lease_term_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE lease_term_seq OWNER TO vista;
 CREATE SEQUENCE lease_term_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -955,9 +955,9 @@ BEGIN
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease DROP COLUMN actual_lease_to';
 
-        -- lease_customer
+        -- lease_participant
 
-        EXECUTE 'CREATE TABLE '||v_schema_name||'.lease_customer ( '||
+        EXECUTE 'CREATE TABLE '||v_schema_name||'.lease_participant ( '||
         '   id                          BIGINT          NOT NULL,'||
         '   iddiscriminator             VARCHAR(64)     NOT NULL,'||
         '   lease                       BIGINT,'||
@@ -965,17 +965,17 @@ BEGIN
         '   participant_id              VARCHAR(14),'||
         '   preauthorized_payment       BIGINT,'||
         '   participant_id_s            VARCHAR(26),'||
-        '   CONSTRAINT lease_customer_pk PRIMARY KEY(id),'||
-        '   CONSTRAINT lease_customer_customer_fk FOREIGN KEY(customer) '||
+        '   CONSTRAINT lease_participant_pk PRIMARY KEY(id),'||
+        '   CONSTRAINT lease_participant_customer_fk FOREIGN KEY(customer) '||
         '       REFERENCES '||v_schema_name||'.customer(id),'||
-        '   CONSTRAINT lease_customer_lease_fk FOREIGN KEY(lease) '||
+        '   CONSTRAINT lease_participant_lease_fk FOREIGN KEY(lease) '||
         '       REFERENCES '||v_schema_name||'.lease(id),'||
-        '   CONSTRAINT lease_customer_preauthorized_payment_fk FOREIGN KEY(preauthorized_payment) '||
+        '   CONSTRAINT lease_participant_preauthorized_payment_fk FOREIGN KEY(preauthorized_payment) '||
         '       REFERENCES '||v_schema_name||'.payment_method(id))';
 
-        EXECUTE 'INSERT INTO '||v_schema_name||'.lease_customer '||
+        EXECUTE 'INSERT INTO '||v_schema_name||'.lease_participant '||
         '(id,iddiscriminator,lease,customer,participant_id) '||
-        '(SELECT nextval(''public.lease_customer_seq'') AS id,''Tenant'' AS iddiscriminator,'||
+        '(SELECT nextval(''public.lease_participant_seq'') AS id,''Tenant'' AS iddiscriminator,'||
         'a.* FROM '||
         '(SELECT a.id AS lease, b.customer, MAX(b.participant_id) AS participant_id  '||
         'FROM '||v_schema_name||'.lease a '||
@@ -985,9 +985,9 @@ BEGIN
         'ORDER BY a.id ) AS a )';
 
 
-        EXECUTE 'INSERT INTO '||v_schema_name||'.lease_customer '||
+        EXECUTE 'INSERT INTO '||v_schema_name||'.lease_participant '||
         '(id,iddiscriminator,lease,customer,participant_id) '||
-        '(SELECT nextval(''public.lease_customer_seq'') AS id,''Guarantor'' AS iddiscriminator,a.* '||
+        '(SELECT nextval(''public.lease_participant_seq'') AS id,''Guarantor'' AS iddiscriminator,a.* '||
         'FROM '||
         '(SELECT a.id AS lease, b.customer, MAX(b.participant_id) AS participant_id '||
         'FROM '||v_schema_name||'.lease a '||
@@ -996,10 +996,10 @@ BEGIN
         'GROUP BY a.id,b.customer '||
         'ORDER BY a.id ) AS a )';
 
-        EXECUTE 'UPDATE '||v_schema_name||'.lease_customer '||
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_participant '||
         '       SET     participant_id_s = LPAD(participant_id,7,''0'')';
 
-        EXECUTE 'UPDATE '||v_schema_name||'.lease_customer AS a '||
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_participant AS a '||
         '       SET preauthorized_payment = b.preauthorized_payment '||
         '       FROM '||
         '       (SELECT DISTINCT a.id AS lease, b.customer, b.preauthorized_payment '||
@@ -1016,19 +1016,19 @@ BEGIN
 
 
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_customer OWNER TO vista';
-        EXECUTE 'CREATE UNIQUE INDEX lease_customer_lease_customer_idx ON '||v_schema_name||'.lease_customer USING btree(lease,customer,iddiscriminator)';
-        EXECUTE 'CREATE UNIQUE INDEX lease_customer_participant_id_idx ON '||v_schema_name||'.lease_customer USING btree(participant_id,iddiscriminator)';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant OWNER TO vista';
+        EXECUTE 'CREATE UNIQUE INDEX lease_participant_lease_customer_idx ON '||v_schema_name||'.lease_participant USING btree(lease,customer,iddiscriminator)';
+        EXECUTE 'CREATE UNIQUE INDEX lease_participant_participant_id_idx ON '||v_schema_name||'.lease_participant USING btree(participant_id,iddiscriminator)';
 
 
-        -- lease_participant
+        -- lease_term_participant
 
-        EXECUTE 'CREATE TABLE '||v_schema_name||'.lease_participant ( '||
+        EXECUTE 'CREATE TABLE '||v_schema_name||'.lease_term_participant ( '||
         '       id                              BIGINT      NOT NULL,'||
         '       tenant_id                       BIGINT,'||
         '       iddiscriminator                 VARCHAR(64)     NOT NULL,'||
-        '       lease_customerdiscriminator     VARCHAR(50),'||
-        '       lease_customer                  BIGINT,'||
+        '       lease_participantdiscriminator     VARCHAR(50),'||
+        '       lease_participant                  BIGINT,'||
         '       participant_role                VARCHAR(50),'||
         '       lease_term_v                    BIGINT,'||
         '       order_in_lease                  INT,'||
@@ -1041,51 +1041,51 @@ BEGIN
         '       tenant                          BIGINT,'||
         '       take_ownership                  BOOLEAN,'||
         '       percentage                      NUMERIC(18,2),'||
-        '       CONSTRAINT lease_participant_pk PRIMARY KEY(id),'||
-        '       CONSTRAINT lease_participant_application_fk FOREIGN KEY(application) '||
+        '       CONSTRAINT lease_term_participant_pk PRIMARY KEY(id),'||
+        '       CONSTRAINT lease_term_participant_application_fk FOREIGN KEY(application) '||
         '               REFERENCES '||v_schema_name||'.online_application(id),'||
-        '       CONSTRAINT lease_participant_lease_customer_fk FOREIGN KEY(lease_customer) '||
-        '               REFERENCES '||v_schema_name||'.lease_customer(id), '||
-        '       CONSTRAINT lease_participant_lease_term_v_fk FOREIGN KEY(lease_term_v) '||
+        '       CONSTRAINT lease_term_participant_lease_participant_fk FOREIGN KEY(lease_participant) '||
+        '               REFERENCES '||v_schema_name||'.lease_participant(id), '||
+        '       CONSTRAINT lease_term_participant_lease_term_v_fk FOREIGN KEY(lease_term_v) '||
         '               REFERENCES '||v_schema_name||'.lease_term_v(id), '||
-       -- '       CONSTRAINT lease_participant_credit_check_fk FOREIGN KEY (credit_check) '||
+       -- '       CONSTRAINT lease_term_participant_credit_check_fk FOREIGN KEY (credit_check) '||
        -- '               REFERENCES '||v_schema_name||'.customer_credit_check(id),'||
-       -- '       CONSTRAINT lease_participant_screening_fk FOREIGN KEY(screening) '||
+       -- '       CONSTRAINT lease_term_participant_screening_fk FOREIGN KEY(screening) '||
        -- '               REFERENCES '||v_schema_name||'.customer_screening(id), '||
-        '       CONSTRAINT lease_participant_tenant_fk FOREIGN KEY(tenant) '||
-        '               REFERENCES '||v_schema_name||'.lease_customer(id))';
+        '       CONSTRAINT lease_term_participant_tenant_fk FOREIGN KEY(tenant) '||
+        '               REFERENCES '||v_schema_name||'.lease_participant(id))';
 
 
-        EXECUTE 'INSERT INTO '||v_schema_name||'.lease_participant '||
-        '(id,tenant_id,iddiscriminator,lease_customerdiscriminator,lease_customer,participant_role,lease_term_v,order_in_lease,'||
+        EXECUTE 'INSERT INTO '||v_schema_name||'.lease_term_participant '||
+        '(id,tenant_id,iddiscriminator,lease_participantdiscriminator,lease_participant,participant_role,lease_term_v,order_in_lease,'||
         'application,screening,relationship,take_ownership,percentage) '||
-        '(SELECT nextval(''public.lease_participant_seq'') AS id,a.id AS tenant_id,''Tenant'' AS iddiscriminator, ''Tenant'' AS lease_customerdiscriminator,'||
-        'c.id AS lease_customer,a.participant_role,b.id AS lease_term_v,a.order_in_lease,a.application,a.screening,a.relationship,'||
+        '(SELECT nextval(''public.lease_term_participant_seq'') AS id,a.id AS tenant_id,''Tenant'' AS iddiscriminator, ''Tenant'' AS lease_participantdiscriminator,'||
+        'c.id AS lease_participant,a.participant_role,b.id AS lease_term_v,a.order_in_lease,a.application,a.screening,a.relationship,'||
         'a.take_ownership,a.percentage '||
         'FROM '||v_schema_name||'.tenant a '||
         'JOIN '||v_schema_name||'.lease_term_v b ON (a.lease_v = b.old_id) '||
         'JOIN '||v_schema_name||'.lease_v d ON (a.lease_v = d.id) '||
         'JOIN '||v_schema_name||'.lease e ON (d.holder = e.id) '||
-        'JOIN '||v_schema_name||'.lease_customer c ON (a.customer = c.customer AND e.id = c.lease ) '||
+        'JOIN '||v_schema_name||'.lease_participant c ON (a.customer = c.customer AND e.id = c.lease ) '||
         'ORDER BY a.id )';
 
-        EXECUTE 'INSERT INTO '||v_schema_name||'.lease_participant '||
-        '(id,iddiscriminator,lease_customerdiscriminator,lease_customer,participant_role,lease_term_v,order_in_lease,'||
+        EXECUTE 'INSERT INTO '||v_schema_name||'.lease_term_participant '||
+        '(id,iddiscriminator,lease_participantdiscriminator,lease_participant,participant_role,lease_term_v,order_in_lease,'||
         'application,screening,relationship,tenantdiscriminator,tenant) '||
-        '(SELECT nextval(''public.lease_participant_seq'') AS id,''Guarantor'' AS iddiscriminator, ''Guarantor'' AS lease_customerdiscriminator,'||
-        'c.id AS lease_customer,a.participant_role,b.id AS lease_term_v,a.order_in_lease,a.application,a.screening,a.relationship,'||
-        '''Tenant'',f.lease_customer AS tenant '||
+        '(SELECT nextval(''public.lease_term_participant_seq'') AS id,''Guarantor'' AS iddiscriminator, ''Guarantor'' AS lease_participantdiscriminator,'||
+        'c.id AS lease_participant,a.participant_role,b.id AS lease_term_v,a.order_in_lease,a.application,a.screening,a.relationship,'||
+        '''Tenant'',f.lease_participant AS tenant '||
         'FROM '||v_schema_name||'.guarantor a '||
         'JOIN '||v_schema_name||'.lease_term_v b ON (a.lease_v = b.old_id) '||
         'JOIN '||v_schema_name||'.lease_v d ON (a.lease_v = d.id) '||
         'JOIN '||v_schema_name||'.lease e ON (d.holder = e.id) '||
-        'JOIN '||v_schema_name||'.lease_customer c ON (a.customer = c.customer AND e.id = c.lease) '||
-        'LEFT JOIN '||v_schema_name||'.lease_participant f ON (f.tenant_id = a.tenant) '||
+        'JOIN '||v_schema_name||'.lease_participant c ON (a.customer = c.customer AND e.id = c.lease) '||
+        'LEFT JOIN '||v_schema_name||'.lease_term_participant f ON (f.tenant_id = a.tenant) '||
         'ORDER BY a.id )';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant OWNER TO vista';
-        EXECUTE 'CREATE INDEX lease_participant_application_idx ON '||v_schema_name||'.lease_participant USING btree(application)';
-        EXECUTE 'CREATE INDEX lease_participant_lease_term_v_idx ON '||v_schema_name||'.lease_participant USING btree(lease_term_v)';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_participant OWNER TO vista';
+        EXECUTE 'CREATE INDEX lease_term_participant_application_idx ON '||v_schema_name||'.lease_term_participant USING btree(application)';
+        EXECUTE 'CREATE INDEX lease_term_participant_lease_term_v_idx ON '||v_schema_name||'.lease_term_participant USING btree(lease_term_v)';
 
         -- lease_termination_policy
         EXECUTE 'CREATE TABLE '||v_schema_name||'.lease_termination_policy '
@@ -1104,19 +1104,19 @@ BEGIN
 
         -- maintenance_request
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request ADD COLUMN lease_customer BIGINT,'||
-                                        'ADD COLUMN lease_customerdiscriminator VARCHAR(50),'||
-                                        'ADD CONSTRAINT maintenance_request_lease_customer_fk FOREIGN KEY(lease_customer) '||
-                                        '   REFERENCES '||v_schema_name||'.lease_customer(id)';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request ADD COLUMN lease_participant BIGINT,'||
+                                        'ADD COLUMN lease_participantdiscriminator VARCHAR(50),'||
+                                        'ADD CONSTRAINT maintenance_request_lease_participant_fk FOREIGN KEY(lease_participant) '||
+                                        '   REFERENCES '||v_schema_name||'.lease_participant(id)';
 
         EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request AS a '
-        ||'     SET lease_customer = b.lease_customer,'
-        ||'     lease_customerdiscriminator = b.lease_customerdiscriminator '
-        ||'     FROM    (SELECT DISTINCT a.id AS lease_customer,'
-        ||'                     b.lease_customerdiscriminator, '
+        ||'     SET lease_participant = b.lease_participant,'
+        ||'     lease_participantdiscriminator = b.lease_participantdiscriminator '
+        ||'     FROM    (SELECT DISTINCT a.id AS lease_participant,'
+        ||'                     b.lease_participantdiscriminator, '
         ||'                     b.tenant_id '
-        ||'             FROM    '||v_schema_name||'.lease_customer a '
-        ||'             JOIN    '||v_schema_name||'.lease_participant b ON (a.id = b.lease_customer)) AS b '
+        ||'             FROM    '||v_schema_name||'.lease_participant a '
+        ||'             JOIN    '||v_schema_name||'.lease_term_participant b ON (a.id = b.lease_participant)) AS b '
         ||'     WHERE a.tenant = b.tenant_id ';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request DROP COLUMN tenant';
@@ -1124,15 +1124,16 @@ BEGIN
         -- payment_record
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record RENAME COLUMN lease_participant TO tenant_id ';
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record ADD COLUMN lease_participant BIGINT ';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record ADD COLUMN lease_term_participant BIGINT ';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record RENAME COLUMN lease_participantdiscriminator TO lease_term_participantdiscriminator ';
 
         EXECUTE 'UPDATE '||v_schema_name||'.payment_record AS a '||
-            'SET    lease_participant = b.id '||
-            'FROM   (SELECT id,tenant_id FROM '||v_schema_name||'.lease_participant) AS b '||
+            'SET    lease_term_participant = b.id '||
+            'FROM   (SELECT id,tenant_id FROM '||v_schema_name||'.lease_term_participant) AS b '||
             'WHERE  a.tenant_id = b.tenant_id ';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record ADD CONSTRAINT payment_record_lease_participant_fk FOREIGN KEY(lease_participant) '||
-                                'REFERENCES '||v_schema_name||'.lease_participant(id),'||
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record ADD CONSTRAINT payment_record_lease_term_participant_fk FOREIGN KEY(lease_term_participant) '||
+                                'REFERENCES '||v_schema_name||'.lease_term_participant(id),'||
                                 'DROP COLUMN tenant_id ';
 
         -- tenant_charge
@@ -1145,11 +1146,11 @@ BEGIN
         '   SET         tenant = b.id, '||
         '               tenantdiscriminator = b.tenantdiscriminator '||
         '   FROM        (SELECT id,tenant_id,tenantdiscriminator '||
-        '               FROM '||v_schema_name||'.lease_participant ) AS b '||
+        '               FROM '||v_schema_name||'.lease_term_participant ) AS b '||
         '   WHERE   a.old_tenant = b.tenant_id ';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge ADD CONSTRAINT tenant_charge_tenant_fk FOREIGN KEY(tenant) '||
-                            'REFERENCES '||v_schema_name||'.lease_participant(id), '||
+                            'REFERENCES '||v_schema_name||'.lease_term_participant(id), '||
                             'DROP COLUMN old_tenant';
 
 
@@ -1340,9 +1341,9 @@ BEGIN
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_credit_check OWNER TO vista';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ADD CONSTRAINT lease_participant_credit_check_fk '||
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_participant ADD CONSTRAINT lease_term_participant_credit_check_fk '||
         'FOREIGN KEY(credit_check) REFERENCES '||v_schema_name||'.customer_credit_check(id),'||
-        'ADD CONSTRAINT lease_participant_screening_fk FOREIGN KEY(screening) REFERENCES '||v_schema_name||'.customer_screening(id)';
+        'ADD CONSTRAINT lease_term_participant_screening_fk FOREIGN KEY(screening) REFERENCES '||v_schema_name||'.customer_screening(id)';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_personal_asset ADD CONSTRAINT customer_screening_personal_asset_owner_fk '||
         'FOREIGN KEY(owner) REFERENCES '||v_schema_name||'.customer_screening_v(id)';
@@ -1351,7 +1352,7 @@ BEGIN
         /** Cleanup **/
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_v DROP COLUMN old_id';
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant DROP COLUMN tenant_id';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_participant DROP COLUMN tenant_id';
 
 
         -- Delete all extra tables
@@ -1418,17 +1419,17 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.late_fee_item ALTER COLUMN policy SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lead_guest ALTER COLUMN lead SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_adjustment_policy_item ALTER COLUMN policy SET NOT NULL' ;
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_customer ALTER COLUMN customer SET NOT NULL' ;
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_customer ALTER COLUMN lease SET NOT NULL' ;
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ALTER COLUMN lease_customer SET NOT NULL' ;
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ALTER COLUMN lease_customerdiscriminator SET NOT NULL' ;
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ALTER COLUMN lease_term_v SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ALTER COLUMN customer SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ALTER COLUMN lease SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_participant ALTER COLUMN lease_participant SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_participant ALTER COLUMN lease_participantdiscriminator SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_participant ALTER COLUMN lease_term_v SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term ALTER COLUMN lease SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_v ALTER COLUMN holder SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.locker ALTER COLUMN locker_area SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.locker_area ALTER COLUMN building SET NOT NULL' ;
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request ALTER COLUMN lease_customer SET NOT NULL' ;
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request ALTER COLUMN lease_customerdiscriminator SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request ALTER COLUMN lease_participant SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request ALTER COLUMN lease_participantdiscriminator SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.nsf_fee_item ALTER COLUMN policy SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.online_application ALTER COLUMN master_online_application SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.page_content ALTER COLUMN descriptor SET NOT NULL' ;
@@ -1520,16 +1521,16 @@ BEGIN
                 'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_billing_policy ADD CONSTRAINT lease_billing_policy_nodediscriminator_d_ck '||
                 'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_customer ADD CONSTRAINT lease_customer_iddiscriminator_ck '||
-                'CHECK (iddiscriminator IN (''Guarantor'',''Tenant'')) ';
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ADD CONSTRAINT lease_participant_lease_customerdiscriminator_d_ck '||
-                'CHECK (lease_customerdiscriminator IN (''Guarantor'',''Tenant'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ADD CONSTRAINT lease_participant_iddiscriminator_ck '||
                 'CHECK (iddiscriminator IN (''Guarantor'',''Tenant'')) ';
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ADD CONSTRAINT lease_participant_tenantdiscriminator_d_ck CHECK (tenantdiscriminator = ''Tenant'') ';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_participant ADD CONSTRAINT lease_term_participant_lease_participantdiscriminator_d_ck '||
+                'CHECK (lease_participantdiscriminator IN (''Guarantor'',''Tenant'')) ';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_participant ADD CONSTRAINT lease_term_participant_iddiscriminator_ck '||
+                'CHECK (iddiscriminator IN (''Guarantor'',''Tenant'')) ';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_participant ADD CONSTRAINT lease_term_participant_tenantdiscriminator_d_ck CHECK (tenantdiscriminator = ''Tenant'') ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_documentation ADD CONSTRAINT legal_documentation_nodediscriminator_d_ck '||
                'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request ADD CONSTRAINT maintenance_request_lease_customerdiscriminator_d_ck CHECK (lease_customerdiscriminator = ''Tenant'') ';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request ADD CONSTRAINT maintenance_request_lease_participantdiscriminator_d_ck CHECK (lease_participantdiscriminator = ''Tenant'') ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.page_descriptor ADD CONSTRAINT page_descriptor_parentdiscriminator_d_ck '||
                 'CHECK (parentdiscriminator IN (''PageDescriptor'',''SiteDescriptor'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_information ADD CONSTRAINT payment_information_payment_method_detailsdiscriminator_d_ck '||
@@ -1538,8 +1539,8 @@ BEGIN
                 'CHECK (detailsdiscriminator IN (''CashInfo'',''CheckInfo'',''CreditCard'',''EcheckInfo'',''InteracInfo'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_payment_details ADD CONSTRAINT payment_payment_details_iddiscriminator_ck '||
                 'CHECK (iddiscriminator IN (''CashInfo'',''CheckInfo'',''CreditCard'',''EcheckInfo'',''InteracInfo'')) ';
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record ADD CONSTRAINT payment_record_lease_participantdiscriminator_d_ck '||
-                'CHECK (lease_participantdiscriminator IN (''Guarantor'',''Tenant'')) ';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record ADD CONSTRAINT payment_record_lease_term_participantdiscriminator_d_ck '||
+                'CHECK (lease_term_participantdiscriminator IN (''Guarantor'',''Tenant'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_transactions_policy ADD CONSTRAINT payment_transactions_policy_nodediscriminator_d_ck '||
                 'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income_info ADD CONSTRAINT customer_screening_income_info_iddiscriminator_ck '||

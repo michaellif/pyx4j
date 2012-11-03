@@ -26,30 +26,30 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
-public abstract class TenantSelectorDialog extends EntitySelectorTableDialog<LeaseCustomerTenant> {
+public abstract class TenantSelectorDialog extends EntitySelectorTableDialog<Tenant> {
 
     private final static I18n i18n = I18n.get(TenantSelectorDialog.class);
 
     public TenantSelectorDialog() {
-        this(Collections.<LeaseCustomerTenant> emptyList());
+        this(Collections.<Tenant> emptyList());
     }
 
     public TenantSelectorDialog(boolean isMultiselect) {
-        this(isMultiselect, Collections.<LeaseCustomerTenant> emptyList());
+        this(isMultiselect, Collections.<Tenant> emptyList());
     }
 
-    public TenantSelectorDialog(List<LeaseCustomerTenant> alreadySelected) {
+    public TenantSelectorDialog(List<Tenant> alreadySelected) {
         this(true, alreadySelected);
     }
 
-    public TenantSelectorDialog(boolean isMultiselect, List<LeaseCustomerTenant> alreadySelected) {
+    public TenantSelectorDialog(boolean isMultiselect, List<Tenant> alreadySelected) {
         this(isMultiselect, alreadySelected, i18n.tr("Select Tenant"));
     }
 
-    public TenantSelectorDialog(boolean isMultiselect, List<LeaseCustomerTenant> alreadySelected, String caption) {
-        super(LeaseCustomerTenant.class, isMultiselect, alreadySelected, caption);
+    public TenantSelectorDialog(boolean isMultiselect, List<Tenant> alreadySelected, String caption) {
+        super(Tenant.class, isMultiselect, alreadySelected, caption);
         setWidth("700px");
     }
 
@@ -74,7 +74,7 @@ public abstract class TenantSelectorDialog extends EntitySelectorTableDialog<Lea
     }
 
     @Override
-    protected AbstractListService<LeaseCustomerTenant> getSelectService() {
+    protected AbstractListService<Tenant> getSelectService() {
         return GWT.<SelectTenantListService> create(SelectTenantListService.class);
     }
 }

@@ -30,7 +30,7 @@ import com.propertyvista.crm.client.visor.notes.NotesParentId;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> implements GuarantorViewerView.Presenter {
@@ -70,7 +70,7 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
 
     @Override
     protected NotesParentId createNotesParentId() {
-        return new NotesParentId(Guarantor.class, notesParentPrimaryKey);
+        return new NotesParentId(LeaseTermGuarantor.class, notesParentPrimaryKey);
     }
 
     @Override

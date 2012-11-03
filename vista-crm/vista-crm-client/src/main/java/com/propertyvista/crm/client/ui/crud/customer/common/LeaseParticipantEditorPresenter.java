@@ -20,7 +20,7 @@ import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 
-public interface LeaseCustomerEditorPresenter extends IEditorView.Presenter {
+public interface LeaseParticipantEditorPresenter extends IEditorView.Presenter {
 
     void deletePaymentMethod(PaymentMethod paymentMethod);
 

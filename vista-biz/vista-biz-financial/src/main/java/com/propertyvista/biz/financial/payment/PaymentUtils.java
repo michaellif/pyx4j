@@ -24,9 +24,9 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 class PaymentUtils {
 
@@ -97,8 +97,8 @@ class PaymentUtils {
         throw new UserRuntimeException(i18n.tr("No active merchantAccount found to process the payment"));
     }
 
-    public static PaymentMethod retrievePreAuthorizedPaymentMethod(Tenant tenant) {
-        PaymentMethod method = tenant.leaseCustomer().preauthorizedPayment();
+    public static PaymentMethod retrievePreAuthorizedPaymentMethod(LeaseTermTenant tenant) {
+        PaymentMethod method = tenant.leaseParticipant().preauthorizedPayment();
         if (method.isNull()) {
             return null;
         } else {

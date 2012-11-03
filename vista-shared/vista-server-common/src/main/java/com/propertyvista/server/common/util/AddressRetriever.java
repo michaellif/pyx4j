@@ -20,15 +20,15 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.tenant.lease.LeaseCustomer;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 public class AddressRetriever {
 
-    public static void getLeaseParticipantCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseParticipant participant) {
+    public static void getLeaseParticipantCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant participant) {
         Persistence.service().retrieve(participant);
         if ((participant == null) || (participant.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseParticipant.class).getCaption() + "' " + participant.getPrimaryKey()
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseTermParticipant.class).getCaption() + "' " + participant.getPrimaryKey()
                     + " NotFound");
         }
 
@@ -43,10 +43,10 @@ public class AddressRetriever {
         callback.onSuccess(address);
     }
 
-    public static void getLeaseParticipantCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseCustomer participant) {
+    public static void getLeaseParticipantCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseParticipant participant) {
         Persistence.service().retrieve(participant);
         if ((participant == null) || (participant.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseParticipant.class).getCaption() + "' " + participant.getPrimaryKey()
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseTermParticipant.class).getCaption() + "' " + participant.getPrimaryKey()
                     + " NotFound");
         }
 

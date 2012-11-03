@@ -26,8 +26,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.callfire.CallFire;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.domain.CampaignHistory;
@@ -39,24 +39,24 @@ public class CampaignManager {
     private final static Logger log = LoggerFactory.getLogger(CampaignManager.class);
 
     public static void fireEvent(CampaignTrigger trigger, TenantInLeaseListDTO tenants) {
-        for (Tenant tenantInfo : tenants.tenants()) {
-            LeaseParticipant.Role status = tenantInfo.role().getValue();
+        for (LeaseTermTenant tenantInfo : tenants.tenants()) {
+            LeaseTermParticipant.Role status = tenantInfo.role().getValue();
 
             switch (trigger) {
             case ApplicationCompleted:
-                if (LeaseParticipant.Role.Applicant.equals(status)) {
+                if (LeaseTermParticipant.Role.Applicant.equals(status)) {
                     fireEvent(trigger, tenantInfo);
                 }
                 break;
             default:
-                if (LeaseParticipant.Role.Applicant.equals(status) || LeaseParticipant.Role.CoApplicant.equals(status)) {
+                if (LeaseTermParticipant.Role.Applicant.equals(status) || LeaseTermParticipant.Role.CoApplicant.equals(status)) {
                     fireEvent(trigger, tenantInfo);
                 }
             }
         }
     }
 
-    public static void fireEvent(CampaignTrigger trigger, Tenant tenant) {
+    public static void fireEvent(CampaignTrigger trigger, LeaseTermTenant tenant) {
         EntityQueryCriteria<CampaignHistory> criteria = EntityQueryCriteria.create(CampaignHistory.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
         criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), trigger));
@@ -76,10 +76,10 @@ public class CampaignManager {
         Persistence.service().persist(history);
     }
 
-    private static void execute(PhoneCallCampaign phoneCallCampaign, Tenant tenant) {
+    private static void execute(PhoneCallCampaign phoneCallCampaign, LeaseTermTenant tenant) {
         List<String> numbers = new ArrayList<String>();
-        String name = tenant.leaseCustomer().customer().person().name().firstName().getValue() + " " + tenant.leaseCustomer().customer().person().name().lastName().getValue();
-        String number = tenant.leaseCustomer().customer().person().homePhone().getValue();
+        String name = tenant.leaseParticipant().customer().person().name().firstName().getValue() + " " + tenant.leaseParticipant().customer().person().name().lastName().getValue();
+        String number = tenant.leaseParticipant().customer().person().homePhone().getValue();
         if (ApplicationMode.isDevelopment()) {
             String allowedNumber = DevelopmentSecurity.callNumberFilter(number);
             log.info("We will call {} instead of {}", allowedNumber, number);

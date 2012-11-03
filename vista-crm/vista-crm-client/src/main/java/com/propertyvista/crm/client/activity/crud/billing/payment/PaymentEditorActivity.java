@@ -29,7 +29,7 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class PaymentEditorActivity extends CrmEditorActivity<PaymentRecordDTO> implements PaymentEditorView.Presenter {
@@ -50,22 +50,22 @@ public class PaymentEditorActivity extends CrmEditorActivity<PaymentRecordDTO> i
     }
 
     @Override
-    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback, LeaseParticipant payer) {
+    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback, LeaseTermParticipant payer) {
         ((PaymentCrudService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
             @Override
             public void onSuccess(AddressStructured result) {
                 callback.onSuccess(result);
             }
-        }, (LeaseParticipant) payer.createIdentityStub());
+        }, (LeaseTermParticipant) payer.createIdentityStub());
     }
 
     @Override
-    public void getProfiledPaymentMethods(final AsyncCallback<List<PaymentMethod>> callback, LeaseParticipant payer) {
+    public void getProfiledPaymentMethods(final AsyncCallback<List<PaymentMethod>> callback, LeaseTermParticipant payer) {
         ((PaymentCrudService) getService()).getProfiledPaymentMethods(new DefaultAsyncCallback<Vector<PaymentMethod>>() {
             @Override
             public void onSuccess(Vector<PaymentMethod> result) {
                 callback.onSuccess(result);
             }
-        }, (LeaseParticipant) payer.createIdentityStub());
+        }, (LeaseTermParticipant) payer.createIdentityStub());
     }
 }

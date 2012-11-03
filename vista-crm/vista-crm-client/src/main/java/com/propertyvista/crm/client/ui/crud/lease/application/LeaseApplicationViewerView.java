@@ -19,7 +19,7 @@ import com.pyx4j.commons.UserRuntimeException;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
 public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApplicationDTO> {
@@ -28,9 +28,9 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
 
         void startOnlineApplication();
 
-        void inviteUsers(List<LeaseParticipant<?>> users);
+        void inviteUsers(List<LeaseTermParticipant<?>> users);
 
-        void creditCheck(List<LeaseParticipant<?>> users);
+        void creditCheck(List<LeaseTermParticipant<?>> users);
 
         void applicationAction(LeaseApplicationActionDTO action);
     }

@@ -35,8 +35,8 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -85,14 +85,14 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         Persistence.service().retrieve(dto.paymentMethod());
 
         Persistence.service().retrieve(dto.paymentMethod().customer());
-        Persistence.service().retrieve(dto.leaseParticipant());
+        Persistence.service().retrieve(dto.leaseTermParticipant());
     }
 
     @Override
     protected void persist(PaymentRecord entity, PaymentRecordDTO dto) {
-        entity.paymentMethod().customer().set(dto.leaseParticipant().leaseCustomer().customer());
+        entity.paymentMethod().customer().set(dto.leaseTermParticipant().leaseParticipant().customer());
 
-        Validate.isTrue(entity.paymentMethod().customer().equals(TenantAppContext.getCurrentUserTenantInLease().leaseCustomer().customer()));
+        Validate.isTrue(entity.paymentMethod().customer().equals(TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().customer()));
 
         Validate.isTrue(PaymentType.avalableInPortal().contains(dto.paymentMethod().type().getValue()));
 
@@ -117,7 +117,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     @Override
     public void initNew(AsyncCallback<PaymentRecordDTO> callback) {
-        Tenant tenant = TenantAppContext.getCurrentUserTenantInLease();
+        LeaseTermTenant tenant = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenant.leaseTermV());
         Persistence.service().retrieve(tenant.leaseTermV().holder().lease());
 
@@ -127,7 +127,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         PaymentRecordDTO dto = EntityFactory.create(PaymentRecordDTO.class);
 
-        dto.leaseParticipant().set(tenant);
+        dto.leaseTermParticipant().set(tenant);
         dto.billingAccount().set(lease.billingAccount());
         dto.leaseId().set(lease.leaseId());
         dto.leaseStatus().set(lease.status());

@@ -17,14 +17,14 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.activity.crud.customer.common.LeaseCustomerEditorActivity;
+import com.propertyvista.crm.client.activity.crud.customer.common.LeaseParticipantEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.TenantDTO;
 
-public class TenantEditorActivity extends LeaseCustomerEditorActivity<Tenant, TenantDTO, TenantCrudService> {
+public class TenantEditorActivity extends LeaseParticipantEditorActivity<LeaseTermTenant, TenantDTO, TenantCrudService> {
 
     public TenantEditorActivity(CrudAppPlace place) {
         super(place, CustomerViewFactory.instance(TenantEditorView.class), GWT.<TenantCrudService> create(TenantCrudService.class), TenantDTO.class);

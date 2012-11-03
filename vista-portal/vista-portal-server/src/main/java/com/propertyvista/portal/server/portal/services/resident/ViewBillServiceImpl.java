@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.ViewBillService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -44,7 +44,7 @@ public class ViewBillServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDT
     public void retrieve(AsyncCallback<BillDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
         if (entityId == null) {
             // find current bill key instead:
-            Tenant tenant = TenantAppContext.getCurrentUserTenantInLease();
+            LeaseTermTenant tenant = TenantAppContext.getCurrentUserTenantInLease();
             Persistence.service().retrieve(tenant.leaseTermV());
             Persistence.service().retrieve(tenant.leaseTermV().holder().lease());
 

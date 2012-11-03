@@ -21,7 +21,7 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseApprovalDTO;
 
 public interface ScreeningFacade {
@@ -30,7 +30,7 @@ public interface ScreeningFacade {
 
     void calculateSuggestedDecision(BigDecimal rentAmount, LeaseApprovalDTO leaseApproval);
 
-    void runCreditCheck(BigDecimal rentAmount, LeaseParticipant<?> leaseParticipantId, Employee currentUserEmployee);
+    void runCreditCheck(BigDecimal rentAmount, LeaseTermParticipant<?> leaseParticipantId, Employee currentUserEmployee);
 
     /**
      * Retrieve draft if there are no final version

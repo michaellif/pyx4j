@@ -59,17 +59,17 @@ import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.VistaBasicBehavior;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.server.jobs.BillingProcess;
@@ -314,9 +314,9 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
             lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(serviceItem.price().getValue());
         }
 
-        Tenant tenantInLease = EntityFactory.create(Tenant.class);
-        tenantInLease.leaseCustomer().customer().set(tenantDataModel.getTenant());
-        tenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
+        LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
+        tenantInLease.leaseParticipant().customer().set(tenantDataModel.getTenant());
+        tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
         lease.currentTerm().version().tenants().add(tenantInLease);
 
         lease.approvalDate().setValue(lease.currentTerm().termFrom().getValue());
@@ -600,7 +600,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Lease lease = retrieveLease();
 
         // Just use the first tenant
-        LeaseParticipant<?> leaseParticipant = lease.currentTerm().version().tenants().iterator().next();
+        LeaseTermParticipant<?> leaseParticipant = lease.currentTerm().version().tenants().iterator().next();
         Persistence.service().retrieve(leaseParticipant);
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
@@ -609,11 +609,11 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         paymentRecord.amount().setValue(new BigDecimal(amount));
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
         paymentRecord.billingAccount().set(lease.billingAccount());
-        paymentRecord.leaseParticipant().set(leaseParticipant);
+        paymentRecord.leaseTermParticipant().set(leaseParticipant);
 
         // add payment method type
         PaymentMethod pm = EntityFactory.create(PaymentMethod.class);
-        pm.customer().set(leaseParticipant.leaseCustomer().customer());
+        pm.customer().set(leaseParticipant.leaseParticipant().customer());
         pm.type().setValue(type);
         paymentRecord.paymentMethod().set(pm);
         Persistence.service().persist(pm);

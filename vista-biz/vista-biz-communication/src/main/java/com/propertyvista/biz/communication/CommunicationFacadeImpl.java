@@ -32,9 +32,9 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
@@ -59,25 +59,25 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendApplicantApplicationInvitation(Tenant tenant) {
+    public void sendApplicantApplicationInvitation(LeaseTermTenant tenant) {
         sendInvitationEmail(tenant, EmailTemplateType.ApplicationCreatedApplicant);
     }
 
     @Override
-    public void sendCoApplicantApplicationInvitation(Tenant tenant) {
+    public void sendCoApplicantApplicationInvitation(LeaseTermTenant tenant) {
         sendInvitationEmail(tenant, EmailTemplateType.ApplicationCreatedCoApplicant);
     }
 
     @Override
-    public void sendGuarantorApplicationInvitation(Guarantor guarantor) {
+    public void sendGuarantorApplicationInvitation(LeaseTermGuarantor guarantor) {
         sendInvitationEmail(guarantor, EmailTemplateType.ApplicationCreatedGuarantor);
     }
 
-    private static void sendInvitationEmail(LeaseParticipant leaseParticipant, EmailTemplateType emailTemplateType) {
+    private static void sendInvitationEmail(LeaseTermParticipant leaseParticipant, EmailTemplateType emailTemplateType) {
         if (disabled) {
             return;
         }
-        String token = AccessKey.createAccessToken(leaseParticipant.leaseCustomer().customer().user(), CustomerUserCredential.class, 10);
+        String token = AccessKey.createAccessToken(leaseParticipant.leaseParticipant().customer().user(), CustomerUserCredential.class, 10);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
@@ -88,11 +88,11 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendApplicationStatus(Tenant tenantId) {
+    public void sendApplicationStatus(LeaseTermTenant tenantId) {
         if (disabled) {
             return;
         }
-        Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
+        LeaseTermTenant tenant = Persistence.service().retrieve(LeaseTermTenant.class, tenantId.getPrimaryKey());
         Persistence.service().retrieve(tenant.leaseTermV());
         Persistence.service().retrieve(tenant.leaseTermV().holder().lease());
 
@@ -115,11 +115,11 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendTenantInvitation(Tenant tenant) {
+    public void sendTenantInvitation(LeaseTermTenant tenant) {
         if (disabled) {
             return;
         }
-        CustomerUser user = tenant.leaseCustomer().customer().user();
+        CustomerUser user = tenant.leaseParticipant().customer().user();
         if (user.isValueDetached()) {
             Persistence.service().retrieve(user);
         }

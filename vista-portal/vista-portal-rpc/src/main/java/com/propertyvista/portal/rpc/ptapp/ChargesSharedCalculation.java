@@ -24,7 +24,7 @@ import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.charges.ChargeLineList;
 import com.propertyvista.domain.charges.Charge_OLD;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
@@ -102,7 +102,7 @@ public class ChargesSharedCalculation {
 
         // check % correctness:
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
-            if (charge.tenant().role().getValue() == Tenant.Role.CoApplicant) {
+            if (charge.tenant().role().getValue() == LeaseTermParticipant.Role.CoApplicant) {
                 totalSplitPrc = totalSplitPrc.add(charge.tenant().percentage().getValue());
             }
         }

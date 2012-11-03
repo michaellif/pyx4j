@@ -20,10 +20,10 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.dto.LeaseCustomerDTO;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.dto.LeaseParticipantDTO;
 
-public interface LeaseCustomerCrudServiceBase<E extends LeaseParticipant<?>, DTO extends LeaseCustomerDTO<E>> extends AbstractCrudService<DTO> {
+public interface LeaseParticipantCrudServiceBase<E extends LeaseTermParticipant<?>, DTO extends LeaseParticipantDTO<E>> extends AbstractCrudService<DTO> {
 
     void deletePaymentMethod(AsyncCallback<Boolean> callback, PaymentMethod paymentMethod);
 

@@ -17,11 +17,11 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.SecurityViolationException;
 
-import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 
 public class GuarantorRetriever extends CustomerRetriever {
 
-    private Guarantor guarantor;
+    private LeaseTermGuarantor guarantor;
 
     public GuarantorRetriever() {
         super();
@@ -37,17 +37,17 @@ public class GuarantorRetriever extends CustomerRetriever {
         retrieve(guarantorId);
     }
 
-    public Guarantor getGuarantor() {
+    public LeaseTermGuarantor getGuarantor() {
         return guarantor;
     }
 
     @Override
     public void retrieve(Key guarantorId) {
-        guarantor = Persistence.service().retrieve(Guarantor.class, guarantorId);
+        guarantor = Persistence.service().retrieve(LeaseTermGuarantor.class, guarantorId);
         if (guarantor == null) {
             throw new SecurityViolationException("Invalid data access");
         }
-        super.retrieve(guarantor.leaseCustomer().customer());
+        super.retrieve(guarantor.leaseParticipant().customer());
         super.retrieve(guarantor.screening());
     }
 }

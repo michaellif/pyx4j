@@ -19,14 +19,14 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentTenantDTO;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
-public class DelinquentTenantListServiceImpl extends AbstractCrudServiceDtoImpl<LeaseCustomerTenant, DelinquentTenantDTO> {
+public class DelinquentTenantListServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, DelinquentTenantDTO> {
 
     public DelinquentTenantListServiceImpl() {
-        super(LeaseCustomerTenant.class, DelinquentTenantDTO.class);
+        super(Tenant.class, DelinquentTenantDTO.class);
 
     }
 
@@ -36,7 +36,7 @@ public class DelinquentTenantListServiceImpl extends AbstractCrudServiceDtoImpl<
     }
 
     @Override
-    protected void enhanceListRetrieved(LeaseCustomerTenant leaseCustomerTenant, DelinquentTenantDTO dto) {
+    protected void enhanceListRetrieved(Tenant leaseCustomerTenant, DelinquentTenantDTO dto) {
         super.enhanceListRetrieved(leaseCustomerTenant, dto);
 
         Persistence.service().retrieveMember(dto.lease());

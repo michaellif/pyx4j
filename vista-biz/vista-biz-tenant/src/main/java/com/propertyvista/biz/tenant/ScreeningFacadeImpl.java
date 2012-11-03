@@ -45,7 +45,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseApprovalDTO;
 import com.propertyvista.dto.LeaseApprovalDTO.SuggestedDecision;
 import com.propertyvista.dto.LeaseParticipanApprovalDTO;
@@ -129,15 +129,15 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
     }
 
     @Override
-    public void runCreditCheck(BigDecimal rentAmount, LeaseParticipant<?> leaseParticipantId, Employee currentUserEmployee) {
+    public void runCreditCheck(BigDecimal rentAmount, LeaseTermParticipant<?> leaseParticipantId, Employee currentUserEmployee) {
         PmcEquifaxInfo equifaxInfo = getCurrentPmcEquifaxInfo();
         if (!isCreditCheckActivated(equifaxInfo)) {
             throw new UserRuntimeException(i18n.tr("Credit Check interface was not activated in Onboarding"));
         }
 
-        LeaseParticipant<?> leaseParticipant = (LeaseParticipant<?>) Persistence.service().retrieve(leaseParticipantId.getValueClass(),
+        LeaseTermParticipant<?> leaseParticipant = (LeaseTermParticipant<?>) Persistence.service().retrieve(leaseParticipantId.getValueClass(),
                 leaseParticipantId.getPrimaryKey());
-        CustomerScreening screening = retrivePersonScreening(leaseParticipant.leaseCustomer().customer());
+        CustomerScreening screening = retrivePersonScreening(leaseParticipant.leaseParticipant().customer());
 
         CustomerCreditCheck pcc = EntityFactory.create(CustomerCreditCheck.class);
         pcc.amountChecked().setValue(rentAmount);
@@ -154,7 +154,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         Persistence.service().retrieve(screening.version().incomes());
         Persistence.service().retrieve(screening.version().assets());
 
-        pcc = EquifaxCreditCheck.runCreditCheck(equifaxInfo, leaseParticipant.leaseCustomer().customer(), pcc, backgroundCheckPolicy.strategyNumber()
+        pcc = EquifaxCreditCheck.runCreditCheck(equifaxInfo, leaseParticipant.leaseParticipant().customer(), pcc, backgroundCheckPolicy.strategyNumber()
                 .getValue());
 
         Persistence.service().persist(pcc);

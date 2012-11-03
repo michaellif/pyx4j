@@ -37,7 +37,7 @@ import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
 
@@ -57,7 +57,7 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
         callback.onSuccess(delinquentTenantsCriteria(EntityListCriteria.create(DelinquentTenantDTO.class), buildingsFilter, criteriaPreset));
     }
 
-    <Criteria extends EntityQueryCriteria<? extends LeaseCustomerTenant>> Criteria delinquentTenantsCriteria(Criteria criteria,
+    <Criteria extends EntityQueryCriteria<? extends Tenant>> Criteria delinquentTenantsCriteria(Criteria criteria,
             Vector<Building> buildingsFilter, String criteriaPreset) {
 
 //        criteria.isCurrent(criteria.proto().leaseTermV());
@@ -117,7 +117,7 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
 
     private void countDelinquentTenants(IPrimitive<Integer> delinquentTenants, Vector<Building> queryParams) {
         delinquentTenants.setValue(Persistence.service().count(//@formatter:off
-                delinquentTenantsCriteria(EntityQueryCriteria.create(LeaseCustomerTenant.class),
+                delinquentTenantsCriteria(EntityQueryCriteria.create(Tenant.class),
                 queryParams,
                 EntityFactory.getEntityPrototype(ArrearsGadgetDataDTO.class).delinquentTenants().getPath().toString())
         ));//@formatter:on

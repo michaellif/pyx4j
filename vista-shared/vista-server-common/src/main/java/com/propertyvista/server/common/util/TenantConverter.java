@@ -15,25 +15,25 @@ package com.propertyvista.server.common.util;
 
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
-import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 
 public class TenantConverter {
 
-    public static class TenantEditorConverter extends EntityDtoBinder<Tenant, TenantInLeaseDTO> {
+    public static class TenantEditorConverter extends EntityDtoBinder<LeaseTermTenant, TenantInLeaseDTO> {
 
         public TenantEditorConverter() {
-            super(Tenant.class, TenantInLeaseDTO.class);
+            super(LeaseTermTenant.class, TenantInLeaseDTO.class);
         }
 
         @Override
         protected void bind() {
-            bind(dtoProto.leaseCustomer().customer(), dboProto.leaseCustomer().customer());
+            bind(dtoProto.leaseParticipant().customer(), dboProto.leaseParticipant().customer());
             bind(dtoProto.relationship(), dboProto.relationship());
             bind(dtoProto.role(), dboProto.role());
             bind(dtoProto.takeOwnership(), dboProto.takeOwnership());
@@ -41,41 +41,41 @@ public class TenantConverter {
     }
 
     @SuppressWarnings("rawtypes")
-    public static class LeaseParticipant2TenantInfo extends EntityDtoBinder<LeaseParticipant, TenantInfoDTO> {
+    public static class LeaseParticipant2TenantInfo extends EntityDtoBinder<LeaseTermParticipant, TenantInfoDTO> {
 
         public LeaseParticipant2TenantInfo() {
-            super(LeaseParticipant.class, TenantInfoDTO.class);
+            super(LeaseTermParticipant.class, TenantInfoDTO.class);
         }
 
         @Override
         protected void bind() {
-            bind(dtoProto.person(), dboProto.leaseCustomer().customer().person());
-            bind(dtoProto.emergencyContacts(), dboProto.leaseCustomer().customer().emergencyContacts());
+            bind(dtoProto.person(), dboProto.leaseParticipant().customer().person());
+            bind(dtoProto.emergencyContacts(), dboProto.leaseParticipant().customer().emergencyContacts());
         }
     }
 
-    public static class Tenant2TenantInfo extends EntityDtoBinder<Tenant, TenantInfoDTO> {
+    public static class Tenant2TenantInfo extends EntityDtoBinder<LeaseTermTenant, TenantInfoDTO> {
 
         public Tenant2TenantInfo() {
-            super(Tenant.class, TenantInfoDTO.class);
+            super(LeaseTermTenant.class, TenantInfoDTO.class);
         }
 
         @Override
         protected void bind() {
-            bind(dtoProto.person(), dboProto.leaseCustomer().customer().person());
-            bind(dtoProto.emergencyContacts(), dboProto.leaseCustomer().customer().emergencyContacts());
+            bind(dtoProto.person(), dboProto.leaseParticipant().customer().person());
+            bind(dtoProto.emergencyContacts(), dboProto.leaseParticipant().customer().emergencyContacts());
         }
     }
 
-    public static class Guarantor2TenantInfo extends EntityDtoBinder<Guarantor, TenantInfoDTO> {
+    public static class Guarantor2TenantInfo extends EntityDtoBinder<LeaseTermGuarantor, TenantInfoDTO> {
 
         public Guarantor2TenantInfo() {
-            super(Guarantor.class, TenantInfoDTO.class);
+            super(LeaseTermGuarantor.class, TenantInfoDTO.class);
         }
 
         @Override
         protected void bind() {
-            bind(dtoProto.person(), dboProto.leaseCustomer().customer().person());
+            bind(dtoProto.person(), dboProto.leaseParticipant().customer().person());
         }
     }
 

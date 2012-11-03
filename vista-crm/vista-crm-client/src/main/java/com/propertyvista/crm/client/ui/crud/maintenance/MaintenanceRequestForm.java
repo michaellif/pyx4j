@@ -33,7 +33,7 @@ import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO> {
@@ -72,10 +72,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         panel.setH1(++row, 0, 2, i18n.tr("Issue Details"));
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseCustomer(), new CEntitySelectorHyperlink<LeaseCustomerTenant>() {
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant(), new CEntitySelectorHyperlink<Tenant>() {
             @Override
             protected AppPlace getTargetPlace() {
-                return AppPlaceEntityMapper.resolvePlace(LeaseCustomerTenant.class, getValue().getPrimaryKey());
+                return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().getPrimaryKey());
             }
 
             @Override

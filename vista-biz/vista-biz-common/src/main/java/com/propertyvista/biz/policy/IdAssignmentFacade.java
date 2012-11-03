@@ -18,7 +18,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseCustomer;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 
 public interface IdAssignmentFacade {
@@ -33,7 +33,7 @@ public interface IdAssignmentFacade {
 
     void assignId(Lease lease);
 
-    <E extends LeaseCustomer> void assignId(E leaseCustomer);
+    <E extends LeaseParticipant> void assignId(E leaseCustomer);
 
     void assignId(Employee employee);
 

@@ -46,12 +46,12 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.generator.util.CommonsGenerator;
@@ -229,7 +229,7 @@ public class LeaseLifecycleSimulator {
             maintenanceRequest.updated().setValue(now());
             maintenanceRequest.status().setValue(MaintenanceRequestStatus.Submitted);
             maintenanceRequest.description().setValue(RandomUtil.randomLetters(50));
-            maintenanceRequest.leaseCustomer().setPrimaryKey(lease.leaseCustomers().iterator().next().getPrimaryKey());
+            maintenanceRequest.leaseParticipant().setPrimaryKey(lease.leaseCustomers().iterator().next().getPrimaryKey());
             maintenanceRequest.issueClassification().set(issueClassifications.get(RandomUtil.randomInt(issueClassifications.size())));
             Persistence.service().persist(maintenanceRequest);
         }
@@ -250,13 +250,13 @@ public class LeaseLifecycleSimulator {
             lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
             Persistence.service().retrieveMember(lease.leaseCustomers());
 
-            Tenant mainTenant = lease.currentTerm().version().tenants().get(0);
-            mainTenant.leaseCustomer().preauthorizedPayment().set(mainTenant.leaseCustomer().customer().paymentMethods().iterator().next());
-            Persistence.service().merge(mainTenant.leaseCustomer());
+            LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().get(0);
+            mainTenant.leaseParticipant().preauthorizedPayment().set(mainTenant.leaseParticipant().customer().paymentMethods().iterator().next());
+            Persistence.service().merge(mainTenant.leaseParticipant());
 
-            for (Tenant tenant : lease.currentTerm().version().tenants()) {
-                tenant.leaseCustomer().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
-                Persistence.service().persist(tenant.leaseCustomer().customer().personScreening());
+            for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
+                tenant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
+                Persistence.service().persist(tenant.leaseParticipant().customer().personScreening());
             }
 
             if (isDebugged) {
@@ -391,7 +391,7 @@ public class LeaseLifecycleSimulator {
                 paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
                 paymentRecord.billingAccount().set(lease.billingAccount());
                 paymentRecord.paymentMethod().set(createPaymentMethod(lease.currentTerm().version().tenants().get(0)));
-                paymentRecord.leaseParticipant().set(lease.currentTerm().version().tenants().get(0));
+                paymentRecord.leaseTermParticipant().set(lease.currentTerm().version().tenants().get(0));
 
                 Persistence.service().persist(paymentRecord.paymentMethod());
                 Persistence.service().persist(paymentRecord);
@@ -400,7 +400,7 @@ public class LeaseLifecycleSimulator {
             }
         }
 
-        public PaymentMethod createPaymentMethod(LeaseParticipant tenant) {
+        public PaymentMethod createPaymentMethod(LeaseTermParticipant tenant) {
             PaymentMethod m = EntityFactory.create(PaymentMethod.class);
             m.type().setValue(PaymentType.CreditCard);
 
@@ -410,11 +410,11 @@ public class LeaseLifecycleSimulator {
             details.card().newNumber().setValue("00" + CommonsStringUtils.d00(RandomUtil.randomInt(99)) + CommonsStringUtils.d00(RandomUtil.randomInt(99)));
             details.card().obfuscatedNumber().setValue(DomainUtil.obfuscateCreditCardNumber(details.card().newNumber().getValue()));
 
-            details.nameOn().setValue(tenant.leaseCustomer().customer().person().name().getStringView());
+            details.nameOn().setValue(tenant.leaseParticipant().customer().person().name().getStringView());
             details.expiryDate().setValue(RandomUtil.randomLogicalDate(2012, 2015));
             m.details().set(details);
 
-            m.customer().set(tenant.leaseCustomer().customer());
+            m.customer().set(tenant.leaseParticipant().customer());
             m.isOneTimePayment().setValue(Boolean.TRUE);
             m.sameAsCurrent().setValue(Boolean.FALSE);
             m.billingAddress().set(CommonsGenerator.createAddress());

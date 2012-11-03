@@ -18,8 +18,8 @@ import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 /**
  * to Tenant/Applicant (Lease)
@@ -45,15 +45,15 @@ public interface CommunicationFacade {
 
     void sendTenantPasswordRetrievalToken(Customer customer);
 
-    void sendApplicantApplicationInvitation(Tenant tenant);
+    void sendApplicantApplicationInvitation(LeaseTermTenant tenant);
 
-    void sendCoApplicantApplicationInvitation(Tenant tenant);
+    void sendCoApplicantApplicationInvitation(LeaseTermTenant tenant);
 
-    void sendGuarantorApplicationInvitation(Guarantor guarantor);
+    void sendGuarantorApplicationInvitation(LeaseTermGuarantor guarantor);
 
-    void sendApplicationStatus(Tenant tenant);
+    void sendApplicationStatus(LeaseTermTenant tenant);
 
-    void sendTenantInvitation(Tenant tenant);
+    void sendTenantInvitation(LeaseTermTenant tenant);
 
     void sendNewPmcEmail(OnboardingUser user, Pmc pmc);
 

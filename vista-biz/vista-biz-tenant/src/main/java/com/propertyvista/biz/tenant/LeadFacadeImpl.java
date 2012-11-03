@@ -36,12 +36,12 @@ import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.validators.lead.LeadValidator;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class LeadFacadeImpl implements LeadFacade {
 
@@ -108,9 +108,9 @@ public class LeadFacadeImpl implements LeadFacade {
             Customer customer = EntityFactory.create(Customer.class);
             customer.person().set(guest.person());
 
-            Tenant tenantInLease = EntityFactory.create(Tenant.class);
-            tenantInLease.leaseCustomer().customer().set(customer);
-            tenantInLease.role().setValue(asApplicant ? LeaseParticipant.Role.Applicant : LeaseParticipant.Role.CoApplicant);
+            LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
+            tenantInLease.leaseParticipant().customer().set(customer);
+            tenantInLease.role().setValue(asApplicant ? LeaseTermParticipant.Role.Applicant : LeaseTermParticipant.Role.CoApplicant);
             lease.currentTerm().version().tenants().add(tenantInLease);
             asApplicant = false;
         }

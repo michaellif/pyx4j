@@ -53,7 +53,7 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
         Vector<MaintenanceRequestDTO> dto = new Vector<MaintenanceRequestDTO>();
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
         criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Scheduled, MaintenanceRequestStatus.Submitted));
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseCustomer(), TenantAppContext.getCurrentUserTenantInLease().leaseCustomer()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), TenantAppContext.getCurrentUserTenantInLease().leaseParticipant()));
         for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submitted()))) {
             Persistence.service().retrieve(mr.issueClassification());
             dto.add(Converter.convert(mr));
@@ -66,7 +66,7 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
         Vector<MaintenanceRequestDTO> dto = new Vector<MaintenanceRequestDTO>();
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
         criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Resolved));
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseCustomer(), TenantAppContext.getCurrentUserTenantInLease().leaseCustomer()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), TenantAppContext.getCurrentUserTenantInLease().leaseParticipant()));
         for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submitted()))) {
             Persistence.service().retrieve(mr.issueClassification());
             dto.add(Converter.convert(mr));
@@ -85,13 +85,13 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     }
 
     protected void enhanceAll(MaintenanceRequestDTO dto) {
-        Persistence.service().retrieve(dto.leaseCustomer());
+        Persistence.service().retrieve(dto.leaseParticipant());
         Persistence.service().retrieve(dto.issueClassification());
     }
 
     @Override
     protected void persist(MaintenanceRequest entity, MaintenanceRequestDTO dto) {
-        entity.leaseCustomer().set(TenantAppContext.getCurrentUserTenantInLease().leaseCustomer());
+        entity.leaseParticipant().set(TenantAppContext.getCurrentUserTenantInLease().leaseParticipant());
         super.persist(entity, dto);
     }
 

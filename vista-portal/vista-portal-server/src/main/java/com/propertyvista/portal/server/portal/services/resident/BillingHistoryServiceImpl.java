@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.BillingHistoryService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -35,7 +35,7 @@ public class BillingHistoryServiceImpl implements BillingHistoryService {
         Vector<BillDataDTO> bills = new Vector<BillDataDTO>();
         EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
 
-        Tenant tenant = TenantAppContext.getCurrentUserTenantInLease();
+        LeaseTermTenant tenant = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenant.leaseTermV());
         Persistence.service().retrieve(tenant.leaseTermV().holder().lease());
 

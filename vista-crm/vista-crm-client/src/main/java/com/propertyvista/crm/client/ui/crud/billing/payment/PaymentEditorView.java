@@ -21,15 +21,15 @@ import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public interface PaymentEditorView extends IEditorView<PaymentRecordDTO> {
 
     interface Presenter extends IEditorView.Presenter {
 
-        void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseParticipant payer);
+        void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant payer);
 
-        void getProfiledPaymentMethods(AsyncCallback<List<PaymentMethod>> callback, LeaseParticipant payer);
+        void getProfiledPaymentMethods(AsyncCallback<List<PaymentMethod>> callback, LeaseTermParticipant payer);
     }
 }

@@ -19,19 +19,19 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.TenantDTO;
 
-public class TenantCrudServiceImpl extends LeaseCustomerCrudServiceBaseImpl<Tenant, LeaseCustomerTenant, TenantDTO> implements TenantCrudService {
+public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<LeaseTermTenant, Tenant, TenantDTO> implements TenantCrudService {
 
     public TenantCrudServiceImpl() {
-        super(LeaseCustomerTenant.class, TenantDTO.class);
+        super(Tenant.class, TenantDTO.class);
     }
 
     @Override
-    protected void enhanceRetrieved(LeaseCustomerTenant entity, TenantDTO dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(Tenant entity, TenantDTO dto, RetrieveTraget retrieveTraget) {
         super.enhanceRetrieved(entity, dto, retrieveTraget);
 
         dto.role().setValue(retrieveTenant(dto.leaseTermV(), entity).role().getValue());
@@ -48,14 +48,14 @@ public class TenantCrudServiceImpl extends LeaseCustomerCrudServiceBaseImpl<Tena
     }
 
     @Override
-    protected void enhanceListRetrieved(LeaseCustomerTenant entity, TenantDTO dto) {
+    protected void enhanceListRetrieved(Tenant entity, TenantDTO dto) {
         super.enhanceListRetrieved(entity, dto);
 
         dto.role().setValue(retrieveTenant(dto.leaseTermV(), entity).role().getValue());
     }
 
     @Override
-    protected void persist(LeaseCustomerTenant entity, TenantDTO dto) {
+    protected void persist(Tenant entity, TenantDTO dto) {
         super.persist(entity, dto);
 
         // memorize pre-authorized method:
@@ -70,9 +70,9 @@ public class TenantCrudServiceImpl extends LeaseCustomerCrudServiceBaseImpl<Tena
         }
     }
 
-    private Tenant retrieveTenant(LeaseTerm.LeaseTermV termV, LeaseCustomerTenant leaseCustomer) {
-        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseCustomer(), leaseCustomer));
+    private LeaseTermTenant retrieveTenant(LeaseTerm.LeaseTermV termV, Tenant leaseCustomer) {
+        EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), leaseCustomer));
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseTermV(), termV));
         return Persistence.service().retrieve(criteria);
     }

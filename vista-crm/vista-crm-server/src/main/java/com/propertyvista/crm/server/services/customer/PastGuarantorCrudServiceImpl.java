@@ -19,13 +19,13 @@ import com.pyx4j.entity.shared.criterion.OrCriterion;
 
 import com.propertyvista.crm.rpc.services.customer.PastGuarantorCrudService;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseCustomerGuarantor;
+import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class PastGuarantorCrudServiceImpl extends GuarantorCrudServiceImpl implements PastGuarantorCrudService {
 
     @Override
-    protected void enhanceListCriteria(EntityListCriteria<LeaseCustomerGuarantor> dbCriteria, EntityListCriteria<GuarantorDTO> dtoCriteria) {
+    protected void enhanceListCriteria(EntityListCriteria<Guarantor> dbCriteria, EntityListCriteria<GuarantorDTO> dtoCriteria) {
         super.enhanceListCriteria(dbCriteria, dtoCriteria);
 
         // filter out just former tenants:
@@ -34,11 +34,11 @@ public class PastGuarantorCrudServiceImpl extends GuarantorCrudServiceImpl imple
         or.left().in(dbCriteria.proto().lease().status(), Lease.Status.former());
 
         AndCriterion currentTermCriterion = new AndCriterion();
-        currentTermCriterion.eq(dbCriteria.proto().leaseParticipants().$().leaseTermV().holder(), dbCriteria.proto().lease().currentTerm());
+        currentTermCriterion.eq(dbCriteria.proto().leaseTermParticipants().$().leaseTermV().holder(), dbCriteria.proto().lease().currentTerm());
         // and finalized e.g. last only:
-        currentTermCriterion.isCurrent(dbCriteria.proto().leaseParticipants().$().leaseTermV());
+        currentTermCriterion.isCurrent(dbCriteria.proto().leaseTermParticipants().$().leaseTermV());
 
-        or.right().notExists(dbCriteria.proto().leaseParticipants(), currentTermCriterion);
+        or.right().notExists(dbCriteria.proto().leaseTermParticipants(), currentTermCriterion);
         or.right().ne(dbCriteria.proto().lease().status(), Lease.Status.Application);
         or.right().ne(dbCriteria.proto().lease().status(), Lease.Status.ExistingLease);
     }

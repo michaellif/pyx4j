@@ -41,7 +41,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.util.DomainUtil;
 
@@ -142,9 +142,9 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public List<PaymentMethod> retrievePaymentMethods(LeaseParticipant<?> participant) {
-        assert !participant.leaseCustomer().customer().isValueDetached();
-        return retrievePaymentMethods(participant.leaseCustomer().customer());
+    public List<PaymentMethod> retrievePaymentMethods(LeaseTermParticipant<?> participant) {
+        assert !participant.leaseParticipant().customer().isValueDetached();
+        return retrievePaymentMethods(participant.leaseParticipant().customer());
     }
 
     @Override

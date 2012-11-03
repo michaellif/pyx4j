@@ -22,13 +22,13 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.boxes.CustomerSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.lease.common.YesNoCancelDialog;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
-public abstract class LeaseParticipantFolder<E extends LeaseParticipant<?>> extends VistaBoxFolder<E> {
+public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<?>> extends VistaBoxFolder<E> {
 
-    static final I18n i18n = I18n.get(LeaseParticipantFolder.class);
+    static final I18n i18n = I18n.get(LeaseTermParticipantFolder.class);
 
-    public LeaseParticipantFolder(Class<E> clazz, boolean modifiable) {
+    public LeaseTermParticipantFolder(Class<E> clazz, boolean modifiable) {
         super(clazz, modifiable);
         setOrderable(false);
     }
@@ -70,8 +70,8 @@ public abstract class LeaseParticipantFolder<E extends LeaseParticipant<?>> exte
 
     private List<Customer> retrieveExistingCustomers() {
         List<Customer> customers = new ArrayList<Customer>(getValue().size());
-        for (LeaseParticipant<?> wrapper : getValue()) {
-            customers.add(wrapper.leaseCustomer().customer());
+        for (LeaseTermParticipant<?> wrapper : getValue()) {
+            customers.add(wrapper.leaseParticipant().customer());
         }
         return customers;
     }

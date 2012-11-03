@@ -35,12 +35,12 @@ import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
@@ -94,31 +94,31 @@ public class LeaseGenerator extends DataGenerator {
     }
 
     private void addTenants(Lease lease) {
-        Tenant mainTenant = EntityFactory.create(Tenant.class);
-        mainTenant.leaseCustomer().customer().set(customerGenerator.createCustomer());
-        mainTenant.leaseCustomer().customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
-        mainTenant.leaseCustomer().customer().personScreening().set(screeningGenerator.createScreening());
-        mainTenant.role().setValue(LeaseParticipant.Role.Applicant);
+        LeaseTermTenant mainTenant = EntityFactory.create(LeaseTermTenant.class);
+        mainTenant.leaseParticipant().customer().set(customerGenerator.createCustomer());
+        mainTenant.leaseParticipant().customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
+        mainTenant.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening());
+        mainTenant.role().setValue(LeaseTermParticipant.Role.Applicant);
         mainTenant.percentage().setValue(new BigDecimal(1));
         lease.currentTerm().version().tenants().add(mainTenant);
 
         addPreathorisedPaymentMethod(mainTenant);
-        Guarantor guarantor = EntityFactory.create(Guarantor.class);
-        guarantor.leaseCustomer().customer().set(customerGenerator.createCustomer());
-        guarantor.leaseCustomer().customer().personScreening().set(screeningGenerator.createScreening());
-        guarantor.role().setValue(LeaseParticipant.Role.Guarantor);
+        LeaseTermGuarantor guarantor = EntityFactory.create(LeaseTermGuarantor.class);
+        guarantor.leaseParticipant().customer().set(customerGenerator.createCustomer());
+        guarantor.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening());
+        guarantor.role().setValue(LeaseTermParticipant.Role.Guarantor);
         guarantor.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
-        guarantor.tenant().set(mainTenant.leaseCustomer());
+        guarantor.tenant().set(mainTenant.leaseParticipant());
         lease.currentTerm().version().guarantors().add(guarantor);
 
         int maxTenants = RandomUtil.randomInt(config.numTenantsInLease);
         for (int t = 0; t < maxTenants; t++) {
-            Tenant tenant = EntityFactory.create(Tenant.class);
-            tenant.leaseCustomer().customer().set(customerGenerator.createCustomer());
-            tenant.leaseCustomer().customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
-            tenant.leaseCustomer().customer().personScreening().set(screeningGenerator.createScreening());
+            LeaseTermTenant tenant = EntityFactory.create(LeaseTermTenant.class);
+            tenant.leaseParticipant().customer().set(customerGenerator.createCustomer());
+            tenant.leaseParticipant().customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
+            tenant.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening());
 
-            tenant.role().setValue(RandomUtil.random(EnumSet.of(LeaseParticipant.Role.CoApplicant, LeaseParticipant.Role.Dependent)));
+            tenant.role().setValue(RandomUtil.random(EnumSet.of(LeaseTermParticipant.Role.CoApplicant, LeaseTermParticipant.Role.Dependent)));
             tenant.percentage().setValue(BigDecimal.ZERO);
             tenant.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
             tenant.takeOwnership().setValue(RandomUtil.randomBoolean());
@@ -136,7 +136,7 @@ public class LeaseGenerator extends DataGenerator {
         return CommonsStringUtils.padding(lenght - len, '0') + value;
     }
 
-    private void addPreathorisedPaymentMethod(Tenant tenant) {
+    private void addPreathorisedPaymentMethod(LeaseTermTenant tenant) {
         PaymentMethod m = EntityFactory.create(PaymentMethod.class);
         m.type().setValue(PaymentType.Echeck);
         m.isOneTimePayment().setValue(Boolean.FALSE);
@@ -144,23 +144,23 @@ public class LeaseGenerator extends DataGenerator {
 
         // create new payment method details:
         EcheckInfo details = EntityFactory.create(EcheckInfo.class);
-        details.nameOn().setValue(tenant.leaseCustomer().customer().person().name().getStringView());
+        details.nameOn().setValue(tenant.leaseParticipant().customer().person().name().getStringView());
         details.bankId().setValue(paddZerro(RandomUtil.randomInt(999), 3));
         details.branchTransitNumber().setValue(paddZerro(RandomUtil.randomInt(99999), 5));
         details.accountNo().number().setValue(Integer.toString(RandomUtil.randomInt(99999)) + Integer.toString(RandomUtil.randomInt(999999)));
         details.accountNo().obfuscatedNumber().setValue(DomainUtil.obfuscateAccountNumber(details.accountNo().number().getValue()));
         m.details().set(details);
 
-        m.customer().set(tenant.leaseCustomer().customer());
+        m.customer().set(tenant.leaseParticipant().customer());
         m.sameAsCurrent().setValue(Boolean.FALSE);
         m.billingAddress().set(CommonsGenerator.createAddress());
 
-        tenant.leaseCustomer().customer().paymentMethods().add(m);
+        tenant.leaseParticipant().customer().paymentMethods().add(m);
     }
 
     public static void attachDocumentData(Lease lease) {
-        for (Tenant tenant : lease.currentTerm().version().tenants()) {
-            ScreeningGenerator.attachDocumentData(tenant.leaseCustomer().customer().personScreening());
+        for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
+            ScreeningGenerator.attachDocumentData(tenant.leaseParticipant().customer().personScreening());
         }
     }
 

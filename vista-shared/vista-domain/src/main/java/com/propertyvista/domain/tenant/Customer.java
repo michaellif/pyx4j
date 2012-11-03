@@ -37,7 +37,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.domain.tenant.lease.LeaseCustomer;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public interface Customer extends IEntity {
 
@@ -84,8 +84,8 @@ public interface Customer extends IEntity {
      */
     @RpcTransient
     @Detached(level = AttachLevel.Detached)
-    @JoinTable(value = LeaseCustomer.class)
-    ISet<LeaseCustomer> _tenantInLease();
+    @JoinTable(value = LeaseParticipant.class)
+    ISet<LeaseParticipant> _tenantInLease();
 
     @Owned
     @Detached(level = AttachLevel.Detached)

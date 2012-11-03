@@ -20,7 +20,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -31,14 +31,14 @@ public class DashboardServiceImpl implements DashboardService {
     public void retrieveTenantDashboard(AsyncCallback<TenantDashboardDTO> callback) {
         TenantDashboardDTO dashboard = EntityFactory.create(TenantDashboardDTO.class);
 
-        Tenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
+        LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenantInLease.leaseTermV());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().floorplan());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().building());
 
-        dashboard.general().tenantName().setValue(tenantInLease.leaseCustomer().customer().person().name().getStringView());
+        dashboard.general().tenantName().setValue(tenantInLease.leaseParticipant().customer().person().name().getStringView());
         dashboard.general().floorplanName().set(tenantInLease.leaseTermV().holder().lease().unit().floorplan().marketingName());
         AddressStructured address = tenantInLease.leaseTermV().holder().lease().unit().building().info().address().duplicate();
         address.suiteNumber().set(tenantInLease.leaseTermV().holder().lease().unit().info().number());

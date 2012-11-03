@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,118 +7,68 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 6, 2012
+ * Created on 2012-09-27
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.domain.tenant.lease;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.EnumSet;
-
-import javax.xml.bind.annotation.XmlType;
-
+import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.annotations.Translate;
-import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.tenant.CustomerCreditCheck;
-import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.domain.tenant.Customer;
 
+@ToStringFormat("{0}")
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
-public interface LeaseParticipant<LC extends LeaseCustomer<?>> extends IEntity {
-
-    @I18n
-    @XmlType(name = "TenantRole")
-    public static enum Role implements Serializable {
-
-        Applicant,
-
-        @Translate("Co-Applicant")
-        CoApplicant,
-
-        Dependent,
-
-        Guarantor;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-
-        public static Collection<Role> tenantRelated() {
-            return EnumSet.of(Applicant, CoApplicant, Dependent);
-        }
-    }
-
-    interface LeaseCustomerHolderId extends ColumnId {
-    }
-
-    @JoinColumn(LeaseCustomerHolderId.class)
-    @NotNull
-    @MemberColumn(notNull = true)
-    @ReadOnly
-    @ToString(index = 0)
-    LC leaseCustomer();
-
-    @NotNull
-    @ToString(index = 1)
-    @MemberColumn(name = "participantRole")
-    IPrimitive<Role> role();
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+public interface LeaseParticipant<E extends LeaseTermParticipant<?>> extends IEntity {
 
     @Owner
     @NotNull
     @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
-    @Indexed
     @JoinColumn
-    @Caption(name = "Lease Agreement")
-    LeaseTermV leaseTermV();
-
-    @OrderColumn
-    IPrimitive<Integer> orderInLease();
+    @Indexed(uniqueConstraint = true, group = { "discriminator+lc,1" })
+    Lease lease();
 
     @NotNull
-    @Indexed
-    @Detached
-    OnlineApplication application();
+    @MemberColumn(notNull = true)
+    @ReadOnly
+    @ToString(index = 0)
+    @Indexed(uniqueConstraint = true, group = { "discriminator+lc,2" })
+    Customer customer();
 
-    /**
-     * Recorded at the time of application approval
-     */
-    @Detached
-    CustomerCreditCheck creditCheck();
+    @NotNull
+    @Caption(name = "Id")
+    @Length(14)
+    @Indexed(uniqueConstraint = true, group = { "discriminator+id,1" })
+    @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
+    IPrimitive<String> participantId();
 
-    /**
-     * Recorded at the time of application approval
-     */
-    @Detached
-    @Versioned
-    CustomerScreening screening();
-
+    //TODO
     @Transient
-    CustomerScreening effectiveScreening();
-
+    @Detached(level = AttachLevel.Detached)
+    @JoinTable(value = LeaseTermParticipant.class, mappedBy = LeaseTermParticipant.LeaseParticipantHolderId.class)
+    ISet<E> leaseTermParticipants();
 }
