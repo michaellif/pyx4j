@@ -88,4 +88,11 @@ public class BillingFacadeImpl implements BillingFacade {
     public void updateLeaseAdjustmentTax(LeaseAdjustment adjustment) {
         BillingManager.updateLeaseAdjustmentTax(adjustment);
     }
+
+    @Override
+    public LogicalDate getNextCycleExecutionDate(BillingCycle cycle) {
+        LogicalDate startDate = BillDateUtils.calculateSubsiquentBillingCycleStartDate(cycle.billingType().paymentFrequency().getValue(), cycle
+                .billingCycleStartDate().getValue());
+        return BillDateUtils.calculateBillingCycleTargetExecutionDate(cycle.billingType().paymentFrequency().getValue(), startDate);
+    }
 }

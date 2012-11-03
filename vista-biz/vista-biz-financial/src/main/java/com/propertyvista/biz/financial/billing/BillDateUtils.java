@@ -146,10 +146,10 @@ public class BillDateUtils {
         return new LogicalDate(calendar.getTime());
     }
 
-    public static LogicalDate calculateBillingCycleTargetExecutionDate(BillingType cycle, LogicalDate billingCycleStartDate) {
+    public static LogicalDate calculateBillingCycleTargetExecutionDate(PaymentFrequency frequency, LogicalDate billingCycleStartDate) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(billingCycleStartDate);
-        calendar.add(Calendar.DATE, -cycle.paymentFrequency().getValue().getBillRunTargetDayOffset());
+        calendar.add(Calendar.DATE, -frequency.getBillRunTargetDayOffset());
         return new LogicalDate(calendar.getTime());
     }
 

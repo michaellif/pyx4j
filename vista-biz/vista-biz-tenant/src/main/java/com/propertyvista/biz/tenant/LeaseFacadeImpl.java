@@ -430,15 +430,17 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         updateUnitRentPrice(lease);
 
-        Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
+        BillingFacade billingFacade = ServerSideFactory.create(BillingFacade.class);
+        Bill bill = billingFacade.runBilling(lease);
         if (bill.billStatus().getValue() != Bill.BillStatus.Failed) {
             if (bill.billStatus().getValue() != Bill.BillStatus.Confirmed) {
-                ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
+                billingFacade.confirmBill(bill);
             }
             // for zero cycle bill also create the next bill if we are past the executionTargetDate of the cycle
             Date curDate = Persistence.service().getTransactionSystemTime();
-            if (BillType.ZeroCycle.equals(bill.billType().getValue()) && !curDate.before(bill.billingCycle().executionTargetDate().getValue())) {
-                ServerSideFactory.create(BillingFacade.class).runBilling(lease);
+            LogicalDate nextExecDate = billingFacade.getNextCycleExecutionDate(bill.billingCycle());
+            if (BillType.ZeroCycle.equals(bill.billType().getValue()) && !curDate.before(nextExecDate)) {
+                billingFacade.runBilling(lease);
             }
         } else {
             throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to failed first time bill"));

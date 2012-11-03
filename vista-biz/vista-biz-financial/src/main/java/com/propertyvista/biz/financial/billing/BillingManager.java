@@ -81,8 +81,11 @@ public class BillingManager {
         }
 
         BillingCycle billingCycle = getNextBillingCycle(lease);
-        validateBillingRunPreconditions(billingCycle, lease, preview);
-        return produceBill(billingCycle, lease, preview);
+        if (validateBillingRunPreconditions(billingCycle, lease, preview)) {
+            return produceBill(billingCycle, lease, preview);
+        } else {
+            throw new BillingException(i18n.tr("Bill Run Precondition Validation failed"));
+        }
     }
 
     /**
@@ -111,42 +114,41 @@ public class BillingManager {
         FilterIterator<Lease> filteredLeaseIterator = new FilterIterator<Lease>(leaseIterator, new Filter<Lease>() {
             @Override
             public boolean accept(Lease lease) {
-                try {
-                    //Don't run bill on cycle that out of boundaries of lease end
-                    if (billingCycle.billingCycleStartDate().getValue().compareTo(lease.leaseTo().getValue()) > 0) {
-                        return false;
-                    } else {
-                        validateBillingRunPreconditions(billingCycle, lease, false);
-                        return true;
-                    }
-                } catch (BillingException e) {
-                    log.error(i18n.tr("Billing Run Preconditions failed"), e);
+                //Don't run bill on cycle that out of boundaries of lease end
+                if (billingCycle.billingCycleStartDate().getValue().compareTo(lease.leaseTo().getValue()) > 0) {
                     return false;
+                } else {
+                    return validateBillingRunPreconditions(billingCycle, lease, false);
                 }
             }
         });
         runBilling(billingCycle, filteredLeaseIterator, dynamicStatisticsRecord);
     }
 
-    private static void validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease, boolean preview) {
+    private static boolean validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease, boolean preview) {
 
-        if (!getNextBillingCycle(lease).equals(billingCycle)) {
-            getNextBillingCycle(lease);
-            throw new BillingException(i18n.tr("Bill can't be created for a given billing cycle"));
+        BillingCycle nextCycle = getNextBillingCycle(lease);
+        if (!nextCycle.equals(billingCycle)) {
+            log.warn(i18n.tr("Invalid billing cycle: {0}; expected: {1}; lease end: {2}", billingCycle.billingCycleStartDate().getValue(), nextCycle
+                    .billingCycleStartDate().getValue(), lease.leaseTo().getValue()));
+            return false;
         }
 
         if (lease.currentTerm().getPrimaryKey().isDraft() && !preview) {
-            throw new BillingException(i18n.tr("Lease Term is in draft state. Billing can run only in preview mode."));
+            log.warn(i18n.tr("Lease Term is in draft state. Billing can run only in preview mode."));
+            return false;
         }
 
         if (lease.status().getValue() == Lease.Status.Closed) {
-            throw new BillingException("Lease is closed");
+            log.warn(i18n.tr("Lease is closed"));
+            return false;
         }
 
         Bill previousBill = getLatestBill(lease);
         if (previousBill != null) {
             if (BillStatus.notConfirmed(previousBill.billStatus().getValue())) {
-                throw new BillingException(i18n.tr("Can't run billing on Account with non-confirmed bills"));
+                log.warn(i18n.tr("Can't run billing on Account with non-confirmed bills"));
+                return false;
             }
         }
 
@@ -160,16 +162,19 @@ public class BillingManager {
 
             //previous bill wasn't the last one so we are dealing here with the regular bill which can't run before executionTargetDate
             if (!isPreviousConfirmedBillTheLast && SysDateManager.getSysDate().compareTo(billingCycle.executionTargetDate().getValue()) < 0) {
-                throw new BillingException(i18n.tr("Regular billing can't run before target execution date"));
+                log.warn(i18n.tr("Regular billing can't run before target execution date"));
+                return false;
             }
 
             //previous bill was the last one so we have to run a final bill but not before lease end date or lease move-out date whatever is first
             if (isPreviousConfirmedBillTheLast && (SysDateManager.getSysDate().compareTo(lease.currentTerm().termTo().getValue()) < 0)
                     && (lease.expectedMoveOut().isNull() || (SysDateManager.getSysDate().compareTo(lease.expectedMoveOut().getValue()) < 0))) {
-                throw new BillingException(i18n.tr("Final billing can't run before both lease end date and move-out date"));
+                log.warn(i18n.tr("Final billing can't run before both lease end date and move-out date"));
+                return false;
             }
         }
 
+        return true;
     }
 
     private static void runBilling(BillingCycle billingCycle, Iterator<Lease> leasesIterator, StatisticsRecord dynamicStatisticsRecord) {
@@ -391,7 +396,8 @@ public class BillingManager {
                     billingCycle.billingCycleStartDate().setValue(billingCycleStartDate);
                     billingCycle.billingCycleEndDate().setValue(
                             BillDateUtils.calculateBillingCycleEndDate(billingType.paymentFrequency().getValue(), billingCycleStartDate));
-                    billingCycle.executionTargetDate().setValue(BillDateUtils.calculateBillingCycleTargetExecutionDate(billingType, billingCycleStartDate));
+                    billingCycle.executionTargetDate().setValue(
+                            BillDateUtils.calculateBillingCycleTargetExecutionDate(billingType.paymentFrequency().getValue(), billingCycleStartDate));
 
 // Can't initialize this table here! HDQLDB will lock. TODO fix HDQLDB                    
 //                    billingCycle.stats().notConfirmed().setValue(0L);

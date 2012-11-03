@@ -52,4 +52,6 @@ public interface BillingFacade {
     // Unitls:
 
     void updateLeaseAdjustmentTax(LeaseAdjustment adjustment);
+
+    LogicalDate getNextCycleExecutionDate(BillingCycle cycle);
 }

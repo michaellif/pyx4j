@@ -118,6 +118,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         billType(Bill.BillType.Final);
         // @formatter:on
 
+        closeLease();
     }
 
     public void testExistingLeaseApprovedAfterBillRun() {
@@ -198,6 +199,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         billType(Bill.BillType.Final);
         // @formatter:on
 
+        closeLease();
     }
 
     public void testExistingLeaseApprovedBeforeBillRun() {
@@ -238,5 +240,6 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         numOfProductCharges(1);
         // @formatter:on
 
+        closeLease();
     }
 }
