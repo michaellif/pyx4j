@@ -208,7 +208,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
         setDate("02-May-2011");
 
-        createLease("01-Mar-2009", "31-Aug-2011", null, new BigDecimal("300.00"));
+        createLease("01-Mar-2009", "30-Jun-2011", null, new BigDecimal("300.00"));
 
         advanceDate("04-May-2011");
         approveExistingLease(true);
@@ -238,6 +238,17 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         billingPeriodStartDate("1-June-2011").
         billingPeriodEndDate("30-June-2011").
         numOfProductCharges(1);
+        // @formatter:on
+
+        //==================== FINAL ======================//
+
+        advanceDate("05-Jul-2011");
+
+        // @formatter:off
+        new BillTester(runBilling()).
+        billSequenceNumber(3).
+        previousBillSequenceNumber(2).
+        billType(Bill.BillType.Final);
         // @formatter:on
 
         closeLease();
