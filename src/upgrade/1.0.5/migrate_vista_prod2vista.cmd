@@ -9,6 +9,9 @@ psql --username postgres --file ../dba_scripts/swap_prod_dev.sql
 psql --username postgres -d "vista" --file ../dba_scripts/dba_functions.sql
 @if errorlevel 1 goto errormark
 
+psql --username postgres -d "vista" --file rename_discriminator_cols.sql
+@if errorlevel 1 goto errormark
+
 psql --username postgres -d "vista" --file dev_clean.sql
 @if errorlevel 1 goto errormark
 
