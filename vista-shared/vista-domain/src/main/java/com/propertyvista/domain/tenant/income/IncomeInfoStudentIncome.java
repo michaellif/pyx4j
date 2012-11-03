@@ -31,7 +31,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 
 @DiscriminatorValue("student")
 @Caption(name = "Income Information Student Income")
-public interface IncomeInfoStudentIncome extends IncomeInfo {
+public interface IncomeInfoStudentIncome extends CustomerScreeningIncomeInfo {
 
     public enum FundingChoice {
         scolarship, bursary, grant, loan

@@ -20,16 +20,16 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.dto.PersonCreditCheckDTO;
+import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.tenant.PersonCreditCheck.CreditCheckResult;
+import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 
-public class PersonCreditCheckForm extends CrmEntityForm<PersonCreditCheckDTO> {
+public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDTO> {
 
-    private static final I18n i18n = I18n.get(PersonCreditCheckForm.class);
+    private static final I18n i18n = I18n.get(CustomerCreditCheckForm.class);
 
-    public PersonCreditCheckForm(boolean viewable) {
-        super(PersonCreditCheckDTO.class, viewable);
+    public CustomerCreditCheckForm(boolean viewable) {
+        super(CustomerCreditCheckDTO.class, viewable);
     }
 
     @Override

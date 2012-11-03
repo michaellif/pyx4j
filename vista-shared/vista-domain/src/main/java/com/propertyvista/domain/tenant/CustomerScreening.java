@@ -35,16 +35,16 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 
-import com.propertyvista.domain.LegalQuestions;
+import com.propertyvista.domain.CustomerScreeningLegalQuestions;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.ApplicationDocumentHolder;
 import com.propertyvista.domain.media.IdentificationDocument;
-import com.propertyvista.domain.tenant.PersonScreening.PersonScreeningV;
-import com.propertyvista.domain.tenant.income.PersonalAsset;
-import com.propertyvista.domain.tenant.income.PersonalIncome;
+import com.propertyvista.domain.tenant.CustomerScreening.CustomerScreeningV;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 
-@DiscriminatorValue("PersonScreening")
-public interface PersonScreening extends IVersionedEntity<PersonScreeningV>, ApplicationDocumentHolder<IdentificationDocument> {
+@DiscriminatorValue("CustomerScreening")
+public interface CustomerScreening extends IVersionedEntity<CustomerScreeningV>, ApplicationDocumentHolder<IdentificationDocument> {
 
     @Owner
     @NotNull
@@ -56,9 +56,9 @@ public interface PersonScreening extends IVersionedEntity<PersonScreeningV>, App
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<PersonCreditCheck> creditChecks();
+    ISet<CustomerCreditCheck> creditChecks();
 
-    public interface PersonScreeningV extends IVersionData<PersonScreening> {
+    public interface CustomerScreeningV extends IVersionData<CustomerScreening> {
 
         @Timestamp(Update.Created)
         IPrimitive<LogicalDate> createDate();
@@ -79,7 +79,7 @@ public interface PersonScreening extends IVersionedEntity<PersonScreeningV>, App
 
         @Owned
         @Caption(name = "General Questions")
-        LegalQuestions legalQuestions();
+        CustomerScreeningLegalQuestions legalQuestions();
 
         //=============== Financial =============//
 
@@ -87,11 +87,11 @@ public interface PersonScreening extends IVersionedEntity<PersonScreeningV>, App
         @Detached
         @Length(3)
         @Caption(name = "Income")
-        IList<PersonalIncome> incomes();
+        IList<CustomerScreeningIncome> incomes();
 
         @Owned
         @Detached
         @Length(3)
-        IList<PersonalAsset> assets();
+        IList<CustomerScreeningPersonalAsset> assets();
     }
 }

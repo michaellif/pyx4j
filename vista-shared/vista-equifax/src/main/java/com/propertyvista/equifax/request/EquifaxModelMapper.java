@@ -50,8 +50,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.PersonCreditCheck;
-import com.propertyvista.domain.tenant.income.PersonalIncome;
+import com.propertyvista.domain.tenant.CustomerCreditCheck;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.equifax.model.ChallengerMode;
 import com.propertyvista.equifax.model.EmploymentStatus;
 import com.propertyvista.equifax.model.MonthlyHousingCosts;
@@ -65,7 +65,7 @@ public class EquifaxModelMapper {
 
     private final static Logger log = LoggerFactory.getLogger(EquifaxModelMapper.class);
 
-    public static CNConsAndCommRequestType createRequest(Customer customer, PersonCreditCheck pcc, int strategyNumber) {
+    public static CNConsAndCommRequestType createRequest(Customer customer, CustomerCreditCheck pcc, int strategyNumber) {
 
         ObjectFactory factory = new ObjectFactory();
 
@@ -260,8 +260,8 @@ public class EquifaxModelMapper {
         //XmlCreator.addParameter(PresentPosition.C, parameters);
 
         //Find PresentEmployer and calculate Income
-        PersonalIncome presentPersonalIncome = null;
-        for (PersonalIncome personalIncome : pcc.screening().version().incomes()) {
+        CustomerScreeningIncome presentPersonalIncome = null;
+        for (CustomerScreeningIncome personalIncome : pcc.screening().version().incomes()) {
             if (isCurrentDate(personalIncome.details().ends())) {
                 addMonthlyIncome(personalIncome, parameters);
                 if (presentPersonalIncome == null) {
@@ -358,7 +358,7 @@ public class EquifaxModelMapper {
         }
     }
 
-    private static void addMonthlyIncome(PersonalIncome personalIncome, Parameters parameters) {
+    private static void addMonthlyIncome(CustomerScreeningIncome personalIncome, Parameters parameters) {
         if (!personalIncome.details().monthlyAmount().isNull()) {
             XmlCreator.addParameter(new MonthlyIncome(personalIncome.details().monthlyAmount().getValue().intValue()), parameters);
         }

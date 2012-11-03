@@ -29,7 +29,7 @@ import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.PersonCreditCheck;
+import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.onboarding.GetUsageRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.onboarding.UsageRecordIO;
@@ -84,7 +84,7 @@ public class GetUsageReportRequestHandler extends AbstractRequestHandler<GetUsag
         TaskRunner.runInTargetNamespace(pmc.namespace().getValue(), new Callable<Void>() {
             @Override
             public Void call() {
-                EntityQueryCriteria<PersonCreditCheck> criteria = EntityQueryCriteria.create(PersonCreditCheck.class);
+                EntityQueryCriteria<CustomerCreditCheck> criteria = EntityQueryCriteria.create(CustomerCreditCheck.class);
                 criteria.add(PropertyCriterion.ge(criteria.proto().creditCheckDate(), request.from().getValue()));
                 criteria.add(PropertyCriterion.le(criteria.proto().creditCheckDate(), request.to().getValue()));
                 record.value().setValue(Persistence.service().count(criteria));

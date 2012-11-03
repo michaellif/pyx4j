@@ -36,7 +36,7 @@ import com.propertyvista.common.client.ui.components.ProofOfEmploymentUploaderFo
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
-import com.propertyvista.domain.tenant.income.IncomeInfo;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoOther;
 import com.propertyvista.domain.tenant.income.IncomeInfoSeasonallyEmployed;
@@ -44,9 +44,9 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoSocialServices;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.IncomeSource;
-import com.propertyvista.domain.tenant.income.PersonalIncome;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 
-public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome> {
+public class PersonalIncomeEditor extends CEntityDecoratableForm<CustomerScreeningIncome> {
 
     private static final I18n i18n = I18n.get(PersonalIncomeEditor.class);
 
@@ -55,7 +55,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
     private ProofOfEmploymentUploaderFolder fileUpload;
 
     public PersonalIncomeEditor() {
-        super(PersonalIncome.class);
+        super(CustomerScreeningIncome.class);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
     }
 
     @Override
-    protected void onValuePropagation(PersonalIncome value, boolean fireEvent, boolean populate) {
+    protected void onValuePropagation(CustomerScreeningIncome value, boolean fireEvent, boolean populate) {
         selectDetailsEditor(value.incomeSource().getValue());
         super.onValuePropagation(value, fireEvent, populate);
     }
@@ -100,7 +100,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
         if (type != null && getValue() != null) {
             @SuppressWarnings("rawtypes")
             CEntityForm editor = null;
-            IncomeInfo details = getValue().details();
+            CustomerScreeningIncomeInfo details = getValue().details();
 
             switch (type) {
             case fulltime:
@@ -139,7 +139,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
         }
     }
 
-    private void validationOfStartStopDates(final CEntityForm<? extends IncomeInfo> comp) {
+    private void validationOfStartStopDates(final CEntityForm<? extends CustomerScreeningIncomeInfo> comp) {
         new StartEndDateValidation(comp.get(comp.proto().starts()), comp.get(comp.proto().ends()));
         comp.get(comp.proto().starts()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(comp.get(comp.proto().ends())));
         comp.get(comp.proto().ends()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(comp.get(comp.proto().starts())));

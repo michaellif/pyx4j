@@ -31,7 +31,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 @AbstractEntity
 @Inheritance
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface IEmploymentInfo extends IncomeInfo {
+public interface IEmploymentInfo extends CustomerScreeningIncomeInfo {
 
     @Override
     @Caption(name = "Employer Name")

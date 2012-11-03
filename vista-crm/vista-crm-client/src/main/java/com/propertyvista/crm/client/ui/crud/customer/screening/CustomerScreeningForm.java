@@ -38,12 +38,12 @@ import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.misc.BusinessRules;
 
-public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
+public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
 
-    private static final I18n i18n = I18n.get(PersonScreeningForm.class);
+    private static final I18n i18n = I18n.get(CustomerScreeningForm.class);
 
     private final FormFlexPanel previousAddress = new FormFlexPanel() {
         @Override
@@ -55,12 +55,12 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
 
     private IdUploaderFolder fileUpload;
 
-    public PersonScreeningForm() {
+    public CustomerScreeningForm() {
         this(false);
     }
 
-    public PersonScreeningForm(boolean viewMode) {
-        super(PersonScreening.class, viewMode);
+    public CustomerScreeningForm(boolean viewMode) {
+        super(CustomerScreening.class, viewMode);
     }
 
     @Override

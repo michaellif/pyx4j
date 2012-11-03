@@ -372,43 +372,36 @@ public class CrmSiteMap implements SiteMap {
     @NavigationItem(navigLabel = "Administration")
     public static class Settings extends AppPlace {
 
-        @PlaceProperties(caption = "Security")
-        @NavigationItem(navigLabel = "Security")
+        @NavigationItem
         public static class Security extends AppPlace {
 
-            @PlaceProperties(caption = "Audit Records")
-            @NavigationItem(navigLabel = "Audit Records")
+            @NavigationItem
             public static class AuditRecords extends CrmCrudAppPlace {
             }
 
         }
 
-        @PlaceProperties(caption = "Credit Checks")
-        @NavigationItem(navigLabel = "Credit Checks")
+        @NavigationItem
         public static class CreditChecks extends AppPlace {
 
-            @PlaceProperties(caption = "Person Credit Checks")
-            @NavigationItem(navigLabel = "Person Credit Checks")
-            public static class PersonCreditCheck extends CrmCrudAppPlace {
+            @NavigationItem
+            public static class CustomerCreditCheck extends CrmCrudAppPlace {
             }
 
         }
 
-        @NavigationItem(navigLabel = "Policies")
+        @NavigationItem
         public static class Policies extends AppPlace {
 
-            @PlaceProperties(caption = "Dates")
-            @NavigationItem(navigLabel = "Dates")
+            @NavigationItem
             public static class Dates extends CrmCrudAppPlace {
             }
 
-            @PlaceProperties(caption = "Restrictions")
-            @NavigationItem(navigLabel = "Restrictions")
+            @NavigationItem
             public static class Restrictions extends CrmCrudAppPlace {
             }
 
-            @PlaceProperties(caption = "Pet Policy")
-            @NavigationItem(navigLabel = "Pet Policy")
+            @NavigationItem
             public static class PetPolicy extends CrmCrudAppPlace {
             }
 

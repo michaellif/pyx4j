@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,16 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-25
- * @author Vlad
+ * Created on 2012-10-16
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.customer.screening;
+package com.propertyvista.crm.rpc.dto;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerCreditCheck;
 
-public interface PersonScreeningEditorView extends IEditorView<PersonScreening> {
+@Transient
+@ExtendsDBO(CustomerCreditCheck.class)
+public interface CustomerCreditCheckDTO extends CustomerCreditCheck {
 
 }

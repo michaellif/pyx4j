@@ -16,15 +16,15 @@ package com.propertyvista.crm.server.services.admin;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.crm.rpc.dto.PersonCreditCheckDTO;
-import com.propertyvista.crm.rpc.services.admin.PersonCreditCheckCrudService;
-import com.propertyvista.domain.tenant.PersonCreditCheck;
+import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
+import com.propertyvista.crm.rpc.services.admin.CustomerCreditCheckCrudService;
+import com.propertyvista.domain.tenant.CustomerCreditCheck;
 
-public class PersonCreditCheckCrudServiceImpl extends AbstractCrudServiceDtoImpl<PersonCreditCheck, PersonCreditCheckDTO> implements
-        PersonCreditCheckCrudService {
+public class CustomerCreditCheckCrudServiceImpl extends AbstractCrudServiceDtoImpl<CustomerCreditCheck, CustomerCreditCheckDTO> implements
+        CustomerCreditCheckCrudService {
 
-    public PersonCreditCheckCrudServiceImpl() {
-        super(PersonCreditCheck.class, PersonCreditCheckDTO.class);
+    public CustomerCreditCheckCrudServiceImpl() {
+        super(CustomerCreditCheck.class, CustomerCreditCheckDTO.class);
     }
 
     @Override
@@ -33,13 +33,14 @@ public class PersonCreditCheckCrudServiceImpl extends AbstractCrudServiceDtoImpl
     }
 
     @Override
-    protected void enhanceRetrieved(PersonCreditCheck entity, PersonCreditCheckDTO dto, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(CustomerCreditCheck entity, CustomerCreditCheckDTO dto,
+            com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget retrieveTraget) {
         Persistence.service().retrieveMember(dto.screening());
         Persistence.service().retrieveMember(dto.screening().screene());
     }
 
     @Override
-    protected void enhanceListRetrieved(PersonCreditCheck entity, PersonCreditCheckDTO dto) {
+    protected void enhanceListRetrieved(CustomerCreditCheck entity, CustomerCreditCheckDTO dto) {
         super.enhanceListRetrieved(entity, dto);
         enhanceRetrieved(entity, dto, RetrieveTraget.View);
     }

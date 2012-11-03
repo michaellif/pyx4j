@@ -64,7 +64,7 @@ import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -342,12 +342,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
     }
 
-    public PersonScreening retrivePersonScreeningId(Customer customer) {
+    public CustomerScreening retrivePersonScreeningId(Customer customer) {
         if (ScreeningValidator.screeningIsAutomaticallyFinalized) {
-            EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
+            EntityQueryCriteria<CustomerScreening> criteria = EntityQueryCriteria.create(CustomerScreening.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customer));
             criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
-            PersonScreening screening = Persistence.service().retrieve(criteria);
+            CustomerScreening screening = Persistence.service().retrieve(criteria);
             if ((screening != null) && (!screening.version().isNull())) {
                 screening.saveAction().setValue(SaveAction.saveAsFinal);
                 Persistence.service().persist(screening);

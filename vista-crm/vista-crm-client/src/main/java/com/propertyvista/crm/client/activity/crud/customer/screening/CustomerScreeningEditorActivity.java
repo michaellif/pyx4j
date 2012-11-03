@@ -18,17 +18,17 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.ui.crud.customer.screening.PersonScreeningViewerView;
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
+import com.propertyvista.crm.client.ui.crud.customer.screening.CustomerScreeningEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
-import com.propertyvista.crm.rpc.services.customer.screening.PersonScreeningCrudService;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningCrudService;
+import com.propertyvista.domain.tenant.CustomerScreening;
 
-public class PersonScreeningViewerActivity extends CrmViewerActivity<PersonScreening> {
+public class CustomerScreeningEditorActivity extends CrmEditorActivity<CustomerScreening> {
 
     @SuppressWarnings("unchecked")
-    public PersonScreeningViewerActivity(CrudAppPlace place) {
-        super(place, CustomerViewFactory.instance(PersonScreeningViewerView.class), (AbstractCrudService<PersonScreening>) GWT
-                .create(PersonScreeningCrudService.class));
+    public CustomerScreeningEditorActivity(CrudAppPlace place) {
+        super(place, CustomerViewFactory.instance(CustomerScreeningEditorView.class), (AbstractCrudService<CustomerScreening>) GWT
+                .create(CustomerScreeningCrudService.class), CustomerScreening.class);
     }
 }

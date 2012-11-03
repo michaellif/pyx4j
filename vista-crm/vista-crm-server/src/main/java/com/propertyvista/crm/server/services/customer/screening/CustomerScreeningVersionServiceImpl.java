@@ -13,16 +13,16 @@
  */
 package com.propertyvista.crm.server.services.customer.screening;
 
-import com.propertyvista.crm.rpc.services.customer.screening.PersonScreeningVersionService;
+import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningVersionService;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.server.versioning.AbstractVistaVersionDataListServiceImpl;
 
-public class PersonScreeningVersionServiceImpl extends AbstractVistaVersionDataListServiceImpl<PersonScreening.PersonScreeningV> implements
-        PersonScreeningVersionService {
+public class CustomerScreeningVersionServiceImpl extends AbstractVistaVersionDataListServiceImpl<CustomerScreening.CustomerScreeningV> implements
+        CustomerScreeningVersionService {
 
-    public PersonScreeningVersionServiceImpl() {
-        super(PersonScreening.PersonScreeningV.class, CrmUser.class);
+    public CustomerScreeningVersionServiceImpl() {
+        super(CustomerScreening.CustomerScreeningV.class, CrmUser.class);
     }
 
     @Override

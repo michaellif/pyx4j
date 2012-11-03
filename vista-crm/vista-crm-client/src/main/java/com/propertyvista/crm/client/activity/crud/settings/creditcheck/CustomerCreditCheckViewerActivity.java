@@ -14,20 +14,20 @@
 package com.propertyvista.crm.client.activity.crud.settings.creditcheck;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.ui.crud.settings.creditchecks.PersonCreditCheckListerView;
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
+import com.propertyvista.crm.client.ui.crud.settings.creditchecks.CustomerCreditCheckViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.dto.PersonCreditCheckDTO;
-import com.propertyvista.crm.rpc.services.admin.PersonCreditCheckCrudService;
+import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
+import com.propertyvista.crm.rpc.services.admin.CustomerCreditCheckCrudService;
 
-public class PersonCreditCheckListerActivity extends ListerActivityBase<PersonCreditCheckDTO> {
+public class CustomerCreditCheckViewerActivity extends CrmViewerActivity<CustomerCreditCheckDTO> {
 
-    public PersonCreditCheckListerActivity(Place place) {
-        super(place, SettingsViewFactory.instance(PersonCreditCheckListerView.class), GWT
-                .<PersonCreditCheckCrudService> create(PersonCreditCheckCrudService.class), PersonCreditCheckDTO.class);
+    public CustomerCreditCheckViewerActivity(CrudAppPlace place) {
+        super(place, SettingsViewFactory.instance(CustomerCreditCheckViewerView.class), GWT
+                .<CustomerCreditCheckCrudService> create(CustomerCreditCheckCrudService.class));
     }
 
 }

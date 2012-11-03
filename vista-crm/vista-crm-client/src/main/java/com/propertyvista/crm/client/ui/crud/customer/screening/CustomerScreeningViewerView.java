@@ -7,15 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-29
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.customer.screening;
+package com.propertyvista.crm.client.ui.crud.customer.screening;
 
-import com.pyx4j.entity.rpc.AbstractVersionDataListService;
+import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 
-public interface PersonScreeningVersionService extends AbstractVersionDataListService<PersonScreening.PersonScreeningV> {
+public interface CustomerScreeningViewerView extends IViewerView<CustomerScreening> {
+
 }

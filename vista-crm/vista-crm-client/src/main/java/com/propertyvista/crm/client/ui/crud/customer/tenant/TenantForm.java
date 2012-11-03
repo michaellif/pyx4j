@@ -38,7 +38,7 @@ import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.EmergencyContact;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantForm extends CrmEntityForm<TenantDTO> {
@@ -99,7 +99,7 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
                     ++row,
                     0,
                     new DecoratorBuilder(inject(proto().customer().personScreening(),
-                            new CEntityCrudHyperlink<PersonScreening>(AppPlaceEntityMapper.resolvePlace(PersonScreening.class))), 15).build());
+                            new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 15).build());
         }
 
         return main;

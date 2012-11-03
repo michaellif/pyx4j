@@ -23,7 +23,7 @@ import com.pyx4j.i18n.annotations.I18n;
 //TODO
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface PersonCreditCheckReport extends IEntity {
+public interface CustomerCreditCheckReport extends IEntity {
 
     @RpcTransient
     @Length(15 * 1024 * 1024)

@@ -27,15 +27,15 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.tenant.income.PersonalAsset;
-import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
 
-public class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
+public class PersonalAssetFolder extends VistaTableFolder<CustomerScreeningPersonalAsset> {
 
     private static final I18n i18n = I18n.get(PersonalAssetFolder.class);
 
     public PersonalAssetFolder(boolean modifyable) {
-        super(PersonalAsset.class, modifyable);
+        super(CustomerScreeningPersonalAsset.class, modifyable);
     }
 
     @Override
@@ -50,16 +50,16 @@ public class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof PersonalAsset) {
+        if (member instanceof CustomerScreeningPersonalAsset) {
             return new PersonalAssetEditor();
         }
         return super.create(member);
     }
 
-    private class PersonalAssetEditor extends CEntityFolderRowEditor<PersonalAsset> {
+    private class PersonalAssetEditor extends CEntityFolderRowEditor<CustomerScreeningPersonalAsset> {
 
         public PersonalAssetEditor() {
-            super(PersonalAsset.class, columns());
+            super(CustomerScreeningPersonalAsset.class, columns());
         }
 
         @Override
@@ -73,7 +73,7 @@ public class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
 
             });
 
-            get(proto().assetType()).addValueChangeHandler(new ValueChangeHandler<PersonalAsset.AssetType>() {
+            get(proto().assetType()).addValueChangeHandler(new ValueChangeHandler<CustomerScreeningPersonalAsset.AssetType>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<AssetType> event) {
                     if (get(proto().percent()).getValue() == null) {

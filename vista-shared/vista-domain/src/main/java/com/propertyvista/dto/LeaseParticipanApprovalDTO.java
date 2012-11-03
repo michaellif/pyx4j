@@ -20,8 +20,8 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.domain.tenant.PersonCreditCheck;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerCreditCheck;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 @Transient
@@ -34,8 +34,8 @@ public interface LeaseParticipanApprovalDTO extends IEntity {
     LeaseParticipant leaseParticipant();
 
     @Detached(level = AttachLevel.ToStringMembers)
-    PersonScreening screening();
+    CustomerScreening screening();
 
     @ToString(index = 1)
-    PersonCreditCheck creditCheck();
+    CustomerCreditCheck creditCheck();
 }

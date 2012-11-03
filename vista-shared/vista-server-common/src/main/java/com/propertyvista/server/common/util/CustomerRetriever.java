@@ -23,13 +23,13 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 
 public class CustomerRetriever {
 
     private Customer customer;
 
-    private PersonScreening screening;
+    private CustomerScreening screening;
 
     private final boolean retrieveFinancialData;
 
@@ -53,13 +53,13 @@ public class CustomerRetriever {
     public void retrieve(Key customerId) {
         retrieve(Persistence.service().retrieve(Customer.class, customerId));
 
-        EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
+        EntityQueryCriteria<CustomerScreening> criteria = EntityQueryCriteria.create(CustomerScreening.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customer));
-        List<PersonScreening> allScreenings = Persistence.service().query(criteria);
+        List<CustomerScreening> allScreenings = Persistence.service().query(criteria);
         if (allScreenings != null && !allScreenings.isEmpty()) {
             screening = allScreenings.get(allScreenings.size() - 1); // use last screening
         } else {
-            screening = EntityFactory.create(PersonScreening.class);
+            screening = EntityFactory.create(CustomerScreening.class);
         }
 
         if (!screening.isEmpty()) {
@@ -80,7 +80,7 @@ public class CustomerRetriever {
         }
     }
 
-    protected void retrieve(PersonScreening in) {
+    protected void retrieve(CustomerScreening in) {
         screening = in;
         if (screening != null) {
             if (screening.isValueDetached()) {
@@ -107,7 +107,7 @@ public class CustomerRetriever {
         saveScreening();
     }
 
-    public PersonScreening getScreening() {
+    public CustomerScreening getScreening() {
         return screening;
     }
 

@@ -81,8 +81,8 @@ import com.propertyvista.crm.client.activity.crud.customer.lead.LeadListerActivi
 import com.propertyvista.crm.client.activity.crud.customer.lead.LeadViewerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.lead.ShowingEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.lead.ShowingViewerActivity;
-import com.propertyvista.crm.client.activity.crud.customer.screening.PersonScreeningEditorActivity;
-import com.propertyvista.crm.client.activity.crud.customer.screening.PersonScreeningViewerActivity;
+import com.propertyvista.crm.client.activity.crud.customer.screening.CustomerScreeningEditorActivity;
+import com.propertyvista.crm.client.activity.crud.customer.screening.CustomerScreeningViewerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.FutureTenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.PastTenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantEditorActivity;
@@ -118,8 +118,8 @@ import com.propertyvista.crm.client.activity.crud.settings.content.PageViewerAct
 import com.propertyvista.crm.client.activity.crud.settings.content.SiteActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.SiteEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.SiteViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.creditcheck.PersonCreditCheckListerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.creditcheck.PersonCreditCheckViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.creditcheck.CustomerCreditCheckListerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.creditcheck.CustomerCreditCheckViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.dictionary.FeatureItemTypeEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.dictionary.FeatureItemTypeViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.dictionary.ProductDictionaryViewActivity;
@@ -468,10 +468,10 @@ public class MainActivityMapper implements AppActivityMapper {
                     } else if (place instanceof CrmSiteMap.Tenants.Screening) {
                         switch (crudPlace.getType()) {
                         case editor:
-                            activity = new PersonScreeningEditorActivity(crudPlace);
+                            activity = new CustomerScreeningEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new PersonScreeningViewerActivity(crudPlace);
+                            activity = new CustomerScreeningViewerActivity(crudPlace);
                             break;
                         }
 
@@ -664,13 +664,13 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.CreditChecks.PersonCreditCheck) {
+                    } else if (place instanceof CrmSiteMap.Settings.CreditChecks.CustomerCreditCheck) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new PersonCreditCheckListerActivity(crudPlace);
+                            activity = new CustomerCreditCheckListerActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new PersonCreditCheckViewerActivity(crudPlace);
+                            activity = new CustomerCreditCheckViewerActivity(crudPlace);
                             break;
                         case editor:
                         default:

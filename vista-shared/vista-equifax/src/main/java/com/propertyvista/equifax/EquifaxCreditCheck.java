@@ -39,13 +39,13 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.PersonCreditCheck;
-import com.propertyvista.domain.tenant.PersonCreditCheck.CreditCheckResult;
+import com.propertyvista.domain.tenant.CustomerCreditCheck;
+import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.equifax.request.EquifaxConsts;
 import com.propertyvista.equifax.request.EquifaxHttpClient;
 import com.propertyvista.equifax.request.EquifaxModelMapper;
 import com.propertyvista.equifax.request.XmlCreator;
-import com.propertyvista.server.domain.PersonCreditCheckReport;
+import com.propertyvista.server.domain.CustomerCreditCheckReport;
 
 public class EquifaxCreditCheck {
 
@@ -97,7 +97,7 @@ public class EquifaxCreditCheck {
         riskCodeOverrideDescription.put("11", i18n.ntr("Review - Decline Applicant received an unacceptably low score"));
     }
 
-    public static PersonCreditCheck runCreditCheck(PmcEquifaxInfo equifaxInfo, Customer customer, PersonCreditCheck pcc, int strategyNumber) {
+    public static CustomerCreditCheck runCreditCheck(PmcEquifaxInfo equifaxInfo, Customer customer, CustomerCreditCheck pcc, int strategyNumber) {
         CNConsAndCommRequestType requestMessage = EquifaxModelMapper.createRequest(customer, pcc, strategyNumber);
 
         if (ApplicationMode.isDevelopment()) {
@@ -126,7 +126,7 @@ public class EquifaxCreditCheck {
 
         //TODO
         if (false) {
-            PersonCreditCheckReport report = EntityFactory.create(PersonCreditCheckReport.class);
+            CustomerCreditCheckReport report = EntityFactory.create(CustomerCreditCheckReport.class);
             report.data().setValue(null);
         }
 

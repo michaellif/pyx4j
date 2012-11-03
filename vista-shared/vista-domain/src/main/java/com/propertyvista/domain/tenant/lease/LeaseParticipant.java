@@ -40,8 +40,8 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.tenant.PersonCreditCheck;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerCreditCheck;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 
@@ -109,16 +109,16 @@ public interface LeaseParticipant<LC extends LeaseCustomer<?>> extends IEntity {
      * Recorded at the time of application approval
      */
     @Detached
-    PersonCreditCheck creditCheck();
+    CustomerCreditCheck creditCheck();
 
     /**
      * Recorded at the time of application approval
      */
     @Detached
     @Versioned
-    PersonScreening screening();
+    CustomerScreening screening();
 
     @Transient
-    PersonScreening effectiveScreening();
+    CustomerScreening effectiveScreening();
 
 }

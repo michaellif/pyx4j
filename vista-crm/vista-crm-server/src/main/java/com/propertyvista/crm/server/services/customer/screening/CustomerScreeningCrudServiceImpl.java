@@ -16,13 +16,13 @@ package com.propertyvista.crm.server.services.customer.screening;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.crm.rpc.services.customer.screening.PersonScreeningCrudService;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningCrudService;
+import com.propertyvista.domain.tenant.CustomerScreening;
 
-public class PersonScreeningCrudServiceImpl extends AbstractVersionedCrudServiceImpl<PersonScreening> implements PersonScreeningCrudService {
+public class CustomerScreeningCrudServiceImpl extends AbstractVersionedCrudServiceImpl<CustomerScreening> implements CustomerScreeningCrudService {
 
-    public PersonScreeningCrudServiceImpl() {
-        super(PersonScreening.class);
+    public CustomerScreeningCrudServiceImpl() {
+        super(CustomerScreening.class);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class PersonScreeningCrudServiceImpl extends AbstractVersionedCrudService
     }
 
     @Override
-    protected void enhanceRetrieved(PersonScreening entity, PersonScreening dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(CustomerScreening entity, CustomerScreening dto, RetrieveTraget retrieveTraget) {
         // load detached entities:        
         Persistence.service().retrieve(dto.documents());
         Persistence.service().retrieve(dto.version().incomes());

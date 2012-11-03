@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 
 public class PolicyFacadeImpl implements PolicyFacade {
 
@@ -35,7 +35,7 @@ public class PolicyFacadeImpl implements PolicyFacade {
         // Find Object hierarchy, Like in BreadcrumbsHelper
         PolicyNode node = null;
         // Special case for not business owned
-        if (entity instanceof PersonScreening) {
+        if (entity instanceof CustomerScreening) {
             // TODO Find  LeaseTerm that have application
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
             criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().leaseCustomers().$().customer().personScreening(), entity));

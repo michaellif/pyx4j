@@ -18,7 +18,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
 
@@ -31,7 +31,7 @@ public interface TenantSummaryGDO extends IEntity {
 
     Tenant tenantInLease();
 
-    PersonScreening tenantScreening();
+    CustomerScreening tenantScreening();
 
-    IList<PersonScreening> guarantorScreening();
+    IList<CustomerScreening> guarantorScreening();
 }

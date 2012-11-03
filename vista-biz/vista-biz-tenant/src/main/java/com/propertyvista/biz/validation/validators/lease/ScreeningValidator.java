@@ -27,7 +27,7 @@ import com.propertyvista.biz.validation.framework.EntityValidator;
 import com.propertyvista.biz.validation.framework.SimpleValidationFailure;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 
 public class ScreeningValidator implements EntityValidator<Customer> {
 
@@ -38,10 +38,10 @@ public class ScreeningValidator implements EntityValidator<Customer> {
     @Override
     public Set<ValidationFailure> validate(Customer entity) {
         if (!entity.personScreening().isNull()) {
-            EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
+            EntityQueryCriteria<CustomerScreening> criteria = EntityQueryCriteria.create(CustomerScreening.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().screene(), entity));
             criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
-            PersonScreening screening = Persistence.service().retrieve(criteria);
+            CustomerScreening screening = Persistence.service().retrieve(criteria);
             if ((screening != null) && !screening.version().isNull()) {
                 Set<ValidationFailure> validationFailures = new HashSet<ValidationFailure>();
                 validationFailures.add(new SimpleValidationFailure(entity, i18n.tr("{0} Has unfinalized Screening.", entity)));

@@ -22,11 +22,11 @@ import ca.equifax.uat.from.ObjectFactory;
 import ca.equifax.uat.to.CNConsAndCommRequestType;
 
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.PersonCreditCheck;
+import com.propertyvista.domain.tenant.CustomerCreditCheck;
 
 public class EquifaxSimulation {
 
-    public static EfxTransmit simulateResponce(CNConsAndCommRequestType requestMessage, Customer customer, PersonCreditCheck pcc, int strategyNumber) {
+    public static EfxTransmit simulateResponce(CNConsAndCommRequestType requestMessage, Customer customer, CustomerCreditCheck pcc, int strategyNumber) {
         ObjectFactory factory = new ObjectFactory();
         EfxTransmit response = factory.createEfxTransmit();
 

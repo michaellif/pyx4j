@@ -137,16 +137,16 @@ CREATE SEQUENCE lease_term_vlease_products$feature_items_seq START WITH 1 INCREM
 ALTER SEQUENCE lease_term_vlease_products$feature_items_seq OWNER TO vista;
 --CREATE SEQUENCE notes_and_attachments$attachments_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 --ALTER SEQUENCE notes_and_attachments$attachments_seq OWNER TO vista;
-CREATE SEQUENCE person_credit_check_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-ALTER SEQUENCE person_credit_check_seq OWNER TO vista;
-CREATE SEQUENCE person_screening_income_info_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-ALTER SEQUENCE person_screening_income_info_seq OWNER TO vista;
-CREATE SEQUENCE person_screening_legal_questions_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-ALTER SEQUENCE person_screening_legal_questions_seq OWNER TO vista;
-CREATE SEQUENCE person_screening_personal_income_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-ALTER SEQUENCE person_screening_personal_income_seq OWNER TO vista;
-CREATE SEQUENCE person_screening_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-ALTER SEQUENCE person_screening_v_seq OWNER TO vista;
+CREATE SEQUENCE customer_credit_check_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ALTER SEQUENCE customer_credit_check_seq OWNER TO vista;
+CREATE SEQUENCE customer_screening_income_info_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ALTER SEQUENCE customer_screening_income_info_seq OWNER TO vista;
+CREATE SEQUENCE customer_screening_legal_questions_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ALTER SEQUENCE customer_screening_legal_questions_seq OWNER TO vista;
+CREATE SEQUENCE customer_screening_income_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ALTER SEQUENCE customer_screening_income_seq OWNER TO vista;
+CREATE SEQUENCE customer_screening_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ALTER SEQUENCE customer_screening_v_seq OWNER TO vista;
 CREATE SEQUENCE product_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE product_seq OWNER TO vista;
 CREATE SEQUENCE product_v$concessions_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -247,7 +247,7 @@ BEGIN
         -- apt_unit_occupancy_segment
         EXECUTE 'UPDATE '||v_schema_name||'.apt_unit_occupancy_segment '
         ||'     SET     status = ''occupied'' '
-        ||'     WHERE   status = ''leased'' '; 
+        ||'     WHERE   status = ''leased'' ';
 
         -- billing_arrears_snapshot
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_arrears_snapshot ADD CONSTRAINT billing_arrears_snapshot_billing_account_ck '||
@@ -259,16 +259,16 @@ BEGIN
          -- billing_bill
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_bill DROP COLUMN lease_for,'
                                                         ||'ADD COLUMN previous_charge_refunds NUMERIC(18,2)';
-                                                        
+
         EXECUTE 'UPDATE '||v_schema_name||'.billing_bill '
 	||'	SET	previous_charge_refunds = 0 ';
 
-        
+
 	-- billing_billing_cycle_stats
         EXECUTE 'CREATE TABLE '||v_schema_name||'.billing_billing_cycle_stats '
         ||'( '
         ||'     id              BIGINT          NOT NULL,'
-        ||'     billing_cycle   BIGINT          NOT NULL,'                 
+        ||'     billing_cycle   BIGINT          NOT NULL,'
         ||'     failed          BIGINT,'
         ||'     rejected        BIGINT,'
         ||'     not_confirmed   BIGINT,'
@@ -281,10 +281,10 @@ BEGIN
         ||'(SELECT nextval(''public.billing_billing_cycle_stats_seq'') AS id,failed,rejected,not_confirmed,confirmed,id AS billing_cycle '
         ||'FROM '||v_schema_name||'.billing_billing_cycle '
         ||'ORDER BY id )';
-        
-        EXECUTE 'CREATE UNIQUE INDEX billing_billing_cycle_stats_billing_cycle_idx ON '||v_schema_name||'.billing_billing_cycle_stats USING btree(billing_cycle)'; 
 
-        
+        EXECUTE 'CREATE UNIQUE INDEX billing_billing_cycle_stats_billing_cycle_idx ON '||v_schema_name||'.billing_billing_cycle_stats USING btree(billing_cycle)';
+
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle_stats ADD CONSTRAINT billing_billing_cycle_stats_billing_cycle_fk FOREIGN KEY(billing_cycle) '||
         'REFERENCES '||v_schema_name||'.billing_billing_cycle(id)';
 
@@ -293,7 +293,7 @@ BEGIN
                                                                 ||'     DROP COLUMN not_confirmed,'
                                                                 ||'     DROP COLUMN confirmed';
 
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_cycle_stats OWNER TO vista';
 
         -- billing_billing_type
@@ -442,21 +442,21 @@ BEGIN
         ||'                       JOIN '||v_schema_name||'.lease c ON (a.lease = c.id) '
         ||'                       JOIN '||v_schema_name||'.lease_v b ON (b.holder = c.id) '
         ||'                       WHERE a.status = ''Created'' AND b.status != ''Application'') ';
-        
-        
+
+
         /**
         ***     ==========================================================================================
         ***
-        ***             Status update on lease_v table performed here so lease_term can be populated 
-        ***             with updated data later on 
+        ***             Status update on lease_v table performed here so lease_term can be populated
+        ***             with updated data later on
         ***
         ***     ==========================================================================================
         **/
-        
+
         EXECUTE 'UPDATE '||v_schema_name||'.lease_v '
         ||'     SET     status = ''ExistingLease'' '
         ||'     WHERE   status = ''Created'' ';
-        
+
         EXECUTE 'UPDATE '||v_schema_name||'.lease_v '
         ||'     SET     status = ''Completed'' '
         ||'     WHERE   status = ''FinalBillIssued'' ';
@@ -466,8 +466,8 @@ BEGIN
         -- legal_questions
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions DROP CONSTRAINT IF EXISTS legal_questions_pk CASCADE';
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions RENAME TO person_screening_legal_questions';
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_legal_questions ADD CONSTRAINT person_screening_legal_questions_pk PRIMARY KEY(id) ';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.legal_questions RENAME TO customer_screening_legal_questions';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_legal_questions ADD CONSTRAINT customer_screening_legal_questions_pk PRIMARY KEY(id) ';
 
         -- locker_area
         EXECUTE 'ALTER TABLE '||v_schema_name||'.locker_area DROP COLUMN is_private';
@@ -761,7 +761,7 @@ BEGIN
         ||'DROP COLUMN old_product ';
 
         -- cleanup
-        
+
         FOREACH v_table_name IN ARRAY
         ARRAY[  'service_v$concessions',
                 'service_v$features',
@@ -773,10 +773,10 @@ BEGIN
             SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,v_table_name,TRUE);
 
         END LOOP;
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v DROP COLUMN old_id, DROP COLUMN old_holder';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product DROP COLUMN old_id';
-       
+
         /**
         *** -----------------------------------------------------------------------------------------
         ***
@@ -801,7 +801,7 @@ BEGIN
                                 'ADD COLUMN next_term BIGINT,'||
                                 'ADD COLUMN previous_term BIGINT,'||
                                 'ADD COLUMN termination_lease_to DATE';
-                                
+
 
 
         /**
@@ -952,7 +952,7 @@ BEGIN
         'ADD CONSTRAINT lease_current_term_fk FOREIGN KEY(current_term) REFERENCES '||v_schema_name||'.lease_term(id),'||
         'ADD CONSTRAINT lease_next_term_fk FOREIGN KEY(next_term) REFERENCES '||v_schema_name||'.lease_term(id),'||
         'ADD CONSTRAINT lease_previous_term_fk FOREIGN KEY(previous_term) REFERENCES '||v_schema_name||'.lease_term(id)';
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease DROP COLUMN actual_lease_to';
 
         -- lease_customer
@@ -1049,9 +1049,9 @@ BEGIN
         '       CONSTRAINT lease_participant_lease_term_v_fk FOREIGN KEY(lease_term_v) '||
         '               REFERENCES '||v_schema_name||'.lease_term_v(id), '||
        -- '       CONSTRAINT lease_participant_credit_check_fk FOREIGN KEY (credit_check) '||
-       -- '               REFERENCES '||v_schema_name||'.person_credit_check(id),'||
-        '       CONSTRAINT lease_participant_screening_fk FOREIGN KEY(screening) '||
-        '               REFERENCES '||v_schema_name||'.person_screening(id), '||
+       -- '               REFERENCES '||v_schema_name||'.customer_credit_check(id),'||
+       -- '       CONSTRAINT lease_participant_screening_fk FOREIGN KEY(screening) '||
+       -- '               REFERENCES '||v_schema_name||'.customer_screening(id), '||
         '       CONSTRAINT lease_participant_tenant_fk FOREIGN KEY(tenant) '||
         '               REFERENCES '||v_schema_name||'.lease_customer(id))';
 
@@ -1099,7 +1099,7 @@ BEGIN
         ||'     CONSTRAINT lease_termination_policy_nodediscriminator_d_ck '
         ||'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement''))'
         ||')';
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_termination_policy OWNER TO vista';
 
         -- maintenance_request
@@ -1108,7 +1108,7 @@ BEGIN
                                         'ADD COLUMN lease_customerdiscriminator VARCHAR(50),'||
                                         'ADD CONSTRAINT maintenance_request_lease_customer_fk FOREIGN KEY(lease_customer) '||
                                         '   REFERENCES '||v_schema_name||'.lease_customer(id)';
-        
+
         EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request AS a '
         ||'     SET lease_customer = b.lease_customer,'
         ||'     lease_customerdiscriminator = b.lease_customerdiscriminator '
@@ -1118,7 +1118,7 @@ BEGIN
         ||'             FROM    '||v_schema_name||'.lease_customer a '
         ||'             JOIN    '||v_schema_name||'.lease_participant b ON (a.id = b.lease_customer)) AS b '
         ||'     WHERE a.tenant = b.tenant_id ';
-        
+
         EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request DROP COLUMN tenant';
 
         -- payment_record
@@ -1168,9 +1168,9 @@ BEGIN
         SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'equifax_result');
 
 
-        -- person_screening_income_info
+        -- customer_screening_income_info
 
-        EXECUTE 'CREATE TABLE '||v_schema_name||'.person_screening_income_info ('||
+        EXECUTE 'CREATE TABLE '||v_schema_name||'.customer_screening_income_info ('||
                 '   id              BIGINT          NOT NULL,'||
                 '   iddiscriminator         VARCHAR(64)         NOT NULL,'||
                 '   name                VARCHAR(500),'||
@@ -1200,15 +1200,15 @@ BEGIN
                 '   program             VARCHAR(50),'||
                 '   field_of_study          VARCHAR(500),'||
                 '   funding_choices         VARCHAR(50),'||
-            '   CONSTRAINT person_screening_income_info_pk PRIMARY KEY (id),'||
-            '   CONSTRAINT person_screening_income_info_address_country_fk FOREIGN KEY (address_country) '||
+            '   CONSTRAINT customer_screening_income_info_pk PRIMARY KEY (id),'||
+            '   CONSTRAINT customer_screening_income_info_address_country_fk FOREIGN KEY (address_country) '||
             '       REFERENCES '||v_schema_name||'.country(id),'||
-            '   CONSTRAINT person_screening_income_info_address_province_fk FOREIGN KEY (address_province) '||
+            '   CONSTRAINT customer_screening_income_info_address_province_fk FOREIGN KEY (address_province) '||
             '       REFERENCES '||v_schema_name||'.province(id))';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_income_info OWNER TO vista';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income_info OWNER TO vista';
 
-        -- personal_income - just in case rename to person_screening_personal_income
+        -- personal_income - just in case rename to customer_screening_income
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.personal_income DROP CONSTRAINT IF EXISTS personal_income_pk,'||
                                                 'DROP CONSTRAINT IF EXISTS personal_income_employer_fk,'||
@@ -1219,9 +1219,9 @@ BEGIN
                                                 'DROP CONSTRAINT IF EXISTS personal_income_social_services_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS personal_income_student_income_fk';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.personal_income RENAME TO person_screening_personal_income';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.personal_income RENAME TO customer_screening_income';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income DROP COLUMN other_income_information,'||
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income DROP COLUMN other_income_information,'||
                                                 'DROP COLUMN employer,'||
                                                 'DROP COLUMN self_employed,'||
                                                 'DROP COLUMN seasonally_employed,'||
@@ -1229,15 +1229,15 @@ BEGIN
                                                 'DROP COLUMN student_income';
 
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ADD COLUMN detailsdiscriminator VARCHAR(50),'||
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income ADD COLUMN detailsdiscriminator VARCHAR(50),'||
                                                 'ADD COLUMN details BIGINT';
 
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ADD CONSTRAINT  person_screening_personal_income_pk PRIMARY KEY(id),'||
-        'ADD CONSTRAINT person_screening_personal_income_details_fk FOREIGN KEY(details) REFERENCES '||v_schema_name||'.person_screening_income_info(id)' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income ADD CONSTRAINT  customer_screening_income_pk PRIMARY KEY(id),'||
+        'ADD CONSTRAINT customer_screening_income_details_fk FOREIGN KEY(details) REFERENCES '||v_schema_name||'.customer_screening_income_info(id)' ;
 
 
-        -- person_screening
+        -- person_screening -> customer_screening
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening '||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_pk CASCADE,'||
@@ -1249,17 +1249,18 @@ BEGIN
                                                 'DROP CONSTRAINT IF EXISTS person_screening_previous_address_province_fk,'||
                                                 'DROP CONSTRAINT IF EXISTS person_screening_screene_fk';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening RENAME TO person_screening_v';
 
-        EXECUTE 'CREATE TABLE '||v_schema_name||'.person_screening ( '||
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening RENAME TO customer_screening_v';
+
+        EXECUTE 'CREATE TABLE '||v_schema_name||'.customer_screening ( '||
                 '       id              BIGINT          NOT NULL,'||
                 '       screene         BIGINT,'||
-                '       CONSTRAINT person_screening_pk PRIMARY KEY(id),'||
-                '       CONSTRAINT person_screening_screene_fk FOREIGN KEY(screene) REFERENCES '||v_schema_name||'.customer(id))';
+                '       CONSTRAINT customer_screening_pk PRIMARY KEY(id),'||
+                '       CONSTRAINT customer_screening_screene_fk FOREIGN KEY(screene) REFERENCES '||v_schema_name||'.customer(id))';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_v OWNER TO vista';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_v OWNER TO vista';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_v ADD COLUMN created_by_user_key BIGINT,'||
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_v ADD COLUMN created_by_user_key BIGINT,'||
                                                                 'ADD COLUMN from_date TIMESTAMP,'||
                                                                 'ADD COLUMN to_date TIMESTAMP,'||
                                                                 'ADD COLUMN holder BIGINT,'||
@@ -1268,21 +1269,26 @@ BEGIN
                                                                 'DROP COLUMN current_address_phone,'||
                                                                 'DROP COLUMN equifax_approval,'||
                                                                 'DROP COLUMN previous_address_phone,'||
-                        'ADD CONSTRAINT person_screening_v_pk PRIMARY KEY(id),'||
-                        'ADD CONSTRAINT person_screening_v_current_address_country_fk FOREIGN KEY(current_address_country) REFERENCES '||v_schema_name||'.country(id),'||
-                        'ADD CONSTRAINT person_screening_v_current_address_province_fk FOREIGN KEY(current_address_province) REFERENCES '||v_schema_name||'.province(id),'||
-                        'ADD CONSTRAINT person_screening_v_holder_fk FOREIGN KEY(holder) REFERENCES '||v_schema_name||'.person_screening(id),'||
-                        'ADD CONSTRAINT person_screening_v_legal_questions_fk FOREIGN KEY(legal_questions) REFERENCES '||v_schema_name||'.person_screening_legal_questions(id),'||
-                        'ADD CONSTRAINT person_screening_v_previous_address_country_fk FOREIGN KEY(previous_address_country) REFERENCES '||v_schema_name||'.country(id),'||
-                        'ADD CONSTRAINT person_screening_v_previous_address_province_fk FOREIGN KEY(previous_address_province) REFERENCES '||v_schema_name||'.province(id)';
+                        'ADD CONSTRAINT customer_screening_v_pk PRIMARY KEY(id),'||
+                        'ADD CONSTRAINT customer_screening_v_current_address_country_fk FOREIGN KEY(current_address_country) REFERENCES '||v_schema_name||'.country(id),'||
+                        'ADD CONSTRAINT customer_screening_v_current_address_province_fk FOREIGN KEY(current_address_province) REFERENCES '||v_schema_name||'.province(id),'||
+                        'ADD CONSTRAINT customer_screening_v_holder_fk FOREIGN KEY(holder) REFERENCES '||v_schema_name||'.customer_screening(id),'||
+                        'ADD CONSTRAINT customer_screening_v_legal_questions_fk FOREIGN KEY(legal_questions) REFERENCES '||v_schema_name||'.customer_screening_legal_questions(id),'||
+                        'ADD CONSTRAINT customer_screening_v_previous_address_country_fk FOREIGN KEY(previous_address_country) REFERENCES '||v_schema_name||'.country(id),'||
+                        'ADD CONSTRAINT customer_screening_v_previous_address_province_fk FOREIGN KEY(previous_address_province) REFERENCES '||v_schema_name||'.province(id)';
 
-        EXECUTE 'CREATE INDEX person_screening_v_holder_from_date_to_date_idx ON '||v_schema_name||'.person_screening_v USING btree(holder, from_date, to_date)';
+        EXECUTE 'CREATE INDEX customer_screening_v_holder_from_date_to_date_idx ON '||v_schema_name||'.customer_screening_v USING btree(holder, from_date, to_date)';
 
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_asset RENAME TO customer_screening_personal_asset';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income '||
-        'ADD CONSTRAINT person_screening_personal_income_owner_fk FOREIGN KEY(owner) REFERENCES '||v_schema_name||'.person_screening_v(id)';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_personal_asset DROP CONSTRAINT person_screening_personal_asset_pk';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening OWNER TO vista';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_personal_asset ADD CONSTRAINT customer_screening_personal_asset_pk PRIMARY KEY (id)';
+
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income '||
+        'ADD CONSTRAINT customer_screening_income_owner_fk FOREIGN KEY(owner) REFERENCES '||v_schema_name||'.customer_screening_v(id)';
+
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening OWNER TO vista';
 
         -- bank_account_info_approval
         SELECT * INTO v_void FROM _dba_.drop_schema_table(v_schema_name,'bank_account_info_approval');
@@ -1310,8 +1316,8 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.background_check_policy ADD CONSTRAINT background_check_policy_version_fk '||
         'FOREIGN KEY(version) REFERENCES '||v_schema_name||'.background_check_policy_v(id)';
 
-        -- person_credit_check
-        EXECUTE 'CREATE TABLE '||v_schema_name||'.person_credit_check ( '||
+        -- customer_credit_check
+        EXECUTE 'CREATE TABLE '||v_schema_name||'.customer_credit_check ( '||
         '       id                      BIGINT          NOT NULL,'||
         '       screening               BIGINT,'||
         '       screening_for           TIMESTAMP,'||
@@ -1324,22 +1330,22 @@ BEGIN
         '       amount_approved         NUMERIC(18,2),'||
         '       credit_check_report     BIGINT,'||
         '       reason                  VARCHAR(500),'||
-        '       CONSTRAINT person_credit_check_pk PRIMARY KEY(id),'||
-        '       CONSTRAINT person_credit_check_background_check_policy_fk FOREIGN KEY(background_check_policy) '||
+        '       CONSTRAINT customer_credit_check_pk PRIMARY KEY(id),'||
+        '       CONSTRAINT customer_credit_check_background_check_policy_fk FOREIGN KEY(background_check_policy) '||
         '               REFERENCES '||v_schema_name||'.background_check_policy_v(id),'||
-        '       CONSTRAINT person_credit_check_created_by_fk FOREIGN KEY(created_by) '||
+        '       CONSTRAINT customer_credit_check_created_by_fk FOREIGN KEY(created_by) '||
         '               REFERENCES '||v_schema_name||'.employee(id),'||
-        '       CONSTRAINT person_credit_check_screening_fk FOREIGN KEY(screening) '||
-        '               REFERENCES '||v_schema_name||'.person_screening(id))';
+        '       CONSTRAINT customer_credit_check_screening_fk FOREIGN KEY(screening) '||
+        '               REFERENCES '||v_schema_name||'.customer_screening(id))';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_credit_check OWNER TO vista';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_credit_check OWNER TO vista';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_participant ADD CONSTRAINT lease_participant_credit_check_fk '||
-        'FOREIGN KEY(credit_check) REFERENCES '||v_schema_name||'.person_credit_check(id),'||
-        'ADD CONSTRAINT lease_participant_screening_fk FOREIGN KEY(screening) REFERENCES '||v_schema_name||'.person_screening(id)';
+        'FOREIGN KEY(credit_check) REFERENCES '||v_schema_name||'.customer_credit_check(id),'||
+        'ADD CONSTRAINT lease_participant_screening_fk FOREIGN KEY(screening) REFERENCES '||v_schema_name||'.customer_screening(id)';
 
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_asset ADD CONSTRAINT person_screening_personal_asset_owner_fk '||
-        'FOREIGN KEY(owner) REFERENCES '||v_schema_name||'.person_screening_v(id)';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_personal_asset ADD CONSTRAINT customer_screening_personal_asset_owner_fk '||
+        'FOREIGN KEY(owner) REFERENCES '||v_schema_name||'.customer_screening_v(id)';
 
 
         /** Cleanup **/
@@ -1434,13 +1440,13 @@ BEGIN
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_method ALTER COLUMN customer SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record ALTER COLUMN billing_account SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record_processing ALTER COLUMN payment_record SET NOT NULL' ;
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening ALTER COLUMN screene SET NOT NULL' ;
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_asset ALTER COLUMN owner SET NOT NULL' ;
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ALTER COLUMN details SET NOT NULL' ;
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ALTER COLUMN detailsdiscriminator SET NOT NULL' ;
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ALTER COLUMN income_source SET NOT NULL' ;
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ALTER COLUMN owner SET NOT NULL' ;
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_v ALTER COLUMN holder SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening ALTER COLUMN screene SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_personal_asset ALTER COLUMN owner SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income ALTER COLUMN details SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income ALTER COLUMN detailsdiscriminator SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income ALTER COLUMN income_source SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income ALTER COLUMN owner SET NOT NULL' ;
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_v ALTER COLUMN holder SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product ALTER COLUMN catalog SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_catalog ALTER COLUMN building SET NOT NULL' ;
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_item ALTER COLUMN product SET NOT NULL' ;
@@ -1536,9 +1542,9 @@ BEGIN
                 'CHECK (lease_participantdiscriminator IN (''Guarantor'',''Tenant'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_transactions_policy ADD CONSTRAINT payment_transactions_policy_nodediscriminator_d_ck '||
                 'CHECK (nodediscriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_income_info ADD CONSTRAINT person_screening_income_info_iddiscriminator_ck '||
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income_info ADD CONSTRAINT customer_screening_income_info_iddiscriminator_ck '||
                 'CHECK (iddiscriminator IN (''employee'',''other'',''seasonalEmployee'',''selfEmployed'',''socialServices'',''student'')) ';
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.person_screening_personal_income ADD CONSTRAINT person_screening_personal_income_detailsdiscriminator_d_ck '||
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income ADD CONSTRAINT customer_screening_income_detailsdiscriminator_d_ck '||
                 'CHECK (detailsdiscriminator IN (''employee'',''other'',''seasonalEmployee'',''selfEmployed'',''socialServices'',''student'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.pet_constraints ADD CONSTRAINT pet_constraints_petdiscriminator_d_ck '||
                 'CHECK (petdiscriminator IN (''feature'',''service'')) ';
@@ -1585,14 +1591,14 @@ $$
 LANGUAGE plpgsql VOLATILE;
 
 /**
-***     Split schema update into several transactions 
-***     to avoid increasing max_locks_per_transaction 
+***     Split schema update into several transactions
+***     to avoid increasing max_locks_per_transaction
 **/
 
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[abc]';
 COMMIT;
@@ -1600,7 +1606,7 @@ COMMIT;
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[def]';
 COMMIT;
@@ -1608,7 +1614,7 @@ COMMIT;
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[ghi]';
 COMMIT;
@@ -1616,7 +1622,7 @@ COMMIT;
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[jkl]';
 COMMIT;
@@ -1624,7 +1630,7 @@ COMMIT;
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[mno]';
 COMMIT;
@@ -1632,7 +1638,7 @@ COMMIT;
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[pqr]';
 COMMIT;
@@ -1640,7 +1646,7 @@ COMMIT;
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[stu]';
 COMMIT;
@@ -1648,7 +1654,7 @@ COMMIT;
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[vwx]';
 COMMIT;
@@ -1656,7 +1662,7 @@ COMMIT;
 BEGIN TRANSACTION;
         SELECT  namespace, _dba_.migrate_to_105(namespace) AS result
         FROM    _admin_.admin_pmc
-        WHERE   status != 'Created' 
+        WHERE   status != 'Created'
         AND     schema_version IS NULL
         AND     namespace ~ '^[yz]';
 COMMIT;

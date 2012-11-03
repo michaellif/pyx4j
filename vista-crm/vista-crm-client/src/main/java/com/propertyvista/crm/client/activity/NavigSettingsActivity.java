@@ -57,7 +57,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         NavigFolder folder = null;
 
         folder = new NavigFolder(i18n.tr("Credit Checks"));
-        folder.addNavigItem(new CrmSiteMap.Settings.CreditChecks.PersonCreditCheck().formListerPlace());
+        folder.addNavigItem(new CrmSiteMap.Settings.CreditChecks.CustomerCreditCheck().formListerPlace());
         list.add(folder);
 
         if (SecurityController.checkBehavior(VistaCrmBehavior.Organization)) {

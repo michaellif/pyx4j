@@ -7,27 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 20, 2011
- * @author vlads
+ * Created on 2011-05-25
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.crm.client.ui.crud.customer.screening;
 
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
-
-import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.tenant.EmergencyContact;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.CustomerScreening;
 
-@Transient
-public interface TenantInfoDTO extends CustomerScreening {
+public class CustomerScreeningEditorViewImpl extends CrmEditorViewImplBase<CustomerScreening> implements CustomerScreeningEditorView {
+    public CustomerScreeningEditorViewImpl() {
+        super(CrmSiteMap.Tenants.Screening.class, new CustomerScreeningForm());
+    }
 
-    @ToString
-    Person person();
-
-    @Length(3)
-    IList<EmergencyContact> emergencyContacts();
 }

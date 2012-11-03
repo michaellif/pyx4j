@@ -21,9 +21,9 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.income.IncomeInfo;
-import com.propertyvista.domain.tenant.income.PersonalAsset;
-import com.propertyvista.domain.tenant.income.PersonalIncome;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 
 @Transient
 public interface TenantFinancialDTO extends IEntity {
@@ -31,12 +31,12 @@ public interface TenantFinancialDTO extends IEntity {
     @ToString
     Person person();
 
-    IList<PersonalIncome> incomes();
+    IList<CustomerScreeningIncome> incomes();
 
     @Caption(name = "Incomes (Other)")
-    IList<IncomeInfo> incomes2();
+    IList<CustomerScreeningIncomeInfo> incomes2();
 
-    IList<PersonalAsset> assets();
+    IList<CustomerScreeningPersonalAsset> assets();
 
     IList<Guarantor> guarantors();
 }

@@ -20,7 +20,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
-import com.propertyvista.crm.rpc.dto.PersonCreditCheckDTO;
+import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
@@ -71,7 +71,7 @@ import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle;
@@ -117,7 +117,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(Customer.class, CrmSiteMap.Tenants.Tenant.class, CrmImages.INSTANCE.tenant());
         AppPlaceEntityMapper.register(LeaseCustomerTenant.class, CrmSiteMap.Tenants.Tenant.class, CrmImages.INSTANCE.tenant());
         AppPlaceEntityMapper.register(LeaseCustomerGuarantor.class, CrmSiteMap.Tenants.Guarantor.class, CrmImages.INSTANCE.tenant());
-        AppPlaceEntityMapper.register(PersonScreening.class, CrmSiteMap.Tenants.Screening.class, defaultImage);
+        AppPlaceEntityMapper.register(CustomerScreening.class, CrmSiteMap.Tenants.Screening.class, defaultImage);
 
         AppPlaceEntityMapper.register(Lead.class, Marketing.Lead.class, defaultImage);
         AppPlaceEntityMapper.register(Appointment.class, Marketing.Appointment.class, defaultImage);
@@ -139,7 +139,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(LeaseAdjustmentReason.class, CrmSiteMap.Settings.LeaseAdjustmentReason.class, defaultImage);
         AppPlaceEntityMapper.register(Tax.class, CrmSiteMap.Settings.Tax.class, defaultImage);
 
-        AppPlaceEntityMapper.register(PersonCreditCheckDTO.class, CrmSiteMap.Settings.CreditChecks.PersonCreditCheck.class, defaultImage);
+        AppPlaceEntityMapper.register(CustomerCreditCheckDTO.class, CrmSiteMap.Settings.CreditChecks.CustomerCreditCheck.class, defaultImage);
 
         AppPlaceEntityMapper.register(CrmRole.class, CrmSiteMap.Settings.UserRole.class, defaultImage);
         AppPlaceEntityMapper.register(Employee.class, CrmSiteMap.Organization.Employee.class, defaultImage);

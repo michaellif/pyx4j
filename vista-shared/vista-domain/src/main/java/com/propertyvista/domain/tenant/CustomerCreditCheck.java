@@ -41,7 +41,7 @@ import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
 /**
  * This object is created once and never updated.
  */
-public interface PersonCreditCheck extends IEntity {
+public interface CustomerCreditCheck extends IEntity {
 
     @I18n
     public enum CreditCheckResult {
@@ -68,7 +68,7 @@ public interface PersonCreditCheck extends IEntity {
     @Versioned
     @Owner
     @JoinColumn
-    PersonScreening screening();
+    CustomerScreening screening();
 
     /**
      * TimeStamp used for selecting the last one and recording actual event

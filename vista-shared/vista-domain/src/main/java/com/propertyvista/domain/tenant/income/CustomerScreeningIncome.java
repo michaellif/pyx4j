@@ -21,7 +21,6 @@ import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -29,11 +28,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.media.ApplicationDocumentHolder;
 import com.propertyvista.domain.media.ProofOfEmploymentDocument;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 
-@DiscriminatorValue("PersonalIncome")
-@Table(prefix = "person_screening_")
-public interface PersonalIncome extends IEntity, ApplicationDocumentHolder<ProofOfEmploymentDocument> {
+@DiscriminatorValue("CustomerScreeningIncome")
+public interface CustomerScreeningIncome extends IEntity, ApplicationDocumentHolder<ProofOfEmploymentDocument> {
 
     @Owner
     @NotNull
@@ -41,7 +39,7 @@ public interface PersonalIncome extends IEntity, ApplicationDocumentHolder<Proof
     @ReadOnly
     @Detached
     @JoinColumn
-    PersonScreening.PersonScreeningV owner();
+    CustomerScreening.CustomerScreeningV owner();
 
     @ToString
     @NotNull
@@ -50,7 +48,7 @@ public interface PersonalIncome extends IEntity, ApplicationDocumentHolder<Proof
 
     @Owned
     @MemberColumn(notNull = true)
-    IncomeInfo details();
+    CustomerScreeningIncomeInfo details();
 
     @OrderColumn
     IPrimitive<Integer> orderInOwner();

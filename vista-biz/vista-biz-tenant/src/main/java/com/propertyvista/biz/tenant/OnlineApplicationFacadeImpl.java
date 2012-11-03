@@ -35,7 +35,7 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
@@ -308,7 +308,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
         // create empty new screening if null:
         if (participant.screening().isNull()) {
-            participant.screening().set(EntityFactory.create(PersonScreening.class));
+            participant.screening().set(EntityFactory.create(CustomerScreening.class));
             Persistence.service().persist(participant);
         }
 

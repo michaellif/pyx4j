@@ -22,7 +22,6 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -34,8 +33,7 @@ import com.pyx4j.i18n.annotations.I18n;
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-@Table(prefix = "person_screening_")
-public interface IncomeInfo extends IEntity {
+public interface CustomerScreeningIncomeInfo extends IEntity {
 
     @Caption(name = "Description")
     IPrimitive<String> name();

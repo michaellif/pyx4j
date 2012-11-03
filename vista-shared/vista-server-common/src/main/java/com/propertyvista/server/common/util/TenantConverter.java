@@ -16,7 +16,7 @@ package com.propertyvista.server.common.util;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
 import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -79,10 +79,10 @@ public class TenantConverter {
         }
     }
 
-    public static class TenantScreening2TenantInfo extends EntityDtoBinder<PersonScreening, TenantInfoDTO> {
+    public static class TenantScreening2TenantInfo extends EntityDtoBinder<CustomerScreening, TenantInfoDTO> {
 
         public TenantScreening2TenantInfo() {
-            super(PersonScreening.class, TenantInfoDTO.class);
+            super(CustomerScreening.class, TenantInfoDTO.class);
         }
 
         @Override
@@ -94,10 +94,10 @@ public class TenantConverter {
         }
     }
 
-    public static class TenantFinancialEditorConverter extends EntityDtoBinder<PersonScreening, TenantFinancialDTO> {
+    public static class TenantFinancialEditorConverter extends EntityDtoBinder<CustomerScreening, TenantFinancialDTO> {
 
         public TenantFinancialEditorConverter() {
-            super(PersonScreening.class, TenantFinancialDTO.class);
+            super(CustomerScreening.class, TenantFinancialDTO.class);
         }
 
         @Override

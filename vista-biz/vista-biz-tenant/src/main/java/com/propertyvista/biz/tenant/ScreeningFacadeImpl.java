@@ -42,9 +42,9 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.PersonCreditCheck;
-import com.propertyvista.domain.tenant.PersonCreditCheck.CreditCheckResult;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerCreditCheck;
+import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApprovalDTO;
 import com.propertyvista.dto.LeaseApprovalDTO.SuggestedDecision;
@@ -137,9 +137,9 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
 
         LeaseParticipant<?> leaseParticipant = (LeaseParticipant<?>) Persistence.service().retrieve(leaseParticipantId.getValueClass(),
                 leaseParticipantId.getPrimaryKey());
-        PersonScreening screening = retrivePersonScreening(leaseParticipant.leaseCustomer().customer());
+        CustomerScreening screening = retrivePersonScreening(leaseParticipant.leaseCustomer().customer());
 
-        PersonCreditCheck pcc = EntityFactory.create(PersonCreditCheck.class);
+        CustomerCreditCheck pcc = EntityFactory.create(CustomerCreditCheck.class);
         pcc.amountChecked().setValue(rentAmount);
         pcc.screening().set(screening);
         pcc.createdBy().set(currentUserEmployee);
@@ -161,11 +161,11 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         Persistence.service().commit();
     }
 
-    private PersonScreening retrivePersonScreening(Customer customer) {
-        EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
+    private CustomerScreening retrivePersonScreening(Customer customer) {
+        EntityQueryCriteria<CustomerScreening> criteria = EntityQueryCriteria.create(CustomerScreening.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customer));
         criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
-        PersonScreening screening = Persistence.service().retrieve(criteria);
+        CustomerScreening screening = Persistence.service().retrieve(criteria);
         if ((screening != null) && (!screening.version().isNull())) {
             if (ScreeningValidator.screeningIsAutomaticallyFinalized) {
                 screening.saveAction().setValue(SaveAction.saveAsFinal);
@@ -187,11 +187,11 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
     }
 
     @Override
-    public PersonScreening retrivePersonScreeningFinalOrDraft(Customer customerId, AttachLevel attachLevel) {
-        EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
+    public CustomerScreening retrivePersonScreeningFinalOrDraft(Customer customerId, AttachLevel attachLevel) {
+        EntityQueryCriteria<CustomerScreening> criteria = EntityQueryCriteria.create(CustomerScreening.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customerId));
         criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
-        PersonScreening screening = Persistence.service().retrieve(criteria, attachLevel);
+        CustomerScreening screening = Persistence.service().retrieve(criteria, attachLevel);
         if (screening != null) {
             return screening;
         }
@@ -201,11 +201,11 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
     }
 
     @Override
-    public PersonScreening retrivePersonScreeningDraftOrFinal(Customer customerId, AttachLevel attachLevel) {
-        EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
+    public CustomerScreening retrivePersonScreeningDraftOrFinal(Customer customerId, AttachLevel attachLevel) {
+        EntityQueryCriteria<CustomerScreening> criteria = EntityQueryCriteria.create(CustomerScreening.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customerId));
         criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
-        PersonScreening screening = Persistence.service().retrieve(criteria, attachLevel);
+        CustomerScreening screening = Persistence.service().retrieve(criteria, attachLevel);
         if (screening != null) {
             return screening;
         }
@@ -215,8 +215,8 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
     }
 
     @Override
-    public PersonCreditCheck retrivePersonCreditCheck(Customer customerId) {
-        EntityQueryCriteria<PersonCreditCheck> criteria = EntityQueryCriteria.create(PersonCreditCheck.class);
+    public CustomerCreditCheck retrivePersonCreditCheck(Customer customerId) {
+        EntityQueryCriteria<CustomerCreditCheck> criteria = EntityQueryCriteria.create(CustomerCreditCheck.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().screening().screene(), customerId));
         criteria.add(PropertyCriterion.ge(criteria.proto().creditCheckDate(), DateUtils.addDays(new Date(), -30)));
         criteria.desc(criteria.proto().creditCheckDate());

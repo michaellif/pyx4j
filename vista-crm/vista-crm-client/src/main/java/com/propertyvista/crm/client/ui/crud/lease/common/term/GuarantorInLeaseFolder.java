@@ -42,7 +42,7 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseCustomerGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
@@ -147,7 +147,7 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
                     ++row,
                     0,
                     new DecoratorBuilder(inject(proto().effectiveScreening(),
-                            new CEntityCrudHyperlink<PersonScreening>(AppPlaceEntityMapper.resolvePlace(PersonScreening.class))), 9).build());
+                            new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 9).build());
 
             FormFlexPanel right = new FormFlexPanel();
             row = -1;

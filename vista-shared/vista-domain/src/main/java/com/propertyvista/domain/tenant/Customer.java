@@ -70,7 +70,7 @@ public interface Customer extends IEntity {
     // parent <-> child relationship:
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
-    PersonScreening personScreening();
+    CustomerScreening personScreening();
 
     // TODO @Owned(cascade = {})
     // Warning: cascade enabled only for tests/development preload to work! 

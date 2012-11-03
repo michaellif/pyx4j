@@ -32,7 +32,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.domain.LegalQuestions;
+import com.propertyvista.domain.CustomerScreeningLegalQuestions;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
@@ -40,15 +40,15 @@ import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.media.ProofOfEmploymentDocument;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy.BjccEntry;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
-import com.propertyvista.domain.tenant.PersonCreditCheck;
-import com.propertyvista.domain.tenant.PersonCreditCheck.CreditCheckResult;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerCreditCheck;
+import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeSource;
-import com.propertyvista.domain.tenant.income.PersonalAsset;
-import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
-import com.propertyvista.domain.tenant.income.PersonalIncome;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
@@ -61,8 +61,8 @@ public class ScreeningGenerator {
 
     }
 
-    PersonScreening createScreening() {
-        PersonScreening screening = EntityFactory.create(PersonScreening.class);
+    CustomerScreening createScreening() {
+        CustomerScreening screening = EntityFactory.create(CustomerScreening.class);
 
         // Documents
         for (int i = 0; i < 2 + RandomUtil.randomInt(2); i++) {
@@ -122,8 +122,8 @@ public class ScreeningGenerator {
         return address;
     }
 
-    private LegalQuestions createLegalQuestions() {
-        LegalQuestions lq = EntityFactory.create(LegalQuestions.class);
+    private CustomerScreeningLegalQuestions createLegalQuestions() {
+        CustomerScreeningLegalQuestions lq = EntityFactory.create(CustomerScreeningLegalQuestions.class);
 
         lq.suedForDamages().setValue(RandomUtil.randomBoolean());
         lq.suedForRent().setValue(RandomUtil.randomBoolean());
@@ -136,18 +136,18 @@ public class ScreeningGenerator {
         return lq;
     }
 
-    private Collection<PersonalIncome> createIncomes() {
-        List<PersonalIncome> incomes = new ArrayList<PersonalIncome>();
+    private Collection<CustomerScreeningIncome> createIncomes() {
+        List<CustomerScreeningIncome> incomes = new ArrayList<CustomerScreeningIncome>();
 
         {
-            PersonalIncome income = EntityFactory.create(PersonalIncome.class);
+            CustomerScreeningIncome income = EntityFactory.create(CustomerScreeningIncome.class);
             income.incomeSource().setValue(IncomeSource.fulltime);
             income.details().set(createEmployer());
             income.documents().add(createProofOfEmploymentDocument());
             incomes.add(income);
         }
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
-            PersonalIncome income = EntityFactory.create(PersonalIncome.class);
+            CustomerScreeningIncome income = EntityFactory.create(CustomerScreeningIncome.class);
             income.incomeSource().setValue(IncomeSource.selfemployed);
             income.details().set(createSelfEmployed());
             income.documents().add(createProofOfEmploymentDocument());
@@ -197,10 +197,10 @@ public class ScreeningGenerator {
         return selfEmpl;
     }
 
-    private Collection<PersonalAsset> createAssets(int minAssets) {
-        List<PersonalAsset> assets = new ArrayList<PersonalAsset>();
+    private Collection<CustomerScreeningPersonalAsset> createAssets(int minAssets) {
+        List<CustomerScreeningPersonalAsset> assets = new ArrayList<CustomerScreeningPersonalAsset>();
         for (int i = 0; i < 1 + minAssets + RandomUtil.randomInt(3); i++) {
-            PersonalAsset asset = EntityFactory.create(PersonalAsset.class);
+            CustomerScreeningPersonalAsset asset = EntityFactory.create(CustomerScreeningPersonalAsset.class);
 
             asset.assetType().setValue(RandomUtil.random(AssetType.values()));
             asset.percent().setValue((double) RandomUtil.randomInt(100));
@@ -211,10 +211,10 @@ public class ScreeningGenerator {
         return assets;
     }
 
-    private Collection<PersonCreditCheck> createPersonCreditCheck() {
-        List<PersonCreditCheck> list = new ArrayList<PersonCreditCheck>();
+    private Collection<CustomerCreditCheck> createPersonCreditCheck() {
+        List<CustomerCreditCheck> list = new ArrayList<CustomerCreditCheck>();
         for (int i = 0; i < 1 + RandomUtil.randomInt(3); i++) {
-            PersonCreditCheck pcc = EntityFactory.create(PersonCreditCheck.class);
+            CustomerCreditCheck pcc = EntityFactory.create(CustomerCreditCheck.class);
 
             pcc.creditCheckDate().setValue(RandomUtil.randomDateDaysShifted(-40));
 
@@ -270,11 +270,11 @@ public class ScreeningGenerator {
         return applicationDocument;
     }
 
-    public static void attachDocumentData(PersonScreening screening) {
+    public static void attachDocumentData(CustomerScreening screening) {
         for (ApplicationDocument document : screening.documents()) {
             attachDocumentData(document);
         }
-        for (PersonalIncome income : screening.version().incomes()) {
+        for (CustomerScreeningIncome income : screening.version().incomes()) {
             for (ApplicationDocument document : income.documents()) {
                 attachDocumentData(document);
             }

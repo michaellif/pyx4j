@@ -17,14 +17,14 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.dto.PersonCreditCheckDTO;
+import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
 
-public class PersonCreditCheckLister extends ListerBase<PersonCreditCheckDTO> {
+public class CustomerCreditCheckLister extends ListerBase<CustomerCreditCheckDTO> {
 
-    private static final I18n i18n = I18n.get(PersonCreditCheckLister.class);
+    private static final I18n i18n = I18n.get(CustomerCreditCheckLister.class);
 
-    public PersonCreditCheckLister() {
-        super(PersonCreditCheckDTO.class, true);
+    public CustomerCreditCheckLister() {
+        super(CustomerCreditCheckDTO.class, true);
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().screening().screene().person().name()).title(i18n.tr("Screene")).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().screening().screene().person().name().firstName()).searchableOnly().build(),

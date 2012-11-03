@@ -44,7 +44,7 @@ import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonRelationship;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseCustomerTenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -198,7 +198,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
                     ++row,
                     0,
                     new DecoratorBuilder(inject(proto().effectiveScreening(),
-                            new CEntityCrudHyperlink<PersonScreening>(AppPlaceEntityMapper.resolvePlace(PersonScreening.class))), 9).build());
+                            new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 9).build());
 
             FormFlexPanel right = new FormFlexPanel();
             row = -1;

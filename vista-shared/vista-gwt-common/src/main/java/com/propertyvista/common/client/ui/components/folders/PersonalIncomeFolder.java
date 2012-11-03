@@ -22,19 +22,19 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.editors.PersonalIncomeEditor;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
-import com.propertyvista.domain.tenant.income.PersonalIncome;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 
-public class PersonalIncomeFolder extends VistaBoxFolder<PersonalIncome> {
+public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome> {
 
     private static final I18n i18n = I18n.get(PersonalIncomeFolder.class);
 
     public PersonalIncomeFolder(boolean modifyable) {
-        super(PersonalIncome.class, modifyable);
+        super(CustomerScreeningIncome.class, modifyable);
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof PersonalIncome) {
+        if (member instanceof CustomerScreeningIncome) {
             return new PersonalIncomeEditor();
         }
         return super.create(member);
@@ -44,13 +44,13 @@ public class PersonalIncomeFolder extends VistaBoxFolder<PersonalIncome> {
     public void addValidations() {
         super.addValidations();
 
-        this.addValueValidator(new EditableValueValidator<IList<PersonalIncome>>() {
+        this.addValueValidator(new EditableValueValidator<IList<CustomerScreeningIncome>>() {
 
             @SuppressWarnings("incomplete-switch")
             @Override
-            public ValidationError isValid(CComponent<IList<PersonalIncome>, ?> component, IList<PersonalIncome> value) {
+            public ValidationError isValid(CComponent<IList<CustomerScreeningIncome>, ?> component, IList<CustomerScreeningIncome> value) {
                 if (value != null && value.size() == 1) {
-                    PersonalIncome income = value.get(0);
+                    CustomerScreeningIncome income = value.get(0);
                     if (!income.details().isEmpty()) {
                         switch (income.incomeSource().getValue()) {
                         case fulltime:

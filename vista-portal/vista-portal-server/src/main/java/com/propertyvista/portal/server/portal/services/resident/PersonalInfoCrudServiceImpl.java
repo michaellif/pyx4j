@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -47,9 +47,9 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
         dto.setValue(tenant.person().getValue());
         dto.emergencyContacts().addAll(tenant.emergencyContacts());
         // add current address if any
-        EntityQueryCriteria<PersonScreening> critAddr = EntityQueryCriteria.create(PersonScreening.class);
+        EntityQueryCriteria<CustomerScreening> critAddr = EntityQueryCriteria.create(CustomerScreening.class);
         critAddr.add(PropertyCriterion.eq(critAddr.proto().screene(), tenant));
-        List<PersonScreening> result = Persistence.service().query(critAddr);
+        List<CustomerScreening> result = Persistence.service().query(critAddr);
         if (result.size() > 0) {
             dto.currentAddress().set(result.get(0).version().currentAddress());
         }

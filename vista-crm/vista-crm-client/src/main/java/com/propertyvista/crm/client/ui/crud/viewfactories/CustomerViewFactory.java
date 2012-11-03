@@ -24,10 +24,10 @@ import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorViewerVi
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.PastGuarantorListerView;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.PastGuarantorListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.customer.screening.PersonScreeningEditorView;
-import com.propertyvista.crm.client.ui.crud.customer.screening.PersonScreeningEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.customer.screening.PersonScreeningViewerView;
-import com.propertyvista.crm.client.ui.crud.customer.screening.PersonScreeningViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.screening.CustomerScreeningEditorView;
+import com.propertyvista.crm.client.ui.crud.customer.screening.CustomerScreeningEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.screening.CustomerScreeningViewerView;
+import com.propertyvista.crm.client.ui.crud.customer.screening.CustomerScreeningViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.PastTenantListerView;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.PastTenantListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantEditorView;
@@ -41,10 +41,10 @@ public class CustomerViewFactory extends ViewFactoryBase {
 
     public static <E extends IEntity, T extends IView> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
-            if (PersonScreeningViewerView.class.equals(type)) {
-                map.put(type, new PersonScreeningViewerViewImpl());
-            } else if (PersonScreeningEditorView.class.equals(type)) {
-                map.put(type, new PersonScreeningEditorViewImpl());
+            if (CustomerScreeningViewerView.class.equals(type)) {
+                map.put(type, new CustomerScreeningViewerViewImpl());
+            } else if (CustomerScreeningEditorView.class.equals(type)) {
+                map.put(type, new CustomerScreeningEditorViewImpl());
 
             } else if (PastTenantListerView.class.equals(type)) {
                 map.put(type, new PastTenantListerViewImpl());

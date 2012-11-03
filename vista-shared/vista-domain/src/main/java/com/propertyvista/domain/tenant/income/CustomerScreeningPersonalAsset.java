@@ -25,7 +25,6 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -33,11 +32,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 
 @Caption(name = "Personal Asset(s)")
-@Table(prefix = "person_screening_")
-public interface PersonalAsset extends IEntity {
+public interface CustomerScreeningPersonalAsset extends IEntity {
 
     public enum AssetType {
 
@@ -77,7 +75,7 @@ public interface PersonalAsset extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
-    PersonScreening.PersonScreeningV owner();
+    CustomerScreening.CustomerScreeningV owner();
 
     @OrderColumn
     IPrimitive<Integer> seq();

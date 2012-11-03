@@ -7,21 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-10-16
+ * Created on 2012-10-17
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.settings.creditchecks;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.dto.PersonCreditCheckDTO;
+import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
 
-public class PersonCreditCheckListerViewImpl extends CrmListerViewImplBase<PersonCreditCheckDTO> implements PersonCreditCheckListerView {
+public class CustomerCreditCheckViewerViewImpl extends CrmViewerViewImplBase<CustomerCreditCheckDTO> implements CustomerCreditCheckViewerView {
 
-    public PersonCreditCheckListerViewImpl() {
-        super(CrmSiteMap.Settings.CreditChecks.PersonCreditCheck.class);
-        setLister(new PersonCreditCheckLister());
+    public CustomerCreditCheckViewerViewImpl() {
+        super(CrmSiteMap.Settings.CreditChecks.CustomerCreditCheck.class, true);
+        setForm(new CustomerCreditCheckForm(true));
     }
 
 }

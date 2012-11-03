@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMethod;
 
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
@@ -98,7 +98,7 @@ public class BreadcrumbsHelper {
         final List<IEntity> trail = new ArrayList<IEntity>();
 
         // Special case for no business owned
-        if (startFromTarget instanceof PersonScreening) {
+        if (startFromTarget instanceof CustomerScreening) {
             @SuppressWarnings("rawtypes")
             EntityQueryCriteria<LeaseParticipant> criteria = EntityQueryCriteria.create(LeaseParticipant.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().leaseCustomer().customer().personScreening(), startFromTarget));
