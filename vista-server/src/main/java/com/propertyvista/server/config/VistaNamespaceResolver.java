@@ -68,7 +68,8 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                 return VistaNamespace.adminNamespace;
             }
             if (servletPath.startsWith("/public/schema") || servletPath.startsWith("/public/version") || servletPath.startsWith("/static/")
-                    || servletPath.startsWith("/demo/") || servletPath.startsWith("/public/status") || servletPath.startsWith("/o/")) {
+                    || servletPath.startsWith("/demo/") || servletPath.startsWith("/public/status") || servletPath.startsWith("/o/")
+                    || servletPath.endsWith("/robots.txt")) {
                 return "_";
             }
             if (ApplicationMode.isDevelopment() && servletPath.equals("/index.html")) {
