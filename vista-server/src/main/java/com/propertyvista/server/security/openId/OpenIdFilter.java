@@ -66,7 +66,8 @@ public class OpenIdFilter implements Filter {
                 String servletPath = httprequest.getServletPath();
                 if (servletPath.startsWith("/o/") || servletPath.endsWith("/o/openid") || servletPath.startsWith("/public/")
                         || servletPath.startsWith("/static/") || servletPath.startsWith("/interfaces/") || servletPath.startsWith("/crm/debug/")
-                        || servletPath.startsWith("/ptapp/debug/") || servletPath.startsWith("/debug/") || servletPath.equals("/favicon.ico")) {
+                        || servletPath.startsWith("/ptapp/debug/") || servletPath.startsWith("/debug/") || servletPath.endsWith("/favicon.ico")
+                        || servletPath.endsWith("/robots.txt")) {
                     chain.doFilter(request, response);
                 } else if (httprequest.getRequestURI().endsWith(".js") || httprequest.getRequestURI().contains("/srv/")) {
                     ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
