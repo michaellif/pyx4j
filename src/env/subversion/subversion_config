@@ -165,6 +165,7 @@ Makefile = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Autho
 *.css = svn:mime-type=text/css;svn:eol-style=native;svn:keywords=Date Author Id Revision
 *.jfig = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
 *.js = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
+*.gs = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
 *.jsp = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
 *.jspf = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
 *.java = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
