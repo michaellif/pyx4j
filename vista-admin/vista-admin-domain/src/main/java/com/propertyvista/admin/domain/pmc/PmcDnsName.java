@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -51,6 +52,7 @@ public interface PmcDnsName extends IEntity {
     @ReadOnly
     @Indexed
     @Owner
+    @MemberColumn(notNull = true)
     @JoinColumn
     Pmc pmc();
 

@@ -45,7 +45,7 @@ public interface Run extends IEntity {
     @Indexed
     @Owner
     @JoinColumn
-    @MemberColumn(name = "trgr")
+    @MemberColumn(notNull = true, name = "trgr")
     Trigger trigger();
 
     @ToString(index = 1)

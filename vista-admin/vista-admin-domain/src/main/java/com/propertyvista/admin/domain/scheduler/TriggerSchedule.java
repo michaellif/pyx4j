@@ -47,7 +47,7 @@ public interface TriggerSchedule extends IEntity {
     @JoinColumn
     @ReadOnly
     @Detached
-    @MemberColumn(name = "trgr")
+    @MemberColumn(name = "trgr", notNull = true)
     Trigger trigger();
 
     @OrderColumn

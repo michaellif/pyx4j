@@ -15,6 +15,7 @@ package com.propertyvista.admin.domain.pmc;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
@@ -30,6 +31,7 @@ public interface OnboardingMerchantAccount extends AbstractMerchantAccount {
 
     @ReadOnly
     @Owner
+    @MemberColumn(notNull = true)
     @JoinColumn
     Pmc pmc();
 

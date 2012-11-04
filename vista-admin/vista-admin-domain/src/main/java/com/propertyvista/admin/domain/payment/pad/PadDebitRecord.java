@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
@@ -35,6 +36,7 @@ import com.propertyvista.domain.VistaNamespace;
 public interface PadDebitRecord extends IEntity {
 
     @Owner
+    @MemberColumn(notNull = true)
     @JoinColumn
     @Indexed
     PadBatch padBatch();

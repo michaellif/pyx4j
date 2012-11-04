@@ -16,6 +16,7 @@ package com.propertyvista.admin.domain.payment.pad.sim;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
@@ -31,6 +32,7 @@ import com.propertyvista.domain.VistaNamespace;
 public interface PadSimDebitRecord extends IEntity {
 
     @Owner
+    @MemberColumn(notNull = true)
     @JoinColumn
     PadSimBatch padBatch();
 

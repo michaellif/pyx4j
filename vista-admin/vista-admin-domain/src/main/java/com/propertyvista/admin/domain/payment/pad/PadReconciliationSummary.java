@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -39,6 +40,7 @@ import com.propertyvista.domain.VistaNamespace;
 public interface PadReconciliationSummary extends IEntity {
 
     @Owner
+    @MemberColumn(notNull = true)
     @JoinColumn
     @Indexed
     PadReconciliationFile reconciliationFile();
