@@ -24,20 +24,20 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerEditorView;
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
-import com.propertyvista.admin.domain.scheduler.Trigger;
+import com.propertyvista.admin.rpc.TriggerDTO;
 import com.propertyvista.admin.rpc.services.scheduler.TriggerCrudService;
 
-public class TriggerEditorActivity extends EditorActivityBase<Trigger> {
+public class TriggerEditorActivity extends EditorActivityBase<TriggerDTO> {
 
     @SuppressWarnings("unchecked")
     public TriggerEditorActivity(CrudAppPlace place) {
-        super(place, ManagementVeiwFactory.instance(TriggerEditorView.class), (AbstractCrudService<Trigger>) GWT.create(TriggerCrudService.class),
-                Trigger.class);
+        super(place, ManagementVeiwFactory.instance(TriggerEditorView.class), (AbstractCrudService<TriggerDTO>) GWT.create(TriggerCrudService.class),
+                TriggerDTO.class);
     }
 
     @Override
-    protected void createNewEntity(AsyncCallback<Trigger> callback) {
-        Trigger process = EntityFactory.create(getEntityClass());
+    protected void createNewEntity(AsyncCallback<TriggerDTO> callback) {
+        TriggerDTO process = EntityFactory.create(getEntityClass());
         process.created().setValue(ClientContext.getServerDate());
         callback.onSuccess(process);
     }

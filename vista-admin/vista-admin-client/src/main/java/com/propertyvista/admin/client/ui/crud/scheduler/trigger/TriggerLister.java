@@ -16,16 +16,17 @@ package com.propertyvista.admin.client.ui.crud.scheduler.trigger;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.admin.domain.scheduler.Trigger;
+import com.propertyvista.admin.rpc.TriggerDTO;
 
-public class TriggerLister extends ListerBase<Trigger> {
+public class TriggerLister extends ListerBase<TriggerDTO> {
 
     public TriggerLister() {
-        super(Trigger.class, true);
+        super(TriggerDTO.class, true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().triggerType()).build(),
             new MemberColumnDescriptor.Builder(proto().name()).build(),
+            new MemberColumnDescriptor.Builder(proto().schedule()).sortable(false).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().created()).build()
         );//@formatter:on
     }

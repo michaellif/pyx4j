@@ -23,10 +23,10 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.client.ui.crud.scheduler.NotificationFolder;
-import com.propertyvista.admin.domain.scheduler.Trigger;
 import com.propertyvista.admin.domain.scheduler.TriggerPmcSelectionType;
+import com.propertyvista.admin.rpc.TriggerDTO;
 
-public class TriggerForm extends AdminEntityForm<Trigger> {
+public class TriggerForm extends AdminEntityForm<TriggerDTO> {
 
     private static final I18n i18n = I18n.get(TriggerForm.class);
 
@@ -35,7 +35,7 @@ public class TriggerForm extends AdminEntityForm<Trigger> {
     }
 
     public TriggerForm(boolean viewMode) {
-        super(Trigger.class, viewMode);
+        super(TriggerDTO.class, viewMode);
     }
 
     @Override

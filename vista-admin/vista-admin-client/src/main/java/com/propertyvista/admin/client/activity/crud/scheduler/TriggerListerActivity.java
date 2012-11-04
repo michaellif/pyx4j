@@ -21,14 +21,14 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerListerView;
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
-import com.propertyvista.admin.domain.scheduler.Trigger;
+import com.propertyvista.admin.rpc.TriggerDTO;
 import com.propertyvista.admin.rpc.services.scheduler.TriggerCrudService;
 
-public class TriggerListerActivity extends ListerActivityBase<Trigger> {
+public class TriggerListerActivity extends ListerActivityBase<TriggerDTO> {
 
     @SuppressWarnings("unchecked")
     public TriggerListerActivity(Place place) {
-        super(place, ManagementVeiwFactory.instance(TriggerListerView.class), (AbstractCrudService<Trigger>) GWT.create(TriggerCrudService.class),
-                Trigger.class);
+        super(place, ManagementVeiwFactory.instance(TriggerListerView.class), (AbstractCrudService<TriggerDTO>) GWT.create(TriggerCrudService.class),
+                TriggerDTO.class);
     }
 }

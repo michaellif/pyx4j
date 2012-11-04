@@ -15,8 +15,8 @@ package com.propertyvista.admin.client.ui.crud.scheduler.trigger;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.admin.domain.scheduler.Trigger;
+import com.propertyvista.admin.rpc.TriggerDTO;
 
-public interface TriggerEditorView extends IEditorView<Trigger> {
+public interface TriggerEditorView extends IEditorView<TriggerDTO> {
 
 }

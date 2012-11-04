@@ -17,10 +17,10 @@ import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.admin.domain.scheduler.Run;
-import com.propertyvista.admin.domain.scheduler.Trigger;
+import com.propertyvista.admin.rpc.TriggerDTO;
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 
-public interface TriggerViewerView extends IViewerView<Trigger> {
+public interface TriggerViewerView extends IViewerView<TriggerDTO> {
 
     interface Presenter extends IViewerView.Presenter {
 

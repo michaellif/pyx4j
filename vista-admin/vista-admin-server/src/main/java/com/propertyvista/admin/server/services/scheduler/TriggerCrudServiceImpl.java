@@ -22,23 +22,26 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.admin.domain.scheduler.Run;
 import com.propertyvista.admin.domain.scheduler.RunStatus;
 import com.propertyvista.admin.domain.scheduler.Trigger;
+import com.propertyvista.admin.domain.scheduler.TriggerSchedule;
+import com.propertyvista.admin.rpc.TriggerDTO;
 import com.propertyvista.admin.rpc.services.scheduler.TriggerCrudService;
 import com.propertyvista.admin.server.proc.JobUtils;
 
-public class TriggerCrudServiceImpl extends AbstractCrudServiceImpl<Trigger> implements TriggerCrudService {
+public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, TriggerDTO> implements TriggerCrudService {
 
     private static final Logger log = LoggerFactory.getLogger(TriggerCrudServiceImpl.class);
 
     public TriggerCrudServiceImpl() {
-        super(Trigger.class);
+        super(Trigger.class, TriggerDTO.class);
     }
 
     @Override
@@ -47,33 +50,50 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceImpl<Trigger> imp
     }
 
     @Override
-    protected void enhanceRetrieved(Trigger entity, Trigger dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceListRetrieved(Trigger entity, TriggerDTO dto) {
+        super.enhanceListRetrieved(entity, dto);
+
+        {
+            StringBuilder b = new StringBuilder();
+            for (TriggerSchedule triggerSchedule : dto.schedules()) {
+                if (b.length() > 0) {
+                    b.append("; ");
+                }
+                b.append(triggerSchedule.repeatType().getStringView()).append(' ').append(triggerSchedule.time().getStringView());
+            }
+            dto.schedule().setValue(b.toString());
+        }
+    }
+
+    @Override
+    protected void enhanceRetrieved(Trigger entity, TriggerDTO dto, RetrieveTraget retrieveTraget) {
         if (entity != null) {
             JobUtils.getScheduleDetails(dto);
         }
     }
 
     @Override
-    protected void create(Trigger entity, Trigger dto) {
+    protected void create(Trigger entity, TriggerDTO dto) {
         super.create(entity, dto);
         JobUtils.createJobDetail(entity);
         JobUtils.updateSchedule(null, entity);
     }
 
     @Override
-    protected void save(Trigger entity, Trigger dto) {
+    protected void save(Trigger entity, TriggerDTO dto) {
         Trigger origProcess = Persistence.service().retrieve(Trigger.class, entity.getPrimaryKey());
         super.save(entity, dto);
         JobUtils.updateSchedule(origProcess, entity);
     }
 
     @Override
-    public void runImmediately(AsyncCallback<Run> callback, Trigger triggerStub) {
+    public void runImmediately(AsyncCallback<Run> callback, TriggerDTO triggerStub) {
         runForDate(callback, triggerStub, Persistence.service().getTransactionSystemTime());
     }
 
     @Override
-    public void runForDate(AsyncCallback<Run> callback, Trigger triggerStub, Date executionDate) {
+    public void runForDate(AsyncCallback<Run> callback, TriggerDTO triggerDTOStub, Date executionDate) {
+        Trigger triggerStub = EntityFactory.createIdentityStub(Trigger.class, triggerDTOStub.getPrimaryKey());
         {
             EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), triggerStub));
@@ -112,5 +132,4 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceImpl<Trigger> imp
         Run runStub = run.createIdentityStub();
         callback.onSuccess(runStub);
     }
-
 }

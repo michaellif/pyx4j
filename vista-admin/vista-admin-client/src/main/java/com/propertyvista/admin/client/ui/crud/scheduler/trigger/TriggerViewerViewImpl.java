@@ -29,12 +29,12 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.client.ui.crud.scheduler.run.RunLister;
 import com.propertyvista.admin.domain.scheduler.Run;
-import com.propertyvista.admin.domain.scheduler.Trigger;
 import com.propertyvista.admin.rpc.AdminSiteMap;
+import com.propertyvista.admin.rpc.TriggerDTO;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 
-public class TriggerViewerViewImpl extends AdminViewerViewImplBase<Trigger> implements TriggerViewerView {
+public class TriggerViewerViewImpl extends AdminViewerViewImplBase<TriggerDTO> implements TriggerViewerView {
 
     private static final I18n i18n = I18n.get(TriggerEditorViewImpl.class);
 
@@ -98,7 +98,7 @@ public class TriggerViewerViewImpl extends AdminViewerViewImplBase<Trigger> impl
     }
 
     @Override
-    public void populate(Trigger value) {
+    public void populate(TriggerDTO value) {
         super.populate(value);
 
         runImmediately.setVisible(true);

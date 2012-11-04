@@ -14,10 +14,10 @@
 package com.propertyvista.admin.client.ui.crud.scheduler.trigger;
 
 import com.propertyvista.admin.client.ui.crud.AdminEditorViewImplBase;
-import com.propertyvista.admin.domain.scheduler.Trigger;
 import com.propertyvista.admin.rpc.AdminSiteMap;
+import com.propertyvista.admin.rpc.TriggerDTO;
 
-public class TriggerEditorViewImpl extends AdminEditorViewImplBase<Trigger> implements TriggerEditorView {
+public class TriggerEditorViewImpl extends AdminEditorViewImplBase<TriggerDTO> implements TriggerEditorView {
 
     public TriggerEditorViewImpl() {
         super(AdminSiteMap.Management.Trigger.class);

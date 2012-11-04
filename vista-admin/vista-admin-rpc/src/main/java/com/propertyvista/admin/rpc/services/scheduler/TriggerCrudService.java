@@ -20,11 +20,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.admin.domain.scheduler.Run;
-import com.propertyvista.admin.domain.scheduler.Trigger;
+import com.propertyvista.admin.rpc.TriggerDTO;
 
-public interface TriggerCrudService extends AbstractCrudService<Trigger> {
+public interface TriggerCrudService extends AbstractCrudService<TriggerDTO> {
 
-    public void runImmediately(AsyncCallback<Run> callback, Trigger triggerStub);
+    public void runImmediately(AsyncCallback<Run> callback, TriggerDTO triggerStub);
 
-    public void runForDate(AsyncCallback<Run> callback, Trigger triggerStub, Date executionDate);
+    public void runForDate(AsyncCallback<Run> callback, TriggerDTO triggerStub, Date executionDate);
 }

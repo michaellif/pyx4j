@@ -28,26 +28,26 @@ import com.propertyvista.admin.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerViewerView;
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.admin.domain.scheduler.Run;
-import com.propertyvista.admin.domain.scheduler.Trigger;
 import com.propertyvista.admin.rpc.AdminSiteMap;
+import com.propertyvista.admin.rpc.TriggerDTO;
 import com.propertyvista.admin.rpc.services.scheduler.RunCrudService;
 import com.propertyvista.admin.rpc.services.scheduler.TriggerCrudService;
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 
-public class TriggerViewerActivity extends AdminViewerActivity<Trigger> implements TriggerViewerView.Presenter {
+public class TriggerViewerActivity extends AdminViewerActivity<TriggerDTO> implements TriggerViewerView.Presenter {
 
     private final Presenter<Run> runLister;
 
     @SuppressWarnings("unchecked")
     public TriggerViewerActivity(CrudAppPlace place) {
-        super(place, ManagementVeiwFactory.instance(TriggerViewerView.class), (AbstractCrudService<Trigger>) GWT.create(TriggerCrudService.class));
+        super(place, ManagementVeiwFactory.instance(TriggerViewerView.class), (AbstractCrudService<TriggerDTO>) GWT.create(TriggerCrudService.class));
 
         runLister = new ListerActivityBase<Run>(place, ((TriggerViewerView) getView()).getRunListerView(),
                 (AbstractCrudService<Run>) GWT.create(RunCrudService.class), Run.class);
     }
 
     @Override
-    protected void onPopulateSuccess(Trigger result) {
+    protected void onPopulateSuccess(TriggerDTO result) {
         super.onPopulateSuccess(result);
 
         runLister.setParent(result.getPrimaryKey());
@@ -67,7 +67,7 @@ public class TriggerViewerActivity extends AdminViewerActivity<Trigger> implemen
             public void onSuccess(Run result) {
                 AppSite.getPlaceController().goTo(new AdminSiteMap.Management.Run().formViewerPlace(result.getPrimaryKey()));
             }
-        }, EntityFactory.createIdentityStub(Trigger.class, getEntityId()));
+        }, EntityFactory.createIdentityStub(TriggerDTO.class, getEntityId()));
     }
 
     @Override
@@ -77,6 +77,6 @@ public class TriggerViewerActivity extends AdminViewerActivity<Trigger> implemen
             public void onSuccess(Run result) {
                 AppSite.getPlaceController().goTo(new AdminSiteMap.Management.Run().formViewerPlace(result.getPrimaryKey()));
             }
-        }, EntityFactory.createIdentityStub(Trigger.class, getEntityId()), date.date().getValue());
+        }, EntityFactory.createIdentityStub(TriggerDTO.class, getEntityId()), date.date().getValue());
     }
 }
