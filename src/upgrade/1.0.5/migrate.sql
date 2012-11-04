@@ -33,6 +33,37 @@ ALTER TABLE admin_pmc_equifax_info
 
 ALTER TABLE audit_record ALTER COLUMN details TYPE VARCHAR(1024);
 
+ALTER TABLE admin_pmc ADD CONSTRAINT admin_pmc_status_e_ck CHECK (status IN ('Active','Cancelled','Created','Suspended','Terminated'));
+ALTER TABLE admin_pmc_account_numbers ADD CONSTRAINT admin_pmc_account_numbers_pmc_type_e_ck CHECK (pmc_type IN ('Large','Medium','Small'));
+ALTER TABLE admin_pmc_dns_name ADD CONSTRAINT admin_pmc_dns_name_target_e_ck CHECK (target IN ('prospectPortal','residentPortal','vistaCrm'));
+ALTER TABLE admin_pmc_equifax_info ADD CONSTRAINT admin_pmc_equifax_info_report_type_e_ck CHECK (report_type IN ('longReport','shortReport'));
+ALTER TABLE audit_record ADD CONSTRAINT audit_record_app_e_ck CHECK (app IN ('admin','crm','prospect','resident'));
+ALTER TABLE audit_record ADD CONSTRAINT audit_record_event_e_ck 
+CHECK (event IN ('Create','CredentialUpdate','Info','Login','LoginFailed','PermitionsUpdate','Read','Update'));
+ALTER TABLE legal_document ADD CONSTRAINT legal_document_locale_e_ck CHECK (locale IN ('en','en_CA','en_US','es','fr','fr_CA','ru','zh_CN','zh_TW'));
+ALTER TABLE onboarding_user_credential ADD CONSTRAINT onboarding_user_credential_behavior_e_ck 
+CHECK (behavior IN ('Caledon','Client','Equifax','OnboardingAdministrator','ProspectiveClient','VistaDemo'));
+ALTER TABLE pad_file ADD CONSTRAINT pad_file_acknowledgment_status_e_ck 
+CHECK (acknowledgment_status IN ('Accepted','BatchAndTransactionReject','BatchLevelReject','DetailRecordCountOutOfBalance','FileOutOfBalance', 'InvalidFileFormat', 'InvalidFileHeader','TransactionReject'));
+ALTER TABLE pad_file ADD CONSTRAINT pad_file_status_e_ck 
+CHECK (status IN ('AcknowledgeProcesed','Acknowledged','Canceled','Creating','Invalid','Procesed','SendError','Sending','Sent'));
+ALTER TABLE pad_reconciliation_debit_record ADD CONSTRAINT pad_reconciliation_debit_record_reconciliation_status_e_ck 
+CHECK (reconciliation_status IN ('DUPLICATE','PROCESSED','REJECTED','RETURNED'));
+ALTER TABLE pad_reconciliation_summary ADD CONSTRAINT pad_reconciliation_summary_reconciliation_status_e_ck CHECK (reconciliation_status IN ('HOLD','PAID'));
+ALTER TABLE pad_sim_batch ADD CONSTRAINT pad_sim_batch_reconciliation_status_e_ck CHECK (reconciliation_status IN ('HOLD','PAID'));
+ALTER TABLE pad_sim_debit_record ADD CONSTRAINT pad_sim_debit_record_reconciliation_status_e_ck 
+CHECK (reconciliation_status IN ('DUPLICATE','PROCESSED','REJECTED','RETURNED'));
+ALTER TABLE pad_sim_file ADD CONSTRAINT pad_sim_file_status_e_ck CHECK (status IN ('Acknowledged','Loaded','ReconciliationSent'));
+ALTER TABLE scheduler_run ADD CONSTRAINT scheduler_run_status_e_ck CHECK (status IN ('Completed','Failed','PartiallyCompleted','Running','Sleeping'));
+ALTER TABLE scheduler_run_data ADD CONSTRAINT scheduler_run_data_status_e_ck CHECK (status IN ('Canceled','Erred','Failed','NeverRan','Processed','Running'));
+ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_population_type_e_ck CHECK (population_type IN ('allPmc','except','manual'));
+ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
+CHECK (trigger_type IN ('billing','cleanup','initializeFutureBillingCycles','leaseActivation','leaseCompletion','leaseRenewal','paymentsBmoRecive','paymentsIssue', 'paymentsPadReciveAcknowledgment','paymentsPadReciveReconciliation','paymentsPadSend','paymentsScheduledCreditCards','paymentsScheduledEcheck','test','updateArrears', 'updatePaymentsSummary'));
+ALTER TABLE scheduler_trigger_notification ADD CONSTRAINT scheduler_trigger_notification_event_e_ck CHECK (event IN ('All','Completed','Error'));
+ALTER TABLE scheduler_trigger_schedule ADD CONSTRAINT scheduler_trigger_schedule_repeat_type_e_ck 
+CHECK (repeat_type IN ('Daily','Hourly','Manual','Minute','Monthly', 'Once','Weekly'));
+
+
 ALTER TABLE vista_terms_v ALTER COLUMN holder SET NOT NULL;
 ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_details_discriminator_d_ck
         CHECK (trigger_details_discriminator IN ('default','pad','test'));
@@ -57,7 +88,7 @@ CREATE INDEX pad_sim_batch_pad_file_idx ON pad_sim_batch USING btree (pad_file);
 
 SET search_path = 'public';
 
--- Remove sequences for tables to be deleted - 61 in total
+-- Remove sequences for tables to be deleted - 63 in total
 
 DROP SEQUENCE arrears_status_gadget_metadata$column_descriptors_seq;
 DROP SEQUENCE arrears_status_gadget_metadata_seq;
@@ -107,6 +138,8 @@ DROP SEQUENCE payment_records_gadget_metadata_seq;
 DROP SEQUENCE payments_summary_gadget_metadata$column_descriptors_seq;
 DROP SEQUENCE payments_summary_gadget_metadata$payment_status_seq;
 DROP SEQUENCE payments_summary_gadget_metadata_seq;
+DROP SEQUENCE person_screening_personal_asset_seq;
+DROP SEQUENCE person_screening_seq;
 DROP SEQUENCE personal_income_seq;
 DROP SEQUENCE onboarding_user_password_reset_question_response_io_seq;
 DROP SEQUENCE service_seq;
@@ -121,7 +154,7 @@ DROP SEQUENCE unit_availability_summary_gmeta$column_descriptors_seq;
 DROP SEQUENCE unit_availability_summary_gmeta_seq;
 DROP SEQUENCE yardi_connection_seq;
 
--- Create new sequences - 19 total
+-- Create new sequences - 21 total
 CREATE SEQUENCE background_check_policy_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE background_check_policy_v_seq OWNER TO vista;
 CREATE SEQUENCE billing_billing_cycle_stats_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -151,6 +184,10 @@ ALTER SEQUENCE customer_screening_legal_questions_seq OWNER TO vista;
 CREATE SEQUENCE customer_screening_income_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE customer_screening_income_seq OWNER TO vista;
 CREATE SEQUENCE customer_screening_v_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+CREATE SEQUENCE customer_screening_personal_asset_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ALTER SEQUENCE customer_screening_personal_asset_seq OWNER TO vista;
+CREATE SEQUENCE customer_screening_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ALTER SEQUENCE customer_screening_seq OWNER TO vista;
 ALTER SEQUENCE customer_screening_v_seq OWNER TO vista;
 CREATE SEQUENCE product_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 ALTER SEQUENCE product_seq OWNER TO vista;
@@ -1497,10 +1534,10 @@ BEGIN
                 'CHECK (content_discriminator IN (''Custom'',''News'',''Promo'',''Testimonials'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.id_assignment_policy ADD CONSTRAINT id_assignment_policy_node_discriminator_d_ck '||
                 'CHECK (node_discriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.identification_document ADD CONSTRAINT identification_document_owner_discriminator_d_ck '||
-                'CHECK (owner_discriminator IN (''ExistingInsurance'',''PersonScreening'',''PersonalIncome'')) ';
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.insurance_certificate ADD CONSTRAINT insurance_certificate_owner_discriminator_d_ck '||
-                'CHECK (owner_discriminator IN (''ExistingInsurance'',''PersonScreening'',''PersonalIncome'')) ';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.identification_document ADD CONSTRAINT identification_document_owner_discriminator_d_ck '
+        ||'CHECK (owner_discriminator IN (''CustomerScreening'',''CustomerScreeningIncome'',''ExistingInsurance''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.insurance_certificate ADD CONSTRAINT insurance_certificate_owner_discriminator_d_ck '
+        ||'CHECK (owner_discriminator IN (''CustomerScreening'',''CustomerScreeningIncome'',''ExistingInsurance''))';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_adjustment_sub_line_item ADD CONSTRAINT invoice_adjustment_sub_line_item_line_item_discriminator_d_ck '||
                 'CHECK (line_item_discriminator = ''ProductCharge'') ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.invoice_charge_sub_line_item ADD CONSTRAINT invoice_charge_sub_line_item_line_item_discriminator_d_ck '||
@@ -1559,13 +1596,374 @@ BEGIN
                 'CHECK (id_discriminator IN (''feature'',''service'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.product_v ADD CONSTRAINT product_v_holder_discriminator_d_ck '||
                 'CHECK (holder_discriminator IN (''feature'',''service'')) ';
-        EXECUTE 'ALTER TABLE '||v_schema_name||'.proof_of_employment_document ADD CONSTRAINT proof_of_employment_document_owner_discriminator_d_ck '||
-                'CHECK (owner_discriminator IN (''ExistingInsurance'',''PersonScreening'',''PersonalIncome'')) ';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.proof_of_employment_document ADD CONSTRAINT proof_of_employment_document_owner_discriminator_d_ck '
+        ||'CHECK (owner_discriminator IN (''CustomerScreening'',''CustomerScreeningIncome'',''ExistingInsurance''))';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.restrictions_policy ADD CONSTRAINT restrictions_policy_node_discriminator_d_ck '||
                 'CHECK (node_discriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.tax ADD CONSTRAINT tax_policy_node_discriminator_d_ck '||
                 'CHECK (policy_node_discriminator IN (''Disc Complex'',''Disc_Building'',''Disc_Country'',''Disc_Floorplan'',''Disc_Province'',''OrganizationPoliciesNode'',''Unit_BuildingElement'')) ';
         EXECUTE 'ALTER TABLE '||v_schema_name||'.tenant_charge ADD CONSTRAINT tenant_charge_tenant_discriminator_d_ck CHECK (tenant_discriminator = ''Tenant'') ';
+
+        /**
+        ***     =====================================================================================================================
+        ***
+        ***             Enum check constraints 
+        ***  
+        ***     =====================================================================================================================
+        **/
+        
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.aggregated_transfer ADD CONSTRAINT aggregated_transfer_status_e_ck '
+        ||'CHECK (status IN (''Canceled'',''Hold'',''Paid'',''Rejected''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.aging_buckets ADD CONSTRAINT aging_buckets_debit_type_e_ck '
+        ||'CHECK (debit_type IN (''accountCharge'',''addOn'',''booking'',''deposit'',''latePayment'',''lease'','
+        ||'''locker'',''nsf'',''other'',''parking'',''pet'',''target'',''total'',''utility''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.application_wizard_step ADD CONSTRAINT application_wizard_step_status_e_ck '
+        ||'CHECK (status IN (''complete'',''invalid'',''latest'',''notVisited''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.application_wizard_substep ADD CONSTRAINT application_wizard_substep_status_e_ck '
+        ||'CHECK (status IN (''complete'',''invalid'',''latest'',''notVisited''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.appointment ADD CONSTRAINT appointment_status_e_ck CHECK (status IN (''closed'',''planned''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit ADD CONSTRAINT apt_unit_info_area_units_e_ck CHECK (info_area_units IN (''sqFeet'',''sqMeters''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit ADD CONSTRAINT apt_unit_info_economic_status_e_ck '
+        ||'CHECK (info_economic_status IN (''commercial'',''offMarket'',''other'',''residential''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit_item ADD CONSTRAINT apt_unit_item_cabinets_type_e_ck '
+        ||'CHECK (cabinets_type IN (''laminate'',''melamine'',''other'',''wood'',''woodVeneer''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit_item ADD CONSTRAINT apt_unit_item_counter_top_type_e_ck '
+        ||'CHECK (counter_top_type IN (''granite'',''laminate'',''marble'',''metal'',''naturalStone'',''other'',''quartz'',''solidSurface'',''tile'',''wood''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit_item ADD CONSTRAINT apt_unit_item_flooring_type_e_ck '
+        ||'CHECK (flooring_type IN (''hardwood'',''laminate'',''other'',''parquet'',''tile''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit_item ADD CONSTRAINT apt_unit_item_unit_detail_type_e_ck '
+        ||'CHECK (unit_detail_type IN (''balcony'',''bathroom'',''bedroom'',''den'',''diningRoom'',''familyRoom'',''kitchen'','
+        ||'''library'',''livingRoom'',''office'',''other'',''sunroom''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit_occupancy_segment ADD CONSTRAINT apt_unit_occupancy_segment_off_market_e_ck '
+        ||'CHECK (off_market IN (''construction'',''down'',''employee'',''model'',''office'',''other''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.apt_unit_occupancy_segment ADD CONSTRAINT apt_unit_occupancy_segment_status_e_ck '
+        ||'CHECK (status IN (''available'',''migrated'',''occupied'',''offMarket'',''pending'',''renovation'',''reserved''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.arpolicy ADD CONSTRAINT arpolicy_credit_debit_rule_e_ck '
+        ||'CHECK (credit_debit_rule IN (''byAgingBucketAndDebitType'',''byDebitType'',''byDueDate''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.available_locale ADD CONSTRAINT available_locale_lang_e_ck '
+        ||'CHECK (lang IN (''en'',''en_CA'',''en_US'',''es'',''fr'',''fr_CA'',''ru'',''zh_CN'',''zh_TW''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.background_check_policy_v ADD CONSTRAINT background_check_policy_v_bankruptcy_e_ck '
+        ||'CHECK (bankruptcy IN (''m12'',''m24'',''m36''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.background_check_policy_v ADD CONSTRAINT background_check_policy_v_charge_off_e_ck '
+        ||'CHECK (charge_off IN (''m12'',''m24'',''m36''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.background_check_policy_v ADD CONSTRAINT background_check_policy_v_collection_e_ck '
+        ||'CHECK (collection IN (''m12'',''m24'',''m36''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.background_check_policy_v ADD CONSTRAINT background_check_policy_v_judgment_e_ck '
+        ||'CHECK (judgment IN (''m12'',''m24'',''m36''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billable_item_adjustment ADD CONSTRAINT billable_item_adjustment_adjustment_type_e_ck '
+        ||'CHECK (adjustment_type IN (''monetary'',''percentage''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_account ADD CONSTRAINT billing_account_proration_method_e_ck '
+        ||'CHECK (proration_method IN (''Actual'',''Annual'',''Standard''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_bill ADD CONSTRAINT billing_bill_bill_status_e_ck '
+        ||'CHECK (bill_status IN (''Confirmed'',''Failed'',''Finished'',''Rejected'',''Running''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_bill ADD CONSTRAINT billing_bill_bill_type_e_ck '
+        ||'CHECK (bill_type IN (''Final'',''First'',''Regular'',''ZeroCycle''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_billing_type ADD CONSTRAINT billing_billing_type_payment_frequency_e_ck '
+        ||'CHECK (payment_frequency IN (''Annually'',''BiWeekly'',''Monthly'',''SemiAnnyally'',''SemiMonthly'',''Weekly''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_invoice_line_item ADD CONSTRAINT billing_invoice_line_item_debit_type_e_ck '
+        ||'CHECK (debit_type IN (''accountCharge'',''addOn'',''booking'',''deposit'',''latePayment'',''lease'','
+        ||'''locker'',''nsf'',''other'',''parking'',''pet'',''target'',''total'',''utility''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_invoice_line_item ADD CONSTRAINT billing_invoice_line_item_period_e_ck '
+        ||'CHECK (period IN (''current'',''next'',''previous''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.billing_invoice_line_item ADD CONSTRAINT billing_invoice_line_item_product_type_e_ck '
+        ||'CHECK (product_type IN (''oneTimeFeature'',''recurringFeature'',''service''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.boiler ADD CONSTRAINT boiler_warranty_warranty_type_e_ck '
+        ||'CHECK (warranty_warranty_type IN (''conditional'',''full'',''labour'',''other'',''partial'',''parts'',''partsAndLabor''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.building ADD CONSTRAINT building_info_address_street_direction_e_ck '
+        ||'CHECK (info_address_street_direction IN (''east'',''north'',''northEast'',''northWest'',''south'',''southEast'',''southWest'',''west''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.building ADD CONSTRAINT building_info_address_street_type_e_ck '
+        ||'CHECK (info_address_street_type IN (''alley'',''approach'',''arcade'',''avenue'',''boulevard'',''brow'',''bypass'',''causeway'','
+        ||'''circle'',''circuit'',''circus'',''close'',''copse'',''corner'',''court'',''cove'',''crescent'',''drive'',''end'','
+        ||'''esplanande'',''flat'',''freeway'',''frontage'',''gardens'',''glade'',''glen'',''green'',''grove'',''heights'',''highway'','
+        ||'''lane'',''line'',''link'',''loop'',''mall'',''mews'',''other'',''packet'',''parade'',''park'',''parkway'',''place'',''promenade'','
+        ||'''reserve'',''ridge'',''rise'',''road'',''row'',''square'',''street'',''strip'',''tarn'',''terrace'',''thoroughfaree'',''track'',''trunkway'','
+        ||'''view'',''vista'',''walk'',''walkway'',''way'',''yard''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.building ADD CONSTRAINT building_info_building_type_e_ck '
+        ||'CHECK (info_building_type IN (''agricultural'',''commercial'',''industrial'',''military'',''mixed_residential'',''other'',''parking_storage'',''residential''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.building ADD CONSTRAINT building_info_construction_type_e_ck '
+        ||'CHECK (info_construction_type IN (''block'',''brick'',''other'',''panel'',''wood''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.building ADD CONSTRAINT building_info_floor_type_e_ck '
+        ||'CHECK (info_floor_type IN (''carpet'',''hardwood'',''laminate'',''mixed'',''other'',''tile''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.building ADD CONSTRAINT building_info_foundation_type_e_ck '
+        ||'CHECK (info_foundation_type IN (''continuousFooting'',''foundationWalls'',''other'',''pile'',''spreadFooting''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.building ADD CONSTRAINT building_info_shape_e_ck '
+        ||'CHECK (info_shape IN (''irregular'',''lShape'',''regular'',''tShape'',''uShape''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.building ADD CONSTRAINT building_info_structure_type_e_ck '
+        ||'CHECK (info_structure_type IN (''condo'',''highRise'',''lowRise'',''midRise'',''other'',''townhouse'',''walkUp''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.building ADD CONSTRAINT building_info_water_supply_e_ck '
+        ||'CHECK (info_water_supply IN (''municipal'',''other'',''privateCommunityWell'',''privateWell''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.building_amenity ADD CONSTRAINT building_amenity_building_amenity_type_e_ck '
+        ||'CHECK (building_amenity_type IN (''availability24Hours'',''basketballCourt'',''businessCenter'',''childCare'',''clubDiscount'',''clubHouse'',''concierge'','
+        ||'''coveredParking'',''doorAttendant'',''elevator'',''fitness'',''fitnessCentre'',''freeWeights'',''garage'',''gas'',''gate'','
+        ||'''groupExercise'',''guestRoom'',''highSpeed'',''houseSitting'',''housekeeping'',''hydro'',''laundry'',''library'',''mealService'',''nightPatrol'','
+        ||'''onSiteMaintenance'',''onSiteManagement'',''other'',''packageReceiving'',''parking'',''playGround'',''pool'',''racquetball'',''recreationalRoom'','
+        ||'''sauna'',''shortTermLease'',''spa'',''storageSpace'',''sundeck'',''tennisCourt'',''transportation'',''tvLounge'',''vintage'',''volleyballCourt'',''water''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.campaign_history ADD CONSTRAINT campaign_history_trg_e_ck '
+        ||'CHECK (trg IN (''ApplicationCompleted'',''Registration''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.charge_line ADD CONSTRAINT charge_line_tp_e_ck '
+        ||'CHECK (tp IN (''deposit'',''firstMonthRent'',''monthlyRent'',''oneTimePayment'',''prorated''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.communication_media ADD CONSTRAINT communication_media_media_type_e_ck '
+        ||'CHECK (media_type IN (''email'',''internal'',''phone'',''postal'',''sms''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.company ADD CONSTRAINT company_logo_media_type_e_ck '
+        ||'CHECK (logo_media_type IN (''externalUrl'',''file'',''youTube''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.company ADD CONSTRAINT company_logo_visibility_e_ck '
+        ||'CHECK (logo_visibility IN (''global'',''internal'',''tenant''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.concession_v ADD CONSTRAINT concession_v_concession_type_e_ck '
+        ||'CHECK (concession_type IN (''free'',''monetaryOff'',''percentageOff'',''promotionalItem''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.concession_v ADD CONSTRAINT concession_v_cond_e_ck CHECK (cond IN (''compliance'',''none''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.concession_v ADD CONSTRAINT concession_v_term_e_ck CHECK (term IN (''firstMonth'',''lastMonth'',''term''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.contact ADD CONSTRAINT contact_media_type_e_ck CHECK (media_type IN (''email'',''internal'',''phone'',''postal'',''sms''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.contact_email ADD CONSTRAINT contact_email_media_type_e_ck '
+        ||'CHECK (media_type IN (''email'',''internal'',''phone'',''postal'',''sms''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.contact_internal ADD CONSTRAINT contact_internal_media_type_e_ck '
+        ||'CHECK (media_type IN (''email'',''internal'',''phone'',''postal'',''sms''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.contact_phone ADD CONSTRAINT contact_phone_media_type_e_ck '
+        ||'CHECK (media_type IN (''email'',''internal'',''phone'',''postal'',''sms''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.contact_postal ADD CONSTRAINT contact_postal_address_street_direction_e_ck '
+        ||'CHECK (address_street_direction IN (''east'',''north'',''northEast'',''northWest'',''south'',''southEast'',''southWest'',''west''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.contact_postal ADD CONSTRAINT contact_postal_address_street_type_e_ck '
+        ||'CHECK (address_street_type IN (''alley'',''approach'',''arcade'',''avenue'',''boulevard'',''brow'',''bypass'',''causeway'',''circle'',''circuit'',''circus'','
+        ||'''close'',''copse'',''corner'',''court'',''cove'',''crescent'',''drive'',''end'',''esplanande'',''flat'',''freeway'',''frontage'','
+        ||'''gardens'',''glade'',''glen'',''green'',''grove'',''heights'',''highway'',''lane'',''line'',''link'',''loop'',''mall'',''mews'','
+        ||'''other'',''packet'',''parade'',''park'',''parkway'',''place'',''promenade'',''reserve'',''ridge'',''rise'',''road'',''row'','
+        ||'''square'',''street'',''strip'',''tarn'',''terrace'',''thoroughfaree'',''track'',''trunkway'',''view'',''vista'',''walk'',''walkway'',''way'',''yard''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.contact_postal ADD CONSTRAINT contact_postal_media_type_e_ck '
+        ||'CHECK (media_type IN (''email'',''internal'',''phone'',''postal'',''sms''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer ADD CONSTRAINT customer_person_name_name_prefix_e_ck '
+        ||'CHECK (person_name_name_prefix IN (''Dr'',''Miss'',''Mr'',''Mrs'',''Ms''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer ADD CONSTRAINT customer_person_sex_e_ck CHECK (person_sex IN (''Female'',''Male''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_credit_check ADD CONSTRAINT customer_credit_check_credit_check_result_e_ck '
+        ||'CHECK (credit_check_result IN (''Accept'',''Decline'',''Error'',''Review'',''ReviewNoInformationAvalable''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income ADD CONSTRAINT customer_screening_income_income_source_e_ck '
+        ||'CHECK (income_source IN(''disabilitySupport'',''dividends'',''fulltime'',''other'',''parttime'',''pension'',''retired'',''seasonallyEmployed'',''selfemployed'','
+        ||'''socialServices'',''student'',''unemployed''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income_info ADD CONSTRAINT customer_screening_income_info_address_street_direction_e_ck '
+        ||'CHECK (address_street_direction IN (''east'',''north'',''northEast'',''northWest'',''south'',''southEast'',''southWest'',''west''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income_info ADD CONSTRAINT customer_screening_income_info_address_street_type_e_ck '
+        ||'CHECK (address_street_type IN (''alley'',''approach'',''arcade'',''avenue'',''boulevard'',''brow'',''bypass'',''causeway'',''circle'',''circuit'',''circus'',''close'',''copse'','
+        ||'''corner'',''court'',''cove'',''crescent'',''drive'',''end'',''esplanande'',''flat'',''freeway'',''frontage'','
+        ||'''gardens'',''glade'',''glen'',''green'',''grove'',''heights'',''highway'',''lane'',''line'',''link'',''loop'',''mall'',''mews'','
+        ||'''other'',''packet'',''parade'',''park'',''parkway'',''place'',''promenade'',''reserve'',''ridge'',''rise'',''road'',''row'','
+        ||'''square'',''street'',''strip'',''tarn'',''terrace'',''thoroughfaree'',''track'',''trunkway'',''view'',''vista'',''walk'',''walkway'',''way'',''yard''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income_info ADD CONSTRAINT customer_screening_income_info_funding_choices_e_ck '
+        ||'CHECK (funding_choices IN (''bursary'',''grant'',''loan'',''scolarship''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_income_info ADD CONSTRAINT customer_screening_income_info_program_e_ck '
+        ||'CHECK (program IN (''graduate'',''undergraduate''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_personal_asset ADD CONSTRAINT customer_screening_personal_asset_asset_type_e_ck '
+        ||'CHECK (asset_type IN (''bankAccounts'',''businesses'',''cars'',''insurancePolicies'',''other'',''realEstateProperties'',''shares'',''unitTrusts''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_v ADD CONSTRAINT customer_screening_v_current_address_rented_e_ck '
+        ||'CHECK (current_address_rented IN (''owned'',''rented''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_v ADD CONSTRAINT customer_screening_v_current_address_street_direction_e_ck '
+        ||'CHECK (current_address_street_direction IN (''east'',''north'',''northEast'',''northWest'',''south'',''southEast'',''southWest'',''west''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_v ADD CONSTRAINT customer_screening_v_current_address_street_type_e_ck '
+        ||'CHECK (current_address_street_type IN (''alley'',''approach'',''arcade'',''avenue'',''boulevard'',''brow'',''bypass'',''causeway'',''circle'',''circuit'',''circus'','
+        ||'''close'',''copse'',''corner'',''court'',''cove'',''crescent'',''drive'',''end'',''esplanande'',''flat'',''freeway'',''frontage'','
+        ||'''gardens'',''glade'',''glen'',''green'',''grove'',''heights'',''highway'',''lane'',''line'',''link'',''loop'',''mall'',''mews'','
+        ||'''other'',''packet'',''parade'',''park'',''parkway'',''place'',''promenade'',''reserve'',''ridge'',''rise'',''road'',''row'','
+        ||'''square'',''street'',''strip'',''tarn'',''terrace'',''thoroughfaree'',''track'',''trunkway'',''view'',''vista'',''walk'',''walkway'',''way'',''yard''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_v ADD CONSTRAINT customer_screening_v_previous_address_rented_e_ck '
+        ||'CHECK (previous_address_rented IN (''owned'',''rented''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_v ADD CONSTRAINT customer_screening_v_previous_address_street_direction_e_ck '
+        ||'CHECK (previous_address_street_direction IN (''east'',''north'',''northEast'',''northWest'',''south'',''southEast'',''southWest'',''west''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.customer_screening_v ADD CONSTRAINT customer_screening_v_previous_address_street_type_e_ck '
+        ||'CHECK (previous_address_street_type IN (''alley'',''approach'',''arcade'',''avenue'',''boulevard'',''brow'',''bypass'',''causeway'',''circle'','
+        ||'''circuit'',''circus'',''close'',''copse'',''corner'',''court'',''cove'',''crescent'',''drive'',''end'',''esplanande'','
+        ||'''flat'',''freeway'',''frontage'',''gardens'',''glade'',''glen'',''green'',''grove'',''heights'',''highway'',''lane'',''line'',''link'',''loop'','
+        ||'''mall'',''mews'',''other'',''packet'',''parade'',''park'',''parkway'',''place'',''promenade'',''reserve'',''ridge'',''rise'',''road'',''row'','
+        ||'''square'',''street'',''strip'',''tarn'',''terrace'',''thoroughfaree'',''track'',''trunkway'',''view'',''vista'',''walk'',''walkway'',''way'',''yard''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.dashboard_metadata ADD CONSTRAINT dashboard_metadata_dashboard_type_e_ck '
+        ||'CHECK (dashboard_type IN (''building'',''system''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.deposit ADD CONSTRAINT deposit_deposit_type_e_ck '
+        ||'CHECK (deposit_type IN (''LastMonthDeposit'',''MoveInDeposit'',''SecurityDeposit''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.deposit_lifecycle ADD CONSTRAINT deposit_lifecycle_status_e_ck '
+        ||'CHECK (status IN (''Created'',''Paid'',''Processed'',''Refunded''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.deposit_policy_item ADD CONSTRAINT deposit_policy_item_deposit_type_e_ck '
+        ||'CHECK (deposit_type IN (''LastMonthDeposit'',''MoveInDeposit'',''SecurityDeposit''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.deposit_policy_item ADD CONSTRAINT deposit_policy_item_value_type_e_ck '
+        ||'CHECK (value_type IN (''Monetary'',''Percentage''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.elevator ADD CONSTRAINT elevator_warranty_warranty_type_e_ck '
+        ||'CHECK (warranty_warranty_type IN (''conditional'',''full'',''labour'',''other'',''partial'',''parts'',''partsAndLabor''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.email_template ADD CONSTRAINT email_template_template_type_e_ck '
+        ||'CHECK (template_type IN (''ApplicationApproved'',''ApplicationCreatedApplicant'',''ApplicationCreatedCoApplicant'',''ApplicationCreatedGuarantor'','
+        ||'''ApplicationDeclined'',''PasswordRetrievalCrm'',''PasswordRetrievalProspect'',''PasswordRetrievalTenant'',''TenantInvitation''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.emergency_contact ADD CONSTRAINT emergency_contact_address_street_direction_e_ck '
+        ||'CHECK (address_street_direction IN (''east'',''north'',''northEast'',''northWest'',''south'',''southEast'',''southWest'',''west''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.emergency_contact ADD CONSTRAINT emergency_contact_address_street_type_e_ck '
+        ||'CHECK (address_street_type IN (''alley'',''approach'',''arcade'',''avenue'',''boulevard'',''brow'',''bypass'',''causeway'',''circle'',''circuit'',''circus'','
+        ||'''close'',''copse'',''corner'',''court'',''cove'',''crescent'',''drive'',''end'',''esplanande'',''flat'',''freeway'',''frontage'','
+        ||'''gardens'',''glade'',''glen'',''green'',''grove'',''heights'',''highway'',''lane'',''line'',''link'',''loop'','
+        ||'''mall'',''mews'',''other'',''packet'',''parade'',''park'',''parkway'',''place'',''promenade'',''reserve'',''ridge'',''rise'',''road'',''row'','
+        ||'''square'',''street'',''strip'',''tarn'',''terrace'',''thoroughfaree'',''track'',''trunkway'',''view'',''vista'',''walk'',''walkway'',''way'',''yard''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.emergency_contact ADD CONSTRAINT emergency_contact_name_name_prefix_e_ck '
+        ||'CHECK (name_name_prefix IN (''Dr'',''Miss'',''Mr'',''Mrs'',''Ms''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.emergency_contact ADD CONSTRAINT emergency_contact_sex_e_ck CHECK (sex IN (''Female'',''Male''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.employee ADD CONSTRAINT employee_name_name_prefix_e_ck '
+        ||'CHECK (name_name_prefix IN (''Dr'',''Miss'',''Mr'',''Mrs'',''Ms''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.employee ADD CONSTRAINT employee_sex_e_ck CHECK (sex IN (''Female'',''Male''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.file_image_thumbnail_blob ADD CONSTRAINT file_image_thumbnail_blob_thumbnail_size_e_ck '
+        ||'CHECK (thumbnail_size IN (''large'',''medium'',''small'',''xlarge'',''xsmall''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.floorplan ADD CONSTRAINT floorplan_area_units_e_ck CHECK (area_units IN (''sqFeet'',''sqMeters''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.floorplan_amenity ADD CONSTRAINT floorplan_amenity_floorplan_type_e_ck '
+        ||'CHECK (floorplan_type IN (''additionalStorage'',''airConditioner'',''alarm'',''balcony'',''cable'',''carport'',''ceilingFan'',''controlledAccess'',''courtyard'','
+        ||'''dishwasher'',''disposal'',''dryer'',''fireplace'',''furnished'',''garage'',''handrails'',''heat'',''individualClimateControl'','
+        ||'''largeClosets'',''microwave'',''other'',''patio'',''privateBalcony'',''privatePatio'',''range'',''refrigerator'','
+        ||'''satellite'',''skylight'',''view'',''washer'',''wdHookup'',''wheelChair'',''windowCoverings''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.home_page_gadget ADD CONSTRAINT home_page_gadget_area_e_ck CHECK (area IN (''narrow'',''wide''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.home_page_gadget ADD CONSTRAINT home_page_gadget_status_e_ck CHECK (status IN (''disabled'',''editing'',''published''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.iagree ADD CONSTRAINT iagree_person_name_name_prefix_e_ck '
+        ||'CHECK (person_name_name_prefix IN (''Dr'',''Miss'',''Mr'',''Mrs'',''Ms''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.iagree ADD CONSTRAINT iagree_person_sex_e_ck CHECK (person_sex IN (''Female'',''Male''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.id_assignment_item ADD CONSTRAINT id_assignment_item_target_e_ck '
+        ||'CHECK (target IN (''accountNumber'',''application'',''customer'',''employee'',''guarantor'',''lead'',''lease'',''propertyCode'',''tenant''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.id_assignment_item ADD CONSTRAINT id_assignment_item_tp_e_ck '
+        ||'CHECK (tp IN (''generatedAlphaNumeric'',''generatedNumber'',''userAssigned'',''userEditable''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.id_assignment_sequence ADD CONSTRAINT id_assignment_sequence_target_e_ck '
+        ||'CHECK (target IN (''accountNumber'',''application'',''customer'',''employee'',''guarantor'',''lead'',''lease'',''propertyCode'',''tenant''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.identification_document_type ADD CONSTRAINT identification_document_type_id_type_e_ck '
+        ||'CHECK (id_type IN (''canadianSIN'',''citizenship'',''immigration'',''license'',''other'',''passport''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.issue_classification ADD CONSTRAINT issue_classification_priority_e_ck '
+        ||'CHECK (priority IN (''EMERGENCY'',''STANDARD''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.issue_element ADD CONSTRAINT issue_element_tp_e_ck '
+        ||'CHECK (tp IN (''Amenities'',''ApartmentUnit'',''Exterior''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.late_fee_item ADD CONSTRAINT late_fee_item_base_fee_type_e_ck '
+        ||'CHECK (base_fee_type IN (''FlatAmount'',''PercentMonthlyRent'',''PercentOwedTotal''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.late_fee_item ADD CONSTRAINT late_fee_item_max_total_fee_type_e_ck '
+        ||'CHECK (max_total_fee_type IN (''FlatAmount'',''PercentMonthlyRent'',''Unlimited''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lead ADD CONSTRAINT lead_appointment_time1_e_ck '
+        ||'CHECK (appointment_time1 IN (''Afternoon'',''Evening'',''Morning''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lead ADD CONSTRAINT lead_appointment_time2_e_ck '
+        ||'CHECK (appointment_time2 IN (''Afternoon'',''Evening'',''Morning''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lead ADD CONSTRAINT lead_lease_term_e_ck CHECK (lease_term IN (''months12'',''months18'',''months6'',''other''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lead ADD CONSTRAINT lead_lease_type_e_ck CHECK (lease_type IN (''commercialUnit'',''residentialUnit''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lead ADD CONSTRAINT lead_ref_source_e_ck '
+        ||'CHECK (ref_source IN (''DirectMail'',''Import'',''Internet'',''LocatorServices'',''Newspaper'',''Other'',''Radio'',''Referral'',''TV''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lead ADD CONSTRAINT lead_status_e_ck CHECK (status IN (''active'',''closed'',''rented''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lead_guest ADD CONSTRAINT lead_guest_person_name_name_prefix_e_ck '
+        ||'CHECK (person_name_name_prefix IN (''Dr'',''Miss'',''Mr'',''Mrs'',''Ms''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lead_guest ADD CONSTRAINT lead_guest_person_sex_e_ck CHECK (person_sex IN (''Female'',''Male''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease ADD CONSTRAINT lease_completion_e_ck CHECK (completion IN (''Eviction'',''Notice'',''Skip'',''Termination''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease ADD CONSTRAINT lease_lease_type_e_ck CHECK (lease_type IN (''commercialUnit'',''residentialUnit''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease ADD CONSTRAINT lease_payment_frequency_e_ck '
+        ||'CHECK (payment_frequency IN (''Annually'',''BiWeekly'',''Monthly'',''SemiAnnyally'',''SemiMonthly'',''Weekly''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease ADD CONSTRAINT lease_status_e_ck '
+        ||'CHECK (status IN (''Active'',''Application'',''Approved'',''Cancelled'',''Closed'',''Completed'',''ExistingLease''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_adjustment ADD CONSTRAINT lease_adjustment_execution_type_e_ck '
+        ||'CHECK (execution_type IN (''immediate'',''pending''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_adjustment ADD CONSTRAINT lease_adjustment_status_e_ck CHECK (status IN (''draft'',''submited''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_adjustment ADD CONSTRAINT lease_adjustment_tax_type_e_ck CHECK (tax_type IN (''percent'',''value''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_adjustment_reason ADD CONSTRAINT lease_adjustment_reason_action_type_e_ck '
+        ||'CHECK (action_type IN (''charge'',''credit''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_application ADD CONSTRAINT lease_application_status_e_ck '
+        ||'CHECK (status IN (''Approved'',''Cancelled'',''Created'',''Declined'',''OnlineApplication'',''PendingDecision''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_billing_policy ADD CONSTRAINT lease_billing_policy_confirmation_method_e_ck '
+        ||'CHECK (confirmation_method IN (''automatic'',''manual''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_billing_policy ADD CONSTRAINT lease_billing_policy_proration_method_e_ck '
+        ||'CHECK (proration_method IN (''Actual'',''Annual'',''Standard''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term ADD CONSTRAINT lease_term_lease_term_status_e_ck '
+        ||'CHECK (lease_term_status IN (''AcceptedOffer'',''Current'',''Historic'',''Offer''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term ADD CONSTRAINT lease_term_lease_term_type_e_ck '
+        ||'CHECK (lease_term_type IN (''Fixed'',''FixedEx'',''Periodic''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_participant ADD CONSTRAINT lease_term_participant_participant_role_e_ck '
+        ||'CHECK (participant_role IN (''Applicant'',''CoApplicant'',''Dependent'',''Guarantor''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease_term_participant ADD CONSTRAINT lease_term_participant_relationship_e_ck '
+        ||'CHECK (relationship IN (''Aunt'',''Daughter'',''Father'',''Friend'',''Grandfather'',''Grandmother'',''Mother'',''Other'',''Son'',''Spouse'',''Uncle''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.locker ADD CONSTRAINT locker_spot_type_e_ck CHECK (spot_type IN (''large'',''regular'',''small''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.maintenance_request ADD CONSTRAINT maintenance_request_status_e_ck '
+        ||'CHECK (status IN (''Cancelled'',''Resolved'',''Scheduled'',''Submitted''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.marketing ADD CONSTRAINT marketing_visibility_e_ck CHECK (visibility IN (''global'',''internal'',''tenant''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.master_online_application ADD CONSTRAINT master_online_application_status_e_ck '
+        ||'CHECK (status IN (''Cancelled'',''Incomplete'',''InformationRequested'',''Submitted''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.media ADD CONSTRAINT media_media_type_e_ck CHECK (media_type IN (''externalUrl'',''file'',''youTube''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.media ADD CONSTRAINT media_visibility_e_ck CHECK (visibility IN (''global'',''internal'',''tenant''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.message ADD CONSTRAINT message_message_type_e_ck '
+        ||'CHECK (message_type IN (''communication'',''maintananceAlert'',''paymentMethodExpired'',''paymnetPastDue''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.name ADD CONSTRAINT name_name_prefix_e_ck CHECK (name_prefix IN (''Dr'',''Miss'',''Mr'',''Mrs'',''Ms''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.nsf_fee_item ADD CONSTRAINT nsf_fee_item_payment_type_e_ck '
+        ||'CHECK (payment_type IN (''Cash'',''Check'',''CreditCard'',''EFT'',''Echeck'',''Interac''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.online_application ADD CONSTRAINT online_application_role_e_ck '
+        ||'CHECK (role IN (''Applicant'',''CoApplicant'',''Guarantor''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.online_application ADD CONSTRAINT online_application_status_e_ck '
+        ||'CHECK (status IN (''Incomplete'',''InformationRequested'',''Invited'',''Submitted''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.owner ADD CONSTRAINT owner_person_name_name_prefix_e_ck '
+        ||'CHECK (person_name_name_prefix IN (''Dr'',''Miss'',''Mr'',''Mrs'',''Ms''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.owner ADD CONSTRAINT owner_person_sex_e_ck CHECK (person_sex IN (''Female'',''Male''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.page_descriptor ADD CONSTRAINT page_descriptor_page_type_e_ck '
+        ||'CHECK (page_type IN (''findApartment'',''potentialTenants'',''residents'',''staticContent''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.parking ADD CONSTRAINT parking_parking_type_e_ck '
+        ||'CHECK (parking_type IN (''coveredLot'',''garageLot'',''none'',''other'',''street'',''surfaceLot''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.parking_spot ADD CONSTRAINT parking_spot_spot_type_e_ck '
+        ||'CHECK (spot_type IN (''disabled'',''narrow'',''regular'',''wide''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_information ADD CONSTRAINT payment_information_payment_method_billing_addr_str_dir_e_ck '
+        ||'CHECK (payment_method_billing_address_street_direction IN (''east'',''north'',''northEast'',''northWest'',''south'',''southEast'',''southWest'',''west''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_information ADD CONSTRAINT payment_information_payment_method_billing_addr_str_type_e_ck '
+        ||'CHECK (payment_method_billing_address_street_type IN(''alley'',''approach'',''arcade'',''avenue'',''boulevard'',''brow'',''bypass'',''causeway'',''circle'','
+        ||'''circuit'',''circus'',''close'',''copse'',''corner'',''court'',''cove'',''crescent'',''drive'',''end'',''esplanande'','
+        ||'''flat'',''freeway'',''frontage'',''gardens'',''glade'',''glen'',''green'',''grove'',''heights'',''highway'',''lane'',''line'',''link'',''loop'','
+        ||'''mall'',''mews'',''other'',''packet'',''parade'',''park'',''parkway'',''place'',''promenade'',''reserve'',''ridge'',''rise'',''road'',''row'','
+        ||'''square'',''street'',''strip'',''tarn'',''terrace'',''thoroughfaree'',''track'',''trunkway'',''view'',''vista'',''walk'',''walkway'',''way'',''yard''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_information ADD CONSTRAINT payment_information_payment_method_payment_type_e_ck '
+        ||'CHECK (payment_method_payment_type IN (''Cash'',''Check'',''CreditCard'',''EFT'',''Echeck'',''Interac''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_method ADD CONSTRAINT payment_method_billing_address_street_direction_e_ck '
+        ||'CHECK (billing_address_street_direction IN (''east'',''north'',''northEast'',''northWest'',''south'',''southEast'',''southWest'',''west''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_method ADD CONSTRAINT payment_method_billing_address_street_type_e_ck '
+        ||'CHECK (billing_address_street_type IN (''alley'',''approach'',''arcade'',''avenue'',''boulevard'',''brow'',''bypass'',''causeway'',''circle'',''circuit'',''circus'','
+        ||'''close'',''copse'',''corner'',''court'',''cove'',''crescent'',''drive'',''end'',''esplanande'',''flat'',''freeway'',''frontage'','
+        ||'''gardens'',''glade'',''glen'',''green'',''grove'',''heights'',''highway'',''lane'',''line'',''link'',''loop'','
+        ||'''mall'',''mews'',''other'',''packet'',''parade'',''park'',''parkway'',''place'',''promenade'',''reserve'',''ridge'',''rise'',''road'',''row'','
+        ||'''square'',''street'',''strip'',''tarn'',''terrace'',''thoroughfaree'',''track'',''trunkway'',''view'',''vista'',''walk'',''walkway'',''way'',''yard''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_method ADD CONSTRAINT payment_method_payment_type_e_ck '
+        ||'CHECK (payment_type IN (''Cash'',''Check'',''CreditCard'',''EFT'',''Echeck'',''Interac''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_payment_details ADD CONSTRAINT payment_payment_details_account_type_e_ck '
+        ||'CHECK (account_type IN (''Chequing'',''Saving''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_payment_details ADD CONSTRAINT payment_payment_details_card_type_e_ck '
+        ||'CHECK (card_type IN (''MasterCard'',''Visa''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payment_record ADD CONSTRAINT payment_record_payment_status_e_ck '
+        ||'CHECK (payment_status IN (''Canceled'',''Cleared'',''Processing'',''Queued'',''Received'',''Rejected'',''Returned'',''Scheduled'',''Submitted''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.payments_summary ADD CONSTRAINT payments_summary_status_e_ck '
+        ||'CHECK (status IN (''Canceled'',''Cleared'',''Processing'',''Queued'',''Received'',''Rejected'',''Returned'',''Scheduled'',''Submitted''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.pet ADD CONSTRAINT pet_weight_unit_e_ck CHECK (weight_unit IN (''kg'',''lb''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.phone_call_campaign ADD CONSTRAINT phone_call_campaign_trg_e_ck CHECK (trg IN (''ApplicationCompleted'',''Registration''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.pricing ADD CONSTRAINT pricing_payment_term_e_ck CHECK (payment_term IN (''monthly'',''oneTime''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product ADD CONSTRAINT product_feature_type_e_ck '
+        ||'CHECK (feature_type IN (''addOn'',''booking'',''locker'',''parking'',''pet'',''utility''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product ADD CONSTRAINT product_service_type_e_ck CHECK (service_type IN (''commercialUnit'',''residentialUnit''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product_item_type ADD CONSTRAINT product_item_type_feature_type_e_ck '
+        ||'CHECK (feature_type IN (''addOn'',''booking'',''locker'',''parking'',''pet'',''utility''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.product_item_type ADD CONSTRAINT product_item_type_service_type_e_ck '
+        ||'CHECK (service_type IN (''commercialUnit'',''residentialUnit''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.property_contact ADD CONSTRAINT property_contact_phone_type_e_ck '
+        ||'CHECK (phone_type IN (''administrator'',''elevator'',''fireMonitoring'',''intercom'',''laundry'',''mainOffice'',''pointOfSale'',''pool'','
+        ||'''poolEmergency'',''superintendent''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.property_contact ADD CONSTRAINT property_contact_visibility_e_ck '
+        ||'CHECK (visibility IN (''global'',''internal'',''tenant''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.property_phone ADD CONSTRAINT property_phone_designation_e_ck '
+        ||'CHECK (designation IN (''elevator'',''fireMonitoring'',''intercom'',''laundry'',''office'',''pointOfSale'',''pool''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.property_phone ADD CONSTRAINT property_phone_phone_type_e_ck '
+        ||'CHECK (phone_type IN (''fax'',''landLine'',''mobile'',''other'',''pager''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.property_phone ADD CONSTRAINT property_phone_visibility_e_ck CHECK (visibility IN (''global'',''internal'',''tenant''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.recipient ADD CONSTRAINT recipient_recipient_type_e_ck CHECK (recipient_type IN (''business'',''person''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.roof ADD CONSTRAINT roof_warranty_warranty_type_e_ck '
+        ||'CHECK (warranty_warranty_type IN (''conditional'',''full'',''labour'',''other'',''partial'',''parts'',''partsAndLabor''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.showing ADD CONSTRAINT showing_reason_e_ck CHECK (reason IN (''other'',''tooDark'',''tooExpensive'',''tooSmall''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.showing ADD CONSTRAINT showing_result_e_ck CHECK (result IN (''interested'',''notInterested''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.showing ADD CONSTRAINT showing_status_e_ck CHECK (status IN (''planned'',''seen''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.site_descriptor ADD CONSTRAINT site_descriptor_skin_e_ck CHECK (skin IN (''crm'',''skin1'',''skin2'',''skin3'',''skin4''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.social_link ADD CONSTRAINT social_link_social_site_e_ck CHECK (social_site IN (''Facebook'',''Flickr'',''Twitter'',''Youtube''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.unit_availability_status ADD CONSTRAINT unit_availability_status_rent_readiness_status_e_ck '
+        ||'CHECK (rent_readiness_status IN (''NeedsRepairs'',''RenoInProgress'',''RentReady''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.unit_availability_status ADD CONSTRAINT unit_availability_status_rented_status_e_ck '
+        ||'CHECK (rented_status IN (''OffMarket'',''Rented'',''Unrented''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.unit_availability_status ADD CONSTRAINT unit_availability_status_scoping_e_ck '
+        ||'CHECK (scoping IN (''Scoped'',''Unscoped''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.unit_availability_status ADD CONSTRAINT unit_availability_status_vacancy_status_e_ck '
+        ||'CHECK (vacancy_status IN (''Notice'',''Vacant''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.vendor ADD CONSTRAINT vendor_logo_media_type_e_ck CHECK (logo_media_type IN (''externalUrl'',''file'',''youTube''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.vendor ADD CONSTRAINT vendor_logo_visibility_e_ck CHECK (logo_visibility IN (''global'',''internal'',''tenant''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.vendor ADD CONSTRAINT vendor_vendor_type_e_ck '
+        ||'CHECK (vendor_type IN (''electrical'',''hvac'',''other'',''plumbing'',''regularMaintenance''))';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.warranty ADD CONSTRAINT warranty_warranty_type_e_ck '
+        ||'CHECK (warranty_type IN (''conditional'',''full'',''labour'',''other'',''partial'',''parts'',''partsAndLabor''))';
+         
 
         -- Final touch - update admin_pmc table
 
