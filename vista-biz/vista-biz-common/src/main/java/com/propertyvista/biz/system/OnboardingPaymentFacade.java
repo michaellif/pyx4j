@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.system;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.onboarding.BankAccountInfo;
 import com.propertyvista.onboarding.BankAccountInfoApproval;
 
@@ -21,8 +22,8 @@ import com.propertyvista.onboarding.BankAccountInfoApproval;
  */
 public interface OnboardingPaymentFacade {
 
-    public void updateBankAccountInfo(String onboardingAccountId, BankAccountInfo requestAcc);
+    public void updateBankAccountInfo(Pmc pmc, BankAccountInfo requestAcc);
 
-    public void approveBankAccountInfo(String onboardingAccountId, BankAccountInfoApproval requestAcc);
+    public void approveBankAccountInfo(Pmc pmc, BankAccountInfoApproval requestAcc);
 
 }

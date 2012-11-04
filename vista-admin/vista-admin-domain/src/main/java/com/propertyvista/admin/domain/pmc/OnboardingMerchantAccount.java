@@ -18,7 +18,6 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -33,9 +32,6 @@ public interface OnboardingMerchantAccount extends AbstractMerchantAccount {
     @Owner
     @JoinColumn
     Pmc pmc();
-
-    @NotNull
-    IPrimitive<String> onboardingAccountId();
 
     // aka external id for updates from onboarding
     IPrimitive<String> onboardingBankAccountId();

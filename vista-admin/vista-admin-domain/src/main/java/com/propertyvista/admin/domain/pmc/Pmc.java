@@ -80,6 +80,7 @@ public interface Pmc extends IEntity {
     @Detached(level = AttachLevel.Detached)
     PmcPaymentTypeInfo paymentTypeInfo();
 
+    @Indexed(uniqueConstraint = true)
     IPrimitive<String> onboardingAccountId();
 
     /**

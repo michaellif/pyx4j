@@ -32,19 +32,14 @@ import com.propertyvista.server.jobs.TaskRunner;
 public class OnboardingPaymentFacadeImpl implements OnboardingPaymentFacade {
 
     @Override
-    public void updateBankAccountInfo(String onboardingAccountId, final BankAccountInfo requestAcc) {
-        EntityQueryCriteria<Pmc> crpmc = EntityQueryCriteria.create(Pmc.class);
-        crpmc.add(PropertyCriterion.eq(crpmc.proto().onboardingAccountId(), onboardingAccountId));
-        Pmc pmc = Persistence.service().retrieve(crpmc);
-
+    public void updateBankAccountInfo(Pmc pmc, final BankAccountInfo requestAcc) {
         EntityQueryCriteria<OnboardingMerchantAccount> crmerch = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
-        crmerch.add(PropertyCriterion.eq(crmerch.proto().onboardingAccountId(), onboardingAccountId));
+        crmerch.add(PropertyCriterion.eq(crmerch.proto().pmc(), pmc));
         crmerch.add(PropertyCriterion.eq(crmerch.proto().onboardingBankAccountId(), requestAcc.onboardingBankAccountId().getValue()));
 
         OnboardingMerchantAccount omacc = Persistence.service().retrieve(crmerch);
         if (omacc == null) {
             omacc = EntityFactory.create(OnboardingMerchantAccount.class);
-            omacc.onboardingAccountId().setValue(onboardingAccountId);
             omacc.onboardingBankAccountId().setValue(requestAcc.onboardingBankAccountId().getValue());
         }
 
@@ -78,7 +73,7 @@ public class OnboardingPaymentFacadeImpl implements OnboardingPaymentFacade {
         }
 
         // See if PMC is created, Then copy the same data to Pmc namespace
-        if ((pmc != null) && (pmc.status().getValue() != PmcStatus.Created)) {
+        if ((pmc.status().getValue() != PmcStatus.Created)) {
             final Key referencedMerchantAccountKey = omacc.merchantAccountKey().getValue();
             final boolean changed2 = changed;
             Key merchantAccountKey = TaskRunner.runInTargetNamespace(pmc.namespace().getValue(), new Callable<Key>() {
@@ -123,13 +118,9 @@ public class OnboardingPaymentFacadeImpl implements OnboardingPaymentFacade {
     }
 
     @Override
-    public void approveBankAccountInfo(String onboardingAccountId, BankAccountInfoApproval requestAcc) {
-        EntityQueryCriteria<Pmc> crpmc = EntityQueryCriteria.create(Pmc.class);
-        crpmc.add(PropertyCriterion.eq(crpmc.proto().onboardingAccountId(), onboardingAccountId));
-        Pmc pmc = Persistence.service().retrieve(crpmc);
-
+    public void approveBankAccountInfo(Pmc pmc, BankAccountInfoApproval requestAcc) {
         EntityQueryCriteria<OnboardingMerchantAccount> crmerch = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
-        crmerch.add(PropertyCriterion.eq(crmerch.proto().onboardingAccountId(), onboardingAccountId));
+        crmerch.add(PropertyCriterion.eq(crmerch.proto().pmc(), pmc));
         crmerch.add(PropertyCriterion.eq(crmerch.proto().onboardingBankAccountId(), requestAcc.onboardingBankAccountId().getValue()));
 
         final OnboardingMerchantAccount omacc = Persistence.service().retrieve(crmerch);
@@ -153,7 +144,7 @@ public class OnboardingPaymentFacadeImpl implements OnboardingPaymentFacade {
         Persistence.service().persist(omacc);
 
         // See if PMC is created, Then copy the same data to Pmc namespace
-        if ((pmc != null) && (pmc.status().getValue() != PmcStatus.Created)) {
+        if ((pmc.status().getValue() != PmcStatus.Created)) {
             if (omacc.merchantAccountKey().isNull()) {
                 throw new Error("Account " + requestAcc.onboardingBankAccountId().getValue() + " has invalid reference");
             }

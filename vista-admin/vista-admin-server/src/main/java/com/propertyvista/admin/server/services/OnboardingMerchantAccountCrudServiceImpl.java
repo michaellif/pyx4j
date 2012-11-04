@@ -88,7 +88,7 @@ public class OnboardingMerchantAccountCrudServiceImpl extends AbstractCrudServic
         if (requestAcc.onboardingBankAccountId().isNull()) {
             requestAcc.onboardingBankAccountId().setValue(UUID.randomUUID().toString());
         }
-        ServerSideFactory.create(OnboardingPaymentFacade.class).updateBankAccountInfo(pmc.onboardingAccountId().getValue(), requestAcc);
+        ServerSideFactory.create(OnboardingPaymentFacade.class).updateBankAccountInfo(pmc, requestAcc);
 
         if (!dto.merchantTerminalId().isNull()) {
             BankAccountInfoApproval account = EntityFactory.create(BankAccountInfoApproval.class);
@@ -99,13 +99,13 @@ public class OnboardingMerchantAccountCrudServiceImpl extends AbstractCrudServic
             account.branchTransitNumber().setValue(requestAcc.branchTransitNumber().getValue());
             account.accountNumber().setValue(requestAcc.accountNumber().getValue());
 
-            ServerSideFactory.create(OnboardingPaymentFacade.class).approveBankAccountInfo(pmc.onboardingAccountId().getValue(), account);
+            ServerSideFactory.create(OnboardingPaymentFacade.class).approveBankAccountInfo(pmc, account);
         }
 
         // Find created item
         {
             EntityQueryCriteria<OnboardingMerchantAccount> criteria = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().onboardingAccountId(), pmc.onboardingAccountId().getValue()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
             criteria.add(PropertyCriterion.eq(criteria.proto().onboardingBankAccountId(), requestAcc.onboardingBankAccountId().getValue()));
             entity.set(Persistence.service().retrieve(criteria));
         }

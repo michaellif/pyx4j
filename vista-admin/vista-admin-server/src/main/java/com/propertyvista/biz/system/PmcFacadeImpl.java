@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.system;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
@@ -147,14 +146,9 @@ public class PmcFacadeImpl implements PmcFacade {
 
             OnboardingUser onbUser = Persistence.service().retrieve(OnboardingUser.class, onbUserCred.user().getPrimaryKey());
 
-            List<OnboardingMerchantAccount> onbMrchAccs;
-            if (pmc.onboardingAccountId().getValue() != null) {
-                EntityQueryCriteria<OnboardingMerchantAccount> onbMrchAccCrt = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
-                onbMrchAccCrt.add(PropertyCriterion.eq(onbMrchAccCrt.proto().onboardingAccountId(), pmc.onboardingAccountId().getValue()));
-                onbMrchAccs = Persistence.service().query(onbMrchAccCrt);
-            } else {
-                onbMrchAccs = new ArrayList<OnboardingMerchantAccount>();
-            }
+            EntityQueryCriteria<OnboardingMerchantAccount> onbMrchAccCrt = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
+            onbMrchAccCrt.add(PropertyCriterion.eq(onbMrchAccCrt.proto().pmc(), pmc));
+            List<OnboardingMerchantAccount> onbMrchAccs = Persistence.service().query(onbMrchAccCrt);
             try {
                 Persistence.service().startBackgroundProcessTransaction();
                 PmcCreator.preloadPmc(pmc, onbUser, onbUserCred, onbMrchAccs);

@@ -19,7 +19,10 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.system.OnboardingPaymentFacade;
 import com.propertyvista.onboarding.BankAccountInfo;
@@ -38,8 +41,18 @@ public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<
     public ResponseIO execute(UpdateBankAccountInfoRequestIO request) {
         log.info("User {} requested {} ", new Object[] { request.onboardingAccountId().getValue(), "UpdateBankAccountInfo" });
 
+        EntityQueryCriteria<Pmc> crpmc = EntityQueryCriteria.create(Pmc.class);
+        crpmc.add(PropertyCriterion.eq(crpmc.proto().onboardingAccountId(), request.onboardingAccountId()));
+        Pmc pmc = Persistence.service().retrieve(crpmc);
+        if (pmc == null) {
+            ResponseIO response = EntityFactory.create(ResponseIO.class);
+            response.success().setValue(Boolean.FALSE);
+            response.errorMessage().setValue("PMC not found");
+            return response;
+        }
+
         for (BankAccountInfo requestAcc : request.accounts()) {
-            ServerSideFactory.create(OnboardingPaymentFacade.class).updateBankAccountInfo(request.onboardingAccountId().getValue(), requestAcc);
+            ServerSideFactory.create(OnboardingPaymentFacade.class).updateBankAccountInfo(pmc, requestAcc);
         }
 
         Persistence.service().commit();

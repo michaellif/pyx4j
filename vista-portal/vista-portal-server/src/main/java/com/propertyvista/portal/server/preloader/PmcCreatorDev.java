@@ -114,7 +114,6 @@ public class PmcCreatorDev {
                         merchantAccount.branchTransitNumber().setValue(imp.branchTransitNumber().getValue());
                         merchantAccount.accountNumber().setValue(imp.accountNumber().getValue());
                         merchantAccount.chargeDescription().setValue("Pay for " + pmcName + " " + n);
-                        merchantAccount.onboardingAccountId().setValue(pmc.onboardingAccountId().getValue());
                         merchantAccount.onboardingBankAccountId().setValue("onb_" + pmcName + merchantAccount.bankId().getValue());
 
                         Persistence.service().persist(merchantAccount);
@@ -138,7 +137,6 @@ public class PmcCreatorDev {
                     }
 
                     merchantAccount.chargeDescription().setValue("Pay for " + pmcName + " " + n);
-                    merchantAccount.onboardingAccountId().setValue(pmc.onboardingAccountId().getValue());
                     merchantAccount.onboardingBankAccountId().setValue("onb_" + pmcName + "e" + n);
                     Persistence.service().persist(merchantAccount);
                 }
@@ -174,7 +172,6 @@ public class PmcCreatorDev {
                     merchantAccount.branchTransitNumber().setValue("00550");
                     merchantAccount.accountNumber().setValue("12345678");
                     merchantAccount.chargeDescription().setValue("Pay for VistaT");
-                    merchantAccount.onboardingAccountId().setValue(pmc.onboardingAccountId().getValue());
                     merchantAccount.onboardingBankAccountId().setValue("onb_" + merchantAccount.bankId().getValue());
                     Persistence.service().persist(merchantAccount);
                 }
@@ -187,7 +184,6 @@ public class PmcCreatorDev {
                     merchantAccount.accountNumber().setValue("01234567");
 
                     merchantAccount.chargeDescription().setValue("Pay for Vista1");
-                    merchantAccount.onboardingAccountId().setValue(pmc.onboardingAccountId().getValue());
                     merchantAccount.onboardingBankAccountId().setValue("onb_" + merchantAccount.bankId().getValue());
                     Persistence.service().persist(merchantAccount);
                 }
@@ -208,7 +204,6 @@ public class PmcCreatorDev {
                         merchantAccount.accountNumber().setValue("01234567");
 
                         merchantAccount.chargeDescription().setValue("Pay for " + pmcName + " " + n);
-                        merchantAccount.onboardingAccountId().setValue(pmc.onboardingAccountId().getValue());
                         merchantAccount.onboardingBankAccountId().setValue("onb_" + merchantAccount.bankId().getValue());
                         Persistence.service().persist(merchantAccount);
                     }
