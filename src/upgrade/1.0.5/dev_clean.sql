@@ -28,7 +28,9 @@ BEGIN
 			   'income_info_student_income',
 			   'income_info_employer',
 			   'personal_income',
-			   'person_screening_personal_asset']
+			   'person_screening_personal_asset',
+			   'identification_document',
+			   'proof_of_employment_document']
 		LOOP
 			SELECT * INTO v_void FROM _dba_.truncate_schema_table(v_schema_name,v_table_name, TRUE) ;
 		END LOOP;
