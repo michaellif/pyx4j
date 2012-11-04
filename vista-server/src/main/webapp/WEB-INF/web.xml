@@ -108,7 +108,7 @@
         </init-param>
         <init-param>
             <param-name>ignoreUrls</param-name>
-            <param-value>/residents/*,/media/*,/o/*,*.siteimgrc</param-value>
+            <param-value>/robots.txt,/favicon.ico,/residents/*,/media/*,/o/*,*.siteimgrc</param-value>
         </init-param>
     </filter>
 
