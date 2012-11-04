@@ -20,7 +20,7 @@ public class UpgradeProcedure105 implements UpgradeProcedure {
 
     @Override
     public int getUpgradeStepsCount() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -29,6 +29,9 @@ public class UpgradeProcedure105 implements UpgradeProcedure {
         case 1:
             runDashboardPreload();
             break;
+        case 2:
+            updateLeaseDates();
+            break;
         default:
             throw new IllegalArgumentException();
         }
@@ -36,6 +39,10 @@ public class UpgradeProcedure105 implements UpgradeProcedure {
 
     private void runDashboardPreload() {
         new DashboardPreloader().create();
+    }
+
+    private void updateLeaseDates() {
+
     }
 
 }
