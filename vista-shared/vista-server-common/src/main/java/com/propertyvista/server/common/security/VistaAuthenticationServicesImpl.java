@@ -13,11 +13,15 @@
  */
 package com.propertyvista.server.common.security;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.servlet.http.Cookie;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
@@ -56,10 +61,14 @@ import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.AbstractUserCredential;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.shared.VistaSystemIdentification;
 
 public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E extends AbstractUserCredential<U>> extends
         com.pyx4j.security.server.AuthenticationServiceImpl {
@@ -365,7 +374,8 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         String requestUrl = ServletUtils.getActualRequestURL(Context.getRequest(), false);
 
         SystemWallMessage systemWallMessage = null;
-        switch (VistaDeployment.getSystemIdentification()) {
+        VistaSystemIdentification systemId = VistaDeployment.getSystemIdentification();
+        switch (systemId) {
         case production:
             if (!requestUrl.startsWith(baseUrl)) {
                 systemWallMessage = new SystemWallMessage(i18n.tr("Repairs in Progress"), true);
@@ -400,6 +410,30 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
 
         ar.setSystemWallMessage(systemWallMessage);
 
+        if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)
+                && ((systemId == VistaSystemIdentification.production) || (systemId == VistaSystemIdentification.demo))) {
+            setVistaEmployeeCookie();
+        }
+
+        if (systemId != VistaSystemIdentification.staging) {
+            ar.setGoogleAnalyticsKey(((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getGoogleAnalyticsKey());
+        }
+
         return ar;
+    }
+
+    public static void setVistaEmployeeCookie() {
+        Cookie sessionCookie = new Cookie(DeploymentConsts.vistaEmployeeCookie, "true");
+        sessionCookie.setPath("/");
+        sessionCookie.setMaxAge(Long.valueOf(180 * Consts.DAY2MSEC).intValue());
+
+        String host = Context.getRequestServerName();
+        List<String> hostParts = new ArrayList<String>(Arrays.asList(host.split("\\.")));
+        Collections.reverse(hostParts);
+        if (hostParts.size() >= 2) {
+            String domain = "." + hostParts.get(1) + "." + hostParts.get(0);
+            sessionCookie.setDomain(domain);
+        }
+        Context.getResponse().addCookie(sessionCookie);
     }
 }

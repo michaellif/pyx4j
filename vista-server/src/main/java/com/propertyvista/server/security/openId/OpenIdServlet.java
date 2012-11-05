@@ -32,6 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
+import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.shared.config.VistaDemo;
 
 @SuppressWarnings("serial")
@@ -68,7 +69,12 @@ public class OpenIdServlet extends HttpServlet {
                 devSession.removeAttribute(OpenIdFilter.REQUESTED_URL_ATTRIBUTE);
             }
             if (openIdResponse.email != null) {
-                devSession.setAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE, openIdResponse.email.toLowerCase(Locale.ENGLISH));
+                openIdResponse.email = openIdResponse.email.toLowerCase(Locale.ENGLISH);
+                devSession.setAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE, openIdResponse.email);
+
+                if (openIdResponse.email.endsWith("propertyvista.com")) {
+                    VistaAuthenticationServicesImpl.setVistaEmployeeCookie();
+                }
             }
             createResponsePage(response, false, receivingURL);
         }

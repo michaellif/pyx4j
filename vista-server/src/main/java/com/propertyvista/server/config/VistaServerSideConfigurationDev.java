@@ -107,4 +107,10 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
         return ".dev.birchwoodsoftwaregroup.com:" + devServerPort + "/vista/";
     }
 
+    @Override
+    public String getGoogleAnalyticsKey() {
+        // If there are problem with tracker enable here to test locally
+        //return VistaSettings.googleAnalyticsDevKey;
+        return null;
+    }
 }

@@ -21,6 +21,7 @@ import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.shared.config.VistaSettings;
 
 public class VistaServerSideConfigurationProdCustomersDemo extends VistaServerSideConfigurationDevCustom {
 
@@ -73,6 +74,16 @@ public class VistaServerSideConfigurationProdCustomersDemo extends VistaServerSi
     @Override
     public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
         return VistaSMTPMailServiceConfig.getGmailConfig("demo-prod-");
+    }
+
+    @Override
+    public boolean isGoogleAnalyticDisableForEmployee() {
+        return true;
+    }
+
+    @Override
+    public String getGoogleAnalyticsKey() {
+        return VistaSettings.googleAnalyticsProdKey;
     }
 
 }

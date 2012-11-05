@@ -22,6 +22,7 @@ import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.server.config.VistaFeaturesLifecycleListener;
+import com.propertyvista.shared.config.VistaSettings;
 
 public abstract class AbstractVistaServerSideConfiguration extends EssentialsServerSideConfiguration {
 
@@ -73,5 +74,13 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
     public abstract String getDefaultBaseURLvistaAdmin();
 
     public abstract String getCaledonCompanyId();
+
+    public boolean isGoogleAnalyticDisableForEmployee() {
+        return false;
+    }
+
+    public String getGoogleAnalyticsKey() {
+        return VistaSettings.googleAnalyticsDevKey;
+    }
 
 }

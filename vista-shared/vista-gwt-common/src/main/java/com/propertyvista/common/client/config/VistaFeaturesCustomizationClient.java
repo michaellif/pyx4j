@@ -22,6 +22,8 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
 
     private static PmcVistaFeatures features = EntityFactory.create(PmcVistaFeatures.class);
 
+    private static boolean isGoogleAnalyticDisableForEmployee;
+
     @Override
     public boolean occupancyModel() {
         return features.occupancyModel().getValue(Boolean.FALSE);
@@ -50,4 +52,13 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
     public static void setVistaFeatures(PmcVistaFeatures features) {
         VistaFeaturesCustomizationClient.features = features;
     }
+
+    public static boolean isGoogleAnalyticDisableForEmployee() {
+        return isGoogleAnalyticDisableForEmployee;
+    }
+
+    public static void setGoogleAnalyticDisableForEmployee(boolean isGoogleAnalyticDisableForEmployee) {
+        VistaFeaturesCustomizationClient.isGoogleAnalyticDisableForEmployee = isGoogleAnalyticDisableForEmployee;
+    }
+
 }

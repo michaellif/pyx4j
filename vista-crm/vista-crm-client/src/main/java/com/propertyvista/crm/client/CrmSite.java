@@ -23,18 +23,23 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.gwt.commons.BrowserType;
+import com.pyx4j.gwt.commons.GoogleAnalytics;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.client.SecurityControllerEvent;
+import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.security.client.SessionInactiveEvent;
 import com.pyx4j.security.client.SessionInactiveHandler;
 import com.pyx4j.security.client.SessionMonitor;
 import com.pyx4j.security.rpc.AuthenticationService;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -53,6 +58,8 @@ import com.propertyvista.crm.client.ui.LogoViewImpl;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
+import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
@@ -99,14 +106,34 @@ public class CrmSite extends VistaSite {
         });
 
         if (verifyBrowserCompatibility()) {
-            initSiteTheme();
-            ClientPolicyManager.initialize(GWT.<PolicyRetrieveService> create(CrmPolicyRetrieveService.class));
+            initialize();
         }
     }
 
     @Override
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
         setMessage(new Message(message, title, buttonText, command));
+    }
+
+    private void initialize() {
+        initSiteTheme();
+        ClientPolicyManager.initialize(GWT.<PolicyRetrieveService> create(CrmPolicyRetrieveService.class));
+
+        AppSite.getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+
+            @Override
+            public void onSecurityContextChange(SecurityControllerEvent event) {
+                if (SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
+                    if (VistaFeaturesCustomizationClient.isGoogleAnalyticDisableForEmployee() && hasVistaSupportCookie()) {
+                        // Do not track Vista Support Employee
+                    } else {
+                        GoogleAnalytics.setGoogleAnalyticsTracker(ClientContext.getGoogleAnalyticsKey());
+                        GoogleAnalytics.track("login");
+                    }
+                }
+            }
+
+        });
     }
 
     private void initSiteTheme() {
@@ -120,6 +147,7 @@ public class CrmSite extends VistaSite {
                 Window.setTitle(i18n.tr("Property Vista") + " - " + descriptor.siteTitles().crmHeader().getStringView());
                 StyleManger.installTheme(new CrmTheme(), new VistaPalette(descriptor.palette()));
                 VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
+                VistaFeaturesCustomizationClient.setGoogleAnalyticDisableForEmployee(descriptor.isGoogleAnalyticDisableForEmployee().getValue());
                 obtainAuthenticationData();
             }
 
@@ -183,5 +211,12 @@ public class CrmSite extends VistaSite {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Used to disable tracking of Vista Employee in customer application
+     */
+    private boolean hasVistaSupportCookie() {
+        return CommonsStringUtils.isStringSet(Cookies.getCookie(DeploymentConsts.vistaEmployeeCookie));
     }
 }

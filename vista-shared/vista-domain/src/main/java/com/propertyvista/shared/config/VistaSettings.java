@@ -20,4 +20,8 @@ public class VistaSettings {
 
     public static String googleAPIKey = "AIzaSyAa7EDFOm17VLX7tLJqCZfn2SX8qT5kYcE";
 
+    public static String googleAnalyticsProdKey = "UA-25984391-2";
+
+    public static String googleAnalyticsDevKey = "UA-36111148-1";
+
 }

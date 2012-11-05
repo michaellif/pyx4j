@@ -22,6 +22,7 @@ import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.shared.config.VistaSettings;
 
 public class VistaServerSideConfigurationProd extends VistaServerSideConfiguration {
 
@@ -131,5 +132,15 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     @Override
     public String openIdProviderDomain() {
         return "static.propertyvista.com";
+    }
+
+    @Override
+    public boolean isGoogleAnalyticDisableForEmployee() {
+        return true;
+    }
+
+    @Override
+    public String getGoogleAnalyticsKey() {
+        return VistaSettings.googleAnalyticsProdKey;
     }
 }

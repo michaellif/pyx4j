@@ -24,7 +24,7 @@ import com.propertyvista.domain.site.SitePalette;
 import com.propertyvista.domain.site.SiteTitles;
 
 @Transient
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface SiteDefinitionsDTO extends IEntity {
 
     IPrimitive<Skin> skin();
@@ -36,4 +36,6 @@ public interface SiteDefinitionsDTO extends IEntity {
     IPrimitive<Boolean> logoAvalable();
 
     PmcVistaFeatures features();
+
+    IPrimitive<Boolean> isGoogleAnalyticDisableForEmployee();
 }

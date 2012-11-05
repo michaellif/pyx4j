@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.NamespaceNotFoundException;
 import com.pyx4j.entity.server.Persistence;
@@ -27,6 +28,7 @@ import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteTitles;
@@ -78,6 +80,9 @@ public class SiteThemeServicesImpl implements SiteThemeServices {
         def.skin().setValue(descriptor.skin().getValue());
 
         def.features().set(VistaDeployment.getCurrentVistaFeatures());
+
+        def.isGoogleAnalyticDisableForEmployee().setValue(
+                ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).isGoogleAnalyticDisableForEmployee());
 
         // TODO different resources base on locale
         if (descriptor.logo().size() > 0) {
