@@ -81,6 +81,7 @@ public interface Pmc extends IEntity {
     PmcPaymentTypeInfo paymentTypeInfo();
 
     @Indexed(uniqueConstraint = true)
+    @Length(63)
     IPrimitive<String> onboardingAccountId();
 
     /**
