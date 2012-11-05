@@ -72,6 +72,7 @@ public class ArrearsStatusGadget extends GadgetInstanceBase<ArrearsStatusGadgetM
                 
                 // arrears
                 new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucketCurrent()).build(),
+                new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucketThisMonth()).build(),
                 new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucket30()).build(),
                 new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucket60()).build(),
                 new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucket90()).build(),
