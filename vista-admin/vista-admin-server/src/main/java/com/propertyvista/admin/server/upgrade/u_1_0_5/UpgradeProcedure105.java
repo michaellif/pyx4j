@@ -13,7 +13,13 @@
  */
 package com.propertyvista.admin.server.upgrade.u_1_0_5;
 
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+
 import com.propertyvista.admin.server.upgrade.UpgradeProcedure;
+import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.server.preloader.DashboardPreloader;
 
 public class UpgradeProcedure105 implements UpgradeProcedure {
@@ -42,7 +48,9 @@ public class UpgradeProcedure105 implements UpgradeProcedure {
     }
 
     private void updateLeaseDates() {
-
+        EntityQueryCriteria<Lease> criteria = new EntityQueryCriteria<Lease>(Lease.class);
+        for (Lease lease : Persistence.service().query(criteria)) {
+            ServerSideFactory.create(LeaseFacade.class).updateLeaseDates(lease);
+        }
     }
-
 }

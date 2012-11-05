@@ -15,6 +15,7 @@ package com.propertyvista.biz.tenant;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
@@ -66,19 +67,19 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.domain.tenant.lease.Guarantor;
-import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class LeaseFacadeImpl implements LeaseFacade {
 
@@ -949,7 +950,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
     }
 
-    private void updateLeaseDates(Lease lease) {
+    @Override
+    public void updateLeaseDates(Lease lease) {
         if (lease.status().getValue().isDraft()) {
             assert (!lease.currentTerm().isEmpty());
 
@@ -959,11 +961,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
             EntityQueryCriteria<LeaseTerm> criteria = new EntityQueryCriteria<LeaseTerm>(LeaseTerm.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
             criteria.add(PropertyCriterion.ne(criteria.proto().status(), LeaseTerm.Status.Offer));
-
             // set sorting by 'from date':
-            Vector<Sort> sorts = new Vector<Sort>();
-            sorts.add(new Sort(criteria.proto().termFrom().getPath().toString(), true));
-            criteria.setSorts(sorts);
+            criteria.setSorts(new Vector<Sort>(Arrays.asList(new Sort(criteria.proto().termFrom().getPath().toString(), true))));
 
             List<LeaseTerm> terms = Persistence.service().query(criteria);
             assert (!terms.isEmpty());
@@ -976,9 +975,14 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (lease.expectedMoveIn().isNull()) {
             lease.expectedMoveIn().setValue(lease.leaseFrom().getValue());
         }
-        // term type corrections:
+        if (lease.completion().isNull()) {
+            lease.expectedMoveOut().setValue(null);
+        }
+
+        // current term type-related corrections:
         switch (lease.currentTerm().type().getValue()) {
         case Fixed:
+        case FixedEx:
             if (lease.completion().isNull()) {
                 lease.expectedMoveOut().setValue(lease.currentTerm().termTo().getValue());
             }
@@ -988,6 +992,21 @@ public class LeaseFacadeImpl implements LeaseFacade {
         default:
             break;
         }
+
+        // next term type-related corrections:
+        if (lease.completion().isNull() && !lease.nextTerm().isNull()) {
+            switch (lease.nextTerm().type().getValue()) {
+            case Fixed:
+            case FixedEx:
+                lease.expectedMoveOut().setValue(lease.nextTerm().termTo().getValue());
+                break;
+            case Periodic:
+                break;
+            default:
+                break;
+            }
+        }
+
         // if lease to be terminated:
         if (!lease.terminationLeaseTo().isNull()) {
             lease.leaseTo().setValue(lease.terminationLeaseTo().getValue());

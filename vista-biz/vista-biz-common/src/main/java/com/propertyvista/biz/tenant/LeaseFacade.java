@@ -86,9 +86,11 @@ public interface LeaseFacade {
 
     void moveOut(Lease leaseId);
 
-    // Utils:
+    // Utils/internals:
 
     Lease load(Lease leaseId, boolean forEdit);
 
     BillableItem createBillableItem(ProductItem itemId, PolicyNode node);
+
+    void updateLeaseDates(Lease lease);
 }
