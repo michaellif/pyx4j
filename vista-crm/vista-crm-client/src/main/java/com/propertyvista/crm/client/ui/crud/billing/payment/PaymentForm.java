@@ -44,7 +44,11 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.tenant.lease.Guarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.PaymentRecordDTO.PaymentSelect;
 
@@ -118,15 +122,21 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber())).build());
         get(proto().billingAccount().accountNumber()).setViewable(true);
 
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntitySelectorHyperlink<LeaseTermParticipant>() {
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntitySelectorHyperlink<LeaseTermParticipant<?>>() {
             @Override
             protected AppPlace getTargetPlace() {
-                return AppPlaceEntityMapper.resolvePlace(getValue().getInstanceValueClass(), getValue().getPrimaryKey());
+                if (getValue().isInstanceOf(LeaseTermTenant.class)) {
+                    return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().getPrimaryKey());
+                } else if (getValue().isInstanceOf(LeaseTermGuarantor.class)) {
+                    return AppPlaceEntityMapper.resolvePlace(Guarantor.class, getValue().getPrimaryKey());
+                } else {
+                    throw new IllegalArgumentException("Incorrect LeaseParticipant value!");
+                }
             }
 
             @Override
-            protected AbstractEntitySelectorDialog<LeaseTermParticipant> getSelectorDialog() {
-                return new EntitySelectorListDialog<LeaseTermParticipant>(i18n.tr("Select Tenant To Pay"), false, PaymentForm.this.getValue().participants()) {
+            protected AbstractEntitySelectorDialog<LeaseTermParticipant<?>> getSelectorDialog() {
+                return new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenant To Pay"), false, PaymentForm.this.getValue().participants()) {
 
                     @Override
                     public boolean onClickOk() {

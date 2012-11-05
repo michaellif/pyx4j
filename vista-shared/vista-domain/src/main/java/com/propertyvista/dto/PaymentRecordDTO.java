@@ -51,7 +51,7 @@ public interface PaymentRecordDTO extends PaymentRecord {
 
     IPrimitive<Status> leaseStatus();
 
-    IList<LeaseTermParticipant> participants();
+    IList<LeaseTermParticipant<?>> participants();
 
     IPrimitive<Boolean> electronicPaymentsAllowed();
 

@@ -63,7 +63,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         super.enhanceRetrieved(entity, dto, retrieveTraget);
         enhanceListRetrieved(entity, dto);
 
-        dto.participants().addAll(retrieveUsers(dto.billingAccount().lease()));
+        dto.participants().addAll(retrievePayableUsers(dto.billingAccount().lease()));
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(dto.billingAccount()));
     }
 
@@ -128,7 +128,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.leaseStatus().set(billingAccount.lease().status());
         dto.propertyCode().set(billingAccount.lease().unit().building().propertyCode());
         dto.unitNumber().set(billingAccount.lease().unit().info().number());
-        dto.participants().addAll(retrieveUsers(billingAccount.lease()));
+        dto.participants().addAll(retrievePayableUsers(billingAccount.lease()));
 
         // some default values:
         dto.paymentStatus().setValue(PaymentStatus.Submitted);
@@ -198,9 +198,11 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     // internals:
-    private List<LeaseTermParticipant> retrieveUsers(Lease lease) {
-        List<LeaseTermParticipant> users = new LinkedList<LeaseTermParticipant>();
+    @SuppressWarnings("incomplete-switch")
+    private List<LeaseTermParticipant<?>> retrievePayableUsers(Lease lease) {
+        List<LeaseTermParticipant<?>> users = new LinkedList<LeaseTermParticipant<?>>();
 
+        // add payable tenants:
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
         for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
             switch (tenant.role().getValue()) {
@@ -209,6 +211,10 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
                 users.add(tenant);
             }
         }
+
+        // add guarantors:
+        Persistence.service().retrieve(lease.currentTerm().version().guarantors());
+        users.addAll(lease.currentTerm().version().guarantors());
 
         return users;
     }
