@@ -26,16 +26,12 @@ import com.propertyvista.common.client.ui.components.security.PasswordChangeView
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
-import com.propertyvista.crm.client.visor.notes.NotesParentId;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> implements GuarantorViewerView.Presenter {
-
-    private Key notesParentPrimaryKey;
 
     private Key screeningParentPrimaryKey;
 
@@ -64,13 +60,7 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     public void onPopulateSuccess(GuarantorDTO result) {
         super.onPopulateSuccess(result);
 
-        notesParentPrimaryKey = result.getPrimaryKey();
         screeningParentPrimaryKey = result.customer().getPrimaryKey();
-    }
-
-    @Override
-    protected NotesParentId createNotesParentId() {
-        return new NotesParentId(LeaseTermGuarantor.class, notesParentPrimaryKey);
     }
 
     @Override

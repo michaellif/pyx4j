@@ -27,6 +27,7 @@ import com.pyx4j.site.client.ui.crud.IView;
 import com.propertyvista.crm.client.visor.IVisorController;
 import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;
 import com.propertyvista.domain.note.NotesAndAttachments;
+import com.propertyvista.shared.NotesParentId;
 
 public class NotesAndAttachmentsVisorController implements IVisorController {
 

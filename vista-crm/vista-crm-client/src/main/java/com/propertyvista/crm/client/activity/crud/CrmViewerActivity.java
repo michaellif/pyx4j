@@ -23,7 +23,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.event.CrudNavigateEvent;
 import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorController;
-import com.propertyvista.crm.client.visor.notes.NotesParentId;
+import com.propertyvista.shared.NotesParentId;
 
 public class CrmViewerActivity<E extends IEntity> extends ViewerActivityBase<E> {
 

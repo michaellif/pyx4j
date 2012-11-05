@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.client.visor.notes;
+package com.propertyvista.shared;
 
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.Key;
@@ -24,9 +24,12 @@ public class NotesParentId {
     private final String ownerClass;
 
     public NotesParentId(Class<? extends IEntity> entityClass, Key ownerId) {
-        super();
         this.ownerId = ownerId.asCurrentKey();
         this.ownerClass = getEntitySimpleClassName(entityClass);
+    }
+
+    public NotesParentId(IEntity entity) {
+        this(entity.createIdentityStub().getEntityMeta().getDBOClass(), entity.getPrimaryKey().asCurrentKey());
     }
 
     // TODO : this algorithm should be revised 
