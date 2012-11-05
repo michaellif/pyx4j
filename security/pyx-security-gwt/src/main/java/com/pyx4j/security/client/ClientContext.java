@@ -214,6 +214,8 @@ public class ClientContext {
 
     static boolean authenticationChanging = false;
 
+    private static String googleAnalyticsKey;
+
     public static void authenticated(AuthenticationResponse authenticationResponse) {
         try {
             authenticationObtained = true;
@@ -256,6 +258,7 @@ public class ClientContext {
                 RPCManager.enableAppEngineUsageStats();
             }
             systemWallMessage = authenticationResponse.getSystemWallMessage();
+            googleAnalyticsKey = authenticationResponse.getGoogleAnalyticsKey();
         } finally {
             authenticationChanging = false;
         }
@@ -321,6 +324,10 @@ public class ClientContext {
 
     public static String getLogoutURL() {
         return logoutURL;
+    }
+
+    public static String getGoogleAnalyticsKey() {
+        return googleAnalyticsKey;
     }
 
     public static void googleAccountsLogin(AuthenticationService authenticationService) {
