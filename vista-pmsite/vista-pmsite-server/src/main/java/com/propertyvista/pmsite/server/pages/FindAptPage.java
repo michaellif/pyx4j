@@ -58,11 +58,19 @@ public class FindAptPage extends BasePage {
         response.renderCSSReference(refCSS);
 
         if (VistaSettings.googleMapApiVersion.equals("2")) {
-            response.renderJavaScriptReference(ServletUtils.getRequestProtocol(Context.getRequest()) + "://maps.google.com/maps?file=api&v="
-                    + VistaSettings.googleMapApiVersion + "&sensor=false&key=" + VistaDeployment.getPortalGoogleAPIKey());
+            //TODO This is Hack!
+            final boolean thereArenoMapToShow = true;
+            if (thereArenoMapToShow) {
+                // Do not send key so Google will not validate it.
+                response.renderJavaScriptReference(ServletUtils.getRequestProtocol(Context.getRequest())
+                        + "://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp&amp;key=");
+            } else {
+                response.renderJavaScriptReference(ServletUtils.getRequestProtocol(Context.getRequest())
+                        + "://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=" + VistaDeployment.getPortalGoogleAPIKey());
+            }
         } else {
             response.renderJavaScriptReference(ServletUtils.getRequestProtocol(Context.getRequest()) + "://maps.googleapis.com/maps/api/js?key="
-                    + VistaDeployment.getPortalGoogleAPIKey() + "&sensor=false");
+                    + VistaDeployment.getPortalGoogleAPIKey() + "&amp;sensor=false");
         }
 
         super.renderHead(response);
