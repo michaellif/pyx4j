@@ -61,8 +61,10 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.Service.ServiceType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -649,7 +651,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         Persistence.secureSave(lease);
 
-        // TODO: add notes with decisionReason!!!
+        Persistence.secureSave(creteLeaseNote(leaseId, "Cancel " + completionType.toString(), decisionReason, decidedBy.user()));
 
         try {
             ServerSideFactory.create(OccupancyFacade.class).cancelMoveOut(lease.unit().getPrimaryKey());
@@ -708,7 +710,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
-        // TODO: add notes with decisionReason!!!
+        Persistence.secureSave(creteLeaseNote(leaseId, "Cancel Lease", decisionReason, decidedBy.user()));
     }
 
     // internals:
@@ -919,7 +921,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
             leaseParticipant.leaseParticipant().id().set(leaseCustomer.id());
             leaseParticipant.leaseParticipant().lease().set(leaseTerm.lease());
             leaseParticipant.leaseParticipant().participantId().set(leaseCustomer.participantId());
-
         }
     }
 
@@ -1068,4 +1069,24 @@ public class LeaseFacadeImpl implements LeaseFacade {
             Persistence.service().commit();
         }
     }
+
+    private NotesAndAttachments creteLeaseNote(Lease leaseId, String subject, String note, CrmUser user) {
+        NotesAndAttachments naa = EntityFactory.create(NotesAndAttachments.class);
+
+        // TODO : sync with Stas and Mickael!!! 
+        String simpleName = Lease.class.getName();
+        // strip the package name
+        simpleName = simpleName.substring(simpleName.lastIndexOf(".") + 1);
+
+        naa.ownerClass().setValue(simpleName);
+        naa.ownerId().setValue(leaseId.getPrimaryKey());
+
+        naa.subject().setValue(subject);
+        naa.note().setValue(note);
+
+        naa.user().set(user);
+
+        return naa;
+    }
+
 }
