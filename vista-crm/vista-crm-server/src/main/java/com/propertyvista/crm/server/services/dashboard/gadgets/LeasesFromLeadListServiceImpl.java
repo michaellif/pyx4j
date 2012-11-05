@@ -52,13 +52,6 @@ public class LeasesFromLeadListServiceImpl extends AbstractListServiceDtoImpl<Le
             Persistence.service().retrieve(dto.lease().currentTerm().version().tenants());
             Persistence.service().retrieve(dto.lease().currentTerm().version().guarantors());
         }
-
-        Persistence.service().retrieveMember(dto.lease().leaseTerms());
-        if (!dto.lease().leaseTerms().isEmpty()) {
-            dto.lease().leaseFrom().set(dto.lease().leaseTerms().get(0).termFrom());
-            dto.lease().leaseTo().set(dto.lease().leaseTerms().get(dto.lease().leaseTerms().size() - 1).termTo());
-            dto.lease().leaseTerms().clear();
-        }
     }
 
     @Override
