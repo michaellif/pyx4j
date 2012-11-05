@@ -16,6 +16,9 @@ package com.propertyvista.domain.financial.tax;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
@@ -39,9 +42,11 @@ public interface Tax extends IEntity {
     @ToString(index = 1)
     IPrimitive<String> authority();
 
-    @NotNull
-    @ToString(index = 2)
     //TODO rate for particular period
+    @NotNull
+    @Format("#,##0.00")
+    @ToString(index = 2)
+    @Editor(type = EditorType.percentage)
     IPrimitive<BigDecimal> rate();
 
     IPrimitive<Boolean> compound();
