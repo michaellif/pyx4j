@@ -68,12 +68,11 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                 return VistaNamespace.adminNamespace;
             }
             if (servletPath.startsWith("/public/schema") || servletPath.startsWith("/public/version") || servletPath.startsWith("/static/")
-                    || servletPath.startsWith("/demo/") || servletPath.startsWith("/public/status") || servletPath.startsWith("/o/")
-                    || servletPath.endsWith("/robots.txt")) {
-                return "_";
+                    || servletPath.startsWith("/demo/") || servletPath.startsWith("/public/status") || servletPath.startsWith("/o/")) {
+                return VistaNamespace.noNamespace;
             }
             if (ApplicationMode.isDevelopment() && servletPath.equals("/index.html")) {
-                return "_";
+                return VistaNamespace.noNamespace;
             }
         }
 
@@ -120,7 +119,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         }
 
         if ("static".equals(namespaceProposal)) {
-            return "_";
+            return VistaNamespace.noNamespace;
         }
 
         String pmcNamespace;
@@ -142,12 +141,12 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                 if (pmc != null) {
                     if (pmc.status().getValue() != PmcStatus.Active) {
                         // Avoid Query for every request
-                        pmcNamespace = "_";
+                        pmcNamespace = VistaNamespace.noNamespace;
                     } else {
                         pmcNamespace = pmc.namespace().getValue();
                     }
                 } else {
-                    pmcNamespace = "_";
+                    pmcNamespace = VistaNamespace.noNamespace;
                 }
                 CacheService.put(VistaNamespaceResolver.class.getName() + "." + host, pmcNamespace);
             }
@@ -155,9 +154,13 @@ public class VistaNamespaceResolver implements NamespaceResolver {
             NamespaceManager.remove();
         }
 
-        if ((pmcNamespace == null) || ("_".equals(pmcNamespace))) {
+        if ((pmcNamespace == null) || (VistaNamespace.noNamespace.equals(pmcNamespace))) {
             log.warn("accessing host {}, path {}", host, httprequest.getServletPath());
-            throw new SiteWasNotActivatedUserRuntimeException(i18n.tr("This property management site was not activated yet"));
+            if (httprequest.getServletPath().endsWith("robots.txt")) {
+                return VistaNamespace.noNamespace;
+            } else {
+                throw new SiteWasNotActivatedUserRuntimeException(i18n.tr("This property management site was not activated yet"));
+            }
         } else {
             return pmcNamespace;
         }
