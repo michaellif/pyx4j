@@ -65,6 +65,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             AptUnit unit = makeAvailable(aptUnitSource.next());
             Persistence.service().commit();
             Lease lease = generator.createLease(unit);
+            Persistence.service().commit();
             LeaseGenerator.attachDocumentData(lease);
             LeaseGenerator.assigneLeaseProducts(lease);
 
@@ -83,14 +84,28 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             // Create normal Active Lease first for Shortcut users
             if (i < numLeasesWithNoSimulation) {
+                Date trDate = Persistence.service().getTransactionSystemTime();
+                Calendar cal = new GregorianCalendar();
+                cal.setTime(new LogicalDate(Math.min(new LogicalDate().getTime(), lease.currentTerm().termFrom().getValue().getTime())));
+                cal.add(Calendar.MONTH, -1);
+                Persistence.service().setTransactionSystemTime(cal.getTime());
                 lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
+                Persistence.service().commit();
+
                 for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
                     tenant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
                     Persistence.service().persist(tenant.leaseParticipant().customer().personScreening());
                 }
+
                 ServerSideFactory.create(LeaseFacade.class).approveApplication(lease, null, null);
-                //TODO
-                // leaseFacade.activate(lease.getPrimaryKey());
+                Persistence.service().commit();
+
+                if (lease.leaseFrom().getValue().compareTo(trDate) <= 0) {
+                    Persistence.service().setTransactionSystemTime(lease.leaseFrom().getValue());
+                    ServerSideFactory.create(LeaseFacade.class).activate(lease);
+                    Persistence.service().commit();
+                }
+                Persistence.service().setTransactionSystemTime(trDate);
             } else {
                 LeaseLifecycleSimulatorBuilder simBuilder = LeaseLifecycleSimulator.sim();
 
