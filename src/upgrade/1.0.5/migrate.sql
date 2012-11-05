@@ -82,7 +82,40 @@ CREATE INDEX pad_reconciliation_debit_record_reconciliation_summary_idx ON pad_r
 CREATE INDEX pad_reconciliation_summary_reconciliation_file_idx ON pad_reconciliation_summary USING btree (reconciliation_file);
 CREATE INDEX pad_sim_batch_pad_file_idx ON pad_sim_batch USING btree (pad_file);
 
+/** Update in case there are null values in admin_onboarding_merchant_account table **/
 
+UPDATE  admin_onboarding_merchant_account AS a
+SET     pmc = b.pmc
+FROM    (SELECT id AS pmc,onboarding_account_id
+        FROM admin_pmc) AS b
+WHERE   a.onboarding_account_id = b.onboarding_account_id
+AND     a.pmc IS NULL;
+
+ALTER TABLE admin_onboarding_merchant_account ALTER COLUMN pmc SET NOT NULL;
+ALTER TABLE admin_onboarding_merchant_account DROP COLUMN onboarding_account_id;
+
+CREATE UNIQUE INDEX admin_pmc_onboarding_account_id_idx ON admin_pmc (onboarding_account_id);
+
+ALTER TABLE admin_pmc_dns_name ALTER COLUMN pmc SET NOT NULL;
+ALTER TABLE admin_pmc_equifax_info ALTER COLUMN pmc SET NOT NULL;
+ALTER TABLE admin_pmc_payment_type_info ALTER COLUMN pmc SET NOT NULL;
+
+CREATE INDEX development_user_email_idx ON development_user (email);
+CREATE INDEX development_user_host1_idx ON development_user (host1);
+CREATE INDEX development_user_host2_idx ON development_user (host2);
+CREATE INDEX development_user_host3_idx ON development_user (host3);
+
+ALTER TABLE pad_batch ALTER COLUMN pad_file SET NOT NULL;
+ALTER TABLE pad_debit_record ALTER COLUMN pad_batch SET NOT NULL;
+ALTER TABLE pad_reconciliation_debit_record ALTER COLUMN reconciliation_summary SET NOT NULL;
+ALTER TABLE pad_reconciliation_summary ALTER COLUMN reconciliation_file SET NOT NULL;
+ALTER TABLE pad_sim_batch ALTER COLUMN pad_file SET NOT NULL;
+ALTER TABLE pad_sim_debit_record ALTER COLUMN pad_batch SET NOT NULL;
+ALTER TABLE scheduler_run ALTER COLUMN trgr SET NOT NULL;
+ALTER TABLE scheduler_run_data ALTER COLUMN execution SET NOT NULL;
+ALTER TABLE scheduler_trigger_notification ALTER COLUMN trgr SET NOT NULL;
+ALTER TABLE scheduler_trigger_pmc ALTER COLUMN trgr SET NOT NULL;
+ALTER TABLE scheduler_trigger_schedule ALTER COLUMN trgr SET NOT NULL;
 
 /**     public schema   **/
 
