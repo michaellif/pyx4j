@@ -22,6 +22,11 @@ public interface VistaTODO {
     public static final boolean codeBaseIsProdBranch = false;
 
     /**
+     * TODO: Do not forget to turn it on/off during/after production release !!!
+     */
+    public static boolean removedForProduction = true;
+
+    /**
      * Set <code>true</code> to let PtApp show a demo wizard for approved tenants
      */
     public static final boolean enableWelcomeWizardDemoMode = true;
@@ -32,8 +37,6 @@ public interface VistaTODO {
     public static final boolean checkLeaseDatesOnUnitReservation = false;
 
     public static final boolean isAfterBeta04Version = false;
-
-    public static boolean removedForProduction = true;
 
     public static boolean vladsLeaseMigration = true;
 
