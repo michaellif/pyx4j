@@ -165,8 +165,8 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
-
             setVisibility(getValue().type().getValue());
+            get(proto().type()).setViewable(getValue().getPrimaryKey() != null);
         }
 
         private void setVisibility(Media.Type type) {
