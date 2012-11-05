@@ -26,6 +26,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.user.client.Window;
+
 public class YouTubePlayerWidget extends ExtSWFWidget {
 
     private static final Logger log = LoggerFactory.getLogger(YouTubePlayerWidget.class);
@@ -87,10 +89,14 @@ public class YouTubePlayerWidget extends ExtSWFWidget {
 
     @Override
     public String getSrc() {
+        String protocol = "http://";
+        if (Window.Location.getProtocol().equals("https:")) {
+            protocol = "https://";
+        }
         if (chromeless) {
-            return "http://www.youtube.com/apiplayer?enablejsapi=1&version=3&playerapiid=" + getSwfId();
+            return protocol + "www.youtube.com/apiplayer?enablejsapi=1&version=3&playerapiid=" + getSwfId();
         } else {
-            return "http://www.youtube.com/v/" + videoId + "?enablejsapi=1&version=3&autoplay=" + (paramAutoPlay ? "1" : "0")
+            return protocol + "www.youtube.com/v/" + videoId + "?enablejsapi=1&version=3&autoplay=" + (paramAutoPlay ? "1" : "0")
                     + "&cc_load_policy=0&playerapiid=" + getSwfId();
         }
     }
