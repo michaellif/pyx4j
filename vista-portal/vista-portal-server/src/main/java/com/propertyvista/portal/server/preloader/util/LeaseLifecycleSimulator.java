@@ -48,15 +48,14 @@ import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
-import com.propertyvista.misc.VistaTODO;
 
 public class LeaseLifecycleSimulator {
 
@@ -432,52 +431,50 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            if (!VistaTODO.removedForProduction) {
-                if (now().before(lease.currentTerm().termTo().getValue()) & lease.status().getValue() != Lease.Status.Completed) {
+            if (now().before(lease.currentTerm().termTo().getValue()) & lease.status().getValue() != Lease.Status.Completed) {
 
-                    // TODO THIS is REALLY CREEPY part, talk to Michael about adding API to the facade that lets check when billing is allowed to run **********
-                    // the following code is copies the calculations inside the billing facade privates 
-                    Persistence.service().retrieve(lease.billingAccount());
-                    Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
-                    if (lastBill.billingPeriodStartDate().isNull()) {
-                        // lease ended
-                        return;
-                    }
-
-                    Calendar billingPeriodStartDate = new GregorianCalendar();
-                    billingPeriodStartDate.setTime(lastBill.billingPeriodStartDate().getValue());
-                    billingPeriodStartDate.add(Calendar.MONTH, 1);
-                    if (billingPeriodStartDate.getTime().after(lease.currentTerm().termTo().getValue())) {
-                        // lease ended
-                        return;
-                    }
-
-                    LogicalDate billingCycleDay = calculateBillingCycleTargetExecutionDate(lease.billingAccount().billingType(), new LogicalDate(
-                            billingPeriodStartDate.getTime()));
-                    // CREEPY PART ENDS HERE *******************************************************************************************************************
-
-                    if (now().equals(billingCycleDay)) {
-                        BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
-                        billing.runBilling(lease);
-                        billing.confirmBill(billing.getLatestBill(lease));
-
-                        if (isDebugged) {
-                            System.out.println("" + now() + " executed run billing lease: " + lease.leaseId().getValue() + " "
-                                    + lease.currentTerm().termFrom().getValue() + " - " + lease.currentTerm().termTo().getValue());
-                            System.out.println("***");
-                        }
-
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(now());
-                        cal.add(Calendar.MONTH, 1);
-                        LogicalDate nextRun = new LogicalDate(cal.getTime());
-                        queueEvent(nextRun, new RunBillingRecurrent(lease));
-
-                    } else {
-                        queueEvent(billingCycleDay, new RunBillingRecurrent(lease));
-                    }
-
+                // TODO THIS is REALLY CREEPY part, talk to Michael about adding API to the facade that lets check when billing is allowed to run **********
+                // the following code is copies the calculations inside the billing facade privates 
+                Persistence.service().retrieve(lease.billingAccount());
+                Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
+                if (lastBill.billingPeriodStartDate().isNull()) {
+                    // lease ended
+                    return;
                 }
+
+                Calendar billingPeriodStartDate = new GregorianCalendar();
+                billingPeriodStartDate.setTime(lastBill.billingPeriodStartDate().getValue());
+                billingPeriodStartDate.add(Calendar.MONTH, 1);
+                if (billingPeriodStartDate.getTime().after(lease.currentTerm().termTo().getValue())) {
+                    // lease ended
+                    return;
+                }
+
+                LogicalDate billingCycleDay = calculateBillingCycleTargetExecutionDate(lease.billingAccount().billingType(), new LogicalDate(
+                        billingPeriodStartDate.getTime()));
+                // CREEPY PART ENDS HERE *******************************************************************************************************************
+
+                if (now().equals(billingCycleDay)) {
+                    BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
+                    billing.runBilling(lease);
+                    billing.confirmBill(billing.getLatestBill(lease));
+
+                    if (isDebugged) {
+                        System.out.println("" + now() + " executed run billing lease: " + lease.leaseId().getValue() + " "
+                                + lease.currentTerm().termFrom().getValue() + " - " + lease.currentTerm().termTo().getValue());
+                        System.out.println("***");
+                    }
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(now());
+                    cal.add(Calendar.MONTH, 1);
+                    LogicalDate nextRun = new LogicalDate(cal.getTime());
+                    queueEvent(nextRun, new RunBillingRecurrent(lease));
+
+                } else {
+                    queueEvent(billingCycleDay, new RunBillingRecurrent(lease));
+                }
+
             }
         }
     }

@@ -155,7 +155,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         main.setH1(++row, 0, 2, proto().currentTerm().version().leaseProducts().featureItems().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().currentTerm().version().leaseProducts().featureItems(), new BillableItemFolder()));
 
-        if (!VistaTODO.removedForProduction) {
+        if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
             main.setH1(++row, 0, 2, proto().currentTerm().version().leaseProducts().concessions().getMeta().getCaption());
             main.setWidget(++row, 0, inject(proto().currentTerm().version().leaseProducts().concessions(), new ConcessionFolder()));
         }

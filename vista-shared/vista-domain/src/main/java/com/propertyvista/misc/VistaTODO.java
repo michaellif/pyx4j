@@ -33,9 +33,7 @@ public interface VistaTODO {
 
     public static final boolean isAfterBeta04Version = false;
 
-    public static boolean removedForProduction = false;
-
-    public static boolean operationDataRemovedForProduction = false;
+    public static boolean removedForProduction = true;
 
     public static boolean vladsLeaseMigration = true;
 
@@ -59,4 +57,6 @@ public interface VistaTODO {
     public final boolean VISTA_1789_Renew_Lease = false;
 
     public final boolean VISTA_2011_Visibility_Of_ProductItems = false;
+
+    public static boolean VISTA_1756_Concessions_Should_Be_Hidden = true;
 }

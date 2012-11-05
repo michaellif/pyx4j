@@ -71,7 +71,7 @@ public class ServiceForm extends CrmEntityForm<Service> {
         main.setH1(++row, 0, 1, i18n.tr("Features"));
         main.setWidget(++row, 0, inject(proto().version().features(), new ServiceFeatureFolder(isEditable(), this)));
 
-        if (!VistaTODO.removedForProduction) {
+        if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
             main.setH1(++row, 0, 1, i18n.tr("Concessions"));
             main.setWidget(++row, 0, inject(proto().version().concessions(), new ServiceConcessionFolder(isEditable(), this)));
         }
