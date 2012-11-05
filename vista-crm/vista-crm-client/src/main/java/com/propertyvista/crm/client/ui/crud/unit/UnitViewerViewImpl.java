@@ -31,6 +31,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implements UnitViewerView {
@@ -96,7 +97,8 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         scopeAction = new MenuItem(i18n.tr("Scope..."), new Command() {
             @Override
             public void execute() {
-                if (getForm().getValue().lease().actualMoveOut().isNull()) {
+                Lease lease = getForm().getValue().lease();
+                if (!lease.isNull() && lease.actualMoveOut().isNull()) {
                     MessageDialog.confirm("", i18n.tr("Are you sure you want to scope occupied unit?"), new Command() {
                         @Override
                         public void execute() {
