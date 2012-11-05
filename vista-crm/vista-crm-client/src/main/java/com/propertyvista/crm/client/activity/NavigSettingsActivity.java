@@ -28,6 +28,7 @@ import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.misc.VistaTODO;
 
 public class NavigSettingsActivity extends AbstractActivity implements NavigView.MainNavigPresenter {
     private static final I18n i18n = I18n.get(NavigSettingsActivity.class);
@@ -85,7 +86,9 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         folder = new NavigFolder(i18n.tr("Policies"));
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.AR());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.ApplicationDocumentation());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.BackgroundCheck());
+        if (VistaTODO.Equifax_Short_VISTA_478) {
+            folder.addNavigItem(new CrmSiteMap.Settings.Policies.BackgroundCheck());
+        }
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.Billing());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.Dates());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.Deposits());
