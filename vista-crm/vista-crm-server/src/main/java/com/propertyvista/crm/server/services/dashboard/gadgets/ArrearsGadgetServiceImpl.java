@@ -57,8 +57,8 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
         callback.onSuccess(delinquentTenantsCriteria(EntityListCriteria.create(DelinquentTenantDTO.class), buildingsFilter, criteriaPreset));
     }
 
-    <Criteria extends EntityQueryCriteria<? extends Tenant>> Criteria delinquentTenantsCriteria(Criteria criteria,
-            Vector<Building> buildingsFilter, String criteriaPreset) {
+    <Criteria extends EntityQueryCriteria<? extends Tenant>> Criteria delinquentTenantsCriteria(Criteria criteria, Vector<Building> buildingsFilter,
+            String criteriaPreset) {
 
 //        criteria.isCurrent(criteria.proto().leaseTermV());
         criteria.add(PropertyCriterion.eq(criteria.proto().lease().billingAccount().arrearsSnapshots().$().toDate(), OccupancyFacade.MAX_DATE));
@@ -102,7 +102,9 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
             if (snapshot == null) {
                 continue;
             } else {
-                add(aggregatedBuckets.bucketThisMonth(), snapshot.totalAgingBuckets().bucketThisMonth());
+                if (!snapshot.totalAgingBuckets().bucketThisMonth().isNull()) {
+                    add(aggregatedBuckets.bucketThisMonth(), snapshot.totalAgingBuckets().bucketThisMonth());
+                }
                 add(aggregatedBuckets.bucketCurrent(), snapshot.totalAgingBuckets().bucketCurrent());
                 add(aggregatedBuckets.bucket30(), snapshot.totalAgingBuckets().bucket30());
                 add(aggregatedBuckets.bucket60(), snapshot.totalAgingBuckets().bucket60());
