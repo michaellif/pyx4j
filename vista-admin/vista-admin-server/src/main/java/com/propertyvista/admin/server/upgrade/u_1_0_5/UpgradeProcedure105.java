@@ -51,7 +51,7 @@ public class UpgradeProcedure105 implements UpgradeProcedure {
         EntityQueryCriteria<Lease> criteria = new EntityQueryCriteria<Lease>(Lease.class);
         for (Lease lease : Persistence.service().query(criteria)) {
             ServerSideFactory.create(LeaseFacade.class).updateLeaseDates(lease);
-            Persistence.service().persist(lease);
+            Persistence.service().merge(lease);
         }
     }
 }
