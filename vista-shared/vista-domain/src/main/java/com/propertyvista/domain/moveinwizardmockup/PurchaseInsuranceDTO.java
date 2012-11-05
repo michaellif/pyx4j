@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -55,22 +56,30 @@ public interface PurchaseInsuranceDTO extends IEntity {
         }
     }
 
-    // Section: Personal Contents 
+    // Section: Personal Contents
     @Caption(description = "TBD")
     @NotNull
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> personalContentsLimit();
 
     @Caption(description = "TBD")
     @NotNull
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> propertyAwayFromPremises();
 
     @Caption(description = "TBD")
     @NotNull
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> additionalLivingExpenses();
 
     // Section: Deductible (per Claim)
     @Caption(description = "TBD")
     @NotNull
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> deductible();
 
     // Section: Form of Coverage
@@ -80,41 +89,65 @@ public interface PurchaseInsuranceDTO extends IEntity {
 
     // Section: Special Limities (per Claim)
     @Caption(name = "Jewlery & Art")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> jewleryAndArt();
 
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> sportsEquipment();
 
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> electronics();
 
     IPrimitive<BigDecimal> sewerBackUp();
 
     @Caption(name = "Money, Gift Cards, or Gift Certificates", description = "TBD")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> moneyOrGiftGardsOrGiftCertificates();
 
     @Caption(description = "TBD")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> securities();
 
     @Caption(description = "TBD")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> utilityTraders();
 
     @Caption(description = "TBD")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> spareAutomobileParts();
 
     @Caption(description = "TBD")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> coinBanknoteOrStampCollections();
 
     @Caption(description = "TBD")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> collectibleCardsAndComics();
 
     // Section: Additional Coverage (per Claim)
     @Caption(description = "TBD")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> freezerFoodSpoilage();
 
     @Caption(description = "TBD")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> animalsBirdsAndFish();
 
     @Caption(description = "TBD")
     @NotNull
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> personalLiability();
 
     // Section: Coverage Qualification Questions
@@ -126,13 +159,16 @@ public interface PurchaseInsuranceDTO extends IEntity {
     @NotNull
     IPrimitive<Integer> numOfPrevClaims();
 
-    // Section:  Quote Total (floating box with that containse the following values)    
+    // Section:  Quote Total (floating box with that containse the following values)
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> monthlyInsurancePremium();
 
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> totalCoverage();
 
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> totalPersonalLiability();
 

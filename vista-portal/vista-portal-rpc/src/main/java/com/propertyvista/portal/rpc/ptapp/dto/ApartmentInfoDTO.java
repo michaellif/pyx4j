@@ -90,7 +90,7 @@ public interface ApartmentInfoDTO extends IEntity {
 
     IPrimitive<LogicalDate> leaseTo();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> unitRent();
 

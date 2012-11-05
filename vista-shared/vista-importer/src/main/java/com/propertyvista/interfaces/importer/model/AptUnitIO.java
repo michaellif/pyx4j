@@ -47,11 +47,11 @@ public interface AptUnitIO extends IEntity {
 
     IPrimitive<AreaMeasurementUnit> areaUnits();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> unitRent();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> marketRent();
 

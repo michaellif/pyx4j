@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -18,6 +18,8 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -60,43 +62,54 @@ public interface AggregatedTransfer extends IEntity {
     IPrimitive<Key> padReconciliationSummaryKey();
 
     @NotNull
-    @Format("#0.00")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> grossPaymentAmount();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> grossPaymentFee();
 
     IPrimitive<Integer> grossPaymentCount();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> rejectItemsAmount();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> rejectItemsFee();
 
     IPrimitive<Integer> rejectItemsCount();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> returnItemsAmount();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> returnItemsFee();
 
     IPrimitive<Integer> returnItemsCount();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> netAmount();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> adjustments();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> previousBalance();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> merchantBalance();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> fundsReleased();
 
     @Detached(level = AttachLevel.Detached)

@@ -63,12 +63,12 @@ public interface AptUnitDTO extends IEntity {
     IPrimitive<Integer> bathrooms();
 
     @Owned
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> unitRent();
 
     @Caption(name = "Deposit")
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> requiredDeposit();
 

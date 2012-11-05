@@ -97,7 +97,7 @@ public interface UnitAvailabilityStatus extends IEntity {
     @ReadOnly
     Complex complex();
 
-    // STATUS DATA    
+    // STATUS DATA
     IPrimitive<LogicalDate> statusFrom();
 
     IPrimitive<LogicalDate> statusUntil();
@@ -114,6 +114,7 @@ public interface UnitAvailabilityStatus extends IEntity {
     IPrimitive<RentReadiness> rentReadinessStatus();
 
     @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     @Caption(name = "Unit Rent ($)")
     IPrimitive<BigDecimal> unitRent();
 
@@ -131,6 +132,7 @@ public interface UnitAvailabilityStatus extends IEntity {
     /** <code>(unitRent - unitMarketRent)/marketRent</code> */
     @Caption(name = "Delta (%)")
     @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> rentDeltaRelative();
 
     /**

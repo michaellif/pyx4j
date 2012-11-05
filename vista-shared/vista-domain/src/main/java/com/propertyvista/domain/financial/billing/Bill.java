@@ -192,6 +192,7 @@ public interface Bill extends IEntity {
     @Format("#,##0.00")
     IPrimitive<BigDecimal> previousChargeRefunds();
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> latePaymentFees();
 
     @Format("#,##0.00")

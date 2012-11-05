@@ -31,7 +31,7 @@ public interface Money extends IEntity {
 
     @ToString(index = 0)
     @NotNull
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 

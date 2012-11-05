@@ -36,7 +36,7 @@ public interface BillDataDTO extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> dueDate();
 
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 }

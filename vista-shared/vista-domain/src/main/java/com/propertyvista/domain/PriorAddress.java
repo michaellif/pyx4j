@@ -52,7 +52,7 @@ public interface PriorAddress extends AddressStructured {
     IPrimitive<LogicalDate> moveOutDate();
 
     @Caption(name = "Monthly Payment")
-    @Format("#0.00")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> payment();
 

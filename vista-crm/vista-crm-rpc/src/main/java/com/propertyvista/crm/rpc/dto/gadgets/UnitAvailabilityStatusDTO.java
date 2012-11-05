@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -54,7 +54,7 @@ public interface UnitAvailabilityStatusDTO extends IEntity {
 
     IPrimitive<String> floorplanMarketingName();
 
-    // STATUS DATA    
+    // STATUS DATA
     IPrimitive<LogicalDate> statusFrom();
 
     IPrimitive<LogicalDate> statusUntil();
@@ -71,6 +71,7 @@ public interface UnitAvailabilityStatusDTO extends IEntity {
     IPrimitive<RentReadiness> rentReadinessStatus();
 
     @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     @Caption(name = "Unit Rent ($)")
     IPrimitive<BigDecimal> unitRent();
 
@@ -86,6 +87,7 @@ public interface UnitAvailabilityStatusDTO extends IEntity {
 
     @Caption(name = "Delta (%)")
     @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> rentDeltaRelative();
 
     @Format("MM/dd/yyyy")
