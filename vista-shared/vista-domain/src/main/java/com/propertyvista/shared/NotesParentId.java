@@ -17,6 +17,8 @@ import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.domain.note.NotesAndAttachments;
+
 public class NotesParentId {
 
     private final Key ownerId;
@@ -44,5 +46,10 @@ public class NotesParentId {
 
     public String getOwnerClass() {
         return ownerClass;
+    }
+
+    public void setOwner(NotesAndAttachments notes) {
+        notes.ownerClass().setValue(getOwnerClass());
+        notes.ownerId().setValue(getOwnerId());
     }
 }

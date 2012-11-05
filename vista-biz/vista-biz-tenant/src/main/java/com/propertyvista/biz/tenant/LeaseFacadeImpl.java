@@ -82,6 +82,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.shared.NotesParentId;
 
 public class LeaseFacadeImpl implements LeaseFacade {
 
@@ -1073,13 +1074,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     private NotesAndAttachments creteLeaseNote(Lease leaseId, String subject, String note, CrmUser user) {
         NotesAndAttachments naa = EntityFactory.create(NotesAndAttachments.class);
 
-        // TODO : sync with Stas and Mickael!!! 
-        String simpleName = Lease.class.getName();
-        // strip the package name
-        simpleName = simpleName.substring(simpleName.lastIndexOf(".") + 1);
-
-        naa.ownerClass().setValue(simpleName);
-        naa.ownerId().setValue(leaseId.getPrimaryKey());
+        new NotesParentId(leaseId).setOwner(naa);
 
         naa.subject().setValue(subject);
         naa.note().setValue(note);
