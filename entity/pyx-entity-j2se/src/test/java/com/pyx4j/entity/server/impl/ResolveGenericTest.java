@@ -119,7 +119,7 @@ public class ResolveGenericTest extends TestCase {
 
     }
 
-    public void TODO_testUnknownWildcard() throws NoSuchMethodException, SecurityException {
+    public void testUnknownWildcard() throws NoSuchMethodException, SecurityException {
         Class<?> interfaceClass = HasUnknownWildcard.class;
 
         Method collectionMethod = interfaceClass.getMethod("getListC", (Class[]) null);

@@ -32,10 +32,6 @@ class EntityImplValidator {
     private static final Logger log = LoggerFactory.getLogger(EntityImplValidator.class);
 
     public static void validate(Class<? extends IEntity> handlerClass) {
-        //TODO
-        if (true) {
-            return;
-        }
         IEntity entity;
         try {
             entity = handlerClass.newInstance();

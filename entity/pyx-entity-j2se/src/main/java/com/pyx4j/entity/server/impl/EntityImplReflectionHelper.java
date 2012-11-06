@@ -123,6 +123,9 @@ public class EntityImplReflectionHelper {
     public static Class<?> resolveType(Type genericType, Class<?> interfaceClass) {
         if (genericType instanceof Class<?>) {
             return (Class<?>) genericType;
+        } else if (genericType instanceof ParameterizedType) {
+            // Allow to use  our IList<Somthing<?>> class
+            return (Class<?>) ((ParameterizedType) genericType).getRawType();
         } else {
             return resolveGenericType(genericType, interfaceClass);
         }
