@@ -155,6 +155,9 @@ public class EntityImplGenerator {
         for (String c : classes) {
             CtClass klass = gen.createImplementation(c);
             try {
+                @SuppressWarnings("unchecked")
+                Class<? extends IEntity> entityClass = klass.toClass(gen.getContextClassLoader(), null);
+                EntityImplValidator.validate(entityClass);
                 klass.writeFile(target.getAbsolutePath());
             } catch (Throwable e) {
                 log.error("compile error", e);

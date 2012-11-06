@@ -112,4 +112,17 @@ public class ResolveGenericTest extends TestCase {
         Method collectionMethod = interfaceClass.getMethod("getListS1", (Class[]) null);
         Assert.assertEquals(Integer.class, EntityImplReflectionHelper.resolveTypeGenericArgumentType(collectionMethod.getGenericReturnType(), interfaceClass));
     }
+
+    private static interface HasUnknownWildcard {
+
+        List<C<?>> getListC();
+
+    }
+
+    public void TODO_testUnknownWildcard() throws NoSuchMethodException, SecurityException {
+        Class<?> interfaceClass = HasUnknownWildcard.class;
+
+        Method collectionMethod = interfaceClass.getMethod("getListC", (Class[]) null);
+        Assert.assertEquals(C.class, EntityImplReflectionHelper.resolveTypeGenericArgumentType(collectionMethod.getGenericReturnType(), interfaceClass));
+    }
 }
