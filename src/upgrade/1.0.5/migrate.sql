@@ -26,6 +26,7 @@ SET search_path = '_admin_';
 
 ALTER TABLE admin_pmc ADD COLUMN schema_version VARCHAR(500);
 ALTER TABLE admin_pmc ADD COLUMN schema_data_upgrade_steps INT;
+ALTER TABLE admin_pmc ALTER COLUMN onboarding_account_id TYPE VARCHAR(63);
 
 ALTER TABLE admin_pmc_equifax_info
     ADD COLUMN report_type VARCHAR(50),
