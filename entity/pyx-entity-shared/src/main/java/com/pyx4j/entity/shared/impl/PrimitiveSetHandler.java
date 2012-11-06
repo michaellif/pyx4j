@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -95,7 +95,8 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
     private Set<TYPE> ensureValue() {
         Set<TYPE> value = getValue();
         if (value == null) {
-            value = new HashSet<TYPE>();
+            // Use LinkedHashSet to maintain insert order
+            value = new LinkedHashSet<TYPE>();
             setValue(value);
         }
         return value;

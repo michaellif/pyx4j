@@ -105,6 +105,8 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
         if (value == null) {
             // Use TreeSet for implementation to allow for modifiable Objects Properties (hashCode) after they are added to Set
             value = new TreeSet<Map<String, Object>>(new ElementsComparator());
+            // TODO Use LinkedHashSet to maintain insert order
+            //value = new LinkedHashSet<Map<String, Object>>();
             setValue(value);
         }
         return value;

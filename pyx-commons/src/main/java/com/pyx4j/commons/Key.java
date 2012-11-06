@@ -25,7 +25,7 @@ import java.util.Date;
 /**
  * Serializable DB Reference (Primary Key) representation
  */
-public class Key implements java.io.Serializable {
+public class Key implements java.io.Serializable, Comparable<Key> {
 
     private static final long serialVersionUID = 7972137198592582112L;
 
@@ -155,5 +155,22 @@ public class Key implements java.io.Serializable {
     @Override
     public int hashCode() {
         return this.toString().hashCode();
+    }
+
+    @Override
+    public int compareTo(Key other) {
+        if (this == other) {
+            return 0;
+        } else if (other == null) {
+            // Null in Front
+            return 1;
+        } else {
+            int r = GWTJava5Helper.longCompare(asLong(), other.asLong());
+            if (r != 0) {
+                return r;
+            } else {
+                return GWTJava5Helper.longCompare(getVersion(), other.getVersion());
+            }
+        }
     }
 }

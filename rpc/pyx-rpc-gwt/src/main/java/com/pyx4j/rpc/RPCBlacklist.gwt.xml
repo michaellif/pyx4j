@@ -23,12 +23,13 @@
     <extend-configuration-property name="rpc.blacklist" value="java.util.Stack" />
     
     <extend-configuration-property name="rpc.blacklist" value="java.util.IdentityHashMap" />
-    <extend-configuration-property name="rpc.blacklist" value="java.util.Linked.*" />
+    <extend-configuration-property name="rpc.blacklist" value="java.util.LinkedHashMap" />
+    <extend-configuration-property name="rpc.blacklist" value="java.util.LinkedList" />
     <extend-configuration-property name="rpc.blacklist" value="javax.validation.*" />
     <!--
       java.util.Vector  used in IList
       java.util.TreeSet used in ISet
-      java.util.HashSet used in IPrimitiveSet and AuthenticationResponse 
+      java.util.LinkedHashSet used in IPrimitiveSet and AuthenticationResponse 
       java.util.TreeMap in EntitySearchCriteria
 	  java.util.HashMap used in IEntity's EntityValueMap
      -->

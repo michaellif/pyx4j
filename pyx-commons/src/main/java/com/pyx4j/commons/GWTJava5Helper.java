@@ -31,4 +31,9 @@ public class GWTJava5Helper {
         // strip the package name
         return simpleName.substring(simpleName.lastIndexOf(".") + 1);
     }
+
+    //TODO Use Java 1.7 Long.compare
+    public static int longCompare(long x, long y) {
+        return (x < y) ? -1 : ((x == y) ? 0 : 1);
+    }
 }
