@@ -15,7 +15,6 @@ package com.propertyvista.portal.server.preloader;
 
 import java.util.List;
 
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
@@ -35,7 +34,7 @@ import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.generator.TenantsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
-import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
+import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 
 public class PreloadNewTenantsAndLeads extends BaseVistaDevDataPreloader {
 
@@ -67,8 +66,18 @@ public class PreloadNewTenantsAndLeads extends BaseVistaDevDataPreloader {
             Persistence.service().persist(tenant);
         }
 
-        List<Floorplan> floorplans = Persistence.service().query(EntityQueryCriteria.create(Floorplan.class));
-        List<Employee> employees = Persistence.service().query(EntityQueryCriteria.create(Employee.class));
+        List<Floorplan> floorplans;
+        {
+            EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
+            criteria.asc(criteria.proto().id());
+            floorplans = Persistence.service().query(criteria);
+        }
+        List<Employee> employees;
+        {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.asc(criteria.proto().id());
+            employees = Persistence.service().query(criteria);
+        }
 
         // Leads:
         List<Lead> leads = generator.createLeads(config().numLeads);
@@ -82,6 +91,7 @@ public class PreloadNewTenantsAndLeads extends BaseVistaDevDataPreloader {
 
             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), lead.floorplan()));
+            criteria.asc(criteria.proto().id());
             List<AptUnit> units = Persistence.service().query(criteria);
 
             List<Appointment> apps = generator.createAppointments(1 + RandomUtil.randomInt(3));

@@ -40,7 +40,7 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.generator.util.CommonsGenerator;
-import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
+import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 import com.propertyvista.preloader.OnboardingUserPreloader;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CrmUserCredential;

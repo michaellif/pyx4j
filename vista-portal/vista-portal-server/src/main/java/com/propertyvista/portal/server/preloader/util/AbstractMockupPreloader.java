@@ -17,6 +17,8 @@ import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.preloader.BaseVistaDevDataPreloader;
+
 public abstract class AbstractMockupPreloader extends BaseVistaDevDataPreloader {
 
     @Override

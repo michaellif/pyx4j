@@ -397,7 +397,7 @@ public class BuildingsGenerator {
         floorplan.dens().setValue(DataGenerator.randomInt(2));
         floorplan.bathrooms().setValue(1 + DataGenerator.randomInt(3));
         floorplan.halfBath().setValue(DataGenerator.randomInt(2));
-        floorplan.area().setValue(DataGenerator.randomDouble(300));
+        floorplan.area().setValue(DataGenerator.randomDouble(300.0, 3));
         floorplan.areaUnits().setValue(DataGenerator.randomEnum(AreaMeasurementUnit.class));
 
         floorplan.marketingName().setValue(createMarketingName(floorplan.bedrooms().getValue(), floorplan.dens().getValue()));

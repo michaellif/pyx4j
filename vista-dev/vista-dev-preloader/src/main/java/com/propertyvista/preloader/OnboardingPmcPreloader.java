@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -40,7 +39,8 @@ import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.server.common.security.UserAccessUtils;
 import com.propertyvista.server.jobs.TaskRunner;
 
-public class OnboardingPmcPreloader extends AbstractDataPreloader {
+public class OnboardingPmcPreloader extends BaseVistaDevDataPreloader {
+
     private final static Logger log = LoggerFactory.getLogger(OnboardingPmcPreloader.class);
 
     public static Pmc createPmc(String name, String dnsName, String onboardingAccountId) {

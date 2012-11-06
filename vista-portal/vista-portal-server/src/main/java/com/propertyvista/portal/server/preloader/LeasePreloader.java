@@ -37,9 +37,9 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.generator.LeaseGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.server.preloader.util.AptUnitSource;
-import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSimulator;
 import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSimulator.LeaseLifecycleSimulatorBuilder;
+import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 
 public class LeasePreloader extends BaseVistaDevDataPreloader {
 

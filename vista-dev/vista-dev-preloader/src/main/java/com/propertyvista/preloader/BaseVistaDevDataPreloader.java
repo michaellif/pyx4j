@@ -11,14 +11,17 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.preloader.util;
+package com.propertyvista.preloader;
 
+import java.io.Serializable;
+
+import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 
-public abstract class BaseVistaDevDataPreloader extends AbstractVistaDataPreloader {
+public abstract class BaseVistaDevDataPreloader extends AbstractDataPreloader {
 
     protected BaseVistaDevDataPreloader() {
         DataGenerator.setRandomSeed(100);
@@ -26,5 +29,9 @@ public abstract class BaseVistaDevDataPreloader extends AbstractVistaDataPreload
 
     protected VistaDevPreloadConfig config() {
         return (VistaDevPreloadConfig) getParameter(VistaDataPreloaderParameter.devPreloadConfig);
+    }
+
+    protected Serializable getParameter(VistaDataPreloaderParameter param) {
+        return super.getParameter(param.name());
     }
 }

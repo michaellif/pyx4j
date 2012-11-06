@@ -65,7 +65,7 @@ import com.propertyvista.generator.ProductCatalogGenerator;
 import com.propertyvista.generator.gdo.ProductItemTypesGDO;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
-import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
+import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;

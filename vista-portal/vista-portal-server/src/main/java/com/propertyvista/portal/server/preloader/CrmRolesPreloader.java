@@ -34,7 +34,7 @@ import com.propertyvista.biz.preloader.LocationsGenerator;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.SecurityQuestion;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
+import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 
 public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
 
