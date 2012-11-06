@@ -20,6 +20,7 @@
  */
 package com.pyx4j.essentials.server.preloader;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.EnumSet;
@@ -208,6 +209,18 @@ public class DataGenerator {
 
     public static double randomDouble(double max) {
         return max * random().nextDouble();
+    }
+
+    /**
+     * 
+     * @param max
+     * @param precision
+     *            The number of decimal digits in created double
+     * @return random Double
+     */
+    public static double randomDouble(double max, int precision) {
+        double r = max * random().nextDouble();
+        return new BigDecimal(String.valueOf(r)).setScale(precision, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
     public static boolean randomBoolean() {
