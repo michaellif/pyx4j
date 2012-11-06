@@ -16,9 +16,10 @@ package com.propertyvista.server.common.util.occupancy;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
+import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
-import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccupancyManagerTestBase {
@@ -318,19 +319,21 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         Assert.assertFalse(getUOM().isApproveLeaseAvaialble(unitId));
     }
 
+    /** check that constraints returned permit move out operation */
     @Test
-    public void testIsCancelEndLeaseAvaialbleWhenAvaialble() {
+    public void testGetCancelMoveOutConstraints1() {
         Lease lease = createLease("2010-01-11", "2011-11-11");
         setup().from("2010-01-01").to("2010-01-10").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
         setup().from("2010-01-11").to("2011-11-11").status(Status.occupied).withLease(lease).x();
         setup().from("2010-01-12").toTheEndOfTime().status(Status.available).x();
 
         now("2010-01-12");
-        Assert.assertTrue(getUOM().isCancelMoveOutAvaialble(unitId));
+        Assert.assertTrue(getUOM().getCancelMoveOutConstraints(unitId).canCancelMoveOut().isBooleanTrue());
     }
 
+    /** check that constraints returned forbid move out operation */
     @Test
-    public void testIsCancelEndLeaseAvaialbleWhenNotAvaialble() {
+    public void testGetCancelMoveOutConstraints2() {
         Lease lease = createLease("2010-01-11", "2011-11-11");
         Lease lease2 = createLease("2011-01-12", "2012-01-01");
 
@@ -339,7 +342,43 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         setup().from("2011-01-12").toTheEndOfTime().status(Status.occupied).withLease(lease2).x();
 
         now("2010-01-12");
-        Assert.assertFalse(getUOM().isCancelMoveOutAvaialble(unitId));
+        CancelMoveOutConstraintsDTO constraints = getUOM().getCancelMoveOutConstraints(unitId);
+        Assert.assertFalse("cancel move out should be forbidden", constraints.canCancelMoveOut().isBooleanTrue());
+        Assert.assertEquals(CancelMoveOutConstraintsDTO.ConstraintsReason.LeasedOrReserved, constraints.reason().getValue());
+        Assert.assertEquals(lease2.getPrimaryKey(), constraints.leaseStub().getPrimaryKey());
+    }
+
+    /** check that constraints returned forbid move out operation */
+    @Test
+    public void testGetCancelMoveOutConstraints3() {
+        Lease lease = createLease("2010-01-11", "2011-11-11");
+
+        setup().from("2010-01-01").to("2010-01-10").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        setup().from("2010-01-11").to("2011-11-11").status(Status.occupied).withLease(lease).x();
+        setup().from("2011-01-12").toTheEndOfTime().status(Status.offMarket).withOffMarketType(OffMarketType.model).x();
+
+        now("2010-01-12");
+        CancelMoveOutConstraintsDTO constraints = getUOM().getCancelMoveOutConstraints(unitId);
+        Assert.assertFalse("cancel move out should be forbidden", constraints.canCancelMoveOut().isBooleanTrue());
+        Assert.assertEquals(CancelMoveOutConstraintsDTO.ConstraintsReason.RenovatedOrOffMarket, constraints.reason().getValue());
+        Assert.assertTrue(constraints.leaseStub().isNull());
+    }
+
+    /** check that constraints returned forbid move out operation */
+    @Test
+    public void testGetCancelMoveOutConstraints4() {
+        Lease lease = createLease("2010-01-11", "2011-11-11");
+
+        setup().from("2010-01-01").to("2010-01-10").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        setup().from("2010-01-11").to("2011-11-11").status(Status.occupied).withLease(lease).x();
+        setup().from("2011-11-12").to("2011-12-11").status(Status.renovation).x();
+        setup().from("2011-12-12").toTheEndOfTime().status(Status.available).x();
+
+        now("2010-11-10");
+        CancelMoveOutConstraintsDTO constraints = getUOM().getCancelMoveOutConstraints(unitId);
+        Assert.assertFalse("cancel move out should be forbidden", constraints.canCancelMoveOut().isBooleanTrue());
+        Assert.assertEquals(CancelMoveOutConstraintsDTO.ConstraintsReason.RenovatedOrOffMarket, constraints.reason().getValue());
+        Assert.assertTrue(constraints.leaseStub().isNull());
     }
 
 }

@@ -11,7 +11,7 @@
  * @author Artyom
  * @version $Id$
  */
-package com.propertyvista.domain.property.asset.unit.occupancy.opconstraints;
+package com.propertyvista.crm.rpc.dto.occupancy.opconstraints;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;

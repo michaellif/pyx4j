@@ -28,9 +28,9 @@ import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.ExistingLeaseDa
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.MakePendingDialog;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.ScopeDialog;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
-import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
 

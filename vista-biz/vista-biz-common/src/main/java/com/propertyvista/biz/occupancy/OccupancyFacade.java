@@ -16,10 +16,11 @@ package com.propertyvista.biz.occupancy;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
+import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
-import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 // TODO add explicit exceptions
@@ -119,7 +120,7 @@ public interface OccupancyFacade {
     /** Cancels the definition of a lease that is currently active and has a defined end date in the future */
     void cancelMoveOut(Key unitId) throws OccupancyOperationException;
 
-    boolean isCancelMoveOutAvaialble(Key unitId);
+    CancelMoveOutConstraintsDTO getCancelMoveOutConstraints(Key unitId);
 
     /**
      * Lease availability.

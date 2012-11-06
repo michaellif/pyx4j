@@ -37,13 +37,15 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
+import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
+import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO.ConstraintsReason;
+import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
-import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.misc.VistaTODO;
 
@@ -535,9 +537,9 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public void cancelMoveOut(Key unitPk) throws OccupancyOperationException {
         assert unitPk != null;
 
-        if (!isCancelMoveOutAvaialble(unitPk)) {
-            throw new OccupancyOperationException(
-                    "'cancelEndLease' operation is impossible (the unit must be leased with a defined lease end date and not reserved in the future)");
+        CancelMoveOutConstraintsDTO constraints = getCancelMoveOutConstraints(unitPk);
+        if (!constraints.canCancelMoveOut().isBooleanTrue()) {
+            throw new OccupancyOperationException("cancelMoveOut cannot be performed due to: " + constraints.reason().getValue());
         }
 
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
@@ -715,19 +717,45 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public boolean isCancelMoveOutAvaialble(Key unitPk) {
+    public CancelMoveOutConstraintsDTO getCancelMoveOutConstraints(Key unitPk) {
         LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
         AptUnitOccupancySegment segment = retrieveOccupancySegment(unitPk, start);
-        if (segment != null && segment.status().getValue() == Status.occupied && !segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE)) {
-            List<AptUnitOccupancySegment> rest = retrieveOccupancy(unitPk, addDay(segment.dateTo().getValue()));
-            for (AptUnitOccupancySegment seg : rest) {
-                if (seg.status().getValue() == Status.occupied | seg.status().getValue() == Status.reserved) {
-                    return false;
-                }
-            }
-            return true;
+        if (segment == null) {
+            throw new IllegalStateException("current occupancy segment was not found");
+        } else if (segment.status().getValue() == Status.occupied & segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE)) {
+            CancelMoveOutConstraintsDTO constraints = EntityFactory.create(CancelMoveOutConstraintsDTO.class);
+            constraints.canCancelMoveOut().setValue(false);
+            constraints.reason().setValue(ConstraintsReason.MoveOutNotExpected);
+            return constraints;
         } else {
-            return false;
+            List<AptUnitOccupancySegment> futureOccupancy = retrieveOccupancy(unitPk, addDay(segment.dateTo().getValue()));
+            CancelMoveOutConstraintsDTO constraints = EntityFactory.create(CancelMoveOutConstraintsDTO.class);
+            constraints.canCancelMoveOut().setValue(true);
+            constraintFound: for (AptUnitOccupancySegment seg : futureOccupancy) {
+                switch (seg.status().getValue()) {
+                case pending:
+                case available:
+                    break;
+
+                case migrated:
+                case occupied:
+                case reserved:
+                    constraints.canCancelMoveOut().setValue(false);
+                    constraints.reason().setValue(ConstraintsReason.LeasedOrReserved);
+                    constraints.leaseStub().set(seg.lease().createIdentityStub());
+                    break constraintFound;
+
+                case offMarket:
+                case renovation:
+                    constraints.canCancelMoveOut().setValue(false);
+                    constraints.reason().setValue(ConstraintsReason.RenovatedOrOffMarket);
+                    break constraintFound;
+                default:
+                    break;
+                }
+
+            }
+            return constraints;
         }
     }
 
@@ -835,6 +863,13 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                 && ((unitOccupancySegment.status().getValue() == Status.migrated) & unitOccupancySegment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE));
     }
 
+    @Override
+    public boolean isAvailableForExistingLease(Key unitId) {
+        LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
+        AptUnitOccupancySegment segment = retrieveOccupancySegment(unitId, now);
+        return segment != null && segment.status().getValue() == Status.pending && segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE);
+    }
+
     private void setUnitAvailableFrom(Key unitPk, LogicalDate newAvaialbleFrom) {
         AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitPk);
         unit._availableForRent().setValue(newAvaialbleFrom);
@@ -877,12 +912,5 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         segment.unit().setPrimaryKey(unitPk);
         setUnitAvailableFrom(unitPk, segment.dateFrom().getValue());
         Persistence.service().merge(segment);
-    }
-
-    @Override
-    public boolean isAvailableForExistingLease(Key unitId) {
-        LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
-        AptUnitOccupancySegment segment = retrieveOccupancySegment(unitId, now);
-        return segment != null && segment.status().getValue() == Status.pending && segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE);
     }
 }
