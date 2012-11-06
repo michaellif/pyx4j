@@ -198,9 +198,9 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     // internals:
-    @SuppressWarnings({ "incomplete-switch", "rawtypes" })
-    private List<LeaseTermParticipant> retrievePayableUsers(Lease lease) {
-        List<LeaseTermParticipant> users = new LinkedList<LeaseTermParticipant>();
+    @SuppressWarnings("incomplete-switch")
+    private List<LeaseTermParticipant<?>> retrievePayableUsers(Lease lease) {
+        List<LeaseTermParticipant<?>> users = new LinkedList<LeaseTermParticipant<?>>();
 
         // add payable tenants:
         Persistence.service().retrieve(lease.currentTerm().version().tenants());

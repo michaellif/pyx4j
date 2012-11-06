@@ -110,7 +110,6 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         selectTab(addTab(content));
     }
 
-    @SuppressWarnings("rawtypes")
     private IsWidget createDetailsPanel() {
         FormFlexPanel left = new FormFlexPanel();
         int row = -1;
@@ -123,7 +122,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber())).build());
         get(proto().billingAccount().accountNumber()).setViewable(true);
 
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntitySelectorHyperlink<LeaseTermParticipant>() {
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntitySelectorHyperlink<LeaseTermParticipant<?>>() {
             @Override
             protected AppPlace getTargetPlace() {
                 if (getValue().isInstanceOf(LeaseTermTenant.class)) {
@@ -136,8 +135,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             }
 
             @Override
-            protected AbstractEntitySelectorDialog<LeaseTermParticipant> getSelectorDialog() {
-                return new EntitySelectorListDialog<LeaseTermParticipant>(i18n.tr("Select Tenant To Pay"), false, PaymentForm.this.getValue().participants()) {
+            protected AbstractEntitySelectorDialog<LeaseTermParticipant<?>> getSelectorDialog() {
+                return new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenant To Pay"), false, PaymentForm.this.getValue().participants()) {
 
                     @Override
                     public boolean onClickOk() {
