@@ -38,8 +38,8 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
+import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -56,13 +56,14 @@ import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
+import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -185,17 +186,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         cancelNoticeAction = new MenuItem(i18n.tr("Cancel Notice"), new Command() {
             @Override
             public void execute() {
-                new ReasonBox(i18n.tr("Cancel Notice")) {
-                    @Override
-                    public boolean onClickOk() {
-                        if (CommonsStringUtils.isEmpty(getReason())) {
-                            MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
-                            return false;
-                        }
-                        ((LeaseViewerView.Presenter) getPresenter()).cancelCompletionEvent(getReason());
-                        return true;
-                    }
-                }.show();
+                cancelCmpletion(CompletionType.Notice);
             }
         });
         addAction(cancelNoticeAction);
@@ -218,20 +209,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addAction(evictAction);
 
-        cancelEvictAction = new MenuItem(i18n.tr("Cancel Evict"), new Command() {
+        cancelEvictAction = new MenuItem(i18n.tr("Cancel Eviction"), new Command() {
             @Override
             public void execute() {
-                new ReasonBox(i18n.tr("Cancel Evict")) {
-                    @Override
-                    public boolean onClickOk() {
-                        if (CommonsStringUtils.isEmpty(getReason())) {
-                            MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
-                            return false;
-                        }
-                        ((LeaseViewerView.Presenter) getPresenter()).cancelCompletionEvent(getReason());
-                        return true;
-                    }
-                }.show();
+                cancelCmpletion(CompletionType.Eviction);
             }
         });
         addAction(cancelEvictAction);
@@ -254,20 +235,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addAction(terminateAction);
 
-        cancelTerminateAction = new MenuItem(i18n.tr("Cancel Terminate"), new Command() {
+        cancelTerminateAction = new MenuItem(i18n.tr("Cancel Termination"), new Command() {
             @Override
             public void execute() {
-                new ReasonBox(i18n.tr("Cancel Terminate")) {
-                    @Override
-                    public boolean onClickOk() {
-                        if (CommonsStringUtils.isEmpty(getReason())) {
-                            MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
-                            return false;
-                        }
-                        ((LeaseViewerView.Presenter) getPresenter()).cancelCompletionEvent(getReason());
-                        return true;
-                    }
-                }.show();
+                cancelCmpletion(CompletionType.Termination);
             }
         });
         addAction(cancelTerminateAction);
@@ -283,20 +254,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         moveOutAction = new MenuItem(i18n.tr("Move Out"), new Command() {
             @Override
             public void execute() {
-                MessageDialog.confirm(
-                        i18n.tr("Move Out"),
-                        i18n.tr("This will mark the unit as moved out (Tenant has brought the key).") + "<br/><br/>"
-                                + i18n.tr("Do you really want to do this?"), new ConfirmDecline() {
-                            @Override
-                            public void onConfirmed() {
-                                ((LeaseViewerView.Presenter) getPresenter()).moveOut();
-                            }
-
-                            @Override
-                            public void onDeclined() {
-                                // TODO Auto-generated method stub
-                            }
-                        });
+                MessageDialog.confirm(i18n.tr("Move Out"), i18n.tr("This will make this unit available to other leases (Tenant has brought the key).")
+                        + "<br/><br/>" + i18n.tr("Are you sure you would like to continue?"), new Command() {
+                    @Override
+                    public void execute() {
+                        ((LeaseViewerView.Presenter) getPresenter()).moveOut();
+                    }
+                });
             }
         });
         addAction(moveOutAction);
@@ -603,5 +567,69 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         protected EmailTemplateType getEmailType() {
             return emailType.getValue();
         }
+    }
+
+    public void cancelCmpletion(final Lease.CompletionType completionType) {
+        ((LeaseViewerView.Presenter) getPresenter()).isCancelCompletionEventAvailable(new DefaultAsyncCallback<CancelMoveOutConstraintsDTO>() {
+            @Override
+            public void onSuccess(final CancelMoveOutConstraintsDTO result) {
+                if (result.reason().isNull()) {
+                    new ReasonBox(i18n.tr("Cancel Notice")) {
+                        @Override
+                        public boolean onClickOk() {
+                            if (CommonsStringUtils.isEmpty(getReason())) {
+                                MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
+                                return false;
+                            }
+                            ((LeaseViewerView.Presenter) getPresenter()).cancelCompletionEvent(getReason());
+                            return true;
+                        }
+                    }.show();
+                } else {
+                    String caption = i18n.tr("Error");
+                    String message = i18n.tr("Can't cancel the ") + completionType.toString();
+                    switch (result.reason().getValue()) {
+                    case LeasedOrReserved:
+                        message += i18n.tr(" the unit is reserved/leased by another Application/Lease already!") + "<br/><br/>"
+                                + i18n.tr("Do you want to view it?");
+                        MessageDialog.confirm(caption, message, new Command() {
+                            @Override
+                            public void execute() {
+                                CrudAppPlace place;
+                                switch (result.leaseStub().status().getValue()) {
+                                case Application:
+                                    place = new CrmSiteMap.Tenants.LeaseApplication();
+                                    break;
+                                case Active:
+                                case Approved:
+                                case Cancelled:
+                                case Closed:
+                                case Completed:
+                                case ExistingLease:
+                                    place = new CrmSiteMap.Tenants.Lease();
+                                    break;
+                                default:
+                                    throw new UserRuntimeException("Unsupported lease status.");
+                                }
+
+                                AppSite.getPlaceController().goTo(place.formViewerPlace(result.leaseStub().getPrimaryKey()));
+                            }
+                        });
+                        break;
+                    case RenovatedOrOffMarket:
+                        message += i18n.tr(" - the unit is Renovated/Off-Market!");
+                        MessageDialog.error(caption, message);
+                        break;
+                    case MoveOutNotExpected:
+                        message += i18n.tr(" - move out is not expected!");
+                        MessageDialog.error(caption, message);
+                        break;
+                    default:
+                        MessageDialog.error(caption, i18n.tr("Unspecified reason!?!"));
+                        break;
+                    }
+                }
+            }
+        });
     }
 }

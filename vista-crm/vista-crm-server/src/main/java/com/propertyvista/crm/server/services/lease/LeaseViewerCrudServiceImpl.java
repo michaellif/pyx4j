@@ -29,18 +29,20 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.server.services.lease.common.LeaseTermCrudServiceImpl;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseTermDTO;
 
@@ -67,6 +69,16 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
         Persistence.service().commit();
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void isCancelCompletionEventAvailable(AsyncCallback<CancelMoveOutConstraintsDTO> callback, Key entityId) {
+        Lease lease = Persistence.service().retrieve(dboClass, entityId);
+        CancelMoveOutConstraintsDTO result = ServerSideFactory.create(OccupancyFacade.class).getCancelMoveOutConstraints(lease.unit().getPrimaryKey());
+        if (!result.leaseStub().isNull()) {
+            Persistence.service().retrieve(result.leaseStub());
+        }
+        callback.onSuccess(result);
     }
 
     @Override

@@ -18,6 +18,7 @@ import java.util.Vector;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
@@ -40,6 +41,7 @@ import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
+import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
@@ -47,8 +49,8 @@ import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -67,6 +69,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     private LeaseDTO currentValue;
 
+    @SuppressWarnings("unchecked")
     public LeaseViewerActivity(CrudAppPlace place) {
         super(place, LeaseViewFactory.instance(LeaseViewerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class));
 
@@ -155,6 +158,16 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
                 populate();
             }
         }, getEntityId(), completionType, eventDate, moveOutDate, leseEndDate);
+    }
+
+    @Override
+    public void isCancelCompletionEventAvailable(final AsyncCallback<CancelMoveOutConstraintsDTO> callback) {
+        ((LeaseViewerCrudService) getService()).isCancelCompletionEventAvailable(new DefaultAsyncCallback<CancelMoveOutConstraintsDTO>() {
+            @Override
+            public void onSuccess(CancelMoveOutConstraintsDTO result) {
+                callback.onSuccess(result);
+            }
+        }, getEntityId());
     }
 
     @Override

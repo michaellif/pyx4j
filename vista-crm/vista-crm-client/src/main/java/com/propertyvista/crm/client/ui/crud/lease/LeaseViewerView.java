@@ -15,17 +15,20 @@ package com.propertyvista.crm.client.ui.crud.lease;
 
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
+import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -39,6 +42,8 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
         void startBilling();
 
         void createCompletionEvent(Lease.CompletionType completionType, LogicalDate eventDate, LogicalDate moveOutDate, LogicalDate leseEndDate);
+
+        void isCancelCompletionEventAvailable(AsyncCallback<CancelMoveOutConstraintsDTO> callback);
 
         void cancelCompletionEvent(String decisionReason);
 

@@ -21,11 +21,12 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseTermDTO;
 
@@ -35,6 +36,8 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
 
     void createCompletionEvent(AsyncCallback<VoidSerializable> callback, Key entityId, Lease.CompletionType completionType, LogicalDate eventDate,
             LogicalDate moveOutDate, LogicalDate leseEndDate);
+
+    void isCancelCompletionEventAvailable(AsyncCallback<CancelMoveOutConstraintsDTO> callback, Key entityId);
 
     void cancelCompletionEvent(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
 
