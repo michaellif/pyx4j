@@ -273,7 +273,7 @@ public class PadProcessor {
             PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class,
                     PadTransactionUtils.toVistaPaymentRecordId(debitRecord.transactionId()));
             if (paymentRecord == null) {
-                throw new Error("Payment transaction '" + debitRecord.transactionId().getValue() + "' not found");
+                throw new Error("Payment transaction '" + debitRecord.transactionId().getValue() + "' not found in " + namespace);
             }
             if (PaymentType.Echeck != paymentRecord.paymentMethod().type().getValue()) {
                 throw new IllegalArgumentException("Invalid PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());

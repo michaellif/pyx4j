@@ -22,7 +22,7 @@ import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 
 @RunWith(Categories.class)
 @IncludeCategory(FunctionalTests.class)
-@Suite.SuiteClasses({ ARSuite.class, BillingSuite.class })
+@Suite.SuiteClasses({ ARSuite.class, BillingSuite.class, PaymentSuite.class })
 public class FunctionalSuite {
 
 }

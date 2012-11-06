@@ -152,6 +152,7 @@
                 <configuration>
                     <forkMode>always</forkMode>
                     <includes>
+                        <include>**/RegressionSuite.java</include>
                         <include>**/FunctionalSuite.java</include>
                     </includes>
                 </configuration>

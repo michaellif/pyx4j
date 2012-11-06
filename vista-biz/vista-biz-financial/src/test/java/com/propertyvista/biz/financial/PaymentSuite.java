@@ -7,22 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 21, 2012
- * @author michaellif
+ * Created on 2012-11-06
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.biz.financial;
 
-import org.junit.experimental.categories.Categories;
-import org.junit.experimental.categories.Categories.IncludeCategory;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
+import com.propertyvista.biz.financial.payment.PadTransactionUtilsTest;
 
-@RunWith(Categories.class)
-@IncludeCategory(RegressionTests.class)
-@Suite.SuiteClasses({ ARSuite.class, BillingSuite.class, PaymentSuite.class })
-public class RegressionSuite {
+@RunWith(Suite.class)
+@Suite.SuiteClasses({ PadTransactionUtilsTest.class })
+public class PaymentSuite {
 
 }

@@ -57,7 +57,7 @@ public class PadTransactionUtils {
                 if (!versionId.equals(testDBversionId())) {
                     throw new Error("Unexpected transactionId " + transactionId.getValue() + "; expected prefix " + testDBversionId());
                 }
-                return new Key(transactionId.getValue().substring(separator));
+                return new Key(transactionId.getValue().substring(separator + 1));
             }
         }
     }
