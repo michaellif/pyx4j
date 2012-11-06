@@ -22,20 +22,27 @@ import com.propertyvista.domain.tenant.lease.Lease;
 @Transient
 public interface CancelMoveOutConstraintsDTO extends IEntity {
 
+    /**
+     * The reasons have priorities, i.e. in situation when both {@linkplain ConstraintsReason#LeasedOrReserved} and
+     * {@linkplain ConstraintsReason#RenovatedOrOffMarket} happen, only {@linkplain ConstraintsReason#LeasedOrReserved} will be returned.
+     */
     enum ConstraintsReason {
 
+        /** A unit is either OCCUPIED or RESERVED in the future. */
         LeasedOrReserved,
 
+        /** A unit is either RENOVATED or OFF-MARKET in the future. */
         RenovatedOrOffMarket,
 
+        /** There's nothing to cancel: i.e., there's no information when move-out is going to happen, and therefore there's nothing to cancel. */
         MoveOutNotExpected
     }
 
     IPrimitive<Boolean> canCancelMoveOut();
 
-    /** If {@linkplain #canCancelMoveOut()} is <code>false</code> */
+    /** If {@linkplain #canCancelMoveOut()} is <code>false</code>. */
     IPrimitive<ConstraintsReason> reason();
 
-    /** If {@linkplain #reason()} is {@linkplain #ConstraintsReason.LeasedOrReserved} will contain a lease stub of a blocking lease */
+    /** If {@linkplain #reason()} is {@linkplain #ConstraintsReason.LeasedOrReserved} will contain a lease stub of a blocking lease. */
     Lease leaseStub();
 }

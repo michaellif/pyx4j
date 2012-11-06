@@ -731,7 +731,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             List<AptUnitOccupancySegment> futureOccupancy = retrieveOccupancy(unitPk, addDay(segment.dateTo().getValue()));
             CancelMoveOutConstraintsDTO constraints = EntityFactory.create(CancelMoveOutConstraintsDTO.class);
             constraints.canCancelMoveOut().setValue(true);
-            constraintFound: for (AptUnitOccupancySegment seg : futureOccupancy) {
+            for (AptUnitOccupancySegment seg : futureOccupancy) {
                 switch (seg.status().getValue()) {
                 case pending:
                 case available:
@@ -743,13 +743,16 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                     constraints.canCancelMoveOut().setValue(false);
                     constraints.reason().setValue(ConstraintsReason.LeasedOrReserved);
                     constraints.leaseStub().set(seg.lease().createIdentityStub());
-                    break constraintFound;
+                    break;
 
                 case offMarket:
                 case renovation:
-                    constraints.canCancelMoveOut().setValue(false);
-                    constraints.reason().setValue(ConstraintsReason.RenovatedOrOffMarket);
-                    break constraintFound;
+                    /** {@linkplain CancelMoveOutConstraintsDTO.ConstraintsReason#LeasedOrReserved} has higher priority */
+                    if (constraints.reason().getValue() != ConstraintsReason.LeasedOrReserved) {
+                        constraints.reason().setValue(ConstraintsReason.RenovatedOrOffMarket);
+                        constraints.canCancelMoveOut().setValue(false);
+                    }
+                    break;
                 default:
                     break;
                 }
