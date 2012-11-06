@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.config;
 
-public class VistaConfigurationDev2QAPostgreSQL extends VistaConfigurationPostgreSQL {
+public class VistaConfigurationPostgreSQLDev2QA extends VistaConfigurationPostgreSQL {
 
     @Override
     public String dbHost() {

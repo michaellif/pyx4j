@@ -24,7 +24,7 @@ public class VistaServerSideConfigurationDevPostgreSQL extends VistaServerSideCo
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
         if (connectToQA) {
-            return new VistaConfigurationDev2QAPostgreSQL();
+            return new VistaConfigurationPostgreSQLDev2QA();
         } else {
             return new VistaConfigurationPostgreSQL() {
                 @Override
