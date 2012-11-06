@@ -19,17 +19,23 @@ import com.propertyvista.misc.VistaTODO;
 
 public class VistaServerSideConfigurationDevPostgreSQL extends VistaServerSideConfigurationDev {
 
+    public static final boolean connectToQA = false;
+
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
-        return new VistaConfigurationPostgreSQL() {
-            @Override
-            public String dbName() {
-                if (VistaTODO.codeBaseIsProdBranch) {
-                    return super.dbName() + "_prod";
-                } else {
-                    return super.dbName();
+        if (connectToQA) {
+            return new VistaConfigurationDev2QAPostgreSQL();
+        } else {
+            return new VistaConfigurationPostgreSQL() {
+                @Override
+                public String dbName() {
+                    if (VistaTODO.codeBaseIsProdBranch) {
+                        return super.dbName() + "_prod";
+                    } else {
+                        return super.dbName();
+                    }
                 }
-            }
-        };
+            };
+        }
     }
 }
