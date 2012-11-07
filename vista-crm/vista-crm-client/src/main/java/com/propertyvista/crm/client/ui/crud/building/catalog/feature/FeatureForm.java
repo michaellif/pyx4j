@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.building.catalog.feature;
 
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -57,5 +58,13 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         content.getColumnFormatter().setWidth(1, "50%");
 
         selectTab(addTab(content));
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        // revalidate items folder (see FeatureItemFolder.addValidations()) on mandatory changes:  
+        get(proto().version().mandatory()).addValueChangeHandler(new RevalidationTrigger<Boolean>(get(proto().version().items())));
     }
 }
