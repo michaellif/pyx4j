@@ -34,6 +34,8 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
         form.get(form.proto().lease().unit()).setValue(value.lease().unit());
         form.get(form.proto().lease().unit().building()).setValue(value.lease().unit().building());
 
+        form.setUnitNote(value.unitMoveOutNote().getValue());
+
         this.getValue().lease().billingAccount().set(value.lease().billingAccount());
 
         updateServiceValue(value);

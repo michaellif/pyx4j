@@ -625,8 +625,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                         MessageDialog.error(caption, message);
                         break;
                     default:
-                        MessageDialog.error(caption, i18n.tr("Unspecified reason!?!"));
-                        break;
+                        throw new IllegalArgumentException("Unsupported reason value!");
                     }
                 }
             }

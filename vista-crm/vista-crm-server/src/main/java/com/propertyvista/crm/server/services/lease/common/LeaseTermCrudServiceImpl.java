@@ -38,10 +38,11 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
@@ -123,6 +124,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
                 fillServiceEligibilityData(dto);
                 fillserviceItems(dto);
             }
+
+            checkUnitMoveOut(dto);
         }
     }
 
@@ -137,6 +140,9 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         loadDetachedProducts(currentValue);
         fillServiceEligibilityData(currentValue);
         fillserviceItems(currentValue);
+
+        checkUnitMoveOut(currentValue);
+
         callback.onSuccess(currentValue);
     }
 
@@ -214,10 +220,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             for (Feature feature : selectedService.features()) {
                 Persistence.service().retrieve(feature.version().items());
                 for (ProductItem item : feature.version().items()) {
-                    if (!item.isDefault().isBooleanTrue()) {
-                        Persistence.service().retrieve(item.product());
-                        currentValue.selectedFeatureItems().add(item);
-                    }
+                    Persistence.service().retrieve(item.product());
+                    currentValue.selectedFeatureItems().add(item);
                 }
             }
 
@@ -237,6 +241,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), currentValue.lease().unit().building().productCatalog()));
         criteria.add(PropertyCriterion.eq(criteria.proto().serviceType(), currentValue.lease().type()));
+        criteria.isCurrent(criteria.proto().version());
+
         for (Service service : Persistence.service().query(criteria)) {
             EntityQueryCriteria<ProductItem> serviceCriteria = EntityQueryCriteria.create(ProductItem.class);
             serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ServiceItemType.class));
@@ -244,10 +250,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), currentValue.lease().unit()));
             serviceCriteria
                     .add(PropertyCriterion.ne(serviceCriteria.proto().id(), currentValue.version().leaseProducts().serviceItem().item().getPrimaryKey()));
+
             currentValue.selectedServiceItems().addAll(Persistence.service().query(serviceCriteria));
-            if (!currentValue.selectedServiceItems().isEmpty()) {
-                break;
-            }
         }
     }
 
@@ -272,5 +276,17 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     public void update(LeaseTerm dbo, LeaseTermDTO dto) {
         enhanceRetrieved(dbo, dto, null);
+    }
+
+    void checkUnitMoveOut(LeaseTermDTO dto) {
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), dto.lease().unit()));
+        criteria.add(PropertyCriterion.ne(criteria.proto().id(), dto.lease().getPrimaryKey()));
+        criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
+
+        Lease lease = Persistence.service().retrieve(criteria);
+        if (lease != null) {
+            dto.unitMoveOutNote().setValue("Warning: This unit is not freed completely!");
+        }
     }
 }

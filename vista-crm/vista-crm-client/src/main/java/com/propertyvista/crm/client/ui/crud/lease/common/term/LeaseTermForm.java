@@ -49,8 +49,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Status;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.misc.VistaTODO;
 
@@ -94,6 +94,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             get(proto().termFrom()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
             get(proto().termTo()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
         }
+
+        setUnitNote(getValue().unitMoveOutNote().getValue());
     }
 
     private FormFlexPanel createDetailsTab(String title) {
@@ -288,5 +290,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         new StartEndDateValidation(date1, date2, message);
         date1.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date2));
         date2.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date1));
+    }
+
+    void setUnitNote(String note) {
+        get(proto().lease().unit()).setNote(note);
     }
 }

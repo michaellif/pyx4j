@@ -16,6 +16,7 @@ package com.propertyvista.dto;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -37,4 +38,6 @@ public interface LeaseTermDTO extends LeaseTerm {
     IList<ProductItem> selectedFeatureItems();
 
     IList<Concession> selectedConcessions();
+
+    IPrimitive<String> unitMoveOutNote();
 }
