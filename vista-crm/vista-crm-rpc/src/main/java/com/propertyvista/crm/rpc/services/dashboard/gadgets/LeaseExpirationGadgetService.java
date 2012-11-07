@@ -35,8 +35,6 @@ import com.propertyvista.dto.LeaseDTO;
 public interface LeaseExpirationGadgetService extends AbstractCounterGadgetBaseService<LeaseExpirationGadgetDataDTO, Vector<Building>>, LeaseCriteriaProvider,
         UnitCriteriaProvider {
 
-    public boolean TODO_LEASES_ON_MONTH_TO_MONTH = false;
-
     @Override
     void countData(AsyncCallback<LeaseExpirationGadgetDataDTO> callback, Vector<Building> buildings);
 

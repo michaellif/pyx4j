@@ -35,6 +35,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -46,14 +47,12 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
 
         LeaseExpirationGadgetDataDTO gadgetData = EntityFactory.create(LeaseExpirationGadgetDataDTO.class);
 
+        count(gadgetData.numOfLeasesOnMonthToMonth(), buildingsFilter);
+
         count(gadgetData.numOfLeasesEndingThisMonth(), buildingsFilter);
         count(gadgetData.numOfLeasesEndingNextMonth(), buildingsFilter);
         count(gadgetData.numOfLeasesEnding60to90Days(), buildingsFilter);
         count(gadgetData.numOfLeasesEndingOver90Days(), buildingsFilter);
-
-        if (TODO_LEASES_ON_MONTH_TO_MONTH) {
-            count(gadgetData.numOfLeasesOnMonthToMonth(), buildingsFilter);
-        }
 
         gadgetData.totalUnits().setValue(CommonQueries.numOfUnits(buildingsFilter));
         gadgetData.occupiedUnits().setValue(numOfOccupiedUnits(buildingsFilter));
@@ -81,38 +80,27 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
         LeaseExpirationGadgetDataDTO proto = EntityFactory.getEntityPrototype(LeaseExpirationGadgetDataDTO.class);
         IObject<?> leaseFilter = proto.getMember(leaseFilterPreset.getPath());
 
-        LogicalDate leaseToLowerBound = null;
-        LogicalDate leaseToUpperBound = null;
-        LogicalDate today = Util.dayOfCurrentTransaction();
-
-        if (proto.numOfLeasesEndingThisMonth() == leaseFilter) {
-            leaseToLowerBound = today;
-            leaseToUpperBound = Util.endOfMonth(today);
-        } else if (proto.numOfLeasesEndingNextMonth() == leaseFilter) {
-            leaseToLowerBound = Util.beginningOfNextMonth(today);
-            leaseToUpperBound = Util.endOfMonth(leaseToLowerBound);
-        } else if (proto.numOfLeasesEnding60to90Days() == leaseFilter) {
-            leaseToLowerBound = Util.addDays(today, 60);
-            leaseToUpperBound = Util.addDays(today, 90);
-        } else if (proto.numOfLeasesEndingOver90Days() == leaseFilter) {
-            leaseToLowerBound = Util.addDays(today, 91);
-            leaseToUpperBound = null;
-        } else if (proto.numOfLeasesOnMonthToMonth() == leaseFilter) {
-            if (!TODO_LEASES_ON_MONTH_TO_MONTH) {
-                throw new RuntimeException("on month to month has not yet been implemented'" + leaseFilter.getPath().toString() + "'");
-            }
-        } else {
-            throw new RuntimeException("it's unknown to to iterpret the lease filter '" + leaseFilter.getPath().toString() + "'");
-        }
-
         if (buildings != null && !buildings.isEmpty()) {
             leaseCriteria.add(PropertyCriterion.in(leaseCriteria.proto().unit().building(), buildings));
         }
-        if (leaseToLowerBound != null) {
-            leaseCriteria.add(PropertyCriterion.ge(leaseCriteria.proto().leaseTo(), leaseToLowerBound));
-        }
-        if (leaseToUpperBound != null) {
-            leaseCriteria.add(PropertyCriterion.le(leaseCriteria.proto().leaseTo(), leaseToUpperBound));
+        LogicalDate today = Util.dayOfCurrentTransaction();
+        if (proto.numOfLeasesEndingThisMonth() == leaseFilter) {
+            leaseCriteria.add(PropertyCriterion.ge(leaseCriteria.proto().leaseTo(), today));
+            leaseCriteria.add(PropertyCriterion.le(leaseCriteria.proto().leaseTo(), Util.endOfMonth(today)));
+        } else if (proto.numOfLeasesEndingNextMonth() == leaseFilter) {
+            leaseCriteria.add(PropertyCriterion.ge(leaseCriteria.proto().leaseTo(), Util.beginningOfNextMonth(today)));
+            leaseCriteria.add(PropertyCriterion.le(leaseCriteria.proto().leaseTo(), Util.endOfMonth(Util.beginningOfNextMonth(today))));
+        } else if (proto.numOfLeasesEnding60to90Days() == leaseFilter) {
+            leaseCriteria.add(PropertyCriterion.ge(leaseCriteria.proto().leaseTo(), Util.addDays(today, 60)));
+            leaseCriteria.add(PropertyCriterion.le(leaseCriteria.proto().leaseTo(), Util.addDays(today, 90)));
+        } else if (proto.numOfLeasesEndingOver90Days() == leaseFilter) {
+            leaseCriteria.add(PropertyCriterion.ge(leaseCriteria.proto().leaseTo(), Util.addDays(today, 91)));
+        } else if (proto.numOfLeasesOnMonthToMonth() == leaseFilter) {
+            leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().status(), Lease.Status.Active));
+            leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().currentTerm().type(), LeaseTerm.Type.Periodic));
+            leaseCriteria.add(PropertyCriterion.isNull(leaseCriteria.proto().leaseTo()));
+        } else {
+            throw new RuntimeException("it's unknown to to iterpret the lease filter '" + leaseFilter.getPath().toString() + "'");
         }
         return leaseCriteria;
     }

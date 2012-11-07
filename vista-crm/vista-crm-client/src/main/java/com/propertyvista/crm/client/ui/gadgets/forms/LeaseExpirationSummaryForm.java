@@ -37,11 +37,9 @@ public final class LeaseExpirationSummaryForm extends ZoomableViewForm<LeaseExpi
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitOccupancyLabel())).customLabel(i18n.tr("Units Occupied")).componentWidth(15)
                 .build());
 
-        if (false) {
-            content.setH2(++row, 0, 1, i18n.tr("Leases on Month to Month:"));
-            content.setWidget(++row, 0,
-                    new DecoratorBuilder(inject(proto().numOfLeasesOnMonthToMonth())).customLabel("").componentWidth(5).useLabelSemicolon(false).build());
-        }
+        content.setH2(++row, 0, 1, i18n.tr("Leases on Month to Month:"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesOnMonthToMonth())).customLabel("").componentWidth(5)
+                .useLabelSemicolon(false).build());
 
         content.setH2(++row, 0, 1, i18n.tr("Leases Ending:"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesEndingThisMonth())).customLabel(i18n.tr("This Month")).componentWidth(5)
