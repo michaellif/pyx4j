@@ -64,7 +64,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         //==================== CYCLE 2 ======================//
 
         advanceDate("18-Mar-2011");
-        confirmBill(getLatestBill(), true, true);
+        confirmBill(true, true);
 
         // @formatter:off
         new BillTester(getLatestBill()).
@@ -79,7 +79,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         //==================== CYCLE 3 ======================//
 
         advanceDate("18-Apr-2011");
-        confirmBill(getLatestBill(), true, true);
+        confirmBill(true, true);
 
         // @formatter:off
         new BillTester(getLatestBill()).
@@ -146,7 +146,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
         //==================== CYCLE 1 ======================//
 
-        confirmBill(getLatestBill(), true, true);
+        confirmBill(true, true);
 
         // @formatter:off
         new BillTester(getLatestConfirmedBill()).
@@ -161,7 +161,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         //==================== CYCLE 2 ======================//
 
         advanceDate("18-Jun-2011");
-        confirmBill(getLatestBill(), true, true);
+        confirmBill(true, true);
 
         // @formatter:off
         new BillTester(getLatestConfirmedBill()).
@@ -176,7 +176,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         //==================== CYCLE 3 ======================//
 
         advanceDate("18-Jul-2011");
-        confirmBill(getLatestBill(), true, true);
+        confirmBill(true, true);
 
         // @formatter:off
         new BillTester(getLatestBill()).
@@ -228,7 +228,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         //==================== CYCLE 1 ======================//
 
         advanceDate("18-May-2011");
-        confirmBill(getLatestBill(), true, true);
+        confirmBill(true, true);
 
         // @formatter:off
         new BillTester(getLatestConfirmedBill()).

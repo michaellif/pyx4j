@@ -80,7 +80,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         receiveAndPostPayment("18-Mar-2011", "300.00");
 
         advanceDate("22-Mar-2011");
-        confirmBill(getLatestBill(), true, true);
+        confirmBill(true, true);
 
         // @formatter:off
         new BillTester(getLatestBill()).
@@ -104,7 +104,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         receiveAndPostPayment("28-Mar-2011", "1058.00");
 
         advanceDate("18-Apr-2011");
-        confirmBill(getLatestBill(), true, true);
+        confirmBill(true, true);
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
@@ -162,7 +162,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         //==================== RUN 2 ======================//
 
         advanceDate("18-Mar-2011");
-        confirmBill(getLatestBill(), true, true);
+        confirmBill(true, true);
 
         // @formatter:off
         new BillTester(getLatestBill()).

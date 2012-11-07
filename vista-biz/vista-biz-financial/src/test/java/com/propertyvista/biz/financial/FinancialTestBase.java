@@ -62,15 +62,15 @@ import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.server.jobs.BillingProcess;
 import com.propertyvista.server.jobs.DepositInterestAdjustmentProcess;
@@ -245,7 +245,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected Bill runBilling(boolean confirm, boolean printBill) {
-        return confirmBill(runBilling(), confirm, printBill);
+        runBilling();
+        return confirmBill(confirm, printBill);
     }
 
     protected Bill runBillingPreview() {
@@ -260,7 +261,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return bill;
     }
 
-    protected Bill confirmBill(Bill bill, boolean confirm, boolean printBill) {
+    protected Bill confirmBill(boolean confirm, boolean printBill) {
+        Bill bill = getLatestBill();
         if (confirm) {
             bill = ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
         } else {
