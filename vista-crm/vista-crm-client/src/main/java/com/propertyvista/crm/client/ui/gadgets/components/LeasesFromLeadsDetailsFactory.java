@@ -52,7 +52,7 @@ public class LeasesFromLeadsDetailsFactory extends AbstractListerDetailsFactory<
                     new Builder(proto().lease().expectedMoveOut(), false).build(),
                     new Builder(proto().lease().actualMoveIn(), false).build(),
                     new Builder(proto().lease().actualMoveOut(), false).build(),
-                    new Builder(proto().lease().moveOutNotice(), false).build(),
+                    new Builder(proto().lease().moveOutSubmissionDate(), false).build(),
                     
                     new Builder(proto().lease().approvalDate(), false).build(),
                     new Builder(proto().lease().creationDate(), false).build()

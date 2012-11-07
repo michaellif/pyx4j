@@ -52,7 +52,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         get(proto().approvalDate()).setVisible(!getValue().approvalDate().isNull());
 
         get(proto().completion()).setVisible(!getValue().completion().isNull());
-        get(proto().moveOutNotice()).setVisible(!getValue().moveOutNotice().isNull());
+        get(proto().moveOutSubmissionDate()).setVisible(!getValue().moveOutSubmissionDate().isNull());
 
         get(proto().expectedMoveIn()).setVisible(!getValue().expectedMoveIn().isNull());
         get(proto().expectedMoveOut()).setVisible(!getValue().expectedMoveOut().isNull());
@@ -128,7 +128,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         datesRow = -1; // first column:
         datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().terminationLeaseTo()), 9).build());
-        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).build());
+        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().moveOutSubmissionDate()), 9).build());
 
         datesRow = -1; // second column:
         datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveIn()), 9).build());

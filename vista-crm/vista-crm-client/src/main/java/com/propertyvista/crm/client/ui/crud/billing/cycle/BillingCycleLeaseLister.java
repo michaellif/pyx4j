@@ -49,7 +49,7 @@ public class BillingCycleLeaseLister extends ListerBase<LeaseDTO> {
             new Builder(proto().expectedMoveOut(), false).build(),
             new Builder(proto().actualMoveIn(), false).build(),
             new Builder(proto().actualMoveOut(), false).build(),
-            new Builder(proto().moveOutNotice(), false).build(),
+            new Builder(proto().moveOutSubmissionDate(), false).build(),
             
             new Builder(proto().approvalDate(), false).build(),
             new Builder(proto().creationDate(), false).build(),

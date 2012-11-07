@@ -50,7 +50,7 @@ public class LeasesDetailsFactory extends AbstractListerDetailsFactory<LeaseDTO,
                     new Builder(proto().expectedMoveOut()).build(),
                     new Builder(proto().actualMoveIn(), false).build(),
                     new Builder(proto().actualMoveOut(), false).build(),
-                    new Builder(proto().moveOutNotice()).build(),
+                    new Builder(proto().moveOutSubmissionDate()).build(),
                     
                     new Builder(proto().approvalDate(), false).build(),
                     new Builder(proto().creationDate(), false).build()

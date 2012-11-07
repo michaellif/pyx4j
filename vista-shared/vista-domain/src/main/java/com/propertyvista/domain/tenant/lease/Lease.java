@@ -231,7 +231,7 @@ public interface Lease extends IEntity {
     IPrimitive<LogicalDate> actualMoveOut();
 
     @Caption(name = "Move Out Submission Date")
-    IPrimitive<LogicalDate> moveOutNotice();
+    IPrimitive<LogicalDate> moveOutSubmissionDate();
 
     @JoinColumn
     @Owned(forceCreation = true, cascade = {})

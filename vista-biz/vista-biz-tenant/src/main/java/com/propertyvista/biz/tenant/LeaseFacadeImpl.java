@@ -593,7 +593,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         lease.completion().setValue(completionType);
-        lease.moveOutNotice().setValue(eventDate);
+        lease.moveOutSubmissionDate().setValue(eventDate);
         lease.expectedMoveOut().setValue(moveOutDay);
 
         switch (completionType) {
@@ -631,7 +631,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         CompletionType completionType = lease.completion().getValue();
 
         lease.completion().setValue(null);
-        lease.moveOutNotice().setValue(null);
+        lease.moveOutSubmissionDate().setValue(null);
         lease.expectedMoveOut().setValue(null);
 
         switch (completionType) {
