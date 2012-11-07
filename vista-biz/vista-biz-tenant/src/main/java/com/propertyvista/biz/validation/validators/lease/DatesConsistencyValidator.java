@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.validation.validators.lease;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,6 +22,7 @@ import com.propertyvista.biz.validation.framework.EntityValidator;
 import com.propertyvista.biz.validation.framework.SimpleValidationFailure;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 public class DatesConsistencyValidator implements EntityValidator<Lease> {
 
@@ -30,15 +30,23 @@ public class DatesConsistencyValidator implements EntityValidator<Lease> {
 
     @Override
     public Set<ValidationFailure> validate(Lease lease) {
-        if (lease.currentTerm().termTo().isNull() || lease.currentTerm().termFrom().isNull()
-                || lease.currentTerm().termFrom().getValue().after(lease.currentTerm().termTo().getValue())) {
-            Set<ValidationFailure> validationFailure = new HashSet<ValidationFailure>();
-            validationFailure.add(new SimpleValidationFailure(lease, i18n.tr("\"{0}\" date must be before \"{1}\" date", lease.currentTerm().termFrom()
-                    .getMeta().getCaption(), lease.currentTerm().termTo().getMeta().getCaption())));
-            return validationFailure;
-        } else {
-            return Collections.emptySet();
+        Set<ValidationFailure> validationFailures = new HashSet<ValidationFailure>();
+        if (lease.currentTerm().termFrom().isNull()) {
+            validationFailures.add(new SimpleValidationFailure(lease.currentTerm().termFrom(), i18n.tr("\"{0}\" is mandatory", lease.currentTerm().termFrom()
+                    .getMeta().getCaption())));
         }
-
+        if (lease.currentTerm().type().getValue() != LeaseTerm.Type.Periodic && lease.currentTerm().termTo().isNull()) {
+            validationFailures.add(new SimpleValidationFailure(lease.currentTerm().termTo(), i18n.tr("\"{0}\" is mandatory", lease.currentTerm().termFrom()
+                    .getMeta().getCaption())));
+        }
+        if (lease.currentTerm().type().getValue() != LeaseTerm.Type.Periodic//@formatter:off
+                & !lease.currentTerm().termFrom().isNull()
+                & !lease.currentTerm().termTo().isNull()) {//@formatter:on
+            if (lease.currentTerm().termFrom().getValue().compareTo(lease.currentTerm().termTo().getValue()) > 0) {
+                validationFailures.add(new SimpleValidationFailure(lease, i18n.tr("\"{0}\" date must be before \"{1}\" date", lease.currentTerm().termFrom()
+                        .getMeta().getCaption(), lease.currentTerm().termTo().getMeta().getCaption())));
+            }
+        }
+        return validationFailures;
     }
 }

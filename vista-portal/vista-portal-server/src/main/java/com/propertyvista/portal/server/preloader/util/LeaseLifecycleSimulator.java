@@ -243,7 +243,7 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             lease.status().setValue(Status.Application);
-            lease.currentTerm().type().setValue(Type.Fixed);
+            lease.currentTerm().type().setValue((RND.nextInt() % 10 < 7) ? Type.Fixed : Type.FixedEx);
             lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
             lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, lease.unit());
             lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
@@ -265,7 +265,7 @@ public class LeaseLifecycleSimulator {
                 System.out.println("***");
             }
             // TODO change that to Employee Agent Decision
-            queueEvent(hasImmideateApproval ? now() : rndBetween(now(), lease.currentTerm().termFrom().getValue()), new ApproveApplication(lease));
+            queueEvent(hasImmideateApproval ? now() : rndBetween(now(), lease.leaseFrom().getValue()), new ApproveApplication(lease));
         }
     }
 

@@ -47,6 +47,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
     @Override
     public String create() {
+
         int numCreated = 0;
         int numCreatedWithBilling = 0;
 
@@ -208,6 +209,15 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         return b.toString();
     }
 
+    @Override
+    public String delete() {
+        return null;
+    }
+
+    private void createApplications() {
+
+    }
+
     private AptUnit makeAvailable(final AptUnit unit) {
         if (unit._availableForRent().isNull()) {
             Persistence.service().setTransactionSystemTime(getStatusFromDate(unit));
@@ -227,11 +237,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         } else {
             return new LogicalDate(segment.dateFrom().getValue());
         }
-    }
-
-    @Override
-    public String delete() {
-        return null;
     }
 
 }

@@ -39,9 +39,6 @@ public class LeaseApprovalValidator extends CompositeEntityValidator<Lease> {
 
         bind(proto().currentTerm(), new NotNullValidator());
 
-        bind(proto().currentTerm().termFrom(), new NotNullValidator());
-        bind(proto().currentTerm().termTo(), new NotNullValidator());
-
         bind(proto().currentTerm().version().tenants(), new HasAtLeastOneApplicantValidator());
         bind(proto().currentTerm().version().tenants(), new TenantInApprovedLeaseValidator());
         bind(proto().currentTerm().version().guarantors(), new GuarantorInApprovedLeaseValidator());
