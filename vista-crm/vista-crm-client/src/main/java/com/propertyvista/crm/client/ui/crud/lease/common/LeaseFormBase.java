@@ -61,41 +61,49 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         get(proto().actualMoveOut()).setVisible(!getValue().actualMoveOut().isNull());
 
         get(proto().terminationLeaseTo()).setVisible(!getValue().terminationLeaseTo().isNull());
+
+        get(proto().unit()).setNote(getValue().unitMoveOutNote().getValue());
     }
 
     private FormFlexPanel createDetailsTab(String title) {
         // Lease details: ---------------------------------------------------------------------------------------------------------------------------
-        FormFlexPanel detailsPanel = new FormFlexPanel();
+        FormFlexPanel detailsLeft = new FormFlexPanel();
 
         int detailsRow = -1; // first column:
-        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().leaseId()), 10).build());
-        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
-        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().paymentFrequency(), new CEnumLabel()), 15).build());
-        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
-        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().completion(), new CEnumLabel()), 15).build());
-        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber()), 15).build());
+        detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().leaseId()), 10).build());
+        detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
+        detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().paymentFrequency(), new CEnumLabel()), 15).build());
+        detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
+        detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().completion(), new CEnumLabel()), 15).build());
+        detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber()), 15).build());
 
+        FormFlexPanel detailsRight = new FormFlexPanel();
         detailsRow = -1; // second column:
-        detailsPanel.setBR(++detailsRow, 1, 1);
-        detailsPanel.setWidget(++detailsRow, 1,
+        detailsRight.setBR(++detailsRow, 0, 1);
+        detailsRight.setWidget(++detailsRow, 0,
                 new DecoratorBuilder(inject(proto().unit().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))),
-                        20).build());
-        detailsPanel.setWidget(++detailsRow, 1,
-                new DecoratorBuilder(inject(proto().unit(), new CEntityCrudHyperlink<AptUnit>(AppPlaceEntityMapper.resolvePlace(AptUnit.class))), 20).build());
+                        25).build());
+        detailsRight.setWidget(++detailsRow, 0,
+                new DecoratorBuilder(inject(proto().unit(), new CEntityCrudHyperlink<AptUnit>(AppPlaceEntityMapper.resolvePlace(AptUnit.class))), 25).build());
 
-        detailsPanel
+        detailsRight
                 .setWidget(
                         ++detailsRow,
-                        1,
+                        0,
                         new DecoratorBuilder(inject(proto().currentTerm(),
-                                new CEntityCrudHyperlink<LeaseTerm>(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class))), 20).build());
+                                new CEntityCrudHyperlink<LeaseTerm>(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class))), 25).build());
+
+        FormFlexPanel detailsPanel = new FormFlexPanel();
+
+        detailsPanel.setWidget(0, 0, detailsLeft);
+        detailsPanel.setWidget(0, 1, detailsRight);
 
         detailsPanel.getColumnFormatter().setWidth(0, "40%");
         detailsPanel.getColumnFormatter().setWidth(1, "60%");
 
         FormFlexPanel main = new FormFlexPanel(title);
-        int row = -1;
 
+        int row = -1;
         main.setWidget(++row, 0, detailsPanel);
 
         // Lease dates: -----------------------------------------------------------------------------------------------------------------------------

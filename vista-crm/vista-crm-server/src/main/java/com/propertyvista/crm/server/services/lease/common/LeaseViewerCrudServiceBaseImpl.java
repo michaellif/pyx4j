@@ -21,6 +21,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
@@ -50,6 +52,8 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
         if (in.status().getValue().isDraft()) {
             dto.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(in)));
         }
+
+        checkUnitMoveOut(dto);
     }
 
     @Override
@@ -77,5 +81,18 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
         }
 
         callback.onSuccess(users);
+    }
+
+    void checkUnitMoveOut(DTO dto) {
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), dto.unit()));
+        criteria.add(PropertyCriterion.ne(criteria.proto().id(), dto.getPrimaryKey()));
+        criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
+        criteria.isNull(criteria.proto().actualMoveOut());
+
+        Lease lease = Persistence.service().retrieve(criteria);
+        if (lease != null) {
+            dto.unitMoveOutNote().setValue("Warning: This unit is not freed completely!");
+        }
     }
 }
