@@ -21,6 +21,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.events.OptionsChangeEvent;
+import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -176,17 +178,18 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
                 if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
                     final CEntityComboBox<ServiceItemType> combo = (CEntityComboBox<ServiceItemType>) comp;
                     combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), parent.getValue().serviceType()));
-// TODO : preselect if single option:                    
-//                    combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), parent.getValue().version().type()));
-//                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ProductItemType>>() {
-//                        @Override
-//                        public void onOptionsChange(OptionsChangeEvent<List<ProductItemType>> event) {
-//                            if (event.getOptions().size() == 1) {
-//                                combo.setValue(event.getOptions().get(0), false);
-//                                combo.setViewable(true);
-//                            }
-//                        }
-//                    });
+                    // preselect if single option:                    
+                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ServiceItemType>>() {
+                        @Override
+                        public void onOptionsChange(OptionsChangeEvent<List<ServiceItemType>> event) {
+                            if (event.getOptions().size() == 1) {
+                                if (combo.getValue() == null) {
+                                    combo.setValue(event.getOptions().get(0), false);
+                                }
+                                combo.setEditable(false);
+                            }
+                        }
+                    });
                 }
             }
 

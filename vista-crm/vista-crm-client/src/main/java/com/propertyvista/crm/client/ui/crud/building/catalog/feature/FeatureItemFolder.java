@@ -22,6 +22,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.events.OptionsChangeEvent;
+import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -114,16 +116,18 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                 if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
                     final CEntityComboBox<FeatureItemType> combo = (CEntityComboBox<FeatureItemType>) comp;
                     combo.addCriterion(PropertyCriterion.eq(combo.proto().featureType(), parent.getValue().featureType()));
-// TODO : preselect if single option:                    
-//                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ProductItemType>>() {
-//                        @Override
-//                        public void onOptionsChange(OptionsChangeEvent<List<ProductItemType>> event) {
-//                            if (event.getOptions().size() == 1) {
-//                                combo.setValue(event.getOptions().get(0), false);
-//                                combo.setViewable(true);
-//                            }
-//                        }
-//                    });
+                    // preselect if single option:                    
+                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<FeatureItemType>>() {
+                        @Override
+                        public void onOptionsChange(OptionsChangeEvent<List<FeatureItemType>> event) {
+                            if (event.getOptions().size() == 1) {
+                                if (combo.getValue() == null) {
+                                    combo.setValue(event.getOptions().get(0), false);
+                                }
+                                combo.setEditable(false);
+                            }
+                        }
+                    });
                 }
             }
             return comp;
@@ -157,18 +161,22 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
         this.addValueValidator(new EditableValueValidator<List<ProductItem>>() {
             @Override
             public ValidationError isValid(CComponent<List<ProductItem>, ?> component, List<ProductItem> value) {
-                if (value != null && parent.getValue().version().mandatory().isBooleanTrue()) {
-                    boolean defaultFound = false;
-                    for (ProductItem item : value) {
-                        if (item.isDefault().isBooleanTrue()) {
-                            defaultFound = true;
-                            break;
+                if (value != null && !value.isEmpty()) {
+                    CComponent<Boolean, ?> comp = parent.get(parent.proto().version().mandatory());
+                    if (comp != null && comp.getValue() != null && comp.getValue()) {
+                        boolean defaultFound = false;
+                        for (ProductItem item : value) {
+                            if (item.isDefault().isBooleanTrue()) {
+                                defaultFound = true;
+                                break;
+                            }
+                        }
+                        if (!defaultFound) {
+                            return new ValidationError(component, i18n.tr("Default item should be selected"));
                         }
                     }
-                    if (!defaultFound) {
-                        return new ValidationError(component, i18n.tr("Default item should be selected"));
-                    }
                 }
+
                 return null;
             }
         });
