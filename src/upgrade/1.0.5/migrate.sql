@@ -877,6 +877,7 @@ BEGIN
                                 'ADD COLUMN next_term BIGINT,'||
                                 'ADD COLUMN previous_term BIGINT,'||
                                 'ADD COLUMN termination_lease_to DATE';
+                                
 
 
 
@@ -1030,6 +1031,7 @@ BEGIN
         'ADD CONSTRAINT lease_previous_term_fk FOREIGN KEY(previous_term) REFERENCES '||v_schema_name||'.lease_term(id)';
 
         EXECUTE 'ALTER TABLE '||v_schema_name||'.lease DROP COLUMN actual_lease_to';
+        EXECUTE 'ALTER TABLE '||v_schema_name||'.lease RENAME COLUMN move_out_notice  TO move_out_submission_date';
 
         -- lease_participant
 
