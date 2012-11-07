@@ -41,6 +41,11 @@ public class VistaServerSideConfigurationProdCustomersDemo extends VistaServerSi
     }
 
     @Override
+    public String openIdProviderDomain() {
+        return "static.propertyvista.com";
+    }
+
+    @Override
     public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
         return "https://demo.propertyvista.com/";
     }
