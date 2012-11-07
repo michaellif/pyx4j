@@ -156,7 +156,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
 
         if ((pmcNamespace == null) || (VistaNamespace.noNamespace.equals(pmcNamespace))) {
             log.warn("accessing host {}, path {}", host, httprequest.getServletPath());
-            if (httprequest.getServletPath().endsWith("robots.txt")) {
+            if (httprequest.getServletPath().endsWith("robots.txt") || httprequest.getServletPath().endsWith("favicon.ico")) {
                 return VistaNamespace.noNamespace;
             } else {
                 throw new SiteWasNotActivatedUserRuntimeException(i18n.tr("This property management site was not activated yet"));

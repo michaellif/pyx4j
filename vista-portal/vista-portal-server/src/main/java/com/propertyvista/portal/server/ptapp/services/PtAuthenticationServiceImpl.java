@@ -84,7 +84,7 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
 
         if (applications.size() == 0) {
             if (ApplicationMode.isDevelopment()) {
-                throw new Error("Application not found for user" + user.getStringView());
+                throw new Error("Application not found for user " + user.getStringView());
             } else {
                 throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
             }

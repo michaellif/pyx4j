@@ -163,9 +163,11 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             LeaseGenerator.attachDocumentData(lease);
 
             //Set users that can login using UI
+            boolean mustHaveApplication = false;
             if (i < DemoData.UserType.PTENANT.getDefaultMax()) {
                 LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().get(0);
                 String email = DemoData.UserType.PTENANT.getEmail(i + 1);
+                mustHaveApplication = true;
                 mainTenant.leaseParticipant().customer().person().email().setValue(email);
 
                 // Make one (Third) Customer with Two Applications
@@ -195,7 +197,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 tenant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
                 Persistence.service().persist(tenant.leaseParticipant().customer().personScreening());
             }
-            if (RandomUtil.randomBoolean()) {
+            if (mustHaveApplication || RandomUtil.randomBoolean()) {
                 ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease);
             }
             Persistence.service().setTransactionSystemTime(null);
