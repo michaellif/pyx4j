@@ -1032,12 +1032,14 @@ public class LeaseFacadeImpl implements LeaseFacade {
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), unit.building().productCatalog()));
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().serviceType(), leaseType));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());
+
         Service service = Persistence.service().retrieve(serviceCriteria);
         if (service != null) {
             EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);
             productCriteria.add(PropertyCriterion.eq(productCriteria.proto().type(), ServiceItemType.class));
             productCriteria.add(PropertyCriterion.eq(productCriteria.proto().product(), service.version()));
             productCriteria.add(PropertyCriterion.eq(productCriteria.proto().element(), unit));
+
             ProductItem serviceItem = Persistence.service().retrieve(productCriteria);
             if (serviceItem != null) {
                 setService(leaseTerm, serviceItem);
