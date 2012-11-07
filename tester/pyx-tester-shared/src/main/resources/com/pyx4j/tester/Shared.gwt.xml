@@ -5,8 +5,10 @@
     <inherits name='com.google.gwt.user.User'/>
 
     <inherits name='com.pyx4j.entity.EntityShared'/>
-
+    <inherits name='com.pyx4j.entity.test.EntitySharedTests'/>
+    
     <source path="domain"/>
     <source path="shared"/>
+
 
 </module>
