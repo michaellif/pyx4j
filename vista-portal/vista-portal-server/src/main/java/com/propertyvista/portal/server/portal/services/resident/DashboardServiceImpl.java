@@ -16,11 +16,14 @@ package com.propertyvista.portal.server.portal.services.resident;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.tenant.TenantInsuranceFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -46,6 +49,10 @@ public class DashboardServiceImpl implements DashboardService {
 
         dashboard.billSummary().set(BillSummaryServiceImpl.retrieve());
         dashboard.maintanances().addAll(MaintenanceServiceImpl.listOpenIssues());
+
+        dashboard.tenantInsuranceStatus().set(
+                ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
+                        TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
 
         callback.onSuccess(dashboard);
     }

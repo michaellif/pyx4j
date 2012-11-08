@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -41,6 +42,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.themes.TenantDashboardTheme;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.statusviewers.TenantInsuranceStatusViewer;
 import com.propertyvista.portal.domain.dto.BillSummaryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
@@ -92,9 +94,11 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
 
         leftPanel.setH1(++row, 0, 1, i18n.tr("GENERAL INFO"));
         leftPanel.setWidget(++row, 0, inject(proto().general(), new GeneralInfoViewer()));
+        get(proto().general()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
 
         leftPanel.setH1(++row, 0, 1, i18n.tr("BILL SUMMARY"));
         leftPanel.setWidget(++row, 0, inject(proto().billSummary(), new BillSummaryViewer()));
+        get(proto().billSummary()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
 
         // =============================================================================================
 
@@ -118,6 +122,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
         });
         rightPanel.setH1(++row, 0, 1, i18n.tr("MAINTENANCE"), newTicket);
         rightPanel.setWidget(++row, 0, inject(proto().maintanances(), new MaintananceViewer()));
+        get(proto().maintanances()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
 
         if (false) {
             Anchor newReservations = new Anchor(i18n.tr("Order Service"));
@@ -125,6 +130,9 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             rightPanel.setWidget(++row, 0, inject(proto().reservations(), new ReservationsViewer()));
         }
 
+        rightPanel.setH1(++row, 0, 1, i18n.tr("TENANT INSURANCE"));
+        rightPanel.setWidget(++row, 0, inject(proto().tenantInsuranceStatus(), new TenantInsuranceStatusViewer()));
+        get(proto().tenantInsuranceStatus()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
         return container;
     }
 
@@ -189,7 +197,6 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             content.setHTML(++row, 0, value.floorplanName().getValue());
             content.setHTML(++row, 0, value.tenantAddress().getValue());
 
-            content.getElement().getStyle().setMargin(1, Unit.EM);
             return content;
         }
     }
@@ -289,7 +296,9 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             }
 
             container.setWidth("100%");
-            return container;
+            ScrollPanel scrollPanel = new ScrollPanel(container);
+            scrollPanel.setSize("100%", "100%");
+            return scrollPanel;
         }
 
         private String issueDetail(IssueClassification ic) {

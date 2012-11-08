@@ -99,9 +99,21 @@ public class PortalSiteMap implements SiteMap {
             }
         }
 
-        @PlaceProperties(caption = "My Insurance")
-        @NavigationItem(navigLabel = "My Insurance")
+        @PlaceProperties(caption = "My Mockup Insurance")
+        @NavigationItem(navigLabel = "My Mockup Insurance")
         public static class InsuranceMockup extends AppPlace {
+
+        }
+
+        @PlaceProperties(caption = "Tenant Insurance")
+        @NavigationItem(navigLabel = "Tenant Insurance")
+        public static class TenantInsurance extends AppPlace {
+
+            @PlaceProperties(caption = "Provide Tenant Insurance")
+            @NavigationItem(navigLabel = "Provide Tenant Insurance")
+            public static class ProvideTenantInsurance extends AppPlace {
+
+            }
 
         }
 

@@ -11,24 +11,23 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard;
+package com.propertyvista.portal.ptapp.client.activity.steps.welcomewizardmockup;
 
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.moveinwizardmockup.MoveInScheduleDTO;
+import com.propertyvista.domain.moveinwizardmockup.InsuranceDTO;
 import com.propertyvista.portal.ptapp.client.activity.steps.WizardStepActivity;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.moveinschedule.MoveInSchedulePresenter;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.moveinschedule.MoveInScheduleView;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.insurance.InsurancePresenter;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.insurance.InsuranceView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.MoveInScheduleService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.InsuranceService;
 
-public class MoveInScheduleActivity extends WizardStepActivity<MoveInScheduleDTO, MoveInSchedulePresenter> {
+public class InsuranceActivity extends WizardStepActivity<InsuranceDTO, InsurancePresenter> implements InsurancePresenter {
 
-    public MoveInScheduleActivity(AppPlace place) {
-        super(WizardStepsViewFactory.instance(MoveInScheduleView.class), MoveInScheduleDTO.class, GWT
-                .<MoveInScheduleService> create(MoveInScheduleService.class));
+    public InsuranceActivity(AppPlace place) {
+        super(WizardStepsViewFactory.instance(InsuranceView.class), InsuranceDTO.class, GWT.<InsuranceService> create(InsuranceService.class));
         withPlace(place);
     }
 

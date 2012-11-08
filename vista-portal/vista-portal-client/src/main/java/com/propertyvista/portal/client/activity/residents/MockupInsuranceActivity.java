@@ -25,13 +25,13 @@ import com.propertyvista.portal.client.ui.residents.insurancemockup.InsuranceVie
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.services.InsuranceService;
 
-public class InsuranceActivity extends AbstractActivity implements InsuranceView.Presenter {
+public class MockupInsuranceActivity extends AbstractActivity implements InsuranceView.Presenter {
 
     private final InsuranceView view;
 
     private final InsuranceService service;
 
-    public InsuranceActivity() {
+    public MockupInsuranceActivity() {
         service = GWT.<InsuranceService> create(InsuranceService.class);
         view = PortalViewFactory.instance(InsuranceView.class);
     }

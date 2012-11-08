@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard;
+package com.propertyvista.portal.ptapp.client.activity.steps.welcomewizardmockup;
 
 import com.google.gwt.core.client.GWT;
 

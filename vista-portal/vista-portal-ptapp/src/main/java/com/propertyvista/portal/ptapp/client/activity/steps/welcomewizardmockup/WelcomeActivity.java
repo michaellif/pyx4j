@@ -7,38 +7,39 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 17, 2012
+ * Created on May 1, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard;
+package com.propertyvista.portal.ptapp.client.activity.steps.welcomewizardmockup;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.completion.CompletionView;
-import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.welcome.WelcomeView;
+import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
-public class CompletionActivity extends AbstractActivity implements CompletionView.Presenter {
+public class WelcomeActivity extends AbstractActivity implements WelcomeView.Presenter {
 
-    private final CompletionView view;
+    private final WelcomeView view;
 
-    public CompletionActivity(AppPlace place) {
-        this.view = WizardStepsViewFactory.instance(CompletionView.class);
-        withPlace(place);
+    public WelcomeActivity() {
+        this.view = PtAppViewFactory.instance(WelcomeView.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        view.setPresenter(this);
     }
 
-    public Activity withPlace(AppPlace place) {
-        return this;
+    @Override
+    public void startTheWizard() {
+        AppSite.getPlaceController().goTo(new PtSiteMap.WelcomeWizard.ReviewLease());
     }
 
 }

@@ -28,7 +28,7 @@ import com.propertyvista.portal.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.client.activity.login.PasswordResetRequestActivity;
 import com.propertyvista.portal.client.activity.login.RedirectToLoginPageActivity;
 import com.propertyvista.portal.client.activity.residents.DashboardActivity;
-import com.propertyvista.portal.client.activity.residents.InsuranceActivity;
+import com.propertyvista.portal.client.activity.residents.MockupInsuranceActivity;
 import com.propertyvista.portal.client.activity.residents.PaymentActivity;
 import com.propertyvista.portal.client.activity.residents.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.residents.billing.BillSummaryActivity;
@@ -87,8 +87,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                 } else if (place instanceof Residents.BillingHistory.ViewBill) {
                     activity = new ViewBillActivity(place);
 
-                } else if (VistaTODO.enableWelcomeWizardDemoMode & (place instanceof PortalSiteMap.Residents.InsuranceMockup)) {
-                    activity = new InsuranceActivity();
+                } else if (VistaTODO.enableWelcomeWizardDemoMode & (place instanceof PortalSiteMap.Residents.TenantInsurance)) {
+                    activity = new MockupInsuranceActivity();
 
                     // TODO not sure if these activities belong here 
                 } else if (place instanceof PortalSiteMap.Login) {

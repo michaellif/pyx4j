@@ -21,7 +21,7 @@ import com.pyx4j.commons.css.ThemeColor;
 public class TenantDashboardTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        TenantDashboard, TenantDashboardLeft, TenantDashboardRight, TenantDashboardTableHeader, TenantDashboardTableRow;
+        TenantDashboard, TenantDashboardLeft, TenantDashboardRight, TenantDashboardTableHeader, TenantDashboardTableRow, TenantDashboardSection;
     }
 
     public TenantDashboardTheme() {
@@ -68,5 +68,10 @@ public class TenantDashboardTheme extends Theme {
 //        style.addProperty("cursor", "pointer");
 //        addStyle(style);
 
+        style = new Style(".", StyleName.TenantDashboardSection);
+        style.addProperty("height", "15em");
+        style.addProperty("padding-left", "0.5em");
+        style.addProperty("padding-right", "0.5em");
+        addStyle(style);
     }
 }

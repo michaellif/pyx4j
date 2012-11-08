@@ -36,6 +36,7 @@ import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.statusviewers.NoTenantInsuranceStatusViewer;
 
 public class PortalTheme extends VistaTheme {
 
@@ -165,6 +166,8 @@ public class PortalTheme extends VistaTheme {
         }
 
         addTheme(new BillingTheme());
+
+        initTenantInsuranceStyles();
     }
 
     protected void initSiteViewStyles() {
@@ -316,6 +319,43 @@ public class PortalTheme extends VistaTheme {
                 addStyle(style);
             }
         }
+    }
+
+    private void initTenantInsuranceStyles() {
+        {
+            Style style = new Style("." + NoTenantInsuranceStatusViewer.STYLE_PREFIX + NoTenantInsuranceStatusViewer.StyleSuffix.WarningText);
+            style.addProperty("color", "#AA0000");
+            style.addProperty("width", "100%");
+            style.addProperty("text-align", "center");
+            style.addProperty("font-size", "16px");
+            style.addProperty("font-weight", "bold");
+            style.addProperty("font-style", "normal");
+            style.addProperty("padding-top", "0.5em");
+            addStyle(style);
+        }
+        {
+            Style style = new Style("." + NoTenantInsuranceStatusViewer.STYLE_PREFIX + NoTenantInsuranceStatusViewer.StyleSuffix.ExplanationText);
+            style.addProperty("width", "100%");
+            style.addProperty("text-align", "justify");
+            style.addProperty("font-weight", "normal");
+            style.addProperty("font-style", "normal");
+            style.addProperty("padding-left", "0em");
+            style.addProperty("padding-right", "1em");
+            style.addProperty("padding-top", "0.5em");
+            style.addProperty("padding-bottom", "2em");
+            addStyle(style);
+        }
+        {
+            Style style = new Style("." + NoTenantInsuranceStatusViewer.STYLE_PREFIX + NoTenantInsuranceStatusViewer.StyleSuffix.GoToInsuranceScreenAnchor);
+            style.addProperty("display", "block");
+            style.addProperty("margin-left", "auto");
+            style.addProperty("margin-right", "auto");
+            style.addProperty("width", "100%");
+            style.addProperty("text-align", "center");
+            style.addProperty("padding-top", "0.5em");
+            addStyle(style);
+        }
+
     }
 
 }

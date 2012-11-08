@@ -36,10 +36,10 @@ import com.propertyvista.portal.ptapp.client.activity.steps.InfoActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.PaymentActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.SummaryActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.TenantsActivity;
-import com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard.InsuranceActivity;
-import com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard.LeaseReviewActivity;
-import com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard.MoveInScheduleActivity;
-import com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard.WelcomeActivity;
+import com.propertyvista.portal.ptapp.client.activity.steps.welcomewizardmockup.InsuranceActivity;
+import com.propertyvista.portal.ptapp.client.activity.steps.welcomewizardmockup.LeaseReviewActivity;
+import com.propertyvista.portal.ptapp.client.activity.steps.welcomewizardmockup.MoveInScheduleActivity;
+import com.propertyvista.portal.ptapp.client.activity.steps.welcomewizardmockup.WelcomeActivity;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class ContentActivityMapper implements ActivityMapper {
@@ -94,7 +94,7 @@ public class ContentActivityMapper implements ActivityMapper {
             } else if (place instanceof PtSiteMap.WelcomeWizard.Insurance) {
                 return new InsuranceActivity(appPlace);
             } else if (place instanceof PtSiteMap.WelcomeWizard.Completion) {
-                return new com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard.CompletionActivity(appPlace);
+                return new com.propertyvista.portal.ptapp.client.activity.steps.welcomewizardmockup.CompletionActivity(appPlace);
             } else if (place instanceof PtSiteMap.WelcomeWizard.WelcomePlace) {
                 return new WelcomeActivity();
             }

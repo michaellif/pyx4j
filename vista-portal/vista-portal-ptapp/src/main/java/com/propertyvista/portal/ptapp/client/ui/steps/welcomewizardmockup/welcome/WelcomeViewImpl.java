@@ -36,8 +36,8 @@ import com.propertyvista.common.client.ui.components.login.AbstractLoginViewImpl
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
-import com.propertyvista.portal.ptapp.client.resources.welcomewizard.WelcomeWizardImages;
-import com.propertyvista.portal.ptapp.client.resources.welcomewizard.WelcomeWizardResources;
+import com.propertyvista.portal.ptapp.client.resources.welcomewizardmockup.WelcomeWizardImages;
+import com.propertyvista.portal.ptapp.client.resources.welcomewizardmockup.WelcomeWizardResources;
 
 public class WelcomeViewImpl extends AbstractLoginViewImpl {
 
