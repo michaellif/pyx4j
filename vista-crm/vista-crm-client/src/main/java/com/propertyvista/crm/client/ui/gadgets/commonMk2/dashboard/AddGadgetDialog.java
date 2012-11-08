@@ -21,7 +21,6 @@ import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
@@ -47,7 +46,6 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
@@ -109,8 +107,6 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
 
             private final SimplePanel componentPanel;
 
-            private final Button addButton;
-
             public GadgetDescriptorDecorator() {
                 FlowPanel decoratorPanel = new FlowPanel();
                 decoratorPanel.setWidth("100%");
@@ -121,14 +117,6 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
                 componentPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
                 decoratorPanel.add(componentPanel);
 
-                SimplePanel buttonsPanel = new SimplePanel();
-
-                addButton = new Button(i18n.tr("Add"));
-                addButton.getElement().getStyle().setFloat(Float.RIGHT);
-                buttonsPanel.setWidget(addButton);
-
-                decoratorPanel.add(buttonsPanel);
-
                 initWidget(decoratorPanel);
             }
 
@@ -136,14 +124,6 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
             public void setComponent(final CEntityFolderItem<AddGadgetGadgetDescriptor> folderItem) {
                 if (folderItem != null) {
                     componentPanel.setWidget(folderItem.createContent());
-                    addButton.addClickHandler(new ClickHandler() {
-                        @Override
-                        public void onClick(ClickEvent event) {
-                            AddGadgetDialog.this.addGadget((GadgetMetadata) EntityFactory.getEntityPrototype(folderItem.getValue().gadgetMetadataProto()
-                                    .getInstanceValueClass()));
-                        }
-                    });
-
                 } else {
                     componentPanel.clear();
                 }
@@ -183,10 +163,30 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
                 contentPanel.add(inject(proto().name()));
                 contentPanel.add(inject(proto().description()));
 
+                ClickHandler onAddGadgetRequested = new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        AddGadgetDialog.this.addGadget((GadgetMetadata) EntityFactory.getEntityPrototype(GadgetDescriptorForm.this.getValue()
+                                .gadgetMetadataProto().getInstanceValueClass()));
+                    }
+                };
                 contentPanel.addStyleName(ADD_GADGET_DIALOG_STYLE + StyleSuffix.GadgetDescriptionBox);
+
                 get(proto().name()).asWidget().addStyleName(ADD_GADGET_DIALOG_STYLE + StyleSuffix.GadgetNameLabel);
+                get(proto().name()).asWidget().addDomHandler(onAddGadgetRequested, ClickEvent.getType());
+
                 get(proto().description()).asWidget().addStyleName(ADD_GADGET_DIALOG_STYLE + StyleSuffix.GadgetDescriptionText);
+                get(proto().description()).asWidget().addDomHandler(onAddGadgetRequested, ClickEvent.getType());
+
                 return contentPanel;
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+                String tooltip = i18n.tr("Click to add \"{0}\" gadget", getValue().name().getValue());
+                get(proto().name()).asWidget().setTitle(tooltip);
+                get(proto().description()).asWidget().setTitle(tooltip);
             }
         }
 

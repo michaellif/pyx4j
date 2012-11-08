@@ -493,6 +493,7 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style("." + prefix + AddGadgetDialog.StyleSuffix.GadgetDescriptionBox);
         style.addProperty("margin-bottom", "0.2em");
+        style.addProperty("margin-bottom", "0.2em");
         addStyle(style);
 
         style = new Style("." + prefix + AddGadgetDialog.StyleSuffix.GadgetDescriptionDecorator);
@@ -503,6 +504,7 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style("." + prefix + AddGadgetDialog.StyleSuffix.GadgetDescriptionDecorator + ":hover");
         style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.8);
+        style.addProperty("cursor", "pointer");
         addStyle(style);
 
         style = new Style("." + prefix + AddGadgetDialog.StyleSuffix.GadgetNameLabel);
