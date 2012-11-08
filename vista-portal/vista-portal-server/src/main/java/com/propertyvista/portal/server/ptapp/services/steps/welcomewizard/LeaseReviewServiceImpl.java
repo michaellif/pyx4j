@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.moveinwizardmockup.LeaseReviewDTO;
 import com.propertyvista.domain.tenant.ptapp.IAgree;
 import com.propertyvista.dto.LegalTermsDescriptorDTO;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.LeaseReviewService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.LeaseReviewService;
 
 public class LeaseReviewServiceImpl implements LeaseReviewService {
 

@@ -49,8 +49,8 @@ import com.propertyvista.portal.ptapp.client.ui.TopRightActionsView;
 import com.propertyvista.portal.ptapp.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.UserMessageView;
 import com.propertyvista.portal.ptapp.client.ui.UserMessageViewImpl;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.welcome.WelcomeView;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.welcome.WelcomeViewImpl;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.welcome.WelcomeView;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.welcome.WelcomeViewImpl;
 
 public class PtAppViewFactory extends ViewFactoryBase {
 

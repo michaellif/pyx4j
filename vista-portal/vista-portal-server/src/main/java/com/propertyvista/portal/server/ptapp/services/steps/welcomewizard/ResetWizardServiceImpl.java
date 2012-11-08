@@ -21,7 +21,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep.Status;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.ResetWizardService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.ResetWizardService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class ResetWizardServiceImpl implements ResetWizardService {

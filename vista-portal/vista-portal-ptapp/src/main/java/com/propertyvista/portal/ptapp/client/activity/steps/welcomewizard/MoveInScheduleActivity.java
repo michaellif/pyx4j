@@ -19,10 +19,10 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.moveinwizardmockup.MoveInScheduleDTO;
 import com.propertyvista.portal.ptapp.client.activity.steps.WizardStepActivity;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.moveinschedule.MoveInSchedulePresenter;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.moveinschedule.MoveInScheduleView;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.moveinschedule.MoveInSchedulePresenter;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.moveinschedule.MoveInScheduleView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.MoveInScheduleService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.MoveInScheduleService;
 
 public class MoveInScheduleActivity extends WizardStepActivity<MoveInScheduleDTO, MoveInSchedulePresenter> {
 

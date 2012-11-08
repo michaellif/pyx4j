@@ -70,10 +70,10 @@ import com.propertyvista.portal.rpc.ptapp.services.steps.SummaryService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantFinancialService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantInfoService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.InsuranceService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.LeaseReviewService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.MoveInScheduleService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.ResetWizardService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.InsuranceService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.LeaseReviewService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.MoveInScheduleService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.ResetWizardService;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
 
 public class VistaPortalAccessControlList extends ServletContainerAclBuilder {

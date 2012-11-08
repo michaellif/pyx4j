@@ -87,7 +87,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                 } else if (place instanceof Residents.BillingHistory.ViewBill) {
                     activity = new ViewBillActivity(place);
 
-                } else if (VistaTODO.enableWelcomeWizardDemoMode & (place instanceof PortalSiteMap.Residents.Insurance)) {
+                } else if (VistaTODO.enableWelcomeWizardDemoMode & (place instanceof PortalSiteMap.Residents.InsuranceMockup)) {
                     activity = new InsuranceActivity();
 
                     // TODO not sure if these activities belong here 

@@ -60,7 +60,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
         items.add(new Residents.PersonalInformation());
 
         if (VistaTODO.enableWelcomeWizardDemoMode && !VistaTODO.removedForProduction) { // this is just mock-up!..
-            items.add(new Residents.Insurance());
+            items.add(new Residents.InsuranceMockup());
         }
         if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
             items.add(new PortalSiteMap.LeaseContextSelection());

@@ -33,12 +33,12 @@ import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryView;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsView;
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsViewImpl;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.InsuranceView;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.InsuranceViewImpl;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.moveinschedule.MoveInScheduleView;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.moveinschedule.MoveInScheduleViewImpl;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseReviewView;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseReviewViewImpl;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.insurance.InsuranceView;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.insurance.InsuranceViewImpl;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.moveinschedule.MoveInScheduleView;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.moveinschedule.MoveInScheduleViewImpl;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.reviewlease.LeaseReviewView;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.reviewlease.LeaseReviewViewImpl;
 
 public class WizardStepsViewFactory extends ViewFactoryBase {
 
@@ -68,8 +68,8 @@ public class WizardStepsViewFactory extends ViewFactoryBase {
                     map.put(type, new MoveInScheduleViewImpl());
                 } else if (InsuranceView.class.equals(type)) {
                     map.put(type, new InsuranceViewImpl());
-                } else if (com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.completion.CompletionView.class.equals(type)) {
-                    map.put(type, new com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.completion.CompletionViewImpl());
+                } else if (com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.completion.CompletionView.class.equals(type)) {
+                    map.put(type, new com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.completion.CompletionViewImpl());
                 }
             }
 

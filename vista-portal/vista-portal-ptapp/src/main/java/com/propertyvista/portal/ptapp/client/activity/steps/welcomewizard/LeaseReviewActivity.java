@@ -19,10 +19,10 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.moveinwizardmockup.LeaseReviewDTO;
 import com.propertyvista.portal.ptapp.client.activity.steps.WizardStepActivity;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseReviewPresenter;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseReviewView;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.reviewlease.LeaseReviewPresenter;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.reviewlease.LeaseReviewView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.LeaseReviewService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.LeaseReviewService;
 
 public class LeaseReviewActivity extends WizardStepActivity<LeaseReviewDTO, LeaseReviewPresenter> implements LeaseReviewPresenter {
 

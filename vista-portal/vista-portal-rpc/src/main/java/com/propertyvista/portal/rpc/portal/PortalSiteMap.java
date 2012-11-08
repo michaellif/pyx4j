@@ -101,7 +101,7 @@ public class PortalSiteMap implements SiteMap {
 
         @PlaceProperties(caption = "My Insurance")
         @NavigationItem(navigLabel = "My Insurance")
-        public static class Insurance extends AppPlace {
+        public static class InsuranceMockup extends AppPlace {
 
         }
 

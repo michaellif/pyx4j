@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.welcome.WelcomeView;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.welcome.WelcomeView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 

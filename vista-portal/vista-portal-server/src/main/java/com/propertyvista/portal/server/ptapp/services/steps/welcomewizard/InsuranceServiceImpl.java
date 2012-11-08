@@ -32,7 +32,7 @@ import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.domain.tenant.ptapp.IAgree;
 import com.propertyvista.dto.LegalTermsDescriptorDTO;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.InsuranceService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.InsuranceService;
 
 public class InsuranceServiceImpl implements InsuranceService {
 

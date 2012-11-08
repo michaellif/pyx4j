@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.moveinwizardmockup.MoveInScheduleDTO;
 import com.propertyvista.domain.moveinwizardmockup.TimeSegmentDTO;
 import com.propertyvista.domain.moveinwizardmockup.TimeSegmentDTO.Status;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.MoveInScheduleService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.MoveInScheduleService;
 
 public class MoveInScheduleServiceImpl implements MoveInScheduleService {
 

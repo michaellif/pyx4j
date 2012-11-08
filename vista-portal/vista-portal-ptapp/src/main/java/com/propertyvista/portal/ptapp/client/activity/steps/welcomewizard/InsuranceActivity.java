@@ -19,10 +19,10 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.moveinwizardmockup.InsuranceDTO;
 import com.propertyvista.portal.ptapp.client.activity.steps.WizardStepActivity;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.InsurancePresenter;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.InsuranceView;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.insurance.InsurancePresenter;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.insurance.InsuranceView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.InsuranceService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.InsuranceService;
 
 public class InsuranceActivity extends WizardStepActivity<InsuranceDTO, InsurancePresenter> implements InsurancePresenter {
 
