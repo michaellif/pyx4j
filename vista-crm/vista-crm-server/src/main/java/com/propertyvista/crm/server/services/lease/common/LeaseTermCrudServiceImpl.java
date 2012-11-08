@@ -137,7 +137,10 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         }
         term = ServerSideFactory.create(LeaseFacade.class).setUnit(term, unitId);
         currentValue = createDTO(term);
+
         loadDetachedProducts(currentValue);
+
+        // fill runtime editor data:
         fillServiceEligibilityData(currentValue);
         fillserviceItems(currentValue);
 
@@ -154,8 +157,13 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         }
         term = ServerSideFactory.create(LeaseFacade.class).setService(term, serviceId);
         currentValue = createDTO(term);
+
         loadDetachedProducts(currentValue);
+
+        // fill runtime editor data:
         fillServiceEligibilityData(currentValue);
+        fillserviceItems(currentValue);
+
         callback.onSuccess(currentValue);
     }
 
