@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.building;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -35,6 +34,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCollectionCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
@@ -151,7 +151,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                             CComponent<?, ?> comp = get(proto().info().structureBuildYear());
                             if (comp instanceof CMonthYearPicker) {
                                 int rangeStart = 1900 + result.yearRangeStart().getValue().getYear();
-                                ((CMonthYearPicker) comp).setYearRange(new Range(rangeStart, (1900 + new Date().getYear())
+                                ((CMonthYearPicker) comp).setYearRange(new Range(rangeStart, (1900 + ClientContext.getServerDate().getYear())
                                         + result.yearRangeFutureSpan().getValue() - rangeStart));
                             }
                         }
