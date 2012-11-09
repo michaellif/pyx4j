@@ -65,6 +65,7 @@ public class VistaUpgrade {
         TaskRunner.runAutonomousTransation(pmc.namespace().getValue(), new Callable<Void>() {
             @Override
             public Void call() {
+                Persistence.service().startBackgroundProcessTransaction();
                 log.info("Execute upgrade Step #{}", step);
                 Lifecycle.startElevatedUserContext();
                 procedure.runUpgradeStep(step);

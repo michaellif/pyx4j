@@ -14,7 +14,9 @@
 package com.propertyvista.admin.server.upgrade.u_1_0_5;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.admin.server.upgrade.UpgradeProcedure;
@@ -49,9 +51,15 @@ public class UpgradeProcedure105 implements UpgradeProcedure {
 
     private void updateLeaseDates() {
         EntityQueryCriteria<Lease> criteria = new EntityQueryCriteria<Lease>(Lease.class);
-        for (Lease lease : Persistence.service().query(criteria)) {
-            ServerSideFactory.create(LeaseFacade.class).updateLeaseDates(lease);
-            Persistence.service().merge(lease);
+        ICursorIterator<Lease> cursor = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        try {
+            while (cursor.hasNext()) {
+                Lease lease = cursor.next();
+                ServerSideFactory.create(LeaseFacade.class).updateLeaseDates(lease);
+                Persistence.service().merge(lease);
+            }
+        } finally {
+            cursor.completeRetrieval();
         }
     }
 }
