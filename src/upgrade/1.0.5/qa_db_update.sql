@@ -48,7 +48,7 @@ SET check_function_bodies = 'off';
                 merchant_terminal_id = regexp_replace(substring(merchant_terminal_id,1,6),'[A-Z0-9]','X','g')||id::text ;
                 
         UPDATE  pad_file
-        SET     status = 'Error'
+        SET     status = 'SendError'
         WHERE   status = 'Creating';
                         
  $$

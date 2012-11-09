@@ -530,6 +530,11 @@ BEGIN
         **/
 
         EXECUTE 'UPDATE '||v_schema_name||'.lease_v '
+        ||'     SET     from_date = current_date '
+        ||'     WHERE   (status != ''Created'' AND status != ''Application'') '
+        ||'     AND     from_date IS NULL ';
+
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_v '
         ||'     SET     status = ''ExistingLease'' '
         ||'     WHERE   status = ''Created'' ';
 
@@ -966,6 +971,8 @@ BEGIN
         'FROM '||v_schema_name||'.lease_v a '||
         'JOIN '||v_schema_name||'.lease_term b ON (a.holder = b.lease) '||
         'ORDER BY a.holder) ';
+        
+       
 
         EXECUTE 'CREATE INDEX lease_term_v_holder_from_date_to_date_idx ON '||v_schema_name||'.lease_term_v USING btree (holder, from_date, to_date)';
 
