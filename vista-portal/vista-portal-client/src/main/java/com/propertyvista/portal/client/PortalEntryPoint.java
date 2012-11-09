@@ -37,6 +37,7 @@ public class PortalEntryPoint implements EntryPoint {
         } else {
             GoogleAPI.setGoogleAPIKey(VistaSettings.googleAPIKey);
         }
+        GoogleAPI.setGoogleAPIKey(""); // Maps V2 Hack - Google won't validate empty key
         GoogleAPI.setMapApiVersion(VistaSettings.googleMapApiVersion);
 
         if (RootPanel.get(APTLIST_MAP_INSERTION_ID) != null) {
