@@ -28,6 +28,7 @@ import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.BreadcrumbsBar;
@@ -224,7 +225,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
                 caption = caption + i18n.tr("Draft Version");
             } else {
                 setFinalizationVisible(false);
-                if (value.getPrimaryKey().isCurrent()) {
+                if (VersionedEntityUtils.isCurrent((IVersionedEntity<?>) value)) {
                     caption = caption + i18n.tr("Current Version");
                 } else {
                     caption = caption + i18n.tr("Version") + " #" + version.versionNumber().getStringView() + " - " + version.fromDate().getStringView();
