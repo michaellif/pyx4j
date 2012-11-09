@@ -19,8 +19,7 @@
 					var isActive = (self.children('input[type="radio"]').prop('checked') == 1);
 					self.toggleClass('typeselActive', isActive);
 					$('[name="'+self.attr('name')+'_input"]')
-						.css('display', isActive ? 'block' : 'none')
-						.find('input, select').attr('disabled', !isActive);
+						.css('display', isActive ? 'block' : 'none');
 				});
 			});
 		mySet.children('input[type="radio"]').each(function() {
