@@ -30,6 +30,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -42,9 +43,9 @@ public interface ProductItem extends IEntity {
     @NotNull
     @MemberColumn(notNull = true)
     @ReadOnly
-    @Detached
     @JoinColumn
     @ToString(index = 0)
+    @Detached(level = AttachLevel.ToStringMembers)
     Product.ProductV<?> product();
 
     @OrderColumn
