@@ -8,19 +8,19 @@
 
     <parent>
         <groupId>com.propertyvista</groupId>
-        <artifactId>vista-shared</artifactId>
+        <artifactId>vista-yardi</artifactId>
         <version>1.0.6-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-yardi</artifactId>
-    <name>vista-yardi</name>
+    <artifactId>vista-yardi-voyager</artifactId>
+    <name>vista-yardi-voyager</name>
 
     <dependencies>
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-yardi-wsdl</artifactId>
+            <artifactId>vista-yardi-voyager-wsdl</artifactId>
             <version>${project.version}</version>
         </dependency>
 

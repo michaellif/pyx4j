@@ -192,6 +192,7 @@
         <module>vista-dev</module>
         <module>vista-portal</module>
         <module>vista-shared</module>
+        <module>vista-yardi</module>
         <module>vista-admin</module>
         <module>vista-crm</module>
         <module>vista-paypad</module>

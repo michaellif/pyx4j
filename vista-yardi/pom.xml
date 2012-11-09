@@ -13,23 +13,14 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-shared</artifactId>
-    <name>vista-shared</name>
+    <artifactId>vista-yardi</artifactId>
+    <name>vista-yardi</name>
     <packaging>pom</packaging>
 
     <modules>
-        <module>vista-server-config</module>
-        <module>vista-domain</module>
-        <module>vista-svg-shared</module>
-        <module>vista-domain-srv</module>
-        <module>vista-server-common</module>
-        <module>vista-gwt-common</module>
-        <module>vista-callfire</module>
-        <module>vista-importer</module>
-        <module>vista-equifax-gen</module>
-        <module>vista-equifax</module>
-        <module>vista-payment</module>
-        <module>vista-integration</module>
+        <module>vista-yardi-voyager-wsdl</module>
+        <module>vista-yardi-voyager</module>
+        <module>vista-yardi-interface</module>
     </modules>
 
 </project>
