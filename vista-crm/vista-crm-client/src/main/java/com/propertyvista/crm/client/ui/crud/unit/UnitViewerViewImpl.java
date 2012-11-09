@@ -100,7 +100,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
             @Override
             public void execute() {
                 Lease lease = getForm().getValue().lease();
-                if (!lease.isNull() && lease.actualMoveOut().isNull()) {
+                if (!lease.isNull() && (!lease.completion().isNull() && lease.actualMoveOut().isNull())) {
                     MessageDialog.show(i18n.tr("Caution"), i18n.tr("This unit is not freed completely. Proceed with caution!"), Type.Warning, new OkOption() {
                         @Override
                         public boolean onClickOk() {
