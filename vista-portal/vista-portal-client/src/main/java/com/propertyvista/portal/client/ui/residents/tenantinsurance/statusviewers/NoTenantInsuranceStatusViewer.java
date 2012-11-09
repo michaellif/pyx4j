@@ -35,7 +35,7 @@ public class NoTenantInsuranceStatusViewer extends CEntityViewer<NoInsuranceTena
 
     public enum StyleSuffix implements IStyleName {
 
-        Panel, WarningText, ExplanationText, GoToInsuranceScreenAnchor;
+        Panel, ExplanationText;
 
     }
 
@@ -47,7 +47,7 @@ public class NoTenantInsuranceStatusViewer extends CEntityViewer<NoInsuranceTena
         contentPanel.addStyleName(STYLE_PREFIX + StyleSuffix.Panel.name());
 
         Label warningMessage = new Label(i18n.tr("According to our records you do not have Valid Tenant Insurance!"));
-        warningMessage.addStyleName(STYLE_PREFIX + StyleSuffix.WarningText.name());
+        warningMessage.addStyleName(TenantInsuranceStatusViewer.Styles.TenantInsuranceWarningText.name());
         contentPanel.add(warningMessage);
 
         Label explanationMessage = new Label(i18n.tr(//@formatter:off
@@ -63,7 +63,7 @@ public class NoTenantInsuranceStatusViewer extends CEntityViewer<NoInsuranceTena
                 AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.ProvideTenantInsurance());
             }
         });
-        goToInsuranceScreenAnchor.addStyleName(STYLE_PREFIX + StyleSuffix.GoToInsuranceScreenAnchor.name());
+        goToInsuranceScreenAnchor.addStyleName(TenantInsuranceStatusViewer.Styles.TenantInsuranceAnchor.name());
         contentPanel.add(goToInsuranceScreenAnchor);
 
         return contentPanel;

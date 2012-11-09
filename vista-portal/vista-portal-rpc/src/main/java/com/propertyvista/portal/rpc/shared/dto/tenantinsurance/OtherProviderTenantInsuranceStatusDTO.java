@@ -20,6 +20,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface OtherProviderTenantInsuranceStatusDTO extends TenantInsuranceStatusDTO {
 
-    IPrimitive<LogicalDate> policyExpirationDate();
+    IPrimitive<LogicalDate> expirationDate();
 
 }

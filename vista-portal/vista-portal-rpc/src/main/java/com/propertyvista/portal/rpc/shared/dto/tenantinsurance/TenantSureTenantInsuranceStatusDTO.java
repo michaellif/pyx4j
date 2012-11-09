@@ -16,15 +16,36 @@ package com.propertyvista.portal.rpc.shared.dto.tenantinsurance;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
 public interface TenantSureTenantInsuranceStatusDTO extends TenantInsuranceStatusDTO {
 
+    enum Error {
+
+        lastPaymentFailed,
+
+    }
+
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> monthlyPremiumPayment();
 
+    /**
+     * Can be <code>null</code> if the there's some problem with credit card, i.e. credit limit, cancelled or whatever, anything that caused last payment to
+     * fail.
+     */
     IPrimitive<LogicalDate> nextPaymentDate();
 
-    IPrimitive<String> errorMessage();
+    IPrimitive<Error> error();
+
+    /** if {@linkplain #error} is not <code>null</code> it will contain the date when insurance is about to expire */
+    IPrimitive<LogicalDate> expirationDate();
+
+    /**
+     * if {@linkplain #error} is not <code>null</code> it will contain the last date when a failed payment can be reprocessed, after that date the insurance
+     * will fail.
+     */
+    IPrimitive<LogicalDate> gracePeriodEndDate();
 }

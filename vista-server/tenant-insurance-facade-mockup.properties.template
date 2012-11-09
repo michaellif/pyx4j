@@ -1,0 +1,21 @@
+### provider of insurance could be one of (tenantSure, other, none)
+#provider tenantSure
+provider none
+#provider other
+
+liability 90000000
+
+### TenantSure status
+tenantSure.monthlyPremium 55.99
+
+#tenantSure.nextPaymentDate 2012-12-01
+
+### toggle these to enter show that payment has failed
+tenantSure.lastPaymentFailed
+tenantSure.insuranceExpirationDate 2012-12-01
+## optional (if tenant still has time to re-process the payment this will hold the last date)
+tenantSure.gracePeriodEndDate 2012-11-15
+
+
+### other provider status
+other.insuranceExpirationDate 2012-12-01

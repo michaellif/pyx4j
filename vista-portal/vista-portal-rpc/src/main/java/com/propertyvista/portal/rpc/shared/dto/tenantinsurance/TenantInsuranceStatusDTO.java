@@ -15,6 +15,7 @@ package com.propertyvista.portal.rpc.shared.dto.tenantinsurance;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -22,6 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface TenantInsuranceStatusDTO extends IEntity {
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> liabilityCoverage();
 
 }

@@ -37,6 +37,8 @@ import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.statusviewers.NoTenantInsuranceStatusViewer;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.statusviewers.TenantInsuranceStatusViewer;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.statusviewers.TenantSureInsuranceStatusViewer;
 
 public class PortalTheme extends VistaTheme {
 
@@ -323,7 +325,7 @@ public class PortalTheme extends VistaTheme {
 
     private void initTenantInsuranceStyles() {
         {
-            Style style = new Style("." + NoTenantInsuranceStatusViewer.STYLE_PREFIX + NoTenantInsuranceStatusViewer.StyleSuffix.WarningText);
+            Style style = new Style("." + TenantInsuranceStatusViewer.Styles.TenantInsuranceWarningText.name());
             style.addProperty("color", "#AA0000");
             style.addProperty("width", "100%");
             style.addProperty("text-align", "center");
@@ -333,6 +335,18 @@ public class PortalTheme extends VistaTheme {
             style.addProperty("padding-top", "0.5em");
             addStyle(style);
         }
+
+        {
+            Style style = new Style("." + TenantInsuranceStatusViewer.Styles.TenantInsuranceAnchor.name());
+            style.addProperty("display", "block");
+            style.addProperty("margin-left", "auto");
+            style.addProperty("margin-right", "auto");
+            style.addProperty("width", "100%");
+            style.addProperty("text-align", "center");
+            style.addProperty("padding-top", "0.5em");
+            addStyle(style);
+        }
+
         {
             Style style = new Style("." + NoTenantInsuranceStatusViewer.STYLE_PREFIX + NoTenantInsuranceStatusViewer.StyleSuffix.ExplanationText);
             style.addProperty("width", "100%");
@@ -345,14 +359,16 @@ public class PortalTheme extends VistaTheme {
             style.addProperty("padding-bottom", "2em");
             addStyle(style);
         }
+
+        // TenantSureStatusViewer
         {
-            Style style = new Style("." + NoTenantInsuranceStatusViewer.STYLE_PREFIX + NoTenantInsuranceStatusViewer.StyleSuffix.GoToInsuranceScreenAnchor);
+            Style style = new Style("." + TenantSureInsuranceStatusViewer.STYLE_PREFIX + TenantSureInsuranceStatusViewer.StyleSuffix.TenantSureLogo);
             style.addProperty("display", "block");
             style.addProperty("margin-left", "auto");
             style.addProperty("margin-right", "auto");
-            style.addProperty("width", "100%");
             style.addProperty("text-align", "center");
-            style.addProperty("padding-top", "0.5em");
+            style.addProperty("margin-top", "10px");
+            style.addProperty("margin-bottom", "10px");
             addStyle(style);
         }
 

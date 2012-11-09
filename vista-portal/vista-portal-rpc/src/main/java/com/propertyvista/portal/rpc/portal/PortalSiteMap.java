@@ -115,6 +115,19 @@ public class PortalSiteMap implements SiteMap {
 
             }
 
+            @PlaceProperties(caption = "TenantSure Control Panel")
+            @NavigationItem(navigLabel = "TenantSure Control Panel")
+            public static class TenantSureControlPanel extends AppPlace {
+
+            }
+
+            @PlaceProperties(caption = "Insurance Control Panel")
+            @NavigationItem(navigLabel = "Insurance Control Panel")
+            /** This place is for controlling insurance other than TenantSure */
+            public static class InsuranceControlPanel extends AppPlace {
+
+            }
+
         }
 
     }
