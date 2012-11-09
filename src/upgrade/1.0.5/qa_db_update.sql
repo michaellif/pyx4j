@@ -28,6 +28,10 @@ CREATE DATABASE vista_qa TEMPLATE vista_prod OWNER vista TABLESPACE vista33;
 
 \c vista_qa
 
+UPDATE  _admin_.pad_file
+SET     status = 'SendError'
+WHERE   status = 'Creating';
+
 SET check_function_bodies = 'off';
  
  CREATE OR REPLACE FUNCTION _dba_.forge_user_credentials() RETURNS VOID AS
@@ -47,9 +51,7 @@ SET check_function_bodies = 'off';
         SET     account_number = regexp_replace(account_number,'[0-9]','X','g')||id::text,
                 merchant_terminal_id = regexp_replace(substring(merchant_terminal_id,1,6),'[A-Z0-9]','X','g')||id::text ;
                 
-        UPDATE  pad_file
-        SET     status = 'SendError'
-        WHERE   status = 'Creating';
+        
                         
  $$
  LANGUAGE SQL VOLATILE;
