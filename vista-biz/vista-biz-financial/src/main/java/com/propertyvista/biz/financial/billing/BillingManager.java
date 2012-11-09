@@ -41,6 +41,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.SysDateManager;
@@ -134,7 +135,7 @@ public class BillingManager {
             return false;
         }
 
-        if (lease.currentTerm().getPrimaryKey().isDraft() && !preview) {
+        if (VersionedEntityUtils.isDraft(lease.currentTerm()) && !preview) {
             log.warn(i18n.tr("Lease Term is in draft state. Billing can run only in preview mode."));
             return false;
         }
