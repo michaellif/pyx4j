@@ -135,7 +135,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 });
             }
         });
-        if (VistaTODO.Equifax_Short_VISTA_478) {
+        if (!VistaTODO.Equifax_Short_VISTA_478) {
             addAction(checkAction);
         }
 

@@ -40,7 +40,7 @@ public class PreloadPolicies extends SimplePoliciesPreloader {
         add(new IdAssignmentPolicyPreloader());
         add(new RestrictionsPolicyPreloader());
         add(new DatesPolicyPreloader());
-        if (VistaTODO.Equifax_Short_VISTA_478) {
+        if (!VistaTODO.Equifax_Short_VISTA_478) {
             add(new BackgroundCheckPolicyPreloader());
         }
 

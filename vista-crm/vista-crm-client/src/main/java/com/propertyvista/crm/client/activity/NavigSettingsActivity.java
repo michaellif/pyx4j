@@ -86,7 +86,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         folder = new NavigFolder(i18n.tr("Policies"));
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.AR());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.ApplicationDocumentation());
-        if (VistaTODO.Equifax_Short_VISTA_478) {
+        if (!VistaTODO.Equifax_Short_VISTA_478) {
             folder.addNavigItem(new CrmSiteMap.Settings.Policies.BackgroundCheck());
         }
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.Billing());
