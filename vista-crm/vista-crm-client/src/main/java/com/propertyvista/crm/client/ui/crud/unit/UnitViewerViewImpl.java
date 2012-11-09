@@ -21,7 +21,9 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.widgets.client.dialog.Dialog.Type;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.ExistingLeaseDataDialog;
@@ -99,18 +101,16 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
             public void execute() {
                 Lease lease = getForm().getValue().lease();
                 if (!lease.isNull() && lease.actualMoveOut().isNull()) {
-                    MessageDialog.confirm("", i18n.tr("Are you sure you want to scope occupied unit?"), new Command() {
+                    MessageDialog.show(i18n.tr("Caution"), i18n.tr("This unit is not freed completely. Proceed with caution!"), Type.Warning, new OkOption() {
                         @Override
-                        public void execute() {
-                            new ScopeDialog((UnitViewerView.Presenter) getPresenter(), canScopeAvailable, canScopeOffMarket, minRenovationEndDate) {
-                            }.show();
+                        public boolean onClickOk() {
+                            new ScopeDialog((UnitViewerView.Presenter) getPresenter(), canScopeAvailable, canScopeOffMarket, minRenovationEndDate).show();
+                            return true;
                         }
                     });
                 } else {
-                    new ScopeDialog((UnitViewerView.Presenter) getPresenter(), canScopeAvailable, canScopeOffMarket, minRenovationEndDate) {
-                    }.show();
+                    new ScopeDialog((UnitViewerView.Presenter) getPresenter(), canScopeAvailable, canScopeOffMarket, minRenovationEndDate).show();
                 }
-
             }
         });
         scopeAction.ensureDebugId(DebugIds.unitViewerViewScopeAction.debugId());
