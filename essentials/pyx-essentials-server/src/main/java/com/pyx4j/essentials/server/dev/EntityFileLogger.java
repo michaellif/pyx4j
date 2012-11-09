@@ -192,12 +192,14 @@ public class EntityFileLogger {
 
         if (props == null) {
             props = new Properties();
-            try {
-                props.load(new FileInputStream(file));
-            } catch (FileNotFoundException e) {
-                log.error("File Not Found", e);
-            } catch (IOException e) {
-                log.error("IO Exception", e);
+            if (file.canRead()) {
+                try {
+                    props.load(new FileInputStream(file));
+                } catch (FileNotFoundException e) {
+                    log.error("File Not Found", e);
+                } catch (IOException e) {
+                    log.error("IO Exception", e);
+                }
             }
             fileNumbers.put(dir, props);
         }
