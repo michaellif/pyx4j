@@ -31,7 +31,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.offering.Service.ServiceV;
 
-@ToStringFormat("{0}, {1}")
+@ToStringFormat("{1}, {0}")
 @DiscriminatorValue("service")
 public interface Service extends Product<ServiceV> {
 

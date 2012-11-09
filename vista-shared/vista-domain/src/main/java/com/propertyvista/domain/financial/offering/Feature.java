@@ -32,7 +32,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.offering.Feature.FeatureV;
 
-@ToStringFormat("{0}, {1}")
+@ToStringFormat("{1}, {0}")
 @DiscriminatorValue("feature")
 public interface Feature extends Product<FeatureV> {
 

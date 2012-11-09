@@ -35,7 +35,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.BuildingElement;
 
-@ToStringFormat("{0}, ${1}")
+@ToStringFormat("{0}, {1}, ${2}")
 public interface ProductItem extends IEntity {
 
     @Owner
@@ -44,18 +44,19 @@ public interface ProductItem extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
+    @ToString(index = 0)
     Product.ProductV<?> product();
 
     @OrderColumn
     IPrimitive<Integer> _orderColumn();
 
     @NotNull
-    @ToString(index = 0)
+    @ToString(index = 1)
     @MemberColumn(name = "itemType")
     ProductItemType type();
 
     @NotNull
-    @ToString(index = 1)
+    @ToString(index = 2)
     @Format("#,##0.00")
     @Caption(name = "Market Price")
     @Editor(type = EditorType.money)
