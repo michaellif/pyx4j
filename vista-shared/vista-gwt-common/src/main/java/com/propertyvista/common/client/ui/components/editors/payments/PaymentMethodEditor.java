@@ -21,6 +21,7 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -52,9 +53,9 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
 
     protected final SimplePanel paymentDetailsHolder = new SimplePanel();
 
-    protected Widget paymentDetailsHeader;
+    protected Widget paymentDetailsHeader = new Label();
 
-    protected Widget billingAddressHeader;
+    protected Widget billingAddressHeader = new Label();
 
     public PaymentMethodEditor() {
         super(PaymentMethod.class);
