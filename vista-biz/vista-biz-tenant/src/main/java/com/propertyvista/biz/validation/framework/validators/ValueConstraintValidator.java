@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.validation.framework.validators;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,7 +27,7 @@ import com.propertyvista.biz.validation.framework.PrimitiveValidator;
 import com.propertyvista.biz.validation.framework.SimpleValidationFailure;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
 
-public class ValueConstraintValidator<T extends Object> implements PrimitiveValidator<T> {
+public class ValueConstraintValidator<T extends Serializable> implements PrimitiveValidator<T> {
 
     private static final I18n i18n = I18n.get(ValueConstraintValidator.class);
 

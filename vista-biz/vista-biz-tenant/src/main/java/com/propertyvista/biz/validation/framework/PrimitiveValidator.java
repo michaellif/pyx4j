@@ -13,11 +13,12 @@
  */
 package com.propertyvista.biz.validation.framework;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface PrimitiveValidator<T extends Object> {
+public interface PrimitiveValidator<T extends Serializable> {
 
     Set<ValidationFailure> validate(IPrimitive<T> validator);
 

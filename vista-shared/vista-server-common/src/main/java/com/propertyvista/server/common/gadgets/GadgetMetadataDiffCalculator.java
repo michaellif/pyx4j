@@ -13,6 +13,8 @@
  */
 package com.propertyvista.server.common.gadgets;
 
+import java.io.Serializable;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -41,7 +43,7 @@ public class GadgetMetadataDiffCalculator {
                 Object origValue = origMember.getValue();
                 Object versionValue = versionMember.getValue();
                 if ((origValue != null && !origValue.equals(versionValue))) {
-                    diff.setMemberValue(memberName, versionValue);
+                    diff.setMemberValue(memberName, (Serializable) versionValue);
                 }
             } else if (origMember instanceof IEntity) {
                 IEntity subDiff = diff((IEntity) origMember, (IEntity) versionMember);

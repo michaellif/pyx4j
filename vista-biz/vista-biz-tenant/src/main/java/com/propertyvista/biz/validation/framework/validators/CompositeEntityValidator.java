@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.validation.framework.validators;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -113,7 +114,7 @@ public abstract class CompositeEntityValidator<E extends IEntity> implements Ent
         bind(memberValidators, member, validator);
     }
 
-    protected final <T extends Object> void bind(IPrimitive<T> primitiveMember, PrimitiveValidator<T> validator) {
+    protected final <T extends Serializable> void bind(IPrimitive<T> primitiveMember, PrimitiveValidator<T> validator) {
         bind(primitiveValidators, primitiveMember, validator);
     }
 
