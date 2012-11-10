@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.xml;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -273,7 +274,7 @@ public class XMLEntityParser {
         }
     }
 
-    private Object parseValueNode(Element valueNode, MemberMeta memberMeta, IObject<?> member) {
+    private Serializable parseValueNode(Element valueNode, MemberMeta memberMeta, IObject<?> member) {
         String str = valueNode.getTextContent();
         if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
             if (CommonsStringUtils.isEmpty(str)) {

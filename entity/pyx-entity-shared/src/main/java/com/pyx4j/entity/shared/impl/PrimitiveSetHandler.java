@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared.impl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,7 +39,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implements IPrimitiveSet<TYPE> {
+public class PrimitiveSetHandler<TYPE extends Serializable> extends ObjectHandler<Set<TYPE>> implements IPrimitiveSet<TYPE> {
 
     private static final long serialVersionUID = -1321079550481643142L;
 
@@ -56,7 +57,7 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
 
     @Override
     public void set(IPrimitiveSet<TYPE> typedSet) {
-        getOwner().setMemberValue(getFieldName(), typedSet.getValue());
+        getOwner().setMemberValue(getFieldName(), (Serializable) typedSet.getValue());
     }
 
     @Override
@@ -72,7 +73,7 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
 
     @Override
     public void setValue(Set<TYPE> value) {
-        getOwner().setMemberValue(getFieldName(), value);
+        getOwner().setMemberValue(getFieldName(), (Serializable) value);
     }
 
     @Override

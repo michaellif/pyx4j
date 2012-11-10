@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.io.Serializable;
+
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 
@@ -27,11 +29,11 @@ public interface EntityMemberAccess {
 
     public String getMemberName();
 
-    public Object getMemberValue(IEntity entity);
+    public Serializable getMemberValue(IEntity entity);
 
     public boolean containsMemberValue(IEntity entity);
 
-    public void setMemberValue(IEntity entity, Object value);
+    public void setMemberValue(IEntity entity, Serializable value);
 
     public IObject<?> getMember(IEntity entity);
 }

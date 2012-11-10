@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.server.impl;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
@@ -178,7 +179,7 @@ public class EntityImplReflectionHelper {
             members.put(uName, methodInfo);
         }
         if (IPrimitive.class.equals(methodInfo.klass)) {
-            return implHandler.lazyCreateMemberIPrimitive(memberName, methodInfo.valueCalss);
+            return implHandler.lazyCreateMemberIPrimitive(memberName, (Class<Serializable>) methodInfo.valueCalss);
         } else if (IEntity.class.isAssignableFrom(methodInfo.klass)) {
             return implHandler.lazyCreateMemberIEntity(memberName, (Class<IEntity>) methodInfo.klass);
         } else if (ISet.class.equals(methodInfo.klass)) {

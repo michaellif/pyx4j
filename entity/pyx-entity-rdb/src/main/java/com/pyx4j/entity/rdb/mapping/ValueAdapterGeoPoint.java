@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -71,7 +72,7 @@ class ValueAdapterGeoPoint implements ValueAdapter {
     }
 
     @Override
-    public Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
+    public Serializable retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
         double lat = rs.getDouble(memberSqlName + "_lat");
         if (rs.wasNull()) {
             return null;
@@ -86,7 +87,7 @@ class ValueAdapterGeoPoint implements ValueAdapter {
     }
 
     @Override
-    public Object ensureType(Object value) {
+    public Serializable ensureType(Serializable value) {
         return value;
     }
 

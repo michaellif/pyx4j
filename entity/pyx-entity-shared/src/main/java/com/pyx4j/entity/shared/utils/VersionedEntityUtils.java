@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared.utils;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import com.pyx4j.commons.Key;
@@ -54,11 +55,11 @@ public class VersionedEntityUtils {
         if (entity2 == entity1) {
             return true;
         }
-        Map<String, Object> thisValue = ((SharedEntityHandler) entity1).getValue();
+        Map<String, Serializable> thisValue = ((SharedEntityHandler) entity1).getValue();
         if (thisValue == null) {
             return false;
         }
-        Map<String, Object> otherValue = ((SharedEntityHandler) entity2).getValue();
+        Map<String, Serializable> otherValue = ((SharedEntityHandler) entity2).getValue();
         if (otherValue == null) {
             return false;
         }

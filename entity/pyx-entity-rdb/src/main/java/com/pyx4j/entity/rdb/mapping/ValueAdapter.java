@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -32,9 +33,9 @@ interface ValueAdapter extends ValueBindAdapter {
 
     boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String coumnName);
 
-    Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException;
+    Serializable retrieveValue(ResultSet rs, String memberSqlName) throws SQLException;
 
     ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value);
 
-    Object ensureType(Object value);
+    Serializable ensureType(Serializable value);
 }

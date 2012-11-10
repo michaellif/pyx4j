@@ -309,7 +309,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
             return;
         }
-        nextValue: for (Map.Entry<String, Object> me : childIEntity.getValue().entrySet()) {
+        nextValue: for (Map.Entry<String, Serializable> me : childIEntity.getValue().entrySet()) {
             if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
                 continue nextValue;
             }
@@ -442,7 +442,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             entityMembersModificationAdapters = adapters.memberModificationAdapters();
         }
 
-        nextValue: for (Map.Entry<String, Object> me : iEntity.getValue().entrySet()) {
+        nextValue: for (Map.Entry<String, Serializable> me : iEntity.getValue().entrySet()) {
             if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
                 continue nextValue;
             }
@@ -914,7 +914,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private Object deserializeValue(IEntity iEntity, String keyName, Object value, RetrieveRequestsAggregator aggregator) {
+    private Serializable deserializeValue(IEntity iEntity, String keyName, Object value, RetrieveRequestsAggregator aggregator) {
         if (value instanceof Text) {
             return ((Text) value).getValue();
         } else if (value instanceof Key) {
@@ -929,13 +929,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     retrieveEntity(childIEntity, (Key) value, aggregator);
                 }
             }
-            return childIEntity.getValue();
+            return (Serializable) childIEntity.getValue();
         } else if (value instanceof String) {
             Class<?> cls = iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass();
             if (Enum.class.isAssignableFrom(cls)) {
                 return Enum.valueOf((Class<Enum>) cls, (String) value);
             } else {
-                return value;
+                return (String) value;
             }
         } else if (value instanceof Date) {
             Class<?> cls = iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass();
@@ -944,7 +944,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             } else if (cls.equals(LogicalDate.class)) {
                 return new LogicalDate(((Date) value).getTime());
             } else {
-                return value;
+                return (Date) value;
             }
         } else if (value instanceof Long) {
             Class<?> metaValueClass = iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass();
@@ -953,13 +953,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             } else if (com.pyx4j.commons.Key.class.isAssignableFrom(metaValueClass)) {
                 return new com.pyx4j.commons.Key(((Long) value).longValue());
             } else if (Long.class.isAssignableFrom(metaValueClass)) {
-                return value;
+                return (Long) value;
             } else if (Short.class.isAssignableFrom(metaValueClass)) {
                 return ((Long) value).shortValue();
             } else if (Byte.class.isAssignableFrom(metaValueClass)) {
                 return ((Long) value).byteValue();
             } else {
-                return value;
+                return (Long) value;
             }
         } else if (value instanceof Blob) {
             //TODO support more types.
@@ -967,14 +967,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         } else if (value instanceof GeoPt) {
             return new GeoPoint(((GeoPt) value).getLatitude(), ((GeoPt) value).getLongitude());
         } else {
-            return value;
+            return (Serializable) value;
         }
     }
 
     /**
      * Recursive set child values
      */
-    private void setEmbededIEntityValue(IEntity iEntity, String keyName, Object value, RetrieveRequestsAggregator aggregator) {
+    private void setEmbededIEntityValue(IEntity iEntity, String keyName, Serializable value, RetrieveRequestsAggregator aggregator) {
         String memberName = keyName.substring(0, keyName.indexOf('_'));
         IObject<?> member = iEntity.getMember(memberName);
         String memberValueName = keyName.substring(memberName.length() + 1, keyName.length() - EMBEDDED_PRROPERTY_SUFIX.length());
@@ -1043,7 +1043,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 continue;
             } else if (keyName.endsWith(EMBEDDED_PRROPERTY_SUFIX)) {
                 // Recursive child values
-                setEmbededIEntityValue(iEntity, keyName, value, aggregator);
+                setEmbededIEntityValue(iEntity, keyName, (Serializable) value, aggregator);
                 continue;
             } else if (value instanceof List<?>) {
                 IObject<?> member = iEntity.getMember(keyName);
@@ -1095,7 +1095,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             } else {
                 value = deserializeValue(iEntity, keyName, value, aggregator);
             }
-            iEntity.setMemberValue(keyName, value);
+            iEntity.setMemberValue(keyName, (Serializable) value);
         }
     }
 
@@ -1705,7 +1705,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     private void getAllKeysForDelete(List<Key> keys, IEntity iEntity) {
-        nextValue: for (Map.Entry<String, Object> me : iEntity.getValue().entrySet()) {
+        nextValue: for (Map.Entry<String, Serializable> me : iEntity.getValue().entrySet()) {
             if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
                 continue nextValue;
             }

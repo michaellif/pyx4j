@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -684,7 +685,7 @@ public class TableModel {
     private void retrieveValues(ResultSet rs, IEntity entity) throws SQLException {
         entity.setValuePopulated();
         for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
-            Object value = member.getValueAdapter().retrieveValue(rs, member.sqlName());
+            Serializable value = member.getValueAdapter().retrieveValue(rs, member.sqlName());
             if (value != null) {
                 if (member.getMemberMeta().isEntity()) {
                     IEntity valueEntity = (IEntity) value;

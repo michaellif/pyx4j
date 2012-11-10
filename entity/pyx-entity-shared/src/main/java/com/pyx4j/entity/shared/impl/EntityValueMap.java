@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared.impl;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,7 +34,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.IEntity;
 
 @SuppressWarnings("serial")
-public class EntityValueMap extends HashMap<String, Object> {
+public class EntityValueMap extends HashMap<String, Serializable> {
 
     private final transient int identityHashCode;
 
@@ -74,15 +75,15 @@ public class EntityValueMap extends HashMap<String, Object> {
     }
 
     public boolean isNull() {
-        return isNull(new HashSet<Map<String, Object>>(), false);
+        return isNull(new HashSet<Map<String, Serializable>>(), false);
     }
 
-    boolean isNull(Set<Map<String, Object>> processed, boolean ignorePk) {
+    boolean isNull(Set<Map<String, Serializable>> processed, boolean ignorePk) {
         processed.add(this);
         if (this.isEmpty()) {
             return true;
         }
-        for (Map.Entry<String, Object> me : this.entrySet()) {
+        for (Map.Entry<String, Serializable> me : this.entrySet()) {
             if (me.getKey().startsWith(IEntity.ATTR_PREFIX) || (ignorePk && (me.getKey().equals(IEntity.PRIMARY_KEY)))) {
                 continue;
             }
@@ -129,7 +130,7 @@ public class EntityValueMap extends HashMap<String, Object> {
     }
 
     @SuppressWarnings("unchecked")
-    public static void dumpMap(StringBuilder b, Map<String, Object> map, Set<Map<String, Object>> processed, String ident) {
+    public static void dumpMap(StringBuilder b, Map<String, Serializable> map, Set<Map<String, Serializable>> processed, String ident) {
         if (ToStringStyle.fieldMultiLine) {
             b.append(ident);
         }
@@ -177,7 +178,7 @@ public class EntityValueMap extends HashMap<String, Object> {
                 if (ToStringStyle.fieldMultiLine) {
                     b.append('\n');
                 }
-                dumpMap(b, (Map<String, Object>) value, processed, ident + ToStringStyle.PADDING);
+                dumpMap(b, (Map<String, Serializable>) value, processed, ident + ToStringStyle.PADDING);
                 if (ToStringStyle.fieldMultiLine) {
                     b.append(ident);
                 }
@@ -196,7 +197,7 @@ public class EntityValueMap extends HashMap<String, Object> {
                         if (ToStringStyle.fieldMultiLine) {
                             b.append('\n');
                         }
-                        dumpMap(b, (Map<String, Object>) o, processed, ident + ToStringStyle.PADDING + ToStringStyle.PADDING);
+                        dumpMap(b, (Map<String, Serializable>) o, processed, ident + ToStringStyle.PADDING + ToStringStyle.PADDING);
                         if (ToStringStyle.fieldMultiLine) {
                             b.append(ident + ToStringStyle.PADDING);
                         }
@@ -218,7 +219,7 @@ public class EntityValueMap extends HashMap<String, Object> {
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
-        EntityValueMap.dumpMap(b, this, new HashSet<Map<String, Object>>(), "");
+        EntityValueMap.dumpMap(b, this, new HashSet<Map<String, Serializable>>(), "");
         return b.toString();
     }
 

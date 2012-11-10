@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.test.shared.domain.parametrized;
 
+import java.io.Serializable;
+
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -27,7 +29,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
 @AbstractEntity(generateMetadata = false)
-public interface IAbstractParametrizedEntity<E extends IEntity, T> extends IEntity {
+public interface IAbstractParametrizedEntity<E extends IEntity, T extends Serializable> extends IEntity {
 
     IPrimitive<String> name();
 

@@ -20,10 +20,11 @@
  */
 package com.pyx4j.entity.shared;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
-public interface ISet<TYPE extends IEntity> extends ICollection<TYPE, Set<Map<String, Object>>>, Set<TYPE> {
+public interface ISet<TYPE extends IEntity> extends ICollection<TYPE, Set<Map<String, Serializable>>>, Set<TYPE> {
 
     public void set(ISet<TYPE> typedSet);
 

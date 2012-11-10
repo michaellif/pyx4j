@@ -33,16 +33,16 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ISet;
 
-public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<TYPE, Set<Map<String, Object>>> implements ISet<TYPE> {
+public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<TYPE, Set<Map<String, Serializable>>> implements ISet<TYPE> {
 
     private static final long serialVersionUID = 1940065645661650951L;
 
     //TODO probably we don't need it now. Remove.
     @SuppressWarnings("serial")
-    public static class ElementsComparator implements Comparator<Map<String, Object>>, Serializable {
+    public static class ElementsComparator implements Comparator<Map<String, Serializable>>, Serializable {
 
         @Override
-        public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+        public int compare(Map<String, Serializable> o1, Map<String, Serializable> o2) {
             if (o1 == o2) {
                 return 0;
             }
@@ -78,33 +78,33 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
 
     @SuppressWarnings("unchecked")
     @Override
-    public Set<Map<String, Object>> getValue() {
-        Map<String, Object> data = getOwner().getValue();
+    public Set<Map<String, Serializable>> getValue() {
+        Map<String, Serializable> data = getOwner().getValue();
         if (data == null) {
             return null;
         } else {
             Object value = data.get(getFieldName());
             assert (value != AttachLevel.Detached) : "Access to detached ISet " + exceptionInfo();
-            return (Set<Map<String, Object>>) value;
+            return (Set<Map<String, Serializable>>) value;
         }
     }
 
     @Override
-    public void setValue(Set<Map<String, Object>> value) {
+    public void setValue(Set<Map<String, Serializable>> value) {
         if ((value != null) && !(value instanceof TreeSet<?>)) {
             throw new ClassCastException("Set expects TreeSet as value");
         }
-        getOwner().setMemberValue(getFieldName(), value);
+        getOwner().setMemberValue(getFieldName(), (Serializable) value);
     }
 
     /**
      * Guarantee that data holder is created before setting the value of element
      */
-    private Set<Map<String, Object>> ensureValue() {
-        Set<Map<String, Object>> value = getValue();
+    private Set<Map<String, Serializable>> ensureValue() {
+        Set<Map<String, Serializable>> value = getValue();
         if (value == null) {
             // Use TreeSet for implementation to allow for modifiable Objects Properties (hashCode) after they are added to Set
-            value = new TreeSet<Map<String, Object>>(new ElementsComparator());
+            value = new TreeSet<Map<String, Serializable>>(new ElementsComparator());
             // TODO Use LinkedHashSet to maintain insert order
             //value = new LinkedHashSet<Map<String, Object>>();
             setValue(value);
@@ -120,7 +120,7 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
     @Override
     public boolean addAll(Collection<? extends TYPE> c) {
         boolean rc = false;
-        Set<Map<String, Object>> value = ensureValue();
+        Set<Map<String, Serializable>> value = ensureValue();
         for (TYPE el : c) {
             if (value.add(ensureTypedValue(el))) {
                 rc = true;
@@ -180,7 +180,7 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
     @Override
     public Iterator<TYPE> iterator() {
         // iterator is also behaves likes Elvis 
-        final Set<Map<String, Object>> setValue = getValue();
+        final Set<Map<String, Serializable>> setValue = getValue();
         if (setValue == null) {
             return new Iterator<TYPE>() {
 
@@ -203,7 +203,7 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
 
         return new Iterator<TYPE>() {
 
-            final Iterator<Map<String, Object>> iter = setValue.iterator();
+            final Iterator<Map<String, Serializable>> iter = setValue.iterator();
 
             @Override
             public boolean hasNext() {

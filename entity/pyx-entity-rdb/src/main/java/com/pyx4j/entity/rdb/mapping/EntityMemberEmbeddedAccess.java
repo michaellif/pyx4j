@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -49,7 +50,7 @@ class EntityMemberEmbeddedAccess implements EntityMemberAccess {
     }
 
     @Override
-    public Object getMemberValue(IEntity entity) {
+    public Serializable getMemberValue(IEntity entity) {
         return actualEntity(entity).getMemberValue(memberName);
     }
 
@@ -59,7 +60,7 @@ class EntityMemberEmbeddedAccess implements EntityMemberAccess {
     }
 
     @Override
-    public void setMemberValue(IEntity entity, Object value) {
+    public void setMemberValue(IEntity entity, Serializable value) {
         actualEntity(entity).setMemberValue(memberName, value);
     }
 

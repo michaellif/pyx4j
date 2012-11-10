@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.client.impl;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
@@ -77,7 +78,8 @@ public abstract class EntityImplNativeHelper {
         return handler.lazyCreateMemberIPrimitive(memberName, java.lang.Double.class);
     }
 
+    @SuppressWarnings("unchecked")
     public static IObject<?> createMemberIPrimitive_byteArray(SharedEntityHandler handler, String memberName) {
-        return handler.lazyCreateMemberIPrimitive(memberName, PrimitiveHandler.BYTE_ARRAY_CLASS);
+        return handler.lazyCreateMemberIPrimitive(memberName, (Class<Serializable>) PrimitiveHandler.BYTE_ARRAY_CLASS);
     }
 }

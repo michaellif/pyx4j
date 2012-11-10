@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,7 +45,7 @@ class ValueAdapterLong extends ValueAdapterPrimitive {
     }
 
     @Override
-    public Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
+    public Serializable retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
         long value = rs.getLong(memberSqlName);
         if (rs.wasNull()) {
             return null;

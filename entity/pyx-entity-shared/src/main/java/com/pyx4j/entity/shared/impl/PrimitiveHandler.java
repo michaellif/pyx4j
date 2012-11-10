@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared.impl;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -38,7 +39,7 @@ import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.annotations.I18nContext;
 import com.pyx4j.i18n.shared.I18n;
 
-public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrimitive<TYPE> {
+public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<TYPE> implements IPrimitive<TYPE> {
 
     private static final long serialVersionUID = 5565143015625424503L;
 

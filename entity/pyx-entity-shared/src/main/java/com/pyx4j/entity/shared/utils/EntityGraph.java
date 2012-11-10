@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared.utils;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -59,14 +60,14 @@ public class EntityGraph {
     }
 
     public static void applyRecursively(IEntity entity, ApplyMethod method) {
-        applyRecursively(entity, method, new HashSet<IEntity>(), new IdentityHashSet<Map<String, Object>>());
+        applyRecursively(entity, method, new HashSet<IEntity>(), new IdentityHashSet<Map<String, Serializable>>());
     }
 
     public static void applyRecursivelyAllObjects(IEntity entity, ApplyMethod method) {
-        applyRecursively(entity, method, new IdentityHashSet<IEntity>(), new IdentityHashSet<Map<String, Object>>());
+        applyRecursively(entity, method, new IdentityHashSet<IEntity>(), new IdentityHashSet<Map<String, Serializable>>());
     }
 
-    private static void applyRecursively(IEntity entity, ApplyMethod method, Set<IEntity> processed, Set<Map<String, Object>> processedValues) {
+    private static void applyRecursively(IEntity entity, ApplyMethod method, Set<IEntity> processed, Set<Map<String, Serializable>> processedValues) {
         if (processed.contains(entity) || processedValues.contains(entity.getValue())) {
             return;
         }
@@ -285,7 +286,7 @@ public class EntityGraph {
     public static void membersCopy(IEntity src, IEntity dst, IPrimitive<?>... protoValues) {
         for (IPrimitive<?> member : protoValues) {
             String memberFieldName = member.getFieldName();
-            Object v = src.getMember(memberFieldName).getValue();
+            Serializable v = (Serializable) src.getMember(memberFieldName).getValue();
             dst.setMemberValue(memberFieldName, v);
         }
     }

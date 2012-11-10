@@ -115,7 +115,7 @@ public class RpcEntityServiceFilter implements IServiceFilter {
             throw new Error("Should not serialize " + entity.getObjectClass());
         }
 
-        nextValue: for (Map.Entry<String, Object> me : entity.getValue().entrySet()) {
+        nextValue: for (Map.Entry<String, Serializable> me : entity.getValue().entrySet()) {
             String memberName = me.getKey();
             if (memberName.equals(IEntity.PRIMARY_KEY)) {
                 if ((me.getValue() != null) && (!(me.getValue() instanceof Key))) {

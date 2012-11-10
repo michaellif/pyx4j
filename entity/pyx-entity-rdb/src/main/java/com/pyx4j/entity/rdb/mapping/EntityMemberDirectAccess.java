@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.io.Serializable;
+
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 
@@ -37,7 +39,7 @@ class EntityMemberDirectAccess implements EntityMemberAccess {
     }
 
     @Override
-    public Object getMemberValue(IEntity entity) {
+    public Serializable getMemberValue(IEntity entity) {
         return entity.getMemberValue(memberName);
     }
 
@@ -47,7 +49,7 @@ class EntityMemberDirectAccess implements EntityMemberAccess {
     }
 
     @Override
-    public void setMemberValue(IEntity entity, Object value) {
+    public void setMemberValue(IEntity entity, Serializable value) {
         entity.setMemberValue(memberName, value);
     }
 

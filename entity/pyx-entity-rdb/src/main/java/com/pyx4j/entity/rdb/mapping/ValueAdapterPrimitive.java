@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
@@ -60,7 +61,7 @@ abstract class ValueAdapterPrimitive implements ValueAdapter {
     }
 
     @Override
-    public Object ensureType(Object value) {
+    public Serializable ensureType(Serializable value) {
         assert (value == null) || valueClass.isAssignableFrom(value.getClass()) : "Trying to set value of a wrong type '" + value.getClass() + "', expected "
                 + valueClass;
         return value;

@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -825,8 +826,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
         for (MemberOperationsMeta member : tm.operationsMeta().getAllMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();
-            Object value;
-            Object lastValue;
+            Serializable value;
+            Serializable lastValue;
             if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 IEntity memberEntity = (IEntity) member.getMember(entity);
                 if (memberEntity.getAttachLevel() == AttachLevel.Detached) {

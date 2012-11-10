@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,7 +46,7 @@ class ValueAdapterBigDecimal extends ValueAdapterPrimitive {
     }
 
     @Override
-    public Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
+    public Serializable retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
         BigDecimal value = rs.getBigDecimal(memberSqlName);
         if (rs.wasNull()) {
             return null;

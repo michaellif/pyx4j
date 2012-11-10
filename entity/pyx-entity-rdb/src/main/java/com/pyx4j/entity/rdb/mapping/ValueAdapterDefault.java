@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,12 +45,12 @@ class ValueAdapterDefault extends ValueAdapterPrimitive {
     }
 
     @Override
-    public Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
+    public Serializable retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
         Object value = rs.getObject(memberSqlName);
         if (rs.wasNull()) {
             return null;
         } else {
-            return value;
+            return (Serializable) value;
         }
     }
 

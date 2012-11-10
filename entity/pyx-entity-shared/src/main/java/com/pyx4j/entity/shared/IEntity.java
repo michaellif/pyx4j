@@ -34,7 +34,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 
 @I18n(strategy = I18nStrategy.DerivedOnly)
-public interface IEntity extends IObject<Map<String, Object>>, Serializable, Printable {
+public interface IEntity extends IObject<Map<String, Serializable>>, Serializable, Printable {
 
     public static String PRIMARY_KEY = "id";
 
@@ -55,7 +55,7 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
     @Indexed
     public IPrimitive<Key> id();
 
-    public IPrimitive<Class<? extends IEntity>> instanceValueClass();
+    public IPrimitive<IEntity> instanceValueClass();
 
     /**
      * @return true if only PrimaryKey present and other properties are empty or null
@@ -84,18 +84,18 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public IObject<?> getMember(Path path) throws IllegalArgumentException;
 
-    public Object getMemberValue(String memberName);
+    public Serializable getMemberValue(String memberName);
 
-    public void setMemberValue(String memberName, Object value);
+    public void setMemberValue(String memberName, Serializable value);
 
     /**
      * Remove all values from this entity, preserve ownership relationships
      */
     public void clearValues();
 
-    public Object getValue(Path path);
+    public Serializable getValue(Path path);
 
-    public void setValue(Path path, Object value);
+    public void setValue(Path path, Serializable value);
 
     /**
      * Unsafe set entity value object.

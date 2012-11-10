@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -416,7 +417,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
                             value = (T) new java.sql.Date(((Date) value).getTime());
                         }
                     }
-                    getValue().setValue(memberPath, value);
+                    getValue().setValue(memberPath, (Serializable) value);
                 }
                 log.trace("CEntityEditor {} model updated {}", shortDebugInfo(), memberPath);
             }

@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared.impl;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -32,7 +33,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler<TYPE, List<Map<String, Object>>> implements IList<TYPE> {
+public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler<TYPE, List<Map<String, Serializable>>> implements IList<TYPE> {
 
     private static final long serialVersionUID = 6416411665137002645L;
 
@@ -52,30 +53,30 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Map<String, Object>> getValue() {
-        Map<String, Object> data = getOwner().getValue();
+    public List<Map<String, Serializable>> getValue() {
+        Map<String, Serializable> data = getOwner().getValue();
         if (data == null) {
             return null;
         } else {
             Object value = data.get(getFieldName());
             assert (value != AttachLevel.Detached) : "Access to detached IList " + exceptionInfo();
-            return (List<Map<String, Object>>) value;
+            return (List<Map<String, Serializable>>) value;
         }
     }
 
     @Override
-    public void setValue(List<Map<String, Object>> value) {
-        getOwner().setMemberValue(getFieldName(), value);
+    public void setValue(List<Map<String, Serializable>> value) {
+        getOwner().setMemberValue(getFieldName(), (Serializable) value);
     }
 
     /**
      * Guarantee that data holder is created before setting the value of element
      */
-    private List<Map<String, Object>> ensureValue() {
-        List<Map<String, Object>> value = getValue();
+    private List<Map<String, Serializable>> ensureValue() {
+        List<Map<String, Serializable>> value = getValue();
         if (value == null) {
             // TODO test  modifiable Objects Properties 
-            value = new Vector<Map<String, Object>>();
+            value = new Vector<Map<String, Serializable>>();
             setValue(value);
         }
         return value;
@@ -95,7 +96,7 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
     @Override
     public boolean addAll(Collection<? extends TYPE> c) {
         boolean rc = false;
-        List<Map<String, Object>> value = ensureValue();
+        List<Map<String, Serializable>> value = ensureValue();
         for (TYPE el : c) {
             if (value.add(ensureTypedValue(el))) {
                 rc = true;
@@ -112,7 +113,7 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
 
     @Override
     public void clear() {
-        List<Map<String, Object>> value = getValue();
+        List<Map<String, Serializable>> value = getValue();
         if (value != null) {
             value.clear();
         }
@@ -150,7 +151,7 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
 
     @Override
     public TYPE get(int index) {
-        List<Map<String, Object>> value = getValue();
+        List<Map<String, Serializable>> value = getValue();
         if (value != null) {
             return createTypedEntity(value.get(index));
         } else {
@@ -195,7 +196,7 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
     @Override
     public Iterator<TYPE> iterator() {
         // iterator is also behaves likes Elvis 
-        final List<Map<String, Object>> value = getValue();
+        final List<Map<String, Serializable>> value = getValue();
         if (value == null) {
             return new Iterator<TYPE>() {
 
@@ -218,7 +219,7 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
 
         return new Iterator<TYPE>() {
 
-            final Iterator<Map<String, Object>> iter = value.iterator();
+            final Iterator<Map<String, Serializable>> iter = value.iterator();
 
             @Override
             public boolean hasNext() {
@@ -239,20 +240,20 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
 
     @Override
     public int lastIndexOf(Object o) {
-        // TODO Auto-generated method stub
-        return 0;
+        // TODO implement this
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public ListIterator<TYPE> listIterator() {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO implement this
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public ListIterator<TYPE> listIterator(int index) {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO implement this
+        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import com.pyx4j.entity.annotations.GeneratedValue;
@@ -27,7 +28,7 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class ValueGenerator {
 
-    static Object generate(GeneratedValue generatedValue, MemberMeta memberMeta) {
+    static Serializable generate(GeneratedValue generatedValue, MemberMeta memberMeta) {
         switch (generatedValue.type()) {
         case randomUUID:
             return UUID.randomUUID().toString();

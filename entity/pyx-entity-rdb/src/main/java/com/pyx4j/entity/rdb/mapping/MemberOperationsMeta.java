@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -141,8 +142,8 @@ public class MemberOperationsMeta implements EntityMemberAccess {
         }
     }
 
-    public Object getPersistMemberValue(IEntity entity) {
-        Object value = getMemberValue(entity);
+    public Serializable getPersistMemberValue(IEntity entity) {
+        Serializable value = getMemberValue(entity);
         if ((value == null) && (generatedValue != null)) {
             value = ValueGenerator.generate(generatedValue, getMemberMeta());
             setMemberValue(entity, value);
@@ -151,7 +152,7 @@ public class MemberOperationsMeta implements EntityMemberAccess {
     }
 
     @Override
-    public Object getMemberValue(IEntity entity) {
+    public Serializable getMemberValue(IEntity entity) {
         return memberAccess.getMemberValue(entity);
     }
 
@@ -161,7 +162,7 @@ public class MemberOperationsMeta implements EntityMemberAccess {
     }
 
     @Override
-    public void setMemberValue(IEntity entity, Object value) {
+    public void setMemberValue(IEntity entity, Serializable value) {
         memberAccess.setMemberValue(entity, valueAdapter.ensureType(value));
     }
 

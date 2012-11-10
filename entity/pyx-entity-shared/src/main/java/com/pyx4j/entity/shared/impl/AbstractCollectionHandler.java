@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared.impl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -59,7 +60,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
 
     @Override
     public AttachLevel getAttachLevel() {
-        Map<String, Object> data = getOwner().getValue();
+        Map<String, Serializable> data = getOwner().getValue();
         if ((data != null) && (data.get(getFieldName()) == AttachLevel.Detached)) {
             return AttachLevel.Detached;
         } else {
@@ -71,7 +72,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
     public void setAttachLevel(AttachLevel level) {
         switch (level) {
         case Attached:
-            Map<String, Object> data = getOwner().getValue();
+            Map<String, Serializable> data = getOwner().getValue();
             if ((data != null) && (data.get(getFieldName()) == AttachLevel.Detached)) {
                 data.put(getFieldName(), null);
             }
@@ -85,7 +86,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
     }
 
     @SuppressWarnings("unchecked")
-    protected TYPE createTypedEntity(Map<String, Object> entityValue) {
+    protected TYPE createTypedEntity(Map<String, Serializable> entityValue) {
         TYPE entity;
         TYPE typeAttr = (TYPE) entityValue.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR);
         if (typeAttr == null) {
@@ -97,11 +98,11 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         return entity;
     }
 
-    protected Map<String, Object> ensureTypedValue(TYPE entity) {
+    protected Map<String, Serializable> ensureTypedValue(TYPE entity) {
         if (!entity.isInstanceOf(getValueClass())) {
             throw new ClassCastException("Collection member type expected " + getValueClass().getName() + ", got " + entity.getInstanceValueClass().getName());
         }
-        Map<String, Object> value = ((SharedEntityHandler) entity).ensureValue();
+        Map<String, Serializable> value = ((SharedEntityHandler) entity).ensureValue();
         if (!this.getValueClass().equals(entity.getInstanceValueClass())) {
             value.put(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
         }
@@ -110,8 +111,8 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         // ensure @Owner value is set properly.
         String ownerMemberName = entity.getEntityMeta().getOwnerMemberName();
         if ((ownerMemberName != null) && (value != null) && (getMeta().isOwnedRelationships())) {
-            Map<String, Object> ownerValue = ((SharedEntityHandler) getOwner()).ensureValue();
-            value.put(ownerMemberName, ownerValue);
+            Map<String, Serializable> ownerValue = ((SharedEntityHandler) getOwner()).ensureValue();
+            value.put(ownerMemberName, (Serializable) ownerValue);
             if (!entity.getMember(ownerMemberName).getObjectClass().equals(getOwner().getInstanceValueClass())) {
                 ownerValue.put(IEntity.CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(getOwner().getInstanceValueClass()));
             }
@@ -120,12 +121,12 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         return value;
     }
 
-    protected Map<String, Object> comparableValue(IEntity entity) {
-        Map<String, Object> enitytValue = entity.getValue();
+    protected Map<String, Serializable> comparableValue(IEntity entity) {
+        Map<String, Serializable> enitytValue = entity.getValue();
         if ((entity.getPrimaryKey() == null) || this.getValueClass().equals(entity.getInstanceValueClass())) {
             return enitytValue;
         } else {
-            Map<String, Object> comparableValue = new EntityValueMap();
+            Map<String, Serializable> comparableValue = new EntityValueMap();
             comparableValue.put(IEntity.PRIMARY_KEY, enitytValue.get(IEntity.PRIMARY_KEY));
             comparableValue.put(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
             return comparableValue;
@@ -137,7 +138,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         if ((o instanceof IEntity) && (((IEntity) o).isInstanceOf(getValueClass()))) {
             Collection<?> collectionValue = (Collection<?>) getValue();
             if (collectionValue != null) {
-                Map<String, Object> enitytValue = comparableValue((IEntity) o);
+                Map<String, Serializable> enitytValue = comparableValue((IEntity) o);
                 boolean rc = collectionValue.remove(enitytValue);
                 if (rc && getMeta().isOwnedRelationships()) {
                     ((SharedEntityHandler) getOwner()).removeValueFromGraph((IEntity) o);
@@ -221,7 +222,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         } else {
             VALUE_TYPE value = getValue();
             if (value != null) {
-                Set<Map<String, Object>> processed = new IdentityHashSet<Map<String, Object>>();
+                Set<Map<String, Serializable>> processed = new IdentityHashSet<Map<String, Serializable>>();
                 b.append("[ size=");
                 b.append(((Collection<?>) value).size());
                 b.append(' ');
@@ -237,7 +238,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
                         if (ToStringStyle.fieldMultiLine) {
                             b.append('\n');
                         }
-                        EntityValueMap.dumpMap(b, (Map<String, Object>) o, processed, ToStringStyle.PADDING + ToStringStyle.PADDING);
+                        EntityValueMap.dumpMap(b, (Map<String, Serializable>) o, processed, ToStringStyle.PADDING + ToStringStyle.PADDING);
                         if (ToStringStyle.fieldMultiLine) {
                             b.append(ToStringStyle.PADDING);
                         }

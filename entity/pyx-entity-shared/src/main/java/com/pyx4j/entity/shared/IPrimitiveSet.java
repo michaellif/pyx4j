@@ -20,10 +20,11 @@
  */
 package com.pyx4j.entity.shared;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 
-public interface IPrimitiveSet<TYPE> extends IObject<Set<TYPE>>, Set<TYPE> {
+public interface IPrimitiveSet<TYPE extends Serializable> extends IObject<Set<TYPE>>, Set<TYPE> {
 
     @Override
     public Class<TYPE> getValueClass();
