@@ -41,21 +41,21 @@ public class SymmetricSerializationGWTTest extends TestCase {
 
     private static final Logger log = LoggerFactory.getLogger(SymmetricSerializationGWTTest.class);
 
-    static final SomeRemoteServiceAsync service;
+    private static final SomeRemoteServiceAsync service;
+
+    private static final Serializer serializer;
 
     /**
      * Trigger generation of Serialized by GWT
      */
     static {
         service = (SomeRemoteServiceAsync) GWT.create(SomeRemoteService.class);
+        RPCSerializer sa = GWT.create(RPCSerializer.class);
+        serializer = sa.getSerializer();
     }
 
     private Object serializeDeserialize(Object data) throws SerializationException {
         String testName = getName();
-
-        RPCSerializer sa = GWT.create(RPCSerializer.class);
-
-        Serializer serializer = sa.getSerializer();
 
         SymmetricClientSerializationStreamWriter w = new SymmetricClientSerializationStreamWriter(serializer);
         w.prepareToWrite();
@@ -149,8 +149,7 @@ public class SymmetricSerializationGWTTest extends TestCase {
 
     public void testPerfomanceEnt5KWrite() throws SerializationException {
         Object data = SerializableDataEntity.generateData(5000, 0, Integer.MAX_VALUE, true);
-        RPCSerializer sa = GWT.create(RPCSerializer.class);
-        SymmetricClientSerializationStreamWriter w = new SymmetricClientSerializationStreamWriter(sa.getSerializer());
+        SymmetricClientSerializationStreamWriter w = new SymmetricClientSerializationStreamWriter(serializer);
         w.prepareToWrite();
         w.writeObject(data);
     }
@@ -163,8 +162,7 @@ public class SymmetricSerializationGWTTest extends TestCase {
 
     public void testPerfomanceEnt7KWrite() throws SerializationException {
         Object data = SerializableDataEntity.generateData(7000, 0, Integer.MAX_VALUE, true);
-        RPCSerializer sa = GWT.create(RPCSerializer.class);
-        SymmetricClientSerializationStreamWriter w = new SymmetricClientSerializationStreamWriter(sa.getSerializer());
+        SymmetricClientSerializationStreamWriter w = new SymmetricClientSerializationStreamWriter(serializer);
         w.prepareToWrite();
         w.writeObject(data);
     }
@@ -177,8 +175,7 @@ public class SymmetricSerializationGWTTest extends TestCase {
 
     public void testPerfomanceEnt50x50Write() throws SerializationException {
         Object data = SerializableDataEntity.generateData(50, 50, Integer.MAX_VALUE, true);
-        RPCSerializer sa = GWT.create(RPCSerializer.class);
-        SymmetricClientSerializationStreamWriter w = new SymmetricClientSerializationStreamWriter(sa.getSerializer());
+        SymmetricClientSerializationStreamWriter w = new SymmetricClientSerializationStreamWriter(serializer);
         w.prepareToWrite();
         w.writeObject(data);
     }
