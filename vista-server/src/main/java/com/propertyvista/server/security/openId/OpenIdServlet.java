@@ -72,9 +72,12 @@ public class OpenIdServlet extends HttpServlet {
                 openIdResponse.email = openIdResponse.email.toLowerCase(Locale.ENGLISH);
                 devSession.setAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE, openIdResponse.email);
 
-                if (openIdResponse.email.endsWith("propertyvista.com")) {
+                if (openIdResponse.email.endsWith("propertyvista.com") && !openIdResponse.email.contains("demo")) {
+                    VistaAuthenticationServicesImpl.setVistaEmployeeCookie();
+                } else if (openIdResponse.email.endsWith("pyx4j.com")) {
                     VistaAuthenticationServicesImpl.setVistaEmployeeCookie();
                 }
+
             }
             createResponsePage(response, false, receivingURL);
         }
