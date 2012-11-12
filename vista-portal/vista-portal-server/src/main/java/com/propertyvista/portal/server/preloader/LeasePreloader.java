@@ -160,7 +160,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             AptUnit unit = aptUnitSource.next();
             unit = makeAvailable(unit);
 
-            Lease lease = generator.createLease(unit);
+            Lease lease = generator.createLeaseWithTenants(unit);
             LeaseGenerator.attachDocumentData(lease);
 
             //Set users that can login using UI
