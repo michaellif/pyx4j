@@ -11,17 +11,13 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.onboarding;
+package com.propertyvista.admin.server.onboarding;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.propertyvista.admin.server.onboarding.PmcNameValidator;
-
-@Ignore
 public class PmcNameValidatorTest {
 
     @Test
@@ -60,6 +56,21 @@ public class PmcNameValidatorTest {
         assertTrue(PmcNameValidator.isDnsNameValid("ABCDE"));
         assertFalse(PmcNameValidator.isDnsNameValid("%abc"));
         assertFalse(PmcNameValidator.isDnsNameValid("ab%c"));
+    }
+
+    @Test
+    public void testProdReservedNamesMatching() {
+        PmcNameValidator.loadReservedWords();
+
+        assertTrue(PmcNameValidator.isDnsReserved("vv_prod01"));
+        assertTrue(PmcNameValidator.isDnsReserved("vv-prod01"));
+        assertTrue(PmcNameValidator.isDnsReserved("vv-prod1"));
+        assertTrue(PmcNameValidator.isDnsReserved("vv_prod1"));
+        assertTrue(PmcNameValidator.isDnsReserved("vv_staging1"));
+        assertTrue(PmcNameValidator.isDnsReserved("vv_staging01"));
+        assertTrue(PmcNameValidator.isDnsReserved("vv-staging1"));
+        assertTrue(PmcNameValidator.isDnsReserved("vv-staging01"));
+        assertFalse(PmcNameValidator.isDnsReserved("vv-staging01a"));
 
     }
 }

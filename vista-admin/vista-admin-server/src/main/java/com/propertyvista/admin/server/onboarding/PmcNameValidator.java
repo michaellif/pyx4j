@@ -33,18 +33,12 @@ public class PmcNameValidator {
 
     private static Logger log = LoggerFactory.getLogger(PmcNameValidator.class);
 
-    private static Set<String> reservedWords;
+    private static final Set<String> reservedWords = new HashSet<String>();
 
-    private static Set<String> reservedWordsRegex;
+    private static final Set<String> reservedWordsRegex = new HashSet<String>();
 
     static {
-        reservedWordsRegex = new HashSet<String>();
-        reservedWords = new HashSet<String>();
-        load(CSVLoad.loadFile("badWords.csv", "name"));
-        load(CSVLoad.loadFile("reservedPmcWords.csv", "name"));
-        if (!ApplicationMode.isDevelopment()) {
-            load(CSVLoad.loadFile("reservedPmcTestWords.csv", "name"));
-        }
+        loadReservedWords();
     }
 
     private static void load(String[] strings) {
@@ -64,10 +58,22 @@ public class PmcNameValidator {
         }
     }
 
-    public static void setReservedWords(String[] words) {
+    static void setReservedWords(String[] words) {
         reservedWordsRegex.clear();
         reservedWords.clear();
         load(words);
+    }
+
+    static void loadReservedWords() {
+        reservedWordsRegex.clear();
+        reservedWords.clear();
+        load(CSVLoad.loadFile("badWords.csv", "name"));
+        load(CSVLoad.loadFile("reservedPmcWords.csv", "name"));
+        if (!ApplicationMode.isDevelopment()) {
+            load(CSVLoad.loadFile("reservedPmcTestWords.csv", "name"));
+        }
+        reservedWordsRegex.add("^.*prod\\d*$");
+        reservedWordsRegex.add("^.*staging\\d*$");
     }
 
     public static boolean canCreatePmcName(String dnsName, String onboardingAccountId) {
