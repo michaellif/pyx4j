@@ -86,10 +86,14 @@ public class LeaseGenerator extends DataGenerator {
         lease.expectedMoveIn().setValue(expectedMoveIn);
 
         ServerSideFactory.create(LeaseFacade.class).setUnit(lease, unit);
-        addTenants(lease);
 
         lease.creationDate().setValue(createdDate);
+        return lease;
+    }
 
+    public Lease createLeaseWithTenants(AptUnit unit) {
+        Lease lease = createLease(unit);
+        addTenants(lease);
         return lease;
     }
 

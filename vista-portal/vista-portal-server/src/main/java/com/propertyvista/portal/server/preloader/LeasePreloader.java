@@ -65,7 +65,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         for (int i = 0; i < config().numTenants; i++) {
             AptUnit unit = makeAvailable(aptUnitSource.next());
             Persistence.service().commit();
-            Lease lease = generator.createLease(unit);
+            Lease lease = generator.createLeaseWithTenants(unit);
             Persistence.service().commit();
             LeaseGenerator.attachDocumentData(lease);
             LeaseGenerator.assigneLeaseProducts(lease);
