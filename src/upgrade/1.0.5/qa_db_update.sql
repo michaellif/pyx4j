@@ -29,8 +29,12 @@ CREATE DATABASE vista_qa TEMPLATE vista_prod OWNER vista TABLESPACE vista33;
 \c vista_qa
 
 UPDATE  _admin_.pad_file
-SET     status = 'SendError'
+SET     status = 'Invalid'
 WHERE   status = 'Creating';
+
+UPDATE  _admin_.pad_file
+SET     status = 'Invalid'
+WHERE   status = 'SendError';
 
 SET check_function_bodies = 'off';
  
