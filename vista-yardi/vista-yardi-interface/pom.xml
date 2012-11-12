@@ -28,9 +28,14 @@
             <artifactId>commons-httpclient</artifactId>
             <scope>test</scope>
             <optional>true</optional>
-            <!--  version>3.1</version -->
         </dependency>
 
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-server</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
