@@ -23,16 +23,19 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.LegalTermsFolder;
+import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.SignatureFolder;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.components.MoneyComboBox;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureQuotationRequestDTO;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.components.YesNoComboBox;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureCoverageRequestDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureQuotationRequestParamsDTO;
 
-public class TenantSureQuotationRequestForm extends CEntityDecoratableForm<TenantSureQuotationRequestDTO> {
+public class TenantSureCoverageRequestForm extends CEntityDecoratableForm<TenantSureCoverageRequestDTO> {
 
-    private static final I18n i18n = I18n.get(TenantSureQuotationRequestForm.class);
+    private static final I18n i18n = I18n.get(TenantSureCoverageRequestForm.class);
 
-    public TenantSureQuotationRequestForm() {
-        super(TenantSureQuotationRequestDTO.class);
+    public TenantSureCoverageRequestForm() {
+        super(TenantSureCoverageRequestDTO.class);
     }
 
     @Override
@@ -40,23 +43,28 @@ public class TenantSureQuotationRequestForm extends CEntityDecoratableForm<Tenan
         FormFlexPanel contentPanel = new FormFlexPanel();
         int row = -1;
 
-        contentPanel.setH1(++row, 0, 1, i18n.tr("Coverage"));
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().personalLiabilityCoverage(), new MoneyComboBox())).build());
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contentsCoverage(), new MoneyComboBox())).build());
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deductible(), new MoneyComboBox())).build());
 
-        contentPanel.setH1(++row, 0, 1, i18n.tr("Coverage Qualification Questions"));
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().smoker(), new CComboBox<Boolean>())).build());
+        contentPanel.setH2(++row, 0, 1, i18n.tr("Coverage Qualification Questions"));
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().smoker(), new YesNoComboBox())).build());
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfPreviousClaims())).build());
 
+        contentPanel.setWidget(++row, 0, inject(proto().personalDisclaimerTerms(), new LegalTermsFolder(true)));
+        contentPanel.setWidget(++row, 0, inject(proto().digitalSignatures(), new SignatureFolder(true)));
         return contentPanel;
     }
 
-    public void setRequestParams(TenantSureQuotationRequestParamsDTO params) {
-        populate(EntityFactory.create(TenantSureQuotationRequestDTO.class));
+    public void setCoverageParams(TenantSureQuotationRequestParamsDTO params) {
+        TenantSureCoverageRequestDTO coverageRequest = EntityFactory.create(TenantSureCoverageRequestDTO.class);
+        coverageRequest.personalDisclaimerTerms().addAll(params.personalDisclaimerTerms());
+        coverageRequest.digitalSignatures().addAll(params.digitalSignatures());
+        setValue(coverageRequest, false);
+
         ((CComboBox<BigDecimal>) (get(proto().personalLiabilityCoverage()))).setOptions(params.generalLiabilityCoverageOptions());
         ((CComboBox<BigDecimal>) (get(proto().contentsCoverage()))).setOptions(params.contentsCoverageOptions());
         ((CComboBox<BigDecimal>) (get(proto().deductible()))).setOptions(params.deductibleOptions());
-    }
 
+    }
 }

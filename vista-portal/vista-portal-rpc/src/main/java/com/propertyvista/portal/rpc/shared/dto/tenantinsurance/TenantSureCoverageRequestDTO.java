@@ -19,10 +19,14 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
+import com.propertyvista.dto.LegalTermsDescriptorDTO;
+
 @Transient
-public interface TenantSureQuotationRequestDTO extends IEntity {
+public interface TenantSureCoverageRequestDTO extends IEntity {
 
     @NotNull
     IPrimitive<BigDecimal> personalLiabilityCoverage();
@@ -36,10 +40,15 @@ public interface TenantSureQuotationRequestDTO extends IEntity {
 
     // these are statement of fact questions
     @NotNull
+    @Caption(name = "Number of Previous Claims")
     IPrimitive<Integer> numberOfPreviousClaims();
 
-    @Caption(name = "Is any one of the tenants a smoker")
+    @Caption(name = "Is any one of the tenants a smoker?")
     @NotNull
     IPrimitive<Boolean> smoker();
+
+    IList<LegalTermsDescriptorDTO> personalDisclaimerTerms();
+
+    IList<DigitalSignature> digitalSignatures();
 
 }

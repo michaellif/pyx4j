@@ -16,15 +16,16 @@ package com.propertyvista.portal.client.activity.tenantinsurance.tenantsure;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureQuotationRequestDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureQuoteDTO;
 
@@ -44,6 +45,7 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
         service.getQuotationRequestParams(new DefaultAsyncCallback<TenantSureQuotationRequestParamsDTO>() {
             @Override
             public void onSuccess(TenantSureQuotationRequestParamsDTO quotationRequestParams) {
+                view.setPresenter(TenantSurePurchaseActivity.this);
                 view.init(quotationRequestParams);
                 panel.setWidget(view);
             }
@@ -52,18 +54,40 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
     }
 
     @Override
-    public void requestQuotation(TenantSureQuotationRequestDTO dto) {
-        // TODO Auto-generated method stub
+    public void onCoverageRequestChanged() {
+        view.waitForQuote();
+        service.getQuote(new DefaultAsyncCallback<TenantSureQuoteDTO>() {
+
+            @Override
+            public void onSuccess(TenantSureQuoteDTO quote) {
+                view.setQuote(quote);
+            }
+        }, view.getCoverageRequest());
     }
 
     @Override
-    public void acceptQuote(TenantSureQuoteDTO quote, CreditCardInfo creditCardInfo) {
-        // TODO Auto-generated method stub
+    public void onQuoteAccepted() {
+        service.acceptQuote(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                // TODO go to paymnet insurance processed screen
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                // TODO process special exception for payment error
+                if (caught instanceof UserRuntimeException) {
+                    view.populatePaymentProcessingError(caught.getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
+            }
+        }, view.getAcceptedQuote(), view.getCreditCardInfo());
     }
 
     @Override
     public void cancel() {
-        // TODO Auto-generated method stub
+        History.back();
     }
 
 }

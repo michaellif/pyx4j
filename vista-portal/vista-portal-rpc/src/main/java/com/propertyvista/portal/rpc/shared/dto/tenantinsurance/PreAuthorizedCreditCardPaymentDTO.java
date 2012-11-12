@@ -7,27 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-09
+ * Created on 2012-11-12
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.shared.dto.tenantinsurance;
 
-import java.math.BigDecimal;
-
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IList;
+
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.dto.LegalTermsDescriptorDTO;
 
 @Transient
-public interface TenantSureQuoteDTO extends IEntity {
+public interface PreAuthorizedCreditCardPaymentDTO extends IEntity {
 
-    TenantSureCoverageRequestDTO quotationRequest();
+    CreditCardInfo creditCardInfo();
 
-    @Caption(name = "Your monthly insurance premium")
-    @Format("$#,##.00")
-    IPrimitive<BigDecimal> monthlyInsurancePremium();
+    IList<LegalTermsDescriptorDTO> agreementLegalBlurbAndPreAuthorizationAgreeement();
 
 }

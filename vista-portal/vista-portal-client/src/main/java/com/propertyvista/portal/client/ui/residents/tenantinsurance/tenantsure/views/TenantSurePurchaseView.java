@@ -16,7 +16,7 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.domain.payment.CreditCardInfo;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureQuotationRequestDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureCoverageRequestDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureQuoteDTO;
 
@@ -24,16 +24,30 @@ public interface TenantSurePurchaseView extends IsWidget {
 
     interface Presenter {
 
-        void requestQuotation(TenantSureQuotationRequestDTO dto);
+        void onCoverageRequestChanged();
 
-        void acceptQuote(TenantSureQuoteDTO quote, CreditCardInfo creditCardInfo);
+        void onQuoteAccepted();
 
         void cancel();
     }
 
+    void setPresenter(Presenter presenter);
+
     /** resets the view with new parameters */
     void init(TenantSureQuotationRequestParamsDTO quotationRequestParams);
 
-    void populateQuote(TenantSureQuoteDTO quote);
+    void setQuote(TenantSureQuoteDTO quote);
 
+    void waitForQuote();
+
+    void waitForPaymentProcessing();
+
+    void populatePaymentProcessingError(String errorReason);
+
+    TenantSureCoverageRequestDTO getCoverageRequest();
+
+    /** @return <code>null</code> when there's no accepted quote, or accepted quote */
+    TenantSureQuoteDTO getAcceptedQuote();
+
+    CreditCardInfo getCreditCardInfo();
 }
