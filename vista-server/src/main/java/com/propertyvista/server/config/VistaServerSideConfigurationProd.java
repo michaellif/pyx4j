@@ -52,9 +52,9 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         case production:
             return "https://" + pmcDnsName + ".propertyvista.com/";
         case staging:
-            return "https://" + pmcDnsName + ".staging02-crm.birchwoodsoftwaregroup.com/";
+            return "https://" + pmcDnsName + "-crm-staging02.birchwoodsoftwaregroup.com/";
         default:
-            return super.getDefaultBaseURLvistaCrm(pmcDnsName);
+            throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
         }
     }
 
@@ -70,9 +70,9 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         case production:
             return protocol + pmcDnsName + ".residentportalsite.com/";
         case staging:
-            return protocol + pmcDnsName + ".staging02.birchwoodsoftwaregroup.com/";
+            return protocol + pmcDnsName + "-portal-staging02.birchwoodsoftwaregroup.com/";
         default:
-            return super.getDefaultBaseURLresidentPortal(pmcDnsName, secure);
+            throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
         }
     }
 
@@ -82,9 +82,9 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         case production:
             return "https://" + pmcDnsName + ".prospectportalsite.com/";
         case staging:
-            return "https://" + pmcDnsName + ".staging02-ptapp.birchwoodsoftwaregroup.com/";
+            return "https://" + pmcDnsName + "-ptapp-staging02.birchwoodsoftwaregroup.com/";
         default:
-            return super.getDefaultBaseURLvistaCrm(pmcDnsName);
+            throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
         }
     }
 
@@ -94,9 +94,9 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         case production:
             return "https://prod02.birchwoodsoftwaregroup.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.ADMIN_URL;
         case staging:
-            return "https://staging02.birchwoodsoftwaregroup.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.ADMIN_URL;
+            return "https://admin-staging02.birchwoodsoftwaregroup.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.ADMIN_URL;
         default:
-            return super.getDefaultBaseURLvistaAdmin();
+            throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
         }
     }
 
