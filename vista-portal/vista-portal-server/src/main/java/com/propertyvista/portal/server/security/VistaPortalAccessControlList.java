@@ -55,6 +55,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentCrudService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
+import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
 import com.propertyvista.portal.rpc.portal.services.resident.ViewBillService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationSelectionService;
@@ -84,7 +85,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         if (VistaTODO.enableWelcomeWizardDemoMode) {
             grant(new IServiceExecutePermission(LeaseReviewService.class));
             grant(new IServiceExecutePermission(InsuranceService.class));
-            grant(new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.services.InsuranceService.class));
+            grant(new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.services.resident.MockupInsuranceService.class));
             grant(new IServiceExecutePermission(MoveInScheduleService.class));
             grant(new IServiceExecutePermission(ResetWizardService.class));
         }
@@ -172,6 +173,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentMethodCrudService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PersonalInfoCrudService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ViewBillService.class));
+
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantSurePurchaseService.class));
 
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(Bill.class, EntityPermission.READ));
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(InvoiceLineItem.class, EntityPermission.READ));

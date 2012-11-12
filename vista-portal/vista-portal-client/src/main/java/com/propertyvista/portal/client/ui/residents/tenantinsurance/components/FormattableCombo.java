@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.insurancemockup.components;
+package com.propertyvista.portal.client.ui.residents.tenantinsurance.components;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.IFormat;

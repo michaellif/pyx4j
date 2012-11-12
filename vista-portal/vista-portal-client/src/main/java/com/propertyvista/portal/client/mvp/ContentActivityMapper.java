@@ -41,6 +41,7 @@ import com.propertyvista.portal.client.activity.residents.paymentmethod.EditPaym
 import com.propertyvista.portal.client.activity.residents.paymentmethod.NewPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.PaymentMethodsActivity;
 import com.propertyvista.portal.client.activity.security.PasswordResetActivity;
+import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.TenantSurePurchaseActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 
@@ -89,6 +90,9 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                 } else if (VistaTODO.enableWelcomeWizardDemoMode & (place instanceof PortalSiteMap.Residents.TenantInsurance)) {
                     activity = new MockupInsuranceActivity();
+
+                } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.TenantSurePurchase) {
+                    activity = new TenantSurePurchaseActivity();
 
                     // TODO not sure if these activities belong here 
                 } else if (place instanceof PortalSiteMap.Login) {

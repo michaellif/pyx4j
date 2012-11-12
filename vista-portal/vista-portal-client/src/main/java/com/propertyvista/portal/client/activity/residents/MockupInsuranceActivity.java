@@ -23,16 +23,16 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.propertyvista.domain.moveinwizardmockup.TenantInsuranceDTO;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.InsuranceView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.rpc.portal.services.InsuranceService;
+import com.propertyvista.portal.rpc.portal.services.resident.MockupInsuranceService;
 
 public class MockupInsuranceActivity extends AbstractActivity implements InsuranceView.Presenter {
 
     private final InsuranceView view;
 
-    private final InsuranceService service;
+    private final MockupInsuranceService service;
 
     public MockupInsuranceActivity() {
-        service = GWT.<InsuranceService> create(InsuranceService.class);
+        service = GWT.<MockupInsuranceService> create(MockupInsuranceService.class);
         view = PortalViewFactory.instance(InsuranceView.class);
     }
 

@@ -36,9 +36,9 @@ import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.statusviewers.NoTenantInsuranceStatusViewer;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.statusviewers.TenantInsuranceStatusViewer;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.statusviewers.TenantSureInsuranceStatusViewer;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.NoTenantInsuranceStatusViewer;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantSureInsuranceStatusViewer;
 
 public class PortalTheme extends VistaTheme {
 

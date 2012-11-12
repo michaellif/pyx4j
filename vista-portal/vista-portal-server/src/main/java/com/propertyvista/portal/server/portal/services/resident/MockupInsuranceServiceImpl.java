@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.services;
+package com.propertyvista.portal.server.portal.services.resident;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -39,11 +39,11 @@ import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.domain.tenant.ptapp.IAgree;
 import com.propertyvista.dto.LegalTermsDescriptorDTO;
-import com.propertyvista.portal.rpc.portal.services.InsuranceService;
+import com.propertyvista.portal.rpc.portal.services.resident.MockupInsuranceService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.portal.server.ptapp.services.steps.welcomewizard.WelcomeWizardDemoData;
 
-public class InsuranceServiceImpl implements InsuranceService {
+public class MockupInsuranceServiceImpl implements MockupInsuranceService {
 
     private final static String PERSONAL_DISCLAIMER =//@formatter:off
             "In order to continue and obatain a quote and insurance certificate from TenantSure, we need you to review and agree to the following disclaimers:<br/>" +

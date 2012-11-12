@@ -42,7 +42,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.themes.TenantDashboardTheme;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.statusviewers.TenantInsuranceStatusViewer;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
 import com.propertyvista.portal.domain.dto.BillSummaryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;

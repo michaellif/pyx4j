@@ -54,6 +54,8 @@ import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethods
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsViewImpl;
 import com.propertyvista.portal.client.ui.residents.personalinfo.PersonalInfoView;
 import com.propertyvista.portal.client.ui.residents.personalinfo.PersonalInfoViewImpl;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseView;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseViewImpl;
 
 public class PortalViewFactory extends ViewFactoryBase {
 
@@ -101,6 +103,8 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new LeaseContextSelectionViewImpl());
             } else if (VistaTODO.enableWelcomeWizardDemoMode & InsuranceView.class.equals(type)) {
                 map.put(type, new InsuranceViewImpl());
+            } else if (TenantSurePurchaseView.class.equals(type)) {
+                map.put(type, new TenantSurePurchaseViewImpl());
             }
         }
 

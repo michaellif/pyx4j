@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.tenantinsurance.statusviewers;
+package com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

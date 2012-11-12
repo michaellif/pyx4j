@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.tenantinsurance.statusviewers;
+package com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
