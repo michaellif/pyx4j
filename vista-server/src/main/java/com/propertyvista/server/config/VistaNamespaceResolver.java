@@ -47,6 +47,8 @@ public class VistaNamespaceResolver implements NamespaceResolver {
 
     private final static Set<String> prodSystemDnsBase = new HashSet<String>();
 
+    private final static String prodPmcAppEnvRegex = "^.*prod\\d*$|^.*staging\\d*$";
+
     static {
         prodSystemDnsBase.add("residentportalsite.com");
         prodSystemDnsBase.add("residentportalsite.ca");
@@ -87,34 +89,26 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         // Prod: Get the 3rd part of URL.
         // www.ABC.propertyvista.com 
 
-        String host = ServletUtils.getForwardedHost(httprequest);
-        if (host == null) {
-            host = httprequest.getServerName();
-            if ("localhost".equals(host) || httprequest.getLocalAddr().equals(host)) {
+        String serverName = ServletUtils.getForwardedHost(httprequest);
+        if (serverName == null) {
+            serverName = httprequest.getServerName();
+            if ("localhost".equals(serverName) || httprequest.getLocalAddr().equals(serverName)) {
                 return VistaNamespace.demoNamespace;
             }
         }
-        host = host.toLowerCase(Locale.ENGLISH);
-        String[] parts = host.split("\\.");
+        serverName = serverName.toLowerCase(Locale.ENGLISH);
+        String[] serverNameParts = serverName.split("\\.");
 
         String namespaceProposal = null;
-        if (parts.length >= 3) {
-            String dnsBase = parts[parts.length - 2] + "." + parts[parts.length - 1];
+        if (serverNameParts.length >= 3) {
+            String dnsBase = serverNameParts[serverNameParts.length - 2] + "." + serverNameParts[serverNameParts.length - 1];
             if (prodSystemDnsBase.contains(dnsBase)) {
-                namespaceProposal = parts[parts.length - 3];
-            } else if (dnsBase.equals("birchwoodsoftwaregroup.com")) {
-                if (parts.length >= 4) {
-                    namespaceProposal = parts[0];
-                } else if (parts.length == 3) {
-                    String finalHostName = parts[parts.length - 3];
-                    int envIdx = finalHostName.lastIndexOf('-');
-                    if (envIdx > 0) {
-                        int appIdx = finalHostName.lastIndexOf('-', envIdx - 1);
-                        if (appIdx > 0) {
-                            namespaceProposal = finalHostName.substring(0, appIdx);
-                        }
-                    }
+                namespaceProposal = serverNameParts[serverNameParts.length - 3];
+                if (namespaceProposal.matches(prodPmcAppEnvRegex)) {
+                    namespaceProposal = getNamespaceFromPmcAppEnv(serverNameParts);
                 }
+            } else if (dnsBase.equals("birchwoodsoftwaregroup.com")) {
+                namespaceProposal = getNamespaceFromPmcAppEnv(serverNameParts);
             }
         }
 
@@ -125,17 +119,17 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         String pmcNamespace;
         try {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
-            pmcNamespace = CacheService.get(VistaNamespaceResolver.class.getName() + "." + host);
+            pmcNamespace = CacheService.get(VistaNamespaceResolver.class.getName() + "." + serverName);
             if (pmcNamespace == null) {
                 EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
                 if (namespaceProposal != null) {
                     OrCriterion or = criteria.or();
                     or.left(PropertyCriterion.eq(criteria.proto().dnsName(), namespaceProposal));
                     or.right(PropertyCriterion.eq(criteria.proto().dnsNameAliases().$().enabled(), Boolean.TRUE));
-                    or.right(PropertyCriterion.eq(criteria.proto().dnsNameAliases().$().dnsName(), host));
+                    or.right(PropertyCriterion.eq(criteria.proto().dnsNameAliases().$().dnsName(), serverName));
                 } else {
                     criteria.add(PropertyCriterion.eq(criteria.proto().dnsNameAliases().$().enabled(), Boolean.TRUE));
-                    criteria.add(PropertyCriterion.eq(criteria.proto().dnsNameAliases().$().dnsName(), host));
+                    criteria.add(PropertyCriterion.eq(criteria.proto().dnsNameAliases().$().dnsName(), serverName));
                 }
                 Pmc pmc = Persistence.service().retrieve(criteria);
                 if (pmc != null) {
@@ -148,14 +142,14 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                 } else {
                     pmcNamespace = VistaNamespace.noNamespace;
                 }
-                CacheService.put(VistaNamespaceResolver.class.getName() + "." + host, pmcNamespace);
+                CacheService.put(VistaNamespaceResolver.class.getName() + "." + serverName, pmcNamespace);
             }
         } finally {
             NamespaceManager.remove();
         }
 
         if ((pmcNamespace == null) || (VistaNamespace.noNamespace.equals(pmcNamespace))) {
-            log.warn("accessing host {}, path {}", host, httprequest.getServletPath());
+            log.warn("accessing host {}, path {}", serverName, httprequest.getServletPath());
             if (httprequest.getServletPath().endsWith("robots.txt") || httprequest.getServletPath().endsWith("favicon.ico")) {
                 return VistaNamespace.noNamespace;
             } else {
@@ -163,6 +157,24 @@ public class VistaNamespaceResolver implements NamespaceResolver {
             }
         } else {
             return pmcNamespace;
+        }
+    }
+
+    private static String getNamespaceFromPmcAppEnv(String[] serverNameParts) {
+        if (serverNameParts.length >= 4) {
+            return serverNameParts[0];
+        } else if (serverNameParts.length == 3) {
+            String hostName = serverNameParts[serverNameParts.length - 3];
+            int envIdx = hostName.lastIndexOf('-');
+            if (envIdx > 0) {
+                int appIdx = hostName.lastIndexOf('-', envIdx - 1);
+                if (appIdx > 0) {
+                    return hostName.substring(0, appIdx);
+                }
+            }
+            return hostName;
+        } else {
+            return null;
         }
     }
 }
