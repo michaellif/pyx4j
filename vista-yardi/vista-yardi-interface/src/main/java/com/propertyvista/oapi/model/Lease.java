@@ -11,29 +11,17 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi;
+package com.propertyvista.oapi.model;
 
-import javax.jws.WebService;
+public class Lease {
 
-import com.propertyvista.oapi.model.Lease;
+    public String leaseId;
 
-@WebService
-public interface LeaseService {
+    public Lease() {
+    }
 
-    void createLease(Lease lease);
-
-    Lease getLeaseByLeaseId(String leaseId);
-
-    // create new lease
-
-    // update existing lease
-
-    // get lease by id
-
-    // get lease list (criteria?)
-
-    // tenants
-
-    //get lease by unit (date, active, future)
+    public Lease(String leaseId) {
+        this.leaseId = leaseId;
+    }
 
 }

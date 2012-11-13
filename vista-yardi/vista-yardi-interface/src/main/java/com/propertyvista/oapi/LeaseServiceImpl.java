@@ -7,33 +7,32 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 13, 2012
+ * Created on Nov 12, 2012
  * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.oapi;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.jws.WebService;
 
 import com.propertyvista.oapi.model.Lease;
 
-@WebService
-public interface LeaseService {
+@WebService(endpointInterface = "com.propertyvista.oapi.LeaseService")
+public class LeaseServiceImpl implements LeaseService {
 
-    void createLease(Lease lease);
+    static private Map<String, Lease> leases = new HashMap<String, Lease>();
 
-    Lease getLeaseByLeaseId(String leaseId);
+    @Override
+    public void createLease(Lease lease) {
+        leases.put(lease.leaseId, lease);
+    }
 
-    // create new lease
-
-    // update existing lease
-
-    // get lease by id
-
-    // get lease list (criteria?)
-
-    // tenants
-
-    //get lease by unit (date, active, future)
+    @Override
+    public Lease getLeaseByLeaseId(String leaseId) {
+        return leases.get(leaseId);
+    }
 
 }
