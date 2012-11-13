@@ -113,7 +113,7 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         numOfProductCharges(3).
         serviceCharge("930.30").
         recurringFeatureCharges("140.00").
-        depositRefundAmount("-1151.00").
+        depositRefundAmount("-1151.00"). // service + pet/31-Mar-2012
         latePaymentFees("0.00").
         taxes("128.44").
         totalDueAmount("127.74");
@@ -136,9 +136,9 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         billType(Bill.BillType.Final).
         billingPeriodStartDate(null).
         billingPeriodEndDate(null).
-        depositRefundAmount("0.00").
+        depositRefundAmount("-225.05"). // parking + locker + parking/Apr-30-2012
         latePaymentFees("0.00").
-        totalDueAmount("0.00");
+        totalDueAmount("-225.05");
         // @formatter:on
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
