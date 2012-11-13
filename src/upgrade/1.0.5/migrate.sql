@@ -533,6 +533,10 @@ BEGIN
         ||'     SET     from_date = current_date '
         ||'     WHERE   (status != ''Created'' AND status != ''Application'') '
         ||'     AND     from_date IS NULL ';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.lease '
+        ||'     SET     lease_term = ''FixedEx'' '
+        ||'     WHERE   lease_term IS NULL ';
 
         EXECUTE 'UPDATE '||v_schema_name||'.lease_v '
         ||'     SET     status = ''ExistingLease'' '
