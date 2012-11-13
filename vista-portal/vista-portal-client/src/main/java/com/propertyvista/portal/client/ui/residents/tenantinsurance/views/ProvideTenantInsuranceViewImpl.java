@@ -18,14 +18,20 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
 
 public class ProvideTenantInsuranceViewImpl extends Composite implements ProvideTenantInsuranceView {
+
+    public enum Styles implements IStyleName {
+        ProvideTINoInsuranceWarning, ProvideTIRequirements, ProvideTIBGetTenantSure, ProvideTIUpdateExisitingInsurance, ProvideTITenantSureLogo;
+    }
 
     private static final I18n i18n = I18n.get(ProvideTenantInsuranceViewImpl.class);
 
@@ -35,22 +41,32 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
 
     private final Label noTenantInsuranceWarningMessage;
 
+    private final TenantSureLogo tenantSureLogo;
+
     public ProvideTenantInsuranceViewImpl() {
         FlowPanel viewPanel = new FlowPanel();
 
         noTenantInsuranceWarningMessage = new Label();
+        noTenantInsuranceWarningMessage.addStyleName(Styles.ProvideTINoInsuranceWarning.name());
+
         noTenantInsuranceWarningMessage.setText(i18n.tr("According to our records you do not have Valid Tenant Insurance!"));
         viewPanel.add(noTenantInsuranceWarningMessage);
 
         tenantInsuranceRequirementsMessage = new Label();
+        tenantInsuranceRequirementsMessage.addStyleName(Styles.ProvideTIRequirements.name());
         viewPanel.add(tenantInsuranceRequirementsMessage);
 
-        Button getTenantSureButton = new Button(i18n.tr("Get TenantSure Insurance"), new ClickHandler() {
+        tenantSureLogo = new TenantSureLogo();
+        tenantSureLogo.addStyleName(Styles.ProvideTITenantSureLogo.name());
+        viewPanel.add(tenantSureLogo);
+
+        Button getTenantSureButton = new Button(i18n.tr("Get TenantSure"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.onPurchaseTenantSure();
             }
         });
+        getTenantSureButton.addStyleName(Styles.ProvideTIBGetTenantSure.name());
         viewPanel.add(getTenantSureButton);
 
         Anchor provideInsuranceByOtherProvider = new Anchor(i18n.tr("I (we) already have Tenant Insurance"), new ClickHandler() {
@@ -60,6 +76,7 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
                 presenter.onUpdateInsuranceByOtherProvider();
             }
         });
+        provideInsuranceByOtherProvider.addStyleName(Styles.ProvideTIUpdateExisitingInsurance.name());
         viewPanel.add(provideInsuranceByOtherProvider);
 
         initWidget(viewPanel);

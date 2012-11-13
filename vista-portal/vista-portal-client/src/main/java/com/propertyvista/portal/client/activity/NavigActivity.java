@@ -26,7 +26,6 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.security.VistaCustomerBehavior;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -59,9 +58,8 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
         }
         items.add(new Residents.PersonalInformation());
 
-        if (VistaTODO.enableWelcomeWizardDemoMode && !VistaTODO.removedForProduction) { // this is just mock-up!..
-            items.add(new Residents.TenantInsurance());
-        }
+        items.add(new Residents.TenantInsurance());
+
         if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
             items.add(new PortalSiteMap.LeaseContextSelection());
         }

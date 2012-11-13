@@ -42,6 +42,7 @@ import com.propertyvista.portal.client.activity.residents.paymentmethod.NewPayme
 import com.propertyvista.portal.client.activity.residents.paymentmethod.PaymentMethodsActivity;
 import com.propertyvista.portal.client.activity.security.PasswordResetActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.ProvideTenantInsuranceActivity;
+import com.propertyvista.portal.client.activity.tenantinsurance.TenantInsuranceActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.otherprovider.TenantInsuranceByOtherProvdierUpdateActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.TenantSurePurchaseActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -90,9 +91,11 @@ public class ContentActivityMapper implements AppActivityMapper {
                 } else if (place instanceof Residents.BillingHistory.ViewBill) {
                     activity = new ViewBillActivity(place);
 
-                } else if (VistaTODO.enableWelcomeWizardDemoMode & (place instanceof PortalSiteMap.Residents.TenantInsurance)) {
+                } else if (VistaTODO.enableWelcomeWizardDemoMode & (place instanceof PortalSiteMap.Residents.InsuranceMockup)) {
                     activity = new MockupInsuranceActivity();
 
+                } else if (place instanceof PortalSiteMap.Residents.TenantInsurance) {
+                    activity = new TenantInsuranceActivity();
                 } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.TenantSurePurchase) {
                     activity = new TenantSurePurchaseActivity();
                 } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.UploadProofOfInsurance) {
