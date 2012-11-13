@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.portal.client.ui.residents.insurancemockup.resources.InsuranceMockupResources;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusDTO;
 
@@ -46,7 +46,7 @@ public class TenantSureInsuranceStatusViewer extends CEntityViewer<TenantSureTen
     @Override
     public IsWidget createContent(TenantSureTenantInsuranceStatusDTO tenantSureStatus) {
         FlowPanel contentPanel = new FlowPanel();
-        Image tenantSureLogo = new Image(InsuranceMockupResources.INSTANCE.logoTenantSure());
+        Image tenantSureLogo = new Image(TenantSureResources.INSTANCE.logoTenantSure());
         tenantSureLogo.addStyleName(STYLE_PREFIX + StyleSuffix.TenantSureLogo.name());
         contentPanel.add(tenantSureLogo);
 
