@@ -13,6 +13,10 @@
  */
 package com.propertyvista.admin.server.upgrade.u_1_0_5;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -25,6 +29,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.server.preloader.DashboardPreloader;
 
 public class UpgradeProcedure105 implements UpgradeProcedure {
+
+    private final static Logger log = LoggerFactory.getLogger(UpgradeProcedure105.class);
 
     @Override
     public int getUpgradeStepsCount() {
@@ -55,7 +61,12 @@ public class UpgradeProcedure105 implements UpgradeProcedure {
         try {
             while (cursor.hasNext()) {
                 Lease lease = cursor.next();
-                ServerSideFactory.create(LeaseFacade.class).updateLeaseDates(lease);
+                try {
+                    ServerSideFactory.create(LeaseFacade.class).updateLeaseDates(lease);
+                } catch (Throwable e) {
+                    log.error("Error migrating lease {}", lease, e);
+                    throw new UserRuntimeException("Error in lease " + lease.getPrimaryKey() + "; " + e.getClass() + " " + e.getMessage());
+                }
                 Persistence.service().merge(lease);
             }
         } finally {
