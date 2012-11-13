@@ -54,6 +54,7 @@ import com.propertyvista.domain.policy.policies.LegalDocumentation;
 import com.propertyvista.domain.policy.policies.PetPolicy;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
+import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Elevator;
@@ -75,12 +76,12 @@ import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
-import com.propertyvista.domain.tenant.lease.Guarantor;
-import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -166,6 +167,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(PetPolicy.class, CrmSiteMap.Settings.Policies.PetPolicy.class, defaultImage);
         AppPlaceEntityMapper.register(ProductTaxPolicy.class, CrmSiteMap.Settings.Policies.ProductTax.class, defaultImage);
         AppPlaceEntityMapper.register(ARPolicy.class, CrmSiteMap.Settings.Policies.AR.class, defaultImage);
+        AppPlaceEntityMapper.register(TenantInsurancePolicy.class, CrmSiteMap.Settings.Policies.TenantInsurance.class, defaultImage);
 
         // DTO mappings:
         AppPlaceEntityMapper.register(LeaseDTO.class, CrmSiteMap.Tenants.Lease.class, defaultImage);

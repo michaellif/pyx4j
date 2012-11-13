@@ -465,6 +465,11 @@ public class CrmSiteMap implements SiteMap {
             @NavigationItem(navigLabel = "Aging Priority")
             public static class AR extends CrmCrudAppPlace {
             }
+
+            @PlaceProperties(caption = "Tenant Insurance")
+            @NavigationItem(navigLabel = "Tenant Insurance")
+            public static class TenantInsurance extends CrmCrudAppPlace {
+            }
         }
 
         @PlaceProperties(caption = "User Role")

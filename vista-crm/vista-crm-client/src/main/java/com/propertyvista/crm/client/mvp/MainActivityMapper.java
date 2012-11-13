@@ -193,6 +193,9 @@ import com.propertyvista.crm.client.activity.policies.producttax.ProductTaxPolic
 import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsurancePolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsurancePolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsurancePolicyViewerActivity;
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
@@ -980,6 +983,19 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
+                    } else if (place instanceof CrmSiteMap.Settings.Policies.TenantInsurance) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new TenantInsurancePolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new TenantInsurancePolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new TenantInsurancePolicyViewerActivity(crudPlace);
+                            break;
+                        }
+// - Security
                     } else if (place instanceof CrmSiteMap.Account.AccountRecoveryOptions) {
                         switch (crudPlace.getType()) {
                         case viewer:
@@ -997,7 +1013,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
 
                         }
-// - Security
+
                     } else if (place instanceof CrmSiteMap.Settings.Security.AuditRecords) {
                         activity = new CrmAuditRecordsListerActivity(place);
 
