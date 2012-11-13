@@ -37,6 +37,8 @@ public class ApplicationVersionServlet extends HttpServlet {
     @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
     private static enum ApplicationVersionType {
 
+        productVersion,
+
         buildLabel,
 
         buildDate,
@@ -91,6 +93,8 @@ public class ApplicationVersionServlet extends HttpServlet {
 
     private String getVersionInfo(ApplicationVersionType type) {
         switch (type) {
+        case productVersion:
+            return ApplicationVersion.getProductVersion();
         case buildDate:
             return ApplicationVersion.getBuildTime();
         case buildLabel:
