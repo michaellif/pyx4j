@@ -13,21 +13,31 @@
  */
 package com.propertyvista.oapi;
 
+import java.util.List;
+
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.ParameterStyle;
 import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
 
-import com.propertyvista.oapi.model.Building;
+import com.propertyvista.oapi.model.BuildingRS;
 
 @WebService
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)
 public interface PropertyService {
 
-    void createBuilding(Building building);
+    @WebMethod
+    void createBuilding(@WebParam(name = "building") BuildingRS building);
 
-    Building getBuildingByPropertyCode(String propertyCode);
+    @WebResult(name = "building")
+    List<BuildingRS> getAllBuildings();
+
+    @WebResult(name = "building")
+    BuildingRS getBuildingByPropertyCode(@WebParam(name = "propertyCode") String propertyCode);
 
     // update existing building
 

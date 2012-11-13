@@ -13,14 +13,19 @@
  */
 package com.propertyvista.oapi.model;
 
-public class Building {
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "building")
+public class BuildingRS {
 
     public String propertyCode;
 
-    public Building() {
+    public AddressRS address;
+
+    public BuildingRS() {
     }
 
-    public Building(String propertyCode) {
+    public BuildingRS(String propertyCode) {
         this.propertyCode = propertyCode;
     }
 

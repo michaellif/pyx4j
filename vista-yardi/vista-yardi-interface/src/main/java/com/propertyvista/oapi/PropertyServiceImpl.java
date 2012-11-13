@@ -13,26 +13,33 @@
  */
 package com.propertyvista.oapi;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.jws.WebService;
 
-import com.propertyvista.oapi.model.Building;
+import com.propertyvista.oapi.model.BuildingRS;
 
 @WebService(endpointInterface = "com.propertyvista.oapi.PropertyService")
 public class PropertyServiceImpl implements PropertyService {
 
-    static private Map<String, Building> buildings = new HashMap<String, Building>();
+    static private Map<String, BuildingRS> buildings = new HashMap<String, BuildingRS>();
 
     @Override
-    public void createBuilding(Building building) {
+    public void createBuilding(BuildingRS building) {
         buildings.put(building.propertyCode, building);
     }
 
     @Override
-    public Building getBuildingByPropertyCode(String propertyCode) {
+    public BuildingRS getBuildingByPropertyCode(String propertyCode) {
         return buildings.get(propertyCode);
+    }
+
+    @Override
+    public List<BuildingRS> getAllBuildings() {
+        return new ArrayList<BuildingRS>(buildings.values());
     }
 
 }

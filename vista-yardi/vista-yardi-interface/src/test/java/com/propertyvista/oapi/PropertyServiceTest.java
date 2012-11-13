@@ -15,6 +15,7 @@ package com.propertyvista.oapi;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.ws.BindingProvider;
@@ -25,7 +26,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import com.propertyvista.oapi.model.Building;
+import com.propertyvista.oapi.model.BuildingRS;
 
 public class PropertyServiceTest extends TestCase {
 
@@ -39,7 +40,7 @@ public class PropertyServiceTest extends TestCase {
         assertEquals(HttpURLConnection.HTTP_OK, getHttpStatusCode(getAddress(port)));
     }
 
-    public void testMessage() throws Exception {
+    public void testCreateBuilding() throws Exception {
 
         PropertyServiceStub stub = new PropertyServiceStub(new URL(getAddress(port)));
 
@@ -48,11 +49,29 @@ public class PropertyServiceTest extends TestCase {
         Map<String, Object> requestContext = ((BindingProvider) service).getRequestContext();
         requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress(port) + "?wsdl");
 
-        service.createBuilding(new Building("b1"));
+        service.createBuilding(new BuildingRS("b1"));
 
-        Building building = service.getBuildingByPropertyCode("b1");
+        BuildingRS building = service.getBuildingByPropertyCode("b1");
 
         assertEquals("b1", building.propertyCode);
+
+    }
+
+    public void testGetAllBuildings() throws Exception {
+
+        PropertyServiceStub stub = new PropertyServiceStub(new URL(getAddress(port)));
+
+        PropertyService service = stub.getPropertyServicePort();
+
+        Map<String, Object> requestContext = ((BindingProvider) service).getRequestContext();
+        requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress(port) + "?wsdl");
+
+        service.createBuilding(new BuildingRS("b1"));
+        service.createBuilding(new BuildingRS("b2"));
+
+        List<BuildingRS> buildings = service.getAllBuildings();
+
+        assertEquals(2, buildings.size());
 
     }
 
