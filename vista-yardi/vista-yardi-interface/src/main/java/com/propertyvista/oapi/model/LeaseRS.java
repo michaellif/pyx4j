@@ -13,14 +13,17 @@
  */
 package com.propertyvista.oapi.model;
 
-public class Lease {
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "lease")
+public class LeaseRS {
 
     public String leaseId;
 
-    public Lease() {
+    public LeaseRS() {
     }
 
-    public Lease(String leaseId) {
+    public LeaseRS(String leaseId) {
         this.leaseId = leaseId;
     }
 

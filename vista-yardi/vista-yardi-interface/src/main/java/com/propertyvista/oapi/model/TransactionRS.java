@@ -13,24 +13,30 @@
  */
 package com.propertyvista.oapi.model;
 
+import java.math.BigDecimal;
+
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 @XmlRootElement
-public class Service {
+@XmlSeeAlso({ ChargeRS.class, PaymentRS.class })
+public abstract class TransactionRS {
 
     public String leaseId;
 
     public String description;
 
-    public Service() {
+    public BigDecimal amount;
+
+    public TransactionRS() {
     }
 
-    public Service(String description) {
+    public TransactionRS(String description, BigDecimal amount) {
         this.description = description;
     }
 
     @Override
     public String toString() {
-        return description;
+        return description + " " + amount;
     }
 }

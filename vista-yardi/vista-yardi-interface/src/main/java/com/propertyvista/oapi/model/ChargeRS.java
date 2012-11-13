@@ -15,17 +15,17 @@ package com.propertyvista.oapi.model;
 
 import java.math.BigDecimal;
 
-public class Charge extends Transaction {
+public class ChargeRS extends TransactionRS {
 
-    public Charge() {
+    public ChargeRS() {
         super();
     }
 
-    public Charge(BigDecimal amount) {
+    public ChargeRS(BigDecimal amount) {
         this("Charge", amount);
     }
 
-    public Charge(String description, BigDecimal amount) {
+    public ChargeRS(String description, BigDecimal amount) {
         super(description, amount);
     }
 

@@ -13,20 +13,24 @@
  */
 package com.propertyvista.oapi.model;
 
-import java.math.BigDecimal;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class Payment extends Transaction {
+@XmlRootElement
+public class ServiceRS {
 
-    public Payment() {
-        super();
+    public String leaseId;
+
+    public String description;
+
+    public ServiceRS() {
     }
 
-    public Payment(BigDecimal amount) {
-        this("Payment", amount);
+    public ServiceRS(String description) {
+        this.description = description;
     }
 
-    public Payment(String description, BigDecimal amount) {
-        super(description, amount);
+    @Override
+    public String toString() {
+        return description;
     }
-
 }

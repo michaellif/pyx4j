@@ -21,13 +21,13 @@ import javax.jws.soap.SOAPBinding.ParameterStyle;
 import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
 
-import com.propertyvista.oapi.model.Transaction;
+import com.propertyvista.oapi.model.TransactionRS;
 
 @WebService
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)
 public interface ReceivableService {
 
-    void postTransactions(List<Transaction> transactions);
+    void postTransactions(List<TransactionRS> transactions);
 
     // run billing
 

@@ -19,15 +19,15 @@ import javax.jws.soap.SOAPBinding.ParameterStyle;
 import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
 
-import com.propertyvista.oapi.model.Lease;
+import com.propertyvista.oapi.model.LeaseRS;
 
 @WebService
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)
 public interface LeaseService {
 
-    void createLease(Lease lease);
+    void createLease(LeaseRS lease);
 
-    Lease getLeaseByLeaseId(String leaseId);
+    LeaseRS getLeaseByLeaseId(String leaseId);
 
     // create new lease
 

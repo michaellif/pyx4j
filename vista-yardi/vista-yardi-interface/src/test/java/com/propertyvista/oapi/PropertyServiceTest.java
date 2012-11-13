@@ -13,41 +13,41 @@
  */
 package com.propertyvista.oapi;
 
+import static org.junit.Assert.assertEquals;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
 import javax.xml.ws.BindingProvider;
-import javax.xml.ws.Endpoint;
 
-import junit.extensions.TestSetup;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.propertyvista.oapi.model.BuildingRS;
 
-public class PropertyServiceTest extends TestCase {
+public class PropertyServiceTest extends OAPITest {
 
-    private static int port;
-
-    private static String getAddress(int port) {
-        return "http://localhost:" + port + "/WS/PropertyService";
+    @Before
+    public void init() throws Exception {
+        publish(PropertyService.class);
     }
 
+    @Test
     public void testContext() throws Exception {
-        assertEquals(HttpURLConnection.HTTP_OK, getHttpStatusCode(getAddress(port)));
+        assertEquals(HttpURLConnection.HTTP_OK, getHttpStatusCode(getAddress()));
     }
 
+    @Test
     public void testCreateBuilding() throws Exception {
 
-        PropertyServiceStub stub = new PropertyServiceStub(new URL(getAddress(port)));
+        PropertyServiceStub stub = new PropertyServiceStub(new URL(getAddress()));
 
         PropertyService service = stub.getPropertyServicePort();
 
         Map<String, Object> requestContext = ((BindingProvider) service).getRequestContext();
-        requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress(port) + "?wsdl");
+        requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress() + "?wsdl");
 
         service.createBuilding(new BuildingRS("b1"));
 
@@ -57,14 +57,15 @@ public class PropertyServiceTest extends TestCase {
 
     }
 
+    @Test
     public void testGetAllBuildings() throws Exception {
 
-        PropertyServiceStub stub = new PropertyServiceStub(new URL(getAddress(port)));
+        PropertyServiceStub stub = new PropertyServiceStub(new URL(getAddress()));
 
         PropertyService service = stub.getPropertyServicePort();
 
         Map<String, Object> requestContext = ((BindingProvider) service).getRequestContext();
-        requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress(port) + "?wsdl");
+        requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress() + "?wsdl");
 
         service.createBuilding(new BuildingRS("b1"));
         service.createBuilding(new BuildingRS("b2"));
@@ -75,34 +76,4 @@ public class PropertyServiceTest extends TestCase {
 
     }
 
-    private int getHttpStatusCode(String address) throws Exception {
-        URL url = new URL(address + "?wsdl");
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.connect();
-        int code = con.getResponseCode();
-        return code;
-    }
-
-    public static Test suite() {
-        TestSetup setup = new TestSetup(new TestSuite(PropertyServiceTest.class)) {
-            @Override
-            protected void setUp() throws Exception {
-                port = PortAllocator.allocatePort();
-                int monitorPort = port;
-                //For TCP/IP monitor
-                if (false) {
-                    port = 8888;
-                    monitorPort = 8080;
-                }
-                Endpoint.publish(getAddress(monitorPort), new PropertyServiceImpl());
-                super.setUp();
-            }
-
-            @Override
-            protected void tearDown() throws Exception {
-                super.tearDown();
-            }
-        };
-        return setup;
-    }
 }

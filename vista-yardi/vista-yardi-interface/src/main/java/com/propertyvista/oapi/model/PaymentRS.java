@@ -15,28 +15,18 @@ package com.propertyvista.oapi.model;
 
 import java.math.BigDecimal;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
+public class PaymentRS extends TransactionRS {
 
-@XmlRootElement
-@XmlSeeAlso({ Charge.class, Payment.class })
-public abstract class Transaction {
-
-    public String leaseId;
-
-    public String description;
-
-    public BigDecimal amount;
-
-    public Transaction() {
+    public PaymentRS() {
+        super();
     }
 
-    public Transaction(String description, BigDecimal amount) {
-        this.description = description;
+    public PaymentRS(BigDecimal amount) {
+        this("Payment", amount);
     }
 
-    @Override
-    public String toString() {
-        return description + " " + amount;
+    public PaymentRS(String description, BigDecimal amount) {
+        super(description, amount);
     }
+
 }

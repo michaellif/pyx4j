@@ -17,13 +17,13 @@ import java.util.List;
 
 import javax.jws.WebService;
 
-import com.propertyvista.oapi.model.Transaction;
+import com.propertyvista.oapi.model.TransactionRS;
 
 @WebService(endpointInterface = "com.propertyvista.oapi.ReceivableService")
 public class ReceivableServiceImpl implements ReceivableService {
 
     @Override
-    public void postTransactions(List<Transaction> transactions) {
+    public void postTransactions(List<TransactionRS> transactions) {
     }
 
 }

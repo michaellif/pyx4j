@@ -18,20 +18,20 @@ import java.util.Map;
 
 import javax.jws.WebService;
 
-import com.propertyvista.oapi.model.Lease;
+import com.propertyvista.oapi.model.LeaseRS;
 
 @WebService(endpointInterface = "com.propertyvista.oapi.LeaseService")
 public class LeaseServiceImpl implements LeaseService {
 
-    static private Map<String, Lease> leases = new HashMap<String, Lease>();
+    static private Map<String, LeaseRS> leases = new HashMap<String, LeaseRS>();
 
     @Override
-    public void createLease(Lease lease) {
+    public void createLease(LeaseRS lease) {
         leases.put(lease.leaseId, lease);
     }
 
     @Override
-    public Lease getLeaseByLeaseId(String leaseId) {
+    public LeaseRS getLeaseByLeaseId(String leaseId) {
         return leases.get(leaseId);
     }
 

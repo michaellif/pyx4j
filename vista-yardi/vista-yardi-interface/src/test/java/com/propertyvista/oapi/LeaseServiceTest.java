@@ -13,77 +13,47 @@
  */
 package com.propertyvista.oapi;
 
+import static org.junit.Assert.assertEquals;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
 import javax.xml.ws.BindingProvider;
-import javax.xml.ws.Endpoint;
 
-import junit.extensions.TestSetup;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.Before;
+import org.junit.Test;
 
-import com.propertyvista.oapi.model.Lease;
+import com.propertyvista.oapi.model.LeaseRS;
 
-public class LeaseServiceTest extends TestCase {
+public class LeaseServiceTest extends OAPITest {
 
-    private static int port;
-
-    private static String getAddress(int port) {
-        return "http://localhost:" + port + "/WS/LeaseService";
+    @Before
+    public void init() throws Exception {
+        publish(LeaseService.class);
     }
 
+    @Test
     public void testContext() throws Exception {
-        assertEquals(HttpURLConnection.HTTP_OK, getHttpStatusCode(getAddress(port)));
+        assertEquals(HttpURLConnection.HTTP_OK, getHttpStatusCode(getAddress()));
     }
 
+    @Test
     public void testMessage() throws Exception {
 
-        LeaseServiceStub stub = new LeaseServiceStub(new URL(getAddress(port)));
+        LeaseServiceStub stub = new LeaseServiceStub(new URL(getAddress()));
 
         LeaseService service = stub.getLeaseServicePort();
 
         Map<String, Object> requestContext = ((BindingProvider) service).getRequestContext();
-        requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress(port) + "?wsdl");
+        requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress() + "?wsdl");
 
-        service.createLease(new Lease("l1"));
+        service.createLease(new LeaseRS("l1"));
 
-        Lease lease = service.getLeaseByLeaseId("l1");
+        LeaseRS lease = service.getLeaseByLeaseId("l1");
 
         assertEquals("l1", lease.leaseId);
 
     }
 
-    private int getHttpStatusCode(String address) throws Exception {
-        URL url = new URL(address + "?wsdl");
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.connect();
-        int code = con.getResponseCode();
-        return code;
-    }
-
-    public static Test suite() {
-        TestSetup setup = new TestSetup(new TestSuite(LeaseServiceTest.class)) {
-            @Override
-            protected void setUp() throws Exception {
-                port = PortAllocator.allocatePort();
-                int monitorPort = port;
-                //For TCP/IP monitor
-                if (false) {
-                    port = 8888;
-                    monitorPort = 8080;
-                }
-                Endpoint.publish(getAddress(monitorPort), new LeaseServiceImpl());
-                super.setUp();
-            }
-
-            @Override
-            protected void tearDown() throws Exception {
-                super.tearDown();
-            }
-        };
-        return setup;
-    }
 }
