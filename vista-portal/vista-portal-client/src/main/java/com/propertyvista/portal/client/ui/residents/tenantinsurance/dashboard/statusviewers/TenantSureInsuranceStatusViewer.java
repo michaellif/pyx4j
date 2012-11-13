@@ -81,7 +81,9 @@ public class TenantSureInsuranceStatusViewer extends CEntityViewer<TenantSureTen
                 }
                 break;
             default:
-                // TODO decide what to put here                 
+                Label warning = new Label(i18n.tr("Something's wrong with your TenantSure, please contanct support"));
+                warning.addStyleName(TenantInsuranceStatusViewer.Styles.TenantInsuranceWarningText.name());
+                contentPanel.add(warning);
                 break;
             }
         }
