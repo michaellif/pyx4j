@@ -29,6 +29,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import com.propertyvista.oapi.PortAllocator;
+
 public class GreetingTest extends TestCase {
 
     private static int port;
@@ -45,9 +47,9 @@ public class GreetingTest extends TestCase {
 
     public void testMessage() throws Exception {
 
-        GreetingImplService service = new GreetingImplService(new URL(getAddress(port)));
+        GreetingStub stub = new GreetingStub(new URL(getAddress(port)));
 
-        Greeting greeting = service.getGreetingImplPort();
+        Greeting greeting = stub.getGreetingImplPort();
 
         Map<String, Object> requestContext = ((BindingProvider) greeting).getRequestContext();
         requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress(port) + "?wsdl");

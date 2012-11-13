@@ -19,7 +19,7 @@ import javax.xml.ws.WebServiceFeature;
  */
 @WebServiceClient(name = "GreetingImplService", targetNamespace = "http://jaxws.yardi.propertyvista.com/", wsdlLocation = "http://localhost:8888/WS/Greeting?wsdl")
 @HandlerChain(file = "client-handler-chain.xml")
-public class GreetingImplService extends Service {
+public class GreetingStub extends Service {
 
     private final static URL GREETINGIMPLSERVICE_WSDL_LOCATION;
 
@@ -39,27 +39,27 @@ public class GreetingImplService extends Service {
         GREETINGIMPLSERVICE_EXCEPTION = e;
     }
 
-    public GreetingImplService() {
+    public GreetingStub() {
         super(__getWsdlLocation(), GREETINGIMPLSERVICE_QNAME);
     }
 
-    public GreetingImplService(WebServiceFeature... features) {
+    public GreetingStub(WebServiceFeature... features) {
         super(__getWsdlLocation(), GREETINGIMPLSERVICE_QNAME, features);
     }
 
-    public GreetingImplService(URL wsdlLocation) {
+    public GreetingStub(URL wsdlLocation) {
         super(wsdlLocation, GREETINGIMPLSERVICE_QNAME);
     }
 
-    public GreetingImplService(URL wsdlLocation, WebServiceFeature... features) {
+    public GreetingStub(URL wsdlLocation, WebServiceFeature... features) {
         super(wsdlLocation, GREETINGIMPLSERVICE_QNAME, features);
     }
 
-    public GreetingImplService(URL wsdlLocation, QName serviceName) {
+    public GreetingStub(URL wsdlLocation, QName serviceName) {
         super(wsdlLocation, serviceName);
     }
 
-    public GreetingImplService(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
+    public GreetingStub(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
         super(wsdlLocation, serviceName, features);
     }
 

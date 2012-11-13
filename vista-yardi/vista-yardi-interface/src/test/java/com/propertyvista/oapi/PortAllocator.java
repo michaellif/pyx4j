@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.yardi.jaxws;
+package com.propertyvista.oapi;
 
 import java.io.IOException;
 import java.net.ServerSocket;

@@ -11,7 +11,7 @@
    Interface Entity     Property Vista (case sensitive)
 
 
- Voyager Url: https://www.iyardiasp.com/8223thirddev/pages/Login.aspx
+ Voyager Url: https://www.iyardiasp.com/8223thirddev/pages/Login.aspx (use IE only)
    Database username    propertyvistadb
    Password             52673
    Server               aspdb04
