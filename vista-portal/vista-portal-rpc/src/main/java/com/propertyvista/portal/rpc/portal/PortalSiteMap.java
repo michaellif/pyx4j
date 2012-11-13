@@ -109,6 +109,7 @@ public class PortalSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Tenant Insurance")
         public static class TenantInsurance extends AppPlace {
 
+            /** this place is displayed to people who don't have tenant insurance */
             @PlaceProperties(caption = "Provide Tenant Insurance")
             @NavigationItem(navigLabel = "Provide Tenant Insurance")
             public static class ProvideTenantInsurance extends AppPlace {
@@ -127,10 +128,10 @@ public class PortalSiteMap implements SiteMap {
 
             }
 
-            @PlaceProperties(caption = "Insurance Control Panel")
-            @NavigationItem(navigLabel = "Insurance Control Panel")
-            /** This place is for controlling insurance other than TenantSure */
-            public static class InsuranceControlPanel extends AppPlace {
+            @PlaceProperties(caption = "Update Proof of Insurance")
+            @NavigationItem(navigLabel = "Update Proof of Insurance")
+            /** This place is for updating insurance other than TenantSure */
+            public static class UploadProofOfInsurance extends AppPlace {
 
             }
 

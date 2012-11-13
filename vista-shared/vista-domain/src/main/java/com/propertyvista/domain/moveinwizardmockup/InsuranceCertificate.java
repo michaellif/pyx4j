@@ -13,11 +13,36 @@
  */
 package com.propertyvista.domain.moveinwizardmockup;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.media.ApplicationDocument;
 
 @DiscriminatorValue("InsuranceCertificate")
 public interface InsuranceCertificate extends ApplicationDocument {
+
+    @NotNull
+    IPrimitive<String> insuranceProvider();
+
+    @NotNull
+    IPrimitive<String> insuranceCertificateNumber();
+
+    @Editor(type = EditorType.money)
+    @Format("#,##0.00")
+    @NotNull
+    IPrimitive<BigDecimal> personalLiability();
+
+    @NotNull
+    IPrimitive<LogicalDate> startDate();
+
+    @NotNull
+    IPrimitive<LogicalDate> expirationDate();
 
 }

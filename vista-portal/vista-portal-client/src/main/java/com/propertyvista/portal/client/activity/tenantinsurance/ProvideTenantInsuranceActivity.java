@@ -1,0 +1,65 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on 2012-11-13
+ * @author ArtyomB
+ * @version $Id$
+ */
+package com.propertyvista.portal.client.activity.tenantinsurance;
+
+import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
+
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
+
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceView;
+import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
+
+public class ProvideTenantInsuranceActivity extends AbstractActivity implements ProvideTenantInsuranceView.Presenter {
+
+    private final ProvideTenantInsuranceView view;
+
+    private final TenantInsuranceService service;
+
+    public ProvideTenantInsuranceActivity() {
+        view = PortalViewFactory.instance(ProvideTenantInsuranceView.class);
+        service = GWT.<TenantInsuranceService> create(TenantInsuranceService.class);
+    }
+
+    @Override
+    public void start(final AcceptsOneWidget panel, EventBus eventBus) {
+        view.setPresenter(this);
+        service.getTenantInsuranceStatus(new DefaultAsyncCallback<TenantInsuranceStatusDTO>() {
+            @Override
+            public void onSuccess(TenantInsuranceStatusDTO status) {
+                view.populate(status instanceof NoInsuranceTenantInsuranceStatusDTO ? (NoInsuranceTenantInsuranceStatusDTO) status : null);
+                panel.setWidget(view);
+            }
+        });
+
+    }
+
+    @Override
+    public void onPurchaseTenantSure() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSurePurchase());
+    }
+
+    @Override
+    public void onUpdateInsuranceByOtherProvider() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.UploadProofOfInsurance());
+    }
+
+}
