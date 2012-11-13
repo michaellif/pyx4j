@@ -116,9 +116,9 @@ public class PortalSiteMap implements SiteMap {
 
             }
 
-            @PlaceProperties(caption = "TenantSure Control Panel")
-            @NavigationItem(navigLabel = "TenantSure Control Panel")
-            public static class TenantSureControlPanel extends AppPlace {
+            @PlaceProperties(caption = "TenantSure Management")
+            @NavigationItem(navigLabel = "TenantSure Management")
+            public static class TenantSureManagement extends AppPlace {
 
             }
 

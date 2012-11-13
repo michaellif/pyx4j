@@ -68,7 +68,7 @@ public class TenantSureInsuranceStatusViewer extends CEntityViewer<TenantSureTen
                     Anchor goToTenantSureScreen = new Anchor(i18n.tr("Update credit card details"), new ClickHandler() {
                         @Override
                         public void onClick(ClickEvent event) {
-                            AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSureControlPanel());
+                            AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSureManagement());
                         }
                     });
                     goToTenantSureScreen.addStyleName(TenantInsuranceStatusViewer.Styles.TenantInsuranceAnchor.name());

@@ -37,6 +37,8 @@ public class TenantSureLogo extends Composite {
 
         logoPanel.add(highCourtLogo);
         logoPanel.add(new Label("1-888-1234-444"));
+        logoPanel.getElement().getStyle().setProperty("width", "100%");
+        logoPanel.getElement().getStyle().setProperty("textAlign", "center");
         initWidget(logoPanel);
     }
 
