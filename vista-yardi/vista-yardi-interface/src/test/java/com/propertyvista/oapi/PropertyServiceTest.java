@@ -71,7 +71,7 @@ public class PropertyServiceTest extends TestCase {
                 port = PortAllocator.allocatePort();
                 int monitorPort = port;
                 //For TCP/IP monitor
-                if (true) {
+                if (false) {
                     port = 8888;
                     monitorPort = 8080;
                 }
