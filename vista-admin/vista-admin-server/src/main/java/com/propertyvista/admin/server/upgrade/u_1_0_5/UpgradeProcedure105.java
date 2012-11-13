@@ -22,6 +22,7 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.server.upgrade.UpgradeProcedure;
 import com.propertyvista.biz.tenant.LeaseFacade;
@@ -65,7 +66,8 @@ public class UpgradeProcedure105 implements UpgradeProcedure {
                     ServerSideFactory.create(LeaseFacade.class).updateLeaseDates(lease);
                 } catch (Throwable e) {
                     log.error("Error migrating lease {}", lease, e);
-                    throw new UserRuntimeException("Error in lease " + lease.getPrimaryKey() + "; " + e.getClass() + " " + e.getMessage());
+                    throw new UserRuntimeException("Error in lease " + NamespaceManager.getNamespace() + "." + lease.getPrimaryKey() + "; " + e.getClass()
+                            + " " + e.getMessage());
                 }
                 Persistence.service().merge(lease);
             }
