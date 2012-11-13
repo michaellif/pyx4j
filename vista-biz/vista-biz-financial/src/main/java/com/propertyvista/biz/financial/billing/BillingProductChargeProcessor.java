@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
@@ -50,9 +51,13 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
 
     private void createCharges() {
 
+        BillableItem service = getBillingManager().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts().serviceItem();
         if (!Bill.BillType.Final.equals(getBillingManager().getNextPeriodBill().billType().getValue())) {
-            createCharge(getBillingManager().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts().serviceItem());
+            createCharge(service);
         }
+        // for Final bill charges may still need to be revised
+        reviseChargeForPeriod(service, InvoiceProductCharge.Period.current);
+        reviseChargeForPeriod(service, InvoiceProductCharge.Period.previous);
 
         for (BillableItem billableItem : getBillingManager().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts()
                 .featureItems()) {
@@ -155,9 +160,18 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
 
     private InvoiceProductCharge createCharge(BillableItem billableItem, Bill bill, InvoiceProductCharge.Period period) {
 
-        // Find if billable item period overlaps with the bill period. 
+        // Find if billable item period overlaps with the bill period.
+        LogicalDate expirationDate = billableItem.expirationDate().getValue();
+        // Keep in mind possible lease termination
+        if (bill.billingAccount().lease().isValueDetached()) {
+            Persistence.service().retrieve(bill.billingAccount());
+            Persistence.service().retrieve(bill.billingAccount().lease());
+        }
+        if (expirationDate == null || expirationDate.after(bill.billingAccount().lease().leaseTo().getValue())) {
+            expirationDate = bill.billingAccount().lease().leaseTo().getValue();
+        }
         DateRange overlap = BillDateUtils.getOverlappingRange(new DateRange(bill.billingPeriodStartDate().getValue(), bill.billingPeriodEndDate().getValue()),
-                new DateRange(billableItem.effectiveDate().getValue(), billableItem.expirationDate().getValue()));
+                new DateRange(billableItem.effectiveDate().getValue(), expirationDate));
 
         // If billable item is not in effect in this billing period do nothing
         if (overlap == null) {
@@ -251,6 +265,10 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
     }
 
     private void createAdjustmentSubLineItem(BillableItemAdjustment billableItemAdjustment, InvoiceProductCharge charge, Bill bill) {
+        if (Bill.BillType.Final.equals(bill.billType().getValue())) {
+            throw new Error(i18n.tr("Final bill should not have adjustments"));
+        }
+
         InvoiceAdjustmentSubLineItem adjustment = EntityFactory.create(InvoiceAdjustmentSubLineItem.class);
 
         BigDecimal amount = null;
@@ -261,27 +279,22 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
             amount = billableItemAdjustment.value().getValue();
         }
 
-        if (Bill.BillType.Final.equals(getBillingManager().getNextPeriodBill().billType().getValue())) {
-            //TODO final bill
-            adjustment.amount().setValue(new BigDecimal("0.00"));
-        } else {
-            DateRange overlap = BillDateUtils.getOverlappingRange(new DateRange(bill.billingPeriodStartDate().getValue(), bill.billingPeriodEndDate()
-                    .getValue()), new DateRange(billableItemAdjustment.effectiveDate().getValue(), billableItemAdjustment.expirationDate().getValue()));
+        DateRange overlap = BillDateUtils.getOverlappingRange(new DateRange(bill.billingPeriodStartDate().getValue(), bill.billingPeriodEndDate().getValue()),
+                new DateRange(billableItemAdjustment.effectiveDate().getValue(), billableItemAdjustment.expirationDate().getValue()));
 
-            if (overlap == null) {
-                return;
-            }
-
-            overlap = BillDateUtils.getOverlappingRange(overlap, new DateRange(billableItemAdjustment.billableItem().effectiveDate().getValue(),
-                    billableItemAdjustment.billableItem().expirationDate().getValue()));
-
-            if (overlap == null) {
-                return;
-            }
-
-            BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), bill.billingCycle());
-            adjustment.amount().setValue(MoneyUtils.round(amount.multiply(proration)));
+        if (overlap == null) {
+            return;
         }
+
+        overlap = BillDateUtils.getOverlappingRange(overlap, new DateRange(billableItemAdjustment.billableItem().effectiveDate().getValue(),
+                billableItemAdjustment.billableItem().expirationDate().getValue()));
+
+        if (overlap == null) {
+            return;
+        }
+
+        BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), bill.billingCycle());
+        adjustment.amount().setValue(MoneyUtils.round(amount.multiply(proration)));
 
         if (billableItemAdjustment.billableItem().item().type().isInstanceOf(FeatureItemType.class)) {
             adjustment.description().setValue(
@@ -324,17 +337,16 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
             return;
         }
 
+        Bill bill = getBillingManager().getNextPeriodBill();
         if (BillingUtils.isService(charge.chargeSubLineItem().billableItem().item().product())) { //Service
-            getBillingManager().getNextPeriodBill().serviceCharge().setValue(charge.amount().getValue());
+            bill.serviceCharge().setValue(bill.serviceCharge().getValue().add(charge.amount().getValue()));
         } else if (BillingUtils.isRecurringFeature(charge.chargeSubLineItem().billableItem().item().product())) { //Recurring Feature
-            getBillingManager().getNextPeriodBill().recurringFeatureCharges()
-                    .setValue(getBillingManager().getNextPeriodBill().recurringFeatureCharges().getValue().add(charge.amount().getValue()));
+            bill.recurringFeatureCharges().setValue(bill.recurringFeatureCharges().getValue().add(charge.amount().getValue()));
         } else {
-            getBillingManager().getNextPeriodBill().oneTimeFeatureCharges()
-                    .setValue(getBillingManager().getNextPeriodBill().oneTimeFeatureCharges().getValue().add(charge.amount().getValue()));
+            bill.oneTimeFeatureCharges().setValue(bill.oneTimeFeatureCharges().getValue().add(charge.amount().getValue()));
         }
-        getBillingManager().getNextPeriodBill().taxes().setValue(getBillingManager().getNextPeriodBill().taxes().getValue().add(charge.taxTotal().getValue()));
-        getBillingManager().getNextPeriodBill().lineItems().add(charge);
+        bill.taxes().setValue(bill.taxes().getValue().add(charge.taxTotal().getValue()));
+        bill.lineItems().add(charge);
     }
 
     private void reviseChargeForPeriod(BillableItem billableItem, InvoiceProductCharge.Period period) {
@@ -394,8 +406,9 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
             }
         }
 
-//        System.out.println("=0=> Revising: found " + period.name() + " charge for " + billableItem.item().description().getValue() + ": "
-//                + (originalCharge == null ? "none" : originalCharge.amount().getValue()) + " -> "
+//        System.out.println("=0=> Revising (bill " + getBillingManager().getNextPeriodBill().billSequenceNumber().getValue() + "): found " + period.name()
+//                + " charge for " + billableItem.item().description().getValue() + ": "
+//                + (originalCharge == null ? "none" : originalCharge.amount().getValue() + "/" + originalCharge.postDate().getValue()) + " -> "
 //                + (revisedCharge == null ? "none" : revisedCharge.amount().getValue()));
 
         if (originalCharge != null && revisedCharge != null && originalCharge.amount().getValue().compareTo(revisedCharge.amount().getValue()) == 0) {

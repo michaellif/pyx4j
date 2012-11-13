@@ -65,6 +65,7 @@ import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
@@ -377,6 +378,30 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected void closeLease() {
         ServerSideFactory.create(LeaseFacade.class).close(retrieveLease());
+    }
+
+    protected void terminateLease(CompletionType reason) {
+        terminateLease(reason, null);
+    }
+
+    protected void terminateLease(CompletionType reason, String asOfDate) {
+        LogicalDate asOf;
+        if (asOfDate == null) {
+            asOf = new LogicalDate(SysDateManager.getSysDate());
+        } else {
+            asOf = new LogicalDate(DateUtils.detectDateformat(asOfDate));
+        }
+        Lease lease = retrieveLeaseForEdit();
+        lease.leaseTo().setValue(asOf);
+        lease.completion().setValue(reason);
+        Persistence.service().persist(lease);
+
+        if (asOfDate == null) {
+            // anding now - do complete
+            ServerSideFactory.create(LeaseFacade.class).complete(lease);
+        }
+
+        Persistence.service().commit();
     }
 
     protected Lease retrieveLease() {

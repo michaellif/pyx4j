@@ -225,6 +225,7 @@ class BillProducer {
             // @formatter:off
             return Arrays.asList(new AbstractBillingProcessor[] { 
                     new BillingProductChargeProcessor(this), 
+                    new BillingDepositProcessor(this),
                     new BillingLeaseAdjustmentProcessor(this),
                     new BillingPaymentProcessor(this),
                     /** Should run last **/

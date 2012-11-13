@@ -254,7 +254,7 @@ public class DepositFacadeImpl implements DepositFacade {
                 // LastMonthDeposit - refund must appear on the last month bill so normally deposits will be issued by
                 // the BillingDepositProcessor. However, if for some reason that did not happen we will pick up those
                 // deposits here to ensure they get into the final bill.
-                if (term.to != null && term.to.before(now)) {
+                if (!lease.leaseTo().getValue().after(now) || (term.to != null && !term.to.after(now))) {
                     arFacade.postDepositRefund(deposit);
                 }
                 break;
@@ -274,7 +274,7 @@ public class DepositFacadeImpl implements DepositFacade {
                         calendar.add(Calendar.DAY_OF_MONTH, -policyItem.securityDepositRefundWindow().getValue());
                     }
                     Date dueDate = calendar.getTime();
-                    if (!term.to.after(dueDate)) {
+                    if (!term.to.after(dueDate) || !lease.leaseTo().getValue().after(dueDate)) {
                         arFacade.postDepositRefund(deposit);
                     }
                 }

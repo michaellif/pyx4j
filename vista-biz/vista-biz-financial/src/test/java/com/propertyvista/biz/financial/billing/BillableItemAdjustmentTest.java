@@ -133,13 +133,13 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-June-2011").
         billingPeriodEndDate("30-June-2011").
-        serviceCharge("869.00"). // 930.30 - 30.30 - 31 (changed to EOM)
+        serviceCharge("1769.00"). // 930.30 - 30.30 - 31 (changed to EOM) + 900 (revised charge for may)
         recurringFeatureCharges("80.00").
-        taxes("113.88").
-        totalDueAmount("1062.88");
+        taxes("221.88").
+        totalDueAmount("1081.92");
         // @formatter:on
 
-        receiveAndPostPayment("19-May-2011", "1062.88");
+        receiveAndPostPayment("19-May-2011", "1081.92");
         //==================== RUN 5 ======================//
         // Service = $900.00 after $30.30 adjustment
 

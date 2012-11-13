@@ -52,6 +52,7 @@ import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
+import com.propertyvista.domain.financial.billing.Bill.BillType;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -153,13 +154,18 @@ public class BillingManager {
             }
         }
 
+        if (lease.status().getValue() == Lease.Status.Completed && previousBill.billType().getValue().equals(BillType.Final)) {
+            log.warn(i18n.tr("Final bill has been already issued"));
+            return false;
+        }
+
         Bill previousConfirmedBill = getLatestConfirmedBill(lease);
         if (previousConfirmedBill != null) {
 
             Persistence.service().retrieve(previousConfirmedBill.billingAccount());
 
             //check if previous confirmed Bill is the last cycle bill and only final bill should run after
-            boolean isPreviousConfirmedBillTheLast = previousConfirmedBill.billingPeriodEndDate().getValue().compareTo(lease.currentTerm().termTo().getValue()) == 0;
+            boolean isPreviousConfirmedBillTheLast = previousConfirmedBill.billingPeriodEndDate().getValue().compareTo(lease.leaseTo().getValue()) >= 0;
 
             //previous bill wasn't the last one so we are dealing here with the regular bill which can't run before executionTargetDate
             if (!isPreviousConfirmedBillTheLast && SysDateManager.getSysDate().compareTo(billingCycle.executionTargetDate().getValue()) < 0) {
@@ -168,7 +174,7 @@ public class BillingManager {
             }
 
             //previous bill was the last one so we have to run a final bill but not before lease end date or lease move-out date whatever is first
-            if (isPreviousConfirmedBillTheLast && (SysDateManager.getSysDate().compareTo(lease.currentTerm().termTo().getValue()) < 0)
+            if (isPreviousConfirmedBillTheLast && (SysDateManager.getSysDate().compareTo(lease.leaseTo().getValue()) < 0)
                     && (lease.expectedMoveOut().isNull() || (SysDateManager.getSysDate().compareTo(lease.expectedMoveOut().getValue()) < 0))) {
                 log.warn(i18n.tr("Final billing can't run before both lease end date and move-out date"));
                 return false;

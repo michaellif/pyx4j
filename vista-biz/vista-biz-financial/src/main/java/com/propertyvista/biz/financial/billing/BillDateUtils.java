@@ -197,6 +197,10 @@ public class BillDateUtils {
             } else {
                 throw new BillingException(i18n.tr("Lease already ended"));
             }
+            // see if lease has been terminated
+            if (date.compareTo(bill.billingAccount().lease().leaseTo().getValue()) > 0) {
+                date = bill.billingAccount().lease().leaseTo().getValue();
+            }
         }
         return date;
     }

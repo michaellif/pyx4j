@@ -27,6 +27,7 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade.ProductTerm;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.Bill.BillType;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
@@ -92,9 +93,10 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
     }
 
     private void crateDepositRefunds() {
-        // LastMonthDeposit - if this is the last month bill, post the refund
+        // LastMonthDeposit - if this is the last month bill, or final bill, post the refund
         Bill nextBill = getBillingManager().getNextPeriodBill();
-        if (!nextBill.billingPeriodEndDate().getValue().before(nextBill.billingAccount().lease().currentTerm().termTo().getValue())) {
+        if (nextBill.billType().getValue().equals(BillType.Final)
+                || !nextBill.billingPeriodEndDate().getValue().before(nextBill.billingAccount().lease().currentTerm().termTo().getValue())) {
             Persistence.service().retrieve(nextBill.billingAccount().deposits());
 
             Map<Deposit, ProductTerm> deposits = ServerSideFactory.create(DepositFacade.class).getCurrentDeposits(nextBill.billingAccount().lease());
