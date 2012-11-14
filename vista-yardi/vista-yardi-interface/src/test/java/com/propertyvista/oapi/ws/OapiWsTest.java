@@ -18,9 +18,14 @@ import java.net.URL;
 
 import javax.xml.ws.Endpoint;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.propertyvista.oapi.PortAllocator;
 
 public class OapiWsTest {
+
+    private static final Logger log = LoggerFactory.getLogger(OapiWsTest.class);
 
     private int port;
 
@@ -47,7 +52,9 @@ public class OapiWsTest {
             port = 8888;
             monitorPort = 8080;
         }
-        Endpoint.publish(getAddress(monitorPort), Class.forName(serviceClass.getName() + "Impl").newInstance());
+        String address = getAddress(monitorPort);
+        log.info("Address: {}", address);
+        Endpoint.publish(address, Class.forName(serviceClass.getName() + "Impl").newInstance());
     }
 
     int getHttpStatusCode(String address) throws Exception {
