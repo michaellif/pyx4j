@@ -43,8 +43,6 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     private final TenantSureCoverageRequestForm quotationRequestForm;
 
-    private final Button getQuoteButton;
-
     private Presenter presenter;
 
     private final TenantSureQuoteForm quoteForm;
@@ -58,6 +56,8 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     private final Label processingPaymentMessage;
 
     private final Label paymentProcessingErrorMessage;
+
+    private final Label pleaseFillOutTheFormMessage;
 
     private final Button cancelButton;
 
@@ -73,21 +73,20 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
             @Override
             public void onValueChange(ValueChangeEvent<TenantSureQuotationRequestDTO> event) {
                 setQuote(null);
-            }
-        });
-        panel.setWidget(++row, 0, quotationRequestForm);
-
-        panel.setH1(++row, 0, 1, i18n.tr("Quote"));
-        getQuoteButton = new Button(i18n.tr("Get Quote"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
+                pleaseFillOutTheFormMessage.setVisible(!quotationRequestForm.isValid());
                 quotationRequestForm.revalidate();
                 if (quotationRequestForm.getValidationResults().isValid()) {
                     presenter.onCoverageRequestChanged();
                 }
             }
         });
-        panel.setWidget(++row, 0, getQuoteButton);
+        panel.setWidget(++row, 0, quotationRequestForm);
+
+        panel.setH1(++row, 0, 1, i18n.tr("Quote"));
+        pleaseFillOutTheFormMessage = new Label();
+        pleaseFillOutTheFormMessage.setText(i18n.tr("Please fill out the form to get a quote"));
+        panel.setWidget(++row, 0, pleaseFillOutTheFormMessage);
+
         quoteForm = new TenantSureQuoteForm();
         quoteForm.initContent();
         panel.setWidget(++row, 0, quoteForm);
@@ -139,7 +138,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
         quoteForm.setValue(null);
         quoteForm.setVisible(false);
-        getQuoteButton.setVisible(true);
+
         retrievingQuoteMessage.setVisible(false);
         processingPaymentMessage.setVisible(false);
         paymentProcessingErrorMessage.setVisible(false);
@@ -157,7 +156,6 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         retrievingQuoteMessage.setVisible(false);
         boolean canAcceptQuote = quote != null && !quote.isNull();
 
-        getQuoteButton.setVisible(!canAcceptQuote);
         quoteForm.setVisible(canAcceptQuote);
 
         buyInsuranceButton.setEnabled(canAcceptQuote);
@@ -193,7 +191,6 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     public void waitForQuote() {
         setQuote(null);
         retrievingQuoteMessage.setVisible(true);
-        getQuoteButton.setVisible(false);
         quoteForm.setVisible(false);
     }
 
