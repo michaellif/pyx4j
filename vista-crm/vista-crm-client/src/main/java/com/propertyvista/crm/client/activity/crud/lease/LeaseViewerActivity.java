@@ -248,4 +248,14 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
             }
         }, getEntityId(), type);
     }
+
+    @Override
+    public void simpleLeaseRenew(LogicalDate leaseEndDate) {
+        ((LeaseViewerCrudService) getService()).simpleLeaseRenew(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, getEntityId(), leaseEndDate);
+    }
 }

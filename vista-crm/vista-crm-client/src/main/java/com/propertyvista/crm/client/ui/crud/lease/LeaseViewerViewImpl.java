@@ -16,8 +16,11 @@ package com.propertyvista.crm.client.ui.crud.lease;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -28,6 +31,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -51,7 +55,6 @@ import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentLister;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillLister;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
-import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -109,9 +112,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final Button renewButton;
 
-    private final MenuItem offerAction;
+    private MenuItem offerAction;
 
-    private final MenuItem viewOfferedTerms;
+    private MenuItem viewOfferedTerms;
 
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
@@ -174,8 +177,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                         if (!isValid()) {
                             return false;
                         }
-                        ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Notice, getValue().moveOutSubmissionDate().getValue(),
-                                getValue().expectedMoveOut().getValue(), null);
+                        ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Notice,
+                                getValue().moveOutSubmissionDate().getValue(), getValue().expectedMoveOut().getValue(), null);
                         return true;
                     }
                 }.show();
@@ -200,8 +203,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                         if (!isValid()) {
                             return false;
                         }
-                        ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Eviction, getValue().moveOutSubmissionDate().getValue(),
-                                getValue().expectedMoveOut().getValue(), null);
+                        ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Eviction, getValue().moveOutSubmissionDate()
+                                .getValue(), getValue().expectedMoveOut().getValue(), null);
                         return true;
                     }
                 }.show();
@@ -226,8 +229,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                         if (!isValid()) {
                             return false;
                         }
-                        ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Termination, getValue().moveOutSubmissionDate().getValue(),
-                                getValue().expectedMoveOut().getValue(), getValue().terminationLeaseTo().getValue());
+                        ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Termination, getValue().moveOutSubmissionDate()
+                                .getValue(), getValue().expectedMoveOut().getValue(), getValue().terminationLeaseTo().getValue());
                         return true;
                     }
                 }.show();
@@ -304,46 +307,74 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         // Renewing stuff : ---------------------------------------------------------------------------------------------------
 
         renewButton = new Button(i18n.tr("Renew"));
-        Button.ButtonMenuBar renewMenu = renewButton.createMenu();
-        renewButton.setMenu(renewMenu);
+        addHeaderToolbarItem(renewButton.asWidget());
+
         if (VistaTODO.VISTA_1789_Renew_Lease) {
-            addHeaderToolbarItem(renewButton.asWidget());
-        }
 
-        offerAction = new MenuItem(i18n.tr("Create Offer"), new Command() {
-            @Override
-            public void execute() {
-                new SelectEnumDialog<LeaseTerm.Type>(i18n.tr("Select Term Type"), LeaseTerm.Type.renew()) {
-                    @Override
-                    public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) getPresenter()).createOffer(getSelectedType());
-                        return true;
-                    }
-                }.show();
-            }
-        });
-        renewMenu.addItem(offerAction);
+            Button.ButtonMenuBar renewMenu = renewButton.createMenu();
+            renewButton.setMenu(renewMenu);
 
-        viewOfferedTerms = new MenuItem(i18n.tr("View Offers..."), new Command() {
-            @Override
-            public void execute() {
-                new LeaseTermSelectorDialog() {
-                    {
-                        setParentFiltering(getForm().getValue().getPrimaryKey());
-                        addFilter(PropertyCriterion.eq(proto().status(), LeaseTerm.Status.Offer));
-                    }
-
-                    @Override
-                    public boolean onClickOk() {
-                        if (!getSelectedItems().isEmpty()) {
-                            ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getSelectedItems().get(0));
+            offerAction = new MenuItem(i18n.tr("Create Offer"), new Command() {
+                @Override
+                public void execute() {
+                    new SelectEnumDialog<LeaseTerm.Type>(i18n.tr("Select Term Type"), LeaseTerm.Type.renew()) {
+                        @Override
+                        public boolean onClickOk() {
+                            ((LeaseViewerView.Presenter) getPresenter()).createOffer(getSelectedType());
+                            return true;
                         }
-                        return !getSelectedItems().isEmpty();
-                    }
-                }.show();
-            }
-        });
-        renewMenu.addItem(viewOfferedTerms);
+                    }.show();
+                }
+            });
+            renewMenu.addItem(offerAction);
+
+            viewOfferedTerms = new MenuItem(i18n.tr("View Offers..."), new Command() {
+                @Override
+                public void execute() {
+                    new LeaseTermSelectorDialog() {
+                        {
+                            setParentFiltering(getForm().getValue().getPrimaryKey());
+                            addFilter(PropertyCriterion.eq(proto().status(), LeaseTerm.Status.Offer));
+                        }
+
+                        @Override
+                        public boolean onClickOk() {
+                            if (!getSelectedItems().isEmpty()) {
+                                ((LeaseViewerView.Presenter) getPresenter()).viewTerm(getSelectedItems().get(0));
+                            }
+                            return !getSelectedItems().isEmpty();
+                        }
+                    }.show();
+                }
+            });
+            renewMenu.addItem(viewOfferedTerms);
+
+        } else if (VistaTODO.VISTA_2245_Simple_Lease_Renewal) {
+
+            renewButton.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    new RenewLeaseBox() {
+                        @Override
+                        public boolean onClickOk() {
+                            LogicalDate newDate = getEndLeaseDate();
+
+                            if (newDate == null) {
+                                MessageDialog.error(i18n.tr("Error"), i18n.tr("Please select the date!"));
+                                return false;
+                            }
+                            if (!getForm().getValue().currentTerm().termTo().getValue().before(newDate)) {
+                                MessageDialog.error(i18n.tr("Error"), i18n.tr("New Lease End date should be greater then current one!"));
+                                return false;
+                            }
+
+                            ((LeaseViewerView.Presenter) getPresenter()).simpleLeaseRenew(newDate);
+                            return true;
+                        }
+                    }.show();
+                }
+            });
+        }
     }
 
     @Override
@@ -402,6 +433,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         if (VistaTODO.VISTA_1789_Renew_Lease) {
             renewButton.setVisible(status == Status.Active && completion == null && value.nextTerm().isNull());
+        } else if (VistaTODO.VISTA_2245_Simple_Lease_Renewal) {
+            renewButton.setVisible(status == Status.Active && completion == null);
         }
     }
 
@@ -460,8 +493,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 public IsWidget createContent() {
                     FormFlexPanel main = new FormFlexPanel();
 
-                    main.setWidget(0, 0, new DecoratorBuilder(inject(proto().moveOutSubmissionDate()), 9).customLabel(action.toString() + i18n.tr(" Submission Date"))
-                            .build());
+                    main.setWidget(0, 0,
+                            new DecoratorBuilder(inject(proto().moveOutSubmissionDate()), 9).customLabel(action.toString() + i18n.tr(" Submission Date"))
+                                    .build());
                     main.setWidget(1, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
 
                     if (showTermination) {
@@ -497,8 +531,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 public void addValidations() {
                     super.addValidations();
 
-                    new DateInPeriodValidation(get(proto().currentTerm().termFrom()), get(proto().moveOutSubmissionDate()), get(proto().currentTerm().termTo()),
-                            i18n.tr("The Date Should Be Within The Lease Period"));
+                    new DateInPeriodValidation(get(proto().currentTerm().termFrom()), get(proto().moveOutSubmissionDate()),
+                            get(proto().currentTerm().termTo()), i18n.tr("The Date Should Be Within The Lease Period"));
 
                     new DateInPeriodValidation(get(proto().currentTerm().termFrom()), get(proto().expectedMoveOut()), get(proto().currentTerm().termTo()),
                             i18n.tr("The Date Should Be Within The Lease Period"));
@@ -630,5 +664,33 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }
             }
         });
+    }
+
+    private abstract class RenewLeaseBox extends OkCancelDialog {
+
+        private final CDatePicker endLeaseDate = new CDatePicker();
+
+        public RenewLeaseBox() {
+            super(i18n.tr("Renew Lease"));
+
+            setBody(createBody());
+
+            endLeaseDate.setValue(getForm().getValue().currentTerm().termTo().getValue());
+            endLeaseDate.setWidth("9em");
+        }
+
+        protected Widget createBody() {
+            VerticalPanel body = new VerticalPanel();
+            body.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+            body.add(new HTML(i18n.tr("Select new Lease End date:")));
+            body.add(endLeaseDate);
+            body.setWidth("100%");
+            body.setSpacing(4);
+            return body;
+        }
+
+        public LogicalDate getEndLeaseDate() {
+            return (endLeaseDate.getValue() != null ? new LogicalDate(endLeaseDate.getValue()) : null);
+        }
     }
 }

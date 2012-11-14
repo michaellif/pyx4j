@@ -93,4 +93,9 @@ public interface LeaseFacade {
     BillableItem createBillableItem(ProductItem itemId, PolicyNode node);
 
     void updateLeaseDates(Lease lease);
+
+    /**
+     * This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)
+     */
+    void simpleLeaseRenew(Lease leaseId, LogicalDate leaseEndDate);
 }

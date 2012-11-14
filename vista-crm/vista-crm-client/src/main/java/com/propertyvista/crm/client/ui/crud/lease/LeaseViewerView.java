@@ -56,6 +56,11 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
         void cancelLease(String decisionReason);
 
         void createOffer(LeaseTerm.Type type);
+
+        /**
+         * This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)
+         */
+        void simpleLeaseRenew(LogicalDate leaseEndDate);
     }
 
     IListerView<DepositLifecycleDTO> getDepositListerView();

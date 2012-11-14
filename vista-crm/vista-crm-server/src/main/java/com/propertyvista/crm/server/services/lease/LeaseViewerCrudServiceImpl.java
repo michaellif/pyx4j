@@ -92,9 +92,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
     @Override
     public void moveOut(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-
-        leaseFacade.moveOut(EntityFactory.createIdentityStub(Lease.class, entityId));
+        ServerSideFactory.create(LeaseFacade.class).moveOut(EntityFactory.createIdentityStub(Lease.class, entityId));
 
         Persistence.service().commit();
         callback.onSuccess(null);
@@ -189,5 +187,18 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         new LeaseTermCrudServiceImpl().update(term, termDto);
 
         callback.onSuccess(termDto);
+    }
+
+    /**
+     * This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)
+     */
+    @Override
+    public void simpleLeaseRenew(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate leaseEndDate) {
+        Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
+
+        ServerSideFactory.create(LeaseFacade.class).simpleLeaseRenew(leaseId, leaseEndDate);
+
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 }

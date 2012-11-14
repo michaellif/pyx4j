@@ -1086,4 +1086,20 @@ public class LeaseFacadeImpl implements LeaseFacade {
         return naa;
     }
 
+    /**
+     * This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)
+     */
+    @Override
+    public void simpleLeaseRenew(Lease leaseId, LogicalDate leaseEndDate) {
+        Lease lease = load(leaseId, true);
+
+        // Verify the status
+        if (lease.status().getValue() != Lease.Status.Active) {
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+        }
+
+        lease.currentTerm().termTo().setValue(leaseEndDate);
+
+        finalize(lease);
+    }
 }

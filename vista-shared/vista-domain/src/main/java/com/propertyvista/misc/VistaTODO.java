@@ -60,4 +60,6 @@ public interface VistaTODO {
     public final boolean VISTA_1789_Renew_Lease = false;
 
     public static boolean VISTA_1756_Concessions_Should_Be_Hidden = true;
+
+    public static boolean VISTA_2245_Simple_Lease_Renewal = true;
 }

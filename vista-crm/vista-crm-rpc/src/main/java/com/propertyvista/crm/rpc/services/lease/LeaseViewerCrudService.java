@@ -55,4 +55,9 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
     void cancelLease(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
 
     void createOffer(AsyncCallback<LeaseTermDTO> callback, Key entityId, LeaseTerm.Type type);
+
+    /**
+     * This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)
+     */
+    void simpleLeaseRenew(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate leaseEndDate);
 }
