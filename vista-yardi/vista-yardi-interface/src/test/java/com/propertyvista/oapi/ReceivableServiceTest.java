@@ -30,8 +30,11 @@ import javax.xml.ws.handler.MessageContext;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.pyx4j.commons.LogicalDate;
+
 import com.propertyvista.oapi.model.ChargeRS;
 import com.propertyvista.oapi.model.PaymentRS;
+import com.propertyvista.oapi.model.ServiceRS;
 import com.propertyvista.oapi.model.TransactionRS;
 
 public class ReceivableServiceTest extends OAPITest {
@@ -62,11 +65,23 @@ public class ReceivableServiceTest extends OAPITest {
         requestContext.put(MessageContext.HTTP_REQUEST_HEADERS, headers);
 
         List<TransactionRS> transactions = new ArrayList<TransactionRS>();
-        transactions.add(new ChargeRS("tr1", new BigDecimal("11")));
-        transactions.add(new ChargeRS("tr2", new BigDecimal("22")));
-        transactions.add(new ChargeRS("tr3", new BigDecimal("33")));
-        transactions.add(new PaymentRS("tr2", new BigDecimal("22")));
-        transactions.add(new PaymentRS("tr3", new BigDecimal("33")));
+        for (int i = 1; i <= 3; i++) {
+            ChargeRS charge = new ChargeRS();
+            charge.description = "tr" + i;
+            charge.amount = new BigDecimal("" + i + i);
+            ServiceRS chargeService = new ServiceRS();
+            chargeService.chargeCode = "ch" + i;
+            charge.service = chargeService;
+            charge.fromDate = new LogicalDate(112, 1, 1);
+            charge.toDate = new LogicalDate(112, 2, 2);
+            transactions.add(charge);
+        }
+        for (int i = 4; i <= 5; i++) {
+            PaymentRS payment = new PaymentRS();
+            payment.description = "tr" + i;
+            payment.amount = new BigDecimal("" + i + i);
+            transactions.add(payment);
+        }
 
         service.postTransactions(transactions);
 

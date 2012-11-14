@@ -26,7 +26,7 @@ import javax.jws.soap.SOAPBinding.Use;
 
 import com.propertyvista.oapi.model.BuildingRS;
 
-@WebService
+@WebService(targetNamespace = "http://www.w3.org/2001/XMLSchema-instance")
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)
 public interface PropertyService {
 

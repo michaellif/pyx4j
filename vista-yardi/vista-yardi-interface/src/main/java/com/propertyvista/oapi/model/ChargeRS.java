@@ -13,20 +13,26 @@
  */
 package com.propertyvista.oapi.model;
 
-import java.math.BigDecimal;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.xml.LogicalDateXmlAdapter;
 
 public class ChargeRS extends TransactionRS {
 
+    public ServiceRS service;
+
+    @XmlSchemaType(name = "date")
+    @XmlJavaTypeAdapter(LogicalDateXmlAdapter.class)
+    public LogicalDate fromDate;
+
+    @XmlSchemaType(name = "date")
+    @XmlJavaTypeAdapter(LogicalDateXmlAdapter.class)
+    public LogicalDate toDate;
+
     public ChargeRS() {
         super();
-    }
-
-    public ChargeRS(BigDecimal amount) {
-        this("Charge", amount);
-    }
-
-    public ChargeRS(String description, BigDecimal amount) {
-        super(description, amount);
     }
 
 }

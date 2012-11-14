@@ -22,6 +22,10 @@ public class ServiceRS {
 
     public String description;
 
+    public String chargeCode;
+
+    public String glCode;
+
     public ServiceRS() {
     }
 

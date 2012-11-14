@@ -15,6 +15,7 @@ package com.propertyvista.oapi;
 
 import java.util.List;
 
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.ParameterStyle;
@@ -23,11 +24,11 @@ import javax.jws.soap.SOAPBinding.Use;
 
 import com.propertyvista.oapi.model.TransactionRS;
 
-@WebService
+@WebService(targetNamespace = "http://www.w3.org/2001/XMLSchema-instance")
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)
 public interface ReceivableService {
 
-    void postTransactions(List<TransactionRS> transactions);
+    void postTransactions(@WebParam(name = "transaction") List<TransactionRS> transactions);
 
     // run billing
 

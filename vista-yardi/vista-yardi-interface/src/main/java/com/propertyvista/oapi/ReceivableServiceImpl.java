@@ -24,6 +24,7 @@ public class ReceivableServiceImpl implements ReceivableService {
 
     @Override
     public void postTransactions(List<TransactionRS> transactions) {
+
     }
 
 }
