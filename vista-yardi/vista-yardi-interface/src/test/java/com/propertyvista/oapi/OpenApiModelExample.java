@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.openapi;
+package com.propertyvista.oapi;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,7 +31,8 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
-import com.propertyvista.crm.server.openapi.model.BuildingsRS;
+import com.propertyvista.oapi.model.BuildingsRS;
+import com.propertyvista.oapi.rest.BuildingsResource;
 
 public class OpenApiModelExample {
 

@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.crm.server.openapi;
+package com.propertyvista.oapi;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,14 +36,15 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
-import com.propertyvista.crm.server.openapi.model.BuildingRS;
-import com.propertyvista.crm.server.openapi.model.BuildingsRS;
-import com.propertyvista.crm.server.openapi.model.FloorplanRS;
-import com.propertyvista.crm.server.openapi.model.MediaRS;
-import com.propertyvista.crm.server.openapi.model.util.Converter;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.oapi.marshaling.Converter;
+import com.propertyvista.oapi.model.BuildingRS;
+import com.propertyvista.oapi.model.BuildingsRS;
+import com.propertyvista.oapi.model.FloorplanRS;
+import com.propertyvista.oapi.model.MediaRS;
+import com.propertyvista.oapi.rest.BuildingsResource;
 
 public class OpenApiModelTest {
 

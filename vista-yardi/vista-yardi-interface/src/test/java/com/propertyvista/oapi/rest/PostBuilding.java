@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.crm.server.openapi;
+package com.propertyvista.oapi.rest;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -21,6 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.gwt.server.IOUtils;
+
+import com.propertyvista.oapi.rest.BuildingsResource;
 
 public class PostBuilding {
     private final static Logger log = LoggerFactory.getLogger(PostBuilding.class);

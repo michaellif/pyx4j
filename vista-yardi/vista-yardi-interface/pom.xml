@@ -24,22 +24,8 @@
         </dependency>
 
         <dependency>
-            <groupId>commons-httpclient</groupId>
-            <artifactId>commons-httpclient</artifactId>
-            <scope>test</scope>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-server</artifactId>
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-entity-rdb</artifactId>
-            <version>${pyxVersion}</version>
         </dependency>
         
         <dependency>
@@ -60,9 +46,30 @@
         </dependency>
         
         <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+        
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-unit-preloader</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+            <optional>true</optional>
         </dependency>
 
     </dependencies>
