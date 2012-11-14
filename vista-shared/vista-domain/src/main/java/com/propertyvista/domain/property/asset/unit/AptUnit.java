@@ -102,8 +102,10 @@ public interface AptUnit extends BuildingElement, PolicyNode {
     // internals:
     /**
      * Denormalized field used for search, managed by @see AptUnitOccupancyManagerImpl
+     * Used in old Starlinght portal only
      */
     @Indexed
+    @Deprecated
     @Caption(name = "Availability")
     IPrimitive<LogicalDate> _availableForRent();
 
