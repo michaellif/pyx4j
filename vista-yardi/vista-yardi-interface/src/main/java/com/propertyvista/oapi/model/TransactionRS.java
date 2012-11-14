@@ -22,6 +22,8 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlSeeAlso({ ChargeRS.class, PaymentRS.class })
 public abstract class TransactionRS {
 
+    public String transactionId;
+
     public String leaseId;
 
     public String description;

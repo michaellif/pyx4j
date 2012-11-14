@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,28 +7,35 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 12, 2012
- * @author michaellif
+ * Created on Jul 28, 2011
+ * @author dmitry
  * @version $Id$
  */
 package com.propertyvista.oapi.model;
 
-import java.math.BigDecimal;
 
-public class PaymentRS extends TransactionRS {
+public class MediaRS {
 
-    //   List<ChargeRS> charges; 
+    public enum MediaType {
 
-    public PaymentRS() {
-        super();
+        file,
+
+        youTube,
+
+        externalUrl;
+
     }
 
-    public PaymentRS(BigDecimal amount) {
-        this("Payment", amount);
-    }
+    public MediaType mediaType;
 
-    public PaymentRS(String description, BigDecimal amount) {
-        super(description, amount);
-    }
+    public String caption;
+
+    public String mimeType;
+
+    public String fileId;
+
+    public String youTubeVideoID;
+
+    public String url;
 
 }

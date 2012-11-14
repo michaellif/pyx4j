@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.crm.server.openapi.model;
+package com.propertyvista.oapi.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

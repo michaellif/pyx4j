@@ -37,6 +37,29 @@
         </dependency>
         
         <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-rdb</artifactId>
+            <version>${pyxVersion}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-server-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
