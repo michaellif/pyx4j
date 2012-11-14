@@ -29,10 +29,9 @@ import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.essentials.j2se.util.FileIOUtils;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
-import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.oapi.model.BuildingsRS;
-import com.propertyvista.oapi.rest.BuildingsResource;
+import com.propertyvista.oapi.rest.PropertyService;
 
 public class OpenApiModelExample {
 
@@ -43,7 +42,7 @@ public class OpenApiModelExample {
 
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.MySQL));
 
-        BuildingsRS buildingsRS = new BuildingsResource().listBuildings(VistaTestsNamespaceResolver.demoNamespace, null, null);
+        BuildingsRS buildingsRS = new PropertyService().listAllBuildings();
 
         log.info("buildings {} ", buildingsRS.buildings.size());
         log.info("Retrive time {} msec", TimeUtils.since(start));

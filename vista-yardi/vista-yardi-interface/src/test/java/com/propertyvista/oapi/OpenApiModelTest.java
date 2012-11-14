@@ -44,7 +44,7 @@ import com.propertyvista.oapi.model.BuildingRS;
 import com.propertyvista.oapi.model.BuildingsRS;
 import com.propertyvista.oapi.model.FloorplanRS;
 import com.propertyvista.oapi.model.MediaRS;
-import com.propertyvista.oapi.rest.BuildingsResource;
+import com.propertyvista.oapi.rest.PropertyService;
 
 public class OpenApiModelTest {
 
@@ -87,7 +87,7 @@ public class OpenApiModelTest {
 
     @Test
     public void testXmlBuildingsUnmarshall() throws IOException, JAXBException {
-        String xml = IOUtils.getTextResource("buildings.xml", BuildingsResource.class);
+        String xml = IOUtils.getTextResource("buildings.xml", PropertyService.class);
 
         BuildingsRS buildings = MarshallUtil.unmarshal(BuildingsRS.class, xml);
         Assert.assertNotNull("Converted buildings", buildings);

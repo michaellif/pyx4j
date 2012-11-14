@@ -47,7 +47,7 @@ public class OapiRsTest {
             port = 8888;
             monitorPort = 8080;
         }
-        Endpoint.publish(getAddress(monitorPort), Class.forName(serviceClass.getName() + "Impl").newInstance());
+        Endpoint.publish(getAddress(monitorPort), serviceClass.newInstance());
     }
 
     int getHttpStatusCode(String address) throws Exception {

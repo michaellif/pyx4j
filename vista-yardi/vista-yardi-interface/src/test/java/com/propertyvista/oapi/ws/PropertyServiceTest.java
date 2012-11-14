@@ -17,7 +17,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.ws.BindingProvider;
@@ -26,7 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.propertyvista.oapi.model.BuildingRS;
-import com.propertyvista.oapi.ws.PropertyService;
+import com.propertyvista.oapi.model.BuildingsRS;
 
 public class PropertyServiceTest extends OapiWsTest {
 
@@ -71,9 +70,9 @@ public class PropertyServiceTest extends OapiWsTest {
         service.createBuilding(new BuildingRS("b1"));
         service.createBuilding(new BuildingRS("b2"));
 
-        List<BuildingRS> buildings = service.getAllBuildings();
+        BuildingsRS buildings = service.listAllBuildings();
 
-        assertEquals(2, buildings.size());
+        assertEquals(2, buildings.buildings.size());
 
     }
 

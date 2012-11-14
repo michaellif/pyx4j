@@ -13,8 +13,6 @@
  */
 package com.propertyvista.oapi.ws;
 
-import java.util.List;
-
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
@@ -25,6 +23,7 @@ import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
 
 import com.propertyvista.oapi.model.BuildingRS;
+import com.propertyvista.oapi.model.BuildingsRS;
 
 @WebService(targetNamespace = "http://www.w3.org/2001/XMLSchema-instance")
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)
@@ -33,8 +32,8 @@ public interface PropertyService {
     @WebMethod
     void createBuilding(@WebParam(name = "building") BuildingRS building);
 
-    @WebResult(name = "building")
-    List<BuildingRS> getAllBuildings();
+    @WebResult(name = "buildings")
+    BuildingsRS listAllBuildings();
 
     @WebResult(name = "building")
     BuildingRS getBuildingByPropertyCode(@WebParam(name = "propertyCode") String propertyCode);
