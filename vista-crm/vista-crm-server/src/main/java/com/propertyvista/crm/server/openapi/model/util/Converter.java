@@ -162,7 +162,7 @@ public class Converter {
             to.streetType = from.streetType().getValue().name();
         }
         if (!from.suiteNumber().isNull()) {
-            to.unitNumber = from.suiteNumber().getValue();
+            to.numberOfUnits = from.suiteNumber().getValue();
         }
         to.city = from.city().getStringView();
         to.province = from.province().getStringView();

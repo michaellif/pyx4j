@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -28,8 +28,10 @@ import com.pyx4j.xml.LogicalDateXmlAdapter;
 
 public class FloorplanRS {
 
+    //mandatory for portal
     public String name;
 
+    //mandatory for portal
     public String marketingName;
 
     public String description;
@@ -38,10 +40,12 @@ public class FloorplanRS {
 
     public Integer unitCount;
 
+    //mandatory for portal
     public Integer bedrooms;
 
     public Integer dens;
 
+    //mandatory for portal
     public Integer bathrooms;
 
     public Integer halfBath;
@@ -65,4 +69,9 @@ public class FloorplanRS {
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "media", type = MediaRS.class))
     public List<MediaRS> medias = new ArrayList<MediaRS>();
+
+    //mandatory for portal
+    @XmlElementWrapper
+    @XmlElements(@XmlElement(name = "aptUnit", type = AptUnitRS.class))
+    public List<AptUnitRS> units = new ArrayList<AptUnitRS>();
 }

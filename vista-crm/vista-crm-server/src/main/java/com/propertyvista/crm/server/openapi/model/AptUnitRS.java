@@ -7,18 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 27, 2011
- * @author vlads
+ * Created on Jul 28, 2011
+ * @author dmitry
  * @version $Id$
  */
 package com.propertyvista.crm.server.openapi.model;
 
-public class GeoLocation {
+
+public class AptUnitRS {
 
     //mandatory for portal
-    public double latitude;
-
-    //mandatory for portal
-    public double longitude;
+    public String number;
 
 }
