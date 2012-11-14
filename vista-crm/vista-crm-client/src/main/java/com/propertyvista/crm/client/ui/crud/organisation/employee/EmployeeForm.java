@@ -79,7 +79,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     public void restrictSecurityRelatedControls(boolean isManager, boolean isSelfEditor) {
         get(proto().enabled()).setVisible(isManager);
-        get(proto().requireChangePasswordOnNextLogIn()).setVisible(isManager);
+        get(proto().requiredPasswordChangeOnNextLogIn()).setVisible(isManager);
 
         get(proto().roles()).setEditable(!isSelfEditor);
 
@@ -140,7 +140,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
         content.setBR(++row, 0, 1);
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextLogIn()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requiredPasswordChangeOnNextLogIn()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().credentialUpdated()), 15).build());
 
         content.setH1(++row, 0, 2, i18n.tr("Roles"));

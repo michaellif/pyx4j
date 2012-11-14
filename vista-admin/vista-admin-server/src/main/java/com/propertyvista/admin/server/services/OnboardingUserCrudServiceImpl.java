@@ -1,6 +1,11 @@
 /*
- * MCO 2
- * Copyright (C) 2008-2011 Amdocs Canada.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Nov 4, 2011
  * @author vlads
@@ -8,12 +13,13 @@
  */
 package com.propertyvista.admin.server.services;
 
+import java.util.concurrent.Callable;
+
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
@@ -23,6 +29,8 @@ import com.propertyvista.admin.rpc.services.OnboardingUserCrudService;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.server.common.security.PasswordEncryptor;
+import com.propertyvista.server.domain.security.CrmUserCredential;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<OnboardingUserCredential, OnboardingUserDTO> implements OnboardingUserCrudService {
 
@@ -43,7 +51,7 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
         bind(dtoProto.role(), dboProto.behavior());
         bind(dtoProto.onboardingAccountId(), dboProto.onboardingAccountId());
         bind(dtoProto.enabled(), dboProto.enabled());
-        bind(dtoProto.requireChangePasswordOnNextLogIn(), dboProto.requiredPasswordChangeOnNextLogIn());
+        bind(dtoProto.requiredPasswordChangeOnNextLogIn(), dboProto.requiredPasswordChangeOnNextLogIn());
 
         bind(dtoProto.pmc(), dboProto.pmc());
         bind(dtoProto.onboardingAccountId(), dboProto.onboardingAccountId());
@@ -51,10 +59,32 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
 
     }
 
+    /**
+     * Data from PMC database takes priority
+     */
+    private void bindCrmUser(final OnboardingUserCredential credential, final OnboardingUserDTO dto) {
+        TaskRunner.runInTargetNamespace(dto.pmc().namespace().getValue(), new Callable<Void>() {
+            @Override
+            public Void call() {
+                CrmUser crmUser = Persistence.service().retrieve(CrmUser.class, credential.crmUser().getValue());
+                CrmUserCredential crmCredential = Persistence.service().retrieve(CrmUserCredential.class, crmUser.getPrimaryKey());
+
+                dto.enabled().setValue(crmCredential.enabled().getValue());
+                dto.requiredPasswordChangeOnNextLogIn().setValue(crmCredential.requiredPasswordChangeOnNextLogIn().getValue());
+                dto.crmCredentialUpdated().setValue(crmCredential.credentialUpdated().getValue());
+
+                return null;
+            }
+        });
+    }
+
     @Override
     protected void enhanceRetrieved(OnboardingUserCredential entity, OnboardingUserDTO dto, RetrieveTraget retrieveTraget) {
         if (!entity.pmc().isNull()) {
             dto.onboardingAccountId().setValue(entity.pmc().onboardingAccountId().getValue());
+            if (entity.pmc().status().getValue() != PmcStatus.Created) {
+                bindCrmUser(entity, dto);
+            }
         }
     }
 
@@ -64,6 +94,9 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
             dto.onboardingAccountId().setValue(entity.pmc().onboardingAccountId().getValue());
             dto.pmcStatus().setValue(entity.pmc().status().getValue());
             dto.pmc().set(entity.pmc());
+            if (entity.pmc().status().getValue() != PmcStatus.Created) {
+                bindCrmUser(entity, dto);
+            }
         }
     }
 
@@ -79,7 +112,7 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
 
     @SuppressWarnings("unchecked")
     @Override
-    protected void persist(OnboardingUserCredential dbo, OnboardingUserDTO dto) {
+    protected void persist(final OnboardingUserCredential dbo, final OnboardingUserDTO dto) {
         dbo.user().email().setValue(PasswordEncryptor.normalizeEmailAddress(dto.email().getValue()));
         dbo.user().name().setValue(EntityFromatUtils.nvl_concat(" ", dbo.user().firstName(), dbo.user().lastName()));
         Persistence.service().merge(dbo.user());
@@ -99,23 +132,26 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
 
             if (pmc.status().getValue() != PmcStatus.Created) {
                 // Update existing CRM user
+                TaskRunner.runInTargetNamespace(pmc.namespace().getValue(), new Callable<Void>() {
+                    @Override
+                    public Void call() {
+                        CrmUser crmUser = Persistence.service().retrieve(CrmUser.class, dbo.crmUser().getValue());
+                        crmUser.email().setValue(dbo.user().email().getValue());
+                        Persistence.service().persist(crmUser);
+                        CrmUserCredential crmCredential = Persistence.service().retrieve(CrmUserCredential.class, crmUser.getPrimaryKey());
+                        crmCredential.enabled().setValue(dbo.enabled().getValue());
+                        crmCredential.requiredPasswordChangeOnNextLogIn().setValue(dbo.requiredPasswordChangeOnNextLogIn().getValue());
+                        crmCredential.credentialUpdated().setValue(dto.crmCredentialUpdated().getValue());
+                        Persistence.service().persist(crmCredential);
 
-                final String namespace = NamespaceManager.getNamespace();
-                try {
-                    NamespaceManager.setNamespace(pmc.namespace().getValue());
-
-                    CrmUser crmUser = Persistence.service().retrieve(CrmUser.class, dbo.crmUser().getValue());
-                    crmUser.email().setValue(dbo.user().email().getValue());
-                    Persistence.service().persist(crmUser);
-
-                    EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
-                    criteria.add(PropertyCriterion.eq(criteria.proto().user(), dbo.crmUser().getValue()));
-                    Employee emp = Persistence.service().retrieve(criteria);
-                    emp.email().setValue(dbo.user().email().getValue());
-                    Persistence.service().persist(emp);
-                } finally {
-                    NamespaceManager.setNamespace(namespace);
-                }
+                        EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+                        criteria.add(PropertyCriterion.eq(criteria.proto().user(), dbo.crmUser().getValue()));
+                        Employee emp = Persistence.service().retrieve(criteria);
+                        emp.email().setValue(dbo.user().email().getValue());
+                        Persistence.service().persist(emp);
+                        return null;
+                    }
+                });
             }
         }
     }

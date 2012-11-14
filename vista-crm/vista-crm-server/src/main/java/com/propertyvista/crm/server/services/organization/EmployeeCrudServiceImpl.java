@@ -70,7 +70,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, entity.user().getPrimaryKey());
             dto.enabled().set(crs.enabled());
             dto.accessAllBuildings().set(crs.accessAllBuildings());
-            dto.requireChangePasswordOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
+            dto.requiredPasswordChangeOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
             dto.roles().addAll(crs.roles());
             dto.credentialUpdated().setValue(crs.credentialUpdated().getValue());
 
@@ -127,7 +127,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             credential.roles().clear();
             credential.roles().addAll(in.roles());
             credential.accessAllBuildings().set(in.accessAllBuildings());
-            credential.requiredPasswordChangeOnNextLogIn().setValue(in.requireChangePasswordOnNextLogIn().getValue());
+            credential.requiredPasswordChangeOnNextLogIn().setValue(in.requiredPasswordChangeOnNextLogIn().getValue());
             ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());
             Persistence.service().persist(credential);
             credential.interfaceUid().setValue(UserAccessUtils.getCrmUserInterfaceUid(credential));
@@ -187,7 +187,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                     onbUserCred.credential().setValue(PasswordEncryptor.encryptPassword(in.password().getValue()));
                     onbUserCred.enabled().setValue(in.enabled().getValue());
                     onbUserCred.onboardingAccountId().setValue(null);
-                    onbUserCred.requiredPasswordChangeOnNextLogIn().setValue(in.requireChangePasswordOnNextLogIn().getValue());
+                    onbUserCred.requiredPasswordChangeOnNextLogIn().setValue(in.requiredPasswordChangeOnNextLogIn().getValue());
                     onbUserCred.interfaceUid().setValue(credential.interfaceUid().getValue());
 
                     Boolean res = TaskRunner.runInAdminNamespace(new Callable<Boolean>() {

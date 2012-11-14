@@ -53,7 +53,7 @@ public class OnboardingUserForm extends AdminEntityForm<OnboardingUserDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().passwordConfirm())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextLogIn())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requiredPasswordChangeOnNextLogIn())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().credentialUpdated())).build());
 
         selectTab(addTab(content));

@@ -30,7 +30,7 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<AdminUs
         bind(dtoProto.updated(), dboProto.user().updated());
 
         bind(dtoProto.enabled(), dboProto.enabled());
-        bind(dtoProto.requireChangePasswordOnNextLogIn(), dboProto.requiredPasswordChangeOnNextLogIn());
+        bind(dtoProto.requiredPasswordChangeOnNextLogIn(), dboProto.requiredPasswordChangeOnNextLogIn());
         bind(dtoProto.credentialUpdated(), dboProto.credentialUpdated());
 
     }

@@ -45,7 +45,7 @@ public interface UserCredentialEditDTO extends IEntity {
     IPrimitive<String> passwordConfirm();
 
     @Caption(name = "Require to change password on next sign in")
-    IPrimitive<Boolean> requireChangePasswordOnNextLogIn();
+    IPrimitive<Boolean> requiredPasswordChangeOnNextLogIn();
 
     @ReadOnly
     @Editor(type = Editor.EditorType.label)
@@ -56,4 +56,7 @@ public interface UserCredentialEditDTO extends IEntity {
     @Editor(type = Editor.EditorType.label)
     @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> credentialUpdated();
+
+    @ReadOnly
+    IPrimitive<Date> crmCredentialUpdated();
 }
