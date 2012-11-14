@@ -389,7 +389,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             }
             break;
         case demo:
-            systemWallMessage = new SystemWallMessage("This is Demo System", true);
+            systemWallMessage = new SystemWallMessage("Demo Environment", true);
             break;
         default:
             if (ApplicationMode.isDevelopment()) {

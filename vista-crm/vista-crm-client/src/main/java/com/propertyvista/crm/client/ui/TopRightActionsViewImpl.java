@@ -77,15 +77,16 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         container.getElement().getStyle().setFloat(Style.Float.RIGHT);
         container.setSize("30%", "100%");
 
-        thisIsProduction = new HTML("This is PRODUCTION SUPPORT!!!");
+        thisIsProduction = new HTML("This is PRODUCTION SUPPORT!");
         thisIsProduction.getElement().getStyle().setColor("red");
         thisIsProduction.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         thisIsProduction.getElement().getStyle().setFontSize(30, Unit.PX);
         thisIsProduction.getElement().getStyle().setMarginLeft(1, Unit.EM);
         thisIsProduction.getElement().getStyle().setMarginRight(1, Unit.EM);
+        thisIsProduction.getElement().getStyle().setProperty("textAlign", "center");
         thisIsProduction.setVisible(false);
 
-        thisIsDemo = new HTML("This is Demo");
+        thisIsDemo = new HTML(i18n.tr("Demo Environment"));
         thisIsDemo.getElement().getStyle().setColor("green");
         thisIsDemo.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         thisIsDemo.getElement().getStyle().setFontSize(30, Unit.PX);
