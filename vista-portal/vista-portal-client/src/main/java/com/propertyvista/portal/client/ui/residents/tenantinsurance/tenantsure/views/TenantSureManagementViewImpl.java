@@ -17,17 +17,22 @@ import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureDetailedStatusForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceDetailedStatusDTO;
 
 public class TenantSureManagementViewImpl extends Composite implements TenantSureManagementlView {
+
+    private static final I18n i18n = I18n.get(TenantSureManagementViewImpl.class);
 
     private Presenter presenter;
 
@@ -71,7 +76,6 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         FlowPanel controlPanel = new FlowPanel();
         controlPanel.getElement().getStyle().setMarginTop(50, Unit.PX);
         Button updateCC = new Button("Update Credit Card Details", new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
                 presenter.updateCreditCardDetails();
@@ -81,7 +85,13 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         Button cancelTenantSure = new Button("Cancel TenantSure", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.cancelTenantSure();
+                MessageDialog.confirm(i18n.tr("TenantSure cancellation"), i18n.tr("Are you sure you want to cancel TenantSure?"), new Command() {
+                    @Override
+                    public void execute() {
+                        presenter.cancelTenantSure();
+                    }
+                });
+
             }
         });
         setControlButtonLayout(cancelTenantSure);

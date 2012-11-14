@@ -20,13 +20,13 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureDetailedStatusForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDTO;
@@ -56,36 +56,16 @@ public class TenantSureInsuranceStatusViewer extends CEntityViewer<TenantSureTen
             contentPanel.add(new Label(i18n.tr("Next Payment Date: {0}", tenantSureStatus.nextPaymentDate().getStringView())));
         }
 
-        if (!tenantSureStatus.error().isNull()) {
-            switch (tenantSureStatus.error().getValue()) {
-            case lastPaymentFailed:
-                if (!tenantSureStatus.gracePeriodEndDate().isNull() && new LogicalDate().compareTo(tenantSureStatus.gracePeriodEndDate().getValue()) <= 0) {
-                    Label gracePeriodNotice = new Label(
-                            i18n.tr("Warning: since your last premium payment has failed, your insurance policy will expire on {0} unless you update your credit card information until {1}!",
-                                    tenantSureStatus.expirationDate().getStringView(), tenantSureStatus.gracePeriodEndDate().getStringView()));
-                    gracePeriodNotice.addStyleName(TenantInsuranceStatusViewer.Styles.TenantInsuranceWarningText.name());
-                    contentPanel.add(gracePeriodNotice);
-                    Anchor goToTenantSureScreen = new Anchor(i18n.tr("Update credit card details"), new ClickHandler() {
-                        @Override
-                        public void onClick(ClickEvent event) {
-                            AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSureManagement());
-                        }
-                    });
-                    goToTenantSureScreen.addStyleName(TenantInsuranceStatusViewer.Styles.TenantInsuranceAnchor.name());
-                    contentPanel.add(goToTenantSureScreen);
-                } else {
-                    Label warning = new Label(i18n.tr("Warning: your TenantSure tenant insurance policy will expire on {0}, due to failed premium payment!",
-                            tenantSureStatus.expirationDate().getStringView()));
-                    warning.addStyleName(TenantInsuranceStatusViewer.Styles.TenantInsuranceWarningText.name());
-                    contentPanel.add(warning);
+        if (!tenantSureStatus.messages().isEmpty()) {
+            contentPanel.add(new TenantSureDetailedStatusForm.TenantSureMessagesViewer().createContent(tenantSureStatus.messages()));
+            Anchor goToTenantSureScreen = new Anchor(i18n.tr("Go To TenantSure Management Page"), new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSureManagement());
                 }
-                break;
-            default:
-                Label warning = new Label(i18n.tr("Something's wrong with your TenantSure, please contanct support"));
-                warning.addStyleName(TenantInsuranceStatusViewer.Styles.TenantInsuranceWarningText.name());
-                contentPanel.add(warning);
-                break;
-            }
+            });
+            contentPanel.add(goToTenantSureScreen);
+
         }
 
         return contentPanel;

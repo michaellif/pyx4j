@@ -19,9 +19,11 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementlView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceDetailedStatusDTO;
 
@@ -50,8 +52,7 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
 
     @Override
     public void updateCreditCardDetails() {
-        // TODO Auto-generated method stub
-
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSureManagement.UpdateCreditCard());
     }
 
     @Override

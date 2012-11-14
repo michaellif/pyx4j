@@ -30,6 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePremiumTaxDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDetailedDTO;
@@ -64,6 +65,7 @@ public class TenantSureDetailedStatusForm extends CEntityDecoratableForm<TenantS
             } else {
                 for (TenantSureMessageDTO message : value) {
                     Label messageLabel = new Label(message.message().getValue());
+                    messageLabel.addStyleName(TenantInsuranceStatusViewer.Styles.TenantInsuranceWarningText.name());
                     panel.add(messageLabel);
                 }
             }
@@ -134,7 +136,6 @@ public class TenantSureDetailedStatusForm extends CEntityDecoratableForm<TenantS
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().monthlyPremiumPayment())).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextPaymentDate())).build());
 
-        panel.setH3(++row, 0, 1, i18n.tr("Messages"));
         panel.setWidget(++row, 0, inject(proto().messages(), new TenantSureMessagesViewer()));
 
         return panel;

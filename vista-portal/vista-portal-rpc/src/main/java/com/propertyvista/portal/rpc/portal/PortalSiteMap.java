@@ -120,6 +120,11 @@ public class PortalSiteMap implements SiteMap {
             @NavigationItem(navigLabel = "TenantSure Management")
             public static class TenantSureManagement extends AppPlace {
 
+                @PlaceProperties(caption = "Update Credit Card")
+                public static class UpdateCreditCard extends AppPlace {
+
+                }
+
             }
 
             @PlaceProperties(caption = "Purchase TenantSure Insurance")

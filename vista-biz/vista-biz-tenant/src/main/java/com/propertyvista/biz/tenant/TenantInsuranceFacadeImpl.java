@@ -22,15 +22,19 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.OtherProviderTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDTO;
 
 // TODO this is a mockup
 public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
+
+    private static final I18n i18n = I18n.get(TenantInsuranceFacadeImpl.class);
 
     private static final File MOCKUP_CONFIG_FILE = new File(System.getProperty("user.dir", ".") + File.separator + "tenant-insurance-facade-mockup.properties");
 
@@ -49,9 +53,12 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
             tenantSureStatus.monthlyPremiumPayment().setValue(new BigDecimal(config.get("tenantSure.monthlyPremium")));
             tenantSureStatus.nextPaymentDate().setValue(fetchDate(config, "tenantSure.nextPaymentDate"));
             tenantSureStatus.expirationDate().setValue(fetchDate(config, "tenantSure.insuranceExpirationDate"));
-            tenantSureStatus.gracePeriodEndDate().setValue(fetchDate(config, "tenantSure.gracePeriodEndDate"));
-            tenantSureStatus.error().setValue(
-                    config.get("tenantSure.lastPaymentFailed") != null ? TenantSureTenantInsuranceStatusDTO.Error.lastPaymentFailed : null);
+            TenantSureMessageDTO m = tenantSureStatus.messages().$();
+            m.message()
+                    .setValue(
+                            i18n.tr("There was a problem with your last scheduled payment. If you dont update your credit card details until {0,date,short}, your TeantSure insurance will expire on {1,date,short}.",
+                                    fetchDate(config, "tenantSure.gracePeriodEndDate"), tenantSureStatus.expirationDate().getValue()));
+            tenantSureStatus.messages().add(m);
 
             return tenantSureStatus;
 
