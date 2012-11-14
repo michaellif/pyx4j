@@ -111,13 +111,17 @@ public class DevSession {
         String domain = ServerSideConfiguration.instance().getDevelopmentSessionCookieDomain();
         if (CommonsStringUtils.isEmpty(domain)) {
             String host = Context.getRequestServerName();
-            String[] hostParts = host.split("\\.");
-            if (hostParts.length == 4) {
-                domain = "." + hostParts[hostParts.length - 3] + "." + hostParts[hostParts.length - 2] + "." + hostParts[hostParts.length - 1];
-            } else if (hostParts.length == 3) {
-                domain = "." + hostParts[hostParts.length - 2] + "." + hostParts[hostParts.length - 1];
-            } else {
+            if (Context.getRequest().getLocalAddr().equals(host)) {
                 domain = host;
+            } else {
+                String[] hostParts = host.split("\\.");
+                if (hostParts.length == 4) {
+                    domain = "." + hostParts[hostParts.length - 3] + "." + hostParts[hostParts.length - 2] + "." + hostParts[hostParts.length - 1];
+                } else if (hostParts.length == 3) {
+                    domain = "." + hostParts[hostParts.length - 2] + "." + hostParts[hostParts.length - 1];
+                } else {
+                    domain = host;
+                }
             }
         }
         sessionCookie.setDomain(domain);
