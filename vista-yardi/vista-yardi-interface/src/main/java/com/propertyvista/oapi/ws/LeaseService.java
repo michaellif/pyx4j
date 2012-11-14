@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi;
+package com.propertyvista.oapi.ws;
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;

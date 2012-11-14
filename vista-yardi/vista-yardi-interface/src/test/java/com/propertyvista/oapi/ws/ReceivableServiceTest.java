@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi;
+package com.propertyvista.oapi.ws;
 
 import static org.junit.Assert.assertEquals;
 
@@ -36,8 +36,9 @@ import com.propertyvista.oapi.model.ChargeRS;
 import com.propertyvista.oapi.model.PaymentRS;
 import com.propertyvista.oapi.model.ServiceRS;
 import com.propertyvista.oapi.model.TransactionRS;
+import com.propertyvista.oapi.ws.ReceivableService;
 
-public class ReceivableServiceTest extends OAPITest {
+public class ReceivableServiceTest extends OapiWsTest {
 
     @Before
     public void init() throws Exception {

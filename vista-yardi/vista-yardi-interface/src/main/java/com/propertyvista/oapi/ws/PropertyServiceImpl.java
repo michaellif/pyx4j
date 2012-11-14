@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi;
+package com.propertyvista.oapi.ws;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +22,7 @@ import javax.jws.WebService;
 
 import com.propertyvista.oapi.model.BuildingRS;
 
-@WebService(endpointInterface = "com.propertyvista.oapi.PropertyService")
+@WebService(endpointInterface = "com.propertyvista.oapi.ws.PropertyService")
 public class PropertyServiceImpl implements PropertyService {
 
     static private Map<String, BuildingRS> buildings = new HashMap<String, BuildingRS>();

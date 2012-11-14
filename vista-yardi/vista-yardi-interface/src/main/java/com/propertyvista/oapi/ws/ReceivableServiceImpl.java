@@ -11,27 +11,20 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi;
+package com.propertyvista.oapi.ws;
 
 import java.util.List;
 
-import javax.jws.WebParam;
 import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
-import javax.jws.soap.SOAPBinding.ParameterStyle;
-import javax.jws.soap.SOAPBinding.Style;
-import javax.jws.soap.SOAPBinding.Use;
 
 import com.propertyvista.oapi.model.TransactionRS;
 
-@WebService(targetNamespace = "http://www.w3.org/2001/XMLSchema-instance")
-@SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)
-public interface ReceivableService {
+@WebService(endpointInterface = "com.propertyvista.oapi.ws.ReceivableService")
+public class ReceivableServiceImpl implements ReceivableService {
 
-    void postTransactions(@WebParam(name = "transaction") List<TransactionRS> transactions);
+    @Override
+    public void postTransactions(List<TransactionRS> transactions) {
 
-    // run billing
-
-    // get payment records
+    }
 
 }

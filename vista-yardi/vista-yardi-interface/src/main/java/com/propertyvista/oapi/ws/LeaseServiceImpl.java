@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi;
+package com.propertyvista.oapi.ws;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ import javax.jws.WebService;
 
 import com.propertyvista.oapi.model.LeaseRS;
 
-@WebService(endpointInterface = "com.propertyvista.oapi.LeaseService")
+@WebService(endpointInterface = "com.propertyvista.oapi.ws.LeaseService")
 public class LeaseServiceImpl implements LeaseService {
 
     static private Map<String, LeaseRS> leases = new HashMap<String, LeaseRS>();

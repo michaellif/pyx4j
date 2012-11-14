@@ -11,14 +11,16 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi;
+package com.propertyvista.oapi.rest;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import javax.xml.ws.Endpoint;
 
-public class OAPITest {
+import com.propertyvista.oapi.PortAllocator;
+
+public class OapiRsTest {
 
     private int port;
 

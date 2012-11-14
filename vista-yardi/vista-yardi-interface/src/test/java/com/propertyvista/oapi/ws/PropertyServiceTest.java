@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi;
+package com.propertyvista.oapi.ws;
 
 import static org.junit.Assert.assertEquals;
 
@@ -26,8 +26,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.propertyvista.oapi.model.BuildingRS;
+import com.propertyvista.oapi.ws.PropertyService;
 
-public class PropertyServiceTest extends OAPITest {
+public class PropertyServiceTest extends OapiWsTest {
 
     @Before
     public void init() throws Exception {

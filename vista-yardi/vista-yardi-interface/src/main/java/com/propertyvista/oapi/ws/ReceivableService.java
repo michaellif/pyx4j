@@ -7,54 +7,31 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 13, 2012
+ * Created on Nov 12, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi;
+package com.propertyvista.oapi.ws;
 
 import java.util.List;
 
-import javax.jws.WebMethod;
 import javax.jws.WebParam;
-import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.ParameterStyle;
 import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
 
-import com.propertyvista.oapi.model.BuildingRS;
+import com.propertyvista.oapi.model.TransactionRS;
 
 @WebService(targetNamespace = "http://www.w3.org/2001/XMLSchema-instance")
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)
-public interface PropertyService {
+public interface ReceivableService {
 
-    @WebMethod
-    void createBuilding(@WebParam(name = "building") BuildingRS building);
+    void postTransactions(@WebParam(name = "transaction") List<TransactionRS> transactions);
 
-    @WebResult(name = "building")
-    List<BuildingRS> getAllBuildings();
+    // run billing
 
-    @WebResult(name = "building")
-    BuildingRS getBuildingByPropertyCode(@WebParam(name = "propertyCode") String propertyCode);
-
-    // update existing building
-
-    // get building by id
-
-    // get building list (criteria?)
-
-    //
-
-    //================================
-
-    // same for units (beds , bath, floorplan name), floorplans(beds , bath)?
-
-//    createUnits(List<Unit>)
-//    
-//    createUnit(Unit)
-//    
-//    updateUnit(Unit)
+    // get payment records
 
 }
