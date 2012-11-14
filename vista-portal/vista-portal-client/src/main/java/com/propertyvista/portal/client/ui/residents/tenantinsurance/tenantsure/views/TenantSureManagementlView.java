@@ -15,10 +15,20 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceDetailedStatusDTO;
+
 public interface TenantSureManagementlView extends IsWidget {
 
     public interface Presenter {
 
+        void updateCreditCardDetails();
+
+        void cancelTenantSure();
+
     }
+
+    void setPresenter(Presenter presenter);
+
+    void populate(TenantSureTenantInsuranceDetailedStatusDTO detailedStatus);
 
 }

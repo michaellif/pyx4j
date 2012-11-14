@@ -17,9 +17,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -28,6 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePremiumTaxDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDetailedDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceDetailedStatusDTO;
@@ -49,6 +52,24 @@ public class TenantSureDetailedStatusForm extends CEntityDecoratableForm<TenantS
                     new EntityFolderColumnDescriptor(proto().absoluteAmount(), "15em")
             );//@formatter:on
         }
+    }
+
+    public static class TenantSureMessagesViewer extends CEntityViewer<IList<TenantSureMessageDTO>> {
+
+        @Override
+        public IsWidget createContent(IList<TenantSureMessageDTO> value) {
+            FlowPanel panel = new FlowPanel();
+            if (value.isEmpty()) {
+
+            } else {
+                for (TenantSureMessageDTO message : value) {
+                    Label messageLabel = new Label(message.message().getValue());
+                    panel.add(messageLabel);
+                }
+            }
+
+            return panel;
+        }
 
     }
 
@@ -60,7 +81,6 @@ public class TenantSureDetailedStatusForm extends CEntityDecoratableForm<TenantS
             int row = 0;
             addDetailRecord(content, ++row, value.grossPremium().getMeta().getCaption(), value.grossPremium().getStringView());
             addDetailRecord(content, ++row, value.underwriterFee().getMeta().getCaption(), value.underwriterFee().getStringView());
-            content.setWidget(++row, 0, new Label(i18n.tr("Taxes:")));
             for (TenantSurePremiumTaxDTO tax : value.taxBreakdown()) {
                 addDetailRecord(content, ++row, tax.taxName().getValue(), tax.absoluteAmount().getStringView());
             }
@@ -104,9 +124,18 @@ public class TenantSureDetailedStatusForm extends CEntityDecoratableForm<TenantS
         panel.setH3(++row, 0, 1, i18n.tr("Coverage"));
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().quote().policy().personalLiabilityCoverage())).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().quote().policy().contentsCoverage())).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().quote().policy().inceptionDate())).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().quote().policy().expiryDate())).build());
 
-        panel.setH3(++row, 0, 1, i18n.tr("Quote"));
+        panel.setH3(++row, 0, 1, i18n.tr("Total Payment"));
         panel.setWidget(++row, 0, inject(proto().quote(), new TenantSureQuoteViewer()));
+
+        panel.setH3(++row, 0, 1, i18n.tr("Monthly Payment"));
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().monthlyPremiumPayment())).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextPaymentDate())).build());
+
+        panel.setH3(++row, 0, 1, i18n.tr("Messages"));
+        panel.setWidget(++row, 0, inject(proto().messages(), new TenantSureMessagesViewer()));
 
         return panel;
     }

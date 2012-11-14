@@ -14,6 +14,9 @@
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views;
 
 import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -22,8 +25,13 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureDetailedStatusForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceDetailedStatusDTO;
 
 public class TenantSureManagementViewImpl extends Composite implements TenantSureManagementlView {
+
+    private Presenter presenter;
+
+    private final TenantSureDetailedStatusForm statusForm;
 
     public TenantSureManagementViewImpl() {
 
@@ -54,17 +62,28 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
         FlowPanel statusPanel = new FlowPanel();
 
-        TenantSureDetailedStatusForm statusForm = new TenantSureDetailedStatusForm();
+        statusForm = new TenantSureDetailedStatusForm();
         statusForm.initContent();
         statusPanel.add(statusForm);
 
         viewPanel.add(statusPanel);
 
         FlowPanel controlPanel = new FlowPanel();
+        controlPanel.getElement().getStyle().setMarginTop(50, Unit.PX);
+        Button updateCC = new Button("Update Credit Card Details", new ClickHandler() {
 
-        Button updateCC = new Button("Update Credit Card Details");
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.updateCreditCardDetails();
+            }
+        });
         setControlButtonLayout(updateCC);
-        Button cancelTenantSure = new Button("Cancel TenantSure");
+        Button cancelTenantSure = new Button("Cancel TenantSure", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.cancelTenantSure();
+            }
+        });
         setControlButtonLayout(cancelTenantSure);
 
         controlPanel.add(updateCC);
@@ -85,5 +104,15 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         button.getElement().getStyle().setProperty("marginTop", "10px");
         button.getElement().getStyle().setProperty("marginBottom", "10px");
 
+    }
+
+    @Override
+    public void populate(TenantSureTenantInsuranceDetailedStatusDTO detailedStatus) {
+        statusForm.populate(detailedStatus);
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
     }
 }

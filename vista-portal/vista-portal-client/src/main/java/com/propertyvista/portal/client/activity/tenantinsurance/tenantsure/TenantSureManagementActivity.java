@@ -14,23 +14,50 @@
 package com.propertyvista.portal.client.activity.tenantinsurance.tenantsure;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementlView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceDetailedStatusDTO;
 
 public class TenantSureManagementActivity extends AbstractActivity implements TenantSureManagementlView.Presenter {
 
     private final TenantSureManagementlView view;
 
+    private final TenantSureManagementService service;
+
     public TenantSureManagementActivity() {
         view = PortalViewFactory.instance(TenantSureManagementlView.class);
+        service = GWT.<TenantSureManagementService> create(TenantSureManagementService.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        view.setPresenter(this);
         panel.setWidget(view);
+        service.getTenantSureDetailedStatus(new DefaultAsyncCallback<TenantSureTenantInsuranceDetailedStatusDTO>() {
+            @Override
+            public void onSuccess(TenantSureTenantInsuranceDetailedStatusDTO status) {
+                view.populate(status);
+            }
+        });
+    }
+
+    @Override
+    public void updateCreditCardDetails() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void cancelTenantSure() {
+        // TODO Auto-generated method stub
+
     }
 
 }
