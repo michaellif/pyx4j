@@ -29,7 +29,7 @@ import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDTO;
 
 public class TenantSureInsuranceStatusViewer extends CEntityViewer<TenantSureTenantInsuranceStatusDTO> {
 

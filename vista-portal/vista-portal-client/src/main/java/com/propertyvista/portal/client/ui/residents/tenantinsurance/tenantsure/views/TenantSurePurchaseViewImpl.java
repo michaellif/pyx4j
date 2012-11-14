@@ -31,9 +31,9 @@ import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.f
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureCoverageRequestForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureQuoteForm;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.PreAuthorizedCreditCardPaymentDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureCoverageRequestDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureQuotationRequestParamsDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureQuoteDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteSummaryDTO;
 
 public class TenantSurePurchaseViewImpl extends Composite implements TenantSurePurchaseView {
 
@@ -69,9 +69,9 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         panel.setH1(++row, 0, 1, i18n.tr("Coverage"));
         quotationRequestForm = new TenantSureCoverageRequestForm();
         quotationRequestForm.initContent();
-        quotationRequestForm.addValueChangeHandler(new ValueChangeHandler<TenantSureCoverageRequestDTO>() {
+        quotationRequestForm.addValueChangeHandler(new ValueChangeHandler<TenantSureQuotationRequestDTO>() {
             @Override
-            public void onValueChange(ValueChangeEvent<TenantSureCoverageRequestDTO> event) {
+            public void onValueChange(ValueChangeEvent<TenantSureQuotationRequestDTO> event) {
                 setQuote(null);
             }
         });
@@ -151,7 +151,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     }
 
     @Override
-    public void setQuote(TenantSureQuoteDTO quote) {
+    public void setQuote(TenantSureQuoteSummaryDTO quote) {
         quoteForm.setValue(quote);
 
         retrievingQuoteMessage.setVisible(false);
@@ -169,12 +169,12 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     }
 
     @Override
-    public TenantSureCoverageRequestDTO getCoverageRequest() {
+    public TenantSureQuotationRequestDTO getCoverageRequest() {
         return quotationRequestForm.getValue();
     }
 
     @Override
-    public TenantSureQuoteDTO getAcceptedQuote() {
+    public TenantSureQuoteSummaryDTO getAcceptedQuote() {
         return quoteForm.getValue().isNull() ? null : quoteForm.getValue();
     }
 

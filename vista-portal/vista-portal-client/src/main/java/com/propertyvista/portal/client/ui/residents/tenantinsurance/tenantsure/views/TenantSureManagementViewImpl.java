@@ -13,42 +13,77 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.VerticalAlign;
+import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.ResizeComposite;
-import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.widgets.client.Button;
+
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureDetailedStatusForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
 
-public class TenantSureManagementViewImpl extends ResizeComposite implements TenantSureManagementlView {
+public class TenantSureManagementViewImpl extends Composite implements TenantSureManagementlView {
 
     public TenantSureManagementViewImpl() {
-        LayoutPanel viewPanel = new LayoutPanel();
 
-        final int PADDING = 20;
+        FlowPanel viewPanel = new FlowPanel();
+
+        FlowPanel tenantSureGreetingPanel = new FlowPanel();
+        tenantSureGreetingPanel.getElement().getStyle().setProperty("width", "100%");
+        tenantSureGreetingPanel.getElement().getStyle().setProperty("height", "8em");
+        tenantSureGreetingPanel.getElement().getStyle().setProperty("display", "table-cell");
+        tenantSureGreetingPanel.getElement().getStyle().setProperty("verticalAlign", "middle");
+
         TenantSureLogo tenantSureLogo = new TenantSureLogo();
-        viewPanel.add(tenantSureLogo);
-        viewPanel.setWidgetLeftWidth(tenantSureLogo, PADDING, Unit.PX, 10, Unit.EM);
-        viewPanel.setWidgetTopHeight(tenantSureLogo, PADDING, Unit.PX, 8, Unit.EM);
+        tenantSureLogo.getElement().getStyle().setFloat(Float.LEFT);
+        tenantSureLogo.getElement().getStyle().setProperty("width", "10em");
+        tenantSureLogo.getElement().getStyle().setProperty("height", "8em");
+        tenantSureGreetingPanel.add(tenantSureLogo);
 
-        Label message = new Label(//@formatter:off
-                "TenantSure is a Licensed Broker. Below please find your TenantSure insurance details. "
-                + "If you have any claims, you can reach TenanSure's claim department at 1-888-1234-444"
-        );//@formatter:on
+        Label greeting = new Label(//@formatter:off
+                  "TenantSure is a Licensed Broker. Below please find your TenantSure insurance details. "
+                  + "If you have any claims, you can reach TenanSure's claim department at 1-888-1234-444"
+          );//@formatter:on
 
-        message.getElement().getStyle().setHeight(8, Unit.EM);
-        message.getElement().getStyle().setProperty("display", "table-cell");
-        message.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        greeting.getElement().getStyle().setProperty("width", "100%");
+        greeting.getElement().getStyle().setProperty("height", "8em");
+        tenantSureGreetingPanel.add(greeting);
 
-        SimplePanel messageHolder = new SimplePanel();
-        messageHolder.setWidget(message);
+        viewPanel.add(tenantSureGreetingPanel);
 
-        viewPanel.add(messageHolder);
-        viewPanel.setWidgetLeftRight(messageHolder, 10.5, Unit.EM, PADDING, Unit.PX);
-        viewPanel.setWidgetTopHeight(messageHolder, PADDING, Unit.PX, 8, Unit.EM);
+        FlowPanel statusPanel = new FlowPanel();
+
+        TenantSureDetailedStatusForm statusForm = new TenantSureDetailedStatusForm();
+        statusForm.initContent();
+        statusPanel.add(statusForm);
+
+        viewPanel.add(statusPanel);
+
+        FlowPanel controlPanel = new FlowPanel();
+
+        Button updateCC = new Button("Update Credit Card Details");
+        setControlButtonLayout(updateCC);
+        Button cancelTenantSure = new Button("Cancel TenantSure");
+        setControlButtonLayout(cancelTenantSure);
+
+        controlPanel.add(updateCC);
+        controlPanel.add(cancelTenantSure);
+
+        viewPanel.add(controlPanel);
 
         initWidget(viewPanel);
+    }
+
+    private static void setControlButtonLayout(Button button) {
+        button.getElement().getStyle().setProperty("display", "block");
+        button.getElement().getStyle().setProperty("textAlign", "center");
+        button.getElement().getStyle().setProperty("width", "15em");
+        button.getElement().getStyle().setProperty("marginLeft", "auto");
+        button.getElement().getStyle().setProperty("marginRight", "auto");
+
+        button.getElement().getStyle().setProperty("marginTop", "10px");
+        button.getElement().getStyle().setProperty("marginBottom", "10px");
+
     }
 }

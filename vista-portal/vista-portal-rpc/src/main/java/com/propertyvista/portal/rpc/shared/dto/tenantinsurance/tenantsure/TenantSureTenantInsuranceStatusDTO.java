@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.shared.dto.tenantinsurance;
+package com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure;
 
 import java.math.BigDecimal;
 
@@ -19,6 +19,8 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
 
 @Transient
 public interface TenantSureTenantInsuranceStatusDTO extends TenantInsuranceStatusDTO {

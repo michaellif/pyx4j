@@ -44,7 +44,7 @@ import com.propertyvista.portal.client.activity.security.PasswordResetActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.ProvideTenantInsuranceActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.TenantInsuranceActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.otherprovider.TenantInsuranceByOtherProvdierUpdateActivity;
-import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.TenantSureControlActivity;
+import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.TenantSureManagementActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.TenantSurePurchaseActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
@@ -103,7 +103,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                 } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.TenantSurePurchase) {
                     activity = new TenantSurePurchaseActivity();
                 } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.TenantSureManagement) {
-                    activity = new TenantSureControlActivity();
+                    activity = new TenantSureManagementActivity();
 
                 } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.UploadProofOfInsurance) {
                     activity = new TenantInsuranceByOtherProvdierUpdateActivity(place);

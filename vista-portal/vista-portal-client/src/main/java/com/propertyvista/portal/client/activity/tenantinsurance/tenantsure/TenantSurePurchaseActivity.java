@@ -26,8 +26,8 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureQuotationRequestParamsDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureQuoteDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteSummaryDTO;
 
 public class TenantSurePurchaseActivity extends AbstractActivity implements TenantSurePurchaseView.Presenter {
 
@@ -56,10 +56,10 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
     @Override
     public void onCoverageRequestChanged() {
         view.waitForQuote();
-        service.getQuote(new DefaultAsyncCallback<TenantSureQuoteDTO>() {
+        service.getQuote(new DefaultAsyncCallback<TenantSureQuoteSummaryDTO>() {
 
             @Override
-            public void onSuccess(TenantSureQuoteDTO quote) {
+            public void onSuccess(TenantSureQuoteSummaryDTO quote) {
                 view.setQuote(quote);
             }
         }, view.getCoverageRequest());

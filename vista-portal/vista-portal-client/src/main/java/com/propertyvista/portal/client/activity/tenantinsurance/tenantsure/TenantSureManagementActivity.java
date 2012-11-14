@@ -20,11 +20,11 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementlView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 
-public class TenantSureControlActivity extends AbstractActivity implements TenantSureManagementlView.Presenter {
+public class TenantSureManagementActivity extends AbstractActivity implements TenantSureManagementlView.Presenter {
 
     private final TenantSureManagementlView view;
 
-    public TenantSureControlActivity() {
+    public TenantSureManagementActivity() {
         view = PortalViewFactory.instance(TenantSureManagementlView.class);
     }
 

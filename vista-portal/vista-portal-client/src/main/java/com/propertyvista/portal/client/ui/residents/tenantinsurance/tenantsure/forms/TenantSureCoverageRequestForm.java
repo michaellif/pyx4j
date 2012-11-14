@@ -27,15 +27,15 @@ import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.LegalT
 import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.SignatureFolder;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.components.MoneyComboBox;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.components.YesNoComboBox;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureCoverageRequestDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureQuotationRequestParamsDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 
-public class TenantSureCoverageRequestForm extends CEntityDecoratableForm<TenantSureCoverageRequestDTO> {
+public class TenantSureCoverageRequestForm extends CEntityDecoratableForm<TenantSureQuotationRequestDTO> {
 
     private static final I18n i18n = I18n.get(TenantSureCoverageRequestForm.class);
 
     public TenantSureCoverageRequestForm() {
-        super(TenantSureCoverageRequestDTO.class);
+        super(TenantSureQuotationRequestDTO.class);
     }
 
     @Override
@@ -43,13 +43,13 @@ public class TenantSureCoverageRequestForm extends CEntityDecoratableForm<Tenant
         FormFlexPanel contentPanel = new FormFlexPanel();
         int row = -1;
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().personalLiabilityCoverage(), new MoneyComboBox())).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contentsCoverage(), new MoneyComboBox())).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deductible(), new MoneyComboBox())).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().policy().personalLiabilityCoverage(), new MoneyComboBox())).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().policy().contentsCoverage(), new MoneyComboBox())).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().policy().deductible(), new MoneyComboBox())).build());
 
         contentPanel.setH2(++row, 0, 1, i18n.tr("Coverage Qualification Questions"));
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().smoker(), new YesNoComboBox())).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfPreviousClaims())).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().policy().smoker(), new YesNoComboBox())).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().policy().numberOfPreviousClaims())).build());
 
         contentPanel.setWidget(++row, 0, inject(proto().personalDisclaimerTerms(), new LegalTermsFolder(true)));
         contentPanel.setWidget(++row, 0, inject(proto().digitalSignatures(), new SignatureFolder(true)));
@@ -57,14 +57,14 @@ public class TenantSureCoverageRequestForm extends CEntityDecoratableForm<Tenant
     }
 
     public void setCoverageParams(TenantSureQuotationRequestParamsDTO params) {
-        TenantSureCoverageRequestDTO coverageRequest = EntityFactory.create(TenantSureCoverageRequestDTO.class);
+        TenantSureQuotationRequestDTO coverageRequest = EntityFactory.create(TenantSureQuotationRequestDTO.class);
         coverageRequest.personalDisclaimerTerms().addAll(params.personalDisclaimerTerms());
         coverageRequest.digitalSignatures().addAll(params.digitalSignatures());
         setValue(coverageRequest, false);
 
-        ((CComboBox<BigDecimal>) (get(proto().personalLiabilityCoverage()))).setOptions(params.generalLiabilityCoverageOptions());
-        ((CComboBox<BigDecimal>) (get(proto().contentsCoverage()))).setOptions(params.contentsCoverageOptions());
-        ((CComboBox<BigDecimal>) (get(proto().deductible()))).setOptions(params.deductibleOptions());
+        ((CComboBox<BigDecimal>) (get(proto().policy().personalLiabilityCoverage()))).setOptions(params.generalLiabilityCoverageOptions());
+        ((CComboBox<BigDecimal>) (get(proto().policy().contentsCoverage()))).setOptions(params.contentsCoverageOptions());
+        ((CComboBox<BigDecimal>) (get(proto().policy().deductible()))).setOptions(params.deductibleOptions());
 
     }
 }

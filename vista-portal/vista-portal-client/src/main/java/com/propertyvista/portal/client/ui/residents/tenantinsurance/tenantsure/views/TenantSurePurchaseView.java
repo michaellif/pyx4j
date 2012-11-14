@@ -16,9 +16,9 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.domain.payment.CreditCardInfo;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureCoverageRequestDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureQuotationRequestParamsDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureQuoteDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteSummaryDTO;
 
 public interface TenantSurePurchaseView extends IsWidget {
 
@@ -36,7 +36,7 @@ public interface TenantSurePurchaseView extends IsWidget {
     /** resets the view with new parameters */
     void init(TenantSureQuotationRequestParamsDTO quotationRequestParams);
 
-    void setQuote(TenantSureQuoteDTO quote);
+    void setQuote(TenantSureQuoteSummaryDTO quote);
 
     void waitForQuote();
 
@@ -44,10 +44,10 @@ public interface TenantSurePurchaseView extends IsWidget {
 
     void populatePaymentProcessingError(String errorReason);
 
-    TenantSureCoverageRequestDTO getCoverageRequest();
+    TenantSureQuotationRequestDTO getCoverageRequest();
 
     /** @return <code>null</code> when there's no accepted quote, or accepted quote */
-    TenantSureQuoteDTO getAcceptedQuote();
+    TenantSureQuoteSummaryDTO getAcceptedQuote();
 
     CreditCardInfo getCreditCardInfo();
 }

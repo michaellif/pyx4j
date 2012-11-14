@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.OtherProviderTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDTO;
 
 /** this is a class that supposed to implement 'polymorphic' tenant insurance status viewer */
 public class TenantInsuranceStatusViewer extends CEntityViewer<TenantInsuranceStatusDTO> {

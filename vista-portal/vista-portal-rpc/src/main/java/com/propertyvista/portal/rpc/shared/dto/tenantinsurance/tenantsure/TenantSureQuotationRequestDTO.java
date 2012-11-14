@@ -11,23 +11,22 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.shared.dto.tenantinsurance;
+package com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure;
 
-import java.math.BigDecimal;
-
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IList;
+
+import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
+import com.propertyvista.dto.LegalTermsDescriptorDTO;
 
 @Transient
-public interface TenantSureQuoteDTO extends IEntity {
+public interface TenantSureQuotationRequestDTO extends IEntity {
 
-    TenantSureCoverageRequestDTO quotationRequest();
+    TenantSureInsurancePolicyDTO policy();
 
-    @Caption(name = "Your monthly insurance premium")
-    @Format("$#,##.00")
-    IPrimitive<BigDecimal> monthlyInsurancePremium();
+    IList<LegalTermsDescriptorDTO> personalDisclaimerTerms();
+
+    IList<DigitalSignature> digitalSignatures();
 
 }

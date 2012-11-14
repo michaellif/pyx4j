@@ -19,14 +19,14 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureQuoteDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteSummaryDTO;
 
-public class TenantSureQuoteForm extends CEntityDecoratableForm<TenantSureQuoteDTO> {
+public class TenantSureQuoteForm extends CEntityDecoratableForm<TenantSureQuoteSummaryDTO> {
 
     private static final I18n i18n = I18n.get(TenantSureQuoteForm.class);
 
     public TenantSureQuoteForm() {
-        super(TenantSureQuoteDTO.class);
+        super(TenantSureQuoteSummaryDTO.class);
         setViewable(true);
     }
 
