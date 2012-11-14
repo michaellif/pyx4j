@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<buildings>
+    <building>
+        <propertyCode>740</propertyCode>
+        <info>
+            <name>XTDDP</name>
+            <type>military</type>
+            <address>
+                <addressType>property</addressType>
+                <streetNumber>7874</streetNumber>
+                <streetName>Yonge St</streetName>
+                <streetNumberSuffix></streetNumberSuffix>
+                <streetDirection>east</streetDirection>
+                <streetType>avenue</streetType>
+                <unitNumber>250</unitNumber>
+                <city>Montreal</city>
+                <province>Connecticut</province>
+                <postalCode>33276</postalCode>
+                <country>United States</country>
+                <county></county>
+            </address>
+            <shape>tShape</shape>
+            <totalStoreys>8</totalStoreys>
+            <residentialStoreys>11</residentialStoreys>
+            <structureType>other</structureType>
+            <structureBuildYear>1814-01-01</structureBuildYear>
+            <constructionType>brick</constructionType>
+            <foundationType>foundationWalls</foundationType>
+            <floorType>mixed</floorType>
+            <landArea>7895sq Ft.</landArea>
+            <waterSupply>privateCommunityWell</waterSupply>
+            <centralAir>false</centralAir>
+            <centralHeat>true</centralHeat>
+        </info>
+        <marketing>
+            <name>CKPM AILTIJ</name>
+            <description>Cras aliquam, quam eget dapibus mollis, nibh risus feugiat odio, sit amet interdum dui nisi nec nisl.</description>
+            <blurbs>
+                <blurb>
+                    <content>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...</content>
+                </blurb>
+            </blurbs>
+        </marketing>
+        <floorplans>
+            <floorplan>
+                <name>MyFloorplan</name>
+                <description>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Pellentesque auctor ante at justo viverra vitae volutpat elit pulvinar.</description>
+                <floorCount>1</floorCount>
+                <bedrooms>4.0</bedrooms>
+                <bathrooms>3.0</bathrooms>
+                <medias>
+                    <media>
+                        <filename>file102.jpg</filename>
+                        <caption>file102</caption>
+                    </media>
+                </medias>
+            </floorplan>
+        </floorplans>
+    </building>
+</buildings>
