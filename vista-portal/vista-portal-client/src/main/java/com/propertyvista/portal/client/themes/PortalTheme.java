@@ -39,6 +39,7 @@ import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.NoTenantInsuranceStatusViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantSureInsuranceStatusViewer;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceViewImpl;
 
 public class PortalTheme extends VistaTheme {
@@ -435,6 +436,39 @@ public class PortalTheme extends VistaTheme {
             style.addProperty("width", "100%");
             style.addProperty("text-align", "center");
             style.addProperty("padding-top", "0.5em");
+            addStyle(style);
+        }
+
+        // Purchase Tenent Sure View
+        {
+            Style style = new Style("." + TenantSurePurchaseViewImpl.Styles.TSPurchaseViewSection.name());
+            style.addProperty("margin-right", "20px");
+            style.addProperty("margin-left", "20px");
+            addStyle(style);
+        }
+        {
+            Style style = new Style("." + TenantSurePurchaseViewImpl.Styles.TSPucrhaseViewMessageText.name());
+            style.addProperty("margin-right", "auto");
+            style.addProperty("margin-left", "auto");
+            style.addProperty("text-align", "center");
+            addStyle(style);
+        }
+
+        {
+            Style style = new Style("." + TenantSurePurchaseViewImpl.Styles.TSPurchaseViewSection.name());
+            style.addProperty("margin-right", "20px");
+            style.addProperty("margin-left", "20px");
+            addStyle(style);
+        }
+        {
+            Style style = new Style("." + TenantSurePurchaseViewImpl.Styles.TSPurchaseViewBuyInsuranceButton.name());
+            style.addProperty("float", "right");
+            style.addProperty("margin-right", "20px");
+            addStyle(style);
+        }
+        {
+            Style style = new Style("." + TenantSurePurchaseViewImpl.Styles.TSPurchaseViewCancelButton.name());
+            style.addProperty("float", "right");
             addStyle(style);
         }
 

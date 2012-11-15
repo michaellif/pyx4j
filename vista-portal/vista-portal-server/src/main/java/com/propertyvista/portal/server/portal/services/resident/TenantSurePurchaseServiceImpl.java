@@ -20,18 +20,19 @@ import java.util.Random;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.domain.tenant.ptapp.IAgree;
 import com.propertyvista.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteSummaryDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDetailedDTO;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
 public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService {
@@ -114,10 +115,11 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     }
 
     @Override
-    public void getQuote(AsyncCallback<TenantSureQuoteSummaryDTO> callback, TenantSureQuotationRequestDTO quotationRequest) {
-        // TODO 
-        TenantSureQuoteSummaryDTO quote = EntityFactory.create(TenantSureQuoteSummaryDTO.class);
-        quote.monthlyInsurancePremium().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
+    public void getQuote(AsyncCallback<TenantSureQuoteDetailedDTO> callback, TenantSureQuotationRequestDTO quotationRequest) {
+        TenantSureQuoteDetailedDTO quote = EntityFactory.create(TenantSureQuoteDetailedDTO.class);
+        quote.grossPremium().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
+        quote.underwriterFee().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
+        quote.totalPayable().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -127,7 +129,12 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     }
 
     @Override
-    public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteSummaryDTO quote, CreditCardInfo creditCardInfo) {
-        callback.onSuccess(null);
+    public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDetailedDTO quote, PaymentMethod paymentMethod) {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        throw new UserRuntimeException("This is not yet implemented :)");
     }
 }

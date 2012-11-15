@@ -13,9 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -23,13 +20,11 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CEntityViewer;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePremiumTaxDTO;
@@ -39,21 +34,6 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 public class TenantSureDetailedStatusForm extends CEntityDecoratableForm<TenantSureTenantInsuranceDetailedStatusDTO> {
 
     private static final I18n i18n = I18n.get(TenantSureDetailedStatusForm.class);
-
-    public static class TenantSurePremiumTaxFolder extends VistaTableFolder<TenantSurePremiumTaxDTO> {
-
-        public TenantSurePremiumTaxFolder() {
-            super(TenantSurePremiumTaxDTO.class, false);
-        }
-
-        @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            return Arrays.asList(//@formatter:off
-                    new EntityFolderColumnDescriptor(proto().taxName(), "10em"),
-                    new EntityFolderColumnDescriptor(proto().absoluteAmount(), "15em")
-            );//@formatter:on
-        }
-    }
 
     public static class TenantSureMessagesViewer extends CEntityViewer<IList<TenantSureMessageDTO>> {
 
@@ -80,14 +60,15 @@ public class TenantSureDetailedStatusForm extends CEntityDecoratableForm<TenantS
         @Override
         public IsWidget createContent(TenantSureQuoteDetailedDTO value) {
             FormFlexPanel content = new FormFlexPanel();
-            int row = 0;
-            addDetailRecord(content, ++row, value.grossPremium().getMeta().getCaption(), value.grossPremium().getStringView());
-            addDetailRecord(content, ++row, value.underwriterFee().getMeta().getCaption(), value.underwriterFee().getStringView());
-            for (TenantSurePremiumTaxDTO tax : value.taxBreakdown()) {
-                addDetailRecord(content, ++row, tax.taxName().getValue(), tax.absoluteAmount().getStringView());
+            if (value != null) {
+                int row = 0;
+                addDetailRecord(content, ++row, value.grossPremium().getMeta().getCaption(), value.grossPremium().getStringView());
+                addDetailRecord(content, ++row, value.underwriterFee().getMeta().getCaption(), value.underwriterFee().getStringView());
+                for (TenantSurePremiumTaxDTO tax : value.taxBreakdown()) {
+                    addDetailRecord(content, ++row, tax.taxName().getValue(), tax.absoluteAmount().getStringView());
+                }
+                addTotalRecord(content, ++row, value.totalPayable().getMeta().getCaption(), value.totalPayable().getStringView());
             }
-            addTotalRecord(content, ++row, value.totalPayable().getMeta().getCaption(), value.totalPayable().getStringView());
-
             return content;
         }
 

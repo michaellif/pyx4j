@@ -30,11 +30,11 @@ import com.propertyvista.portal.client.ui.residents.tenantinsurance.components.Y
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 
-public class TenantSureCoverageRequestForm extends CEntityDecoratableForm<TenantSureQuotationRequestDTO> {
+public class TenantSureQuotationRequestForm extends CEntityDecoratableForm<TenantSureQuotationRequestDTO> {
 
-    private static final I18n i18n = I18n.get(TenantSureCoverageRequestForm.class);
+    private static final I18n i18n = I18n.get(TenantSureQuotationRequestForm.class);
 
-    public TenantSureCoverageRequestForm() {
+    public TenantSureQuotationRequestForm() {
         super(TenantSureQuotationRequestDTO.class);
     }
 
@@ -56,6 +56,7 @@ public class TenantSureCoverageRequestForm extends CEntityDecoratableForm<Tenant
         return contentPanel;
     }
 
+    /** resets the form and sets pre-defined options for filling the from */
     public void setCoverageParams(TenantSureQuotationRequestParamsDTO params) {
         TenantSureQuotationRequestDTO coverageRequest = EntityFactory.create(TenantSureQuotationRequestDTO.class);
         coverageRequest.personalDisclaimerTerms().addAll(params.personalDisclaimerTerms());

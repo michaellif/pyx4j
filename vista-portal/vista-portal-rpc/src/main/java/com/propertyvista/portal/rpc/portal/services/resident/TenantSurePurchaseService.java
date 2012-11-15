@@ -18,16 +18,16 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteSummaryDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDetailedDTO;
 
 public interface TenantSurePurchaseService extends IService {
 
     void getQuotationRequestParams(AsyncCallback<TenantSureQuotationRequestParamsDTO> callback);
 
-    void getQuote(AsyncCallback<TenantSureQuoteSummaryDTO> callback, TenantSureQuotationRequestDTO quotationRequest);
+    void getQuote(AsyncCallback<TenantSureQuoteDetailedDTO> callback, TenantSureQuotationRequestDTO quotationRequest);
 
-    void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteSummaryDTO quote, CreditCardInfo creditCardInfo);
+    void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDetailedDTO quote, PaymentMethod paymentMethod);
 }
