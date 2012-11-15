@@ -13,9 +13,20 @@
  */
 package com.propertyvista.oapi.model;
 
-public class AptUnitRS {
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "unit")
+public class UnitRS {
+
+    public String propertyCode;
 
     //mandatory for portal
     public String number;
+
+    public String floorplanName;
+
+    public Integer beds;
+
+    public Integer baths;
 
 }

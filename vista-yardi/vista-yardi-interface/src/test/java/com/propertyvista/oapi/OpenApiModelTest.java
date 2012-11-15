@@ -26,7 +26,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -36,14 +35,10 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
-import com.propertyvista.domain.media.Media;
-import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.oapi.marshaling.Converter;
 import com.propertyvista.oapi.model.BuildingRS;
 import com.propertyvista.oapi.model.BuildingsRS;
-import com.propertyvista.oapi.model.FloorplanRS;
-import com.propertyvista.oapi.model.MediaRS;
 import com.propertyvista.oapi.rest.PropertyService;
 
 public class OpenApiModelTest {
@@ -107,16 +102,16 @@ public class OpenApiModelTest {
             log.info("building date {}", buildingRS.info.structureBuildYear);
             buildingsRS.buildings.add(buildingRS);
 
-            Floorplan floorplan = EntityFactory.create(Floorplan.class);
+//            Floorplan floorplan = EntityFactory.create(Floorplan.class);
             // generator.createFloorplan();
-            FloorplanRS floorplanRS = Converter.convertFloorplan(floorplan);
-            buildingRS.floorplans.add(floorplanRS);
+//            FloorplanRS floorplanRS = Converter.convertFloorplan(floorplan);
+//            buildingRS.floorplans.add(floorplanRS);
 
-            Media media = EntityFactory.create(Media.class);
-            // MediaGenerator.createMedia()
-
-            MediaRS mediaRS = Converter.convertMedia(media);
-            floorplanRS.medias.add(mediaRS);
+//            Media media = EntityFactory.create(Media.class);
+//            // MediaGenerator.createMedia()
+//
+//            MediaRS mediaRS = Converter.convertMedia(media);
+//            floorplanRS.medias.add(mediaRS);
         }
         String xml = MarshallUtil.marshall(buildingsRS);
 

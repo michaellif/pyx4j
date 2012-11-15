@@ -21,7 +21,7 @@ import javax.jws.WebService;
 
 import com.propertyvista.oapi.model.BuildingRS;
 import com.propertyvista.oapi.model.BuildingsRS;
-import com.propertyvista.oapi.model.FloorplanRS;
+import com.propertyvista.oapi.model.UnitRS;
 
 @WebService(endpointInterface = "com.propertyvista.oapi.ws.PropertyService")
 public class PropertyServiceImpl implements PropertyService {
@@ -49,13 +49,13 @@ public class PropertyServiceImpl implements PropertyService {
     public void createUnit(String unitNumber, String floorplanName, String propertyCode) {
         BuildingRS building = buildings.get(propertyCode);
         if (building != null) {
-            for (FloorplanRS floorplan : building.floorplans) {
-                if (floorplan.name.equals(floorplanName)) {
-                    //floorplan.
-                }
-            }
+            UnitRS newUnit = new UnitRS();
+            newUnit.number = unitNumber;
+            newUnit.floorplanName = floorplanName;
+            newUnit.propertyCode = propertyCode;
+            building.units.add(newUnit);
         } else {
-            // error, create building before putting units in it
+            //TODO error, create building before putting units in it
         }
 
     }

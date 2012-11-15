@@ -70,9 +70,4 @@ public class FloorplanRS {
     @XmlElements(@XmlElement(name = "media", type = MediaRS.class))
     public List<MediaRS> medias = new ArrayList<MediaRS>();
 
-    //mandatory for portal
-    @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "aptUnit", type = AptUnitRS.class))
-    public List<AptUnitRS> units = new ArrayList<AptUnitRS>();
-
 }

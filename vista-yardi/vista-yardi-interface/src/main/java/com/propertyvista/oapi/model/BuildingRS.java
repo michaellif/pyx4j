@@ -38,9 +38,10 @@ public class BuildingRS {
 
     public MarketingRS marketing;
 
+    //mandatory for portal
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "floorplan", type = FloorplanRS.class))
-    public List<FloorplanRS> floorplans = new ArrayList<FloorplanRS>();
+    @XmlElements(@XmlElement(name = "unit", type = UnitRS.class))
+    public List<UnitRS> units = new ArrayList<UnitRS>();
 
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "media", type = MediaRS.class))
