@@ -14,7 +14,6 @@
 package com.propertyvista.domain.financial.offering;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Inheritance;
@@ -62,7 +61,6 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V> {
 
         @Length(25)
         @ToString(index = 1)
-        @Caption(description = "Name of a group of items that are eligible for the same products or are located in the same area. e.g. 'Units With Access To Lockers', 'Level 1 Parking'")
         IPrimitive<String> name();
 
         @Length(250)
