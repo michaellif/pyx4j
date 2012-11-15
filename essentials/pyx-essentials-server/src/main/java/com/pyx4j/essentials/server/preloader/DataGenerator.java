@@ -152,7 +152,7 @@ public class DataGenerator {
 
     public static AddressInfo randomAddressInfo() {
         if (adresses == null) {
-            adresses = EntityCSVReciver.create(AddressInfo.class).loadFile(resourceFileName("postal_codes.csv"));
+            adresses = EntityCSVReciver.create(AddressInfo.class).loadResourceFile(resourceFileName("postal_codes.csv"));
         }
         return adresses.get(nextInt(adresses.size(), "address", 10));
     }

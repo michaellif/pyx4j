@@ -52,6 +52,14 @@ public class XLSLoad {
 
     private final DataFormatter formatter;
 
+    public static void loadResourceFile(String resourceName, boolean xlsx, CSVReciver reciver) {
+        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
+        if (is == null) {
+            throw new RuntimeException("Resouce [" + resourceName + "] not found");
+        }
+        loadFile(is, xlsx, reciver);
+    }
+
     public static void loadFile(InputStream is, boolean xlsx, CSVReciver reciver) {
         try {
             XLSLoad l = new XLSLoad(is, xlsx);

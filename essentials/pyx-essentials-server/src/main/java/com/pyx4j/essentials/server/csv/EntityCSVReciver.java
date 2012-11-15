@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +47,7 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.rpc.ImportColumn;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -483,8 +485,19 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         return list;
     }
 
-    public List<E> loadFile(String resourceName) {
-        CSVLoad.loadFile(resourceName, this);
+    public List<E> loadResourceFile(String resourceName) {
+        DownloadFormat format = DownloadFormat.valueByExtension(FilenameUtils.getExtension(resourceName));
+        switch (format) {
+        case CSV:
+            CSVLoad.loadResourceFile(resourceName, this);
+            break;
+        case XLSX:
+        case XLS:
+            XLSLoad.loadResourceFile(resourceName, format == DownloadFormat.XLSX, this);
+            break;
+        default:
+            throw new Error("Unsupported format " + format);
+        }
         return getEntities();
     }
 

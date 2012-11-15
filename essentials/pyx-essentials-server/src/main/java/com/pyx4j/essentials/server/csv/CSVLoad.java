@@ -57,7 +57,7 @@ public class CSVLoad {
         return -1;
     }
 
-    public static void loadFile(String resourceName, CSVReciver reciver) {
+    public static void loadResourceFile(String resourceName, CSVReciver reciver) {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
         if (is == null) {
             throw new RuntimeException("Resouce [" + resourceName + "] not found");
@@ -108,7 +108,7 @@ public class CSVLoad {
 
     public static String[] loadFile(String resourceName, final String columName) {
         final List<String> data = new Vector<String>();
-        loadFile(resourceName, new CSVReciver() {
+        loadResourceFile(resourceName, new CSVReciver() {
 
             int columnIndex = 0;
 
