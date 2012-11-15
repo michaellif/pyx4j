@@ -99,10 +99,11 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public CrudAppPlace formNewItemPlace(Key parentID) {
         setType(Type.editor);
+        setStable(false);
         if (parentID != null) {
             placeArg(ARG_NAME_PARENT_ID, parentID.toString());
         }
-        setStable(false);
+        placeArg(ARG_NAME_TAB_IDX, String.valueOf(0));
         return (CrudAppPlace) placeArg(ARG_NAME_ID, ARG_VALUE_NEW);
     }
 
@@ -110,7 +111,6 @@ public abstract class CrudAppPlace extends AppPlace {
         if (parentClass != null) {
             placeArg(ARG_NAME_PARENT_CLASS, parentClass.getName());
         }
-        setStable(false);
         return formNewItemPlace(parentID);
     }
 
@@ -118,6 +118,7 @@ public abstract class CrudAppPlace extends AppPlace {
         this.newItem = newItem;
         setType(Type.editor);
         setStable(false);
+        placeArg(ARG_NAME_TAB_IDX, String.valueOf(0));
         return (CrudAppPlace) placeArg(ARG_NAME_ID, ARG_VALUE_NEW);
     }
 
