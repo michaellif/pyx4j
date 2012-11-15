@@ -49,9 +49,12 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.media.IdentificationDocument;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
+import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.equifax.model.ChallengerMode;
 import com.propertyvista.equifax.model.EmploymentStatus;
 import com.propertyvista.equifax.model.MonthlyHousingCosts;
@@ -88,148 +91,88 @@ public class EquifaxModelMapper {
         CNRequestsType requests = factory.createCNRequestsType();
         transmit.setCNRequests(requests);
         // customer info  FMTLDECGEN0000115
-        if (true) {
-            // consumer requests
-            CNConsumerRequests consumerRequests = factory.createCNRequestsTypeCNConsumerRequests();
-            requests.setCNConsumerRequests(consumerRequests);
 
-            // consumer request
-            CNConsumerRequestType consumerRequest = factory.createCNConsumerRequestType();
-            consumerRequests.getCNConsumerRequest().add(consumerRequest);
+        // consumer requests
+        CNConsumerRequests consumerRequests = factory.createCNRequestsTypeCNConsumerRequests();
+        requests.setCNConsumerRequests(consumerRequests);
 
-            // subjects
-            SubjectsType subjects = factory.createSubjectsType();
-            consumerRequest.setSubjects(subjects);
+        // consumer request
+        CNConsumerRequestType consumerRequest = factory.createCNConsumerRequestType();
+        consumerRequests.getCNConsumerRequest().add(consumerRequest);
 
-            // subject
-            Subject subject = factory.createSubjectsTypeSubject();
-            subjects.getSubject().add(subject);
-            subject.setSubjectType("SUBJ");
+        // subjects
+        SubjectsType subjects = factory.createSubjectsType();
+        consumerRequest.setSubjects(subjects);
 
-            // subject name
-            CNSubjectNameType subjectName = factory.createCNSubjectNameType();
-            subject.setSubjectName(subjectName);
-            subjectName.setFirstName(customer.person().name().firstName().getValue());
-            subjectName.setLastName(customer.person().name().lastName().getValue());
+        // subject
+        Subject subject = factory.createSubjectsTypeSubject();
+        subjects.getSubject().add(subject);
+        subject.setSubjectType("SUBJ");
 
-            // addresses
-            AddressesType addresses = factory.createAddressesType();
-            subjects.setAddresses(addresses);
+        // subject name
+        CNSubjectNameType subjectName = factory.createCNSubjectNameType();
+        subject.setSubjectName(subjectName);
+        subjectName.setFirstName(customer.person().name().firstName().getValue());
+        subjectName.setLastName(customer.person().name().lastName().getValue());
+        subjectName.setMiddleName(customer.person().name().middleName().getValue());
 
-            // address
-            {
-                Address address = factory.createAddressesTypeAddress();
-                addresses.getAddress().add(address);
-                address.setAddressType("CURR");
+        // addresses
+        AddressesType addresses = factory.createAddressesType();
+        subjects.setAddresses(addresses);
 
-                PriorAddress currentAddress = pcc.screening().version().currentAddress();
+        // address
+        {
+            Address efxAddress = factory.createAddressesTypeAddress();
+            addresses.getAddress().add(efxAddress);
+            efxAddress.setAddressType("CURR");
 
-                address.setCivicNumber(currentAddress.streetNumber().getValue());
-                address.setStreetName(currentAddress.streetName().getValue());
-                address.setSuite(currentAddress.suiteNumber().getValue());
-                CityType city = factory.createCityType();
-                city.setValue(currentAddress.city().getValue());
-                address.setCity(city);
-                CodeType province = factory.createCodeType();
-                province.setCode(currentAddress.province().code().getValue());
-                province.setDescription(currentAddress.province().name().getValue());
-                address.setProvince(province);
-                address.setPostalCode(efxPostalCodeFormat(currentAddress.postalCode().getValue()));
-            }
+            PriorAddress currentAddress = pcc.screening().version().currentAddress();
 
-            if (!customer.person().birthDate().isNull()) {
-                // date of birth
-                DateOfBirth dob = factory.createDateOfBirth();
-                dob.setValue(new SimpleDateFormat("YYYY-MM-dd").format(customer.person().birthDate().getValue()));
-                subject.setDateOfBirth(dob);
+            toEtxAddress(factory, currentAddress, efxAddress);
+        }
+        // previousAddress {
+        {
+            PriorAddress previousAddress = pcc.screening().version().previousAddress();
+            if (!previousAddress.isEmpty()) {
+                Address efxAddress = factory.createAddressesTypeAddress();
+                addresses.getAddress().add(efxAddress);
+                efxAddress.setAddressType("FORM");
+                toEtxAddress(factory, previousAddress, efxAddress);
             }
         }
 
-        // customer info
-        if (false) {
-            // consumer requests
-            CNConsumerRequests consumerRequests = factory.createCNRequestsTypeCNConsumerRequests();
-            requests.setCNConsumerRequests(consumerRequests);
-
-            // consumer request
-            CNConsumerRequestType consumerRequest = factory.createCNConsumerRequestType();
-            consumerRequests.getCNConsumerRequest().add(consumerRequest);
-
-            // subjects
-            SubjectsType subjects = factory.createSubjectsType();
-            consumerRequest.setSubjects(subjects);
-
-            // subject
-            Subject subject = factory.createSubjectsTypeSubject();
-            subjects.getSubject().add(subject);
-            subject.setSubjectType("SUBJ");
-
-            // subject name
-            CNSubjectNameType subjectName = factory.createCNSubjectNameType();
-            subject.setSubjectName(subjectName);
-            subjectName.setFirstName("Sherlock");
-            subjectName.setMiddleName("P");
-            subjectName.setLastName("Holmes");
-
-            // sin
-            subject.setSocialInsuranceNumber(new BigInteger("123456789"));
-
+        if (!customer.person().birthDate().isNull()) {
             // date of birth
             DateOfBirth dob = factory.createDateOfBirth();
-            dob.setValue("1967-08-13");
+            dob.setValue(new SimpleDateFormat("YYYY-MM-dd").format(customer.person().birthDate().getValue()));
             subject.setDateOfBirth(dob);
+        }
 
-            // subject fields
-            subject.setOccupation("Programmer");
-            subject.setEmployer("IBM");
+        if (!customer.person().homePhone().isNull()) {
+            toEfxPhone(factory, subject, "RES", customer.person().homePhone().getStringView());
+        }
+        if (!customer.person().mobilePhone().isNull()) {
+            toEfxPhone(factory, subject, "MOB", customer.person().mobilePhone().getStringView());
+        }
+        if (!customer.person().workPhone().isNull()) {
+            toEfxPhone(factory, subject, "BUS", customer.person().workPhone().getStringView());
+        }
 
+        // sin
+        for (IdentificationDocument document : pcc.screening().documents()) {
+            if ((document.idType().type().getValue() == IdentificationDocumentType.Type.canadianSIN) && (!document.idNumber().isNull())) {
+                subject.setSocialInsuranceNumber(new BigInteger(document.idNumber().getValue().replaceAll("[\\s-]+", "")));
+                break;
+            }
+        }
+
+        // May add this in future
+        if (false) {
             // account number
             AccountNumberType accountNumber = factory.createAccountNumberType();
             accountNumber.setMnemonic("abc");
             accountNumber.setValue("1277792");
             subject.setAccountNumber(accountNumber);
-
-            // parsed telephones
-            ParsedTelephonesType telephones = factory.createParsedTelephonesType();
-            subject.setParsedTelephones(telephones);
-
-            // parsed telephone
-            ParsedTelephone telephone = factory.createParsedTelephone();
-            telephones.getParsedTelephone().add(telephone);
-            telephone.setAreaCode((short) 416);
-            telephone.setExtension((short) 555);
-            telephone.setNumber("1234567");
-            telephone.setTelephoneType("BUS");
-
-            // addresses
-            AddressesType addresses = factory.createAddressesType();
-            subjects.setAddresses(addresses);
-
-            // address
-            Address address = factory.createAddressesTypeAddress();
-            addresses.getAddress().add(address);
-            address.setAddressType("CURR");
-            address.setCivicNumber("55");
-            address.setStreetName("Rose Valley St");
-            address.setSuite("221b");
-            CityType city = factory.createCityType();
-            city.setCode("YYZ");
-            city.setValue("Toronto");
-            address.setCity(city);
-            CodeType province = factory.createCodeType();
-            province.setCode("ON");
-            province.setDescription("Ontario");
-            address.setProvince(province);
-            address.setPostalCode("L1C 9H5");
-
-            // customer info
-            consumerRequest.setCustomerInfo(customerInfo);
-
-            // customer reference number
-            consumerRequest.setCustomerReferenceNumber("ABCDEFG");
-            consumerRequest.setECOAInquiryType("ABC");
-            consumerRequest.setJointAccessIndicator("JOINTABC");
-            consumerRequest.setProfileIndicator("Q"); // indicates iDecision request
         }
 
         // output parameters
@@ -315,6 +258,13 @@ public class EquifaxModelMapper {
             if (!presentPersonalIncome.details().starts().isNull()) {
                 XmlCreator.addParameter(new TimeAtPresentEmployer(monthSince(presentPersonalIncome.details().starts())), parameters);
             }
+
+            // subject fields
+            if (presentPersonalIncome.details().isInstanceOf(IEmploymentInfo.class)) {
+                IEmploymentInfo personalIncomeDetails = presentPersonalIncome.details().cast();
+                subject.setOccupation(personalIncomeDetails.position().getStringView());
+                subject.setEmployer(personalIncomeDetails.name().getStringView());
+            }
         } else {
             XmlCreator.addParameter(EmploymentStatus.NotAsked, parameters);
         }
@@ -336,10 +286,56 @@ public class EquifaxModelMapper {
                 break;
             }
         } else {
-            XmlCreator.addParameter(ResidentialStatus.NotAsked, parameters);
+            XmlCreator.addParameter(ResidentialStatus.NotGiven, parameters);
         }
 
         return transmit;
+    }
+
+    private static void toEfxPhone(ObjectFactory factory, Subject subject, String telephoneType, String telephone) {
+        // parsed telephones
+        ParsedTelephonesType telephones = subject.getParsedTelephones();
+        if (telephones == null) {
+            telephones = factory.createParsedTelephonesType();
+            subject.setParsedTelephones(telephones);
+        }
+
+        // parsed telephone
+        ParsedTelephone efxTelephone = factory.createParsedTelephone();
+        efxTelephone.setTelephoneType(telephoneType);
+
+        String unformatedPhone = telephone.replaceAll("[\\s\\(\\)-]+", "");
+
+        try {
+            if (unformatedPhone.length() == 10) {
+                efxTelephone.setAreaCode(Short.valueOf(unformatedPhone.substring(0, 3)));
+                efxTelephone.setNumber(unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10));
+            } else if (unformatedPhone.length() > 10) {
+                efxTelephone.setAreaCode(Short.valueOf(unformatedPhone.substring(0, 3)));
+                efxTelephone.setNumber(unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10));
+                efxTelephone.setAreaCode(Short.valueOf(unformatedPhone.substring(10, unformatedPhone.length())));
+            } else {
+                efxTelephone.setNumber(telephone);
+            }
+        } catch (NumberFormatException notANumber) {
+            efxTelephone.setNumber(telephone);
+        }
+
+        telephones.getParsedTelephone().add(efxTelephone);
+    }
+
+    private static void toEtxAddress(ObjectFactory factory, PriorAddress vistaAddress, Address efxAddress) {
+        efxAddress.setCivicNumber(vistaAddress.streetNumber().getValue());
+        efxAddress.setStreetName(vistaAddress.streetName().getValue());
+        efxAddress.setSuite(vistaAddress.suiteNumber().getValue());
+        CityType city = factory.createCityType();
+        city.setValue(vistaAddress.city().getValue());
+        efxAddress.setCity(city);
+        CodeType province = factory.createCodeType();
+        province.setCode(vistaAddress.province().code().getValue());
+        province.setDescription(vistaAddress.province().name().getValue());
+        efxAddress.setProvince(province);
+        efxAddress.setPostalCode(efxPostalCodeFormat(vistaAddress.postalCode().getValue()));
     }
 
     private static String efxPostalCodeFormat(String value) {
