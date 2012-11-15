@@ -16,23 +16,37 @@ package com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface TenantSureTenantInsuranceDetailedStatusDTO extends IEntity {
+public interface TenantSureCoverageDTO extends IEntity {
 
-    TenantSureQuoteDetailedDTO quote();
+    @NotNull
+    IPrimitive<BigDecimal> personalLiabilityCoverage();
 
-    // ongoing stuff
-    IList<TenantSureMessageDTO> messages();
+    @NotNull
+    IPrimitive<BigDecimal> contentsCoverage();
 
-    @Format("#,##0.00")
-    IPrimitive<LogicalDate> nextPaymentDate();
+    @Caption(name = "Deductible (per claim)")
+    @NotNull
+    IPrimitive<BigDecimal> deductible();
 
-    @Format("#,##0.00")
-    IPrimitive<BigDecimal> monthlyPremiumPayment();
+    // these are statement of fact questions
+    @NotNull
+    @Caption(name = "Number of Previous Claims")
+    IPrimitive<Integer> numberOfPreviousClaims();
+
+    @Caption(name = "Is any one of the tenants a smoker?")
+    @NotNull
+    IPrimitive<Boolean> smoker();
+
+    IPrimitive<LogicalDate> inceptionDate();
+
+    /** note: according to Arthur this is not defined for tenant sure */
+    IPrimitive<LogicalDate> expiryDate();
+
 }

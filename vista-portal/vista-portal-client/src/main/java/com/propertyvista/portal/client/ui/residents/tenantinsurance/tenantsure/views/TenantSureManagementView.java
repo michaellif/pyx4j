@@ -15,9 +15,9 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceDetailedStatusDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
 
-public interface TenantSureManagementlView extends IsWidget {
+public interface TenantSureManagementView extends IsWidget {
 
     public interface Presenter {
 
@@ -29,6 +29,6 @@ public interface TenantSureManagementlView extends IsWidget {
 
     void setPresenter(Presenter presenter);
 
-    void populate(TenantSureTenantInsuranceDetailedStatusDTO detailedStatus);
+    void populate(TenantSureTenantInsuranceStatusDetailedDTO detailedStatus);
 
 }

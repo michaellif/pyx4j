@@ -14,14 +14,14 @@
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.views;
 
 import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.forms.TenantInsuranceByOtherProviderDetailsForm;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceByOtherProviderDetailsDTO;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.forms.OtherProvidersTenantInsuranceDetailsForm;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.otherprovider.OtherProvidersTenantInsuranceDetailsDTO;
 
-public class TenantInsuranceByOtherProviderUpdateViewImpl extends BasicViewImpl<TenantInsuranceByOtherProviderDetailsDTO> implements
+public class TenantInsuranceByOtherProviderUpdateViewImpl extends BasicViewImpl<OtherProvidersTenantInsuranceDetailsDTO> implements
         TenantInsuranceByOtherProviderUpdateView {
 
     public TenantInsuranceByOtherProviderUpdateViewImpl() {
-        setForm(new TenantInsuranceByOtherProviderDetailsForm());
+        setForm(new OtherProvidersTenantInsuranceDetailsForm());
     }
 
 }

@@ -22,20 +22,20 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePremiumTaxDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceDetailedStatusDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
 
 public class TenantSureManagementServiceImpl implements TenantSureManagementService {
 
     @Override
-    public void getTenantSureDetailedStatus(AsyncCallback<TenantSureTenantInsuranceDetailedStatusDTO> callback) {
-        TenantSureTenantInsuranceDetailedStatusDTO status = EntityFactory.create(TenantSureTenantInsuranceDetailedStatusDTO.class);
+    public void getTenantSureDetailedStatus(AsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO> callback) {
+        TenantSureTenantInsuranceStatusDetailedDTO status = EntityFactory.create(TenantSureTenantInsuranceStatusDetailedDTO.class);
         status.quote().grossPremium().setValue(new BigDecimal("1003"));
         status.quote().underwriterFee().setValue(new BigDecimal("55.51"));
         TenantSurePremiumTaxDTO tax = status.quote().taxBreakdown().$();
         tax.taxName().setValue("HST");
         tax.absoluteAmount().setValue(new BigDecimal("52.99"));
         status.quote().taxBreakdown().add(tax);
-        status.quote().totalPayable().setValue(new BigDecimal("9000.01"));
+        status.quote().totalMonthlyPayable().setValue(new BigDecimal("9000.01"));
         TenantSureMessageDTO message = status.messages().$();
         message.message().setValue("Your insurance is about to expire, we strongly advise you to stop playing with matches :)");
         status.messages().add(message);

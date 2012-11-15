@@ -37,12 +37,11 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureDetailedStatusForm;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureDetailedStatusForm.TenantSureQuoteViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureQuotationRequestForm;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureQuoteViewer;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDetailedDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
 public class TenantSurePurchaseViewImpl extends Composite implements TenantSurePurchaseView {
 
@@ -105,7 +104,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         pleaseFillOutTheFormMessage.setText(i18n.tr("Please fill out the form to get a quote"));
         quoteSection.add(pleaseFillOutTheFormMessage);
 
-        quoteViewer = new TenantSureDetailedStatusForm.TenantSureQuoteViewer();
+        quoteViewer = new TenantSureQuoteViewer();
         quoteViewer.initContent();
         quoteSection.add(quoteViewer);
 
@@ -196,7 +195,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     }
 
     @Override
-    public void setQuote(TenantSureQuoteDetailedDTO quote) {
+    public void setQuote(TenantSureQuoteDTO quote) {
         quoteViewer.setValue(quote);
 
         retrievingQuoteMessage.setVisible(false);
@@ -218,7 +217,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     }
 
     @Override
-    public TenantSureQuoteDetailedDTO getAcceptedQuote() {
+    public TenantSureQuoteDTO getAcceptedQuote() {
         return quoteViewer.getValue().isNull() ? null : quoteViewer.getValue();
     }
 

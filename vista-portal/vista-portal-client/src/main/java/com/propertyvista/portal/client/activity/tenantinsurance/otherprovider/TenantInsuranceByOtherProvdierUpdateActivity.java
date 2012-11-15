@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.views.TenantInsuranceByOtherProviderUpdateView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceByOtherProviderDetailsDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.otherprovider.OtherProvidersTenantInsuranceDetailsDTO;
 
 public class TenantInsuranceByOtherProvdierUpdateActivity extends SecurityAwareActivity implements TenantInsuranceByOtherProviderUpdateView.Presenter {
 
@@ -37,13 +37,13 @@ public class TenantInsuranceByOtherProvdierUpdateActivity extends SecurityAwareA
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
         view.setPresenter(this);
-        view.populate(EntityFactory.create(TenantInsuranceByOtherProviderDetailsDTO.class));
+        view.populate(EntityFactory.create(OtherProvidersTenantInsuranceDetailsDTO.class));
         panel.setWidget(view);
 
     }
 
     @Override
-    public void save(TenantInsuranceByOtherProviderDetailsDTO entity) {
+    public void save(OtherProvidersTenantInsuranceDetailsDTO entity) {
         // TODO Auto-generated method stub
     }
 

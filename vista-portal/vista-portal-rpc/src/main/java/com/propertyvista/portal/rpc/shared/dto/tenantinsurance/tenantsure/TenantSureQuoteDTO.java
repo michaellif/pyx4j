@@ -15,37 +15,33 @@ package com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+/**
+ * This entity contains information that is interesting for tenant and that is mostly retrieved from <code>retrieveCodeInformation</code>.
+ * 
+ * {@link https://api.cfcprograms.com/cfc_api.asmx?op=retrieveQuoteInformation}
+ */
 @Transient
-public interface TenantSureInsurancePolicyDTO extends IEntity {
+public interface TenantSureQuoteDTO extends IEntity {
 
-    @NotNull
-    IPrimitive<BigDecimal> personalLiabilityCoverage();
+    IPrimitive<String> quoteId();
 
-    @NotNull
-    IPrimitive<BigDecimal> contentsCoverage();
+    TenantSureCoverageDTO coverage();
 
-    @Caption(name = "Deductible (per claim)")
-    @NotNull
-    IPrimitive<BigDecimal> deductible();
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> grossPremium();
 
-    // these are statement of fact questions
-    @NotNull
-    @Caption(name = "Number of Previous Claims")
-    IPrimitive<Integer> numberOfPreviousClaims();
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> underwriterFee();
 
-    @Caption(name = "Is any one of the tenants a smoker?")
-    @NotNull
-    IPrimitive<Boolean> smoker();
+    IList<TenantSurePremiumTaxDTO> taxBreakdown();
 
-    IPrimitive<LogicalDate> inceptionDate();
-
-    IPrimitive<LogicalDate> expiryDate();
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> totalMonthlyPayable();
 
 }

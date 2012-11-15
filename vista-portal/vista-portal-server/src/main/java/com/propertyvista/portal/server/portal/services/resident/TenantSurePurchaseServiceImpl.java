@@ -32,7 +32,7 @@ import com.propertyvista.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDetailedDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
 public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService {
@@ -115,11 +115,11 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     }
 
     @Override
-    public void getQuote(AsyncCallback<TenantSureQuoteDetailedDTO> callback, TenantSureQuotationRequestDTO quotationRequest) {
-        TenantSureQuoteDetailedDTO quote = EntityFactory.create(TenantSureQuoteDetailedDTO.class);
+    public void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureQuotationRequestDTO quotationRequest) {
+        TenantSureQuoteDTO quote = EntityFactory.create(TenantSureQuoteDTO.class);
         quote.grossPremium().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
         quote.underwriterFee().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
-        quote.totalPayable().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
+        quote.totalMonthlyPayable().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -129,7 +129,7 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     }
 
     @Override
-    public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDetailedDTO quote, PaymentMethod paymentMethod) {
+    public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, PaymentMethod paymentMethod) {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {

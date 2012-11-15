@@ -23,14 +23,14 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUploaderFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceByOtherProviderDetailsDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.otherprovider.OtherProvidersTenantInsuranceDetailsDTO;
 
-public class TenantInsuranceByOtherProviderDetailsForm extends CEntityDecoratableForm<TenantInsuranceByOtherProviderDetailsDTO> {
+public class OtherProvidersTenantInsuranceDetailsForm extends CEntityDecoratableForm<OtherProvidersTenantInsuranceDetailsDTO> {
 
-    private final static I18n i18n = I18n.get(TenantInsuranceByOtherProviderDetailsForm.class);
+    private final static I18n i18n = I18n.get(OtherProvidersTenantInsuranceDetailsForm.class);
 
-    public TenantInsuranceByOtherProviderDetailsForm() {
-        super(TenantInsuranceByOtherProviderDetailsDTO.class);
+    public OtherProvidersTenantInsuranceDetailsForm() {
+        super(OtherProvidersTenantInsuranceDetailsDTO.class);
     }
 
     @Override
@@ -45,12 +45,12 @@ public class TenantInsuranceByOtherProviderDetailsForm extends CEntityDecoratabl
         content.setH2(++row, 0, 1, i18n.tr("Attach Scanned Insurance Certificate"));
         content.setWidget(++row, 0, inject(proto().documentPages(), new ApplicationDocumentFileUploaderFolder()));
 
-        addValueValidator(new EditableValueValidator<TenantInsuranceByOtherProviderDetailsDTO>() {
+        addValueValidator(new EditableValueValidator<OtherProvidersTenantInsuranceDetailsDTO>() {
 
             @Override
-            public ValidationError isValid(CComponent<TenantInsuranceByOtherProviderDetailsDTO, ?> component, TenantInsuranceByOtherProviderDetailsDTO value) {
+            public ValidationError isValid(CComponent<OtherProvidersTenantInsuranceDetailsDTO, ?> component, OtherProvidersTenantInsuranceDetailsDTO value) {
                 if (!component.isValid()) {
-                    return new ValidationError(TenantInsuranceByOtherProviderDetailsForm.this, i18n.tr("Valid Proof of Insurance is Required"));
+                    return new ValidationError(OtherProvidersTenantInsuranceDetailsForm.this, i18n.tr("Valid Proof of Insurance is Required"));
                 } else {
                     return null;
                 }

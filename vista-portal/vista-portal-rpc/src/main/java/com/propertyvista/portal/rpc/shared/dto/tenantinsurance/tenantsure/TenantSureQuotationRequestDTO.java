@@ -23,7 +23,7 @@ import com.propertyvista.dto.LegalTermsDescriptorDTO;
 @Transient
 public interface TenantSureQuotationRequestDTO extends IEntity {
 
-    TenantSureInsurancePolicyDTO policy();
+    TenantSureCoverageDTO coverage();
 
     IList<LegalTermsDescriptorDTO> personalDisclaimerTerms();
 

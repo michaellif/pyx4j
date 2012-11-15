@@ -14,11 +14,11 @@
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.views;
 
 import com.propertyvista.portal.client.ui.residents.View;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceByOtherProviderDetailsDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.otherprovider.OtherProvidersTenantInsuranceDetailsDTO;
 
-public interface TenantInsuranceByOtherProviderUpdateView extends View<TenantInsuranceByOtherProviderDetailsDTO> {
+public interface TenantInsuranceByOtherProviderUpdateView extends View<OtherProvidersTenantInsuranceDetailsDTO> {
 
-    interface Presenter extends View.Presenter<TenantInsuranceByOtherProviderDetailsDTO> {
+    interface Presenter extends View.Presenter<OtherProvidersTenantInsuranceDetailsDTO> {
 
     }
 

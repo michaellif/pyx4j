@@ -21,13 +21,13 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDetailedDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
 public interface TenantSurePurchaseService extends IService {
 
     void getQuotationRequestParams(AsyncCallback<TenantSureQuotationRequestParamsDTO> callback);
 
-    void getQuote(AsyncCallback<TenantSureQuoteDetailedDTO> callback, TenantSureQuotationRequestDTO quotationRequest);
+    void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureQuotationRequestDTO quotationRequest);
 
-    void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDetailedDTO quote, PaymentMethod paymentMethod);
+    void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, PaymentMethod paymentMethod);
 }

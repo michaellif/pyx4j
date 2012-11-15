@@ -7,39 +7,34 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-14
+ * Created on 2012-11-08
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure;
+package com.propertyvista.portal.rpc.shared.dto.tenantinsurance;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-/**
- * This entity contains information that is interesting for tenant and that is mostly retrieved from <code>retrieveCodeInformation</code>.
- * 
- * {@link https://api.cfcprograms.com/cfc_api.asmx?op=retrieveQuoteInformation}
- */
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
+
 @Transient
-public interface TenantSureQuoteDetailedDTO extends IEntity {
-
-    TenantSureInsurancePolicyDTO policy();
+public interface TenantSureTenantInsuranceStatusShortDTO extends TenantInsuranceStatusDTO {
 
     @Format("#,##0.00")
-    IPrimitive<BigDecimal> grossPremium();
+    IPrimitive<BigDecimal> monthlyPremiumPayment();
 
-    @Format("#,##0.00")
-    IPrimitive<BigDecimal> underwriterFee();
+    /**
+     * Can be <code>null</code> if the there's some problem with credit card, i.e. credit limit, cancelled or whatever, anything that caused last payment to
+     * fail.
+     */
+    IPrimitive<LogicalDate> nextPaymentDate();
 
-    IList<TenantSurePremiumTaxDTO> taxBreakdown();
-
-    @Format("#,##0.00")
-    IPrimitive<BigDecimal> totalPayable();
+    IList<TenantSureMessageDTO> messages();
 
 }

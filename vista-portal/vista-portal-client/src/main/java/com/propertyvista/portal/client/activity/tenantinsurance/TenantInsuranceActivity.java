@@ -27,7 +27,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceServ
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.OtherProviderTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusShortDTO;
 
 public class TenantInsuranceActivity extends AbstractActivity {
 
@@ -46,7 +46,7 @@ public class TenantInsuranceActivity extends AbstractActivity {
                 Place dispatchTo = null;
                 if (status instanceof NoInsuranceTenantInsuranceStatusDTO) {
                     dispatchTo = new PortalSiteMap.Residents.TenantInsurance.ProvideTenantInsurance();
-                } else if (status instanceof TenantSureTenantInsuranceStatusDTO) {
+                } else if (status instanceof TenantSureTenantInsuranceStatusShortDTO) {
                     dispatchTo = new PortalSiteMap.Residents.TenantInsurance.TenantSureManagement();
                 } else if (status instanceof OtherProviderTenantInsuranceStatusDTO) {
                     dispatchTo = new PortalSiteMap.Residents.TenantInsurance.UploadProofOfInsurance();

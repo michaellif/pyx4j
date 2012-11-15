@@ -26,17 +26,17 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureDetailedStatusForm;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureStatusForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceDetailedStatusDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
 
-public class TenantSureManagementViewImpl extends Composite implements TenantSureManagementlView {
+public class TenantSureManagementViewImpl extends Composite implements TenantSureManagementView {
 
     private static final I18n i18n = I18n.get(TenantSureManagementViewImpl.class);
 
     private Presenter presenter;
 
-    private final TenantSureDetailedStatusForm statusForm;
+    private final TenantSureStatusForm statusForm;
 
     public TenantSureManagementViewImpl() {
 
@@ -67,7 +67,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
         FlowPanel statusPanel = new FlowPanel();
 
-        statusForm = new TenantSureDetailedStatusForm();
+        statusForm = new TenantSureStatusForm();
         statusForm.initContent();
         statusPanel.add(statusForm);
 
@@ -117,7 +117,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     }
 
     @Override
-    public void populate(TenantSureTenantInsuranceDetailedStatusDTO detailedStatus) {
+    public void populate(TenantSureTenantInsuranceStatusDetailedDTO detailedStatus) {
         statusForm.populate(detailedStatus);
     }
 

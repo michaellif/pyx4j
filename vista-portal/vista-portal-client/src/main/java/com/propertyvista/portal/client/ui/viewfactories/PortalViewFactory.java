@@ -59,7 +59,7 @@ import com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovide
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureCreditCardUpdateView;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureCreditCardUpdateViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementViewImpl;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementlView;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementView;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseView;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceView;
@@ -111,7 +111,7 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new LeaseContextSelectionViewImpl());
             } else if (VistaTODO.enableWelcomeWizardDemoMode & InsuranceView.class.equals(type)) {
                 map.put(type, new InsuranceViewImpl());
-            } else if (TenantSureManagementlView.class.equals(type)) {
+            } else if (TenantSureManagementView.class.equals(type)) {
                 map.put(type, new TenantSureManagementViewImpl());
             } else if (TenantSurePurchaseView.class.equals(type)) {
                 map.put(type, new TenantSurePurchaseViewImpl());

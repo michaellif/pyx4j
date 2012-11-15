@@ -26,12 +26,12 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureDetailedStatusForm;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureStatusForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusShortDTO;
 
-public class TenantSureInsuranceStatusViewer extends CEntityViewer<TenantSureTenantInsuranceStatusDTO> {
+public class TenantSureInsuranceStatusViewer extends CEntityViewer<TenantSureTenantInsuranceStatusShortDTO> {
 
     public static final String STYLE_PREFIX = "-vista-TenantSureStatusViewer";
 
@@ -44,7 +44,7 @@ public class TenantSureInsuranceStatusViewer extends CEntityViewer<TenantSureTen
     private static final I18n i18n = I18n.get(TenantSureInsuranceStatusViewer.class);
 
     @Override
-    public IsWidget createContent(TenantSureTenantInsuranceStatusDTO tenantSureStatus) {
+    public IsWidget createContent(TenantSureTenantInsuranceStatusShortDTO tenantSureStatus) {
         FlowPanel contentPanel = new FlowPanel();
         Image tenantSureLogo = new Image(TenantSureResources.INSTANCE.logoTenantSure());
         tenantSureLogo.addStyleName(STYLE_PREFIX + StyleSuffix.TenantSureLogo.name());
@@ -57,7 +57,7 @@ public class TenantSureInsuranceStatusViewer extends CEntityViewer<TenantSureTen
         }
 
         if (!tenantSureStatus.messages().isEmpty()) {
-            contentPanel.add(new TenantSureDetailedStatusForm.TenantSureMessagesViewer().createContent(tenantSureStatus.messages()));
+            contentPanel.add(new TenantSureStatusForm.TenantSureMessagesViewer().createContent(tenantSureStatus.messages()));
             Anchor goToTenantSureScreen = new Anchor(i18n.tr("Go To TenantSure Management Page"), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {

@@ -28,8 +28,8 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.OtherProviderTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusShortDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDTO;
 
 // TODO this is a mockup
 public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
@@ -48,16 +48,15 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
         }
         String insuranceProvider = config.get("provider");
         if ("tenantSure".equals(insuranceProvider)) {
-            TenantSureTenantInsuranceStatusDTO tenantSureStatus = EntityFactory.create(TenantSureTenantInsuranceStatusDTO.class);
+            TenantSureTenantInsuranceStatusShortDTO tenantSureStatus = EntityFactory.create(TenantSureTenantInsuranceStatusShortDTO.class);
             tenantSureStatus.liabilityCoverage().setValue(new BigDecimal(config.get("liability")));
             tenantSureStatus.monthlyPremiumPayment().setValue(new BigDecimal(config.get("tenantSure.monthlyPremium")));
             tenantSureStatus.nextPaymentDate().setValue(fetchDate(config, "tenantSure.nextPaymentDate"));
-            tenantSureStatus.expirationDate().setValue(fetchDate(config, "tenantSure.insuranceExpirationDate"));
             TenantSureMessageDTO m = tenantSureStatus.messages().$();
             m.message()
                     .setValue(
                             i18n.tr("There was a problem with your last scheduled payment. If you dont update your credit card details until {0,date,short}, your TeantSure insurance will expire on {1,date,short}.",
-                                    fetchDate(config, "tenantSure.gracePeriodEndDate"), tenantSureStatus.expirationDate().getValue()));
+                                    fetchDate(config, "tenantSure.gracePeriodEndDate"), new LogicalDate()));
             tenantSureStatus.messages().add(m);
 
             return tenantSureStatus;

@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.OtherProviderTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusShortDTO;
 
 /** this is a class that supposed to implement 'polymorphic' tenant insurance status viewer */
 public class TenantInsuranceStatusViewer extends CEntityViewer<TenantInsuranceStatusDTO> {
@@ -34,8 +34,8 @@ public class TenantInsuranceStatusViewer extends CEntityViewer<TenantInsuranceSt
         if (tenantInsuranceStatus instanceof NoInsuranceTenantInsuranceStatusDTO) {
             return new NoTenantInsuranceStatusViewer().createContent((NoInsuranceTenantInsuranceStatusDTO) tenantInsuranceStatus);
 
-        } else if (tenantInsuranceStatus instanceof TenantSureTenantInsuranceStatusDTO) {
-            return new TenantSureInsuranceStatusViewer().createContent((TenantSureTenantInsuranceStatusDTO) tenantInsuranceStatus);
+        } else if (tenantInsuranceStatus instanceof TenantSureTenantInsuranceStatusShortDTO) {
+            return new TenantSureInsuranceStatusViewer().createContent((TenantSureTenantInsuranceStatusShortDTO) tenantInsuranceStatus);
 
         } else if (tenantInsuranceStatus instanceof OtherProviderTenantInsuranceStatusDTO) {
             return new OtherProviderTenantInsuranceStatusViewer().createContent((OtherProviderTenantInsuranceStatusDTO) tenantInsuranceStatus);

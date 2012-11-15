@@ -7,17 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-12
+ * Created on 2012-11-14
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.shared.dto.tenantinsurance;
+package com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
-
-import com.propertyvista.domain.moveinwizardmockup.InsuranceCertificate;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface TenantInsuranceByOtherProviderDetailsDTO extends InsuranceCertificate {
+public interface TenantSureTenantInsuranceStatusDetailedDTO extends IEntity {
+
+    TenantSureQuoteDTO quote();
+
+    IPrimitive<LogicalDate> nextPaymentDate();
+
+    IList<TenantSureMessageDTO> messages();
 
 }

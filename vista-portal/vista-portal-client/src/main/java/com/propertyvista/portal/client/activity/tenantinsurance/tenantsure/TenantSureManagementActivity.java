@@ -21,20 +21,20 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementlView;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceDetailedStatusDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
 
-public class TenantSureManagementActivity extends AbstractActivity implements TenantSureManagementlView.Presenter {
+public class TenantSureManagementActivity extends AbstractActivity implements TenantSureManagementView.Presenter {
 
-    private final TenantSureManagementlView view;
+    private final TenantSureManagementView view;
 
     private final TenantSureManagementService service;
 
     public TenantSureManagementActivity() {
-        view = PortalViewFactory.instance(TenantSureManagementlView.class);
+        view = PortalViewFactory.instance(TenantSureManagementView.class);
         service = GWT.<TenantSureManagementService> create(TenantSureManagementService.class);
     }
 
@@ -42,9 +42,9 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
         panel.setWidget(view);
-        service.getTenantSureDetailedStatus(new DefaultAsyncCallback<TenantSureTenantInsuranceDetailedStatusDTO>() {
+        service.getTenantSureDetailedStatus(new DefaultAsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO>() {
             @Override
-            public void onSuccess(TenantSureTenantInsuranceDetailedStatusDTO status) {
+            public void onSuccess(TenantSureTenantInsuranceStatusDetailedDTO status) {
                 view.populate(status);
             }
         });
