@@ -21,6 +21,7 @@ import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -73,6 +74,11 @@ public class TenantsEquifaxTestCasesGenerator {
             PriorAddress currentAddress = mainTenant.leaseParticipant().customer().personScreening().version().currentAddress();
             currentAddress.streetNumber().set(tenantInfo.streetNumber());
             currentAddress.streetName().set(tenantInfo.streetName());
+
+            currentAddress.suiteNumber().setValue(null);
+            currentAddress.streetDirection().setValue(null);
+            currentAddress.streetType().setValue(StreetType.other);
+
             currentAddress.city().set(tenantInfo.city());
             currentAddress.province().code().set(tenantInfo.province());
             currentAddress.postalCode().set(tenantInfo.postalCode());
