@@ -43,6 +43,9 @@ public class TenantsEquifaxTestCasesGenerator {
         if (tenantInfoTestCases == null) {
             tenantInfoTestCases = EntityCSVReciver.create(EquifaxIDecisionGenericTestCase.class).loadResourceFile(
                     IOUtils.resourceFileName("iDecision-GenericTestCases.xlsx", TenantsEquifaxTestCasesGenerator.class));
+            if (tenantInfoTestCases.size() == 0) {
+                throw new Error("resourceFile iDecision-GenericTestCases.xlsx is empty");
+            }
         }
     }
 
