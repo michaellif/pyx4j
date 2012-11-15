@@ -36,6 +36,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
@@ -100,13 +101,17 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
 
     @Override
     public void show() {
-        lister.obtain(0); // populate lister...
+        lister.restoreState(); // populate lister...
         // super.show(); will be called in lister.onObtainSuccess() 
     }
 
     protected abstract List<ColumnDescriptor> defineColumnDescriptors();
 
     protected abstract AbstractListService<E> getSelectService();
+
+    protected List<Sort> getDefaultSorting() {
+        return null;
+    }
 
     protected Widget createBody() {
         getOkButton().setEnabled(!lister.getCheckedItems().isEmpty());
@@ -215,6 +220,15 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
             }
 
             setColumnDescriptors(EntitySelectorTableDialog.this.defineColumnDescriptors());
+        }
+
+        @Override
+        public List<Sort> getDefaultSorting() {
+            List<Sort> sort = EntitySelectorTableDialog.this.getDefaultSorting();
+            if (sort == null) {
+                sort = super.getDefaultSorting();
+            }
+            return sort;
         }
 
         public VersionDisplayMode getVersionDisplayMode() {
