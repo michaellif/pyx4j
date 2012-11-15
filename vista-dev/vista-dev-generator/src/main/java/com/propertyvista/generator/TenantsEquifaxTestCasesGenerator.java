@@ -82,16 +82,6 @@ public class TenantsEquifaxTestCasesGenerator {
             currentAddress.city().set(tenantInfo.city());
             currentAddress.province().code().set(tenantInfo.province());
             currentAddress.postalCode().set(tenantInfo.postalCode());
-            //TimeAtPresentAddress
-            currentAddress.moveInDate().setValue(null);
-            currentAddress.moveOutDate().setValue(null);
-
-            //ResidentialStatus.NotGiven / NotAsked ?
-            currentAddress.rented().setValue(null);
-
-            // EmploymentStatus Unknown
-            mainTenant.leaseParticipant().customer().personScreening().version().assets().clear();
-            mainTenant.leaseParticipant().customer().personScreening().version().incomes().clear();
 
             mainTenant.leaseParticipant().customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
 

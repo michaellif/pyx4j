@@ -28,10 +28,10 @@ import com.pyx4j.i18n.annotations.I18n;
 public interface EquifaxIDecisionGenericTestCase extends IEntity {
 
     @ImportColumn(names = { "LAST NAME" })
-    IPrimitive<String> firstName();
+    IPrimitive<String> lastName();
 
     @ImportColumn(names = { "FIRST NAME" })
-    IPrimitive<String> lastName();
+    IPrimitive<String> firstName();
 
     @ImportColumn(names = { "STREET NUMBER" })
     IPrimitive<String> streetNumber();
