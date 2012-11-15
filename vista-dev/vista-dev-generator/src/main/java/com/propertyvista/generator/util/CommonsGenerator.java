@@ -109,7 +109,7 @@ public class CommonsGenerator {
 
     public static Name createEmployeeName() {
         if (names == null) {
-            names = EntityCSVReciver.create(Name.class).loadFile(IOUtils.resourceFileName("employee-names.csv", CommonsGenerator.class));
+            names = EntityCSVReciver.create(Name.class).loadResourceFile(IOUtils.resourceFileName("employee-names.csv", CommonsGenerator.class));
         }
         return names.get(DataGenerator.nextInt(names.size(), "names", 10)).duplicate(); //doesn't check for duplicate names
     }
@@ -170,7 +170,7 @@ public class CommonsGenerator {
 
     public static AddressStructured createAddress() {
         if (adresses == null) {
-            adresses = EntityCSVReciver.create(AddressStructured.class).loadFile(IOUtils.resourceFileName("address-struct.csv", CommonsGenerator.class));
+            adresses = EntityCSVReciver.create(AddressStructured.class).loadResourceFile(IOUtils.resourceFileName("address-struct.csv", CommonsGenerator.class));
         }
         AddressStructured addressStructured = adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10)).duplicate();
         if (addressStructured.streetType().isNull()) {

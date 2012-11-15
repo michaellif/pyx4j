@@ -63,7 +63,7 @@ public class PmcCreatorDev {
         if (accountImport == null) {
             EntityCSVReciver<OnboardingMerchantAccountImport> rcv = EntityCSVReciver.create(OnboardingMerchantAccountImport.class);
             rcv.setHeaderIgnoreCase(true);
-            accountImport = rcv.loadFile("OnboardingMerchantAccounts.csv");
+            accountImport = rcv.loadResourceFile("OnboardingMerchantAccounts.csv");
         }
         // Use data provided by Caledon
         if (true) {

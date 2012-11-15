@@ -48,7 +48,7 @@ public class LocationsGenerator {
     }
 
     private static List<Province> loadProvincesFromFile() {
-        List<Province> provinces = EntityCSVReciver.create(Province.class).loadFile(IOUtils.resourceFileName("Province.csv", LocationsGenerator.class));
+        List<Province> provinces = EntityCSVReciver.create(Province.class).loadResourceFile(IOUtils.resourceFileName("Province.csv", LocationsGenerator.class));
         return provinces;
     }
 
@@ -70,9 +70,9 @@ public class LocationsGenerator {
 
     public static List<City> loadCityFromFile() {
         List<City> all = new Vector<City>();
-        all.addAll(updateCitiesWithProvince(EntityCSVReciver.create(City.class).loadFile(
+        all.addAll(updateCitiesWithProvince(EntityCSVReciver.create(City.class).loadResourceFile(
                 IOUtils.resourceFileName("City-Canada-city.csv", LocationsGenerator.class))));
-        all.addAll(updateCitiesWithProvince(EntityCSVReciver.create(City.class).loadFile(
+        all.addAll(updateCitiesWithProvince(EntityCSVReciver.create(City.class).loadResourceFile(
                 IOUtils.resourceFileName("City-Canada-town.csv", LocationsGenerator.class))));
         return all;
     }

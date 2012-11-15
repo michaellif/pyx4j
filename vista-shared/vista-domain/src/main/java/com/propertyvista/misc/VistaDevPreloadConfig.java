@@ -45,6 +45,8 @@ public final class VistaDevPreloadConfig implements Serializable {
 
     public int numPotentialTenants = DemoData.UserType.PTENANT.getDefaultMax() + 5;
 
+    public int numPotentialTenants2CreditCheck = 20;
+
     public int numUnAssigendTenants = DemoData.UserType.NEW_TENANT.getDefaultMax();
 
     public int maxOnboardingUsers = DemoData.UserType.ONB.getDefaultMax();
@@ -91,6 +93,7 @@ public final class VistaDevPreloadConfig implements Serializable {
         config.numResidentialBuildings = 2;
         config.numUnAssigendTenants = 0;
         config.numPotentialTenants = 1;
+        config.numPotentialTenants2CreditCheck = 1;
         config.numTenants = 3;
         config.numTenantsInLease = 2;
         config.numFloors = 2;
@@ -110,6 +113,7 @@ public final class VistaDevPreloadConfig implements Serializable {
         config.numTenants = 1;
         config.numUnAssigendTenants = 0;
         config.numPotentialTenants = 1;
+        config.numPotentialTenants2CreditCheck = 1;
         config.numTenantsInLease = 2;
         config.numFloors = 2;
         config.numFloorplans = 2;

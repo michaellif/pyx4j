@@ -35,6 +35,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.generator.LeaseGenerator;
+import com.propertyvista.generator.TenantsEquifaxTestCasesGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.server.preloader.util.AptUnitSource;
 import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSimulator;
@@ -202,6 +203,22 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease);
             }
             Persistence.service().setTransactionSystemTime(null);
+        }
+
+        TenantsEquifaxTestCasesGenerator tenantsEquifaxTestCasesGenerator = new TenantsEquifaxTestCasesGenerator();
+        for (int i = 0; i < config().numPotentialTenants2CreditCheck; i++) {
+            AptUnit unit = aptUnitSource.next();
+            unit = makeAvailable(unit);
+            Lease lease = generator.createLease(unit);
+            if (!tenantsEquifaxTestCasesGenerator.addTenants(lease)) {
+                break;
+            }
+            LeaseGenerator.attachDocumentData(lease);
+            ServerSideFactory.create(LeaseFacade.class).persist(lease);
+            for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
+                tenant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
+                Persistence.service().persist(tenant.leaseParticipant().customer().personScreening());
+            }
         }
 
         StringBuilder b = new StringBuilder();

@@ -123,7 +123,7 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
         //TODO Add roles reload with proper business names.
 
         Persistence.service().persist(
-                EntityCSVReciver.create(SecurityQuestion.class).loadFile(IOUtils.resourceFileName("SecurityQuestion.csv", LocationsGenerator.class)));
+                EntityCSVReciver.create(SecurityQuestion.class).loadResourceFile(IOUtils.resourceFileName("SecurityQuestion.csv", LocationsGenerator.class)));
 
         return "Created " + rolesCount + " Roles";
     }

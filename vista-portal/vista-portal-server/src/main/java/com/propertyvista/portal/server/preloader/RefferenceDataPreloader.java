@@ -66,7 +66,7 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
     }
 
     private void createIssueClassifications() {
-        List<MaintenanceTreeImport> data = EntityCSVReciver.create(MaintenanceTreeImport.class).loadFile(
+        List<MaintenanceTreeImport> data = EntityCSVReciver.create(MaintenanceTreeImport.class).loadResourceFile(
                 IOUtils.resourceFileName("maintenance-tree.csv", RefferenceDataPreloader.class));
 
         Map<String, IssueElement> elements = new HashMap<String, IssueElement>();

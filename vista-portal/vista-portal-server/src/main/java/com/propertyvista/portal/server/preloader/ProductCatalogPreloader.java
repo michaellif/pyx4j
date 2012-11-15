@@ -38,9 +38,9 @@ import com.propertyvista.generator.ProductItemTypesGenerator;
 public class ProductCatalogPreloader extends AbstractDataPreloader {
 
     private void createGl() {
-        List<GlCodeCategory> glcodeCategories = EntityCSVReciver.create(GlCodeCategory.class).loadFile(
+        List<GlCodeCategory> glcodeCategories = EntityCSVReciver.create(GlCodeCategory.class).loadResourceFile(
                 IOUtils.resourceFileName("glcode-categories.csv", ProductCatalogPreloader.class));
-        List<GlCode> glcodes = EntityCSVReciver.create(GlCode.class).loadFile(IOUtils.resourceFileName("glcodes.csv", ProductCatalogPreloader.class));
+        List<GlCode> glcodes = EntityCSVReciver.create(GlCode.class).loadResourceFile(IOUtils.resourceFileName("glcodes.csv", ProductCatalogPreloader.class));
 
         // Place Codes to categories
         for (GlCode code : glcodes) {
@@ -92,7 +92,7 @@ public class ProductCatalogPreloader extends AbstractDataPreloader {
     }
 
     private void createLeaseAdjustmentReasons() {
-        List<LeaseAdjustmentReason> reasons = EntityCSVReciver.create(LeaseAdjustmentReason.class).loadFile(
+        List<LeaseAdjustmentReason> reasons = EntityCSVReciver.create(LeaseAdjustmentReason.class).loadResourceFile(
                 IOUtils.resourceFileName("leaseAdjustmentReason.csv", ProductCatalogPreloader.class));
 
         // Assignee GL references

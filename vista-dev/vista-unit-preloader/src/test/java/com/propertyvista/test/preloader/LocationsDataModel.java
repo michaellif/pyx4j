@@ -64,7 +64,7 @@ public class LocationsDataModel {
     }
 
     private static List<Province> loadProvincesFromFile() {
-        List<Province> provinces = EntityCSVReciver.create(Province.class).loadFile(IOUtils.resourceFileName("Province.csv", LocationsDataModel.class));
+        List<Province> provinces = EntityCSVReciver.create(Province.class).loadResourceFile(IOUtils.resourceFileName("Province.csv", LocationsDataModel.class));
         return provinces;
     }
 
@@ -86,9 +86,9 @@ public class LocationsDataModel {
 
     public static List<City> loadCityFromFile() {
         List<City> all = new Vector<City>();
-        all.addAll(updateCitiesWithProvince(EntityCSVReciver.create(City.class).loadFile(
+        all.addAll(updateCitiesWithProvince(EntityCSVReciver.create(City.class).loadResourceFile(
                 IOUtils.resourceFileName("City-Canada-city.csv", LocationsDataModel.class))));
-        all.addAll(updateCitiesWithProvince(EntityCSVReciver.create(City.class).loadFile(
+        all.addAll(updateCitiesWithProvince(EntityCSVReciver.create(City.class).loadResourceFile(
                 IOUtils.resourceFileName("City-Canada-town.csv", LocationsDataModel.class))));
         return all;
     }
