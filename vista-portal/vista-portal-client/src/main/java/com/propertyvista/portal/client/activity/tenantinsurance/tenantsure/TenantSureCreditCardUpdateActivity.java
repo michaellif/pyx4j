@@ -16,7 +16,10 @@ package com.propertyvista.portal.client.activity.tenantinsurance.tenantsure;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.domain.payment.CreditCardInfo;
+import com.pyx4j.entity.shared.EntityFactory;
+
+import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureCreditCardUpdateView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
@@ -33,12 +36,16 @@ public class TenantSureCreditCardUpdateActivity extends SecurityAwareActivity im
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
         view.setPresenter(this);
-        panel.setWidget(view);
 
+        PaymentMethod pm = EntityFactory.create(PaymentMethod.class);
+        pm.type().setValue(PaymentType.CreditCard);
+        view.populate(pm);
+
+        panel.setWidget(view);
     }
 
     @Override
-    public void save(CreditCardInfo entity) {
+    public void save(PaymentMethod entity) {
         // TODO Auto-generated method stub
 
     }

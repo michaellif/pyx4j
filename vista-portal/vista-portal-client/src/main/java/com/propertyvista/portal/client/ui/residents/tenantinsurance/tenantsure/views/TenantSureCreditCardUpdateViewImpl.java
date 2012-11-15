@@ -13,14 +13,14 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views;
 
-import com.propertyvista.common.client.ui.components.editors.payments.CreditCardInfoEditor;
-import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePaymentMethodForm;
 
-public class TenantSureCreditCardUpdateViewImpl extends BasicViewImpl<CreditCardInfo> implements TenantSureCreditCardUpdateView {
+public class TenantSureCreditCardUpdateViewImpl extends BasicViewImpl<PaymentMethod> implements TenantSureCreditCardUpdateView {
 
     public TenantSureCreditCardUpdateViewImpl() {
-        setForm(new CreditCardInfoEditor());
+        setForm(new TenantSurePaymentMethodForm());
     }
 
 }

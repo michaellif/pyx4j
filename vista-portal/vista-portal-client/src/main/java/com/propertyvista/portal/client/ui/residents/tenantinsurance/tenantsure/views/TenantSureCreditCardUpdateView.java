@@ -13,12 +13,12 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views;
 
-import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.portal.client.ui.residents.View;
 
-public interface TenantSureCreditCardUpdateView extends View<CreditCardInfo> {
+public interface TenantSureCreditCardUpdateView extends View<PaymentMethod> {
 
-    interface Presenter extends View.Presenter<CreditCardInfo> {
+    interface Presenter extends View.Presenter<PaymentMethod> {
 
     }
 

@@ -5,6 +5,7 @@ import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
+import com.google.gwt.resources.client.TextResource;
 
 public interface TenantSureResources extends ClientBundleWithLookup {
 
@@ -17,5 +18,8 @@ public interface TenantSureResources extends ClientBundleWithLookup {
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("logo-Highcourt-small.png")
     ImageResource logoHighcourt();
+
+    @Source("pre-authorized-payment-disclaimer.html")
+    TextResource preAuthorizedPaymentDisclaimer();
 
 }

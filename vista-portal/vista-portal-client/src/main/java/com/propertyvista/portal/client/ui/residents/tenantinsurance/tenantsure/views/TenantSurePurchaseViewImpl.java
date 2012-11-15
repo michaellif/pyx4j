@@ -13,9 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -36,7 +33,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePaymentMethodForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureQuotationRequestForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureQuoteViewer;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestDTO;
@@ -118,14 +115,9 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         viewPanel.getCellFormatter().getElement(row, 0).getStyle().setProperty("height", "10em");
 
         viewPanel.setH1(++row, 0, 1, i18n.tr("Payment"));
-        paymentMethodForm = new PaymentMethodForm() {
-            @Override
-            public List<PaymentType> getPaymentOptions() {
-                return Arrays.asList(PaymentType.CreditCard);
-            }
-        };
+        paymentMethodForm = new TenantSurePaymentMethodForm();
+
         paymentMethodForm.initContent();
-//      paymentMethodForm.asWidget().addStyleName(Styles.TSPurchaseViewSection.name());
         viewPanel.setWidget(++row, 0, paymentMethodForm);
 
         processingPaymentMessage = new Label();

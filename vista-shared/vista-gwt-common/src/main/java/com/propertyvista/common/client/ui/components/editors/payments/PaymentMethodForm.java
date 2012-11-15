@@ -46,7 +46,7 @@ public class PaymentMethodForm extends PaymentMethodEditor {
 
     private final CCheckBox iAgreeBox = new CCheckBox();
 
-    private final CLabel<String> legalTerms = new CLabel<String>();
+    protected final CLabel<String> legalTerms = new CLabel<String>();
 
     private final boolean twoColumns;
 
