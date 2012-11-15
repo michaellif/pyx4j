@@ -20,6 +20,7 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -60,6 +61,11 @@ public abstract class GlCodeSelectorDialog extends EntitySelectorTableDialog<GlC
                 new MemberColumnDescriptor.Builder(proto().description(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().glCodeCategory(), true).build()
         ); //@formatter:on
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().codeId().getPath().toString(), false), new Sort(proto().glCodeCategory().getPath().toString(), false));
     }
 
     @Override

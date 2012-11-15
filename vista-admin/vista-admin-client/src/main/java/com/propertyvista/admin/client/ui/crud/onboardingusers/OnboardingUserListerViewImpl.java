@@ -50,7 +50,7 @@ public class OnboardingUserListerViewImpl extends AdminListerViewImplBase<Onboar
 
         @Override
         public List<Sort> getDefaultSorting() {
-            return Arrays.asList(new Sort(proto().pmc().namespace().getPath().toString(), false));
+            return Arrays.asList(new Sort(proto().pmc().namespace().getPath().toString(), false), new Sort(proto().name().getPath().toString(), false));
         }
     }
 }

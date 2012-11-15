@@ -13,6 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
@@ -37,5 +41,10 @@ public class PaymentRecordLister extends ListerBase<PaymentRecord> {
             new MemberColumnDescriptor.Builder(proto().paymentStatus()).build(),
             new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).build()
         );//@formatter:on
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().id().getPath().toString(), false));
     }
 }

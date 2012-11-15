@@ -13,6 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
@@ -35,5 +39,10 @@ public class ElevatorLister extends ListerBase<ElevatorDTO> {
             new MemberColumnDescriptor.Builder(proto().license().renewal(), false).build(),
             new MemberColumnDescriptor.Builder(proto().warranty().type(), false).build()
         );//@formatter:on
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().model().getPath().toString(), false));
     }
 }

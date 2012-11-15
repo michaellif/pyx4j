@@ -20,6 +20,7 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -92,6 +93,11 @@ public abstract class BuildingSelectorDialog extends EntitySelectorTableDialog<B
                 new MemberColumnDescriptor.Builder(proto().financial().currency().name(), false).title(proto().financial().currency()).build(),
                 new MemberColumnDescriptor.Builder(proto().marketing().name(), false).title(i18n.tr("Marketing Name")).build()
         ); //@formatter:on
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().propertyCode().getPath().toString(), false));
     }
 
     @Override

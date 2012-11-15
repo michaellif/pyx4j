@@ -43,7 +43,7 @@ public class ServiceLister extends VersionedLister<Service> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().serviceType().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().serviceType().getPath().toString(), false), new Sort(proto().version().name().getPath().toString(), false));
     }
 
     @Override

@@ -35,17 +35,17 @@ public class FeatureLister extends VersionedLister<Feature> {
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
             new MemberColumnDescriptor.Builder(proto().featureType(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().mandatory(), true).build(),
-            new MemberColumnDescriptor.Builder(proto().version().recurring(), true).build()
+            new MemberColumnDescriptor.Builder(proto().version().recurring(), true).build(),
+            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build()
         );//@formatter:on
     }
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().featureType().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().featureType().getPath().toString(), false), new Sort(proto().version().name().getPath().toString(), false));
     }
 
     @Override

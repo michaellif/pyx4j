@@ -51,4 +51,9 @@ public abstract class VersionSelectorDialog<V extends IVersionData<?>> extends E
                 new MemberColumnDescriptor.Builder(proto().createdByUser()).build()
             );//@formatter:on
     }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().versionNumber().getPath().toString(), false));
+    }
 }

@@ -23,6 +23,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -68,6 +69,11 @@ public class DashboardManagementViewerViewImpl extends CrmViewerViewImplBase<Das
             return Arrays.asList(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().name()).build()
             );//@formatter:on
+        }
+
+        @Override
+        public List<Sort> getDefaultSorting() {
+            return Arrays.asList(new Sort(proto().name().getPath().toString(), false));
         }
 
         @Override

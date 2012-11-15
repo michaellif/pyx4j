@@ -21,6 +21,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
@@ -125,11 +126,17 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().featureType()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().mandatory()).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().recurring()).build()
+                    new MemberColumnDescriptor.Builder(proto().featureType(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().mandatory(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().recurring(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build()
             );//@formatter:on
+        }
+
+        @Override
+        public List<Sort> getDefaultSorting() {
+            return Arrays.asList(new Sort(proto().featureType().getPath().toString(), false), new Sort(proto().version().name().getPath().toString(), false));
         }
 
         @Override

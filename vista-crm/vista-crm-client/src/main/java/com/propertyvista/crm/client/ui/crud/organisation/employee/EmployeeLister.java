@@ -29,9 +29,10 @@ public class EmployeeLister extends ListerBase<EmployeeDTO> {
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().employeeId()).build(),
+            new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().title()).build(),
-            new MemberColumnDescriptor.Builder(proto().name().firstName()).build(),
-            new MemberColumnDescriptor.Builder(proto().name().lastName()).build(),
+            new MemberColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().build(),
+            new MemberColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().build(),
             new MemberColumnDescriptor.Builder(proto().email(), false).build(),
             new MemberColumnDescriptor.Builder(proto().updated(), false).build()
         );//@formatter:on
@@ -39,6 +40,6 @@ public class EmployeeLister extends ListerBase<EmployeeDTO> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().employeeId().getPath().toString(), false), new Sort(proto().name().lastName().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().employeeId().getPath().toString(), false));
     }
 }

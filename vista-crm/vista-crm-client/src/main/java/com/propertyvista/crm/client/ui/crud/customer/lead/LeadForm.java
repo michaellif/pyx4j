@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -255,6 +256,12 @@ public class LeadForm extends CrmEntityForm<Lead> {
                     new MemberColumnDescriptor.Builder(proto().dens(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().bathrooms(), true).build()
             );//@formatter:on
+        }
+
+        @Override
+        public List<Sort> getDefaultSorting() {
+            return Arrays.asList(new Sort(proto().building().propertyCode().getPath().toString(), false), new Sort(
+                    proto().marketingName().getPath().toString(), false));
         }
 
         @Override

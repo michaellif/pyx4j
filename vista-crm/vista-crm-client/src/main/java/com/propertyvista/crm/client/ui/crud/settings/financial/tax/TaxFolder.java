@@ -21,6 +21,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -105,6 +106,11 @@ public class TaxFolder extends VistaTableFolder<Tax> {
                     new MemberColumnDescriptor.Builder(proto().rate(), true).build(),
                     new MemberColumnDescriptor.Builder(proto().compound(), true).build()
             );//@formatter:on
+        }
+
+        @Override
+        public List<Sort> getDefaultSorting() {
+            return Arrays.asList(new Sort(proto().name().getPath().toString(), false));
         }
 
         @Override

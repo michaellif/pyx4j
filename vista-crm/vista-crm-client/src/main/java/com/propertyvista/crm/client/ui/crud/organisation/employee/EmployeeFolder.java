@@ -23,6 +23,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
@@ -134,12 +135,18 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off                    
                     new MemberColumnDescriptor.Builder(proto().employeeId()).build(),
+                    new MemberColumnDescriptor.Builder(proto().name()).searchable(false).build(),
                     new MemberColumnDescriptor.Builder(proto().title()).build(),
-                    new MemberColumnDescriptor.Builder(proto().name().namePrefix()).build(),
-                    new MemberColumnDescriptor.Builder(proto().name().firstName()).build(),
-                    new MemberColumnDescriptor.Builder(proto().name().lastName()).build(),
-                    new MemberColumnDescriptor.Builder(proto().name().nameSuffix()).build()
+                    new MemberColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().build(),
+                    new MemberColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().build(),
+                    new MemberColumnDescriptor.Builder(proto().email(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().updated(), false).build()
             ); //@formatter:on
+        }
+
+        @Override
+        public List<Sort> getDefaultSorting() {
+            return Arrays.asList(new Sort(proto().employeeId().getPath().toString(), false));
         }
 
         @Override

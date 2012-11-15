@@ -13,6 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.vendor;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
@@ -27,5 +31,10 @@ public class VendorLister extends ListerBase<Vendor> {
             new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().type()).build()
         );//@formatter:on
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().name().getPath().toString(), false));
     }
 }

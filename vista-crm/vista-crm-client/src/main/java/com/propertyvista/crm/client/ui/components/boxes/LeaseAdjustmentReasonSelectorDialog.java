@@ -20,6 +20,7 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -60,6 +61,11 @@ public abstract class LeaseAdjustmentReasonSelectorDialog extends EntitySelector
                 new MemberColumnDescriptor.Builder(proto().glCode(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().actionType(), true).build()
         ); //@formatter:on
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().name().getPath().toString(), false), new Sort(proto().glCode().getPath().toString(), false));
     }
 
     @Override

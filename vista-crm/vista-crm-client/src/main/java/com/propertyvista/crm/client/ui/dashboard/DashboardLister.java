@@ -13,9 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
@@ -64,5 +68,10 @@ public class DashboardLister extends ListerBase<DashboardMetadata> {
             new MemberColumnDescriptor.Builder(proto().ownerUser()).title(i18n.tr("Owner")).build(),
             new MemberColumnDescriptor.Builder(proto().description()).build()
         );//@formatter:on
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().name().getPath().toString(), false));
     }
 }

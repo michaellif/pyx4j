@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -160,27 +160,6 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
     private static class BuildingBoundFloorplanSelectorDialog extends EntitySelectorTableDialog<Floorplan> {
 
-        private static final List<ColumnDescriptor> COLUMNS;
-
-        static {
-            Floorplan proto = EntityFactory.getEntityPrototype(Floorplan.class);
-            COLUMNS = Arrays.asList(
-					// @formatter:off
-					new MemberColumnDescriptor.Builder(proto.name()).build(),
-					new MemberColumnDescriptor.Builder(proto.marketingName(),
-							false).build(), new MemberColumnDescriptor.Builder(
-							proto.floorCount()).build(),
-					new MemberColumnDescriptor.Builder(proto.bedrooms())
-							.build(),
-					new MemberColumnDescriptor.Builder(proto.bathrooms())
-							.build(),
-					new MemberColumnDescriptor.Builder(proto.halfBath())
-							.build(),
-					new MemberColumnDescriptor.Builder(proto.dens()).build(),
-					new MemberColumnDescriptor.Builder(proto.description(),
-							false).build());// @formatter:on
-        }
-
         private final AsyncCallback<Floorplan> onSelectedCallback;
 
         public BuildingBoundFloorplanSelectorDialog(Key ownerBuildingPk, AsyncCallback<Floorplan> onSelectedCallback) {
@@ -197,7 +176,21 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
-            return COLUMNS;
+            return Arrays.asList( // @formatter:off
+                    new MemberColumnDescriptor.Builder(proto().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().marketingName(),false).build(), 
+                    new MemberColumnDescriptor.Builder(proto().floorCount()).build(),
+                    new MemberColumnDescriptor.Builder(proto().bedrooms()).build(),
+                    new MemberColumnDescriptor.Builder(proto().bathrooms()).build(),
+                    new MemberColumnDescriptor.Builder(proto().halfBath()).build(),
+                    new MemberColumnDescriptor.Builder(proto().dens()).build(),
+                    new MemberColumnDescriptor.Builder(proto().description(),false).build()
+                );// @formatter:on        
+        }
+
+        @Override
+        public List<Sort> getDefaultSorting() {
+            return Arrays.asList(new Sort(proto().marketingName().getPath().toString(), false), new Sort(proto().bedrooms().getPath().toString(), false));
         }
 
         @Override

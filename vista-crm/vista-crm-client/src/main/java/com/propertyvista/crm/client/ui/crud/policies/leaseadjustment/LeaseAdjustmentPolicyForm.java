@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -147,6 +148,11 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
                     new MemberColumnDescriptor.Builder(proto().actionType()).build(),
                     new MemberColumnDescriptor.Builder(proto().glCode()).build()
                 );//@formatter:on
+            }
+
+            @Override
+            public List<Sort> getDefaultSorting() {
+                return Arrays.asList(new Sort(proto().name().getPath().toString(), false));
             }
 
             @Override

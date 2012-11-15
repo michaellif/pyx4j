@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
@@ -220,6 +221,11 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                 return Arrays.asList(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().name()).build()
                 );//@formatter:on
+            }
+
+            @Override
+            public List<Sort> getDefaultSorting() {
+                return Arrays.asList(new Sort(proto().name().getPath().toString(), false));
             }
 
             @Override

@@ -19,6 +19,7 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -88,6 +89,11 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
                     new MemberColumnDescriptor.Builder(proto().name()).build(),
                     new MemberColumnDescriptor.Builder(proto().behaviors()).build()
             );//@formatter:on
+        }
+
+        @Override
+        public List<Sort> getDefaultSorting() {
+            return Arrays.asList(new Sort(proto().name().getPath().toString(), false));
         }
 
         @Override
