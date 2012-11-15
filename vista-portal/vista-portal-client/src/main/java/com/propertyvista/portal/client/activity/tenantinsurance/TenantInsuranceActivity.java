@@ -47,9 +47,9 @@ public class TenantInsuranceActivity extends AbstractActivity {
                 if (status instanceof NoInsuranceTenantInsuranceStatusDTO) {
                     dispatchTo = new PortalSiteMap.Residents.TenantInsurance.ProvideTenantInsurance();
                 } else if (status instanceof TenantSureTenantInsuranceStatusShortDTO) {
-                    dispatchTo = new PortalSiteMap.Residents.TenantInsurance.TenantSureManagement();
+                    dispatchTo = new PortalSiteMap.Residents.TenantInsurance.TenantSure.Management();
                 } else if (status instanceof OtherProviderTenantInsuranceStatusDTO) {
-                    dispatchTo = new PortalSiteMap.Residents.TenantInsurance.UploadProofOfInsurance();
+                    dispatchTo = new PortalSiteMap.Residents.TenantInsurance.Other.UploadCertificate();
                 } else {
                     throw new Error("got unknown insurance status");
                 }

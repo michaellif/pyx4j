@@ -101,14 +101,14 @@ public class ContentActivityMapper implements AppActivityMapper {
                 } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.ProvideTenantInsurance) {
                     activity = new ProvideTenantInsuranceActivity();
 
-                } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.TenantSurePurchase) {
+                } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.TenantSure.TenantSurePurchase) {
                     activity = new TenantSurePurchaseActivity();
-                } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.TenantSureManagement) {
+                } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.TenantSure.Management) {
                     activity = new TenantSureManagementActivity();
-                } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.TenantSureManagement.UpdateCreditCard) {
+                } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.TenantSure.Management.UpdateCreditCard) {
                     activity = new TenantSureCreditCardUpdateActivity();
 
-                } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.UploadProofOfInsurance) {
+                } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.Other.UploadCertificate) {
                     activity = new TenantInsuranceByOtherProvdierUpdateActivity(place);
 
                     // TODO not sure if these activities belong here 

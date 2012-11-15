@@ -116,27 +116,35 @@ public class PortalSiteMap implements SiteMap {
 
             }
 
-            @PlaceProperties(caption = "TenantSure Management")
-            @NavigationItem(navigLabel = "TenantSure Management")
-            public static class TenantSureManagement extends AppPlace {
+            public static class TenantSure {
 
-                @PlaceProperties(caption = "Update Credit Card")
-                public static class UpdateCreditCard extends AppPlace {
+                @PlaceProperties(caption = "TenantSure Management")
+                @NavigationItem(navigLabel = "TenantSure Management")
+                public static class Management extends AppPlace {
+
+                    @PlaceProperties(caption = "Update Credit Card")
+                    public static class UpdateCreditCard extends AppPlace {
+
+                    }
+
+                }
+
+                @PlaceProperties(caption = "Get TenantSure")
+                @NavigationItem(navigLabel = "Get TenantSure")
+                public static class TenantSurePurchase extends AppPlace {
 
                 }
 
             }
 
-            @PlaceProperties(caption = "Purchase TenantSure Insurance")
-            @NavigationItem(navigLabel = "Purchase TenantSure Insurance")
-            public static class TenantSurePurchase extends AppPlace {
+            public static class Other {
 
-            }
+                @PlaceProperties(caption = "Upload Certificate")
+                @NavigationItem(navigLabel = "Upload Certificate")
+                /** This place is for updating insurance other than TenantSure */
+                public static class UploadCertificate extends AppPlace {
 
-            @PlaceProperties(caption = "Update Proof of Insurance")
-            @NavigationItem(navigLabel = "Update Proof of Insurance")
-            /** This place is for updating insurance other than TenantSure */
-            public static class UploadProofOfInsurance extends AppPlace {
+                }
 
             }
 
