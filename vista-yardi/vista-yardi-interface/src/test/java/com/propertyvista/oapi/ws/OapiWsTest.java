@@ -29,14 +29,14 @@ public class OapiWsTest {
 
     private int port;
 
-    private String serviceName;
+    private Class<?> serviceClass;
 
     public int getPort() {
         return port;
     }
 
     private String getAddress(int port) {
-        return "http://localhost:" + port + "/WS/" + serviceName;
+        return "http://localhost:" + port + "/WS/" + serviceClass.getSimpleName();
     }
 
     String getAddress() {
@@ -44,13 +44,13 @@ public class OapiWsTest {
     }
 
     void publish(Class<?> serviceClass) throws Exception {
-        serviceName = serviceClass.getSimpleName();
+        this.serviceClass = serviceClass;
         port = PortAllocator.allocatePort();
         int monitorPort = port;
         //For TCP/IP monitor
         if (false) {
-            port = 8888;
-            monitorPort = 8080;
+            port = 9999;
+            monitorPort = 9090;
         }
         String address = getAddress(monitorPort);
         log.info("Address: {}", address);

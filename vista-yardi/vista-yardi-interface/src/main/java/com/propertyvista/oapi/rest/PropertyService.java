@@ -13,13 +13,14 @@
  */
 package com.propertyvista.oapi.rest;
 
-import javax.jws.WebService;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
+import com.propertyvista.oapi.model.BuildingRS;
 import com.propertyvista.oapi.model.BuildingsRS;
 
-@WebService
 @Path("/buildings")
 public class PropertyService {
 
@@ -27,8 +28,15 @@ public class PropertyService {
     }
 
     @GET
+    @Path("listAllBuildings")
+    @Produces({ MediaType.APPLICATION_XML })
     public BuildingsRS listAllBuildings() {
-        return new BuildingsRS();
+        BuildingsRS buildings = new BuildingsRS();
+        BuildingRS building = new BuildingRS();
+        building.propertyCode = "aaa122";
+        buildings.buildings.add(building);
+        buildings.buildings.add(new BuildingRS());
+        return buildings;
     }
 
 }
