@@ -11,8 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.crm.server.openapi.model;
-
+package com.propertyvista.oapi.model;
 
 public class AptUnitRS {
 

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -21,6 +21,7 @@ import javax.jws.WebService;
 
 import com.propertyvista.oapi.model.BuildingRS;
 import com.propertyvista.oapi.model.BuildingsRS;
+import com.propertyvista.oapi.model.FloorplanRS;
 
 @WebService(endpointInterface = "com.propertyvista.oapi.ws.PropertyService")
 public class PropertyServiceImpl implements PropertyService {
@@ -42,6 +43,21 @@ public class PropertyServiceImpl implements PropertyService {
         BuildingsRS buildingFolder = new BuildingsRS();
         buildingFolder.buildings = new ArrayList<BuildingRS>(buildings.values());
         return buildingFolder;
+    }
+
+    @Override
+    public void createUnit(String unitNumber, String floorplanName, String propertyCode) {
+        BuildingRS building = buildings.get(propertyCode);
+        if (building != null) {
+            for (FloorplanRS floorplan : building.floorplans) {
+                if (floorplan.name.equals(floorplanName)) {
+                    //floorplan.
+                }
+            }
+        } else {
+            // error, create building before putting units in it
+        }
+
     }
 
 }

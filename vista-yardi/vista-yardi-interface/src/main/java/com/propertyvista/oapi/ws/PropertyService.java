@@ -50,7 +50,9 @@ public interface PropertyService {
 
 //    createUnits(List<Unit>)
 //
-//    createUnit(Unit)
+//
+    void createUnit(@WebParam(name = "unitNumber") String unitNumber, @WebParam(name = "floorplanName") String floorplanName,
+            @WebParam(name = "propertyCode") String propertyCode);
 //
 //    updateUnit(Unit)
 
