@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -32,6 +33,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 public interface InsuranceCertificate extends ApplicationDocumentHolder<InsuranceCertificateDocument> {
 
     @Owner
+    @JoinColumn
     Tenant tenant();
 
     @NotNull

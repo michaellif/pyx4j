@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -29,6 +30,7 @@ import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 
 @DiscriminatorValue(value = "ExistingInsurance")
 @Deprecated
+@Transient
 public interface ExistingInsurance extends IEntity, ApplicationDocumentHolder<InsuranceCertificateDocument> {
 
     IPrimitive<String> insuranceProvider();

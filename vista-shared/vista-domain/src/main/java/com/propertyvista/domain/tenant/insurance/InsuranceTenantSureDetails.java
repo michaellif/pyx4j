@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant.insurance;
 
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
@@ -20,6 +21,7 @@ import com.pyx4j.entity.shared.IEntity;
 public interface InsuranceTenantSureDetails extends IEntity {
 
     @Owner
+    @JoinColumn
     @MemberColumn(notNull = true)
     InsuranceTenantSure insurance();
 
