@@ -24,9 +24,12 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.media.ApplicationDocumentHolder;
+import com.propertyvista.domain.media.InsuranceCertificateDocument;
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 
 @DiscriminatorValue(value = "ExistingInsurance")
-public interface ExistingInsurance extends IEntity, ApplicationDocumentHolder<InsuranceCertificate> {
+@Deprecated
+public interface ExistingInsurance extends IEntity, ApplicationDocumentHolder<InsuranceCertificateDocument> {
 
     IPrimitive<String> insuranceProvider();
 

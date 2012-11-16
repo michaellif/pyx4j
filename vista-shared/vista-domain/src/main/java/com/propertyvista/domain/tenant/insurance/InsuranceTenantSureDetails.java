@@ -7,17 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-12
- * @author ArtyomB
+ * Created on 2012-11-16
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.shared.dto.tenantinsurance.otherprovider;
+package com.propertyvista.domain.tenant.insurance;
 
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
+public interface InsuranceTenantSureDetails extends IEntity {
 
-@Transient
-public interface OtherProvidersTenantInsuranceDetailsDTO extends InsuranceCertificate {
+    @Owner
+    @MemberColumn(notNull = true)
+    InsuranceTenantSure insurance();
 
 }

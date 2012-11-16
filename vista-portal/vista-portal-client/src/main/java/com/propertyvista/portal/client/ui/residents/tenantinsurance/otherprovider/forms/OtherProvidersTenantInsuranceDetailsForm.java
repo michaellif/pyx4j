@@ -21,7 +21,6 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUploaderFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.otherprovider.OtherProvidersTenantInsuranceDetailsDTO;
 
@@ -43,7 +42,7 @@ public class OtherProvidersTenantInsuranceDetailsForm extends CEntityDecoratable
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().startDate()), 10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expirationDate()), 10).build());
         content.setH2(++row, 0, 1, i18n.tr("Attach Scanned Insurance Certificate"));
-        content.setWidget(++row, 0, inject(proto().documentPages(), new ApplicationDocumentFileUploaderFolder()));
+        //content.setWidget(++row, 0, inject(proto().documentPages(), new ApplicationDocumentFileUploaderFolder()));
 
         addValueValidator(new EditableValueValidator<OtherProvidersTenantInsuranceDetailsDTO>() {
 

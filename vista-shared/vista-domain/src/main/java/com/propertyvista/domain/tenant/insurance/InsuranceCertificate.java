@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.moveinwizardmockup;
+package com.propertyvista.domain.tenant.insurance;
 
 import java.math.BigDecimal;
 
@@ -20,13 +20,19 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.media.ApplicationDocumentHolder;
+import com.propertyvista.domain.media.InsuranceCertificateDocument;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 @DiscriminatorValue("InsuranceCertificate")
-public interface InsuranceCertificate extends ApplicationDocument {
+public interface InsuranceCertificate extends ApplicationDocumentHolder<InsuranceCertificateDocument> {
+
+    @Owner
+    Tenant tenant();
 
     @NotNull
     IPrimitive<String> insuranceProvider();
