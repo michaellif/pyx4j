@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.activity.crud.customer.tenant;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -28,11 +29,13 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implements TenantViewerView.Presenter {
 
-    private Key screeningParentPrimaryKey;
+    private Customer screeningCustomer;
 
     public TenantViewerActivity(CrudAppPlace place) {
         super(place, CustomerViewFactory.instance(TenantViewerView.class), GWT.<TenantCrudService> create(TenantCrudService.class));
@@ -40,7 +43,10 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
 
     @Override
     public void goToCreateScreening() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Screening().formNewItemPlace(screeningParentPrimaryKey));
+        CustomerScreening screening = EntityFactory.create(CustomerScreening.class);
+        screening.screene().set(screeningCustomer);
+
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Screening().formNewItemPlace(screening));
     }
 
     @Override
@@ -57,7 +63,8 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     @Override
     public void onPopulateSuccess(TenantDTO result) {
         super.onPopulateSuccess(result);
-        screeningParentPrimaryKey = result.customer().getPrimaryKey();
+
+        screeningCustomer = result.customer();
     }
 
     @Override

@@ -19,7 +19,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.MenuItemSeparator;
 
@@ -30,6 +29,7 @@ import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.BreadcrumbsBar;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
@@ -238,23 +238,15 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         setEditingEnabled(super.getPresenter().canEdit());
 
         actionsButton.setVisible(!actionsMenu.isMenuEmpty());
-        populateBreadcrumbs(value, caption);
+        populateBreadcrumbs(value);
     }
 
-    protected void populateBreadcrumbs(E value, final String caption) {
-        breadcumbsService.obtainBreadcrumbTrail(new AsyncCallback<Vector<IEntity>>() {
-
+    protected void populateBreadcrumbs(E value) {
+        breadcumbsService.obtainBreadcrumbTrail(new DefaultAsyncCallback<Vector<IEntity>>() {
             @Override
             public void onSuccess(Vector<IEntity> result) {
-                setCaption(caption);
                 breadcrumbsBar.populate(result);
             }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new Error(caught);
-            }
-
         }, value.createIdentityStub());
     }
 

@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.customer.screening;
 
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningCrudService;
 import com.propertyvista.domain.tenant.CustomerScreening;
@@ -36,5 +37,6 @@ public class CustomerScreeningCrudServiceImpl extends AbstractVersionedCrudServi
         Persistence.service().retrieve(dto.documents());
         Persistence.service().retrieve(dto.version().incomes());
         Persistence.service().retrieve(dto.version().assets());
+        Persistence.service().retrieve(dto.screene(), AttachLevel.ToStringMembers);
     }
 }

@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.crud.customer.guarantor;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -29,20 +29,24 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> implements GuarantorViewerView.Presenter {
 
-    private Key screeningParentPrimaryKey;
+    private Customer screeningCustomer;
 
-    @SuppressWarnings("unchecked")
     public GuarantorViewerActivity(CrudAppPlace place) {
-        super(place, CustomerViewFactory.instance(GuarantorViewerView.class), (AbstractCrudService<GuarantorDTO>) GWT.create(GuarantorCrudService.class));
+        super(place, CustomerViewFactory.instance(GuarantorViewerView.class), GWT.<GuarantorCrudService> create(GuarantorCrudService.class));
     }
 
     @Override
     public void goToCreateScreening() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Screening().formNewItemPlace(screeningParentPrimaryKey));
+        CustomerScreening screening = EntityFactory.create(CustomerScreening.class);
+        screening.screene().set(screeningCustomer);
+
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Screening().formNewItemPlace(screening));
     }
 
     @Override
@@ -60,7 +64,7 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     public void onPopulateSuccess(GuarantorDTO result) {
         super.onPopulateSuccess(result);
 
-        screeningParentPrimaryKey = result.customer().getPrimaryKey();
+        screeningCustomer = result.customer();
     }
 
     @Override

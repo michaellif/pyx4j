@@ -26,4 +26,11 @@ public class CustomerScreeningViewerViewImpl extends CrmViewerViewImplBase<Custo
         super(CrmSiteMap.Tenants.Screening.class, new CustomerScreeningForm(true));
         enableVersioning(CustomerScreening.CustomerScreeningV.class, GWT.<CustomerScreeningVersionService> create(CustomerScreeningVersionService.class));
     }
+
+    @Override
+    public void populate(CustomerScreening value) {
+        super.populate(value);
+
+        setCaption(value.screene().getStringView() + " " + getCaption());
+    }
 }

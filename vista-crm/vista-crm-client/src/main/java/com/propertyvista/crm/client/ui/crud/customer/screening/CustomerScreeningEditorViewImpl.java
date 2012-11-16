@@ -22,4 +22,10 @@ public class CustomerScreeningEditorViewImpl extends CrmEditorViewImplBase<Custo
         super(CrmSiteMap.Tenants.Screening.class, new CustomerScreeningForm());
     }
 
+    @Override
+    public void populate(CustomerScreening value) {
+        super.populate(value);
+
+        setCaption(value.screene().getStringView() + " " + getCaption());
+    }
 }
