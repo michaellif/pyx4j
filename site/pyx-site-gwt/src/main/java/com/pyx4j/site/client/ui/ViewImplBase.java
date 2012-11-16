@@ -153,6 +153,10 @@ public abstract class ViewImplBase extends DockLayoutPanel implements IView {
         captionLabel.setText(caption);
     }
 
+    public String getCaption() {
+        return captionLabel.getText();
+    }
+
     public void setBreadcrumbsBar(BreadcrumbsBar breadcrumbsBar) {
         setWidgetSize(headerContainer, headerToolbarHeight);
         headerBreadcrumbHolder.setWidget(breadcrumbsBar);

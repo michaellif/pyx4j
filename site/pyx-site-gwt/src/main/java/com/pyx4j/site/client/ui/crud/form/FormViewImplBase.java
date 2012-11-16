@@ -78,6 +78,7 @@ public class FormViewImplBase<E extends IEntity> extends ViewImplBase implements
 
     @Override
     public void reset() {
+        setCaption(null);
         assert (form != null);
         form.reset();
     }
