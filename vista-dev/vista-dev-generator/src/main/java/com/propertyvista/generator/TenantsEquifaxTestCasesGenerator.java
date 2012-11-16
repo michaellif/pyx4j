@@ -16,6 +16,7 @@ package com.propertyvista.generator;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
@@ -82,6 +83,11 @@ public class TenantsEquifaxTestCasesGenerator {
             currentAddress.city().set(tenantInfo.city());
             currentAddress.province().code().set(tenantInfo.province());
             currentAddress.postalCode().set(tenantInfo.postalCode());
+
+            currentAddress.moveInDate().setValue(new LogicalDate(2008, 1, 1));
+            currentAddress.moveOutDate().setValue(null);
+
+            mainTenant.leaseParticipant().customer().personScreening().version().previousAddress().clearValues();
 
             mainTenant.leaseParticipant().customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
 
