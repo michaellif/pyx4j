@@ -19,6 +19,7 @@
 
     <modules>
         <module>vista-biz-common</module>
+        <module>vista-biz-tenantsure-gen</module>
         <module>vista-biz-tenant</module>
         <module>vista-biz-occupancy</module>
         <module>vista-biz-communication</module>
