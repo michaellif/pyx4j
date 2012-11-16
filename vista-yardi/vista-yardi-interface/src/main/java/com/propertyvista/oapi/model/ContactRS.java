@@ -8,16 +8,16 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Nov 16, 2012
- * @author michaellif
+ * @author yuriyl
  * @version $Id$
  */
-package com.propertyvista.oapi.marshaling;
+package com.propertyvista.oapi.model;
 
-import com.pyx4j.entity.shared.IEntity;
+public class ContactRS {
 
-public interface Marshaller<ValueType extends IEntity, BoundType> {
+    public String email;
 
-    public abstract BoundType unmarshal(ValueType v) throws Exception;
+    public String phone;
 
-    public abstract ValueType marshal(BoundType v) throws Exception;
+    public String name;
 }

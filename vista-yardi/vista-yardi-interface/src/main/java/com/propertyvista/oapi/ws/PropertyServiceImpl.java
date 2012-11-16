@@ -13,12 +13,12 @@
  */
 package com.propertyvista.oapi.ws;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.jws.WebService;
 
+import com.propertyvista.oapi.PropertyFacade;
 import com.propertyvista.oapi.model.BuildingRS;
 import com.propertyvista.oapi.model.BuildingsRS;
 import com.propertyvista.oapi.model.UnitRS;
@@ -40,9 +40,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public BuildingsRS listAllBuildings() {
-        BuildingsRS buildingFolder = new BuildingsRS();
-        buildingFolder.buildings = new ArrayList<BuildingRS>(buildings.values());
-        return buildingFolder;
+        return PropertyFacade.listAllBuildings();
     }
 
     @Override

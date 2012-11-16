@@ -29,12 +29,7 @@ public class BuildingRS {
 
     public BuildingInfoRS info;
 
-    public String contactEmail;
-
-    @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "phone"))
-    @Deprecated
-    public List<String> contactPhones = new ArrayList<String>();
+    public List<ContactRS> contacts = new ArrayList<ContactRS>();
 
     public MarketingRS marketing;
 
