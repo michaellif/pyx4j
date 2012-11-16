@@ -18,10 +18,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.propertyvista.oapi.model.BuildingRS;
+import com.propertyvista.oapi.PropertyFacade;
 import com.propertyvista.oapi.model.BuildingsRS;
 
-@Path("/buildings")
+//http://localhost:8888/vista/interfaces/oapi/rs/propertyService/listAllBuildings
+@Path("/propertyService")
 public class PropertyService {
 
     public PropertyService() {
@@ -31,12 +32,7 @@ public class PropertyService {
     @Path("listAllBuildings")
     @Produces({ MediaType.APPLICATION_XML })
     public BuildingsRS listAllBuildings() {
-        BuildingsRS buildings = new BuildingsRS();
-        BuildingRS building = new BuildingRS();
-        building.propertyCode = "aaa122";
-        buildings.buildings.add(building);
-        buildings.buildings.add(new BuildingRS());
-        return buildings;
+        return PropertyFacade.listAllBuildings();
     }
 
 }
