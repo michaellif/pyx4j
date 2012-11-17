@@ -372,6 +372,7 @@
     <build>
         <pluginManagement>
             <plugins>
+
                 <plugin>
                     <groupId>org.apache.axis2</groupId>
                     <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
@@ -384,6 +385,13 @@
                         </dependency>
                     </dependencies>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jaxb2-maven-plugin</artifactId>
+                    <version>1.5</version>
+                </plugin>
+
             </plugins>
         </pluginManagement>
     </build>
