@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-         <groupId>com.propertyvista</groupId>
+        <groupId>com.propertyvista</groupId>
         <artifactId>vista-shared</artifactId>
         <version>1.0.6-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
@@ -23,7 +23,7 @@
             <artifactId>gwt-user</artifactId>
             <scope>compile</scope>
         </dependency>
-        
+
         <dependency>
         	<groupId>com.pyx4j</groupId>
         	<artifactId>pyx-site-gwt</artifactId>
@@ -34,7 +34,7 @@
         	<artifactId>vista-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
-                
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-portal-rpc</artifactId>

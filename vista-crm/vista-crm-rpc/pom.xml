@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-         <groupId>com.propertyvista</groupId>
+        <groupId>com.propertyvista</groupId>
         <artifactId>vista-crm</artifactId>
         <version>1.0.6-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
@@ -29,7 +29,7 @@
             <artifactId>vista-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-portal-rpc</artifactId>

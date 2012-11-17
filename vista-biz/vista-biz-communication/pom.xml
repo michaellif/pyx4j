@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-         <groupId>com.propertyvista</groupId>
+        <groupId>com.propertyvista</groupId>
         <artifactId>vista-biz</artifactId>
         <version>1.0.6-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
@@ -35,7 +35,7 @@
             <artifactId>vista-server-common</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
 	    <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-unit-preloader</artifactId>
@@ -44,7 +44,7 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
-       
+
     </dependencies>
 
     <build>

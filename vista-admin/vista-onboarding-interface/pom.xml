@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-         <groupId>com.propertyvista</groupId>
+        <groupId>com.propertyvista</groupId>
         <artifactId>vista-admin</artifactId>
         <version>1.0.6-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
@@ -30,7 +30,7 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
-        
+
         <!--  DO not add any dependencies form our projects here, since this is standalone module -->
 
         <dependency>
@@ -46,7 +46,7 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-        
+
     </dependencies>
 
 
