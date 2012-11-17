@@ -3,7 +3,9 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <inherits name='com.google.gwt.user.User'/>
-     <inherits name='com.pyx4j.Commons'/>
+    <inherits name='com.pyx4j.Commons'/>
     
     <source path="client"/>
+    
+    <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.dnd.client.*" />
 </module>

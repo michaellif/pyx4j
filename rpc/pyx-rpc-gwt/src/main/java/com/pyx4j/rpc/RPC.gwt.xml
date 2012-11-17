@@ -27,6 +27,7 @@
     
     <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.rpc.client.*" />
 
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.aria.client.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.core.client.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.canvas.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.cell.*" />
@@ -37,19 +38,23 @@
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.cellview.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.view.client.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.validation.client.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.DocumentModeAsserter.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.ui.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.dom.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.jsonp.client.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.i18n.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.layout.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.libideas.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.widgetideas.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.resources.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.xml.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.xhr.client.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.rpc.SerializableException" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.rpc.ServiceDefTarget.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.rpc.impl.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.ajaxloader.*" />
-
+    <extend-configuration-property name="rpc.blacklist" value="com.google.web.bindery.event.*" />
+    
     <extend-configuration-property name="rpc.blacklist" value="java.util.Random" />
     <extend-configuration-property name="rpc.blacklist" value="java.lang.annotation.*" />
 
