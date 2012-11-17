@@ -76,7 +76,6 @@
                <configuration>
                    <schemaDirectory>${basedir}/src/main/resources</schemaDirectory>
                    <nv>true</nv>
-                   <readOnly>true</readOnly>
                    <clearOutputDir>false</clearOutputDir>
                </configuration>
             </plugin>
