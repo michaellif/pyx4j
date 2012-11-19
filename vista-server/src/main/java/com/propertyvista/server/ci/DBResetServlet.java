@@ -293,7 +293,7 @@ public class DBResetServlet extends HttpServlet {
                     h(out, "</body></html>");
                 } catch (Throwable t) {
                     log.error("DB reset error", t);
-                    o(out, "\nError:");
+                    o(out, "\nDB reset error:");
                     o(out, t.getMessage());
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 } finally {
