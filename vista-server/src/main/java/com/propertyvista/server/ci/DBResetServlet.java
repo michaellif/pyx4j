@@ -361,6 +361,7 @@ public class DBResetServlet extends HttpServlet {
             cfg = VistaDevPreloadConfig.createDefault();
         }
         if (pmcDnsName.equals(DemoPmc.star.name())) {
+            cfg.numPotentialTenants2CreditCheck = 0;
             cfg.numPotentialTenants = 0;
             cfg.numTenants = 0;
         }
