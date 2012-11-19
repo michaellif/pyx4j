@@ -84,7 +84,7 @@ public class TenantsEquifaxTestCasesGenerator {
             currentAddress.province().code().set(tenantInfo.province());
             currentAddress.postalCode().set(tenantInfo.postalCode());
 
-            currentAddress.moveInDate().setValue(new LogicalDate(2008, 1, 1));
+            currentAddress.moveInDate().setValue(new LogicalDate(2008 - 1900, 1, 1));
             currentAddress.moveOutDate().setValue(null);
 
             mainTenant.leaseParticipant().customer().personScreening().version().previousAddress().clearValues();
