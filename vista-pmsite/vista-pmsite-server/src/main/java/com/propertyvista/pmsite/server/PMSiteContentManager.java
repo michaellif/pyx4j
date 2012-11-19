@@ -58,6 +58,7 @@ import com.propertyvista.pmsite.server.panels.NavigationItem;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.shared.SiteWasNotSetUpUserRuntimeException;
+import com.propertyvista.portal.server.portal.PropertyFinder;
 import com.propertyvista.shared.CompiledLocale;
 
 public class PMSiteContentManager implements Serializable {
@@ -416,7 +417,7 @@ public class PMSiteContentManager implements Serializable {
         // account for visibility type
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().marketing().visibility(), PublicVisibilityType.global));
         dbCriteria.setPageSize(4);
-        List<Building> buildings = Persistence.service().query(dbCriteria);
+        List<Building> buildings = PropertyFinder.getPropertyList(null, dbCriteria);
         for (Building bld : buildings) {
             PromoDataModel item = new PromoDataModel();
             if (bld.media().isEmpty() || bld.info().address().isEmpty()) {

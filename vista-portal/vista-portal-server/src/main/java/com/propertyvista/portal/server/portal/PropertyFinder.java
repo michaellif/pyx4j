@@ -177,7 +177,14 @@ public class PropertyFinder {
     }
 
     public static List<Building> getPropertyList(PropertySearchCriteria searchCriteria) {
-        EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
+        return getPropertyList(searchCriteria, null);
+    }
+
+    public static List<Building> getPropertyList(PropertySearchCriteria searchCriteria, EntityQueryCriteria<Building> dbCriteria) {
+        if (dbCriteria == null) {
+            dbCriteria = EntityQueryCriteria.create(Building.class);
+            dbCriteria.add(PropertyCriterion.isNotNull(dbCriteria.proto().productCatalog()));
+        }
         // if search criteria returns nothing, quit now!
         if (searchCriteria != null && !addSearchCriteria(dbCriteria, searchCriteria)) {
             return null;
@@ -224,6 +231,7 @@ public class PropertyFinder {
     }
 
     private static Building getBuildingDetails(EntityQueryCriteria<Building> dbCriteria) {
+        dbCriteria.add(PropertyCriterion.isNotNull(dbCriteria.proto().productCatalog()));
         List<Building> buildings = Persistence.service().query(dbCriteria);
         if (buildings.size() != 1) {
             return null;
@@ -272,9 +280,6 @@ public class PropertyFinder {
     public static MinMaxPair<BigDecimal> getMinMaxMarketRent(Collection<AptUnit> aptUnits) {
         BigDecimal minPrice = null, maxPrice = null;
         for (AptUnit u : aptUnits) {
-            if (u._availableForRent().isNull()) {
-                continue;
-            }
             BigDecimal price = u.financial()._marketRent().getValue();
             minPrice = DomainUtil.min(minPrice, price);
             maxPrice = DomainUtil.max(maxPrice, price);
@@ -285,9 +290,6 @@ public class PropertyFinder {
     public static MinMaxPair<Integer> getMinMaxAreaInSqFeet(Collection<AptUnit> aptUnits) {
         Integer minArea = null, maxArea = null;
         for (AptUnit u : aptUnits) {
-            if (u._availableForRent().isNull()) {
-                continue;
-            }
             minArea = DomainUtil.min(minArea, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
             maxArea = DomainUtil.max(maxArea, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
         }
