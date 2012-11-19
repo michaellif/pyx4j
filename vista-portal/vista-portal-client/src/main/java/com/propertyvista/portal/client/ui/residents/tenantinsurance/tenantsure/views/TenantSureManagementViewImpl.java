@@ -26,8 +26,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureStatusForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureStatusForm;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
 
 public class TenantSureManagementViewImpl extends Composite implements TenantSureManagementView {
@@ -37,6 +37,10 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     private Presenter presenter;
 
     private final TenantSureStatusForm statusForm;
+
+    private final Button cancelTenantSureButton;
+
+    private final Button updateCCButton;
 
     public TenantSureManagementViewImpl() {
 
@@ -75,14 +79,14 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
         FlowPanel controlPanel = new FlowPanel();
         controlPanel.getElement().getStyle().setMarginTop(50, Unit.PX);
-        Button updateCC = new Button("Update Credit Card Details", new ClickHandler() {
+        updateCCButton = new Button("Update Credit Card Details", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.updateCreditCardDetails();
             }
         });
-        setControlButtonLayout(updateCC);
-        Button cancelTenantSure = new Button("Cancel TenantSure", new ClickHandler() {
+        setControlButtonLayout(updateCCButton);
+        cancelTenantSureButton = new Button("Cancel TenantSure", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 MessageDialog.confirm(i18n.tr("TenantSure cancellation"), i18n.tr("Are you sure you want to cancel TenantSure?"), new Command() {
@@ -94,10 +98,10 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
             }
         });
-        setControlButtonLayout(cancelTenantSure);
+        setControlButtonLayout(cancelTenantSureButton);
 
-        controlPanel.add(updateCC);
-        controlPanel.add(cancelTenantSure);
+        controlPanel.add(updateCCButton);
+        controlPanel.add(cancelTenantSureButton);
 
         viewPanel.add(controlPanel);
 
@@ -119,10 +123,25 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     @Override
     public void populate(TenantSureTenantInsuranceStatusDetailedDTO detailedStatus) {
         statusForm.populate(detailedStatus);
+        boolean isCancelled = !detailedStatus.expiryDate().isNull();
+        updateCCButton.setEnabled(!isCancelled);
+        cancelTenantSureButton.setEnabled(!isCancelled);
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void reportUpdateCreditCardUpdate(String errorMessage) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void reportCancelFailure(String errorMessage) {
+        // TODO Auto-generated method stub
+
     }
 }

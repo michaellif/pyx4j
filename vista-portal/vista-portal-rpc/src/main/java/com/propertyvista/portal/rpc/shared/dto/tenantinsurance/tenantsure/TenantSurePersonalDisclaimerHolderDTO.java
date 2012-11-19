@@ -7,33 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-09
+ * Created on 2012-11-19
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitiveSet;
 
-import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.dto.LegalTermsDescriptorDTO;
 
 @Transient
-public interface TenantSureQuotationRequestParamsDTO extends IEntity {
-
-    IPrimitiveSet<BigDecimal> generalLiabilityCoverageOptions();
-
-    IPrimitiveSet<BigDecimal> contentsCoverageOptions();
-
-    IPrimitiveSet<BigDecimal> deductibleOptions();
-
-    IList<LegalTermsDescriptorDTO> personalDisclaimerTerms();
-
-    IList<DigitalSignature> digitalSignatures();
+public interface TenantSurePersonalDisclaimerHolderDTO extends LegalTermsDescriptorDTO {
 
 }

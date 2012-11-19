@@ -34,9 +34,9 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 // TODO this is a mockup
 public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
 
-    private static final I18n i18n = I18n.get(TenantInsuranceFacadeImpl.class);
+    public static final File MOCKUP_CONFIG_FILE = new File(System.getProperty("user.dir", ".") + File.separator + "tenant-insurance-facade-mockup.properties");
 
-    private static final File MOCKUP_CONFIG_FILE = new File(System.getProperty("user.dir", ".") + File.separator + "tenant-insurance-facade-mockup.properties");
+    private static final I18n i18n = I18n.get(TenantInsuranceFacadeImpl.class);
 
     @Override
     public TenantInsuranceStatusDTO getInsuranceStatus(Tenant tenantStub) {

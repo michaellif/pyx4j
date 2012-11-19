@@ -25,15 +25,17 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.domain.tenant.ptapp.IAgree;
 import com.propertyvista.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.server.common.util.AddressRetriever;
 
 public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService {
 
@@ -81,12 +83,10 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
                 new BigDecimal("50000")
         ));//@formatter:on
 
-        // these values are taken from a email that was sent to me by Arthur (insurance_items_matrix.xls)
         params.deductibleOptions().addAll(Arrays.asList(//@formatter:off
-                        BigDecimal.ZERO,
                         new BigDecimal("500"),
                         new BigDecimal("1000"),
-                        new BigDecimal("2000")
+                        new BigDecimal("2500")
         ));//@formatter:on
 
         IAgree agreeHolder = EntityFactory.create(IAgree.class);
@@ -104,18 +104,12 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
         signature.person().set(TenantAppContext.getCurrentUserTenant().duplicate());
         params.digitalSignatures().add(signature);
 
-        LegalTermsDescriptorDTO preAuthorizedPaymentTerms = params.agreementLegalBlurbAndPreAuthorizationAgreeement().$();
-        preAuthorizedPaymentTerms.content().localizedCaption().setValue("Pre Authorization Agreement");
-        preAuthorizedPaymentTerms.content().content().setValue("I agree to pay everything, bla-bla-bla");
-        preAuthorizedPaymentTerms.agrees().add(agreeHolder.duplicate(IAgree.class));
-        params.agreementLegalBlurbAndPreAuthorizationAgreeement().add(preAuthorizedPaymentTerms);
-
         callback.onSuccess(params);
 
     }
 
     @Override
-    public void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureQuotationRequestDTO quotationRequest) {
+    public void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureCoverageDTO quotationRequest) {
         TenantSureQuoteDTO quote = EntityFactory.create(TenantSureQuoteDTO.class);
         quote.grossPremium().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
         quote.underwriterFee().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
@@ -136,5 +130,10 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
             e.printStackTrace();
         }
         throw new UserRuntimeException("This is not yet implemented :)");
+    }
+
+    @Override
+    public void getCurrentTenantAddress(AsyncCallback<AddressStructured> callback) {
+        AddressRetriever.getLeaseParticipantCurrentAddress(callback, TenantAppContext.getCurrentUserTenantInLease());
     }
 }

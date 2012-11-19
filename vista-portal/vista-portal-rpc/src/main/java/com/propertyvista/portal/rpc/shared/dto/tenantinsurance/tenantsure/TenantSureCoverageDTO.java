@@ -21,9 +21,58 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 @Transient
 public interface TenantSureCoverageDTO extends IEntity {
+
+    @I18n
+    public enum PreviousClaims {
+
+        None {
+            @Override
+            public int numericValue() {
+                return 0;
+            }
+        },
+
+        @Translate("1")
+        One {
+            @Override
+            public int numericValue() {
+                // TODO Auto-generated method stub
+                return 1;
+            }
+        },
+
+        @Translate("2")
+        Two {
+            @Override
+            public int numericValue() {
+                return 2;
+            }
+
+        },
+
+        @Translate("More")
+        MoreThanTwo {
+
+            @Override
+            public int numericValue() {
+                throw new Error("doesn't have a value");
+            }
+
+        };
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+
+        public abstract int numericValue();
+    }
 
     @NotNull
     IPrimitive<BigDecimal> personalLiabilityCoverage();
@@ -37,16 +86,13 @@ public interface TenantSureCoverageDTO extends IEntity {
 
     // these are statement of fact questions
     @NotNull
-    @Caption(name = "Number of Previous Claims")
-    IPrimitive<Integer> numberOfPreviousClaims();
+    @Caption(name = "Number of previous claims made by tenanats")
+    IPrimitive<PreviousClaims> numberOfPreviousClaims();
 
     @Caption(name = "Is any one of the tenants a smoker?")
     @NotNull
     IPrimitive<Boolean> smoker();
 
     IPrimitive<LogicalDate> inceptionDate();
-
-    /** note: according to Arthur this is not defined for tenant sure */
-    IPrimitive<LogicalDate> expiryDate();
 
 }

@@ -29,6 +29,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePersonalDisclaimerHolderDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
@@ -51,7 +52,11 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
             public void onSuccess(TenantSureQuotationRequestParamsDTO quotationRequestParams) {
                 PaymentMethod paymentMethod = EntityFactory.create(PaymentMethod.class);
                 paymentMethod.type().setValue(PaymentType.CreditCard);
-                view.init(quotationRequestParams, paymentMethod);
+
+                TenantSurePersonalDisclaimerHolderDTO disclaimerHolder = EntityFactory.create(TenantSurePersonalDisclaimerHolderDTO.class);
+                disclaimerHolder.set(quotationRequestParams.personalDisclaimerTerms().get(0).duplicate(TenantSurePersonalDisclaimerHolderDTO.class));
+
+                view.init(disclaimerHolder, quotationRequestParams, paymentMethod);
 
                 panel.setWidget(view);
             }
@@ -91,8 +96,20 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
     }
 
     @Override
+    public void onBillingAddressSameAsCurrentSelected() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
     public void cancel() {
         History.back();
+    }
+
+    @Override
+    public void onPaymentProcessingSuccessAccepted() {
+        // TODO Auto-generated method stub
+
     }
 
 }

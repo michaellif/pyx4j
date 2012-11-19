@@ -28,4 +28,12 @@ public interface TenantSureTenantInsuranceStatusDetailedDTO extends IEntity {
 
     IList<TenantSureMessageDTO> messages();
 
+    /**
+     * <code>true</code> if a tenant for whom this status was requested is the one who purchased TenantSure, <code>false</code>if a
+     * IPrimitive<Boolean> isOwner();
+     * 
+     * /** If tenant sure has been cancelled, it should hold the expiry date
+     */
+    IPrimitive<LogicalDate> expiryDate();
+
 }

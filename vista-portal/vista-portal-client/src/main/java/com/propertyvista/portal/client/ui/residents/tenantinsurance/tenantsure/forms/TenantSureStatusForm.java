@@ -65,7 +65,7 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().quote().coverage().personalLiabilityCoverage())).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().quote().coverage().contentsCoverage())).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().quote().coverage().inceptionDate())).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().quote().coverage().expiryDate())).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate())).build());
 
         panel.setH3(++row, 0, 1, i18n.tr("Payment"));
         panel.setWidget(++row, 0, inject(proto().quote(), new TenantSureQuoteViewer()));

@@ -7,32 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-13
+ * Created on 2012-11-16
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views;
+package com.propertyvista.biz.tenant;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
 
-public interface TenantSureManagementView extends IsWidget {
+public interface TenantSureFacade {
 
-    public interface Presenter {
-
-        void updateCreditCardDetails();
-
-        void cancelTenantSure();
-
-    }
-
-    void setPresenter(Presenter presenter);
-
-    void populate(TenantSureTenantInsuranceStatusDetailedDTO detailedStatus);
-
-    void reportUpdateCreditCardUpdate(String errorMessage);
-
-    void reportCancelFailure(String errorMessage);
+    /** will return <code>null</code> if tenant is not covered by tenant sure */
+    TenantSureTenantInsuranceStatusDetailedDTO getStatus(Tenant tenant);
 
 }

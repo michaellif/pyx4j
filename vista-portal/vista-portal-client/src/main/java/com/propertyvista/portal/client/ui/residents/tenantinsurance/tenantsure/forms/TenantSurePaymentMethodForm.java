@@ -16,11 +16,26 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.user.client.Command;
+
+import com.pyx4j.forms.client.ui.CComponent;
+
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 
 public class TenantSurePaymentMethodForm extends PaymentMethodForm {
+
+    private final Command onSameAsCurrentAddressSelected;
+
+    public TenantSurePaymentMethodForm(Command onSameAsCurrentAddressSelected) {
+        this.onSameAsCurrentAddressSelected = onSameAsCurrentAddressSelected;
+    }
+
+    public TenantSurePaymentMethodForm() {
+        this(null);
+    }
 
     @Override
     public List<PaymentType> getPaymentOptions() {
@@ -37,6 +52,20 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm {
             assert false : type.name() + " cannot be used for TenantSure!";
             break;
         }
+    }
+
+    @Override
+    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
+        if (set) {
+            onSameAsCurrentAddressSelected.execute();
+        }
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        setBillingAddressAsCurrentEnabled(onSameAsCurrentAddressSelected != null);
+        setBillingAddressAsCurrentVisible(onSameAsCurrentAddressSelected != null);
+        super.onValueSet(populate);
     }
 
 }

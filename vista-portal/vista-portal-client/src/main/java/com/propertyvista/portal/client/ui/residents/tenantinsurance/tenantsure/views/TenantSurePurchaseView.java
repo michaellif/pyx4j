@@ -15,8 +15,10 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePersonalDisclaimerHolderDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
@@ -26,7 +28,11 @@ public interface TenantSurePurchaseView extends IsWidget {
 
         void onCoverageRequestChanged();
 
+        void onBillingAddressSameAsCurrentSelected();
+
         void onQuoteAccepted();
+
+        void onPaymentProcessingSuccessAccepted();
 
         void cancel();
 
@@ -35,7 +41,8 @@ public interface TenantSurePurchaseView extends IsWidget {
     void setPresenter(Presenter presenter);
 
     /** resets the view with new parameters */
-    void init(TenantSureQuotationRequestParamsDTO quotationRequestParams, PaymentMethod initialPaymentMethod);
+    void init(TenantSurePersonalDisclaimerHolderDTO disclaimerHolder, TenantSureQuotationRequestParamsDTO quotationRequestParams,
+            PaymentMethod initialPaymentMethod);
 
     void setQuote(TenantSureQuoteDTO quote);
 
@@ -45,7 +52,11 @@ public interface TenantSurePurchaseView extends IsWidget {
 
     void populatePaymentProcessingError(String errorReason);
 
-    TenantSureQuotationRequestDTO getCoverageRequest();
+    void populatePaymentProcessingSuccess();
+
+    void setBillingAddress(AddressStructured billingAddress);
+
+    TenantSureCoverageDTO getCoverageRequest();
 
     /** @return <code>null</code> when there's no accepted quote, or accepted quote */
     TenantSureQuoteDTO getAcceptedQuote();

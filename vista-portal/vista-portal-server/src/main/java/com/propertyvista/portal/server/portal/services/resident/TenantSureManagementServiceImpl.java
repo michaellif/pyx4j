@@ -18,7 +18,9 @@ import java.math.BigDecimal;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePremiumTaxDTO;
@@ -27,7 +29,7 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 public class TenantSureManagementServiceImpl implements TenantSureManagementService {
 
     @Override
-    public void getTenantSureDetailedStatus(AsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO> callback) {
+    public void getStatus(AsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO> callback) {
         TenantSureTenantInsuranceStatusDetailedDTO status = EntityFactory.create(TenantSureTenantInsuranceStatusDetailedDTO.class);
         status.quote().grossPremium().setValue(new BigDecimal("1003"));
         status.quote().underwriterFee().setValue(new BigDecimal("55.51"));
@@ -40,6 +42,18 @@ public class TenantSureManagementServiceImpl implements TenantSureManagementServ
         message.message().setValue("Your insurance is about to expire, we strongly advise you to stop playing with matches :)");
         status.messages().add(message);
         callback.onSuccess(status);
+    }
+
+    @Override
+    public void updatePaymentMethod(AsyncCallback<VoidSerializable> callback, PaymentMethod paymentMethod) {
+        // TODO Auto-generated method stub
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void cancelTenantSure(AsyncCallback<VoidSerializable> callback) {
+        // TODO
+        callback.onSuccess(null);
     }
 
 }
