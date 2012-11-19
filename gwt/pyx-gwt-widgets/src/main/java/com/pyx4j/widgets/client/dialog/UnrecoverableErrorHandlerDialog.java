@@ -30,7 +30,6 @@ import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.DefaultUnrecoverableErrorHandler;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.i18n.shared.I18n;
@@ -149,11 +148,7 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
 
     @Override
     protected void showHttpStatusCode(StatusCodeException caught, int statusCode, String errorCode) {
-        if ((statusCode == 0) && BrowserType.isFirefox()) {
-            showInternetConnectionError();
-        } else {
-            showDefaultError(caught, errorCode);
-        }
+        showDefaultError(caught, errorCode);
     }
 
     protected boolean includeErrorCodeInUserMessage() {

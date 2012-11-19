@@ -114,7 +114,11 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
                 showInternetConnectionError();
                 break;
             default:
-                showHttpStatusCode((StatusCodeException) cause, statusCode, errorCode);
+                if ((statusCode == 0) && (BrowserType.isFirefox() || BrowserType.isSafari())) {
+                    showInternetConnectionError();
+                } else {
+                    showHttpStatusCode((StatusCodeException) cause, statusCode, errorCode);
+                }
             }
         } else if ((cause instanceof RuntimeException) && ("HTTP download failed with status 404".equals(cause.getMessage()))) {
             // TODO see if com.google.gwt.core.client.impl.AsyncFragmentLoader.HttpDownloadFailure was made public
