@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
@@ -81,9 +82,20 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
-                        new EntityFolderColumnDescriptor(proto().name(), "15em"), 
-                        new EntityFolderColumnDescriptor(proto().type(), "15em")                    
+                    new EntityFolderColumnDescriptor(proto().type(), "15em", true),                    
+                        new EntityFolderColumnDescriptor(proto().name(), "15em")
                     );//@formatter:on
+        }
+
+        @Override
+        protected void addItem() {
+            new DocumentTypeSelectorDialog() {
+                @Override
+                public boolean onClickOk() {
+                    addItem(getSelectedItems().get(0));
+                    return true;
+                }
+            }.show();
         }
 //
 //        @Override
