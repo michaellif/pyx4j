@@ -40,8 +40,6 @@ public class BuildingMarshaller implements Marshaller<Building, BuildingRS> {
         buildingRS.info.address.streetNumber = building.info().address().streetNumber().getValue();
         buildingRS.info.address.streetName = building.info().address().streetName().getValue();
         buildingRS.info.address.streetType = building.info().address().streetType().getValue().toString();
-        // detached entity, fix later
-
         buildingRS.contacts.addAll(getContacts(building));
 
         return buildingRS;

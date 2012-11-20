@@ -18,7 +18,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "lease")
 public class LeaseRS {
 
+    public String propertyCode;
+
+    public String unitNumber;
+
     public String leaseId;
+
+    public String status;
 
     public LeaseRS() {
     }

@@ -14,6 +14,7 @@
 package com.propertyvista.oapi.ws;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.jws.WebService;
@@ -40,7 +41,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public BuildingsRS listAllBuildings() {
-        return PropertyFacade.listAllBuildings();
+        return PropertyFacade.getBuildings();
     }
 
     @Override
@@ -56,6 +57,11 @@ public class PropertyServiceImpl implements PropertyService {
             //TODO error, create building before putting units in it
         }
 
+    }
+
+    @Override
+    public List<UnitRS> listAllBuildingUnits(String buildingCode) {
+        return PropertyFacade.getUnitsByPropertyCode(buildingCode);
     }
 
 }
