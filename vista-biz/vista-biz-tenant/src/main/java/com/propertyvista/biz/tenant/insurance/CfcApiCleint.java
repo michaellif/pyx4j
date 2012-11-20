@@ -26,6 +26,7 @@ import com.cfcprograms.api.Result;
 import com.cfcprograms.api.SimpleClient;
 import com.cfcprograms.api.SimpleClientResponse;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
@@ -86,6 +87,7 @@ class CfcApiCleint {
         InsuranceTenantSureClient tenantSureClient = EntityFactory.create(InsuranceTenantSureClient.class);
         tenantSureClient.tenant().set(tenant);
         tenantSureClient.clientReferenceNumber().setValue(createClientRssult.getSimpleClientResult().getId());
+        Persistence.service().persist(tenantSureClient);
         return tenantSureClient;
     }
 
