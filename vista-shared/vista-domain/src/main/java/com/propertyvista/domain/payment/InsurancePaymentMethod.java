@@ -14,7 +14,9 @@
 package com.propertyvista.domain.payment;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -23,7 +25,9 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 public interface InsurancePaymentMethod extends PaymentMethod {
 
     @Owner
+    @MemberColumn(notNull = true)
     @JoinColumn
+    @Indexed
     Tenant tenant();
 
 }

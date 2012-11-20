@@ -115,8 +115,12 @@ class CreditCardProcessor {
 
     public static void persistToken(Building building, CreditCardInfo cc) {
         MerchantAccount account = PaymentUtils.retrieveMerchantAccount(building);
+        persistToken(account.merchantTerminalId().getValue(), cc);
+    }
+
+    static void persistToken(String merchantTerminalId, CreditCardInfo cc) {
         Merchant merchant = EntityFactory.create(Merchant.class);
-        merchant.terminalID().setValue(account.merchantTerminalId().getValue());
+        merchant.terminalID().setValue(merchantTerminalId);
 
         CCInformation ccInfo = EntityFactory.create(CCInformation.class);
         if (!cc.card().number().isNull()) {
@@ -127,6 +131,10 @@ class CreditCardProcessor {
         }
         ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
         ccInfo.securityCode().setValue(cc.securityCode().getValue());
+
+        if (cc.id().isNull()) {
+            throw new Error("CreditCardInfo should be saved first");
+        }
 
         Token token = EntityFactory.create(Token.class);
         if (!cc.token().isNull()) {
