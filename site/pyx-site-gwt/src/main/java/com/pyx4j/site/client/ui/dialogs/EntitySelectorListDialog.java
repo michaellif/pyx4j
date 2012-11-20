@@ -51,7 +51,9 @@ public abstract class EntitySelectorListDialog<E extends IEntity> extends Abstra
 
     private final Formatter<E> formatter;
 
-    private final List<E> data;
+    private CellList<E> cellList;
+
+    private List<E> data;
 
     public EntitySelectorListDialog(String caption, boolean isMultiselectAllowed, List<E> data, Formatter<E> formatter) {
         super(caption);
@@ -175,7 +177,7 @@ public abstract class EntitySelectorListDialog<E extends IEntity> extends Abstra
             }
         };
 
-        CellList<E> cellList = new CellList<E>(cell, new FakeCellListResources());
+        cellList = new CellList<E>(cell, new FakeCellListResources());
         cellList.setHeight(defineHeight());
         cellList.setWidth("100%");
         if (isMultiselectAllowed) {
@@ -189,6 +191,17 @@ public abstract class EntitySelectorListDialog<E extends IEntity> extends Abstra
         panel.getElement().getStyle().setProperty("borderStyle", "inset");
         panel.getElement().getStyle().setProperty("borderWidth", "1px");
         return panel;
+    }
+
+    public List<E> getData() {
+        return data;
+    }
+
+    public void setData(List<E> data) {
+        this.data = data;
+        if (cellList != null) {
+            cellList.setRowData(data);
+        }
     }
 
     public static interface Formatter<E> {
