@@ -40,6 +40,7 @@
                             <wsdlFiles>
                                 <wsdlFile>cfc_api.asmx.wsdl</wsdlFile>
                             </wsdlFiles>
+                            <wsdlLocation>https://api.cfcprograms.com/cfc_api.asmx?WSDL</wsdlLocation>
                         </configuration>
                     </execution>
                </executions>
