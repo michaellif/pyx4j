@@ -35,6 +35,8 @@ public class LoggerConfig {
 
     public static final String MDC_userID = "userID";
 
+    public static final String MDC_remoteAddr = "remoteAddr";
+
     public static final String MDC_namespace = "namespace";
 
     static Map<String, String> nameVariables = new HashMap<String, String>();

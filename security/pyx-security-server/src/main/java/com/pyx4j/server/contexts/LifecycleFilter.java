@@ -40,6 +40,7 @@ import com.pyx4j.config.server.LocaleResolver;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.RequestDebug;
+import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.i18n.server.I18nManager;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.rpc.shared.ContainerHandledUserRuntimeException;
@@ -90,7 +91,10 @@ public class LifecycleFilter implements Filter {
                 }
                 try {
                     NamespaceManager.setNamespace(ServerSideConfiguration.instance().getNamespaceResolver().getNamespace(httprequest));
-                    LoggerConfig.mdcPut(LoggerConfig.MDC_remoteAddr, Context.getRequestRemoteAddr());
+                    String remoteAddr = ServletUtils.getActualRequestRemoteAddr(httprequest);
+                    if (remoteAddr != null) {
+                        LoggerConfig.mdcPut(LoggerConfig.MDC_remoteAddr, remoteAddr);
+                    }
                     LocaleResolver lr = ServerSideConfiguration.instance().getLocaleResolver();
                     if (lr != null) {
                         I18nManager.setThreadLocale(lr.getRequestLocale(httprequest));
