@@ -247,6 +247,17 @@
             </roles>
             <timezone>-5</timezone>
         </developer>
+        <developer>
+            <name>Flora Lifschitz</name>
+            <id>floral</id>
+            <email>flora.lifschitz@pyx4j.com</email>
+            <organization>Pyx Software Services Inc.</organization>
+            <organizationUrl>http://www.pyx4j.com</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
     </developers>
 
     <build>
