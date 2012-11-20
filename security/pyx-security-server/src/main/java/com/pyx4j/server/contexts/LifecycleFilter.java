@@ -90,6 +90,7 @@ public class LifecycleFilter implements Filter {
                 }
                 try {
                     NamespaceManager.setNamespace(ServerSideConfiguration.instance().getNamespaceResolver().getNamespace(httprequest));
+                    LoggerConfig.mdcPut(LoggerConfig.MDC_remoteAddr, Context.getRequestRemoteAddr());
                     LocaleResolver lr = ServerSideConfiguration.instance().getLocaleResolver();
                     if (lr != null) {
                         I18nManager.setThreadLocale(lr.getRequestLocale(httprequest));
