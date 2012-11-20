@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms;
 
+import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -41,8 +43,10 @@ public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
                 addTotalRecord(contentPanel, ++row, quote.totalMonthlyPayable().getMeta().getCaption(), quote.totalMonthlyPayable().getStringView());
             } else {
                 Label specialQuoteText = new Label();
-                specialQuoteText.getElement().getStyle();
+                specialQuoteText.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+                specialQuoteText.getElement().getStyle().setFontWeight(FontWeight.BOLD);
                 specialQuoteText.setText(quote.specialQuote().getValue());
+
                 contentPanel.setWidget(0, 0, specialQuoteText);
                 contentPanel.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
                 contentPanel.getCellFormatter().getElement(0, 0).getStyle().setProperty("height", "10em");

@@ -21,6 +21,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -386,7 +387,12 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         paymentStepPanel = new FormFlexPanel();
 
         paymentStepPanel.setH1(++row, 0, 1, i18n.tr("Payment"));
-        paymentMethodForm = new TenantSurePaymentMethodForm();
+        paymentMethodForm = new TenantSurePaymentMethodForm(new Command() {
+            @Override
+            public void execute() {
+                presenter.onBillingAddressSameAsCurrentSelected();
+            }
+        });
         paymentMethodForm.initContent();
         paymentStepPanel.setWidget(++row, 0, paymentMethodForm);
 
@@ -434,11 +440,12 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         final FlowPanel finishStepPanel = new FlowPanel();
         finishStepPanel.getElement().getStyle().setProperty("display", "table-cell");
         finishStepPanel.getElement().getStyle().setProperty("verticalAlign", "middle");
+        finishStepPanel.getElement().getStyle().setProperty("textAlign", "center");
         finishStepPanel.getElement().getStyle().setHeight(10., Unit.EM);
 
         Label label = new Label();
         label.addStyleName(Styles.TSPucrhaseViewMessageText.name());
-        label.setText(i18n.tr("Payment Processed Successfully"));
+        label.setText(i18n.tr("Payment Processed Successfuly: an email with your insurance policy has been sent to your email."));
         finishStepPanel.add(label);
 
         Anchor returnToInsuranceManagement = new Anchor(i18n.tr("return to Tenant Insurance"), new ClickHandler() {
