@@ -71,6 +71,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
 
     public void setParentEntity(IEntity parentEntity) {
         if (!VistaTODO.ApplicationDocumentationPolicyRefacotring) {
+
             ClientPolicyManager.obtainHierarchicalEffectivePolicy(parentEntity, ApplicationDocumentationPolicy.class,
                     new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
                         @Override
@@ -78,6 +79,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
                             documentationPolicy = result;
                         }
                     });
+
         }
     }
 
@@ -136,6 +138,15 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
             content.setH3(++row, 0, 1, i18n.tr("Files"));
             content.setWidget(++row, 0, inject(proto().documentPages(), docPagesFolder));
             return content;
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+
+            if (isViewable()) {
+                get(proto().notes()).setVisible(!getValue().notes().isNull());
+            }
         }
 
         @Override
