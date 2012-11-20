@@ -42,7 +42,7 @@ import com.pyx4j.widgets.client.RadioGroup;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -58,7 +58,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private Widget paymentMethodEditorSeparator;
 
-    private final CComboBox<PaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<PaymentMethod>();
+    private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
     private final PaymentMethodEditor paymentMethodEditor = new PaymentMethodEditor() {
         @Override
@@ -228,9 +228,9 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             }
         });
 
-        profiledPaymentMethodsCombo.addValueChangeHandler(new ValueChangeHandler<PaymentMethod>() {
+        profiledPaymentMethodsCombo.addValueChangeHandler(new ValueChangeHandler<LeasePaymentMethod>() {
             @Override
-            public void onValueChange(ValueChangeEvent<PaymentMethod> event) {
+            public void onValueChange(ValueChangeEvent<LeasePaymentMethod> event) {
                 paymentMethodEditor.setVisible(event.getValue() != null);
                 paymentMethodEditorSeparator.setVisible(event.getValue() != null);
                 if (event.getValue() != null) {
@@ -324,9 +324,9 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {
         profiledPaymentMethodsCombo.setOptions(null);
         ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getProfiledPaymentMethods(
-                new DefaultAsyncCallback<List<PaymentMethod>>() {
+                new DefaultAsyncCallback<List<LeasePaymentMethod>>() {
                     @Override
-                    public void onSuccess(List<PaymentMethod> result) {
+                    public void onSuccess(List<LeasePaymentMethod> result) {
                         profiledPaymentMethodsCombo.setOptions(result);
                         if (callback != null) {
                             callback.onSuccess(null);

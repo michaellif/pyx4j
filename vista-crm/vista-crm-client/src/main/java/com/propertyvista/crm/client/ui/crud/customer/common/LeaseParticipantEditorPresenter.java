@@ -18,11 +18,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 
 public interface LeaseParticipantEditorPresenter extends IEditorView.Presenter {
 
-    void deletePaymentMethod(PaymentMethod paymentMethod);
+    void deletePaymentMethod(LeasePaymentMethod paymentMethod);
 
     void getCurrentAddress(AsyncCallback<AddressStructured> callback);
 }

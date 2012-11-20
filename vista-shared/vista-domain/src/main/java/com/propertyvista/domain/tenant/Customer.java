@@ -34,7 +34,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -77,7 +77,7 @@ public interface Customer extends IEntity {
     @Owned
     @RpcTransient
     @Detached(level = AttachLevel.Detached)
-    IList<PaymentMethod> paymentMethods();
+    IList<LeasePaymentMethod> paymentMethods();
 
     /**
      * This used to enforce Data access

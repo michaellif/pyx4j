@@ -18,7 +18,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -39,7 +39,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<L
         Persistence.service().retrieve(dto.customer().emergencyContacts());
 
         // mark pre-authorized one:
-        for (PaymentMethod paymentMethod : dto.paymentMethods()) {
+        for (LeasePaymentMethod paymentMethod : dto.paymentMethods()) {
             if (paymentMethod.equals(entity.preauthorizedPayment())) {
                 paymentMethod.isPreauthorized().setValue(Boolean.TRUE);
                 break;
@@ -59,7 +59,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<L
         super.persist(entity, dto);
 
         // memorize pre-authorized method:
-        for (PaymentMethod paymentMethod : dto.paymentMethods()) {
+        for (LeasePaymentMethod paymentMethod : dto.paymentMethods()) {
             if (paymentMethod.isPreauthorized().isBooleanTrue()) {
                 if (!paymentMethod.equals(entity.preauthorizedPayment())) {
                     entity.preauthorizedPayment().set(paymentMethod);

@@ -29,7 +29,7 @@ import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.LeaseParticipantCrudServiceBase;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -61,7 +61,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<E extends LeaseTermPar
         dto.paymentMethods().clear();
         dto.paymentMethods().addAll(ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(entity.customer()));
         if (retrieveTraget == RetrieveTraget.Edit) {
-            for (PaymentMethod method : dto.paymentMethods()) {
+            for (LeasePaymentMethod method : dto.paymentMethods()) {
                 Persistence.service().retrieve(method.details());
             }
         }
@@ -79,7 +79,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<E extends LeaseTermPar
         ServerSideFactory.create(CustomerFacade.class).persistCustomer(entity.customer());
 
         // delete payment methods removed in UI:
-        for (PaymentMethod paymentMethod : ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(entity.customer())) {
+        for (LeasePaymentMethod paymentMethod : ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(entity.customer())) {
             if (!dto.paymentMethods().contains(paymentMethod)) {
                 ServerSideFactory.create(PaymentFacade.class).deletePaymentMethod(paymentMethod);
             }
@@ -90,7 +90,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<E extends LeaseTermPar
         Building building = Persistence.service().retrieve(criteria);
 
         // save new/edited ones:
-        for (PaymentMethod paymentMethod : dto.paymentMethods()) {
+        for (LeasePaymentMethod paymentMethod : dto.paymentMethods()) {
             paymentMethod.customer().set(entity.customer());
             paymentMethod.isOneTimePayment().setValue(false);
             ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(building, paymentMethod);
@@ -100,7 +100,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<E extends LeaseTermPar
     }
 
     @Override
-    public void deletePaymentMethod(AsyncCallback<Boolean> callback, PaymentMethod paymentMethod) {
+    public void deletePaymentMethod(AsyncCallback<Boolean> callback, LeasePaymentMethod paymentMethod) {
         Persistence.service().retrieve(paymentMethod);
         ServerSideFactory.create(PaymentFacade.class).deletePaymentMethod(paymentMethod);
         Persistence.service().commit();

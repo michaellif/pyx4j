@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 
 public interface PaymentMethodsView extends IsWidget {
 
@@ -25,14 +25,14 @@ public interface PaymentMethodsView extends IsWidget {
 
         void addPaymentMethod();
 
-        void editPaymentMethod(PaymentMethod paymentMethod);
+        void editPaymentMethod(LeasePaymentMethod paymentMethod);
 
-        void savePaymentMethod(PaymentMethod paymentMethod);
+        void savePaymentMethod(LeasePaymentMethod paymentMethod);
 
-        void removePaymentMethod(PaymentMethod paymentMethod);
+        void removePaymentMethod(LeasePaymentMethod paymentMethod);
     }
 
-    void populate(List<PaymentMethod> paymentMethods);
+    void populate(List<LeasePaymentMethod> paymentMethods);
 
     void setPresenter(Presenter presenter);
 }

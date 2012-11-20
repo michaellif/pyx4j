@@ -16,12 +16,12 @@ package com.propertyvista.portal.client.ui.residents.paymentmethod;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.client.ui.residents.View;
 
-public interface EditPaymentMethodView extends View<PaymentMethod> {
+public interface EditPaymentMethodView extends View<LeasePaymentMethod> {
 
-    interface Presenter extends View.Presenter<PaymentMethod> {
+    interface Presenter extends View.Presenter<LeasePaymentMethod> {
 
         void getCurrentAddress(AsyncCallback<AddressStructured> callback);
     }

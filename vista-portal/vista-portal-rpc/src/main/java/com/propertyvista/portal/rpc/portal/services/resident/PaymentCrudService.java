@@ -20,7 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public interface PaymentCrudService extends AbstractCrudService<PaymentRecordDTO> {
@@ -29,5 +29,5 @@ public interface PaymentCrudService extends AbstractCrudService<PaymentRecordDTO
 
     void getCurrentAddress(AsyncCallback<AddressStructured> callback);
 
-    void getProfiledPaymentMethods(AsyncCallback<Vector<PaymentMethod>> callback);
+    void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback);
 }

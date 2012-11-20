@@ -31,7 +31,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.payment.EcheckInfo;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -141,7 +141,7 @@ public class LeaseGenerator extends DataGenerator {
     }
 
     private void addPreathorisedPaymentMethod(LeaseTermTenant tenant) {
-        PaymentMethod m = EntityFactory.create(PaymentMethod.class);
+        LeasePaymentMethod m = EntityFactory.create(LeasePaymentMethod.class);
         m.type().setValue(PaymentType.Echeck);
         m.isOneTimePayment().setValue(Boolean.FALSE);
         m.isDeleted().setValue(Boolean.FALSE);

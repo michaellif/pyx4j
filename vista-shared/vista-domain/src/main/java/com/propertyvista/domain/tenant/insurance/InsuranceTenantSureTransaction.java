@@ -26,7 +26,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.InsurancePaymentMethod;
 
 public interface InsuranceTenantSureTransaction extends IEntity {
 
@@ -53,7 +53,7 @@ public interface InsuranceTenantSureTransaction extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
-    PaymentMethod paymentMethod();
+    InsurancePaymentMethod paymentMethod();
 
     IPrimitive<TransactionStatus> status();
 

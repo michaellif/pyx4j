@@ -25,7 +25,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
@@ -51,7 +51,7 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
         service.getQuotationRequestParams(new DefaultAsyncCallback<TenantSureQuotationRequestParamsDTO>() {
             @Override
             public void onSuccess(TenantSureQuotationRequestParamsDTO quotationRequestParams) {
-                PaymentMethod paymentMethod = EntityFactory.create(PaymentMethod.class);
+                LeasePaymentMethod paymentMethod = EntityFactory.create(LeasePaymentMethod.class);
                 paymentMethod.type().setValue(PaymentType.CreditCard);
 
                 TenantSurePersonalDisclaimerHolderDTO disclaimerHolder = EntityFactory.create(TenantSurePersonalDisclaimerHolderDTO.class);

@@ -26,7 +26,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.domain.tenant.ptapp.IAgree;
 import com.propertyvista.dto.LegalTermsDescriptorDTO;
@@ -130,7 +130,7 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     }
 
     @Override
-    public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, PaymentMethod paymentMethod) {
+    public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, LeasePaymentMethod paymentMethod) {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {

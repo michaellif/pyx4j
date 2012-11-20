@@ -19,7 +19,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -35,7 +35,7 @@ public interface LeaseParticipantDTO<E extends LeaseTermParticipant<?>> extends 
     @Caption(name = "Lease Term")
     LeaseTermV leaseTermV();
 
-    IList<PaymentMethod> paymentMethods();
+    IList<LeasePaymentMethod> paymentMethods();
 
     IPrimitive<Boolean> electronicPaymentsAllowed();
 }

@@ -13,11 +13,11 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views;
 
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePaymentMethodForm;
 
-public class TenantSureCreditCardUpdateViewImpl extends BasicViewImpl<PaymentMethod> implements TenantSureCreditCardUpdateView {
+public class TenantSureCreditCardUpdateViewImpl extends BasicViewImpl<LeasePaymentMethod> implements TenantSureCreditCardUpdateView {
 
     public TenantSureCreditCardUpdateViewImpl() {
         setForm(new TenantSurePaymentMethodForm());

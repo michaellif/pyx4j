@@ -22,11 +22,11 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
 
-public class EditPaymentMethodViewImpl extends BasicViewImpl<PaymentMethod> implements EditPaymentMethodView {
+public class EditPaymentMethodViewImpl extends BasicViewImpl<LeasePaymentMethod> implements EditPaymentMethodView {
 
     public EditPaymentMethodViewImpl() {
         setForm(new PaymentMethodForm() {
@@ -59,7 +59,7 @@ public class EditPaymentMethodViewImpl extends BasicViewImpl<PaymentMethod> impl
     }
 
     @Override
-    public void populate(PaymentMethod value) {
+    public void populate(LeasePaymentMethod value) {
         super.populate(value);
 
         getSubmitButton().setEnabled(false);

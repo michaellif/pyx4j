@@ -29,7 +29,7 @@ import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
@@ -113,7 +113,7 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
 
     protected PaymentRecord makePaymentRecord(MerchantAccount merchantAccount, String lastStatusChangeDate, String amount, PaymentType paymentType,
             PaymentRecord.PaymentStatus paymentStatus) {
-        PaymentMethod paymentMethod = EntityFactory.create(PaymentMethod.class);
+        LeasePaymentMethod paymentMethod = EntityFactory.create(LeasePaymentMethod.class);
         paymentMethod.type().setValue(paymentType);
         LeaseTermTenant tenant = lease.currentTerm().version().tenants().get(0);
         if (tenant.isValueDetached()) {

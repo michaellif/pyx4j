@@ -28,7 +28,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lead.Appointment;
@@ -59,11 +59,11 @@ public class TenantsGenerator {
         return item;
     }
 
-    public List<PaymentMethod> createPaymentMethods(Customer customer) {
-        List<PaymentMethod> l = new Vector<PaymentMethod>();
+    public List<LeasePaymentMethod> createPaymentMethods(Customer customer) {
+        List<LeasePaymentMethod> l = new Vector<LeasePaymentMethod>();
 
         for (int i = 0; i < 2; i++) {
-            PaymentMethod m = EntityFactory.create(PaymentMethod.class);
+            LeasePaymentMethod m = EntityFactory.create(LeasePaymentMethod.class);
             m.type().setValue(PaymentType.CreditCard);
 
             // create new payment method details:

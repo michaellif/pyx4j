@@ -36,7 +36,7 @@ import com.propertyvista.domain.payment.CashInfo;
 import com.propertyvista.domain.payment.CheckInfo;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
@@ -70,7 +70,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public PaymentMethod persistPaymentMethod(Building building, PaymentMethod paymentMethod) {
+    public LeasePaymentMethod persistPaymentMethod(Building building, LeasePaymentMethod paymentMethod) {
         paymentMethod.isDeleted().setValue(Boolean.FALSE);
 
         Validate.isTrue(!paymentMethod.customer().isNull(), "Owner (customer) is required for PaymentMethod");
@@ -134,7 +134,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public void deletePaymentMethod(PaymentMethod paymentMethod) {
+    public void deletePaymentMethod(LeasePaymentMethod paymentMethod) {
         Persistence.service().retrieve(paymentMethod);
         paymentMethod.isDeleted().setValue(Boolean.TRUE);
         paymentMethod.isOneTimePayment().setValue(Boolean.TRUE);
@@ -142,19 +142,19 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public List<PaymentMethod> retrievePaymentMethods(LeaseTermParticipant<?> participant) {
+    public List<LeasePaymentMethod> retrievePaymentMethods(LeaseTermParticipant<?> participant) {
         assert !participant.leaseParticipant().customer().isValueDetached();
         return retrievePaymentMethods(participant.leaseParticipant().customer());
     }
 
     @Override
-    public List<PaymentMethod> retrievePaymentMethods(Customer customer) {
-        EntityQueryCriteria<PaymentMethod> criteria = new EntityQueryCriteria<PaymentMethod>(PaymentMethod.class);
+    public List<LeasePaymentMethod> retrievePaymentMethods(Customer customer) {
+        EntityQueryCriteria<LeasePaymentMethod> criteria = new EntityQueryCriteria<LeasePaymentMethod>(LeasePaymentMethod.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().customer(), customer));
         criteria.add(PropertyCriterion.eq(criteria.proto().isOneTimePayment(), Boolean.FALSE));
         criteria.add(PropertyCriterion.eq(criteria.proto().isDeleted(), Boolean.FALSE));
 
-        List<PaymentMethod> methods = Persistence.service().query(criteria);
+        List<LeasePaymentMethod> methods = Persistence.service().query(criteria);
         return methods;
     }
 

@@ -44,7 +44,7 @@ import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -305,7 +305,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                 // do pre-authorized payments for main applicant for now
                 switch (tenant.role().getValue()) {
                 case Applicant:
-                    PaymentMethod method = PaymentUtils.retrievePreAuthorizedPaymentMethod(tenant);
+                    LeasePaymentMethod method = PaymentUtils.retrievePreAuthorizedPaymentMethod(tenant);
                     if (method != null) {
                         createPreAuthorizedPayment(tenant, currentBalance, bill.billingAccount(), method);
                         StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, currentBalance);
@@ -325,7 +325,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         Persistence.service().commit();
     }
 
-    private void createPreAuthorizedPayment(LeaseTermParticipant leaseParticipant, BigDecimal amount, BillingAccount billingAccount, PaymentMethod method) {
+    private void createPreAuthorizedPayment(LeaseTermParticipant leaseParticipant, BigDecimal amount, BillingAccount billingAccount, LeasePaymentMethod method) {
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
         paymentRecord.billingAccount().set(billingAccount);
         paymentRecord.leaseTermParticipant().set(leaseParticipant);

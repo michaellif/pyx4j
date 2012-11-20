@@ -19,13 +19,13 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseParticipantDTO;
 
 public interface LeaseParticipantCrudServiceBase<E extends LeaseTermParticipant<?>, DTO extends LeaseParticipantDTO<E>> extends AbstractCrudService<DTO> {
 
-    void deletePaymentMethod(AsyncCallback<Boolean> callback, PaymentMethod paymentMethod);
+    void deletePaymentMethod(AsyncCallback<Boolean> callback, LeasePaymentMethod paymentMethod);
 
     void getCurrentAddress(AsyncCallback<AddressStructured> callback, Key entityId);
 }

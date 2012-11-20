@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.charges.ChargeLineList;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 
 public interface PaymentInformation extends IEntity, IBoundToApplication {
 
@@ -38,5 +38,5 @@ public interface PaymentInformation extends IEntity, IBoundToApplication {
     IPrimitive<Boolean> preauthoriseAgree();
 
     @EmbeddedEntity
-    PaymentMethod paymentMethod();
+    LeasePaymentMethod paymentMethod();
 }

@@ -39,7 +39,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.payment.PaymentDetails;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView.Presenter;
 import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
 
@@ -64,16 +64,16 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
         return container;
     }
 
-    public void populate(List<PaymentMethod> paymentMethods) {
+    public void populate(List<LeasePaymentMethod> paymentMethods) {
         PaymentMethodListDTO dto = EntityFactory.create(PaymentMethodListDTO.class);
         dto.paymentMethods().addAll(paymentMethods);
         super.populate(dto);
     }
 
-    private class PaymentMethodFolder extends VistaTableFolder<PaymentMethod> {
+    private class PaymentMethodFolder extends VistaTableFolder<LeasePaymentMethod> {
 
         public PaymentMethodFolder() {
-            super(PaymentMethod.class, true);
+            super(LeasePaymentMethod.class, true);
             setOrderable(false);
         }
 
@@ -88,7 +88,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
 
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof PaymentMethod) {
+            if (member instanceof LeasePaymentMethod) {
                 return new PaymentMethodEditorEx();
             }
             return super.create(member);
@@ -100,7 +100,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
         }
 
         @Override
-        protected void removeItem(final CEntityFolderItem<PaymentMethod> item) {
+        protected void removeItem(final CEntityFolderItem<LeasePaymentMethod> item) {
 
             MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Payment Method?"), new Command() {
                 @Override
@@ -115,12 +115,12 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
         public void addValidations() {
             super.addValidations();
 
-            this.addValueValidator(new EditableValueValidator<List<PaymentMethod>>() {
+            this.addValueValidator(new EditableValueValidator<List<LeasePaymentMethod>>() {
                 @Override
-                public ValidationError isValid(CComponent<List<PaymentMethod>, ?> component, List<PaymentMethod> value) {
+                public ValidationError isValid(CComponent<List<LeasePaymentMethod>, ?> component, List<LeasePaymentMethod> value) {
                     if (value != null && !value.isEmpty()) {
                         boolean primaryFound = false;
-                        for (PaymentMethod item : value) {
+                        for (LeasePaymentMethod item : value) {
                             if (item.isPreauthorized().isBooleanTrue()) {
                                 primaryFound = true;
                                 break;
@@ -135,10 +135,10 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
             });
         }
 
-        private class PaymentMethodEditorEx extends CEntityFolderRowEditor<PaymentMethod> {
+        private class PaymentMethodEditorEx extends CEntityFolderRowEditor<LeasePaymentMethod> {
 
             public PaymentMethodEditorEx() {
-                super(PaymentMethod.class, columns());
+                super(LeasePaymentMethod.class, columns());
             }
 
             @Override

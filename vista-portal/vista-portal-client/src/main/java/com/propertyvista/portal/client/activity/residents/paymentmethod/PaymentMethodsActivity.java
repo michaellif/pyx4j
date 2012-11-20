@@ -25,7 +25,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
@@ -49,12 +49,12 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        srv.list(new DefaultAsyncCallback<EntitySearchResult<PaymentMethod>>() {
+        srv.list(new DefaultAsyncCallback<EntitySearchResult<LeasePaymentMethod>>() {
             @Override
-            public void onSuccess(EntitySearchResult<PaymentMethod> result) {
+            public void onSuccess(EntitySearchResult<LeasePaymentMethod> result) {
                 view.populate(result.getData());
             }
-        }, new EntityListCriteria<PaymentMethod>(PaymentMethod.class));
+        }, new EntityListCriteria<LeasePaymentMethod>(LeasePaymentMethod.class));
     }
 
     @Override
@@ -63,14 +63,14 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
     }
 
     @Override
-    public void editPaymentMethod(PaymentMethod paymentMethod) {
+    public void editPaymentMethod(LeasePaymentMethod paymentMethod) {
         AppPlace place = new PortalSiteMap.Residents.PaymentMethods.EditPaymentMethod();
         place.placeArg(PortalSiteMap.ARG_ENTITY_ID, paymentMethod.id().getValue().toString());
         AppSite.getPlaceController().goTo(place);
     }
 
     @Override
-    public void savePaymentMethod(PaymentMethod paymentMethod) {
+    public void savePaymentMethod(LeasePaymentMethod paymentMethod) {
         srv.save(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
@@ -79,7 +79,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
     }
 
     @Override
-    public void removePaymentMethod(PaymentMethod paymentMethod) {
+    public void removePaymentMethod(LeasePaymentMethod paymentMethod) {
         srv.delete(new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {

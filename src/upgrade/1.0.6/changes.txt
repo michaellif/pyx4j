@@ -1,0 +1,6 @@
+# @version $Revision$ ($Author$) $Date$
+
+
+VISTA-2216 TenantSure 20/11/2012 5:42:37 PM
+PaymentMethod  now have id_discriminator
+ migration set original records to 'LeasePaymentMethod'

@@ -26,7 +26,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.EditPaymentMethodView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
@@ -59,9 +59,9 @@ public class EditPaymentMethodActivity extends SecurityAwareActivity implements 
         panel.setWidget(view);
 
         assert (entityId != null);
-        srv.retrieve(new DefaultAsyncCallback<PaymentMethod>() {
+        srv.retrieve(new DefaultAsyncCallback<LeasePaymentMethod>() {
             @Override
-            public void onSuccess(PaymentMethod result) {
+            public void onSuccess(LeasePaymentMethod result) {
                 view.populate(result);
             }
         }, entityId, AbstractCrudService.RetrieveTraget.Edit);
@@ -72,7 +72,7 @@ public class EditPaymentMethodActivity extends SecurityAwareActivity implements 
     }
 
     @Override
-    public void save(PaymentMethod paymentmethod) {
+    public void save(LeasePaymentMethod paymentmethod) {
         srv.create(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {

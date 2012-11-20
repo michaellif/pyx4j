@@ -23,7 +23,7 @@ import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantEditorPresenter;
 import com.propertyvista.crm.rpc.services.customer.LeaseParticipantCrudServiceBase;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseParticipantDTO;
 
@@ -36,7 +36,7 @@ public abstract class LeaseParticipantEditorActivity<E extends LeaseTermParticip
 
     @SuppressWarnings("unchecked")
     @Override
-    public void deletePaymentMethod(PaymentMethod paymentMethod) {
+    public void deletePaymentMethod(LeasePaymentMethod paymentMethod) {
         ((CS) getService()).deletePaymentMethod(new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {

@@ -44,7 +44,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -399,8 +399,8 @@ public class LeaseLifecycleSimulator {
             }
         }
 
-        public PaymentMethod createPaymentMethod(LeaseTermParticipant tenant) {
-            PaymentMethod m = EntityFactory.create(PaymentMethod.class);
+        public LeasePaymentMethod createPaymentMethod(LeaseTermParticipant tenant) {
+            LeasePaymentMethod m = EntityFactory.create(LeasePaymentMethod.class);
             m.type().setValue(PaymentType.CreditCard);
 
             // create new payment method details:

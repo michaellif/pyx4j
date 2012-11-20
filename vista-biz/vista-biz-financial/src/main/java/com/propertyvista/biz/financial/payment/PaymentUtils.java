@@ -22,7 +22,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -97,8 +97,8 @@ class PaymentUtils {
         throw new UserRuntimeException(i18n.tr("No active merchantAccount found to process the payment"));
     }
 
-    public static PaymentMethod retrievePreAuthorizedPaymentMethod(LeaseTermTenant tenant) {
-        PaymentMethod method = tenant.leaseParticipant().preauthorizedPayment();
+    public static LeasePaymentMethod retrievePreAuthorizedPaymentMethod(LeaseTermTenant tenant) {
+        LeasePaymentMethod method = tenant.leaseParticipant().preauthorizedPayment();
         if (method.isNull()) {
             return null;
         } else {

@@ -44,10 +44,10 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.InteracInfo;
 import com.propertyvista.domain.payment.PaymentDetails;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 
-public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
+public class PaymentMethodEditor extends CEntityDecoratableForm<LeasePaymentMethod> {
 
     private static final I18n i18n = I18n.get(PaymentMethodEditor.class);
 
@@ -58,11 +58,11 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
     protected Widget billingAddressHeader = new Label();
 
     public PaymentMethodEditor() {
-        super(PaymentMethod.class);
+        super(LeasePaymentMethod.class);
     }
 
     public PaymentMethodEditor(IEditableComponentFactory factory) {
-        super(PaymentMethod.class, factory);
+        super(LeasePaymentMethod.class, factory);
     }
 
     @Override
@@ -118,13 +118,13 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
     }
 
     @Override
-    protected void onValuePropagation(PaymentMethod value, boolean fireEvent, boolean populate) {
+    protected void onValuePropagation(LeasePaymentMethod value, boolean fireEvent, boolean populate) {
         selectPaymentDetailsEditor(value != null ? value.type().getValue() : null, populate);
         super.onValuePropagation(value, fireEvent, populate);
     }
 
     @Override
-    protected PaymentMethod preprocessValue(PaymentMethod value, boolean fireEvent, boolean populate) {
+    protected LeasePaymentMethod preprocessValue(LeasePaymentMethod value, boolean fireEvent, boolean populate) {
         if (!isValueEmpty()) {
             return super.preprocessValue(value, fireEvent, populate);
         }
@@ -217,7 +217,7 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
     }
 
     public void initNew(PaymentType type) {
-        PaymentMethod value = EntityFactory.create(PaymentMethod.class);
+        LeasePaymentMethod value = EntityFactory.create(LeasePaymentMethod.class);
         value.type().setValue(type);
         populate(value);
     }

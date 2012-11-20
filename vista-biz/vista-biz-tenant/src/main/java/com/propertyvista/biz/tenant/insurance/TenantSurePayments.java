@@ -13,17 +13,17 @@
  */
 package com.propertyvista.biz.tenant.insurance;
 
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 class TenantSurePayments {
 
-    static PaymentMethod getPaymentMethod(Tenant tenantId) {
+    static InsurancePaymentMethod getPaymentMethod(Tenant tenantId) {
         return null;
     }
 
-    static PaymentMethod updatePaymentMethod(PaymentMethod paymentMethod, Tenant tenantId) {
+    static InsurancePaymentMethod updatePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId) {
         return null;
     }
 

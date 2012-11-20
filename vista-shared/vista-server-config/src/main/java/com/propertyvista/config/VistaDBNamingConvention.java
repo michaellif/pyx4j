@@ -33,6 +33,7 @@ public class VistaDBNamingConvention extends NamingConventionOracle {
         shortWords.add("payment_information_payment_method_billing_address_street_type_e_ck", "payment_information_payment_method_billing_addr_str_type_e_ck");
         shortWords.add("payment_information_payment_method_billing_address_street_direction_e_ck",
                 "payment_information_payment_method_billing_addr_str_dir_e_ck");
+        shortWords.add("insurance_tenant_sure_transaction_payment_method_discriminator_d_ck", "insurance_tenant_sure_transaction_payment_method_discr_d_ck");
         return shortWords;
     }
 

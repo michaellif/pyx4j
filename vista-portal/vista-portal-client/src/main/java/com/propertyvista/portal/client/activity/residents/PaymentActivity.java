@@ -28,7 +28,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentView;
@@ -99,10 +99,10 @@ public class PaymentActivity extends SecurityAwareActivity implements PaymentVie
     }
 
     @Override
-    public void getProfiledPaymentMethods(final AsyncCallback<List<PaymentMethod>> callback) {
-        srv.getProfiledPaymentMethods(new DefaultAsyncCallback<Vector<PaymentMethod>>() {
+    public void getProfiledPaymentMethods(final AsyncCallback<List<LeasePaymentMethod>> callback) {
+        srv.getProfiledPaymentMethods(new DefaultAsyncCallback<Vector<LeasePaymentMethod>>() {
             @Override
-            public void onSuccess(Vector<PaymentMethod> result) {
+            public void onSuccess(Vector<LeasePaymentMethod> result) {
                 callback.onSuccess(result);
             }
         });

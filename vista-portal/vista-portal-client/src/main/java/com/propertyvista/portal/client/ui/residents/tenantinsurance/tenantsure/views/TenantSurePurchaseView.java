@@ -16,7 +16,7 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePersonalDisclaimerHolderDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
@@ -42,7 +42,7 @@ public interface TenantSurePurchaseView extends IsWidget {
 
     /** resets the view with new parameters */
     void init(TenantSurePersonalDisclaimerHolderDTO disclaimerHolder, TenantSureQuotationRequestParamsDTO quotationRequestParams,
-            PaymentMethod initialPaymentMethod);
+            LeasePaymentMethod initialPaymentMethod);
 
     void setQuote(TenantSureQuoteDTO quote);
 
@@ -61,5 +61,5 @@ public interface TenantSurePurchaseView extends IsWidget {
     /** @return <code>null</code> when there's no accepted quote, or accepted quote */
     TenantSureQuoteDTO getAcceptedQuote();
 
-    PaymentMethod getPaymentMethod();
+    LeasePaymentMethod getPaymentMethod();
 }

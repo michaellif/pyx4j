@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
@@ -38,13 +38,13 @@ public class NewPaymentMethodActivity extends EditPaymentMethodActivity {
         panel.setWidget(view);
 
         // create default empty method:
-        PaymentMethod method = EntityFactory.create(PaymentMethod.class);
+        LeasePaymentMethod method = EntityFactory.create(LeasePaymentMethod.class);
         method.type().setValue(PaymentType.Echeck);
         view.populate(method);
     }
 
     @Override
-    public void save(PaymentMethod paymentmethod) {
+    public void save(LeasePaymentMethod paymentmethod) {
         srv.create(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {

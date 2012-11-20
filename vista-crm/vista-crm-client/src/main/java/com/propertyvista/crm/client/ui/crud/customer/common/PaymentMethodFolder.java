@@ -26,17 +26,17 @@ import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 
-public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> {
+public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMethod> {
 
     private static final I18n i18n = I18n.get(PaymentMethodFolder.class);
 
     private final boolean showPreauthorized;
 
     public PaymentMethodFolder(boolean modifiable, boolean showPreauthorized) {
-        super(PaymentMethod.class, modifiable);
+        super(LeasePaymentMethod.class, modifiable);
         this.showPreauthorized = showPreauthorized;
     }
 
@@ -45,7 +45,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> 
         new SelectEnumDialog<PaymentType>(i18n.tr("Select Payment Method Type"), PaymentType.avalableInProfile()) {
             @Override
             public boolean onClickOk() {
-                PaymentMethod pm = EntityFactory.create(PaymentMethod.class);
+                LeasePaymentMethod pm = EntityFactory.create(LeasePaymentMethod.class);
                 pm.type().setValue(getSelectedType());
                 addItem(pm);
                 return true;
@@ -60,7 +60,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> 
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof PaymentMethod) {
+        if (member instanceof LeasePaymentMethod) {
             return new PaymentMethodEditorEx();
         }
         return super.create(member);

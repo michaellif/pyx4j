@@ -40,7 +40,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePaymentMethodForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePersonalDisclaimerForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureQuotationRequestForm;
@@ -191,7 +191,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     @Override
     public void init(TenantSurePersonalDisclaimerHolderDTO disclaimerHolder, TenantSureQuotationRequestParamsDTO quotationRequestParams,
-            PaymentMethod paymentMethod) {
+            LeasePaymentMethod paymentMethod) {
         stepDriver.reset();
 
         personalDisclaimerForm.populate(disclaimerHolder);
@@ -216,7 +216,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     @Override
     public void setBillingAddress(AddressStructured billingAddress) {
-        PaymentMethod pm = paymentMethodForm.getValue();
+        LeasePaymentMethod pm = paymentMethodForm.getValue();
         pm.billingAddress().set(billingAddress);
         paymentMethodForm.populate(pm);
     }
@@ -237,7 +237,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     }
 
     @Override
-    public PaymentMethod getPaymentMethod() {
+    public LeasePaymentMethod getPaymentMethod() {
         return paymentMethodForm.getValue().duplicate();
     }
 

@@ -22,13 +22,13 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @DiscriminatorValue("Tenant")
 public interface Tenant extends LeaseParticipant<LeaseTermTenant> {
 
-    PaymentMethod preauthorizedPayment();
+    LeasePaymentMethod preauthorizedPayment();
 
     // ----------------------------------------------------
     // parent <-> child relationship:

@@ -26,16 +26,16 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
-public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<PaymentMethod> implements PaymentMethodCrudService {
+public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeasePaymentMethod> implements PaymentMethodCrudService {
 
     public PaymentMethodCrudServiceImpl() {
-        super(PaymentMethod.class);
+        super(LeasePaymentMethod.class);
     }
 
     @Override
@@ -44,26 +44,26 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<Paymen
     }
 
     @Override
-    protected void enhanceListCriteria(EntityListCriteria<PaymentMethod> dbCriteria, EntityListCriteria<PaymentMethod> dtoCriteria) {
+    protected void enhanceListCriteria(EntityListCriteria<LeasePaymentMethod> dbCriteria, EntityListCriteria<LeasePaymentMethod> dtoCriteria) {
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().customer().user(), TenantAppContext.getCurrentUser()));
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().isOneTimePayment(), Boolean.FALSE));
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().isDeleted(), Boolean.FALSE));
     }
 
     @Override
-    protected void enhanceListRetrieved(PaymentMethod entity, PaymentMethod dto) {
+    protected void enhanceListRetrieved(LeasePaymentMethod entity, LeasePaymentMethod dto) {
         dto.isPreauthorized().setValue(entity.equals(TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().preauthorizedPayment()));
         super.enhanceListRetrieved(entity, dto);
     }
 
     @Override
-    protected void enhanceRetrieved(PaymentMethod entity, PaymentMethod dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(LeasePaymentMethod entity, LeasePaymentMethod dto, RetrieveTraget retrieveTraget) {
         dto.isPreauthorized().setValue(entity.equals(TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().preauthorizedPayment()));
         super.enhanceRetrieved(entity, dto, retrieveTraget);
     }
 
     @Override
-    protected void persist(PaymentMethod entity, PaymentMethod dto) {
+    protected void persist(LeasePaymentMethod entity, LeasePaymentMethod dto) {
         LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenantInLease.leaseTermV());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
@@ -86,7 +86,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<Paymen
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        PaymentMethod paymentMethod = Persistence.service().retrieve(entityClass, entityId);
+        LeasePaymentMethod paymentMethod = Persistence.service().retrieve(entityClass, entityId);
         ServerSideFactory.create(PaymentFacade.class).deletePaymentMethod(paymentMethod);
         Persistence.service().commit();
         callback.onSuccess(Boolean.TRUE);

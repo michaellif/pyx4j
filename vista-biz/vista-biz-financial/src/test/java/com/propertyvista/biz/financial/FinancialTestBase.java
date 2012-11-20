@@ -55,7 +55,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Feature.Type;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.VistaBasicBehavior;
@@ -639,7 +639,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         paymentRecord.leaseTermParticipant().set(leaseParticipant);
 
         // add payment method type
-        PaymentMethod pm = EntityFactory.create(PaymentMethod.class);
+        LeasePaymentMethod pm = EntityFactory.create(LeasePaymentMethod.class);
         pm.customer().set(leaseParticipant.leaseParticipant().customer());
         pm.type().setValue(type);
         paymentRecord.paymentMethod().set(pm);

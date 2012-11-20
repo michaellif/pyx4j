@@ -7,19 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-14
- * @author ArtyomB
+ * Created on 2012-11-20
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views;
+package com.propertyvista.domain.payment;
 
-import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.portal.client.ui.residents.View;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owner;
 
-public interface TenantSureCreditCardUpdateView extends View<LeasePaymentMethod> {
+import com.propertyvista.domain.tenant.lease.Tenant;
 
-    interface Presenter extends View.Presenter<LeasePaymentMethod> {
+@DiscriminatorValue("InsurancePaymentMethod")
+public interface InsurancePaymentMethod extends PaymentMethod {
 
-    }
+    @Owner
+    @JoinColumn
+    Tenant tenant();
 
 }

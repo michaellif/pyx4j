@@ -20,7 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePremiumTaxDTO;
@@ -45,7 +45,7 @@ public class TenantSureManagementServiceImpl implements TenantSureManagementServ
     }
 
     @Override
-    public void updatePaymentMethod(AsyncCallback<VoidSerializable> callback, PaymentMethod paymentMethod) {
+    public void updatePaymentMethod(AsyncCallback<VoidSerializable> callback, LeasePaymentMethod paymentMethod) {
         // TODO Auto-generated method stub
         callback.onSuccess(null);
     }

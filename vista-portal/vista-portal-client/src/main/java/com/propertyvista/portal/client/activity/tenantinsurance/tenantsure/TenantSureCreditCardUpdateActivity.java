@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureCreditCardUpdateView;
@@ -37,7 +37,7 @@ public class TenantSureCreditCardUpdateActivity extends SecurityAwareActivity im
         super.start(panel, eventBus);
         view.setPresenter(this);
 
-        PaymentMethod pm = EntityFactory.create(PaymentMethod.class);
+        LeasePaymentMethod pm = EntityFactory.create(LeasePaymentMethod.class);
         pm.type().setValue(PaymentType.CreditCard);
         view.populate(pm);
 
@@ -45,7 +45,7 @@ public class TenantSureCreditCardUpdateActivity extends SecurityAwareActivity im
     }
 
     @Override
-    public void save(PaymentMethod entity) {
+    public void save(LeasePaymentMethod entity) {
         // TODO Auto-generated method stub
 
     }

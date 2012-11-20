@@ -41,7 +41,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 /**
@@ -131,7 +131,7 @@ public interface PaymentRecord extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
-    PaymentMethod paymentMethod();
+    LeasePaymentMethod paymentMethod();
 
     IPrimitive<PaymentStatus> paymentStatus();
 
