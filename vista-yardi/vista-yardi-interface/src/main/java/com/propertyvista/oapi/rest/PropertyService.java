@@ -56,7 +56,11 @@ public class PropertyService {
     @Produces({ MediaType.APPLICATION_XML })
     public BuildingsRS getBuildings(@QueryParam("province") String province) {
         BuildingsRS allBuildings = PropertyFacade.getBuildings();
+        if (province == null) {
+            return allBuildings;
+        }
         BuildingsRS filteredBuildings = new BuildingsRS();
+
         for (BuildingRS building : allBuildings.buildings) {
             if (building.info.address.province.equals(province)) {
                 filteredBuildings.buildings.add(building);

@@ -50,6 +50,9 @@ public class LeaseService {
     public List<LeaseRS> getLeases(@QueryParam("propertyCode") String propertyCode) {
 
         List<LeaseRS> allLeases = LeaseFacade.getLeases();
+        if (propertyCode == null) {
+            return allLeases;
+        }
         List<LeaseRS> filteredLeases = new ArrayList<LeaseRS>();
         for (LeaseRS lease : allLeases) {
             if (lease.propertyCode.equals(propertyCode)) {
