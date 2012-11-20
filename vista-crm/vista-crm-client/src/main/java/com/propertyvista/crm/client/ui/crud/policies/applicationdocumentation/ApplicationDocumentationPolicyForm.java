@@ -83,7 +83,7 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
                     new EntityFolderColumnDescriptor(proto().type(), "15em", true),                    
-                        new EntityFolderColumnDescriptor(proto().name(), "15em")
+                        new EntityFolderColumnDescriptor(proto().name(), "30em")
                     );//@formatter:on
         }
 
