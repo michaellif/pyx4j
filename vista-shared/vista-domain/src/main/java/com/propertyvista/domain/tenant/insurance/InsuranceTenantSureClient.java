@@ -26,6 +26,7 @@ public interface InsuranceTenantSureClient extends IEntity {
     @JoinColumn
     Tenant tenant();
 
+    /** this is a reference of a client in CFC API (TenantSure underwriter) system */
     IPrimitive<String> clientReferenceNumber();
 
 }

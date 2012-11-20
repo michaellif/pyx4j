@@ -26,13 +26,17 @@ import com.cfcprograms.api.Result;
 import com.cfcprograms.api.SimpleClient;
 import com.cfcprograms.api.SimpleClientResponse;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
 
+import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureTenantAdapter;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
+/** This is an adapter class for CFC API */
 class CfcApiCleint {
-
     private CFCAPI getApi() {
         try {
             if (VistaDeployment.isVistaProduction()) {
@@ -51,33 +55,38 @@ class CfcApiCleint {
     }
 
     private boolean isSuccessfulCode(String code) {
-        if ("SU001".equals(code)) {
+        if (code != null && code.startsWith("SU")) {
             return true;
         } else {
             return false;
         }
     }
 
-    String createClient(String addressTodo) {
-
+    /** Return client ID */
+    InsuranceTenantSureClient createClient(Tenant tenant) {
         CFCAPISoap api = getApi().getCFCAPISoap();
 
         Credentials crs = getCredentials();
         Result autenticationResult = api.userAuthentication(crs.email, crs.password);
-        //  Error handling
+
         if (!isSuccessfulCode(autenticationResult.getCode())) {
             throw new Error(autenticationResult.getCode());
         }
 
         SimpleClient parameters = new ObjectFactory().createSimpleClient();
-        //mapParams()
         parameters.setSessionID(autenticationResult.getId());
+
+        TenantSureTenantAdapter.fillClient(tenant, parameters);
 
         SimpleClientResponse createClientRssult = api.runCreateClient(parameters);
         if (!isSuccessfulCode(createClientRssult.getSimpleClientResult().getCode())) {
             throw new Error(createClientRssult.getSimpleClientResult().getCode());
         }
 
-        return createClientRssult.getSimpleClientResult().getId();
+        InsuranceTenantSureClient tenantSureClient = EntityFactory.create(InsuranceTenantSureClient.class);
+        tenantSureClient.tenant().set(tenant);
+        tenantSureClient.clientReferenceNumber().setValue(createClientRssult.getSimpleClientResult().getId());
+        return tenantSureClient;
     }
+
 }
