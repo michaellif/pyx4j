@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.tenant.insurance;
 
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
@@ -41,10 +42,12 @@ public interface TenantSureFacade {
 
     void cancel(Tenant tenantId);
 
+    PaymentMethod getPaymentMethod(Tenant tenantId);
+
     /**
      * Only update credit card, do not perform outstanding payment
      */
-    //UpdateCreditCard
+    PaymentMethod updatePaymentMethod(PaymentMethod paymentMethod, Tenant tenantId);
 
     //payOutstandingPayment ?
 }

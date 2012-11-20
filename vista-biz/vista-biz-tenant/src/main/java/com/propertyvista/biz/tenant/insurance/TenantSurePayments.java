@@ -23,6 +23,10 @@ class TenantSurePayments {
         return null;
     }
 
+    static PaymentMethod updatePaymentMethod(PaymentMethod paymentMethod, Tenant tenantId) {
+        return null;
+    }
+
     static InsuranceTenantSureTransaction preAuthorization(InsuranceTenantSureTransaction transaction) {
         return transaction;
     }

@@ -21,6 +21,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
@@ -31,6 +32,19 @@ public abstract class TenantSureFacadeImpl implements TenantSureFacade {
     private final static Logger log = LoggerFactory.getLogger(TenantSureFacadeImpl.class);
 
     private static final I18n i18n = I18n.get(TenantSureFacadeImpl.class);
+
+    @Override
+    public PaymentMethod getPaymentMethod(Tenant tenantId) {
+        return TenantSurePayments.getPaymentMethod(tenantId);
+    }
+
+    /**
+     * Only update credit card, do not perform outstanding payment
+     */
+    @Override
+    public PaymentMethod updatePaymentMethod(PaymentMethod paymentMethod, Tenant tenantId) {
+        return TenantSurePayments.updatePaymentMethod(paymentMethod, tenantId);
+    }
 
     /**
      * Function implements this: http://jira.birchwoodsoftwaregroup.com/wiki/pages/viewpage.action?pageId=10027234
