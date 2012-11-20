@@ -30,8 +30,8 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.ui.components.IdUploaderFolder;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
+import com.propertyvista.common.client.ui.components.folders.IdUploaderFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;

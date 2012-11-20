@@ -11,15 +11,15 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.common.client.ui.components;
+package com.propertyvista.common.client.ui.components.folders;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -27,17 +27,18 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
+import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUploaderFolder;
+import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
-import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
+import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.VistaTODO;
 
 public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
 
-    private final static I18n i18n = I18n.get(IdUploaderFolder.class);
+    final static I18n i18n = I18n.get(IdUploaderFolder.class);
 
     protected ApplicationDocumentationPolicy documentationPolicy = null;
 
@@ -81,6 +82,19 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
     }
 
     @Override
+    protected void addItem() {
+        new DocumentTypeSelectorDialog() {
+            @Override
+            public boolean onClickOk() {
+                IdentificationDocument document = EntityFactory.create(IdentificationDocument.class);
+                document.idType().set(getSelectedItems().get(0));
+                addItem(document);
+                return true;
+            }
+        }.show();
+    }
+
+    @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof IdentificationDocument) {
             return new IdentificationDocumentEditor();
@@ -95,19 +109,17 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
             super(IdentificationDocument.class);
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public IsWidget createContent() {
             FormFlexPanel content = new FormFlexPanel();
             content.setSize("100%", "100%");
             int row = -1;
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().idType(), new CEntityComboBox(IdentificationDocumentType.class))).labelWidth(8)
-                    .build());
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().idType())).labelWidth(8).build());
             content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().idNumber())).labelWidth(8).build());
             content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notes())).labelWidth(8).build());
+
             ApplicationDocumentFileUploaderFolder docPagesFolder = new ApplicationDocumentFileUploaderFolder();
             docPagesFolder.addValueValidator(new EditableValueValidator<IList<ApplicationDocumentFile>>() {
-
                 @Override
                 public ValidationError isValid(CComponent<IList<ApplicationDocumentFile>, ?> component, IList<ApplicationDocumentFile> value) {
                     if (value != null && value.size() < 1) {
@@ -117,10 +129,47 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
                     }
                 }
             });
+
+            // Tune ups:
+            get(proto().idType()).setViewable(true);
+
             content.setH3(++row, 0, 1, i18n.tr("Files"));
             content.setWidget(++row, 0, inject(proto().documentPages(), docPagesFolder));
             return content;
         }
-    }
 
+        @Override
+        public void addValidations() {
+            super.addValidations();
+
+            get(proto().idNumber()).addValueValidator(new EditableValueValidator<String>() {
+                @Override
+                public ValidationError isValid(CComponent<String, ?> component, String value) {
+                    if (get(proto().idType()).getValue() != null) {
+                        switch (get(proto().idType()).getValue().type().getValue()) {
+                        case canadianSIN:
+                            if (!ValidationUtils.isSinValid(value.trim().replaceAll(" ", ""))) {
+                                return new ValidationError(component, i18n.tr("Invalid SIN"));
+                            }
+                            break;
+                        case citizenship:
+                            break;
+                        case immigration:
+                            break;
+                        case license:
+                            break;
+                        case other:
+                            break;
+                        case passport:
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+
+                    return null;
+                }
+            });
+        }
+    }
 }
