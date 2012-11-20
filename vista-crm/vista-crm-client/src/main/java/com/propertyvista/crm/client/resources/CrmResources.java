@@ -15,8 +15,12 @@ package com.propertyvista.crm.client.resources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
+import com.google.gwt.resources.client.TextResource;
 
 public interface CrmResources extends ClientBundleWithLookup {
 
     CrmResources INSTANCE = GWT.create(CrmResources.class);
+
+    @Source("BackgroundCheckHelp.html")
+    TextResource backgroundCheckHelp();
 }
