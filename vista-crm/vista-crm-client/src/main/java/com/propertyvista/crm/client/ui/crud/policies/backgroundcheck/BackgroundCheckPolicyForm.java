@@ -53,7 +53,7 @@ public class BackgroundCheckPolicyForm extends PolicyDTOTabPanelBasedForm<Backgr
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().collection()), 5).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().chargeOff()), 5).build());
 
-        panel.setH1(++row, 0, 1, i18n.tr("Help"));
+        panel.setH3(++row, 0, 1, i18n.tr("Help"));
         panel.setWidget(++row, 0, new HTML(CrmResources.INSTANCE.backgroundCheckHelp().getText()));
 
         return panel;
