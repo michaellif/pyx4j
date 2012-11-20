@@ -22,6 +22,7 @@ import com.propertyvista.oapi.PropertyFacade;
 import com.propertyvista.oapi.model.BuildingsRS;
 
 //http://localhost:8888/vista/interfaces/oapi/rs/propertyService/listAllBuildings
+//https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/rs/propertyService/listAllBuildings
 @Path("/propertyService")
 public class PropertyService {
 
