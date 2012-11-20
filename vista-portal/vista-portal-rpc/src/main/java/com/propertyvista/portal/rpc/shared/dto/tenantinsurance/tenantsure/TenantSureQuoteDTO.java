@@ -44,4 +44,6 @@ public interface TenantSureQuoteDTO extends IEntity {
     @Format("#,##0.00")
     IPrimitive<BigDecimal> totalMonthlyPayable();
 
+    /** if this field is not <code>null</code> then automatic quote is not available through the CFC system */
+    IPrimitive<String> specialQuote();
 }

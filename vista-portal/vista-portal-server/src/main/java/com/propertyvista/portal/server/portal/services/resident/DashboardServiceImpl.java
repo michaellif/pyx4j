@@ -20,7 +20,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.tenant.TenantInsuranceFacade;
+import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;

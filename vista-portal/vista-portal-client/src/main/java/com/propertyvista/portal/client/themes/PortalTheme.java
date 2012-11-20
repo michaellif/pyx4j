@@ -461,7 +461,7 @@ public class PortalTheme extends VistaTheme {
             addStyle(style);
         }
         {
-            Style style = new Style("." + TenantSurePurchaseViewImpl.Styles.TSPurchaseViewBuyInsuranceButton.name());
+            Style style = new Style("." + TenantSurePurchaseViewImpl.Styles.TSPurchaseViewNextStepButton.name());
             style.addProperty("float", "right");
             style.addProperty("margin-right", "20px");
             addStyle(style);

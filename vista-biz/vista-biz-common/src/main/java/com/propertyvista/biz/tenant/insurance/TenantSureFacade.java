@@ -7,17 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-08
+ * Created on 2012-11-16
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.tenant;
+package com.propertyvista.biz.tenant.insurance;
 
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
 
-public interface TenantInsuranceFacade {
+public interface TenantSureFacade {
 
-    TenantInsuranceStatusDTO getInsuranceStatus(Tenant tenantStub);
+    /** will return <code>null</code> if tenant is not covered by tenant sure */
+    TenantSureTenantInsuranceStatusDetailedDTO getStatus(Tenant tenant);
 
 }

@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.biz.tenant.TenantInsuranceFacade;
+import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;

@@ -81,7 +81,7 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
         service.acceptQuote(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                // TODO go to paymnet insurance processed screen
+                view.populatePaymentProcessingSuccess();
             }
 
             @Override

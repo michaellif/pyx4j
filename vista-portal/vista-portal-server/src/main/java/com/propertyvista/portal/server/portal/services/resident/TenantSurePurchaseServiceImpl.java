@@ -20,8 +20,8 @@ import java.util.Random;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 
@@ -32,12 +32,15 @@ import com.propertyvista.domain.tenant.ptapp.IAgree;
 import com.propertyvista.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO.PreviousClaims;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService {
+
+    private static final I18n i18n = I18n.get(TenantSurePurchaseServiceImpl.class);
 
     @Deprecated
     // TODO this is just a mockup
@@ -111,9 +114,13 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     @Override
     public void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureCoverageDTO quotationRequest) {
         TenantSureQuoteDTO quote = EntityFactory.create(TenantSureQuoteDTO.class);
-        quote.grossPremium().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
-        quote.underwriterFee().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
-        quote.totalMonthlyPayable().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
+        if (quotationRequest.numberOfPreviousClaims().getValue() == PreviousClaims.MoreThanTwo) {
+            quote.specialQuote().setValue(i18n.tr("Please call TenantSure 1-800-1234-567 to get your quote."));
+        } else {
+            quote.grossPremium().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
+            quote.underwriterFee().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
+            quote.totalMonthlyPayable().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
+        }
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -129,7 +136,9 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        throw new UserRuntimeException("This is not yet implemented :)");
+
+        callback.onSuccess(null);
+//        throw new UserRuntimeException("This is not yet implemented :)");
     }
 
     @Override

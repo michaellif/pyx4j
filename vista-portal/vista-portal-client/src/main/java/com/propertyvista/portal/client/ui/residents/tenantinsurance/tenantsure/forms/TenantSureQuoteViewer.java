@@ -14,10 +14,12 @@
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms;
 
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePremiumTaxDTO;
@@ -26,18 +28,27 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
 
     @Override
-    public IsWidget createContent(TenantSureQuoteDTO value) {
-        FormFlexPanel content = new FormFlexPanel();
-        if (value != null) {
-            int row = 0;
-            addDetailRecord(content, ++row, value.grossPremium().getMeta().getCaption(), value.grossPremium().getStringView());
-            addDetailRecord(content, ++row, value.underwriterFee().getMeta().getCaption(), value.underwriterFee().getStringView());
-            for (TenantSurePremiumTaxDTO tax : value.taxBreakdown()) {
-                addDetailRecord(content, ++row, tax.taxName().getValue(), tax.absoluteAmount().getStringView());
+    public IsWidget createContent(TenantSureQuoteDTO quote) {
+        FormFlexPanel contentPanel = new FormFlexPanel();
+        if (quote != null) {
+            if (quote.specialQuote().isNull()) {
+                int row = 0;
+                addDetailRecord(contentPanel, ++row, quote.grossPremium().getMeta().getCaption(), quote.grossPremium().getStringView());
+                addDetailRecord(contentPanel, ++row, quote.underwriterFee().getMeta().getCaption(), quote.underwriterFee().getStringView());
+                for (TenantSurePremiumTaxDTO tax : quote.taxBreakdown()) {
+                    addDetailRecord(contentPanel, ++row, tax.taxName().getValue(), tax.absoluteAmount().getStringView());
+                }
+                addTotalRecord(contentPanel, ++row, quote.totalMonthlyPayable().getMeta().getCaption(), quote.totalMonthlyPayable().getStringView());
+            } else {
+                Label specialQuoteText = new Label();
+                specialQuoteText.getElement().getStyle();
+                specialQuoteText.setText(quote.specialQuote().getValue());
+                contentPanel.setWidget(0, 0, specialQuoteText);
+                contentPanel.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
+                contentPanel.getCellFormatter().getElement(0, 0).getStyle().setProperty("height", "10em");
             }
-            addTotalRecord(content, ++row, value.totalMonthlyPayable().getMeta().getCaption(), value.totalMonthlyPayable().getStringView());
         }
-        return content;
+        return contentPanel;
     }
 
     private void addDetailRecord(FlexTable table, int row, String description, String amount) {

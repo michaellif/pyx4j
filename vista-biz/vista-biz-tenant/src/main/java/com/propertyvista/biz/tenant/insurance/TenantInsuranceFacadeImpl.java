@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.tenant;
+package com.propertyvista.biz.tenant.insurance;
 
 import java.io.File;
 import java.math.BigDecimal;
