@@ -13,10 +13,13 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.propertyvista.crm.rpc.services.policies.policy.BackgroundCheckPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.BackgroundCheckPolicyDTO;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
+import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy.BjccEntry;
 
 public class BackgroundCheckPolicyCrudServiceImpl extends GenericPolicyCrudService<BackgroundCheckPolicy, BackgroundCheckPolicyDTO> implements
         BackgroundCheckPolicyCrudService {
@@ -42,6 +45,28 @@ public class BackgroundCheckPolicyCrudServiceImpl extends GenericPolicyCrudServi
     }
 
     @Override
+    public void createNewPolicy(final AsyncCallback<BackgroundCheckPolicyDTO> callback) {
+        super.createNewPolicy(new AsyncCallback<BackgroundCheckPolicyDTO>() {
+            @Override
+            public void onFailure(Throwable err) {
+                callback.onFailure(err);
+            }
+
+            @Override
+            public void onSuccess(BackgroundCheckPolicyDTO policy) {
+                // load default values:
+                policy.version().bankruptcy().setValue(BjccEntry.m12);
+                policy.version().judgment().setValue(BjccEntry.m12);
+                policy.version().collection().setValue(BjccEntry.m12);
+                policy.version().chargeOff().setValue(BjccEntry.m12);
+                policy.strategyNumber().setValue(1);
+
+                callback.onSuccess(policy);
+            }
+        });
+    }
+
+    @Override
     protected void persist(BackgroundCheckPolicy dbo, BackgroundCheckPolicyDTO in) {
         //The order of indexes is significant
         dbo.strategyNumber().setValue(
@@ -50,4 +75,5 @@ public class BackgroundCheckPolicyCrudServiceImpl extends GenericPolicyCrudServi
 
         super.persist(dbo, in);
     }
+
 }
