@@ -13,11 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -66,7 +70,9 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -571,29 +577,68 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private abstract class SendMailBox extends EntitySelectorListDialog<LeaseTermParticipant<?>> {
 
+        private final List<LeaseTermParticipant<?>> tenants = new ArrayList<LeaseTermParticipant<?>>();
+
+        private final List<LeaseTermParticipant<?>> guarantors = new ArrayList<LeaseTermParticipant<?>>();
+
         private CComboBox<EmailTemplateType> emailType;
 
-        public SendMailBox(List<LeaseTermParticipant<?>> applicationUsers) {
-            super(i18n.tr("Send Mail"), true, applicationUsers);
+        public SendMailBox(List<LeaseTermParticipant<?>> participants) {
+            super(i18n.tr("Send Mail"), true, Arrays.<LeaseTermParticipant<?>> asList());
+
+            // Classify participants:
+            for (LeaseTermParticipant<?> participant : participants) {
+                if (participant.isInstanceOf(LeaseTermTenant.class)) {
+                    tenants.add(participant);
+                } else if (participant.isInstanceOf(LeaseTermGuarantor.class)) {
+                    guarantors.add(participant);
+                }
+            }
+
             getOkButton().setText(i18n.tr("Send"));
+
+            if (emailType.getOptions().size() == 1) {
+                emailType.setValue(emailType.getOptions().get(0), true);
+                emailType.setEditable(false);
+            }
         }
 
         @Override
         protected Widget initBody(boolean isMultiselectAllowed, List<LeaseTermParticipant<?>> data) {
             VerticalPanel body = new VerticalPanel();
-            body.add(new HTML(i18n.tr("Select Tenants:")));
-            body.add(super.initBody(isMultiselectAllowed, data));
+
             body.add(new HTML(i18n.tr("Email Type:")));
-            body.add(initEmailTypes());
+            body.add(initEmailTypes(Arrays.asList(EmailTemplateType.TenantInvitation)));
+
+            body.add(new HTML("&nbsp"));
+
+            body.add(new HTML(i18n.tr("Recipient(s):")));
+            body.add(super.initBody(isMultiselectAllowed, data));
+
+            body.setSpacing(4);
             body.setWidth("100%");
-            body.setSpacing(3);
             return body;
         }
 
-        private Widget initEmailTypes() {
+        private Widget initEmailTypes(Collection<EmailTemplateType> opt) {
             emailType = new CComboBox<EmailTemplateType>();
-            emailType.setOptions(Arrays.asList(EmailTemplateType.TenantInvitation));
-            emailType.setValue(EmailTemplateType.TenantInvitation, false);
+            emailType.setOptions(opt);
+            emailType.addValueChangeHandler(new ValueChangeHandler<EmailTemplateType>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<EmailTemplateType> event) {
+                    /*
+                     * Update recipients list according to selected email type:
+                     */
+                    switch (event.getValue()) {
+                    case TenantInvitation:
+                        setData(tenants);
+                        break;
+                    default:
+                        setData(Arrays.<LeaseTermParticipant<?>> asList());
+                        break;
+                    }
+                }
+            });
             emailType.setMandatory(true);
             return emailType.asWidget();
         }
