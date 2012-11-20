@@ -14,7 +14,7 @@
 package com.propertyvista.common.client.ui.components;
 
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
@@ -40,16 +40,13 @@ public class ApplicationDocumentFileUploaderFolder extends VistaTableFolder<Appl
 
     private static final I18n i18n = I18n.get(ApplicationDocumentFileUploaderFolder.class);
 
-    private static final List<EntityFolderColumnDescriptor> COLUMNS;
-
-    static {
-        ApplicationDocumentFile proto = EntityFactory.getEntityPrototype(ApplicationDocumentFile.class);
-        COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
-        COLUMNS.add(new EntityFolderColumnDescriptor(proto.fileName(), "30em"));
+    public ApplicationDocumentFileUploaderFolder() {
+        super(ApplicationDocumentFile.class, i18n.tr("File"));
     }
 
-    public ApplicationDocumentFileUploaderFolder() {
-        super(ApplicationDocumentFile.class);
+    @Override
+    public List<EntityFolderColumnDescriptor> columns() {
+        return Arrays.asList((new EntityFolderColumnDescriptor(proto().fileName(), "30em")));
     }
 
     @Override
@@ -65,11 +62,6 @@ public class ApplicationDocumentFileUploaderFolder extends VistaTableFolder<Appl
             return new ApplicationDocumentEditor();
         }
         return super.create(member);
-    }
-
-    @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        return COLUMNS;
     }
 
     @Override
