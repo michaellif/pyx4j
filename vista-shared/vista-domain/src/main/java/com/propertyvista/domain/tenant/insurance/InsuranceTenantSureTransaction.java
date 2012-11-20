@@ -28,11 +28,15 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.payment.PaymentMethod;
 
-public interface InsuranceTenantSureTransactions extends IEntity {
+public interface InsuranceTenantSureTransaction extends IEntity {
 
     enum TransactionStatus {
 
-        Submitted,
+        Draft,
+
+        Authorized,
+
+        Processing,
 
         Rejected,
 

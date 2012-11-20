@@ -24,7 +24,7 @@ public enum CaledonTransactionType {
     VOID("V", "Void"),
 
     //external api
-    AUTH_REVERSE("A", "Auth Reversal"),
+    AUTH_REVERSE("W", "Auth Reversal"),
 
     PREAUTH("P", "Pre-Authorization"),
 

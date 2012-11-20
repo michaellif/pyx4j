@@ -35,15 +35,20 @@ public interface InsuranceTenantSure extends IEntity {
 
     public enum Status {
 
+        Draft,
+
         /**
          * Initial payment or bind Failed
          */
         Failed,
 
+        //Initial Payment Failed
+        Pending,
+
         Active,
 
         //Payment Failed, Pending cancellation
-        Pending,
+        PendingCancellation,
 
         Cancelled;
 
@@ -87,6 +92,6 @@ public interface InsuranceTenantSure extends IEntity {
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<InsuranceTenantSureTransactions> transactions();
+    ISet<InsuranceTenantSureTransaction> transactions();
 
 }
