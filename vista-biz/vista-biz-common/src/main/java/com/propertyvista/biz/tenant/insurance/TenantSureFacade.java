@@ -14,11 +14,37 @@
 package com.propertyvista.biz.tenant.insurance;
 
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
 
 public interface TenantSureFacade {
 
     /** will return <code>null</code> if tenant is not covered by tenant sure */
-    TenantSureTenantInsuranceStatusDetailedDTO getStatus(Tenant tenant);
+    TenantSureTenantInsuranceStatusDetailedDTO getStatus(Tenant tenantId);
 
+    TenantSureQuoteDTO getQuote(TenantSureCoverageDTO coverage, Tenant tenantId);
+
+    /**
+     * Save all data including CC and perform TenantSure bind.
+     * If any fails
+     * - Save Quote in DB as InsuranceTenantSure Status.Pending
+     * - Save CC, create token
+     * - make payment Authorize
+     * - TenantSure bind
+     * - make payment Process (or Return if bind fails)
+     * - Make InsuranceTenantSure.status Active
+     * 
+     * If any action failed: status set to Failed and record is kept in DB
+     */
+    void buyInsurance(String quoteId, Tenant tenantId);
+
+    void cancel(Tenant tenantId);
+
+    /**
+     * Only update credit card, do not perform outstanding payment
+     */
+    //UpdateCreditCard
+
+    //payOutstandingPayment ?
 }

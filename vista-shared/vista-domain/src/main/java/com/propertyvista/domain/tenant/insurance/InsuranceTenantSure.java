@@ -35,6 +35,11 @@ public interface InsuranceTenantSure extends IEntity {
 
     public enum Status {
 
+        /**
+         * Initial payment or bind Failed
+         */
+        Failed,
+
         Active,
 
         //Payment Failed, Pending cancellation
@@ -55,6 +60,8 @@ public interface InsuranceTenantSure extends IEntity {
 
     @Owner
     @JoinColumn
+    InsuranceTenantSureClient client();
+
     InsuranceCertificate insuranceCertificate();
 
     /**
