@@ -79,6 +79,7 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
                 new BigDecimal("5000000")
         ));//@formatter:on
         params.contentsCoverageOptions().addAll(Arrays.asList(//@formatter:off
+                null,
                 new BigDecimal("10000"),
                 new BigDecimal("20000"),
                 new BigDecimal("30000"),

@@ -26,6 +26,8 @@ import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
 public abstract class TenantSureFacadeImpl implements TenantSureFacade {
 
@@ -36,6 +38,13 @@ public abstract class TenantSureFacadeImpl implements TenantSureFacade {
     @Override
     public InsurancePaymentMethod getPaymentMethod(Tenant tenantId) {
         return TenantSurePayments.getPaymentMethod(tenantId);
+    }
+
+    @Override
+    public TenantSureQuoteDTO getQuote(TenantSureCoverageDTO coverage, Tenant tenantId) {
+        InsuranceTenantSureClient client = initializeCleint(tenantId);
+        TenantSureQuoteDTO quote = new CfcApiCleint().getQuote(client, coverage);
+        return quote;
     }
 
     /**
@@ -128,8 +137,8 @@ public abstract class TenantSureFacadeImpl implements TenantSureFacade {
     }
 
     InsuranceTenantSureClient initializeCleint(Tenant tenantId) {
-        new CfcApiCleint().createClient(null);
-        return null;
+        InsuranceTenantSureClient client = new CfcApiCleint().createClient(null);
+        return client;
     }
 
     private void bind(InsuranceTenantSure ts) {
