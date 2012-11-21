@@ -28,8 +28,8 @@ import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.model.UnitIO;
 
-//http://localhost:8888/vista/interfaces/oapi/rs/propertyService/listAllBuildings
-//https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/rs/propertyService/listAllBuildings
+//http://localhost:8888/vista/interfaces/oapi/rs/buildings
+//https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/rs/buildings
 
 /**
  * 

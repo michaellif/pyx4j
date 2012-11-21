@@ -114,6 +114,16 @@
         <url-pattern>/portal/*</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>OAPIFilter</filter-name>
+        <filter-class>com.propertyvista.server.oapi.OAPIFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>OAPIFilter</filter-name>
+        <url-pattern>/interfaces/oapi/*</url-pattern>
+    </filter-mapping>
+
     <!-- Servlets -->
 
     <servlet>
