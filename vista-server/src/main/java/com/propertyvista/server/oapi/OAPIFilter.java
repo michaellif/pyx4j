@@ -23,7 +23,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.HttpUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +45,8 @@ public class OAPIFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         log.info("Inside OAPIFilter.doFilter()");
         HttpServletRequest wrappedRequest = new SecurityWrapperHttpServletRequest((HttpServletRequest) request);
-        log.info(HttpUtils.getRequestURL(wrappedRequest).toString());
+
+        log.info(wrappedRequest.getRequestURL().toString());
 
         chain.doFilter(wrappedRequest, response);
     }
