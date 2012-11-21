@@ -250,12 +250,12 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     @Override
     public void onLogedOut() {
         logout.setVisible(false);
+        login.setVisible(false);
 //        alert.setVisible(false);
 //        message.setVisible(false);
 //        search.setVisible(false);
         home.setVisible(false);
         settings.setVisible(false);
-        login.setVisible(true);
         getSatisfaction.setVisible(false);
         greetings.setVisible(false);
         greetings.setHTML("");
