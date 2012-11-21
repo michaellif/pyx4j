@@ -100,12 +100,13 @@ class CfcApiCleint {
         CFCAPISoap api = getApi().getCFCAPISoap();
         Credentials crs = getCredentials();
         Result authenticationResult = api.userAuthentication(crs.email, crs.password);
-
         if (!isSuccessfulCode(authenticationResult.getCode())) {
             throw new Error(authenticationResult.getCode());
         }
 
         OptionQuote optionQuote = new ObjectFactory().createOptionQuote();
+        optionQuote.setSessionID(authenticationResult.getId());
+
         TenantSureCoverageRequestAdapter.fillOptionQuote(client, coverageRequest, optionQuote);
         Result quoteResponse = api.createQuote(optionQuote).getOptionQuoteResult();
         if (!isSuccessfulCode(quoteResponse.getCode())) {
@@ -121,5 +122,22 @@ class CfcApiCleint {
         tenantSureQuote.totalMonthlyPayable().setValue(new BigDecimal(quoteResponse.getTotalPayable()));
 
         return tenantSureQuote;
+    }
+
+    /** @return insurance certificate number */
+    String bindQuote(TenantSureQuoteDTO quote) {
+        CFCAPISoap api = getApi().getCFCAPISoap();
+        Credentials crs = getCredentials();
+        Result authenticationResult = api.userAuthentication(crs.email, crs.password);
+        if (!isSuccessfulCode(authenticationResult.getCode())) {
+            throw new Error(authenticationResult.getCode());
+        }
+
+        Result bindResult = api.requestBind(quote.quoteId().getValue(), authenticationResult.getId());
+        if (!isSuccessfulCode(bindResult.getCode())) {
+            throw new Error(bindResult.getCode());
+        }
+
+        return bindResult.getId();
     }
 }
