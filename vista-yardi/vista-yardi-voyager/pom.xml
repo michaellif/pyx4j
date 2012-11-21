@@ -43,12 +43,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-financial</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        
-        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-j2se</artifactId>
         </dependency>
