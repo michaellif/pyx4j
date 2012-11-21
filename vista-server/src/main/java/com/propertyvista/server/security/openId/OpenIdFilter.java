@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.dev.DevSession;
-import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.server.contexts.AntiDoS;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
@@ -72,7 +71,12 @@ public class OpenIdFilter implements Filter {
                 } else if (httprequest.getRequestURI().endsWith(".js") || httprequest.getRequestURI().contains("/srv/")) {
                     ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 } else {
-                    String receivingURL = ServletUtils.getActualRequestURL(httprequest, true);
+                    String receivingURL = httprequest.getRequestURL().toString();
+                    String query = httprequest.getQueryString();
+                    if (query != null && query.length() > 0) {
+                        receivingURL += "?" + query;
+                    }
+
                     log.debug("authentication required for ServletPath [{}] [{}]", httprequest.getServletPath(), receivingURL);
                     if (!devSession.isAlive()) {
                         devSession = DevSession.beginSession();
@@ -84,7 +88,7 @@ public class OpenIdFilter implements Filter {
                         }
                     }
                     OpenIdServlet.createResponsePage((HttpServletResponse) response, true,
-                            OpenId.getDestinationUrl(OpenIdServlet.DOMAIN, ServletUtils.getActualRequestBaseURL(httprequest)));
+                            OpenId.getDestinationUrl(OpenIdServlet.DOMAIN, httprequest.getRequestURL().toString()));
 
                 }
             }

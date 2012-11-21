@@ -41,7 +41,6 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 import com.pyx4j.essentials.server.dev.DevSession;
-import com.pyx4j.gwt.server.ServletUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.SystemConfig;
@@ -176,7 +175,11 @@ public class OpenId {
             log.info("has discovered {}", discovered);
 
             // extract the receiving URL from the HTTP request
-            String receivingURL = ServletUtils.getActualRequestURL(request, true);
+            String receivingURL = request.getRequestURL().toString();
+            String query = request.getQueryString();
+            if (query != null && query.length() > 0) {
+                receivingURL += "?" + query;
+            }
             log.info("verify the response {}", receivingURL);
 
             String claimed_id = responsePrams.getParameterValue("openid.claimed_id");

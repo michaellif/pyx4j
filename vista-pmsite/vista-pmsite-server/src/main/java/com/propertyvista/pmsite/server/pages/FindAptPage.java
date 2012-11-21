@@ -17,7 +17,6 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 
 import templates.TemplateResources;
 
-import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.Context;
 
@@ -62,14 +61,14 @@ public class FindAptPage extends BasePage {
             final boolean thereArenoMapToShow = true;
             if (thereArenoMapToShow) {
                 // Do not send key so Google will not validate it.
-                response.renderJavaScriptReference(ServletUtils.getRequestProtocol(Context.getRequest())
+                response.renderJavaScriptReference(Context.getRequest().getProtocol()
                         + "://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp&amp;key=");
             } else {
-                response.renderJavaScriptReference(ServletUtils.getRequestProtocol(Context.getRequest())
-                        + "://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=" + VistaDeployment.getPortalGoogleAPIKey());
+                response.renderJavaScriptReference(Context.getRequest().getProtocol() + "://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key="
+                        + VistaDeployment.getPortalGoogleAPIKey());
             }
         } else {
-            response.renderJavaScriptReference(ServletUtils.getRequestProtocol(Context.getRequest()) + "://maps.googleapis.com/maps/api/js?key="
+            response.renderJavaScriptReference(Context.getRequest().getProtocol() + "://maps.googleapis.com/maps/api/js?key="
                     + VistaDeployment.getPortalGoogleAPIKey() + "&amp;sensor=false");
         }
 

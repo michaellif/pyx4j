@@ -45,7 +45,6 @@ import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
-import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -371,7 +370,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         AuthenticationResponse ar = super.createAuthenticationResponse(sessionToken);
 
         String baseUrl = VistaDeployment.getBaseApplicationURL(getApplicationBehavior(), true);
-        String requestUrl = ServletUtils.getActualRequestURL(Context.getRequest(), false);
+        String requestUrl = Context.getRequest().getRequestURL().toString();
 
         SystemWallMessage systemWallMessage = null;
         VistaSystemIdentification systemId = VistaDeployment.getSystemIdentification();

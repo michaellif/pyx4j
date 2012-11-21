@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
@@ -36,12 +35,11 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public void obtainSetsatisfactionLoginUrl(AsyncCallback<String> callback) {
-        boolean isSecure = "https".equals(ServletUtils.getRequestProtocol(Context.getRequest()));
         Visit visit = Context.getVisit();
         String url;
         try {
             url = GetSatisfactionUrl.url(visit.getUserVisit().getEmail(), visit.getUserVisit().getName(),
-                    UserAccessUtils.getCrmUserUUID(visit.getUserVisit().getPrincipalPrimaryKey()), isSecure);
+                    UserAccessUtils.getCrmUserUUID(visit.getUserVisit().getPrincipalPrimaryKey()), Context.getRequest().isSecure());
         } catch (Throwable e) {
             log.error("Error", e);
             throw new UserRuntimeException(i18n.tr("Feedback Service unavailable"));

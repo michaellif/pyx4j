@@ -38,7 +38,7 @@ public class GwtInclude extends Panel {
         add(script);
 
         WebMarkupContainer relativeGwtInclude = new WebMarkupContainer("gwtResidentsJs");
-        relativeGwtInclude.add(new AttributeAppender("src", Model.of(PMSiteContentManager.getContextPath() + "residents/residents.nocache.js")));
+        relativeGwtInclude.add(new AttributeAppender("src", Model.of(PMSiteContentManager.getPortalContextPath() + "residents/residents.nocache.js")));
         add(relativeGwtInclude);
 
     }

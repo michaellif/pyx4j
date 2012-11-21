@@ -61,7 +61,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.security.rpc.AuthenticationService;
 
 import com.propertyvista.config.VistaDeployment;
@@ -430,7 +429,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         HttpServletRequest httpServletRequest = ((ServletWebRequest) request).getContainerRequest();
         // redirect if not secure
         String secureBaseUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true);
-        String requestUrl = ServletUtils.getActualRequestURL(httpServletRequest, false);
+        String requestUrl = httpServletRequest.getRequestURL().toString();
         log.debug("request: {}; configured: {}", requestUrl, secureBaseUrl);
         if (!requestUrl.startsWith(secureBaseUrl)) {
             String secureUrl = secureBaseUrl + request.getUrl().toString();
