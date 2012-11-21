@@ -84,7 +84,7 @@ public class LifecycleFilter implements Filter {
             if (!(request instanceof HttpServletRequest)) {
                 chain.doFilter(request, response);
             } else {
-                HttpServletRequest httprequest = (HttpServletRequest) request;
+                HttpServletRequest httprequest = new DeploymentContextHttpServletRequestWrapper((HttpServletRequest) request);
                 HttpServletResponse httpresponse = (HttpServletResponse) response;
                 if (!allowRequest(httprequest, httpresponse)) {
                     return;
@@ -107,11 +107,11 @@ public class LifecycleFilter implements Filter {
                         LoggerConfig.mdcPut(LoggerConfig.MDC_sessionNum, session.getId());
                     }
 
-                    chain.doFilter(request, response);
+                    chain.doFilter(httprequest, response);
                 } catch (Throwable t) {
                     log.error("return http error {}", t);
                     if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
-                        RequestDebug.debug(request);
+                        RequestDebug.debug(httprequest);
                         if (t instanceof UserRuntimeException) {
                             if (t instanceof StatusCodeUserRuntimeException) {
                                 httpresponse.sendError(((StatusCodeUserRuntimeException) t).getStatusCode(), t.getMessage());

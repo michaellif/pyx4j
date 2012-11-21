@@ -25,8 +25,16 @@ import javax.servlet.http.HttpServletRequest;
 
 public class ServletUtils {
 
+    public static final String x_forwarded_protocol = "x-forwarded-protocol";
+
+    public static final String x_forwarded_host = "x-forwarded-host";
+
+    public static final String x_forwarded_context = "x-forwarded-context";
+
+    public static final String x_forwarded_for = "x-forwarded-for";
+
     public static String getForwardedHost(HttpServletRequest request) {
-        String host = request.getHeader("x-forwarded-host");
+        String host = request.getHeader(ServletUtils.x_forwarded_host);
         if (host != null) {
             if (host.contains(", ")) {
                 host = host.split(", ")[0];
@@ -55,12 +63,12 @@ public class ServletUtils {
         String forwarded = getForwardedHost(request);
         if (forwarded != null) {
             receivingURL = new StringBuffer();
-            String forwardedProtocol = request.getHeader("x-forwarded-protocol");
+            String forwardedProtocol = request.getHeader(ServletUtils.x_forwarded_protocol);
             if (forwardedProtocol == null) {
                 forwardedProtocol = "http";
             }
             receivingURL.append(forwardedProtocol).append("://").append(forwarded);
-            String forwardedContext = request.getHeader("x-forwarded-context");
+            String forwardedContext = request.getHeader(x_forwarded_context);
             if (forwardedContext != null) {
                 receivingURL.append(request.getRequestURI().substring(forwardedContext.length()));
             } else {
@@ -82,12 +90,12 @@ public class ServletUtils {
         String receivingURL;
         String forwarded = getForwardedHost(request);
         if (forwarded != null) {
-            String forwardedProtocol = request.getHeader("x-forwarded-protocol");
+            String forwardedProtocol = request.getHeader(ServletUtils.x_forwarded_protocol);
             if (forwardedProtocol == null) {
                 forwardedProtocol = "http";
             }
             receivingURL = forwardedProtocol + "://" + forwarded;
-            String forwardedContext = request.getHeader("x-forwarded-context");
+            String forwardedContext = request.getHeader(x_forwarded_context);
             if (forwardedContext == null) {
                 receivingURL += request.getContextPath();
             }
@@ -104,7 +112,7 @@ public class ServletUtils {
     }
 
     public static String getActualRequestContextPath(HttpServletRequest request) {
-        String forwardedContext = request.getHeader("x-forwarded-context");
+        String forwardedContext = request.getHeader(ServletUtils.x_forwarded_context);
         if (forwardedContext == null) {
             return request.getContextPath();
         } else {
@@ -133,7 +141,7 @@ public class ServletUtils {
     public static String getRequestProtocol(HttpServletRequest request) {
         String forwarded = getForwardedHost(request);
         if (forwarded != null) {
-            String forwardedProtocol = request.getHeader("x-forwarded-protocol");
+            String forwardedProtocol = request.getHeader(ServletUtils.x_forwarded_protocol);
             if (forwardedProtocol == null) {
                 return "http";
             } else {

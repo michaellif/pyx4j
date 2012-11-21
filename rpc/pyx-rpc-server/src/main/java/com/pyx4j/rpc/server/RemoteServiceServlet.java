@@ -39,6 +39,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.RequestDebug;
+import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
@@ -77,8 +78,7 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
     }
 
     // GWT makes it impossible to Override any other method in RemoteServiceServlet and access moduleBaseURL from RCP request.
-    @Override
-    protected void onBeforeRequestDeserialized(String serializedRequest) {
+    protected void TODO_REOMVE_onBeforeRequestDeserialized(String serializedRequest) {
         // 6|1|12|http://localhost:8888/g.site/|2005C2913F3EF6EE0AB1510ECABAE604|_|
         int beginModuleBaseURL = 0;
         for (int i = 0; i < 3; i++) {
@@ -94,7 +94,7 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
         }
 
         // Allow for redirected requests environments
-        String forwardedContext = Context.getRequest().getHeader("x-forwarded-context");
+        String forwardedContext = Context.getRequest().getHeader(ServletUtils.x_forwarded_context);
         if (forwardedContext != null) {
             modulePath = forwardedContext + modulePath;
         }
@@ -108,10 +108,9 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
         ServicePolicy.loadServicePolicyToRequest(this.getServletContext(), moduleRelativePath);
     }
 
-    @Override
-    protected SerializationPolicy doGetSerializationPolicy(HttpServletRequest request, String moduleBaseURL, String strongName) {
+    protected SerializationPolicy TODO_REOMVE_doGetSerializationPolicy(HttpServletRequest request, String moduleBaseURL, String strongName) {
         // Allow for redirected requests environments, consider the context is mapped to root.
-        String forwardedContext = request.getHeader("x-forwarded-context");
+        String forwardedContext = request.getHeader(ServletUtils.x_forwarded_context);
         final boolean debug = true;
         if (debug) {
             log.debug("moduleBaseURL orig {}", moduleBaseURL);
