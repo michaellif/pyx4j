@@ -24,14 +24,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.pyx4j.gwt.server.ServletUtils;
 
 public class OAPIFilter implements Filter {
-
-    private final static Logger log = LoggerFactory.getLogger(OAPIFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -43,12 +38,12 @@ public class OAPIFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        log.info("Inside OAPIFilter.doFilter()");
-        HttpServletRequest wrappedRequest = new SecurityWrapperHttpServletRequest((HttpServletRequest) request);
-
-        log.info(wrappedRequest.getRequestURL().toString());
-
-        chain.doFilter(wrappedRequest, response);
+        if (request instanceof HttpServletRequest) {
+            HttpServletRequest wrappedRequest = new SecurityWrapperHttpServletRequest((HttpServletRequest) request);
+            chain.doFilter(wrappedRequest, response);
+        } else {
+            chain.doFilter(request, response);
+        }
     }
 
     private static class SecurityWrapperHttpServletRequest extends HttpServletRequestWrapper {
@@ -83,7 +78,19 @@ public class OAPIFilter implements Filter {
 
         @Override
         public String getContextPath() {
-            return ServletUtils.getActualRequestContextPath((HttpServletRequest) super.getRequest(), "");
+            if (true) {
+                return ServletUtils.getActualRequestContextPath((HttpServletRequest) super.getRequest());
+            }
+            // Call to https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/debug/PropertyService?wsdl
+            // Should return proper location value
+            // Fixed com.sun.xml.ws.transport.http.servlet.ServletConnectionImpl.getBaseAddress();
+            StackTraceElement[] ste = new Throwable().getStackTrace();
+            String firstRunnableMethod = (ste[1]).getMethodName();
+            if (firstRunnableMethod.equals("getBaseAddress")) {
+                return ServletUtils.getActualRequestContextPath((HttpServletRequest) super.getRequest());
+            } else {
+                return super.getContextPath();
+            }
         }
     }
 }
