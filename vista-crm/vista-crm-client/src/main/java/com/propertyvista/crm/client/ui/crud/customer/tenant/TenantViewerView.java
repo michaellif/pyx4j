@@ -24,6 +24,8 @@ public interface TenantViewerView extends IViewerView<TenantDTO> {
 
         void goToCreateScreening();
 
+        void goToCreateMaintenanceRequest();
+
         void goToChangePassword(Key tenantPrincipalPk, String tenantName);
     }
 }

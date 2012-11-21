@@ -13,15 +13,18 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<LeaseTermTenant, Tenant, TenantDTO> implements TenantCrudService {
@@ -68,6 +71,11 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<L
                 }
             }
         }
+    }
+
+    @Override
+    public void getAssosiatedTenant(AsyncCallback<Tenant> callback, Key entityId) {
+        callback.onSuccess(Persistence.service().retrieve(Tenant.class, entityId));
     }
 
     private LeaseTermTenant retrieveTenant(LeaseTerm.LeaseTermV termV, Tenant leaseCustomer) {

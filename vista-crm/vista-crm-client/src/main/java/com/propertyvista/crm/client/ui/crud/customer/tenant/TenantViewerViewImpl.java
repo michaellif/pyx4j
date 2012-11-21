@@ -30,6 +30,8 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
     private final MenuItem screeningAction;
 
+    private final MenuItem maintenanceAction;
+
     public TenantViewerViewImpl() {
         super(CrmSiteMap.Tenants.Tenant.class);
 
@@ -52,12 +54,21 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
             }
         });
         addAction(screeningAction);
+
+        maintenanceAction = new MenuItem(i18n.tr("Create Maintenance Request"), new Command() {
+            @Override
+            public void execute() {
+                ((TenantViewerView.Presenter) getPresenter()).goToCreateMaintenanceRequest();
+            }
+        });
+        addAction(maintenanceAction);
     }
 
     @Override
     public void reset() {
         setActionVisible(passwordAction, false);
         setActionVisible(screeningAction, false);
+        setActionVisible(maintenanceAction, false);
 
         super.reset();
     }
@@ -67,6 +78,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         super.populate(value);
 
         setActionVisible(screeningAction, value.customer().personScreening().getPrimaryKey() == null);
+        setActionVisible(maintenanceAction, value.lease().status().getValue().isActive());
 
         // Disable password change button for tenants with no associated user principal
         if (value != null & !value.customer().user().isNull()) {

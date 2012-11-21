@@ -13,9 +13,15 @@
  */
 package com.propertyvista.crm.rpc.services.customer;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
+
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.TenantDTO;
 
 public interface TenantCrudService extends LeaseParticipantCrudServiceBase<LeaseTermTenant, TenantDTO> {
 
+    void getAssosiatedTenant(AsyncCallback<Tenant> callback, Key entityId);
 }

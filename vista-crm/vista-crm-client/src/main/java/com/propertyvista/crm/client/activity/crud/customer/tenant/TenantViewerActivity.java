@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -31,6 +32,8 @@ import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implements TenantViewerView.Presenter {
@@ -47,6 +50,20 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
         screening.screene().set(screeningCustomer);
 
         AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Screening().formNewItemPlace(screening));
+    }
+
+    @Override
+    public void goToCreateMaintenanceRequest() {
+
+        ((TenantCrudService) getService()).getAssosiatedTenant(new DefaultAsyncCallback<Tenant>() {
+            @Override
+            public void onSuccess(Tenant result) {
+                MaintenanceRequestDTO maintenanceRequest = EntityFactory.create(MaintenanceRequestDTO.class);
+                maintenanceRequest.leaseParticipant().set(result);
+
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.MaintenanceRequest().formNewItemPlace(maintenanceRequest));
+            }
+        }, getEntityId());
     }
 
     @Override
