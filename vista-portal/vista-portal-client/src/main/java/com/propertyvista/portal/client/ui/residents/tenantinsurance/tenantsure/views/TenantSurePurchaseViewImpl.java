@@ -64,6 +64,8 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
         void onProceedToNext(AsyncCallback<VoidSerializable> callback);
 
+        void setNextButton(Button next);
+
     }
 
     private class StepDriver extends Composite {
@@ -133,12 +135,14 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
             currentStep = stepNumber;
             for (Step step : steps) {
                 step.asWidget().setVisible(false);
+                step.setNextButton(nextStepButton);
             }
             steps.get(stepNumber).asWidget().setVisible(true);
             if (stepNumber < steps.size() - 1) {
                 nextStepButton.setTextLabel(steps.get(stepNumber + 1).getTitle());
                 nextStepButton.setVisible(true);
-                nextStepButton.setVisible(true);
+                nextStepButton.setEnabled(false);
+                cancelButton.setVisible(true);
             } else {
                 nextStepButton.setVisible(false);
                 cancelButton.setVisible(false);
@@ -173,6 +177,8 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     private StepDriver stepDriver;
 
+    private Button acceptQuoteButton;
+
     protected AsyncCallback<VoidSerializable> paymentSucceededCallback;
 
     public TenantSurePurchaseViewImpl() {
@@ -202,6 +208,8 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         // payment section        
         paymentMethodForm.populate(paymentMethod);
 
+        // reset quote
+        setQuote(null);
     }
 
     @Override
@@ -209,9 +217,12 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         quoteViewer.setValue(quote);
 
         retrievingQuoteMessage.setVisible(false);
-        boolean canAcceptQuote = quote != null && !quote.isNull();
+        boolean canAcceptQuote = quote != null && !quote.isNull() && quote.specialQuote().isNull();
+        if (acceptQuoteButton != null) {
+            acceptQuoteButton.setEnabled(canAcceptQuote);
+        }
+        quoteViewer.setVisible(quote != null);
 
-        quoteViewer.setVisible(canAcceptQuote);
     }
 
     @Override
@@ -233,7 +244,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     @Override
     public TenantSureQuoteDTO getAcceptedQuote() {
-        return quoteViewer.getValue().isNull() ? null : quoteViewer.getValue();
+        return quoteViewer.getValue();
     }
 
     @Override
@@ -278,6 +289,21 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         personalDisclaimerForm.initContent();
         personalDisclaimerStepPanel.add(personalDisclaimerForm);
         return new Step() {
+            private Button next;
+
+            {
+                personalDisclaimerForm.addValueChangeHandler(new ValueChangeHandler<TenantSurePersonalDisclaimerHolderDTO>() {
+
+                    @Override
+                    public void onValueChange(ValueChangeEvent<TenantSurePersonalDisclaimerHolderDTO> event) {
+                        personalDisclaimerForm.revalidate();
+                        if (next != null) {
+                            next.setEnabled(personalDisclaimerForm.isValid());
+                        }
+                    }
+                });
+            }
+
             @Override
             public Widget asWidget() {
                 return personalDisclaimerStepPanel;
@@ -301,6 +327,11 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
                 } else {
                     MessageDialog.info("You must accept the agreement to continue");
                 }
+            }
+
+            @Override
+            public void setNextButton(Button next) {
+                this.next = next;
             };
         };
 
@@ -313,17 +344,6 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         quotationRequestForm = new TenantSureQuotationRequestForm();
         quotationRequestForm.initContent();
         quotationRequestForm.asWidget().addStyleName(Styles.TSPurchaseViewSection.name());
-        quotationRequestForm.addValueChangeHandler(new ValueChangeHandler<TenantSureCoverageDTO>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<TenantSureCoverageDTO> event) {
-                setQuote(null);
-                pleaseFillOutTheFormMessage.setVisible(!quotationRequestForm.isValid());
-                quotationRequestForm.revalidate();
-                if (quotationRequestForm.getValidationResults().isValid()) {
-                    presenter.onCoverageRequestChanged();
-                }
-            }
-        });
         quotationRequestStepPanel.setWidget(++qrpRow, 0, quotationRequestForm);
 
         quotationRequestStepPanel.setH1(++qrpRow, 0, 1, i18n.tr("Quote"));
@@ -349,6 +369,22 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         quotationRequestStepPanel.getCellFormatter().getElement(qrpRow, 0).getStyle().setProperty("height", "10em");
 
         return new Step() {
+
+            {
+                quotationRequestForm.addValueChangeHandler(new ValueChangeHandler<TenantSureCoverageDTO>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<TenantSureCoverageDTO> event) {
+                        setQuote(null);
+                        pleaseFillOutTheFormMessage.setVisible(!quotationRequestForm.isValid());
+                        quotationRequestForm.revalidate();
+                        if (quotationRequestForm.getValidationResults().isValid()) {
+                            presenter.onCoverageRequestChanged();
+                        }
+                    }
+                });
+
+            }
+
             @Override
             public Widget asWidget() {
                 return quotationRequestStepPanel;
@@ -376,6 +412,11 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
                 } else {
                     MessageDialog.info(i18n.tr("Please fill out the form to continue"));
                 }
+            }
+
+            @Override
+            public void setNextButton(Button next) {
+                TenantSurePurchaseViewImpl.this.acceptQuoteButton = next;
             }
 
         };
@@ -410,6 +451,22 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
         return new Step() {
 
+            private Button next = null;
+
+            {
+                paymentMethodForm.addValueChangeHandler(new ValueChangeHandler<LeasePaymentMethod>() {
+
+                    @Override
+                    public void onValueChange(ValueChangeEvent<LeasePaymentMethod> event) {
+                        if (next != null) {
+                            paymentMethodForm.revalidate();
+                            next.setEnabled(paymentMethodForm.isValid());
+                        }
+
+                    }
+                });
+            }
+
             @Override
             public Widget asWidget() {
                 return paymentStepPanel;
@@ -432,6 +489,11 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
             @Override
             public String getTitle() {
                 return i18n.tr("Accept quote and proceed to payment");
+            }
+
+            @Override
+            public void setNextButton(Button next) {
+                this.next = next;
             }
         };
     }
@@ -476,6 +538,11 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
             @Override
             public String getTitle() {
                 return i18n.tr("Buy TenantSure");
+            }
+
+            @Override
+            public void setNextButton(Button next) {
+                // this is not required;
             }
         };
     }
