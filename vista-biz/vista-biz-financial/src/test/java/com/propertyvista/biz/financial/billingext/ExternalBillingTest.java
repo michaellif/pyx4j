@@ -15,8 +15,11 @@ package com.propertyvista.biz.financial.billingext;
 
 import java.math.BigDecimal;
 
+import org.junit.Ignore;
+
 import com.propertyvista.biz.financial.ExternalTestBase;
 
+@Ignore
 public class ExternalBillingTest extends ExternalTestBase {
 
     @Override
