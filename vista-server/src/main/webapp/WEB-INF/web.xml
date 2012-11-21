@@ -226,6 +226,11 @@
 
     <servlet-mapping>
         <servlet-name>DebugServlet</servlet-name>
+        <url-pattern>/interfaces/oapi/debug/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DebugServlet</servlet-name>
         <url-pattern>/o/debug/*</url-pattern>
     </servlet-mapping>
 
