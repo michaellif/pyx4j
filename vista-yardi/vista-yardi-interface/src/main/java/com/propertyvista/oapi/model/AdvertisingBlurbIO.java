@@ -7,14 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 17, 2011
- * @author michaellif
+ * Created on Jul 29, 2011
+ * @author dmitry
  * @version $Id$
  */
 package com.propertyvista.oapi.model;
 
-public class UtilityRS {
+public class AdvertisingBlurbIO {
 
-    public String name;
+    public String content;
 
 }

@@ -24,9 +24,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.propertyvista.oapi.PropertyFacade;
-import com.propertyvista.oapi.model.BuildingRS;
-import com.propertyvista.oapi.model.BuildingsRS;
-import com.propertyvista.oapi.model.UnitRS;
+import com.propertyvista.oapi.model.BuildingIO;
+import com.propertyvista.oapi.model.BuildingsIO;
+import com.propertyvista.oapi.model.UnitIO;
 
 //http://localhost:8888/vista/interfaces/oapi/rs/propertyService/listAllBuildings
 //https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/rs/propertyService/listAllBuildings
@@ -54,14 +54,14 @@ public class PropertyService {
 
     @GET
     @Produces({ MediaType.APPLICATION_XML })
-    public BuildingsRS getBuildings(@QueryParam("province") String province) {
-        BuildingsRS allBuildings = PropertyFacade.getBuildings();
+    public BuildingsIO getBuildings(@QueryParam("province") String province) {
+        BuildingsIO allBuildings = PropertyFacade.getBuildings();
         if (province == null) {
             return allBuildings;
         }
-        BuildingsRS filteredBuildings = new BuildingsRS();
+        BuildingsIO filteredBuildings = new BuildingsIO();
 
-        for (BuildingRS building : allBuildings.buildings) {
+        for (BuildingIO building : allBuildings.buildings) {
             if (building.info.address.province.equals(province)) {
                 filteredBuildings.buildings.add(building);
             }
@@ -72,7 +72,7 @@ public class PropertyService {
     @GET
     @Path("/{propertyCode}")
     @Produces({ MediaType.APPLICATION_XML })
-    public BuildingRS getBuildingByPropertyCode(@PathParam("propertyCode") String propertyCode) {
+    public BuildingIO getBuildingByPropertyCode(@PathParam("propertyCode") String propertyCode) {
 
         return PropertyFacade.getBuildingByPropertyCode(propertyCode);
     }
@@ -80,11 +80,11 @@ public class PropertyService {
     @GET
     @Path("/{propertyCode}/units")
     @Produces({ MediaType.APPLICATION_XML })
-    public List<UnitRS> getAllUnitsByPropertyCode(@PathParam("propertyCode") String propertyCode, @QueryParam("floorplan") String floorplan) {
+    public List<UnitIO> getAllUnitsByPropertyCode(@PathParam("propertyCode") String propertyCode, @QueryParam("floorplan") String floorplan) {
 
-        List<UnitRS> allUnits = PropertyFacade.getUnitsByPropertyCode(propertyCode);
-        List<UnitRS> filteredUnits = new ArrayList<UnitRS>();
-        for (UnitRS unit : allUnits) {
+        List<UnitIO> allUnits = PropertyFacade.getUnitsByPropertyCode(propertyCode);
+        List<UnitIO> filteredUnits = new ArrayList<UnitIO>();
+        for (UnitIO unit : allUnits) {
             if (unit.floorplanName.equals(floorplan)) {
                 filteredUnits.add(unit);
             }
@@ -95,7 +95,7 @@ public class PropertyService {
     @GET
     @Path("/{propertyCode}/units/{unitNumber}")
     @Produces({ MediaType.APPLICATION_XML })
-    public UnitRS getUnitByNumber(@PathParam("propertyCode") String propertyCode, @PathParam("unitNumber") String unitNumber) {
+    public UnitIO getUnitByNumber(@PathParam("propertyCode") String propertyCode, @PathParam("unitNumber") String unitNumber) {
 
         return PropertyFacade.getUnitByNumber(propertyCode, unitNumber);
 

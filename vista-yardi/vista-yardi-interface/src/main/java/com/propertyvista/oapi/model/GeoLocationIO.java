@@ -13,7 +13,7 @@
  */
 package com.propertyvista.oapi.model;
 
-public class GeoLocationRS {
+public class GeoLocationIO {
 
     //mandatory for portal
     public double latitude;

@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.xml.LogicalDateXmlAdapter;
 
-public class FloorplanRS {
+public class FloorplanIO {
 
     //mandatory for portal
     public String name;
@@ -63,11 +63,11 @@ public class FloorplanRS {
     public LogicalDate availableFrom;
 
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "amenity", type = AmenityRS.class))
-    public List<AmenityRS> amenities = new ArrayList<AmenityRS>();
+    @XmlElements(@XmlElement(name = "amenity", type = AmenityIO.class))
+    public List<AmenityIO> amenities = new ArrayList<AmenityIO>();
 
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "media", type = MediaRS.class))
-    public List<MediaRS> medias = new ArrayList<MediaRS>();
+    @XmlElements(@XmlElement(name = "media", type = MediaIO.class))
+    public List<MediaIO> medias = new ArrayList<MediaIO>();
 
 }

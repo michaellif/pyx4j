@@ -7,16 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 16, 2011
- * @author vlads
+ * Created on Aug 17, 2011
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.oapi.model;
 
-public class PhoneRS {
+public class UtilityIO {
 
-    public String number;
-
-    public String description;
+    public String name;
 
 }

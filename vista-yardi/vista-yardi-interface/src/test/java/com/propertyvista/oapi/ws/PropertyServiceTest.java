@@ -24,7 +24,7 @@ import javax.xml.ws.BindingProvider;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.propertyvista.oapi.model.BuildingRS;
+import com.propertyvista.oapi.model.BuildingIO;
 
 public class PropertyServiceTest extends OapiWsTest {
 
@@ -48,9 +48,9 @@ public class PropertyServiceTest extends OapiWsTest {
         Map<String, Object> requestContext = ((BindingProvider) service).getRequestContext();
         requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress() + "?wsdl");
 
-        service.createBuilding(new BuildingRS("b1"));
+        service.createBuilding(new BuildingIO("b1"));
 
-        BuildingRS building = service.getBuildingByPropertyCode("b1");
+        BuildingIO building = service.getBuildingByPropertyCode("b1");
 
         assertEquals("b1", building.propertyCode);
 

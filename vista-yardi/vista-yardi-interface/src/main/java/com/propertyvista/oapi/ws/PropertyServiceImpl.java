@@ -20,35 +20,35 @@ import java.util.Map;
 import javax.jws.WebService;
 
 import com.propertyvista.oapi.PropertyFacade;
-import com.propertyvista.oapi.model.BuildingRS;
-import com.propertyvista.oapi.model.BuildingsRS;
-import com.propertyvista.oapi.model.UnitRS;
+import com.propertyvista.oapi.model.BuildingIO;
+import com.propertyvista.oapi.model.BuildingsIO;
+import com.propertyvista.oapi.model.UnitIO;
 
 @WebService(endpointInterface = "com.propertyvista.oapi.ws.PropertyService")
 public class PropertyServiceImpl implements PropertyService {
 
-    static private Map<String, BuildingRS> buildings = new HashMap<String, BuildingRS>();
+    static private Map<String, BuildingIO> buildings = new HashMap<String, BuildingIO>();
 
     @Override
-    public void createBuilding(BuildingRS building) {
+    public void createBuilding(BuildingIO building) {
         buildings.put(building.propertyCode, building);
     }
 
     @Override
-    public BuildingRS getBuildingByPropertyCode(String propertyCode) {
+    public BuildingIO getBuildingByPropertyCode(String propertyCode) {
         return buildings.get(propertyCode);
     }
 
     @Override
-    public BuildingsRS listAllBuildings() {
+    public BuildingsIO listAllBuildings() {
         return PropertyFacade.getBuildings();
     }
 
     @Override
     public void createUnit(String unitNumber, String floorplanName, String propertyCode) {
-        BuildingRS building = buildings.get(propertyCode);
+        BuildingIO building = buildings.get(propertyCode);
         if (building != null) {
-            UnitRS newUnit = new UnitRS();
+            UnitIO newUnit = new UnitIO();
             newUnit.number = unitNumber;
             newUnit.floorplanName = floorplanName;
             newUnit.propertyCode = propertyCode;
@@ -60,7 +60,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public List<UnitRS> listAllBuildingUnits(String buildingCode) {
+    public List<UnitIO> listAllBuildingUnits(String buildingCode) {
         return PropertyFacade.getUnitsByPropertyCode(buildingCode);
     }
 

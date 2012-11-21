@@ -7,35 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 28, 2011
- * @author dmitry
+ * Created on Sep 16, 2011
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.oapi.model;
 
+public class PhoneIO {
 
-public class MediaRS {
+    public String number;
 
-    public enum MediaType {
-
-        file,
-
-        youTube,
-
-        externalUrl;
-
-    }
-
-    public MediaType mediaType;
-
-    public String caption;
-
-    public String mimeType;
-
-    public String fileId;
-
-    public String youTubeVideoID;
-
-    public String url;
+    public String description;
 
 }

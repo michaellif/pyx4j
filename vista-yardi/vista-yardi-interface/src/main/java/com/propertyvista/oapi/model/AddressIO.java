@@ -13,7 +13,7 @@
  */
 package com.propertyvista.oapi.model;
 
-public class AddressRS {
+public class AddressIO {
 
     public String addressType;
 
@@ -48,5 +48,5 @@ public class AddressRS {
     public String county;
 
     //mandatory for portal
-    public GeoLocationRS location;
+    public GeoLocationIO location;
 }

@@ -19,8 +19,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
 @XmlRootElement
-@XmlSeeAlso({ ChargeRS.class, PaymentRS.class })
-public abstract class TransactionRS {
+@XmlSeeAlso({ ChargeIO.class, PaymentIO.class })
+public abstract class TransactionIO {
 
     public String transactionId;
 
@@ -30,10 +30,10 @@ public abstract class TransactionRS {
 
     public BigDecimal amount;
 
-    public TransactionRS() {
+    public TransactionIO() {
     }
 
-    public TransactionRS(String description, BigDecimal amount) {
+    public TransactionIO(String description, BigDecimal amount) {
         this.description = description;
     }
 

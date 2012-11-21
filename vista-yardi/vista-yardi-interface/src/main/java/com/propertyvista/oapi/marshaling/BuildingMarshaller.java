@@ -22,16 +22,16 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.oapi.model.AddressRS;
-import com.propertyvista.oapi.model.BuildingInfoRS;
-import com.propertyvista.oapi.model.BuildingRS;
-import com.propertyvista.oapi.model.ContactRS;
+import com.propertyvista.oapi.model.AddressIO;
+import com.propertyvista.oapi.model.BuildingInfoIO;
+import com.propertyvista.oapi.model.BuildingIO;
+import com.propertyvista.oapi.model.ContactIO;
 
-public class BuildingMarshaller implements Marshaller<Building, BuildingRS> {
+public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {
 
     @Override
-    public BuildingRS unmarshal(Building building) {
-        BuildingRS buildingRS = initBuildingRS();
+    public BuildingIO unmarshal(Building building) {
+        BuildingIO buildingRS = initBuildingRS();
         buildingRS.propertyCode = building.propertyCode().getValue();
         buildingRS.info.address.country = building.info().address().country().name().getValue();
         buildingRS.info.address.province = building.info().address().province().name().getValue();
@@ -45,22 +45,22 @@ public class BuildingMarshaller implements Marshaller<Building, BuildingRS> {
         return buildingRS;
     }
 
-    private BuildingRS initBuildingRS() {
-        BuildingRS buildingRS = new BuildingRS();
-        BuildingInfoRS buildingInfoRS = new BuildingInfoRS();
-        AddressRS addressRS = new AddressRS();
+    private BuildingIO initBuildingRS() {
+        BuildingIO buildingRS = new BuildingIO();
+        BuildingInfoIO buildingInfoRS = new BuildingInfoIO();
+        AddressIO addressRS = new AddressIO();
         buildingInfoRS.address = addressRS;
         buildingRS.info = buildingInfoRS;
 
         return buildingRS;
     }
 
-    private List<ContactRS> getContacts(Building building) {
-        List<ContactRS> contacts = new ArrayList<ContactRS>();
+    private List<ContactIO> getContacts(Building building) {
+        List<ContactIO> contacts = new ArrayList<ContactIO>();
         Persistence.service().retrieve(building.contacts().propertyContacts());
         for (PropertyContact contact : building.contacts().propertyContacts()) {
             if (EnumSet.of(PropertyContactType.mainOffice, PropertyContactType.pointOfSale).contains(contact.type().getValue())) {
-                ContactRS contactRS = new ContactRS();
+                ContactIO contactRS = new ContactIO();
                 contactRS.email = contact.email().getValue();
                 contactRS.name = contact.name().getValue();
                 contactRS.phone = contact.phone().getValue();
@@ -71,7 +71,7 @@ public class BuildingMarshaller implements Marshaller<Building, BuildingRS> {
     }
 
     @Override
-    public Building marshal(BuildingRS buildingRs) {
+    public Building marshal(BuildingIO buildingRs) {
         return null;
     }
 

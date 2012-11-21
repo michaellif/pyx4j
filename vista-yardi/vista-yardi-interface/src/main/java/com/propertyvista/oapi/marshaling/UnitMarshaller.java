@@ -14,13 +14,13 @@
 package com.propertyvista.oapi.marshaling;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.oapi.model.UnitRS;
+import com.propertyvista.oapi.model.UnitIO;
 
-public class UnitMarshaller implements Marshaller<AptUnit, UnitRS> {
+public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
 
     @Override
-    public UnitRS unmarshal(AptUnit unit) {
-        UnitRS unitRS = new UnitRS();
+    public UnitIO unmarshal(AptUnit unit) {
+        UnitIO unitRS = new UnitIO();
         unitRS.propertyCode = unit.building().propertyCode().getValue();
         unitRS.floorplanName = unit.floorplan().name().getValue();
         unitRS.number = unit.info().number().getValue();
@@ -30,7 +30,7 @@ public class UnitMarshaller implements Marshaller<AptUnit, UnitRS> {
     }
 
     @Override
-    public AptUnit marshal(UnitRS unitRS) throws Exception {
+    public AptUnit marshal(UnitIO unitRS) throws Exception {
         return null;
     }
 

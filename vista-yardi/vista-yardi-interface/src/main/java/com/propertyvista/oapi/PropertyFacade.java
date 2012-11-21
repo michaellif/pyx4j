@@ -26,9 +26,9 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.oapi.marshaling.BuildingMarshaller;
 import com.propertyvista.oapi.marshaling.UnitMarshaller;
-import com.propertyvista.oapi.model.BuildingRS;
-import com.propertyvista.oapi.model.BuildingsRS;
-import com.propertyvista.oapi.model.UnitRS;
+import com.propertyvista.oapi.model.BuildingIO;
+import com.propertyvista.oapi.model.BuildingsIO;
+import com.propertyvista.oapi.model.UnitIO;
 
 public class PropertyFacade {
 
@@ -38,7 +38,7 @@ public class PropertyFacade {
         service = Persistence.service();
     }
 
-    public static BuildingsRS getBuildings() {
+    public static BuildingsIO getBuildings() {
 
         //TODO
         NamespaceManager.setNamespace("vista");
@@ -47,7 +47,7 @@ public class PropertyFacade {
         buildingCriteria.asc(buildingCriteria.proto().propertyCode());
         List<Building> buildings = service.query(buildingCriteria);
 
-        BuildingsRS buildingsRs = new BuildingsRS();
+        BuildingsIO buildingsRs = new BuildingsIO();
 
         for (Building building : buildings) {
             BuildingMarshaller marshaller = new BuildingMarshaller();
@@ -57,7 +57,7 @@ public class PropertyFacade {
         return buildingsRs;
     }
 
-    public static BuildingRS getBuildingByPropertyCode(String propertyCode) {
+    public static BuildingIO getBuildingByPropertyCode(String propertyCode) {
 
         //TODO
         NamespaceManager.setNamespace("vista");
@@ -71,8 +71,8 @@ public class PropertyFacade {
         return marshaller.unmarshal(buildings.get(0));
     }
 
-    public static List<UnitRS> getUnitsByPropertyCode(String propertyCode) {
-        List<UnitRS> unitsRS = new ArrayList<UnitRS>();
+    public static List<UnitIO> getUnitsByPropertyCode(String propertyCode) {
+        List<UnitIO> unitsRS = new ArrayList<UnitIO>();
 
         NamespaceManager.setNamespace("vista");
         EntityQueryCriteria<AptUnit> unitCriteria = EntityQueryCriteria.create(AptUnit.class);
@@ -87,7 +87,7 @@ public class PropertyFacade {
         return unitsRS;
     }
 
-    public static UnitRS getUnitByNumber(String propertyCode, String unitNumber) {
+    public static UnitIO getUnitByNumber(String propertyCode, String unitNumber) {
         NamespaceManager.setNamespace("vista");
         EntityQueryCriteria<AptUnit> unitCriteria = EntityQueryCriteria.create(AptUnit.class);
         unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().building().propertyCode(), propertyCode));

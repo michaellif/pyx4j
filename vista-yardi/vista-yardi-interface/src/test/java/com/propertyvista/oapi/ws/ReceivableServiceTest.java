@@ -32,10 +32,10 @@ import org.junit.Test;
 
 import com.pyx4j.commons.LogicalDate;
 
-import com.propertyvista.oapi.model.ChargeRS;
-import com.propertyvista.oapi.model.PaymentRS;
-import com.propertyvista.oapi.model.ServiceRS;
-import com.propertyvista.oapi.model.TransactionRS;
+import com.propertyvista.oapi.model.ChargeIO;
+import com.propertyvista.oapi.model.PaymentIO;
+import com.propertyvista.oapi.model.ServiceIO;
+import com.propertyvista.oapi.model.TransactionIO;
 import com.propertyvista.oapi.ws.ReceivableService;
 
 public class ReceivableServiceTest extends OapiWsTest {
@@ -65,12 +65,12 @@ public class ReceivableServiceTest extends OapiWsTest {
         headers.put("Password", Collections.singletonList("password"));
         requestContext.put(MessageContext.HTTP_REQUEST_HEADERS, headers);
 
-        List<TransactionRS> transactions = new ArrayList<TransactionRS>();
+        List<TransactionIO> transactions = new ArrayList<TransactionIO>();
         for (int i = 1; i <= 3; i++) {
-            ChargeRS charge = new ChargeRS();
+            ChargeIO charge = new ChargeIO();
             charge.description = "tr" + i;
             charge.amount = new BigDecimal("" + i + i);
-            ServiceRS chargeService = new ServiceRS();
+            ServiceIO chargeService = new ServiceIO();
             chargeService.chargeCode = "ch" + i;
             charge.service = chargeService;
             charge.fromDate = new LogicalDate(112, 1, 1);
@@ -78,7 +78,7 @@ public class ReceivableServiceTest extends OapiWsTest {
             transactions.add(charge);
         }
         for (int i = 4; i <= 5; i++) {
-            PaymentRS payment = new PaymentRS();
+            PaymentIO payment = new PaymentIO();
             payment.description = "tr" + i;
             payment.amount = new BigDecimal("" + i + i);
             transactions.add(payment);

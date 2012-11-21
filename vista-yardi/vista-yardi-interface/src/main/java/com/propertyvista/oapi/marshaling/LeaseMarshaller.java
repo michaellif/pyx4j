@@ -14,13 +14,13 @@
 package com.propertyvista.oapi.marshaling;
 
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.oapi.model.LeaseRS;
+import com.propertyvista.oapi.model.LeaseIO;
 
-public class LeaseMarshaller implements Marshaller<Lease, LeaseRS> {
+public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
 
     @Override
-    public LeaseRS unmarshal(Lease lease) {
-        LeaseRS leaseRS = new LeaseRS();
+    public LeaseIO unmarshal(Lease lease) {
+        LeaseIO leaseRS = new LeaseIO();
         leaseRS.leaseId = lease.leaseId().getValue();
         leaseRS.status = lease.status().getValue().toString();
         leaseRS.propertyCode = lease.unit().building().propertyCode().getValue();
@@ -29,7 +29,7 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseRS> {
     }
 
     @Override
-    public Lease marshal(LeaseRS leaseRS) throws Exception {
+    public Lease marshal(LeaseIO leaseRS) throws Exception {
         return null;
     }
 

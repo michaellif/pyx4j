@@ -24,9 +24,9 @@ import javax.jws.soap.SOAPBinding.ParameterStyle;
 import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
 
-import com.propertyvista.oapi.model.BuildingRS;
-import com.propertyvista.oapi.model.BuildingsRS;
-import com.propertyvista.oapi.model.UnitRS;
+import com.propertyvista.oapi.model.BuildingIO;
+import com.propertyvista.oapi.model.BuildingsIO;
+import com.propertyvista.oapi.model.UnitIO;
 
 //http://localhost:8888/vista/interfaces/oapi/ws/PropertyService?wsdl
 //https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/ws/PropertyService?wsdl
@@ -36,16 +36,16 @@ import com.propertyvista.oapi.model.UnitRS;
 public interface PropertyService {
 
     @WebMethod
-    void createBuilding(@WebParam(name = "building") BuildingRS building);
+    void createBuilding(@WebParam(name = "building") BuildingIO building);
 
     @WebResult(name = "buildings")
-    BuildingsRS listAllBuildings();
+    BuildingsIO listAllBuildings();
 
     @WebResult(name = "building")
-    BuildingRS getBuildingByPropertyCode(@WebParam(name = "propertyCode") String propertyCode);
+    BuildingIO getBuildingByPropertyCode(@WebParam(name = "propertyCode") String propertyCode);
 
     @WebResult(name = "units")
-    List<UnitRS> listAllBuildingUnits(@WebParam(name = "propertyCode") String buildingCode);
+    List<UnitIO> listAllBuildingUnits(@WebParam(name = "propertyCode") String buildingCode);
 
     // update existing building
 

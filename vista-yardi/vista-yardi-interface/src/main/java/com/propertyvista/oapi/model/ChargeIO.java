@@ -19,9 +19,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.xml.LogicalDateXmlAdapter;
 
-public class ChargeRS extends TransactionRS {
+public class ChargeIO extends TransactionIO {
 
-    public ServiceRS service;
+    public ServiceIO service;
 
     @XmlSchemaType(name = "date")
     @XmlJavaTypeAdapter(LogicalDateXmlAdapter.class)
@@ -31,7 +31,7 @@ public class ChargeRS extends TransactionRS {
     @XmlJavaTypeAdapter(LogicalDateXmlAdapter.class)
     public LogicalDate toDate;
 
-    public ChargeRS() {
+    public ChargeIO() {
         super();
     }
 

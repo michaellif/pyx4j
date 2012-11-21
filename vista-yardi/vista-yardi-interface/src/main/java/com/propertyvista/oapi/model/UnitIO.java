@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
@@ -7,17 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 16, 2012
- * @author yuriyl
+ * Created on Jul 28, 2011
+ * @author dmitry
  * @version $Id$
  */
 package com.propertyvista.oapi.model;
 
-public class ContactRS {
+import javax.xml.bind.annotation.XmlRootElement;
 
-    public String email;
+@XmlRootElement(name = "unit")
+public class UnitIO {
 
-    public String phone;
+    public String propertyCode;
 
-    public String name;
+    //mandatory for portal
+    public String number;
+
+    public String floorplanName;
+
+    public Integer beds;
+
+    public Integer baths;
+
 }

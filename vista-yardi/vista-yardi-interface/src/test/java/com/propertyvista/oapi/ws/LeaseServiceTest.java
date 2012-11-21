@@ -24,7 +24,7 @@ import javax.xml.ws.BindingProvider;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.propertyvista.oapi.model.LeaseRS;
+import com.propertyvista.oapi.model.LeaseIO;
 import com.propertyvista.oapi.ws.LeaseService;
 
 public class LeaseServiceTest extends OapiWsTest {
@@ -49,9 +49,9 @@ public class LeaseServiceTest extends OapiWsTest {
         Map<String, Object> requestContext = ((BindingProvider) service).getRequestContext();
         requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress() + "?wsdl");
 
-        service.createLease(new LeaseRS("l1"));
+        service.createLease(new LeaseIO("l1"));
 
-        LeaseRS lease = service.getLeaseByLeaseId("l1");
+        LeaseIO lease = service.getLeaseByLeaseId("l1");
 
         assertEquals("l1", lease.leaseId);
 

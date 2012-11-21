@@ -24,7 +24,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.propertyvista.oapi.LeaseFacade;
-import com.propertyvista.oapi.model.LeaseRS;
+import com.propertyvista.oapi.model.LeaseIO;
 
 //http://localhost:8888/vista/interfaces/oapi/rs/propertyService/listAllBuildings
 //https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/rs/propertyService/listAllBuildings
@@ -47,14 +47,14 @@ public class LeaseService {
 
     @GET
     @Produces({ MediaType.APPLICATION_XML })
-    public List<LeaseRS> getLeases(@QueryParam("propertyCode") String propertyCode) {
+    public List<LeaseIO> getLeases(@QueryParam("propertyCode") String propertyCode) {
 
-        List<LeaseRS> allLeases = LeaseFacade.getLeases();
+        List<LeaseIO> allLeases = LeaseFacade.getLeases();
         if (propertyCode == null) {
             return allLeases;
         }
-        List<LeaseRS> filteredLeases = new ArrayList<LeaseRS>();
-        for (LeaseRS lease : allLeases) {
+        List<LeaseIO> filteredLeases = new ArrayList<LeaseIO>();
+        for (LeaseIO lease : allLeases) {
             if (lease.propertyCode.equals(propertyCode)) {
                 filteredLeases.add(lease);
             }
@@ -66,7 +66,7 @@ public class LeaseService {
     @GET
     @Path("/{leaseId}")
     @Produces({ MediaType.APPLICATION_XML })
-    public LeaseRS getLeaseByNumber(@PathParam("leaseId") String leaseId) {
+    public LeaseIO getLeaseByNumber(@PathParam("leaseId") String leaseId) {
 
         return LeaseFacade.getLeaseById(leaseId);
 

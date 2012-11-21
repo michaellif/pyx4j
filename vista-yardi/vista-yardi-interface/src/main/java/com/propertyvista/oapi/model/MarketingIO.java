@@ -19,18 +19,18 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 
-public class MarketingRS {
+public class MarketingIO {
 
     public String name;
 
     public String description;
 
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "blurb", type = AdvertisingBlurbRS.class))
-    public List<AdvertisingBlurbRS> blurbs = new ArrayList<AdvertisingBlurbRS>();
+    @XmlElements(@XmlElement(name = "blurb", type = AdvertisingBlurbIO.class))
+    public List<AdvertisingBlurbIO> blurbs = new ArrayList<AdvertisingBlurbIO>();
 
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "phone", type = PhoneRS.class))
-    public List<PhoneRS> phones = new ArrayList<PhoneRS>();
+    @XmlElements(@XmlElement(name = "phone", type = PhoneIO.class))
+    public List<PhoneIO> phones = new ArrayList<PhoneIO>();
 
 }

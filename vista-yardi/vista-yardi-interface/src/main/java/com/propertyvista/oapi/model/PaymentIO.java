@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,16 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 12, 2011
+ * Created on Nov 12, 2012
  * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.oapi.model;
 
-public class AmenityRS {
+import java.math.BigDecimal;
 
-    public String name;
+public class PaymentIO extends TransactionIO {
 
-    public String description;
+    //   List<ChargeRS> charges; 
+
+    public PaymentIO() {
+        super();
+    }
+
+    public PaymentIO(BigDecimal amount) {
+        this("Payment", amount);
+    }
+
+    public PaymentIO(String description, BigDecimal amount) {
+        super(description, amount);
+    }
 
 }

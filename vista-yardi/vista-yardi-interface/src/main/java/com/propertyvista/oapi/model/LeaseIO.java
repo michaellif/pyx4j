@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
@@ -7,26 +7,30 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 28, 2011
- * @author dmitry
+ * Created on Nov 13, 2012
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.oapi.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "unit")
-public class UnitRS {
+@XmlRootElement(name = "lease")
+public class LeaseIO {
 
     public String propertyCode;
 
-    //mandatory for portal
-    public String number;
+    public String unitNumber;
 
-    public String floorplanName;
+    public String leaseId;
 
-    public Integer beds;
+    public String status;
 
-    public Integer baths;
+    public LeaseIO() {
+    }
+
+    public LeaseIO(String leaseId) {
+        this.leaseId = leaseId;
+    }
 
 }

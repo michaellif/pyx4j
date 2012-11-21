@@ -7,30 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 13, 2012
- * @author michaellif
+ * Created on Nov 16, 2012
+ * @author yuriyl
  * @version $Id$
  */
 package com.propertyvista.oapi.model;
 
-import javax.xml.bind.annotation.XmlRootElement;
+public class ContactIO {
 
-@XmlRootElement(name = "lease")
-public class LeaseRS {
+    public String email;
 
-    public String propertyCode;
+    public String phone;
 
-    public String unitNumber;
-
-    public String leaseId;
-
-    public String status;
-
-    public LeaseRS() {
-    }
-
-    public LeaseRS(String leaseId) {
-        this.leaseId = leaseId;
-    }
-
+    public String name;
 }

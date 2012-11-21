@@ -18,7 +18,7 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo.FloorType;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.FoundationType;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.WaterSupply;
 
-public class BuildingInfoRS {
+public class BuildingInfoIO {
 
     public enum BuildingType {
 
@@ -48,7 +48,7 @@ public class BuildingInfoRS {
     public BuildingType buildingType;
 
     //mandatory for portal
-    public AddressRS address;
+    public AddressIO address;
 
     public String shape;
 

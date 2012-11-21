@@ -7,14 +7,35 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 29, 2011
+ * Created on Jul 28, 2011
  * @author dmitry
  * @version $Id$
  */
 package com.propertyvista.oapi.model;
 
-public class AdvertisingBlurbRS {
 
-    public String content;
+public class MediaIO {
+
+    public enum MediaType {
+
+        file,
+
+        youTube,
+
+        externalUrl;
+
+    }
+
+    public MediaType mediaType;
+
+    public String caption;
+
+    public String mimeType;
+
+    public String fileId;
+
+    public String youTubeVideoID;
+
+    public String url;
 
 }

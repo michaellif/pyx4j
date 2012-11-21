@@ -7,21 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 27, 2011
- * @author dmitry
+ * Created on Aug 12, 2011
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.oapi.model;
 
-import java.util.ArrayList;
-import java.util.List;
+public class AmenityIO {
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+    public String name;
 
-@XmlRootElement(name = "buildings")
-public class BuildingsRS {
+    public String description;
 
-    @XmlElement(name = "building")
-    public List<BuildingRS> buildings = new ArrayList<BuildingRS>();
 }

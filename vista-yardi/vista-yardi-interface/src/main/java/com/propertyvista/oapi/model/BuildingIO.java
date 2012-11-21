@@ -22,42 +22,42 @@ import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "building")
-public class BuildingRS {
+public class BuildingIO {
 
     //mandatory for portal, unique identifier
     public String propertyCode;
 
-    public BuildingInfoRS info;
+    public BuildingInfoIO info;
 
-    public List<ContactRS> contacts = new ArrayList<ContactRS>();
+    public List<ContactIO> contacts = new ArrayList<ContactIO>();
 
-    public MarketingRS marketing;
+    public MarketingIO marketing;
 
     //mandatory for portal
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "unit", type = UnitRS.class))
-    public List<UnitRS> units = new ArrayList<UnitRS>();
+    @XmlElements(@XmlElement(name = "unit", type = UnitIO.class))
+    public List<UnitIO> units = new ArrayList<UnitIO>();
 
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "media", type = MediaRS.class))
-    public List<MediaRS> medias = new ArrayList<MediaRS>();
+    @XmlElements(@XmlElement(name = "media", type = MediaIO.class))
+    public List<MediaIO> medias = new ArrayList<MediaIO>();
 
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "amenity", type = AmenityRS.class))
-    public List<AmenityRS> amenities = new ArrayList<AmenityRS>();
+    @XmlElements(@XmlElement(name = "amenity", type = AmenityIO.class))
+    public List<AmenityIO> amenities = new ArrayList<AmenityIO>();
 
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "parking", type = ParkingRS.class))
-    public List<ParkingRS> parkings = new ArrayList<ParkingRS>();
+    @XmlElements(@XmlElement(name = "parking", type = ParkingIO.class))
+    public List<ParkingIO> parkings = new ArrayList<ParkingIO>();
 
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "utility", type = UtilityRS.class))
-    public List<UtilityRS> includedUtilities = new ArrayList<UtilityRS>();
+    @XmlElements(@XmlElement(name = "utility", type = UtilityIO.class))
+    public List<UtilityIO> includedUtilities = new ArrayList<UtilityIO>();
 
-    public BuildingRS() {
+    public BuildingIO() {
     }
 
-    public BuildingRS(String propertyCode) {
+    public BuildingIO(String propertyCode) {
         this.propertyCode = propertyCode;
     }
 

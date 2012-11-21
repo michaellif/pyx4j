@@ -24,7 +24,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.oapi.marshaling.LeaseMarshaller;
-import com.propertyvista.oapi.model.LeaseRS;
+import com.propertyvista.oapi.model.LeaseIO;
 
 public class LeaseFacade {
 
@@ -34,8 +34,8 @@ public class LeaseFacade {
         service = Persistence.service();
     }
 
-    public static List<LeaseRS> getLeases() {
-        List<LeaseRS> leasesRS = new ArrayList<LeaseRS>();
+    public static List<LeaseIO> getLeases() {
+        List<LeaseIO> leasesRS = new ArrayList<LeaseIO>();
         NamespaceManager.setNamespace("vista");
         EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
         leaseCriteria.asc(leaseCriteria.proto().leaseId());
@@ -49,7 +49,7 @@ public class LeaseFacade {
         return leasesRS;
     }
 
-    public static LeaseRS getLeaseById(String leaseId) {
+    public static LeaseIO getLeaseById(String leaseId) {
         NamespaceManager.setNamespace("vista");
         EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
         leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().leaseId(), leaseId));
