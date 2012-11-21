@@ -25,6 +25,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.propertyvista.oapi.LeaseFacade;
 import com.propertyvista.oapi.model.LeaseIO;
+import com.propertyvista.oapi.model.TenantIO;
 
 //http://localhost:8888/vista/interfaces/oapi/rs/propertyService/listAllBuildings
 //https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/rs/propertyService/listAllBuildings
@@ -36,6 +37,8 @@ import com.propertyvista.oapi.model.LeaseIO;
  * interfaces/oapi/rs/leases?propertyCode=B1 - all leases under property B1
  * 
  * interfaces/oapi/rs/leases/<LeaseId> - specific lease
+ * 
+ * interfaces/oapi/rs/leases/<LeaseId>/tenants
  * 
  * 
  */
@@ -55,7 +58,7 @@ public class LeaseService {
         }
         List<LeaseIO> filteredLeases = new ArrayList<LeaseIO>();
         for (LeaseIO lease : allLeases) {
-            if (lease.propertyCode.equals(propertyCode)) {
+            if (lease._propertyCode.equals(propertyCode)) {
                 filteredLeases.add(lease);
             }
         }
@@ -69,6 +72,15 @@ public class LeaseService {
     public LeaseIO getLeaseByNumber(@PathParam("leaseId") String leaseId) {
 
         return LeaseFacade.getLeaseById(leaseId);
+
+    }
+
+    @GET
+    @Path("/{leaseId}/tenants")
+    @Produces({ MediaType.APPLICATION_XML })
+    public List<TenantIO> getTenants(@PathParam("leaseId") String leaseId) {
+
+        return LeaseFacade.getTenants(leaseId);
 
     }
 }

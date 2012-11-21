@@ -80,9 +80,10 @@ public class PropertyFacade {
         List<AptUnit> units = service.query(unitCriteria);
         for (AptUnit unit : units) {
             service.retrieve(unit.floorplan());
-            service.retrieve(unit.building());
             UnitMarshaller marshaller = new UnitMarshaller();
-            unitsRS.add(marshaller.unmarshal(unit));
+            UnitIO unitIO = marshaller.unmarshal(unit);
+            unitIO.propertyCode = propertyCode;
+            unitsRS.add(unitIO);
         }
         return unitsRS;
     }

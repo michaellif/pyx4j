@@ -20,12 +20,16 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
 
     @Override
     public LeaseIO unmarshal(Lease lease) {
-        LeaseIO leaseRS = new LeaseIO();
-        leaseRS.leaseId = lease.leaseId().getValue();
-        leaseRS.status = lease.status().getValue().toString();
-        leaseRS.propertyCode = lease.unit().building().propertyCode().getValue();
-        leaseRS.unitNumber = lease.unit().info().number().getValue();
-        return leaseRS;
+        LeaseIO leaseIO = new LeaseIO();
+        leaseIO.leaseId = lease.leaseId().getValue();
+        leaseIO.status = lease.status().getValue().toString();
+        leaseIO.paymentFrequency = lease.paymentFrequency().getValue().name();
+        leaseIO.numberOfCycles = lease.paymentFrequency().getValue().getNumOfCycles();
+        leaseIO.leaseFrom = lease.leaseFrom().getValue().toString();
+        leaseIO.leaseTo = lease.leaseTo().getValue().toString();
+        leaseIO._propertyCode = lease.unit().building().propertyCode().getValue();
+        leaseIO._unitNumber = lease.unit().info().number().getValue();
+        return leaseIO;
     }
 
     @Override

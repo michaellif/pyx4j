@@ -20,13 +20,12 @@ public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
 
     @Override
     public UnitIO unmarshal(AptUnit unit) {
-        UnitIO unitRS = new UnitIO();
-        unitRS.propertyCode = unit.building().propertyCode().getValue();
-        unitRS.floorplanName = unit.floorplan().name().getValue();
-        unitRS.number = unit.info().number().getValue();
-        unitRS.baths = unit.floorplan().bathrooms().getValue();
-        unitRS.beds = unit.floorplan().bedrooms().getValue();
-        return unitRS;
+        UnitIO unitIO = new UnitIO();
+        unitIO.floorplanName = unit.floorplan().name().getValue();
+        unitIO.number = unit.info().number().getValue();
+        unitIO.baths = unit.floorplan().bathrooms().getValue();
+        unitIO.beds = unit.floorplan().bedrooms().getValue();
+        return unitIO;
     }
 
     @Override

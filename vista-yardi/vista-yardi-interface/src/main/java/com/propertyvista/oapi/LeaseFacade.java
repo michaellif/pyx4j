@@ -23,8 +23,11 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.oapi.marshaling.LeaseMarshaller;
+import com.propertyvista.oapi.marshaling.TenantMarshaller;
 import com.propertyvista.oapi.model.LeaseIO;
+import com.propertyvista.oapi.model.TenantIO;
 
 public class LeaseFacade {
 
@@ -59,5 +62,23 @@ public class LeaseFacade {
         service.retrieve(lease.unit().building());
         LeaseMarshaller marshaller = new LeaseMarshaller();
         return marshaller.unmarshal(lease);
+    }
+
+    public static List<TenantIO> getTenants(String leaseId) {
+        List<TenantIO> tenantsIO = new ArrayList<TenantIO>();
+        NamespaceManager.setNamespace("vista");
+        EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
+        leaseCriteria.eq(leaseCriteria.proto().leaseId(), leaseId);
+        List<Lease> leases = service.query(leaseCriteria);
+        Lease lease = leases.get(0);
+        service.retrieveMember(lease.leaseCustomers());
+        for (LeaseParticipant participant : lease.leaseCustomers()) {
+            TenantMarshaller marshaller = new TenantMarshaller();
+            TenantIO tenantIO = marshaller.unmarshal(participant);
+            tenantIO._leaseId = leaseId;
+            tenantsIO.add(tenantIO);
+        }
+
+        return tenantsIO;
     }
 }

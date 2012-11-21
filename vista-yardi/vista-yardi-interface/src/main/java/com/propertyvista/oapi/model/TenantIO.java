@@ -15,30 +15,31 @@ package com.propertyvista.oapi.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "lease")
-public class LeaseIO {
+@XmlRootElement(name = "tenant")
+public class TenantIO {
 
-    public String leaseId;
+    public String firstName;
 
-    public String status;
+    public String middleName;
 
-    public String paymentFrequency;
+    public String lastName;
 
-    public int numberOfCycles;
+    public String birthDate;
 
-    public String leaseFrom;
+    public String sex;
 
-    public String leaseTo;
+    public String email;
 
-    public String _propertyCode;
+    public String phone;
 
-    public String _unitNumber;
+    public String _leaseId;
 
-    public LeaseIO() {
+    public TenantIO() {
     }
 
-    public LeaseIO(String leaseId) {
-        this.leaseId = leaseId;
+    public TenantIO(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
 }
