@@ -17,6 +17,7 @@ import java.util.List;
 
 import javax.jws.WebService;
 
+import com.propertyvista.oapi.ReceivableFacade;
 import com.propertyvista.oapi.model.TransactionIO;
 
 @WebService(endpointInterface = "com.propertyvista.oapi.ws.ReceivableService")
@@ -24,6 +25,9 @@ public class ReceivableServiceImpl implements ReceivableService {
 
     @Override
     public void postTransactions(List<TransactionIO> transactions) {
+        for (TransactionIO transIO : transactions) {
+            ReceivableFacade.postTransaction(transIO);
+        }
 
     }
 
