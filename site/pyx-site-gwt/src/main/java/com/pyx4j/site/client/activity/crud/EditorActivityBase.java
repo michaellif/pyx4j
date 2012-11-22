@@ -29,6 +29,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.ReferenceDataManager;
@@ -131,7 +132,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         return parentClassName;
     }
 
-    public Key getParentId() {
+    public final Key getParentId() {
         return parentId;
     }
 
@@ -184,11 +185,15 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     private void setEntityParent(E entity, boolean force) {
-        if (parentId != null) {
+        if (getParentId() != null) {
             String ownerName = entity.getEntityMeta().getOwnerMemberName();
             if (ownerName != null) {
-                if (force || ((IEntity) entity.getMember(ownerName)).getPrimaryKey() == null) {
-                    ((IEntity) entity.getMember(ownerName)).setPrimaryKey(parentId);
+                IEntity parent = ((IEntity) entity.getMember(ownerName));
+                if (force || parent.getPrimaryKey() == null) {
+                    if (parent.isNull()) {
+                        parent.setAttachLevel(AttachLevel.IdOnly);
+                    }
+                    parent.setPrimaryKey(getParentId());
                 }
             }
         }
