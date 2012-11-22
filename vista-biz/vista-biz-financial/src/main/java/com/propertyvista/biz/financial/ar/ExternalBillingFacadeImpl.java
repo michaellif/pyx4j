@@ -14,7 +14,6 @@
 package com.propertyvista.biz.financial.ar;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -43,7 +42,8 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
     private BillingAccount getBillingAccount(final String leaseId) {
         EntityQueryCriteria<Lease> leaseQry = EntityQueryCriteria.create(Lease.class);
         leaseQry.add(PropertyCriterion.eq(leaseQry.proto().leaseId(), leaseId));
-        Lease lease = Persistence.service().retrieve(leaseQry);
-        return lease == null ? null : lease.billingAccount();
+//        Lease lease = Persistence.service().retrieve(leaseQry);
+//        return lease == null ? null : lease.billingAccount();
+        return null;
     }
 }
