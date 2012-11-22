@@ -24,6 +24,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -41,8 +42,8 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.util.DomainUtil;
 
 public class PaymentFacadeImpl implements PaymentFacade {
@@ -71,6 +72,25 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
     @Override
     public LeasePaymentMethod persistPaymentMethod(Building building, LeasePaymentMethod paymentMethod) {
+        if (!paymentMethod.id().isNull()) {
+            // Keep history of payment methods that were used.
+            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+            criteria.eq(criteria.proto().paymentMethod(), paymentMethod);
+            criteria.ne(criteria.proto().paymentStatus(), PaymentStatus.Submitted);
+            if (Persistence.service().count(criteria) != 0) {
+
+                LeasePaymentMethod origPaymentMethod = Persistence.service().retrieve(LeasePaymentMethod.class, paymentMethod.getPrimaryKey());
+                origPaymentMethod.isDeleted().setValue(true);
+                Persistence.service().merge(origPaymentMethod);
+
+                EntityGraph.makeDuplicate(paymentMethod);
+                if (paymentMethod.type().getValue() == PaymentType.CreditCard) {
+                    CreditCardInfo cc = paymentMethod.details().cast();
+                    cc.token().setValue(null);
+                }
+            }
+        }
+
         paymentMethod.isDeleted().setValue(Boolean.FALSE);
 
         Validate.isTrue(!paymentMethod.customer().isNull(), "Owner (customer) is required for PaymentMethod");

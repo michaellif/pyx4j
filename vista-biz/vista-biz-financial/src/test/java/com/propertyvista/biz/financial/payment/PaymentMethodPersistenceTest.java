@@ -20,6 +20,7 @@ import junit.framework.Assert;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.SysDateManager;
@@ -38,10 +39,10 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
         createLease("01-Feb-2012", "31-Dec-2012");
     }
 
-    public void testPersistPaymentMethodEcheck() {
+    private void testPersistPaymentMethod(PaymentType type) {
         Assert.assertEquals("Preload should have no PaymentMethods", 0, retrieveAllPaymentMethods().size());
 
-        LeasePaymentMethod paymentMethod = createPaymentMethod(PaymentType.Echeck);
+        LeasePaymentMethod paymentMethod = createPaymentMethod(type);
         paymentMethod.customer().set(tenantDataModel.getTenantCustomer());
         paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
         ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(buildingDataModel.getBuilding(), paymentMethod);
@@ -63,12 +64,22 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
 
         profileMethods = ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(tenantDataModel.getTenantCustomer());
         Assert.assertEquals(0, profileMethods.size());
+
+        Assert.assertEquals("PaymentMethod remains in DB", 1, retrieveAllPaymentMethods().size());
+    }
+
+    public void testPersistPaymentMethodEcheck() {
+        testPersistPaymentMethod(PaymentType.Echeck);
     }
 
     public void testPersistPaymentMethodCreditCard() {
+        testPersistPaymentMethod(PaymentType.CreditCard);
+    }
+
+    public void testUpdatePaymentMethod(PaymentType type) {
         Assert.assertEquals("Preload should have no PaymentMethods", 0, retrieveAllPaymentMethods().size());
 
-        LeasePaymentMethod paymentMethod = createPaymentMethod(PaymentType.CreditCard);
+        LeasePaymentMethod paymentMethod = createPaymentMethod(type);
         paymentMethod.customer().set(tenantDataModel.getTenantCustomer());
         paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
         ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(buildingDataModel.getBuilding(), paymentMethod);
@@ -85,10 +96,37 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
         Assert.assertEquals("Just one PaymentMethod remains", 1, retrieveAllPaymentMethods().size());
 
         ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
+        Persistence.service().commit();
 
-        ServerSideFactory.create(PaymentFacade.class).deletePaymentMethod(paymentMethod);
+        {
+            profileMethods = ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(tenantDataModel.getTenantCustomer());
+            LeasePaymentMethod paymentMethodUpdate = profileMethods.get(0);
+            try {
+                ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(buildingDataModel.getBuilding(), paymentMethodUpdate);
+                Assert.fail("Account numbers should be validated during save");
+            } catch (IllegalArgumentException ok) {
+                Persistence.service().rollback();
+            }
+        }
+
+        {
+            profileMethods = ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(tenantDataModel.getTenantCustomer());
+            LeasePaymentMethod paymentMethodUpdate = profileMethods.get(0);
+            setNewPaymentMethodDetails(paymentMethodUpdate);
+            ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(buildingDataModel.getBuilding(), paymentMethodUpdate);
+        }
 
         profileMethods = ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(tenantDataModel.getTenantCustomer());
-        Assert.assertEquals(0, profileMethods.size());
+        Assert.assertEquals(1, profileMethods.size());
+
+        Assert.assertEquals("PaymentMethod in DB", 2, retrieveAllPaymentMethods().size());
+    }
+
+    public void testUpdatePaymentMethodEcheck() {
+        testUpdatePaymentMethod(PaymentType.Echeck);
+    }
+
+    public void testUpdatePaymentMethodCreditCard() {
+        testUpdatePaymentMethod(PaymentType.CreditCard);
     }
 }

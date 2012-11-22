@@ -75,17 +75,13 @@ public class PaymentTestBase extends FinancialTestBase {
         switch (type) {
         case Echeck: {
             EcheckInfo details = EntityFactory.create(EcheckInfo.class);
-            details.bankId().setValue(CommonsStringUtils.paddZerro(RandomUtil.randomInt(999), 3));
-            details.branchTransitNumber().setValue(CommonsStringUtils.paddZerro(RandomUtil.randomInt(99999), 5));
-            details.accountNo().newNumber().setValue(Integer.toString(RandomUtil.randomInt(99999)) + Integer.toString(RandomUtil.randomInt(999999)));
+            setEcheckInfoDetails(details);
             paymentMethod.details().set(details);
         }
             break;
         case CreditCard: {
             CreditCardInfo details = EntityFactory.create(CreditCardInfo.class);
-            details.cardType().setValue(CreditCardType.Visa);
-            details.card().newNumber().setValue(CreditCardNumberGenerator.generateCardNumber(details.cardType().getValue()));
-            details.expiryDate().setValue(new LogicalDate(2015 - 1900, 1, 1));
+            setCreditCardDetails(details);
             paymentMethod.details().set(details);
         }
             break;
@@ -93,6 +89,32 @@ public class PaymentTestBase extends FinancialTestBase {
             throw new IllegalArgumentException();
         }
 
+    }
+
+    protected void setNewPaymentMethodDetails(PaymentMethod paymentMethod) {
+        switch (paymentMethod.type().getValue()) {
+        case Echeck:
+            setEcheckInfoDetails((EcheckInfo) paymentMethod.details().cast());
+            break;
+        case CreditCard:
+            setCreditCardDetails((CreditCardInfo) paymentMethod.details().cast());
+            break;
+        default:
+            throw new IllegalArgumentException();
+        }
+
+    }
+
+    private void setEcheckInfoDetails(EcheckInfo details) {
+        details.bankId().setValue(CommonsStringUtils.paddZerro(RandomUtil.randomInt(999), 3));
+        details.branchTransitNumber().setValue(CommonsStringUtils.paddZerro(RandomUtil.randomInt(99999), 5));
+        details.accountNo().newNumber().setValue(Integer.toString(RandomUtil.randomInt(99999)) + Integer.toString(RandomUtil.randomInt(999999)));
+    }
+
+    private void setCreditCardDetails(CreditCardInfo details) {
+        details.cardType().setValue(CreditCardType.Visa);
+        details.card().newNumber().setValue(CreditCardNumberGenerator.generateCardNumber(details.cardType().getValue()));
+        details.expiryDate().setValue(new LogicalDate(2015 - 1900, 1, 1));
     }
 
     protected PaymentRecord createPaymentRecord(LeasePaymentMethod paymentMethod, String amount) {
