@@ -392,10 +392,16 @@ public class EntityGraph {
      */
     public static <E extends IEntity> E businessDuplicate(E entity) {
         final E copy = entity.duplicate();
-        applyRecursivelyAllObjects(copy, new ApplyMethod() {
+        makeDuplicate(copy);
+        return copy;
+    }
+
+    public static <E extends IEntity> void makeDuplicate(final E rootEntity) {
+        rootEntity.setPrimaryKey(null);
+        applyRecursivelyAllObjects(rootEntity, new ApplyMethod() {
             @Override
             public boolean apply(IEntity entity) {
-                if ((entity == copy || entity.getMeta().isOwnedRelationships())) {
+                if ((entity == rootEntity || entity.getMeta().isOwnedRelationships())) {
                     if (entity.getPrimaryKey() != null) {
                         entity.setPrimaryKey(null);
                     }
@@ -405,8 +411,6 @@ public class EntityGraph {
                 }
             }
         });
-
-        return copy;
     }
 
     /**
