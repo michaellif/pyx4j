@@ -78,7 +78,8 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
     }
 
     // GWT makes it impossible to Override any other method in RemoteServiceServlet and access moduleBaseURL from RCP request.
-    protected void TODO_REOMVE_onBeforeRequestDeserialized(String serializedRequest) {
+    @Override
+    protected void onBeforeRequestDeserialized(String serializedRequest) {
         // 6|1|12|http://localhost:8888/g.site/|2005C2913F3EF6EE0AB1510ECABAE604|_|
         int beginModuleBaseURL = 0;
         for (int i = 0; i < 3; i++) {
@@ -108,7 +109,8 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
         ServicePolicy.loadServicePolicyToRequest(this.getServletContext(), moduleRelativePath);
     }
 
-    protected SerializationPolicy TODO_REOMVE_doGetSerializationPolicy(HttpServletRequest request, String moduleBaseURL, String strongName) {
+    @Override
+    protected SerializationPolicy doGetSerializationPolicy(HttpServletRequest request, String moduleBaseURL, String strongName) {
         // Allow for redirected requests environments, consider the context is mapped to root.
         String forwardedContext = request.getHeader(ServletUtils.x_forwarded_context);
         final boolean debug = true;
