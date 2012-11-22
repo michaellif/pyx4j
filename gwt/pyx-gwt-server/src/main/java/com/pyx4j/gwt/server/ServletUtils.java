@@ -129,11 +129,20 @@ public class ServletUtils {
         String forwardedContext = request.getHeader(x_forwarded_context);
         if (forwardedContext == null) {
             return request.getContextPath() + servletPath;
-        } else if (request.getContextPath().length() == 0) {
-            forwardedContext = forwardedContext.substring(forwardedContext.indexOf('/'));
-            return servletPath.substring(forwardedContext.length());
         } else {
-            return (request.getContextPath() + servletPath).substring(forwardedContext.length());
+            String forwardedPath = request.getHeader(ServletUtils.x_forwarded_path);
+            if (forwardedPath != null) {
+                if (!servletPath.startsWith(forwardedPath)) {
+                    throw new Error("Unreachable path" + servletPath + " when " + forwardedPath + " forwarded");
+                }
+                return servletPath.substring(forwardedPath.length());
+            } else {
+                String path = request.getContextPath() + servletPath;
+                if (!path.startsWith(forwardedContext)) {
+                    throw new Error("Unreachable path" + servletPath + " when " + forwardedContext + " forwarded");
+                }
+                return path.substring(forwardedContext.length());
+            }
         }
     }
 
