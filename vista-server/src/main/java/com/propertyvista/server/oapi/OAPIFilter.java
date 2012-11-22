@@ -14,6 +14,8 @@
 package com.propertyvista.server.oapi;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -22,8 +24,29 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.config.shared.ClientSystemInfo;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.server.LocalService;
+import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.server.contexts.NamespaceManager;
+
+import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class OAPIFilter implements Filter {
+
+    private final static Logger log = LoggerFactory.getLogger(OAPIFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -31,15 +54,69 @@ public class OAPIFilter implements Filter {
 
     @Override
     public void destroy() {
+
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, final FilterChain chain) throws IOException, ServletException {
         if (request instanceof HttpServletRequest) {
-            chain.doFilter(request, response);
+            final HttpServletRequest httpRequest = (HttpServletRequest) request;
+            final HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+            final AtomicBoolean rc = new AtomicBoolean(false);
+            final String auth = httpRequest.getHeader("Authorization");
+            if (auth != null) {
+
+                try {
+                    final int index = auth.indexOf(' ');
+                    if (index > 0) {
+                        final String[] credentials = StringUtils.split(new String(Base64.decodeBase64(auth.substring(index)), Charset.forName("UTF-8")), ':');
+
+                        NamespaceManager.setNamespace(credentials[1]);
+
+                        AuthenticationRequest authenticationRequest = EntityFactory.create(AuthenticationRequest.class);
+                        authenticationRequest.email().setValue(credentials[0]);
+                        authenticationRequest.password().setValue(credentials[2]);
+
+                        LocalService.create(CrmAuthenticationService.class).authenticate(new AsyncCallback<AuthenticationResponse>() {
+                            @Override
+                            public void onFailure(Throwable caught) {
+                                rc.set(false);
+                            }
+
+                            @Override
+                            public void onSuccess(AuthenticationResponse result) {
+                                rc.set(SecurityController.checkBehavior(VistaCrmBehavior.OAPI));
+                            }
+                        }, new ClientSystemInfo(), authenticationRequest);
+
+                    }
+                } catch (Throwable t) {
+                    log.error("Login failed", t);
+                }
+            }
+
+            if (rc.get()) {
+                try {
+                    chain.doFilter(httpRequest, httpResponse);
+                } finally {
+                    LocalService.create(CrmAuthenticationService.class).logout(new AsyncCallback<AuthenticationResponse>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            log.error("logout error", caught);
+                        }
+
+                        @Override
+                        public void onSuccess(AuthenticationResponse result) {
+                        }
+                    });
+                }
+            } else {
+                httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"Vista Realm\"");
+                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            }
         } else {
             chain.doFilter(request, response);
         }
     }
-
 }
