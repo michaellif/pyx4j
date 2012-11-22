@@ -116,7 +116,7 @@ public class ServletUtils {
         if (forwardedContext == null) {
             return request.getContextPath();
         } else {
-            return request.getContextPath().substring(forwardedContext.length());
+            return "";
         }
     }
 
