@@ -111,6 +111,7 @@ public class LifecycleFilter implements Filter {
                 } catch (Throwable t) {
                     log.error("return http error {}", t);
                     if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+                        RequestDebug.debug(request);
                         RequestDebug.debug(httprequest);
                         if (t instanceof UserRuntimeException) {
                             if (t instanceof StatusCodeUserRuntimeException) {
