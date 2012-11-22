@@ -107,7 +107,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
                 // Do merge.                
                 EcheckInfo origValue = Persistence.service().retrieve(EcheckInfo.class, eci.getPrimaryKey());
                 eci.accountNo().number().setValue(origValue.accountNo().number().getValue());
-                Validate.isTrue(eci.accountNo().obfuscatedNumber().equals(origValue.accountNo().obfuscatedNumber()));
+                Validate.isTrue(eci.accountNo().obfuscatedNumber().equals(origValue.accountNo().obfuscatedNumber()), "obfuscatedNumber changed");
             }
             break;
         case CreditCard:
@@ -116,7 +116,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
             if (!paymentMethod.details().id().isNull()) {
                 CreditCardInfo ccOrigValue = Persistence.service().retrieve(CreditCardInfo.class, cc.getPrimaryKey());
                 if (cc.card().newNumber().isNull()) {
-                    Validate.isTrue(cc.card().obfuscatedNumber().equals(ccOrigValue.card().obfuscatedNumber()));
+                    Validate.isTrue(cc.card().obfuscatedNumber().equals(ccOrigValue.card().obfuscatedNumber()), "obfuscatedNumber changed");
                 }
             }
             break;
