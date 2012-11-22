@@ -34,7 +34,7 @@ public class ServletUtils {
     public static final String x_forwarded_for = "x-forwarded-for";
 
     public static String getForwardedHost(HttpServletRequest request) {
-        String host = request.getHeader(ServletUtils.x_forwarded_host);
+        String host = request.getHeader(x_forwarded_host);
         if (host != null) {
             if (host.contains(", ")) {
                 host = host.split(", ")[0];
@@ -63,7 +63,7 @@ public class ServletUtils {
         String forwarded = getForwardedHost(request);
         if (forwarded != null) {
             receivingURL = new StringBuffer();
-            String forwardedProtocol = request.getHeader(ServletUtils.x_forwarded_protocol);
+            String forwardedProtocol = request.getHeader(x_forwarded_protocol);
             if (forwardedProtocol == null) {
                 forwardedProtocol = "http";
             }
@@ -90,7 +90,7 @@ public class ServletUtils {
         String receivingURL;
         String forwarded = getForwardedHost(request);
         if (forwarded != null) {
-            String forwardedProtocol = request.getHeader(ServletUtils.x_forwarded_protocol);
+            String forwardedProtocol = request.getHeader(x_forwarded_protocol);
             if (forwardedProtocol == null) {
                 forwardedProtocol = "http";
             }
@@ -112,7 +112,7 @@ public class ServletUtils {
     }
 
     public static String getActualRequestContextPath(HttpServletRequest request) {
-        String forwardedContext = request.getHeader(ServletUtils.x_forwarded_context);
+        String forwardedContext = request.getHeader(x_forwarded_context);
         if (forwardedContext == null) {
             return request.getContextPath();
         } else {
@@ -120,9 +120,24 @@ public class ServletUtils {
         }
     }
 
+    /**
+     * Handle the mapping of '/app/part' to root
+     */
+    public static String getRelativeServletPath(HttpServletRequest request, String servletPath) {
+        String forwardedContext = request.getHeader(x_forwarded_context);
+        if (forwardedContext == null) {
+            return request.getContextPath() + servletPath;
+        } else if (request.getContextPath().length() == 0) {
+            forwardedContext = forwardedContext.substring(forwardedContext.indexOf('/'));
+            return servletPath.substring(forwardedContext.length());
+        } else {
+            return (request.getContextPath() + servletPath).substring(forwardedContext.length());
+        }
+    }
+
     public static String getActualRequestRemoteAddr(ServletRequest request) {
         if (request instanceof HttpServletRequest) {
-            String forwarded = ((HttpServletRequest) request).getHeader("x-forwarded-for");
+            String forwarded = ((HttpServletRequest) request).getHeader(x_forwarded_for);
             if (forwarded != null) {
                 if (forwarded.contains(", ")) {
                     forwarded = forwarded.split(", ")[0];
@@ -141,7 +156,7 @@ public class ServletUtils {
     public static String getRequestProtocol(HttpServletRequest request) {
         String forwarded = getForwardedHost(request);
         if (forwarded != null) {
-            String forwardedProtocol = request.getHeader(ServletUtils.x_forwarded_protocol);
+            String forwardedProtocol = request.getHeader(x_forwarded_protocol);
             if (forwardedProtocol == null) {
                 return "http";
             } else {
