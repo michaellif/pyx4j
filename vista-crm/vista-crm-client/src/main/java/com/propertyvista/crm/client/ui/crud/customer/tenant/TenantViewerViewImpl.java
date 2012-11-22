@@ -13,10 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -37,6 +40,15 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
         //set main form here:
         setForm(new TenantForm(true));
+
+        addHeaderToolbarItem(new Button(i18n.tr("Maintenance Requests"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (!isVisorShown()) {
+                    ((TenantViewerView.Presenter) getPresenter()).getMaintenanceRequestVisorController().show(TenantViewerViewImpl.this);
+                }
+            }
+        }));
 
         passwordAction = new MenuItem(i18n.tr("Change Password"), new Command() {
             @Override

@@ -59,6 +59,7 @@ import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentLister;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillLister;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
+import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -121,6 +122,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     private MenuItem offerAction;
 
     private MenuItem viewOfferedTerms;
+
+    private final MenuItem maintenanceAction;
 
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
@@ -310,6 +313,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addAction(cancelAction);
 
+        maintenanceAction = new MenuItem(i18n.tr("Create Maintenance Request"), new Command() {
+            @Override
+            public void execute() {
+                ((TenantViewerView.Presenter) getPresenter()).goToCreateMaintenanceRequest();
+            }
+        });
+        addAction(maintenanceAction);
         // Renewing stuff : ---------------------------------------------------------------------------------------------------
 
         renewButton = new Button(i18n.tr("Renew"));

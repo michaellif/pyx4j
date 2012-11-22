@@ -27,6 +27,7 @@ import com.propertyvista.common.client.ui.components.security.PasswordChangeView
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
+import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -38,10 +39,22 @@ import com.propertyvista.dto.TenantDTO;
 
 public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implements TenantViewerView.Presenter {
 
+    private MaintenanceRequestVisorController maintenanceRequestVisorController;
+
+    private Key currentTenantId;
+
     private Customer screeningCustomer;
 
     public TenantViewerActivity(CrudAppPlace place) {
         super(place, CustomerViewFactory.instance(TenantViewerView.class), GWT.<TenantCrudService> create(TenantCrudService.class));
+    }
+
+    @Override
+    public MaintenanceRequestVisorController getMaintenanceRequestVisorController() {
+        if (maintenanceRequestVisorController == null) {
+            maintenanceRequestVisorController = new MaintenanceRequestVisorController(currentTenantId);
+        }
+        return maintenanceRequestVisorController;
     }
 
     @Override
@@ -54,7 +67,6 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
 
     @Override
     public void goToCreateMaintenanceRequest() {
-
         ((TenantCrudService) getService()).getAssosiatedTenant(new DefaultAsyncCallback<Tenant>() {
             @Override
             public void onSuccess(Tenant result) {
@@ -81,6 +93,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     public void onPopulateSuccess(TenantDTO result) {
         super.onPopulateSuccess(result);
 
+        currentTenantId = result.getPrimaryKey();
         screeningCustomer = result.customer();
     }
 

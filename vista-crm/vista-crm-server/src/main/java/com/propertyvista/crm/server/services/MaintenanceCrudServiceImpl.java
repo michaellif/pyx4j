@@ -26,6 +26,7 @@ import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.SurveyResponse;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements MaintenanceCrudService {
@@ -90,5 +91,10 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
         Persistence.service().merge(entity);
         Persistence.service().commit();
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void loadTenant(AsyncCallback<Tenant> callback, Tenant tenantId) {
+        callback.onSuccess(Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey()));
     }
 }

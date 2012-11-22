@@ -21,6 +21,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.domain.maintenance.SurveyResponse;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceRequestDTO> {
@@ -32,4 +33,6 @@ public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceR
     void rateAction(AsyncCallback<VoidSerializable> callback, SurveyResponse rate, Key entityId);
 
     void cancelAction(AsyncCallback<VoidSerializable> callback, Key entityId);
+
+    void loadTenant(AsyncCallback<Tenant> callback, Tenant tenantId);
 }

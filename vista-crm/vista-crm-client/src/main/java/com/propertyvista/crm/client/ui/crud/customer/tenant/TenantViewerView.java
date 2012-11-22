@@ -16,11 +16,14 @@ package com.propertyvista.crm.client.ui.crud.customer.tenant;
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
+import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
 import com.propertyvista.dto.TenantDTO;
 
 public interface TenantViewerView extends IViewerView<TenantDTO> {
 
     interface Presenter extends IViewerView.Presenter {
+
+        MaintenanceRequestVisorController getMaintenanceRequestVisorController();
 
         void goToCreateScreening();
 

@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.crud.maintenance;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -25,23 +25,34 @@ import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestEditor
 import com.propertyvista.crm.client.ui.crud.viewfactories.MaintenanceViewFactory;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestEditorActivity extends CrmEditorActivity<MaintenanceRequestDTO> implements MaintenanceRequestEditorView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public MaintenanceRequestEditorActivity(CrudAppPlace place) {
-        super(place, MaintenanceViewFactory.instance(MaintenanceRequestEditorView.class), (AbstractCrudService<MaintenanceRequestDTO>) GWT
-                .create(MaintenanceCrudService.class), MaintenanceRequestDTO.class);
+        super(place, MaintenanceViewFactory.instance(MaintenanceRequestEditorView.class), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),
+                MaintenanceRequestDTO.class);
     }
 
     @Override
     protected void createNewEntity(final AsyncCallback<MaintenanceRequestDTO> callback) {
         super.createNewEntity(new DefaultAsyncCallback<MaintenanceRequestDTO>() {
             @Override
-            public void onSuccess(MaintenanceRequestDTO entity) {
+            public void onSuccess(final MaintenanceRequestDTO entity) {
                 entity.status().setValue(MaintenanceRequestStatus.Submitted);
-                callback.onSuccess(entity);
+
+                if (getParentId() != null) {
+                    ((MaintenanceCrudService) getService()).loadTenant(new DefaultAsyncCallback<Tenant>() {
+                        @Override
+                        public void onSuccess(Tenant result) {
+                            entity.leaseParticipant().set(result);
+                            callback.onSuccess(entity);
+                        }
+                    }, EntityFactory.createIdentityStub(Tenant.class, getParentId()));
+                } else {
+                    callback.onSuccess(entity);
+                }
             }
         });
     }
