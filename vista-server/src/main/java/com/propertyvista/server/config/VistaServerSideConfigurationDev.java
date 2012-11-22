@@ -26,6 +26,8 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
 
     public static int devServerPort = 8888;
 
+    public static String devContextPath = "/vista";
+
     @Override
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
         // Disable environment selection.
@@ -104,7 +106,7 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
 
     @Override
     public String getApplicationURLNamespace() {
-        return ".dev.birchwoodsoftwaregroup.com:" + devServerPort + "/vista/";
+        return ".dev.birchwoodsoftwaregroup.com:" + devServerPort + devContextPath + "/";
     }
 
     @Override

@@ -52,7 +52,7 @@ public class VistaPortalJettyLaunch extends JettyLaunch {
 
     @Override
     public String getContextPath() {
-        return "/vista";
+        return VistaServerSideConfigurationDev.devContextPath;
     }
 
     @Override
