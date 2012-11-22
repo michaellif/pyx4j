@@ -22,7 +22,6 @@ import java.util.Map;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
@@ -59,7 +58,7 @@ public class BuildingDataModel {
         createServiceMeta();
     }
 
-    public IEntity getBuilding() {
+    public Building getBuilding() {
         return building;
     }
 

@@ -35,25 +35,11 @@ public class TaskRunner {
     private static final Logger log = LoggerFactory.getLogger(TaskRunner.class);
 
     public static <T> T runInAdminNamespace(final Callable<T> task) {
-        return runInTargetNamespace(VistaNamespace.adminNamespace, task);
+        return NamespaceManager.runInTargetNamespace(VistaNamespace.adminNamespace, task);
     }
 
     public static <T> T runInTargetNamespace(final String targetNamespace, final Callable<T> task) {
-        final String namespace = NamespaceManager.getNamespace();
-        try {
-            NamespaceManager.setNamespace(targetNamespace);
-            try {
-                return task.call();
-            } catch (Exception e) {
-                if (e instanceof RuntimeException) {
-                    throw (RuntimeException) e;
-                } else {
-                    throw new Error(e);
-                }
-            }
-        } finally {
-            NamespaceManager.setNamespace(namespace);
-        }
+        return NamespaceManager.runInTargetNamespace(targetNamespace, task);
     }
 
     public static <T> T runAutonomousTransation(final Callable<T> task) {

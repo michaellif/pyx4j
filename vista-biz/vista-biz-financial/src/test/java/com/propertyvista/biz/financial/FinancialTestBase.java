@@ -318,7 +318,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         }
 
         LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
-        tenantInLease.leaseParticipant().customer().set(tenantDataModel.getTenant());
+        tenantInLease.leaseParticipant().customer().set(tenantDataModel.getTenantCustomer());
         tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
         lease.currentTerm().version().tenants().add(tenantInLease);
 

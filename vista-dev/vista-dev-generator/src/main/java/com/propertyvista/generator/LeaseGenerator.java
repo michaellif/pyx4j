@@ -131,15 +131,6 @@ public class LeaseGenerator extends DataGenerator {
         }
     }
 
-    public static String paddZerro(int i, int lenght) {
-        String value = String.valueOf(i);
-        int len = value.length();
-        if (len > lenght) {
-            throw new IllegalArgumentException();
-        }
-        return CommonsStringUtils.padding(lenght - len, '0') + value;
-    }
-
     private void addPreathorisedPaymentMethod(LeaseTermTenant tenant) {
         LeasePaymentMethod m = EntityFactory.create(LeasePaymentMethod.class);
         m.type().setValue(PaymentType.Echeck);
@@ -149,8 +140,8 @@ public class LeaseGenerator extends DataGenerator {
         // create new payment method details:
         EcheckInfo details = EntityFactory.create(EcheckInfo.class);
         details.nameOn().setValue(tenant.leaseParticipant().customer().person().name().getStringView());
-        details.bankId().setValue(paddZerro(RandomUtil.randomInt(999), 3));
-        details.branchTransitNumber().setValue(paddZerro(RandomUtil.randomInt(99999), 5));
+        details.bankId().setValue(CommonsStringUtils.paddZerro(RandomUtil.randomInt(999), 3));
+        details.branchTransitNumber().setValue(CommonsStringUtils.paddZerro(RandomUtil.randomInt(99999), 5));
         details.accountNo().number().setValue(Integer.toString(RandomUtil.randomInt(99999)) + Integer.toString(RandomUtil.randomInt(999999)));
         details.accountNo().obfuscatedNumber().setValue(DomainUtil.obfuscateAccountNumber(details.accountNo().number().getValue()));
         m.details().set(details);

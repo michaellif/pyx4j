@@ -48,6 +48,7 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.CreditCardNumberIdentity;
 import com.propertyvista.domain.util.ValidationUtils;
+import com.propertyvista.misc.CreditCardNumberGenerator;
 
 public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo> {
 
@@ -164,7 +165,7 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
             getValue().card().newNumber().setValue("4222222222222");
             get(proto().card()).setValue(getValue().card());
         } else {
-            ((CTextFieldBase<?, ?>) get(proto().card())).setValueByString("4222222222222");
+            ((CTextFieldBase<?, ?>) get(proto().card())).setValueByString(CreditCardNumberGenerator.generateCardNumber(get(proto().cardType()).getValue()));
         }
 
         get(proto().expiryDate()).setValue(new LogicalDate());

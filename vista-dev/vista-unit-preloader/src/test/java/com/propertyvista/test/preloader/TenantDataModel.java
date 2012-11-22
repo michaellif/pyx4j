@@ -44,7 +44,7 @@ public class TenantDataModel {
         Persistence.service().persist(tenant);
     }
 
-    public Customer getTenant() {
+    public Customer getTenantCustomer() {
         return tenant;
     }
 

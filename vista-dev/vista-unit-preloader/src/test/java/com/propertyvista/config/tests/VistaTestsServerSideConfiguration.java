@@ -149,7 +149,7 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
 
     @Override
     public String getCaledonCompanyId() {
-        return "vista_test";
+        return "BIRCHWOOD2";
     }
 
     @Override
