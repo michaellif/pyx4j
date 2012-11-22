@@ -28,12 +28,12 @@ import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.model.UnitIO;
 
-//http://localhost:8888/vista/interfaces/oapi/ws/PropertyService?wsdl
-//https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/ws/PropertyService?wsdl
+//http://localhost:8888/vista/interfaces/oapi/ws/WSPropertyService?wsdl
+//https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/ws/WSPropertyService?wsdl
 
 @WebService(targetNamespace = "http://www.w3.org/2001/XMLSchema-instance")
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)
-public interface PropertyService {
+public interface WSPropertyService {
 
     @WebMethod
     void createBuilding(@WebParam(name = "building") BuildingIO building);

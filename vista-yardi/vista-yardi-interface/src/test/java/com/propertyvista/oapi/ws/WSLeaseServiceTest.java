@@ -25,13 +25,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.propertyvista.oapi.model.LeaseIO;
-import com.propertyvista.oapi.ws.LeaseService;
+import com.propertyvista.oapi.ws.WSLeaseService;
 
-public class LeaseServiceTest extends OapiWsTest {
+public class WSLeaseServiceTest extends WSOapiTest {
 
     @Before
     public void init() throws Exception {
-        publish(LeaseService.class);
+        publish(WSLeaseService.class);
     }
 
     @Test
@@ -42,9 +42,9 @@ public class LeaseServiceTest extends OapiWsTest {
     @Test
     public void testMessage() throws Exception {
 
-        LeaseServiceStub stub = new LeaseServiceStub(new URL(getAddress()));
+        WSLeaseServiceStub stub = new WSLeaseServiceStub(new URL(getAddress()));
 
-        LeaseService service = stub.getLeaseServicePort();
+        WSLeaseService service = stub.getLeaseServicePort();
 
         Map<String, Object> requestContext = ((BindingProvider) service).getRequestContext();
         requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress() + "?wsdl");

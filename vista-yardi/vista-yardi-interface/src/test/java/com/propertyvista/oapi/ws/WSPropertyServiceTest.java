@@ -26,11 +26,11 @@ import org.junit.Test;
 
 import com.propertyvista.oapi.model.BuildingIO;
 
-public class PropertyServiceTest extends OapiWsTest {
+public class WSPropertyServiceTest extends WSOapiTest {
 
     @Before
     public void init() throws Exception {
-        publish(PropertyService.class);
+        publish(WSPropertyService.class);
     }
 
     @Test
@@ -41,9 +41,9 @@ public class PropertyServiceTest extends OapiWsTest {
     @Test
     public void testCreateBuilding() throws Exception {
 
-        PropertyServiceStub stub = new PropertyServiceStub(new URL(getAddress()));
+        WSPropertyServiceStub stub = new WSPropertyServiceStub(new URL(getAddress()));
 
-        PropertyService service = stub.getPropertyServicePort();
+        WSPropertyService service = stub.getPropertyServicePort();
 
         Map<String, Object> requestContext = ((BindingProvider) service).getRequestContext();
         requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress() + "?wsdl");

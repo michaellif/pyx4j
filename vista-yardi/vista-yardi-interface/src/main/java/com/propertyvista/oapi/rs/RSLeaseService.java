@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi.rest;
+package com.propertyvista.oapi.rs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.propertyvista.oapi.LeaseFacade;
+import com.propertyvista.oapi.LeaseService;
 import com.propertyvista.oapi.model.LeaseIO;
 import com.propertyvista.oapi.model.TenantIO;
 
@@ -43,16 +43,16 @@ import com.propertyvista.oapi.model.TenantIO;
  * 
  */
 @Path("/leases")
-public class LeaseService {
+public class RSLeaseService {
 
-    public LeaseService() {
+    public RSLeaseService() {
     }
 
     @GET
     @Produces({ MediaType.APPLICATION_XML })
     public List<LeaseIO> getLeases(@QueryParam("propertyCode") String propertyCode) {
 
-        List<LeaseIO> allLeases = LeaseFacade.getLeases();
+        List<LeaseIO> allLeases = LeaseService.getLeases();
         if (propertyCode == null) {
             return allLeases;
         }
@@ -71,7 +71,7 @@ public class LeaseService {
     @Produces({ MediaType.APPLICATION_XML })
     public LeaseIO getLeaseByNumber(@PathParam("leaseId") String leaseId) {
 
-        return LeaseFacade.getLeaseById(leaseId);
+        return LeaseService.getLeaseById(leaseId);
 
     }
 
@@ -80,7 +80,7 @@ public class LeaseService {
     @Produces({ MediaType.APPLICATION_XML })
     public List<TenantIO> getTenants(@PathParam("leaseId") String leaseId) {
 
-        return LeaseFacade.getTenants(leaseId);
+        return LeaseService.getTenants(leaseId);
 
     }
 }

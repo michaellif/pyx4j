@@ -22,7 +22,7 @@ import com.propertyvista.oapi.marshaling.ChargeMarshaller;
 import com.propertyvista.oapi.model.ChargeIO;
 import com.propertyvista.oapi.model.TransactionIO;
 
-public class ReceivableFacade {
+public class ReceivableService {
 
     public static void postTransaction(TransactionIO transaction) {
         if (transaction instanceof ChargeIO) {

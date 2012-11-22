@@ -23,7 +23,7 @@ import com.propertyvista.oapi.model.LeaseIO;
 
 @WebService(targetNamespace = "http://www.w3.org/2001/XMLSchema-instance")
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)
-public interface LeaseService {
+public interface WSLeaseService {
 
     void createLease(LeaseIO lease);
 

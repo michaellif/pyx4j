@@ -20,8 +20,8 @@ import javax.jws.WebService;
 
 import com.propertyvista.oapi.model.LeaseIO;
 
-@WebService(endpointInterface = "com.propertyvista.oapi.ws.LeaseService")
-public class LeaseServiceImpl implements LeaseService {
+@WebService(endpointInterface = "com.propertyvista.oapi.ws.WSLeaseService")
+public class WSLeaseServiceImpl implements WSLeaseService {
 
     static private Map<String, LeaseIO> leases = new HashMap<String, LeaseIO>();
 

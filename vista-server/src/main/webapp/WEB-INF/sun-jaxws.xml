@@ -4,6 +4,6 @@
   version="2.0">
   <endpoint
       name="PropertyService"
-      implementation="com.propertyvista.oapi.ws.PropertyServiceImpl"
-      url-pattern="/interfaces/oapi/ws/PropertyService"/>
+      implementation="com.propertyvista.oapi.ws.WSPropertyServiceImpl"
+      url-pattern="/interfaces/oapi/ws/WSPropertyService"/>
 </endpoints>

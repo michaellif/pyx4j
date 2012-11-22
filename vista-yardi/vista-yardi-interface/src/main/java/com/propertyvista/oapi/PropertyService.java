@@ -30,7 +30,7 @@ import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.model.UnitIO;
 
-public class PropertyFacade {
+public class PropertyService {
 
     private static final IEntityPersistenceService service;
 

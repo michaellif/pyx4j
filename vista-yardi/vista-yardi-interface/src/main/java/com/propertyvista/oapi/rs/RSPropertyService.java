@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi.rest;
+package com.propertyvista.oapi.rs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.propertyvista.oapi.PropertyFacade;
+import com.propertyvista.oapi.PropertyService;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.model.UnitIO;
@@ -47,15 +47,15 @@ import com.propertyvista.oapi.model.UnitIO;
  * 
  */
 @Path("/buildings")
-public class PropertyService {
+public class RSPropertyService {
 
-    public PropertyService() {
+    public RSPropertyService() {
     }
 
     @GET
     @Produces({ MediaType.APPLICATION_XML })
     public BuildingsIO getBuildings(@QueryParam("province") String province) {
-        BuildingsIO allBuildings = PropertyFacade.getBuildings();
+        BuildingsIO allBuildings = PropertyService.getBuildings();
         if (province == null) {
             return allBuildings;
         }
@@ -74,7 +74,7 @@ public class PropertyService {
     @Produces({ MediaType.APPLICATION_XML })
     public BuildingIO getBuildingByPropertyCode(@PathParam("propertyCode") String propertyCode) {
 
-        return PropertyFacade.getBuildingByPropertyCode(propertyCode);
+        return PropertyService.getBuildingByPropertyCode(propertyCode);
     }
 
     @GET
@@ -82,7 +82,7 @@ public class PropertyService {
     @Produces({ MediaType.APPLICATION_XML })
     public List<UnitIO> getAllUnitsByPropertyCode(@PathParam("propertyCode") String propertyCode, @QueryParam("floorplan") String floorplan) {
 
-        List<UnitIO> allUnits = PropertyFacade.getUnitsByPropertyCode(propertyCode);
+        List<UnitIO> allUnits = PropertyService.getUnitsByPropertyCode(propertyCode);
         List<UnitIO> filteredUnits = new ArrayList<UnitIO>();
         for (UnitIO unit : allUnits) {
             if (unit.floorplanName.equals(floorplan)) {
@@ -97,7 +97,7 @@ public class PropertyService {
     @Produces({ MediaType.APPLICATION_XML })
     public UnitIO getUnitByNumber(@PathParam("propertyCode") String propertyCode, @PathParam("unitNumber") String unitNumber) {
 
-        return PropertyFacade.getUnitByNumber(propertyCode, unitNumber);
+        return PropertyService.getUnitByNumber(propertyCode, unitNumber);
 
     }
 }

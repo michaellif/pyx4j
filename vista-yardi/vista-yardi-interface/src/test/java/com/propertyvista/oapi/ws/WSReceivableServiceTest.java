@@ -36,13 +36,13 @@ import com.propertyvista.oapi.model.ChargeIO;
 import com.propertyvista.oapi.model.PaymentIO;
 import com.propertyvista.oapi.model.ServiceIO;
 import com.propertyvista.oapi.model.TransactionIO;
-import com.propertyvista.oapi.ws.ReceivableService;
+import com.propertyvista.oapi.ws.WSReceivableService;
 
-public class ReceivableServiceTest extends OapiWsTest {
+public class WSReceivableServiceTest extends WSOapiTest {
 
     @Before
     public void init() throws Exception {
-        publish(ReceivableService.class);
+        publish(WSReceivableService.class);
     }
 
     @Test
@@ -53,9 +53,9 @@ public class ReceivableServiceTest extends OapiWsTest {
     @Test
     public void testMessage() throws Exception {
 
-        ReceivableServiceStub stub = new ReceivableServiceStub(new URL(getAddress()));
+        WSReceivableServiceStub stub = new WSReceivableServiceStub(new URL(getAddress()));
 
-        ReceivableService service = stub.getReceivableServicePort();
+        WSReceivableService service = stub.getReceivableServicePort();
 
         Map<String, Object> requestContext = ((BindingProvider) service).getRequestContext();
         requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress() + "?wsdl");

@@ -23,9 +23,9 @@ import org.slf4j.LoggerFactory;
 
 import com.propertyvista.oapi.PortAllocator;
 
-public class OapiWsTest {
+public class WSOapiTest {
 
-    private static final Logger log = LoggerFactory.getLogger(OapiWsTest.class);
+    private static final Logger log = LoggerFactory.getLogger(WSOapiTest.class);
 
     private int port;
 

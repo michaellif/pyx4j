@@ -29,7 +29,7 @@ import com.propertyvista.oapi.marshaling.TenantMarshaller;
 import com.propertyvista.oapi.model.LeaseIO;
 import com.propertyvista.oapi.model.TenantIO;
 
-public class LeaseFacade {
+public class LeaseService {
 
     private static final IEntityPersistenceService service;
 

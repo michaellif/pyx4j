@@ -15,23 +15,20 @@ package com.propertyvista.oapi.ws;
 
 import java.util.List;
 
-import javax.jws.WebParam;
 import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
-import javax.jws.soap.SOAPBinding.ParameterStyle;
-import javax.jws.soap.SOAPBinding.Style;
-import javax.jws.soap.SOAPBinding.Use;
 
+import com.propertyvista.oapi.ReceivableService;
 import com.propertyvista.oapi.model.TransactionIO;
 
-@WebService(targetNamespace = "http://www.w3.org/2001/XMLSchema-instance")
-@SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)
-public interface ReceivableService {
+@WebService(endpointInterface = "com.propertyvista.oapi.ws.WSReceivableService")
+public class WSReceivableServiceImpl implements WSReceivableService {
 
-    void postTransactions(@WebParam(name = "transaction") List<TransactionIO> transactions);
+    @Override
+    public void postTransactions(List<TransactionIO> transactions) {
+        for (TransactionIO transIO : transactions) {
+            ReceivableService.postTransaction(transIO);
+        }
 
-    // run billing
-
-    // get payment records
+    }
 
 }

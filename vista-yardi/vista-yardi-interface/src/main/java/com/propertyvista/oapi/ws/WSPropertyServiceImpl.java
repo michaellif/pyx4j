@@ -19,13 +19,13 @@ import java.util.Map;
 
 import javax.jws.WebService;
 
-import com.propertyvista.oapi.PropertyFacade;
+import com.propertyvista.oapi.PropertyService;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.model.UnitIO;
 
-@WebService(endpointInterface = "com.propertyvista.oapi.ws.PropertyService")
-public class PropertyServiceImpl implements PropertyService {
+@WebService(endpointInterface = "com.propertyvista.oapi.ws.WSPropertyService")
+public class WSPropertyServiceImpl implements WSPropertyService {
 
     static private Map<String, BuildingIO> buildings = new HashMap<String, BuildingIO>();
 
@@ -41,7 +41,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public BuildingsIO listAllBuildings() {
-        return PropertyFacade.getBuildings();
+        return PropertyService.getBuildings();
     }
 
     @Override
@@ -61,7 +61,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public List<UnitIO> listAllBuildingUnits(String buildingCode) {
-        return PropertyFacade.getUnitsByPropertyCode(buildingCode);
+        return PropertyService.getUnitsByPropertyCode(buildingCode);
     }
 
 }

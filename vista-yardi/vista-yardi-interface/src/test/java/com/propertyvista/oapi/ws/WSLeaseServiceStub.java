@@ -10,18 +10,16 @@ import javax.xml.ws.WebServiceClient;
 import javax.xml.ws.WebServiceException;
 import javax.xml.ws.WebServiceFeature;
 
-import com.propertyvista.oapi.ws.LeaseService;
-
-@WebServiceClient(name = "LeaseServiceImplService", targetNamespace = "http://ws.oapi.propertyvista.com/", wsdlLocation = "http://localhost:8888/WS/LeaseService?wsdl")
-public class LeaseServiceStub extends Service {
+@WebServiceClient(name = "WSLeaseServiceImplService", targetNamespace = "http://ws.oapi.propertyvista.com/", wsdlLocation = "http://localhost:8888/WS/WSLeaseService?wsdl")
+public class WSLeaseServiceStub extends Service {
 
     private final static URL IMPL_SERVICE_WSDL_LOCATION;
 
     private final static WebServiceException IMPL_SERVICE_EXCEPTION;
 
-    private final static QName IMPL_SERVICE_QNAME = new QName("http://ws.oapi.propertyvista.com/", "LeaseServiceImplService");
+    private final static QName IMPL_SERVICE_QNAME = new QName("http://ws.oapi.propertyvista.com/", "WSLeaseServiceImplService");
 
-    private final static QName IMPL_PORT_QNAME = new QName("http://ws.oapi.propertyvista.com/", "LeaseServiceImplPort");
+    private final static QName IMPL_PORT_QNAME = new QName("http://ws.oapi.propertyvista.com/", "WSLeaseServiceImplPort");
 
     static {
         URL url = null;
@@ -35,38 +33,38 @@ public class LeaseServiceStub extends Service {
         IMPL_SERVICE_EXCEPTION = e;
     }
 
-    public LeaseServiceStub() {
+    public WSLeaseServiceStub() {
         super(getWsdlLocation(), IMPL_SERVICE_QNAME);
     }
 
-    public LeaseServiceStub(WebServiceFeature... features) {
+    public WSLeaseServiceStub(WebServiceFeature... features) {
         super(getWsdlLocation(), IMPL_SERVICE_QNAME, features);
     }
 
-    public LeaseServiceStub(URL wsdlLocation) {
+    public WSLeaseServiceStub(URL wsdlLocation) {
         super(wsdlLocation, IMPL_SERVICE_QNAME);
     }
 
-    public LeaseServiceStub(URL wsdlLocation, WebServiceFeature... features) {
+    public WSLeaseServiceStub(URL wsdlLocation, WebServiceFeature... features) {
         super(wsdlLocation, IMPL_SERVICE_QNAME, features);
     }
 
-    public LeaseServiceStub(URL wsdlLocation, QName serviceName) {
+    public WSLeaseServiceStub(URL wsdlLocation, QName serviceName) {
         super(wsdlLocation, serviceName);
     }
 
-    public LeaseServiceStub(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
+    public WSLeaseServiceStub(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
         super(wsdlLocation, serviceName, features);
     }
 
-    @WebEndpoint(name = "LeaseServiceImplPort")
-    public LeaseService getLeaseServicePort() {
-        return super.getPort(IMPL_PORT_QNAME, LeaseService.class);
+    @WebEndpoint(name = "WSLeaseServiceImplPort")
+    public WSLeaseService getLeaseServicePort() {
+        return super.getPort(IMPL_PORT_QNAME, WSLeaseService.class);
     }
 
-    @WebEndpoint(name = "LeaseServiceImplPort")
-    public LeaseService getLeaseServicePort(WebServiceFeature... features) {
-        return super.getPort(IMPL_PORT_QNAME, LeaseService.class, features);
+    @WebEndpoint(name = "WSLeaseServiceImplPort")
+    public WSLeaseService getLeaseServicePort(WebServiceFeature... features) {
+        return super.getPort(IMPL_PORT_QNAME, WSLeaseService.class, features);
     }
 
     private static URL getWsdlLocation() {
