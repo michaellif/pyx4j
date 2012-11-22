@@ -17,9 +17,11 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import com.cfcprograms.api.ArrayOfString;
 import com.cfcprograms.api.CFCAPI;
 import com.cfcprograms.api.CFCAPISoap;
 import com.cfcprograms.api.ObjectFactory;
@@ -42,7 +44,7 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
 /** This is an adapter class for CFC SOAP API */
-class CfcApiCleint {
+class CfcApiClient {
     private CFCAPI getApi() {
         try {
             if (VistaDeployment.isVistaProduction()) {
@@ -68,23 +70,16 @@ class CfcApiCleint {
         }
     }
 
-    /** Return client ID */
+    /** registers a client in CFC system, and creates reference in vista DB that is bound to <code>tenant</code> */
     InsuranceTenantSureClient createClient(Tenant tenant) {
         CFCAPISoap api = getApi().getCFCAPISoap();
+        String sessionId = makeNewCfcSession(api);
 
-        Credentials crs = getCredentials();
-        Result autenticationResult = api.userAuthentication(crs.email, crs.password);
+        SimpleClient simpleClient = new ObjectFactory().createSimpleClient();
+        simpleClient.setSessionID(sessionId);
+        TenantSureTenantAdapter.fillClient(tenant, simpleClient);
 
-        if (!isSuccessfulCode(autenticationResult.getCode())) {
-            throw new Error(autenticationResult.getCode());
-        }
-
-        SimpleClient parameters = new ObjectFactory().createSimpleClient();
-        parameters.setSessionID(autenticationResult.getId());
-
-        TenantSureTenantAdapter.fillClient(tenant, parameters);
-
-        SimpleClientResponse createClientRssult = api.runCreateClient(parameters);
+        SimpleClientResponse createClientRssult = api.runCreateClient(simpleClient);
         if (!isSuccessfulCode(createClientRssult.getSimpleClientResult().getCode())) {
             throw new Error(createClientRssult.getSimpleClientResult().getCode());
         }
@@ -93,19 +88,16 @@ class CfcApiCleint {
         tenantSureClient.tenant().set(tenant);
         tenantSureClient.clientReferenceNumber().setValue(createClientRssult.getSimpleClientResult().getId());
         Persistence.service().persist(tenantSureClient);
+
         return tenantSureClient;
     }
 
     TenantSureQuoteDTO getQuote(InsuranceTenantSureClient client, TenantSureCoverageDTO coverageRequest) {
         CFCAPISoap api = getApi().getCFCAPISoap();
-        Credentials crs = getCredentials();
-        Result authenticationResult = api.userAuthentication(crs.email, crs.password);
-        if (!isSuccessfulCode(authenticationResult.getCode())) {
-            throw new Error(authenticationResult.getCode());
-        }
+        String sessionId = makeNewCfcSession(api);
 
         OptionQuote optionQuote = new ObjectFactory().createOptionQuote();
-        optionQuote.setSessionID(authenticationResult.getId());
+        optionQuote.setSessionID(sessionId);
 
         TenantSureCoverageRequestAdapter.fillOptionQuote(client, coverageRequest, optionQuote);
         Result quoteResponse = api.createQuote(optionQuote).getOptionQuoteResult();
@@ -125,19 +117,44 @@ class CfcApiCleint {
     }
 
     /** @return insurance certificate number */
-    String bindQuote(TenantSureQuoteDTO quote) {
+    String bindQuote(String quoteId) {
         CFCAPISoap api = getApi().getCFCAPISoap();
-        Credentials crs = getCredentials();
-        Result authenticationResult = api.userAuthentication(crs.email, crs.password);
-        if (!isSuccessfulCode(authenticationResult.getCode())) {
-            throw new Error(authenticationResult.getCode());
-        }
+        String sessionId = makeNewCfcSession(api);
 
-        Result bindResult = api.requestBind(quote.quoteId().getValue(), authenticationResult.getId());
+        Result bindResult = api.requestBind(quoteId, sessionId);
         if (!isSuccessfulCode(bindResult.getCode())) {
             throw new Error(bindResult.getCode());
         }
 
         return bindResult.getId();
     }
+
+    /** Send policy related documentation to the list of e-mail addresses */
+    void requestDocument(String quoteId, List<String> emails) {
+        CFCAPISoap cfcApiSoap = getApi().getCFCAPISoap();
+        String sessionId = makeNewCfcSession(cfcApiSoap);
+
+        ArrayOfString toEmailArray = new ObjectFactory().createArrayOfString();
+        toEmailArray.getString().addAll(emails);
+        cfcApiSoap.requestDocument(quoteId, sessionId, toEmailArray, new ObjectFactory().createArrayOfString());
+    }
+
+    private void assertSuccessfulResponse(Result response) {
+        if (!isSuccessfulCode(response.getCode())) {
+            throw new Error(response.getCode());
+        }
+    }
+
+    /**
+     * Opens a new session to CFC
+     * 
+     * @return session id, or throw an <code>Error<code>
+     */
+    private String makeNewCfcSession(CFCAPISoap cfcApiSoap) {
+        Credentials crs = getCredentials();
+        Result authResult = cfcApiSoap.userAuthentication(crs.email, crs.password);
+        assertSuccessfulResponse(authResult);
+        return authResult.getId();
+    }
+
 }

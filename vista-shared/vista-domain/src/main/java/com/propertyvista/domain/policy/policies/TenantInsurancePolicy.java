@@ -13,7 +13,12 @@
  */
 package com.propertyvista.domain.policy.policies;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
@@ -25,4 +30,12 @@ import com.propertyvista.domain.property.asset.building.Building;
 public interface TenantInsurancePolicy extends Policy {
 
     IPrimitive<Boolean> isSubscribedToTenantSure();
+
+    @NotNull
+    @Owned
+    @Length(20845)
+    @Editor(type = Editor.EditorType.richtextarea)
+    @Caption(description = "This text is displayed in Resident Portal on a page that lets a tenant to either provide insurance or purchase TenantSure insurance")
+    IPrimitive<String> tenantInsuranceInvitation();
+
 }

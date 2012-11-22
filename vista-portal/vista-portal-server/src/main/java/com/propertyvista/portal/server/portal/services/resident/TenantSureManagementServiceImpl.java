@@ -13,40 +13,30 @@
  */
 package com.propertyvista.portal.server.portal.services.resident;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
+import com.propertyvista.domain.payment.InsurancePaymentMethod;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePremiumTaxDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
+import com.propertyvista.portal.server.portal.TenantAppContext;
 
 public class TenantSureManagementServiceImpl implements TenantSureManagementService {
 
     @Override
     public void getStatus(AsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO> callback) {
-        TenantSureTenantInsuranceStatusDetailedDTO status = EntityFactory.create(TenantSureTenantInsuranceStatusDetailedDTO.class);
-        status.quote().grossPremium().setValue(new BigDecimal("1003"));
-        status.quote().underwriterFee().setValue(new BigDecimal("55.51"));
-        TenantSurePremiumTaxDTO tax = status.quote().taxBreakdown().$();
-        tax.taxName().setValue("HST");
-        tax.absoluteAmount().setValue(new BigDecimal("52.99"));
-        status.quote().taxBreakdown().add(tax);
-        status.quote().totalMonthlyPayable().setValue(new BigDecimal("9000.01"));
-        TenantSureMessageDTO message = status.messages().$();
-        message.message().setValue("Your insurance is about to expire, we strongly advise you to stop playing with matches :)");
-        status.messages().add(message);
+        TenantSureTenantInsuranceStatusDetailedDTO status = ServerSideFactory.create(TenantSureFacade.class).getStatus(
+                TenantAppContext.getCurrentUserTenantInLease().<Tenant> createIdentityStub());
         callback.onSuccess(status);
     }
 
     @Override
-    public void updatePaymentMethod(AsyncCallback<VoidSerializable> callback, LeasePaymentMethod paymentMethod) {
-        // TODO Auto-generated method stub
+    public void updatePaymentMethod(AsyncCallback<VoidSerializable> callback, InsurancePaymentMethod paymentMethod) {
+
         callback.onSuccess(null);
     }
 

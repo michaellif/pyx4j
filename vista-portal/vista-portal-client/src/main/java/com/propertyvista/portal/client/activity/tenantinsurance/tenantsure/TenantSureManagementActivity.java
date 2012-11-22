@@ -16,7 +16,6 @@ package com.propertyvista.portal.client.activity.tenantinsurance.tenantsure;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -44,12 +43,7 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
         panel.setWidget(view);
-        service.getStatus(new DefaultAsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO>() {
-            @Override
-            public void onSuccess(TenantSureTenantInsuranceStatusDetailedDTO status) {
-                view.populate(status);
-            }
-        });
+        populateStatus();
     }
 
     @Override
@@ -59,15 +53,19 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
 
     @Override
     public void cancelTenantSure() {
-        service.cancelTenantSure(new AsyncCallback<VoidSerializable>() {
+        service.cancelTenantSure(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-
+                populateStatus();
             }
+        });
+    }
 
+    private void populateStatus() {
+        service.getStatus(new DefaultAsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO>() {
             @Override
-            public void onFailure(Throwable caught) {
-
+            public void onSuccess(TenantSureTenantInsuranceStatusDetailedDTO status) {
+                view.populate(status);
             }
         });
     }

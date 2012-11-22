@@ -15,24 +15,25 @@ package com.propertyvista.portal.server.portal.services.resident;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Random;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.InsurancePaymentMethod;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.domain.tenant.ptapp.IAgree;
 import com.propertyvista.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO.PreviousClaims;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -114,32 +115,19 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
 
     @Override
     public void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureCoverageDTO quotationRequest) {
-        TenantSureQuoteDTO quote = EntityFactory.create(TenantSureQuoteDTO.class);
-        if (quotationRequest.numberOfPreviousClaims().getValue() == PreviousClaims.MoreThanTwo) {
-            quote.specialQuote().setValue(i18n.tr("Please call TenantSure 1-800-1234-567 to get your quote."));
-        } else {
-            quote.grossPremium().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
-            quote.underwriterFee().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
-            quote.totalMonthlyPayable().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
-        }
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        TenantSureQuoteDTO quote = ServerSideFactory.create(TenantSureFacade.class).getQuote(quotationRequest,
+                TenantAppContext.getCurrentUserTenantInLease().<Tenant> createIdentityStub());
         callback.onSuccess(quote);
     }
 
     @Override
-    public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, LeasePaymentMethod paymentMethod) {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, InsurancePaymentMethod paymentMethod) {
+        ServerSideFactory.create(TenantSureFacade.class).updatePaymentMethod(paymentMethod,
+                TenantAppContext.getCurrentUserTenantInLease().<Tenant> createIdentityStub());
+
+        ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, TenantAppContext.getCurrentUserTenantInLease().<Tenant> createIdentityStub());
 
         callback.onSuccess(null);
-//        throw new UserRuntimeException("This is not yet implemented :)");
     }
 
     @Override

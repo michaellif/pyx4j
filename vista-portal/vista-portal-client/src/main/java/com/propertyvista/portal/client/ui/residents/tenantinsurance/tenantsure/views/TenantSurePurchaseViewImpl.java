@@ -40,6 +40,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePaymentMethodForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePersonalDisclaimerForm;
@@ -248,8 +249,8 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     }
 
     @Override
-    public LeasePaymentMethod getPaymentMethod() {
-        return paymentMethodForm.getValue().duplicate();
+    public InsurancePaymentMethod getPaymentMethod() {
+        return paymentMethodForm.getValue().duplicate(InsurancePaymentMethod.class);
     }
 
     @Override

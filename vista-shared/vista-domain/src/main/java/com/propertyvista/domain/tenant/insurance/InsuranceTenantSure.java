@@ -70,7 +70,7 @@ public interface InsuranceTenantSure extends IEntity {
     InsuranceCertificate insuranceCertificate();
 
     /**
-     * PK in TenantSure API
+     * PK in TenantSure API of the accepted quote that was bound to the owner client/tenant.
      */
     @NotNull
     IPrimitive<String> quoteId();

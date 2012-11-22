@@ -13,10 +13,13 @@
  */
 package com.propertyvista.domain.tenant.insurance;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 public interface InsuranceTenantSureDetails extends IEntity {
 
@@ -24,5 +27,18 @@ public interface InsuranceTenantSureDetails extends IEntity {
     @JoinColumn
     @MemberColumn(notNull = true)
     InsuranceTenantSure insurance();
+
+    IPrimitive<BigDecimal> liabilityCoverage();
+
+    IPrimitive<BigDecimal> contentsCoverage();
+
+    IPrimitive<BigDecimal> deductible();
+
+    IPrimitive<BigDecimal> grossPremium();
+
+    IPrimitive<BigDecimal> underwriterFee();
+
+    // TODO 
+    IPrimitive<String> taxes();
 
 }
