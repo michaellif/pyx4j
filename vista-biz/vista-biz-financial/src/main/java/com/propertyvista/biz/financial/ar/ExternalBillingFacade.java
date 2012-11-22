@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.biz.financial.billingext;
+package com.propertyvista.biz.financial.ar;
 
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 
