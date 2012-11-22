@@ -33,6 +33,8 @@ public class ServletUtils {
 
     public static final String x_forwarded_for = "x-forwarded-for";
 
+    public static final String x_forwarded_path = "x-forwarded-path";
+
     public static String getForwardedHost(HttpServletRequest request) {
         String host = request.getHeader(x_forwarded_host);
         if (host != null) {

@@ -95,13 +95,13 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
         }
 
         // Allow for redirected requests environments
-        String forwardedContext = Context.getRequest().getHeader(ServletUtils.x_forwarded_context);
-        if (forwardedContext != null) {
-            modulePath = forwardedContext + modulePath;
+        String forwardedPath = Context.getRequest().getHeader(ServletUtils.x_forwarded_path);
+        if (forwardedPath != null) {
+            modulePath = forwardedPath + modulePath;
         }
         String moduleRelativePath;
         String contextPath = Context.getRequest().getContextPath();
-        if (modulePath.contains(contextPath)) {
+        if (modulePath.startsWith(contextPath)) {
             moduleRelativePath = modulePath.substring(contextPath.length());
         } else {
             moduleRelativePath = modulePath;
@@ -112,17 +112,17 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
     @Override
     protected SerializationPolicy doGetSerializationPolicy(HttpServletRequest request, String moduleBaseURL, String strongName) {
         // Allow for redirected requests environments, consider the context is mapped to root.
-        String forwardedContext = request.getHeader(ServletUtils.x_forwarded_context);
-        final boolean debug = true;
+        String forwardedPath = request.getHeader(ServletUtils.x_forwarded_path);
+        final boolean debug = false;
         if (debug) {
             log.debug("moduleBaseURL orig {}", moduleBaseURL);
             RequestDebug.debug(request);
         }
-        if (forwardedContext != null) {
+        if (forwardedPath != null) {
             try {
                 URL url = new URL(moduleBaseURL);
                 String modulePath = url.getPath();
-                moduleBaseURL = url.getProtocol() + "://" + url.getAuthority() + forwardedContext;
+                moduleBaseURL = url.getProtocol() + "://" + url.getAuthority() + forwardedPath;
                 if (modulePath != null) {
                     moduleBaseURL += modulePath;
                 }

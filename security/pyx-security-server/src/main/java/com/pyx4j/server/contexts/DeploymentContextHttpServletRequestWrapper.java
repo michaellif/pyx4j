@@ -69,6 +69,22 @@ public class DeploymentContextHttpServletRequestWrapper extends HttpServletReque
     }
 
     @Override
+    public String getHeader(String name) {
+        if (ServletUtils.x_forwarded_path.equals(name)) {
+            String forwardedContext = request.getHeader(ServletUtils.x_forwarded_context);
+            if (forwardedContext != null) {
+                int p = forwardedContext.indexOf('/', 1);
+                if (p != -1) {
+                    return forwardedContext.substring(p);
+                }
+            }
+            return null;
+        }
+        return request.getHeader(name);
+
+    }
+
+    @Override
     public String getRequestURI() {
         String uri = super.getRequestURI();
         String forwardedContext = request.getHeader(ServletUtils.x_forwarded_context);
