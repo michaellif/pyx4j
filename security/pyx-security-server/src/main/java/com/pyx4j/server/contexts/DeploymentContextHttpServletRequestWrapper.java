@@ -53,7 +53,7 @@ public class DeploymentContextHttpServletRequestWrapper extends HttpServletReque
             if ("http".equals(getScheme())) {
                 return 80;
             } else {
-                return 433;
+                return 443;
             }
         }
     }
