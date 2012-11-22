@@ -319,7 +319,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 ((TenantViewerView.Presenter) getPresenter()).goToCreateMaintenanceRequest();
             }
         });
-        addAction(maintenanceAction);
+//        addAction(maintenanceAction);
         // Renewing stuff : ---------------------------------------------------------------------------------------------------
 
         renewButton = new Button(i18n.tr("Renew"));

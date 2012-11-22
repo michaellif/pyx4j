@@ -471,6 +471,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.activationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         Persistence.secureSave(lease);
 
+        ensureLeaseUniqness(lease);
+
         ServerSideFactory.create(UnitTurnoverAnalysisFacade.class).propagateLeaseActivationToTurnoverReport(lease);
         ServerSideFactory.create(LeadFacade.class).setLeadRentedState(lease);
     }
@@ -511,9 +513,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (lease.status().getValue() != Lease.Status.Active) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
-        // if renewed and or forcibly moving out:  
+        // if renewed and not moving out:  
         if (!lease.nextTerm().isNull() && lease.completion().isNull()) {
-            throw new IllegalStateException(SimpleMessageFormat.format("Lease has next term ready"));
+            throw new IllegalStateException("Lease has next term ready");
+        }
+        // if still has time to go:  
+        if (!lease.leaseTo().isNull() && !lease.leaseTo().getValue().before(new LogicalDate(Persistence.service().getTransactionSystemTime()))) {
+            throw new IllegalStateException("Lease is not ended still");
         }
 
         lease.status().setValue(Status.Completed);
@@ -671,9 +677,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (lease.status().getValue() != Lease.Status.Active) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
-        // if renewed and or forcibly moving out:  
+        // if not moving out:  
         if (lease.completion().isNull()) {
-            throw new IllegalStateException(SimpleMessageFormat.format("Lease has next term ready"));
+            throw new IllegalStateException("Lease has no completion mark");
         }
 
         lease.actualMoveOut().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
@@ -1101,5 +1107,27 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.currentTerm().termTo().setValue(leaseEndDate);
 
         finalize(lease);
+    }
+
+    /**
+     * Terminate-complete all other active, but completion marked (Evicted/Skipped/etc.) leases on the unit.
+     * 
+     * @param lease
+     *            - primary lease.
+     */
+    private void ensureLeaseUniqness(Lease lease) {
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), lease.unit()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Active));
+        criteria.add(PropertyCriterion.ne(criteria.proto().id(), lease.getPrimaryKey()));
+
+        for (Lease concurrent : Persistence.service().query(criteria)) {
+            if (concurrent.completion().isNull()) {
+                throw new IllegalStateException("Lease has no completion mark");
+            }
+            concurrent.terminationLeaseTo().setValue(new LogicalDate(lease.leaseFrom().getValue().getTime() - ONE_DAY_IN_MSEC));
+            updateLeaseDates(concurrent);
+            complete(concurrent);
+        }
     }
 }

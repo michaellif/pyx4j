@@ -158,7 +158,8 @@ public class LeaseLifecycleSimulator {
 
         queueEvent(reservedOn, new Create(lease));
         queueEvent(max(leaseFrom, sub(leaseTo, rndBetween(MIN_NOTICE_TERM, MAX_NOTICE_TERM))), new Notice(lease));
-        queueEvent(leaseTo, new Complete(lease));
+        queueEvent(leaseTo, new MoveOut(lease));
+        queueEvent(add(leaseTo, DAY), new Complete(lease));
 
         queueMaintenanceRequests(lease);
 
@@ -492,6 +493,21 @@ public class LeaseLifecycleSimulator {
         }
     }
 
+    private class MoveOut extends AbstractLeaseEvent {
+
+        public MoveOut(Lease lease) {
+            super(500, lease);
+        }
+
+        @Override
+        public void exec() {
+            lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
+            if (lease.status().getValue() == Lease.Status.Active) {
+                ServerSideFactory.create(LeaseFacade.class).moveOut(lease);
+            }
+        }
+    }
+
     private class Complete extends AbstractLeaseEvent {
 
         public Complete(Lease lease) {
@@ -502,7 +518,6 @@ public class LeaseLifecycleSimulator {
         public void exec() {
             lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
             if (lease.status().getValue() == Lease.Status.Active) {
-                ServerSideFactory.create(LeaseFacade.class).moveOut(lease);
                 ServerSideFactory.create(LeaseFacade.class).complete(lease);
             }
         }
