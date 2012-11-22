@@ -31,6 +31,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.PublicVisibilityType;
@@ -365,7 +366,7 @@ public class PMSiteContentManager implements Serializable {
      * We want to build a relative! path from the current page down to the servlet root
      */
     public static String getPortalContextPath() {
-        return com.pyx4j.server.contexts.Context.getRequest().getContextPath() + "/" + DeploymentConsts.PORTAL_URL;
+        return ServletUtils.getRelativeServletPath(com.pyx4j.server.contexts.Context.getRequest(), "/" + DeploymentConsts.PORTAL_URL);
     }
 
     public static String getMediaImgUrl(long mediaId, ThumbnailSize size) {
@@ -376,7 +377,8 @@ public class PMSiteContentManager implements Serializable {
         if (resource == null) {
             throw new Error("SiteImageResource cannot be null.");
         }
-        return getPortalContextPath() + resource.id().getStringView() + "/" + resource.fileName().getStringView() + DeploymentConsts.siteImageResourceServletMapping;
+        return getPortalContextPath() + resource.id().getStringView() + "/" + resource.fileName().getStringView()
+                + DeploymentConsts.siteImageResourceServletMapping;
     }
 
     public static String getFistVisibleMediaImgUrl(List<Media> medias, ThumbnailSize size) {
