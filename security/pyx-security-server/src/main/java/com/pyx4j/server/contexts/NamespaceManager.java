@@ -20,6 +20,8 @@
  */
 package com.pyx4j.server.contexts;
 
+import java.util.concurrent.Callable;
+
 import com.pyx4j.log4j.LoggerConfig;
 
 public class NamespaceManager {
@@ -45,4 +47,21 @@ public class NamespaceManager {
         LoggerConfig.mdcRemove(LoggerConfig.MDC_namespace);
     }
 
+    public static <T> T runInTargetNamespace(final String targetNamespace, final Callable<T> task) {
+        final String namespace = NamespaceManager.getNamespace();
+        try {
+            NamespaceManager.setNamespace(targetNamespace);
+            try {
+                return task.call();
+            } catch (Exception e) {
+                if (e instanceof RuntimeException) {
+                    throw (RuntimeException) e;
+                } else {
+                    throw new Error(e);
+                }
+            }
+        } finally {
+            NamespaceManager.setNamespace(namespace);
+        }
+    }
 }
