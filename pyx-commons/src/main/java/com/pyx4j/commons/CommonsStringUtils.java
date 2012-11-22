@@ -118,6 +118,15 @@ public class CommonsStringUtils {
         return new String(buf);
     }
 
+    public static String paddZerro(int number, int lenght) {
+        String value = String.valueOf(number);
+        int len = value.length();
+        if (len > lenght) {
+            throw new IllegalArgumentException();
+        }
+        return padding(lenght - len, '0') + value;
+    }
+
     public static String d00(long number) {
         if (number < 10) {
             return "0" + String.valueOf(number);
