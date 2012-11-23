@@ -115,7 +115,7 @@ public class DevSession {
                 domain = host;
             } else {
                 String[] hostParts = host.split("\\.");
-                if (hostParts.length == 4) {
+                if (hostParts.length >= 4) {
                     domain = "." + hostParts[hostParts.length - 3] + "." + hostParts[hostParts.length - 2] + "." + hostParts[hostParts.length - 1];
                 } else if (hostParts.length == 3) {
                     domain = "." + hostParts[hostParts.length - 2] + "." + hostParts[hostParts.length - 1];

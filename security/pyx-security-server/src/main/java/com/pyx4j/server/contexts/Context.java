@@ -151,7 +151,7 @@ public class Context {
     }
 
     public static String getRequestServerName() {
-        return ServletUtils.getRequestServerName(getRequest());
+        return getRequest().getServerName();
     }
 
     public static String getRequestScheme() {

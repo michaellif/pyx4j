@@ -100,4 +100,20 @@ public class DeploymentContextHttpServletRequestWrapper extends HttpServletReque
         return new StringBuffer(ServletUtils.getActualRequestURL(request));
     }
 
+    @Override
+    public String toString() {
+        StringBuilder buf = new StringBuilder();
+        String scheme = this.getScheme();
+        buf.append(scheme);
+        buf.append("://");
+        buf.append(this.getServerName());
+        buf.append(':');
+        buf.append(this.getServerPort());
+        buf.append(this.getRequestURI());
+        String query = this.getQueryString();
+        if (query != null && query.length() > 0) {
+            buf.append("?").append(query);
+        }
+        return buf.toString();
+    }
 }
