@@ -70,7 +70,8 @@ public class SystemMaintenance {
                 return true;
             }
         } else if (maintenanceScheduled != 0) {
-            if (maintenanceScheduled <= System.currentTimeMillis()) {
+            if (maintenanceScheduled <= System.currentTimeMillis() && (maintenanceScheduledEnd > System.currentTimeMillis())) {
+                log.info("System Maintenance started");
                 maintenanceStarted = System.currentTimeMillis() + Consts.MIN2MSEC * gracePeriodMin;
                 return true;
             }
@@ -108,6 +109,7 @@ public class SystemMaintenance {
     public static void stopSystemMaintenance() {
         maintenanceScheduled = 0;
         maintenanceStarted = 0;
+        log.info("System Maintenance stopped");
     }
 
     public static SystemMaintenanceState getSystemMaintenanceClientInfo() {
@@ -165,8 +167,6 @@ public class SystemMaintenance {
             }
             long end = startTime.getTimeInMillis() + Consts.MIN2MSEC * state.duration().getValue();
 
-            maintenanceScheduled = start;
-            maintenanceScheduledEnd = end;
             if (systemMaintenanceState.type().isNull()) {
                 systemMaintenanceState.type().setValue(SystemState.ReadOnly);
             }
@@ -176,8 +176,14 @@ public class SystemMaintenance {
             if (!systemMaintenanceState.message().isNull() && CommonsStringUtils.isEmpty(systemMaintenanceState.message().getValue())) {
                 systemMaintenanceState.message().setValue(null);
             }
-            if (start >= System.currentTimeMillis() && (end <= System.currentTimeMillis())) {
-                log.info("maintenanceScheduled {}", state.startTime());
+
+            if (start >= System.currentTimeMillis() || (start < System.currentTimeMillis() && (end > System.currentTimeMillis()))) {
+                log.info("System Maintenance Scheduled for {} {}", state.startDate().getValue(), state.startTime().getValue());
+                maintenanceScheduled = start;
+                maintenanceScheduledEnd = end;
+            } else {
+                maintenanceScheduled = 0;
+                maintenanceScheduledEnd = 0;
             }
         }
         saveState();
