@@ -71,7 +71,7 @@ public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurat
     }
 
     @Override
-    public int tablesItentityOffset() {
+    public int tablesIdentityOffset() {
         return 997;
     }
 

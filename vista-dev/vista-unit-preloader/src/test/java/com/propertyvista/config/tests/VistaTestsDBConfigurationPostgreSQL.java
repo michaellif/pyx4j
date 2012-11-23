@@ -74,7 +74,7 @@ public class VistaTestsDBConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cf
     }
 
     @Override
-    public int tablesItentityOffset() {
+    public int tablesIdentityOffset() {
         return 997;
     }
 

@@ -57,7 +57,7 @@ public class VistaTestsDBConfigurationHSQLMemory extends ConfigurationHSQL {
     }
 
     @Override
-    public int tablesItentityOffset() {
+    public int tablesIdentityOffset() {
         return 1000;
     }
 

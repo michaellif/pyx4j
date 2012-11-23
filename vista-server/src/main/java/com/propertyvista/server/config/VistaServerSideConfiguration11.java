@@ -37,7 +37,7 @@ public class VistaServerSideConfiguration11 extends VistaServerSideConfiguration
             }
 
             @Override
-            public int tablesItentityOffset() {
+            public int tablesIdentityOffset() {
                 return 0;
             }
         };
