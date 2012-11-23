@@ -89,12 +89,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         cancelTenantSureButton = new Button("Cancel TenantSure", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                MessageDialog.confirm(i18n.tr("TenantSure cancellation"), i18n.tr("Are you sure you want to cancel TenantSure?"), new Command() {
-                    @Override
-                    public void execute() {
-                        presenter.cancelTenantSure();
-                    }
-                });
+                TenantSureManagementViewImpl.this.onCancelTenantSure();
             }
         });
         setControlButtonLayout(cancelTenantSureButton);
@@ -105,7 +100,12 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         Button viewFaq = new Button(i18n.tr("FAQ"));
         setControlButtonLayout(viewFaq);
 
-        Button makeAClaim = new Button(i18n.tr("Make a Claim"));
+        Button makeAClaim = new Button(i18n.tr("Make a Claim"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                TenantSureManagementViewImpl.this.onMakeAClaim();
+            }
+        });
         setControlButtonLayout(makeAClaim);
 
         controlPanel.add(viewCertificateButton);
@@ -146,13 +146,24 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
     @Override
     public void reportUpdateCreditCardUpdate(String errorMessage) {
-        // TODO Auto-generated method stub
-
+        MessageDialog.error(i18n.tr("Error"), errorMessage);
     }
 
     @Override
     public void reportCancelFailure(String errorMessage) {
-        // TODO Auto-generated method stub
+        MessageDialog.error(i18n.tr("Error"), errorMessage);
+    }
 
+    private void onCancelTenantSure() {
+        MessageDialog.confirm(i18n.tr("TenantSure cancellation"), i18n.tr("Are you sure you want to cancel TenantSure?"), new Command() {
+            @Override
+            public void execute() {
+                presenter.cancelTenantSure();
+            }
+        });
+    }
+
+    private void onMakeAClaim() {
+        MessageDialog.info(i18n.tr("To make a claim please call {0}", TenantSureConstants.TENANT_SURE_PHONE));
     }
 }
