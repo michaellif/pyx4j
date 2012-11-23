@@ -95,11 +95,22 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
                         presenter.cancelTenantSure();
                     }
                 });
-
             }
         });
         setControlButtonLayout(cancelTenantSureButton);
 
+        Button viewCertificateButton = new Button(i18n.tr("View Insurance Certificate"));
+        setControlButtonLayout(viewCertificateButton);
+
+        Button viewFaq = new Button(i18n.tr("FAQ"));
+        setControlButtonLayout(viewFaq);
+
+        Button makeAClaim = new Button(i18n.tr("Make a Claim"));
+        setControlButtonLayout(makeAClaim);
+
+        controlPanel.add(viewCertificateButton);
+        controlPanel.add(makeAClaim);
+        controlPanel.add(viewFaq);
         controlPanel.add(updateCCButton);
         controlPanel.add(cancelTenantSureButton);
 

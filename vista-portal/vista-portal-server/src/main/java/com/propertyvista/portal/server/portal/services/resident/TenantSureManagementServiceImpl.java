@@ -30,7 +30,7 @@ public class TenantSureManagementServiceImpl implements TenantSureManagementServ
     @Override
     public void getStatus(AsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO> callback) {
         TenantSureTenantInsuranceStatusDetailedDTO status = ServerSideFactory.create(TenantSureFacade.class).getStatus(
-                TenantAppContext.getCurrentUserTenantInLease().<Tenant> createIdentityStub());
+                TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
         callback.onSuccess(status);
     }
 

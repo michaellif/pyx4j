@@ -19,6 +19,7 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -177,11 +178,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
     @Override
     public TenantSureTenantInsuranceStatusDetailedDTO getStatus(Tenant tenantId) {
-        EntityQueryCriteria<InsuranceTenantSure> criteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
-        criteria.add(PropertyCriterion.ne(criteria.proto().status(), InsuranceTenantSure.Status.Draft));
-        criteria.add(PropertyCriterion.ne(criteria.proto().status(), InsuranceTenantSure.Status.Failed));
-        criteria.add(PropertyCriterion.eq(criteria.proto().client().tenant(), tenantId));
-        InsuranceTenantSure insurance = Persistence.service().retrieve(criteria);
+        InsuranceTenantSure insurance = retrieveInsuranceTenantSure(tenantId);
 
         TenantSureTenantInsuranceStatusDetailedDTO tenantSureInsurance = EntityFactory.create(TenantSureTenantInsuranceStatusDetailedDTO.class);
         tenantSureInsurance.insuranceCertificateNumber().setValue(insurance.insuranceCertificate().insuranceCertificateNumber().getValue());
@@ -203,6 +200,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         }
 
         return tenantSureInsurance;
+
     }
 
     @Override
@@ -223,4 +221,27 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         }
     }
 
+    private InsuranceTenantSure retrieveInsuranceTenantSure(Tenant tenantId) {
+        if (TODO_MOCKUP) {
+            InsuranceTenantSure insurance = EntityFactory.create(InsuranceTenantSure.class);
+            insurance.status().setValue(Status.Active);
+            insurance.startDate().setValue(new LogicalDate());
+            insurance.expiryDate().setValue(null);
+            insurance.details().liabilityCoverage().getValue();
+            insurance.monthlyPayable().setValue(new BigDecimal("999.99"));
+            insurance.details().liabilityCoverage().setValue(new BigDecimal("1000000"));
+            insurance.details().contentsCoverage().setValue(new BigDecimal("10000"));
+            insurance.details().deductible().setValue(new BigDecimal("500"));
+            insurance.details().grossPremium().setValue(new BigDecimal("40"));
+            insurance.details().underwriterFee().setValue(new BigDecimal("10"));
+            return insurance;
+        } else {
+            EntityQueryCriteria<InsuranceTenantSure> criteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
+            criteria.add(PropertyCriterion.ne(criteria.proto().status(), InsuranceTenantSure.Status.Draft));
+            criteria.add(PropertyCriterion.ne(criteria.proto().status(), InsuranceTenantSure.Status.Failed));
+            criteria.add(PropertyCriterion.eq(criteria.proto().client().tenant(), tenantId));
+            InsuranceTenantSure insurance = Persistence.service().retrieve(criteria);
+            return insurance;
+        }
+    }
 }
