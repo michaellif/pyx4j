@@ -38,6 +38,7 @@ import com.propertyvista.domain.payment.CheckInfo;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
@@ -70,24 +71,74 @@ public class PaymentFacadeImpl implements PaymentFacade {
         return PaymentUtils.isElectronicPaymentsAllowed(leaseTermId);
     }
 
+    private boolean isAccountNumberChange(PaymentMethod paymentMethod, PaymentMethod origPaymentMethod) {
+        switch (paymentMethod.type().getValue()) {
+        case Echeck:
+            EcheckInfo eci = paymentMethod.details().cast();
+            if (!eci.accountNo().newNumber().isNull()) {
+                return true;
+            }
+            EcheckInfo origeci = origPaymentMethod.details().cast();
+            if (!EntityGraph.membersEquals(eci, origeci, eci.bankId(), eci.branchTransitNumber())) {
+                return true;
+            }
+            break;
+        case CreditCard:
+            CreditCardInfo cc = paymentMethod.details().cast();
+            if (!cc.card().newNumber().isNull()) {
+                return true;
+            }
+            CreditCardInfo origcc = origPaymentMethod.details().cast();
+            if (!EntityGraph.membersEquals(cc, origcc, cc.cardType())) {
+                return true;
+            }
+            break;
+        default:
+            break;
+        }
+        return false;
+    }
+
     @Override
     public LeasePaymentMethod persistPaymentMethod(Building building, LeasePaymentMethod paymentMethod) {
+        LeasePaymentMethod origPaymentMethod = null;
         if (!paymentMethod.id().isNull()) {
             // Keep history of payment methods that were used.
-            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.eq(criteria.proto().paymentMethod(), paymentMethod);
-            criteria.ne(criteria.proto().paymentStatus(), PaymentStatus.Submitted);
-            if (Persistence.service().count(criteria) != 0) {
-
-                LeasePaymentMethod origPaymentMethod = Persistence.service().retrieve(LeasePaymentMethod.class, paymentMethod.getPrimaryKey());
-                origPaymentMethod.isDeleted().setValue(true);
-                Persistence.service().merge(origPaymentMethod);
-
-                EntityGraph.makeDuplicate(paymentMethod);
-                if (paymentMethod.type().getValue() == PaymentType.CreditCard) {
-                    CreditCardInfo cc = paymentMethod.details().cast();
-                    cc.token().setValue(null);
+            origPaymentMethod = Persistence.service().retrieve(LeasePaymentMethod.class, paymentMethod.getPrimaryKey());
+            if (isAccountNumberChange(paymentMethod, origPaymentMethod)) {
+                EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+                criteria.eq(criteria.proto().paymentMethod(), paymentMethod);
+                criteria.ne(criteria.proto().paymentStatus(), PaymentStatus.Submitted);
+                if (Persistence.service().count(criteria) != 0) {
+                    origPaymentMethod.isDeleted().setValue(true);
+                    Persistence.service().merge(origPaymentMethod);
+                    EntityGraph.makeDuplicate(paymentMethod);
+                    switch (paymentMethod.type().getValue()) {
+                    case CreditCard:
+                        CreditCardInfo cc = paymentMethod.details().cast();
+                        cc.token().setValue(null);
+                        break;
+                    case Echeck:
+                        EcheckInfo eci = paymentMethod.details().cast();
+                        if (eci.accountNo().newNumber().isNull()) {
+                            EcheckInfo origeci = origPaymentMethod.details().cast();
+                            eci.accountNo().newNumber().setValue(origeci.accountNo().number().getValue());
+                        }
+                    default:
+                        break;
+                    }
+                    origPaymentMethod = null;
                 }
+            }
+        } else {
+            // New Value validation
+            switch (paymentMethod.type().getValue()) {
+            case CreditCard:
+                CreditCardInfo cc = paymentMethod.details().cast();
+                Validate.isTrue(cc.token().isNull(), "Can't attach to token");
+                break;
+            default:
+                break;
             }
         }
 
@@ -102,21 +153,19 @@ public class PaymentFacadeImpl implements PaymentFacade {
                 eci.accountNo().number().setValue(eci.accountNo().newNumber().getValue());
                 eci.accountNo().obfuscatedNumber().setValue(DomainUtil.obfuscateAccountNumber(eci.accountNo().number().getValue()));
             } else {
-                Validate.isTrue(!paymentMethod.details().id().isNull(), "Account number is required");
-                //TODO move to framework
-                // Do merge.                
-                EcheckInfo origValue = Persistence.service().retrieve(EcheckInfo.class, eci.getPrimaryKey());
-                eci.accountNo().number().setValue(origValue.accountNo().number().getValue());
-                Validate.isTrue(eci.accountNo().obfuscatedNumber().equals(origValue.accountNo().obfuscatedNumber()), "obfuscatedNumber changed");
+                Validate.isTrue(!paymentMethod.details().id().isNull(), "Account number is required when creating Echeck");
+                EcheckInfo origeci = origPaymentMethod.details().cast();
+                eci.accountNo().number().setValue(origeci.accountNo().number().getValue());
+                Validate.isTrue(eci.accountNo().obfuscatedNumber().equals(origeci.accountNo().obfuscatedNumber()), "obfuscatedNumber changed");
             }
             break;
         case CreditCard:
             //Verify CC change
             CreditCardInfo cc = paymentMethod.details().cast();
             if (!paymentMethod.details().id().isNull()) {
-                CreditCardInfo ccOrigValue = Persistence.service().retrieve(CreditCardInfo.class, cc.getPrimaryKey());
+                CreditCardInfo origcc = origPaymentMethod.details().cast();
                 if (cc.card().newNumber().isNull()) {
-                    Validate.isTrue(cc.card().obfuscatedNumber().equals(ccOrigValue.card().obfuscatedNumber()), "obfuscatedNumber changed");
+                    Validate.isTrue(cc.card().obfuscatedNumber().equals(origcc.card().obfuscatedNumber()), "obfuscatedNumber changed");
                 }
             }
             break;
@@ -141,10 +190,16 @@ public class PaymentFacadeImpl implements PaymentFacade {
                 cc.card().number().setValue(cc.card().newNumber().getValue());
                 cc.card().obfuscatedNumber().setValue(DomainUtil.obfuscateCreditCardNumber(cc.card().newNumber().getValue()));
             }
-            // Allow to update expiryDate 
-            CreditCardProcessor.persistToken(building, cc);
-            Persistence.service().merge(paymentMethod);
-
+            // Allow to update expiryDate or create token
+            boolean needUpdate = (origPaymentMethod == null);
+            needUpdate |= (!cc.card().newNumber().isNull());
+            if (origPaymentMethod != null) {
+                needUpdate |= (!EntityGraph.membersEquals(cc, origPaymentMethod.details().cast(), cc.expiryDate()));
+            }
+            if (needUpdate) {
+                CreditCardProcessor.persistToken(building, cc);
+                Persistence.service().merge(cc);
+            }
             break;
         default:
             break;

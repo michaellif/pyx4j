@@ -75,9 +75,9 @@ public class LeaseLifecycleSimulator {
 
     private long maxReserveTerm = 1000L * 60L * 60L * 24L * 60L; // 60 days
 
-    private static final long MIN_LEASE_TERM = 1000L * 60L * 60L * 24L * 365L; // approx 1 Year
+    private static final long MIN_LEASE_TERM = 1000L * 60L * 60L * 24L * 40L; // approx 1 Year
 
-    private static final long MAX_LEASE_TERM = 1000L * 60L * 60L * 24L * 365L * 5L; // approx 5 Years
+    private static final long MAX_LEASE_TERM = 1000L * 60L * 60L * 24L * 60L * 1L; // approx 5 Years
 
     private static final long MIN_NOTICE_TERM = 1000L * 60L * 60L * 24L * 31L;
 
@@ -157,11 +157,11 @@ public class LeaseLifecycleSimulator {
         clearEvents();
 
         queueEvent(reservedOn, new Create(lease));
-        queueEvent(max(leaseFrom, sub(leaseTo, rndBetween(MIN_NOTICE_TERM, MAX_NOTICE_TERM))), new Notice(lease));
-        queueEvent(leaseTo, new MoveOut(lease));
-        queueEvent(add(leaseTo, DAY), new Complete(lease));
-
-        queueMaintenanceRequests(lease);
+//        queueEvent(max(leaseFrom, sub(leaseTo, rndBetween(MIN_NOTICE_TERM, MAX_NOTICE_TERM))), new Notice(lease));
+//        queueEvent(leaseTo, new MoveOut(lease));
+//        queueEvent(add(leaseTo, DAY), new Complete(lease));
+//
+//        queueMaintenanceRequests(lease);
 
         try {
             while (hasNextEvent()) {

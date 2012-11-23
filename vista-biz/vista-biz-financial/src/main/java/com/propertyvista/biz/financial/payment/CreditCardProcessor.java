@@ -140,7 +140,7 @@ class CreditCardProcessor {
         if (!cc.token().isNull()) {
             token.code().setValue(cc.token().getValue());
         } else {
-            Validate.isTrue(!ccInfo.creditCardNumber().isNull());
+            Validate.isTrue(!ccInfo.creditCardNumber().isNull(), "Card number is required when creating token");
             //Create Unique token using PMC Id
             Pmc pmc = VistaDeployment.getCurrentPmc();
             String prefix;

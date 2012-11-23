@@ -25,6 +25,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 
@@ -47,7 +49,8 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
         paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
         ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(buildingDataModel.getBuilding(), paymentMethod);
 
-        List<LeasePaymentMethod> profileMethods = ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(tenantDataModel.getTenantCustomer());
+        List<LeasePaymentMethod> profileMethods = retrieveProfilePaymentMethodsSerializable();
+        assertRpcTransientMemebers(profileMethods);
 
         Assert.assertEquals("PaymentMethod Added to profile", 1, profileMethods.size());
 
@@ -79,12 +82,15 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
     public void testUpdatePaymentMethod(PaymentType type) {
         Assert.assertEquals("Preload should have no PaymentMethods", 0, retrieveAllPaymentMethods().size());
 
-        LeasePaymentMethod paymentMethod = createPaymentMethod(type);
-        paymentMethod.customer().set(tenantDataModel.getTenantCustomer());
-        paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
-        ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(buildingDataModel.getBuilding(), paymentMethod);
+        {
+            LeasePaymentMethod paymentMethod = createPaymentMethod(type);
+            paymentMethod.customer().set(tenantDataModel.getTenantCustomer());
+            paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
+            ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(buildingDataModel.getBuilding(), paymentMethod);
+        }
 
-        List<LeasePaymentMethod> profileMethods = ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(tenantDataModel.getTenantCustomer());
+        List<LeasePaymentMethod> profileMethods = retrieveProfilePaymentMethodsSerializable();
+        assertRpcTransientMemebers(profileMethods);
 
         Assert.assertEquals("PaymentMethod Added to profile", 1, profileMethods.size());
 
@@ -92,25 +98,94 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
         PaymentRecord paymentRecord = createPaymentRecord(profileMethods.get(0), "100");
         ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
         ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
+        Persistence.service().commit();
 
         Assert.assertEquals("Just one PaymentMethod remains", 1, retrieveAllPaymentMethods().size());
+
+        {
+            profileMethods = ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(tenantDataModel.getTenantCustomer());
+            LeasePaymentMethod paymentMethodUpdate = profileMethods.get(0);
+            {
+                switch (paymentMethodUpdate.type().getValue()) {
+                case Echeck:
+                    EcheckInfo ec = paymentMethodUpdate.details().cast();
+                    ec.accountNo().obfuscatedNumber().setValue("garbage");
+                    break;
+                case CreditCard:
+                    CreditCardInfo cc = paymentMethodUpdate.details().cast();
+                    cc.card().obfuscatedNumber().setValue("garbage");
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+                }
+                try {
+                    ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(buildingDataModel.getBuilding(), paymentMethodUpdate);
+                    Assert.fail("Obfuscated Account numbers should be validated during save");
+                } catch (IllegalArgumentException ok) {
+                    Persistence.service().rollback();
+                }
+            }
+
+            if (paymentMethodUpdate.type().getValue() == PaymentType.CreditCard) {
+                paymentMethodUpdate = retrieveProfilePaymentMethodsSerializable().get(0);
+                CreditCardInfo cc = paymentMethodUpdate.details().cast();
+                cc.token().setValue("garbage");
+                try {
+                    ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(buildingDataModel.getBuilding(), paymentMethodUpdate);
+                    Assert.fail("token changes should be validated during save");
+                } catch (Error ok) {
+                    Persistence.service().rollback();
+                }
+            }
+        }
 
         ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
         Persistence.service().commit();
 
         {
-            profileMethods = ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(tenantDataModel.getTenantCustomer());
+            profileMethods = retrieveProfilePaymentMethodsSerializable();
             LeasePaymentMethod paymentMethodUpdate = profileMethods.get(0);
+            // Nothing changed, save will not change anything
+            ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(buildingDataModel.getBuilding(), paymentMethodUpdate);
+        }
+
+        {
+            profileMethods = retrieveProfilePaymentMethodsSerializable();
+            LeasePaymentMethod paymentMethodUpdate = profileMethods.get(0);
+            switch (paymentMethodUpdate.type().getValue()) {
+            case Echeck:
+                EcheckInfo ec = paymentMethodUpdate.details().cast();
+                ec.accountNo().obfuscatedNumber().setValue("garbage");
+                break;
+            case CreditCard:
+                CreditCardInfo cc = paymentMethodUpdate.details().cast();
+                cc.card().obfuscatedNumber().setValue("garbage");
+                break;
+            default:
+                throw new IllegalArgumentException();
+            }
             try {
                 ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(buildingDataModel.getBuilding(), paymentMethodUpdate);
-                Assert.fail("Account numbers should be validated during save");
+                Assert.fail("Obfuscated Account numbers should be validated during save");
             } catch (IllegalArgumentException ok) {
                 Persistence.service().rollback();
+            }
+
+            if (paymentMethodUpdate.type().getValue() == PaymentType.CreditCard) {
+                paymentMethodUpdate = retrieveProfilePaymentMethodsSerializable().get(0);
+                CreditCardInfo cc = paymentMethodUpdate.details().cast();
+                cc.token().setValue("garbage");
+                try {
+                    ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(buildingDataModel.getBuilding(), paymentMethodUpdate);
+                    Assert.fail("token changes should be validated during save");
+                } catch (Error ok) {
+                    Persistence.service().rollback();
+                }
             }
         }
 
         {
-            profileMethods = ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(tenantDataModel.getTenantCustomer());
+            profileMethods = retrieveProfilePaymentMethodsSerializable();
             LeasePaymentMethod paymentMethodUpdate = profileMethods.get(0);
             setNewPaymentMethodDetails(paymentMethodUpdate);
             ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(buildingDataModel.getBuilding(), paymentMethodUpdate);

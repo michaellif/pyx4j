@@ -13,12 +13,17 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
+import junit.framework.Assert;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.RpcEntityServiceFilter;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -61,6 +66,33 @@ public class PaymentTestBase extends FinancialTestBase {
         EntityQueryCriteria<LeasePaymentMethod> criteria = new EntityQueryCriteria<LeasePaymentMethod>(LeasePaymentMethod.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().customer(), tenantDataModel.getTenantCustomer()));
         return Persistence.service().query(criteria);
+    }
+
+    protected List<LeasePaymentMethod> retrieveProfilePaymentMethodsSerializable() {
+        List<LeasePaymentMethod> profileMethods = ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(tenantDataModel.getTenantCustomer());
+        RpcEntityServiceFilter.filterRpcTransient((Serializable) profileMethods);
+        return profileMethods;
+    }
+
+    public void assertRpcTransientMemebers(List<LeasePaymentMethod> methods) {
+        for (LeasePaymentMethod method : methods) {
+            assertRpcTransientMemebers(method);
+        }
+    }
+
+    @SuppressWarnings("incomplete-switch")
+    public void assertRpcTransientMemebers(LeasePaymentMethod paymentMethod) {
+        switch (paymentMethod.type().getValue()) {
+        case Echeck:
+            EcheckInfo ec = paymentMethod.details().cast();
+            Assert.assertNull(ec.accountNo().number().getValue());
+            break;
+        case CreditCard:
+            CreditCardInfo cc = paymentMethod.details().cast();
+            Assert.assertNull(cc.card().number().getValue());
+            Assert.assertNull(cc.securityCode().getValue());
+            break;
+        }
     }
 
     protected LeasePaymentMethod createPaymentMethod(PaymentType type) {
