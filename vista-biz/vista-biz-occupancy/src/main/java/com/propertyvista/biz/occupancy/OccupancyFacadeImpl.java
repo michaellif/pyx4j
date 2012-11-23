@@ -428,7 +428,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public void moveOut(Key unitPk, LogicalDate moveOutDate) throws OccupancyOperationException {
+    public void moveOut(Key unitPk, LogicalDate moveOutDate, Lease leaseId) throws OccupancyOperationException {
         assert unitPk != null;
         assert moveOutDate != null;
         LogicalDate unitAvailableFrom = null;

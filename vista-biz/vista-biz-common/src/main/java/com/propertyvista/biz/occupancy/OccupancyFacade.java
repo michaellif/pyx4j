@@ -115,7 +115,7 @@ public interface OccupancyFacade {
      * @param moveOutDate
      *            a last day of of the lease: a <code>leased</code> occupancy segment that is connected to current lease will end on this date (inclusive)
      */
-    void moveOut(Key unitId, LogicalDate moveOutDate) throws OccupancyOperationException;
+    void moveOut(Key unitId, LogicalDate moveOutDate, Lease leaseId) throws OccupancyOperationException;
 
     /** Cancels the definition of a lease that is currently active and has a defined end date in the future */
     void cancelMoveOut(Key unitId) throws OccupancyOperationException;

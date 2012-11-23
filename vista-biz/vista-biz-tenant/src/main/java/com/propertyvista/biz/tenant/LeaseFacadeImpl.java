@@ -621,7 +621,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Persistence.secureSave(lease);
 
         try {
-            ServerSideFactory.create(OccupancyFacade.class).moveOut(lease.unit().getPrimaryKey(), lease.expectedMoveOut().getValue());
+            ServerSideFactory.create(OccupancyFacade.class).moveOut(lease.unit().getPrimaryKey(), lease.expectedMoveOut().getValue(), lease);
         } catch (OccupancyOperationException e) {
             throw new IllegalStateException(e.getMessage());
         }
@@ -689,7 +689,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Persistence.secureSave(lease);
 
         try {
-            ServerSideFactory.create(OccupancyFacade.class).moveOut(lease.unit().getPrimaryKey(), lease.actualMoveOut().getValue());
+            ServerSideFactory.create(OccupancyFacade.class).moveOut(lease.unit().getPrimaryKey(), lease.actualMoveOut().getValue(), lease);
         } catch (OccupancyOperationException e) {
             throw new IllegalStateException(e.getMessage());
         }
