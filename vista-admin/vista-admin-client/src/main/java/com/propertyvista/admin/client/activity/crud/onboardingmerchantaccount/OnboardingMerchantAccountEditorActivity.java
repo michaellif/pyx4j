@@ -14,14 +14,20 @@
 package com.propertyvista.admin.client.activity.crud.onboardingmerchantaccount;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.ui.crud.pmc.OnboardingMerchantAccountEditorView;
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.admin.rpc.OnboardingMerchantAccountDTO;
+import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.OnboardingMerchantAccountCrudService;
+import com.propertyvista.admin.rpc.services.PmcCrudService;
 
 public class OnboardingMerchantAccountEditorActivity extends EditorActivityBase<OnboardingMerchantAccountDTO> {
 
@@ -34,4 +40,25 @@ public class OnboardingMerchantAccountEditorActivity extends EditorActivityBase<
         );//@formatter:on
     }
 
+    @Override
+    protected void createNewEntity(final AsyncCallback<OnboardingMerchantAccountDTO> callback) {
+        if (getParentId() == null) {
+            throw new UserRuntimeException("Invalid URL");
+        }
+        PmcCrudService srv = GWT.create(PmcCrudService.class);
+        srv.retrieve(new AsyncCallback<PmcDTO>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                callback.onFailure(caught);
+            }
+
+            @Override
+            public void onSuccess(PmcDTO result) {
+                OnboardingMerchantAccountDTO ent = EntityFactory.create(OnboardingMerchantAccountDTO.class);
+                ent.pmc().name().set(result.name());
+                callback.onSuccess(ent);
+            }
+        }, getParentId(), AbstractCrudService.RetrieveTraget.View);
+    }
 }
