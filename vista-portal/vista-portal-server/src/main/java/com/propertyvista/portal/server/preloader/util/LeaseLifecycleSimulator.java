@@ -105,6 +105,10 @@ public class LeaseLifecycleSimulator {
 
     private List<IssueClassification> issueClassifications;
 
+    public int numOfBills = -1;
+
+    public int numOfPayments = -1;
+
     private LeaseLifecycleSimulator() {
         this.events = new PriorityQueue<LeaseLifecycleSimulator.LeaseEventContainer>(10, new Comparator<LeaseEventContainer>() {
             @Override
@@ -346,7 +350,8 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            if (runBilling) {
+            if (runBilling & numOfPayments != 0) {
+                --numOfPayments;
                 performRandomPayment();
             }
             scheduleNextAction();
@@ -432,50 +437,52 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            if (now().before(lease.currentTerm().termTo().getValue()) & lease.status().getValue() != Lease.Status.Completed) {
+            numOfBills--;
+            if (numOfBills != 0) {
+                if (now().before(lease.currentTerm().termTo().getValue()) & lease.status().getValue() != Lease.Status.Completed) {
 
-                // TODO THIS is REALLY CREEPY part, talk to Michael about adding API to the facade that lets check when billing is allowed to run **********
-                // the following code is copies the calculations inside the billing facade privates 
-                Persistence.service().retrieve(lease.billingAccount());
-                Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
-                if (lastBill.billingPeriodStartDate().isNull()) {
-                    // lease ended
-                    return;
-                }
-
-                Calendar billingPeriodStartDate = new GregorianCalendar();
-                billingPeriodStartDate.setTime(lastBill.billingPeriodStartDate().getValue());
-                billingPeriodStartDate.add(Calendar.MONTH, 1);
-                if (billingPeriodStartDate.getTime().after(lease.currentTerm().termTo().getValue())) {
-                    // lease ended
-                    return;
-                }
-
-                LogicalDate billingCycleDay = calculateBillingCycleTargetExecutionDate(lease.billingAccount().billingType(), new LogicalDate(
-                        billingPeriodStartDate.getTime()));
-                // CREEPY PART ENDS HERE *******************************************************************************************************************
-
-                if (now().equals(billingCycleDay)) {
-                    BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
-                    billing.runBilling(lease);
-                    billing.confirmBill(billing.getLatestBill(lease));
-
-                    if (isDebugged) {
-                        System.out.println("" + now() + " executed run billing lease: " + lease.leaseId().getValue() + " "
-                                + lease.currentTerm().termFrom().getValue() + " - " + lease.currentTerm().termTo().getValue());
-                        System.out.println("***");
+                    // TODO THIS is REALLY CREEPY part, talk to Michael about adding API to the facade that lets check when billing is allowed to run **********
+                    // the following code is copies the calculations inside the billing facade privates 
+                    Persistence.service().retrieve(lease.billingAccount());
+                    Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
+                    if (lastBill.billingPeriodStartDate().isNull()) {
+                        // lease ended
+                        return;
                     }
 
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(now());
-                    cal.add(Calendar.MONTH, 1);
-                    LogicalDate nextRun = new LogicalDate(cal.getTime());
-                    queueEvent(nextRun, new RunBillingRecurrent(lease));
+                    Calendar billingPeriodStartDate = new GregorianCalendar();
+                    billingPeriodStartDate.setTime(lastBill.billingPeriodStartDate().getValue());
+                    billingPeriodStartDate.add(Calendar.MONTH, 1);
+                    if (billingPeriodStartDate.getTime().after(lease.currentTerm().termTo().getValue())) {
+                        // lease ended
+                        return;
+                    }
 
-                } else {
-                    queueEvent(billingCycleDay, new RunBillingRecurrent(lease));
+                    LogicalDate billingCycleDay = calculateBillingCycleTargetExecutionDate(lease.billingAccount().billingType(), new LogicalDate(
+                            billingPeriodStartDate.getTime()));
+                    // CREEPY PART ENDS HERE *******************************************************************************************************************
+
+                    if (now().equals(billingCycleDay)) {
+                        BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
+                        billing.runBilling(lease);
+                        billing.confirmBill(billing.getLatestBill(lease));
+
+                        if (isDebugged) {
+                            System.out.println("" + now() + " executed run billing lease: " + lease.leaseId().getValue() + " "
+                                    + lease.currentTerm().termFrom().getValue() + " - " + lease.currentTerm().termTo().getValue());
+                            System.out.println("***");
+                        }
+
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(now());
+                        cal.add(Calendar.MONTH, 1);
+                        LogicalDate nextRun = new LogicalDate(cal.getTime());
+                        queueEvent(nextRun, new RunBillingRecurrent(lease));
+
+                    } else {
+                        queueEvent(billingCycleDay, new RunBillingRecurrent(lease));
+                    }
                 }
-
             }
         }
     }
@@ -744,6 +751,11 @@ public class LeaseLifecycleSimulator {
         public LeaseLifecycleSimulatorBuilder approveImmidately() {
             leaseLifecycleSim.hasImmideateApproval = true;
             return this;
+        }
+
+        public void setNumOfBillsAndPayments(int i) {
+            leaseLifecycleSim.numOfBills = i;
+            leaseLifecycleSim.numOfPayments = i;
         }
 
     }

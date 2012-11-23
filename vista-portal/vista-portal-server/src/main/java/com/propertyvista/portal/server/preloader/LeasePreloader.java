@@ -57,10 +57,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         AptUnitSource aptUnitSource = new AptUnitSource(1);
 
         //ensure LeaseLifecycleSimulator is fired during tests
-        int numLeasesWithNoSimulation = DemoData.UserType.TENANT.getDefaultMax();
-        if (numLeasesWithNoSimulation >= config().numTenants) {
-            numLeasesWithNoSimulation = config().numTenants - config().minSimulatedLeases;
-        }
 
         Customer dualTenantCustomer = null;
         for (int i = 0; i < config().numTenants; i++) {
@@ -85,7 +81,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             }
 
             // Create normal Active Lease first for Shortcut users
-            if (i < numLeasesWithNoSimulation) {
+            if (i < config().numOfLeasesWithNoSimulation) {
                 Date trDate = Persistence.service().getTransactionSystemTime();
                 Calendar cal = new GregorianCalendar();
                 cal.setTime(new LogicalDate(Math.min(new LogicalDate().getTime(), lease.currentTerm().termFrom().getValue().getTime())));
@@ -125,6 +121,9 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
                     ++numCreatedWithBilling;
                     simBuilder.simulateBilling();
+
+                    simBuilder.setNumOfBillsAndPayments(config().oneBillOnePayment ? 1 : -1);
+
                 } else {
                     Calendar cal = new GregorianCalendar();
                     cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));

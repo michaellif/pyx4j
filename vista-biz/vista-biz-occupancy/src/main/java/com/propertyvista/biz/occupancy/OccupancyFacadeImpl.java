@@ -435,20 +435,15 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
 
         AptUnitOccupancySegment currentSegment = retrieveOccupancySegment(unitPk, now);
-        AptUnitOccupancySegment occupiedSegment = null;
 
-        if (currentSegment.status().getValue() == Status.occupied) {
-            occupiedSegment = currentSegment;
-        } else {
-            GregorianCalendar cal = new GregorianCalendar();
-            cal.setTime(currentSegment.dateFrom().getValue());
-            cal.add(GregorianCalendar.DAY_OF_YEAR, -1);
-            AptUnitOccupancySegment prevSegment = retrieveOccupancySegment(unitPk, new LogicalDate(cal.getTime()));
-            if (prevSegment != null && prevSegment.status().getValue() != Status.occupied) {
-                throw new OccupancyOperationException(
-                        i18n.tr("Occupied segment was not found. Please ensure that the unit is not leased, reserved or scheduled for renovation"));
-            }
-            occupiedSegment = prevSegment;
+        EntityQueryCriteria<AptUnitOccupancySegment> occupiedSegmentCriteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
+        occupiedSegmentCriteria.add(PropertyCriterion.eq(occupiedSegmentCriteria.proto().unit(), unitPk));
+        occupiedSegmentCriteria.add(PropertyCriterion.eq(occupiedSegmentCriteria.proto().lease(), leaseId));
+        occupiedSegmentCriteria.add(PropertyCriterion.eq(occupiedSegmentCriteria.proto().status(), AptUnitOccupancySegment.Status.occupied));
+        AptUnitOccupancySegment occupiedSegment = occupiedSegment = Persistence.service().retrieve(occupiedSegmentCriteria);
+        if (occupiedSegment == null) {
+            throw new OccupancyOperationException(
+                    i18n.tr("Occupied segment was not found. Please ensure that the unit is not leased, reserved or scheduled for renovation"));
         }
 
         if (moveOutDate.getTime() < occupiedSegment.lease().leaseFrom().getValue().getTime()) {

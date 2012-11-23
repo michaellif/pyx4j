@@ -32,7 +32,7 @@ public class AptUnitOccupancyManagerMoveOutTest extends AptUnitOccupancyManagerT
 
         now("2011-08-01");
 
-        getUOM().moveOut(unitId, asDate("2011-10-25"));
+        getUOM().moveOut(unitId, asDate("2011-10-25"), lease);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -54,7 +54,7 @@ public class AptUnitOccupancyManagerMoveOutTest extends AptUnitOccupancyManagerT
 
         now("2011-08-01");
 
-        getUOM().moveOut(unitId, asDate("2011-10-20"));
+        getUOM().moveOut(unitId, asDate("2011-10-20"), lease);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -75,7 +75,7 @@ public class AptUnitOccupancyManagerMoveOutTest extends AptUnitOccupancyManagerT
 
         now("2011-10-24");
 
-        getUOM().moveOut(unitId, asDate("2011-10-24"));
+        getUOM().moveOut(unitId, asDate("2011-10-24"), lease);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -97,7 +97,7 @@ public class AptUnitOccupancyManagerMoveOutTest extends AptUnitOccupancyManagerT
 
         now("2011-10-24");
 
-        getUOM().moveOut(unitId, asDate("2011-10-24"));
+        getUOM().moveOut(unitId, asDate("2011-10-24"), lease);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -119,7 +119,7 @@ public class AptUnitOccupancyManagerMoveOutTest extends AptUnitOccupancyManagerT
 
         now("2011-08-01");
 
-        getUOM().moveOut(unitId, asDate("2011-10-24"));
+        getUOM().moveOut(unitId, asDate("2011-10-24"), lease);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -142,7 +142,7 @@ public class AptUnitOccupancyManagerMoveOutTest extends AptUnitOccupancyManagerT
 
         now("2011-08-01");
 
-        getUOM().moveOut(unitId, asDate("2011-10-24"));
+        getUOM().moveOut(unitId, asDate("2011-10-24"), lease);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -169,7 +169,7 @@ public class AptUnitOccupancyManagerMoveOutTest extends AptUnitOccupancyManagerT
 
         now("2011-08-01");
 
-        getUOM().moveOut(unitId, asDate("2011-10-22"));
+        getUOM().moveOut(unitId, asDate("2011-10-22"), lease);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -197,7 +197,7 @@ public class AptUnitOccupancyManagerMoveOutTest extends AptUnitOccupancyManagerT
 
         now("2011-08-01");
 
-        getUOM().moveOut(unitId, asDate("2011-10-22"));
+        getUOM().moveOut(unitId, asDate("2011-10-22"), lease);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -225,7 +225,7 @@ public class AptUnitOccupancyManagerMoveOutTest extends AptUnitOccupancyManagerT
 
         now("2011-08-01");
 
-        getUOM().moveOut(unitId, asDate("2011-10-23"));
+        getUOM().moveOut(unitId, asDate("2011-10-23"), lease);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -252,7 +252,7 @@ public class AptUnitOccupancyManagerMoveOutTest extends AptUnitOccupancyManagerT
 
         now("2011-08-01");
 
-        getUOM().moveOut(unitId, asDate("2011-10-25"));
+        getUOM().moveOut(unitId, asDate("2011-10-25"), lease);
     }
 
     /**
@@ -270,7 +270,7 @@ public class AptUnitOccupancyManagerMoveOutTest extends AptUnitOccupancyManagerT
 
         now("2011-08-01");
 
-        getUOM().moveOut(unitId, asDate("2011-10-25"));
+        getUOM().moveOut(unitId, asDate("2011-10-25"), lease);
 
         assertExpectedTimeline();
         assertUnitIsNotAvailable();
@@ -287,7 +287,7 @@ public class AptUnitOccupancyManagerMoveOutTest extends AptUnitOccupancyManagerT
 
         now("2011-08-01");
 
-        getUOM().moveOut(unitId, asDate("2011-10-19"));
+        getUOM().moveOut(unitId, asDate("2011-10-19"), lease);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -310,7 +310,7 @@ public class AptUnitOccupancyManagerMoveOutTest extends AptUnitOccupancyManagerT
 
         now("2011-08-01");
 
-        getUOM().moveOut(unitId, asDate("2011-10-23"));
+        getUOM().moveOut(unitId, asDate("2011-10-23"), lease);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -333,7 +333,7 @@ public class AptUnitOccupancyManagerMoveOutTest extends AptUnitOccupancyManagerT
 
         now("2011-02-15");
 
-        getUOM().moveOut(unitId, asDate("2011-02-15"));
+        getUOM().moveOut(unitId, asDate("2011-02-15"), lease);
 
         expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
         expect().from("2011-02-03").to("2011-02-14").status(Status.reserved).withLease(lease).x();
@@ -355,7 +355,7 @@ public class AptUnitOccupancyManagerMoveOutTest extends AptUnitOccupancyManagerT
 
         now("2011-02-15");
 
-        getUOM().moveOut(unitId, asDate("2011-02-14"));
+        getUOM().moveOut(unitId, asDate("2011-02-14"), lease);
     }
 
     @Test
