@@ -970,7 +970,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
             criteria.add(PropertyCriterion.ne(criteria.proto().status(), LeaseTerm.Status.Offer));
             // set sorting by 'from date':
-            criteria.setSorts(new Vector<Sort>(Arrays.asList(new Sort(criteria.proto().termFrom().getPath().toString(), true))));
+            criteria.setSorts(new Vector<Sort>(Arrays.asList(new Sort(criteria.proto().termFrom().getPath().toString(), false))));
 
             List<LeaseTerm> terms = Persistence.service().query(criteria);
             assert (!terms.isEmpty());
@@ -1127,6 +1127,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             }
             concurrent.terminationLeaseTo().setValue(new LogicalDate(lease.leaseFrom().getValue().getTime() - ONE_DAY_IN_MSEC));
             updateLeaseDates(concurrent);
+            Persistence.secureSave(concurrent);
             complete(concurrent);
         }
     }

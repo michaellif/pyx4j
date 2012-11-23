@@ -22,6 +22,7 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
@@ -65,6 +66,8 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().unit(), in));
             criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
+            // set sorting by 'from date' to get last active lease first:
+            criteria.setSorts(new Vector<Sort>(Arrays.asList(new Sort(criteria.proto().leaseFrom().getPath().toString(), true))));
             dto.lease().set(Persistence.service().retrieve(criteria));
         }
 
