@@ -97,7 +97,7 @@ class TableDDL {
         }
     }
 
-    static List<String> sqlCreate(Dialect dialect, TableModel tableModel, int tablesidentityOffset) {
+    static List<String> sqlCreate(Dialect dialect, TableModel tableModel, int tablesIdentityOffset) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
         sql.append("CREATE TABLE ");
@@ -185,8 +185,8 @@ class TableDDL {
             }
         }
 
-        if ((tablesidentityOffset != 0) && !dialect.isSequencesBaseIdentity() && (tableModel.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO)) {
-            sqls.add(dialect.sqlAlterIdentityColumn(tableModel.tableName, nextidentityOffset(tablesidentityOffset)));
+        if ((tablesIdentityOffset != 0) && !dialect.isSequencesBaseIdentity() && (tableModel.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO)) {
+            sqls.add(dialect.sqlAlterIdentityColumn(tableModel.tableName, nextIdentityOffset(tablesIdentityOffset)));
         }
         return sqls;
     }
@@ -473,7 +473,7 @@ class TableDDL {
         return sql.toString();
     }
 
-    public static List<String> sqlCreateCollectionMember(Dialect dialect, MemberOperationsMeta member, int tablesidentityOffset) {
+    public static List<String> sqlCreateCollectionMember(Dialect dialect, MemberOperationsMeta member, int tablesIdentityOffset) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
 
@@ -524,8 +524,8 @@ class TableDDL {
 
         sqls.add(sqlIdx.toString());
 
-        if ((tablesidentityOffset != 0) && !dialect.isSequencesBaseIdentity()) {
-            sqls.add(dialect.sqlAlterIdentityColumn(tableName, nextidentityOffset(tablesidentityOffset)));
+        if ((tablesIdentityOffset != 0) && !dialect.isSequencesBaseIdentity()) {
+            sqls.add(dialect.sqlAlterIdentityColumn(tableName, nextIdentityOffset(tablesIdentityOffset)));
         }
 
         return sqls;
@@ -579,7 +579,7 @@ class TableDDL {
         }
     }
 
-    static synchronized int nextidentityOffset(int tablesidentityOffset) {
+    static synchronized int nextIdentityOffset(int tablesidentityOffset) {
         identityOffset += tablesidentityOffset;
         return identityOffset;
     }

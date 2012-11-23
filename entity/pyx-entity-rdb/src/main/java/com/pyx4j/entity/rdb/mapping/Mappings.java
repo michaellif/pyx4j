@@ -315,7 +315,7 @@ public class Mappings {
     int nextIdentityOffset() {
         int identityOffset = 0;
         if (tablesIdentityOffset() != 0) {
-            identityOffset = TableDDL.nextidentityOffset(tablesIdentityOffset());
+            identityOffset = TableDDL.nextIdentityOffset(tablesIdentityOffset());
         }
         return identityOffset;
     }

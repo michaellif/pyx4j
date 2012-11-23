@@ -64,7 +64,7 @@ public class ConfigurationPostgreSQLProperties extends ConfigurationPostgreSQL {
 
     protected int unreturnedConnectionBackgroundProcessTimeout = 60 * 60;
 
-    private int tablesidentityOffset = 0;
+    private int tablesIdentityOffset = 0;
 
     private Ddl ddl = Ddl.auto;
 
@@ -165,7 +165,7 @@ public class ConfigurationPostgreSQLProperties extends ConfigurationPostgreSQL {
 
     @Override
     public int tablesIdentityOffset() {
-        return tablesidentityOffset;
+        return tablesIdentityOffset;
     }
 
     @Override
@@ -201,7 +201,7 @@ public class ConfigurationPostgreSQLProperties extends ConfigurationPostgreSQL {
         this.unreturnedConnectionBackgroundProcessTimeout = c.getIntegerValue("unreturnedConnectionBackgroundProcessTimeout",
                 this.unreturnedConnectionBackgroundProcessTimeout);
 
-        this.tablesidentityOffset = c.getIntegerValue("tablesidentityOffset", this.tablesidentityOffset);
+        this.tablesIdentityOffset = c.getIntegerValue("tablesIdentityOffset", this.tablesIdentityOffset);
         this.ddl = c.getEnumValue("ddl", Ddl.class, ddl);
     }
 
