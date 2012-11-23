@@ -107,9 +107,11 @@ public class SystemMaintenance {
     }
 
     public static void stopSystemMaintenance() {
+        if (maintenanceStarted != 0) {
+            log.info("System Maintenance stopped");
+        }
         maintenanceScheduled = 0;
         maintenanceStarted = 0;
-        log.info("System Maintenance stopped");
     }
 
     public static SystemMaintenanceState getSystemMaintenanceClientInfo() {
