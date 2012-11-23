@@ -23,8 +23,8 @@ import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.oapi.model.AddressIO;
-import com.propertyvista.oapi.model.BuildingInfoIO;
 import com.propertyvista.oapi.model.BuildingIO;
+import com.propertyvista.oapi.model.BuildingInfoIO;
 import com.propertyvista.oapi.model.ContactIO;
 
 public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {

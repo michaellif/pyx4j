@@ -13,11 +13,14 @@
  */
 package com.propertyvista.oapi.model;
 
+import javax.xml.bind.annotation.XmlElement;
+
 public class AddressIO {
 
     public String addressType;
 
     //mandatory for portal
+    @XmlElement(nillable = true)
     public String streetNumber;
 
     //mandatory for portal

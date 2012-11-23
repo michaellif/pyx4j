@@ -13,6 +13,7 @@
  */
 package com.propertyvista.oapi.ws;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.jws.WebParam;
@@ -22,6 +23,7 @@ import javax.jws.soap.SOAPBinding.ParameterStyle;
 import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
 
+import com.propertyvista.oapi.model.PaymentRecordIO;
 import com.propertyvista.oapi.model.TransactionIO;
 
 @WebService(targetNamespace = "http://www.w3.org/2001/XMLSchema-instance")
@@ -30,8 +32,9 @@ public interface WSReceivableService {
 
     void postTransactions(@WebParam(name = "transaction") List<TransactionIO> transactions);
 
-    // run billing
+    void runBilling(String buildingCode);
 
-    // get payment records
+    //TODO change to LogicalDate
+    List<PaymentRecordIO> getPaymentRecords(Date date);
 
 }

@@ -16,10 +16,10 @@ package com.propertyvista.oapi.marshaling;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.oapi.model.TenantIO;
 
-public class TenantMarshaller implements Marshaller<LeaseParticipant, TenantIO> {
+public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantIO> {
 
     @Override
-    public TenantIO unmarshal(LeaseParticipant participant) {
+    public TenantIO unmarshal(LeaseParticipant<?> participant) {
         TenantIO tenantIO = new TenantIO();
         tenantIO.firstName = participant.customer().person().name().firstName().getValue();
         tenantIO.lastName = participant.customer().person().name().lastName().getValue();
@@ -31,7 +31,7 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant, TenantIO> 
     }
 
     @Override
-    public LeaseParticipant marshal(TenantIO v) throws Exception {
+    public LeaseParticipant<?> marshal(TenantIO v) throws Exception {
         return null;
     }
 

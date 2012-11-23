@@ -7,21 +7,12 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 27, 2011
- * @author dmitry
+ * Created on Aug 12, 2011
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.oapi.model;
 
-import java.util.ArrayList;
-import java.util.List;
+public class PaymentRecordIO {
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement(name = "buildings", namespace = "http://www.w3.org/2001/XMLSchema-instance")
-public class BuildingsIO {
-
-    @XmlElement(name = "building")
-    public List<BuildingIO> buildings = new ArrayList<BuildingIO>();
 }

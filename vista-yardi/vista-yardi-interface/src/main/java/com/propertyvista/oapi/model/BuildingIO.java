@@ -16,6 +16,7 @@ package com.propertyvista.oapi.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
@@ -25,6 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class BuildingIO {
 
     //mandatory for portal, unique identifier
+    @XmlAttribute
     public String propertyCode;
 
     public BuildingInfoIO info;

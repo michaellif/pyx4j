@@ -13,11 +13,13 @@
  */
 package com.propertyvista.oapi.ws;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.jws.WebService;
 
 import com.propertyvista.oapi.ReceivableService;
+import com.propertyvista.oapi.model.PaymentRecordIO;
 import com.propertyvista.oapi.model.TransactionIO;
 
 @WebService(endpointInterface = "com.propertyvista.oapi.ws.WSReceivableService")
@@ -29,6 +31,16 @@ public class WSReceivableServiceImpl implements WSReceivableService {
             ReceivableService.postTransaction(transIO);
         }
 
+    }
+
+    @Override
+    public void runBilling(String buildingCode) {
+
+    }
+
+    @Override
+    public List<PaymentRecordIO> getPaymentRecords(Date date) {
+        return null;
     }
 
 }
