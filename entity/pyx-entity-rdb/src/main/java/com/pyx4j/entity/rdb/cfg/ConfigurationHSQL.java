@@ -163,7 +163,7 @@ public abstract class ConfigurationHSQL implements Configuration {
     }
 
     @Override
-    public int tablesItentityOffset() {
+    public int tablesIdentityOffset() {
         return 0;
     }
 

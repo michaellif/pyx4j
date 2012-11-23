@@ -65,7 +65,7 @@ public class TestConfigurationHSQL extends com.pyx4j.entity.rdb.cfg.Configuratio
     }
 
     @Override
-    public int tablesItentityOffset() {
+    public int tablesIdentityOffset() {
         return 997;
     }
 

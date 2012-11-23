@@ -83,7 +83,7 @@ public interface Configuration extends IPersistenceConfiguration {
      * 
      * @return 0 if all id starts with the same value 0
      */
-    public int tablesItentityOffset();
+    public int tablesIdentityOffset();
 
     public List<String> dbInitializationSqls();
 

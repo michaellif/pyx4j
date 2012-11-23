@@ -176,7 +176,7 @@ public abstract class ConfigurationMySQL implements Configuration {
     }
 
     @Override
-    public int tablesItentityOffset() {
+    public int tablesIdentityOffset() {
         return 0;
     }
 

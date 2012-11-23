@@ -111,7 +111,7 @@ public abstract class Dialect {
         return "";
     }
 
-    public String sqlAlterIdentityColumn(String tableName, int itentityOffset) {
+    public String sqlAlterIdentityColumn(String tableName, int identityOffset) {
         return null;
     }
 
@@ -233,7 +233,7 @@ public abstract class Dialect {
         throw new Error("Dialect does not support sequences");
     }
 
-    public String getCreateSequenceSql(String sequenceName, int itentityOffset) {
+    public String getCreateSequenceSql(String sequenceName, int identityOffset) {
         throw new Error("Dialect does not support sequences");
     }
 

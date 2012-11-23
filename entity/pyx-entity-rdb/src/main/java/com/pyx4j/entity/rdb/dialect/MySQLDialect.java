@@ -61,8 +61,8 @@ public class MySQLDialect extends Dialect {
     }
 
     @Override
-    public String sqlAlterIdentityColumn(String tableName, int itentityOffset) {
-        return "ALTER TABLE  " + tableName + "  AUTO_INCREMENT = " + itentityOffset;
+    public String sqlAlterIdentityColumn(String tableName, int identityOffset) {
+        return "ALTER TABLE  " + tableName + "  AUTO_INCREMENT = " + identityOffset;
     }
 
     @Override

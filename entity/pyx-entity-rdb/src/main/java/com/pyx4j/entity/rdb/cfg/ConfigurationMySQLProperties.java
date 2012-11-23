@@ -64,7 +64,7 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
 
     protected int unreturnedConnectionBackgroundProcessTimeout = 60 * 60;
 
-    private int tablesItentityOffset;
+    private int tablesidentityOffset;
 
     private Ddl ddl = Ddl.auto;
 
@@ -164,8 +164,8 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
     }
 
     @Override
-    public int tablesItentityOffset() {
-        return tablesItentityOffset;
+    public int tablesIdentityOffset() {
+        return tablesidentityOffset;
     }
 
     @Override
@@ -201,7 +201,7 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
         this.unreturnedConnectionBackgroundProcessTimeout = c.getIntegerValue("unreturnedConnectionBackgroundProcessTimeout",
                 this.unreturnedConnectionBackgroundProcessTimeout);
 
-        this.tablesItentityOffset = c.getIntegerValue("tablesItentityOffset", this.tablesItentityOffset);
+        this.tablesidentityOffset = c.getIntegerValue("tablesidentityOffset", this.tablesidentityOffset);
         this.ddl = c.getEnumValue("ddl", Ddl.class, ddl);
     }
 

@@ -158,7 +158,7 @@ public abstract class ConfigurationPostgreSQL implements Configuration {
     }
 
     @Override
-    public int tablesItentityOffset() {
+    public int tablesIdentityOffset() {
         return 0;
     }
 

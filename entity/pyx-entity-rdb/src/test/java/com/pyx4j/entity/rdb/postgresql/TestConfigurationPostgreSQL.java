@@ -64,7 +64,7 @@ public class TestConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Config
     }
 
     @Override
-    public int tablesItentityOffset() {
+    public int tablesIdentityOffset() {
         return 937;
     }
 

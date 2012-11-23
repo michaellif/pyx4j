@@ -65,7 +65,7 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
 
     protected int unreturnedConnectionBackgroundProcessTimeout = 60 * 60;
 
-    private int tablesItentityOffset;
+    private int tablesidentityOffset;
 
     private boolean createForeignKeys = true;
 
@@ -176,8 +176,8 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
     }
 
     @Override
-    public int tablesItentityOffset() {
-        return tablesItentityOffset;
+    public int tablesIdentityOffset() {
+        return tablesidentityOffset;
     }
 
     @Override
@@ -216,7 +216,7 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
         this.unreturnedConnectionBackgroundProcessTimeout = c.getIntegerValue("unreturnedConnectionBackgroundProcessTimeout",
                 this.unreturnedConnectionBackgroundProcessTimeout);
 
-        this.tablesItentityOffset = c.getIntegerValue("tablesItentityOffset", this.tablesItentityOffset);
+        this.tablesidentityOffset = c.getIntegerValue("tablesidentityOffset", this.tablesidentityOffset);
         this.ddl = c.getEnumValue("ddl", Ddl.class, ddl);
     }
 

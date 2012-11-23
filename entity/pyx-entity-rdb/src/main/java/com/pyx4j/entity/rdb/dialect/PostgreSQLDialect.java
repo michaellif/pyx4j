@@ -96,8 +96,8 @@ public class PostgreSQLDialect extends Dialect {
     }
 
     @Override
-    public String getCreateSequenceSql(String sequenceName, int itentityOffset) {
-        return "CREATE SEQUENCE " + sequenceName + ((itentityOffset != 0) ? (" START WITH " + itentityOffset) : "");
+    public String getCreateSequenceSql(String sequenceName, int identityOffset) {
+        return "CREATE SEQUENCE " + sequenceName + ((identityOffset != 0) ? (" START WITH " + identityOffset) : "");
     }
 
     @Override

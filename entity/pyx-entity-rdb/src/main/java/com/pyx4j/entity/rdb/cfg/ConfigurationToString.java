@@ -38,7 +38,7 @@ public class ConfigurationToString {
         b.append("maxBackgroundProcessPoolSize     : ").append(conf.maxBackgroundProcessPoolSize()).append("\n");
         b.append("maxPoolPreparedStatements        : ").append(conf.maxPoolPreparedStatements()).append("\n");
         b.append("unreturnedConnectionTimeout      : ").append(conf.unreturnedConnectionTimeout()).append("\n");
-        b.append("tablesItentityOffset             : ").append(conf.tablesItentityOffset()).append("\n");
+        b.append("tablesIdentityOffset             : ").append(conf.tablesIdentityOffset()).append("\n");
         return b.toString();
     }
 }

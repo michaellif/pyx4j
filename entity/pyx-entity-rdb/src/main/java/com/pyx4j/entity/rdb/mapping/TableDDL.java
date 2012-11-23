@@ -85,7 +85,7 @@ class TableDDL {
 
     }
 
-    protected static int itentityOffset = 0;
+    protected static int identityOffset = 0;
 
     private static final boolean NS_PART_OF_PK = true;
 
@@ -97,7 +97,7 @@ class TableDDL {
         }
     }
 
-    static List<String> sqlCreate(Dialect dialect, TableModel tableModel, int tablesItentityOffset) {
+    static List<String> sqlCreate(Dialect dialect, TableModel tableModel, int tablesidentityOffset) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
         sql.append("CREATE TABLE ");
@@ -185,8 +185,8 @@ class TableDDL {
             }
         }
 
-        if ((tablesItentityOffset != 0) && !dialect.isSequencesBaseIdentity() && (tableModel.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO)) {
-            sqls.add(dialect.sqlAlterIdentityColumn(tableModel.tableName, nextItentityOffset(tablesItentityOffset)));
+        if ((tablesidentityOffset != 0) && !dialect.isSequencesBaseIdentity() && (tableModel.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO)) {
+            sqls.add(dialect.sqlAlterIdentityColumn(tableModel.tableName, nextidentityOffset(tablesidentityOffset)));
         }
         return sqls;
     }
@@ -473,7 +473,7 @@ class TableDDL {
         return sql.toString();
     }
 
-    public static List<String> sqlCreateCollectionMember(Dialect dialect, MemberOperationsMeta member, int tablesItentityOffset) {
+    public static List<String> sqlCreateCollectionMember(Dialect dialect, MemberOperationsMeta member, int tablesidentityOffset) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
 
@@ -524,8 +524,8 @@ class TableDDL {
 
         sqls.add(sqlIdx.toString());
 
-        if ((tablesItentityOffset != 0) && !dialect.isSequencesBaseIdentity()) {
-            sqls.add(dialect.sqlAlterIdentityColumn(tableName, nextItentityOffset(tablesItentityOffset)));
+        if ((tablesidentityOffset != 0) && !dialect.isSequencesBaseIdentity()) {
+            sqls.add(dialect.sqlAlterIdentityColumn(tableName, nextidentityOffset(tablesidentityOffset)));
         }
 
         return sqls;
@@ -579,9 +579,9 @@ class TableDDL {
         }
     }
 
-    static synchronized int nextItentityOffset(int tablesItentityOffset) {
-        itentityOffset += tablesItentityOffset;
-        return itentityOffset;
+    static synchronized int nextidentityOffset(int tablesidentityOffset) {
+        identityOffset += tablesidentityOffset;
+        return identityOffset;
     }
 
 }
