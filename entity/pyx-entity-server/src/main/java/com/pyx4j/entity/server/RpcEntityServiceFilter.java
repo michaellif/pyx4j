@@ -48,6 +48,10 @@ public class RpcEntityServiceFilter implements IServiceFilter {
 
     private static final Logger log = LoggerFactory.getLogger(RpcEntityServiceFilter.class);
 
+    public static void filterRpcTransient(Serializable value) {
+        new RpcEntityServiceFilter().filterRpcTransient(value, new IdentityHashSet<Serializable>(), false);
+    }
+
     @Override
     public Serializable filterIncomming(Class<? extends Service<?, ?>> serviceClass, Serializable request) {
         boolean ok = false;
