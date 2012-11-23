@@ -97,7 +97,7 @@ class TableDDL {
         }
     }
 
-    static List<String> sqlCreate(Dialect dialect, TableModel tableModel) {
+    static List<String> sqlCreate(Dialect dialect, TableModel tableModel, int tablesItentityOffset) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
         sql.append("CREATE TABLE ");
@@ -185,8 +185,8 @@ class TableDDL {
             }
         }
 
-        if (tableModel.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
-            sqls.add(sqlAlterIdentity(dialect, tableModel.tableName));
+        if ((tablesItentityOffset != 0) && !dialect.isSequencesBaseIdentity() && (tableModel.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO)) {
+            sqls.add(dialect.sqlAlterIdentityColumn(tableModel.tableName, nextItentityOffset(tablesItentityOffset)));
         }
         return sqls;
     }
@@ -473,7 +473,7 @@ class TableDDL {
         return sql.toString();
     }
 
-    public static List<String> sqlCreateCollectionMember(Dialect dialect, MemberOperationsMeta member) {
+    public static List<String> sqlCreateCollectionMember(Dialect dialect, MemberOperationsMeta member, int tablesItentityOffset) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
 
@@ -524,7 +524,9 @@ class TableDDL {
 
         sqls.add(sqlIdx.toString());
 
-        sqls.add(sqlAlterIdentity(dialect, tableName));
+        if ((tablesItentityOffset != 0) && !dialect.isSequencesBaseIdentity()) {
+            sqls.add(dialect.sqlAlterIdentityColumn(tableName, nextItentityOffset(tablesItentityOffset)));
+        }
 
         return sqls;
     }
@@ -577,13 +579,9 @@ class TableDDL {
         }
     }
 
-    private static String sqlAlterIdentity(Dialect dialect, String tableName) {
-        if (dialect.getTablesItentityOffset() == 0) {
-            return null;
-        } else {
-            itentityOffset += dialect.getTablesItentityOffset();
-            return dialect.sqlAlterIdentityColumn(tableName, itentityOffset);
-        }
+    static synchronized int nextItentityOffset(int tablesItentityOffset) {
+        itentityOffset += tablesItentityOffset;
+        return itentityOffset;
     }
 
 }

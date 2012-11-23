@@ -48,8 +48,6 @@ public abstract class Dialect {
 
     private final boolean multitenantSeparateSchemas;
 
-    private int tablesItentityOffset;
-
     protected Dialect(DatabaseType databaseType, NamingConvention namingConvention, MultitenancyType multitenancyType) {
         this.databaseType = databaseType;
         this.namingConvention = namingConvention;
@@ -115,14 +113,6 @@ public abstract class Dialect {
 
     public String sqlAlterIdentityColumn(String tableName, int itentityOffset) {
         return null;
-    }
-
-    public int getTablesItentityOffset() {
-        return tablesItentityOffset;
-    }
-
-    public void setTablesItentityOffset(int tablesItentityOffset) {
-        this.tablesItentityOffset = tablesItentityOffset;
     }
 
     public Class<?> getType(Class<?> klass) {
@@ -243,7 +233,7 @@ public abstract class Dialect {
         throw new Error("Dialect does not support sequences");
     }
 
-    public String getCreateSequenceSql(String sequenceName) {
+    public String getCreateSequenceSql(String sequenceName, int itentityOffset) {
         throw new Error("Dialect does not support sequences");
     }
 

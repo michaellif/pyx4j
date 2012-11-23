@@ -96,19 +96,14 @@ public class PostgreSQLDialect extends Dialect {
     }
 
     @Override
-    public String getCreateSequenceSql(String sequenceName) {
-        return "create sequence " + sequenceName;
+    public String getCreateSequenceSql(String sequenceName, int itentityOffset) {
+        return "CREATE SEQUENCE " + sequenceName + ((itentityOffset != 0) ? (" START WITH " + itentityOffset) : "");
     }
 
     @Override
     public String getDropSequenceSql(String sequenceName) {
-        return "drop sequence " + sequenceName;
+        return "DROP SEQUENCE " + sequenceName;
     }
-
-//    @Override
-//    public String sqlAlterIdentityColumn(String tableName, int itentityOffset) {
-//        return "ALTER TABLE  " + tableName + "  AUTO_INCREMENT = " + itentityOffset;
-//    }
 
     @Override
     public String sqlDropForeignKey(String tableName, String constraintName) {

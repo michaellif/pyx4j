@@ -181,7 +181,7 @@ public class TableModel {
                 log.debug("table {} does not exists", tableName);
                 switch (ddl) {
                 case auto:
-                    SQLUtils.execute(persistenceContext.getConnection(), TableDDL.sqlCreate(dialect, this));
+                    SQLUtils.execute(persistenceContext.getConnection(), TableDDL.sqlCreate(dialect, this, this.mappings.tablesItentityOffset()));
                     if (Mappings.traceInit) {
                         log.trace(Trace.id() + "table created {}", tableName);
                     }
@@ -214,7 +214,8 @@ public class TableModel {
             if (memberTableMetadata == null) {
                 switch (ddl) {
                 case auto:
-                    SQLUtils.execute(persistenceContext.getConnection(), TableDDL.sqlCreateCollectionMember(dialect, member));
+                    SQLUtils.execute(persistenceContext.getConnection(),
+                            TableDDL.sqlCreateCollectionMember(dialect, member, this.mappings.tablesItentityOffset()));
                     tableCreated = true;
                     break;
                 case disabled:

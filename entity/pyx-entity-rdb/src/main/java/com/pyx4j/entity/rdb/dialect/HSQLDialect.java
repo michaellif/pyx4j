@@ -81,11 +81,11 @@ public class HSQLDialect extends Dialect {
     }
 
     @Override
-    public String getCreateSequenceSql(String sequenceName) {
+    public String getCreateSequenceSql(String sequenceName, int itentityOffset) {
         if (sequencesBaseIdentity) {
-            return "create sequence " + sequenceName;
+            return "CREATE SEQUENCE " + sequenceName + ((itentityOffset != 0) ? (" START WITH " + itentityOffset) : "");
         } else {
-            return super.getCreateSequenceSql(sequenceName);
+            return super.getCreateSequenceSql(sequenceName, itentityOffset);
         }
     }
 

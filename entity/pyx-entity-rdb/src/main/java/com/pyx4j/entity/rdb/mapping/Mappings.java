@@ -96,6 +96,10 @@ public class Mappings {
         return configuration.sharedSequencesSchema();
     }
 
+    public int tablesItentityOffset() {
+        return configuration.tablesItentityOffset();
+    }
+
     public void reset() {
         tables.clear();
         usedTableNames.clear();
@@ -308,14 +312,22 @@ public class Mappings {
         }
     }
 
+    int nextItentityOffset() {
+        int itentityOffset = 0;
+        if (tablesItentityOffset() != 0) {
+            itentityOffset = TableDDL.nextItentityOffset(tablesItentityOffset());
+        }
+        return itentityOffset;
+    }
+
     private void createSequence(PersistenceContext persistenceContext, String sequenceName) throws SQLException {
-        SQLUtils.execute(persistenceContext.getConnection(), persistenceContext.getDialect().getCreateSequenceSql(sequenceName));
+        SQLUtils.execute(persistenceContext.getConnection(), persistenceContext.getDialect().getCreateSequenceSql(sequenceName, nextItentityOffset()));
     }
 
     private void createSharedSequence(PersistenceContext persistenceContext, String sequenceName) throws SQLException {
         Connection connection = connectionProvider.getConnection(ConnectionTarget.forDDL);
         try {
-            SQLUtils.execute(connection, persistenceContext.getDialect().getCreateSequenceSql(sequenceName));
+            SQLUtils.execute(connection, persistenceContext.getDialect().getCreateSequenceSql(sequenceName, nextItentityOffset()));
         } finally {
             SQLUtils.closeQuietly(connection);
         }
