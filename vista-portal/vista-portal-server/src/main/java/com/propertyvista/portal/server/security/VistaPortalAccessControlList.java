@@ -89,7 +89,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         if (VistaTODO.enableWelcomeWizardDemoMode) {
             grant(new IServiceExecutePermission(LeaseReviewService.class));
             grant(new IServiceExecutePermission(InsuranceService.class));
-            grant(new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.services.resident.MockupInsuranceService.class));
             grant(new IServiceExecutePermission(MoveInScheduleService.class));
             grant(new IServiceExecutePermission(ResetWizardService.class));
         }

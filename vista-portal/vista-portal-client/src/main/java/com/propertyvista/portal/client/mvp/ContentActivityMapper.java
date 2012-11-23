@@ -21,14 +21,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
 import com.propertyvista.portal.client.activity.login.LeaseContextSelectionActivity;
 import com.propertyvista.portal.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.client.activity.login.PasswordResetRequestActivity;
 import com.propertyvista.portal.client.activity.login.RedirectToLoginPageActivity;
 import com.propertyvista.portal.client.activity.residents.DashboardActivity;
-import com.propertyvista.portal.client.activity.residents.MockupInsuranceActivity;
 import com.propertyvista.portal.client.activity.residents.PaymentActivity;
 import com.propertyvista.portal.client.activity.residents.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.residents.billing.BillSummaryActivity;
@@ -92,9 +90,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new BillingHistoryActivity(place);
                 } else if (place instanceof Residents.BillingHistory.ViewBill) {
                     activity = new ViewBillActivity(place);
-
-                } else if (VistaTODO.enableWelcomeWizardDemoMode & (place instanceof PortalSiteMap.Residents.InsuranceMockup)) {
-                    activity = new MockupInsuranceActivity();
 
                 } else if (place instanceof PortalSiteMap.Residents.TenantInsurance) {
                     activity = new TenantInsuranceActivity();
