@@ -674,7 +674,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
 
         // Verify the status
-        if (lease.status().getValue() != Lease.Status.Active) {
+        if (!lease.status().getValue().isOperative()) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
         // if not moving out:  

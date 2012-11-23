@@ -100,6 +100,10 @@ public interface Lease extends IEntity {
             return EnumSet.of(Approved, Active, Completed);
         }
 
+        public static EnumSet<Status> operative() {
+            return EnumSet.of(Active, Completed);
+        }
+
         public static EnumSet<Status> former() {
             return EnumSet.of(Cancelled, Completed, Closed);
         }
@@ -116,6 +120,10 @@ public interface Lease extends IEntity {
 
         public boolean isCurrent() {
             return current().contains(this);
+        }
+
+        public boolean isOperative() {
+            return operative().contains(this);
         }
 
         public boolean isFormer() {
