@@ -116,7 +116,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     public String getApplicationURLNamespace() {
-        return "-22.birchwoodsoftwaregroup.com/";
+        return ".birchwoodsoftwaregroup.com/";
     }
 
     protected String getAppUrlSeparator() {

@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.dev.DevSession;
+import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.server.contexts.AntiDoS;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
@@ -88,7 +89,7 @@ public class OpenIdFilter implements Filter {
                         }
                     }
                     OpenIdServlet.createResponsePage((HttpServletResponse) response, true,
-                            OpenId.getDestinationUrl(OpenIdServlet.DOMAIN, httprequest.getRequestURL().toString()));
+                            OpenId.getDestinationUrl(OpenIdServlet.DOMAIN, ServletUtils.getRequestBaseURL(httprequest)));
 
                 }
             }

@@ -91,7 +91,8 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
 
     @Override
     public String openIdDomain() {
-        return "dev.birchwoodsoftwaregroup.com";
+        //return "dev.birchwoodsoftwaregroup.com";
+        return "propertyvista.com";
     }
 
     @Override
