@@ -88,6 +88,23 @@ public class ServletUtils {
         return receivingURL.toString();
     }
 
+    public static String getRequestBaseURL(HttpServletRequest request) {
+        StringBuilder buf = new StringBuilder();
+        String scheme = request.getScheme();
+        buf.append(scheme);
+        buf.append("://");
+        buf.append(request.getServerName());
+        // Skip default port
+        int port = request.getServerPort();
+        if (!(((port == 80) && scheme.equals("http")) || (port == 443) && scheme.equals("https"))) {
+            buf.append(':');
+            buf.append(request.getServerPort());
+        }
+        buf.append(request.getContextPath());
+        return buf.toString();
+    }
+
+    @Deprecated
     public static String getActualRequestBaseURL(HttpServletRequest request) {
         String receivingURL;
         String forwarded = getForwardedHost(request);
