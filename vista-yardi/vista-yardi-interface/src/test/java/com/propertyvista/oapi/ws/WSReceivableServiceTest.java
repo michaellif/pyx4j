@@ -36,7 +36,9 @@ import com.propertyvista.oapi.model.ChargeIO;
 import com.propertyvista.oapi.model.PaymentIO;
 import com.propertyvista.oapi.model.ServiceIO;
 import com.propertyvista.oapi.model.TransactionIO;
-import com.propertyvista.oapi.ws.WSReceivableService;
+import com.propertyvista.oapi.xml.BigDecimalIO;
+import com.propertyvista.oapi.xml.LogicalDateIO;
+import com.propertyvista.oapi.xml.StringIO;
 
 public class WSReceivableServiceTest extends WSOapiTest {
 
@@ -68,19 +70,19 @@ public class WSReceivableServiceTest extends WSOapiTest {
         List<TransactionIO> transactions = new ArrayList<TransactionIO>();
         for (int i = 1; i <= 3; i++) {
             ChargeIO charge = new ChargeIO();
-            charge.description = "tr" + i;
-            charge.amount = new BigDecimal("" + i + i);
+            charge.description = new StringIO("tr" + i);
+            charge.amount = new BigDecimalIO(new BigDecimal("" + i + i));
             ServiceIO chargeService = new ServiceIO();
             chargeService.chargeCode = "ch" + i;
             charge.service = chargeService;
-            charge.fromDate = new LogicalDate(112, 1, 1);
-            charge.toDate = new LogicalDate(112, 2, 2);
+            charge.fromDate = new LogicalDateIO(new LogicalDate(112, 1, 1));
+            charge.toDate = new LogicalDateIO(new LogicalDate(112, 2, 2));
             transactions.add(charge);
         }
         for (int i = 4; i <= 5; i++) {
             PaymentIO payment = new PaymentIO();
-            payment.description = "tr" + i;
-            payment.amount = new BigDecimal("" + i + i);
+            payment.description = new StringIO("tr" + i);
+            payment.amount = new BigDecimalIO(new BigDecimal("" + i + i));
             transactions.add(payment);
         }
 

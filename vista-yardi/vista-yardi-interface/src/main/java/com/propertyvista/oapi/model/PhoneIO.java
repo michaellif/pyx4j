@@ -13,10 +13,12 @@
  */
 package com.propertyvista.oapi.model;
 
+import com.propertyvista.oapi.xml.StringIO;
+
 public class PhoneIO {
 
     public String number;
 
-    public String description;
+    public StringIO description;
 
 }

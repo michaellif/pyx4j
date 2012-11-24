@@ -23,6 +23,7 @@ import com.propertyvista.oapi.PropertyService;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.model.UnitIO;
+import com.propertyvista.oapi.xml.StringIO;
 
 @WebService(endpointInterface = "com.propertyvista.oapi.ws.WSPropertyService")
 public class WSPropertyServiceImpl implements WSPropertyService {
@@ -50,7 +51,7 @@ public class WSPropertyServiceImpl implements WSPropertyService {
         if (building != null) {
             UnitIO newUnit = new UnitIO();
             newUnit.number = unitNumber;
-            newUnit.floorplanName = floorplanName;
+            newUnit.floorplanName = new StringIO(floorplanName);
             newUnit.propertyCode = propertyCode;
             building.units.add(newUnit);
         } else {

@@ -13,27 +13,32 @@
  */
 package com.propertyvista.oapi.model;
 
-import java.math.BigDecimal;
-
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
+import com.propertyvista.oapi.xml.AbstractElementIO;
+import com.propertyvista.oapi.xml.BigDecimalIO;
+import com.propertyvista.oapi.xml.StringIO;
+
 @XmlRootElement
 @XmlSeeAlso({ ChargeIO.class, PaymentIO.class })
-public abstract class TransactionIO {
+public abstract class TransactionIO extends AbstractElementIO {
 
+    @XmlAttribute
     public String transactionId;
 
+    @XmlAttribute
     public String leaseId;
 
-    public String description;
+    public StringIO description;
 
-    public BigDecimal amount;
+    public BigDecimalIO amount;
 
     public TransactionIO() {
     }
 
-    public TransactionIO(String description, BigDecimal amount) {
+    public TransactionIO(StringIO description, BigDecimalIO amount) {
         this.description = description;
     }
 

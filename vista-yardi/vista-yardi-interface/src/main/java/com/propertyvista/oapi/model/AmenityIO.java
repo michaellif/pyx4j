@@ -13,10 +13,13 @@
  */
 package com.propertyvista.oapi.model;
 
-public class AmenityIO {
+import com.propertyvista.oapi.xml.AbstractElementIO;
+import com.propertyvista.oapi.xml.StringIO;
 
-    public String name;
+public class AmenityIO extends AbstractElementIO {
 
-    public String description;
+    public StringIO name;
+
+    public StringIO description;
 
 }

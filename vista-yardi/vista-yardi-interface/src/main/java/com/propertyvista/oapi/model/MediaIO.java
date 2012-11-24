@@ -13,6 +13,7 @@
  */
 package com.propertyvista.oapi.model;
 
+import com.propertyvista.oapi.xml.StringIO;
 
 public class MediaIO {
 
@@ -28,14 +29,14 @@ public class MediaIO {
 
     public MediaType mediaType;
 
-    public String caption;
+    public StringIO caption;
 
-    public String mimeType;
+    public StringIO mimeType;
 
-    public String fileId;
+    public StringIO fileId;
 
-    public String youTubeVideoID;
+    public StringIO youTubeVideoID;
 
-    public String url;
+    public StringIO url;
 
 }

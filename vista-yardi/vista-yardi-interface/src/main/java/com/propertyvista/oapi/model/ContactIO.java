@@ -13,11 +13,18 @@
  */
 package com.propertyvista.oapi.model;
 
-public class ContactIO {
+import javax.xml.bind.annotation.XmlAttribute;
 
-    public String email;
+import com.propertyvista.oapi.xml.AbstractElementIO;
+import com.propertyvista.oapi.xml.StringIO;
 
-    public String phone;
+public class ContactIO extends AbstractElementIO {
 
+    @XmlAttribute
     public String name;
+
+    public StringIO email;
+
+    public StringIO phone;
+
 }

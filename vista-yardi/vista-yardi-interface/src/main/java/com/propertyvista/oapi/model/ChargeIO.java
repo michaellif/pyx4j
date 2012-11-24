@@ -13,23 +13,15 @@
  */
 package com.propertyvista.oapi.model;
 
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.xml.LogicalDateXmlAdapter;
+import com.propertyvista.oapi.xml.LogicalDateIO;
 
 public class ChargeIO extends TransactionIO {
 
     public ServiceIO service;
 
-    @XmlSchemaType(name = "date")
-    @XmlJavaTypeAdapter(LogicalDateXmlAdapter.class)
-    public LogicalDate fromDate;
+    public LogicalDateIO fromDate;
 
-    @XmlSchemaType(name = "date")
-    @XmlJavaTypeAdapter(LogicalDateXmlAdapter.class)
-    public LogicalDate toDate;
+    public LogicalDateIO toDate;
 
     public ChargeIO() {
         super();

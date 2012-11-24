@@ -58,7 +58,7 @@ public class RSLeaseService {
         }
         List<LeaseIO> filteredLeases = new ArrayList<LeaseIO>();
         for (LeaseIO lease : allLeases) {
-            if (lease._propertyCode.equals(propertyCode)) {
+            if (lease.propertyCode.equals(propertyCode)) {
                 filteredLeases.add(lease);
             }
         }

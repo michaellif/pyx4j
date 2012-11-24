@@ -7,29 +7,33 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 12, 2012
+ * Created on Nov 24, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi.model;
+package com.propertyvista.oapi.xml;
 
-import com.propertyvista.oapi.xml.BigDecimalIO;
-import com.propertyvista.oapi.xml.StringIO;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlValue;
 
-public class PaymentIO extends TransactionIO {
+public class BooleanIO implements ElementIO {
 
-    //   List<ChargeRS> charges; 
+    @XmlValue
+    public Boolean value;
 
-    public PaymentIO() {
-        super();
+    @XmlAttribute
+    public Action action;
+
+    public BooleanIO() {
     }
 
-    public PaymentIO(BigDecimalIO amount) {
-        this(new StringIO("Payment"), amount);
+    public BooleanIO(Boolean value) {
+        this.value = value;
     }
 
-    public PaymentIO(StringIO description, BigDecimalIO amount) {
-        super(description, amount);
+    @Override
+    public Action getAction() {
+        return action;
     }
 
 }

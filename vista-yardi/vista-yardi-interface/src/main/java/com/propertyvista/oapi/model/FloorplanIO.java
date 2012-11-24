@@ -13,54 +13,51 @@
  */
 package com.propertyvista.oapi.model;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.xml.LogicalDateXmlAdapter;
+import com.propertyvista.oapi.xml.BigDecimalIO;
+import com.propertyvista.oapi.xml.IntegerIO;
+import com.propertyvista.oapi.xml.LogicalDateIO;
+import com.propertyvista.oapi.xml.StringIO;
 
 public class FloorplanIO {
 
     //mandatory for portal
-    public String name;
+    public StringIO name;
 
     //mandatory for portal
-    public String marketingName;
+    public StringIO marketingName;
 
-    public String description;
+    public StringIO description;
 
-    public Integer floorCount;
+    public IntegerIO floorCount;
 
-    public Integer unitCount;
-
-    //mandatory for portal
-    public Integer bedrooms;
-
-    public Integer dens;
+    public IntegerIO unitCount;
 
     //mandatory for portal
-    public Integer bathrooms;
+    public IntegerIO bedrooms;
 
-    public Integer halfBath;
+    public IntegerIO dens;
 
-    public BigDecimal rentFrom;
+    //mandatory for portal
+    public IntegerIO bathrooms;
 
-    public BigDecimal rentTo;
+    public IntegerIO halfBath;
 
-    public Integer sqftFrom;
+    public BigDecimalIO rentFrom;
 
-    public Integer sqftTo;
+    public BigDecimalIO rentTo;
 
-    @XmlSchemaType(name = "date")
-    @XmlJavaTypeAdapter(LogicalDateXmlAdapter.class)
-    public LogicalDate availableFrom;
+    public IntegerIO sqftFrom;
+
+    public IntegerIO sqftTo;
+
+    public LogicalDateIO availableFrom;
 
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "amenity", type = AmenityIO.class))

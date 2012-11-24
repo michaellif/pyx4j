@@ -75,7 +75,7 @@ public class LeaseService {
         for (LeaseParticipant participant : lease.leaseCustomers()) {
             TenantMarshaller marshaller = new TenantMarshaller();
             TenantIO tenantIO = marshaller.unmarshal(participant);
-            tenantIO._leaseId = leaseId;
+            tenantIO.leaseId = leaseId;
             tenantsIO.add(tenantIO);
         }
 

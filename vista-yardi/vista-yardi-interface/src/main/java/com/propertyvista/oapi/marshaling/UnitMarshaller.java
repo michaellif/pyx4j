@@ -15,16 +15,18 @@ package com.propertyvista.oapi.marshaling;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.oapi.model.UnitIO;
+import com.propertyvista.oapi.xml.IntegerIO;
+import com.propertyvista.oapi.xml.StringIO;
 
 public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
 
     @Override
     public UnitIO unmarshal(AptUnit unit) {
         UnitIO unitIO = new UnitIO();
-        unitIO.floorplanName = unit.floorplan().name().getValue();
+        unitIO.floorplanName = new StringIO(unit.floorplan().name().getValue());
         unitIO.number = unit.info().number().getValue();
-        unitIO.baths = unit.floorplan().bathrooms().getValue();
-        unitIO.beds = unit.floorplan().bedrooms().getValue();
+        unitIO.baths = new IntegerIO(unit.floorplan().bathrooms().getValue());
+        unitIO.beds = new IntegerIO(unit.floorplan().bedrooms().getValue());
         return unitIO;
     }
 

@@ -13,26 +13,30 @@
  */
 package com.propertyvista.oapi.model;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.propertyvista.oapi.xml.LogicalDateIO;
 
 @XmlRootElement(name = "lease")
 public class LeaseIO {
 
+    @XmlAttribute
+    public String propertyCode;
+
+    @XmlAttribute
+    public String unitNumber;
+
+    @XmlAttribute
     public String leaseId;
 
-    public String status;
+    public LeaseStatusIO status;
 
-    public String paymentFrequency;
+    public PaymentFrequencyIO paymentFrequency;
 
-    public int numberOfCycles;
+    public LogicalDateIO leaseFrom;
 
-    public String leaseFrom;
-
-    public String leaseTo;
-
-    public String _propertyCode;
-
-    public String _unitNumber;
+    public LogicalDateIO leaseTo;
 
     public LeaseIO() {
     }

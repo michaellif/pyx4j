@@ -19,26 +19,29 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.oapi.model.ChargeIO;
+import com.propertyvista.oapi.xml.BigDecimalIO;
+import com.propertyvista.oapi.xml.LogicalDateIO;
+import com.propertyvista.oapi.xml.StringIO;
 
 public class ChargeMarshaller implements Marshaller<InvoiceProductCharge, ChargeIO> {
 
     @Override
-    public ChargeIO unmarshal(InvoiceProductCharge v) {
+    public ChargeIO unmarshal(InvoiceProductCharge charge) {
         ChargeIO chargeRS = new ChargeIO();
-        chargeRS.amount = v.amount().getValue();
-        chargeRS.description = v.description().getValue();
-        chargeRS.fromDate = v.fromDate().getValue();
-        chargeRS.toDate = v.toDate().getValue();
+        chargeRS.amount = new BigDecimalIO(charge.amount().getValue());
+        chargeRS.description = new StringIO(charge.description().getValue());
+        chargeRS.fromDate = new LogicalDateIO(charge.fromDate().getValue());
+        chargeRS.toDate = new LogicalDateIO(charge.toDate().getValue());
         return chargeRS;
     }
 
     @Override
     public InvoiceProductCharge marshal(ChargeIO c) {
         InvoiceProductCharge charge = EntityFactory.create(InvoiceProductCharge.class);
-        charge.amount().setValue(c.amount);
-        charge.description().setValue(c.description);
-        charge.fromDate().setValue(c.fromDate); // Transaction.ChargeDetail.ServiceFromDate
-        charge.toDate().setValue(c.toDate); // Transaction.ChargeDetail.ServiceToDate
+        charge.amount().setValue(c.amount.value);
+        charge.description().setValue(c.description.value);
+        charge.fromDate().setValue(c.fromDate.value); // Transaction.ChargeDetail.ServiceFromDate
+        charge.toDate().setValue(c.toDate.value); // Transaction.ChargeDetail.ServiceToDate
         charge.taxTotal().setValue(new BigDecimal("0.00")); // Tax ??
         return charge;
     }

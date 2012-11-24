@@ -13,15 +13,22 @@
  */
 package com.propertyvista.oapi.model;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "tenant")
 public class TenantIO {
 
+    @XmlAttribute
+    public String leaseId;
+
+    @XmlAttribute
     public String firstName;
 
+    @XmlAttribute
     public String middleName;
 
+    @XmlAttribute
     public String lastName;
 
     public String birthDate;
@@ -31,8 +38,6 @@ public class TenantIO {
     public String email;
 
     public String phone;
-
-    public String _leaseId;
 
     public TenantIO() {
     }

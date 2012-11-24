@@ -13,12 +13,14 @@
  */
 package com.propertyvista.oapi.model;
 
+import com.propertyvista.oapi.xml.DoubleIO;
+
 public class GeoLocationIO {
 
     //mandatory for portal
-    public double latitude;
+    public DoubleIO latitude;
 
     //mandatory for portal
-    public double longitude;
+    public DoubleIO longitude;
 
 }

@@ -15,6 +15,9 @@ package com.propertyvista.oapi.marshaling;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.oapi.model.LeaseIO;
+import com.propertyvista.oapi.model.LeaseStatusIO;
+import com.propertyvista.oapi.model.PaymentFrequencyIO;
+import com.propertyvista.oapi.xml.LogicalDateIO;
 
 public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
 
@@ -22,13 +25,12 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
     public LeaseIO unmarshal(Lease lease) {
         LeaseIO leaseIO = new LeaseIO();
         leaseIO.leaseId = lease.leaseId().getValue();
-        leaseIO.status = lease.status().getValue().toString();
-        leaseIO.paymentFrequency = lease.paymentFrequency().getValue().name();
-        leaseIO.numberOfCycles = lease.paymentFrequency().getValue().getNumOfCycles();
-        leaseIO.leaseFrom = lease.leaseFrom().getValue().toString();
-        leaseIO.leaseTo = lease.leaseTo().getValue().toString();
-        leaseIO._propertyCode = lease.unit().building().propertyCode().getValue();
-        leaseIO._unitNumber = lease.unit().info().number().getValue();
+        leaseIO.status = new LeaseStatusIO(lease.status().getValue());
+        leaseIO.paymentFrequency = new PaymentFrequencyIO(lease.paymentFrequency().getValue());
+        leaseIO.leaseFrom = new LogicalDateIO(lease.leaseFrom().getValue());
+        leaseIO.leaseTo = new LogicalDateIO(lease.leaseTo().getValue());
+        leaseIO.propertyCode = lease.unit().building().propertyCode().getValue();
+        leaseIO.unitNumber = lease.unit().info().number().getValue();
         return leaseIO;
     }
 

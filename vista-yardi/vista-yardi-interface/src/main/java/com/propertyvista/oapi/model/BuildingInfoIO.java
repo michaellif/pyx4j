@@ -12,58 +12,40 @@
  */
 package com.propertyvista.oapi.model;
 
-import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.ConstructionType;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.FloorType;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.FoundationType;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.WaterSupply;
+import com.propertyvista.oapi.xml.AbstractElementIO;
+import com.propertyvista.oapi.xml.BooleanIO;
+import com.propertyvista.oapi.xml.StringIO;
 
-public class BuildingInfoIO {
-
-    public enum BuildingType {
-
-        agricultural,
-
-        commercial,
-
-        mixed_residential,
-
-        residential,
-
-        industrial,
-
-        military,
-
-        parking_storage,
-
-        other;
-
-    }
+public class BuildingInfoIO extends AbstractElementIO {
 
     //mandatory for portal
-    public String name;
+    public StringIO name;
 
-    public String description;
+    public StringIO description;
 
-    public BuildingType buildingType;
+    public BuildingTypeIO buildingType;
+
+    public BuildingStructureTypeIO structureType;
 
     //mandatory for portal
     public AddressIO address;
 
-    public String shape;
+    public StringIO shape;
 
-    public String totalStoreys;
+    public StringIO totalStoreys;
 
-    public String residentialStoreys;
-
-    public BuildingInfo.StructureType structureType;
+    public StringIO residentialStoreys;
 
     // TODO this can later be date
 //    @XmlSchemaType(name = "date")
 //    @XmlElement(required = true)
 //    @XmlJavaTypeAdapter(LogicalDateXmlAdapter.class)
 //    public Date structureBuildYear;
-    public String structureBuildYear;
+    public StringIO structureBuildYear;
 
     public ConstructionType constructionType;
 
@@ -71,13 +53,13 @@ public class BuildingInfoIO {
 
     public FloorType floorType;
 
-    public String landArea;
+    public StringIO landArea;
 
     public WaterSupply waterSupply;
 
-    public Boolean centralAir;
+    public BooleanIO centralAir;
 
-    public Boolean centralHeat;
+    public BooleanIO centralHeat;
 
     public Integer unitCount;
 

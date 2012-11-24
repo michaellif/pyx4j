@@ -19,11 +19,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 
+import com.propertyvista.oapi.xml.StringIO;
+
 public class MarketingIO {
 
-    public String name;
+    public StringIO name;
 
-    public String description;
+    public StringIO description;
 
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "blurb", type = AdvertisingBlurbIO.class))

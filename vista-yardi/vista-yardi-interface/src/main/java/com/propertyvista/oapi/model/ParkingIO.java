@@ -13,10 +13,15 @@
  */
 package com.propertyvista.oapi.model;
 
+import javax.xml.bind.annotation.XmlAttribute;
+
+import com.propertyvista.oapi.xml.StringIO;
+
 public class ParkingIO {
 
+    @XmlAttribute
     public String name;
 
-    public String description;
+    public StringIO description;
 
 }

@@ -22,8 +22,10 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.propertyvista.oapi.xml.AbstractElementIO;
+
 @XmlRootElement(name = "building")
-public class BuildingIO {
+public class BuildingIO extends AbstractElementIO {
 
     //mandatory for portal, unique identifier
     @XmlAttribute
@@ -31,6 +33,8 @@ public class BuildingIO {
 
     public BuildingInfoIO info;
 
+    @XmlElementWrapper
+    @XmlElements(@XmlElement(name = "contact", type = ContactIO.class))
     public List<ContactIO> contacts = new ArrayList<ContactIO>();
 
     public MarketingIO marketing;
