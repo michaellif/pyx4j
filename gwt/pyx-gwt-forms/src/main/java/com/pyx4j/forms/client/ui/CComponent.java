@@ -44,6 +44,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -563,7 +564,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     }
 
     public final void setValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
-        if (!isValuesEquals(getValue(), value)) {
+        //In case of CComponent model represented by IEntity, disable check for equality because value may be the same instance that is returned by getValue()
+        if (value instanceof IEntity || !isValuesEquals(getValue(), value)) {
             this.value = preprocessValue(value, fireEvent, populate);
             setNativeValue(this.value);
             revalidate();
