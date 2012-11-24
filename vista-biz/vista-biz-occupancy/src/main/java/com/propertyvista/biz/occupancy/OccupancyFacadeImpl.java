@@ -440,7 +440,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         occupiedSegmentCriteria.add(PropertyCriterion.eq(occupiedSegmentCriteria.proto().unit(), unitPk));
         occupiedSegmentCriteria.add(PropertyCriterion.eq(occupiedSegmentCriteria.proto().lease(), leaseId));
         occupiedSegmentCriteria.add(PropertyCriterion.eq(occupiedSegmentCriteria.proto().status(), AptUnitOccupancySegment.Status.occupied));
-        AptUnitOccupancySegment occupiedSegment = Persistence.service().retrieve(occupiedSegmentCriteria);
+        AptUnitOccupancySegment occupiedSegment = occupiedSegment = Persistence.service().retrieve(occupiedSegmentCriteria);
         if (occupiedSegment == null) {
             throw new OccupancyOperationException(
                     i18n.tr("Occupied segment was not found. Please ensure that the unit is not leased, reserved or scheduled for renovation"));
@@ -454,6 +454,9 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         cal.setTime(occupiedSegment.dateTo().getValue());
         cal.add(GregorianCalendar.DAY_OF_YEAR, 1);
         LogicalDate nextSegmentStartDay = new LogicalDate(cal.getTime());
+
+        occupiedSegment.dateTo().setValue(moveOutDate);
+        Persistence.service().merge(occupiedSegment);
 
         AptUnitOccupancySegment nextSegment = retrieveOccupancySegment(unitPk, nextSegmentStartDay);
         if (nextSegment == null) {
@@ -476,9 +479,6 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             Persistence.service().merge(nextSegment);
             break;
         case reserved:
-            if (!nextSegment.lease().equals(leaseId)) {
-                return; // nothing to to - unit is reserved already!
-            }
             if (nextSegment.lease().leaseFrom().getValue().getTime() < dayAfterMoveOutDate.getTime()) {
                 throw new OccupancyOperationException(i18n.tr("It's imposible to move out, since the unit is reserved on move out date"));
             }
@@ -486,9 +486,6 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             Persistence.service().merge(nextSegment);
             break;
         case occupied:
-            if (!nextSegment.lease().equals(leaseId)) {
-                return; // nothing to to - unit is leased already!
-            }
             if (nextSegment.dateFrom().getValue().before(dayAfterMoveOutDate)) {
                 throw new OccupancyOperationException(i18n.tr("It's imposible to move out, since the unit is leased on move out date"));
             } else {
@@ -527,10 +524,6 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         if (nextSegment.dateTo().getValue().getTime() <= occupiedSegment.dateTo().getValue().getTime()) {
             Persistence.service().delete(nextSegment);
         }
-
-        occupiedSegment.dateTo().setValue(moveOutDate);
-        Persistence.service().merge(occupiedSegment);
-
         new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
         setUnitAvailableFrom(unitPk, unitAvailableFrom);
     }
