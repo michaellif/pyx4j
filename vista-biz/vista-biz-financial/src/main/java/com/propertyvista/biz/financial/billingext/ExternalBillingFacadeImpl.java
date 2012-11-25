@@ -11,14 +11,17 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.biz.financial.ar;
+package com.propertyvista.biz.financial.billingext;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.biz.financial.ar.ARDateUtils;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge.Period;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -39,11 +42,15 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
         return true;
     }
 
+    @Override
+    public Bill runBilling(Lease lease) {
+        return ExternalBillProducer.produceBill(lease);
+    }
+
     private BillingAccount getBillingAccount(final String leaseId) {
         EntityQueryCriteria<Lease> leaseQry = EntityQueryCriteria.create(Lease.class);
         leaseQry.add(PropertyCriterion.eq(leaseQry.proto().leaseId(), leaseId));
-//        Lease lease = Persistence.service().retrieve(leaseQry);
-//        return lease == null ? null : lease.billingAccount();
-        return null;
+        Lease lease = Persistence.service().retrieve(leaseQry);
+        return lease == null ? null : lease.billingAccount();
     }
 }

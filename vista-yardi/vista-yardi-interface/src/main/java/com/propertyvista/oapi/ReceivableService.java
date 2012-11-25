@@ -16,7 +16,7 @@ package com.propertyvista.oapi;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.financial.ar.ExternalBillingFacade;
+import com.propertyvista.biz.financial.billingext.ExternalBillingFacade;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.oapi.marshaling.ChargeMarshaller;
 import com.propertyvista.oapi.model.ChargeIO;

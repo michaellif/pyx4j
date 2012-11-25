@@ -13,13 +13,13 @@
  */
 package com.propertyvista.biz.financial.billingext;
 
-import java.math.BigDecimal;
-
-import org.junit.Ignore;
+import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.ExternalTestBase;
+import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.billing.BillTester;
+import com.propertyvista.domain.financial.billing.Bill;
 
-@Ignore
 public class ExternalBillingTest extends ExternalTestBase {
 
     @Override
@@ -29,10 +29,33 @@ public class ExternalBillingTest extends ExternalTestBase {
     }
 
     public void testScenatio() {
-        setDate("15-May-2011");
-        createLease("1-Mar-2009", "31-Aug-2011", null, new BigDecimal("300.00"));
+        setDate("15-Sep-2011");
+        createLease("1-Oct-2011", "31-Aug-2012");
 
-//        ReceivableServiceImpl service = new ReceivableServiceImpl();
-//        PropertyFacade f;
+//        approveApplication(false);
+        activateLease();
+
+        postExternalCharge("-1000.00", "charge 1", "10-Sep-2011", "1-Oct-2011");
+        postExternalCharge("-100.00", "charge 2", "15-Sep-2011", "1-Oct-2011");
+        postExternalCharge("200.00", "refund 1", "20-Sep-2011", "1-Nov-2011");
+
+        setDate("17-Sep-2011");
+        Bill bill = runExternalBilling();
+
+        // @formatter:off
+        new BillTester(bill, true).
+        billSequenceNumber(1).
+        previousBillSequenceNumber(null).
+        // TODO bill type
+//        billType(Bill.BillType.Regular).
+        billingPeriodStartDate("1-Oct-2011").
+        billingPeriodEndDate("31-Oct-2011").
+        numOfProductCharges(3).
+        recurringFeatureCharges("-900.00").
+        taxes("0.00").
+        totalDueAmount("-900.00");
+        // @formatter:on
+
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
     }
 }

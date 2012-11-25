@@ -26,11 +26,11 @@ public class ARDateUtils {
 
     private static final I18n i18n = I18n.get(ARDateUtils.class);
 
-    static LogicalDate calculateDueDate(BillingAccount billingAccount) {
+    public static LogicalDate calculateDueDate(BillingAccount billingAccount) {
         return calculateDueDate(billingAccount, new LogicalDate(SysDateManager.getSysDate()));
     }
 
-    static LogicalDate calculateDueDate(BillingAccount billingAccount, LogicalDate postDate) {
+    public static LogicalDate calculateDueDate(BillingAccount billingAccount, LogicalDate postDate) {
         LogicalDate dueDate = null;
 
         switch (billingAccount.billingType().paymentFrequency().getValue()) {

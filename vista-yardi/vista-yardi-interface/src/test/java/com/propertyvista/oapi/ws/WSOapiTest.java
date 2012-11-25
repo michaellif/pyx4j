@@ -21,6 +21,7 @@ import javax.xml.ws.Endpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.oapi.PortAllocator;
 
 public class WSOapiTest {
@@ -63,5 +64,9 @@ public class WSOapiTest {
         con.connect();
         int code = con.getResponseCode();
         return code;
+    }
+
+    void initPersistenceLayer() {
+        VistaTestDBSetup.init();
     }
 }

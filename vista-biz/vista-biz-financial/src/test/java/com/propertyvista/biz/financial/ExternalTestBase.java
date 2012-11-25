@@ -18,9 +18,15 @@ import java.math.BigDecimal;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.server.dev.DataDump;
 
-import com.propertyvista.biz.financial.ar.ExternalBillingFacade;
+import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.billingext.ExternalBillingFacade;
+import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class ExternalTestBase extends FinancialTestBase {
 
@@ -37,5 +43,34 @@ public class ExternalTestBase extends FinancialTestBase {
         if (ServerSideFactory.create(ExternalBillingFacade.class).reconcileCharge(charge, retrieveLease().leaseId().getValue())) {
             Persistence.service().persist(charge);
         }
+    }
+
+    protected Bill runExternalBilling() {
+        Lease lease = retrieveLease();
+
+        DataDump.dump("leaseT", lease);
+
+        Bill bill = ServerSideFactory.create(ExternalBillingFacade.class).runBilling(lease);
+
+        Persistence.service().commit();
+
+        return bill;
+    }
+
+    @Override
+    protected Bill approveApplication(boolean printBill) {
+        // do nothing; for external billing use activateLease()
+        return ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease()); //super.approveApplication(printBill);
+    }
+
+    @Override
+    protected void activateLease() {
+        Lease lease = retrieveLeaseForEdit();
+
+        lease.status().setValue(Lease.Status.Approved);
+        ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+        ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
+
+        super.activateLease();
     }
 }

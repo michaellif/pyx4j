@@ -262,7 +262,7 @@ public class BillingManager {
         }
     }
 
-    static BillingCycle getNextBillingCycle(Lease lease) {
+    public static BillingCycle getNextBillingCycle(Lease lease) {
         Bill previousBill = getLatestConfirmedBill(lease);
         BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, lease.billingAccount().getPrimaryKey());
         Persistence.service().retrieve(lease.unit());

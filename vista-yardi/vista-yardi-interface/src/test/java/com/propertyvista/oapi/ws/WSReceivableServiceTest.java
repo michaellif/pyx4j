@@ -45,6 +45,7 @@ public class WSReceivableServiceTest extends WSOapiTest {
     @Before
     public void init() throws Exception {
         publish(WSReceivableService.class);
+        initPersistenceLayer();
     }
 
     @Test
