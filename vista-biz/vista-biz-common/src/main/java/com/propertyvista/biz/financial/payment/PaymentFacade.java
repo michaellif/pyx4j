@@ -13,16 +13,10 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.util.List;
-
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 public interface PaymentFacade {
@@ -34,14 +28,6 @@ public interface PaymentFacade {
     boolean isElectronicPaymentsAllowed(Lease leaseId);
 
     boolean isElectronicPaymentsAllowed(LeaseTerm leaseTermId);
-
-    LeasePaymentMethod persistPaymentMethod(Building building, LeasePaymentMethod paymentMethod);
-
-    void deletePaymentMethod(LeasePaymentMethod paymentMethod);
-
-    List<LeasePaymentMethod> retrievePaymentMethods(LeaseTermParticipant<?> participant);
-
-    List<LeasePaymentMethod> retrievePaymentMethods(Customer customer);
 
     PaymentRecord persistPayment(PaymentRecord paymentRecord);
 

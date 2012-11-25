@@ -69,7 +69,8 @@ public class PaymentTestBase extends FinancialTestBase {
     }
 
     protected List<LeasePaymentMethod> retrieveProfilePaymentMethodsSerializable() {
-        List<LeasePaymentMethod> profileMethods = ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(tenantDataModel.getTenantCustomer());
+        List<LeasePaymentMethod> profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
+                tenantDataModel.getTenantCustomer());
         RpcEntityServiceFilter.filterRpcTransient((Serializable) profileMethods);
         return profileMethods;
     }

@@ -24,7 +24,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.payment.PaymentFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -74,7 +74,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
         Validate.isTrue(PaymentType.avalableInPortal().contains(entity.type().getValue()));
         entity.isOneTimePayment().setValue(Boolean.FALSE);
 
-        ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(tenantInLease.leaseTermV().holder().lease().unit().building(), entity);
+        ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(tenantInLease.leaseTermV().holder().lease().unit().building(), entity);
 
         if (dto.isPreauthorized().isBooleanTrue() || tenantInLease.leaseParticipant().preauthorizedPayment().isNull()) {
             if (!tenantInLease.leaseParticipant().preauthorizedPayment().equals(entity)) {
@@ -87,7 +87,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         LeasePaymentMethod paymentMethod = Persistence.service().retrieve(entityClass, entityId);
-        ServerSideFactory.create(PaymentFacade.class).deletePaymentMethod(paymentMethod);
+        ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(paymentMethod);
         Persistence.service().commit();
         callback.onSuccess(Boolean.TRUE);
     }

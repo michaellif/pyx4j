@@ -32,6 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -157,7 +158,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseTermParticipant.class).getCaption() + "' " + payer.getPrimaryKey()
                     + " NotFound");
         }
-        callback.onSuccess(new Vector<LeasePaymentMethod>(ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(payer)));
+        callback.onSuccess(new Vector<LeasePaymentMethod>(ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(payer)));
     }
 
     // Payment operations:

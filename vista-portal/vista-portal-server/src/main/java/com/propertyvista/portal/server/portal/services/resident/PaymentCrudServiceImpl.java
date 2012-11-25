@@ -30,6 +30,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
@@ -154,7 +155,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
-        callback.onSuccess(new Vector<LeasePaymentMethod>(ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(
+        callback.onSuccess(new Vector<LeasePaymentMethod>(ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
                 TenantAppContext.getCurrentUserTenantInLease())));
     }
 }
