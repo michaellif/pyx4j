@@ -20,15 +20,20 @@
  */
 package com.pyx4j.essentials.server.csv;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +47,10 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.impl.PrimitiveHandler;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.rpc.ImportColumn;
@@ -56,6 +63,8 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
     private final static Logger log = LoggerFactory.getLogger(EntityCSVReciver.class);
 
     private static final I18n i18n = I18n.get(EntityCSVReciver.class);
+
+    public static final String DEFAULT_COLLECTION_DELIM = ";";
 
     private final Class<E> entityClass;
 
@@ -86,6 +95,8 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
     private FIFO<String[]> headersStack;
 
     private int currentRow = 0;
+
+    private String collectionDelimiter = DEFAULT_COLLECTION_DELIM;
 
     public static <T extends IEntity> EntityCSVReciver<T> create(Class<T> entityClass) {
         return new EntityCSVReciver<T>(entityClass);
@@ -184,6 +195,14 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
     public EntityCSVReciver<E> verifyRequiredValues(boolean verifyRequiredValues) {
         setVerifyRequiredValues(verifyRequiredValues);
         return this;
+    }
+
+    public String getCollectionDelimiter() {
+        return collectionDelimiter;
+    }
+
+    public void setCollectionDelimiter(String collectionDelimiter) {
+        this.collectionDelimiter = collectionDelimiter;
     }
 
     public int getCurrentRow() {
@@ -424,9 +443,21 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
             int i = 0;
             for (Path path : headersPath) {
                 if (path != null) {
-                    @SuppressWarnings("rawtypes")
-                    IPrimitive primitive = (IPrimitive<?>) entity.getMember(path);
-                    primitive.setValue(parsValue(primitive, value[i]));
+                    IObject<?> member = entity.getMember(path);
+                    switch (member.getMeta().getObjectClassType()) {
+                    case Primitive:
+                        @SuppressWarnings("rawtypes")
+                        IPrimitive primitive = (IPrimitive<?>) member;
+                        primitive.setValue(parsePrimitive(primitive, primitive.getValueClass(), value[i]));
+                        break;
+                    case PrimitiveSet:
+                        @SuppressWarnings("rawtypes")
+                        IPrimitiveSet primitiveSet = (IPrimitiveSet<?>) member;
+                        primitiveSet.setCollectionValue(parsCollectionValue(primitiveSet, value[i]));
+                        break;
+                    default:
+                        throw new Error("TODO implement this");
+                    }
                 }
                 i++;
                 if (i >= value.length) {
@@ -456,29 +487,49 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         }
     }
 
-    protected Object parsValue(IPrimitive<?> primitive, String value) {
-        if (LogicalDate.class.isAssignableFrom(primitive.getValueClass())) {
+    protected Object parsePrimitive(IObject<?> member, Class<?> valueClass, String value) {
+        if (valueClass.isAssignableFrom(byte[].class)) {
+            return new Base64().decode(value);
+        } else if (valueClass.isAssignableFrom(java.sql.Time.class)) {
+            SimpleDateFormat tFormat = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+            try {
+                return new java.sql.Time(tFormat.parse(value).getTime());
+            } catch (ParseException e) {
+                throw new Error("Error parsing time [" + value + "]", e);
+            }
+        } else if (LogicalDate.class.isAssignableFrom(valueClass)) {
             if ("".equals(value)) {
                 return null;
             } else {
                 return new LogicalDate(DateUtils.detectDateformat(value));
             }
-        } else if (Date.class.isAssignableFrom(primitive.getValueClass())) {
+        } else if (valueClass.isAssignableFrom(Date.class)) {
             if ("".equals(value)) {
                 return null;
             } else {
                 return DateUtils.detectDateformat(value);
             }
-        } else if (Number.class.isAssignableFrom(primitive.getValueClass())) {
+        } else if (Number.class.isAssignableFrom(valueClass)) {
             if ("".equals(value)) {
                 return null;
             } else {
                 // Is Local English?
-                return primitive.parse(value.replaceAll(",", ""));
+                return PrimitiveHandler.parsString(valueClass, value.replaceAll(",", ""));
             }
         } else {
-            return primitive.parse(value);
+            return PrimitiveHandler.parsString(valueClass, value);
         }
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected Collection<?> parsCollectionValue(IPrimitiveSet primitiveSet, String value) {
+        Collection returnValue = new ArrayList();
+        StringTokenizer st = new StringTokenizer(value, getCollectionDelimiter());
+        while (st.hasMoreTokens()) {
+            String str = st.nextToken();
+            returnValue.add(parsePrimitive(primitiveSet, primitiveSet.getValueClass(), str));
+        }
+        return returnValue;
     }
 
     public List<E> getEntities() {
