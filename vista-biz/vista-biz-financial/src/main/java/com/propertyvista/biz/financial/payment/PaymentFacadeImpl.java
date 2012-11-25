@@ -72,7 +72,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
         criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().billingAccount(), paymentRecord.billingAccount()));
         Building building = Persistence.service().retrieve(criteria);
-        PaymentMethodPersister.persistPaymentMethod(building, paymentRecord.paymentMethod());
+        PaymentMethodPersister.persistLeasePaymentMethod(building, paymentRecord.paymentMethod());
 
         if (paymentRecord.id().isNull()) {
             paymentRecord.createdDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));

@@ -19,12 +19,15 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
+import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSource;
+import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSourceBuilding;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.CashInfo;
 import com.propertyvista.domain.payment.CheckInfo;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -60,7 +63,7 @@ class PaymentMethodPersister {
         return false;
     }
 
-    static LeasePaymentMethod persistPaymentMethod(Building building, LeasePaymentMethod paymentMethod) {
+    static LeasePaymentMethod persistLeasePaymentMethod(Building building, LeasePaymentMethod paymentMethod) {
         LeasePaymentMethod origPaymentMethod = null;
         if (!paymentMethod.id().isNull()) {
             // Keep history of payment methods that were used.
@@ -90,7 +93,36 @@ class PaymentMethodPersister {
                     origPaymentMethod = null;
                 }
             }
-        } else {
+        }
+
+        Validate.isTrue(!paymentMethod.customer().isNull(), "Owner (customer) is required for PaymentMethod");
+
+        return persistPaymentMethod(paymentMethod, origPaymentMethod, new MerchantTerminalSourceBuilding(building));
+    }
+
+    static InsurancePaymentMethod persistInsurancePaymentMethod(InsurancePaymentMethod paymentMethod) {
+        InsurancePaymentMethod origPaymentMethod = null;
+        if (!paymentMethod.id().isNull()) {
+            // Keep history of payment methods that were used.
+            origPaymentMethod = Persistence.service().retrieve(InsurancePaymentMethod.class, paymentMethod.getPrimaryKey());
+            if (isAccountNumberChange(paymentMethod, origPaymentMethod)) {
+                //TODO
+            }
+        }
+        Validate.isTrue(!paymentMethod.tenant().isNull(), "Owner (tenant) is required for PaymentMethod");
+
+        return persistPaymentMethod(paymentMethod, origPaymentMethod, new MerchantTerminalSource() {
+
+            @Override
+            public String getMerchantTerminalId() {
+                // TODO find the terminal Id
+                return "BIRCHWT7";
+            }
+        });
+    }
+
+    private static <E extends PaymentMethod> E persistPaymentMethod(E paymentMethod, E origPaymentMethod, MerchantTerminalSource merchantTerminalSource) {
+        if (paymentMethod.id().isNull()) {
             // New Value validation
             switch (paymentMethod.type().getValue()) {
             case CreditCard:
@@ -103,8 +135,6 @@ class PaymentMethodPersister {
         }
 
         paymentMethod.isDeleted().setValue(Boolean.FALSE);
-
-        Validate.isTrue(!paymentMethod.customer().isNull(), "Owner (customer) is required for PaymentMethod");
 
         switch (paymentMethod.type().getValue()) {
         case Echeck:
@@ -157,7 +187,7 @@ class PaymentMethodPersister {
                 needUpdate |= (!EntityGraph.membersEquals(cc, origPaymentMethod.details().cast(), cc.expiryDate()));
             }
             if (needUpdate) {
-                CreditCardProcessor.persistToken(building, cc);
+                CreditCardProcessor.persistToken(merchantTerminalSource.getMerchantTerminalId(), cc);
                 Persistence.service().merge(cc);
             }
             break;

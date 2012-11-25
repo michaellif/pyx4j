@@ -15,10 +15,12 @@ package com.propertyvista.biz.financial.payment;
 
 import java.util.List;
 
+import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 public interface PaymentMethodFacade {
 
@@ -29,4 +31,8 @@ public interface PaymentMethodFacade {
     List<LeasePaymentMethod> retrieveLeasePaymentMethods(LeaseTermParticipant<?> participant);
 
     List<LeasePaymentMethod> retrieveLeasePaymentMethods(Customer customer);
+
+    InsurancePaymentMethod persistInsurancePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId);
+
+    InsurancePaymentMethod retrieveInsurancePaymentMethod(Tenant tenantId);
 }

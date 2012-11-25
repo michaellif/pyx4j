@@ -13,9 +13,9 @@
  */
 package com.propertyvista.biz.tenant.insurance;
 
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.config.server.ServerSideFactory;
 
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -23,14 +23,11 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 class TenantSurePayments {
 
     static InsurancePaymentMethod getPaymentMethod(Tenant tenantId) {
-        EntityQueryCriteria<InsurancePaymentMethod> criteria = EntityQueryCriteria.create(InsurancePaymentMethod.class);
-        criteria.eq(criteria.proto().tenant(), tenantId);
-        criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
-        return Persistence.service().retrieve(criteria);
+        return ServerSideFactory.create(PaymentMethodFacade.class).retrieveInsurancePaymentMethod(tenantId);
     }
 
     static InsurancePaymentMethod updatePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId) {
-        return null;
+        return ServerSideFactory.create(PaymentMethodFacade.class).persistInsurancePaymentMethod(paymentMethod, tenantId);
     }
 
     static InsuranceTenantSureTransaction preAuthorization(InsuranceTenantSureTransaction transaction) {

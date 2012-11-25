@@ -51,6 +51,28 @@ class CreditCardProcessor {
 
     private static final I18n i18n = I18n.get(CreditCardProcessor.class);
 
+    static interface MerchantTerminalSource {
+
+        String getMerchantTerminalId();
+
+    }
+
+    static class MerchantTerminalSourceBuilding implements MerchantTerminalSource {
+
+        Building building;
+
+        public MerchantTerminalSourceBuilding(Building building) {
+            this.building = building;
+        }
+
+        @Override
+        public String getMerchantTerminalId() {
+            MerchantAccount account = PaymentUtils.retrieveMerchantAccount(building);
+            return account.merchantTerminalId().getValue();
+        }
+
+    }
+
     static PaymentRecord realTimeSale(final PaymentRecord paymentRecord) {
         return TaskRunner.runAutonomousTransation(new Callable<PaymentRecord>() {
             @Override
@@ -111,11 +133,6 @@ class CreditCardProcessor {
             Persistence.service().merge(paymentRecord);
             Persistence.service().commit();
         }
-    }
-
-    public static void persistToken(Building building, CreditCardInfo cc) {
-        MerchantAccount account = PaymentUtils.retrieveMerchantAccount(building);
-        persistToken(account.merchantTerminalId().getValue(), cc);
     }
 
     static void persistToken(String merchantTerminalId, CreditCardInfo cc) {

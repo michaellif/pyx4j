@@ -60,6 +60,10 @@ public enum PaymentType {
         return EnumSet.of(Echeck, CreditCard);
     }
 
+    public static EnumSet<PaymentType> avalableInInsurance() {
+        return EnumSet.of(CreditCard);
+    }
+
     public static EnumSet<PaymentType> electronicPayments() {
         return EnumSet.of(Echeck, CreditCard);
     }
