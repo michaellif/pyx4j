@@ -1,12 +1,14 @@
 package com.pyx4j.svg.j2se.basic;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.svg.GetSVGDocument;
+import org.w3c.dom.svg.SVGElement;
 
 import com.pyx4j.svg.basic.Text;
 
 public class TextImpl extends ShapeImpl implements Text {
 
-    private final String text;
+    private String text;
 
     public TextImpl(Document document, String text, int x, int y) {
         super(document.createElementNS(SvgRootImpl.SVG_NAMESPACE, "text"));
@@ -24,6 +26,10 @@ public class TextImpl extends ShapeImpl implements Text {
         getElement().setAttribute("font", font);
     }
 
+    public void setFontSize(String fontSize) {
+        getElement().setAttribute("font-size", fontSize);
+    }
+
     //possible values are :     start | middle | end |  inherit (think enumeration)
     public void setTextAnchor(String anchor) {
         getElement().setAttribute("text-anchor", anchor);
@@ -33,5 +39,10 @@ public class TextImpl extends ShapeImpl implements Text {
     public String getTextValue() {
         return text;
     }
-
+    
+    public void setTextValue(String text) {
+    	SVGElement txt = (SVGElement)getElement().getOwnerDocument().getElementById(getId());
+     	txt.setTextContent(text);
+     	this.text = text;
+    }
 }

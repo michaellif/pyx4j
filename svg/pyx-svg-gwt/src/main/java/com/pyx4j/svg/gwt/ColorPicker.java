@@ -20,7 +20,10 @@
  */
 package com.pyx4j.svg.gwt;
 
+import java.awt.Color;
+
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.pyx4j.svg.basic.Circle;
 import com.pyx4j.svg.basic.Defs;
@@ -28,12 +31,14 @@ import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.IsSvgElement;
 import com.pyx4j.svg.basic.LinearGradient;
 import com.pyx4j.svg.basic.Path;
+import com.pyx4j.svg.basic.Rect;
 import com.pyx4j.svg.basic.Stop;
 import com.pyx4j.svg.basic.SvgElement;
 import com.pyx4j.svg.basic.SvgFactory;
+import com.pyx4j.svg.basic.Text;
 import com.pyx4j.svg.gwt.event.MouseEventHandler;
 import com.pyx4j.svg.util.Utils;
-//import com.pyx4j.commons.css.ColorUtil;
+import com.pyx4j.commons.css.ColorUtil;
 
 public class ColorPicker implements IsSvgElement {
 
@@ -51,11 +56,15 @@ public class ColorPicker implements IsSvgElement {
 
     protected final static int PADDING = 15;
     
-    private final int radius;
-
-    private int hueInt;
+    protected final static int RED_COLOR = 0xFF0000;
     
-    public double hue;
+    private final int radius;
+       
+    private Rect rect;
+    
+    private Text text;
+
+    private int inputColor;
     
     private double saturation = 1;
     
@@ -63,32 +72,48 @@ public class ColorPicker implements IsSvgElement {
 
     private float markerSize;
     
-    private String color;
+    private int color;
     
     private Circle circleIn;
     
     private Circle circleOut;
     
-    private Circle circleColor;
-   
     private int currentMarkerX;
     
     private int currentMarkerY;
 
-    public ColorPicker(SvgFactory svgfactory, Widget content, int radius, int hueInt) {
+    public static enum PickerType {
+        Hue,
+        Color
+    }
+    private PickerType pickerType;
+    
+    public ColorPicker(SvgFactory svgfactory, Widget content, PickerType pickerType, int radius, int color) {
         this.svgFactory = svgfactory;
         container = svgFactory.createGroup();
-        this.radius = radius;
-        this.hueInt = hueInt;
+        this.radius = radius; 
+        inputColor = color;
+        if(pickerType == PickerType.Hue) {
+          	this.inputColor = ColorUtil.hslToRgb((Utils.degree2radian(color) / (Math.PI*2) + 1) % 1, saturation, lightness);
+        } else {
+        	this.inputColor = (color == 0) ? RED_COLOR : color;
+        }
+        this.pickerType = pickerType;
         this.content = content;
         xStart = radius + PADDING + RIM_WIDTH/2;
         yStart = radius + RIM_WIDTH/2;
         drawColorWheel();
     }
 
+    public int getColor() {
+    	return color;
+    }
+    
     private class ColorPickerDragDrop extends MouseEventHandler {
         protected boolean inMotion = false;
         protected boolean circleDrag = false;
+        private int X1, X2, Y1, Y2;
+        private double hueRadian;
    	
         public ColorPickerDragDrop(Widget dragHandle) {
           super(dragHandle);
@@ -100,17 +125,38 @@ public class ColorPicker implements IsSvgElement {
             circleDrag = false;
           }
 
+        public void onMouseDown(MouseDownEvent event) {
+            super.onMouseDown(event);
+        	hueRadian = Math.atan2(yStart - event.getY(),xStart - event.getX() - PADDING) + Math.PI/2;
+            X1 = (int) Math.round(xStart - PADDING - Math.sin(hueRadian) * (radius-RIM_WIDTH/2));
+            Y1 = (int) Math.round(yStart + Math.cos(hueRadian) * (radius-RIM_WIDTH/2));
+            X2 = (int) Math.round(xStart - PADDING - Math.sin(hueRadian) * (radius+RIM_WIDTH/2));
+            Y2 = (int) Math.round(yStart + Math.cos(hueRadian) * (radius+RIM_WIDTH/2));
+            if(event.getX()>=Math.min(X1, X2)&&event.getX()<=Math.max(X1, X2)&&event.getY()>=Math.min(Y1, Y2)&&event.getY()<=Math.max(Y1, Y2)) {
+               	circleDrag = true;
+            }
+         	
+            if (circleDrag) {
+           	    drawMarkers(hueRadian, -1);
+            } 
+          }
+
         @Override
         public void handleDrag(int dragEndX, int dragEndY) {
-        	
+        	hueRadian = Math.atan2(yStart - dragEndY,xStart - dragEndX - PADDING) + Math.PI/2;
          	if(!inMotion) {
-            	circleDrag = Math.max(Math.abs(currentMarkerX-PADDING-dragStartX), Math.abs(currentMarkerY-dragStartY)) < markerSize;
+                X1 = (int) Math.round(xStart - PADDING - Math.sin(hueRadian) * (radius-RIM_WIDTH/2));
+                Y1 = (int) Math.round(yStart + Math.cos(hueRadian) * (radius-RIM_WIDTH/2));
+                X2 = (int) Math.round(xStart - PADDING - Math.sin(hueRadian) * (radius+RIM_WIDTH/2));
+                Y2 = (int) Math.round(yStart + Math.cos(hueRadian) * (radius+RIM_WIDTH/2));
+                if(dragEndX>=Math.min(X1, X2)&&dragEndX<=Math.max(X1, X2)&&dragEndY>=Math.min(Y1, Y2)&&dragEndY<=Math.max(Y1, Y2)) {
+                	circleDrag = true;
+                }
             	inMotion = true;
          	}
          	
             if (circleDrag) {
-            	double hueRadian = Math.atan2(yStart - dragEndY,xStart - dragEndX - PADDING ) + Math.PI/2;
-           	    drawMarkers(hueRadian, false);
+           	    drawMarkers(hueRadian, -1);
             } 
         }
     }   
@@ -126,6 +172,7 @@ public class ColorPicker implements IsSvgElement {
         double hue1 = 0, hue2;
         String color1, color2;
         float x1, x2, y1, y2;
+        
         double r1 = (double) (radius + RIM_WIDTH / 2) / radius;
         double r2 = (double) (radius - RIM_WIDTH / 2) / radius;
 
@@ -146,12 +193,12 @@ public class ColorPicker implements IsSvgElement {
             tan = 1 / Math.cos((angle2 - angle1) / 2);
             xm = Math.sin(am) * tan;
             ym = -Math.cos(am) * tan;
-            color2 = rgbToHex(hslToRgb(hue2, saturation, lightness));
+            color2 = ColorUtil.rgbToHex(ColorUtil.hslToRgb(hue2, saturation, lightness));
 
             if (i > 0) {
                 double corr = (1 + Math.min(Math.abs(Math.tan(angle1)), Math.abs(Math.tan(Math.PI / 2 - angle1)))) / nSegments;
-                color1 = rgbToHex(hslToRgb(hue1 - 0.15 * corr, saturation, lightness));
-                color2 = rgbToHex(hslToRgb(hue2 + 0.15 * corr, saturation, lightness));
+                color1 = ColorUtil.rgbToHex(ColorUtil.hslToRgb(hue1 - 0.15 * corr, saturation, lightness));
+                color2 = ColorUtil.rgbToHex(ColorUtil.hslToRgb(hue2 + 0.15 * corr, saturation, lightness));
                 
                 float a = (float) Utils.round(xStart - x1 * radius, 2);
                 float b = (float) Utils.round(yStart - y1 * radius, 2);
@@ -190,23 +237,55 @@ public class ColorPicker implements IsSvgElement {
             hue1 = hue2;
         }
 
-        new ColorPickerDragDrop( content );
-        drawMarkers(Utils.degree2radian(hueInt),true);
+        int yCoord = yStart + radius + RIM_WIDTH;
+        int xCoord = (pickerType == PickerType.Hue) ? (xStart - 10) : (xStart - 25);
+        rect = svgFactory.createRect(xStart-radius, yCoord, radius*2, 20, 0, 0);
+        container.add(rect);
         
+        text = svgFactory.createText("", xCoord , yCoord + 16);
+        text.setFont("Verdana");
+        text.setFontSize("16");
+        container.add(text);
+        
+        new ColorPickerDragDrop( content );
+       	float[] hsb = ColorUtil.rgbToHsb(inputColor);
+       	drawMarkers(Utils.degree2radian((int) Math.round((hsb[0]*360))),inputColor);
+       	
+       	
         return;
     }
 
-    public void drawMarkers(double hueValue, boolean first) {
+    public void drawMarkers(double hueValue, int inputColor) {
 
         float innerWidth = (float) Math.ceil(markerSize / 4);
         int innerRadius = Math.round(markerSize - innerWidth + 1);
         currentMarkerX = (int) Math.round(xStart - Math.sin(hueValue) * radius);
         currentMarkerY = (int) Math.round(yStart + Math.cos(hueValue) * radius);
         
-        color = rgbToHex(hslToRgb( (hueValue / 6.28 + 1) % 1, saturation, lightness));
-       	//System.out.println("color=" + color);
+        if(inputColor == -1) {
+        	color=ColorUtil.hslToRgb((hueValue / (Math.PI*2) + 1) % 1, saturation, lightness);
+        } else {
+        	color=inputColor;
+        }
+        String colorStr = ColorUtil.rgbToHex(color);
+        rect.setFill(colorStr);
+    	int hue = (int) Math.round(Utils.radian2degree(hueValue));
+    	if(hue < 0) {
+    		hue+=360;
+    	}
+    	if(hue>=200 && hue<=300) {
+    		text.setFill("white");    		
+    	} else {
+    		text.setFill("black");
+    	}
 
-        if(first) {        	
+        if(pickerType==PickerType.Hue) {
+            text.setTextValue(Integer.toString(hue));        	       	
+        } else {
+            text.setTextValue(colorStr);        	
+        }
+
+        if(inputColor != -1) {        	
             circleIn = svgFactory.createCircle(currentMarkerX, currentMarkerY, innerRadius);
             circleIn.setFill("none");
             circleIn.setStroke("#000");
@@ -218,52 +297,55 @@ public class ColorPicker implements IsSvgElement {
             circleOut.setStroke("#fff");
             circleOut.setStrokeWidth(Integer.toString((int) innerWidth));
             circleOut.setTransform("matrix(1,0,0,1,0,0)");
-            container.add(circleOut);    
-            
-            circleColor = svgFactory.createCircle(xStart, yStart, radius/2);
-            circleColor.setFill(color);
-            circleColor.setStroke("black");
-            circleColor.setStrokeWidth("2");
-            circleColor.setTransform("matrix(1,0,0,1,0,0)");
-            container.add(circleColor);
+            container.add(circleOut);  
         } else {
         	circleIn.setAttribute("cx", String.valueOf(currentMarkerX));
         	circleIn.setAttribute("cy", String.valueOf(currentMarkerY));
            	circleOut.setAttribute("cx", String.valueOf(currentMarkerX));
         	circleOut.setAttribute("cy", String.valueOf(currentMarkerY));
-            circleColor.setFill(color);
        }
     }
- 
-    public int hslToRgb(double hue, double saturation, double lightness) {
-        double m2 = (lightness <= 0.5) ? lightness * (saturation + 1) : lightness + saturation - lightness * saturation;
-        double m1 = lightness * 2 - m2;
-    	int r = (int) Math.round(convertHUEtoRGB(m1, m2, hue + 0.33333) * 255);
-    	int g = (int) Math.round(convertHUEtoRGB(m1, m2, hue) * 255);
-    	int b = (int) Math.round(convertHUEtoRGB(m1, m2, hue - 0.33333) * 255);
-        return (r << 16) | (g << 8) | (b << 0);
-    }
 
-    public double convertHUEtoRGB(double p, double q, double t) {
-        t = (t + 1) % 1;
-        if (t * 6 < 1)
-            return (p + (q - p) * t * 6);
-        if (t * 2 < 1)
-            return (int) q;
-        if (t * 3 < 2)
-            return (p + (q - p) * (0.66666 - t) * 6);
-        return p;
-    }
+    public static float[] rgbToHsl(int rgb) {
+        int r = (rgb >> 16) & 0xFF;
+        int g = (rgb >> 8) & 0xFF;
+        int b = (rgb >> 0) & 0xFF;
+        float r1 = (float)((r) / 255.0f);
+        float g1 = (float)((g) / 255.0f);
+        float b1 = (float)((b) / 255.0f);
+        
+        float max = (r1 > g1) ? r1 : g1;
+        if (b1 > max)
+            max = b1;
+        float min = (r1 < g1) ? r1 : g1;
+        if (b1 < min)
+            min = b1;
 
-    public static String rgbToHex(int rgb) {
-        String colorString = Integer.toHexString(rgb);
-        int length = colorString.length();
-        for (int i = 0; i < (6 - length); i++) {
-            colorString = "0" + colorString;
+        
+        float hue,saturation;
+        float lightness = (max + min) / 2;
+        
+        if(max == min){
+            hue = saturation = 0;
+        }else{
+            float d = max - min;
+            saturation = lightness > 0.5 ? d / (2 - max - min) : d / (max + min);
+            if(max == r1) {
+            	hue = (g1 - b1) / d + (g1 < b1 ? 6 : 0);
+            } else if(max == g1) {
+            	hue = (b1 - r1) / d + 2;
+            } else {
+            	hue = (r1 - g1) / d + 4;
+            }
+            hue /= 6;
         }
-        return "#" + colorString;
-    }
-
+        float[] hslvals = new float[3];
+        hslvals[0] = hue;
+        hslvals[1] = saturation;
+        hslvals[2] = lightness;
+        return hslvals;
+    }   
+    
     @Override
     public SvgElement asSvgElement() {
         return container;

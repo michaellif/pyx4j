@@ -77,6 +77,10 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
                 0,
                 new TesterWidgetDecorator(inject(proto().personalId(), new CPersonalIdentityField<IPersonalIdentity>(IPersonalIdentity.class,
                         "XXX-XXX-xxx;XX-XX-xxxx", "Personal Info"))));
+
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().hue())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().color())));
+
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().textBox())));
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().integerBox())));
 

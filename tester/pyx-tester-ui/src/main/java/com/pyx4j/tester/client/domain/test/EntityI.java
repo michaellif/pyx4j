@@ -138,4 +138,13 @@ public interface EntityI extends IEntity {
     EntityV entitySelectorBox();
 
     IPersonalIdentity personalId();
+    
+    @Editor(type = EditorType.hue)
+    IPrimitive<Integer> hue();
+
+    @Editor(type = EditorType.color)
+    IPrimitive<Integer> color();
+
+    
+    
 }

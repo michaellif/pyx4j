@@ -22,8 +22,6 @@ package com.pyx4j.forms.client.ui;
 
 public class CColorPicker extends CFocusComponent<Integer, NColorPicker> {
 
-    private Integer color;
-
     private boolean hueOnly = false;
 
     public CColorPicker() {
@@ -42,5 +40,7 @@ public class CColorPicker extends CFocusComponent<Integer, NColorPicker> {
     public boolean isHueOnly() {
         return hueOnly;
     }
+    
+    
 
 }

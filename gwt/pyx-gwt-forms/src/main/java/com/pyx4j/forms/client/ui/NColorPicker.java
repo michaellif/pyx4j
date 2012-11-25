@@ -22,13 +22,19 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ColorUtil;
 import com.pyx4j.forms.client.ui.NColorPicker.ColorButton;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.IFocusWidget;
-import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
+import com.pyx4j.svg.basic.Group;
+import com.pyx4j.svg.basic.SvgFactory;
+import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
+import com.pyx4j.svg.basic.SvgRoot;
+import com.pyx4j.svg.gwt.ColorPicker;
 
 public class NColorPicker extends NFocusComponent<Integer, ColorButton, CColorPicker, ColorButton> implements INativeFocusComponent<Integer> {
 
@@ -63,7 +69,6 @@ public class NColorPicker extends NFocusComponent<Integer, ColorButton, CColorPi
             button = getEditor();
         }
         button.setValue(value);
-
     }
 
     @Override
@@ -142,25 +147,16 @@ public class NColorPicker extends NFocusComponent<Integer, ColorButton, CColorPi
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    new ColorPickerDialog() {
+                String header = getCComponent().isHueOnly()?"Hue Picker":"Color Picker";
+                   new ColorPickerDialog(header) {
                         @Override
                         public boolean onClickOk() {
-                            setValue(Integer.parseInt(valueBox.getText()));
+                            setValue(colorPicker.getColor());
                             return true;
                         }
                     }.show();
                 }
             });
-        }
-
-        private void setRGB(int r, int g, int b, int a) {
-            testRGBColorValueRange(r, g, b, a);
-            color = ((a & 0xFF) << 24) | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF) << 0);
-        }
-
-        private void setHSB(int h, int s, int b) {
-            testHSBColorValueRange(h, s, b);
-            color = ColorUtil.hsbToRgb(h, s, b);
         }
 
         public Integer getValue() {
@@ -169,23 +165,23 @@ public class NColorPicker extends NFocusComponent<Integer, ColorButton, CColorPi
 
         public void setValue(Integer color) {
 
-            this.color = color;
-
-            String colorString;
-            String textString;
+         	String textString;
+         	String colorString;
+        	this.color = color;
+        	float[] hsb;
             if (color == null) {
                 colorString = "#fff";
                 textString = "";
             } else {
                 if (getCComponent().isHueOnly()) {
-                    colorString = ColorUtil.rgbToHex(ColorUtil.hsbToRgb((float) color / 360, 1, 1));
-                    textString = color.toString();
+                    colorString = ColorUtil.rgbToHex(color);
+               	    hsb = ColorUtil.rgbToHsb(color);
+               	    textString = Integer.toString((int)Math.round((hsb[0]*360)));
                 } else {
                     colorString = ColorUtil.rgbToHex(color);
                     textString = colorString;
                 }
             }
-
             setButtonLabel(colorString, textString);
         }
 
@@ -207,12 +203,41 @@ public class NColorPicker extends NFocusComponent<Integer, ColorButton, CColorPi
 
     abstract class ColorPickerDialog extends OkCancelDialog {
 
-        final TextBox valueBox;
+    	ColorPicker colorPicker;
+    	
+        public ColorPickerDialog(String header) {
+         	super(header);
+             
+           SimplePanel content = new SimplePanel();
+           SvgFactory svgFactory = new SvgFactoryForGwt();
+           
+           SvgRoot svgroot = svgFactory.getSvgRoot();
+           ((Widget) svgroot).setSize("230px", "240px");
+           
+           int hue, pickerColor;
+           float[] hsb;
+           Integer color = getEditor().color;          
+           if (color == null) {
+        	   hue = 0;
+        	   pickerColor = 0;
+           } else {
+         	   hsb = ColorUtil.rgbToHsb(color);
+        	   hue = (int) Math.round((hsb[0]*360));
+        	   pickerColor = color.intValue();
+           }
 
-        public ColorPickerDialog() {
-            super("Color Picker");
-            valueBox = new TextBox();
-            setBody(valueBox);
+           if(header.equals("Hue Picker")) {
+               colorPicker = new ColorPicker(svgFactory, (Widget) svgroot, ColorPicker.PickerType.Hue, 90, hue);        	   
+           } else {
+               colorPicker = new ColorPicker(svgFactory, (Widget) svgroot, ColorPicker.PickerType.Color, 90, pickerColor);        	   
+           }
+        	   
+            Group g = svgFactory.createGroup();
+            g.add(colorPicker);
+            svgroot.add(g);
+            content.setWidget((Widget) svgroot);      
+            
+            setBody(content);
         }
 
     }

@@ -24,4 +24,10 @@ public interface Text extends Shape {
     public static final int DEFAULT_FONT_SIZE = 11;
 
     public String getTextValue();
+    
+    public void setTextValue(String text);
+    
+    public void setFont(String font);
+
+    public void setFontSize(String fontSize);
 }
