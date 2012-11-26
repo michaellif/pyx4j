@@ -25,6 +25,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -41,6 +42,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePaymentMethodForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePersonalDisclaimerForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureQuotationRequestForm;
@@ -184,6 +186,13 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     public TenantSurePurchaseViewImpl() {
         FormFlexPanel viewPanel = new FormFlexPanel();
         int row = -1;
+
+        TenantSureLogo logo = new TenantSureLogo();
+        logo.getElement().getStyle().setMarginTop(20, Unit.PX);
+        logo.getElement().getStyle().setMarginBottom(20, Unit.PX);
+        viewPanel.setWidget(++row, 0, logo);
+        viewPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        viewPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 
         viewPanel.setWidget(++row, 0, stepDriver = new StepDriver(Arrays.asList(//@formatter:off
                 makePersonalDisclaimerStep(),
