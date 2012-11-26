@@ -182,6 +182,12 @@ public class BillDateUtils {
             }
         } else if (Bill.BillType.Regular == bill.billType().getValue()) {
             date = bill.billingCycle().billingCycleStartDate().getValue();
+        } else if (Bill.BillType.External == bill.billType().getValue()) {
+            // start with lease if billing cycle starts earlier
+            date = bill.billingCycle().billingCycleStartDate().getValue();
+            if (date.compareTo(bill.billingAccount().lease().currentTerm().termFrom().getValue()) < 0) {
+                date = bill.billingAccount().lease().currentTerm().termFrom().getValue();
+            }
         }
         return date;
     }

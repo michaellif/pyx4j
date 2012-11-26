@@ -14,11 +14,11 @@
 package com.propertyvista.biz.financial.billingext;
 
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
+import com.propertyvista.domain.financial.billingext.dto.ChargeDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface ExternalBillingFacade {
-    boolean reconcileCharge(InvoiceProductCharge charge, String leaseId);
+    boolean postCharge(ChargeDTO charge, String leaseId);
 
     Bill runBilling(Lease lease);
 }

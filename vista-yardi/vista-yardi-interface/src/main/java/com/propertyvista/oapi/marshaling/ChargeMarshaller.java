@@ -13,20 +13,18 @@
  */
 package com.propertyvista.oapi.marshaling;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
+import com.propertyvista.domain.financial.billingext.dto.ChargeDTO;
 import com.propertyvista.oapi.model.ChargeIO;
 import com.propertyvista.oapi.xml.BigDecimalIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class ChargeMarshaller implements Marshaller<InvoiceProductCharge, ChargeIO> {
+public class ChargeMarshaller implements Marshaller<ChargeDTO, ChargeIO> {
 
     @Override
-    public ChargeIO unmarshal(InvoiceProductCharge charge) {
+    public ChargeIO unmarshal(ChargeDTO charge) {
         ChargeIO chargeRS = new ChargeIO();
         chargeRS.amount = new BigDecimalIO(charge.amount().getValue());
         chargeRS.description = new StringIO(charge.description().getValue());
@@ -36,13 +34,14 @@ public class ChargeMarshaller implements Marshaller<InvoiceProductCharge, Charge
     }
 
     @Override
-    public InvoiceProductCharge marshal(ChargeIO c) {
-        InvoiceProductCharge charge = EntityFactory.create(InvoiceProductCharge.class);
+    public ChargeDTO marshal(ChargeIO c) {
+        ChargeDTO charge = EntityFactory.create(ChargeDTO.class);
+        charge.transactionId().setValue(c.transactionId);
+        charge.leaseId().setValue(c.leaseId);
         charge.amount().setValue(c.amount.value);
         charge.description().setValue(c.description.value);
         charge.fromDate().setValue(c.fromDate.value); // Transaction.ChargeDetail.ServiceFromDate
         charge.toDate().setValue(c.toDate.value); // Transaction.ChargeDetail.ServiceToDate
-        charge.taxTotal().setValue(new BigDecimal("0.00")); // Tax ??
         return charge;
     }
 

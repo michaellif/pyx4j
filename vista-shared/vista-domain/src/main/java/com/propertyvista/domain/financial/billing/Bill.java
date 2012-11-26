@@ -83,7 +83,9 @@ public interface Bill extends IEntity {
 
         Regular,
 
-        Final;
+        Final,
+
+        External;
 
         @Override
         public String toString() {

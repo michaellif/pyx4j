@@ -35,6 +35,7 @@ import com.propertyvista.biz.financial.TaxUtils;
 import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.financial.billing.BillingManager;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.Bill.BillType;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -89,13 +90,9 @@ class ExternalBillProducer {
 
             bill.executionDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
 
-            // TODO - set bill type
-            // Bill.BillType billType = BillType.external;
-            // bill.billType().setValue(billType);
+            bill.billType().setValue(BillType.External);
 
-            // start date
-            // TODO - fix bill type to use BillDateUtils.calculateBillingPeriodStartDate(bill)
-            bill.billingPeriodStartDate().setValue(bill.billingCycle().billingCycleStartDate().getValue());
+            bill.billingPeriodStartDate().setValue(BillDateUtils.calculateBillingPeriodStartDate(bill));
             bill.billingPeriodEndDate().setValue(BillDateUtils.calculateBillingPeriodEndDate(bill));
             bill.dueDate().setValue(BillDateUtils.calculateBillDueDate(bill));
 

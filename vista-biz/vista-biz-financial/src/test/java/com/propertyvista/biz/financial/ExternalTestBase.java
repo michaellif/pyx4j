@@ -25,24 +25,19 @@ import com.propertyvista.biz.financial.billingext.ExternalBillingFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
+import com.propertyvista.domain.financial.billingext.dto.ChargeDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class ExternalTestBase extends FinancialTestBase {
 
-    // this method is a duplicate of ReceivableFacade#postTransaction(TransactionIO) to avoid circular package dependency;
-    // please keep this up to date
     public void postExternalCharge(String amount, String description, String fromDate, String toDate) {
-        InvoiceProductCharge charge = EntityFactory.create(InvoiceProductCharge.class);
+        ChargeDTO charge = EntityFactory.create(ChargeDTO.class);
         charge.amount().setValue(new BigDecimal(amount));
         charge.description().setValue(description);
         charge.fromDate().setValue(FinancialTestsUtils.getDate(fromDate));
         charge.toDate().setValue(FinancialTestsUtils.getDate(toDate));
-        charge.taxTotal().setValue(new BigDecimal("0.00"));
 
-        if (ServerSideFactory.create(ExternalBillingFacade.class).reconcileCharge(charge, retrieveLease().leaseId().getValue())) {
-            Persistence.service().persist(charge);
-        }
+        ServerSideFactory.create(ExternalBillingFacade.class).postCharge(charge, retrieveLease().leaseId().getValue());
     }
 
     protected Bill runExternalBilling() {

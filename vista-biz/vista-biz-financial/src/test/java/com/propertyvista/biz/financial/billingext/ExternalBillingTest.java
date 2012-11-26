@@ -46,8 +46,7 @@ public class ExternalBillingTest extends ExternalTestBase {
         new BillTester(bill, true).
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
-        // TODO bill type
-//        billType(Bill.BillType.Regular).
+        billType(Bill.BillType.External).
         billingPeriodStartDate("1-Oct-2011").
         billingPeriodEndDate("31-Oct-2011").
         numOfProductCharges(3).

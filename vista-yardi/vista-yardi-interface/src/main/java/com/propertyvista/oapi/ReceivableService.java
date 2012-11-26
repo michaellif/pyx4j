@@ -14,10 +14,9 @@
 package com.propertyvista.oapi;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.billingext.ExternalBillingFacade;
-import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
+import com.propertyvista.domain.financial.billingext.dto.ChargeDTO;
 import com.propertyvista.oapi.marshaling.ChargeMarshaller;
 import com.propertyvista.oapi.model.ChargeIO;
 import com.propertyvista.oapi.model.TransactionIO;
@@ -27,12 +26,9 @@ public class ReceivableService {
     public static void postTransaction(TransactionIO transaction) {
         if (transaction instanceof ChargeIO) {
             ChargeIO chargeIO = (ChargeIO) transaction;
-            InvoiceProductCharge charge = new ChargeMarshaller().marshal(chargeIO);
+            ChargeDTO chargeDTO = new ChargeMarshaller().marshal(chargeIO);
 
-            if (ServerSideFactory.create(ExternalBillingFacade.class).reconcileCharge(charge, chargeIO.leaseId)) {
-                Persistence.service().persist(charge);
-            }
+            ServerSideFactory.create(ExternalBillingFacade.class).postCharge(chargeDTO, chargeIO.leaseId);
         }
-
     }
 }
