@@ -15,6 +15,7 @@ package com.propertyvista.oapi.model;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
+import com.propertyvista.oapi.xml.DoubleIO;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class ParkingIO {
@@ -25,5 +26,9 @@ public class ParkingIO {
     public StringIO newName;
 
     public StringIO description;
+
+    public ParkingTypeIO type;
+
+    public DoubleIO levels;
 
 }

@@ -23,6 +23,7 @@ public class MediaIO {
 
     public StringIO mimeType;
 
+    // file conversion not implemented
     public StringIO fileId;
 
     public StringIO youTubeVideoID;
