@@ -21,6 +21,17 @@ import com.propertyvista.oapi.xml.LogicalDateIO;
 
 public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
 
+    private static class SingletonHolder {
+        public static final LeaseMarshaller INSTANCE = new LeaseMarshaller();
+    }
+
+    private LeaseMarshaller() {
+    }
+
+    public static LeaseMarshaller getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
     @Override
     public LeaseIO unmarshal(Lease lease) {
         LeaseIO leaseIO = new LeaseIO();

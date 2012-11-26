@@ -23,6 +23,17 @@ import com.propertyvista.oapi.xml.StringIO;
 
 public class ParkingMarshaller implements Marshaller<Parking, ParkingIO> {
 
+    private static class SingletonHolder {
+        public static final ParkingMarshaller INSTANCE = new ParkingMarshaller();
+    }
+
+    private ParkingMarshaller() {
+    }
+
+    public static ParkingMarshaller getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
     @Override
     public ParkingIO unmarshal(Parking parking) {
         ParkingIO parkingIO = new ParkingIO();
@@ -30,7 +41,6 @@ public class ParkingMarshaller implements Marshaller<Parking, ParkingIO> {
         parkingIO.description = new StringIO(parking.description().getValue());
         parkingIO.type = new ParkingTypeIO(parking.type().getValue());
         parkingIO.levels = new DoubleIO(parking.levels().getValue());
-
         return parkingIO;
     }
 

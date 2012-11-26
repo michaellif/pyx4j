@@ -19,6 +19,17 @@ import com.propertyvista.oapi.xml.StringIO;
 
 public class AddressMarshaller implements Marshaller<AddressStructured, AddressIO> {
 
+    private static class SingletonHolder {
+        public static final AddressMarshaller INSTANCE = new AddressMarshaller();
+    }
+
+    private AddressMarshaller() {
+    }
+
+    public static AddressMarshaller getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
     @Override
     public AddressIO unmarshal(AddressStructured address) {
         AddressIO addressIO = new AddressIO();

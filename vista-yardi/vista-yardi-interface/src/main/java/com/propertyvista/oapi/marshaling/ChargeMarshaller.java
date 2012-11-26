@@ -23,6 +23,17 @@ import com.propertyvista.oapi.xml.StringIO;
 
 public class ChargeMarshaller implements Marshaller<ChargeDTO, ChargeIO> {
 
+    private static class SingletonHolder {
+        public static final ChargeMarshaller INSTANCE = new ChargeMarshaller();
+    }
+
+    private ChargeMarshaller() {
+    }
+
+    public static ChargeMarshaller getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
     @Override
     public ChargeIO unmarshal(ChargeDTO charge) {
         ChargeIO chargeRS = new ChargeIO();

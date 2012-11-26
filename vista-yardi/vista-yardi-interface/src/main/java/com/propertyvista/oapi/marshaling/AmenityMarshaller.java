@@ -21,6 +21,17 @@ import com.propertyvista.oapi.xml.StringIO;
 
 public class AmenityMarshaller implements Marshaller<Amenity, AmenityIO> {
 
+    private static class SingletonHolder {
+        public static final AmenityMarshaller INSTANCE = new AmenityMarshaller();
+    }
+
+    private AmenityMarshaller() {
+    }
+
+    public static AmenityMarshaller getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
     @Override
     public AmenityIO unmarshal(Amenity amenity) {
         AmenityIO amenityIO = new AmenityIO();

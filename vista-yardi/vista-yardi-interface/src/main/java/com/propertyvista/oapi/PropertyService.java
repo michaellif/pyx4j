@@ -50,8 +50,7 @@ public class PropertyService {
         BuildingsIO buildingsRs = new BuildingsIO();
 
         for (Building building : buildings) {
-            BuildingMarshaller marshaller = new BuildingMarshaller();
-            buildingsRs.buildings.add(marshaller.unmarshal(building));
+            buildingsRs.buildings.add(BuildingMarshaller.getInstance().unmarshal(building));
         }
 
         return buildingsRs;
@@ -66,9 +65,7 @@ public class PropertyService {
         buildingCriteria.eq(buildingCriteria.proto().propertyCode(), propertyCode);
         List<Building> buildings = service.query(buildingCriteria);
 
-        BuildingMarshaller marshaller = new BuildingMarshaller();
-
-        return marshaller.unmarshal(buildings.get(0));
+        return BuildingMarshaller.getInstance().unmarshal(buildings.get(0));
     }
 
     public static List<UnitIO> getUnitsByPropertyCode(String propertyCode) {
@@ -80,8 +77,7 @@ public class PropertyService {
         List<AptUnit> units = service.query(unitCriteria);
         for (AptUnit unit : units) {
             service.retrieve(unit.floorplan());
-            UnitMarshaller marshaller = new UnitMarshaller();
-            UnitIO unitIO = marshaller.unmarshal(unit);
+            UnitIO unitIO = UnitMarshaller.getInstance().unmarshal(unit);
             unitIO.propertyCode = propertyCode;
             unitsRS.add(unitIO);
         }
@@ -97,8 +93,7 @@ public class PropertyService {
         AptUnit unit = units.get(0);
         service.retrieve(unit.floorplan());
         service.retrieve(unit.building());
-        UnitMarshaller marshaller = new UnitMarshaller();
-        return marshaller.unmarshal(unit);
+        return UnitMarshaller.getInstance().unmarshal(unit);
 
     }
 }

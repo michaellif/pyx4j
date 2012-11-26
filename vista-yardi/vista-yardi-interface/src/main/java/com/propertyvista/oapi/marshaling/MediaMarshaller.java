@@ -13,6 +13,9 @@
  */
 package com.propertyvista.oapi.marshaling;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.media.Media;
@@ -22,6 +25,17 @@ import com.propertyvista.oapi.xml.StringIO;
 
 public class MediaMarshaller implements Marshaller<Media, MediaIO> {
 
+    private static class SingletonHolder {
+        public static final MediaMarshaller INSTANCE = new MediaMarshaller();
+    }
+
+    private MediaMarshaller() {
+    }
+
+    public static MediaMarshaller getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
     @Override
     public MediaIO unmarshal(Media media) {
         MediaIO mediaIO = new MediaIO();
@@ -30,6 +44,14 @@ public class MediaMarshaller implements Marshaller<Media, MediaIO> {
         mediaIO.url = new StringIO(media.url().getValue());
         mediaIO.youTubeVideoID = new StringIO(media.youTubeVideoID().getValue());
         return mediaIO;
+    }
+
+    public List<MediaIO> unmarshal(List<Media> mediaList) {
+        List<MediaIO> mediaIOList = new ArrayList<MediaIO>();
+        for (Media media : mediaList) {
+            mediaIOList.add(unmarshal(media));
+        }
+        return mediaIOList;
     }
 
     @Override

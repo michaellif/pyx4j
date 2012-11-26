@@ -19,10 +19,21 @@ import com.propertyvista.oapi.model.BuildingTypeIO;
 
 public class BuildingInfoMarshaller implements Marshaller<BuildingInfo, BuildingInfoIO> {
 
+    private static class SingletonHolder {
+        public static final BuildingInfoMarshaller INSTANCE = new BuildingInfoMarshaller();
+    }
+
+    private BuildingInfoMarshaller() {
+    }
+
+    public static BuildingInfoMarshaller getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
     @Override
     public BuildingInfoIO unmarshal(BuildingInfo info) {
         BuildingInfoIO buildingInfoIO = new BuildingInfoIO();
-        buildingInfoIO.address = new AddressMarshaller().unmarshal(info.address());
+        buildingInfoIO.address = AddressMarshaller.getInstance().unmarshal(info.address());
         buildingInfoIO.buildingType = new BuildingTypeIO(info.type().getValue());
         return buildingInfoIO;
     }

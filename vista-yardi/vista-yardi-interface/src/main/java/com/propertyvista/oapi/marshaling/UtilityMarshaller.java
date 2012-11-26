@@ -18,6 +18,17 @@ import com.propertyvista.oapi.model.UtilityIO;
 
 public class UtilityMarshaller implements Marshaller<Utility, UtilityIO> {
 
+    private static class SingletonHolder {
+        public static final UtilityMarshaller INSTANCE = new UtilityMarshaller();
+    }
+
+    private UtilityMarshaller() {
+    }
+
+    public static UtilityMarshaller getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
     @Override
     public UtilityIO unmarshal(Utility utility) {
         UtilityIO utilityIO = new UtilityIO();

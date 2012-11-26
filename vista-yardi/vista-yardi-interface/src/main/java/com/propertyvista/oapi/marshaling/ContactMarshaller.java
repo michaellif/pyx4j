@@ -19,6 +19,17 @@ import com.propertyvista.oapi.xml.StringIO;
 
 public class ContactMarshaller implements Marshaller<PropertyContact, ContactIO> {
 
+    private static class SingletonHolder {
+        public static final ContactMarshaller INSTANCE = new ContactMarshaller();
+    }
+
+    private ContactMarshaller() {
+    }
+
+    public static ContactMarshaller getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
     @Override
     public ContactIO unmarshal(PropertyContact contact) {
         ContactIO contactIO = new ContactIO();

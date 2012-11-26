@@ -18,6 +18,17 @@ import com.propertyvista.oapi.model.TenantIO;
 
 public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantIO> {
 
+    private static class SingletonHolder {
+        public static final TenantMarshaller INSTANCE = new TenantMarshaller();
+    }
+
+    private TenantMarshaller() {
+    }
+
+    public static TenantMarshaller getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
     @Override
     public TenantIO unmarshal(LeaseParticipant<?> participant) {
         TenantIO tenantIO = new TenantIO();

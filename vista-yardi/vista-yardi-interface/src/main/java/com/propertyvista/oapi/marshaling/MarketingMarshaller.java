@@ -16,6 +16,7 @@ package com.propertyvista.oapi.marshaling;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
@@ -26,15 +27,27 @@ import com.propertyvista.oapi.xml.StringIO;
 
 public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
 
+    private static class SingletonHolder {
+        public static final MarketingMarshaller INSTANCE = new MarketingMarshaller();
+    }
+
+    private MarketingMarshaller() {
+    }
+
+    public static MarketingMarshaller getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
     @Override
     public MarketingIO unmarshal(Marketing marketing) {
         MarketingIO marketingIO = new MarketingIO();
         marketingIO.name = new StringIO(marketing.name().getValue());
         marketingIO.description = new StringIO(marketing.description().getValue());
 
+        Persistence.service().retrieveMember(marketing.adBlurbs());
         List<AdvertisingBlurbIO> adBlurbsIO = new ArrayList<AdvertisingBlurbIO>();
         for (AdvertisingBlurb adBlurb : marketing.adBlurbs()) {
-            adBlurbsIO.add(new AdvertisingBlurbMarshaller().unmarshal(adBlurb));
+            adBlurbsIO.add(AdvertisingBlurbMarshaller.getInstance().unmarshal(adBlurb));
         }
         marketingIO.blurbs = adBlurbsIO;
 
@@ -49,7 +62,7 @@ public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
 
         List<AdvertisingBlurb> adBlurbs = new ArrayList<AdvertisingBlurb>();
         for (AdvertisingBlurbIO adBlurbIO : marketingIO.blurbs) {
-            adBlurbs.add(new AdvertisingBlurbMarshaller().marshal(adBlurbIO));
+            adBlurbs.add(AdvertisingBlurbMarshaller.getInstance().marshal(adBlurbIO));
         }
         marketing.adBlurbs().addAll(adBlurbs);
         return marketing;

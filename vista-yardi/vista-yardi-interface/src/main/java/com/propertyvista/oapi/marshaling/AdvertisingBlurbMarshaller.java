@@ -21,6 +21,17 @@ import com.propertyvista.oapi.xml.StringIO;
 
 public class AdvertisingBlurbMarshaller implements Marshaller<AdvertisingBlurb, AdvertisingBlurbIO> {
 
+    private static class SingletonHolder {
+        public static final AdvertisingBlurbMarshaller INSTANCE = new AdvertisingBlurbMarshaller();
+    }
+
+    private AdvertisingBlurbMarshaller() {
+    }
+
+    public static AdvertisingBlurbMarshaller getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
     @Override
     public AdvertisingBlurbIO unmarshal(AdvertisingBlurb adBlurb) {
         AdvertisingBlurbIO adBlurbIO = new AdvertisingBlurbIO();

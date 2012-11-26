@@ -27,8 +27,8 @@ import com.propertyvista.oapi.LeaseService;
 import com.propertyvista.oapi.model.LeaseIO;
 import com.propertyvista.oapi.model.TenantIO;
 
-//http://localhost:8888/vista/interfaces/oapi/rs/propertyService/listAllBuildings
-//https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/rs/propertyService/listAllBuildings
+//http://localhost:8888/vista/interfaces/oapi/rs/leases
+//https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/rs/leases
 
 /**
  * 

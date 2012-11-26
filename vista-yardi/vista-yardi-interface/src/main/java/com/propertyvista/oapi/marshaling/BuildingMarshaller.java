@@ -21,7 +21,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.marketing.yield.Amenity;
-import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.domain.property.asset.Parking;
@@ -30,49 +29,59 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.oapi.model.AmenityIO;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.ContactIO;
-import com.propertyvista.oapi.model.MediaIO;
 import com.propertyvista.oapi.model.ParkingIO;
 import com.propertyvista.oapi.model.UtilityIO;
 
 public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {
 
+    private static class SingletonHolder {
+        public static final BuildingMarshaller INSTANCE = new BuildingMarshaller();
+    }
+
+    private BuildingMarshaller() {
+    }
+
+    public static BuildingMarshaller getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
     @Override
     public BuildingIO unmarshal(Building building) {
         BuildingIO buildingIO = new BuildingIO();
         buildingIO.propertyCode = building.propertyCode().getValue();
-        buildingIO.info = new BuildingInfoMarshaller().unmarshal(building.info());
-        buildingIO.marketing = new MarketingMarshaller().unmarshal(building.marketing());
+        buildingIO.info = BuildingInfoMarshaller.getInstance().unmarshal(building.info());
+        buildingIO.marketing = MarketingMarshaller.getInstance().unmarshal(building.marketing());
 
         List<ContactIO> contacts = new ArrayList<ContactIO>();
         Persistence.service().retrieve(building.contacts().propertyContacts());
         for (PropertyContact contact : building.contacts().propertyContacts()) {
             if (EnumSet.of(PropertyContactType.mainOffice, PropertyContactType.pointOfSale).contains(contact.type().getValue())) {
-                contacts.add(new ContactMarshaller().unmarshal(contact));
+                contacts.add(ContactMarshaller.getInstance().unmarshal(contact));
             }
         }
         buildingIO.contacts.addAll(contacts);
 
-        List<MediaIO> medias = new ArrayList<MediaIO>();
-        for (Media media : building.media()) {
-            medias.add(new MediaMarshaller().unmarshal(media));
-        }
-        buildingIO.medias = medias;
+        Persistence.service().retrieve(building.media());
+        buildingIO.medias = MediaMarshaller.getInstance().unmarshal(building.media());
 
+        Persistence.service().retrieveMember(building.amenities());
         List<AmenityIO> amenities = new ArrayList<AmenityIO>();
         for (Amenity amenity : building.amenities()) {
-            amenities.add(new AmenityMarshaller().unmarshal(amenity));
+            amenities.add(AmenityMarshaller.getInstance().unmarshal(amenity));
         }
         buildingIO.amenities = amenities;
 
+        Persistence.service().retrieveMember(building._Parkings());
         List<ParkingIO> parkings = new ArrayList<ParkingIO>();
         for (Parking parking : building._Parkings()) {
-            parkings.add(new ParkingMarshaller().unmarshal(parking));
+            parkings.add(ParkingMarshaller.getInstance().unmarshal(parking));
         }
         buildingIO.parkings = parkings;
 
+        Persistence.service().retrieveMember(building.includedUtilities());
         List<UtilityIO> utilities = new ArrayList<UtilityIO>();
         for (Utility utility : building.includedUtilities()) {
-            utilities.add(new UtilityMarshaller().unmarshal(utility));
+            utilities.add(UtilityMarshaller.getInstance().unmarshal(utility));
         }
         buildingIO.includedUtilities = utilities;
 
@@ -83,8 +92,8 @@ public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {
     public Building marshal(BuildingIO buildingIO) throws Exception {
         Building building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(buildingIO.propertyCode);
-        building.info().set(new BuildingInfoMarshaller().marshal(buildingIO.info));
-        building.marketing().set(new MarketingMarshaller().marshal(buildingIO.marketing));
+        building.info().set(BuildingInfoMarshaller.getInstance().marshal(buildingIO.info));
+        building.marketing().set(MarketingMarshaller.getInstance().marshal(buildingIO.marketing));
 
         return building;
     }

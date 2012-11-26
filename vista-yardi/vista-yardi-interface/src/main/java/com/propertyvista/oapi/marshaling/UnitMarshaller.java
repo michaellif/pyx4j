@@ -20,6 +20,17 @@ import com.propertyvista.oapi.xml.StringIO;
 
 public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
 
+    private static class SingletonHolder {
+        public static final UnitMarshaller INSTANCE = new UnitMarshaller();
+    }
+
+    private UnitMarshaller() {
+    }
+
+    public static UnitMarshaller getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
     @Override
     public UnitIO unmarshal(AptUnit unit) {
         UnitIO unitIO = new UnitIO();
