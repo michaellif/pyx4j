@@ -19,6 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -29,6 +30,11 @@ public interface OccupancyFacade {
     public static final LogicalDate MIN_DATE = new LogicalDate(0, 0, 1); // 1900-1-1
 
     public static final LogicalDate MAX_DATE = new LogicalDate(1100, 0, 1); // 3000-1-1
+
+    /**
+     * @return an occupancy segment of the unit that contains the provided date.
+     */
+    AptUnitOccupancySegment getOccupancySegment(AptUnit unit, LogicalDate date);
 
     void setupNewUnit(AptUnit unit);
 
