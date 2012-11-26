@@ -15,11 +15,11 @@ package com.propertyvista.common.client.ui.validators;
 
 import java.util.Date;
 
-import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 
 public class FutureDateValidator implements EditableValueValidator<Date> {
 
@@ -37,6 +37,6 @@ public class FutureDateValidator implements EditableValueValidator<Date> {
 
     @Override
     public ValidationError isValid(CComponent<Date, ?> component, Date value) {
-        return (value == null) || !value.before(TimeUtils.today()) ? null : new ValidationError(component, message);
+        return (value == null) || !value.before(ClientContext.getServerDate()) ? null : new ValidationError(component, message);
     }
 }
