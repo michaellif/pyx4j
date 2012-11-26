@@ -36,23 +36,23 @@ public class ChargeMarshaller implements Marshaller<ChargeDTO, ChargeIO> {
 
     @Override
     public ChargeIO unmarshal(ChargeDTO charge) {
-        ChargeIO chargeRS = new ChargeIO();
-        chargeRS.amount = new BigDecimalIO(charge.amount().getValue());
-        chargeRS.description = new StringIO(charge.description().getValue());
-        chargeRS.fromDate = new LogicalDateIO(charge.fromDate().getValue());
-        chargeRS.toDate = new LogicalDateIO(charge.toDate().getValue());
-        return chargeRS;
+        ChargeIO chargeIO = new ChargeIO();
+        chargeIO.amount = new BigDecimalIO(charge.amount().getValue());
+        chargeIO.description = new StringIO(charge.description().getValue());
+        chargeIO.fromDate = new LogicalDateIO(charge.fromDate().getValue());
+        chargeIO.toDate = new LogicalDateIO(charge.toDate().getValue());
+        return chargeIO;
     }
 
     @Override
-    public ChargeDTO marshal(ChargeIO c) {
+    public ChargeDTO marshal(ChargeIO chargeIO) {
         ChargeDTO charge = EntityFactory.create(ChargeDTO.class);
-        charge.transactionId().setValue(c.transactionId);
-        charge.leaseId().setValue(c.leaseId);
-        charge.amount().setValue(c.amount.value);
-        charge.description().setValue(c.description.value);
-        charge.fromDate().setValue(c.fromDate.value); // Transaction.ChargeDetail.ServiceFromDate
-        charge.toDate().setValue(c.toDate.value); // Transaction.ChargeDetail.ServiceToDate
+        charge.transactionId().setValue(chargeIO.transactionId);
+        charge.leaseId().setValue(chargeIO.leaseId);
+        charge.amount().setValue(chargeIO.amount.value);
+        charge.description().setValue(chargeIO.description.value);
+        charge.fromDate().setValue(chargeIO.fromDate.value); // Transaction.ChargeDetail.ServiceFromDate
+        charge.toDate().setValue(chargeIO.toDate.value); // Transaction.ChargeDetail.ServiceToDate
         return charge;
     }
 
