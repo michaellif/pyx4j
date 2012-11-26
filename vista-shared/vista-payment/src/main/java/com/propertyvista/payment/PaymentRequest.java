@@ -13,6 +13,8 @@
  */
 package com.propertyvista.payment;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -24,8 +26,7 @@ public interface PaymentRequest extends IEntity {
 
     PaymentInstrument paymentInstrument();
 
-    //TODO change to BigDecimal
-    IPrimitive<Float> amount();
+    IPrimitive<BigDecimal> amount();
 
     IPrimitive<String> referenceNumber();
 

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.payment.caledon;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.payment.CCInformation;
@@ -31,7 +33,7 @@ public class CaledonRealTimeTest extends CaledonTestBase {
     static PaymentRequest createRequest(String creditCardNumber, String exp, String securityCode, double amount) {
         PaymentRequest request = EntityFactory.create(PaymentRequest.class);
         request.referenceNumber().setValue("Test1");
-        request.amount().setValue((float) amount);
+        request.amount().setValue(new BigDecimal(amount));
         CCInformation ccInfo = createCCInformation(creditCardNumber, exp);
         request.paymentInstrument().set(ccInfo);
         return request;

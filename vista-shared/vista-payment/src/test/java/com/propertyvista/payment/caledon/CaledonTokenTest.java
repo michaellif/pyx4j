@@ -13,6 +13,8 @@
  */
 package com.propertyvista.payment.caledon;
 
+import java.math.BigDecimal;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +65,7 @@ public class CaledonTokenTest extends CaledonTestBase {
 
         PaymentRequest request = EntityFactory.create(PaymentRequest.class);
         request.paymentInstrument().set(token);
-        request.amount().setValue(10f);
+        request.amount().setValue(new BigDecimal(10f));
         request.referenceNumber().setValue("Test212");
         try {
             PaymentResponse pr1 = proc.realTimeSale(testMerchant, request);

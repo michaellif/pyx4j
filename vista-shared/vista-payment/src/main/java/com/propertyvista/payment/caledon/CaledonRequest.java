@@ -13,6 +13,7 @@
  */
 package com.propertyvista.payment.caledon;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,12 +54,19 @@ public class CaledonRequest {
     @HttpRequestField("AMT")
     public String amount;
 
+    public void setAmount(BigDecimal value) {
+        BigDecimal centValue = value.multiply(new BigDecimal("100"));
+        this.amount = centValue.setScale(0).toString();
+    }
+
+    @Deprecated
     public void setAmount(float amount) {
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setGroupingUsed(false);
         this.amount = nf.format(amount * 100);
     }
 
+    @Deprecated
     public void setAmountCents(int amount) {
         this.amount = String.valueOf(amount);
     }

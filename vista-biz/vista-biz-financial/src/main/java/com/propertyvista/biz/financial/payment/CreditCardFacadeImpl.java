@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.math.BigDecimal;
+
 import com.propertyvista.domain.payment.CreditCardInfo;
 
 public class CreditCardFacadeImpl implements CreditCardFacade {
@@ -20,6 +22,11 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
     @Override
     public void persistToken(String merchantTerminalId, CreditCardInfo cc) {
         CreditCardProcessor.persistToken(merchantTerminalId, cc);
+    }
+
+    @Override
+    public String authorization(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
+        return CreditCardProcessor.authorization(amount, merchantTerminalId, referenceNumber, cc);
     }
 
 }

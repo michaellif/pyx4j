@@ -13,9 +13,14 @@
  */
 package com.propertyvista.biz.tenant.insurance;
 
-import com.pyx4j.config.server.ServerSideFactory;
+import java.math.BigDecimal;
 
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
+
+import com.propertyvista.biz.financial.payment.CreditCardFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -31,6 +36,13 @@ class TenantSurePayments {
     }
 
     static InsuranceTenantSureTransaction preAuthorization(InsuranceTenantSureTransaction transaction) {
+        BigDecimal amount = transaction.amount().getValue();
+        String merchantTerminalId = "";
+        String referenceNumber = transaction.id().getStringView();
+        String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).authorization(amount, merchantTerminalId, referenceNumber,
+                (CreditCardInfo) transaction.paymentMethod().details().cast());
+        transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
+        transaction.transactionDate().setValue(Persistence.service().getTransactionSystemTime());
         return transaction;
     }
 

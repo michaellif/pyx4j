@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.Callable;
@@ -73,68 +74,6 @@ class CreditCardProcessor {
 
     }
 
-    static PaymentRecord realTimeSale(final PaymentRecord paymentRecord) {
-        return TaskRunner.runAutonomousTransation(new Callable<PaymentRecord>() {
-            @Override
-            public PaymentRecord call() {
-                Persistence.service().merge(paymentRecord);
-                doRealTimeSale(paymentRecord);
-                return paymentRecord;
-            }
-        });
-    }
-
-    private static void doRealTimeSale(PaymentRecord paymentRecord) {
-        MerchantAccount account = PaymentUtils.retrieveValidMerchantAccount(paymentRecord);
-
-        Merchant merchant = EntityFactory.create(Merchant.class);
-        merchant.terminalID().setValue(account.merchantTerminalId().getValue());
-
-        PaymentRequest request = EntityFactory.create(PaymentRequest.class);
-        //TODO identify what should be there
-        request.referenceNumber().setValue(paymentRecord.id().getStringView());
-        request.amount().setValue(paymentRecord.amount().getValue().floatValue());
-        CreditCardInfo cc = paymentRecord.paymentMethod().details().cast();
-        if (!cc.token().isNull()) {
-            Token token = EntityFactory.create(Token.class);
-            token.code().setValue(cc.token().getStringView());
-            request.paymentInstrument().set(token);
-        } else {
-            if (!ValidationUtils.isCreditCardNumberValid(cc.card().number().getValue())) {
-                throw new UserRuntimeException(i18n.tr("Invalid Credit Card Number"));
-            }
-            CCInformation ccInfo = EntityFactory.create(CCInformation.class);
-            ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
-            ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
-            ccInfo.securityCode().setValue(cc.securityCode().getValue());
-
-            request.paymentInstrument().set(ccInfo);
-        }
-
-        IPaymentProcessor proc = new CaledonPaymentProcessor();
-
-        PaymentResponse response = proc.realTimeSale(merchant, request);
-        if (response.code().getValue().equals("0000")) {
-            log.debug("ccTransaction accepted {}", response);
-            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
-            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-            paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-            paymentRecord.transactionAuthorizationNumber().setValue(response.authorizationNumber().getValue());
-            Persistence.service().merge(paymentRecord);
-            Persistence.service().commit();
-            ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
-            Persistence.service().commit();
-        } else {
-            log.debug("ccTransaction rejected {}", response);
-            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
-            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-            paymentRecord.transactionAuthorizationNumber().setValue(response.code().getValue());
-            paymentRecord.transactionErrorMessage().setValue(response.message().getValue());
-            Persistence.service().merge(paymentRecord);
-            Persistence.service().commit();
-        }
-    }
-
     static void persistToken(String merchantTerminalId, CreditCardInfo cc) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
@@ -188,4 +127,102 @@ class CreditCardProcessor {
         }
 
     }
+
+    static PaymentRecord realTimeSale(final PaymentRecord paymentRecord) {
+        return TaskRunner.runAutonomousTransation(new Callable<PaymentRecord>() {
+            @Override
+            public PaymentRecord call() {
+                Persistence.service().merge(paymentRecord);
+                doRealTimeSale(paymentRecord);
+                return paymentRecord;
+            }
+        });
+    }
+
+    private static void doRealTimeSale(PaymentRecord paymentRecord) {
+        MerchantAccount account = PaymentUtils.retrieveValidMerchantAccount(paymentRecord);
+
+        Merchant merchant = EntityFactory.create(Merchant.class);
+        merchant.terminalID().setValue(account.merchantTerminalId().getValue());
+
+        PaymentRequest request = EntityFactory.create(PaymentRequest.class);
+        //TODO identify what should be there
+        request.referenceNumber().setValue(paymentRecord.id().getStringView());
+        request.amount().setValue(paymentRecord.amount().getValue());
+        CreditCardInfo cc = paymentRecord.paymentMethod().details().cast();
+        if (!cc.token().isNull()) {
+            Token token = EntityFactory.create(Token.class);
+            token.code().setValue(cc.token().getStringView());
+            request.paymentInstrument().set(token);
+        } else {
+            if (!ValidationUtils.isCreditCardNumberValid(cc.card().number().getValue())) {
+                throw new UserRuntimeException(i18n.tr("Invalid Credit Card Number"));
+            }
+            CCInformation ccInfo = EntityFactory.create(CCInformation.class);
+            ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
+            ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
+            ccInfo.securityCode().setValue(cc.securityCode().getValue());
+
+            request.paymentInstrument().set(ccInfo);
+        }
+
+        IPaymentProcessor proc = new CaledonPaymentProcessor();
+
+        PaymentResponse response = proc.realTimeSale(merchant, request);
+        if (response.code().getValue().equals("0000")) {
+            log.debug("ccTransaction accepted {}", response);
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
+            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            paymentRecord.transactionAuthorizationNumber().setValue(response.authorizationNumber().getValue());
+            Persistence.service().merge(paymentRecord);
+            Persistence.service().commit();
+            ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
+            Persistence.service().commit();
+        } else {
+            log.debug("ccTransaction rejected {}", response);
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
+            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            paymentRecord.transactionAuthorizationNumber().setValue(response.code().getValue());
+            paymentRecord.transactionErrorMessage().setValue(response.message().getValue());
+            Persistence.service().merge(paymentRecord);
+            Persistence.service().commit();
+        }
+    }
+
+    public static String authorization(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
+        Merchant merchant = EntityFactory.create(Merchant.class);
+        merchant.terminalID().setValue(merchantTerminalId);
+
+        PaymentRequest request = EntityFactory.create(PaymentRequest.class);
+        request.referenceNumber().setValue(referenceNumber);
+        request.amount().setValue(amount);
+        if (!cc.token().isNull()) {
+            Token token = EntityFactory.create(Token.class);
+            token.code().setValue(cc.token().getStringView());
+            request.paymentInstrument().set(token);
+        } else {
+            if (!ValidationUtils.isCreditCardNumberValid(cc.card().number().getValue())) {
+                throw new UserRuntimeException(i18n.tr("Invalid Credit Card Number"));
+            }
+            CCInformation ccInfo = EntityFactory.create(CCInformation.class);
+            ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
+            ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
+            ccInfo.securityCode().setValue(cc.securityCode().getValue());
+
+            request.paymentInstrument().set(ccInfo);
+        }
+
+        IPaymentProcessor proc = new CaledonPaymentProcessor();
+
+        PaymentResponse response = proc.realTimeAuthorization(merchant, request);
+        if (response.code().getValue().equals("0000")) {
+            log.debug("ccTransaction accepted {}", response);
+            return response.authorizationNumber().getValue();
+        } else {
+            log.debug("ccTransaction rejected {}", response);
+            throw new UserRuntimeException(i18n.tr("Credit Card Authorization failed {0}", response.message()));
+        }
+    }
+
 }

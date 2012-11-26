@@ -13,10 +13,16 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.math.BigDecimal;
+
 import com.propertyvista.domain.payment.CreditCardInfo;
 
 public interface CreditCardFacade {
 
     public void persistToken(String merchantTerminalId, CreditCardInfo cc);
 
+    /**
+     * @return authorizationNumber
+     */
+    public String authorization(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc);
 }
