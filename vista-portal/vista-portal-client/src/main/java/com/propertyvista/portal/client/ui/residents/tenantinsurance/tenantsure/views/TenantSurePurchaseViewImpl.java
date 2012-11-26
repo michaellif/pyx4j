@@ -41,7 +41,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePaymentMethodForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePersonalDisclaimerForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureQuotationRequestForm;
@@ -168,7 +167,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     private TenantSureQuoteViewer quoteViewer;
 
-    private PaymentMethodForm paymentMethodForm;
+    private PaymentMethodForm<InsurancePaymentMethod> paymentMethodForm;
 
     private TenantSurePersonalDisclaimerForm personalDisclaimerForm;
 
@@ -198,7 +197,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     @Override
     public void init(TenantSurePersonalDisclaimerHolderDTO disclaimerHolder, TenantSureQuotationRequestParamsDTO quotationRequestParams,
-            LeasePaymentMethod paymentMethod) {
+            InsurancePaymentMethod paymentMethod) {
         stepDriver.reset();
 
         personalDisclaimerForm.populate(disclaimerHolder);
@@ -228,7 +227,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     @Override
     public void setBillingAddress(AddressStructured billingAddress) {
-        LeasePaymentMethod pm = paymentMethodForm.getValue();
+        InsurancePaymentMethod pm = paymentMethodForm.getValue();
         pm.billingAddress().set(billingAddress);
         paymentMethodForm.populate(pm);
     }
@@ -455,10 +454,9 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
             private Button next = null;
 
             {
-                paymentMethodForm.addValueChangeHandler(new ValueChangeHandler<LeasePaymentMethod>() {
-
+                paymentMethodForm.addValueChangeHandler(new ValueChangeHandler<InsurancePaymentMethod>() {
                     @Override
-                    public void onValueChange(ValueChangeEvent<LeasePaymentMethod> event) {
+                    public void onValueChange(ValueChangeEvent<InsurancePaymentMethod> event) {
                         if (next != null) {
                             paymentMethodForm.revalidate();
                             next.setEnabled(paymentMethodForm.isValid());

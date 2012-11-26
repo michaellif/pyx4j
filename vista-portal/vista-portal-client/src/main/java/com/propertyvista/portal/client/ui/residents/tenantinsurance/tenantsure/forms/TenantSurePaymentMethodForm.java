@@ -22,19 +22,21 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 
-public class TenantSurePaymentMethodForm extends PaymentMethodForm {
+public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaymentMethod> {
 
     private final Command onSameAsCurrentAddressSelected;
 
-    public TenantSurePaymentMethodForm(Command onSameAsCurrentAddressSelected) {
-        this.onSameAsCurrentAddressSelected = onSameAsCurrentAddressSelected;
-    }
-
     public TenantSurePaymentMethodForm() {
         this(null);
+    }
+
+    public TenantSurePaymentMethodForm(Command onSameAsCurrentAddressSelected) {
+        super(InsurancePaymentMethod.class);
+        this.onSameAsCurrentAddressSelected = onSameAsCurrentAddressSelected;
     }
 
     @Override

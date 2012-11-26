@@ -89,7 +89,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof LeasePaymentMethod) {
-                return new PaymentMethodEditorEx();
+                return new LeasePaymentMethodEditor();
             }
             return super.create(member);
         }
@@ -135,9 +135,9 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
             });
         }
 
-        private class PaymentMethodEditorEx extends CEntityFolderRowEditor<LeasePaymentMethod> {
+        private class LeasePaymentMethodEditor extends CEntityFolderRowEditor<LeasePaymentMethod> {
 
-            public PaymentMethodEditorEx() {
+            public LeasePaymentMethodEditor() {
                 super(LeasePaymentMethod.class, columns());
             }
 
@@ -173,12 +173,12 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                             MessageDialog.confirm(i18n.tr("Please Confirm"), i18n.tr("Mark the payment as pre-authorized?"), new Command() {
                                 @Override
                                 public void execute() { // Confirmation:
-                                    presenter.savePaymentMethod(PaymentMethodEditorEx.this.getValue());
+                                    presenter.savePaymentMethod(LeasePaymentMethodEditor.this.getValue());
                                     for (int i = 0; i < PaymentMethodFolder.this.getItemCount(); ++i) {
                                         for (CComponent<?, ?> comp : PaymentMethodFolder.this.getItem(i).getComponents()) {
-                                            if (comp instanceof PaymentMethodEditorEx && !comp.equals(PaymentMethodEditorEx.this)) {
-                                                ((PaymentMethodEditorEx) comp).get(proto().isPreauthorized()).setValue(false, false);
-                                                presenter.savePaymentMethod(((PaymentMethodEditorEx) comp).getValue());
+                                            if (comp instanceof LeasePaymentMethodEditor && !comp.equals(LeasePaymentMethodEditor.this)) {
+                                                ((LeasePaymentMethodEditor) comp).get(proto().isPreauthorized()).setValue(false, false);
+                                                presenter.savePaymentMethod(((LeasePaymentMethodEditor) comp).getValue());
                                             }
                                         }
                                     }

@@ -122,6 +122,7 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
 
     @Override
     public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, InsurancePaymentMethod paymentMethod) {
+        paymentMethod.tenant().set(TenantAppContext.getCurrentUserTenant());
         ServerSideFactory.create(TenantSureFacade.class).updatePaymentMethod(paymentMethod,
                 TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub());
 

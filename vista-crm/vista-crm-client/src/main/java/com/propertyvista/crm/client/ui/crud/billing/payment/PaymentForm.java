@@ -60,7 +60,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
-    private final PaymentMethodEditor paymentMethodEditor = new PaymentMethodEditor() {
+    private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
         public List<PaymentType> getPaymentOptions() {
             return new ArrayList<PaymentType>(PaymentType.avalableInCrm());

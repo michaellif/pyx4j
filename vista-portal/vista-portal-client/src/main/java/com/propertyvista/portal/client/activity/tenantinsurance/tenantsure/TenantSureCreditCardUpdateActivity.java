@@ -24,7 +24,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureCreditCardUpdateView;
@@ -48,7 +47,7 @@ public class TenantSureCreditCardUpdateActivity extends SecurityAwareActivity im
         super.start(panel, eventBus);
         view.setPresenter(this);
 
-        LeasePaymentMethod pm = EntityFactory.create(LeasePaymentMethod.class);
+        InsurancePaymentMethod pm = EntityFactory.create(InsurancePaymentMethod.class);
         pm.type().setValue(PaymentType.CreditCard);
         view.populate(pm);
 
@@ -56,7 +55,7 @@ public class TenantSureCreditCardUpdateActivity extends SecurityAwareActivity im
     }
 
     @Override
-    public void save(LeasePaymentMethod paymentMethod) {
+    public void save(InsurancePaymentMethod paymentMethod) {
         service.updatePaymentMethod(new DefaultAsyncCallback<VoidSerializable>() {
 
             @Override

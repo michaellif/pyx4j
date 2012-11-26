@@ -36,9 +36,10 @@ import com.propertyvista.common.client.resources.VistaResources;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 
-public class PaymentMethodForm extends PaymentMethodEditor {
+public class PaymentMethodForm<E extends PaymentMethod> extends PaymentMethodEditor<E> {
 
     private static final I18n i18n = I18n.get(PaymentMethodForm.class);
 
@@ -50,12 +51,12 @@ public class PaymentMethodForm extends PaymentMethodEditor {
 
     private final boolean twoColumns;
 
-    public PaymentMethodForm() {
-        this(false);
+    public PaymentMethodForm(Class<E> clazz) {
+        this(clazz, false);
     }
 
-    public PaymentMethodForm(boolean twoColumns) {
-        super(new VistaEditorsComponentFactory());
+    public PaymentMethodForm(Class<E> clazz, boolean twoColumns) {
+        super(clazz, new VistaEditorsComponentFactory());
         this.twoColumns = twoColumns;
     }
 

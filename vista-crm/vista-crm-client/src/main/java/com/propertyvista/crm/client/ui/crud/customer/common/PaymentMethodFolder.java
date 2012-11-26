@@ -61,12 +61,16 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof LeasePaymentMethod) {
-            return new PaymentMethodEditorEx();
+            return new LeasePaymentMethodEditor();
         }
         return super.create(member);
     }
 
-    private class PaymentMethodEditorEx extends PaymentMethodEditor {
+    private class LeasePaymentMethodEditor extends PaymentMethodEditor<LeasePaymentMethod> {
+
+        public LeasePaymentMethodEditor() {
+            super(LeasePaymentMethod.class);
+        }
 
         @Override
         public IsWidget createContent() {
@@ -90,8 +94,8 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
                     if (event.getValue().booleanValue()) {
                         for (int i = 0; i < PaymentMethodFolder.this.getItemCount(); ++i) {
                             for (CComponent<?, ?> comp : PaymentMethodFolder.this.getItem(i).getComponents()) {
-                                if (comp instanceof PaymentMethodEditorEx && !comp.equals(PaymentMethodEditorEx.this)) {
-                                    ((PaymentMethodEditorEx) comp).get(proto().isPreauthorized()).setValue(false, false);
+                                if (comp instanceof LeasePaymentMethodEditor && !comp.equals(LeasePaymentMethodEditor.this)) {
+                                    ((LeasePaymentMethodEditor) comp).get(proto().isPreauthorized()).setValue(false, false);
                                 }
                             }
                         }

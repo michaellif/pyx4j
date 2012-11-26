@@ -14,12 +14,12 @@
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.portal.client.ui.residents.View;
 
-public interface TenantSureCreditCardUpdateView extends View<LeasePaymentMethod> {
+public interface TenantSureCreditCardUpdateView extends View<InsurancePaymentMethod> {
 
-    interface Presenter extends View.Presenter<LeasePaymentMethod> {
+    interface Presenter extends View.Presenter<InsurancePaymentMethod> {
 
         void onTenantAddressRequested();
 

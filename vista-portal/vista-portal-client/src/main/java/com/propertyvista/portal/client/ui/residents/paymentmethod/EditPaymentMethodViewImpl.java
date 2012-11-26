@@ -29,7 +29,7 @@ import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
 public class EditPaymentMethodViewImpl extends BasicViewImpl<LeasePaymentMethod> implements EditPaymentMethodView {
 
     public EditPaymentMethodViewImpl() {
-        setForm(new PaymentMethodForm() {
+        setForm(new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
             @Override
             public List<PaymentType> getPaymentOptions() {

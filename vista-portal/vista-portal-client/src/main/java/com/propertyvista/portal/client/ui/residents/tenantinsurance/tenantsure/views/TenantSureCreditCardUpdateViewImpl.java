@@ -17,11 +17,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePaymentMethodForm;
 
-public class TenantSureCreditCardUpdateViewImpl extends BasicViewImpl<LeasePaymentMethod> implements TenantSureCreditCardUpdateView {
+public class TenantSureCreditCardUpdateViewImpl extends BasicViewImpl<InsurancePaymentMethod> implements TenantSureCreditCardUpdateView {
 
     private static final I18n i18n = I18n.get(TenantSureCreditCardUpdateViewImpl.class);
 
@@ -36,9 +36,8 @@ public class TenantSureCreditCardUpdateViewImpl extends BasicViewImpl<LeasePayme
 
     @Override
     public void setTenantAddress(AddressStructured tenantAddress) {
-        LeasePaymentMethod paymentMethod = ((TenantSurePaymentMethodForm) form).getValue();
+        InsurancePaymentMethod paymentMethod = ((TenantSurePaymentMethodForm) form).getValue();
         paymentMethod.billingAddress().set(tenantAddress);
         ((TenantSurePaymentMethodForm) form).setValue(paymentMethod);
     }
-
 }

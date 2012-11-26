@@ -53,7 +53,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
-    private final PaymentMethodForm paymentMethodEditor = new PaymentMethodForm() {
+    private final PaymentMethodForm<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
         public List<PaymentType> getPaymentOptions() {
             return new ArrayList<PaymentType>(PaymentType.avalableInPortal());

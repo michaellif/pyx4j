@@ -43,11 +43,12 @@ import com.propertyvista.domain.payment.CheckInfo;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.InteracInfo;
-import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentDetails;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 
-public class PaymentMethodEditor extends CEntityDecoratableForm<LeasePaymentMethod> {
+public class PaymentMethodEditor<E extends PaymentMethod> extends CEntityDecoratableForm<E> {
 
     private static final I18n i18n = I18n.get(PaymentMethodEditor.class);
 
@@ -57,12 +58,16 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<LeasePaymentMeth
 
     protected Widget billingAddressHeader = new Label();
 
-    public PaymentMethodEditor() {
-        super(LeasePaymentMethod.class);
+    protected Class<E> paymentEntityClass;
+
+    public PaymentMethodEditor(Class<E> clazz) {
+        super(clazz);
+        this.paymentEntityClass = clazz;
     }
 
-    public PaymentMethodEditor(IEditableComponentFactory factory) {
-        super(LeasePaymentMethod.class, factory);
+    public PaymentMethodEditor(Class<E> clazz, IEditableComponentFactory factory) {
+        super(clazz, factory);
+        this.paymentEntityClass = clazz;
     }
 
     @Override
@@ -86,9 +91,11 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<LeasePaymentMeth
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sameAsCurrent())).build());
         main.setWidget(++row, 0, inject(proto().billingAddress(), new AddressStructuredEditor(true)));
 
-        main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isPreauthorized())).build());
-        get(proto().isPreauthorized()).setVisible(false);
+        if (paymentEntityClass.equals(LeasePaymentMethod.class)) {
+            main.setBR(++row, 0, 1);
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(((LeasePaymentMethod) proto()).isPreauthorized())).build());
+            get(((LeasePaymentMethod) proto()).isPreauthorized()).setVisible(false);
+        }
 
         // tweak UI:
         get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
@@ -118,13 +125,13 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<LeasePaymentMeth
     }
 
     @Override
-    protected void onValuePropagation(LeasePaymentMethod value, boolean fireEvent, boolean populate) {
+    protected void onValuePropagation(E value, boolean fireEvent, boolean populate) {
         selectPaymentDetailsEditor(value != null ? value.type().getValue() : null, populate);
         super.onValuePropagation(value, fireEvent, populate);
     }
 
     @Override
-    protected LeasePaymentMethod preprocessValue(LeasePaymentMethod value, boolean fireEvent, boolean populate) {
+    protected E preprocessValue(E value, boolean fireEvent, boolean populate) {
         if (!isValueEmpty()) {
             return super.preprocessValue(value, fireEvent, populate);
         }
@@ -217,7 +224,7 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<LeasePaymentMeth
     }
 
     public void initNew(PaymentType type) {
-        LeasePaymentMethod value = EntityFactory.create(LeasePaymentMethod.class);
+        E value = EntityFactory.create(paymentEntityClass);
         value.type().setValue(type);
         populate(value);
     }
@@ -267,12 +274,18 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<LeasePaymentMeth
     }
 
     public void setIsPreauthorizedVisible(boolean visible) {
-        get(proto().isPreauthorized()).setVisible(visible);
+        if (paymentEntityClass.equals(LeasePaymentMethod.class)) {
+            get(((LeasePaymentMethod) proto()).isPreauthorized()).setVisible(visible);
+        }
 
     }
 
     public boolean isIsPreauthorizedVisible() {
-        return get(proto().isPreauthorized()).isVisible();
+        if (paymentEntityClass.equals(LeasePaymentMethod.class)) {
+            return get(((LeasePaymentMethod) proto()).isPreauthorized()).isVisible();
+        } else {
+            return false;
+        }
     }
 
     public List<PaymentType> getPaymentOptions() {
