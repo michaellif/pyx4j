@@ -16,6 +16,7 @@ package com.propertyvista.biz.tenant.insurance;
 import java.math.BigDecimal;
 import java.util.Random;
 
+import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,9 +93,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
      */
     @Override
     public void buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId) {
-        if (quote.quoteId().isNull()) {
-            throw new Error("it's impossible to buy insurance with no quote id!!!");
-        }
+        Validate.isTrue(!quote.quoteId().isNull(), "it's impossible to buy insurance with no quote id!!!");
+
         InsuranceTenantSure ts = EntityFactory.create(InsuranceTenantSure.class);
         ts.quoteId().setValue(quote.quoteId().getValue());
         ts.client().set(initializeCleint(tenantId));
@@ -107,7 +107,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         transaction.paymentMethod().set(TenantSurePayments.getPaymentMethod(tenantId));
         transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Draft);
         // TODO
-        transaction.amount().setValue(null);
+        transaction.amount().setValue(new BigDecimal("10"));
         Persistence.service().persist(transaction);
 
         Persistence.service().commit();
@@ -131,6 +131,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             }
             transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Authorized);
             Persistence.service().persist(transaction);
+            Persistence.service().commit();
 
             try {
                 bind(ts);
