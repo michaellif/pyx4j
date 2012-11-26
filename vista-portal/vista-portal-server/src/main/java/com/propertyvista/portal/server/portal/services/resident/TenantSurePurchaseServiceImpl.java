@@ -95,7 +95,7 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
         ));//@formatter:on
 
         IAgree agreeHolder = EntityFactory.create(IAgree.class);
-        agreeHolder.person().set(TenantAppContext.getCurrentUserTenant().person().duplicate());
+        agreeHolder.person().set(TenantAppContext.getCurrentUserCustomer().person().duplicate());
 
         LegalTermsDescriptorDTO personalDisclaimerTerms = params.personalDisclaimerTerms().$();
         personalDisclaimerTerms.content().localizedCaption().setValue("Personal Disclaimer");
@@ -106,7 +106,7 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
         DigitalSignature signature = params.digitalSignatures().$();
         signature.timestamp().setValue(new LogicalDate());
         signature.ipAddress().setValue(Context.getRequestRemoteAddr());
-        signature.person().set(TenantAppContext.getCurrentUserTenant().duplicate());
+        signature.person().set(TenantAppContext.getCurrentUserCustomer().duplicate());
         params.digitalSignatures().add(signature);
 
         callback.onSuccess(params);
@@ -116,14 +116,14 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     @Override
     public void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureCoverageDTO quotationRequest) {
         TenantSureQuoteDTO quote = ServerSideFactory.create(TenantSureFacade.class).getQuote(quotationRequest,
-                TenantAppContext.getCurrentUserTenantInLease().<Tenant> createIdentityStub());
+                TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub());
         callback.onSuccess(quote);
     }
 
     @Override
     public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, InsurancePaymentMethod paymentMethod) {
         ServerSideFactory.create(TenantSureFacade.class).updatePaymentMethod(paymentMethod,
-                TenantAppContext.getCurrentUserTenantInLease().<Tenant> createIdentityStub());
+                TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub());
 
         ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, TenantAppContext.getCurrentUserTenantInLease().<Tenant> createIdentityStub());
 
