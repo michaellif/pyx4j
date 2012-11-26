@@ -13,9 +13,13 @@
  */
 package com.propertyvista.domain.policy.policies;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -29,13 +33,24 @@ import com.propertyvista.domain.property.asset.building.Building;
 @LowestApplicableNode(value = Building.class)
 public interface TenantInsurancePolicy extends Policy {
 
-    IPrimitive<Boolean> isSubscribedToTenantSure();
+    IPrimitive<Boolean> requireMinimumLiability();
+
+    @Editor(type = EditorType.money)
+    @Format("#,##.00")
+    IPrimitive<BigDecimal> minimumRequiredLiability();
 
     @NotNull
     @Owned
     @Length(20845)
     @Editor(type = Editor.EditorType.richtextarea)
-    @Caption(description = "This text is displayed in Resident Portal on a page that lets a tenant to either provide insurance or purchase TenantSure insurance")
+    @Caption(description = "This text is displayed in Resident Portal on a page that lets a tenant to either provide insurance or purchase TenantSure insurance.")
     IPrimitive<String> tenantInsuranceInvitation();
+
+    @NotNull
+    @Owned
+    @Length(20845)
+    @Editor(type = Editor.EditorType.richtextarea)
+    @Caption(description = "This text is displayed in Resident Portal's Dashboard when a tenant doesn't have tenant insurance.")
+    IPrimitive<String> noInsuranceStatusMessage();
 
 }

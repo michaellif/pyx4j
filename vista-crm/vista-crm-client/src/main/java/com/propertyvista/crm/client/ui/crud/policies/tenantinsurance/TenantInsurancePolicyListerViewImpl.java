@@ -18,7 +18,7 @@ import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.TenantInsurancePolicyDTO;
 
-public class TenantInsurancePolicyListerViewImpl extends CrmListerViewImplBase<TenantInsurancePolicyDTO> {
+public class TenantInsurancePolicyListerViewImpl extends CrmListerViewImplBase<TenantInsurancePolicyDTO> implements TenantInsurancePolicyListerView {
 
     public TenantInsurancePolicyListerViewImpl() {
         super(CrmSiteMap.Settings.Policies.TenantInsurance.class);

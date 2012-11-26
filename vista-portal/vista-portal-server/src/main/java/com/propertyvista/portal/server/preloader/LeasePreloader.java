@@ -56,8 +56,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
         AptUnitSource aptUnitSource = new AptUnitSource(1);
 
-        //ensure LeaseLifecycleSimulator is fired during tests
-
         Customer dualTenantCustomer = null;
         for (int i = 0; i < config().numTenants; i++) {
             AptUnit unit = makeAvailable(aptUnitSource.next());

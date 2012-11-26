@@ -25,4 +25,7 @@ public interface NoInsuranceTenantInsuranceStatusDTO extends TenantInsuranceStat
     @Format("#,##0.00")
     IPrimitive<BigDecimal> minimumRequiredLiability();
 
+    IPrimitive<String> noInsuranceStatusMessage();
+
+    IPrimitive<String> tenantInsuranceInvitation();
 }

@@ -16,6 +16,9 @@ package com.propertyvista.crm.client.ui.crud.policies.tenantinsurance;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -32,11 +35,33 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
 
     @Override
     protected List<FormFlexPanel> createCustomTabPanels() {
-        FormFlexPanel general = new FormFlexPanel(i18n.tr("General"));
-        int row = -1;
-
-        general.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isSubscribedToTenantSure()), 5).build());
-
-        return Arrays.asList(general);
+        return Arrays.asList(//@formatter:off
+                createInsuranceRequirementsTab(),
+                createPortalConfigurationTab()                
+        );//@formatter:on
     }
+
+    private FormFlexPanel createInsuranceRequirementsTab() {
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Insurance Requirements"));
+        int row = -1;
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireMinimumLiability()), 5).build());
+        get(proto().requireMinimumLiability()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                get(proto().minimumRequiredLiability()).setVisible(event.getValue());
+            }
+        });
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().minimumRequiredLiability()), 5).build());
+        get(proto().minimumRequiredLiability()).setVisible(false);
+        return panel;
+    }
+
+    private FormFlexPanel createPortalConfigurationTab() {
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Portal Configuration"));
+        int row = -1;
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().noInsuranceStatusMessage()), 50).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenantInsuranceInvitation()), 50).build());
+        return panel;
+    }
+
 }

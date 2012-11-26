@@ -96,6 +96,12 @@ import com.propertyvista.crm.client.ui.crud.policies.restrictions.RestrictionsPo
 import com.propertyvista.crm.client.ui.crud.policies.restrictions.RestrictionsPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.restrictions.RestrictionsPolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.policies.restrictions.RestrictionsPolicyViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.tenantinsurance.TenantInsurancePolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.tenantinsurance.TenantInsurancePolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.tenantinsurance.TenantInsurancePolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.tenantinsurance.TenantInsurancePolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.tenantinsurance.TenantInsurancePolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.tenantinsurance.TenantInsurancePolicyViewerViewImpl;
 
 public class PolicyViewFactory extends ViewFactoryBase {
     public static <E extends IEntity, T extends IView> T instance(Class<T> type) {
@@ -193,6 +199,13 @@ public class PolicyViewFactory extends ViewFactoryBase {
                 map.put(ARPolicyEditorView.class, new ARPolicyEditorViewImpl());
             } else if (ARPolicyViewerView.class.equals(type)) {
                 map.put(ARPolicyViewerView.class, new ARPolicyViewerViewImpl());
+
+            } else if (TenantInsurancePolicyListerView.class.equals(type)) {
+                map.put(type, new TenantInsurancePolicyListerViewImpl());
+            } else if (TenantInsurancePolicyEditorView.class.equals(type)) {
+                map.put(type, new TenantInsurancePolicyEditorViewImpl());
+            } else if (TenantInsurancePolicyViewerView.class.equals(type)) {
+                map.put(type, new TenantInsurancePolicyViewerViewImpl());
             }
 
         }

@@ -29,6 +29,7 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeas
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupProductTaxPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProductTaxPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.RestrictionsPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.TenantInsurancePolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.util.SimplePoliciesPreloader;
 
 public class PreloadPolicies extends SimplePoliciesPreloader {
@@ -40,6 +41,7 @@ public class PreloadPolicies extends SimplePoliciesPreloader {
         add(new IdAssignmentPolicyPreloader());
         add(new RestrictionsPolicyPreloader());
         add(new DatesPolicyPreloader());
+        add(new TenantInsurancePolicyPreloader());
         if (!VistaTODO.Equifax_Short_VISTA_478) {
             add(new BackgroundCheckPolicyPreloader());
         }
