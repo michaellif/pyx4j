@@ -7,35 +7,37 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 12, 2012
+ * Created on Nov 24, 2012
  * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.oapi.model;
 
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlValue;
 
-import com.propertyvista.oapi.xml.StringIO;
+import com.propertyvista.domain.media.Media;
+import com.propertyvista.oapi.xml.Action;
+import com.propertyvista.oapi.xml.ElementIO;
 
-@XmlRootElement
-public class ServiceIO {
+public class MediaTypeIO implements ElementIO {
+
+    @XmlValue
+    public Media.Type value;
 
     @XmlAttribute
-    public String leaseId;
+    public Action action;
 
-    @XmlAttribute
-    public String chargeCode;
-
-    public StringIO description;
-
-    public StringIO glCode;
-
-    public ServiceIO() {
+    public MediaTypeIO() {
     }
 
-    public ServiceIO(StringIO description) {
-        this.description = description;
+    public MediaTypeIO(Media.Type value) {
+        this.value = value;
+    }
+
+    @Override
+    public Action getAction() {
+        return action;
     }
 
 }

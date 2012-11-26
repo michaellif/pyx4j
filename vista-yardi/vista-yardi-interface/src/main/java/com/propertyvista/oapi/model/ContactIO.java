@@ -23,6 +23,8 @@ public class ContactIO extends AbstractElementIO {
     @XmlAttribute
     public String name;
 
+    public StringIO newName;
+
     public StringIO email;
 
     public StringIO phone;

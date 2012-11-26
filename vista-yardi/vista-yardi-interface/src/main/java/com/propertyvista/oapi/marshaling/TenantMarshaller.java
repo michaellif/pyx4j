@@ -24,9 +24,9 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantI
         tenantIO.firstName = participant.customer().person().name().firstName().getValue();
         tenantIO.lastName = participant.customer().person().name().lastName().getValue();
         tenantIO.middleName = participant.customer().person().name().middleName().getValue();
-        tenantIO.sex = participant.customer().person().sex().getValue().name();
-        tenantIO.phone = participant.customer().person().homePhone().getValue();
-        tenantIO.email = participant.customer().person().email().getValue();
+        tenantIO.sex.value = participant.customer().person().sex().getValue();
+        tenantIO.phone.value = participant.customer().person().homePhone().getValue();
+        tenantIO.email.value = participant.customer().person().email().getValue();
         return tenantIO;
     }
 

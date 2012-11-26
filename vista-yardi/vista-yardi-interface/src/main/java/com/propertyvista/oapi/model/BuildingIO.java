@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.propertyvista.oapi.xml.AbstractElementIO;
+import com.propertyvista.oapi.xml.StringIO;
 
 @XmlRootElement(name = "building")
 public class BuildingIO extends AbstractElementIO {
@@ -30,6 +31,8 @@ public class BuildingIO extends AbstractElementIO {
     //mandatory for portal, unique identifier
     @XmlAttribute
     public String propertyCode;
+
+    public StringIO newPropertyCode;
 
     public BuildingInfoIO info;
 

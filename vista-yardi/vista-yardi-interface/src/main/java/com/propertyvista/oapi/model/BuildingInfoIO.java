@@ -12,12 +12,9 @@
  */
 package com.propertyvista.oapi.model;
 
-import com.propertyvista.domain.property.asset.building.BuildingInfo.ConstructionType;
-import com.propertyvista.domain.property.asset.building.BuildingInfo.FloorType;
-import com.propertyvista.domain.property.asset.building.BuildingInfo.FoundationType;
-import com.propertyvista.domain.property.asset.building.BuildingInfo.WaterSupply;
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.BooleanIO;
+import com.propertyvista.oapi.xml.IntegerIO;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class BuildingInfoIO extends AbstractElementIO {
@@ -47,20 +44,20 @@ public class BuildingInfoIO extends AbstractElementIO {
 //    public Date structureBuildYear;
     public StringIO structureBuildYear;
 
-    public ConstructionType constructionType;
+    public ConstructionTypeIO constructionType;
 
-    public FoundationType foundationType;
+    public FoundationTypeIO foundationType;
 
-    public FloorType floorType;
+    public FloorTypeIO floorType;
 
     public StringIO landArea;
 
-    public WaterSupply waterSupply;
+    public WaterSupplyTypeIO waterSupply;
 
     public BooleanIO centralAir;
 
     public BooleanIO centralHeat;
 
-    public Integer unitCount;
+    public IntegerIO unitCount;
 
 }

@@ -17,11 +17,13 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 import com.propertyvista.oapi.xml.StringIO;
 
-public class PhoneIO {
+public class GlCodeIO {
 
     @XmlAttribute
-    public String number;
+    public String codeId;
 
     public StringIO description;
+
+    public GlCodeCategoryIO glCodeCategory;
 
 }

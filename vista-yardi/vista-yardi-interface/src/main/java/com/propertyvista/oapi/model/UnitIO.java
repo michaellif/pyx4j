@@ -29,6 +29,8 @@ public class UnitIO {
     @XmlAttribute
     public String number;
 
+    public StringIO newNumber;
+
     public StringIO floorplanName;
 
     public IntegerIO beds;
