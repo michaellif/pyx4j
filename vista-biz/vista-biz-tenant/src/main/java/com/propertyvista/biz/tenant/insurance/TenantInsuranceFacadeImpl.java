@@ -20,10 +20,16 @@ import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.PropertiesConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.OtherProviderTenantInsuranceStatusDTO;
@@ -69,7 +75,12 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
 
         } else {
             NoInsuranceTenantInsuranceStatusDTO noInsuranceStatus = EntityFactory.create(NoInsuranceTenantInsuranceStatusDTO.class);
-            noInsuranceStatus.minimumRequiredLiability().setValue(new BigDecimal("90000000"));
+
+            TenantInsurancePolicy tenantInsurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                    retrieveLease(tenantStub).unit(), TenantInsurancePolicy.class);
+            noInsuranceStatus.minimumRequiredLiability().setValue(tenantInsurancePolicy.minimumRequiredLiability().getValue());
+            noInsuranceStatus.noInsuranceStatusMessage().setValue(tenantInsurancePolicy.noInsuranceStatusMessage().getValue());
+            noInsuranceStatus.tenantInsuranceInvitation().setValue(tenantInsurancePolicy.tenantInsuranceInvitation().getValue());
             return noInsuranceStatus;
         }
 
@@ -78,5 +89,12 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
     private static LogicalDate fetchDate(Map<String, String> config, String propertyName) {
         String rawDate = config.get(propertyName);
         return rawDate != null ? new LogicalDate(DateUtils.detectDateformat(config.get(propertyName))) : null;
+    }
+
+    private static Lease retrieveLease(Tenant tenantId) {
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
+        Persistence.service().retrieve(Lease.class, tenant.lease().getPrimaryKey());
+        return Persistence.service().retrieve(criteria);
     }
 }

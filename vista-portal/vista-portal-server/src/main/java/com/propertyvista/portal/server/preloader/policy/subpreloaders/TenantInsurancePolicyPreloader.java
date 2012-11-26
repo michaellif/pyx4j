@@ -30,7 +30,7 @@ public class TenantInsurancePolicyPreloader extends AbstractPolicyPreloader<Tena
         policy.requireMinimumLiability().setValue(false);
         policy.noInsuranceStatusMessage().setValue(//@formatter:off
                 "<div>" +
-                    "<div style=\"text-align: center\">" +
+                    "<div style=\"text-align: center; font-weight: bold;\">" +
                     "<span>" +
                     "According to our records you do not have valid tenant insurance!" +
                     "</span>" +
@@ -44,15 +44,15 @@ public class TenantInsurancePolicyPreloader extends AbstractPolicyPreloader<Tena
         );//@formatter:on
         policy.tenantInsuranceInvitation().setValue(//@formatter:off
                 "<div>" +
-                "<div style=\"text-align: center;\">" +
+                "<div style=\"text-align: center; font-weight: bold;\">" +
                 "<span>" +
-                "According to our records you do not have Valid Tenant Insurance!" +
+                "According to our records you do not have valid tenant insurance!" +
                 "</span>" +
                 "</div>" +
                 "<div style=\"text-align: justify;\">" +
                 "<span>" +
-                "As per you Lease Agreement, you must obtain and provide the Landlord with Proof of Tenant Insurance. " +
-                "We have teamed up with TenantSure, a Licensed Broker, to assist you in obtaining your Tenant Insurance." +
+                "As per you Lease Agreement, you must obtain and provide the landlord with proof of tenant insurance. " +
+                "We have teamed up with TenantSure, a licensed broker, to assist you in obtaining your tenant insurance." +
                 "</span>" +
                 "</div>" +
                 "</div>" 

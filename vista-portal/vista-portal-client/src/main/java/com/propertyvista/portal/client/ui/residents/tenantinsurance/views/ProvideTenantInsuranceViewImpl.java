@@ -17,6 +17,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
@@ -30,7 +32,7 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenant
 public class ProvideTenantInsuranceViewImpl extends Composite implements ProvideTenantInsuranceView {
 
     public enum Styles implements IStyleName {
-        ProvideTINoInsuranceWarning, ProvideTIRequirements, ProvideTIBGetTenantSure, ProvideTIUpdateExisitingInsurance, ProvideTITenantSureLogo;
+        ProvideTIRequirements, ProvideTIBGetTenantSure, ProvideTIUpdateExisitingInsurance, ProvideTITenantSureLogo;
     }
 
     private static final I18n i18n = I18n.get(ProvideTenantInsuranceViewImpl.class);
@@ -39,35 +41,34 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
 
     private final Label tenantInsuranceRequirementsMessage;
 
-    private final Label noTenantInsuranceWarningMessage;
-
     private final TenantSureLogo tenantSureLogo;
 
     public ProvideTenantInsuranceViewImpl() {
         FlowPanel viewPanel = new FlowPanel();
 
-        noTenantInsuranceWarningMessage = new Label();
-        noTenantInsuranceWarningMessage.addStyleName(Styles.ProvideTINoInsuranceWarning.name());
-
-        noTenantInsuranceWarningMessage.setText(i18n.tr("According to our records you do not have Valid Tenant Insurance!"));
-        viewPanel.add(noTenantInsuranceWarningMessage);
-
         tenantInsuranceRequirementsMessage = new Label();
-        tenantInsuranceRequirementsMessage.addStyleName(Styles.ProvideTIRequirements.name());
+        tenantInsuranceRequirementsMessage.setStyleName(Styles.ProvideTIRequirements.name());
         viewPanel.add(tenantInsuranceRequirementsMessage);
+
+        HorizontalPanel getTenantSurePanel = new HorizontalPanel();
+        getTenantSurePanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        getTenantSurePanel.getElement().getStyle().setProperty("marginLeft", "auto");
+        getTenantSurePanel.getElement().getStyle().setProperty("marginRight", "auto");
 
         tenantSureLogo = new TenantSureLogo();
         tenantSureLogo.addStyleName(Styles.ProvideTITenantSureLogo.name());
-        viewPanel.add(tenantSureLogo);
+        getTenantSurePanel.add(tenantSureLogo);
 
-        Button getTenantSureButton = new Button(i18n.tr("Get TenantSure"), new ClickHandler() {
+        Button getTenantSureButton = new Button(i18n.tr("Get TenantSure"));
+        getTenantSureButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.onPurchaseTenantSure();
             }
         });
         getTenantSureButton.addStyleName(Styles.ProvideTIBGetTenantSure.name());
-        viewPanel.add(getTenantSureButton);
+        getTenantSurePanel.add(getTenantSureButton);
+        viewPanel.add(getTenantSurePanel);
 
         Anchor provideInsuranceByOtherProvider = new Anchor(i18n.tr("I (we) already have Tenant Insurance"), new ClickHandler() {
 
@@ -91,14 +92,9 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
     public void populate(NoInsuranceTenantInsuranceStatusDTO noInsuranceStatus) {
         boolean noInsurance = noInsuranceStatus != null && !noInsuranceStatus.isNull();
 
-        noTenantInsuranceWarningMessage.setVisible(noInsurance);
         tenantInsuranceRequirementsMessage.setVisible(noInsurance);
-
-        tenantInsuranceRequirementsMessage
-                .setText(noInsurance ? i18n
-                        .tr("As per you Lease Agreement, you must obtain and provide the Landlord with Proof of Tenant Insurance with a minimum Personal Liability of ${0}. We have teamed up with TenantSure, a Licensed Broker, to assist you in obtaining your Tenant Insurance.",
-                                noInsuranceStatus.minimumRequiredLiability())
-                        : "");
+        tenantInsuranceRequirementsMessage.setVisible(noInsurance);
+        tenantInsuranceRequirementsMessage.setHTML(noInsuranceStatus.tenantInsuranceInvitation().getValue());
     }
 
 }

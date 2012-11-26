@@ -36,7 +36,6 @@ import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.NoTenantInsuranceStatusViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantSureInsuranceStatusViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseViewImpl;
@@ -352,19 +351,6 @@ public class PortalTheme extends VistaTheme {
         }
 
         {
-            Style style = new Style("." + NoTenantInsuranceStatusViewer.STYLE_PREFIX + NoTenantInsuranceStatusViewer.StyleSuffix.ExplanationText);
-            style.addProperty("width", "100%");
-            style.addProperty("text-align", "justify");
-            style.addProperty("font-weight", "normal");
-            style.addProperty("font-style", "normal");
-            style.addProperty("padding-left", "0em");
-            style.addProperty("padding-right", "1em");
-            style.addProperty("padding-top", "0.5em");
-            style.addProperty("padding-bottom", "2em");
-            addStyle(style);
-        }
-
-        {
             Style style = new Style("." + TenantSureInsuranceStatusViewer.STYLE_PREFIX + TenantSureInsuranceStatusViewer.StyleSuffix.TenantSureLogo);
             style.addProperty("display", "block");
             style.addProperty("margin-left", "auto");
@@ -376,17 +362,6 @@ public class PortalTheme extends VistaTheme {
         }
 
         // ProvideTenantInsuranceView **************************************************************************************************************************
-        {
-            Style style = new Style("." + ProvideTenantInsuranceViewImpl.Styles.ProvideTINoInsuranceWarning.name());
-            style.addProperty("color", "#AA0000");
-            style.addProperty("width", "100%");
-            style.addProperty("text-align", "center");
-            style.addProperty("font-size", "16px");
-            style.addProperty("font-weight", "bold");
-            style.addProperty("font-style", "normal");
-            style.addProperty("padding-top", "0.5em");
-            addStyle(style);
-        }
 
         {
             Style style = new Style("." + ProvideTenantInsuranceViewImpl.Styles.ProvideTIRequirements.name());
@@ -396,8 +371,8 @@ public class PortalTheme extends VistaTheme {
             style.addProperty("font-style", "normal");
             style.addProperty("margin-left", "auto");
             style.addProperty("margin-right", "auto");
-            style.addProperty("padding-top", "0.5em");
-            style.addProperty("padding-bottom", "0.5em");
+            style.addProperty("margin-bottom", "40px");
+            style.addProperty("margin-top", "30px");
             addStyle(style);
         }
 
@@ -416,11 +391,12 @@ public class PortalTheme extends VistaTheme {
         {
             Style style = new Style("." + ProvideTenantInsuranceViewImpl.Styles.ProvideTIBGetTenantSure.name());
             // put the button in the center
-            style.addProperty("position", "relative");
-            style.addProperty("left", "50%");
+//            style.addProperty("position", "relative");
+//            style.addProperty("left", "50%");
+//            style.addProperty("margin-left", "-10em");
+            style.addProperty("margin-left", "20px");
             style.addProperty("width", "20em");
-            style.addProperty("margin-left", "-10em");
-            style.addProperty("padding", "0.5em");
+            style.addProperty("padding", "0.40em");
             style.addProperty("font-size", "18px");
             style.addProperty("text-align", "center");
             style.addProperty("font-style", "bold");
