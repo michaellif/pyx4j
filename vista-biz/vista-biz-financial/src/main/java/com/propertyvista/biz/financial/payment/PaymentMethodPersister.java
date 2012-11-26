@@ -31,11 +31,12 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.util.DomainUtil;
 
 class PaymentMethodPersister {
 
-    static boolean isAccountNumberChange(PaymentMethod paymentMethod, PaymentMethod origPaymentMethod) {
+    private static boolean isAccountNumberChange(PaymentMethod paymentMethod, PaymentMethod origPaymentMethod) {
         switch (paymentMethod.type().getValue()) {
         case Echeck:
             EcheckInfo eci = paymentMethod.details().cast();
@@ -106,7 +107,29 @@ class PaymentMethodPersister {
             // Keep history of payment methods that were used.
             origPaymentMethod = Persistence.service().retrieve(InsurancePaymentMethod.class, paymentMethod.getPrimaryKey());
             if (isAccountNumberChange(paymentMethod, origPaymentMethod)) {
-                //TODO
+                EntityQueryCriteria<InsuranceTenantSureTransaction> criteria = EntityQueryCriteria.create(InsuranceTenantSureTransaction.class);
+                criteria.eq(criteria.proto().paymentMethod(), paymentMethod);
+                criteria.ne(criteria.proto().status(), InsuranceTenantSureTransaction.TransactionStatus.Draft);
+                if (Persistence.service().count(criteria) != 0) {
+                    origPaymentMethod.isDeleted().setValue(true);
+                    Persistence.service().merge(origPaymentMethod);
+                    EntityGraph.makeDuplicate(paymentMethod);
+                    switch (paymentMethod.type().getValue()) {
+                    case CreditCard:
+                        CreditCardInfo cc = paymentMethod.details().cast();
+                        cc.token().setValue(null);
+                        break;
+                    case Echeck:
+                        EcheckInfo eci = paymentMethod.details().cast();
+                        if (eci.accountNo().newNumber().isNull()) {
+                            EcheckInfo origeci = origPaymentMethod.details().cast();
+                            eci.accountNo().newNumber().setValue(origeci.accountNo().number().getValue());
+                        }
+                    default:
+                        break;
+                    }
+                    origPaymentMethod = null;
+                }
             }
         }
         Validate.isTrue(!paymentMethod.tenant().isNull(), "Owner (tenant) is required for PaymentMethod");
