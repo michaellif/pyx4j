@@ -22,6 +22,8 @@ package com.pyx4j.entity.server;
 
 public interface IEntityPersistenceServiceExt {
 
+    public void reconnect();
+
     public void dispose();
 
     public void deregister();

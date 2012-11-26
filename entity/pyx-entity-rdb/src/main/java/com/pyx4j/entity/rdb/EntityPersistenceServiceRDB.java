@@ -102,6 +102,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     private static final I18n i18n = I18n.get(EntityPersistenceServiceRDB.class);
 
+    private Configuration configuration;
+
     private final ConnectionProvider connectionProvider;
 
     private final Mappings mappings;
@@ -130,6 +132,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 log.error("RDB initialization error", e);
                 throw new RuntimeException(e.getMessage());
             }
+            this.configuration = configuration;
             boolean initialized = false;
             try {
                 mappings = new Mappings(connectionProvider, configuration);
@@ -153,6 +156,17 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             throw new RuntimeException("Invalid RDB configuration class " + cfg);
         }
         return (Configuration) cfg;
+    }
+
+    @Override
+    public void reconnect() {
+        endTransaction();
+        try {
+            connectionProvider.reconnect(configuration);
+        } catch (SQLException e) {
+            log.error("RDB initialization error", e);
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override

@@ -46,21 +46,21 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
     private final DataSource dataSourceAministration;
 
-    public ConnectionPoolC3P0(Configuration cfg) throws Exception {
+    public ConnectionPoolC3P0(Configuration configuration) throws Exception {
         if (singleInstanceCreated) {
             throw new Error("Only single Instance of  ConnectionPoolC3P0 supported");
         }
-        log.debug("initialize DB ConnectionPool {}", cfg);
+        log.debug("initialize DB ConnectionPool {}", configuration);
         {
-            dataSource = createDataSource(cfg);
+            dataSource = createDataSource(configuration);
             dataSource.setDataSourceName("default");
 
             // the settings below are optional -- c3p0 can work with defaults
-            dataSource.setInitialPoolSize(cfg.initialPoolSize());
-            dataSource.setMinPoolSize(cfg.minPoolSize()); // default is 3
-            dataSource.setMaxPoolSize(cfg.maxPoolSize()); // default is 15, we may need more for the server
+            dataSource.setInitialPoolSize(configuration.initialPoolSize());
+            dataSource.setMinPoolSize(configuration.minPoolSize()); // default is 3
+            dataSource.setMaxPoolSize(configuration.maxPoolSize()); // default is 15, we may need more for the server
 
-            dataSource.setUnreturnedConnectionTimeout(cfg.unreturnedConnectionTimeout());
+            dataSource.setUnreturnedConnectionTimeout(configuration.unreturnedConnectionTimeout());
             dataSource.setDebugUnreturnedConnectionStackTraces(true);
 
             if (ServerSideConfiguration.isRunningInDeveloperEnviroment()) {
@@ -73,15 +73,15 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
         }
 
         {
-            dataSourceBackgroundProcess = createDataSource(cfg);
+            dataSourceBackgroundProcess = createDataSource(configuration);
             dataSourceBackgroundProcess.setDataSourceName("backgroundProcess");
 
             // the settings below are optional -- c3p0 can work with defaults
-            dataSourceBackgroundProcess.setInitialPoolSize(cfg.initialBackgroundProcessPoolSize());
-            dataSourceBackgroundProcess.setMinPoolSize(cfg.minBackgroundProcessPoolSize()); // default is 3
-            dataSourceBackgroundProcess.setMaxPoolSize(cfg.maxBackgroundProcessPoolSize());
+            dataSourceBackgroundProcess.setInitialPoolSize(configuration.initialBackgroundProcessPoolSize());
+            dataSourceBackgroundProcess.setMinPoolSize(configuration.minBackgroundProcessPoolSize()); // default is 3
+            dataSourceBackgroundProcess.setMaxPoolSize(configuration.maxBackgroundProcessPoolSize());
 
-            dataSourceBackgroundProcess.setUnreturnedConnectionTimeout(cfg.unreturnedConnectionBackgroundProcessTimeout());
+            dataSourceBackgroundProcess.setUnreturnedConnectionTimeout(configuration.unreturnedConnectionBackgroundProcessTimeout());
             dataSourceBackgroundProcess.setDebugUnreturnedConnectionStackTraces(true);
             dataSourceBackgroundProcess.setIdentityToken(C3P0ImplUtils.allocateIdentityToken(dataSourceBackgroundProcess));
 
@@ -91,7 +91,7 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
         }
 
         {
-            dataSourceAministration = DataSources.unpooledDataSource(cfg.connectionUrl(), cfg.dbAdministrationUserName(), cfg.dbAdministrationPassword());
+            dataSourceAministration = DataSources.unpooledDataSource(configuration.connectionUrl(), configuration.dbAdministrationUserName(), configuration.dbAdministrationPassword());
         }
         singleInstanceCreated = true;
     }

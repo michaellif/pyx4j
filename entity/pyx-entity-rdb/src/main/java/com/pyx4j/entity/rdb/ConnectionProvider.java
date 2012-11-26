@@ -71,27 +71,27 @@ public class ConnectionProvider {
 
     }
 
-    public ConnectionProvider(Configuration cfg) throws SQLException {
-        setupDataSource(cfg);
+    public ConnectionProvider(Configuration configuration) throws SQLException {
+        setupDataSource(configuration);
     }
 
-    private void setupDataSource(Configuration cfg) throws SQLException {
+    private void setupDataSource(Configuration configuration) throws SQLException {
         synchronized (java.sql.DriverManager.class) {
             try {
-                Class.forName(cfg.driverClass());
+                Class.forName(configuration.driverClass());
             } catch (ClassNotFoundException e) {
-                throw new SQLException("JDBC driver " + cfg.driverClass() + " not found");
+                throw new SQLException("JDBC driver " + configuration.driverClass() + " not found");
             }
         }
 
         // connection pool
         try {
-            if (cfg.connectionPool() == ConnectionPoolProvider.dbcp) {
-                connectionPool = new ConnectionPoolDBCP(cfg);
-            } else if (cfg.connectionPool() == ConnectionPoolProvider.c3p0) {
-                connectionPool = new ConnectionPoolC3P0(cfg);
+            if (configuration.connectionPool() == ConnectionPoolProvider.dbcp) {
+                connectionPool = new ConnectionPoolDBCP(configuration);
+            } else if (configuration.connectionPool() == ConnectionPoolProvider.c3p0) {
+                connectionPool = new ConnectionPoolC3P0(configuration);
             } else {
-                throw new SQLException("Configuration does not specify proper connection pool " + cfg.connectionPool());
+                throw new SQLException("Configuration does not specify proper connection pool " + configuration.connectionPool());
             }
 
             log.debug("Using connection pool {}", connectionPool);
@@ -102,35 +102,46 @@ public class ConnectionProvider {
             throw new SQLException("Failed to initialize connection pool: " + e.getMessage(), e);
         }
 
-        NamingConvention namingConvention = cfg.namingConvention();
+        NamingConvention namingConvention = configuration.namingConvention();
         if (namingConvention == null) {
             namingConvention = new NamingConventionOracle(64, null);
         }
 
-        switch (cfg.databaseType()) {
+        switch (configuration.databaseType()) {
         case HSQLDB:
-            dialect = new HSQLDialect(namingConvention, cfg.getMultitenancyType(), cfg.sequencesBaseIdentity());
+            dialect = new HSQLDialect(namingConvention, configuration.getMultitenancyType(), configuration.sequencesBaseIdentity());
             break;
         case MySQL:
-            dialect = new MySQLDialect(namingConvention, cfg.getMultitenancyType());
+            dialect = new MySQLDialect(namingConvention, configuration.getMultitenancyType());
             break;
         case Oracle:
-            dialect = new OracleDialect(namingConvention, cfg.getMultitenancyType());
+            dialect = new OracleDialect(namingConvention, configuration.getMultitenancyType());
             break;
         case PostgreSQL:
-            dialect = new PostgreSQLDialect(namingConvention, cfg.getMultitenancyType());
+            dialect = new PostgreSQLDialect(namingConvention, configuration.getMultitenancyType());
             break;
         default:
-            throw new Error("Unsupported driver Dialect " + cfg.driverClass());
+            throw new Error("Unsupported driver Dialect " + configuration.driverClass());
         }
     }
 
-    public void dispose() {
+    public void reconnect(Configuration configuration) throws SQLException {
+        close();
+        setupDataSource(configuration);
+    }
+
+    public void close() {
         try {
             connectionPool.close();
         } catch (Throwable e) {
             log.error("pool close error", e);
         }
+        this.dataSource = null;
+        this.backgroundProcessDataSource = null;
+    }
+
+    public void dispose() {
+        close();
     }
 
     public void deregister() {
