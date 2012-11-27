@@ -20,6 +20,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.payment.CreditCardFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
@@ -27,19 +28,28 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 
 class TenantSurePayments {
 
+    private static String tenantSureMerchantTerminalId() {
+        if (VistaDeployment.isVistaProduction()) {
+            //TODO
+            throw new Error("Not Implemented");
+        } else {
+            return "BIRCHWT6";
+        }
+
+    }
+
     static InsurancePaymentMethod getPaymentMethod(Tenant tenantId) {
         return ServerSideFactory.create(PaymentMethodFacade.class).retrieveInsurancePaymentMethod(tenantId);
     }
 
     static InsurancePaymentMethod updatePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId) {
-        return ServerSideFactory.create(PaymentMethodFacade.class).persistInsurancePaymentMethod(paymentMethod, tenantId);
+        return ServerSideFactory.create(PaymentMethodFacade.class).persistInsurancePaymentMethod(tenantSureMerchantTerminalId(), paymentMethod, tenantId);
     }
 
     static InsuranceTenantSureTransaction preAuthorization(InsuranceTenantSureTransaction transaction) {
         BigDecimal amount = transaction.amount().getValue();
-        String merchantTerminalId = "";
         String referenceNumber = transaction.id().getStringView();
-        String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).authorization(amount, merchantTerminalId, referenceNumber,
+        String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).authorization(amount, tenantSureMerchantTerminalId(), referenceNumber,
                 (CreditCardInfo) transaction.paymentMethod().details().cast());
         transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
         transaction.transactionDate().setValue(Persistence.service().getTransactionSystemTime());

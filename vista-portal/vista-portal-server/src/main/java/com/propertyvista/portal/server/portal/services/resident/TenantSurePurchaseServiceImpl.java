@@ -126,7 +126,7 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
         ServerSideFactory.create(TenantSureFacade.class).updatePaymentMethod(paymentMethod,
                 TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub());
 
-        ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, TenantAppContext.getCurrentUserTenantInLease().<Tenant> createIdentityStub());
+        ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub());
 
         callback.onSuccess(null);
     }

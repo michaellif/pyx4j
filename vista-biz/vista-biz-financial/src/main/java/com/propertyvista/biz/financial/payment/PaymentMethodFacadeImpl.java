@@ -70,10 +70,10 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
-    public InsurancePaymentMethod persistInsurancePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId) {
+    public InsurancePaymentMethod persistInsurancePaymentMethod(String merchantTerminalId, InsurancePaymentMethod paymentMethod, Tenant tenantId) {
         Validate.isTrue(paymentMethod.tenant().equals(tenantId));
         Validate.isTrue(PaymentType.avalableInInsurance().contains(paymentMethod.type().getValue()));
-        return PaymentMethodPersister.persistInsurancePaymentMethod(paymentMethod);
+        return PaymentMethodPersister.persistInsurancePaymentMethod(merchantTerminalId, paymentMethod);
     }
 
 }

@@ -74,6 +74,21 @@ class CreditCardProcessor {
 
     }
 
+    static class MerchantTerminalSourceConst implements MerchantTerminalSource {
+
+        private final String merchantTerminalId;
+
+        public MerchantTerminalSourceConst(String merchantTerminalId) {
+            super();
+            this.merchantTerminalId = merchantTerminalId;
+        }
+
+        @Override
+        public String getMerchantTerminalId() {
+            return merchantTerminalId;
+        }
+    }
+
     static void persistToken(String merchantTerminalId, CreditCardInfo cc) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);

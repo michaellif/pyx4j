@@ -32,7 +32,7 @@ public interface PaymentMethodFacade {
 
     List<LeasePaymentMethod> retrieveLeasePaymentMethods(Customer customer);
 
-    InsurancePaymentMethod persistInsurancePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId);
+    InsurancePaymentMethod persistInsurancePaymentMethod(String merchantTerminalId, InsurancePaymentMethod paymentMethod, Tenant tenantId);
 
     InsurancePaymentMethod retrieveInsurancePaymentMethod(Tenant tenantId);
 }

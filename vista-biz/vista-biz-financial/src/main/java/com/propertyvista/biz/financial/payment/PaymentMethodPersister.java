@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSource;
 import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSourceBuilding;
+import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSourceConst;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.CashInfo;
@@ -101,7 +102,7 @@ class PaymentMethodPersister {
         return persistPaymentMethod(paymentMethod, origPaymentMethod, new MerchantTerminalSourceBuilding(building));
     }
 
-    static InsurancePaymentMethod persistInsurancePaymentMethod(InsurancePaymentMethod paymentMethod) {
+    static InsurancePaymentMethod persistInsurancePaymentMethod(String merchantTerminalId, InsurancePaymentMethod paymentMethod) {
         InsurancePaymentMethod origPaymentMethod = null;
         if (!paymentMethod.id().isNull()) {
             // Keep history of payment methods that were used.
@@ -134,14 +135,7 @@ class PaymentMethodPersister {
         }
         Validate.isTrue(!paymentMethod.tenant().isNull(), "Owner (tenant) is required for PaymentMethod");
 
-        return persistPaymentMethod(paymentMethod, origPaymentMethod, new MerchantTerminalSource() {
-
-            @Override
-            public String getMerchantTerminalId() {
-                // TODO find the terminal Id
-                return "BIRCHWT7";
-            }
-        });
+        return persistPaymentMethod(paymentMethod, origPaymentMethod, new MerchantTerminalSourceConst(merchantTerminalId));
     }
 
     private static <E extends PaymentMethod> E persistPaymentMethod(E paymentMethod, E origPaymentMethod, MerchantTerminalSource merchantTerminalSource) {

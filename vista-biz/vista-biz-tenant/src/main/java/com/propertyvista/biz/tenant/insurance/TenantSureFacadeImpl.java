@@ -164,7 +164,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             if (e instanceof UserRuntimeException) {
                 throw (UserRuntimeException) e;
             } else {
-                throw new UserRuntimeException(i18n.tr("Credit Card payment failed, payment transaction would be compleated later"));
+                throw new UserRuntimeException(i18n.tr("Credit Card payment failed, payment transaction would be completed later"));
             }
         }
         transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Cleared);
