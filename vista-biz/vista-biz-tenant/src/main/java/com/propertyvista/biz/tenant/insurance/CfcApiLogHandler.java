@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
+import javax.xml.soap.SOAPMessage;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
@@ -26,32 +27,34 @@ import javax.xml.ws.handler.soap.SOAPMessageContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.essentials.server.dev.EntityFileLogger;
+
 public class CfcApiLogHandler implements SOAPHandler<SOAPMessageContext> {
 
     private static final Logger log = LoggerFactory.getLogger(CfcApiLogHandler.class);
 
     @Override
-    public void close(MessageContext arg0) {
+    public void close(MessageContext ctx) {
 
     }
 
     @Override
-    public boolean handleFault(SOAPMessageContext arg0) {
+    public boolean handleFault(SOAPMessageContext smctx) {
         return true;
     }
 
     @Override
-    public boolean handleMessage(SOAPMessageContext smctx) {
+    public boolean handleMessage(SOAPMessageContext context) {
         if (log.isInfoEnabled()) {
             try {
-                Boolean isOutbound = (Boolean) smctx.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+                Boolean isOutbound = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+                SOAPMessage message = context.getMessage();
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
-                smctx.getMessage().writeTo(out);
-                log.info("CFC API " + (isOutbound ? "OUT" : "IN") + ": " + out.toString());
+                message.writeTo(out);
+                EntityFileLogger.logXml("tenantSure", (isOutbound ? "out" : "in"), out.toString());
             } catch (Throwable e) {
                 log.warn("CFC API communication trace failed: " + e.getMessage());
             }
-            System.err.println();
         }
         return true;
     }

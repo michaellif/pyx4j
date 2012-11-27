@@ -14,8 +14,14 @@
 package com.propertyvista.biz.tenant.insurance;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.Proxy;
+import java.net.ProxySelector;
+import java.net.SocketAddress;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +54,60 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 
 /** This is an adapter class for CFC SOAP API */
 public class CfcApiClient implements ICfcApiClient {
+
+    private CFCAPI getApi() {
+        CFCAPI api = null;
+        try {
+            String url = "https://api.cfcprograms.com/cfc_api.asmx";
+            if (!VistaDeployment.isVistaProduction()) {
+//                boolean tcpMonitor = true;
+//                if (tcpMonitor) {
+//                    url = "http://localhost:9992/cfc_api.asmx";
+//                } else {
+                url = "http://testapi.cfcprograms.com/cfc_api.asmx";
+//                }
+            }
+            api = new CFCAPI(new URL(url), new QName("http://api.cfcprograms.com/", "CFC_API"));
+        } catch (MalformedURLException e) {
+            throw new Error(e);
+        }
+        api.setHandlerResolver(new HandlerResolver() {
+            @SuppressWarnings("rawtypes")
+            @Override
+            public List<Handler> getHandlerChain(PortInfo portInfo) {
+                List<Handler> handlerChain = new ArrayList<Handler>();
+                handlerChain.add(new CfcApiLogHandler());
+                return handlerChain;
+            }
+        });
+
+        boolean eclipseTcpIpMonitor = false;
+
+        if (eclipseTcpIpMonitor) {
+            ProxySelector ps = new ProxySelector() {
+
+                ProxySelector defsel = ProxySelector.getDefault();
+
+                @Override
+                public List<Proxy> select(URI uri) {
+                    if (uri.getHost().equals("testapi.cfcprograms.com")) {
+                        ArrayList<Proxy> l = new ArrayList<Proxy>();
+                        l.add(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 9992)));
+                        return l;
+                    }
+                    return defsel.select(uri);
+                }
+
+                @Override
+                public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
+                    defsel.connectFailed(uri, sa, ioe);
+                }
+            };
+            ProxySelector.setDefault(ps);
+        }
+
+        return api;
+    }
 
     @Override
     public String createClient(Tenant tenant) {
@@ -129,28 +189,6 @@ public class CfcApiClient implements ICfcApiClient {
         Result authResult = cfcApiSoap.userAuthentication(crs.email, crs.password);
         assertSuccessfulResponse(authResult);
         return authResult.getId();
-    }
-
-    private CFCAPI getApi() {
-        CFCAPI api = null;
-        try {
-            if (VistaDeployment.isVistaProduction()) {
-                api = new CFCAPI(new URL("https://api.cfcprograms.com/cfc_api.asmx"), new QName("http://api.cfcprograms.com/", "CFC_API"));
-            } else {
-                api = new CFCAPI(new URL("http://testapi.cfcprograms.com/cfc_api.asmx"), new QName("http://api.cfcprograms.com/", "CFC_API"));
-            }
-        } catch (MalformedURLException e) {
-            throw new Error(e);
-        }
-        api.setHandlerResolver(new HandlerResolver() {
-            @Override
-            public List<Handler> getHandlerChain(PortInfo arg0) {
-                List<Handler> handlerChain = new ArrayList<Handler>();
-                handlerChain.add(new CfcApiLogHandler());
-                return handlerChain;
-            }
-        });
-        return api;
     }
 
     private static Credentials getCredentials() {
