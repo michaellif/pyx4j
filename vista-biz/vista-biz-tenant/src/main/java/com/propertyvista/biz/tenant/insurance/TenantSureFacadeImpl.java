@@ -29,6 +29,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.Status;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
@@ -99,6 +100,11 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         ts.quoteId().setValue(quote.quoteId().getValue());
         ts.client().set(initializeCleint(tenantId));
         ts.status().setValue(InsuranceTenantSure.Status.Draft);
+        //TODO ArtyomB
+        ts.monthlyPayable().setValue(new BigDecimal("10"));
+
+        //TODO ArtyomB All the rest of the data
+
         Persistence.service().persist(ts);
 
         // Start payment
@@ -106,8 +112,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         transaction.insurance().set(ts);
         transaction.paymentMethod().set(TenantSurePayments.getPaymentMethod(tenantId));
         transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Draft);
-        // TODO
-        transaction.amount().setValue(new BigDecimal("10"));
+        transaction.amount().setValue(ts.monthlyPayable().getValue().multiply(BigDecimal.valueOf(2)));
         Persistence.service().persist(transaction);
 
         Persistence.service().commit();
@@ -152,6 +157,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             Persistence.service().commit();
         }
 
+        createInsuranceCertificate(ts);
+
         try {
             TenantSurePayments.compleateTransaction(transaction);
         } catch (Throwable e) {
@@ -170,6 +177,16 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Cleared);
         Persistence.service().commit();
 
+    }
+
+    private void createInsuranceCertificate(InsuranceTenantSure ts) {
+        InsuranceCertificate ic = EntityFactory.create(InsuranceCertificate.class);
+
+        // TODO Set all the proper values       ArtyomB 
+
+        Persistence.service().persist(ic);
+        ts.insuranceCertificate().set(ic);
+        Persistence.service().persist(ts);
     }
 
     InsuranceTenantSureClient initializeCleint(Tenant tenantId) {
