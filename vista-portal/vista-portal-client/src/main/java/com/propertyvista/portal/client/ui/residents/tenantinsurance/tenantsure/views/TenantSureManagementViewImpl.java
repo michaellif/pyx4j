@@ -22,10 +22,12 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureStatusForm;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
@@ -59,8 +61,10 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         tenantSureGreetingPanel.add(tenantSureLogo);
 
         Label greeting = new Label(//@formatter:off
+                SimpleMessageFormat.format(
                   "TenantSure is a Licensed Broker. Below please find your TenantSure insurance details. "
-                  + "If you have any claims, you can reach TenanSure's claim department at 1-888-1234-444"
+                  + "If you have any claims, you can reach TenanSure's claim department at {0}",
+                 TenantSureConstants.TENANTSURE_PHONE_NUMBER)
           );//@formatter:on
 
         greeting.getElement().getStyle().setProperty("width", "100%");
@@ -164,6 +168,6 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     }
 
     private void onMakeAClaim() {
-        MessageDialog.info(i18n.tr("To make a claim please call {0}", TenantSureConstants.TENANT_SURE_PHONE));
+        MessageDialog.info(i18n.tr("To make a claim please call {0}", TenantSureConstants.TENANTSURE_PHONE_NUMBER));
     }
 }

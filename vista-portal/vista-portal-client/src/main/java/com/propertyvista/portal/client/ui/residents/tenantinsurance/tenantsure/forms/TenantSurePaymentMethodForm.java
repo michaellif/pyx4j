@@ -30,6 +30,8 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
 
     private final Command onSameAsCurrentAddressSelected;
 
+    private boolean isAgreedToPreauthorizedPayments;
+
     public TenantSurePaymentMethodForm() {
         this(null);
     }
@@ -37,6 +39,11 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
     public TenantSurePaymentMethodForm(Command onSameAsCurrentAddressSelected) {
         super(InsurancePaymentMethod.class);
         this.onSameAsCurrentAddressSelected = onSameAsCurrentAddressSelected;
+        this.isAgreedToPreauthorizedPayments = false;
+    }
+
+    public boolean isAgreedToPreauthorizedPayments() {
+        return isAgreedToPreauthorizedPayments;
     }
 
     @Override
@@ -68,6 +75,11 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
         setBillingAddressAsCurrentEnabled(onSameAsCurrentAddressSelected != null);
         setBillingAddressAsCurrentVisible(onSameAsCurrentAddressSelected != null);
         super.onValueSet(populate);
+    }
+
+    @Override
+    protected void onIAgree(boolean set) {
+        isAgreedToPreauthorizedPayments = set;
     }
 
 }

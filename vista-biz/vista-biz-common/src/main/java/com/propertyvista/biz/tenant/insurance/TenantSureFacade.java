@@ -21,7 +21,7 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 
 public interface TenantSureFacade {
 
-    /** will return <code>null</code> if tenant is not covered by tenant sure */
+    /** @return <code>null</code> if tenant is not covered by tenant sure, or details of coverage */
     TenantSureTenantInsuranceStatusDetailedDTO getStatus(Tenant tenantId);
 
     TenantSureQuoteDTO getQuote(TenantSureCoverageDTO coverage, Tenant tenantId);

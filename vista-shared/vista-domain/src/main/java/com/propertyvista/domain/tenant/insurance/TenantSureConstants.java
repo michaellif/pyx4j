@@ -7,14 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-23
+ * Created on 2012-11-27
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views;
+package com.propertyvista.domain.tenant.insurance;
 
-public class TenantSureConstants {
+import java.io.Serializable;
 
-    public static final String TENANT_SURE_PHONE = "1-800-123-3457";
+public class TenantSureConstants implements Serializable {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = -3683124450005723775L;
+
+    public static final String TENANTSURE_LEGAL_NAME = "TenantSure";
+
+    public static final String TENANTSURE_PHONE_NUMBER = "1-800-123-4567";
 
 }

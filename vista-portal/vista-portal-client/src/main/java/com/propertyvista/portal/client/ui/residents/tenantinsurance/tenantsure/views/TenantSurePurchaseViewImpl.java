@@ -39,7 +39,6 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
@@ -169,7 +168,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     private TenantSureQuoteViewer quoteViewer;
 
-    private PaymentMethodForm<InsurancePaymentMethod> paymentMethodForm;
+    private TenantSurePaymentMethodForm paymentMethodForm;
 
     private TenantSurePersonalDisclaimerForm personalDisclaimerForm;
 
@@ -490,8 +489,12 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
             @Override
             public void onProceedToNext(AsyncCallback<VoidSerializable> callback) {
-                presenter.onQuoteAccepted();
-                TenantSurePurchaseViewImpl.this.paymentSucceededCallback = callback;
+                if (paymentMethodForm.isAgreedToPreauthorizedPayments()) {
+                    presenter.onQuoteAccepted();
+                    TenantSurePurchaseViewImpl.this.paymentSucceededCallback = callback;
+                } else {
+                    MessageDialog.info(i18n.tr("You must accept the Pre-Authorized Payments Agreement in order to proceed!"));
+                }
             }
 
             @Override

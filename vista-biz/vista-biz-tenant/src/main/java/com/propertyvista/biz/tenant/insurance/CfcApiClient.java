@@ -43,34 +43,10 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
 /** This is an adapter class for CFC SOAP API */
-class CfcApiClient {
-    private CFCAPI getApi() {
-        try {
-            if (VistaDeployment.isVistaProduction()) {
-                return new CFCAPI(new URL("https://api.cfcprograms.com/cfc_api.asmx"), new QName("http://api.cfcprograms.com/"));
-            } else {
-                return new CFCAPI(new URL("http://testapi.cfcprograms.com/cfc_api.asmx"), new QName("http://api.cfcprograms.com/"));
-            }
-        } catch (MalformedURLException e) {
-            throw new Error(e);
-        }
-    }
+public class CfcApiClient implements ICfcApiClient {
 
-    private static Credentials getCredentials() {
-        File credentialsFile = new File(System.getProperty("user.dir", "."), "cfcprograms-tenantsure-credentials.properties");
-        return J2SEServiceConnector.getCredentials(credentialsFile.getAbsolutePath());
-    }
-
-    private boolean isSuccessfulCode(String code) {
-        if (code != null && code.startsWith("SU")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /** registers a client in CFC system, and creates reference in vista DB that is bound to <code>tenant</code> */
-    String createClient(Tenant tenant) {
+    @Override
+    public String createClient(Tenant tenant) {
         CFCAPISoap api = getApi().getCFCAPISoap();
         String sessionId = makeNewCfcSession(api);
 
@@ -85,7 +61,8 @@ class CfcApiClient {
         return createClientRssult.getSimpleClientResult().getId();
     }
 
-    TenantSureQuoteDTO getQuote(InsuranceTenantSureClient client, TenantSureCoverageDTO coverageRequest) {
+    @Override
+    public TenantSureQuoteDTO getQuote(InsuranceTenantSureClient client, TenantSureCoverageDTO coverageRequest) {
         CFCAPISoap api = getApi().getCFCAPISoap();
         String sessionId = makeNewCfcSession(api);
 
@@ -109,8 +86,8 @@ class CfcApiClient {
         return tenantSureQuote;
     }
 
-    /** @return insurance certificate number */
-    String bindQuote(String quoteId) {
+    @Override
+    public String bindQuote(String quoteId) {
         CFCAPISoap api = getApi().getCFCAPISoap();
         String sessionId = makeNewCfcSession(api);
 
@@ -122,8 +99,8 @@ class CfcApiClient {
         return bindResult.getId();
     }
 
-    /** Send policy related documentation to the list of e-mail addresses */
-    void requestDocument(String quoteId, List<String> emails) {
+    @Override
+    public void requestDocument(String quoteId, List<String> emails) {
         CFCAPISoap cfcApiSoap = getApi().getCFCAPISoap();
         String sessionId = makeNewCfcSession(cfcApiSoap);
 
@@ -148,6 +125,31 @@ class CfcApiClient {
         Result authResult = cfcApiSoap.userAuthentication(crs.email, crs.password);
         assertSuccessfulResponse(authResult);
         return authResult.getId();
+    }
+
+    private CFCAPI getApi() {
+        try {
+            if (VistaDeployment.isVistaProduction()) {
+                return new CFCAPI(new URL("https://api.cfcprograms.com/cfc_api.asmx"), new QName("http://api.cfcprograms.com/"));
+            } else {
+                return new CFCAPI(new URL("http://testapi.cfcprograms.com/cfc_api.asmx"), new QName("http://api.cfcprograms.com/"));
+            }
+        } catch (MalformedURLException e) {
+            throw new Error(e);
+        }
+    }
+
+    private static Credentials getCredentials() {
+        File credentialsFile = new File(System.getProperty("user.dir", "."), "cfcprograms-tenantsure-credentials.properties");
+        return J2SEServiceConnector.getCredentials(credentialsFile.getAbsolutePath());
+    }
+
+    private boolean isSuccessfulCode(String code) {
+        if (code != null && code.startsWith("SU")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

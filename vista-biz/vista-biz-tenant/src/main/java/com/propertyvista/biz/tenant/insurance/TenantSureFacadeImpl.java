@@ -14,15 +14,14 @@
 package com.propertyvista.biz.tenant.insurance;
 
 import java.math.BigDecimal;
-import java.util.Random;
 
+import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -34,6 +33,7 @@ import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.Status;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
+import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO.PreviousClaims;
@@ -43,11 +43,21 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 
 public class TenantSureFacadeImpl implements TenantSureFacade {
 
-    private final boolean TODO_MOCKUP = true;
-
-    private final static Logger log = LoggerFactory.getLogger(TenantSureFacadeImpl.class);
+    private static final boolean TODO_MOCKUP = true;
 
     private static final I18n i18n = I18n.get(TenantSureFacadeImpl.class);
+
+    private static final Logger log = LoggerFactory.getLogger(TenantSureFacadeImpl.class);
+
+    private final ICfcApiClient cfcApiClient;
+
+    public TenantSureFacadeImpl(ICfcApiClient cfcApiClient) {
+        this.cfcApiClient = cfcApiClient;
+    }
+
+    public TenantSureFacadeImpl() {
+        this(TODO_MOCKUP ? new MockupCfcApiClient() : new CfcApiClient());
+    }
 
     @Override
     public InsurancePaymentMethod getPaymentMethod(Tenant tenantId) {
@@ -56,27 +66,13 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
     @Override
     public TenantSureQuoteDTO getQuote(TenantSureCoverageDTO coverage, Tenant tenantId) {
-        if (TODO_MOCKUP) {
-            TenantSureQuoteDTO quote = EntityFactory.create(TenantSureQuoteDTO.class);
-            if (coverage.numberOfPreviousClaims().getValue() == PreviousClaims.MoreThanTwo) {
-                quote.specialQuote().setValue(i18n.tr("Please call TenantSure 1-800-1234-567 to get your quote."));
-            } else {
-                quote.grossPremium().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
-                quote.underwriterFee().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
-                quote.totalMonthlyPayable().setValue(new BigDecimal(10 + new Random().nextInt() % 50));
-            }
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                throw new Error(e);
-            }
+        if (coverage.numberOfPreviousClaims().getValue() != PreviousClaims.MoreThanTwo) {
+            InsuranceTenantSureClient client = initializeClient(tenantId);
+            TenantSureQuoteDTO quote = cfcApiClient.getQuote(client, coverage);
             return quote;
         } else {
-
-            InsuranceTenantSureClient client = initializeCleint(tenantId);
-            TenantSureQuoteDTO quote = new CfcApiClient().getQuote(client, coverage);
-
+            TenantSureQuoteDTO quote = EntityFactory.create(TenantSureQuoteDTO.class);
+            quote.specialQuote().setValue(i18n.tr("Please call TenantSure {0} to get your quote.", TenantSureConstants.TENANTSURE_PHONE_NUMBER));
             return quote;
         }
     }
@@ -94,30 +90,35 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
      */
     @Override
     public void buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId) {
-        //TODO
-        //Validate.isTrue(!quote.quoteId().isNull(), "it's impossible to buy insurance with no quote id!!!");
+        Validate.isTrue(!quote.quoteId().isNull(), "it's impossible to buy insurance with no quote id!!!");
 
-        InsuranceTenantSure ts = EntityFactory.create(InsuranceTenantSure.class);
-        ts.quoteId().setValue(quote.quoteId().getValue());
-        ts.client().set(initializeCleint(tenantId));
-        ts.status().setValue(InsuranceTenantSure.Status.Draft);
-        //TODO ArtyomB
-        ts.monthlyPayable().setValue(new BigDecimal("10"));
+        InsuranceTenantSure insuranceTenantSure = EntityFactory.create(InsuranceTenantSure.class);
+        insuranceTenantSure.quoteId().setValue(quote.quoteId().getValue());
+        insuranceTenantSure.client().set(initializeClient(tenantId));
+        insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Draft);
 
-        //TODO ArtyomB All the rest of the data
+        insuranceTenantSure.startDate().setValue(new LogicalDate());
+        insuranceTenantSure.monthlyPayable().setValue(quote.totalMonthlyPayable().getValue());
+        insuranceTenantSure.details().liabilityCoverage().setValue(quote.coverage().personalLiabilityCoverage().getValue());
+        insuranceTenantSure.details().contentsCoverage().setValue(quote.coverage().contentsCoverage().getValue());
+        insuranceTenantSure.details().deductible().setValue(quote.coverage().deductible().getValue());
+        insuranceTenantSure.details().grossPremium().setValue(quote.grossPremium().getValue());
+        insuranceTenantSure.details().underwriterFee().setValue(quote.underwriterFee().getValue());
+        // TODO fill details with taxes: "ts.details().taxes().setAll(BLA_BLA_BLA)"
 
-        Persistence.service().persist(ts);
+        Persistence.service().persist(insuranceTenantSure);
 
         // Start payment
         InsuranceTenantSureTransaction transaction = EntityFactory.create(InsuranceTenantSureTransaction.class);
-        transaction.insurance().set(ts);
+        transaction.insurance().set(insuranceTenantSure);
         transaction.paymentMethod().set(TenantSurePayments.getPaymentMethod(tenantId));
         transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Draft);
-        transaction.amount().setValue(ts.monthlyPayable().getValue().multiply(BigDecimal.valueOf(2)));
+        transaction.amount().setValue(insuranceTenantSure.monthlyPayable().getValue().multiply(BigDecimal.valueOf(2)));
         Persistence.service().persist(transaction);
 
         Persistence.service().commit();
 
+        String tenantSureCertificateNumber = null;
         // Like two phase commit transaction
         {
             try {
@@ -126,8 +127,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 log.error("Error", e);
                 transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Rejected);
                 Persistence.service().persist(transaction);
-                ts.status().setValue(InsuranceTenantSure.Status.Failed);
-                Persistence.service().persist(ts);
+                insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Failed);
+                Persistence.service().persist(insuranceTenantSure);
                 Persistence.service().commit();
                 if (e instanceof UserRuntimeException) {
                     throw (UserRuntimeException) e;
@@ -140,11 +141,11 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             Persistence.service().commit();
 
             try {
-                bind(ts);
+                tenantSureCertificateNumber = cfcApiClient.bindQuote(insuranceTenantSure.quoteId().getValue());
             } catch (Throwable e) {
                 log.error("Error", e);
-                ts.status().setValue(InsuranceTenantSure.Status.Failed);
-                Persistence.service().persist(ts);
+                insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Failed);
+                Persistence.service().persist(insuranceTenantSure);
                 Persistence.service().commit();
                 if (e instanceof UserRuntimeException) {
                     throw (UserRuntimeException) e;
@@ -153,12 +154,12 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 }
             }
 
-            ts.status().setValue(InsuranceTenantSure.Status.Active);
-            Persistence.service().persist(ts);
+            insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Active);
+            Persistence.service().persist(insuranceTenantSure);
             Persistence.service().commit();
         }
 
-        createInsuranceCertificate(tenantId, ts);
+        createInsuranceCertificate(tenantId, tenantSureCertificateNumber, insuranceTenantSure);
 
         try {
             TenantSurePayments.compleateTransaction(transaction);
@@ -166,8 +167,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             log.error("Error", e);
             transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Rejected);
             Persistence.service().persist(transaction);
-            ts.status().setValue(InsuranceTenantSure.Status.Pending);
-            Persistence.service().persist(ts);
+            insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Pending);
+            Persistence.service().persist(insuranceTenantSure);
             Persistence.service().commit();
             if (e instanceof UserRuntimeException) {
                 throw (UserRuntimeException) e;
@@ -180,46 +181,28 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
     }
 
-    private void createInsuranceCertificate(Tenant tenantId, InsuranceTenantSure ts) {
+    private void createInsuranceCertificate(Tenant tenantId, String insuranceCertifiateNumber, InsuranceTenantSure ts) {
         InsuranceCertificate ic = EntityFactory.create(InsuranceCertificate.class);
         ic.tenant().set(tenantId);
 
-        // TODO Set all the proper values       ArtyomB
-        {
-            ic.insuranceProvider().setValue("TODO LegalName of TenantSure");
-            ic.insuranceCertificateNumber().setValue(ts.quoteId().getValue());
-            ic.personalLiability();
-            ic.startDate();
-            ic.expirationDate();
-        }
+        ic.insuranceProvider().setValue(TODO_MOCKUP ? "TODO LegalName of TenantSure" : TenantSureConstants.TENANTSURE_LEGAL_NAME);
+        ic.insuranceCertificateNumber().setValue(insuranceCertifiateNumber);
+        ic.personalLiability().setValue(ts.details().liabilityCoverage().getValue());
+        ic.startDate().setValue(ts.startDate().getValue());
+        ic.expirationDate().setValue(null); // doesn't expire unless payment fails
 
         Persistence.service().persist(ic);
+
         ts.insuranceCertificate().set(ic);
         Persistence.service().persist(ts);
-    }
-
-    InsuranceTenantSureClient initializeCleint(Tenant tenantId) {
-        EntityQueryCriteria<InsuranceTenantSureClient> criteria = EntityQueryCriteria.create(InsuranceTenantSureClient.class);
-        criteria.eq(criteria.proto().tenant(), tenantId);
-        InsuranceTenantSureClient tenantSureClient = Persistence.service().retrieve(criteria);
-        if (tenantSureClient == null) {
-            tenantSureClient = EntityFactory.create(InsuranceTenantSureClient.class);
-            tenantSureClient.tenant().set(tenantId);
-
-            if (!TODO_MOCKUP) {
-                Persistence.ensureRetrieve(tenantId, AttachLevel.Attached);
-                String clientReferenceNumber = new CfcApiClient().createClient(tenantId);
-                tenantSureClient.clientReferenceNumber().setValue(clientReferenceNumber);
-            }
-
-            Persistence.service().persist(tenantSureClient);
-        }
-        return tenantSureClient;
     }
 
     @Override
     public TenantSureTenantInsuranceStatusDetailedDTO getStatus(Tenant tenantId) {
         InsuranceTenantSure insurance = retrieveInsuranceTenantSure(tenantId);
+        if (insurance == null) {
+            return null;
+        }
 
         TenantSureTenantInsuranceStatusDetailedDTO tenantSureInsurance = EntityFactory.create(TenantSureTenantInsuranceStatusDetailedDTO.class);
         tenantSureInsurance.insuranceCertificateNumber().setValue(insurance.insuranceCertificate().insuranceCertificateNumber().getValue());
@@ -246,43 +229,31 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
     @Override
     public void cancel(Tenant tenantId) {
-        // TODO Auto-generated method stub
+        // TODO implement cancel()
         throw new Error("Not Implemented!!!");
     }
 
-    private void bind(InsuranceTenantSure insuranceTenantSure) {
-        if (TODO_MOCKUP) {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            new CfcApiClient().bindQuote(insuranceTenantSure.quoteId().getValue());
+    private InsuranceTenantSureClient initializeClient(Tenant tenantId) {
+        EntityQueryCriteria<InsuranceTenantSureClient> criteria = EntityQueryCriteria.create(InsuranceTenantSureClient.class);
+        criteria.eq(criteria.proto().tenant(), tenantId);
+        InsuranceTenantSureClient tenantSureClient = Persistence.service().retrieve(criteria);
+        if (tenantSureClient == null) {
+            tenantSureClient = EntityFactory.create(InsuranceTenantSureClient.class);
+            tenantSureClient.tenant().set(tenantId);
+            String clientReferenceNumber = cfcApiClient.createClient(tenantId);
+            tenantSureClient.clientReferenceNumber().setValue(clientReferenceNumber);
+            Persistence.service().persist(tenantSureClient);
+            Persistence.service().commit();
         }
+        return tenantSureClient;
     }
 
     private InsuranceTenantSure retrieveInsuranceTenantSure(Tenant tenantId) {
-        if (TODO_MOCKUP) {
-            InsuranceTenantSure insurance = EntityFactory.create(InsuranceTenantSure.class);
-            insurance.status().setValue(Status.Active);
-            insurance.startDate().setValue(new LogicalDate());
-            insurance.expiryDate().setValue(null);
-            insurance.details().liabilityCoverage().getValue();
-            insurance.monthlyPayable().setValue(new BigDecimal("999.99"));
-            insurance.details().liabilityCoverage().setValue(new BigDecimal("1000000"));
-            insurance.details().contentsCoverage().setValue(new BigDecimal("10000"));
-            insurance.details().deductible().setValue(new BigDecimal("500"));
-            insurance.details().grossPremium().setValue(new BigDecimal("40"));
-            insurance.details().underwriterFee().setValue(new BigDecimal("10"));
-            return insurance;
-        } else {
-            EntityQueryCriteria<InsuranceTenantSure> criteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
-            criteria.add(PropertyCriterion.ne(criteria.proto().status(), InsuranceTenantSure.Status.Draft));
-            criteria.add(PropertyCriterion.ne(criteria.proto().status(), InsuranceTenantSure.Status.Failed));
-            criteria.add(PropertyCriterion.eq(criteria.proto().client().tenant(), tenantId));
-            InsuranceTenantSure insurance = Persistence.service().retrieve(criteria);
-            return insurance;
-        }
+        EntityQueryCriteria<InsuranceTenantSure> criteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
+        criteria.add(PropertyCriterion.ne(criteria.proto().status(), InsuranceTenantSure.Status.Draft));
+        criteria.add(PropertyCriterion.ne(criteria.proto().status(), InsuranceTenantSure.Status.Failed));
+        criteria.add(PropertyCriterion.eq(criteria.proto().client().tenant(), tenantId));
+        InsuranceTenantSure insurance = Persistence.service().retrieve(criteria);
+        return insurance;
     }
 }

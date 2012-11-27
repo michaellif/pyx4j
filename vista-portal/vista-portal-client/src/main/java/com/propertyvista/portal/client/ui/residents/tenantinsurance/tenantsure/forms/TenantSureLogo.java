@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
+import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 
 public class TenantSureLogo extends Composite {
@@ -36,7 +37,7 @@ public class TenantSureLogo extends Composite {
         highCourtLogo.getElement().getStyle().setProperty("marginRight", "auto");
 
         logoPanel.add(highCourtLogo);
-        logoPanel.add(new Label("1-888-1234-444"));
+        logoPanel.add(new Label(TenantSureConstants.TENANTSURE_PHONE_NUMBER));
         logoPanel.getElement().getStyle().setProperty("width", "100%");
         logoPanel.getElement().getStyle().setProperty("textAlign", "center");
         initWidget(logoPanel);
