@@ -116,13 +116,13 @@ public class EntityFileLogger {
         long id = getNextNumber(dir);
         NumberFormat nf = new DecimalFormat("0000");
         StringBuffer name = new StringBuffer(nf.format(id));
-        name.append('-').append(type).append('-');
+        name.append('-').append(type);
         String ext = ".log";
         {
             IEntity ent = null;
             switch (dataType) {
             case EntityList:
-                name.append("list");
+                name.append("-list");
                 if (!((List<?>) item).isEmpty()) {
                     ent = (IEntity) ((List<?>) item).get(0);
                 }
@@ -140,6 +140,7 @@ public class EntityFileLogger {
                 break;
             default:
                 if (item != null) {
+                    name.append('-');
                     name.append(item.getClass().getSimpleName());
                     if (item instanceof IHaveServiceCallMarker) {
                         name.append('-').append(((IHaveServiceCallMarker) item).getServiceCallMarker().replace('\\', '_').replace('/', '_'));
@@ -147,6 +148,7 @@ public class EntityFileLogger {
                 }
             }
             if (ent != null) {
+                name.append('-');
                 name.append(ent.getEntityMeta().getEntityClass().getSimpleName());
             }
         }
