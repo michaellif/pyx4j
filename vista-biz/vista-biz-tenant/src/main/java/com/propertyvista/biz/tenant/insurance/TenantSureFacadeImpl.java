@@ -14,6 +14,8 @@
 package com.propertyvista.biz.tenant.insurance;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
@@ -30,6 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.CancellationType;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.Status;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
@@ -43,8 +46,6 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 
 public class TenantSureFacadeImpl implements TenantSureFacade {
 
-    private static final boolean TODO_MOCKUP = false;
-
     private static final I18n i18n = I18n.get(TenantSureFacadeImpl.class);
 
     private static final Logger log = LoggerFactory.getLogger(TenantSureFacadeImpl.class);
@@ -56,7 +57,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     }
 
     public TenantSureFacadeImpl() {
-        this(TODO_MOCKUP ? new MockupCfcApiClient() : new CfcApiClient());
+        this(new MockupCfcApiClient());
     }
 
     @Override
@@ -185,7 +186,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         InsuranceCertificate ic = EntityFactory.create(InsuranceCertificate.class);
         ic.tenant().set(tenantId);
 
-        ic.insuranceProvider().setValue(TODO_MOCKUP ? "TODO LegalName of TenantSure" : TenantSureConstants.TENANTSURE_LEGAL_NAME);
+        ic.insuranceProvider().setValue(TenantSureConstants.TENANTSURE_LEGAL_NAME);
         ic.insuranceCertificateNumber().setValue(insuranceCertifiateNumber);
         ic.personalLiability().setValue(ts.details().liabilityCoverage().getValue());
         ic.startDate().setValue(ts.startDate().getValue());
@@ -199,10 +200,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
     @Override
     public TenantSureTenantInsuranceStatusDetailedDTO getStatus(Tenant tenantId) {
-        InsuranceTenantSure insurance = retrieveInsuranceTenantSure(tenantId);
-        if (insurance == null) {
-            return null;
-        }
+        InsuranceTenantSure insurance = retrieveActiveInsuranceTenantSure(tenantId);
 
         TenantSureTenantInsuranceStatusDetailedDTO tenantSureInsurance = EntityFactory.create(TenantSureTenantInsuranceStatusDetailedDTO.class);
         tenantSureInsurance.insuranceCertificateNumber().setValue(insurance.insuranceCertificate().insuranceCertificateNumber().getValue());
@@ -219,7 +217,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
         if (insurance.status().getValue() == Status.PendingCancellation) {
             TenantSureMessageDTO messageHolder = EntityFactory.create(TenantSureMessageDTO.class);
-            messageHolder.message().setValue(
+            messageHolder.messageText().setValue(
                     i18n.tr("Your payment couln't be processed, please update your credit card info or else your insurance will expire"));
         }
 
@@ -228,9 +226,18 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     }
 
     @Override
-    public void cancel(Tenant tenantId) {
-        // TODO implement cancel()
-        throw new Error("Not Implemented!!!");
+    public void cancel(Tenant tenantId, CancellationType cancellationType, String cancellationReason) {
+        InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
+        Validate.notNull(insuranceTenantSure, "no active TenantSure insurance was found");
+        insuranceTenantSure.status().setValue(Status.PendingCancellation);
+        insuranceTenantSure.cancellation().setValue(cancellationType);
+        insuranceTenantSure.cancellationDescriptionReasonFromTenantSure().setValue(cancellationReason);
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        insuranceTenantSure.expiryDate().setValue(new LogicalDate(cal.getTime()));
+        Persistence.service().persist(insuranceTenantSure);
+        Persistence.service().commit();
+        // TODO send email notification to tenant?
     }
 
     private InsuranceTenantSureClient initializeClient(Tenant tenantId) {
@@ -248,10 +255,12 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         return tenantSureClient;
     }
 
-    private InsuranceTenantSure retrieveInsuranceTenantSure(Tenant tenantId) {
+    private InsuranceTenantSure retrieveActiveInsuranceTenantSure(Tenant tenantId) {
         EntityQueryCriteria<InsuranceTenantSure> criteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
         criteria.add(PropertyCriterion.ne(criteria.proto().status(), InsuranceTenantSure.Status.Draft));
         criteria.add(PropertyCriterion.ne(criteria.proto().status(), InsuranceTenantSure.Status.Failed));
+        criteria.or(PropertyCriterion.eq(criteria.proto().status(), InsuranceTenantSure.Status.Active),
+                PropertyCriterion.eq(criteria.proto().status(), InsuranceTenantSure.Status.PendingCancellation));
         criteria.add(PropertyCriterion.eq(criteria.proto().client().tenant(), tenantId));
         InsuranceTenantSure insurance = Persistence.service().retrieve(criteria);
         return insurance;

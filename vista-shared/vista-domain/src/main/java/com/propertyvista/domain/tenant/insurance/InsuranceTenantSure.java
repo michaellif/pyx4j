@@ -42,14 +42,15 @@ public interface InsuranceTenantSure extends IEntity {
          */
         Failed,
 
-        //Initial Payment Failed
+        /** Initial Payment Failed */
         Pending,
 
         Active,
 
-        //Payment Failed, Pending cancellation
+        /** Pending cancellation */
         PendingCancellation,
 
+        /** This insurance is no longer active, and stored for archive purposes */
         Cancelled;
 
     }
@@ -78,6 +79,9 @@ public interface InsuranceTenantSure extends IEntity {
     IPrimitive<InsuranceTenantSure.Status> status();
 
     IPrimitive<InsuranceTenantSure.CancellationType> cancellation();
+
+    /** for insurance that is cancelled by TenantSure, holds the reason for cancellation */
+    IPrimitive<String> cancellationDescriptionReasonFromTenantSure();
 
     @NotNull
     IPrimitive<LogicalDate> startDate();

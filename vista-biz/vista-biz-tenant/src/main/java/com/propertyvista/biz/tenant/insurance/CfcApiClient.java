@@ -86,7 +86,7 @@ public class CfcApiClient implements ICfcApiClient {
         tenantSureQuote.underwriterFee().setValue(new BigDecimal(quoteResponse.getFee()));
         // TODO deal with taxes
         tenantSureQuote.totalMonthlyPayable().setValue(new BigDecimal(quoteResponse.getTotalPayable()));
-
+        tenantSureQuote.coverage().set(coverageRequest.duplicate(TenantSureCoverageDTO.class));
         return tenantSureQuote;
     }
 

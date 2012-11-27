@@ -46,6 +46,7 @@ public class MockupCfcApiClient implements ICfcApiClient {
         quote.underwriterFee().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
         quote.totalMonthlyPayable().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
         quote.quoteId().setValue("MockupTSQuote-" + RandomStringUtils.randomAlphanumeric(10));
+        quote.coverage().set(coverageRequest.duplicate(TenantSureCoverageDTO.class));
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {

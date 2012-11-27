@@ -14,6 +14,7 @@
 package com.propertyvista.biz.tenant.insurance;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.CancellationType;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
@@ -40,7 +41,7 @@ public interface TenantSureFacade {
      */
     void buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId);
 
-    void cancel(Tenant tenantId);
+    void cancel(Tenant tenantId, CancellationType cancelationType, String cancellationReason);
 
     InsurancePaymentMethod getPaymentMethod(Tenant tenantId);
 

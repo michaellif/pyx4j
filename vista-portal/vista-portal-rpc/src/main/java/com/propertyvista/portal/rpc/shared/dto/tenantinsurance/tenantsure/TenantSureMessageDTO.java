@@ -20,6 +20,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface TenantSureMessageDTO extends IEntity {
 
-    IPrimitive<String> message();
+    IPrimitive<String> messageText();
 
 }

@@ -40,7 +40,7 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
 
             } else {
                 for (TenantSureMessageDTO message : value) {
-                    Label messageLabel = new Label(message.message().getValue());
+                    Label messageLabel = new Label(message.messageText().getValue());
                     messageLabel.addStyleName(TenantInsuranceStatusViewer.Styles.TenantInsuranceWarningText.name());
                     panel.add(messageLabel);
                 }
