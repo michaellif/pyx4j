@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -190,8 +191,22 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     }
 
     InsuranceTenantSureClient initializeCleint(Tenant tenantId) {
-        InsuranceTenantSureClient client = new CfcApiClient().createClient(null);
-        return client;
+        EntityQueryCriteria<InsuranceTenantSureClient> criteria = EntityQueryCriteria.create(InsuranceTenantSureClient.class);
+        criteria.eq(criteria.proto().tenant(), tenantId);
+        InsuranceTenantSureClient tenantSureClient = Persistence.service().retrieve(criteria);
+        if (tenantSureClient == null) {
+            tenantSureClient = EntityFactory.create(InsuranceTenantSureClient.class);
+            tenantSureClient.tenant().set(tenantId);
+
+            if (!TODO_MOCKUP) {
+                Persistence.ensureRetrieve(tenantId, AttachLevel.Attached);
+                String clientReferenceNumber = new CfcApiClient().createClient(tenantId);
+                tenantSureClient.clientReferenceNumber().setValue(clientReferenceNumber);
+            }
+
+            Persistence.service().persist(tenantSureClient);
+        }
+        return tenantSureClient;
     }
 
     @Override

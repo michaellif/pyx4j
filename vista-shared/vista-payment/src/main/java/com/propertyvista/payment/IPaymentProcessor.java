@@ -19,6 +19,8 @@ public interface IPaymentProcessor {
 
     PaymentResponse realTimeAuthorization(Merchant merchant, PaymentRequest request);
 
+    PaymentResponse realTimeAuthorizationCompletion(Merchant merchant, PaymentRequest request);
+
     PaymentResponse createToken(Merchant merchant, CCInformation ccinfo, Token token);
 
     PaymentResponse updateToken(Merchant merchant, CCInformation ccinfo, Token token);

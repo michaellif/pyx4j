@@ -13,6 +13,7 @@
  */
 package com.propertyvista.payment.caledon;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.payment.CCInformation;
@@ -32,23 +33,33 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
         client = new CaledonHttpClient();
     }
 
+    private CaledonRequest createRequestInstrument(PaymentInstrument paymentInstrument) {
+        if (paymentInstrument instanceof CCInformation) {
+            CaledonRequest crequest = new CaledonRequest();
+            crequest.creditCardNumber = ((CCInformation) paymentInstrument).creditCardNumber().getValue();
+            crequest.setExpiryDate(((CCInformation) paymentInstrument).creditCardExpiryDate().getValue());
+            crequest.cvv = ((CCInformation) paymentInstrument).securityCode().getValue();
+            return crequest;
+        } else if (paymentInstrument instanceof Token) {
+            CaledonRequestToken trequest = new CaledonRequestToken();
+            trequest.token = ((Token) paymentInstrument).code().getValue();
+            return trequest;
+        } else {
+            throw new PaymentProcessingException("Unknown Payment Instrument " + paymentInstrument.getClass());
+        }
+    }
+
+    private PaymentResponse createResponse(CaledonResponse cresponse) {
+        PaymentResponse response = EntityFactory.create(PaymentResponse.class);
+        response.code().setValue(cresponse.code);
+        response.message().setValue(cresponse.text);
+        response.authorizationNumber().setValue(cresponse.authorizationNumber);
+        return response;
+    }
+
     @Override
     public PaymentResponse realTimeSale(Merchant merchant, PaymentRequest request) throws PaymentProcessingException {
-        CaledonRequest crequest = null;
-        PaymentInstrument pinstrument = request.paymentInstrument().cast();
-        if (pinstrument instanceof CCInformation) {
-            crequest = new CaledonRequest();
-            crequest.creditCardNumber = ((CCInformation) pinstrument).creditCardNumber().getValue();
-            crequest.setExpiryDate(((CCInformation) pinstrument).creditCardExpiryDate().getValue());
-            crequest.cvv = ((CCInformation) pinstrument).securityCode().getValue();
-
-        } else if (pinstrument instanceof Token) {
-            crequest = new CaledonRequestToken();
-            ((CaledonRequestToken) crequest).token = ((Token) pinstrument).code().getValue();
-            crequest.setAmount(request.amount().getValue());
-        } else {
-            throw new PaymentProcessingException("Unknown Payment Instrument " + pinstrument.getClass());
-        }
+        CaledonRequest crequest = createRequestInstrument(request.paymentInstrument().<PaymentInstrument> cast());
 
         crequest.terminalID = merchant.terminalID().getValue();
         crequest.transactionType = CaledonTransactionType.SALE.getValue();
@@ -58,31 +69,12 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
 
         CaledonResponse cresponse = client.transaction(crequest);
 
-        PaymentResponse response = EntityFactory.create(PaymentResponse.class);
-        response.code().setValue(cresponse.code);
-        response.message().setValue(cresponse.text);
-        response.authorizationNumber().setValue(cresponse.authorizationNumber);
-
-        return response;
+        return createResponse(cresponse);
     }
 
     @Override
     public PaymentResponse realTimeAuthorization(Merchant merchant, PaymentRequest request) {
-        CaledonRequest crequest = null;
-        PaymentInstrument pinstrument = request.paymentInstrument().cast();
-        if (pinstrument instanceof CCInformation) {
-            crequest = new CaledonRequest();
-            crequest.creditCardNumber = ((CCInformation) pinstrument).creditCardNumber().getValue();
-            crequest.setExpiryDate(((CCInformation) pinstrument).creditCardExpiryDate().getValue());
-            crequest.cvv = ((CCInformation) pinstrument).securityCode().getValue();
-
-        } else if (pinstrument instanceof Token) {
-            crequest = new CaledonRequestToken();
-            ((CaledonRequestToken) crequest).token = ((Token) pinstrument).code().getValue();
-            crequest.setAmount(request.amount().getValue());
-        } else {
-            throw new PaymentProcessingException("Unknown Payment Instrument " + pinstrument.getClass());
-        }
+        CaledonRequest crequest = createRequestInstrument(request.paymentInstrument().<PaymentInstrument> cast());
 
         crequest.terminalID = merchant.terminalID().getValue();
         crequest.transactionType = CaledonTransactionType.PREAUTH.getValue();
@@ -92,12 +84,28 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
 
         CaledonResponse cresponse = client.transaction(crequest);
 
-        PaymentResponse response = EntityFactory.create(PaymentResponse.class);
-        response.code().setValue(cresponse.code);
-        response.message().setValue(cresponse.text);
-        response.authorizationNumber().setValue(cresponse.authorizationNumber);
+        return createResponse(cresponse);
+    }
 
-        return response;
+    @Override
+    public PaymentResponse realTimeAuthorizationCompletion(Merchant merchant, PaymentRequest request) {
+        CaledonRequest crequest = createRequestInstrument(request.paymentInstrument().<PaymentInstrument> cast());
+
+        if (!(crequest instanceof CaledonRequestToken)) {
+            if (CommonsStringUtils.isEmpty(crequest.creditCardNumber)) {
+                crequest.creditCardNumber = "0";
+            }
+        }
+
+        crequest.terminalID = merchant.terminalID().getValue();
+        crequest.transactionType = CaledonTransactionType.COMPLETION.getValue();
+        crequest.referenceNumber = request.referenceNumber().getValue();
+
+        crequest.setAmount(request.amount().getValue());
+
+        CaledonResponse cresponse = client.transaction(crequest);
+
+        return createResponse(cresponse);
     }
 
     @Override
@@ -115,12 +123,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
 
         CaledonResponse cresponse = client.transaction(crequest);
 
-        PaymentResponse response = EntityFactory.create(PaymentResponse.class);
-        response.code().setValue(cresponse.code);
-        response.message().setValue(cresponse.text);
-        response.authorizationNumber().setValue(cresponse.authorizationNumber);
-
-        return response;
+        return createResponse(cresponse);
     }
 
     @Override
@@ -138,12 +141,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
 
         CaledonResponse cresponse = client.transaction(crequest);
 
-        PaymentResponse response = EntityFactory.create(PaymentResponse.class);
-        response.code().setValue(cresponse.code);
-        response.message().setValue(cresponse.text);
-        response.authorizationNumber().setValue(cresponse.authorizationNumber);
-
-        return response;
+        return createResponse(cresponse);
     }
 
     @Override
@@ -157,12 +155,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
 
         CaledonResponse cresponse = client.transaction(crequest);
 
-        PaymentResponse response = EntityFactory.create(PaymentResponse.class);
-        response.code().setValue(cresponse.code);
-        response.message().setValue(cresponse.text);
-        response.authorizationNumber().setValue(cresponse.authorizationNumber);
-
-        return response;
+        return createResponse(cresponse);
     }
 
     @Override
@@ -176,12 +169,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
 
         CaledonResponse cresponse = client.transaction(crequest);
 
-        PaymentResponse response = EntityFactory.create(PaymentResponse.class);
-        response.code().setValue(cresponse.code);
-        response.message().setValue(cresponse.text);
-        response.authorizationNumber().setValue(cresponse.authorizationNumber);
-
-        return response;
+        return createResponse(cresponse);
     }
 
     @Override
@@ -196,12 +184,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
 
         CaledonResponse cresponse = client.transaction(crequest);
 
-        PaymentResponse response = EntityFactory.create(PaymentResponse.class);
-        response.code().setValue(cresponse.code);
-        response.message().setValue(cresponse.text);
-        response.authorizationNumber().setValue(cresponse.authorizationNumber);
-
-        return response;
+        return createResponse(cresponse);
     }
 
 }

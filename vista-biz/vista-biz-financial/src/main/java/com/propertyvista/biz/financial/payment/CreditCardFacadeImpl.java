@@ -29,4 +29,9 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
         return CreditCardProcessor.authorization(amount, merchantTerminalId, referenceNumber, cc);
     }
 
+    @Override
+    public String completion(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
+        return CreditCardProcessor.completion(amount, merchantTerminalId, referenceNumber, cc);
+    }
+
 }

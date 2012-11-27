@@ -25,4 +25,6 @@ public interface CreditCardFacade {
      * @return authorizationNumber
      */
     public String authorization(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc);
+
+    public String completion(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc);
 }

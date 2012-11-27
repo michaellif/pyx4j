@@ -30,7 +30,6 @@ import com.cfcprograms.api.Result;
 import com.cfcprograms.api.SimpleClient;
 import com.cfcprograms.api.SimpleClientResponse;
 
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
@@ -71,7 +70,7 @@ class CfcApiClient {
     }
 
     /** registers a client in CFC system, and creates reference in vista DB that is bound to <code>tenant</code> */
-    InsuranceTenantSureClient createClient(Tenant tenant) {
+    String createClient(Tenant tenant) {
         CFCAPISoap api = getApi().getCFCAPISoap();
         String sessionId = makeNewCfcSession(api);
 
@@ -83,13 +82,7 @@ class CfcApiClient {
         if (!isSuccessfulCode(createClientRssult.getSimpleClientResult().getCode())) {
             throw new Error(createClientRssult.getSimpleClientResult().getCode());
         }
-
-        InsuranceTenantSureClient tenantSureClient = EntityFactory.create(InsuranceTenantSureClient.class);
-        tenantSureClient.tenant().set(tenant);
-        tenantSureClient.clientReferenceNumber().setValue(createClientRssult.getSimpleClientResult().getId());
-        Persistence.service().persist(tenantSureClient);
-
-        return tenantSureClient;
+        return createClientRssult.getSimpleClientResult().getId();
     }
 
     TenantSureQuoteDTO getQuote(InsuranceTenantSureClient client, TenantSureCoverageDTO coverageRequest) {
