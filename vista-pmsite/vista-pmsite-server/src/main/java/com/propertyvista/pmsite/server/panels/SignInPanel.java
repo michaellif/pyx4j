@@ -215,9 +215,18 @@ public class SignInPanel extends Panel {
                 Label devNotes = new Label("signInHint", "This application is running in <b>" + DemoData.applicationModeName()
                         + "</b> mode.<br/><i>Username and password are both<br/>");
                 add(devNotes.setEscapeModelStrings(false));
-                String onClick = "var f=document.getElementById('signInForm');f.username.value=f.password.value";
-                String login1 = DemoData.UserType.TENANT.getEmail(1);
-                add(new JSActionLink("signInLogin1", onClick + "='" + login1 + "'", false).setBody(new Model<String>(login1)));
+                StringBuilder js = new StringBuilder();
+                js.append("var f=document.getElementById('signInForm');");
+                js.append("dev_selectAndSetNext(f.username,f.password,");
+                js.append("new Array(");
+                for (int n = 1; n < DemoData.UserType.TENANT.getDefaultMax(); n++) {
+                    if (n != 1) {
+                        js.append(",");
+                    }
+                    js.append("\"").append(DemoData.UserType.TENANT.getEmail(n)).append("\"");
+                }
+                js.append("))");
+                add(new JSActionLink("signInLogin1", js.toString(), false).setBody(new Model<String>(DemoData.UserType.TENANT.getEmail(1))));
             }
         }
 

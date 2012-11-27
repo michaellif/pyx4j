@@ -193,3 +193,20 @@ function submitGeolocationV2(form) {
     };
 	gc.getLocations(address, callback);
 }
+
+function dev_selectAndSetNext(el1, el2, values) {
+	var nextVal;
+	if (el1.value == "") {
+		nextVal = values[0];
+	} else {
+		var p = values.indexOf(el1.value);
+		if ((p == -1)  || (p == values.length -1)) {
+			p = 0;
+		} else {
+			p++;
+		}
+		nextVal = values[p];
+	}
+	el1.value = nextVal; 
+	el2.value = nextVal; 
+}
