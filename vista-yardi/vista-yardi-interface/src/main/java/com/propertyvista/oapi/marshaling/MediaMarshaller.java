@@ -63,4 +63,12 @@ public class MediaMarshaller implements Marshaller<Media, MediaIO> {
         media.youTubeVideoID().setValue(mediaIO.youTubeVideoID.value);
         return media;
     }
+
+    public List<Media> marshal(List<MediaIO> MediaIOList) throws Exception {
+        List<Media> medias = new ArrayList<Media>();
+        for (MediaIO mediaIO : MediaIOList) {
+            medias.add(marshal(mediaIO));
+        }
+        return medias;
+    }
 }

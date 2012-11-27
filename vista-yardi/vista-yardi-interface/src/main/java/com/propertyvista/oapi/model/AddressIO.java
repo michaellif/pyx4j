@@ -34,7 +34,7 @@ public class AddressIO extends AbstractElementIO {
     public StringIO streetDirection;
 
     //mandatory for portal
-    public StringIO streetType;
+    public StreetTypeIO streetType;
 
     public StringIO unitNumber;
 

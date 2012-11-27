@@ -13,6 +13,8 @@
  */
 package com.propertyvista.oapi.marshaling;
 
+import com.pyx4j.entity.shared.EntityFactory;
+
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.oapi.model.UnitIO;
 import com.propertyvista.oapi.xml.IntegerIO;
@@ -42,8 +44,12 @@ public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
     }
 
     @Override
-    public AptUnit marshal(UnitIO unitRS) throws Exception {
-        return null;
+    public AptUnit marshal(UnitIO unitIO) throws Exception {
+        AptUnit unit = EntityFactory.create(AptUnit.class);
+        unit.floorplan().name().setValue(unitIO.floorplanName.value);
+        unit.info().number().setValue(unitIO.number);
+        unit.floorplan().bathrooms().setValue(unitIO.baths.value);
+        unit.floorplan().bedrooms().setValue(unitIO.beds.value);
+        return unit;
     }
-
 }

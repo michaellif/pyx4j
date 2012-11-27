@@ -20,17 +20,11 @@ import java.util.List;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
-import com.propertyvista.domain.property.asset.Parking;
-import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.oapi.model.AmenityIO;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.ContactIO;
-import com.propertyvista.oapi.model.ParkingIO;
-import com.propertyvista.oapi.model.UtilityIO;
 
 public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {
 
@@ -65,25 +59,13 @@ public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {
         buildingIO.medias = MediaMarshaller.getInstance().unmarshal(building.media());
 
         Persistence.service().retrieveMember(building.amenities());
-        List<AmenityIO> amenities = new ArrayList<AmenityIO>();
-        for (Amenity amenity : building.amenities()) {
-            amenities.add(AmenityMarshaller.getInstance().unmarshal(amenity));
-        }
-        buildingIO.amenities = amenities;
+        buildingIO.amenities = BuildingAmenityMarshaller.getInstance().unmarshal(building.amenities());
 
         Persistence.service().retrieveMember(building._Parkings());
-        List<ParkingIO> parkings = new ArrayList<ParkingIO>();
-        for (Parking parking : building._Parkings()) {
-            parkings.add(ParkingMarshaller.getInstance().unmarshal(parking));
-        }
-        buildingIO.parkings = parkings;
+        buildingIO.parkings = ParkingMarshaller.getInstance().unmarshal(building._Parkings());
 
         Persistence.service().retrieveMember(building.includedUtilities());
-        List<UtilityIO> utilities = new ArrayList<UtilityIO>();
-        for (Utility utility : building.includedUtilities()) {
-            utilities.add(UtilityMarshaller.getInstance().unmarshal(utility));
-        }
-        buildingIO.includedUtilities = utilities;
+        buildingIO.includedUtilities = UtilityMarshaller.getInstance().unmarshal(building.includedUtilities());
 
         return buildingIO;
     }
@@ -94,7 +76,11 @@ public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {
         building.propertyCode().setValue(buildingIO.propertyCode);
         building.info().set(BuildingInfoMarshaller.getInstance().marshal(buildingIO.info));
         building.marketing().set(MarketingMarshaller.getInstance().marshal(buildingIO.marketing));
-
+        building.contacts().propertyContacts().addAll(ContactMarshaller.getInstance().marshal(buildingIO.contacts));
+        building.media().addAll(MediaMarshaller.getInstance().marshal(buildingIO.medias));
+        building.amenities().addAll(BuildingAmenityMarshaller.getInstance().marshal(buildingIO.amenities));
+        building._Parkings().addAll(ParkingMarshaller.getInstance().marshal(buildingIO.parkings));
+        building.includedUtilities().addAll(UtilityMarshaller.getInstance().marshal(buildingIO.includedUtilities));
         return building;
     }
 }

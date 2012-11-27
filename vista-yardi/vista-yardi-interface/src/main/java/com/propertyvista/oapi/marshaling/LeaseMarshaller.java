@@ -13,6 +13,8 @@
  */
 package com.propertyvista.oapi.marshaling;
 
+import com.pyx4j.entity.shared.EntityFactory;
+
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.oapi.model.LeaseIO;
 import com.propertyvista.oapi.model.LeaseStatusIO;
@@ -46,8 +48,16 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
     }
 
     @Override
-    public Lease marshal(LeaseIO leaseRS) throws Exception {
-        return null;
+    public Lease marshal(LeaseIO leaseIO) throws Exception {
+        Lease lease = EntityFactory.create(Lease.class);
+        lease.leaseId().setValue(leaseIO.leaseId);
+        lease.status().setValue(leaseIO.status.value);
+        lease.paymentFrequency().setValue(leaseIO.paymentFrequency.value);
+        lease.leaseFrom().setValue(leaseIO.leaseFrom.value);
+        lease.leaseTo().setValue(leaseIO.leaseTo.value);
+        lease.unit().building().propertyCode().setValue(leaseIO.propertyCode);
+        lease.unit().info().number().setValue(leaseIO.unitNumber);
+        return lease;
     }
 
 }

@@ -53,7 +53,7 @@ public class BuildingIO extends AbstractElementIO {
 
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "amenity", type = AmenityIO.class))
-    public List<AmenityIO> amenities = new ArrayList<AmenityIO>();
+    public List<BuildingAmenityIO> amenities = new ArrayList<BuildingAmenityIO>();
 
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "parking", type = ParkingIO.class))

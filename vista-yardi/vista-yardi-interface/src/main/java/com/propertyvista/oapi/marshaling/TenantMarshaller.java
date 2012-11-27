@@ -13,6 +13,9 @@
  */
 package com.propertyvista.oapi.marshaling;
 
+import com.pyx4j.entity.shared.EntityFactory;
+
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.oapi.model.TenantIO;
 
@@ -32,18 +35,27 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantI
     @Override
     public TenantIO unmarshal(LeaseParticipant<?> participant) {
         TenantIO tenantIO = new TenantIO();
-        tenantIO.firstName = participant.customer().person().name().firstName().getValue();
-        tenantIO.lastName = participant.customer().person().name().lastName().getValue();
-        tenantIO.middleName = participant.customer().person().name().middleName().getValue();
-        tenantIO.sex.value = participant.customer().person().sex().getValue();
-        tenantIO.phone.value = participant.customer().person().homePhone().getValue();
-        tenantIO.email.value = participant.customer().person().email().getValue();
+        Person person = participant.customer().person();
+        tenantIO.firstName = person.name().firstName().getValue();
+        tenantIO.lastName = person.name().lastName().getValue();
+        tenantIO.middleName = person.name().middleName().getValue();
+        tenantIO.sex.value = person.sex().getValue();
+        tenantIO.phone.value = person.homePhone().getValue();
+        tenantIO.email.value = person.email().getValue();
         return tenantIO;
     }
 
     @Override
-    public LeaseParticipant<?> marshal(TenantIO v) throws Exception {
-        return null;
+    public LeaseParticipant<?> marshal(TenantIO tenantIO) throws Exception {
+        LeaseParticipant<?> participant = EntityFactory.create(LeaseParticipant.class);
+        Person person = EntityFactory.create(Person.class);
+        person.name().firstName().setValue(tenantIO.firstName);
+        person.name().lastName().setValue(tenantIO.lastName);
+        person.name().middleName().setValue(tenantIO.middleName);
+        person.sex().setValue(tenantIO.sex.value);
+        person.homePhone().setValue(tenantIO.phone.value);
+        person.email().setValue(tenantIO.email.value);
+        participant.customer().person().set(person);
+        return participant;
     }
-
 }

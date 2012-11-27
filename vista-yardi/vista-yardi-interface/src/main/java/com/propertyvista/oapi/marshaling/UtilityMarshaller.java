@@ -13,6 +13,12 @@
  */
 package com.propertyvista.oapi.marshaling;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import com.pyx4j.entity.shared.EntityFactory;
+
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.oapi.model.UtilityIO;
 
@@ -36,8 +42,26 @@ public class UtilityMarshaller implements Marshaller<Utility, UtilityIO> {
         return utilityIO;
     }
 
+    public List<UtilityIO> unmarshal(Collection<Utility> utilities) {
+        List<UtilityIO> utilityIOList = new ArrayList<UtilityIO>();
+        for (Utility utility : utilities) {
+            utilityIOList.add(unmarshal(utility));
+        }
+        return utilityIOList;
+    }
+
     @Override
     public Utility marshal(UtilityIO utilityIO) throws Exception {
-        return null;
+        Utility utility = EntityFactory.create(Utility.class);
+        utility.name().setValue(utilityIO.name);
+        return utility;
+    }
+
+    public List<Utility> marshal(Collection<UtilityIO> utilityIOList) throws Exception {
+        List<Utility> utilities = new ArrayList<Utility>();
+        for (UtilityIO utilityIO : utilityIOList) {
+            utilities.add(marshal(utilityIO));
+        }
+        return utilities;
     }
 }
