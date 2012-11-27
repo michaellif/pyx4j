@@ -50,6 +50,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
     private static final Logger log = LoggerFactory.getLogger(TenantSureFacadeImpl.class);
 
+    public static boolean mockup = true;
+
     private final ICfcApiClient cfcApiClient;
 
     public TenantSureFacadeImpl(ICfcApiClient cfcApiClient) {
@@ -57,7 +59,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     }
 
     public TenantSureFacadeImpl() {
-        this(new MockupCfcApiClient());
+        this(mockup ? new MockupCfcApiClient() : new CfcApiClient());
     }
 
     @Override
