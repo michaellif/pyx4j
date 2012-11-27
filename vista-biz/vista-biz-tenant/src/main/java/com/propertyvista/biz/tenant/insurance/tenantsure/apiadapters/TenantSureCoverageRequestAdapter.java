@@ -24,8 +24,12 @@ import com.cfcprograms.api.ObjectFactory;
 import com.cfcprograms.api.OptionQuote;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 
 public class TenantSureCoverageRequestAdapter {
@@ -49,11 +53,14 @@ public class TenantSureCoverageRequestAdapter {
         }
         optionQuote.setInceptionDate(dataTypeFactory.newXMLGregorianCalendar(today));
 
-        Persistence.service().retrieveMember(client.tenant().lease());
-        BigDecimal monthlyRentalAmount = client.tenant().lease().unit().financial()._unitRent().getValue();
+        Tenant tenant = Persistence.service().retrieve(Tenant.class, client.tenant().getPrimaryKey());
+        Persistence.service().retrieveMember(tenant.lease());
+        BigDecimal monthlyRentalAmount = tenant.lease().unit().financial()._unitRent().getValue();
         optionQuote.setRevenue(monthlyRentalAmount);
 
-        int numOfTenants = client.tenant().lease().currentTerm().version().tenants().size();
+        EntityQueryCriteria<LeaseTermTenant> numOfTenantsCriteria = EntityQueryCriteria.create(LeaseTermTenant.class);
+        numOfTenantsCriteria.add(PropertyCriterion.eq(numOfTenantsCriteria.proto().leaseTermV(), tenant.lease().currentTerm().version()));
+        int numOfTenants = Persistence.service().count(numOfTenantsCriteria);
         optionQuote.setEmployeeCount(new BigDecimal(numOfTenants));
         optionQuote.setUsExposure(BigDecimal.ZERO);
         optionQuote.setRetroDate(dataTypeFactory.newXMLGregorianCalendar(today));
@@ -83,7 +90,7 @@ public class TenantSureCoverageRequestAdapter {
 
     public static String makeOptionCode(BigDecimal liablityCoverage, BigDecimal contentsCoverage) {
         StringBuilder optionCode = new StringBuilder();
-        optionCode.append("TS");
+        optionCode.append("TSP");
         optionCode.append(firstDigit(liablityCoverage));
         if (contentsCoverage != null && !contentsCoverage.equals(BigDecimal.ZERO)) {
             optionCode.append(firstDigit(contentsCoverage));

@@ -17,9 +17,13 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.namespace.QName;
+import javax.xml.ws.handler.Handler;
+import javax.xml.ws.handler.HandlerResolver;
+import javax.xml.ws.handler.PortInfo;
 
 import com.cfcprograms.api.ArrayOfString;
 import com.cfcprograms.api.CFCAPI;
@@ -128,15 +132,25 @@ public class CfcApiClient implements ICfcApiClient {
     }
 
     private CFCAPI getApi() {
+        CFCAPI api = null;
         try {
             if (VistaDeployment.isVistaProduction()) {
-                return new CFCAPI(new URL("https://api.cfcprograms.com/cfc_api.asmx"), new QName("http://api.cfcprograms.com/"));
+                api = new CFCAPI(new URL("https://api.cfcprograms.com/cfc_api.asmx"), new QName("http://api.cfcprograms.com/", "CFC_API"));
             } else {
-                return new CFCAPI(new URL("http://testapi.cfcprograms.com/cfc_api.asmx"), new QName("http://api.cfcprograms.com/"));
+                api = new CFCAPI(new URL("http://testapi.cfcprograms.com/cfc_api.asmx"), new QName("http://api.cfcprograms.com/", "CFC_API"));
             }
         } catch (MalformedURLException e) {
             throw new Error(e);
         }
+        api.setHandlerResolver(new HandlerResolver() {
+            @Override
+            public List<Handler> getHandlerChain(PortInfo arg0) {
+                List<Handler> handlerChain = new ArrayList<Handler>();
+                handlerChain.add(new CfcApiLogHandler());
+                return handlerChain;
+            }
+        });
+        return api;
     }
 
     private static Credentials getCredentials() {

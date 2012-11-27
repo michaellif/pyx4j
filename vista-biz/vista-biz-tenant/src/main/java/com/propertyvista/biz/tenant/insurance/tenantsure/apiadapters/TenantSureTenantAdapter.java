@@ -16,30 +16,38 @@ package com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters;
 import com.cfcprograms.api.SimpleClient;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class TenantSureTenantAdapter {
 
-    public static void fillClient(Tenant tenant, SimpleClient parameters) {
+    public static void fillClient(Tenant tenantId, SimpleClient parameters) {
+        Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
+
+        parameters.setCompanyName(tenant.customer().person().name().getStringView());
         parameters.setContactName(tenant.customer().person().name().getStringView());
 
+        Persistence.service().retrieveMember(tenant.lease());
+        Persistence.service().retrieveMember(tenant.lease().unit().building());
         AddressStructured address = tenant.lease().unit().building().info().address();
-        String streetNumber = address.streetNumber().getValue() + tenant.lease().unit().building().info().address().streetNumberSuffix().getValue();
+
+        String streetNumber = address.streetNumber().getValue();
         if (!address.streetNumberSuffix().isNull()) {
             streetNumber += address.streetNumberSuffix().getValue();
         }
         String fullStreetName = address.streetName().getValue();
         if (!address.streetType().isNull()) {
-            fullStreetName += " " + address.streetType().getValue().toString();
+            fullStreetName += " " + address.streetType().getStringView();
         }
-        if (!address.streetType().isNull()) {
-            fullStreetName += address.streetType().getValue();
+        if (!address.streetDirection().isNull()) {
+            fullStreetName += " " + address.streetDirection().getValue();
         }
+
         parameters.setAddress1(SimpleMessageFormat.format("{0} {1}", streetNumber, fullStreetName));
 
-        parameters.setAddress2(tenant.lease().unit().info().number().getStringView());
+        parameters.setAddress2("unit " + tenant.lease().unit().info().number().getStringView());
 
         parameters.setCity(tenant.lease().unit().building().info().address().city().getValue());
 
@@ -49,7 +57,7 @@ public class TenantSureTenantAdapter {
 
         String countryName = tenant.lease().unit().building().info().address().country().name().getValue();
         if ("Canada".equals(countryName)) {
-            parameters.setPostcode("CA");
+            parameters.setCountryCode("CA");
         } else {
             throw new Error(SimpleMessageFormat.format("tenant's country ({0}) is not supported!", countryName));
         }
