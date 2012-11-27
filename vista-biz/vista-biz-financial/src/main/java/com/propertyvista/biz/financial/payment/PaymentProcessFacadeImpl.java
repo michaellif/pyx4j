@@ -71,13 +71,17 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         criteria.add(PropertyCriterion.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Queued));
         criteria.add(PropertyCriterion.eq(criteria.proto().paymentMethod().type(), PaymentType.Echeck));
         ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
-        while (paymentRecordIterator.hasNext()) {
-            PaymentRecord paymentRecord = paymentRecordIterator.next();
-            if (new PadProcessor().processPayment(paymentRecord, padFile)) {
-                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, paymentRecord.amount().getValue());
-            } else {
-                StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, paymentRecord.amount().getValue());
+        try {
+            while (paymentRecordIterator.hasNext()) {
+                PaymentRecord paymentRecord = paymentRecordIterator.next();
+                if (new PadProcessor().processPayment(paymentRecord, padFile)) {
+                    StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, paymentRecord.amount().getValue());
+                } else {
+                    StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, paymentRecord.amount().getValue());
+                }
             }
+        } finally {
+            paymentRecordIterator.completeRetrieval();
         }
         Persistence.service().commit();
     }
@@ -283,43 +287,47 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         billCriteria.add(PropertyCriterion.eq(billCriteria.proto().billStatus(), Bill.BillStatus.Confirmed));
 
         ICursorIterator<Bill> billIterator = Persistence.service().query(null, billCriteria, AttachLevel.Attached);
-        while (billIterator.hasNext()) {
-            Bill bill = billIterator.next();
-            //Check this bill is latest
-            if (!ServerSideFactory.create(BillingFacade.class).isLatestBill(bill)) {
-                continue;
-            }
-            Persistence.service().retrieve(bill.billingAccount());
-            Persistence.service().retrieve(bill.billingAccount().lease());
+        try {
+            while (billIterator.hasNext()) {
+                Bill bill = billIterator.next();
+                //Check this bill is latest
+                if (!ServerSideFactory.create(BillingFacade.class).isLatestBill(bill)) {
+                    continue;
+                }
+                Persistence.service().retrieve(bill.billingAccount());
+                Persistence.service().retrieve(bill.billingAccount().lease());
 
-            // call AR facade to get current balance for dueDate
-            BigDecimal currentBalance = ServerSideFactory.create(ARFacade.class).getCurrentBalance(bill.billingAccount());
-            if (currentBalance.compareTo(BigDecimal.ZERO) <= 0) {
-                continue;
-            }
+                // call AR facade to get current balance for dueDate
+                BigDecimal currentBalance = ServerSideFactory.create(ARFacade.class).getCurrentBalance(bill.billingAccount());
+                if (currentBalance.compareTo(BigDecimal.ZERO) <= 0) {
+                    continue;
+                }
 
-            Lease lease = bill.billingAccount().lease();
-            Persistence.service().retrieve(lease.currentTerm().version().tenants());
+                Lease lease = bill.billingAccount().lease();
+                Persistence.service().retrieve(lease.currentTerm().version().tenants());
 
-            tanantLoop: for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
-                // do pre-authorized payments for main applicant for now
-                switch (tenant.role().getValue()) {
-                case Applicant:
-                    LeasePaymentMethod method = PaymentUtils.retrievePreAuthorizedPaymentMethod(tenant);
-                    if (method != null) {
-                        createPreAuthorizedPayment(tenant, currentBalance, bill.billingAccount(), method);
-                        StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, currentBalance);
+                tanantLoop: for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
+                    // do pre-authorized payments for main applicant for now
+                    switch (tenant.role().getValue()) {
+                    case Applicant:
+                        LeasePaymentMethod method = PaymentUtils.retrievePreAuthorizedPaymentMethod(tenant);
+                        if (method != null) {
+                            createPreAuthorizedPayment(tenant, currentBalance, bill.billingAccount(), method);
+                            StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, currentBalance);
+                        }
+                        break tanantLoop;
+                    case CoApplicant:
+                        //TODO Payment split
+                        break;
+                    default:
+                        break;
                     }
-                    break tanantLoop;
-                case CoApplicant:
-                    //TODO Payment split
-                    break;
-                default:
-                    break;
+
                 }
 
             }
-
+        } finally {
+            billIterator.completeRetrieval();
         }
 
         Persistence.service().commit();
@@ -355,15 +363,19 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         criteria.add(PropertyCriterion.le(criteria.proto().targetDate(), Persistence.service().getTransactionSystemTime()));
 
         ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
-        while (paymentRecordIterator.hasNext()) {
-            PaymentRecord paymentRecord = paymentRecordIterator.next();
-            paymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
+        try {
+            while (paymentRecordIterator.hasNext()) {
+                PaymentRecord paymentRecord = paymentRecordIterator.next();
+                paymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
 
-            if (paymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
-                StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, paymentRecord.amount().getValue());
-            } else {
-                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, paymentRecord.amount().getValue());
+                if (paymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
+                    StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, paymentRecord.amount().getValue());
+                } else {
+                    StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, paymentRecord.amount().getValue());
+                }
             }
+        } finally {
+            paymentRecordIterator.completeRetrieval();
         }
         Persistence.service().commit();
     }

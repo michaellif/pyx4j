@@ -13,12 +13,11 @@
  */
 package com.propertyvista.server.jobs;
 
-import java.util.Iterator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -46,23 +45,27 @@ public class LeaseActivationProcess implements PmcProcess {
         long total = 0;
         long failed = 0;
 
-        Iterator<Lease> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
+        ICursorIterator<Lease> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
         LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-        while (i.hasNext()) {
-            ++total;
+        try {
+            while (i.hasNext()) {
+                ++total;
 
-            Lease lease = i.next();
-            try {
-                leaseFacade.activate(lease);
-                Persistence.service().commit();
+                Lease lease = i.next();
+                try {
+                    leaseFacade.activate(lease);
+                    Persistence.service().commit();
 
-                StatisticsUtils.addProcessed(context.getRunStats(), 1);
-            } catch (Throwable error) {
-                log.error("failed to activate lease id = {}:  {}", lease.getPrimaryKey(), error.getMessage());
-                Persistence.service().rollback();
-                ++failed;
-                StatisticsUtils.addFailed(context.getRunStats(), 1);
+                    StatisticsUtils.addProcessed(context.getRunStats(), 1);
+                } catch (Throwable error) {
+                    log.error("failed to activate lease id = {}:  {}", lease.getPrimaryKey(), error.getMessage());
+                    Persistence.service().rollback();
+                    ++failed;
+                    StatisticsUtils.addFailed(context.getRunStats(), 1);
+                }
             }
+        } finally {
+            i.completeRetrieval();
         }
         log.info("{} out of {} leases were activated successfully", total - failed, total);
     }

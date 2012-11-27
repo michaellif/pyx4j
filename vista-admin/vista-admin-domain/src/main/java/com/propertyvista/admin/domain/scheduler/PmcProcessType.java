@@ -42,6 +42,8 @@ public enum PmcProcessType implements Serializable {
 
     paymentsPadReciveReconciliation,
 
+    paymentsTenantSure,
+
     initializeFutureBillingCycles,
 
     leaseActivation,

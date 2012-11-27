@@ -118,12 +118,16 @@ public final class PaymentsSummaryHelper {
         criteria.add(PropertyCriterion.eq(criteria.proto().paymentStatus(), paymentStatus));
 
         ICursorIterator<PaymentRecord> i = Persistence.service().query(null, criteria, AttachLevel.Attached);
-        while (i.hasNext()) {
-            PaymentRecord r = i.next();
-            Persistence.service().retrieve(r.merchantAccount());
-            PaymentType paymentType = r.paymentMethod().type().getValue();
-            IPrimitive<BigDecimal> amountMember = paymentTypeMapper.getMember(summary, paymentType);
-            amountMember.setValue(amountMember.getValue().add(r.amount().getValue()));
+        try {
+            while (i.hasNext()) {
+                PaymentRecord r = i.next();
+                Persistence.service().retrieve(r.merchantAccount());
+                PaymentType paymentType = r.paymentMethod().type().getValue();
+                IPrimitive<BigDecimal> amountMember = paymentTypeMapper.getMember(summary, paymentType);
+                amountMember.setValue(amountMember.getValue().add(r.amount().getValue()));
+            }
+        } finally {
+            i.completeRetrieval();
         }
 
         summary.status().setValue(paymentStatus);
@@ -150,12 +154,16 @@ public final class PaymentsSummaryHelper {
         criteria.add(PropertyCriterion.eq(criteria.proto().paymentStatus(), paymentStatus));
 
         ICursorIterator<PaymentRecord> i = Persistence.service().query(null, criteria, AttachLevel.Attached);
-        while (i.hasNext()) {
-            PaymentRecord r = i.next();
-            Persistence.service().retrieve(r.merchantAccount());
-            PaymentType paymentType = r.paymentMethod().type().getValue();
-            IPrimitive<BigDecimal> amountMember = paymentTypeMapper.getMember(summary, paymentType);
-            amountMember.setValue(amountMember.getValue().add(r.amount().getValue()));
+        try {
+            while (i.hasNext()) {
+                PaymentRecord r = i.next();
+                Persistence.service().retrieve(r.merchantAccount());
+                PaymentType paymentType = r.paymentMethod().type().getValue();
+                IPrimitive<BigDecimal> amountMember = paymentTypeMapper.getMember(summary, paymentType);
+                amountMember.setValue(amountMember.getValue().add(r.amount().getValue()));
+            }
+        } finally {
+            i.completeRetrieval();
         }
 
         summary.status().setValue(paymentStatus);

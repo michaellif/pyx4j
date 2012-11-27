@@ -38,6 +38,8 @@ public class PmcProcessFactory {
             return new PadReciveAcknowledgmentProcess();
         case paymentsPadReciveReconciliation:
             return new PadReciveReconciliationProcess();
+        case paymentsTenantSure:
+            return new PaymentsTenantSureProcess();
         case initializeFutureBillingCycles:
             return new FutureBillingCycleInitializationProcess();
 

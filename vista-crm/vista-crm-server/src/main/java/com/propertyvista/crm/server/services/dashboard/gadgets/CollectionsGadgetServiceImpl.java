@@ -130,8 +130,12 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
 
         ICursorIterator<PaymentRecord> i = Persistence.service().query(null,
                 paymentRecordsCriteria(EntityQueryCriteria.create(PaymentRecord.class), buildingsFilter, member.getPath().toString()), AttachLevel.Attached);
-        while (i.hasNext()) {
-            sum = sum.add(i.next().amount().getValue());
+        try {
+            while (i.hasNext()) {
+                sum = sum.add(i.next().amount().getValue());
+            }
+        } finally {
+            i.completeRetrieval();
         }
         member.setValue(sum);
 
