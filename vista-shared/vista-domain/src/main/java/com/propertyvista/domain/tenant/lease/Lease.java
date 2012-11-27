@@ -278,5 +278,5 @@ public interface Lease extends IEntity {
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
-    ISet<LeaseParticipant> leaseCustomers();
+    ISet<LeaseParticipant<?>> leaseParticipants();
 }

@@ -159,14 +159,10 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
     private void devGenerateCreditCard() {
         get(proto().nameOn()).setValue("Dev");
-        get(proto().cardType()).setValue(CreditCardType.Visa);
-
-        if (false) {
-            getValue().card().newNumber().setValue("4222222222222");
-            get(proto().card()).setValue(getValue().card());
-        } else {
-            ((CTextFieldBase<?, ?>) get(proto().card())).setValueByString(CreditCardNumberGenerator.generateCardNumber(get(proto().cardType()).getValue()));
+        if (get(proto().cardType()).getValue() == null) {
+            get(proto().cardType()).setValue(CreditCardType.Visa);
         }
+        ((CTextFieldBase<?, ?>) get(proto().card())).setValueByString(CreditCardNumberGenerator.generateCardNumber(get(proto().cardType()).getValue()));
 
         get(proto().expiryDate()).setValue(new LogicalDate());
         get(proto().securityCode()).setValue("123");

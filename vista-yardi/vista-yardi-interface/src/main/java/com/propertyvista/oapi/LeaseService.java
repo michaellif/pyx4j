@@ -69,8 +69,8 @@ public class LeaseService {
         leaseCriteria.eq(leaseCriteria.proto().leaseId(), leaseId);
         List<Lease> leases = service.query(leaseCriteria);
         Lease lease = leases.get(0);
-        service.retrieveMember(lease.leaseCustomers());
-        for (LeaseParticipant<?> participant : lease.leaseCustomers()) {
+        service.retrieveMember(lease.leaseParticipants());
+        for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
             TenantIO tenantIO = TenantMarshaller.getInstance().unmarshal(participant);
             tenantIO.leaseId = leaseId;
             tenantsIO.add(tenantIO);

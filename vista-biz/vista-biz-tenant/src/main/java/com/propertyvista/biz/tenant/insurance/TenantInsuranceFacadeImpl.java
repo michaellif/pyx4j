@@ -29,6 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
@@ -45,7 +46,31 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
     private static final I18n i18n = I18n.get(TenantInsuranceFacadeImpl.class);
 
     @Override
-    public TenantInsuranceStatusDTO getInsuranceStatus(Tenant tenantStub) {
+    public TenantInsuranceStatusDTO getInsuranceStatus(Tenant tenantId) {
+        EntityQueryCriteria<InsuranceCertificate> criteria = EntityQueryCriteria.create(InsuranceCertificate.class);
+        criteria.eq(criteria.proto().tenant(), tenantId);
+        //TODO ArtyomB,VladS lets talk
+        //criteria.isNotNull(criteria.proto().expirationDate());
+        InsuranceCertificate insuranceCertificate = Persistence.service().retrieve(criteria);
+        if (insuranceCertificate == null) {
+            // Find Certificate that is set for other tenants. Make it Non changeable. 
+            criteria = EntityQueryCriteria.create(InsuranceCertificate.class);
+            criteria.eq(criteria.proto().tenant().lease().leaseParticipants(), tenantId);
+            //TODO ArtyomB,VladS lets talk
+            //criteria.isNotNull(criteria.proto().expirationDate());
+            insuranceCertificate = Persistence.service().retrieve(criteria);
+        }
+
+        if (insuranceCertificate != null) {
+            //TODO ArtyomB use the code below
+            OtherProviderTenantInsuranceStatusDTO otherProviderStatus = EntityFactory.create(OtherProviderTenantInsuranceStatusDTO.class);
+            otherProviderStatus.liabilityCoverage().setValue(insuranceCertificate.personalLiability().getValue());
+            otherProviderStatus.expirationDate().setValue(insuranceCertificate.expirationDate().getValue());
+            return otherProviderStatus;
+        }
+
+        //TODO ArtyomB remove below
+
         Map<String, String> config;
         try {
             config = PropertiesConfiguration.loadProperties(MOCKUP_CONFIG_FILE);
@@ -76,8 +101,8 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
         } else {
             NoInsuranceTenantInsuranceStatusDTO noInsuranceStatus = EntityFactory.create(NoInsuranceTenantInsuranceStatusDTO.class);
 
-            TenantInsurancePolicy tenantInsurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
-                    retrieveLease(tenantStub).unit(), TenantInsurancePolicy.class);
+            TenantInsurancePolicy tenantInsurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(retrieveLease(tenantId).unit(),
+                    TenantInsurancePolicy.class);
             noInsuranceStatus.minimumRequiredLiability().setValue(tenantInsurancePolicy.minimumRequiredLiability().getValue());
             noInsuranceStatus.noInsuranceStatusMessage().setValue(tenantInsurancePolicy.noInsuranceStatusMessage().getValue());
             noInsuranceStatus.tenantInsuranceInvitation().setValue(tenantInsurancePolicy.tenantInsuranceInvitation().getValue());

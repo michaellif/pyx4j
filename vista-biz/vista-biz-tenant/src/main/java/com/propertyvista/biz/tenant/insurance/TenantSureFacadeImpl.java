@@ -16,7 +16,6 @@ package com.propertyvista.biz.tenant.insurance;
 import java.math.BigDecimal;
 import java.util.Random;
 
-import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,7 +94,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
      */
     @Override
     public void buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId) {
-        Validate.isTrue(!quote.quoteId().isNull(), "it's impossible to buy insurance with no quote id!!!");
+        //TODO
+        //Validate.isTrue(!quote.quoteId().isNull(), "it's impossible to buy insurance with no quote id!!!");
 
         InsuranceTenantSure ts = EntityFactory.create(InsuranceTenantSure.class);
         ts.quoteId().setValue(quote.quoteId().getValue());
@@ -158,7 +158,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             Persistence.service().commit();
         }
 
-        createInsuranceCertificate(ts);
+        createInsuranceCertificate(tenantId, ts);
 
         try {
             TenantSurePayments.compleateTransaction(transaction);
@@ -180,10 +180,18 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
     }
 
-    private void createInsuranceCertificate(InsuranceTenantSure ts) {
+    private void createInsuranceCertificate(Tenant tenantId, InsuranceTenantSure ts) {
         InsuranceCertificate ic = EntityFactory.create(InsuranceCertificate.class);
+        ic.tenant().set(tenantId);
 
-        // TODO Set all the proper values       ArtyomB 
+        // TODO Set all the proper values       ArtyomB
+        {
+            ic.insuranceProvider().setValue("TODO LegalName of TenantSure");
+            ic.insuranceCertificateNumber().setValue(ts.quoteId().getValue());
+            ic.personalLiability();
+            ic.startDate();
+            ic.expirationDate();
+        }
 
         Persistence.service().persist(ic);
         ts.insuranceCertificate().set(ic);

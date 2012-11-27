@@ -149,8 +149,8 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
         maintenanceRequest.status().setValue(MaintenanceRequestStatus.Submitted);
         maintenanceRequest.description().setValue(RandomUtil.randomLetters(50));
 
-        Persistence.service().retrieveMember(lease.leaseCustomers());
-        maintenanceRequest.leaseParticipant().setPrimaryKey(lease.leaseCustomers().iterator().next().getPrimaryKey());
+        Persistence.service().retrieveMember(lease.leaseParticipants());
+        maintenanceRequest.leaseParticipant().setPrimaryKey(lease.leaseParticipants().iterator().next().getPrimaryKey());
         maintenanceRequest.issueClassification().set(issueClassifications.get(RandomUtil.randomInt(issueClassifications.size())));
         Persistence.service().persist(maintenanceRequest);
     }

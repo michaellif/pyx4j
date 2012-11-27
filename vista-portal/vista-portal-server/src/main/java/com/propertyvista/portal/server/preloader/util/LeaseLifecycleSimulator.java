@@ -233,7 +233,7 @@ public class LeaseLifecycleSimulator {
             maintenanceRequest.updated().setValue(now());
             maintenanceRequest.status().setValue(MaintenanceRequestStatus.Submitted);
             maintenanceRequest.description().setValue(RandomUtil.randomLetters(50));
-            maintenanceRequest.leaseParticipant().setPrimaryKey(lease.leaseCustomers().iterator().next().getPrimaryKey());
+            maintenanceRequest.leaseParticipant().setPrimaryKey(lease.leaseParticipants().iterator().next().getPrimaryKey());
             maintenanceRequest.issueClassification().set(issueClassifications.get(RandomUtil.randomInt(issueClassifications.size())));
             Persistence.service().persist(maintenanceRequest);
         }
@@ -252,7 +252,7 @@ public class LeaseLifecycleSimulator {
             lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
             lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, lease.unit());
             lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
-            Persistence.service().retrieveMember(lease.leaseCustomers());
+            Persistence.service().retrieveMember(lease.leaseParticipants());
 
             LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().get(0);
             mainTenant.leaseParticipant().preauthorizedPayment().set(mainTenant.leaseParticipant().customer().paymentMethods().iterator().next());
