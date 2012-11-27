@@ -22,6 +22,7 @@ import com.google.gwt.view.client.Range;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
@@ -164,7 +165,9 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         }
         ((CTextFieldBase<?, ?>) get(proto().card())).setValueByString(CreditCardNumberGenerator.generateCardNumber(get(proto().cardType()).getValue()));
 
-        get(proto().expiryDate()).setValue(new LogicalDate());
+        LogicalDate nextNoth = new LogicalDate();
+        TimeUtils.addDays(nextNoth, 31);
+        get(proto().expiryDate()).setValue(nextNoth);
         get(proto().securityCode()).setValue("123");
     }
 }
