@@ -42,7 +42,7 @@
             <version>${project.version}</version>
         </dependency>
 
-	    <dependency>
+        <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-payment</artifactId>
             <version>${project.version}</version>
@@ -81,7 +81,7 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-unit-server</artifactId>
@@ -143,9 +143,9 @@
             <scope>test</scope>
         </dependency>
 
-	    <dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
+            <artifactId>javax.servlet-api</artifactId>
             <scope>test</scope>
             <optional>true</optional>
         </dependency>

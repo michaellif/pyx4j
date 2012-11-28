@@ -21,6 +21,13 @@
 
         <!-- ensure proper version, NOT from gwt-dev.jar -->
         <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- ensure proper version, NOT from gwt-dev.jar -->
+        <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
         </dependency>
@@ -49,7 +56,7 @@
             <version>${project.version}</version>
         </dependency>
 
-	    <dependency>
+        <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-biz-communication</artifactId>
             <version>${project.version}</version>
@@ -150,12 +157,6 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-jetty-runtime</artifactId>
             <version>${pyxVersion}</version>
@@ -163,7 +164,7 @@
             <scope>test</scope>
         </dependency>
 
-	    <dependency>
+        <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-unit-preloader</artifactId>
             <version>${project.version}</version>

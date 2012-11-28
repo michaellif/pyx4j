@@ -18,16 +18,16 @@
 
     <dependencies>
 
-		<!-- ensure proper version, NOT from gwt-dev.jar -->
-		<dependency>
-		    <groupId>commons-codec</groupId>
-		    <artifactId>commons-codec</artifactId>
-		</dependency>
+        <!-- ensure proper version, NOT from gwt-dev.jar -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
 
-		<dependency>
-		    <groupId>commons-io</groupId>
-		    <artifactId>commons-io</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.propertyvista</groupId>
@@ -59,7 +59,7 @@
             <version>${project.version}</version>
         </dependency>
 
-	    <!--  TODO remove -->
+        <!--  TODO remove -->
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-biz-preloader</artifactId>
@@ -125,8 +125,8 @@
 
         <dependency>
             <groupId>net.tanesha.recaptcha4j</groupId>
-	        <artifactId>recaptcha4j</artifactId>
-	    </dependency>
+            <artifactId>recaptcha4j</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>commons-fileupload</groupId>
@@ -145,7 +145,7 @@
 
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
+            <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -154,7 +154,7 @@
             <artifactId>jasperreports</artifactId>
         </dependency>
 
-	    <dependency>
+        <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-unit-preloader</artifactId>
             <version>${project.version}</version>
@@ -162,7 +162,7 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-report</artifactId>
@@ -171,7 +171,7 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
-        
+
     </dependencies>
 
     <build>

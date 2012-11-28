@@ -25,9 +25,9 @@
         </dependency>
 
         <dependency>
-        	<groupId>com.propertyvista</groupId>
-        	<artifactId>vista-server-common</artifactId>
-        	<version>${project.version}</version>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-server-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -43,11 +43,11 @@
 
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
+            <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
 
-	    <dependency>
+        <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-unit-preloader</artifactId>
             <version>${project.version}</version>
@@ -56,6 +56,6 @@
             <optional>true</optional>
         </dependency>
 
-	</dependencies>
+    </dependencies>
 
 </project>
