@@ -13,15 +13,24 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.views;
 
-import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.forms.OtherProvidersTenantInsuranceDetailsForm;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.otherprovider.OtherProvidersTenantInsuranceDetailsDTO;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class TenantInsuranceByOtherProviderUpdateViewImpl extends BasicViewImpl<OtherProvidersTenantInsuranceDetailsDTO> implements
-        TenantInsuranceByOtherProviderUpdateView {
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
+import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.forms.TenantInsuranceByOtherProviderDetailsForm;
+
+public class TenantInsuranceByOtherProviderUpdateViewImpl extends BasicViewImpl<InsuranceCertificate> implements TenantInsuranceByOtherProviderUpdateView {
+
+    private static final I18n i18n = I18n.get(TenantInsuranceByOtherProviderUpdateViewImpl.class);
 
     public TenantInsuranceByOtherProviderUpdateViewImpl() {
-        setForm(new OtherProvidersTenantInsuranceDetailsForm());
+        setForm(new TenantInsuranceByOtherProviderDetailsForm());
+    }
+
+    @Override
+    public void reportSaveSuccess() {
+        MessageDialog.info(i18n.tr("Your insurance details were saved successfully"));
     }
 
 }

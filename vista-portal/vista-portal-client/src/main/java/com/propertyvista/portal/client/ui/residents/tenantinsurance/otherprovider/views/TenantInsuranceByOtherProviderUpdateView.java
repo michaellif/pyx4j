@@ -13,13 +13,15 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.views;
 
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.portal.client.ui.residents.View;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.otherprovider.OtherProvidersTenantInsuranceDetailsDTO;
 
-public interface TenantInsuranceByOtherProviderUpdateView extends View<OtherProvidersTenantInsuranceDetailsDTO> {
+public interface TenantInsuranceByOtherProviderUpdateView extends View<InsuranceCertificate> {
 
-    interface Presenter extends View.Presenter<OtherProvidersTenantInsuranceDetailsDTO> {
+    interface Presenter extends View.Presenter<InsuranceCertificate> {
 
     }
+
+    void reportSaveSuccess();
 
 }
