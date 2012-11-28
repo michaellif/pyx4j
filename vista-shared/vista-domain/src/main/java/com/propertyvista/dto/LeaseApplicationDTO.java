@@ -42,4 +42,6 @@ public interface LeaseApplicationDTO extends LeaseDTO {
     IPrimitive<Integer> numberOfGuarantors();
 
     Customer mainApplicant();
+
+    IPrimitive<Boolean> isCreditCheckActivated();
 }

@@ -73,6 +73,8 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
         dto.masterApplicationStatus().set(
                 ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(dto.leaseApplication().onlineApplication()));
+
+        dto.isCreditCheckActivated().setValue(ServerSideFactory.create(ScreeningFacade.class).isCreditCheckActivated());
     }
 
     private void loadLeaseParticipant(Lease lease, LeaseApplicationDTO dto, LeaseTermParticipant<?> leaseParticipantId) {
@@ -160,8 +162,8 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         for (LeaseTermParticipant<?> user : users) {
             // check that all lease participants have an associated user entity (email)            
             if (user.leaseParticipant().customer().user().isNull()) {
-                throw new UserRuntimeException(i18n.tr("Failed to invite users, email of lease participant {0} was not found", user.leaseParticipant().customer()
-                        .person().name().getStringView()));
+                throw new UserRuntimeException(i18n.tr("Failed to invite users, email of lease participant {0} was not found", user.leaseParticipant()
+                        .customer().person().name().getStringView()));
             }
 
             // check that selected guarantors/co-applicants have online-applications

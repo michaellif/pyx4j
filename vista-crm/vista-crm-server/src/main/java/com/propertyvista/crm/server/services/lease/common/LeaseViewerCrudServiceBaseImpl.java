@@ -86,12 +86,9 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     void checkUnitMoveOut(DTO dto) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().unit(), dto.unit()));
-        criteria.add(PropertyCriterion.ne(criteria.proto().id(), dto.getPrimaryKey()));
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
-        criteria.isNull(criteria.proto().actualMoveOut());
+        criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.active()));
 
-        Lease lease = Persistence.service().retrieve(criteria);
-        if (lease != null) {
+        if (Persistence.service().query(criteria).size() > 1) {
             dto.unitMoveOutNote().setValue("Warning: This unit is not freed completely!");
         }
     }
