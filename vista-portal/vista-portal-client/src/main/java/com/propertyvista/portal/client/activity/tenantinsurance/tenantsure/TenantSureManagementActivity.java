@@ -56,7 +56,7 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
         service.cancelTenantSure(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                populateStatus();
+                TenantSureManagementActivity.this.populateStatus();
             }
         });
     }

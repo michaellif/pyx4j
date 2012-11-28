@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -61,7 +60,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         tenantSureGreetingPanel.add(tenantSureLogo);
 
         Label greeting = new Label(//@formatter:off
-                SimpleMessageFormat.format(
+                i18n.tr(
                   "TenantSure is a Licensed Broker. Below please find your TenantSure insurance details. "
                   + "If you have any claims, you can reach TenanSure's claim department at {0}",
                  TenantSureConstants.TENANTSURE_PHONE_NUMBER)

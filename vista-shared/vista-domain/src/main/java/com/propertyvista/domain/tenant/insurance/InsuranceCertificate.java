@@ -45,12 +45,12 @@ public interface InsuranceCertificate extends ApplicationDocumentHolder<Insuranc
     @Editor(type = EditorType.money)
     @Format("#,##0.00")
     @NotNull
-    IPrimitive<BigDecimal> personalLiability();
+    IPrimitive<BigDecimal> liabilityCoverage();
 
     @NotNull
-    IPrimitive<LogicalDate> startDate();
+    IPrimitive<LogicalDate> inceptionDate();
 
     @NotNull
-    IPrimitive<LogicalDate> expirationDate();
+    IPrimitive<LogicalDate> expiryDate();
 
 }

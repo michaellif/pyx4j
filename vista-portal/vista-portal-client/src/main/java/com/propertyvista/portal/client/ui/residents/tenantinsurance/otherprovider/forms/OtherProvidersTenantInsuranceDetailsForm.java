@@ -38,9 +38,9 @@ public class OtherProvidersTenantInsuranceDetailsForm extends CEntityDecoratable
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceProvider()), 10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceCertificateNumber()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().personalLiability()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().startDate()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expirationDate()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().liabilityCoverage()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().inceptionDate()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate()), 10).build());
         content.setH2(++row, 0, 1, i18n.tr("Attach Scanned Insurance Certificate"));
         //content.setWidget(++row, 0, inject(proto().documentPages(), new ApplicationDocumentFileUploaderFolder()));
 

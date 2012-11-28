@@ -20,7 +20,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.CancellationType;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
@@ -43,8 +42,8 @@ public class TenantSureManagementServiceImpl implements TenantSureManagementServ
 
     @Override
     public void cancelTenantSure(AsyncCallback<VoidSerializable> callback) {
-        ServerSideFactory.create(TenantSureFacade.class).cancel(
-                TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub(), CancellationType.CancelledByTenant, null);
+        ServerSideFactory.create(TenantSureFacade.class).cancelByTenant(
+                TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
         callback.onSuccess(null);
     }
 

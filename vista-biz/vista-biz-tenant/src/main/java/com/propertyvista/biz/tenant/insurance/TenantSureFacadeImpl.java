@@ -100,7 +100,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         insuranceTenantSure.client().set(initializeClient(tenantId));
         insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Draft);
 
-        insuranceTenantSure.startDate().setValue(new LogicalDate());
+        insuranceTenantSure.inceptionDate().setValue(new LogicalDate());
         insuranceTenantSure.monthlyPayable().setValue(quote.totalMonthlyPayable().getValue());
         insuranceTenantSure.details().liabilityCoverage().setValue(quote.coverage().personalLiabilityCoverage().getValue());
         insuranceTenantSure.details().contentsCoverage().setValue(quote.coverage().contentsCoverage().getValue());
@@ -190,9 +190,9 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
         ic.insuranceProvider().setValue(TenantSureConstants.TENANTSURE_LEGAL_NAME);
         ic.insuranceCertificateNumber().setValue(insuranceCertifiateNumber);
-        ic.personalLiability().setValue(ts.details().liabilityCoverage().getValue());
-        ic.startDate().setValue(ts.startDate().getValue());
-        ic.expirationDate().setValue(null); // doesn't expire unless payment fails
+        ic.liabilityCoverage().setValue(ts.details().liabilityCoverage().getValue());
+        ic.inceptionDate().setValue(ts.inceptionDate().getValue());
+        ic.expiryDate().setValue(null); // doesn't expire unless payment fails
 
         Persistence.service().persist(ic);
 
@@ -202,44 +202,102 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
     @Override
     public TenantSureTenantInsuranceStatusDetailedDTO getStatus(Tenant tenantId) {
-        InsuranceTenantSure insurance = retrieveActiveInsuranceTenantSure(tenantId);
+        InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
 
-        TenantSureTenantInsuranceStatusDetailedDTO tenantSureInsurance = EntityFactory.create(TenantSureTenantInsuranceStatusDetailedDTO.class);
-        tenantSureInsurance.insuranceCertificateNumber().setValue(insurance.insuranceCertificate().insuranceCertificateNumber().getValue());
+        TenantSureTenantInsuranceStatusDetailedDTO status = EntityFactory.create(TenantSureTenantInsuranceStatusDetailedDTO.class);
+        status.insuranceCertificateNumber().setValue(insuranceTenantSure.insuranceCertificate().insuranceCertificateNumber().getValue());
 
-        tenantSureInsurance.quote().coverage().personalLiabilityCoverage().setValue(insurance.details().liabilityCoverage().getValue());
-        tenantSureInsurance.quote().coverage().contentsCoverage().setValue(insurance.details().contentsCoverage().getValue());
-        tenantSureInsurance.quote().coverage().deductible().setValue(insurance.details().deductible().getValue());
-        tenantSureInsurance.quote().grossPremium().setValue(insurance.details().grossPremium().getValue());
-        tenantSureInsurance.quote().underwriterFee().setValue(insurance.details().underwriterFee().getValue());
+        status.quote().coverage().personalLiabilityCoverage().setValue(insuranceTenantSure.details().liabilityCoverage().getValue());
+        status.quote().coverage().contentsCoverage().setValue(insuranceTenantSure.details().contentsCoverage().getValue());
+        status.quote().coverage().deductible().setValue(insuranceTenantSure.details().deductible().getValue());
+        status.quote().coverage().inceptionDate().setValue(insuranceTenantSure.insuranceCertificate().inceptionDate().getValue());
+
+        status.quote().grossPremium().setValue(insuranceTenantSure.details().grossPremium().getValue());
+        status.quote().underwriterFee().setValue(insuranceTenantSure.details().underwriterFee().getValue());
         // TODO add taxes        
-        tenantSureInsurance.quote().totalMonthlyPayable().setValue(insurance.monthlyPayable().getValue());
+        status.quote().totalMonthlyPayable().setValue(insuranceTenantSure.monthlyPayable().getValue());
 
-        tenantSureInsurance.expiryDate().setValue(insurance.expiryDate().getValue());
+        status.expiryDate().setValue(insuranceTenantSure.insuranceCertificate().expiryDate().getValue());
 
-        if (insurance.status().getValue() == Status.PendingCancellation) {
-            TenantSureMessageDTO messageHolder = EntityFactory.create(TenantSureMessageDTO.class);
-            messageHolder.messageText().setValue(
-                    i18n.tr("Your payment couln't be processed, please update your credit card info or else your insurance will expire"));
+        if (insuranceTenantSure.status().getValue() != Status.PendingCancellation) {
+            GregorianCalendar cal = new GregorianCalendar();
+            cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.MONTH));
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+            status.nextPaymentDate().setValue(new LogicalDate(cal.getTime()));
         }
 
-        return tenantSureInsurance;
+        if (insuranceTenantSure.status().getValue() == Status.PendingCancellation) {
+            TenantSureMessageDTO message = status.messages().$();
+            if (insuranceTenantSure.cancellation().getValue() == CancellationType.SkipPayment) {
+                message.messageText()
+                        .setValue(
+                                i18n.tr("There was a problem with your last scheduled payment. If you don't update your credit card details until {0,date,short}, your TeantSure insurance will expire on {1,date,short}.",
+                                        insuranceTenantSure.expiryDate().getValue()));
+            } else {
+                message.messageText().setValue(
+                        i18n.tr("Your insurance has been cancelled and will expire on {0,date,short}", insuranceTenantSure.expiryDate().getValue()));
+            }
+        }
+
+        return status;
 
     }
 
     @Override
-    public void cancel(Tenant tenantId, CancellationType cancellationType, String cancellationReason) {
+    public void cancelByTenant(Tenant tenantId) {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
-        Validate.notNull(insuranceTenantSure, "no active TenantSure insurance was found");
+        validateIsCancellable(insuranceTenantSure);
+
         insuranceTenantSure.status().setValue(Status.PendingCancellation);
-        insuranceTenantSure.cancellation().setValue(cancellationType);
-        insuranceTenantSure.cancellationDescriptionReasonFromTenantSure().setValue(cancellationReason);
+        insuranceTenantSure.cancellation().setValue(CancellationType.CancelledByTenant);
+
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.add(Calendar.MONTH, 1);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        insuranceTenantSure.expiryDate().setValue(new LogicalDate(cal.getTime()));
+        Persistence.service().merge(insuranceTenantSure);
+
+        insuranceTenantSure.insuranceCertificate().expiryDate().setValue(insuranceTenantSure.expiryDate().getValue());
+        Persistence.service().merge(insuranceTenantSure.insuranceCertificate());
+
+        Persistence.service().commit();
+    }
+
+    @Override
+    public void cancelDueToSkippedPayment(Tenant tenantId) {
+        InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
+        validateIsCancellable(insuranceTenantSure);
+
+        insuranceTenantSure.status().setValue(Status.PendingCancellation);
+        insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
+
         GregorianCalendar cal = new GregorianCalendar();
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         insuranceTenantSure.expiryDate().setValue(new LogicalDate(cal.getTime()));
-        Persistence.service().persist(insuranceTenantSure);
+        Persistence.service().merge(insuranceTenantSure);
+
+        insuranceTenantSure.insuranceCertificate().expiryDate().setValue(insuranceTenantSure.expiryDate().getValue());
+        Persistence.service().merge(insuranceTenantSure.insuranceCertificate());
+
         Persistence.service().commit();
-        // TODO send email notification to tenant?
+    }
+
+    @Override
+    public void cancelByTenantSure(Tenant tenantId, String cancellationReason, LogicalDate expiryDate) {
+        InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
+        validateIsCancellable(insuranceTenantSure);
+
+        insuranceTenantSure.status().setValue(expiryDate.compareTo(new LogicalDate()) < 0 ? Status.PendingCancellation : Status.Cancelled);
+        insuranceTenantSure.cancellation().setValue(CancellationType.CancelledByTenantSure);
+        insuranceTenantSure.cancellationDescriptionReasonFromTenantSure().setValue(cancellationReason);
+
+        insuranceTenantSure.expiryDate().setValue(expiryDate);
+        Persistence.service().merge(insuranceTenantSure);
+
+        insuranceTenantSure.insuranceCertificate().expiryDate().setValue(insuranceTenantSure.expiryDate().getValue());
+        Persistence.service().merge(insuranceTenantSure.insuranceCertificate());
+
+        Persistence.service().commit();
     }
 
     private InsuranceTenantSureClient initializeClient(Tenant tenantId) {
@@ -267,4 +325,12 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         InsuranceTenantSure insurance = Persistence.service().retrieve(criteria);
         return insurance;
     }
+
+    private void validateIsCancellable(InsuranceTenantSure insuranceTenantSure) {
+        Validate.notNull(insuranceTenantSure, "no active TenantSure insurance was found");
+        if (insuranceTenantSure.status().getValue() != Status.Active) {
+            throw new Error("It's impossible to cancel a tenant sure insurance which is not " + Status.Active);
+        }
+    }
+
 }

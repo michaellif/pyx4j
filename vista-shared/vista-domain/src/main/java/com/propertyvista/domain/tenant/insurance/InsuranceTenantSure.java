@@ -84,7 +84,7 @@ public interface InsuranceTenantSure extends IEntity {
     IPrimitive<String> cancellationDescriptionReasonFromTenantSure();
 
     @NotNull
-    IPrimitive<LogicalDate> startDate();
+    IPrimitive<LogicalDate> inceptionDate();
 
     IPrimitive<LogicalDate> expiryDate();
 

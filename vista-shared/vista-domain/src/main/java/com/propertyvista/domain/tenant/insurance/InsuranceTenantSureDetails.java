@@ -28,6 +28,7 @@ public interface InsuranceTenantSureDetails extends IEntity {
     @MemberColumn(notNull = true)
     InsuranceTenantSure insurance();
 
+    // TODO i don't like this duplication, actually this value is held in parent insurance certificate
     IPrimitive<BigDecimal> liabilityCoverage();
 
     IPrimitive<BigDecimal> contentsCoverage();
