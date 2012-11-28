@@ -142,6 +142,11 @@ public class PortalSiteMap implements SiteMap {
 
             }
 
+            @PlaceProperties(caption = "Tenant Insurance")
+            public static class CoveredByOtherTenant extends AppPlace {
+
+            }
+
         }
 
     }

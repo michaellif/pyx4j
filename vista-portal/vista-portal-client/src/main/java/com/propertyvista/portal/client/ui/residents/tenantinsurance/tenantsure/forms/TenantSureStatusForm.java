@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -79,6 +81,10 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
+        get(proto().quote().coverage().contentsCoverage()).setVisible(
+                !getValue().quote().coverage().contentsCoverage().isNull()
+                        && !getValue().quote().coverage().contentsCoverage().getValue().equals(new BigDecimal("0.00")));
+        get(proto().expiryDate()).setVisible(!getValue().expiryDate().isNull());
         get(proto().nextPaymentDate()).setVisible(!getValue().nextPaymentDate().isNull());
     }
 }

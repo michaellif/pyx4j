@@ -17,6 +17,9 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -74,9 +77,13 @@ public interface TenantSureCoverageDTO extends IEntity {
         public abstract int numericValue();
     }
 
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     @NotNull
     IPrimitive<BigDecimal> personalLiabilityCoverage();
 
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
     @NotNull
     IPrimitive<BigDecimal> contentsCoverage();
 

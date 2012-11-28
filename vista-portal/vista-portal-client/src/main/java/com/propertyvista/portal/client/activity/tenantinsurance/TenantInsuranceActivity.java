@@ -16,12 +16,13 @@ package com.propertyvista.portal.client.activity.tenantinsurance;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.TenantInsuranceCoveredByOtherTenantView;
+import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
@@ -38,22 +39,29 @@ public class TenantInsuranceActivity extends AbstractActivity {
     }
 
     @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+    public void start(final AcceptsOneWidget panel, EventBus eventBus) {
         service.getTenantInsuranceStatus(new DefaultAsyncCallback<TenantInsuranceStatusDTO>() {
 
             @Override
             public void onSuccess(TenantInsuranceStatusDTO status) {
-                Place dispatchTo = null;
                 if (status instanceof NoInsuranceTenantInsuranceStatusDTO) {
-                    dispatchTo = new PortalSiteMap.Residents.TenantInsurance.ProvideTenantInsurance();
-                } else if (status instanceof TenantSureTenantInsuranceStatusShortDTO) {
-                    dispatchTo = new PortalSiteMap.Residents.TenantInsurance.TenantSure.Management();
-                } else if (status instanceof OtherProviderTenantInsuranceStatusDTO) {
-                    dispatchTo = new PortalSiteMap.Residents.TenantInsurance.Other.UploadCertificate();
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.ProvideTenantInsurance());
                 } else {
-                    throw new Error("got unknown insurance status");
+                    if (status.isOwner().isBooleanTrue()) {
+                        if (status instanceof TenantSureTenantInsuranceStatusShortDTO) {
+                            AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSure.Management());
+                        } else if (status instanceof OtherProviderTenantInsuranceStatusDTO) {
+                            AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.Other.UploadCertificate());
+                        } else {
+                            throw new Error("got unknown insurance status");
+                        }
+                    } else {
+                        TenantInsuranceCoveredByOtherTenantView view = PortalViewFactory.instance(TenantInsuranceCoveredByOtherTenantView.class);
+                        view.populate(status);
+                        panel.setWidget(view);
+                    }
                 }
-                AppSite.getPlaceController().goTo(dispatchTo);
+
             }
 
         });

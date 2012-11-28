@@ -321,7 +321,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         criteria.add(PropertyCriterion.ne(criteria.proto().status(), InsuranceTenantSure.Status.Failed));
         criteria.or(PropertyCriterion.eq(criteria.proto().status(), InsuranceTenantSure.Status.Active),
                 PropertyCriterion.eq(criteria.proto().status(), InsuranceTenantSure.Status.PendingCancellation));
-        criteria.add(PropertyCriterion.eq(criteria.proto().client().tenant(), tenantId));
+        criteria.add(PropertyCriterion.eq(criteria.proto().insuranceCertificate().tenant().lease().leaseParticipants(), tenantId));
+
         InsuranceTenantSure insurance = Persistence.service().retrieve(criteria);
         return insurance;
     }

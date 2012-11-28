@@ -7,20 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-27
+ * Created on 2012-11-28
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.tenant.insurance;
+package com.propertyvista.portal.client.ui.residents.tenantinsurance.views;
 
-import java.io.Serializable;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class TenantSureConstants implements Serializable {
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
 
-    private static final long serialVersionUID = -3683124450005723775L;
+public interface TenantInsuranceCoveredByOtherTenantView extends IsWidget {
 
-    public static final String TENANTSURE_LEGAL_NAME = "TenantSure";
-
-    public static final String TENANTSURE_PHONE_NUMBER = "1-800-123-4567";
+    void populate(TenantInsuranceStatusDTO status);
 
 }

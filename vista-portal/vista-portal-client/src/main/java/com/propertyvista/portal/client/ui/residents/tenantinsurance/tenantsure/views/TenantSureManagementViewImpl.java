@@ -14,13 +14,16 @@
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views;
 
 import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -37,101 +40,21 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
     private Presenter presenter;
 
-    private final TenantSureStatusForm statusForm;
+    private TenantSureStatusForm statusForm;
 
-    private final Button cancelTenantSureButton;
+    private Button cancelTenantSureButton;
 
-    private final Button updateCCButton;
+    private Button updateCCButton;
 
     public TenantSureManagementViewImpl() {
 
         FlowPanel viewPanel = new FlowPanel();
 
-        FlowPanel tenantSureGreetingPanel = new FlowPanel();
-        tenantSureGreetingPanel.getElement().getStyle().setProperty("width", "100%");
-        tenantSureGreetingPanel.getElement().getStyle().setProperty("height", "8em");
-        tenantSureGreetingPanel.getElement().getStyle().setProperty("display", "table-cell");
-        tenantSureGreetingPanel.getElement().getStyle().setProperty("verticalAlign", "middle");
-
-        TenantSureLogo tenantSureLogo = new TenantSureLogo();
-        tenantSureLogo.getElement().getStyle().setFloat(Float.LEFT);
-        tenantSureLogo.getElement().getStyle().setProperty("width", "10em");
-        tenantSureLogo.getElement().getStyle().setProperty("height", "8em");
-        tenantSureGreetingPanel.add(tenantSureLogo);
-
-        Label greeting = new Label(//@formatter:off
-                i18n.tr(
-                  "TenantSure is a Licensed Broker. Below please find your TenantSure insurance details. "
-                  + "If you have any claims, you can reach TenanSure's claim department at {0}",
-                 TenantSureConstants.TENANTSURE_PHONE_NUMBER)
-          );//@formatter:on
-
-        greeting.getElement().getStyle().setProperty("width", "100%");
-        greeting.getElement().getStyle().setProperty("height", "8em");
-        tenantSureGreetingPanel.add(greeting);
-
-        viewPanel.add(tenantSureGreetingPanel);
-
-        FlowPanel statusPanel = new FlowPanel();
-
-        statusForm = new TenantSureStatusForm();
-        statusForm.initContent();
-        statusPanel.add(statusForm);
-
-        viewPanel.add(statusPanel);
-
-        FlowPanel controlPanel = new FlowPanel();
-        controlPanel.getElement().getStyle().setMarginTop(50, Unit.PX);
-        updateCCButton = new Button("Update Credit Card Details", new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.updateCreditCardDetails();
-            }
-        });
-        setControlButtonLayout(updateCCButton);
-        cancelTenantSureButton = new Button("Cancel TenantSure", new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                TenantSureManagementViewImpl.this.onCancelTenantSure();
-            }
-        });
-        setControlButtonLayout(cancelTenantSureButton);
-
-        Button viewCertificateButton = new Button(i18n.tr("View Insurance Certificate"));
-        setControlButtonLayout(viewCertificateButton);
-
-        Button viewFaq = new Button(i18n.tr("FAQ"));
-        setControlButtonLayout(viewFaq);
-
-        Button makeAClaim = new Button(i18n.tr("Make a Claim"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                TenantSureManagementViewImpl.this.onMakeAClaim();
-            }
-        });
-        setControlButtonLayout(makeAClaim);
-
-        controlPanel.add(viewCertificateButton);
-        controlPanel.add(makeAClaim);
-        controlPanel.add(viewFaq);
-        controlPanel.add(updateCCButton);
-        controlPanel.add(cancelTenantSureButton);
-
-        viewPanel.add(controlPanel);
+        viewPanel.add(makeGreetingPanel());
+        viewPanel.add(makeStatusDetailsPanel());
+        viewPanel.add(makeActionsPanel());
 
         initWidget(viewPanel);
-    }
-
-    private static void setControlButtonLayout(Button button) {
-        button.getElement().getStyle().setProperty("display", "block");
-        button.getElement().getStyle().setProperty("textAlign", "center");
-        button.getElement().getStyle().setProperty("width", "15em");
-        button.getElement().getStyle().setProperty("marginLeft", "auto");
-        button.getElement().getStyle().setProperty("marginRight", "auto");
-
-        button.getElement().getStyle().setProperty("marginTop", "10px");
-        button.getElement().getStyle().setProperty("marginBottom", "10px");
-
     }
 
     @Override
@@ -157,6 +80,85 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         MessageDialog.error(i18n.tr("Error"), errorMessage);
     }
 
+    private Widget makeGreetingPanel() {
+        FlowPanel tenantSureGreetingPanel = new FlowPanel();
+        final double HEIGHT = 8;
+        tenantSureGreetingPanel.getElement().getStyle().setWidth(100, Unit.PCT);
+        tenantSureGreetingPanel.getElement().getStyle().setHeight(HEIGHT, Unit.EM);
+        tenantSureGreetingPanel.getElement().getStyle().setPadding(20, Unit.PX);
+
+        TenantSureLogo tenantSureLogo = new TenantSureLogo();
+        tenantSureLogo.getElement().getStyle().setFloat(Float.LEFT);
+        tenantSureLogo.getElement().getStyle().setWidth(10, Unit.EM);
+        tenantSureLogo.getElement().getStyle().setHeight(HEIGHT, Unit.EM);
+        tenantSureGreetingPanel.add(tenantSureLogo);
+
+        Label greeting = new Label(//@formatter:off
+                i18n.tr("TenantSure is a Licensed Broker. Below please find your TenantSure insurance details. If you have any claims, you can reach TenantSure''s claim department at {0}.",
+                 TenantSureConstants.TENANTSURE_PHONE_NUMBER)
+          );//@formatter:on
+
+        greeting.getElement().getStyle().setWidth(100, Unit.PCT);
+        greeting.getElement().getStyle().setHeight(HEIGHT, Unit.EM);
+        greeting.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        greeting.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        greeting.getElement().getStyle().setProperty("display", "table-cell");
+        tenantSureGreetingPanel.add(greeting);
+        return tenantSureGreetingPanel;
+    }
+
+    private Widget makeStatusDetailsPanel() {
+        FlowPanel statusPanel = new FlowPanel();
+        statusPanel.getElement().getStyle().setPadding(10, Unit.PX);
+        statusForm = new TenantSureStatusForm();
+        statusForm.initContent();
+        statusPanel.add(statusForm);
+        return statusPanel;
+    }
+
+    private Widget makeActionsPanel() {
+        FlowPanel actionsPanel = new FlowPanel();
+        actionsPanel.getElement().getStyle().setMarginTop(50, Unit.PX);
+        actionsPanel.getElement().getStyle().setMarginBottom(50, Unit.PX);
+
+        updateCCButton = new Button("Update Credit Card Details", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.updateCreditCardDetails();
+            }
+        });
+        setControlButtonLayout(updateCCButton);
+
+        cancelTenantSureButton = new Button("Cancel TenantSure", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                TenantSureManagementViewImpl.this.onCancelTenantSure();
+            }
+        });
+        setControlButtonLayout(cancelTenantSureButton);
+
+        Button viewCertificateButton = new Button(i18n.tr("View Insurance Certificate"));
+        setControlButtonLayout(viewCertificateButton);
+
+        Button viewFaq = new Button(i18n.tr("FAQ"));
+        setControlButtonLayout(viewFaq);
+
+        Button makeAClaim = new Button(i18n.tr("Make a Claim"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                TenantSureManagementViewImpl.this.onMakeAClaim();
+            }
+        });
+        setControlButtonLayout(makeAClaim);
+
+        actionsPanel.add(viewCertificateButton);
+        actionsPanel.add(makeAClaim);
+        actionsPanel.add(viewFaq);
+        actionsPanel.add(updateCCButton);
+        actionsPanel.add(cancelTenantSureButton);
+        return actionsPanel;
+    }
+
     private void onCancelTenantSure() {
         MessageDialog.confirm(i18n.tr("TenantSure cancellation"), i18n.tr("Are you sure you want to cancel TenantSure?"), new Command() {
             @Override
@@ -169,4 +171,16 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     private void onMakeAClaim() {
         MessageDialog.info(i18n.tr("To make a claim please call {0}", TenantSureConstants.TENANTSURE_PHONE_NUMBER));
     }
+
+    private static void setControlButtonLayout(Button button) {
+        button.getElement().getStyle().setProperty("display", "block");
+        button.getElement().getStyle().setProperty("textAlign", "center");
+        button.getElement().getStyle().setProperty("width", "15em");
+        button.getElement().getStyle().setProperty("marginLeft", "auto");
+        button.getElement().getStyle().setProperty("marginRight", "auto");
+
+        button.getElement().getStyle().setProperty("marginTop", "10px");
+        button.getElement().getStyle().setProperty("marginBottom", "10px");
+    }
+
 }
