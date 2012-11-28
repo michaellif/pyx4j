@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease.application;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -25,7 +26,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
+import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.YesNoOption;
 
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
@@ -121,16 +124,25 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         checkAction = new MenuItem(i18n.tr("Credit Check"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).isCreditCheckActivated(new DefaultAsyncCallback<Boolean>() {
                     @Override
-                    public void onSuccess(List<LeaseTermParticipant<?>> result) {
-                        new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Check"), true, result) {
-                            @Override
-                            public boolean onClickOk() {
-                                ((LeaseApplicationViewerView.Presenter) getPresenter()).creditCheck(getSelectedItems());
-                                return true;
-                            }
-                        }.show();
+                    public void onSuccess(Boolean result) {
+                        if (result) {
+                            ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
+                                @Override
+                                public void onSuccess(List<LeaseTermParticipant<?>> result) {
+                                    new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Check"), true, result) {
+                                        @Override
+                                        public boolean onClickOk() {
+                                            ((LeaseApplicationViewerView.Presenter) getPresenter()).creditCheck(getSelectedItems());
+                                            return true;
+                                        }
+                                    }.show();
+                                }
+                            });
+                        } else {
+                            new CreditCheckSubscribeDialog().show();
+                        }
                     }
                 });
             }
@@ -238,7 +250,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         }
         setActionVisible(onlineApplication, status == Status.Created);
         setActionVisible(inviteAction, status == Status.OnlineApplication);
-        setActionVisible(checkAction, status.isDraft() && value.isCreditCheckActivated().isBooleanTrue());
+        setActionVisible(checkAction, status.isDraft());
         setActionVisible(approveAction, status.isDraft());
         setActionVisible(moreInfoAction, status.isDraft() && status != Status.Created);
         setActionVisible(declineAction, status.isDraft());
@@ -284,5 +296,25 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     public void reportApplicationApprovalFailure(UserRuntimeException caught) {
         MessageDialog.info(caught.getMessage());
 
+    }
+
+    private class CreditCheckSubscribeDialog extends Dialog implements YesNoOption {
+
+        public CreditCheckSubscribeDialog() {
+            super(i18n.tr("Credit Check"));
+            setBody(new HTML(i18n.tr("No credit check service for this account has been set up.") + "<br/>" + i18n.tr("Do you want to apply now?")));
+            setDialogOptions(this);
+        }
+
+        @Override
+        public boolean onClickYes() {
+            // TODO : go to credit check application...
+            return true;
+        }
+
+        @Override
+        public boolean onClickNo() {
+            return true;
+        }
     }
 }

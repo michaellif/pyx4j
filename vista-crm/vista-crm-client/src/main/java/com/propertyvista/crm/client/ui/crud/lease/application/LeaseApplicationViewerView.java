@@ -15,6 +15,8 @@ package com.propertyvista.crm.client.ui.crud.lease.application;
 
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.commons.UserRuntimeException;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
@@ -33,6 +35,8 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
         void creditCheck(List<LeaseTermParticipant<?>> users);
 
         void applicationAction(LeaseApplicationActionDTO action);
+
+        void isCreditCheckActivated(AsyncCallback<Boolean> callback);
     }
 
     void reportStartOnlineApplicationSuccess();

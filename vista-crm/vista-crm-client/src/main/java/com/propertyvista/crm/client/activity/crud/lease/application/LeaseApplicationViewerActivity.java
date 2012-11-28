@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.rpc.AbstractCrudService;
@@ -111,5 +112,15 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
                 }
             }
         }, action);
+    }
+
+    @Override
+    public void isCreditCheckActivated(final AsyncCallback<Boolean> callback) {
+        ((LeaseApplicationViewerCrudService) getService()).isCreditCheckActivated(new DefaultAsyncCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                callback.onSuccess(result);
+            }
+        });
     }
 }

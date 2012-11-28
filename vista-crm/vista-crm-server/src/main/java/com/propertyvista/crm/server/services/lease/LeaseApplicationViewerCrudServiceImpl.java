@@ -73,8 +73,6 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
         dto.masterApplicationStatus().set(
                 ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(dto.leaseApplication().onlineApplication()));
-
-        dto.isCreditCheckActivated().setValue(ServerSideFactory.create(ScreeningFacade.class).isCreditCheckActivated());
     }
 
     private void loadLeaseParticipant(Lease lease, LeaseApplicationDTO dto, LeaseTermParticipant<?> leaseParticipantId) {
@@ -227,5 +225,10 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         }
         Persistence.service().commit();
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void isCreditCheckActivated(AsyncCallback<Boolean> callback) {
+        callback.onSuccess(ServerSideFactory.create(ScreeningFacade.class).isCreditCheckActivated());
     }
 }
