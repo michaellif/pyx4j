@@ -354,6 +354,13 @@
         </profile>
 
         <profile>
+            <id>developer-env</id>
+            <properties>
+                <gwtDraftCompile>true</gwtDraftCompile>
+            </properties>
+        </profile>
+
+        <profile>
             <id>soyc</id>
             <properties>
                 <gwtCompileReport>true</gwtCompileReport>
