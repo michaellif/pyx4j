@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.views;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -31,6 +33,11 @@ public class TenantInsuranceByOtherProviderUpdateViewImpl extends BasicViewImpl<
     @Override
     public void reportSaveSuccess() {
         MessageDialog.info(i18n.tr("Your insurance details were saved successfully"));
+    }
+
+    @Override
+    public void setMinRequiredLiability(BigDecimal minRequiredLiability) {
+        ((TenantInsuranceByOtherProviderDetailsForm) form).setMinRequiredLiability(minRequiredLiability);
     }
 
 }

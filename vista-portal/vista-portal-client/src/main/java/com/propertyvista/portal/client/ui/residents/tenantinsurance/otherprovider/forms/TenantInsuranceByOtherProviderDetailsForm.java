@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.forms;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IObject;
@@ -74,8 +76,11 @@ public class TenantInsuranceByOtherProviderDetailsForm extends CEntityDecoratabl
         }
     }
 
+    private BigDecimal minRequiredLiability;
+
     public TenantInsuranceByOtherProviderDetailsForm() {
         super(InsuranceCertificate.class);
+        this.minRequiredLiability = null;
     }
 
     @Override
@@ -85,11 +90,24 @@ public class TenantInsuranceByOtherProviderDetailsForm extends CEntityDecoratabl
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceProvider()), 10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceCertificateNumber()), 10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().liabilityCoverage()), 10).build());
+        get(proto().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
+            @Override
+            public ValidationError isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
+                if (TenantInsuranceByOtherProviderDetailsForm.this.minRequiredLiability != null && value != null && value.compareTo(minRequiredLiability) < 0) {
+                    return new ValidationError(component, i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
+                }
+                return null;
+            }
+        });
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().inceptionDate()), 10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate()), 10).build());
         content.setH2(++row, 0, 1, i18n.tr("Attach Scanned Insurance Certificate"));
         content.setWidget(++row, 0, inject(proto().documents(), new InsuranceCertificateDocumentFolder()));
 
         return content;
+    }
+
+    public void setMinRequiredLiability(BigDecimal minRequiredLiability) {
+        this.minRequiredLiability = minRequiredLiability;
     }
 }

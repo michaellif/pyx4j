@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.views;
 
+import java.math.BigDecimal;
+
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.portal.client.ui.residents.View;
 
@@ -21,6 +23,9 @@ public interface TenantInsuranceByOtherProviderUpdateView extends View<Insurance
     interface Presenter extends View.Presenter<InsuranceCertificate> {
 
     }
+
+    /** can be <code>null</code> if unlimited */
+    void setMinRequiredLiability(BigDecimal minRequiredLiability);
 
     void reportSaveSuccess();
 
