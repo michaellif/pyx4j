@@ -31,7 +31,7 @@ import com.propertyvista.oapi.model.UnitIO;
 //http://localhost:8888/vista/interfaces/oapi/ws/WSPropertyService?wsdl
 //https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/ws/WSPropertyService?wsdl
 
-@WebService(targetNamespace = "http://www.w3.org/2001/XMLSchema-instance")
+@WebService
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)
 public interface WSPropertyService {
 

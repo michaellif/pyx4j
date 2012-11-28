@@ -26,7 +26,7 @@ import javax.jws.soap.SOAPBinding.Use;
 import com.propertyvista.oapi.model.PaymentRecordIO;
 import com.propertyvista.oapi.model.TransactionIO;
 
-@WebService(targetNamespace = "http://www.w3.org/2001/XMLSchema-instance")
+@WebService
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)
 public interface WSReceivableService {
 
