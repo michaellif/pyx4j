@@ -84,13 +84,13 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         // disable some editing on signed lease:
         if (isEditable()) {
             boolean isDraft = getValue().lease().status().getValue().isDraft();
+            boolean isCurrent = getValue().getPrimaryKey() == null
+                    || getValue().getPrimaryKey().equalsIgnoreVersion(getValue().lease().currentTerm().getPrimaryKey());
 
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lease, get(proto().lease().leaseId()), getValue().lease().getPrimaryKey());
 
             get(proto().lease().unit()).setEditable(isDraft);
 
-            boolean isCurrent = getValue().getPrimaryKey() == null
-                    || getValue().getPrimaryKey().asCurrentKey().equals(getValue().lease().currentTerm().getPrimaryKey());
             get(proto().termFrom()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
             get(proto().termTo()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
         }

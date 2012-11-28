@@ -22,6 +22,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.deposit.DepositFacade;
@@ -77,7 +78,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     protected void save(LeaseTerm dbo, LeaseTermDTO in) {
         updateAdjustments(dbo);
 
-        if (dbo.lease().equals(dbo.lease().currentTerm())) {
+        if (VersionedEntityUtils.equalsIgnoreVersion(dbo, dbo.lease().currentTerm())) {
+            dbo.lease().currentTerm().set(dbo);
             ServerSideFactory.create(LeaseFacade.class).persist(dbo.lease());
         } else {
             ServerSideFactory.create(LeaseFacade.class).persist(dbo);

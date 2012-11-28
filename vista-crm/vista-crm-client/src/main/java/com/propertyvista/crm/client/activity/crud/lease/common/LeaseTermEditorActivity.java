@@ -102,7 +102,7 @@ public class LeaseTermEditorActivity extends CrmEditorActivity<LeaseTermDTO> imp
             AppSite.getPlaceController().goTo(
                     new CrmSiteMap.Tenants.LeaseTerm().formEditorPlace(entityID).queryArg(LeaseTermEditorActivity.ARG_NAME_RETURN_BH, returnBehaviour.name()));
         } else {
-            super.goToViewer(entityID);
+            super.goToEditor(entityID);
         }
     }
 
