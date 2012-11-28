@@ -88,9 +88,8 @@ public class MockHttpSession implements HttpSession {
         throw new UnsupportedOperationException();
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
-    public Enumeration getAttributeNames() {
+    public Enumeration<String> getAttributeNames() {
         return attributes.keys();
     }
 
@@ -130,8 +129,7 @@ public class MockHttpSession implements HttpSession {
 
     @Override
     public boolean isNew() {
-        // TODO Auto-generated method stub
-        return false;
+        throw new UnsupportedOperationException();
     }
 
 }

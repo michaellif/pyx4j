@@ -124,7 +124,7 @@
         <gaeVersion>1.7.0</gaeVersion>
         <gae.version>${gaeVersion}</gae.version>
 
-        <jettyVersion>7.2.2.v20101205</jettyVersion>
+        <jettyVersion>9.0.0.M3</jettyVersion>
 
         <jasperreportsVersion>4.5.1</jasperreportsVersion>
         <quartzVersion>2.1.5</quartzVersion>
@@ -159,6 +159,13 @@
 
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>3.0.1</version>
+                <scope>provided</scope>
+            </dependency>
 
             <dependency>
                 <groupId>com.google.gwt</groupId>
@@ -247,13 +254,6 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>1.0.4</version>
-            </dependency>
-
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>servlet-api</artifactId>
-                <version>2.5</version>
-                <scope>provided</scope>
             </dependency>
 
             <!-- MemoryLeakPrevention remove META-INF/services on build server -->

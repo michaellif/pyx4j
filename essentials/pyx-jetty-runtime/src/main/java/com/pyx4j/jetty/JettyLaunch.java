@@ -24,14 +24,17 @@ import java.io.File;
 import java.net.ServerSocket;
 import java.util.TimeZone;
 
+import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.server.NCSARequestLog;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
-import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 public abstract class JettyLaunch {
@@ -98,12 +101,15 @@ public abstract class JettyLaunch {
         Server server = new Server(port);
 
         if (jettyLaunch.getServerSslPort() != 0) {
-            SslSelectChannelConnector connector = new SslSelectChannelConnector();
+            SslContextFactory sslContextFactory = new SslContextFactory();
+            sslContextFactory.setKeyStorePassword("123456");
+            sslContextFactory.setKeyStoreType("JKS");
+            sslContextFactory.setKeyStorePath("./src/test/ssl/jetty.keystore");
+            sslContextFactory.setKeyManagerPassword("123456");
+
+            SslConnectionFactory ssl = new SslConnectionFactory(sslContextFactory, HttpVersion.HTTP_1_1.asString());
+            ServerConnector connector = new ServerConnector(server, ssl);
             connector.setPort(jettyLaunch.getServerSslPort());
-            connector.setPassword("123456");
-            connector.setKeystoreType("JKS");
-            connector.setKeystore("./src/test/ssl/jetty.keystore");
-            connector.setKeyPassword("123456");
             server.addConnector(connector);
         }
 
@@ -133,9 +139,9 @@ public abstract class JettyLaunch {
         webAppContext.setResourceBase(jettyLaunch.getWarResourceBase());
 
         if (jettyLaunch.getSessionCookiePath() != null) {
-            webAppContext.getSessionHandler().getSessionManager().setSessionPath(jettyLaunch.getSessionCookiePath());
+            webAppContext.getSessionHandler().getSessionManager().getSessionCookieConfig().setPath(jettyLaunch.getSessionCookiePath());
         }
-        webAppContext.getSessionHandler().getSessionManager().setMaxCookieAge(jettyLaunch.getSessionMaxAge());
+        webAppContext.getSessionHandler().getSessionManager().getSessionCookieConfig().setMaxAge(jettyLaunch.getSessionMaxAge());
 
         if (jettyLaunch.getHashLoginServiceConfig() != null) {
             webAppContext.getSecurityHandler().setLoginService(new HashLoginService("default", jettyLaunch.getHashLoginServiceConfig()));

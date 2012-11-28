@@ -22,6 +22,7 @@ package com.pyx4j.unit.server.mock;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.Locale;
 
 import javax.servlet.ServletOutputStream;
@@ -186,12 +187,32 @@ public class MockHttpServletResponse implements HttpServletResponse {
     }
 
     @Override
+    public String getHeader(String name) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Collection<String> getHeaders(String name) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Collection<String> getHeaderNames() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void setStatus(int sc) {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public void setStatus(int sc, String sm) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int getStatus() {
         throw new UnsupportedOperationException();
     }
 

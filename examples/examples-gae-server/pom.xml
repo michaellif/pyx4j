@@ -66,9 +66,9 @@
             <artifactId>appengine-api-labs</artifactId>
         </dependency>
 
-		<dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
+            <artifactId>javax.servlet-api</artifactId>
         </dependency>
 
     </dependencies>
@@ -156,7 +156,7 @@
 
             <plugin>
                 <groupId>net.kindleit</groupId>
-	            <artifactId>maven-gae-plugin</artifactId>
+                <artifactId>maven-gae-plugin</artifactId>
             </plugin>
 
         </plugins>
@@ -219,7 +219,7 @@
                 <plugins>
                     <plugin>
                         <groupId>net.kindleit</groupId>
-	                    <artifactId>maven-gae-plugin</artifactId>
+                        <artifactId>maven-gae-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>gae-deploy</id>

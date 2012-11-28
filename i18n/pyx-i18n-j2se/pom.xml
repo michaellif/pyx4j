@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="http://maven.apache.org/POM/4.0.0">
 <!-- @version $Revision$ ($Author$) $Date$ -->
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>com.pyx4j</groupId>
@@ -17,7 +17,7 @@
     <name>pyx-i18n-j2se</name>
     <description>pyx i18n for J2SE</description>
 
-	<dependencies>
+    <dependencies>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
@@ -36,13 +36,12 @@
             <artifactId>pyx-config-server</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
+            <artifactId>javax.servlet-api</artifactId>
         </dependency>
-        
-        
-	</dependencies>
+
+    </dependencies>
 
 </project>
