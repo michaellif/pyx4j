@@ -18,6 +18,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.oapi.model.BuildingInfoIO;
 import com.propertyvista.oapi.model.BuildingTypeIO;
+import com.propertyvista.oapi.xml.Action;
 
 public class BuildingInfoMarshaller implements Marshaller<BuildingInfo, BuildingInfoIO> {
 
@@ -42,9 +43,16 @@ public class BuildingInfoMarshaller implements Marshaller<BuildingInfo, Building
 
     @Override
     public BuildingInfo marshal(BuildingInfoIO buildingInfoIO) throws Exception {
+        if (buildingInfoIO == null) {
+            return null;
+        }
         BuildingInfo buildingInfo = EntityFactory.create(BuildingInfo.class);
-        buildingInfo.address().set(AddressMarshaller.getInstance().marshal(buildingInfoIO.address));
-        buildingInfo.type().setValue(buildingInfoIO.buildingType.value);
+        if (buildingInfoIO.getAction() == Action.nil) {
+            buildingInfo.set(null);
+        } else {
+            buildingInfo.address().set(AddressMarshaller.getInstance().marshal(buildingInfoIO.address));
+            buildingInfo.type().setValue(buildingInfoIO.buildingType.value);
+        }
         return buildingInfo;
     }
 }

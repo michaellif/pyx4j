@@ -23,6 +23,7 @@ import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.oapi.model.AdvertisingBlurbIO;
 import com.propertyvista.oapi.model.MarketingIO;
+import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
@@ -56,15 +57,22 @@ public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
 
     @Override
     public Marketing marshal(MarketingIO marketingIO) throws Exception {
-        Marketing marketing = EntityFactory.create(Marketing.class);
-        marketing.name().setValue(marketingIO.name.value);
-        marketing.description().setValue(marketingIO.description.value);
-
-        List<AdvertisingBlurb> adBlurbs = new ArrayList<AdvertisingBlurb>();
-        for (AdvertisingBlurbIO adBlurbIO : marketingIO.blurbs) {
-            adBlurbs.add(AdvertisingBlurbMarshaller.getInstance().marshal(adBlurbIO));
+        if (marketingIO == null) {
+            return null;
         }
-        marketing.adBlurbs().addAll(adBlurbs);
+        Marketing marketing = EntityFactory.create(Marketing.class);
+        if (marketingIO.getAction() == Action.nil) {
+            marketing.set(null);
+        } else {
+            marketing.name().setValue(marketingIO.name.value);
+            marketing.description().setValue(marketingIO.description.value);
+
+            List<AdvertisingBlurb> adBlurbs = new ArrayList<AdvertisingBlurb>();
+            for (AdvertisingBlurbIO adBlurbIO : marketingIO.blurbs) {
+                adBlurbs.add(AdvertisingBlurbMarshaller.getInstance().marshal(adBlurbIO));
+            }
+            marketing.adBlurbs().addAll(adBlurbs);
+        }
         return marketing;
     }
 }

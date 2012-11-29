@@ -25,6 +25,7 @@ import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.oapi.model.AddressIO;
 import com.propertyvista.oapi.model.StreetTypeIO;
+import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class AddressMarshaller implements Marshaller<AddressStructured, AddressIO> {
@@ -55,14 +56,21 @@ public class AddressMarshaller implements Marshaller<AddressStructured, AddressI
 
     @Override
     public AddressStructured marshal(AddressIO addressIO) throws Exception {
+        if (addressIO == null) {
+            return null;
+        }
         AddressStructured address = EntityFactory.create(AddressStructured.class);
-        address.country().set(getCountry(addressIO.country.value));
-        address.province().set(getProvince(addressIO.province.value));
-        address.city().setValue(addressIO.city.value);
-        address.postalCode().setValue(addressIO.postalCode.value);
-        address.streetNumber().setValue(addressIO.streetNumber.value);
-        address.streetName().setValue(addressIO.streetName.value);
-        address.streetType().setValue(addressIO.streetType.value);
+        if (addressIO.getAction() == Action.nil) {
+            address.set(null);
+        } else {
+            address.country().set(getCountry(addressIO.country.value));
+            address.province().set(getProvince(addressIO.province.value));
+            address.city().setValue(addressIO.city.value);
+            address.postalCode().setValue(addressIO.postalCode.value);
+            address.streetNumber().setValue(addressIO.streetNumber.value);
+            address.streetName().setValue(addressIO.streetName.value);
+            address.streetType().setValue(addressIO.streetType.value);
+        }
         return address;
     }
 

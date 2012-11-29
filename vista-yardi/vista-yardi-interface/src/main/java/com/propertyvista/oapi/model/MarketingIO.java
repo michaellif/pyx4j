@@ -15,13 +15,19 @@ package com.propertyvista.oapi.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 
+import com.propertyvista.oapi.xml.Action;
+import com.propertyvista.oapi.xml.ElementIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class MarketingIO {
+public class MarketingIO implements ElementIO {
+
+    @XmlAttribute
+    public Action action;
 
     public StringIO name;
 
@@ -30,5 +36,10 @@ public class MarketingIO {
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "blurb", type = AdvertisingBlurbIO.class))
     public List<AdvertisingBlurbIO> blurbs = new ArrayList<AdvertisingBlurbIO>();
+
+    @Override
+    public Action getAction() {
+        return action;
+    }
 
 }

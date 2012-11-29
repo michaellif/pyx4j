@@ -41,7 +41,5 @@ public class GetAllBuildingsClient {
 
         BuildingsIO buildings = service.listAllBuildings();
 
-        System.out.println("++++++++++" + buildings.buildings.size());
-
     }
 }

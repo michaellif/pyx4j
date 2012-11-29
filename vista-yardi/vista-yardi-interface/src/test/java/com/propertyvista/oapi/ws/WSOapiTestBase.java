@@ -72,7 +72,4 @@ public class WSOapiTestBase {
         return code;
     }
 
-    void initPersistenceLayer() {
-        VistaTestDBSetup.init();
-    }
 }
