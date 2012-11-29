@@ -57,7 +57,11 @@ class TenantSurePayments {
     }
 
     public static void compleateTransaction(InsuranceTenantSureTransaction transaction) {
-        // TODO Auto-generated method stub
-
+        BigDecimal amount = transaction.amount().getValue();
+        String referenceNumber = transaction.id().getStringView();
+        String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).completion(amount, tenantSureMerchantTerminalId(), referenceNumber,
+                (CreditCardInfo) transaction.paymentMethod().details().cast());
+        transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
+        transaction.transactionDate().setValue(Persistence.service().getTransactionSystemTime());
     }
 }
