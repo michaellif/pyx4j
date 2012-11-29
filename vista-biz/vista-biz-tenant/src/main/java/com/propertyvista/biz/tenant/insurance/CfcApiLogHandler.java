@@ -51,7 +51,7 @@ public class CfcApiLogHandler implements SOAPHandler<SOAPMessageContext> {
                 SOAPMessage message = context.getMessage();
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 message.writeTo(out);
-                EntityFileLogger.logXml("tenantSure", (isOutbound ? "out" : "in"), out.toString());
+                EntityFileLogger.logXml("tenantSure", (isOutbound ? "request" : "response") + getMethodName(context, isOutbound), out.toString());
             } catch (Throwable e) {
                 log.warn("CFC API communication trace failed: " + e.getMessage());
             }
@@ -64,4 +64,25 @@ public class CfcApiLogHandler implements SOAPHandler<SOAPMessageContext> {
         return new HashSet<QName>(Arrays.asList(new QName("http://api.cfcprograms.com/", "CFC_API")));
     }
 
+    private String getMethodName(SOAPMessageContext context, boolean isOutbound) {
+        try {
+            QName operationName = (QName) context.get(MessageContext.WSDL_OPERATION);
+            if (operationName != null) {
+                return "-" + operationName.getLocalPart();
+            } else {
+//                Field field = context.getClass().getSuperclass().getDeclaredField("packet");
+//                field.setAccessible(true);
+//                Packet packet = (Packet)field.get(context);
+//                if (isOutbound) {
+//                    return ((StreamMessage) packet.getMessage()).getPayloadLocalPart();
+//                } else {
+//                    return ((JAXBMessage) packet.getMessage()).getPayloadLocalPart();
+//                }
+                return "";
+            }
+        } catch (Throwable e) {
+            log.debug("error accessing wsdl operation name", e);
+            return "";
+        }
+    }
 }
