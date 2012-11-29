@@ -21,7 +21,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -89,9 +88,9 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String create() {
         List<VistaCrmBehavior> allRoles = new ArrayList<VistaCrmBehavior>(Arrays.asList(VistaCrmBehavior.values()));
-        if (!ServerSideConfiguration.isStartedUnderEclipse()) {
-            allRoles.remove(VistaCrmBehavior.PropertyVistaSupport);
-        }
+        allRoles.remove(VistaCrmBehavior.PropertyVistaSupport);
+        allRoles.remove(VistaCrmBehavior.PropertyVistaAccountOwner);
+
         createRole(DEFAULT_ACCESS_ALL_ROLE_NAME, true, allRoles.toArray(new VistaCrmBehavior[allRoles.size()]));
 
         createRole("Accountant", VistaCrmBehavior.ProductCatalog, VistaCrmBehavior.Billing, VistaCrmBehavior.Reports);
