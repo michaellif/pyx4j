@@ -24,6 +24,8 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
 
     private static boolean isGoogleAnalyticDisableForEmployee;
 
+    public static boolean enviromentTitleVisible;
+
     @Override
     public boolean occupancyModel() {
         return features.occupancyModel().getValue(Boolean.FALSE);

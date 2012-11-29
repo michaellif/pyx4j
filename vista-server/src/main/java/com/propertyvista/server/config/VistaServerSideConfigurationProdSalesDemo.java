@@ -29,6 +29,11 @@ public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideCo
     }
 
     @Override
+    public boolean enviromentTitleVisible() {
+        return getConfigProperties().getBooleanValue("enviromentTitleVisible", true);
+    }
+
+    @Override
     public Set<DemoPmc> dbResetPreloadPmc() {
         return EnumSet.of(DemoPmc.star, DemoPmc.redridge, DemoPmc.rockville);
     }

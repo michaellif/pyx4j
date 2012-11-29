@@ -31,6 +31,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ClentNavigUtils;
+import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.login.GetSatisfaction;
 import com.propertyvista.crm.client.ui.TopRightActionsView;
@@ -56,7 +57,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        view.setDisplayThisIsDemoWarning(VistaDemo.isDemo());
+        view.setDisplayThisIsDemoWarning(VistaFeaturesCustomizationClient.enviromentTitleVisible && VistaDemo.isDemo());
         updateAuthenticatedView();
         eventBus.addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
             @Override

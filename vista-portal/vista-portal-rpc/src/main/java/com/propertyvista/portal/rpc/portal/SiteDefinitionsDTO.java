@@ -38,4 +38,6 @@ public interface SiteDefinitionsDTO extends IEntity {
     PmcVistaFeatures features();
 
     IPrimitive<Boolean> isGoogleAnalyticDisableForEmployee();
+
+    IPrimitive<Boolean> enviromentTitleVisible();
 }

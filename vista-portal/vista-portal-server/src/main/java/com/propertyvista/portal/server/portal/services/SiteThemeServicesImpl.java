@@ -83,6 +83,7 @@ public class SiteThemeServicesImpl implements SiteThemeServices {
 
         def.isGoogleAnalyticDisableForEmployee().setValue(
                 ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).isGoogleAnalyticDisableForEmployee());
+        def.enviromentTitleVisible().setValue(((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).enviromentTitleVisible());
 
         // TODO different resources base on locale
         if (descriptor.logo().size() > 0) {

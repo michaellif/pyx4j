@@ -83,4 +83,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
         return VistaSettings.googleAnalyticsDevKey;
     }
 
+    public boolean enviromentTitleVisible() {
+        return true;
+    }
+
 }
