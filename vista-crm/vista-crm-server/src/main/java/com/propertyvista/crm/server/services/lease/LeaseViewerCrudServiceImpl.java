@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.lease;
 
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -24,6 +25,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -37,6 +39,7 @@ import com.propertyvista.crm.server.services.lease.common.LeaseTermCrudServiceIm
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
@@ -59,6 +62,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         super.enhanceRetrieved(in, dto, retrieveTraget);
 
         dto.transactionHistory().set(ServerSideFactory.create(ARFacade.class).getTransactionHistory(dto.billingAccount()));
+        fillTenantInsurance(dto);
     }
 
     @Override
@@ -200,5 +204,16 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
         Persistence.service().commit();
         callback.onSuccess(null);
+    }
+
+    private void fillTenantInsurance(LeaseDTO lease) {
+        EntityQueryCriteria<InsuranceCertificate> criteria = new EntityQueryCriteria<InsuranceCertificate>(InsuranceCertificate.class);
+        criteria.eq(criteria.proto().tenant().lease(), lease);
+        List<InsuranceCertificate> certificates = Persistence.service().query(criteria);
+
+        // TODO add sorting
+        if (certificates != null) {
+            lease.tenantInsuranceCertificates().addAll(certificates);
+        }
     }
 }

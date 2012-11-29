@@ -15,8 +15,10 @@ package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
@@ -31,4 +33,6 @@ public interface LeaseDTO extends Lease {
     BillDTO billingPreview();
 
     IPrimitive<String> unitMoveOutNote();
+
+    IList<InsuranceCertificate> tenantInsuranceCertificates();
 }

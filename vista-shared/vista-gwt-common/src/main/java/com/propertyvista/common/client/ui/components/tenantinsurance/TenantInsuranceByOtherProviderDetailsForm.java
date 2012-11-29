@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.forms;
+package com.propertyvista.common.client.ui.components.tenantinsurance;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -131,7 +131,8 @@ public class TenantInsuranceByOtherProviderDetailsForm extends CEntityDecoratabl
                 return null;
             }
         });
-        content.setH2(++row, 0, 1, i18n.tr("Attach Scanned Insurance Certificate"));
+
+        content.setH2(++row, 0, 1, isEditable() ? i18n.tr("Attach Scanned Insurance Certificate") : i18n.tr("Scanned Insurance Certificate"));
         content.setWidget(++row, 0, inject(proto().documents(), new InsuranceCertificateDocumentFolder()));
 
         return content;

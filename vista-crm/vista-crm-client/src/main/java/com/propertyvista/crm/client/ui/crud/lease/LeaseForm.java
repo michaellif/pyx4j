@@ -39,6 +39,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         billsTab = addTab(((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
         paymentsTab = addTab(((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
         financialTab = addTab(createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"));
+        addTab(createTenantInsuranceTab().asWidget(), i18n.tr("Tenant Insurance"));
     }
 
     @Override
@@ -56,5 +57,11 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         FormFlexPanel financialTransactionHistory = new FormFlexPanel();
         financialTransactionHistory.setWidget(0, 0, inject(proto().transactionHistory(), new TransactionHistoryViewer()));
         return financialTransactionHistory;
+    }
+
+    private IsWidget createTenantInsuranceTab() {
+        FormFlexPanel insuranceTab = new FormFlexPanel();
+        insuranceTab.setWidget(0, 0, inject(proto().tenantInsuranceCertificates(), new TenantInsuranceCertificateFolder()));
+        return insuranceTab;
     }
 }

@@ -18,9 +18,9 @@ import java.math.BigDecimal;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceByOtherProviderDetailsForm;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.forms.TenantInsuranceByOtherProviderDetailsForm;
 
 public class TenantInsuranceByOtherProviderUpdateViewImpl extends BasicViewImpl<InsuranceCertificate> implements TenantInsuranceByOtherProviderUpdateView {
 
