@@ -124,7 +124,7 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         get(proto().card()).addValueValidator(new CreditCardNumberTypeValidator(new CreditCardTypeProvider() {
             @Override
             public CreditCardType getCreditCardType() {
-                return (CreditCardInfoEditor.this.getValue() == null ? null : CreditCardInfoEditor.this.getValue().cardType().getValue());
+                return (get(proto().cardType()).getValue() == null ? null : get(proto().cardType()).getValue());
             }
         }));
         get(proto().cardType()).addValueChangeHandler(new RevalidationTrigger<CreditCardType>(get(proto().card())));
