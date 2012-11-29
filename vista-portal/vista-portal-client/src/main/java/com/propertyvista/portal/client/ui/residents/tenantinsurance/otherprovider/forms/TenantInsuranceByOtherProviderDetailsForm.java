@@ -14,9 +14,11 @@
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.forms;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -99,8 +101,36 @@ public class TenantInsuranceByOtherProviderDetailsForm extends CEntityDecoratabl
                 return null;
             }
         });
+        get(proto().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
+            @Override
+            public ValidationError isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
+                if (value != null && value.compareTo(BigDecimal.ZERO) <= 0) {
+                    return new ValidationError(component, i18n.tr("Please enter a positive value"));
+                }
+                return null;
+            }
+        });
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().inceptionDate()), 10).build());
+
+        get(proto().inceptionDate()).addValueValidator(new EditableValueValidator<Date>() {
+            @Override
+            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+                if (value != null && value.compareTo(new LogicalDate()) > 0) {
+                    return new ValidationError(component, i18n.tr("Please provide a date less than or equal of today"));
+                }
+                return null;
+            }
+        });
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate()), 10).build());
+        get(proto().expiryDate()).addValueValidator(new EditableValueValidator<Date>() {
+            @Override
+            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+                if (value != null && value.compareTo(new LogicalDate()) < 0) {
+                    return new ValidationError(component, i18n.tr("Please provide a date greater than or equal of today"));
+                }
+                return null;
+            }
+        });
         content.setH2(++row, 0, 1, i18n.tr("Attach Scanned Insurance Certificate"));
         content.setWidget(++row, 0, inject(proto().documents(), new InsuranceCertificateDocumentFolder()));
 

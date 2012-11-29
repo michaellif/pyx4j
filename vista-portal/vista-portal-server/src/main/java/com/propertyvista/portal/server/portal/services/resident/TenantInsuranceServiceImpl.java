@@ -16,10 +16,16 @@ package com.propertyvista.portal.server.portal.services.resident;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
+import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceRequirementsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
@@ -32,6 +38,18 @@ public class TenantInsuranceServiceImpl implements TenantInsuranceService {
                 TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
 
         callback.onSuccess(tenantInsuranceStatus);
+    }
+
+    @Override
+    public void getTenantInsuranceRequirements(AsyncCallback<TenantInsuranceRequirementsDTO> callback) {
+        Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
+        TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), TenantInsurancePolicy.class);
+
+        TenantInsuranceRequirementsDTO requirements = EntityFactory.create(TenantInsuranceRequirementsDTO.class);
+        requirements.minLiability().setValue(
+                insurancePolicy.requireMinimumLiability().isBooleanTrue() ? insurancePolicy.minimumRequiredLiability().getValue() : null);
+
+        callback.onSuccess(requirements);
     }
 
 }

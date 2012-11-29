@@ -41,7 +41,7 @@ public class TenantInsuranceByOtherProviderManagementServiceImpl implements Tena
     public void get(AsyncCallback<InsuranceCertificate> callback) {
         EntityQueryCriteria<InsuranceCertificate> criteria = EntityQueryCriteria.create(InsuranceCertificate.class);
         criteria.eq(criteria.proto().tenant(), TenantAppContext.getCurrentUserTenant());
-        criteria.le(criteria.proto().expiryDate(), new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        criteria.ge(criteria.proto().expiryDate(), new LogicalDate(Persistence.service().getTransactionSystemTime()));
 
         InsuranceCertificate insuranceCertificate = Persistence.secureRetrieve(criteria);
         if (insuranceCertificate == null) {
@@ -50,4 +50,5 @@ public class TenantInsuranceByOtherProviderManagementServiceImpl implements Tena
         }
         callback.onSuccess(insuranceCertificate);
     }
+
 }

@@ -51,8 +51,7 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
                 get(proto().minimumRequiredLiability()).setVisible(event.getValue());
             }
         });
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().minimumRequiredLiability()), 5).build());
-        get(proto().minimumRequiredLiability()).setVisible(false);
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().minimumRequiredLiability()), 20).build());
         return panel;
     }
 
@@ -64,4 +63,9 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
         return panel;
     }
 
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        get(proto().minimumRequiredLiability()).setVisible(getValue().requireMinimumLiability().isBooleanTrue());
+    }
 }

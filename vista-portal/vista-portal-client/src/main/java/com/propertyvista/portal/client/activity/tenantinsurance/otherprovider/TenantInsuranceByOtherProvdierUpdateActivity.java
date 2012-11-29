@@ -27,42 +27,52 @@ import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.views.TenantInsuranceByOtherProviderUpdateView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceByOtherProviderManagementService;
+import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceRequirementsDTO;
 
 public class TenantInsuranceByOtherProvdierUpdateActivity extends SecurityAwareActivity implements TenantInsuranceByOtherProviderUpdateView.Presenter {
 
     private final TenantInsuranceByOtherProviderUpdateView view;
 
-    private final TenantInsuranceByOtherProviderManagementService service;
+    private final TenantInsuranceService insuranceService;
+
+    private final TenantInsuranceByOtherProviderManagementService insuranceByOtherProviderService;
 
     public TenantInsuranceByOtherProvdierUpdateActivity(Place place) {
         view = PortalViewFactory.instance(TenantInsuranceByOtherProviderUpdateView.class);
-        service = GWT.<TenantInsuranceByOtherProviderManagementService> create(TenantInsuranceByOtherProviderManagementService.class);
+        insuranceByOtherProviderService = GWT.<TenantInsuranceByOtherProviderManagementService> create(TenantInsuranceByOtherProviderManagementService.class);
+        insuranceService = GWT.<TenantInsuranceService> create(TenantInsuranceService.class);
     }
 
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
-        service.get(new DefaultAsyncCallback<InsuranceCertificate>() {
-
+        insuranceService.getTenantInsuranceRequirements(new DefaultAsyncCallback<TenantInsuranceRequirementsDTO>() {
             @Override
-            public void onSuccess(InsuranceCertificate result) {
-                view.setPresenter(TenantInsuranceByOtherProvdierUpdateActivity.this);
-                view.populate(result);
-                panel.setWidget(view);
+            public void onSuccess(final TenantInsuranceRequirementsDTO requirements) {
+                insuranceByOtherProviderService.get(new DefaultAsyncCallback<InsuranceCertificate>() {
+                    @Override
+                    public void onSuccess(InsuranceCertificate result) {
+                        view.setPresenter(TenantInsuranceByOtherProvdierUpdateActivity.this);
+                        view.setMinRequiredLiability(requirements.minLiability().getValue());
+                        view.populate(result);
+                        panel.setWidget(view);
+                    }
+                });
             }
-
         });
 
     }
 
     @Override
     public void save(InsuranceCertificate certificate) {
-        service.save(new DefaultAsyncCallback<VoidSerializable>() {
+        insuranceByOtherProviderService.save(new DefaultAsyncCallback<VoidSerializable>() {
 
             @Override
             public void onSuccess(VoidSerializable result) {
                 view.reportSaveSuccess();
             }
+
         }, certificate);
     }
 
