@@ -26,6 +26,8 @@ public class GetAllBuildingsClient {
 
     private static String ADDRESS = "http://localhost:8888/vista/interfaces/oapi/ws/WSPropertyService";
 
+    //  private static String ADDRESS = "http://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/ws/WSPropertyService?wsdl";
+
     public static void main(String[] args) throws MalformedURLException {
 
         Authenticator.setDefault(new Authenticator() {
