@@ -12,6 +12,12 @@
  */
 package com.propertyvista.oapi.model;
 
+import com.propertyvista.oapi.model.types.BuildingStructureTypeIO;
+import com.propertyvista.oapi.model.types.BuildingTypeIO;
+import com.propertyvista.oapi.model.types.ConstructionTypeIO;
+import com.propertyvista.oapi.model.types.FloorTypeIO;
+import com.propertyvista.oapi.model.types.FoundationTypeIO;
+import com.propertyvista.oapi.model.types.WaterSupplyTypeIO;
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.BooleanIO;
 import com.propertyvista.oapi.xml.IntegerIO;

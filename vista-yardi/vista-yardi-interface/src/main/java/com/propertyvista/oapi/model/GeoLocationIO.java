@@ -13,9 +13,10 @@
  */
 package com.propertyvista.oapi.model;
 
+import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.DoubleIO;
 
-public class GeoLocationIO {
+public class GeoLocationIO extends AbstractElementIO {
 
     //mandatory for portal
     public DoubleIO latitude;

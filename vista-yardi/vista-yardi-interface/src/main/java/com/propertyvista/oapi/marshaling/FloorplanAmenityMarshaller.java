@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.oapi.model.FloorplanAmenityIO;
-import com.propertyvista.oapi.model.FloorplanAmenityTypeIO;
+import com.propertyvista.oapi.model.types.FloorplanAmenityTypeIO;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class FloorplanAmenityMarshaller implements Marshaller<FloorplanAmenity, FloorplanAmenityIO> {

@@ -11,27 +11,27 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi.model;
+package com.propertyvista.oapi.model.types;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlValue;
 
-import com.propertyvista.domain.property.asset.Parking;
+import com.propertyvista.domain.property.asset.building.BuildingInfo.WaterSupply;
 import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.ElementIO;
 
-public class ParkingTypeIO implements ElementIO {
+public class WaterSupplyTypeIO implements ElementIO {
 
     @XmlValue
-    public Parking.Type value;
+    public WaterSupply value;
 
     @XmlAttribute
     public Action action;
 
-    public ParkingTypeIO() {
+    public WaterSupplyTypeIO() {
     }
 
-    public ParkingTypeIO(Parking.Type value) {
+    public WaterSupplyTypeIO(WaterSupply value) {
         this.value = value;
     }
 

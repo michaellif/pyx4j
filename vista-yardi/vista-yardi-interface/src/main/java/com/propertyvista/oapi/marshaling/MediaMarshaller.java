@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.oapi.model.MediaIO;
-import com.propertyvista.oapi.model.MediaTypeIO;
+import com.propertyvista.oapi.model.types.MediaTypeIO;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class MediaMarshaller implements Marshaller<Media, MediaIO> {

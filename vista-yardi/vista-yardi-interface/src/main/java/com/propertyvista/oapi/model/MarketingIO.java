@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlValue;
 
 import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.ElementIO;
@@ -29,6 +30,7 @@ public class MarketingIO implements ElementIO {
     @XmlAttribute
     public Action action;
 
+    @XmlValue
     public StringIO name;
 
     public StringIO description;
@@ -41,5 +43,4 @@ public class MarketingIO implements ElementIO {
     public Action getAction() {
         return action;
     }
-
 }

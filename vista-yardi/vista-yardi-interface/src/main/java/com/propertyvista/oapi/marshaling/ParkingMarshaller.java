@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.oapi.model.ParkingIO;
-import com.propertyvista.oapi.model.ParkingTypeIO;
+import com.propertyvista.oapi.model.types.ParkingTypeIO;
 import com.propertyvista.oapi.xml.DoubleIO;
 import com.propertyvista.oapi.xml.StringIO;
 

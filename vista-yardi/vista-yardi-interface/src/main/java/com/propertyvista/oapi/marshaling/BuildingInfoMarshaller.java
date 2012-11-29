@@ -17,7 +17,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.oapi.model.BuildingInfoIO;
-import com.propertyvista.oapi.model.BuildingTypeIO;
+import com.propertyvista.oapi.model.types.BuildingTypeIO;
 import com.propertyvista.oapi.xml.Action;
 
 public class BuildingInfoMarshaller implements Marshaller<BuildingInfo, BuildingInfoIO> {

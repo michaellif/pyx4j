@@ -13,6 +13,8 @@
  */
 package com.propertyvista.oapi.model;
 
+import com.propertyvista.oapi.model.types.FloorplanAmenityTypeIO;
+
 
 public class FloorplanAmenityIO extends AmenityIO {
 

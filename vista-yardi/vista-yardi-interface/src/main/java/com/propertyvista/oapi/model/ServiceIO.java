@@ -16,10 +16,11 @@ package com.propertyvista.oapi.model;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.StringIO;
 
 @XmlRootElement
-public class ServiceIO {
+public class ServiceIO extends AbstractElementIO {
 
     @XmlAttribute
     public String leaseId;

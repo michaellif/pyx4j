@@ -11,27 +11,27 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi.model;
+package com.propertyvista.oapi.model.types;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlValue;
 
-import com.propertyvista.domain.property.asset.FloorplanAmenity;
+import com.propertyvista.domain.property.asset.building.BuildingInfo.ConstructionType;
 import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.ElementIO;
 
-public class FloorplanAmenityTypeIO implements ElementIO {
+public class ConstructionTypeIO implements ElementIO {
 
     @XmlValue
-    public FloorplanAmenity.Type value;
+    public ConstructionType value;
 
     @XmlAttribute
     public Action action;
 
-    public FloorplanAmenityTypeIO() {
+    public ConstructionTypeIO() {
     }
 
-    public FloorplanAmenityTypeIO(FloorplanAmenity.Type value) {
+    public ConstructionTypeIO(ConstructionType value) {
         this.value = value;
     }
 

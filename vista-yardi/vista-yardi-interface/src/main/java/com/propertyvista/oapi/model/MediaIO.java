@@ -13,9 +13,11 @@
  */
 package com.propertyvista.oapi.model;
 
+import com.propertyvista.oapi.model.types.MediaTypeIO;
+import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class MediaIO {
+public class MediaIO extends AbstractElementIO {
 
     public MediaTypeIO mediaType;
 

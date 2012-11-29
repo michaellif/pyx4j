@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -11,27 +11,27 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi.model;
+package com.propertyvista.oapi.model.types;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlValue;
 
-import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.property.asset.building.BuildingInfo.Type;
 import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.ElementIO;
 
-public class SexTypeIO implements ElementIO {
+public class BuildingTypeIO implements ElementIO {
 
     @XmlValue
-    public Person.Sex value;
+    public Type value;
 
     @XmlAttribute
     public Action action;
 
-    public SexTypeIO() {
+    public BuildingTypeIO() {
     }
 
-    public SexTypeIO(Person.Sex value) {
+    public BuildingTypeIO(Type value) {
         this.value = value;
     }
 

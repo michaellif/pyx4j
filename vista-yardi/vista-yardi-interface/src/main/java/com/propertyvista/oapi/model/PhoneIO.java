@@ -15,9 +15,10 @@ package com.propertyvista.oapi.model;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
+import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class PhoneIO {
+public class PhoneIO extends AbstractElementIO {
 
     @XmlAttribute
     public String number;

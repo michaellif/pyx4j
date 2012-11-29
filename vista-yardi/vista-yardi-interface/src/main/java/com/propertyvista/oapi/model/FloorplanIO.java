@@ -20,12 +20,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 
+import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.BigDecimalIO;
 import com.propertyvista.oapi.xml.IntegerIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class FloorplanIO {
+public class FloorplanIO extends AbstractElementIO{
 
     //mandatory for portal
     public StringIO name;

@@ -11,27 +11,27 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi.model;
+package com.propertyvista.oapi.model.types;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlValue;
 
-import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.ElementIO;
 
-public class BuildingAmenityTypeIO implements ElementIO {
+public class StreetTypeIO implements ElementIO {
 
     @XmlValue
-    public BuildingAmenity.Type value;
+    public StreetType value;
 
     @XmlAttribute
     public Action action;
 
-    public BuildingAmenityTypeIO() {
+    public StreetTypeIO() {
     }
 
-    public BuildingAmenityTypeIO(BuildingAmenity.Type value) {
+    public StreetTypeIO(StreetType value) {
         this.value = value;
     }
 

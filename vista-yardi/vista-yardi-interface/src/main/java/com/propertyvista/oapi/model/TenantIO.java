@@ -16,11 +16,13 @@ package com.propertyvista.oapi.model;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.propertyvista.oapi.model.types.SexTypeIO;
+import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
 import com.propertyvista.oapi.xml.StringIO;
 
 @XmlRootElement(name = "tenant")
-public class TenantIO {
+public class TenantIO extends AbstractElementIO {
 
     @XmlAttribute
     public String leaseId;

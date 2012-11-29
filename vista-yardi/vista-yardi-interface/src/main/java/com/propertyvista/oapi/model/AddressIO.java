@@ -15,12 +15,11 @@ package com.propertyvista.oapi.model;
 
 import javax.xml.bind.annotation.XmlElement;
 
+import com.propertyvista.oapi.model.types.StreetTypeIO;
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class AddressIO extends AbstractElementIO {
-
-    public StringIO addressType;
 
     //mandatory for portal
     @XmlElement(nillable = true)

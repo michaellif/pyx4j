@@ -24,7 +24,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.oapi.model.AddressIO;
-import com.propertyvista.oapi.model.StreetTypeIO;
+import com.propertyvista.oapi.model.types.StreetTypeIO;
 import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.StringIO;
 

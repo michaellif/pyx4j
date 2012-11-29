@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.oapi.model.BuildingAmenityIO;
-import com.propertyvista.oapi.model.BuildingAmenityTypeIO;
+import com.propertyvista.oapi.model.types.BuildingAmenityTypeIO;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class BuildingAmenityMarshaller implements Marshaller<BuildingAmenity, BuildingAmenityIO> {

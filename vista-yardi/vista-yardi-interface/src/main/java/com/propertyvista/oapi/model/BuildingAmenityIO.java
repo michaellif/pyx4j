@@ -13,6 +13,8 @@
  */
 package com.propertyvista.oapi.model;
 
+import com.propertyvista.oapi.model.types.BuildingAmenityTypeIO;
+
 public class BuildingAmenityIO extends AmenityIO {
 
     public BuildingAmenityTypeIO type;

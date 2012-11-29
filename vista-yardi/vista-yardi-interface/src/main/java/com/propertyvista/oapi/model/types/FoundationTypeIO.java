@@ -11,27 +11,27 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi.model;
+package com.propertyvista.oapi.model.types;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlValue;
 
-import com.propertyvista.domain.property.asset.building.BuildingInfo.FloorType;
+import com.propertyvista.domain.property.asset.building.BuildingInfo.FoundationType;
 import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.ElementIO;
 
-public class FloorTypeIO implements ElementIO {
+public class FoundationTypeIO implements ElementIO {
 
     @XmlValue
-    public FloorType value;
+    public FoundationType value;
 
     @XmlAttribute
     public Action action;
 
-    public FloorTypeIO() {
+    public FoundationTypeIO() {
     }
 
-    public FloorTypeIO(FloorType value) {
+    public FoundationTypeIO(FoundationType value) {
         this.value = value;
     }
 

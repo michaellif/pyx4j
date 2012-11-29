@@ -11,27 +11,27 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi.model;
+package com.propertyvista.oapi.model.types;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlValue;
 
-import com.propertyvista.domain.contact.AddressStructured.StreetType;
+import com.propertyvista.domain.property.asset.building.BuildingInfo.FloorType;
 import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.ElementIO;
 
-public class StreetTypeIO implements ElementIO {
+public class FloorTypeIO implements ElementIO {
 
     @XmlValue
-    public StreetType value;
+    public FloorType value;
 
     @XmlAttribute
     public Action action;
 
-    public StreetTypeIO() {
+    public FloorTypeIO() {
     }
 
-    public StreetTypeIO(StreetType value) {
+    public FloorTypeIO(FloorType value) {
         this.value = value;
     }
 
