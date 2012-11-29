@@ -3,7 +3,8 @@
     version="3.0"
     xmlns="http://java.sun.com/xml/ns/j2ee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+    metadata-complete="true">
     <!-- @version $Revision$ ($Author$) $Date$ -->
     <display-name>Vista Portal ${buildLabel} svn:${scm.revision} ts:${timestamp}</display-name>
 
