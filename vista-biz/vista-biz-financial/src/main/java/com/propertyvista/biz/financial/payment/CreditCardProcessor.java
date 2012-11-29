@@ -99,6 +99,9 @@ class CreditCardProcessor {
             if (!ValidationUtils.isCreditCardNumberValid(cc.card().number().getValue())) {
                 throw new UserRuntimeException(i18n.tr("Invalid Credit Card Number"));
             }
+            if (!ValidationUtils.isCreditCardNumberIinValid(cc.cardType().getValue().iinsPatterns, cc.card().number().getValue())) {
+                throw new UserRuntimeException(i18n.tr("The credit card number doesn't match the credit card type"));
+            }
             ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
         }
         ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
@@ -163,6 +166,9 @@ class CreditCardProcessor {
         } else {
             if (!ValidationUtils.isCreditCardNumberValid(cc.card().number().getValue())) {
                 throw new UserRuntimeException(i18n.tr("Invalid Credit Card Number"));
+            }
+            if (!ValidationUtils.isCreditCardNumberIinValid(cc.cardType().getValue().iinsPatterns, cc.card().number().getValue())) {
+                throw new UserRuntimeException(i18n.tr("The credit card number doesn't match the credit card type"));
             }
             CCInformation ccInfo = EntityFactory.create(CCInformation.class);
             ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
