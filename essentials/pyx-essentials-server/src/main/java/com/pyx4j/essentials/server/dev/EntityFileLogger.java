@@ -26,6 +26,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -42,6 +44,7 @@ import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.xml.XMLEntityWriter;
 import com.pyx4j.entity.xml.XMLStringWriter;
+import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.log4j.LoggerConfig;
 
 public class EntityFileLogger {
@@ -195,12 +198,15 @@ public class EntityFileLogger {
         if (props == null) {
             props = new Properties();
             if (file.canRead()) {
+                InputStream in = null;
                 try {
-                    props.load(new FileInputStream(file));
+                    props.load(in = new FileInputStream(file));
                 } catch (FileNotFoundException e) {
                     log.error("File Not Found", e);
                 } catch (IOException e) {
                     log.error("IO Exception", e);
+                } finally {
+                    IOUtils.closeQuietly(in);
                 }
             }
             fileNumbers.put(dir, props);
@@ -214,11 +220,14 @@ public class EntityFileLogger {
         number += 1;
         props.put("number", number.toString());
 
+        OutputStream out = null;
         try {
-            props.store(new FileOutputStream(file), null);
+            props.store(out = new FileOutputStream(file), null);
         } catch (IOException e) {
             log.error("Error while saving  number", e);
             throw new Error(e.getLocalizedMessage());
+        } finally {
+            IOUtils.closeQuietly(out);
         }
 
         return number;
