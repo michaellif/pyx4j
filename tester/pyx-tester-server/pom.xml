@@ -36,6 +36,13 @@
 
     <dependencies>
 
+        <!-- ensure proper version, NOT from gwt-dev.jar -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-tester-shared</artifactId>
