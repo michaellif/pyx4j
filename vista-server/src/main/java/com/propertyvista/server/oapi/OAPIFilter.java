@@ -71,25 +71,28 @@ public class OAPIFilter implements Filter {
                     final int index = auth.indexOf(' ');
                     if (index > 0) {
                         final String[] credentials = StringUtils.split(new String(Base64.decodeBase64(auth.substring(index)), Charset.forName("UTF-8")), ':');
+                        if (credentials.length != 3) {
+                            log.warn("invalid credentials format");
+                        } else {
 
-                        NamespaceManager.setNamespace(credentials[1]);
+                            NamespaceManager.setNamespace(credentials[1]);
 
-                        AuthenticationRequest authenticationRequest = EntityFactory.create(AuthenticationRequest.class);
-                        authenticationRequest.email().setValue(credentials[0]);
-                        authenticationRequest.password().setValue(credentials[2]);
+                            AuthenticationRequest authenticationRequest = EntityFactory.create(AuthenticationRequest.class);
+                            authenticationRequest.email().setValue(credentials[0]);
+                            authenticationRequest.password().setValue(credentials[2]);
 
-                        LocalService.create(CrmAuthenticationService.class).authenticate(new AsyncCallback<AuthenticationResponse>() {
-                            @Override
-                            public void onFailure(Throwable caught) {
-                                rc.set(false);
-                            }
+                            LocalService.create(CrmAuthenticationService.class).authenticate(new AsyncCallback<AuthenticationResponse>() {
+                                @Override
+                                public void onFailure(Throwable caught) {
+                                    rc.set(false);
+                                }
 
-                            @Override
-                            public void onSuccess(AuthenticationResponse result) {
-                                rc.set(SecurityController.checkBehavior(VistaCrmBehavior.OAPI));
-                            }
-                        }, new ClientSystemInfo(), authenticationRequest);
-
+                                @Override
+                                public void onSuccess(AuthenticationResponse result) {
+                                    rc.set(SecurityController.checkBehavior(VistaCrmBehavior.OAPI));
+                                }
+                            }, new ClientSystemInfo(), authenticationRequest);
+                        }
                     }
                 } catch (Throwable t) {
                     log.error("Login failed", t);

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd">
+<web-app
+    version="3.0"
+    xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <!-- @version $Revision$ ($Author$) $Date$ -->
     <display-name>Vista Portal ${buildLabel} svn:${scm.revision} ts:${timestamp}</display-name>
 
@@ -18,39 +21,6 @@
     <listener>
         <listener-class>com.propertyvista.server.config.VistaInitializationServletContextListener</listener-class>
     </listener>
-
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>Admin Pages</web-resource-name>
-            <url-pattern>/_aj/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>admin</role-name>
-        </auth-constraint>
-    </security-constraint>
-
-    <!--PRODUCTION_TEMPLATE_REMOVE_START -->
-    <!-- <security-constraint> <web-resource-collection> <url-pattern>/*</url-pattern> </web-resource-collection> <auth-constraint> 
-        <role-name>*</role-name> </auth-constraint> </security-constraint> -->
-    <!--PRODUCTION_TEMPLATE_REMOVE_END -->
-
-    <security-constraint>
-        <web-resource-collection>
-            <url-pattern>/internal/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>admin</role-name>
-        </auth-constraint>
-    </security-constraint>
-
-    <login-config>
-        <auth-method>BASIC</auth-method>
-        <realm-name>Vista Manager Application</realm-name>
-    </login-config>
-
-    <security-role>
-        <role-name>admin</role-name>
-    </security-role>
 
     <filter>
         <filter-name>GWTCacheFilter</filter-name>
@@ -329,8 +299,8 @@
         <url-pattern>/crm/srv/*</url-pattern>
     </servlet-mapping>
 
-    <!-- <servlet> <servlet-name>RemoteJ2SEServiceServlet</servlet-name> <servlet-class>com.pyx4j.rpc.server.RemoteJ2SEServiceServlet</servlet-class> 
-        </servlet> <servlet-mapping> <servlet-name>RemoteJ2SEServiceServlet</servlet-name> <url-pattern>/internal/j2sesrv/*</url-pattern> 
+    <!-- <servlet> <servlet-name>RemoteJ2SEServiceServlet</servlet-name> <servlet-class>com.pyx4j.rpc.server.RemoteJ2SEServiceServlet</servlet-class>
+        </servlet> <servlet-mapping> <servlet-name>RemoteJ2SEServiceServlet</servlet-name> <url-pattern>/internal/j2sesrv/*</url-pattern>
         </servlet-mapping> -->
     <servlet>
         <servlet-name>DownloadServlet</servlet-name>
@@ -457,40 +427,24 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>ServletContainerLoginServlet</servlet-name>
-        <servlet-class>com.pyx4j.security.server.ServletContainerLoginServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>ServletContainerLoginServlet</servlet-name>
-        <url-pattern>/_aj/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>JerseyRESTService</servlet-name>
+        <servlet-name>OpenAPIv1Servlet</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
-            <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>com.propertyvista.crm.server.openapi</param-value>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>com.propertyvista.crm.server.openapi.OpenAPIv1RsApplication</param-value>
         </init-param>
-        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>JerseyRESTService</servlet-name>
+        <servlet-name>OpenAPIv1Servlet</servlet-name>
         <url-pattern>/interfaces/rest/*</url-pattern>
     </servlet-mapping>
 
     <listener>
-        <listener-class>
-            com.sun.xml.ws.transport.http.servlet.WSServletContextListener
-        </listener-class>
+        <listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>
     </listener>
     <servlet>
         <servlet-name>OpenApiWsService</servlet-name>
-        <servlet-class>
-            com.sun.xml.ws.transport.http.servlet.WSServlet
-        </servlet-class>
-        <load-on-startup>1</load-on-startup>
+        <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>OpenApiWsService</servlet-name>
@@ -501,10 +455,9 @@
         <servlet-name>OpenApiRsService</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
-            <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>com.propertyvista.oapi.rs</param-value>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>com.propertyvista.oapi.OpenApiRsApplication</param-value>
         </init-param>
-        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>OpenApiRsService</servlet-name>
@@ -568,6 +521,5 @@
         <exception-type>com.pyx4j.rpc.shared.ContainerHandledUserRuntimeException</exception-type>
         <location>/static/errors/500.html</location>
     </error-page>
-
 
 </web-app>
