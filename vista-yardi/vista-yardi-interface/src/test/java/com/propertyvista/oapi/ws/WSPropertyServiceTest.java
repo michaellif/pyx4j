@@ -25,8 +25,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.propertyvista.oapi.model.BuildingIO;
+import com.propertyvista.oapi.model.BuildingsIO;
 
-public class WSPropertyServiceTest extends WSOapiTest {
+public class WSPropertyServiceTest extends WSOapiTestBase {
 
     @Before
     public void init() throws Exception {
@@ -59,19 +60,19 @@ public class WSPropertyServiceTest extends WSOapiTest {
     @Test
     public void testGetAllBuildings() throws Exception {
 
-//        PropertyServiceStub stub = new PropertyServiceStub(new URL(getAddress()));
-//
-//        PropertyService service = stub.getPropertyServicePort();
-//
-//        Map<String, Object> requestContext = ((BindingProvider) service).getRequestContext();
-//        requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress() + "?wsdl");
-//
-//        service.createBuilding(new BuildingRS("b1"));
-//        service.createBuilding(new BuildingRS("b2"));
-//
-//        BuildingsRS buildings = service.listAllBuildings();
+        WSPropertyServiceStub stub = new WSPropertyServiceStub(new URL(getAddress()));
 
-//        assertEquals(2, buildings.buildings.size());
+        WSPropertyService service = stub.getPropertyServicePort();
+
+        Map<String, Object> requestContext = ((BindingProvider) service).getRequestContext();
+        requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress() + "?wsdl");
+
+        service.createBuilding(new BuildingIO("b1"));
+        service.createBuilding(new BuildingIO("b2"));
+
+        BuildingsIO buildings = service.listAllBuildings();
+
+        assertEquals(0, buildings.buildings.size());
 
     }
 

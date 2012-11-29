@@ -27,7 +27,7 @@ import org.junit.Test;
 import com.propertyvista.oapi.model.LeaseIO;
 import com.propertyvista.oapi.ws.WSLeaseService;
 
-public class WSLeaseServiceTest extends WSOapiTest {
+public class WSLeaseServiceTest extends WSOapiTestBase {
 
     @Before
     public void init() throws Exception {

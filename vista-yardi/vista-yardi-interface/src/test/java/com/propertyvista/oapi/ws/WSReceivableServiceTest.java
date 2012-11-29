@@ -40,7 +40,7 @@ import com.propertyvista.oapi.xml.BigDecimalIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class WSReceivableServiceTest extends WSOapiTest {
+public class WSReceivableServiceTest extends WSOapiTestBase {
 
     @Before
     public void init() throws Exception {

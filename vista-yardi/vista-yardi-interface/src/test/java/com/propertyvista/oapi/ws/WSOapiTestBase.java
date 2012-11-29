@@ -18,19 +18,25 @@ import java.net.URL;
 
 import javax.xml.ws.Endpoint;
 
+import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.oapi.PortAllocator;
 
-public class WSOapiTest {
+public class WSOapiTestBase {
 
-    private static final Logger log = LoggerFactory.getLogger(WSOapiTest.class);
+    private static final Logger log = LoggerFactory.getLogger(WSOapiTestBase.class);
 
     private int port;
 
     private Class<?> serviceClass;
+
+    @Before
+    public void initDB() throws Exception {
+        VistaTestDBSetup.init();
+    }
 
     public int getPort() {
         return port;

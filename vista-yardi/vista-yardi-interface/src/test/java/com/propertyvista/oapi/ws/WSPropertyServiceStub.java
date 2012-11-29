@@ -3,6 +3,7 @@ package com.propertyvista.oapi.ws;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.jws.HandlerChain;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
@@ -11,6 +12,7 @@ import javax.xml.ws.WebServiceException;
 import javax.xml.ws.WebServiceFeature;
 
 @WebServiceClient(name = "WSPropertyServiceImplService", targetNamespace = "http://ws.oapi.propertyvista.com/", wsdlLocation = "http://localhost:8888/WS/WSPropertyService?wsdl")
+@HandlerChain(file = "client-handler-chain.xml")
 public class WSPropertyServiceStub extends Service {
 
     private final static URL IMPL_SERVICE_WSDL_LOCATION;

@@ -11,8 +11,10 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.yardi.jaxws;
+package com.propertyvista.oapi.ws;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
@@ -20,44 +22,45 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
-public class ServerMessageHandler implements SOAPHandler<SOAPMessageContext> {
+import com.propertyvista.oapi.ws.client.XmlFormatter;
+
+public class ClientMessageHandler implements SOAPHandler<SOAPMessageContext> {
 
     @Override
     public boolean handleMessage(SOAPMessageContext context) {
-        Boolean isRequest = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
-        System.out.println("Server : handleMessage(), request=" + isRequest);
 
-        //if this is a request, true for outbound messages, false for inbound
-        if (isRequest) {
-//            try {
-//                SOAPMessage soapMsg = context.getMessage();
-//                SOAPEnvelope soapEnv = soapMsg.getSOAPPart().getEnvelope();
-//
-//                soapEnv.addChildElement("TEST");
-//
-//                soapMsg.saveChanges();
-//
-//            } catch (SOAPException e) {
-//                System.err.println(e);
-//            }
+        Boolean isRequest = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        try {
+            System.out.println("===============" + (isRequest ? "REQUEST" : "RESPONSE") + "================");
+            context.getMessage().writeTo(stream);
+            stream.flush();
+            System.out.println(new XmlFormatter().format(stream.toString()));
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                stream.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         return true;
     }
 
     @Override
     public boolean handleFault(SOAPMessageContext context) {
-        System.out.println("Server : handleFault()......");
         return true;
     }
 
     @Override
     public void close(MessageContext context) {
-        System.out.println("Server : close()......");
     }
 
     @Override
     public Set<QName> getHeaders() {
-        System.out.println("Server : getHeaders()......");
         return null;
     }
 
