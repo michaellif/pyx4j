@@ -30,7 +30,6 @@ public class MarketingIO implements ElementIO {
     @XmlAttribute
     public Action action;
 
-    @XmlValue
     public StringIO name;
 
     public StringIO description;
