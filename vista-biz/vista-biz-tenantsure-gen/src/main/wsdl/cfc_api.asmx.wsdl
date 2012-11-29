@@ -1049,12 +1049,10 @@
       <wsdl:input name="OptionQuote" message="tns:OptionQuoteSoapIn"/>
       <wsdl:output name="OptionQuote" message="tns:OptionQuoteSoapOut"/>
     </wsdl:operation>
-<!--
     <wsdl:operation name="createQuote">
       <wsdl:input name="TerrorismQuote" message="tns:TerrorismQuoteSoapIn"/>
       <wsdl:output name="TerrorismQuote" message="tns:TerrorismQuoteSoapOut"/>
     </wsdl:operation>
--->
     <wsdl:operation name="requestDocument">
       <wsdl:input message="tns:requestDocumentSoapIn"/>
       <wsdl:output message="tns:requestDocumentSoapOut"/>
@@ -1188,7 +1186,6 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
-<!--
     <wsdl:operation name="createQuote">
       <soap:operation soapAction="http://api.cfcprograms.com/TerrorismQuote" style="document"/>
       <wsdl:input name="TerrorismQuote">
@@ -1198,7 +1195,6 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
--->
     <wsdl:operation name="requestDocument">
       <soap:operation soapAction="http://api.cfcprograms.com/requestDocument" style="document"/>
       <wsdl:input>
@@ -1427,7 +1423,6 @@
         <soap12:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
-<!--
     <wsdl:operation name="createQuote">
       <soap12:operation soapAction="http://api.cfcprograms.com/TerrorismQuote" style="document"/>
       <wsdl:input name="TerrorismQuote">
@@ -1437,7 +1432,6 @@
         <soap12:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
--->
     <wsdl:operation name="requestDocument">
       <soap12:operation soapAction="http://api.cfcprograms.com/requestDocument" style="document"/>
       <wsdl:input>
