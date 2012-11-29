@@ -15,6 +15,7 @@ package com.propertyvista.admin.server.services;
 
 import java.util.concurrent.Callable;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -67,6 +68,9 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
             @Override
             public Void call() {
                 CrmUser crmUser = Persistence.service().retrieve(CrmUser.class, credential.crmUser().getValue());
+                if (crmUser == null) {
+                    throw new UserRuntimeException("CRM USer not found");
+                }
                 CrmUserCredential crmCredential = Persistence.service().retrieve(CrmUserCredential.class, crmUser.getPrimaryKey());
 
                 dto.enabled().setValue(crmCredential.enabled().getValue());
