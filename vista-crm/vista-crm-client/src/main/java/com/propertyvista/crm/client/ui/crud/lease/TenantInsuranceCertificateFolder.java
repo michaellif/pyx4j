@@ -17,19 +17,23 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceByOtherProviderDetailsForm;
+import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceCertificateForm;
+import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceCertificateForm.TenantOwnerClickHandler;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 
 public class TenantInsuranceCertificateFolder extends VistaBoxFolder<InsuranceCertificate> {
 
-    public TenantInsuranceCertificateFolder() {
+    private final TenantOwnerClickHandler tenantOwnerClickHanlder;
+
+    public TenantInsuranceCertificateFolder(TenantOwnerClickHandler tenatOwnerClickHandler) {
         super(InsuranceCertificate.class);
+        this.tenantOwnerClickHanlder = tenatOwnerClickHandler;
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof InsuranceCertificate) {
-            return new TenantInsuranceByOtherProviderDetailsForm();
+            return new TenantInsuranceCertificateForm(true, tenantOwnerClickHanlder);
         }
         return super.create(member);
     }

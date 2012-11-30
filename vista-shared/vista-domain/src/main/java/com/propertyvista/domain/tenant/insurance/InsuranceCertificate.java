@@ -16,6 +16,7 @@ package com.propertyvista.domain.tenant.insurance;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -32,9 +33,13 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 @DiscriminatorValue("InsuranceCertificate")
 public interface InsuranceCertificate extends ApplicationDocumentHolder<InsuranceCertificateDocument> {
 
+    @Caption(name = "Owned By")
     @Owner
     @JoinColumn
     Tenant tenant();
+
+    /** <code>true</code> for certificates create via Property Vista integrated systems */
+    IPrimitive<Boolean> isPropertyVistaIntegratedProvider();
 
     @NotNull
     IPrimitive<String> insuranceProvider();

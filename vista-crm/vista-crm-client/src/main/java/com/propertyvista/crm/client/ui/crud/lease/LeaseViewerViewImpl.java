@@ -74,6 +74,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -134,7 +135,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         adjustmentLister = new ListerInternalViewImplBase<LeaseAdjustment>(new LeaseAdjustmentLister());
 
         // set main form here:
-        setForm(new LeaseForm());
+        setForm(new LeaseForm() {
+            @Override
+            public void onTenantInsuranceOwnerClicked(Tenant tenantId) {
+                ((LeaseViewerView.Presenter) getPresenter()).onInsuredTenantClicked(tenantId);
+            }
+        });
 
         // Actions:
 

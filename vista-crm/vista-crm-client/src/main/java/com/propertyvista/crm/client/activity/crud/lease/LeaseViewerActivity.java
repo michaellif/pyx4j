@@ -29,6 +29,7 @@ import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
@@ -51,6 +52,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -257,5 +259,10 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
                 populate();
             }
         }, getEntityId(), leaseEndDate);
+    }
+
+    @Override
+    public void onInsuredTenantClicked(Tenant tenantId) {
+        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Tenant.class, tenantId.getPrimaryKey()));
     }
 }

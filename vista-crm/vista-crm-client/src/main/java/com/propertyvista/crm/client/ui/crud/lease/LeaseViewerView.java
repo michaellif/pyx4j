@@ -29,6 +29,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -61,6 +62,8 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
          * This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)
          */
         void simpleLeaseRenew(LogicalDate leaseEndDate);
+
+        void onInsuredTenantClicked(Tenant tenantId);
     }
 
     IListerView<DepositLifecycleDTO> getDepositListerView();

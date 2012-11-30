@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceByOtherProviderDetailsForm;
+import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceCertificateForm;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
 
@@ -27,7 +27,7 @@ public class TenantInsuranceByOtherProviderUpdateViewImpl extends BasicViewImpl<
     private static final I18n i18n = I18n.get(TenantInsuranceByOtherProviderUpdateViewImpl.class);
 
     public TenantInsuranceByOtherProviderUpdateViewImpl() {
-        setForm(new TenantInsuranceByOtherProviderDetailsForm());
+        setForm(new TenantInsuranceCertificateForm());
     }
 
     @Override
@@ -37,7 +37,7 @@ public class TenantInsuranceByOtherProviderUpdateViewImpl extends BasicViewImpl<
 
     @Override
     public void setMinRequiredLiability(BigDecimal minRequiredLiability) {
-        ((TenantInsuranceByOtherProviderDetailsForm) form).setMinRequiredLiability(minRequiredLiability);
+        ((TenantInsuranceCertificateForm) form).setMinRequiredLiability(minRequiredLiability);
     }
 
 }
