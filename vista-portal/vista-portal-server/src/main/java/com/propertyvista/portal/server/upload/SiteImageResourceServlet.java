@@ -69,6 +69,7 @@ public class SiteImageResourceServlet extends HttpServlet {
         Key key = null;
         // check if logo was requested
         if (segments[1].startsWith("logo.")) {
+            // portal logo
             SiteDescriptor descriptor = SiteThemeServicesImpl.getSiteDescriptorFromCache();
             if (descriptor.logo().size() == 0) {
                 log.debug("descriptor has no logos");
@@ -90,6 +91,15 @@ public class SiteImageResourceServlet extends HttpServlet {
                 // TODO define default locale per PMC; use first one for now
                 key = descriptor.logo().get(0).imageResource().getPrimaryKey();
             }
+        } else if (segments[1].startsWith("logo-crm.")) {
+            // crm logo
+            SiteDescriptor descriptor = SiteThemeServicesImpl.getSiteDescriptorFromCache();
+            if (descriptor.crmLogo().isEmpty()) {
+                log.debug("descriptor has no logos");
+                response.setStatus(HttpServletResponse.SC_GONE);
+                return;
+            }
+            key = descriptor.crmLogo().getPrimaryKey();
         } else {
             String id = segments[2];
             if (CommonsStringUtils.isEmpty(id) || "0".equals(id)) {

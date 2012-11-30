@@ -86,6 +86,8 @@ public interface SiteDescriptor extends Descriptor {
 
     IPrimitive<Boolean> disableBuildingDetails();
 
+    SiteImageResource crmLogo();
+
     @Owned
     SitePalette sitePalette();
 

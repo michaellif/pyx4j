@@ -8,7 +8,7 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Jan 30, 2012
- * @author dev_vista
+ * @author stanp
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.settings.content.site;
@@ -159,7 +159,7 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResourc
         }
     }
 
-    class SiteImageThumbnail extends Image {
+    public static class SiteImageThumbnail extends Image {
         private double thumbSize = 80;
 
         public SiteImageThumbnail() {

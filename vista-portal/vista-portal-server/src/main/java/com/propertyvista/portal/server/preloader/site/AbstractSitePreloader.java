@@ -217,6 +217,8 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
         createLogo(site, siteLocale);
 
+        createCrmLogo(site);
+
         Persistence.service().persist(site);
         return null;
     }
@@ -471,6 +473,15 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         news.date().setValue(date);
 
         return news;
+    }
+
+    private void createCrmLogo(SiteDescriptor site) {
+        String cType = "image/png";
+        SiteImageResource siteImage = makeSiteImage("crm-logo.png", cType);
+        if (siteImage == null) {
+            siteImage = makeSiteImage("logo.png", cType);
+        }
+        site.crmLogo().set(siteImage);
     }
 
     private void createLogo(SiteDescriptor site, List<LocaleInfo> siteLocale) {

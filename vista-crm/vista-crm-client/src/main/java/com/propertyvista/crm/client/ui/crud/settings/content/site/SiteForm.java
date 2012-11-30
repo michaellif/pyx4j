@@ -17,28 +17,42 @@ import java.util.EnumSet;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkDialog;
 
+import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.settings.content.site.PortalImageResourceFolder.SiteImageThumbnail;
+import com.propertyvista.domain.File;
 import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
 
     private static final I18n i18n = I18n.get(SiteForm.class);
+
+    private final SiteImageThumbnail thumb = new SiteImageThumbnail();
 
     public SiteForm() {
         this(false);
@@ -70,6 +84,45 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableMapView()), 10).build());
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableBuildingDetails()), 10).build());
 
+        HorizontalPanel imageLinkContainer = new HorizontalPanel();
+        imageLinkContainer.setWidth("100%");
+        content.setH1(row++, 0, 1, proto().crmLogo().getMeta().getCaption());
+        content.setWidget(row++, 0, imageLinkContainer);
+        imageLinkContainer.add(inject(proto().crmLogo(), new CFile<File>(new Command() {
+            @Override
+            public void execute() {
+                OkDialog dialog = new OkDialog(getValue().crmLogo().fileName().getValue()) {
+                    @Override
+                    public boolean onClickOk() {
+                        return true;
+                    }
+                };
+                dialog.setBody(new Image(MediaUtils.createSiteImageResourceUrl(getValue().crmLogo())));
+                dialog.center();
+            }
+        }) {
+            @Override
+            public void showFileSelectionDialog() {
+                SiteImageResourceProvider provider = new SiteImageResourceProvider();
+                provider.selectResource(new AsyncCallback<SiteImageResource>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        MessageDialog.error(i18n.tr("Action Failed"), caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(SiteImageResource rc) {
+                        setValue(rc);
+                        thumb.setUrl(MediaUtils.createSiteImageResourceUrl(rc));
+                    }
+                });
+            }
+        }));
+        imageLinkContainer.add(thumb);
+        imageLinkContainer.setCellVerticalAlignment(imageLinkContainer.getWidget(0), HasVerticalAlignment.ALIGN_MIDDLE);
+        imageLinkContainer.getWidget(0).setWidth("400px");
+        imageLinkContainer.setCellWidth(thumb, "200px");
+
         content.setH1(row++, 0, 1, proto().locales().getMeta().getCaption());
         content.setWidget(row++, 0, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
 
@@ -96,6 +149,13 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
 
         selectTab(addTab(content));
 
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        thumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().crmLogo()));
     }
 
     class GadgetSelectorDialog extends SelectEnumDialog<HomePageGadget.GadgetType> {

@@ -49,4 +49,8 @@ public class MediaUtils {
     public static String createSiteLogoUrl() {
         return ClentNavigUtils.getDeploymentBaseURL() + "/logo.png" + DeploymentConsts.siteImageResourceServletMapping;
     }
+
+    public static String createCrmLogoUrl() {
+        return ClentNavigUtils.getDeploymentBaseURL() + "/logo-crm.png" + DeploymentConsts.siteImageResourceServletMapping;
+    }
 }

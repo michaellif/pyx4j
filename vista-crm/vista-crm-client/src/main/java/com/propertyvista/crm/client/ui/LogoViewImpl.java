@@ -48,7 +48,7 @@ public class LogoViewImpl extends SimplePanel implements LogoView {
     public LogoViewImpl() {
         HasClickHandlers logoElement;
         if (useLogoImage) {
-            Image logoImage = new Image(MediaUtils.createSiteLogoUrl());
+            Image logoImage = new Image(MediaUtils.createCrmLogoUrl());
             logoImage.getElement().getStyle().setProperty("maxHeight", "50px");
             logoImage.getElement().getStyle().setMarginLeft(20, Unit.PX);
             logoImage.getElement().getStyle().setMarginTop(4, Unit.PX);
