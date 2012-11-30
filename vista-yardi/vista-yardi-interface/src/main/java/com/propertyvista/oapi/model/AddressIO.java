@@ -35,8 +35,6 @@ public class AddressIO extends AbstractElementIO {
     //mandatory for portal
     public StreetTypeIO streetType;
 
-    public StringIO unitNumber;
-
     //mandatory for portal
     public StringIO city;
 

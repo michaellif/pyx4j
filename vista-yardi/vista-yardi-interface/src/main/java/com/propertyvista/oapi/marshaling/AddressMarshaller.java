@@ -78,13 +78,21 @@ public class AddressMarshaller implements Marshaller<AddressStructured, AddressI
         EntityQueryCriteria<Province> provinceCriteria = EntityQueryCriteria.create(Province.class);
         provinceCriteria.add(PropertyCriterion.eq(provinceCriteria.proto().name(), name));
         List<Province> provinces = Persistence.service().query(provinceCriteria);
-        return provinces.get(1);
+        if (provinces.size() > 0) {
+            return provinces.get(0);
+        } else {
+            return null;
+        }
     }
 
     private Country getCountry(String name) {
         EntityQueryCriteria<Country> countryCriteria = EntityQueryCriteria.create(Country.class);
         countryCriteria.add(PropertyCriterion.eq(countryCriteria.proto().name(), name));
         List<Country> countries = Persistence.service().query(countryCriteria);
-        return countries.get(1);
+        if (countries.size() > 0) {
+            return countries.get(0);
+        } else {
+            return null;
+        }
     }
 }
