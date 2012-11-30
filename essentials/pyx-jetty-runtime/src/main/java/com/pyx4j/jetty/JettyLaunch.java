@@ -24,14 +24,12 @@ import java.io.File;
 import java.net.ServerSocket;
 import java.util.TimeZone;
 
-import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.server.NCSARequestLog;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -107,8 +105,7 @@ public abstract class JettyLaunch {
             sslContextFactory.setKeyStorePath("./src/test/ssl/jetty.keystore");
             sslContextFactory.setKeyManagerPassword("123456");
 
-            SslConnectionFactory ssl = new SslConnectionFactory(sslContextFactory, HttpVersion.HTTP_1_1.asString());
-            ServerConnector connector = new ServerConnector(server, ssl);
+            ServerConnector connector = new ServerConnector(server, sslContextFactory);
             connector.setPort(jettyLaunch.getServerSslPort());
             server.addConnector(connector);
         }
