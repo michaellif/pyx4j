@@ -186,6 +186,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
     private void createInsuranceCertificate(Tenant tenantId, String insuranceCertifiateNumber, InsuranceTenantSure ts) {
         InsuranceCertificate ic = EntityFactory.create(InsuranceCertificate.class);
+        ic.isPropertyVistaIntegratedProvider().setValue(true);
         ic.tenant().set(tenantId);
 
         ic.insuranceProvider().setValue(TenantSureConstants.TENANTSURE_LEGAL_NAME);
@@ -248,6 +249,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         validateIsCancellable(insuranceTenantSure);
 
+        insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         insuranceTenantSure.status().setValue(Status.PendingCancellation);
         insuranceTenantSure.cancellation().setValue(CancellationType.CancelledByTenant);
 
@@ -268,6 +270,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         validateIsCancellable(insuranceTenantSure);
 
+        insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         insuranceTenantSure.status().setValue(Status.PendingCancellation);
         insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
 
@@ -287,6 +290,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         validateIsCancellable(insuranceTenantSure);
 
+        insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         insuranceTenantSure.status().setValue(expiryDate.compareTo(new LogicalDate()) < 0 ? Status.PendingCancellation : Status.Cancelled);
         insuranceTenantSure.cancellation().setValue(CancellationType.CancelledByTenantSure);
         insuranceTenantSure.cancellationDescriptionReasonFromTenantSure().setValue(cancellationReason);

@@ -88,6 +88,9 @@ public interface InsuranceTenantSure extends IEntity {
 
     IPrimitive<LogicalDate> expiryDate();
 
+    /** a date when cancellation command has been issued */
+    IPrimitive<LogicalDate> cancellationDate();
+
     @Format("#,##0.00")
     IPrimitive<BigDecimal> monthlyPayable();
 
