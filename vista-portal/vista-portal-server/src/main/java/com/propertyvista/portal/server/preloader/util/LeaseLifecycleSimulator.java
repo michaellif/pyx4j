@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -59,7 +62,9 @@ import com.propertyvista.generator.util.RandomUtil;
 
 public class LeaseLifecycleSimulator {
 
-    private final static boolean isDebugged = false;
+    private static final Logger log = LoggerFactory.getLogger(LeaseLifecycleSimulator.class);
+
+    private final static boolean debug = false;
 
     private final static Random RND = new Random(1);
 
@@ -136,6 +141,9 @@ public class LeaseLifecycleSimulator {
     }
 
     public void generateRandomLifeCycle(Lease lease) {
+        if (debug) {
+            log.info("-- Start new RandomLifeCycle for Lease {} from {}", lease.getPrimaryKey(), simStart);
+        }
 
         Persistence.service().setTransactionSystemTime(simStart);
         if (lease.unit()._availableForRent().isNull()) {
@@ -206,11 +214,17 @@ public class LeaseLifecycleSimulator {
 
     private void queueEvent(LogicalDate fireOn, LeaseEvent event) {
         events.add(new LeaseEventContainer(fireOn, event));
+        if (debug) {
+            log.info("QueueEvent: {} {}", fireOn, event.getClass().getSimpleName());
+        }
     }
 
     private void processNextEvent() {
         LeaseEventContainer container = events.poll();
         Persistence.service().setTransactionSystemTime(container.date());
+        if (debug) {
+            log.info("ProcessEvent: {} {}", container.date(), container.event().getClass().getSimpleName());
+        }
         container.event().exec();
         Persistence.service().commit();
     }
@@ -263,11 +277,11 @@ public class LeaseLifecycleSimulator {
                 Persistence.service().persist(tenant.leaseParticipant().customer().personScreening());
             }
 
-            if (isDebugged) {
-                System.out.println("" + now() + " created lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
+            if (debug) {
+                log.info("" + now() + " created lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
                         + lease.currentTerm().termTo().getValue());
-                System.out.println(lease.toString());
-                System.out.println("***");
+                log.debug(lease.toString());
+                log.info("***");
             }
             // TODO change that to Employee Agent Decision
             queueEvent(hasImmideateApproval ? now() : rndBetween(now(), lease.leaseFrom().getValue()), new ApproveApplication(lease));
@@ -284,7 +298,7 @@ public class LeaseLifecycleSimulator {
         public void exec() {
             ServerSideFactory.create(LeaseFacade.class).approveApplication(lease, null, "simulation");
 
-            if (isDebugged) {
+            if (debug) {
                 System.out.println("" + now() + " approved lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
                         + lease.currentTerm().termTo().getValue());
                 System.out.println("***");
@@ -303,7 +317,7 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             ServerSideFactory.create(LeaseFacade.class).activate(lease);
-            if (isDebugged) {
+            if (debug) {
                 System.out.println("" + now() + " activated lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
                         + lease.currentTerm().termTo().getValue());
                 System.out.println("***");
@@ -372,7 +386,7 @@ public class LeaseLifecycleSimulator {
 
             if (bill != null && !bill.totalDueAmount().getValue().equals(BigDecimal.ZERO)) {
                 BigDecimal amount = tenantAgent.pay(bill);
-                if (isDebugged) {
+                if (debug) {
                     System.out.println("" + now() + " payed " + amount);
                 }
                 PaymentRecord payment = receivePayment(amount);
@@ -467,7 +481,7 @@ public class LeaseLifecycleSimulator {
                         billing.runBilling(lease);
                         billing.confirmBill(billing.getLatestBill(lease));
 
-                        if (isDebugged) {
+                        if (debug) {
                             System.out.println("" + now() + " executed run billing lease: " + lease.leaseId().getValue() + " "
                                     + lease.currentTerm().termFrom().getValue() + " - " + lease.currentTerm().termTo().getValue());
                             System.out.println("***");
@@ -490,13 +504,18 @@ public class LeaseLifecycleSimulator {
     private class Notice extends AbstractLeaseEvent {
 
         public Notice(Lease lease) {
-            super(0, lease);
+            super(400, lease);
         }
 
         @Override
         public void exec() {
-            ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, now(), lease.currentTerm().termTo().getValue(),
-                    null);
+            lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
+            if (lease.status().getValue() == Lease.Status.Active) {
+                ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, now(), lease.currentTerm().termTo().getValue(),
+                        null);
+            } else if (debug) {
+                log.info("Notice not given");
+            }
         }
     }
 
@@ -518,15 +537,15 @@ public class LeaseLifecycleSimulator {
     private class Complete extends AbstractLeaseEvent {
 
         public Complete(Lease lease) {
-            super(500, lease);
+            super(600, lease);
         }
 
         @Override
         public void exec() {
             lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            if (lease.status().getValue() == Lease.Status.Active) {
-                ServerSideFactory.create(LeaseFacade.class).complete(lease);
-            }
+            //if (lease.status().getValue() == Lease.Status.Active) {
+            ServerSideFactory.create(LeaseFacade.class).complete(lease);
+            //}
         }
     }
 

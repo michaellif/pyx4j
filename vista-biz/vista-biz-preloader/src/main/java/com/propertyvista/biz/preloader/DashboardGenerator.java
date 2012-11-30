@@ -39,7 +39,10 @@ import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMet
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.demo.OccupancyChartGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.demo.OutstandingMaintenanceChartGadgetMetadata;
 import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
+import com.propertyvista.shared.config.VistaDemo;
 
 @SuppressWarnings("unchecked")
 public class DashboardGenerator {
@@ -101,12 +104,21 @@ public class DashboardGenerator {
     }
 
     private DashboardMetadata makeDefaultSystemDashboard() {
-        return makeSystemDashboard(//@formatter:off
+        if (VistaDemo.isDemo()) {
+            return makeSystemDashboard(//@formatter:off
                 i18n.tr("System"),
                 i18n.tr("Displays default system data"),
-                BuildingListerGadgetMetadata.class                
+                BuildingListerGadgetMetadata.class, 
+                OutstandingMaintenanceChartGadgetMetadata.class ,               
+                OccupancyChartGadgetMetadata.class                
         );//@formatter:on
-
+        } else {
+            return makeSystemDashboard(//@formatter:off
+                    i18n.tr("System"),
+                    i18n.tr("Displays default system data"),
+                    BuildingListerGadgetMetadata.class                
+            );//@formatter:on            
+        }
     }
 
     private DashboardMetadata makeDashboard(String name, String description, Class<? extends GadgetMetadata>... gadgetMetadatas) {
@@ -128,5 +140,4 @@ public class DashboardGenerator {
         dm.type().setValue(DashboardType.system);
         return dm;
     }
-
 }

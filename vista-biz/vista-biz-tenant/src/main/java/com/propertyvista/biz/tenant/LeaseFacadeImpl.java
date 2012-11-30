@@ -680,7 +680,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
         // if not moving out:  
         if (lease.completion().isNull()) {
-            throw new IllegalStateException("Lease has no completion mark");
+            throw new IllegalStateException(SimpleMessageFormat.format("Lease " + leaseId.getPrimaryKey() + " has no completion event"));
         }
 
         lease.actualMoveOut().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));

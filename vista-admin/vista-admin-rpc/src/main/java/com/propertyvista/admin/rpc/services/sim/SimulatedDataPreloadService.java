@@ -20,6 +20,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+//TODO Remove , use data preloaders
+@Deprecated
 public interface SimulatedDataPreloadService extends IService {
 
     void generateArrearsHistory(AsyncCallback<VoidSerializable> callback);

@@ -36,6 +36,8 @@ import com.propertyvista.domain.dashboard.gadgets.type.demo.CounterGadgetDemoGad
 import com.propertyvista.domain.dashboard.gadgets.type.demo.DemoGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.demo.GaugeGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.demo.LineChartGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.demo.OccupancyChartGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.demo.OutstandingMaintenanceChartGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.demo.PieChart2DGadgetMetadata;
 import com.propertyvista.server.common.gadgets.defaultsettings.ArrearsStatusGadgetMetadataDefaultSettings;
 import com.propertyvista.server.common.gadgets.defaultsettings.ArrearsYOYAnalysisChartGadgetMetadataDefaultSettings;
@@ -73,6 +75,8 @@ public final class GadgetMetadataRepository extends GadgetMetadataRepositoryBase
                 
                 // STUPID GADGETS
                 bind(BuildingListerGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
+                bind(OccupancyChartGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
+                bind(OutstandingMaintenanceChartGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
                 
                 // DEMO GADGETS (in lexicographic order)
                 bind(BarChart2DGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),

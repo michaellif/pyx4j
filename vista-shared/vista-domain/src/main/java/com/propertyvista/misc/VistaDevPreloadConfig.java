@@ -30,6 +30,10 @@ public final class VistaDevPreloadConfig implements Serializable {
 
     public boolean mockupData = false;
 
+    public int updateArrearsHistorNumOfYearsBack = 4;
+
+    public int maintenanceRequestsDaysBack = 60;
+
     public int maxPropertyManagers = DemoData.UserType.PM.getDefaultMax();
 
     public int maxPropertyManagementEmployee = DemoData.UserType.EMP.getDefaultMax();
@@ -87,6 +91,14 @@ public final class VistaDevPreloadConfig implements Serializable {
 
     public static VistaDevPreloadConfig createDefault() {
         return new VistaDevPreloadConfig();
+    }
+
+    public static VistaDevPreloadConfig createMockup() {
+        VistaDevPreloadConfig config = createDefault();
+        config.mockupData = true;
+        //config.numOfPseudoRandomLeasesWithSimulatedBilling = (config.numResidentialBuildings / 2) * config.numUnitsPerFloor * config.numFloorplans;
+        config.numOfPseudoRandomLeasesWithSimulatedBilling = 10;
+        return config;
     }
 
     public static VistaDevPreloadConfig createTest() {

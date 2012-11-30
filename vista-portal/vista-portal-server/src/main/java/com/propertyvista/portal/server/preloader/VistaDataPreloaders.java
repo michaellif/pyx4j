@@ -41,24 +41,6 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         add(new DashboardPreloader());
         add(new RefferenceDataPreloader());
 
-        if (production) {
-            //DEMO add(new ProdSitePreloader());            
-        } else {
-
-            add(new UserPreloader());
-            add(new CampaignPreloader());
-
-            PmcDataPreloader pmcDataPreloader = new PmcDataPreloader();
-            if (pmcDataPreloader.hasData()) {
-                add(pmcDataPreloader);
-            } else {
-                add(new BuildingPreloader());
-            }
-
-            add(new LeasePreloader());
-            add(new PreloadNewTenantsAndLeads());
-        }
-
         //DEMO Different data for different PMC
         DemoPmc demoPmc;
         try {
@@ -91,6 +73,26 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             default:
                 add(new ProdSitePreloader());
             }
+        }
+
+        if (production) {
+            //DEMO add(new ProdSitePreloader());            
+        } else {
+
+            add(new UserPreloader());
+            add(new CampaignPreloader());
+
+            PmcDataPreloader pmcDataPreloader = new PmcDataPreloader();
+            if (pmcDataPreloader.hasData()) {
+                add(pmcDataPreloader);
+            } else {
+                add(new BuildingPreloader());
+            }
+
+            add(new LeasePreloader());
+            add(new PreloadNewTenantsAndLeads());
+            add(new UpdateArrearsHistoryDevPreloader());
+            add(new MaintenanceRequestsDevPreloader());
         }
     }
 

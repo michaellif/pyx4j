@@ -44,6 +44,8 @@ import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.server.jobs.UpdateArrearsProcess;
 
+//TODO Remove , use data preloaders
+@Deprecated
 public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadService {
 
     private static final Logger log = LoggerFactory.getLogger(SimulatedDataPreloadServiceImpl.class);

@@ -13,6 +13,9 @@
  */
 package com.propertyvista.server.rdb;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,9 +48,11 @@ public class VistaDBReset {
     private static final Logger log = LoggerFactory.getLogger(VistaDBReset.class);
 
     public static void main(String[] args) {
+        List<String> arguments = Arrays.asList(args);
+
         long totalStart = System.currentTimeMillis();
         VistaServerSideConfiguration conf;
-        if ((args.length > 0) && (args[0].equals("--postgre"))) {
+        if (arguments.contains("--postgre")) {
             log.info("Use PostgreSQL");
             conf = new VistaServerSideConfigurationDevPostgreSQL();
         } else {
@@ -84,12 +89,10 @@ public class VistaDBReset {
             }
 
             DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
-            if ((args != null) && (args.length > 0)) {
-                VistaDevPreloadConfig cfg = VistaDevPreloadConfig.createDefault();
-                if (args[0].equals("--mockup")) {
-                    cfg.mockupData = true;
-                    preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), cfg);
-                }
+            VistaDevPreloadConfig cfg = VistaDevPreloadConfig.createDefault();
+            if (arguments.contains("--mockup")) {
+                cfg = VistaDevPreloadConfig.createMockup();
+                preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), cfg);
             }
 
             try {

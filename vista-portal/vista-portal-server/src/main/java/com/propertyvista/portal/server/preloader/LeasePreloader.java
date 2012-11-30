@@ -16,7 +16,6 @@ package com.propertyvista.portal.server.preloader;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Random;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -24,6 +23,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
@@ -43,8 +43,6 @@ import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSimulator.Le
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 
 public class LeasePreloader extends BaseVistaDevDataPreloader {
-
-    private static Random RND = new Random(1l);
 
     @Override
     public String create() {
@@ -125,18 +123,32 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 } else {
                     Calendar cal = new GregorianCalendar();
                     cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
-                    cal.add(Calendar.YEAR, -1);
+                    if (config().mockupData) {
+                        cal.add(Calendar.YEAR, -2);
+                    } else {
+                        cal.add(Calendar.YEAR, -1);
+                    }
                     simBuilder.start(new LogicalDate(cal.getTime()));
 
-                    cal.setTime(new LogicalDate());
-                    if (i % 2 == 0) {
-                        // produce lease completed by the day of the preload run
-                        cal.add(Calendar.MONTH, -1 - (RND.nextInt() % 4));
-                        simBuilder.leaseTo(new LogicalDate(cal.getTime()));
-                    } else {
-                        // produce a lease that ends after the day of the preload run 
-                        cal.add(Calendar.MONTH, 1 + RND.nextInt() % 4);
-                        simBuilder.leaseTo(new LogicalDate(cal.getTime()));
+                    // To 
+                    {
+                        Calendar leaseToCal = new GregorianCalendar();
+                        leaseToCal.setTime(new LogicalDate());
+                        int month;
+
+                        if (config().mockupData) {
+                            month = DataGenerator.randomInt(11);
+                        } else {
+                            month = DataGenerator.randomInt(4);
+                        }
+                        if (i % 2 == 0) {
+                            // produce lease completed by the day of the preload run
+                            leaseToCal.add(Calendar.MONTH, -1 - month);
+                        } else {
+                            // produce a lease that ends after the day of the preload run 
+                            leaseToCal.add(Calendar.MONTH, 1 + month);
+                        }
+                        simBuilder.leaseTo(new LogicalDate(leaseToCal.getTime()));
                     }
 
                     simBuilder.end(new LogicalDate());
@@ -147,6 +159,23 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 }
 
                 simBuilder.create().generateRandomLifeCycle(lease);
+                // Add Turnover
+                lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
+                if (lease.status().getValue().isFormer()) {
+                    // Create new Lease for the same unit
+                    unit = makeAvailable(Persistence.service().retrieve(AptUnit.class, unit.getPrimaryKey()));
+                    Lease lease2 = generator.createLeaseWithTenants(unit);
+
+                    Calendar leaseFrom = new GregorianCalendar();
+                    leaseFrom.setTime(lease.leaseTo().getValue());
+                    leaseFrom.add(Calendar.MONTH, 2);
+                    lease2.leaseFrom().setValue(new LogicalDate(leaseFrom.getTime()));
+
+                    LeaseLifecycleSimulatorBuilder simBuilder2 = LeaseLifecycleSimulator.sim();
+                    simBuilder2.start(new LogicalDate(leaseFrom.getTime()));
+                    simBuilder2.end(new LogicalDate());
+                    simBuilder2.create().generateRandomLifeCycle(lease2);
+                }
             }
 
             numCreated++;
@@ -244,6 +273,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
     private LogicalDate getStatusFromDate(AptUnit unit) {
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
+        criteria.desc(criteria.proto().dateFrom());
         AptUnitOccupancySegment segment = Persistence.service().retrieve(criteria);
 
         if (segment == null || segment.status().getValue() != AptUnitOccupancySegment.Status.pending) {

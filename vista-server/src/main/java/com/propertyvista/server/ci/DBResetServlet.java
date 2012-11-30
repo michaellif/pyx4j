@@ -359,8 +359,7 @@ public class DBResetServlet extends HttpServlet {
         case addPmcMockupTest1:
         case allAddMockup:
         case allWithMockup:
-            cfg = VistaDevPreloadConfig.createDefault();
-            cfg.mockupData = true;
+            cfg = VistaDevPreloadConfig.createMockup();
             break;
         case vistaMini:
         case allMini:
