@@ -13,7 +13,6 @@
  */
 package com.propertyvista.oapi.ws;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.jws.WebService;
@@ -39,8 +38,15 @@ public class WSReceivableServiceImpl implements WSReceivableService {
     }
 
     @Override
-    public List<PaymentRecordIO> getPaymentRecords(Date date) {
+    public List<PaymentRecordIO> getNonProcessedPaymentRecords() {
+        // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void reconcilePaymentRecords(List<PaymentRecordIO> records) {
+        // TODO Auto-generated method stub
+
     }
 
 }

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.oapi.ws;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.jws.WebParam;
@@ -34,7 +33,8 @@ public interface WSReceivableService {
 
     void runBilling(String buildingCode);
 
-    //TODO change to LogicalDate
-    List<PaymentRecordIO> getPaymentRecords(Date date);
+    List<PaymentRecordIO> getNonProcessedPaymentRecords();
+
+    void reconcilePaymentRecords(List<PaymentRecordIO> records);
 
 }

@@ -13,8 +13,15 @@
  */
 package com.propertyvista.oapi.model;
 
+import javax.xml.bind.annotation.XmlAttribute;
+
 import com.propertyvista.oapi.xml.AbstractElementIO;
 
 public class PaymentRecordIO extends AbstractElementIO {
+
+    @XmlAttribute
+    public String transactionId;
+
+    public String externalTransactionId;
 
 }

@@ -32,6 +32,7 @@ public class WSPropertyServiceTest extends WSOapiTestBase {
     @Before
     public void init() throws Exception {
         publish(WSPropertyService.class);
+        preloadData();
     }
 
     @Test

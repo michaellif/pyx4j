@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.oapi.PortAllocator;
+import com.propertyvista.test.preloader.LocationsDataModel;
+import com.propertyvista.test.preloader.PreloadConfig;
 
 public class WSOapiTestBase {
 
@@ -70,6 +72,13 @@ public class WSOapiTestBase {
         con.connect();
         int code = con.getResponseCode();
         return code;
+    }
+
+    protected void preloadData() {
+        PreloadConfig config = new PreloadConfig();
+        LocationsDataModel locationsDataModel = new LocationsDataModel(config);
+        locationsDataModel.generate();
+
     }
 
 }

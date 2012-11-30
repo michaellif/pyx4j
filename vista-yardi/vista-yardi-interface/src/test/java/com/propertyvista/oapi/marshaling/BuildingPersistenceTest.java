@@ -18,15 +18,16 @@ import org.junit.Test;
 
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.oapi.model.BuildingIO;
+import com.propertyvista.oapi.ws.WSOapiTestBase;
 
-public class BuildingPersistenceTest {
+public class BuildingPersistenceTest extends WSOapiTestBase {
 
+    @Override
     @Before
-    public void initDB() throws Exception {
-        VistaTestDBSetup.init();
+    public void preloadData() {
+        super.preloadData();
     }
 
     @Test
