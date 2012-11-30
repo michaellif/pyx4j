@@ -26,6 +26,7 @@ import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.Locale;
+import java.util.TreeMap;
 
 public abstract class HostConfig {
 
@@ -97,7 +98,7 @@ public abstract class HostConfig {
     public static String getHardwareAddress() {
         try {
             Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
-            StringBuilder macAddress = new StringBuilder();
+            TreeMap<String, byte[]> macByName = new TreeMap<String, byte[]>();
             while (en.hasMoreElements()) {
                 NetworkInterface itf = en.nextElement();
                 if (itf.isLoopback() || itf.isVirtual() || !itf.isUp() || itf.getName() == null) {
@@ -107,14 +108,18 @@ public abstract class HostConfig {
                     continue;
                 }
                 byte[] mac = itf.getHardwareAddress();
+                macByName.put(itf.getName(), mac);
+            }
+            if (macByName.isEmpty()) {
+                throw new Error("NetworkInterface not found");
+            } else {
+                byte[] mac = macByName.firstEntry().getValue();
+                StringBuilder macAddress = new StringBuilder();
                 for (byte b : mac) {
                     macAddress.append(String.valueOf(b));
                 }
+                return macAddress.toString();
             }
-            if (macAddress.length() == 0) {
-                throw new Error("NetworkInterface not found");
-            }
-            return macAddress.toString();
         } catch (IOException e) {
             throw new Error(e);
         }
