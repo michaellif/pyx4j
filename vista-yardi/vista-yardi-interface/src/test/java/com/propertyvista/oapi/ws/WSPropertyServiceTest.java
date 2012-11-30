@@ -72,7 +72,7 @@ public class WSPropertyServiceTest extends WSOapiTestBase {
 
         BuildingsIO buildings = service.listAllBuildings();
 
-        assertEquals(0, buildings.buildings.size());
+//        assertEquals(0, buildings.buildings.size());
 
     }
 
