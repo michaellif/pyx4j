@@ -1,0 +1,59 @@
+.vista-pmsite-residentPage {
+    color: ${foreground_100};
+}
+
+.vista-pmsite-residentPage .vista-pmsite-content {
+		min-height: 500px;
+}
+
+.vista-pmsite-residentPage .vista-pmsite-mainWrap {
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
+	background: ${object2_10};
+}
+.vista-pmsite-residentPage .caption {
+	height: 80px;
+	overflow: hidden;
+	padding: 40px 0 0 30px;
+}
+.vista-pmsite-residentPage .secondaryNavig {
+	padding: 35px 0;
+	width: 211px;
+	float: left;
+	min-height: 400px;
+//	border-right:1px solid ${foreground_20};
+}
+
+.vista-pmsite-residentPage .secondaryNavig ul {
+	list-style: none outside none;
+	margin: 0;
+	padding: 0;
+}
+
+.vista-pmsite-residentPage .secondaryNavig ul li {
+	color: ${object2_100};
+	font-size: 15px;
+	font-weight:bold;
+	height: 38px;
+	overflow: hidden;
+	padding: 0 10px 0 35px;
+}
+
+
+.vista-pmsite-residentPage .secondaryNavig ul li:hover div {
+	border-bottom:1px solid ${object2_100};
+}
+
+.vista-pmsite-residentPage .secondaryNavig ul li.active div {
+	border-bottom:2px solid ${object2_100};
+}
+
+.vista-pmsite-residentPage .vista-pmsite-main .content {
+	min-height: 396px;
+	color: ${contrast1_100};
+	background: ${foreground_10};
+//	border-top:1px solid ${foreground_20};
+	line-height: 20px;
+	overflow: hidden;
+}

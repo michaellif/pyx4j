@@ -1,0 +1,66 @@
+.vista-pmsite-pwdChangePage {
+    color: ${foreground_100};
+    font-size: 16px;
+}
+
+.vista-pmsite-pwdChangePage .vista-pmsite-mainWrap {
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
+	border-left: solid 1px ${object2_20};
+	border-right: solid 1px ${object2_20};
+	background: ${object2_10};
+}
+
+.vista-pmsite-pwdChangePage .vista-pmsite-content .caption {
+	background-size: 100% 100%;
+	background: ${object2_90};
+	height: 70px;
+	overflow: hidden;
+	padding: 0 0 0 30px;
+}
+
+.vista-pmsite-pwdChangePage .vista-pmsite-content .caption h1 {
+	font-size: 36px;
+	font-weight: normal;
+	line-height: 70px;
+	color: ${object2_10};
+}
+
+.vista-pmsite-pwdChangePage .content {
+	min-height: 396px;
+	color: ${foreground_100};
+	border-top:1px solid ${foreground_20};
+	line-height: 20px;
+	overflow: hidden;
+	padding: 30px 30px 0;
+}
+.vista-pmsite-pwdChangePage .pwdChangeFormWrap {
+	padding:20px;
+}
+
+.vista-pmsite-pwdChangePage .pwdChangeFormWrap input[type=submit] {
+	background: ${object1_100};
+	border: 2px solid ${object1_100};
+	color: ${object1_10};
+	cursor: pointer;
+	font-size: 16px;
+	margin: 15px auto 0;
+	text-transform: uppercase;
+	width: 128px;
+	height: 32px;
+}
+
+.vista-pmsite-pwdChangePage .pwdChangeFormWrap .pwdChangeFormInput {
+	padding:20px 0 0 60px;
+}
+
+.vista-pmsite-pwdChangePage .pwdChangeFormWrap .pwdChangeFormInput label {
+	display:inline-block;
+	width:150px;
+	padding-right:4px;
+}
+.vista-pmsite-pwdChangePage .pwdChangeFormWrap .pwdChangeFormInput input[type=text],
+.vista-pmsite-pwdChangePage .pwdChangeFormWrap .pwdChangeFormInput input[type=password] {
+	width:300px;
+}

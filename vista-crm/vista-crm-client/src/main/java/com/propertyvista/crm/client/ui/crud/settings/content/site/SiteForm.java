@@ -43,7 +43,7 @@ import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.PortalImageResourceFolder.SiteImageThumbnail;
 import com.propertyvista.domain.File;
-import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 import com.propertyvista.dto.SiteDescriptorDTO;
@@ -79,7 +79,7 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast2()), 10).build());
 
         if (skinComp instanceof CComboBox) {
-            ((CComboBox<SiteDescriptor.Skin>) skinComp).setOptions(EnumSet.of(SiteDescriptor.Skin.skin2, SiteDescriptor.Skin.skin3, SiteDescriptor.Skin.skin4));
+            ((CComboBox<Skin>) skinComp).setOptions(EnumSet.of(Skin.skin2, Skin.skin3, Skin.skin4, Skin.skin5));
         }
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableMapView()), 10).build());
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableBuildingDetails()), 10).build());
