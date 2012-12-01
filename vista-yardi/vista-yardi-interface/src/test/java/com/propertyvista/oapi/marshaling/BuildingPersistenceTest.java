@@ -33,10 +33,9 @@ import com.propertyvista.oapi.xml.StringIO;
 
 public class BuildingPersistenceTest extends WSOapiTestBase {
 
-    @Override
     @Before
-    public void preloadData() {
-        super.preloadData();
+    public void init() throws Exception {
+        preloadData();
     }
 
     @Test
