@@ -90,12 +90,8 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     abstract protected void createTabs();
 
-    public Tab addTab(Widget content, String tabTitle) {
-        return addTab(content, tabTitle, true);
-    }
-
     public Tab addTab(final FormFlexPanel panel) {
-        final Tab tab = addTab(panel, panel.getTitle(), true);
+        final Tab tab = addTab(panel, panel.getTitle());
         panel.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
@@ -112,14 +108,10 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
         return tab;
     }
 
-    public Tab addTab(Widget content, String tabTitle, boolean scrolled) {
+    public Tab addTab(Widget content, String tabTitle) {
         Tab tab = null;
-        if (scrolled) {
-            ScrollPanel scroll = new ScrollPanel(content);
-            tab = new Tab(scroll, tabTitle, null, false);
-        } else {
-            tab = new Tab(content, tabTitle, null, false);
-        }
+        ScrollPanel scroll = new ScrollPanel(content);
+        tab = new Tab(scroll, tabTitle, null, false);
         tabPanel.addTab(tab);
         return tab;
     }

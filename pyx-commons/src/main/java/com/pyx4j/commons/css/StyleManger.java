@@ -34,7 +34,13 @@ public class StyleManger {
 
     private static final Logger log = LoggerFactory.getLogger(StyleManger.class);
 
-    private static StyleManger instance;
+    private static class SingletonHolder {
+        public static final StyleManger INSTANCE = new StyleManger();
+    }
+
+    public static StyleManger instance() {
+        return SingletonHolder.INSTANCE;
+    }
 
     private Theme theme;
 
@@ -45,13 +51,6 @@ public class StyleManger {
     private static int alternativeHostnameIdx;
 
     private StyleManger() {
-    }
-
-    public static StyleManger instance() {
-        if (instance == null) {
-            instance = new StyleManger();
-        }
-        return instance;
     }
 
     public static void setAlternativeHostnames(String... names) {
