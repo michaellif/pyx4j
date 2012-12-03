@@ -17,10 +17,10 @@ import java.io.File;
 import java.util.Map;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.essentials.j2se.J2SEServiceConnector;
-import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
+import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
 import com.propertyvista.admin.domain.dev.DevelopmentUser;
@@ -43,8 +43,8 @@ public class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
         Map<String, String> configProperties = PropertiesConfiguration.loadProperties(credentialsFile);
         config.readProperties("mail", configProperties);
 
-        Credentials credentials = J2SEServiceConnector.getCredentials(credentialsFile.getAbsolutePath());
-        config.user = credentials.email;
+        Credentials credentials = CredentialsFileStorage.getCredentials(credentialsFile);
+        config.user = credentials.userName;
         config.password = credentials.password;
 
         if (VistaDemo.isDemo() || ApplicationMode.isDevelopment()) {

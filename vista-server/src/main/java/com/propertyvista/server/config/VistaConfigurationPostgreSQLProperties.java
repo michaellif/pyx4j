@@ -16,10 +16,10 @@ package com.propertyvista.server.config;
 import java.io.File;
 import java.util.Map;
 
+import com.pyx4j.config.server.Credentials;
 import com.pyx4j.entity.rdb.cfg.ConfigurationPostgreSQLProperties;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
-import com.pyx4j.essentials.j2se.J2SEServiceConnector;
-import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
+import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 
 import com.propertyvista.config.VistaDBNamingConvention;
 
@@ -28,8 +28,8 @@ public class VistaConfigurationPostgreSQLProperties extends ConfigurationPostgre
     public VistaConfigurationPostgreSQLProperties(File configDirectory, Map<String, String> properties) {
         File dbCredentialsFile = new File(configDirectory, "db-credentials.properties");
         if (dbCredentialsFile.canRead()) {
-            Credentials credentials = J2SEServiceConnector.getCredentials(dbCredentialsFile.getAbsolutePath());
-            this.user = credentials.email;
+            Credentials credentials = CredentialsFileStorage.getCredentials(dbCredentialsFile);
+            this.user = credentials.userName;
             this.password = credentials.password;
         }
         readProperties("db", properties);

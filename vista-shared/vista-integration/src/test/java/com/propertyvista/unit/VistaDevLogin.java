@@ -13,11 +13,13 @@
  */
 package com.propertyvista.unit;
 
+import java.io.File;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.essentials.j2se.J2SEServiceConnector;
-import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
+import com.pyx4j.config.server.Credentials;
+import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 import com.pyx4j.selenium.SeleniumExtended;
 
 public class VistaDevLogin {
@@ -30,11 +32,11 @@ public class VistaDevLogin {
             return;
         }
 
-        Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/credentials.properties");
+        Credentials credentials = CredentialsFileStorage.getCredentials(new File(System.getProperty("user.dir", "."), "credentials.properties"));
 
         selenium.click("id=googleSignIn");
 
-        selenium.type("id=Email", credentials.email);
+        selenium.type("id=Email", credentials.userName);
         selenium.type("id=Passwd", credentials.password);
         selenium.click("id=signIn");
 

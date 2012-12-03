@@ -40,9 +40,9 @@ import com.cfcprograms.api.Result;
 import com.cfcprograms.api.SimpleClient;
 import com.cfcprograms.api.SimpleClientResponse;
 
+import com.pyx4j.config.server.Credentials;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.j2se.J2SEServiceConnector;
-import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
+import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 
 import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureCoverageRequestAdapter;
 import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureTenantAdapter;
@@ -186,14 +186,13 @@ public class CfcApiClient implements ICfcApiClient {
      */
     private String makeNewCfcSession(CFCAPISoap cfcApiSoap) {
         Credentials crs = getCredentials();
-        Result authResult = cfcApiSoap.userAuthentication(crs.email, crs.password);
+        Result authResult = cfcApiSoap.userAuthentication(crs.userName, crs.password);
         assertSuccessfulResponse(authResult);
         return authResult.getId();
     }
 
     private static Credentials getCredentials() {
-        File credentialsFile = new File(System.getProperty("user.dir", "."), "cfcprograms-tenantsure-credentials.properties");
-        return J2SEServiceConnector.getCredentials(credentialsFile.getAbsolutePath());
+        return CredentialsFileStorage.getCredentials(new File(System.getProperty("user.dir", "."), "cfcprograms-tenantsure-credentials.properties"));
     }
 
     private boolean isSuccessfulCode(String code) {
