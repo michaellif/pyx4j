@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2012 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,26 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-02-20
+ * Created on 2012-12-03
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.server.mail;
+package com.pyx4j.config.server;
 
-import javax.mail.Authenticator;
-import javax.mail.PasswordAuthentication;
+public class Credentials {
 
-public class SMTPAuthenticatorImpl extends Authenticator {
+    public String userName;
 
-    private final PasswordAuthentication authentication;
-
-    public SMTPAuthenticatorImpl(String userName, String password) {
-        authentication = new PasswordAuthentication(userName, password);
-    }
-
-    @Override
-    public PasswordAuthentication getPasswordAuthentication() {
-        return authentication;
-    }
+    public String password;
 
 }

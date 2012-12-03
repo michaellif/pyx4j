@@ -20,21 +20,12 @@
  */
 package com.pyx4j.essentials.j2se;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Properties;
-
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
-import org.jasypt.properties.PropertyValueEncryptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.server.Credentials;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.j2se.J2SEService;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -45,69 +36,19 @@ public class J2SEServiceConnector extends J2SEService {
 
     protected AuthenticationResponse auth;
 
-    public static class Credentials {
-
-        public String email;
-
-        public String password;
-
-    }
-
     public J2SEServiceConnector(String name) {
         super(null);
         setName(name);
         EntityImplGenerator.generateOnce(false);
     }
 
-    public static Credentials getCredentials(String fileName) {
-        Properties p = new Properties();
-        FileReader reader = null;
-        try {
-            p.load(reader = new FileReader(fileName));
-        } catch (IOException e) {
-            log.error("read error", e);
-            throw new Error(e);
-        } finally {
-            IOUtils.closeQuietly(reader);
-        }
-        Credentials c = new Credentials();
-        c.email = p.getProperty("user");
-        if (CommonsStringUtils.isEmpty(c.email)) {
-            c.email = p.getProperty("email");
-        }
-        c.password = p.getProperty("password");
-        String encrypt = p.getProperty("encrypt");
-        if ("false".equalsIgnoreCase(encrypt)) {
-            return c;
-        }
-        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-        encryptor.setPassword(HostConfig.getHardwareAddress());
-        if (PropertyValueEncryptionUtils.isEncryptedValue(c.password)) {
-            c.password = PropertyValueEncryptionUtils.decrypt(c.password, encryptor);
-        } else {
-            p.put("password", PropertyValueEncryptionUtils.encrypt(c.password, encryptor));
-            p.put("encrypt", "true");
-            Writer writer = null;
-            try {
-                p.store(writer = new FileWriter(fileName), null);
-                log.warn("Password file '{}' Encrypted", fileName);
-            } catch (IOException e) {
-                log.error("property write error", e);
-                throw new Error(e);
-            } finally {
-                IOUtils.closeQuietly(writer);
-            }
-        }
-        return c;
-    }
-
     public void openGooleSession(Credentials credentials, GoogleAccountType googleAccountType, boolean developerAdmin) {
-        super.googleLogin(credentials.email, credentials.password, googleAccountType, developerAdmin);
+        super.googleLogin(credentials.userName, credentials.password, googleAccountType, developerAdmin);
     }
 
     public void openApplicationSession(Credentials credentials) {
         AuthenticationRequest authenticationRequest = EntityFactory.create(AuthenticationRequest.class);
-        authenticationRequest.email().setValue(credentials.email);
+        authenticationRequest.email().setValue(credentials.userName);
         authenticationRequest.password().setValue(credentials.password);
         //auth = super.execute(AuthenticationServices.Authenticate.class, authenticationRequest);
         sessionToken = auth.getSessionToken();
