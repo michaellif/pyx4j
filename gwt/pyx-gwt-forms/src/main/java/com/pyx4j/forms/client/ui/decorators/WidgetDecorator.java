@@ -254,8 +254,12 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
     protected void renderNote() {
         if (component.getNote() != null && component.getNote().trim().length() > 0) {
             noteLabel.setText(component.getNote());
+            noteLabel.addStyleDependentName(component.getNoteStyle().toString());
         } else {
             noteLabel.setText(null);
+            for (DefaultCComponentsTheme.StyleDependent style : DefaultCComponentsTheme.StyleDependent.values()) {
+                noteLabel.removeStyleDependentName(style.toString());
+            }
         }
     }
 

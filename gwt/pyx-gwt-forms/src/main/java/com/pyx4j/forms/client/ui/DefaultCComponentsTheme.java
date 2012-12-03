@@ -34,7 +34,7 @@ public class DefaultCComponentsTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        disabled, readonly
+        disabled, readonly, info, warning
     }
 
     public DefaultCComponentsTheme() {
@@ -99,9 +99,17 @@ public class DefaultCComponentsTheme extends Theme {
 
     protected void initNoteStyle() {
         Style style = new Style(".", StyleName.NoteLabel);
-        style.addProperty("color", ThemeColor.foreground, 0.7);
         style.addProperty("font-weight", "normal");
         style.addProperty("font-style", "italic");
         addStyle(style);
+
+        style = new Style(".", StyleName.NoteLabel, "-", StyleDependent.info);
+        style.addProperty("color", ThemeColor.foreground, 0.7);
+        addStyle(style);
+
+        style = new Style(".", StyleName.NoteLabel, "-", StyleDependent.warning);
+        style.addProperty("color", ThemeColor.object1, 1);
+        addStyle(style);
+
     }
 }

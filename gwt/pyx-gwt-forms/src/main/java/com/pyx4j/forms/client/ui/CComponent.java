@@ -64,6 +64,10 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     private static final I18n i18n = I18n.get(CComponent.class);
 
+    public static enum NoteStyle {
+        Info, Warn
+    }
+
     private String title;
 
     private String locationHint;
@@ -71,6 +75,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     private String tooltip;
 
     private String note;
+
+    private NoteStyle noteStyle;
 
     private CContainer<?, ?> parent;
 
@@ -384,9 +390,18 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         return note;
     }
 
-    public void setNote(String note) {
+    public NoteStyle getNoteStyle() {
+        return noteStyle;
+    }
+
+    public void setNote(String note, NoteStyle style) {
         this.note = note;
+        this.noteStyle = style;
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.note);
+    }
+
+    public void setNote(String note) {
+        setNote(note, NoteStyle.Info);
     }
 
     protected abstract WIDGET_TYPE createWidget();
