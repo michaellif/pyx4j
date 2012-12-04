@@ -41,6 +41,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
@@ -89,8 +90,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
     private static final Logger log = LoggerFactory.getLogger(LeaseFacadeImpl.class);
 
     private static final I18n i18n = I18n.get(LeaseFacadeImpl.class);
-
-    private static final long ONE_DAY_IN_MSEC = 1000L * 60L * 60L * 25L; // set to 25h to avoid winter daylight savings problem on 4/11/XXXX !!!
 
     @Override
     public Lease create(Status status) {
@@ -546,7 +545,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         term.lease().set(lease);
 
         // set from date to next day after current term:
-        term.termFrom().setValue(new LogicalDate(lease.currentTerm().termTo().getValue().getTime() + ONE_DAY_IN_MSEC));
+        term.termFrom().setValue(DateUtils.daysAdd(lease.currentTerm().termTo().getValue(), 1));
 
         updateTermUnitRelatedData(term, lease.unit(), lease.type().getValue());
 
@@ -1128,7 +1127,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             if (concurrent.completion().isNull()) {
                 throw new IllegalStateException("Lease has no completion mark");
             }
-            concurrent.terminationLeaseTo().setValue(new LogicalDate(lease.leaseFrom().getValue().getTime() - ONE_DAY_IN_MSEC));
+            concurrent.terminationLeaseTo().setValue(DateUtils.daysAdd(lease.leaseFrom().getValue(), 1));
             updateLeaseDates(concurrent);
             Persistence.secureSave(concurrent);
             complete(concurrent);

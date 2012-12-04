@@ -34,6 +34,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -163,10 +164,7 @@ public class LeaseLifecycleSimulator {
         queueEvent(reservedOn, new Create(lease));
         queueEvent(max(leaseFrom, sub(leaseTo, rndBetween(MIN_NOTICE_TERM, MAX_NOTICE_TERM))), new Notice(lease));
         queueEvent(leaseTo, new MoveOut(lease));
-        Calendar gregorianCal = new GregorianCalendar();
-        gregorianCal.setTime(leaseTo);
-        gregorianCal.add(Calendar.DATE, 1);
-        queueEvent(new LogicalDate(gregorianCal.getTime()), new Complete(lease));
+        queueEvent(DateUtils.daysAdd(leaseTo, 1), new Complete(lease));
 
         queueMaintenanceRequests(lease);
 
