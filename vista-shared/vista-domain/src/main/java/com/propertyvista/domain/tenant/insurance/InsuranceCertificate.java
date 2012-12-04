@@ -23,6 +23,8 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -31,6 +33,7 @@ import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 @DiscriminatorValue("InsuranceCertificate")
+@ToStringFormat("Provider: {0}, Certificate #: {1}, Liability Coverage: ${2,#,##0.00}, Expiry: {3}")
 public interface InsuranceCertificate extends ApplicationDocumentHolder<InsuranceCertificateDocument> {
 
     @Caption(name = "Owned By")
@@ -42,13 +45,16 @@ public interface InsuranceCertificate extends ApplicationDocumentHolder<Insuranc
     IPrimitive<Boolean> isPropertyVistaIntegratedProvider();
 
     @NotNull
+    @ToString(index = 0)
     IPrimitive<String> insuranceProvider();
 
     @NotNull
+    @ToString(index = 1)
     IPrimitive<String> insuranceCertificateNumber();
 
     @Editor(type = EditorType.money)
     @Format("#,##0.00")
+    @ToString(index = 2)
     @NotNull
     IPrimitive<BigDecimal> liabilityCoverage();
 
@@ -56,6 +62,7 @@ public interface InsuranceCertificate extends ApplicationDocumentHolder<Insuranc
     IPrimitive<LogicalDate> inceptionDate();
 
     @NotNull
+    @ToString(index = 3)
     IPrimitive<LogicalDate> expiryDate();
 
 }

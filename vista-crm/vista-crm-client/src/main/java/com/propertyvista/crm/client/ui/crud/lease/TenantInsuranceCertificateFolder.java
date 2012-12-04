@@ -15,6 +15,8 @@ package com.propertyvista.crm.client.ui.crud.lease;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceCertificateForm;
@@ -33,9 +35,16 @@ public class TenantInsuranceCertificateFolder extends VistaBoxFolder<InsuranceCe
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof InsuranceCertificate) {
-            return new TenantInsuranceCertificateForm(true, tenantOwnerClickHanlder);
+            TenantInsuranceCertificateForm form = new TenantInsuranceCertificateForm(true, tenantOwnerClickHanlder);
+            return form;
         }
         return super.create(member);
     }
 
+    @Override
+    public IFolderItemDecorator<InsuranceCertificate> createItemDecorator() {
+        BoxFolderItemDecorator<InsuranceCertificate> decorator = (BoxFolderItemDecorator<InsuranceCertificate>) super.createItemDecorator();
+        decorator.setExpended(false);
+        return decorator;
+    }
 }

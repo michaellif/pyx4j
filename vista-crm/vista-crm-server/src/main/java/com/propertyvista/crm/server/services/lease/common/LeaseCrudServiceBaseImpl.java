@@ -13,10 +13,14 @@
  */
 package com.propertyvista.crm.server.services.lease.common;
 
+import java.util.List;
+
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -52,6 +56,8 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         for (LeaseTermGuarantor item : dto.currentTerm().version().guarantors()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
         }
+
+        fillTenantInsurance(dto);
     }
 
     @Override
@@ -89,4 +95,16 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             Persistence.service().retrieve(item.item().product());
         }
     }
+
+    private void fillTenantInsurance(LeaseDTO lease) {
+        EntityQueryCriteria<InsuranceCertificate> criteria = new EntityQueryCriteria<InsuranceCertificate>(InsuranceCertificate.class);
+        criteria.eq(criteria.proto().tenant().lease(), lease);
+        List<InsuranceCertificate> certificates = Persistence.service().query(criteria);
+
+        // TODO add sorting
+        if (certificates != null) {
+            lease.tenantInsuranceCertificates().addAll(certificates);
+        }
+    }
+
 }

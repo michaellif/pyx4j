@@ -21,10 +21,13 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
+import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceCertificateForm.TenantOwnerClickHandler;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.lease.TenantInsuranceCertificateFolder;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.misc.VistaTODO;
 
@@ -63,6 +66,10 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         get(proto().terminationLeaseTo()).setVisible(!getValue().terminationLeaseTo().isNull());
 
         get(proto().unit()).setNote(getValue().unitMoveOutNote().getValue());
+    }
+
+    public void onTenantInsuranceOwnerClicked(Tenant tenantId) {
+
     }
 
     private FormFlexPanel createDetailsTab(String title) {
@@ -167,6 +174,14 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
             main.setH1(++row, 0, 2, proto().currentTerm().version().leaseProducts().concessions().getMeta().getCaption());
             main.setWidget(++row, 0, inject(proto().currentTerm().version().leaseProducts().concessions(), new ConcessionFolder()));
         }
+
+        main.setH1(++row, 0, 2, i18n.tr("Tenant Insurance"));
+        main.setWidget(++row, 0, inject(proto().tenantInsuranceCertificates(), new TenantInsuranceCertificateFolder(new TenantOwnerClickHandler() {
+            @Override
+            public void onTenantOwnerClicked(Tenant tenantId) {
+                LeaseFormBase.this.onTenantInsuranceOwnerClicked(tenantId);
+            }
+        })));
 
         return main;
     }

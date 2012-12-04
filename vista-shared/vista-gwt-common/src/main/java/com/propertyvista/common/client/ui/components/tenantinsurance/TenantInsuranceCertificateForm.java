@@ -198,5 +198,6 @@ public class TenantInsuranceCertificateForm extends CEntityDecoratableForm<Insur
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         scannedInsuranceCertificateNotAvailable.setVisible(!isEditable() & getValue().documents().isEmpty());
+        setViewable(getValue().isPropertyVistaIntegratedProvider().isBooleanTrue());
     }
 }
