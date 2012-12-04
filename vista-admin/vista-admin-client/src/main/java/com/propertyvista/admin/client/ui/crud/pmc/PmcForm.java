@@ -137,11 +137,12 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
         })), 50).build());
 
         content.setH1(++row, 0, 2, proto().features().getMeta().getCaption());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().occupancyModel()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().productCatalog()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().leases()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().onlineApplication()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().xmlSiteExport()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().occupancyModel()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().productCatalog()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().leases()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().onlineApplication()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().xmlSiteExport()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().genericProductCatalog()), 5).build());
 
         content.setH1(++row, 0, 2, proto().dnsNameAliases().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable())));

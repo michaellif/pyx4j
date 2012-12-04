@@ -33,6 +33,7 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.generator.PreloadData;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.server.preloader.ido.OnboardingMerchantAccountImport;
 import com.propertyvista.shared.config.VistaDemo;
 
@@ -52,6 +53,7 @@ public class PmcCreatorDev {
         pmc.features().leases().setValue(Boolean.TRUE);
         pmc.features().onlineApplication().setValue(Boolean.TRUE);
         pmc.features().xmlSiteExport().setValue(Boolean.TRUE);
+        pmc.features().genericProductCatalog().setValue(VistaTODO.VISTA_2256_Generic_Product_Catalog);
         pmc.equifaxInfo().approved().setValue(true);
         pmc.equifaxInfo().reportType().setValue(EquifaxReportType.longReport);
 

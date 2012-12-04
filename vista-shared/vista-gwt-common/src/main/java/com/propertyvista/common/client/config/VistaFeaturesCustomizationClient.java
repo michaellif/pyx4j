@@ -51,6 +51,11 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
         return features.xmlSiteExport().getValue(Boolean.FALSE);
     }
 
+    @Override
+    public boolean genericProductCatalog() {
+        return features.genericProductCatalog().getValue(Boolean.FALSE);
+    }
+
     public static void setVistaFeatures(PmcVistaFeatures features) {
         VistaFeaturesCustomizationClient.features = features;
     }
@@ -62,5 +67,4 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
     public static void setGoogleAnalyticDisableForEmployee(boolean isGoogleAnalyticDisableForEmployee) {
         VistaFeaturesCustomizationClient.isGoogleAnalyticDisableForEmployee = isGoogleAnalyticDisableForEmployee;
     }
-
 }

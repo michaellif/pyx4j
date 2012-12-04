@@ -35,9 +35,9 @@ public class ServiceLister extends VersionedLister<Service> {
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
             new MemberColumnDescriptor.Builder(proto().serviceType()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().name()).build()
+            new MemberColumnDescriptor.Builder(proto().version().name()).build(),
+            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build()
         );//@formatter:on
     }
 

@@ -56,6 +56,11 @@ public class VistaFeatures {
         public boolean xmlSiteExport() {
             return threadLocale.get().xmlSiteExport().getValue(Boolean.FALSE);
         }
+
+        @Override
+        public boolean genericProductCatalog() {
+            return threadLocale.get().genericProductCatalog().getValue(Boolean.FALSE);
+        }
     }
 
     static void removeThreadLocale() {

@@ -31,6 +31,8 @@ public class VistaFeatures {
         boolean onlineApplication();
 
         boolean xmlSiteExport();
+
+        boolean genericProductCatalog();
     }
 
     private final static VistaFeaturesCustomization impl;

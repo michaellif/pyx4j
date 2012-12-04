@@ -31,6 +31,7 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
+import com.propertyvista.biz.preloader.GenericProductCatalogFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
@@ -72,6 +73,7 @@ import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 import com.propertyvista.server.domain.FileBlob;
 import com.propertyvista.server.domain.FileImageThumbnailBlob;
 import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
@@ -101,8 +103,6 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             EntityQueryCriteria<FeatureItemType> criteria = EntityQueryCriteria.create(FeatureItemType.class);
             productItemTypes.featureItemTypes.addAll(Persistence.service().query(criteria));
         }
-
-        ProductCatalogGenerator productCatalogGenerator = new ProductCatalogGenerator(productItemTypes);
 
         // create some complexes:
         List<Complex> complexes = new Vector<Complex>();
@@ -156,7 +156,12 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             building.propertyManager().set(DataGenerator.random(managements)); // temporary for Starlight!..
 
             // Service Catalog:
-            productCatalogGenerator.createProductCatalog(building.productCatalog());
+
+            if (VistaFeatures.instance().genericProductCatalog()) {
+                ServerSideFactory.create(GenericProductCatalogFacade.class).createFor(building);
+            } else {
+                new ProductCatalogGenerator(productItemTypes).createProductCatalog(building.productCatalog());
+            }
 
             BuildingMerchantAccount bma = building.merchantAccounts().$();
             bma.merchantAccount().set(merchantAccount);
@@ -167,11 +172,13 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 MediaGenerator.generatedBuildingMedia(building);
             }
 
-            building.includedUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
-            if (DataGenerator.randomBoolean()) {
+            if (!VistaFeatures.instance().genericProductCatalog()) {
                 building.includedUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
+                if (DataGenerator.randomBoolean()) {
+                    building.includedUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
+                }
+                building.externalUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
             }
-            building.externalUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
 
 // TODO : let's leave dashboard empty - in runtime the first Building dashboard will be used by default!
 //            building.dashboard().set(DataGenerator.random(availableDashboards.buildingDashboards));
@@ -215,18 +222,20 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             // Floorplans:
             List<Floorplan> floorplans = generator.createFloorplans(building, config().numFloorplans);
             for (Floorplan floorplan : floorplans) {
-
                 if (this.getParameter(VistaDataPreloaderParameter.attachMedia) != Boolean.FALSE) {
                     MediaGenerator.attachGeneratedFloorplanMedia(floorplan);
                 }
-
             }
 
             // Units:
             List<AptUnit> units = generator.createUnits(building, floorplans, config().numFloors, config().numUnitsPerFloor);
             unitCount += units.size();
-            for (AptUnit unitData : units) {
-                productCatalogGenerator.createAptUnitServices(building.productCatalog(), unitData);
+            for (AptUnit unit : units) {
+                if (VistaFeatures.instance().genericProductCatalog()) {
+                    ServerSideFactory.create(GenericProductCatalogFacade.class).addUnit(building, unit);
+                } else {
+                    new ProductCatalogGenerator(productItemTypes).createAptUnitServices(building.productCatalog(), unit);
+                }
             }
 
             // fill Service Catalog with building elements:

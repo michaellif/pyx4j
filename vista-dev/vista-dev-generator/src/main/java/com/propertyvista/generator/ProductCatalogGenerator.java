@@ -152,11 +152,8 @@ public class ProductCatalogGenerator {
                 ServiceItemType selectedItem = RandomUtil.random(allowedItemTypes);
 
                 item.type().set(selectedItem);
-                item.type().name().setValue(selectedItem.getStringView());
-                item.type().<ServiceItemType> cast().serviceType().setValue(selectedItem.serviceType().getValue());
-
                 item.price().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
-                item.description().setValue(type.toString() + " description");
+                item.description().setValue(item.type().getStringView() + " description");
 
                 items.add(item);
             }
@@ -200,8 +197,7 @@ public class ProductCatalogGenerator {
                 ProductItem item = EntityFactory.create(ProductItem.class);
 
                 item.type().set(RandomUtil.random(allowedItemTypes));
-                item.type().name().setValue(item.type().getStringView());
-                item.description().setValue(type.toString() + " description");
+                item.description().setValue(item.type().getStringView() + " description");
 
                 switch (type) {
                 case parking:
@@ -348,12 +344,9 @@ public class ProductCatalogGenerator {
         ServiceItemType selectedItem = RandomUtil.random(allowedItemTypes);
 
         item.type().set(selectedItem);
-        item.type().name().setValue(selectedItem.getStringView());
-        item.type().<ServiceItemType> cast().serviceType().setValue(selectedItem.serviceType().getValue());
-
         // This value may not be used in all cases and overridden later in generator
         item.price().setValue(price);
-        item.description().setValue(type.toString() + " description");
+        item.description().setValue(item.type().getStringView() + " description");
         item.element().set(buildingElement);
 
         service.version().items().add(item);

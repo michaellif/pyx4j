@@ -40,8 +40,10 @@ public class ServiceForm extends CrmEntityForm<Service> {
         Tab tab = addTab(createGeneralTab(i18n.tr("General")));
         selectTab(tab);
 
+// TODO uncomment in final version:        
+//        if (!VistaFeatures.instance().genericProductCatalog()) {
         addTab(createEligibilityTab(i18n.tr("Eligibility")));
-
+//        }
     }
 
     public FormFlexPanel createGeneralTab(String title) {

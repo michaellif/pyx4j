@@ -27,6 +27,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
@@ -199,7 +200,36 @@ public class LeaseGenerator extends DataGenerator {
     private static BillableItem createBillableItem(ProductItem serviceItem, LogicalDate effectiveDate) {
         BillableItem newItem = EntityFactory.create(BillableItem.class);
         newItem.item().set(serviceItem);
-        newItem.agreedPrice().setValue(newItem.item().price().getValue());
+
+        if (newItem.item().price().isNull()) {
+            if (serviceItem.type().isInstanceOf(ServiceItemType.class)) {
+                newItem.agreedPrice().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
+            } else if (serviceItem.type().isInstanceOf(FeatureItemType.class)) {
+                switch (((FeatureItemType) serviceItem.type()).featureType().getValue()) {
+                case parking:
+                    newItem.agreedPrice().setValue(new BigDecimal(5 + RandomUtil.randomInt(50)));
+                    break;
+                case locker:
+                    newItem.agreedPrice().setValue(new BigDecimal(5 + RandomUtil.randomInt(10)));
+                    break;
+                case pet:
+                    newItem.agreedPrice().setValue(new BigDecimal(20 + RandomUtil.randomInt(20)));
+                    break;
+                case booking:
+                    newItem.agreedPrice().setValue(new BigDecimal(5 + RandomUtil.randomInt(5)));
+                    break;
+                case addOn:
+                    newItem.agreedPrice().setValue(new BigDecimal(30 + RandomUtil.randomInt(50)));
+                    break;
+                case utility:
+                    newItem.agreedPrice().setValue(new BigDecimal(80 + RandomUtil.randomInt(50)));
+                    break;
+                }
+            }
+        } else {
+            newItem.agreedPrice().setValue(serviceItem.price().getValue());
+        }
+
         newItem.effectiveDate().setValue(effectiveDate != null ? effectiveDate : new LogicalDate());
         return newItem;
     }
