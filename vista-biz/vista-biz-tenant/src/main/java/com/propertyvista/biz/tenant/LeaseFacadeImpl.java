@@ -48,7 +48,6 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.OccupancyOperationException;
-import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.validators.lease.LeaseApprovalValidator;
@@ -474,7 +473,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         ensureLeaseUniqness(lease);
 
-        ServerSideFactory.create(UnitTurnoverAnalysisFacade.class).propagateLeaseActivationToTurnoverReport(lease);
         ServerSideFactory.create(LeadFacade.class).setLeadRentedState(lease);
     }
 

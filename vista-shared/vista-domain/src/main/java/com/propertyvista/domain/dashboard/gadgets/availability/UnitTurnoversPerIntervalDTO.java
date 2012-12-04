@@ -26,7 +26,9 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @Transient
 public interface UnitTurnoversPerIntervalDTO extends IEntity {
 
+    @SuppressWarnings("deprecation")
     public enum AnalysisResolution {
+
         Day {
 
             @Override
@@ -49,7 +51,6 @@ public interface UnitTurnoversPerIntervalDTO extends IEntity {
                 return new Date(time).getTime();
             }
 
-            @SuppressWarnings("deprecation")
             @Override
             public long intervalEnd(long time) {
                 Date date = new Date(time);
@@ -57,6 +58,7 @@ public interface UnitTurnoversPerIntervalDTO extends IEntity {
                 return date.getTime();
             }
         },
+
         Week {
             private static final long DAY_TIMESPAN = 1000L * 60L * 60L * 24L;
 
@@ -75,14 +77,12 @@ public interface UnitTurnoversPerIntervalDTO extends IEntity {
                 return "(" + TimeUtils.simpleFormat(start, "MM/dd") + ", " + TimeUtils.simpleFormat(end, "MM/dd") + ")";
             }
 
-            @SuppressWarnings("deprecation")
             @Override
             public long intervalStart(long time) {
                 Date date = new Date(time);
                 return date.getTime() - date.getDay() * DAY_TIMESPAN;
             }
 
-            @SuppressWarnings("deprecation")
             @Override
             public long intervalEnd(long time) {
                 Date date = new Date(time);
@@ -90,6 +90,7 @@ public interface UnitTurnoversPerIntervalDTO extends IEntity {
                 return date.getTime() + daysToAdd * DAY_TIMESPAN;
             }
         },
+
         Month {
 
             @Override
@@ -102,7 +103,6 @@ public interface UnitTurnoversPerIntervalDTO extends IEntity {
                 return addToTimeAndReturnDate(date.getTime());
             }
 
-            @SuppressWarnings("deprecation")
             private Date addToTimeAndReturnDate(long time) {
                 Date updatedDate = new Date(time);
                 int updatedMonth = updatedDate.getMonth() + 1;
@@ -116,7 +116,6 @@ public interface UnitTurnoversPerIntervalDTO extends IEntity {
                 return TimeUtils.simpleFormat(start, "MMM yyyy");
             }
 
-            @SuppressWarnings("deprecation")
             @Override
             public long intervalStart(long time) {
                 Date date = new Date(time);
@@ -124,7 +123,6 @@ public interface UnitTurnoversPerIntervalDTO extends IEntity {
                 return date.getTime();
             }
 
-            @SuppressWarnings("deprecation")
             @Override
             public long intervalEnd(long time) {
                 Date date = new Date(time);
@@ -136,6 +134,7 @@ public interface UnitTurnoversPerIntervalDTO extends IEntity {
                 return date.getTime();
             }
         },
+
         Year {
             @Override
             public long addTo(long time) {
@@ -147,7 +146,6 @@ public interface UnitTurnoversPerIntervalDTO extends IEntity {
                 return addToTimeAndReturnDate(date.getTime());
             }
 
-            @SuppressWarnings("deprecation")
             private Date addToTimeAndReturnDate(long time) {
                 Date date = new Date(time);
                 date.setYear(date.getYear() + 1);
@@ -159,7 +157,6 @@ public interface UnitTurnoversPerIntervalDTO extends IEntity {
                 return TimeUtils.simpleFormat(start, "yyyy");
             }
 
-            @SuppressWarnings("deprecation")
             @Override
             public long intervalStart(long time) {
                 Date date = new Date(time);
@@ -168,7 +165,6 @@ public interface UnitTurnoversPerIntervalDTO extends IEntity {
                 return date.getTime();
             }
 
-            @SuppressWarnings("deprecation")
             @Override
             public long intervalEnd(long time) {
                 Date date = new Date(time);

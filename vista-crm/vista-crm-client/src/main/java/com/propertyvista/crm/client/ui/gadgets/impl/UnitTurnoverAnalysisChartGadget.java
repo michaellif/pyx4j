@@ -62,9 +62,6 @@ public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurn
     /** Sets graph height in <i>EMs</i>. */
     private static double GRAPH_HEIGHT = 20.0;
 
-    /** Sets toolbar height in <i>EMs</i>. */
-    private static double CONTROLS_HEIGHT = 3.5;
-
     private static final String MEASURE_SELECTOR_RADIO_GROUP_ID = "measureSelector";
 
     private static final boolean DEFAULT_IS_TURNOVER_MEASURED_BY_PERCENT = false;
