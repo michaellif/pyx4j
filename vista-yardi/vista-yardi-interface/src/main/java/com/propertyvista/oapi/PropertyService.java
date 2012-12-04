@@ -62,13 +62,9 @@ public class PropertyService {
     }
 
     public static void updateBuilding(BuildingIO buildingIO) throws Exception {
-
         Building building = BuildingMarshaller.getInstance().marshal(buildingIO);
-
-        System.out.println("++++++++++" + building);
-
         Persistence.service().persist(building);
-
+        Persistence.service().commit();
     }
 
     public static List<UnitIO> getUnitsByPropertyCode(String propertyCode) {

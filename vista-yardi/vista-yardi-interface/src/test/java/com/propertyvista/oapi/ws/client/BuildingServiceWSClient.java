@@ -22,7 +22,7 @@ import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.ws.WSPropertyService;
 import com.propertyvista.oapi.ws.WSPropertyServiceStub;
 
-public class GetAllBuildingsClient {
+public class BuildingServiceWSClient {
 
     private static String ADDRESS = "http://localhost:8888/vista/interfaces/oapi/ws/WSPropertyService";
 

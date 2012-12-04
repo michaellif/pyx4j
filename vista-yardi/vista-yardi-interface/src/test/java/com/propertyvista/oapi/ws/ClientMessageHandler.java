@@ -22,7 +22,7 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
-import com.propertyvista.oapi.ws.client.XmlFormatter;
+import com.propertyvista.oapi.XmlFormatter;
 
 public class ClientMessageHandler implements SOAPHandler<SOAPMessageContext> {
 

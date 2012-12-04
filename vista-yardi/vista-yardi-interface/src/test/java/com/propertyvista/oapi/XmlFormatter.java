@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.oapi.ws.client;
+package com.propertyvista.oapi;
 
 import java.io.StringReader;
 import java.io.StringWriter;
