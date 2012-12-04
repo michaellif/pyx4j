@@ -35,7 +35,7 @@ public class TenantInsuranceCertificateFolder extends VistaBoxFolder<InsuranceCe
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof InsuranceCertificate) {
-            TenantInsuranceCertificateForm form = new TenantInsuranceCertificateForm(true, tenantOwnerClickHanlder);
+            TenantInsuranceCertificateForm form = new TenantInsuranceCertificateForm(tenantOwnerClickHanlder != null, tenantOwnerClickHanlder);
             return form;
         }
         return super.create(member);

@@ -34,11 +34,12 @@ import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantEditorPresenter;
 import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
+import com.propertyvista.crm.client.ui.crud.lease.TenantInsuranceCertificateFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
-import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantForm extends CrmEntityForm<TenantDTO> {
@@ -59,6 +60,25 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
         addTab(createContactsTab(i18n.tr("Emergency Contacts")));
         addTab(createPaymentMethodsTab(i18n.tr("Payment Methods")));
+        addTab(createTenantInsuranceTab(i18n.tr("Insurance")));
+    }
+
+    @Override
+    public void addValidations() {
+        get(proto().customer().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
+
+            @Override
+            public ValidationError isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
+                if (value == null || getValue() == null) {
+                    return null;
+                }
+                return !EntityGraph.hasBusinessDuplicates(getValue().customer().emergencyContacts()) ? null : new ValidationError(component, i18n
+                        .tr("Duplicate contacts specified"));
+            }
+
+        });
+
+        new PastDateValidation(get(proto().customer().person().birthDate()));
     }
 
     @Override
@@ -145,21 +165,10 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
         return main;
     }
 
-    @Override
-    public void addValidations() {
-        get(proto().customer().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
-
-            @Override
-            public ValidationError isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
-                if (value == null || getValue() == null) {
-                    return null;
-                }
-                return !EntityGraph.hasBusinessDuplicates(getValue().customer().emergencyContacts()) ? null : new ValidationError(component, i18n
-                        .tr("Duplicate contacts specified"));
-            }
-
-        });
-
-        new PastDateValidation(get(proto().customer().person().birthDate()));
+    private FormFlexPanel createTenantInsuranceTab(String title) {
+        FormFlexPanel tabPanel = new FormFlexPanel(title);
+        tabPanel.setWidget(0, 0, inject(proto().insuranceCertificates(), new TenantInsuranceCertificateFolder(null)));
+        return tabPanel;
     }
+
 }

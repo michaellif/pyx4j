@@ -15,15 +15,20 @@ package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 @Transient
 @ExtendsDBO(Tenant.class)
 public interface TenantDTO extends LeaseParticipantDTO<LeaseTermTenant> {
 
     IPrimitive<Role> role();
+
+    IList<InsuranceCertificate> insuranceCertificates();
+
 }

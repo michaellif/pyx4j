@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -48,6 +49,12 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<L
                 break;
             }
         }
+
+        // get insurance certificates
+        EntityQueryCriteria<InsuranceCertificate> tenantInsuranceCriteria = EntityQueryCriteria.create(InsuranceCertificate.class);
+        tenantInsuranceCriteria.desc(tenantInsuranceCriteria.proto().inceptionDate());
+        tenantInsuranceCriteria.eq(tenantInsuranceCriteria.proto().tenant(), entity);
+        dto.insuranceCertificates().addAll(Persistence.service().query(tenantInsuranceCriteria));
     }
 
     @Override
@@ -55,20 +62,32 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<L
         super.enhanceListRetrieved(entity, dto);
 
         dto.role().setValue(retrieveTenant(dto.leaseTermV(), entity).role().getValue());
+
     }
 
     @Override
-    protected void persist(Tenant entity, TenantDTO dto) {
-        super.persist(entity, dto);
+    protected void persist(Tenant tenant, TenantDTO tenantDto) {
+        super.persist(tenant, tenantDto);
 
         // memorize pre-authorized method:
-        for (LeasePaymentMethod paymentMethod : dto.paymentMethods()) {
+        for (LeasePaymentMethod paymentMethod : tenantDto.paymentMethods()) {
             if (paymentMethod.isPreauthorized().isBooleanTrue()) {
-                if (!paymentMethod.equals(entity.preauthorizedPayment())) {
-                    entity.preauthorizedPayment().set(paymentMethod);
-                    Persistence.service().merge(entity);
+                if (!paymentMethod.equals(tenant.preauthorizedPayment())) {
+                    tenant.preauthorizedPayment().set(paymentMethod);
+                    Persistence.service().merge(tenant);
                     break;
                 }
+            }
+        }
+
+        for (InsuranceCertificate insuranceCertificate : tenantDto.insuranceCertificates()) {
+            if (insuranceCertificate.isPropertyVistaIntegratedProvider().isBooleanTrue()) {
+                // property vista integrated insurance certificates should be managed by software, i.e. the users have no right to manually modify such insurance certificates 
+                continue;
+            }
+            if (insuranceCertificate.getPrimaryKey() == null) {
+                insuranceCertificate.tenant().set(tenant);
+                Persistence.service().merge(insuranceCertificate);
             }
         }
     }
