@@ -63,7 +63,7 @@ public class ParkingMarshaller implements Marshaller<Parking, ParkingIO> {
         parking.description().setValue(parkingIO.description.value);
         parking.type().setValue(parkingIO.type.value);
         parking.levels().setValue(parkingIO.levels.value);
-        return null;
+        return parking;
     }
 
     public List<Parking> marshal(Collection<ParkingIO> parkingIOList) throws Exception {
