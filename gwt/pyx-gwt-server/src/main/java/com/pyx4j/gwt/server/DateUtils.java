@@ -29,6 +29,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 
 public class DateUtils extends TimeUtils {
@@ -98,20 +99,31 @@ public class DateUtils extends TimeUtils {
         calendar.set(Calendar.MILLISECOND, 0);
     }
 
-    public static Date yearsAdd(Date date, int years) {
-        Calendar c = new GregorianCalendar();
+    private static Date add(Date date, int calendarField, int amount) {
+        Calendar c = Calendar.getInstance();
         c.setTime(date);
-        c.add(Calendar.YEAR, years);
-
+        c.add(calendarField, amount);
         return c.getTime();
     }
 
-    public static Date monthAdd(Date date, int months) {
-        Calendar c = new GregorianCalendar();
-        c.setTime(date);
-        c.add(Calendar.MONTH, months);
+    public static Date yearsAdd(Date date, int years) {
+        return add(date, Calendar.YEAR, years);
+    }
 
-        return c.getTime();
+    public static LogicalDate monthAdd(LogicalDate date, int days) {
+        return new LogicalDate(add(date, Calendar.MONTH, days));
+    }
+
+    public static Date monthAdd(Date date, int months) {
+        return add(date, Calendar.MONTH, months);
+    }
+
+    public static LogicalDate daysAdd(LogicalDate date, int days) {
+        return new LogicalDate(add(date, Calendar.DATE, days));
+    }
+
+    public static Date daysAdd(Date date, int days) {
+        return add(date, Calendar.DATE, days);
     }
 
     public static boolean isSameDay(Calendar d1, Calendar d2) {
