@@ -90,7 +90,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     private static final I18n i18n = I18n.get(LeaseFacadeImpl.class);
 
-    private static final long ONE_DAY_IN_MSEC = 1000L * 60L * 60L * 24L;
+    private static final long ONE_DAY_IN_MSEC = 1000L * 60L * 60L * 25L; // set to 25h to avoid winter daylight savings problem on 4/11/XXXX !!!
 
     @Override
     public Lease create(Status status) {
