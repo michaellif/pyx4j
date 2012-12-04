@@ -70,7 +70,7 @@ public class LeaseLifecycleSimulator {
 
     // TODO define these as customizable parameters via builder
     // TODO define some kind of framework of classes that represent time terms/intervals and allow to perform computations, instead of this *long* crap
-    public static final long DAY = 1000L * 60L * 60L * 24L;
+    public static final long DAY = 1000L * 60L * 60L * 25L; // set to 25h to avoid winter daylight savings problem on 4/11/XXXX !!!
 
     public static final long MONTH = 1000L * 60L * 60L * 24L * 30L;
 

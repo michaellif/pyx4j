@@ -520,7 +520,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
         // if still has time to go:  
         if (!lease.leaseTo().isNull() && !lease.leaseTo().getValue().before(new LogicalDate(Persistence.service().getTransactionSystemTime()))) {
-            throw new IllegalStateException("Lease is not ended still");
+            throw new IllegalStateException("Lease is not ended yet");
         }
 
         lease.status().setValue(Status.Completed);
