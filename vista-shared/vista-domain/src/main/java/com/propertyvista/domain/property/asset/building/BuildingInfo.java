@@ -229,4 +229,10 @@ public interface BuildingInfo extends IEntity {
     IPrimitive<Boolean> centralAir();
 
     IPrimitive<Boolean> centralHeat();
+
+    IPrimitive<Boolean> hasSprinklers();
+
+    IPrimitive<Boolean> hasFireAlarm();
+
+    IPrimitive<Boolean> hasEarthquakes();
 }

@@ -68,14 +68,6 @@ public class LeaseLifecycleSimulator {
 
     private final static Random RND = new Random(1);
 
-    // TODO define these as customizable parameters via builder
-    // TODO define some kind of framework of classes that represent time terms/intervals and allow to perform computations, instead of this *long* crap
-    public static final long DAY = 1000L * 60L * 60L * 25L; // set to 25h to avoid winter daylight savings problem on 4/11/XXXX !!!
-
-    public static final long MONTH = 1000L * 60L * 60L * 24L * 30L;
-
-    public static final long YEAR = 1000L * 60L * 60L * 24L * 365L;
-
     private long minReserveTerm = 0L;
 
     private long maxReserveTerm = 1000L * 60L * 60L * 24L * 60L; // 60 days
@@ -171,7 +163,10 @@ public class LeaseLifecycleSimulator {
         queueEvent(reservedOn, new Create(lease));
         queueEvent(max(leaseFrom, sub(leaseTo, rndBetween(MIN_NOTICE_TERM, MAX_NOTICE_TERM))), new Notice(lease));
         queueEvent(leaseTo, new MoveOut(lease));
-        queueEvent(add(leaseTo, DAY), new Complete(lease));
+        Calendar gregorianCal = new GregorianCalendar();
+        gregorianCal.setTime(leaseTo);
+        gregorianCal.add(Calendar.DATE, 1);
+        queueEvent(new LogicalDate(gregorianCal.getTime()), new Complete(lease));
 
         queueMaintenanceRequests(lease);
 
@@ -543,7 +538,7 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            //if (lease.status().getValue() == Lease.Status.Active) {
+            //if (lease.status().getValue() == Lease.Status.Active) {            
             ServerSideFactory.create(LeaseFacade.class).complete(lease);
             //}
         }
@@ -571,11 +566,15 @@ public class LeaseLifecycleSimulator {
         return new LogicalDate(rndBetween(min.getTime(), max.getTime()));
     }
 
+    @Deprecated
     private static LogicalDate add(LogicalDate date, long term) {
+        // TODO get rid of this (it doesn't work with daylight savings)
         return new LogicalDate(date.getTime() + term);
     }
 
+    @Deprecated
     private static LogicalDate sub(LogicalDate date, long term) {
+        // TODO get rid of this (it doesn't work with daylight savings)
         return add(date, -term);
     }
 

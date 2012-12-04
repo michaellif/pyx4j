@@ -71,14 +71,22 @@ public class TenantSureCoverageRequestAdapter {
         if (coverageRequest.smoker().isBooleanTrue()) {
             optionalExtras += "Smoker=true;";
         }
-        // TODO add 'Alarm=true;' if there's a fire alarm
-        // TODO add 'Sprinklers=true;' if there are sprinklers
         if (coverageRequest.numberOfPreviousClaims().getValue().numericValue() > 0) {
             optionalExtras += "Claims=" + coverageRequest.numberOfPreviousClaims().getValue().numericValue() + ";";
         }
-        // TODO add 'BCEQ=true;' for earthquake cover
         if (coverageRequest.deductible().getValue().compareTo(new BigDecimal("500")) > 0) {
             optionalExtras += "Deductible:" + coverageRequest.deductible().getValue().toString() + ";";
+        }
+
+        Persistence.service().retrieveMember(tenant.lease().unit().building());
+        if (tenant.lease().unit().building().info().hasFireAlarm().isBooleanTrue()) {
+            optionalExtras += "Alarm=true;";
+        }
+        if (tenant.lease().unit().building().info().hasSprinklers().isBooleanTrue()) {
+            optionalExtras += "Sprinklers=true;";
+        }
+        if (tenant.lease().unit().building().info().hasEarthquakes().isBooleanTrue()) {
+            optionalExtras += "BCEQ=true;";
         }
         if (!optionalExtras.equals("")) {
             optionQuote.setOptionalExtras(optionalExtras);

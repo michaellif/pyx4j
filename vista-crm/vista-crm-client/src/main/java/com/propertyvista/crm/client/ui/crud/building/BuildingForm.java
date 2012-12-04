@@ -237,6 +237,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().waterSupply()), 15).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().centralAir()), 15).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().centralHeat()), 15).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().hasSprinklers()), 15).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().hasFireAlarm()), 15).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().hasEarthquakes()), 15).build());
 
         if (isEditable()) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().website()), 50).build());
