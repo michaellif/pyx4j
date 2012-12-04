@@ -46,7 +46,7 @@ public class BuildingServiceRSClient {
 
         URL url = null;
         if (true) {
-            url = new URL("http://localhost:9999/vista/interfaces/oapi/rs/buildings/createBuilding");
+            url = new URL("http://localhost:8888/vista/interfaces/oapi/rs/buildings/createBuilding");
         } else {
             url = new URL("http://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/rs/buildings/createBuilding");
         }
@@ -119,7 +119,7 @@ public class BuildingServiceRSClient {
 
         URL url = null;
         if (true) {
-            url = new URL("http://localhost:9999/vista/interfaces/oapi/rs/buildings/" + buildingCode);
+            url = new URL("http://localhost:8888/vista/interfaces/oapi/rs/buildings/" + buildingCode);
         } else {
             url = new URL("http://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/rs/buildings/" + buildingCode);
         }
