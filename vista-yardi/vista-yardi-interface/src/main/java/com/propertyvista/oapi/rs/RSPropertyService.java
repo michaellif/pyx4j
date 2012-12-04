@@ -16,7 +16,9 @@ package com.propertyvista.oapi.rs;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -73,8 +75,14 @@ public class RSPropertyService {
     @Path("/{propertyCode}")
     @Produces({ MediaType.APPLICATION_XML })
     public BuildingIO getBuildingByPropertyCode(@PathParam("propertyCode") String propertyCode) {
-
         return PropertyService.getBuildingByPropertyCode(propertyCode);
+    }
+
+    @POST
+    @Path("/createBuilding")
+    @Consumes({ "application/xml" })
+    public void createBuilding(BuildingIO buildingIO) throws Exception {
+        PropertyService.updateBuilding(buildingIO);
     }
 
     @GET

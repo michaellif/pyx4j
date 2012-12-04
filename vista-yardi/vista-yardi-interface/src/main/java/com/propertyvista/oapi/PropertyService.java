@@ -20,7 +20,6 @@ import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -40,9 +39,6 @@ public class PropertyService {
 
     public static BuildingsIO getBuildings() {
 
-        //TODO
-        NamespaceManager.setNamespace("vista");
-
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
         buildingCriteria.asc(buildingCriteria.proto().propertyCode());
         List<Building> buildings = service.query(buildingCriteria);
@@ -58,9 +54,6 @@ public class PropertyService {
 
     public static BuildingIO getBuildingByPropertyCode(String propertyCode) {
 
-        //TODO
-        NamespaceManager.setNamespace("vista");
-
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
         buildingCriteria.eq(buildingCriteria.proto().propertyCode(), propertyCode);
         List<Building> buildings = service.query(buildingCriteria);
@@ -68,10 +61,19 @@ public class PropertyService {
         return BuildingMarshaller.getInstance().unmarshal(buildings.get(0));
     }
 
+    public static void updateBuilding(BuildingIO buildingIO) throws Exception {
+
+        Building building = BuildingMarshaller.getInstance().marshal(buildingIO);
+
+        System.out.println("++++++++++" + building);
+
+        Persistence.service().persist(building);
+
+    }
+
     public static List<UnitIO> getUnitsByPropertyCode(String propertyCode) {
         List<UnitIO> unitsRS = new ArrayList<UnitIO>();
 
-        NamespaceManager.setNamespace("vista");
         EntityQueryCriteria<AptUnit> unitCriteria = EntityQueryCriteria.create(AptUnit.class);
         unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().building().propertyCode(), propertyCode));
         List<AptUnit> units = service.query(unitCriteria);
@@ -85,7 +87,6 @@ public class PropertyService {
     }
 
     public static UnitIO getUnitByNumber(String propertyCode, String unitNumber) {
-        NamespaceManager.setNamespace("vista");
         EntityQueryCriteria<AptUnit> unitCriteria = EntityQueryCriteria.create(AptUnit.class);
         unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().building().propertyCode(), propertyCode));
         unitCriteria.eq(unitCriteria.proto().info().number(), unitNumber);

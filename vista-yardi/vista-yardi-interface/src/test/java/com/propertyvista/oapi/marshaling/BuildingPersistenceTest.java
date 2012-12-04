@@ -39,7 +39,7 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
     }
 
     @Test
-    public void testBewBuildingPersistance() throws Exception {
+    public void testNewBuildingPersistance() throws Exception {
         BuildingIO buildingIO = createBuilding();
 
         Building building = BuildingMarshaller.getInstance().marshal(buildingIO);
