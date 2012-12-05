@@ -13,7 +13,6 @@
  */
 package com.propertyvista.oapi.rs;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -25,7 +24,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.propertyvista.oapi.PropertyService;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.model.UnitIO;
@@ -45,74 +43,40 @@ import com.propertyvista.oapi.model.UnitIO;
  * 
  * interfaces/oapi/rs/buildings/<buildingCode>/units?floorplan=3bdrm - all units for which floorplanName = 3bdrm
  * 
+ * interfaces/oapi/rs/buildings/updateBuilding - updates/creates building
  * 
+ * interfaces/oapi/rs/buildings/<buildingCode>/units/updateUnit - updates/creates unit for corresponding building
  * 
  */
-@Path("/buildings")
-public class RSPropertyService {
-
-    public RSPropertyService() {
-    }
+public interface RSPropertyService {
 
     @GET
     @Produces({ MediaType.APPLICATION_XML })
-    public BuildingsIO getBuildings(@QueryParam("province") String province) {
-        BuildingsIO allBuildings = PropertyService.getBuildings();
-        if (province == null) {
-            return allBuildings;
-        }
-        BuildingsIO filteredBuildings = new BuildingsIO();
-
-        for (BuildingIO building : allBuildings.buildings) {
-            if (building.info.address.province.equals(province)) {
-                filteredBuildings.buildings.add(building);
-            }
-        }
-        return filteredBuildings;
-    }
+    public BuildingsIO getBuildings(@QueryParam("province") String province);
 
     @GET
     @Path("/{propertyCode}")
     @Produces({ MediaType.APPLICATION_XML })
-    public BuildingIO getBuildingByPropertyCode(@PathParam("propertyCode") String propertyCode) {
-        return PropertyService.getBuildingByPropertyCode(propertyCode);
-    }
-
-    @POST
-    @Path("/createBuilding")
-    @Consumes({ "application/xml" })
-    public void createBuilding(BuildingIO buildingIO) throws Exception {
-        PropertyService.updateBuilding(buildingIO);
-    }
+    public BuildingIO getBuildingByPropertyCode(@PathParam("propertyCode") String propertyCode);
 
     @GET
     @Path("/{propertyCode}/units")
     @Produces({ MediaType.APPLICATION_XML })
-    public List<UnitIO> getAllUnitsByPropertyCode(@PathParam("propertyCode") String propertyCode, @QueryParam("floorplan") String floorplan) {
-
-        List<UnitIO> allUnits = PropertyService.getUnitsByPropertyCode(propertyCode);
-        List<UnitIO> filteredUnits = new ArrayList<UnitIO>();
-        for (UnitIO unit : allUnits) {
-            if (unit.floorplanName.equals(floorplan)) {
-                filteredUnits.add(unit);
-            }
-        }
-        return filteredUnits;
-    }
+    public List<UnitIO> getAllUnitsByPropertyCode(@PathParam("propertyCode") String propertyCode, @QueryParam("floorplan") String floorplan);
 
     @GET
     @Path("/{propertyCode}/units/{unitNumber}")
     @Produces({ MediaType.APPLICATION_XML })
-    public UnitIO getUnitByNumber(@PathParam("propertyCode") String propertyCode, @PathParam("unitNumber") String unitNumber) {
-
-        return PropertyService.getUnitByNumber(propertyCode, unitNumber);
-
-    }
+    public UnitIO getUnitByNumber(@PathParam("propertyCode") String propertyCode, @PathParam("unitNumber") String unitNumber);
 
     @POST
-    @Path("/{propertyCode}/units/createUnit")
-    @Consumes({ "application/xml" })
-    public void createUnit(UnitIO unitIO) throws Exception {
+    @Path("/updateBuilding")
+    @Consumes({ MediaType.APPLICATION_XML })
+    public void updateBuilding(BuildingIO buildingIO);
 
-    }
+    @POST
+    @Path("/{propertyCode}/units/updateUnit")
+    @Consumes({ MediaType.APPLICATION_XML })
+    public void updateUnit(@PathParam("propertyCode") String propertyCode, UnitIO unitIO);
+
 }
