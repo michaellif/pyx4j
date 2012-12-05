@@ -27,8 +27,6 @@ public class RSOapiTestBase extends JerseyTest {
 
     private static final Logger log = LoggerFactory.getLogger(RSOapiTestBase.class);
 
-    private int port;
-
     public RSOapiTestBase(String... packages) {
         super(packages);
     }
