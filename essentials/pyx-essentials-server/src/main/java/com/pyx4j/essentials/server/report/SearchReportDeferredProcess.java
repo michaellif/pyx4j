@@ -53,7 +53,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
 
     protected ReportTableFormater formater;
 
-    private final ReportRequest request;
+    protected final ReportRequest request;
 
     private String encodedCursorReference;
 

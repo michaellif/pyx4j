@@ -25,6 +25,8 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.essentials.server.download.MimeMap;
 
 public class ReportTableCSVFormater implements ReportTableFormater {
 
@@ -69,7 +71,7 @@ public class ReportTableCSVFormater implements ReportTableFormater {
 
     @Override
     public String getContentType() {
-        return "text/csv";
+        return MimeMap.getContentType(DownloadFormat.CSV);
     }
 
     @Override
