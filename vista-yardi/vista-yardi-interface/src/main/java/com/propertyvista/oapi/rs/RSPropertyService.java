@@ -108,4 +108,11 @@ public class RSPropertyService {
         return PropertyService.getUnitByNumber(propertyCode, unitNumber);
 
     }
+
+    @POST
+    @Path("/{propertyCode}/units/createUnit")
+    @Consumes({ "application/xml" })
+    public void createUnit(UnitIO unitIO) throws Exception {
+
+    }
 }
