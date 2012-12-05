@@ -84,6 +84,11 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
             return;
         }
 
+        if (rentAmount.compareTo(BigDecimal.ZERO) == 0) {
+            leaseApproval.suggestedDecision().setValue(SuggestedDecision.ManualReview);
+            return;
+        }
+
         BigDecimal amountApproved = BigDecimal.ZERO;
         int creditCheckCount = 0;
 

@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.biz.preloader.GenericProductCatalogFacade;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
@@ -35,6 +36,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.AptUnitServicePriceDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
 
@@ -104,6 +106,15 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
             dto.marketing().description().setValue(null);
         }
         dto.info().economicStatusDescription().setValue(null);
+    }
+
+    @Override
+    protected void create(AptUnit entity, AptUnitDTO dto) {
+        super.create(entity, dto);
+
+        if (VistaFeatures.instance().genericProductCatalog()) {
+            ServerSideFactory.create(GenericProductCatalogFacade.class).addUnit(entity.building(), entity);
+        }
     }
 
     @Override

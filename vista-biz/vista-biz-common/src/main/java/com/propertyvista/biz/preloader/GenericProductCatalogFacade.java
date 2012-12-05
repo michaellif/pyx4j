@@ -33,6 +33,13 @@ public interface GenericProductCatalogFacade {
     void updateFor(Building building);
 
     /**
+     * Persist catalog for the specified building.
+     * 
+     * @param building
+     */
+    void persistFor(Building building);
+
+    /**
      * Adds new unit as ProductItem to the catalog unit-related services.
      * 
      * @param building

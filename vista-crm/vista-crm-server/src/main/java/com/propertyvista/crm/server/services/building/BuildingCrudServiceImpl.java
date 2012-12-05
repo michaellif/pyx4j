@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.preloader.GenericProductCatalogFacade;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.server.services.admin.MerchantAccountCrudServiceImpl;
 import com.propertyvista.domain.GeoLocation;
@@ -37,6 +38,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building, BuildingDTO> implements BuildingCrudService {
 
@@ -113,6 +115,16 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     protected void enhanceListRetrieved(Building entity, BuildingDTO dto) {
         // just clear unnecessary data before serialization:
         dto.marketing().description().setValue(null);
+    }
+
+    @Override
+    protected void create(Building entity, BuildingDTO dto) {
+        super.create(entity, dto);
+
+        if (VistaFeatures.instance().genericProductCatalog()) {
+            ServerSideFactory.create(GenericProductCatalogFacade.class).createFor(entity);
+            ServerSideFactory.create(GenericProductCatalogFacade.class).persistFor(entity);
+        }
     }
 
     @Override

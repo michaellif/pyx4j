@@ -42,7 +42,7 @@ public class UnitMarketPriceCalculator {
             EntityQueryCriteria<ProductCatalog> criteria = EntityQueryCriteria.create(ProductCatalog.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
             productCatalog = Persistence.service().retrieve(criteria);
-            Persistence.service().retrieve(productCatalog.services());
+            Persistence.service().retrieveMember(productCatalog.services());
             for (Service service : productCatalog.services()) {
                 if (service.serviceType().getValue() == Service.ServiceType.residentialUnit) {
                     Persistence.service().retrieve(service.version().items());

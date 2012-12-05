@@ -27,6 +27,7 @@ import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.financial.offering.Concession;
@@ -43,6 +44,9 @@ public class GenericProductCatalogFacadeImpl implements GenericProductCatalogFac
 
     @Override
     public void createFor(Building building) {
+        if (building.isValueDetached()) {
+            Persistence.service().retrieve(building);
+        }
 
         building.productCatalog().services().clear();
         building.productCatalog().services().addAll(createDefaultServices(building.productCatalog()));
@@ -58,16 +62,51 @@ public class GenericProductCatalogFacadeImpl implements GenericProductCatalogFac
 
     @Override
     public void updateFor(Building building) {
+        if (building.isValueDetached()) {
+            Persistence.service().retrieve(building);
+        }
+
         // TODO Auto-generated method stub
     }
 
     @Override
+    public void persistFor(Building building) {
+        Persistence.service().merge(building);
+
+        // Save Versioned Items, 
+        for (Concession concession : building.productCatalog().concessions()) {
+            concession.saveAction().setValue(SaveAction.saveAsFinal);
+            Persistence.service().persist(concession);
+        }
+        for (Feature feature : building.productCatalog().features()) {
+            feature.saveAction().setValue(SaveAction.saveAsFinal);
+            Persistence.service().persist(feature);
+        }
+        for (Service service : building.productCatalog().services()) {
+            service.saveAction().setValue(SaveAction.saveAsFinal);
+            Persistence.service().persist(service);
+        }
+    }
+
+    @Override
     public void addUnit(Building building, AptUnit unit) {
+        if (building.isValueDetached()) {
+            Persistence.service().retrieve(building);
+        }
+
+        if (building.productCatalog().isValueDetached()) {
+            Persistence.service().retrieve(building.productCatalog());
+        }
+
+        Persistence.service().retrieveMember(building.productCatalog().services());
+
         for (Service service : building.productCatalog().services()) {
             switch (service.serviceType().getValue()) {
             case commercialUnit:
             case residentialUnit:
                 service.version().items().add(createUnitItem(unit, service));
+                service.saveAction().setValue(SaveAction.saveAsFinal);
+                Persistence.service().persist(service);
                 break;
             default:
                 break;
