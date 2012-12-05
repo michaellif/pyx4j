@@ -13,6 +13,10 @@
  */
 package com.propertyvista.dto;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
@@ -28,6 +32,10 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 public interface TenantDTO extends LeaseParticipantDTO<LeaseTermTenant> {
 
     IPrimitive<Role> role();
+
+    @Editor(type = Editor.EditorType.money)
+    @Caption(description = "This is the minimum liability that was set by tenant insurance policy")
+    IPrimitive<BigDecimal> minimumRequiredLiability();
 
     IList<InsuranceCertificate> insuranceCertificates();
 

@@ -18,12 +18,15 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -56,6 +59,12 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<L
         // unattach tenant related information since we don't want to send again
         for (InsuranceCertificate insuranceCertificate : dto.insuranceCertificates()) {
             insuranceCertificate.tenant().set(insuranceCertificate.tenant().createIdentityStub());
+        }
+
+        TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(entity.lease().unit(),
+                TenantInsurancePolicy.class);
+        if (insurancePolicy.requireMinimumLiability().isBooleanTrue()) {
+            dto.minimumRequiredLiability().setValue(insurancePolicy.minimumRequiredLiability().getValue());
         }
     }
 

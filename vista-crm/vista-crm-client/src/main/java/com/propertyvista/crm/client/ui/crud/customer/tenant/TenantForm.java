@@ -15,6 +15,8 @@ package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
 import java.util.List;
 
+import com.google.gwt.user.client.ui.Label;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -45,6 +47,8 @@ import com.propertyvista.dto.TenantDTO;
 public class TenantForm extends CrmEntityForm<TenantDTO> {
 
     private static final I18n i18n = I18n.get(TenantForm.class);
+
+    private Label noRequirementsLabel;
 
     public TenantForm() {
         this(false);
@@ -92,6 +96,8 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
         } else {
             get(proto().customer().personScreening()).setVisible(getValue().customer().personScreening().getPrimaryKey() != null);
         }
+
+        updateTenantInsuranceTabControls();
     }
 
     private FormFlexPanel createDetailsTab(String title) {
@@ -167,8 +173,23 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
 
     private FormFlexPanel createTenantInsuranceTab(String title) {
         FormFlexPanel tabPanel = new FormFlexPanel(title);
-        tabPanel.setWidget(0, 0, inject(proto().insuranceCertificates(), new TenantInsuranceCertificateFolder(null)));
+        int row = -1;
+        tabPanel.setH1(++row, 0, 1, i18n.tr("Requirements"));
+        tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().minimumRequiredLiability()), 15).build());
+        get(proto().minimumRequiredLiability()).setViewable(true);
+
+        noRequirementsLabel = new Label(i18n.tr("None"));
+        noRequirementsLabel.setVisible(false);
+        tabPanel.setWidget(++row, 0, noRequirementsLabel);
+
+        tabPanel.setH1(++row, 0, 1, i18n.tr("Insurance Certificates"));
+        tabPanel.setWidget(++row, 0, inject(proto().insuranceCertificates(), new TenantInsuranceCertificateFolder(null)));
         return tabPanel;
     }
 
+    private void updateTenantInsuranceTabControls() {
+        (get(proto().minimumRequiredLiability())).setVisible(!getValue().minimumRequiredLiability().isNull());
+        noRequirementsLabel.setVisible(getValue().minimumRequiredLiability().isNull());
+
+    }
 }
