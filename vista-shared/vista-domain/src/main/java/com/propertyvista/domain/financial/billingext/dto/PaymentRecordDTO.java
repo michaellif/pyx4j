@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 25, 2012
+ * Created on Dec 4, 2012
  * @author stanp
  * @version $Id$
  */
@@ -21,16 +21,18 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface ChargeDTO extends IEntity {
+public interface PaymentRecordDTO extends IEntity {
+
     IPrimitive<String> transactionId();
+
+    IPrimitive<String> externalTransactionId();
 
     IPrimitive<String> leaseId();
 
-    IPrimitive<String> description();
+    IPrimitive<LogicalDate> transactionDate();
 
     IPrimitive<BigDecimal> amount();
 
-    IPrimitive<LogicalDate> fromDate();
+    IPrimitive<String> paymentType();
 
-    IPrimitive<LogicalDate> toDate();
 }

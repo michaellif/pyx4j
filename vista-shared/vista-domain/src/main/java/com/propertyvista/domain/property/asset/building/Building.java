@@ -176,4 +176,6 @@ public interface Building extends PolicyNode {
     @Owned
     @Detached(level = AttachLevel.Detached)
     ISet<BillingCycle> billingCycles();
+
+    IPrimitive<Boolean> useExternalBilling();
 }

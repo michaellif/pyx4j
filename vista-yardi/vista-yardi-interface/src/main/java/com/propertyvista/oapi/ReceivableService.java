@@ -13,12 +13,18 @@
  */
 package com.propertyvista.oapi;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.billingext.ExternalBillingFacade;
 import com.propertyvista.domain.financial.billingext.dto.ChargeDTO;
+import com.propertyvista.domain.financial.billingext.dto.PaymentRecordDTO;
 import com.propertyvista.oapi.marshaling.ChargeMarshaller;
+import com.propertyvista.oapi.marshaling.PaymentRecordMarshaller;
 import com.propertyvista.oapi.model.ChargeIO;
+import com.propertyvista.oapi.model.PaymentRecordIO;
 import com.propertyvista.oapi.model.TransactionIO;
 
 public class ReceivableService {
@@ -30,5 +36,40 @@ public class ReceivableService {
 
             ServerSideFactory.create(ExternalBillingFacade.class).postCharge(chargeDTO, chargeIO.leaseId);
         }
+    }
+
+    public static void runBilling(String propertyCode) {
+        ServerSideFactory.create(ExternalBillingFacade.class).runBilling(propertyCode);
+    }
+
+    public static List<PaymentRecordIO> getNonProcessedPaymentRecords() {
+        // ExternalPaymentFacade.onPaymentRecordCreated(PaymentRecord pr) will create an ExtendedPaymentRecord
+        // that will be owned by BillingAccount, will reference original PaymentRecord, and will hold externalTransactionId
+        // when that record is reconciled. So, here we return all the records where externalTransactionId is not set.
+        List<PaymentRecordDTO> payments = ServerSideFactory.create(ExternalBillingFacade.class).getNonProcessedPaymentRecords();
+        if (payments == null || payments.size() == 0) {
+            return null;
+        }
+
+        List<PaymentRecordIO> records = new ArrayList<PaymentRecordIO>();
+        for (PaymentRecordDTO prDTO : payments) {
+            PaymentRecordIO pr = PaymentRecordMarshaller.getInstance().marshal(prDTO);
+            records.add(pr);
+        }
+
+        return records;
+    }
+
+    public static void reconcilePaymentRecords(List<PaymentRecordIO> records) {
+        // add PaymentRecordIO.externalTransactionId to the ExternalPaymentRecord referenced by PaymentRecordIO.transactionId
+        // to flag the PaymentRecord as "processed" and be able to find it later when processing incoming payment transactions
+        if (records == null || records.size() == 0) {
+            return;
+        }
+        List<PaymentRecordDTO> payments = new ArrayList<PaymentRecordDTO>();
+        for (PaymentRecordIO record : records) {
+            payments.add(PaymentRecordMarshaller.getInstance().unmarshal(record));
+        }
+        ServerSideFactory.create(ExternalBillingFacade.class).reconcilePaymentRecords(payments);
     }
 }

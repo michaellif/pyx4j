@@ -13,12 +13,24 @@
  */
 package com.propertyvista.biz.financial.billingext;
 
+import java.util.List;
+
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billingext.dto.ChargeDTO;
+import com.propertyvista.domain.financial.billingext.dto.PaymentRecordDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface ExternalBillingFacade {
     boolean postCharge(ChargeDTO charge, String leaseId);
 
+    List<PaymentRecordDTO> getNonProcessedPaymentRecords();
+
+    void reconcilePaymentRecords(List<PaymentRecordDTO> records);
+
     Bill runBilling(Lease lease);
+
+    void runBilling(String propertyCode);
+
+    void onPaymentRecordCreated(PaymentRecord paymentRecord);
 }

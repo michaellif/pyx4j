@@ -16,6 +16,8 @@ package com.propertyvista.oapi.model;
 import javax.xml.bind.annotation.XmlAttribute;
 
 import com.propertyvista.oapi.xml.AbstractElementIO;
+import com.propertyvista.oapi.xml.BigDecimalIO;
+import com.propertyvista.oapi.xml.LogicalDateIO;
 
 public class PaymentRecordIO extends AbstractElementIO {
 
@@ -24,4 +26,11 @@ public class PaymentRecordIO extends AbstractElementIO {
 
     public String externalTransactionId;
 
+    public String leaseId;
+
+    public LogicalDateIO transactionDate;
+
+    public BigDecimalIO amount;
+
+    public String paymentType;
 }

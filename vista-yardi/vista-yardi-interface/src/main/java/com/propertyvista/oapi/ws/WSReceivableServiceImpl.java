@@ -29,24 +29,21 @@ public class WSReceivableServiceImpl implements WSReceivableService {
         for (TransactionIO transIO : transactions) {
             ReceivableService.postTransaction(transIO);
         }
-
     }
 
     @Override
     public void runBilling(String buildingCode) {
-
+        ReceivableService.runBilling(buildingCode);
     }
 
     @Override
     public List<PaymentRecordIO> getNonProcessedPaymentRecords() {
-        // TODO Auto-generated method stub
-        return null;
+        return ReceivableService.getNonProcessedPaymentRecords();
     }
 
     @Override
     public void reconcilePaymentRecords(List<PaymentRecordIO> records) {
-        // TODO Auto-generated method stub
-
+        ReceivableService.reconcilePaymentRecords(records);
     }
 
 }
