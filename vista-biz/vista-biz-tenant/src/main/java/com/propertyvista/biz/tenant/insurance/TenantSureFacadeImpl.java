@@ -230,6 +230,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         if (insuranceTenantSure.status().getValue() == Status.PendingCancellation) {
             TenantSureMessageDTO message = status.messages().$();
             if (insuranceTenantSure.cancellation().getValue() == CancellationType.SkipPayment) {
+                status.isPaymentFailed().setValue(true);
                 message.messageText()
                         .setValue(
                                 i18n.tr("There was a problem with your last scheduled payment. If you don't update your credit card details until {0,date,short}, your TeantSure insurance will expire on {1,date,short}.",
@@ -238,6 +239,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 message.messageText().setValue(
                         i18n.tr("Your insurance has been cancelled and will expire on {0,date,short}", insuranceTenantSure.expiryDate().getValue()));
             }
+            status.messages().add(message);
         }
 
         return status;

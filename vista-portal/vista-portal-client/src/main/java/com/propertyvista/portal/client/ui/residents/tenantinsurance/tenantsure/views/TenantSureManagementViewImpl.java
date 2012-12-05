@@ -36,6 +36,8 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 
 public class TenantSureManagementViewImpl extends Composite implements TenantSureManagementView {
 
+    private static final boolean TODO = false;
+
     private static final I18n i18n = I18n.get(TenantSureManagementViewImpl.class);
 
     private Presenter presenter;
@@ -45,6 +47,8 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     private Button cancelTenantSureButton;
 
     private Button updateCCButton;
+
+    private Button updateCCAndPay;
 
     public TenantSureManagementViewImpl() {
 
@@ -63,6 +67,9 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         boolean isCancelled = !detailedStatus.expiryDate().isNull();
         updateCCButton.setEnabled(!isCancelled);
         cancelTenantSureButton.setEnabled(!isCancelled);
+
+        setControlButtonLayout(updateCCButton, !detailedStatus.isPaymentFailed().isBooleanTrue()); // because setVisible for some reason screws up other style settings        
+        setControlButtonLayout(updateCCAndPay, detailedStatus.isPaymentFailed().isBooleanTrue()); // because setVisible for some reason screws up other style settings
     }
 
     @Override
@@ -121,7 +128,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         actionsPanel.getElement().getStyle().setMarginTop(50, Unit.PX);
         actionsPanel.getElement().getStyle().setMarginBottom(50, Unit.PX);
 
-        updateCCButton = new Button("Update Credit Card Details", new ClickHandler() {
+        updateCCButton = new Button(i18n.tr("Update Credit Card Details"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.updateCreditCardDetails();
@@ -129,7 +136,16 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         });
         setControlButtonLayout(updateCCButton);
 
-        cancelTenantSureButton = new Button("Cancel TenantSure", new ClickHandler() {
+        updateCCAndPay = new Button(i18n.tr("Update Credid Card and Pay"), new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.updateCreditCardDetails();
+            }
+        });
+        setControlButtonLayout(updateCCAndPay);
+
+        cancelTenantSureButton = new Button(i18n.tr("Cancel TenantSure"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 TenantSureManagementViewImpl.this.onCancelTenantSure();
@@ -155,6 +171,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         actionsPanel.add(makeAClaim);
         actionsPanel.add(viewFaq);
         actionsPanel.add(updateCCButton);
+        actionsPanel.add(updateCCAndPay);
         actionsPanel.add(cancelTenantSureButton);
         return actionsPanel;
     }
@@ -172,8 +189,8 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         MessageDialog.info(i18n.tr("To make a claim please call {0}", TenantSureConstants.TENANTSURE_PHONE_NUMBER));
     }
 
-    private static void setControlButtonLayout(Button button) {
-        button.getElement().getStyle().setProperty("display", "block");
+    private static void setControlButtonLayout(Button button, boolean isVisible) {
+        button.getElement().getStyle().setProperty("display", isVisible ? "block" : "none");
         button.getElement().getStyle().setProperty("textAlign", "center");
         button.getElement().getStyle().setProperty("width", "15em");
         button.getElement().getStyle().setProperty("marginLeft", "auto");
@@ -181,6 +198,10 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
         button.getElement().getStyle().setProperty("marginTop", "10px");
         button.getElement().getStyle().setProperty("marginBottom", "10px");
+    }
+
+    private static void setControlButtonLayout(Button button) {
+        setControlButtonLayout(button, true);
     }
 
 }

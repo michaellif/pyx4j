@@ -33,6 +33,8 @@ public interface TenantSureTenantInsuranceStatusDetailedDTO extends IEntity {
      */
     IPrimitive<LogicalDate> expiryDate();
 
+    IPrimitive<Boolean> isPaymentFailed();
+
     IList<TenantSureMessageDTO> messages();
 
 }
