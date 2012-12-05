@@ -140,7 +140,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
     }
 
     protected String getFileName() {
-        return EntityFactory.getEntityMeta(entityClass).getCaption() + ".csv";
+        return EntityFactory.getEntityMeta(entityClass).getCaption() + "." + request.getDownloadFormat().getExtension();
     }
 
     protected boolean acceptMember(String memberName, MemberMeta memberMeta) {
