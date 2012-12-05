@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -28,6 +28,8 @@ import com.propertyvista.oapi.XmlFormatter;
 
 public class BuildingServiceRSClient {
 
+    private static boolean isLocal = true;
+
     public static void main(String[] args) throws MalformedURLException {
 
         String buildingCode = String.valueOf(System.currentTimeMillis()).substring(5);
@@ -45,7 +47,7 @@ public class BuildingServiceRSClient {
         });
 
         URL url = null;
-        if (true) {
+        if (isLocal) {
             url = new URL("http://localhost:8888/vista/interfaces/oapi/rs/buildings/createBuilding");
         } else {
             url = new URL("http://static-11.birchwoodsoftwaregroup.com/interfaces/oapi/rs/buildings/createBuilding");
@@ -69,8 +71,8 @@ public class BuildingServiceRSClient {
             //out.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><building propertyCode=\"" + buildingCode + "\"></building>");
             out.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><building propertyCode=\""
                     + buildingCode
-                    + "\"><info><buildingType>mixed_residential</buildingType><address><streetNumber>1206</streetNumber><streetName>Emerson</streetName><streetType>avenue</streetType><city>Saskatoon</city><province>Saskatchewan</province><postalCode>S7H 2X1</postalCode><country>Canada</country></address></info><contacts><contact name=\"Cathern Petters\"><email>cathern.petters@yahoo.ca</email><phone>905-306-0112</phone></contact></contacts><marketing><name>emerson1206 mktRG</name><description>Curabitur sem velit, ullamcorper nec sagittis et, fringilla at risus. Donec eleifend convallis massa, ac commodo odio condimentum eu.</description><blurbs/></marketing><units/><medias><media><mediaType>youTube</mediaType><caption>A emerson1206 video</caption><youTubeVideoID>rDZR0RglALI</youTubeVideoID><url/></media><media><mediaType>file</mediaType><caption>building6</caption><youTubeVideoID/><url/></media><media><mediaType>file</mediaType><caption>building6-1</caption><youTubeVideoID/><url/></media></medias><parkings><parking name=\"Parking1\"><description>3-level parking1 at emerson1206</description><type>garageLot</type><levels>3.0</levels></parking></parkings></building>");
-            // + "\"><info><buildingType>mixed_residential</buildingType><address><streetNumber>1206</streetNumber><streetName>Emerson</streetName><streetType>avenue</streetType><city>Saskatoon</city><province>Saskatchewan</province><postalCode>S7H 2X1</postalCode><country>Canada</country></address></info><contacts><contact name=\"Cathern Petters\"><email>cathern.petters@yahoo.ca</email><phone>905-306-0112</phone></contact></contacts><marketing><name>emerson1206 mktRG</name><description>Curabitur sem velit, ullamcorper nec sagittis et, fringilla at risus. Donec eleifend convallis massa, ac commodo odio condimentum eu.</description><blurbs/></marketing><units/><medias><media><mediaType>youTube</mediaType><caption>A emerson1206 video</caption><youTubeVideoID>rDZR0RglALI</youTubeVideoID><url/></media><media><mediaType>file</mediaType><caption>building6</caption><youTubeVideoID/><url/></media><media><mediaType>file</mediaType><caption>building6-1</caption><youTubeVideoID/><url/></media></medias><amenities><amenity><name>Elevator JI</name><description>Libero consectetur pharetra</description></amenity><amenity><name>Play Ground CL</name><description>Pellentesque et enim a eros rutrum dapibus</description></amenity><amenity><name>Business Center SH</name><description>Non fringilla diam</description></amenity><amenity><name>House Sitting TL</name><description>Pellentesque vitae turpis vitae</description></amenity><amenity><name>On-Site Maintenance EG</name><description>Neque porro quisquam</description></amenity></amenities><parkings><parking name=\"Parking1\"><description>3-level parking1 at emerson1206</description><type>garageLot</type><levels>3.0</levels></parking></parkings><includedUtilities><utility><name>Hydro</name></utility></includedUtilities></building>");
+                    + "\"><info><buildingType>mixed_residential</buildingType><address><streetNumber>1206</streetNumber><streetName>Emerson</streetName><streetType>avenue</streetType><city>Saskatoon</city><province>Saskatchewan</province><postalCode>S7H 2X1</postalCode><country>Canada</country></address></info><contacts><contact name=\"Cathern Petters\"><email>cathern.petters@yahoo.ca</email><phone>905-306-0112</phone></contact></contacts><marketing><name>emerson1206 mktRG</name><description>Curabitur sem velit, ullamcorper nec sagittis et, fringilla at risus. Donec eleifend convallis massa, ac commodo odio condimentum eu.</description><blurbs/></marketing><units/><medias><media><mediaType>youTube</mediaType><caption>A emerson1206 video</caption><youTubeVideoID>rDZR0RglALI</youTubeVideoID><url/></media><media><mediaType>file</mediaType><caption>building6</caption><youTubeVideoID/><url/></media><media><mediaType>file</mediaType><caption>building6-1</caption><youTubeVideoID/><url/></media></medias><amenities><amenity><name>Elevator JI</name><description>Libero consectetur pharetra</description></amenity><amenity><name>Play Ground CL</name><description>Pellentesque et enim a eros rutrum dapibus</description></amenity><amenity><name>Business Center SH</name><description>Non fringilla diam</description></amenity><amenity><name>House Sitting TL</name><description>Pellentesque vitae turpis vitae</description></amenity><amenity><name>On-Site Maintenance EG</name><description>Neque porro quisquam</description></amenity></amenities><parkings><parking name=\"Parking1\"><description>3-level parking1 at emerson1206</description><type>garageLot</type><levels>3.0</levels></parking></parkings></building>");
+            //      + "\"><info><buildingType>mixed_residential</buildingType><address><streetNumber>1206</streetNumber><streetName>Emerson</streetName><streetType>avenue</streetType><city>Saskatoon</city><province>Saskatchewan</province><postalCode>S7H 2X1</postalCode><country>Canada</country></address></info><contacts><contact name=\"Cathern Petters\"><email>cathern.petters@yahoo.ca</email><phone>905-306-0112</phone></contact></contacts><marketing><name>emerson1206 mktRG</name><description>Curabitur sem velit, ullamcorper nec sagittis et, fringilla at risus. Donec eleifend convallis massa, ac commodo odio condimentum eu.</description><blurbs/></marketing><units/><medias><media><mediaType>youTube</mediaType><caption>A emerson1206 video</caption><youTubeVideoID>rDZR0RglALI</youTubeVideoID><url/></media><media><mediaType>file</mediaType><caption>building6</caption><youTubeVideoID/><url/></media><media><mediaType>file</mediaType><caption>building6-1</caption><youTubeVideoID/><url/></media></medias><amenities><amenity><name>Elevator JI</name><description>Libero consectetur pharetra</description></amenity><amenity><name>Play Ground CL</name><description>Pellentesque et enim a eros rutrum dapibus</description></amenity><amenity><name>Business Center SH</name><description>Non fringilla diam</description></amenity><amenity><name>House Sitting TL</name><description>Pellentesque vitae turpis vitae</description></amenity><amenity><name>On-Site Maintenance EG</name><description>Neque porro quisquam</description></amenity></amenities><parkings><parking name=\"Parking1\"><description>3-level parking1 at emerson1206</description><type>garageLot</type><levels>3.0</levels></parking></parkings><includedUtilities><utility><name>Hydro</name></utility></includedUtilities></building>");
 
             out.flush();
             out.close();
@@ -121,7 +123,7 @@ public class BuildingServiceRSClient {
         });
 
         URL url = null;
-        if (true) {
+        if (isLocal) {
             url = new URL("http://localhost:8888/vista/interfaces/oapi/rs/buildings/" + buildingCode);
         } else {
             url = new URL("http://static-11.birchwoodsoftwaregroup.com/interfaces/oapi/rs/buildings/" + buildingCode);

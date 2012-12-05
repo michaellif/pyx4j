@@ -59,7 +59,9 @@ public class BuildingAmenityMarshaller implements Marshaller<BuildingAmenity, Bu
         BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
         amenity.name().setValue(amenityIO.name.value);
         amenity.description().setValue(amenityIO.description.value);
-        amenity.type().setValue(amenityIO.type.value);
+        if (amenityIO.type != null) {
+            amenity.type().setValue(amenityIO.type.value);
+        }
         return amenity;
     }
 

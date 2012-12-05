@@ -19,27 +19,18 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlValue;
 
-import com.propertyvista.oapi.xml.Action;
-import com.propertyvista.oapi.xml.ElementIO;
+import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class MarketingIO implements ElementIO {
+public class MarketingIO extends AbstractElementIO {
 
     @XmlAttribute
-    public Action action;
-
-    public StringIO name;
+    public String name;
 
     public StringIO description;
 
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "blurb", type = AdvertisingBlurbIO.class))
     public List<AdvertisingBlurbIO> blurbs = new ArrayList<AdvertisingBlurbIO>();
-
-    @Override
-    public Action getAction() {
-        return action;
-    }
 }

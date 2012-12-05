@@ -17,8 +17,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.oapi.model.LeaseIO;
-import com.propertyvista.oapi.model.LeaseStatusIO;
-import com.propertyvista.oapi.model.PaymentFrequencyIO;
+import com.propertyvista.oapi.model.types.LeaseStatusIO;
+import com.propertyvista.oapi.model.types.PaymentFrequencyIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
 
 public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {

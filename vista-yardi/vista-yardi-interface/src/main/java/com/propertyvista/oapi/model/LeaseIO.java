@@ -16,6 +16,8 @@ package com.propertyvista.oapi.model;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.propertyvista.oapi.model.types.LeaseStatusIO;
+import com.propertyvista.oapi.model.types.PaymentFrequencyIO;
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
 

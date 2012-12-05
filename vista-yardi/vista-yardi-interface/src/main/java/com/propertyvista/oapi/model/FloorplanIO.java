@@ -26,7 +26,7 @@ import com.propertyvista.oapi.xml.IntegerIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class FloorplanIO extends AbstractElementIO{
+public class FloorplanIO extends AbstractElementIO {
 
     //mandatory for portal
     public StringIO name;
@@ -61,8 +61,8 @@ public class FloorplanIO extends AbstractElementIO{
     public LogicalDateIO availableFrom;
 
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "amenity", type = AmenityIO.class))
-    public List<AmenityIO> amenities = new ArrayList<AmenityIO>();
+    @XmlElements(@XmlElement(name = "amenity", type = FloorplanAmenityIO.class))
+    public List<FloorplanAmenityIO> amenities = new ArrayList<FloorplanAmenityIO>();
 
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "media", type = MediaIO.class))

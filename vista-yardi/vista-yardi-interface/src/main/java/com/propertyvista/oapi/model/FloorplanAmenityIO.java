@@ -14,10 +14,15 @@
 package com.propertyvista.oapi.model;
 
 import com.propertyvista.oapi.model.types.FloorplanAmenityTypeIO;
+import com.propertyvista.oapi.xml.AbstractElementIO;
+import com.propertyvista.oapi.xml.StringIO;
 
-
-public class FloorplanAmenityIO extends AmenityIO {
+public class FloorplanAmenityIO extends AbstractElementIO {
 
     public FloorplanAmenityTypeIO type;
+
+    public StringIO name;
+
+    public StringIO description;
 
 }

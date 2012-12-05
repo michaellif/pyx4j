@@ -46,8 +46,15 @@ public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
     @Override
     public AptUnit unmarshal(UnitIO unitIO) throws Exception {
         AptUnit unit = EntityFactory.create(AptUnit.class);
-        unit.floorplan().name().setValue(unitIO.floorplanName.value);
         unit.info().number().setValue(unitIO.number);
+
+        // EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
+        // floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), unitIO.floorplanName.value));
+        // floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().bathrooms(), unitIO.baths.value));
+        // floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().bedrooms(), unitIO.beds.value));
+        // List<Floorplan> floorplans = Persistence.service().query(floorplanCriteria);
+
+        unit.floorplan().name().setValue(unitIO.floorplanName.value);
         unit.floorplan().bathrooms().setValue(unitIO.baths.value);
         unit.floorplan().bedrooms().setValue(unitIO.beds.value);
         return unit;
