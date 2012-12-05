@@ -40,10 +40,19 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
     @Override
     public TenantInsuranceStatusDTO getInsuranceStatus(Tenant tenantId) {
         LogicalDate today = new LogicalDate(Persistence.service().getTransactionSystemTime());
-        EntityQueryCriteria<InsuranceCertificate> criteria = EntityQueryCriteria.create(InsuranceCertificate.class);
-        criteria.eq(criteria.proto().tenant().lease().leaseParticipants(), tenantId);
-        criteria.or(PropertyCriterion.ge(criteria.proto().expiryDate(), today), PropertyCriterion.isNull(criteria.proto().expiryDate()));
-        InsuranceCertificate insuranceCertificate = Persistence.service().retrieve(criteria);
+        InsuranceCertificate insuranceCertificate = null;
+        EntityQueryCriteria<InsuranceCertificate> ownInsuranceCriteira = EntityQueryCriteria.create(InsuranceCertificate.class);
+        ownInsuranceCriteira.eq(ownInsuranceCriteira.proto().tenant(), tenantId);
+        ownInsuranceCriteira.or(PropertyCriterion.ge(ownInsuranceCriteira.proto().expiryDate(), today),
+                PropertyCriterion.isNull(ownInsuranceCriteira.proto().expiryDate()));
+        insuranceCertificate = Persistence.service().retrieve(ownInsuranceCriteira);
+        if (insuranceCertificate == null) {
+            EntityQueryCriteria<InsuranceCertificate> anyNonExpiredInsuranceCriteria = EntityQueryCriteria.create(InsuranceCertificate.class);
+            anyNonExpiredInsuranceCriteria.eq(anyNonExpiredInsuranceCriteria.proto().tenant().lease().leaseParticipants(), tenantId);
+            anyNonExpiredInsuranceCriteria.or(PropertyCriterion.ge(anyNonExpiredInsuranceCriteria.proto().expiryDate(), today),
+                    PropertyCriterion.isNull(anyNonExpiredInsuranceCriteria.proto().expiryDate()));
+            insuranceCertificate = Persistence.service().retrieve(anyNonExpiredInsuranceCriteria);
+        }
 
         if (insuranceCertificate == null) {
             NoInsuranceTenantInsuranceStatusDTO noInsuranceStatus = EntityFactory.create(NoInsuranceTenantInsuranceStatusDTO.class);
