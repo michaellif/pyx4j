@@ -23,8 +23,8 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -33,12 +33,14 @@ import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 @DiscriminatorValue("InsuranceCertificate")
-@ToStringFormat("Provider: {0}, Certificate #: {1}, Liability Coverage: ${2,#,##0.00}, Expiry: {3}")
+// TODO this format fails during update of new instances of InsuranceCertificate via BoxFolder
+//@ToStringFormat("Provider: {0}, Certificate #: {1}, Liability Coverage: ${2,choice,null#|!null#,#,##0.00}, Expiry: {3}")
 public interface InsuranceCertificate extends ApplicationDocumentHolder<InsuranceCertificateDocument> {
 
     @Caption(name = "Owned By")
     @Owner
     @JoinColumn
+    @ReadOnly
     Tenant tenant();
 
     /** <code>true</code> for certificates create via Property Vista integrated systems */

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -50,11 +52,11 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<L
             }
         }
 
-        // get insurance certificates
-        EntityQueryCriteria<InsuranceCertificate> tenantInsuranceCriteria = EntityQueryCriteria.create(InsuranceCertificate.class);
-        tenantInsuranceCriteria.desc(tenantInsuranceCriteria.proto().inceptionDate());
-        tenantInsuranceCriteria.eq(tenantInsuranceCriteria.proto().tenant(), entity);
-        dto.insuranceCertificates().addAll(Persistence.service().query(tenantInsuranceCriteria));
+        dto.insuranceCertificates().addAll(retrieveInsuranceCertificates(entity));
+        // unattach tenant related information since we don't want to send again
+        for (InsuranceCertificate insuranceCertificate : dto.insuranceCertificates()) {
+            insuranceCertificate.tenant().set(insuranceCertificate.tenant().createIdentityStub());
+        }
     }
 
     @Override
@@ -102,5 +104,12 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<L
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), leaseCustomer));
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseTermV(), termV));
         return Persistence.service().retrieve(criteria);
+    }
+
+    private List<InsuranceCertificate> retrieveInsuranceCertificates(Tenant tenantId) {
+        EntityQueryCriteria<InsuranceCertificate> tenantInsuranceCriteria = EntityQueryCriteria.create(InsuranceCertificate.class);
+        tenantInsuranceCriteria.eq(tenantInsuranceCriteria.proto().tenant(), tenantId);
+        tenantInsuranceCriteria.desc(tenantInsuranceCriteria.proto().inceptionDate());
+        return Persistence.service().query(tenantInsuranceCriteria);
     }
 }

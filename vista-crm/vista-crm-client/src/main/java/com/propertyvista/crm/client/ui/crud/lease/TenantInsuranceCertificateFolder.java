@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -29,6 +30,7 @@ public class TenantInsuranceCertificateFolder extends VistaBoxFolder<InsuranceCe
 
     public TenantInsuranceCertificateFolder(TenantOwnerClickHandler tenatOwnerClickHandler) {
         super(InsuranceCertificate.class);
+        setRemovable(false);
         this.tenantOwnerClickHanlder = tenatOwnerClickHandler;
     }
 
@@ -44,7 +46,14 @@ public class TenantInsuranceCertificateFolder extends VistaBoxFolder<InsuranceCe
     @Override
     public IFolderItemDecorator<InsuranceCertificate> createItemDecorator() {
         BoxFolderItemDecorator<InsuranceCertificate> decorator = (BoxFolderItemDecorator<InsuranceCertificate>) super.createItemDecorator();
-        decorator.setExpended(false);
+        decorator.setExpended(isEditable());
         return decorator;
+    }
+
+    @Override
+    protected void addItem() {
+        InsuranceCertificate certificate = EntityFactory.create(InsuranceCertificate.class);
+        certificate.documents().add(certificate.documents().$());
+        super.addItem(certificate);
     }
 }
