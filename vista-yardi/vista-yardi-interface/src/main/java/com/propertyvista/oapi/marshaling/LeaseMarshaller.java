@@ -13,6 +13,7 @@
  */
 package com.propertyvista.oapi.marshaling;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -44,6 +45,9 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
         leaseIO.leaseTo = new LogicalDateIO(lease.leaseTo().getValue());
         leaseIO.propertyCode = lease.unit().building().propertyCode().getValue();
         leaseIO.unitNumber = lease.unit().info().number().getValue();
+
+        Persistence.service().retrieve(lease.leaseParticipants());
+        leaseIO.tenants.addAll(TenantMarshaller.getInstance().marshal(lease.leaseParticipants()));
         return leaseIO;
     }
 
@@ -57,6 +61,7 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
         lease.leaseTo().setValue(leaseIO.leaseTo.value);
         lease.unit().building().propertyCode().setValue(leaseIO.propertyCode);
         lease.unit().info().number().setValue(leaseIO.unitNumber);
+        lease.leaseParticipants().addAll(TenantMarshaller.getInstance().unmarshal(leaseIO.tenants));
         return lease;
     }
 

@@ -13,6 +13,10 @@
  */
 package com.propertyvista.oapi.marshaling;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.person.Person;
@@ -45,6 +49,14 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantI
         return tenantIO;
     }
 
+    public List<TenantIO> marshal(Collection<LeaseParticipant<?>> participants) {
+        List<TenantIO> tenants = new ArrayList<TenantIO>();
+        for (LeaseParticipant<?> participant : participants) {
+            tenants.add(marshal(participant));
+        }
+        return tenants;
+    }
+
     @Override
     public LeaseParticipant<?> unmarshal(TenantIO tenantIO) throws Exception {
         LeaseParticipant<?> participant = EntityFactory.create(LeaseParticipant.class);
@@ -57,5 +69,13 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantI
         person.email().setValue(tenantIO.email.value);
         participant.customer().person().set(person);
         return participant;
+    }
+
+    public List<LeaseParticipant<?>> unmarshal(Collection<TenantIO> tenantIOList) throws Exception {
+        List<LeaseParticipant<?>> participants = new ArrayList<LeaseParticipant<?>>();
+        for (TenantIO tenantIO : tenantIOList) {
+            participants.add(unmarshal(tenantIO));
+        }
+        return participants;
     }
 }

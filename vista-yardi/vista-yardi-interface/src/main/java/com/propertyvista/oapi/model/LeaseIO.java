@@ -13,6 +13,8 @@
  */
 package com.propertyvista.oapi.model;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -40,6 +42,8 @@ public class LeaseIO extends AbstractElementIO {
     public LogicalDateIO leaseFrom;
 
     public LogicalDateIO leaseTo;
+
+    public List<TenantIO> tenants;
 
     public LeaseIO() {
     }

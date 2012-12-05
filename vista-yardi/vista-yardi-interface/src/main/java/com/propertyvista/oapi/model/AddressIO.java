@@ -43,6 +43,7 @@ public class AddressIO extends AbstractElementIO {
 
     public StringIO provinceCode;
 
+    //mandatory for portal
     public StringIO postalCode;
 
     //mandatory for portal
