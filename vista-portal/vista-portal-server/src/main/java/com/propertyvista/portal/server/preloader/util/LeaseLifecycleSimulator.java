@@ -503,12 +503,8 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            if (lease.status().getValue() == Lease.Status.Active) {
-                ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, now(), lease.currentTerm().termTo().getValue(),
-                        null);
-            } else if (debug) {
-                log.info("Notice not given");
-            }
+            ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, now(), lease.currentTerm().termTo().getValue(),
+                    null);
         }
     }
 
@@ -521,9 +517,7 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            if (lease.status().getValue() == Lease.Status.Active) {
-                ServerSideFactory.create(LeaseFacade.class).moveOut(lease);
-            }
+            ServerSideFactory.create(LeaseFacade.class).moveOut(lease);
         }
     }
 
@@ -536,9 +530,7 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            //if (lease.status().getValue() == Lease.Status.Active) {            
             ServerSideFactory.create(LeaseFacade.class).complete(lease);
-            //}
         }
     }
 
