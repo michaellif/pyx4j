@@ -35,7 +35,7 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
     }
 
     @Override
-    public LeaseIO unmarshal(Lease lease) {
+    public LeaseIO marshal(Lease lease) {
         LeaseIO leaseIO = new LeaseIO();
         leaseIO.leaseId = lease.leaseId().getValue();
         leaseIO.status = new LeaseStatusIO(lease.status().getValue());
@@ -48,7 +48,7 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
     }
 
     @Override
-    public Lease marshal(LeaseIO leaseIO) throws Exception {
+    public Lease unmarshal(LeaseIO leaseIO) throws Exception {
         Lease lease = EntityFactory.create(Lease.class);
         lease.leaseId().setValue(leaseIO.leaseId);
         lease.status().setValue(leaseIO.status.value);

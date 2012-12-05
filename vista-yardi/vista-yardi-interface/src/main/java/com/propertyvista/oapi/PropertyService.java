@@ -46,7 +46,7 @@ public class PropertyService {
         BuildingsIO buildingsRs = new BuildingsIO();
 
         for (Building building : buildings) {
-            buildingsRs.buildings.add(BuildingMarshaller.getInstance().unmarshal(building));
+            buildingsRs.buildings.add(BuildingMarshaller.getInstance().marshal(building));
         }
 
         return buildingsRs;
@@ -58,11 +58,11 @@ public class PropertyService {
         buildingCriteria.eq(buildingCriteria.proto().propertyCode(), propertyCode);
         List<Building> buildings = service.query(buildingCriteria);
 
-        return BuildingMarshaller.getInstance().unmarshal(buildings.get(0));
+        return BuildingMarshaller.getInstance().marshal(buildings.get(0));
     }
 
     public static void updateBuilding(BuildingIO buildingIO) throws Exception {
-        Building building = BuildingMarshaller.getInstance().marshal(buildingIO);
+        Building building = BuildingMarshaller.getInstance().unmarshal(buildingIO);
         Persistence.service().persist(building);
         Persistence.service().commit();
     }
@@ -75,7 +75,7 @@ public class PropertyService {
         List<AptUnit> units = service.query(unitCriteria);
         for (AptUnit unit : units) {
             service.retrieve(unit.floorplan());
-            UnitIO unitIO = UnitMarshaller.getInstance().unmarshal(unit);
+            UnitIO unitIO = UnitMarshaller.getInstance().marshal(unit);
             unitIO.propertyCode = propertyCode;
             unitsRS.add(unitIO);
         }
@@ -90,7 +90,7 @@ public class PropertyService {
         AptUnit unit = units.get(0);
         service.retrieve(unit.floorplan());
         service.retrieve(unit.building());
-        return UnitMarshaller.getInstance().unmarshal(unit);
+        return UnitMarshaller.getInstance().marshal(unit);
 
     }
 }

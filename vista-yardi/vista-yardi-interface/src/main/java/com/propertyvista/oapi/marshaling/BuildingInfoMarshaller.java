@@ -34,15 +34,15 @@ public class BuildingInfoMarshaller implements Marshaller<BuildingInfo, Building
     }
 
     @Override
-    public BuildingInfoIO unmarshal(BuildingInfo info) {
+    public BuildingInfoIO marshal(BuildingInfo info) {
         BuildingInfoIO buildingInfoIO = new BuildingInfoIO();
-        buildingInfoIO.address = AddressMarshaller.getInstance().unmarshal(info.address());
+        buildingInfoIO.address = AddressMarshaller.getInstance().marshal(info.address());
         buildingInfoIO.buildingType = new BuildingTypeIO(info.type().getValue());
         return buildingInfoIO;
     }
 
     @Override
-    public BuildingInfo marshal(BuildingInfoIO buildingInfoIO) throws Exception {
+    public BuildingInfo unmarshal(BuildingInfoIO buildingInfoIO) throws Exception {
         if (buildingInfoIO == null) {
             return null;
         }
@@ -50,7 +50,7 @@ public class BuildingInfoMarshaller implements Marshaller<BuildingInfo, Building
         if (buildingInfoIO.getAction() == Action.nil) {
             buildingInfo.set(null);
         } else {
-            buildingInfo.address().set(AddressMarshaller.getInstance().marshal(buildingInfoIO.address));
+            buildingInfo.address().set(AddressMarshaller.getInstance().unmarshal(buildingInfoIO.address));
             buildingInfo.type().setValue(buildingInfoIO.buildingType.value);
         }
         return buildingInfo;

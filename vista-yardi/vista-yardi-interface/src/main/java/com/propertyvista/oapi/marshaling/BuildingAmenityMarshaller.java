@@ -38,7 +38,7 @@ public class BuildingAmenityMarshaller implements Marshaller<BuildingAmenity, Bu
     }
 
     @Override
-    public BuildingAmenityIO unmarshal(BuildingAmenity amenity) {
+    public BuildingAmenityIO marshal(BuildingAmenity amenity) {
         BuildingAmenityIO amenityIO = new BuildingAmenityIO();
         amenityIO.name = new StringIO(amenity.name().getValue());
         amenityIO.description = new StringIO(amenity.description().getValue());
@@ -46,16 +46,16 @@ public class BuildingAmenityMarshaller implements Marshaller<BuildingAmenity, Bu
         return amenityIO;
     }
 
-    public List<BuildingAmenityIO> unmarshal(Collection<BuildingAmenity> amenities) {
+    public List<BuildingAmenityIO> marshal(Collection<BuildingAmenity> amenities) {
         List<BuildingAmenityIO> amenityIOList = new ArrayList<BuildingAmenityIO>();
         for (BuildingAmenity amenity : amenities) {
-            amenityIOList.add(unmarshal(amenity));
+            amenityIOList.add(marshal(amenity));
         }
         return amenityIOList;
     }
 
     @Override
-    public BuildingAmenity marshal(BuildingAmenityIO amenityIO) throws Exception {
+    public BuildingAmenity unmarshal(BuildingAmenityIO amenityIO) throws Exception {
         BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
         amenity.name().setValue(amenityIO.name.value);
         amenity.description().setValue(amenityIO.description.value);
@@ -63,10 +63,10 @@ public class BuildingAmenityMarshaller implements Marshaller<BuildingAmenity, Bu
         return amenity;
     }
 
-    public List<BuildingAmenity> marshal(Collection<BuildingAmenityIO> amenityIOList) throws Exception {
+    public List<BuildingAmenity> unmarshal(Collection<BuildingAmenityIO> amenityIOList) throws Exception {
         List<BuildingAmenity> amenities = new ArrayList<BuildingAmenity>();
         for (BuildingAmenityIO amenityIO : amenityIOList) {
-            amenities.add(marshal(amenityIO));
+            amenities.add(unmarshal(amenityIO));
         }
         return amenities;
     }

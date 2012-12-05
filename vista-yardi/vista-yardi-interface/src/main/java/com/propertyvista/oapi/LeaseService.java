@@ -45,7 +45,7 @@ public class LeaseService {
         List<Lease> leases = service.query(leaseCriteria);
         for (Lease lease : leases) {
             service.retrieve(lease.unit().building());
-            leasesRS.add(LeaseMarshaller.getInstance().unmarshal(lease));
+            leasesRS.add(LeaseMarshaller.getInstance().marshal(lease));
         }
 
         return leasesRS;
@@ -59,7 +59,7 @@ public class LeaseService {
 
         Lease lease = leases.get(0);
         service.retrieve(lease.unit().building());
-        return LeaseMarshaller.getInstance().unmarshal(lease);
+        return LeaseMarshaller.getInstance().marshal(lease);
     }
 
     public static List<TenantIO> getTenants(String leaseId) {
@@ -71,7 +71,7 @@ public class LeaseService {
         Lease lease = leases.get(0);
         service.retrieveMember(lease.leaseParticipants());
         for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
-            TenantIO tenantIO = TenantMarshaller.getInstance().unmarshal(participant);
+            TenantIO tenantIO = TenantMarshaller.getInstance().marshal(participant);
             tenantIO.leaseId = leaseId;
             tenantsIO.add(tenantIO);
         }

@@ -37,7 +37,7 @@ public class MediaMarshaller implements Marshaller<Media, MediaIO> {
     }
 
     @Override
-    public MediaIO unmarshal(Media media) {
+    public MediaIO marshal(Media media) {
         MediaIO mediaIO = new MediaIO();
         mediaIO.caption = new StringIO(media.caption().getValue());
         mediaIO.mediaType = new MediaTypeIO(media.type().getValue());
@@ -46,16 +46,16 @@ public class MediaMarshaller implements Marshaller<Media, MediaIO> {
         return mediaIO;
     }
 
-    public List<MediaIO> unmarshal(List<Media> mediaList) {
+    public List<MediaIO> marshal(List<Media> mediaList) {
         List<MediaIO> mediaIOList = new ArrayList<MediaIO>();
         for (Media media : mediaList) {
-            mediaIOList.add(unmarshal(media));
+            mediaIOList.add(marshal(media));
         }
         return mediaIOList;
     }
 
     @Override
-    public Media marshal(MediaIO mediaIO) throws Exception {
+    public Media unmarshal(MediaIO mediaIO) throws Exception {
         Media media = EntityFactory.create(Media.class);
         media.caption().setValue(mediaIO.caption.value);
         media.type().setValue(mediaIO.mediaType.value);
@@ -64,10 +64,10 @@ public class MediaMarshaller implements Marshaller<Media, MediaIO> {
         return media;
     }
 
-    public List<Media> marshal(List<MediaIO> MediaIOList) throws Exception {
+    public List<Media> unmarshal(List<MediaIO> MediaIOList) throws Exception {
         List<Media> medias = new ArrayList<Media>();
         for (MediaIO mediaIO : MediaIOList) {
-            medias.add(marshal(mediaIO));
+            medias.add(unmarshal(mediaIO));
         }
         return medias;
     }

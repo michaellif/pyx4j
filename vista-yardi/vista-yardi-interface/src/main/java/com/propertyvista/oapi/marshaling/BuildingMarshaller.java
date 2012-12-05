@@ -40,47 +40,47 @@ public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {
     }
 
     @Override
-    public BuildingIO unmarshal(Building building) {
+    public BuildingIO marshal(Building building) {
         BuildingIO buildingIO = new BuildingIO();
         buildingIO.propertyCode = building.propertyCode().getValue();
-        buildingIO.info = BuildingInfoMarshaller.getInstance().unmarshal(building.info());
-        buildingIO.marketing = MarketingMarshaller.getInstance().unmarshal(building.marketing());
+        buildingIO.info = BuildingInfoMarshaller.getInstance().marshal(building.info());
+        buildingIO.marketing = MarketingMarshaller.getInstance().marshal(building.marketing());
 
         List<ContactIO> contacts = new ArrayList<ContactIO>();
         Persistence.service().retrieve(building.contacts().propertyContacts());
         for (PropertyContact contact : building.contacts().propertyContacts()) {
             if (EnumSet.of(PropertyContactType.mainOffice, PropertyContactType.pointOfSale).contains(contact.type().getValue())) {
-                contacts.add(ContactMarshaller.getInstance().unmarshal(contact));
+                contacts.add(ContactMarshaller.getInstance().marshal(contact));
             }
         }
         buildingIO.contacts.addAll(contacts);
 
         Persistence.service().retrieve(building.media());
-        buildingIO.medias = MediaMarshaller.getInstance().unmarshal(building.media());
+        buildingIO.medias = MediaMarshaller.getInstance().marshal(building.media());
 
         Persistence.service().retrieveMember(building.amenities());
-        buildingIO.amenities = BuildingAmenityMarshaller.getInstance().unmarshal(building.amenities());
+        buildingIO.amenities = BuildingAmenityMarshaller.getInstance().marshal(building.amenities());
 
         Persistence.service().retrieveMember(building._Parkings());
-        buildingIO.parkings = ParkingMarshaller.getInstance().unmarshal(building._Parkings());
+        buildingIO.parkings = ParkingMarshaller.getInstance().marshal(building._Parkings());
 
         Persistence.service().retrieveMember(building.includedUtilities());
-        buildingIO.includedUtilities = UtilityMarshaller.getInstance().unmarshal(building.includedUtilities());
+        buildingIO.includedUtilities = UtilityMarshaller.getInstance().marshal(building.includedUtilities());
 
         return buildingIO;
     }
 
     @Override
-    public Building marshal(BuildingIO buildingIO) throws Exception {
+    public Building unmarshal(BuildingIO buildingIO) throws Exception {
         Building building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(buildingIO.propertyCode);
-        building.info().set(BuildingInfoMarshaller.getInstance().marshal(buildingIO.info));
-        building.marketing().set(MarketingMarshaller.getInstance().marshal(buildingIO.marketing));
-        building.contacts().propertyContacts().addAll(ContactMarshaller.getInstance().marshal(buildingIO.contacts));
-        building.media().addAll(MediaMarshaller.getInstance().marshal(buildingIO.medias));
-        building.amenities().addAll(BuildingAmenityMarshaller.getInstance().marshal(buildingIO.amenities));
-        building._Parkings().addAll(ParkingMarshaller.getInstance().marshal(buildingIO.parkings));
-        building.includedUtilities().addAll(UtilityMarshaller.getInstance().marshal(buildingIO.includedUtilities));
+        building.info().set(BuildingInfoMarshaller.getInstance().unmarshal(buildingIO.info));
+        building.marketing().set(MarketingMarshaller.getInstance().unmarshal(buildingIO.marketing));
+        building.contacts().propertyContacts().addAll(ContactMarshaller.getInstance().unmarshal(buildingIO.contacts));
+        building.media().addAll(MediaMarshaller.getInstance().unmarshal(buildingIO.medias));
+        building.amenities().addAll(BuildingAmenityMarshaller.getInstance().unmarshal(buildingIO.amenities));
+        building._Parkings().addAll(ParkingMarshaller.getInstance().unmarshal(buildingIO.parkings));
+        building.includedUtilities().addAll(UtilityMarshaller.getInstance().unmarshal(buildingIO.includedUtilities));
         return building;
     }
 }

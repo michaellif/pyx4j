@@ -42,7 +42,7 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
     public void testNewBuildingPersistance() throws Exception {
         BuildingIO buildingIO = createBuilding();
 
-        Building building = BuildingMarshaller.getInstance().marshal(buildingIO);
+        Building building = BuildingMarshaller.getInstance().unmarshal(buildingIO);
 
         System.out.println("++++++++++" + building);
 
@@ -52,7 +52,7 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
 
         System.out.println("++++++++++" + building);
 
-        BuildingIO buildingIO2 = BuildingMarshaller.getInstance().unmarshal(building);
+        BuildingIO buildingIO2 = BuildingMarshaller.getInstance().marshal(building);
 
         assertEquals(buildingIO.propertyCode, buildingIO2.propertyCode);
         assertEquals(buildingIO.info.address.city.value, buildingIO2.info.address.city.value);

@@ -26,7 +26,7 @@ public class ReceivableService {
     public static void postTransaction(TransactionIO transaction) {
         if (transaction instanceof ChargeIO) {
             ChargeIO chargeIO = (ChargeIO) transaction;
-            ChargeDTO chargeDTO = ChargeMarshaller.getInstance().marshal(chargeIO);
+            ChargeDTO chargeDTO = ChargeMarshaller.getInstance().unmarshal(chargeIO);
 
             ServerSideFactory.create(ExternalBillingFacade.class).postCharge(chargeDTO, chargeIO.leaseId);
         }

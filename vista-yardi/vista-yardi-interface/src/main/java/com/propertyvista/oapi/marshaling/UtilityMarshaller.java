@@ -36,31 +36,31 @@ public class UtilityMarshaller implements Marshaller<Utility, UtilityIO> {
     }
 
     @Override
-    public UtilityIO unmarshal(Utility utility) {
+    public UtilityIO marshal(Utility utility) {
         UtilityIO utilityIO = new UtilityIO();
         utilityIO.name = utility.name().getValue();
         return utilityIO;
     }
 
-    public List<UtilityIO> unmarshal(Collection<Utility> utilities) {
+    public List<UtilityIO> marshal(Collection<Utility> utilities) {
         List<UtilityIO> utilityIOList = new ArrayList<UtilityIO>();
         for (Utility utility : utilities) {
-            utilityIOList.add(unmarshal(utility));
+            utilityIOList.add(marshal(utility));
         }
         return utilityIOList;
     }
 
     @Override
-    public Utility marshal(UtilityIO utilityIO) throws Exception {
+    public Utility unmarshal(UtilityIO utilityIO) throws Exception {
         Utility utility = EntityFactory.create(Utility.class);
         utility.name().setValue(utilityIO.name);
         return utility;
     }
 
-    public List<Utility> marshal(Collection<UtilityIO> utilityIOList) throws Exception {
+    public List<Utility> unmarshal(Collection<UtilityIO> utilityIOList) throws Exception {
         List<Utility> utilities = new ArrayList<Utility>();
         for (UtilityIO utilityIO : utilityIOList) {
-            utilities.add(marshal(utilityIO));
+            utilities.add(unmarshal(utilityIO));
         }
         return utilities;
     }

@@ -35,7 +35,7 @@ public class ChargeMarshaller implements Marshaller<ChargeDTO, ChargeIO> {
     }
 
     @Override
-    public ChargeIO unmarshal(ChargeDTO charge) {
+    public ChargeIO marshal(ChargeDTO charge) {
         ChargeIO chargeIO = new ChargeIO();
         chargeIO.amount = new BigDecimalIO(charge.amount().getValue());
         chargeIO.description = new StringIO(charge.description().getValue());
@@ -45,7 +45,7 @@ public class ChargeMarshaller implements Marshaller<ChargeDTO, ChargeIO> {
     }
 
     @Override
-    public ChargeDTO marshal(ChargeIO chargeIO) {
+    public ChargeDTO unmarshal(ChargeIO chargeIO) {
         ChargeDTO charge = EntityFactory.create(ChargeDTO.class);
         charge.transactionId().setValue(chargeIO.transactionId);
         charge.leaseId().setValue(chargeIO.leaseId);

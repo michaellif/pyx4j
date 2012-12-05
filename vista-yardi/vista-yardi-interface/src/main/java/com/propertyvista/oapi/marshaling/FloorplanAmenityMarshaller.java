@@ -38,7 +38,7 @@ public class FloorplanAmenityMarshaller implements Marshaller<FloorplanAmenity, 
     }
 
     @Override
-    public FloorplanAmenityIO unmarshal(FloorplanAmenity amenity) {
+    public FloorplanAmenityIO marshal(FloorplanAmenity amenity) {
         FloorplanAmenityIO amenityIO = new FloorplanAmenityIO();
         amenityIO.name = new StringIO(amenity.name().getValue());
         amenityIO.description = new StringIO(amenity.description().getValue());
@@ -46,16 +46,16 @@ public class FloorplanAmenityMarshaller implements Marshaller<FloorplanAmenity, 
         return amenityIO;
     }
 
-    public List<FloorplanAmenityIO> unmarshal(Collection<FloorplanAmenity> amenities) {
+    public List<FloorplanAmenityIO> marshal(Collection<FloorplanAmenity> amenities) {
         List<FloorplanAmenityIO> amenityIOList = new ArrayList<FloorplanAmenityIO>();
         for (FloorplanAmenity amenity : amenities) {
-            amenityIOList.add(unmarshal(amenity));
+            amenityIOList.add(marshal(amenity));
         }
         return amenityIOList;
     }
 
     @Override
-    public FloorplanAmenity marshal(FloorplanAmenityIO amenityIO) throws Exception {
+    public FloorplanAmenity unmarshal(FloorplanAmenityIO amenityIO) throws Exception {
         FloorplanAmenity amenity = EntityFactory.create(FloorplanAmenity.class);
         amenity.name().setValue(amenityIO.name.value);
         amenity.description().setValue(amenityIO.description.value);
@@ -63,10 +63,10 @@ public class FloorplanAmenityMarshaller implements Marshaller<FloorplanAmenity, 
         return amenity;
     }
 
-    public List<FloorplanAmenity> marshal(Collection<FloorplanAmenityIO> amenityIOList) throws Exception {
+    public List<FloorplanAmenity> unmarshal(Collection<FloorplanAmenityIO> amenityIOList) throws Exception {
         List<FloorplanAmenity> amenities = new ArrayList<FloorplanAmenity>();
         for (FloorplanAmenityIO amenityIO : amenityIOList) {
-            amenities.add(marshal(amenityIO));
+            amenities.add(unmarshal(amenityIO));
         }
         return amenities;
     }

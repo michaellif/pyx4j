@@ -17,7 +17,7 @@ import com.pyx4j.entity.shared.IEntity;
 
 public interface Marshaller<ValueType extends IEntity, BoundType> {
 
-    public abstract BoundType unmarshal(ValueType v) throws Exception;
+    public abstract BoundType marshal(ValueType v) throws Exception;
 
-    public abstract ValueType marshal(BoundType v) throws Exception;
+    public abstract ValueType unmarshal(BoundType v) throws Exception;
 }

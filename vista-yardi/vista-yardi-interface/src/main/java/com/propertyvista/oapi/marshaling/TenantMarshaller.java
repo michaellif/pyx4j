@@ -33,7 +33,7 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantI
     }
 
     @Override
-    public TenantIO unmarshal(LeaseParticipant<?> participant) {
+    public TenantIO marshal(LeaseParticipant<?> participant) {
         TenantIO tenantIO = new TenantIO();
         Person person = participant.customer().person();
         tenantIO.firstName = person.name().firstName().getValue();
@@ -46,7 +46,7 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantI
     }
 
     @Override
-    public LeaseParticipant<?> marshal(TenantIO tenantIO) throws Exception {
+    public LeaseParticipant<?> unmarshal(TenantIO tenantIO) throws Exception {
         LeaseParticipant<?> participant = EntityFactory.create(LeaseParticipant.class);
         Person person = EntityFactory.create(Person.class);
         person.name().firstName().setValue(tenantIO.firstName);

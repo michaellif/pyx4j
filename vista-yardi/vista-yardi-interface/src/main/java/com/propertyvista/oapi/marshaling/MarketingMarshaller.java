@@ -40,7 +40,7 @@ public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
     }
 
     @Override
-    public MarketingIO unmarshal(Marketing marketing) {
+    public MarketingIO marshal(Marketing marketing) {
         MarketingIO marketingIO = new MarketingIO();
         marketingIO.name = new StringIO(marketing.name().getValue());
         marketingIO.description = new StringIO(marketing.description().getValue());
@@ -48,7 +48,7 @@ public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
         Persistence.service().retrieveMember(marketing.adBlurbs());
         List<AdvertisingBlurbIO> adBlurbsIO = new ArrayList<AdvertisingBlurbIO>();
         for (AdvertisingBlurb adBlurb : marketing.adBlurbs()) {
-            adBlurbsIO.add(AdvertisingBlurbMarshaller.getInstance().unmarshal(adBlurb));
+            adBlurbsIO.add(AdvertisingBlurbMarshaller.getInstance().marshal(adBlurb));
         }
         marketingIO.blurbs = adBlurbsIO;
 
@@ -56,7 +56,7 @@ public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
     }
 
     @Override
-    public Marketing marshal(MarketingIO marketingIO) throws Exception {
+    public Marketing unmarshal(MarketingIO marketingIO) throws Exception {
         if (marketingIO == null) {
             return null;
         }
@@ -69,7 +69,7 @@ public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
 
             List<AdvertisingBlurb> adBlurbs = new ArrayList<AdvertisingBlurb>();
             for (AdvertisingBlurbIO adBlurbIO : marketingIO.blurbs) {
-                adBlurbs.add(AdvertisingBlurbMarshaller.getInstance().marshal(adBlurbIO));
+                adBlurbs.add(AdvertisingBlurbMarshaller.getInstance().unmarshal(adBlurbIO));
             }
             marketing.adBlurbs().addAll(adBlurbs);
         }

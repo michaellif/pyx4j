@@ -34,7 +34,7 @@ public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
     }
 
     @Override
-    public UnitIO unmarshal(AptUnit unit) {
+    public UnitIO marshal(AptUnit unit) {
         UnitIO unitIO = new UnitIO();
         unitIO.floorplanName = new StringIO(unit.floorplan().name().getValue());
         unitIO.number = unit.info().number().getValue();
@@ -44,7 +44,7 @@ public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
     }
 
     @Override
-    public AptUnit marshal(UnitIO unitIO) throws Exception {
+    public AptUnit unmarshal(UnitIO unitIO) throws Exception {
         AptUnit unit = EntityFactory.create(AptUnit.class);
         unit.floorplan().name().setValue(unitIO.floorplanName.value);
         unit.info().number().setValue(unitIO.number);

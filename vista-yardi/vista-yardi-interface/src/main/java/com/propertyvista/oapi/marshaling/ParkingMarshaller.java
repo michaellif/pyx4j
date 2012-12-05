@@ -39,7 +39,7 @@ public class ParkingMarshaller implements Marshaller<Parking, ParkingIO> {
     }
 
     @Override
-    public ParkingIO unmarshal(Parking parking) {
+    public ParkingIO marshal(Parking parking) {
         ParkingIO parkingIO = new ParkingIO();
         parkingIO.name = parking.name().getValue();
         parkingIO.description = new StringIO(parking.description().getValue());
@@ -48,16 +48,16 @@ public class ParkingMarshaller implements Marshaller<Parking, ParkingIO> {
         return parkingIO;
     }
 
-    public List<ParkingIO> unmarshal(Collection<Parking> parkings) {
+    public List<ParkingIO> marshal(Collection<Parking> parkings) {
         List<ParkingIO> parkingIOList = new ArrayList<ParkingIO>();
         for (Parking parking : parkings) {
-            parkingIOList.add(unmarshal(parking));
+            parkingIOList.add(marshal(parking));
         }
         return parkingIOList;
     }
 
     @Override
-    public Parking marshal(ParkingIO parkingIO) throws Exception {
+    public Parking unmarshal(ParkingIO parkingIO) throws Exception {
         Parking parking = EntityFactory.create(Parking.class);
         parking.name().setValue(parkingIO.name);
         parking.description().setValue(parkingIO.description.value);
@@ -66,10 +66,10 @@ public class ParkingMarshaller implements Marshaller<Parking, ParkingIO> {
         return parking;
     }
 
-    public List<Parking> marshal(Collection<ParkingIO> parkingIOList) throws Exception {
+    public List<Parking> unmarshal(Collection<ParkingIO> parkingIOList) throws Exception {
         List<Parking> parkings = new ArrayList<Parking>();
         for (ParkingIO parkingIO : parkingIOList) {
-            parkings.add(marshal(parkingIO));
+            parkings.add(unmarshal(parkingIO));
         }
         return parkings;
     }

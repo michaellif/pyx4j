@@ -42,7 +42,7 @@ public class AddressMarshaller implements Marshaller<AddressStructured, AddressI
     }
 
     @Override
-    public AddressIO unmarshal(AddressStructured address) {
+    public AddressIO marshal(AddressStructured address) {
         AddressIO addressIO = new AddressIO();
         addressIO.country = new StringIO(address.country().name().getValue());
         addressIO.province = new StringIO(address.province().name().getValue());
@@ -55,7 +55,7 @@ public class AddressMarshaller implements Marshaller<AddressStructured, AddressI
     }
 
     @Override
-    public AddressStructured marshal(AddressIO addressIO) throws Exception {
+    public AddressStructured unmarshal(AddressIO addressIO) throws Exception {
         if (addressIO == null) {
             return null;
         }
