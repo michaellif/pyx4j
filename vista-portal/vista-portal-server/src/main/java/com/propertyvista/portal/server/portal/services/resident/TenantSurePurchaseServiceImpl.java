@@ -79,7 +79,10 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
 
         LegalTermsDescriptorDTO personalDisclaimerTerms = params.personalDisclaimerTerms().$();
         personalDisclaimerTerms.content().localizedCaption().setValue(i18n.tr("Personal Disclaimer"));
-        personalDisclaimerTerms.content().content().setValue(ServerSideFactory.create(TenantSureTextFacade.class).getPersonalDisclaimerText());
+        if (false) {
+            // TODO right now this is filled on client from resources
+            personalDisclaimerTerms.content().content().setValue(ServerSideFactory.create(TenantSureTextFacade.class).getPersonalDisclaimerText());
+        }
         IAgree agreeHolder = EntityFactory.create(IAgree.class);
         agreeHolder.person().set(TenantAppContext.getCurrentUserCustomer().person().duplicate());
         personalDisclaimerTerms.agrees().add(agreeHolder.duplicate(IAgree.class));

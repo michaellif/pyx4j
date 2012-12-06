@@ -22,4 +22,10 @@ public interface TenantSureResources extends ClientBundleWithLookup {
     @Source("pre-authorized-payment-disclaimer.html")
     TextResource preAuthorizedPaymentDisclaimer();
 
+    @Source("faq.html")
+    TextResource faq();
+
+    @Source("personal-disclaimer.html")
+    TextResource personalDisclaimer();
+
 }

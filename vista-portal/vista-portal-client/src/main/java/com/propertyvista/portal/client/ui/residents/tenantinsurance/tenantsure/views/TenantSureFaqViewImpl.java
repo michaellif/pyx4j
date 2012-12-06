@@ -13,9 +13,12 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
+
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 
 public class TenantSureFaqViewImpl extends Composite implements TenantSureFaqView {
 
@@ -24,12 +27,17 @@ public class TenantSureFaqViewImpl extends Composite implements TenantSureFaqVie
     public TenantSureFaqViewImpl() {
         faq = new Label();
         faq.setSize("100%", "100%");
-        initWidget(new ScrollPanel(faq));
+        faq.getElement().setInnerHTML(TenantSureResources.INSTANCE.faq().getText());
+
+        ScrollPanel scrollPanel = new ScrollPanel(faq);
+        scrollPanel.getElement().getStyle().setPadding(20, Unit.PX);
+
+        initWidget(scrollPanel);
     }
 
     @Override
     public void populate(String tenantSureFaqHtml) {
-        faq.getElement().setInnerHTML(tenantSureFaqHtml);
+        // not requried since right now FAQ is loaded from resource
     }
 
 }

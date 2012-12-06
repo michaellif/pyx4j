@@ -28,6 +28,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -54,6 +55,8 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
             @Override
             public void onSuccess(TenantSureQuotationRequestParamsDTO quotationRequestParams) {
                 InsurancePaymentMethod paymentMethod = EntityFactory.create(InsurancePaymentMethod.class);
+                quotationRequestParams.personalDisclaimerTerms().get(0).content().content()
+                        .setValue(TenantSureResources.INSTANCE.personalDisclaimer().getText());
                 paymentMethod.type().setValue(PaymentType.CreditCard);
 
                 TenantSurePersonalDisclaimerHolderDTO disclaimerHolder = EntityFactory.create(TenantSurePersonalDisclaimerHolderDTO.class);
