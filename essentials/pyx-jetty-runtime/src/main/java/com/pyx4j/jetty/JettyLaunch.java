@@ -29,9 +29,9 @@ import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.server.NCSARequestLog;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
+import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -105,8 +105,15 @@ public abstract class JettyLaunch {
             sslContextFactory.setKeyStorePath("./src/test/ssl/jetty.keystore");
             sslContextFactory.setKeyManagerPassword("123456");
 
-            ServerConnector connector = new ServerConnector(server, sslContextFactory);
+            //TODO Jetty 9.0.0
+            //import org.eclipse.jetty.server.ServerConnector;
+            //ServerConnector connector = new ServerConnector(server, sslContextFactory);
+            //connector.setPort(jettyLaunch.getServerSslPort());
+
+            //Jetty 8
+            SslSelectChannelConnector connector = new SslSelectChannelConnector(sslContextFactory);
             connector.setPort(jettyLaunch.getServerSslPort());
+
             server.addConnector(connector);
         }
 

@@ -124,7 +124,7 @@
         <gaeVersion>1.7.0</gaeVersion>
         <gae.version>${gaeVersion}</gae.version>
 
-        <jettyVersion>9.0.0.M3</jettyVersion>
+        <jettyVersion>8.1.8.v20121106</jettyVersion>
 
         <jasperreportsVersion>4.5.1</jasperreportsVersion>
         <quartzVersion>2.1.5</quartzVersion>
