@@ -69,7 +69,7 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
             public Void call() {
                 CrmUser crmUser = Persistence.service().retrieve(CrmUser.class, credential.crmUser().getValue());
                 if (crmUser == null) {
-                    throw new UserRuntimeException("CRM USer not found");
+                    throw new UserRuntimeException("CRM User " + credential.crmUser().getValue() + " not found in PMC " + dto.pmc().namespace().getValue());
                 }
                 CrmUserCredential crmCredential = Persistence.service().retrieve(CrmUserCredential.class, crmUser.getPrimaryKey());
 
