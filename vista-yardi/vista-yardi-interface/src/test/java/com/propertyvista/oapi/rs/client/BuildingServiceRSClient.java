@@ -28,7 +28,7 @@ import com.propertyvista.oapi.XmlFormatter;
 
 public class BuildingServiceRSClient {
 
-    private static boolean isLocal = true;
+    private static boolean isLocal = false;
 
     public static void main(String[] args) throws MalformedURLException {
 
@@ -48,9 +48,9 @@ public class BuildingServiceRSClient {
 
         URL url = null;
         if (isLocal) {
-            url = new URL("http://localhost:8888/vista/interfaces/oapi/rs/buildings/createBuilding");
+            url = new URL("http://localhost:8888/vista/interfaces/oapi/rs/buildings/updateBuilding");
         } else {
-            url = new URL("http://static-11.birchwoodsoftwaregroup.com/interfaces/oapi/rs/buildings/createBuilding");
+            url = new URL("http://static-11.birchwoodsoftwaregroup.com/interfaces/oapi/rs/buildings/updateBuilding");
         }
         HttpURLConnection conn = null;
         OutputStreamWriter out = null;

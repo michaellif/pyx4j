@@ -13,6 +13,7 @@
  */
 package com.propertyvista.oapi.rs;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -24,6 +25,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.propertyvista.oapi.LeaseService;
 import com.propertyvista.oapi.model.LeaseIO;
 import com.propertyvista.oapi.model.TenantIO;
 
@@ -45,30 +47,55 @@ import com.propertyvista.oapi.model.TenantIO;
  * interfaces/oapi/rs/leases/<LeaseId>/updateTenants - updates/creates tenants for corresponding lease
  * 
  */
-public interface RSLeaseService {
+
+@Path("/leases")
+public class RSLeaseService {
 
     @GET
     @Produces({ MediaType.APPLICATION_XML })
-    public List<LeaseIO> getLeases(@QueryParam("propertyCode") String propertyCode);
+    public List<LeaseIO> getLeases(@QueryParam("propertyCode") String propertyCode) {
+        List<LeaseIO> allLeases = LeaseService.getLeases();
+        if (propertyCode == null) {
+            return allLeases;
+        }
+        List<LeaseIO> filteredLeases = new ArrayList<LeaseIO>();
+        for (LeaseIO lease : allLeases) {
+            if (lease.propertyCode.equals(propertyCode)) {
+                filteredLeases.add(lease);
+            }
+        }
+        return filteredLeases;
+
+    }
 
     @GET
     @Path("/{leaseId}")
     @Produces({ MediaType.APPLICATION_XML })
-    public LeaseIO getLeaseById(@PathParam("leaseId") String leaseId);
+    public LeaseIO getLeaseById(@PathParam("leaseId") String leaseId) {
+        return LeaseService.getLeaseById(leaseId);
+    }
 
     @GET
     @Path("/{leaseId}/tenants")
     @Produces({ MediaType.APPLICATION_XML })
-    public List<TenantIO> getTenants(@PathParam("leaseId") String leaseId);
+    public List<TenantIO> getTenants(@PathParam("leaseId") String leaseId) {
+        return LeaseService.getTenants(leaseId);
+    }
 
     @POST
     @Path("/updateLease")
     @Consumes({ MediaType.APPLICATION_XML })
-    public void updateLease(LeaseIO leaseIO);
+    public void updateLease(LeaseIO leaseIO) {
+        // TODO Auto-generated method stub
+
+    }
 
     @POST
     @Path("/{leaseId}/updateTenants")
     @Consumes({ MediaType.APPLICATION_XML })
-    public void updateTenants(@PathParam("leaseId") String leaseId, List<TenantIO> tenantIOs);
+    public void updateTenants(@PathParam("leaseId") String leaseId, List<TenantIO> tenantIOs) {
+        // TODO Auto-generated method stub
+
+    }
 
 }

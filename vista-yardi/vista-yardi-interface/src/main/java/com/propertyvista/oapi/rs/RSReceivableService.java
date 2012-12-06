@@ -37,25 +37,39 @@ import com.propertyvista.oapi.model.TransactionIO;
  * interfaces/oapi/rs/payments/reconcile - reconciles payments
  * 
  */
-public interface RSReceivableService {
+
+@Path("/payments")
+public class RSReceivableService {
 
     @POST
     @Path("/transactions")
     @Consumes({ MediaType.APPLICATION_XML })
-    public void postTransactions(List<TransactionIO> transactions);
+    public void postTransactions(List<TransactionIO> transactions) {
+        // TODO Auto-generated method stub
+
+    }
 
     @POST
     @Path("/{propertyCode}/runBilling")
-    public void runBilling(@PathParam("propertyCode") String buildingCode);
+    public void runBilling(@PathParam("propertyCode") String buildingCode) {
+        // TODO Auto-generated method stub
+
+    }
 
     @POST
     @Path("/reconcile")
     @Consumes({ MediaType.APPLICATION_XML })
-    public void reconcilePaymentRecords(List<PaymentRecordIO> records);
+    public void reconcilePaymentRecords(List<PaymentRecordIO> records) {
+        // TODO Auto-generated method stub
+
+    }
 
     @GET
     @Path("/nonProcessed")
     @Produces({ MediaType.APPLICATION_XML })
-    public List<PaymentRecordIO> getNonProcessedPaymentRecords();
+    public List<PaymentRecordIO> getNonProcessedPaymentRecords() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

@@ -24,9 +24,7 @@ import com.propertyvista.oapi.ws.WSPropertyServiceStub;
 
 public class BuildingServiceWSClient {
 
-    private static String ADDRESS = "http://localhost:8888/vista/interfaces/oapi/ws/WSPropertyService";
-
-    //  private static String ADDRESS = "http://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/ws/WSPropertyService?wsdl";
+    private static boolean isLocal = true;
 
     public static void main(String[] args) throws MalformedURLException {
 
@@ -37,7 +35,14 @@ public class BuildingServiceWSClient {
             }
         });
 
-        WSPropertyServiceStub stub = new WSPropertyServiceStub(new URL(ADDRESS));
+        String address = null;
+        if (isLocal) {
+            address = "http://localhost:8888/vista/interfaces/oapi/ws/WSPropertyService";
+        } else {
+            address = "http://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/ws/WSPropertyService?wsdl";
+        }
+
+        WSPropertyServiceStub stub = new WSPropertyServiceStub(new URL(address));
 
         WSPropertyService service = stub.getPropertyServicePort();
 
