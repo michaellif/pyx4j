@@ -29,7 +29,6 @@ import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 
 @DiscriminatorValue(value = "ExistingInsurance")
-@Deprecated
 @Transient
 public interface ExistingInsurance extends IEntity, ApplicationDocumentHolder<InsuranceCertificateDocument> {
 
