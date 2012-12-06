@@ -35,9 +35,11 @@ public class ExternalBillingTest extends ExternalTestBase {
 //        approveApplication(false);
         activateLease();
 
-        postExternalCharge("-1000.00", "charge 1", "10-Sep-2011", "1-Oct-2011");
-        postExternalCharge("-100.00", "charge 2", "15-Sep-2011", "1-Oct-2011");
-        postExternalCharge("200.00", "refund 1", "20-Sep-2011", "1-Nov-2011");
+        postExternalCharge("1000.00", "charge 1", "10-Sep-2011", "1-Oct-2011");
+        postExternalCharge("100.00", "charge 2", "15-Sep-2011", "1-Oct-2011");
+        postExternalCharge("-200.00", "refund 1", "20-Sep-2011", "1-Nov-2011");
+
+        postExternalPayment("1000.00", "payment", "E-Check");
 
         setDate("17-Sep-2011");
         Bill bill = runExternalBilling();
@@ -50,9 +52,9 @@ public class ExternalBillingTest extends ExternalTestBase {
         billingPeriodStartDate("1-Oct-2011").
         billingPeriodEndDate("31-Oct-2011").
         numOfProductCharges(3).
-        recurringFeatureCharges("-900.00").
+        recurringFeatureCharges("900.00").
         taxes("0.00").
-        totalDueAmount("-900.00");
+        totalDueAmount("-100.00");
         // @formatter:on
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));

@@ -18,19 +18,20 @@ import javax.xml.bind.annotation.XmlAttribute;
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.BigDecimalIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
+import com.propertyvista.oapi.xml.StringIO;
 
 public class PaymentRecordIO extends AbstractElementIO {
 
     @XmlAttribute
     public String transactionId;
 
-    public String externalTransactionId;
+    public StringIO externalTransactionId;
 
-    public String leaseId;
+    public StringIO leaseId;
 
     public LogicalDateIO transactionDate;
 
     public BigDecimalIO amount;
 
-    public String paymentType;
+    public StringIO paymentType;
 }

@@ -20,10 +20,13 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.billingext.ExternalBillingFacade;
 import com.propertyvista.domain.financial.billingext.dto.ChargeDTO;
+import com.propertyvista.domain.financial.billingext.dto.PaymentDTO;
 import com.propertyvista.domain.financial.billingext.dto.PaymentRecordDTO;
 import com.propertyvista.oapi.marshaling.ChargeMarshaller;
+import com.propertyvista.oapi.marshaling.PaymentMarshaller;
 import com.propertyvista.oapi.marshaling.PaymentRecordMarshaller;
 import com.propertyvista.oapi.model.ChargeIO;
+import com.propertyvista.oapi.model.PaymentIO;
 import com.propertyvista.oapi.model.PaymentRecordIO;
 import com.propertyvista.oapi.model.TransactionIO;
 
@@ -35,6 +38,11 @@ public class ReceivableService {
             ChargeDTO chargeDTO = ChargeMarshaller.getInstance().unmarshal(chargeIO);
 
             ServerSideFactory.create(ExternalBillingFacade.class).postCharge(chargeDTO, chargeIO.leaseId);
+        } else if (transaction instanceof PaymentIO) {
+            PaymentIO paymentIO = (PaymentIO) transaction;
+            PaymentDTO paymentDTO = PaymentMarshaller.getInstance().unmarshal(paymentIO);
+
+            ServerSideFactory.create(ExternalBillingFacade.class).postPayment(paymentDTO, paymentIO.leaseId);
         }
     }
 

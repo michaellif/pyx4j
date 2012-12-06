@@ -13,13 +13,10 @@
  */
 package com.propertyvista.domain.financial.billingext.dto;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface ChargeDTO extends TransactionDTO {
-    IPrimitive<LogicalDate> fromDate();
-
-    IPrimitive<LogicalDate> toDate();
+public interface PaymentDTO extends TransactionDTO {
+    IPrimitive<String> paymentType();
 }

@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -26,6 +27,7 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billingext.dto.ChargeDTO;
+import com.propertyvista.domain.financial.billingext.dto.PaymentDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class ExternalTestBase extends FinancialTestBase {
@@ -34,10 +36,21 @@ public class ExternalTestBase extends FinancialTestBase {
         ChargeDTO charge = EntityFactory.create(ChargeDTO.class);
         charge.amount().setValue(new BigDecimal(amount));
         charge.description().setValue(description);
+        charge.transactionDate().setValue(new LogicalDate());
         charge.fromDate().setValue(FinancialTestsUtils.getDate(fromDate));
         charge.toDate().setValue(FinancialTestsUtils.getDate(toDate));
 
         ServerSideFactory.create(ExternalBillingFacade.class).postCharge(charge, retrieveLease().leaseId().getValue());
+    }
+
+    public void postExternalPayment(String amount, String description, String type) {
+        PaymentDTO payment = EntityFactory.create(PaymentDTO.class);
+        payment.amount().setValue(new BigDecimal(amount));
+        payment.description().setValue(description);
+        payment.transactionDate().setValue(new LogicalDate());
+        payment.paymentType().setValue(type);
+
+        ServerSideFactory.create(ExternalBillingFacade.class).postPayment(payment, retrieveLease().leaseId().getValue());
     }
 
     protected Bill runExternalBilling() {

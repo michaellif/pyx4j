@@ -19,6 +19,7 @@ import com.propertyvista.domain.financial.billingext.dto.PaymentRecordDTO;
 import com.propertyvista.oapi.model.PaymentRecordIO;
 import com.propertyvista.oapi.xml.BigDecimalIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
+import com.propertyvista.oapi.xml.StringIO;
 
 public class PaymentRecordMarshaller implements Marshaller<PaymentRecordDTO, PaymentRecordIO> {
 
@@ -37,11 +38,11 @@ public class PaymentRecordMarshaller implements Marshaller<PaymentRecordDTO, Pay
     public PaymentRecordIO marshal(PaymentRecordDTO payment) {
         PaymentRecordIO paymentIO = new PaymentRecordIO();
         paymentIO.transactionId = payment.transactionId().getValue();
-        paymentIO.externalTransactionId = payment.externalTransactionId().getValue();
-        paymentIO.leaseId = payment.leaseId().getValue();
+        paymentIO.externalTransactionId = new StringIO(payment.externalTransactionId().getValue());
+        paymentIO.leaseId = new StringIO(payment.leaseId().getValue());
         paymentIO.amount = new BigDecimalIO(payment.amount().getValue());
         paymentIO.transactionDate = new LogicalDateIO(payment.transactionDate().getValue());
-        paymentIO.paymentType = payment.paymentType().getValue();
+        paymentIO.paymentType = new StringIO(payment.paymentType().getValue());
         return paymentIO;
     }
 
@@ -49,11 +50,11 @@ public class PaymentRecordMarshaller implements Marshaller<PaymentRecordDTO, Pay
     public PaymentRecordDTO unmarshal(PaymentRecordIO paymentIO) {
         PaymentRecordDTO payment = EntityFactory.create(PaymentRecordDTO.class);
         payment.transactionId().setValue(paymentIO.transactionId);
-        payment.externalTransactionId().setValue(paymentIO.externalTransactionId);
-        payment.leaseId().setValue(paymentIO.leaseId);
+        payment.externalTransactionId().setValue(paymentIO.externalTransactionId.value);
+        payment.leaseId().setValue(paymentIO.leaseId.value);
         payment.amount().setValue(paymentIO.amount.value);
         payment.transactionDate().setValue(paymentIO.transactionDate.value);
-        payment.paymentType().setValue(paymentIO.paymentType);
+        payment.paymentType().setValue(paymentIO.paymentType.value);
         return payment;
     }
 

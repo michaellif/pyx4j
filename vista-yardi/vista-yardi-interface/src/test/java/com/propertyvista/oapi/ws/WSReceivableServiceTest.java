@@ -83,6 +83,7 @@ public class WSReceivableServiceTest extends WSOapiTestBase {
             PaymentIO payment = new PaymentIO();
             payment.description = new StringIO("tr" + i);
             payment.amount = new BigDecimalIO(new BigDecimal("" + i + i));
+            payment.paymentType = new StringIO("Check");
             transactions.add(payment);
         }
 

@@ -29,10 +29,12 @@ import com.propertyvista.biz.financial.ar.ARDateUtils;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge.Period;
-import com.propertyvista.domain.financial.billingext.ExtendedPaymentRecord;
+import com.propertyvista.domain.financial.billingext.PaymentRecordExternal;
 import com.propertyvista.domain.financial.billingext.dto.ChargeDTO;
+import com.propertyvista.domain.financial.billingext.dto.PaymentDTO;
 import com.propertyvista.domain.financial.billingext.dto.PaymentRecordDTO;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -62,24 +64,41 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
     }
 
     @Override
+    public boolean postPayment(PaymentDTO paymentDTO, final String leaseId) {
+        BillingAccount billingAccount = getBillingAccount(leaseId);
+        if (billingAccount == null) {
+            return false;
+        }
+
+        InvoicePayment payment = EntityFactory.create(InvoicePayment.class);
+        payment.billingAccount().set(billingAccount);
+        payment.paymentRecord().set(getPaymentRecord(paymentDTO.transactionId().getValue()));
+        payment.amount().setValue(paymentDTO.amount().getValue().negate());
+        payment.description().set(paymentDTO.description());
+        payment.claimed().setValue(false);
+        payment.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+        Persistence.service().persist(payment);
+
+        return true;
+    }
+
+    @Override
     public List<PaymentRecordDTO> getNonProcessedPaymentRecords() {
-        // 1 - find all ExtendedPaymentRecord with no externalTransactionId
-        EntityQueryCriteria<ExtendedPaymentRecord> criteria = EntityQueryCriteria.create(ExtendedPaymentRecord.class);
+        EntityQueryCriteria<PaymentRecordExternal> criteria = EntityQueryCriteria.create(PaymentRecordExternal.class);
         criteria.add(PropertyCriterion.isNull(criteria.proto().externalTransactionId()));
-        List<ExtendedPaymentRecord> result = Persistence.service().query(criteria);
+        List<PaymentRecordExternal> result = Persistence.service().query(criteria);
         if (result == null || result.size() == 0) {
             return null;
         }
 
-        // 2 - for each ExtendedPaymentRecord create PaymentRecordDTO where PaymentRecordDTO.transactionId = ExtendedPaymentRecord.id
         List<PaymentRecordDTO> paymentRecords = new ArrayList<PaymentRecordDTO>();
-        for (ExtendedPaymentRecord epr : result) {
+        for (PaymentRecordExternal epr : result) {
             PaymentRecordDTO prDTO = EntityFactory.create(PaymentRecordDTO.class);
-            prDTO.amount().set(epr.paymentRecord().amount());
-            prDTO.transactionDate().set(epr.paymentRecord().finalizeDate());
-            prDTO.paymentType().setValue(epr.paymentRecord().paymentMethod().type().toString());
-            prDTO.leaseId().set(epr.paymentRecord().billingAccount().lease().leaseId());
             prDTO.transactionId().setValue(epr.getPrimaryKey().toString());
+            prDTO.leaseId().set(epr.paymentRecord().billingAccount().lease().leaseId());
+            prDTO.amount().set(epr.paymentRecord().amount());
+            prDTO.paymentType().setValue(epr.paymentRecord().paymentMethod().type().toString());
+            prDTO.transactionDate().set(epr.paymentRecord().finalizeDate());
             paymentRecords.add(prDTO);
         }
 
@@ -91,12 +110,9 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
         if (records == null || records.size() == 0) {
             return;
         }
-        // for each PaymentRecordDTO find corresponding ExtendedPaymentRecord using PaymentRecordDTO.transactionId
-        // make sure ExtendedPaymentRecord.externalTransactionId is not set
-        // update ExtendedPaymentRecord.externalTransactionId with PaymentRecordDTO.externalTransactionId
         for (PaymentRecordDTO record : records) {
-            ExtendedPaymentRecord epr = Persistence.service().retrieve(ExtendedPaymentRecord.class, new Key(record.transactionId().getValue()));
-            if (epr != null) {
+            PaymentRecordExternal epr = Persistence.service().retrieve(PaymentRecordExternal.class, new Key(record.transactionId().getValue()));
+            if (epr != null && epr.externalTransactionId().isNull()) {
                 epr.externalTransactionId().set(record.externalTransactionId());
             }
         }
@@ -122,11 +138,18 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
 
     @Override
     public void onPaymentRecordCreated(PaymentRecord paymentRecord) {
-        ExtendedPaymentRecord epr = EntityFactory.create(ExtendedPaymentRecord.class);
+        PaymentRecordExternal epr = EntityFactory.create(PaymentRecordExternal.class);
         epr.billingAccount().set(paymentRecord.billingAccount());
         epr.paymentRecord().set(paymentRecord);
         Persistence.service().persist(epr);
         Persistence.service().commit();
+    }
+
+    private PaymentRecord getPaymentRecord(String transactionId) {
+        EntityQueryCriteria<PaymentRecordExternal> criteria = EntityQueryCriteria.create(PaymentRecordExternal.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().externalTransactionId(), transactionId));
+        PaymentRecordExternal epr = Persistence.service().retrieve(criteria);
+        return epr == null ? null : epr.paymentRecord();
     }
 
     private Building getBuilding(String propertyCode) {

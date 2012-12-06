@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 
-public interface ExtendedPaymentRecord extends IEntity {
+public interface PaymentRecordExternal extends IEntity {
     @Owner
     @NotNull
     @MemberColumn(notNull = true)

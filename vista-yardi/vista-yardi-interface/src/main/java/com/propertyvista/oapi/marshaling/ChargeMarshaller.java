@@ -37,6 +37,8 @@ public class ChargeMarshaller implements Marshaller<ChargeDTO, ChargeIO> {
     @Override
     public ChargeIO marshal(ChargeDTO charge) {
         ChargeIO chargeIO = new ChargeIO();
+        chargeIO.transactionId = charge.transactionId().getValue();
+        chargeIO.leaseId = charge.leaseId().getValue();
         chargeIO.amount = new BigDecimalIO(charge.amount().getValue());
         chargeIO.description = new StringIO(charge.description().getValue());
         chargeIO.fromDate = new LogicalDateIO(charge.fromDate().getValue());

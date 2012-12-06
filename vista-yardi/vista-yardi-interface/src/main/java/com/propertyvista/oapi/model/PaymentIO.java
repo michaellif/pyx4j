@@ -18,7 +18,9 @@ import com.propertyvista.oapi.xml.StringIO;
 
 public class PaymentIO extends TransactionIO {
 
-    //   List<ChargeRS> charges; 
+    //   List<ChargeRS> charges;
+
+    public StringIO paymentType;
 
     public PaymentIO() {
         super();
