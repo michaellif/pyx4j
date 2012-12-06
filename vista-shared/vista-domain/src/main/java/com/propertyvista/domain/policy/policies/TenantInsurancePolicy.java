@@ -37,6 +37,7 @@ public interface TenantInsurancePolicy extends Policy {
 
     @Editor(type = EditorType.money)
     @Format("#,##.00")
+    @NotNull
     IPrimitive<BigDecimal> minimumRequiredLiability();
 
     @NotNull

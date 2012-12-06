@@ -18,18 +18,19 @@ import java.util.Arrays;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
+import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.domain.tenant.ptapp.IAgree;
 import com.propertyvista.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
@@ -40,8 +41,6 @@ import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService {
-
-    private static final I18n i18n = I18n.get(TenantSurePurchaseServiceImpl.class);
 
     @Deprecated
     // TODO this is just a mockup
@@ -73,12 +72,18 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     public void getQuotationRequestParams(AsyncCallback<TenantSureQuotationRequestParamsDTO> callback) {
         TenantSureQuotationRequestParamsDTO params = EntityFactory.create(TenantSureQuotationRequestParamsDTO.class);
 
-        // these values are taken from the TenantSure API document: Appendix I
-        params.generalLiabilityCoverageOptions().addAll(Arrays.asList(//@formatter:off
-                new BigDecimal("1000000"),
-                new BigDecimal("2000000"),
-                new BigDecimal("5000000")
-        ));//@formatter:on
+        Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
+        TenantInsurancePolicy tenantInsurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                lease.unit().<AptUnit> createIdentityStub(), TenantInsurancePolicy.class);
+        // these values are taken from the TenantSure API document: Appendix I        
+        for (BigDecimal libilityCoverage : Arrays.asList(new BigDecimal("1000000"), new BigDecimal("2000000"), new BigDecimal("5000000"))) {
+            if (!tenantInsurancePolicy.requireMinimumLiability().isBooleanTrue()
+                    | (tenantInsurancePolicy.requireMinimumLiability().isBooleanTrue() && libilityCoverage.compareTo(tenantInsurancePolicy
+                            .minimumRequiredLiability().getValue()) >= 0)) {
+                params.generalLiabilityCoverageOptions().add(libilityCoverage);
+            }
+        }
+
         params.contentsCoverageOptions().addAll(Arrays.asList(//@formatter:off
                 BigDecimal.ZERO,
                 new BigDecimal("10000"),
@@ -94,20 +99,13 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
                         new BigDecimal("2500")
         ));//@formatter:on
 
-        IAgree agreeHolder = EntityFactory.create(IAgree.class);
-        agreeHolder.person().set(TenantAppContext.getCurrentUserCustomer().person().duplicate());
-
         LegalTermsDescriptorDTO personalDisclaimerTerms = params.personalDisclaimerTerms().$();
         personalDisclaimerTerms.content().localizedCaption().setValue("Personal Disclaimer");
         personalDisclaimerTerms.content().content().setValue(PERSONAL_DISCLAIMER);
-        params.personalDisclaimerTerms().add(personalDisclaimerTerms);
+        IAgree agreeHolder = EntityFactory.create(IAgree.class);
+        agreeHolder.person().set(TenantAppContext.getCurrentUserCustomer().person().duplicate());
         personalDisclaimerTerms.agrees().add(agreeHolder.duplicate(IAgree.class));
-
-        DigitalSignature signature = params.digitalSignatures().$();
-        signature.timestamp().setValue(new LogicalDate());
-        signature.ipAddress().setValue(Context.getRequestRemoteAddr());
-        signature.person().set(TenantAppContext.getCurrentUserCustomer().duplicate());
-        params.digitalSignatures().add(signature);
+        params.personalDisclaimerTerms().add(personalDisclaimerTerms);
 
         callback.onSuccess(params);
 
@@ -135,4 +133,5 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     public void getCurrentTenantAddress(AsyncCallback<AddressStructured> callback) {
         AddressRetriever.getLeaseParticipantCurrentAddress(callback, TenantAppContext.getCurrentUserTenantInLease());
     }
+
 }
