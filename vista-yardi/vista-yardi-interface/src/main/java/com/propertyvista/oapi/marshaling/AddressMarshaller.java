@@ -43,14 +43,17 @@ public class AddressMarshaller implements Marshaller<AddressStructured, AddressI
 
     @Override
     public AddressIO marshal(AddressStructured address) {
+        if (address == null || address.isNull()) {
+            return null;
+        }
         AddressIO addressIO = new AddressIO();
-        addressIO.country = new StringIO(address.country().name().getValue());
-        addressIO.province = new StringIO(address.province().name().getValue());
-        addressIO.city = new StringIO(address.city().getValue());
-        addressIO.postalCode = new StringIO(address.postalCode().getValue());
-        addressIO.streetNumber = new StringIO(address.streetNumber().getValue());
-        addressIO.streetName = new StringIO(address.streetName().getValue());
-        addressIO.streetType = new StreetTypeIO(address.streetType().getValue());
+        addressIO.country = MarshallerUtils.createIo(StringIO.class, address.country().name());
+        addressIO.province = MarshallerUtils.createIo(StringIO.class, address.province().name());
+        addressIO.city = MarshallerUtils.createIo(StringIO.class, address.city());
+        addressIO.postalCode = MarshallerUtils.createIo(StringIO.class, address.postalCode());
+        addressIO.streetNumber = MarshallerUtils.createIo(StringIO.class, address.streetNumber());
+        addressIO.streetName = MarshallerUtils.createIo(StringIO.class, address.streetName());
+        addressIO.streetType = MarshallerUtils.createIo(StreetTypeIO.class, address.streetType());
         return addressIO;
     }
 
@@ -67,11 +70,11 @@ public class AddressMarshaller implements Marshaller<AddressStructured, AddressI
             address.country().set(getCountry(addressIO.country.getValue()));
             address.province().set(getProvince(addressIO.province.getValue()));
 
-            MarshallerUtils.ioToEntity(address.city(), addressIO.city);
-            MarshallerUtils.ioToEntity(address.postalCode(), addressIO.postalCode);
-            MarshallerUtils.ioToEntity(address.streetNumber(), addressIO.streetNumber);
-            MarshallerUtils.ioToEntity(address.streetName(), addressIO.streetName);
-            MarshallerUtils.ioToEntity(address.streetType(), addressIO.streetType);
+            MarshallerUtils.setValue(address.city(), addressIO.city);
+            MarshallerUtils.setValue(address.postalCode(), addressIO.postalCode);
+            MarshallerUtils.setValue(address.streetNumber(), addressIO.streetNumber);
+            MarshallerUtils.setValue(address.streetName(), addressIO.streetName);
+            MarshallerUtils.setValue(address.streetType(), addressIO.streetType);
         }
         return address;
     }

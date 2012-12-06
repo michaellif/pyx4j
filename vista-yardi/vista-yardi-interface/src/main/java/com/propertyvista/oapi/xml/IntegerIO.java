@@ -13,10 +13,13 @@
  */
 package com.propertyvista.oapi.xml;
 
+import javax.xml.bind.annotation.XmlValue;
 
 public class IntegerIO implements PrimitiveIO<Integer> {
 
     private Integer value;
+
+    private Action action;
 
     public IntegerIO() {
     }
@@ -26,6 +29,7 @@ public class IntegerIO implements PrimitiveIO<Integer> {
     }
 
     @Override
+    @XmlValue
     public Integer getValue() {
         return value;
     }
@@ -33,5 +37,10 @@ public class IntegerIO implements PrimitiveIO<Integer> {
     @Override
     public void setValue(Integer value) {
         this.value = value;
+    }
+
+    @Override
+    public Action getAction() {
+        return action;
     }
 }

@@ -13,12 +13,17 @@
  */
 package com.propertyvista.oapi.model.types;
 
+import javax.xml.bind.annotation.XmlValue;
+
 import com.propertyvista.domain.property.asset.building.BuildingInfo.FoundationType;
+import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.PrimitiveIO;
 
 public class FoundationTypeIO implements PrimitiveIO<FoundationType> {
 
     private FoundationType value;
+
+    private Action action;
 
     public FoundationTypeIO() {
     }
@@ -28,6 +33,7 @@ public class FoundationTypeIO implements PrimitiveIO<FoundationType> {
     }
 
     @Override
+    @XmlValue
     public FoundationType getValue() {
         return value;
     }
@@ -35,5 +41,10 @@ public class FoundationTypeIO implements PrimitiveIO<FoundationType> {
     @Override
     public void setValue(FoundationType value) {
         this.value = value;
+    }
+
+    @Override
+    public Action getAction() {
+        return action;
     }
 }

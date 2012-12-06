@@ -41,6 +41,9 @@ public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {
 
     @Override
     public BuildingIO marshal(Building building) {
+        if (building == null || building.isNull()) {
+            return null;
+        }
         BuildingIO buildingIO = new BuildingIO();
         buildingIO.propertyCode = building.propertyCode().getValue();
         buildingIO.info = BuildingInfoMarshaller.getInstance().marshal(building.info());

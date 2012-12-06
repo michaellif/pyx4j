@@ -41,9 +41,12 @@ public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
 
     @Override
     public MarketingIO marshal(Marketing marketing) {
+        if (marketing == null || marketing.isNull()) {
+            return null;
+        }
         MarketingIO marketingIO = new MarketingIO();
         marketingIO.name = marketing.name().getValue();
-        marketingIO.description = new StringIO(marketing.description().getValue());
+        marketingIO.description = MarshallerUtils.createIo(StringIO.class, marketing.description());
 
         Persistence.service().retrieveMember(marketing.adBlurbs());
         List<AdvertisingBlurbIO> adBlurbsIO = new ArrayList<AdvertisingBlurbIO>();
@@ -65,7 +68,7 @@ public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
             marketing.set(null);
         } else {
             marketing.name().setValue(marketingIO.name);
-            MarshallerUtils.ioToEntity(marketing.description(), marketingIO.description);
+            MarshallerUtils.setValue(marketing.description(), marketingIO.description);
 
             List<AdvertisingBlurb> adBlurbs = new ArrayList<AdvertisingBlurb>();
             for (AdvertisingBlurbIO adBlurbIO : marketingIO.blurbs) {

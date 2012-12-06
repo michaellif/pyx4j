@@ -14,6 +14,7 @@
 package com.propertyvista.oapi.xml;
 
 import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlValue;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.pyx4j.commons.LogicalDate;
@@ -23,6 +24,8 @@ public class LogicalDateIO implements PrimitiveIO<LogicalDate> {
 
     private LogicalDate value;
 
+    private Action action;
+
     public LogicalDateIO() {
     }
 
@@ -31,6 +34,7 @@ public class LogicalDateIO implements PrimitiveIO<LogicalDate> {
     }
 
     @Override
+    @XmlValue
     @XmlSchemaType(name = "date")
     @XmlJavaTypeAdapter(LogicalDateXmlAdapter.class)
     public LogicalDate getValue() {
@@ -42,4 +46,8 @@ public class LogicalDateIO implements PrimitiveIO<LogicalDate> {
         this.value = value;
     }
 
+    @Override
+    public Action getAction() {
+        return action;
+    }
 }

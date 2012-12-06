@@ -22,6 +22,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.oapi.model.TenantIO;
+import com.propertyvista.oapi.model.types.SexTypeIO;
+import com.propertyvista.oapi.xml.StringIO;
 
 public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantIO> {
 
@@ -38,14 +40,17 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantI
 
     @Override
     public TenantIO marshal(LeaseParticipant<?> participant) {
+        if (participant == null || participant.isNull()) {
+            return null;
+        }
         TenantIO tenantIO = new TenantIO();
         Person person = participant.customer().person();
         tenantIO.firstName = person.name().firstName().getValue();
         tenantIO.lastName = person.name().lastName().getValue();
         tenantIO.middleName = person.name().middleName().getValue();
-        MarshallerUtils.entityToIo(tenantIO.sex, person.sex());
-        MarshallerUtils.entityToIo(tenantIO.phone, person.homePhone());
-        MarshallerUtils.entityToIo(tenantIO.email, person.email());
+        tenantIO.sex = MarshallerUtils.createIo(SexTypeIO.class, person.sex());
+        tenantIO.phone = MarshallerUtils.createIo(StringIO.class, person.homePhone());
+        tenantIO.email = MarshallerUtils.createIo(StringIO.class, person.email());
         return tenantIO;
     }
 
@@ -64,9 +69,9 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantI
         person.name().firstName().setValue(tenantIO.firstName);
         person.name().lastName().setValue(tenantIO.lastName);
         person.name().middleName().setValue(tenantIO.middleName);
-        MarshallerUtils.ioToEntity(person.sex(), tenantIO.sex);
-        MarshallerUtils.ioToEntity(person.homePhone(), tenantIO.phone);
-        MarshallerUtils.ioToEntity(person.email(), tenantIO.email);
+        MarshallerUtils.setValue(person.sex(), tenantIO.sex);
+        MarshallerUtils.setValue(person.homePhone(), tenantIO.phone);
+        MarshallerUtils.setValue(person.email(), tenantIO.email);
         participant.customer().person().set(person);
         return participant;
     }

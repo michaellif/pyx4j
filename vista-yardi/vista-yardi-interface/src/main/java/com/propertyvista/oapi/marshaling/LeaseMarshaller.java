@@ -37,14 +37,18 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
 
     @Override
     public LeaseIO marshal(Lease lease) {
+        if (lease == null || lease.isNull()) {
+            return null;
+        }
         LeaseIO leaseIO = new LeaseIO();
-        leaseIO.leaseId = lease.leaseId().getValue();
-        leaseIO.status = new LeaseStatusIO(lease.status().getValue());
-        leaseIO.paymentFrequency = new PaymentFrequencyIO(lease.paymentFrequency().getValue());
-        leaseIO.leaseFrom = new LogicalDateIO(lease.leaseFrom().getValue());
-        leaseIO.leaseTo = new LogicalDateIO(lease.leaseTo().getValue());
         leaseIO.propertyCode = lease.unit().building().propertyCode().getValue();
         leaseIO.unitNumber = lease.unit().info().number().getValue();
+
+        leaseIO.leaseId = lease.leaseId().getValue();
+        leaseIO.status = MarshallerUtils.createIo(LeaseStatusIO.class, lease.status());
+        leaseIO.paymentFrequency = MarshallerUtils.createIo(PaymentFrequencyIO.class, lease.paymentFrequency());
+        leaseIO.leaseFrom = MarshallerUtils.createIo(LogicalDateIO.class, lease.leaseFrom());
+        leaseIO.leaseTo = MarshallerUtils.createIo(LogicalDateIO.class, lease.leaseTo());
 
         Persistence.service().retrieve(lease.leaseParticipants());
         leaseIO.tenants.addAll(TenantMarshaller.getInstance().marshal(lease.leaseParticipants()));
@@ -55,10 +59,10 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
     public Lease unmarshal(LeaseIO leaseIO) {
         Lease lease = EntityFactory.create(Lease.class);
         lease.leaseId().setValue(leaseIO.leaseId);
-        MarshallerUtils.ioToEntity(lease.status(), leaseIO.status);
-        MarshallerUtils.ioToEntity(lease.paymentFrequency(), leaseIO.paymentFrequency);
-        MarshallerUtils.ioToEntity(lease.leaseFrom(), leaseIO.leaseFrom);
-        MarshallerUtils.ioToEntity(lease.leaseTo(), leaseIO.leaseTo);
+        MarshallerUtils.setValue(lease.status(), leaseIO.status);
+        MarshallerUtils.setValue(lease.paymentFrequency(), leaseIO.paymentFrequency);
+        MarshallerUtils.setValue(lease.leaseFrom(), leaseIO.leaseFrom);
+        MarshallerUtils.setValue(lease.leaseTo(), leaseIO.leaseTo);
         lease.unit().building().propertyCode().setValue(leaseIO.propertyCode);
         lease.unit().info().number().setValue(leaseIO.unitNumber);
         lease.leaseParticipants().addAll(TenantMarshaller.getInstance().unmarshal(leaseIO.tenants));

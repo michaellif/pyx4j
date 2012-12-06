@@ -13,12 +13,17 @@
  */
 package com.propertyvista.oapi.model.types;
 
+import javax.xml.bind.annotation.XmlValue;
+
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.PrimitiveIO;
 
 public class PaymentFrequencyIO implements PrimitiveIO<PaymentFrequency> {
 
     private PaymentFrequency value;
+
+    private Action action;
 
     public PaymentFrequencyIO() {
     }
@@ -28,6 +33,7 @@ public class PaymentFrequencyIO implements PrimitiveIO<PaymentFrequency> {
     }
 
     @Override
+    @XmlValue
     public PaymentFrequency getValue() {
         return value;
     }
@@ -35,5 +41,10 @@ public class PaymentFrequencyIO implements PrimitiveIO<PaymentFrequency> {
     @Override
     public void setValue(PaymentFrequency value) {
         this.value = value;
+    }
+
+    @Override
+    public Action getAction() {
+        return action;
     }
 }

@@ -13,12 +13,17 @@
  */
 package com.propertyvista.oapi.model.types;
 
+import javax.xml.bind.annotation.XmlValue;
+
 import com.propertyvista.domain.property.asset.building.BuildingInfo.ConstructionType;
+import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.PrimitiveIO;
 
 public class ConstructionTypeIO implements PrimitiveIO<ConstructionType> {
 
     private ConstructionType value;
+
+    private Action action;
 
     public ConstructionTypeIO() {
     }
@@ -28,6 +33,7 @@ public class ConstructionTypeIO implements PrimitiveIO<ConstructionType> {
     }
 
     @Override
+    @XmlValue
     public ConstructionType getValue() {
         return value;
     }
@@ -35,5 +41,10 @@ public class ConstructionTypeIO implements PrimitiveIO<ConstructionType> {
     @Override
     public void setValue(ConstructionType value) {
         this.value = value;
+    }
+
+    @Override
+    public Action getAction() {
+        return action;
     }
 }

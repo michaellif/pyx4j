@@ -36,13 +36,16 @@ public class ChargeMarshaller implements Marshaller<ChargeDTO, ChargeIO> {
 
     @Override
     public ChargeIO marshal(ChargeDTO charge) {
+        if (charge == null || charge.isNull()) {
+            return null;
+        }
         ChargeIO chargeIO = new ChargeIO();
         chargeIO.transactionId = charge.transactionId().getValue();
         chargeIO.leaseId = charge.leaseId().getValue();
-        chargeIO.amount = new BigDecimalIO(charge.amount().getValue());
-        chargeIO.description = new StringIO(charge.description().getValue());
-        chargeIO.fromDate = new LogicalDateIO(charge.fromDate().getValue());
-        chargeIO.toDate = new LogicalDateIO(charge.toDate().getValue());
+        chargeIO.amount = MarshallerUtils.createIo(BigDecimalIO.class, charge.amount());
+        chargeIO.description = MarshallerUtils.createIo(StringIO.class, charge.description());
+        chargeIO.fromDate = MarshallerUtils.createIo(LogicalDateIO.class, charge.fromDate());
+        chargeIO.toDate = MarshallerUtils.createIo(LogicalDateIO.class, charge.toDate());
         return chargeIO;
     }
 
@@ -51,10 +54,10 @@ public class ChargeMarshaller implements Marshaller<ChargeDTO, ChargeIO> {
         ChargeDTO charge = EntityFactory.create(ChargeDTO.class);
         charge.transactionId().setValue(chargeIO.transactionId);
         charge.leaseId().setValue(chargeIO.leaseId);
-        MarshallerUtils.ioToEntity(charge.amount(), chargeIO.amount);
-        MarshallerUtils.ioToEntity(charge.description(), chargeIO.description);
-        MarshallerUtils.ioToEntity(charge.fromDate(), chargeIO.fromDate); // Transaction.ChargeDetail.ServiceFromDate
-        MarshallerUtils.ioToEntity(charge.toDate(), chargeIO.toDate); // Transaction.ChargeDetail.ServiceToDate
+        MarshallerUtils.setValue(charge.amount(), chargeIO.amount);
+        MarshallerUtils.setValue(charge.description(), chargeIO.description);
+        MarshallerUtils.setValue(charge.fromDate(), chargeIO.fromDate); // Transaction.ChargeDetail.ServiceFromDate
+        MarshallerUtils.setValue(charge.toDate(), chargeIO.toDate); // Transaction.ChargeDetail.ServiceToDate
         return charge;
     }
 

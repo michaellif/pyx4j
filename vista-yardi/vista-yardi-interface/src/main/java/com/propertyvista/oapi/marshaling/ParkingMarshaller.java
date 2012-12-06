@@ -40,11 +40,14 @@ public class ParkingMarshaller implements Marshaller<Parking, ParkingIO> {
 
     @Override
     public ParkingIO marshal(Parking parking) {
+        if (parking == null || parking.isNull()) {
+            return null;
+        }
         ParkingIO parkingIO = new ParkingIO();
         parkingIO.name = parking.name().getValue();
-        parkingIO.description = new StringIO(parking.description().getValue());
-        parkingIO.type = new ParkingTypeIO(parking.type().getValue());
-        parkingIO.levels = new DoubleIO(parking.levels().getValue());
+        parkingIO.description = MarshallerUtils.createIo(StringIO.class, parking.description());
+        parkingIO.type = MarshallerUtils.createIo(ParkingTypeIO.class, parking.type());
+        parkingIO.levels = MarshallerUtils.createIo(DoubleIO.class, parking.levels());
         return parkingIO;
     }
 
@@ -60,9 +63,9 @@ public class ParkingMarshaller implements Marshaller<Parking, ParkingIO> {
     public Parking unmarshal(ParkingIO parkingIO) throws Exception {
         Parking parking = EntityFactory.create(Parking.class);
         parking.name().setValue(parkingIO.name);
-        MarshallerUtils.ioToEntity(parking.description(), parkingIO.description);
-        MarshallerUtils.ioToEntity(parking.type(), parkingIO.type);
-        MarshallerUtils.ioToEntity(parking.levels(), parkingIO.levels);
+        MarshallerUtils.setValue(parking.description(), parkingIO.description);
+        MarshallerUtils.setValue(parking.type(), parkingIO.type);
+        MarshallerUtils.setValue(parking.levels(), parkingIO.levels);
         return parking;
     }
 

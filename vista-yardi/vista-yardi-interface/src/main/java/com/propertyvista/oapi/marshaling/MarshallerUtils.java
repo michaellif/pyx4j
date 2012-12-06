@@ -21,15 +21,23 @@ import com.propertyvista.oapi.xml.PrimitiveIO;
 
 public class MarshallerUtils {
 
-    public static <T extends Serializable> void ioToEntity(IPrimitive<T> primitive, PrimitiveIO<T> primitiveIO) {
+    public static <T extends Serializable> void setValue(IPrimitive<T> primitive, PrimitiveIO<T> primitiveIO) {
         if (primitiveIO != null) {
             primitive.setValue(primitiveIO.getValue());
         }
     }
 
-    public static <T extends Serializable> void entityToIo(PrimitiveIO<T> primitiveIO, IPrimitive<T> primitive) {
-        if (primitive != null) {
+    public static <T extends Serializable, E extends PrimitiveIO<T>> E createIo(Class<E> classIO, IPrimitive<T> primitive) {
+        if (primitive != null && !primitive.isNull()) {
+            E primitiveIO;
+            try {
+                primitiveIO = classIO.newInstance();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             primitiveIO.setValue(primitive.getValue());
+            return primitiveIO;
         }
+        return null;
     }
 }

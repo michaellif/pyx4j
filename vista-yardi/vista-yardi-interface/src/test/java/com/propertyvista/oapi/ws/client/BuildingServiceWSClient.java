@@ -24,7 +24,7 @@ import com.propertyvista.oapi.ws.WSPropertyServiceStub;
 
 public class BuildingServiceWSClient {
 
-    private static boolean isLocal = true;
+    private static boolean isLocal = false;
 
     public static void main(String[] args) throws MalformedURLException {
 

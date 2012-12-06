@@ -34,15 +34,18 @@ public class AdvertisingBlurbMarshaller implements Marshaller<AdvertisingBlurb, 
 
     @Override
     public AdvertisingBlurbIO marshal(AdvertisingBlurb adBlurb) {
+        if (adBlurb == null || adBlurb.isNull()) {
+            return null;
+        }
         AdvertisingBlurbIO adBlurbIO = new AdvertisingBlurbIO();
-        adBlurbIO.content = new StringIO(adBlurb.content().getValue());
+        adBlurbIO.content = MarshallerUtils.createIo(StringIO.class, adBlurb.content());
         return adBlurbIO;
     }
 
     @Override
     public AdvertisingBlurb unmarshal(AdvertisingBlurbIO adBlurbIO) throws Exception {
         AdvertisingBlurb adBlurb = EntityFactory.create(AdvertisingBlurb.class);
-        MarshallerUtils.ioToEntity(adBlurb.content(), adBlurbIO.content);
+        MarshallerUtils.setValue(adBlurb.content(), adBlurbIO.content);
         return adBlurb;
     }
 }

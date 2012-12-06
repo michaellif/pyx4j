@@ -13,12 +13,17 @@
  */
 package com.propertyvista.oapi.model.types;
 
+import javax.xml.bind.annotation.XmlValue;
+
 import com.propertyvista.domain.property.asset.Parking;
+import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.PrimitiveIO;
 
 public class ParkingTypeIO implements PrimitiveIO<Parking.Type> {
 
     private Parking.Type value;
+
+    private Action action;
 
     public ParkingTypeIO() {
     }
@@ -28,6 +33,7 @@ public class ParkingTypeIO implements PrimitiveIO<Parking.Type> {
     }
 
     @Override
+    @XmlValue
     public Parking.Type getValue() {
         return value;
     }
@@ -35,5 +41,10 @@ public class ParkingTypeIO implements PrimitiveIO<Parking.Type> {
     @Override
     public void setValue(Parking.Type value) {
         this.value = value;
+    }
+
+    @Override
+    public Action getAction() {
+        return action;
     }
 }

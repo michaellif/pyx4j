@@ -36,13 +36,17 @@ public class PaymentRecordMarshaller implements Marshaller<PaymentRecordDTO, Pay
 
     @Override
     public PaymentRecordIO marshal(PaymentRecordDTO payment) {
+        if (payment == null || payment.isNull()) {
+            return null;
+        }
         PaymentRecordIO paymentIO = new PaymentRecordIO();
         paymentIO.transactionId = payment.transactionId().getValue();
-        paymentIO.externalTransactionId = new StringIO(payment.externalTransactionId().getValue());
-        paymentIO.leaseId = new StringIO(payment.leaseId().getValue());
-        paymentIO.amount = new BigDecimalIO(payment.amount().getValue());
-        paymentIO.transactionDate = new LogicalDateIO(payment.transactionDate().getValue());
-        paymentIO.paymentType = new StringIO(payment.paymentType().getValue());
+
+        paymentIO.externalTransactionId = MarshallerUtils.createIo(StringIO.class, payment.externalTransactionId());
+        paymentIO.leaseId = MarshallerUtils.createIo(StringIO.class, payment.leaseId());
+        paymentIO.amount = MarshallerUtils.createIo(BigDecimalIO.class, payment.amount());
+        paymentIO.transactionDate = MarshallerUtils.createIo(LogicalDateIO.class, payment.transactionDate());
+        paymentIO.paymentType = MarshallerUtils.createIo(StringIO.class, payment.paymentType());
         return paymentIO;
     }
 
@@ -50,11 +54,11 @@ public class PaymentRecordMarshaller implements Marshaller<PaymentRecordDTO, Pay
     public PaymentRecordDTO unmarshal(PaymentRecordIO paymentIO) {
         PaymentRecordDTO payment = EntityFactory.create(PaymentRecordDTO.class);
         payment.transactionId().setValue(paymentIO.transactionId);
-        MarshallerUtils.ioToEntity(payment.externalTransactionId(), paymentIO.externalTransactionId);
-        MarshallerUtils.ioToEntity(payment.leaseId(), paymentIO.leaseId);
-        MarshallerUtils.ioToEntity(payment.amount(), paymentIO.amount);
-        MarshallerUtils.ioToEntity(payment.transactionDate(), paymentIO.transactionDate);
-        MarshallerUtils.ioToEntity(payment.paymentType(), paymentIO.paymentType);
+        MarshallerUtils.setValue(payment.externalTransactionId(), paymentIO.externalTransactionId);
+        MarshallerUtils.setValue(payment.leaseId(), paymentIO.leaseId);
+        MarshallerUtils.setValue(payment.amount(), paymentIO.amount);
+        MarshallerUtils.setValue(payment.transactionDate(), paymentIO.transactionDate);
+        MarshallerUtils.setValue(payment.paymentType(), paymentIO.paymentType);
         return payment;
     }
 

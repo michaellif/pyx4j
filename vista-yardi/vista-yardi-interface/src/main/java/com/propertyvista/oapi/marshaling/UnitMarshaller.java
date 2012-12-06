@@ -35,11 +35,15 @@ public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
 
     @Override
     public UnitIO marshal(AptUnit unit) {
+        if (unit == null || unit.isNull()) {
+            return null;
+        }
         UnitIO unitIO = new UnitIO();
-        unitIO.floorplanName = new StringIO(unit.floorplan().name().getValue());
         unitIO.number = unit.info().number().getValue();
-        unitIO.baths = new IntegerIO(unit.floorplan().bathrooms().getValue());
-        unitIO.beds = new IntegerIO(unit.floorplan().bedrooms().getValue());
+
+        unitIO.floorplanName = MarshallerUtils.createIo(StringIO.class, unit.floorplan().name());
+        unitIO.baths = MarshallerUtils.createIo(IntegerIO.class, unit.floorplan().bathrooms());
+        unitIO.beds = MarshallerUtils.createIo(IntegerIO.class, unit.floorplan().bedrooms());
         return unitIO;
     }
 
@@ -54,9 +58,9 @@ public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
         // floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().bedrooms(), unitIO.beds.value));
         // List<Floorplan> floorplans = Persistence.service().query(floorplanCriteria);
 
-        MarshallerUtils.ioToEntity(unit.floorplan().name(), unitIO.floorplanName);
-        MarshallerUtils.ioToEntity(unit.floorplan().bathrooms(), unitIO.baths);
-        MarshallerUtils.ioToEntity(unit.floorplan().bedrooms(), unitIO.beds);
+        MarshallerUtils.setValue(unit.floorplan().name(), unitIO.floorplanName);
+        MarshallerUtils.setValue(unit.floorplan().bathrooms(), unitIO.baths);
+        MarshallerUtils.setValue(unit.floorplan().bedrooms(), unitIO.beds);
         return unit;
     }
 }

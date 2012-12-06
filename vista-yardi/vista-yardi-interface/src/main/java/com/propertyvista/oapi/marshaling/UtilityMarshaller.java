@@ -37,8 +37,12 @@ public class UtilityMarshaller implements Marshaller<Utility, UtilityIO> {
 
     @Override
     public UtilityIO marshal(Utility utility) {
+        if (utility == null || utility.isNull()) {
+            return null;
+        }
         UtilityIO utilityIO = new UtilityIO();
         utilityIO.name = utility.name().getValue();
+
         return utilityIO;
     }
 

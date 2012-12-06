@@ -38,11 +38,14 @@ public class MediaMarshaller implements Marshaller<Media, MediaIO> {
 
     @Override
     public MediaIO marshal(Media media) {
+        if (media == null || media.isNull()) {
+            return null;
+        }
         MediaIO mediaIO = new MediaIO();
-        mediaIO.caption = new StringIO(media.caption().getValue());
-        mediaIO.mediaType = new MediaTypeIO(media.type().getValue());
-        mediaIO.url = new StringIO(media.url().getValue());
-        mediaIO.youTubeVideoID = new StringIO(media.youTubeVideoID().getValue());
+        mediaIO.caption = MarshallerUtils.createIo(StringIO.class, media.caption());
+        mediaIO.mediaType = MarshallerUtils.createIo(MediaTypeIO.class, media.type());
+        mediaIO.url = MarshallerUtils.createIo(StringIO.class, media.url());
+        mediaIO.youTubeVideoID = MarshallerUtils.createIo(StringIO.class, media.youTubeVideoID());
         return mediaIO;
     }
 
@@ -57,10 +60,10 @@ public class MediaMarshaller implements Marshaller<Media, MediaIO> {
     @Override
     public Media unmarshal(MediaIO mediaIO) throws Exception {
         Media media = EntityFactory.create(Media.class);
-        MarshallerUtils.ioToEntity(media.caption(), mediaIO.caption);
-        MarshallerUtils.ioToEntity(media.type(), mediaIO.mediaType);
-        MarshallerUtils.ioToEntity(media.url(), mediaIO.url);
-        MarshallerUtils.ioToEntity(media.youTubeVideoID(), mediaIO.youTubeVideoID);
+        MarshallerUtils.setValue(media.caption(), mediaIO.caption);
+        MarshallerUtils.setValue(media.type(), mediaIO.mediaType);
+        MarshallerUtils.setValue(media.url(), mediaIO.url);
+        MarshallerUtils.setValue(media.youTubeVideoID(), mediaIO.youTubeVideoID);
         return media;
     }
 

@@ -39,10 +39,13 @@ public class FloorplanAmenityMarshaller implements Marshaller<FloorplanAmenity, 
 
     @Override
     public FloorplanAmenityIO marshal(FloorplanAmenity amenity) {
+        if (amenity == null || amenity.isNull()) {
+            return null;
+        }
         FloorplanAmenityIO amenityIO = new FloorplanAmenityIO();
-        amenityIO.name = new StringIO(amenity.name().getValue());
-        amenityIO.description = new StringIO(amenity.description().getValue());
-        amenityIO.type = new FloorplanAmenityTypeIO(amenity.type().getValue());
+        amenityIO.name = MarshallerUtils.createIo(StringIO.class, amenity.name());
+        amenityIO.description = MarshallerUtils.createIo(StringIO.class, amenity.description());
+        amenityIO.type = MarshallerUtils.createIo(FloorplanAmenityTypeIO.class, amenity.type());
         return amenityIO;
     }
 
@@ -57,9 +60,9 @@ public class FloorplanAmenityMarshaller implements Marshaller<FloorplanAmenity, 
     @Override
     public FloorplanAmenity unmarshal(FloorplanAmenityIO amenityIO) throws Exception {
         FloorplanAmenity amenity = EntityFactory.create(FloorplanAmenity.class);
-        MarshallerUtils.ioToEntity(amenity.name(), amenityIO.name);
-        MarshallerUtils.ioToEntity(amenity.description(), amenityIO.description);
-        MarshallerUtils.ioToEntity(amenity.type(), amenityIO.type);
+        MarshallerUtils.setValue(amenity.name(), amenityIO.name);
+        MarshallerUtils.setValue(amenity.description(), amenityIO.description);
+        MarshallerUtils.setValue(amenity.type(), amenityIO.type);
         return amenity;
     }
 

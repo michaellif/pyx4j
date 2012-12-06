@@ -34,13 +34,17 @@ public class PaymentMarshaller implements Marshaller<PaymentDTO, PaymentIO> {
     }
 
     @Override
-    public PaymentIO marshal(PaymentDTO dto) {
+    public PaymentIO marshal(PaymentDTO payment) {
+        if (payment == null || payment.isNull()) {
+            return null;
+        }
         PaymentIO io = new PaymentIO();
-        io.transactionId = dto.transactionId().getValue();
-        io.leaseId = dto.leaseId().getValue();
-        io.amount = new BigDecimalIO(dto.amount().getValue());
-        io.description = new StringIO(dto.description().getValue());
-        io.paymentType = new StringIO(dto.paymentType().getValue());
+        io.transactionId = payment.transactionId().getValue();
+        io.leaseId = payment.leaseId().getValue();
+
+        io.amount = MarshallerUtils.createIo(BigDecimalIO.class, payment.amount());
+        io.description = MarshallerUtils.createIo(StringIO.class, payment.description());
+        io.paymentType = MarshallerUtils.createIo(StringIO.class, payment.paymentType());
         return io;
     }
 
@@ -49,9 +53,9 @@ public class PaymentMarshaller implements Marshaller<PaymentDTO, PaymentIO> {
         PaymentDTO dto = EntityFactory.create(PaymentDTO.class);
         dto.transactionId().setValue(io.transactionId);
         dto.leaseId().setValue(io.leaseId);
-        MarshallerUtils.ioToEntity(dto.amount(), io.amount);
-        MarshallerUtils.ioToEntity(dto.description(), io.description);
-        MarshallerUtils.ioToEntity(dto.paymentType(), io.paymentType);
+        MarshallerUtils.setValue(dto.amount(), io.amount);
+        MarshallerUtils.setValue(dto.description(), io.description);
+        MarshallerUtils.setValue(dto.paymentType(), io.paymentType);
         return dto;
     }
 
