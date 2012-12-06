@@ -13,20 +13,12 @@
  */
 package com.propertyvista.oapi.model.types;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlValue;
-
 import com.propertyvista.domain.property.asset.building.BuildingInfo.FloorType;
-import com.propertyvista.oapi.xml.Action;
-import com.propertyvista.oapi.xml.ElementIO;
+import com.propertyvista.oapi.xml.PrimitiveIO;
 
-public class FloorTypeIO implements ElementIO {
+public class FloorTypeIO implements PrimitiveIO<FloorType> {
 
-    @XmlValue
-    public FloorType value;
-
-    @XmlAttribute
-    public Action action;
+    private FloorType value;
 
     public FloorTypeIO() {
     }
@@ -36,8 +28,12 @@ public class FloorTypeIO implements ElementIO {
     }
 
     @Override
-    public Action getAction() {
-        return action;
+    public FloorType getValue() {
+        return value;
     }
 
+    @Override
+    public void setValue(FloorType value) {
+        this.value = value;
+    }
 }

@@ -13,25 +13,14 @@
  */
 package com.propertyvista.oapi.xml;
 
+import java.io.Serializable;
 
-public class DoubleIO implements PrimitiveIO<Double> {
+import javax.xml.bind.annotation.XmlValue;
 
-    private Double value;
+public interface PrimitiveIO<E extends Serializable> {
 
-    public DoubleIO() {
-    }
+    @XmlValue
+    E getValue();
 
-    public DoubleIO(Double value) {
-        this.value = value;
-    }
-
-    @Override
-    public Double getValue() {
-        return value;
-    }
-
-    @Override
-    public void setValue(Double value) {
-        this.value = value;
-    }
+    void setValue(E value);
 }

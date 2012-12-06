@@ -60,9 +60,9 @@ public class ParkingMarshaller implements Marshaller<Parking, ParkingIO> {
     public Parking unmarshal(ParkingIO parkingIO) throws Exception {
         Parking parking = EntityFactory.create(Parking.class);
         parking.name().setValue(parkingIO.name);
-        parking.description().setValue(parkingIO.description.value);
-        parking.type().setValue(parkingIO.type.value);
-        parking.levels().setValue(parkingIO.levels.value);
+        MarshallerUtils.ioToEntity(parking.description(), parkingIO.description);
+        MarshallerUtils.ioToEntity(parking.type(), parkingIO.type);
+        MarshallerUtils.ioToEntity(parking.levels(), parkingIO.levels);
         return parking;
     }
 

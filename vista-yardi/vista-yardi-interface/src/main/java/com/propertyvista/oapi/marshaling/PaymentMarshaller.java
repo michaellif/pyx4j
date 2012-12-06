@@ -49,9 +49,9 @@ public class PaymentMarshaller implements Marshaller<PaymentDTO, PaymentIO> {
         PaymentDTO dto = EntityFactory.create(PaymentDTO.class);
         dto.transactionId().setValue(io.transactionId);
         dto.leaseId().setValue(io.leaseId);
-        dto.amount().setValue(io.amount.value);
-        dto.description().setValue(io.description.value);
-        dto.paymentType().setValue(io.paymentType.value);
+        MarshallerUtils.ioToEntity(dto.amount(), io.amount);
+        MarshallerUtils.ioToEntity(dto.description(), io.description);
+        MarshallerUtils.ioToEntity(dto.paymentType(), io.paymentType);
         return dto;
     }
 

@@ -65,7 +65,7 @@ public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
             marketing.set(null);
         } else {
             marketing.name().setValue(marketingIO.name);
-            marketing.description().setValue(marketingIO.description.value);
+            MarshallerUtils.ioToEntity(marketing.description(), marketingIO.description);
 
             List<AdvertisingBlurb> adBlurbs = new ArrayList<AdvertisingBlurb>();
             for (AdvertisingBlurbIO adBlurbIO : marketingIO.blurbs) {

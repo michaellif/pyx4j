@@ -13,16 +13,10 @@
  */
 package com.propertyvista.oapi.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlValue;
 
-public class BooleanIO implements ElementIO {
+public class BooleanIO implements PrimitiveIO<Boolean> {
 
-    @XmlValue
-    public Boolean value;
-
-    @XmlAttribute
-    public Action action;
+    private Boolean value;
 
     public BooleanIO() {
     }
@@ -32,8 +26,12 @@ public class BooleanIO implements ElementIO {
     }
 
     @Override
-    public Action getAction() {
-        return action;
+    public Boolean getValue() {
+        return value;
     }
 
+    @Override
+    public void setValue(Boolean value) {
+        this.value = value;
+    }
 }

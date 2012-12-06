@@ -57,11 +57,9 @@ public class BuildingAmenityMarshaller implements Marshaller<BuildingAmenity, Bu
     @Override
     public BuildingAmenity unmarshal(BuildingAmenityIO amenityIO) throws Exception {
         BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
-        amenity.name().setValue(amenityIO.name.value);
-        amenity.description().setValue(amenityIO.description.value);
-        if (amenityIO.type != null) {
-            amenity.type().setValue(amenityIO.type.value);
-        }
+        MarshallerUtils.ioToEntity(amenity.name(), amenityIO.name);
+        MarshallerUtils.ioToEntity(amenity.description(), amenityIO.description);
+        MarshallerUtils.ioToEntity(amenity.type(), amenityIO.type);
         return amenity;
     }
 

@@ -57,10 +57,10 @@ public class MediaMarshaller implements Marshaller<Media, MediaIO> {
     @Override
     public Media unmarshal(MediaIO mediaIO) throws Exception {
         Media media = EntityFactory.create(Media.class);
-        media.caption().setValue(mediaIO.caption.value);
-        media.type().setValue(mediaIO.mediaType.value);
-        media.url().setValue(mediaIO.url.value);
-        media.youTubeVideoID().setValue(mediaIO.youTubeVideoID.value);
+        MarshallerUtils.ioToEntity(media.caption(), mediaIO.caption);
+        MarshallerUtils.ioToEntity(media.type(), mediaIO.mediaType);
+        MarshallerUtils.ioToEntity(media.url(), mediaIO.url);
+        MarshallerUtils.ioToEntity(media.youTubeVideoID(), mediaIO.youTubeVideoID);
         return media;
     }
 

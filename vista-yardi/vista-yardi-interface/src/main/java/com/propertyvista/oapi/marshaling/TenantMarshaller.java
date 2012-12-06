@@ -43,9 +43,9 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantI
         tenantIO.firstName = person.name().firstName().getValue();
         tenantIO.lastName = person.name().lastName().getValue();
         tenantIO.middleName = person.name().middleName().getValue();
-        tenantIO.sex.value = person.sex().getValue();
-        tenantIO.phone.value = person.homePhone().getValue();
-        tenantIO.email.value = person.email().getValue();
+        MarshallerUtils.entityToIo(tenantIO.sex, person.sex());
+        MarshallerUtils.entityToIo(tenantIO.phone, person.homePhone());
+        MarshallerUtils.entityToIo(tenantIO.email, person.email());
         return tenantIO;
     }
 
@@ -58,20 +58,20 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantI
     }
 
     @Override
-    public LeaseParticipant<?> unmarshal(TenantIO tenantIO) throws Exception {
+    public LeaseParticipant<?> unmarshal(TenantIO tenantIO) {
         LeaseParticipant<?> participant = EntityFactory.create(LeaseParticipant.class);
         Person person = EntityFactory.create(Person.class);
         person.name().firstName().setValue(tenantIO.firstName);
         person.name().lastName().setValue(tenantIO.lastName);
         person.name().middleName().setValue(tenantIO.middleName);
-        person.sex().setValue(tenantIO.sex.value);
-        person.homePhone().setValue(tenantIO.phone.value);
-        person.email().setValue(tenantIO.email.value);
+        MarshallerUtils.ioToEntity(person.sex(), tenantIO.sex);
+        MarshallerUtils.ioToEntity(person.homePhone(), tenantIO.phone);
+        MarshallerUtils.ioToEntity(person.email(), tenantIO.email);
         participant.customer().person().set(person);
         return participant;
     }
 
-    public List<LeaseParticipant<?>> unmarshal(Collection<TenantIO> tenantIOList) throws Exception {
+    public List<LeaseParticipant<?>> unmarshal(Collection<TenantIO> tenantIOList) {
         List<LeaseParticipant<?>> participants = new ArrayList<LeaseParticipant<?>>();
         for (TenantIO tenantIO : tenantIOList) {
             participants.add(unmarshal(tenantIO));

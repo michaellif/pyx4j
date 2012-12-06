@@ -63,13 +63,15 @@ public class AddressMarshaller implements Marshaller<AddressStructured, AddressI
         if (addressIO.getAction() == Action.nil) {
             address.set(null);
         } else {
-            address.country().set(getCountry(addressIO.country.value));
-            address.province().set(getProvince(addressIO.province.value));
-            address.city().setValue(addressIO.city.value);
-            address.postalCode().setValue(addressIO.postalCode.value);
-            address.streetNumber().setValue(addressIO.streetNumber.value);
-            address.streetName().setValue(addressIO.streetName.value);
-            address.streetType().setValue(addressIO.streetType.value);
+
+            address.country().set(getCountry(addressIO.country.getValue()));
+            address.province().set(getProvince(addressIO.province.getValue()));
+
+            MarshallerUtils.ioToEntity(address.city(), addressIO.city);
+            MarshallerUtils.ioToEntity(address.postalCode(), addressIO.postalCode);
+            MarshallerUtils.ioToEntity(address.streetNumber(), addressIO.streetNumber);
+            MarshallerUtils.ioToEntity(address.streetName(), addressIO.streetName);
+            MarshallerUtils.ioToEntity(address.streetType(), addressIO.streetType);
         }
         return address;
     }

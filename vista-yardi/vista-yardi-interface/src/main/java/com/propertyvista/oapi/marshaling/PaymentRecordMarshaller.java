@@ -50,11 +50,11 @@ public class PaymentRecordMarshaller implements Marshaller<PaymentRecordDTO, Pay
     public PaymentRecordDTO unmarshal(PaymentRecordIO paymentIO) {
         PaymentRecordDTO payment = EntityFactory.create(PaymentRecordDTO.class);
         payment.transactionId().setValue(paymentIO.transactionId);
-        payment.externalTransactionId().setValue(paymentIO.externalTransactionId.value);
-        payment.leaseId().setValue(paymentIO.leaseId.value);
-        payment.amount().setValue(paymentIO.amount.value);
-        payment.transactionDate().setValue(paymentIO.transactionDate.value);
-        payment.paymentType().setValue(paymentIO.paymentType.value);
+        MarshallerUtils.ioToEntity(payment.externalTransactionId(), paymentIO.externalTransactionId);
+        MarshallerUtils.ioToEntity(payment.leaseId(), paymentIO.leaseId);
+        MarshallerUtils.ioToEntity(payment.amount(), paymentIO.amount);
+        MarshallerUtils.ioToEntity(payment.transactionDate(), paymentIO.transactionDate);
+        MarshallerUtils.ioToEntity(payment.paymentType(), paymentIO.paymentType);
         return payment;
     }
 

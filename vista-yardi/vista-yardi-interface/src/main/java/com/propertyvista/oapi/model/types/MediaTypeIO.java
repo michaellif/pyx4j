@@ -13,20 +13,12 @@
  */
 package com.propertyvista.oapi.model.types;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlValue;
-
 import com.propertyvista.domain.media.Media;
-import com.propertyvista.oapi.xml.Action;
-import com.propertyvista.oapi.xml.ElementIO;
+import com.propertyvista.oapi.xml.PrimitiveIO;
 
-public class MediaTypeIO implements ElementIO {
+public class MediaTypeIO implements PrimitiveIO<Media.Type> {
 
-    @XmlValue
-    public Media.Type value;
-
-    @XmlAttribute
-    public Action action;
+    private Media.Type value;
 
     public MediaTypeIO() {
     }
@@ -36,8 +28,12 @@ public class MediaTypeIO implements ElementIO {
     }
 
     @Override
-    public Action getAction() {
-        return action;
+    public Media.Type getValue() {
+        return value;
     }
 
+    @Override
+    public void setValue(Media.Type value) {
+        this.value = value;
+    }
 }

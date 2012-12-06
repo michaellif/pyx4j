@@ -13,20 +13,12 @@
  */
 package com.propertyvista.oapi.model.types;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlValue;
-
 import com.propertyvista.domain.property.asset.building.BuildingInfo.StructureType;
-import com.propertyvista.oapi.xml.Action;
-import com.propertyvista.oapi.xml.ElementIO;
+import com.propertyvista.oapi.xml.PrimitiveIO;
 
-public class BuildingStructureTypeIO implements ElementIO {
+public class BuildingStructureTypeIO implements PrimitiveIO<StructureType> {
 
-    @XmlValue
-    public StructureType value;
-
-    @XmlAttribute
-    public Action action;
+    private StructureType value;
 
     public BuildingStructureTypeIO() {
     }
@@ -36,8 +28,12 @@ public class BuildingStructureTypeIO implements ElementIO {
     }
 
     @Override
-    public Action getAction() {
-        return action;
+    public StructureType getValue() {
+        return value;
     }
 
+    @Override
+    public void setValue(StructureType value) {
+        this.value = value;
+    }
 }

@@ -13,20 +13,13 @@
  */
 package com.propertyvista.oapi.model.types;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlValue;
-
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
-import com.propertyvista.oapi.xml.Action;
-import com.propertyvista.oapi.xml.ElementIO;
+import com.propertyvista.domain.property.asset.building.BuildingAmenity.Type;
+import com.propertyvista.oapi.xml.PrimitiveIO;
 
-public class BuildingAmenityTypeIO implements ElementIO {
+public class BuildingAmenityTypeIO implements PrimitiveIO<BuildingAmenity.Type> {
 
-    @XmlValue
-    public BuildingAmenity.Type value;
-
-    @XmlAttribute
-    public Action action;
+    private BuildingAmenity.Type value;
 
     public BuildingAmenityTypeIO() {
     }
@@ -36,8 +29,13 @@ public class BuildingAmenityTypeIO implements ElementIO {
     }
 
     @Override
-    public Action getAction() {
-        return action;
+    public Type getValue() {
+        return value;
+    }
+
+    @Override
+    public void setValue(Type value) {
+        this.value = value;
     }
 
 }

@@ -52,13 +52,13 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
     }
 
     @Override
-    public Lease unmarshal(LeaseIO leaseIO) throws Exception {
+    public Lease unmarshal(LeaseIO leaseIO) {
         Lease lease = EntityFactory.create(Lease.class);
         lease.leaseId().setValue(leaseIO.leaseId);
-        lease.status().setValue(leaseIO.status.value);
-        lease.paymentFrequency().setValue(leaseIO.paymentFrequency.value);
-        lease.leaseFrom().setValue(leaseIO.leaseFrom.value);
-        lease.leaseTo().setValue(leaseIO.leaseTo.value);
+        MarshallerUtils.ioToEntity(lease.status(), leaseIO.status);
+        MarshallerUtils.ioToEntity(lease.paymentFrequency(), leaseIO.paymentFrequency);
+        MarshallerUtils.ioToEntity(lease.leaseFrom(), leaseIO.leaseFrom);
+        MarshallerUtils.ioToEntity(lease.leaseTo(), leaseIO.leaseTo);
         lease.unit().building().propertyCode().setValue(leaseIO.propertyCode);
         lease.unit().info().number().setValue(leaseIO.unitNumber);
         lease.leaseParticipants().addAll(TenantMarshaller.getInstance().unmarshal(leaseIO.tenants));

@@ -57,9 +57,9 @@ public class FloorplanAmenityMarshaller implements Marshaller<FloorplanAmenity, 
     @Override
     public FloorplanAmenity unmarshal(FloorplanAmenityIO amenityIO) throws Exception {
         FloorplanAmenity amenity = EntityFactory.create(FloorplanAmenity.class);
-        amenity.name().setValue(amenityIO.name.value);
-        amenity.description().setValue(amenityIO.description.value);
-        amenity.type().setValue(amenityIO.type.value);
+        MarshallerUtils.ioToEntity(amenity.name(), amenityIO.name);
+        MarshallerUtils.ioToEntity(amenity.description(), amenityIO.description);
+        MarshallerUtils.ioToEntity(amenity.type(), amenityIO.type);
         return amenity;
     }
 

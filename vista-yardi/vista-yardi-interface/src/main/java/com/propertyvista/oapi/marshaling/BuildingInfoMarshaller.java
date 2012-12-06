@@ -51,7 +51,7 @@ public class BuildingInfoMarshaller implements Marshaller<BuildingInfo, Building
             buildingInfo.set(null);
         } else {
             buildingInfo.address().set(AddressMarshaller.getInstance().unmarshal(buildingInfoIO.address));
-            buildingInfo.type().setValue(buildingInfoIO.buildingType.value);
+            MarshallerUtils.ioToEntity(buildingInfo.type(), buildingInfoIO.buildingType);
         }
         return buildingInfo;
     }

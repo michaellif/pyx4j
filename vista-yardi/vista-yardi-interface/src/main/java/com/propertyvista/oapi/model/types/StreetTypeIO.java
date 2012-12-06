@@ -13,20 +13,12 @@
  */
 package com.propertyvista.oapi.model.types;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlValue;
-
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
-import com.propertyvista.oapi.xml.Action;
-import com.propertyvista.oapi.xml.ElementIO;
+import com.propertyvista.oapi.xml.PrimitiveIO;
 
-public class StreetTypeIO implements ElementIO {
+public class StreetTypeIO implements PrimitiveIO<StreetType> {
 
-    @XmlValue
-    public StreetType value;
-
-    @XmlAttribute
-    public Action action;
+    private StreetType value;
 
     public StreetTypeIO() {
     }
@@ -36,8 +28,12 @@ public class StreetTypeIO implements ElementIO {
     }
 
     @Override
-    public Action getAction() {
-        return action;
+    public StreetType getValue() {
+        return value;
     }
 
+    @Override
+    public void setValue(StreetType value) {
+        this.value = value;
+    }
 }

@@ -42,7 +42,7 @@ public class AdvertisingBlurbMarshaller implements Marshaller<AdvertisingBlurb, 
     @Override
     public AdvertisingBlurb unmarshal(AdvertisingBlurbIO adBlurbIO) throws Exception {
         AdvertisingBlurb adBlurb = EntityFactory.create(AdvertisingBlurb.class);
-        adBlurb.content().setValue(adBlurbIO.content.value);
+        MarshallerUtils.ioToEntity(adBlurb.content(), adBlurbIO.content);
         return adBlurb;
     }
 }

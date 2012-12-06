@@ -54,9 +54,9 @@ public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
         // floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().bedrooms(), unitIO.beds.value));
         // List<Floorplan> floorplans = Persistence.service().query(floorplanCriteria);
 
-        unit.floorplan().name().setValue(unitIO.floorplanName.value);
-        unit.floorplan().bathrooms().setValue(unitIO.baths.value);
-        unit.floorplan().bedrooms().setValue(unitIO.beds.value);
+        MarshallerUtils.ioToEntity(unit.floorplan().name(), unitIO.floorplanName);
+        MarshallerUtils.ioToEntity(unit.floorplan().bathrooms(), unitIO.baths);
+        MarshallerUtils.ioToEntity(unit.floorplan().bedrooms(), unitIO.beds);
         return unit;
     }
 }

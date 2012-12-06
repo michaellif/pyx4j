@@ -13,23 +13,15 @@
  */
 package com.propertyvista.oapi.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlValue;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.xml.LogicalDateXmlAdapter;
 
-public class LogicalDateIO implements ElementIO {
+public class LogicalDateIO implements PrimitiveIO<LogicalDate> {
 
-    @XmlValue
-    @XmlSchemaType(name = "date")
-    @XmlJavaTypeAdapter(LogicalDateXmlAdapter.class)
-    public LogicalDate value;
-
-    @XmlAttribute
-    public Action action;
+    private LogicalDate value;
 
     public LogicalDateIO() {
     }
@@ -39,8 +31,15 @@ public class LogicalDateIO implements ElementIO {
     }
 
     @Override
-    public Action getAction() {
-        return action;
+    @XmlSchemaType(name = "date")
+    @XmlJavaTypeAdapter(LogicalDateXmlAdapter.class)
+    public LogicalDate getValue() {
+        return value;
+    }
+
+    @Override
+    public void setValue(LogicalDate value) {
+        this.value = value;
     }
 
 }

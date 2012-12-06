@@ -13,20 +13,12 @@
  */
 package com.propertyvista.oapi.model.types;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlValue;
-
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.oapi.xml.Action;
-import com.propertyvista.oapi.xml.ElementIO;
+import com.propertyvista.oapi.xml.PrimitiveIO;
 
-public class LeaseStatusIO implements ElementIO {
+public class LeaseStatusIO implements PrimitiveIO<Lease.Status> {
 
-    @XmlValue
-    public Lease.Status value;
-
-    @XmlAttribute
-    public Action action;
+    private Lease.Status value;
 
     public LeaseStatusIO() {
     }
@@ -36,8 +28,12 @@ public class LeaseStatusIO implements ElementIO {
     }
 
     @Override
-    public Action getAction() {
-        return action;
+    public Lease.Status getValue() {
+        return value;
     }
 
+    @Override
+    public void setValue(Lease.Status value) {
+        this.value = value;
+    }
 }

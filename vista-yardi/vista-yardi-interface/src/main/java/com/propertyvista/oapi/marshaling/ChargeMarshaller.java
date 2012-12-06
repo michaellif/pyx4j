@@ -51,10 +51,10 @@ public class ChargeMarshaller implements Marshaller<ChargeDTO, ChargeIO> {
         ChargeDTO charge = EntityFactory.create(ChargeDTO.class);
         charge.transactionId().setValue(chargeIO.transactionId);
         charge.leaseId().setValue(chargeIO.leaseId);
-        charge.amount().setValue(chargeIO.amount.value);
-        charge.description().setValue(chargeIO.description.value);
-        charge.fromDate().setValue(chargeIO.fromDate.value); // Transaction.ChargeDetail.ServiceFromDate
-        charge.toDate().setValue(chargeIO.toDate.value); // Transaction.ChargeDetail.ServiceToDate
+        MarshallerUtils.ioToEntity(charge.amount(), chargeIO.amount);
+        MarshallerUtils.ioToEntity(charge.description(), chargeIO.description);
+        MarshallerUtils.ioToEntity(charge.fromDate(), chargeIO.fromDate); // Transaction.ChargeDetail.ServiceFromDate
+        MarshallerUtils.ioToEntity(charge.toDate(), chargeIO.toDate); // Transaction.ChargeDetail.ServiceToDate
         return charge;
     }
 
