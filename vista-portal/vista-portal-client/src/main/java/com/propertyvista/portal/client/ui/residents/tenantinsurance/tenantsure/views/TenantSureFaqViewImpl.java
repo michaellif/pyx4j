@@ -7,34 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-13
+ * Created on 2012-12-06
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
+public class TenantSureFaqViewImpl extends Composite implements TenantSureFaqView {
 
-public interface TenantSureManagementView extends IsWidget {
+    private final Label faq;
 
-    public interface Presenter {
-
-        void updateCreditCardDetails();
-
-        void cancelTenantSure();
-
-        void viewFaq();
-
+    public TenantSureFaqViewImpl() {
+        faq = new Label();
+        faq.setSize("100%", "100%");
+        initWidget(new ScrollPanel(faq));
     }
 
-    void setPresenter(Presenter presenter);
-
-    void populate(TenantSureTenantInsuranceStatusDetailedDTO detailedStatus);
-
-    void reportUpdateCreditCardUpdate(String errorMessage);
-
-    void reportCancelFailure(String errorMessage);
+    @Override
+    public void populate(String tenantSureFaqHtml) {
+        faq.getElement().setInnerHTML(tenantSureFaqHtml);
+    }
 
 }

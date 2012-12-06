@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-13
+ * Created on 2012-12-06
  * @author ArtyomB
  * @version $Id$
  */
@@ -15,26 +15,8 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
+public interface TenantSureFaqView extends IsWidget {
 
-public interface TenantSureManagementView extends IsWidget {
-
-    public interface Presenter {
-
-        void updateCreditCardDetails();
-
-        void cancelTenantSure();
-
-        void viewFaq();
-
-    }
-
-    void setPresenter(Presenter presenter);
-
-    void populate(TenantSureTenantInsuranceStatusDetailedDTO detailedStatus);
-
-    void reportUpdateCreditCardUpdate(String errorMessage);
-
-    void reportCancelFailure(String errorMessage);
+    void populate(String tenantSureFaqHtml);
 
 }

@@ -153,7 +153,12 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         Button viewCertificateButton = new Button(i18n.tr("View Insurance Certificate"));
         setControlButtonLayout(viewCertificateButton);
 
-        Button viewFaq = new Button(i18n.tr("FAQ"));
+        Button viewFaq = new Button(i18n.tr("FAQ"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.viewFaq();
+            }
+        });
         setControlButtonLayout(viewFaq);
 
         Button makeAClaim = new Button(i18n.tr("Make a Claim"), new ClickHandler() {

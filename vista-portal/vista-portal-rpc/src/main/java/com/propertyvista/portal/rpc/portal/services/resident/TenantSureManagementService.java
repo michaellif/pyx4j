@@ -23,6 +23,8 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 
 public interface TenantSureManagementService extends IService {
 
+    void getFaq(AsyncCallback<String> faqHtml);
+
     void getStatus(AsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO> callback);
 
     void updatePaymentMethod(AsyncCallback<VoidSerializable> callback, InsurancePaymentMethod paymentMethod);

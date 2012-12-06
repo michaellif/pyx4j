@@ -19,6 +19,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
+import com.propertyvista.biz.tenant.insurance.TenantSureTextFacade;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
@@ -45,6 +46,11 @@ public class TenantSureManagementServiceImpl implements TenantSureManagementServ
         ServerSideFactory.create(TenantSureFacade.class).cancelByTenant(
                 TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void getFaq(AsyncCallback<String> faqHtml) {
+        faqHtml.onSuccess(ServerSideFactory.create(TenantSureTextFacade.class).getFaq());
     }
 
 }

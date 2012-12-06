@@ -21,10 +21,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
+import com.propertyvista.biz.tenant.insurance.TenantSureTextFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
@@ -42,31 +44,7 @@ import com.propertyvista.server.common.util.AddressRetriever;
 
 public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService {
 
-    @Deprecated
-    // TODO this is just a mockup
-    private final static String PERSONAL_DISCLAIMER =//@formatter:off
-            "In order to continue and obatain a quote and insurance certificate from TenantSure, we need you to review and agree to the following disclaimers:<br/>" +
-            "<ol>" +
-                "<li>" +
-                    "I understand and agree that quotes received and/or insurance coverage I purchase on this web site are based on accurate and true information tha I provide. " +
-                    "I will provide accurate information to the best of my ability and degree that any of false information could cause my premiums to increase my insturance coverage to be invalid." +
-                "</li>" +
-                "<li>" +
-                    "I understand that if I choose to purchase insurance thought this web site, my previous insurance history, my previous landlord history, and any other background information may be obtained. " +
-                    "This information will be held in strict confidence and will only be used to assess my risk as an insurance consumer and to determine my insturance premiums." +
-                 "</li>" +            
-                 "<li>" +
-                     "I understand that if I choose to purchase insurance throught this web site, my landlord will be advised that I am insured throught this web site. Only basic policy details will be provided to my landlord. " +
-                     "No financial or specific coverage information will be shared." +
-                 "</li>" +
-                 "<li>" +
-                     "I acknowledge that I have the authority to determine coverage for myself and my roommates." +
-                 "</li>" +
-                 "<li>" +
-                     "I have read and agree with privacy policy of this site <a href=\"javascript:void();\">Privacy Policy</a>\n" +
-                 "</li>" +
-              "</ol>";
-    //@formatter:on
+    private static I18n i18n = I18n.get(TenantSurePurchaseServiceImpl.class);
 
     @Override
     public void getQuotationRequestParams(AsyncCallback<TenantSureQuotationRequestParamsDTO> callback) {
@@ -100,8 +78,8 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
         ));//@formatter:on
 
         LegalTermsDescriptorDTO personalDisclaimerTerms = params.personalDisclaimerTerms().$();
-        personalDisclaimerTerms.content().localizedCaption().setValue("Personal Disclaimer");
-        personalDisclaimerTerms.content().content().setValue(PERSONAL_DISCLAIMER);
+        personalDisclaimerTerms.content().localizedCaption().setValue(i18n.tr("Personal Disclaimer"));
+        personalDisclaimerTerms.content().content().setValue(ServerSideFactory.create(TenantSureTextFacade.class).getPersonalDisclaimerText());
         IAgree agreeHolder = EntityFactory.create(IAgree.class);
         agreeHolder.person().set(TenantAppContext.getCurrentUserCustomer().person().duplicate());
         personalDisclaimerTerms.agrees().add(agreeHolder.duplicate(IAgree.class));

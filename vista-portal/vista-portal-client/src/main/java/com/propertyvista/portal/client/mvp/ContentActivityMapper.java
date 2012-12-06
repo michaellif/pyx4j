@@ -43,6 +43,7 @@ import com.propertyvista.portal.client.activity.tenantinsurance.ProvideTenantIns
 import com.propertyvista.portal.client.activity.tenantinsurance.TenantInsuranceActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.otherprovider.TenantInsuranceByOtherProvdierUpdateActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.TenantSureCreditCardUpdateActivity;
+import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.TenantSureFaqActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.TenantSureManagementActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.TenantSurePurchaseActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -100,6 +101,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new TenantSurePurchaseActivity();
                 } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.TenantSure.Management) {
                     activity = new TenantSureManagementActivity();
+                } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.TenantSure.Faq) {
+                    activity = new TenantSureFaqActivity();
                 } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.TenantSure.Management.UpdateCreditCard) {
                     activity = new TenantSureCreditCardUpdateActivity();
 

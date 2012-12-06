@@ -112,6 +112,11 @@ public class PortalSiteMap implements SiteMap {
 
             public static class TenantSure {
 
+                @PlaceProperties(caption = "TenantSure FAQ")
+                public static class Faq extends AppPlace {
+
+                }
+
                 @PlaceProperties(caption = "TenantSure Management")
                 @NavigationItem(navigLabel = "TenantSure Management")
                 public static class Management extends AppPlace {

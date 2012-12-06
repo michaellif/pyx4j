@@ -61,6 +61,11 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
         });
     }
 
+    @Override
+    public void viewFaq() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSure.Faq());
+    }
+
     private void populateStatus() {
         service.getStatus(new DefaultAsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO>() {
             @Override
@@ -69,4 +74,5 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
             }
         });
     }
+
 }
