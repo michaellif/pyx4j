@@ -232,7 +232,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             unitCount += units.size();
             for (AptUnit unit : units) {
                 if (VistaFeatures.instance().genericProductCatalog()) {
-                    ServerSideFactory.create(GenericProductCatalogFacade.class).addUnit(building, unit);
+                    ServerSideFactory.create(GenericProductCatalogFacade.class).addUnit(building, unit, false);
                 } else {
                     new ProductCatalogGenerator(productItemTypes).createAptUnitServices(building.productCatalog(), unit);
                 }

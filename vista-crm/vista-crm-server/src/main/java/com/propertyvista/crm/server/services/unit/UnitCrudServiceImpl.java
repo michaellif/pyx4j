@@ -113,7 +113,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         super.create(entity, dto);
 
         if (VistaFeatures.instance().genericProductCatalog()) {
-            ServerSideFactory.create(GenericProductCatalogFacade.class).addUnit(entity.building(), entity);
+            ServerSideFactory.create(GenericProductCatalogFacade.class).addUnit(entity.building(), entity, true);
         }
     }
 

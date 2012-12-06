@@ -44,6 +44,8 @@ public interface GenericProductCatalogFacade {
      * 
      * @param building
      * @param unit
+     * @param persist
+     *            - if persist affected services immediately or persistFor(...) will be called later
      */
-    void addUnit(Building building, AptUnit unit);
+    void addUnit(Building building, AptUnit unit, boolean persist);
 }

@@ -89,7 +89,7 @@ public class GenericProductCatalogFacadeImpl implements GenericProductCatalogFac
     }
 
     @Override
-    public void addUnit(Building building, AptUnit unit) {
+    public void addUnit(Building building, AptUnit unit, boolean persist) {
         if (building.isValueDetached()) {
             Persistence.service().retrieve(building);
         }
@@ -105,8 +105,10 @@ public class GenericProductCatalogFacadeImpl implements GenericProductCatalogFac
             case commercialUnit:
             case residentialUnit:
                 service.version().items().add(createUnitItem(unit, service));
-                service.saveAction().setValue(SaveAction.saveAsFinal);
-                Persistence.service().persist(service);
+                if (persist) {
+                    service.saveAction().setValue(SaveAction.saveAsFinal);
+                    Persistence.service().persist(service);
+                }
                 break;
             default:
                 break;
