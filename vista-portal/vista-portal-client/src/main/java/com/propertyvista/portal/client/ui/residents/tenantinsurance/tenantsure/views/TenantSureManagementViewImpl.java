@@ -36,8 +36,6 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 
 public class TenantSureManagementViewImpl extends Composite implements TenantSureManagementView {
 
-    private static final boolean TODO = false;
-
     private static final I18n i18n = I18n.get(TenantSureManagementViewImpl.class);
 
     private Presenter presenter;
@@ -90,7 +88,6 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     private Widget makeGreetingPanel() {
         FlowPanel tenantSureGreetingPanel = new FlowPanel();
         final double HEIGHT = 8;
-        tenantSureGreetingPanel.getElement().getStyle().setWidth(100, Unit.PCT);
         tenantSureGreetingPanel.getElement().getStyle().setHeight(HEIGHT, Unit.EM);
         tenantSureGreetingPanel.getElement().getStyle().setPadding(20, Unit.PX);
 

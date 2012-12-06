@@ -293,6 +293,9 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     private Step makePersonalDisclaimerStep() {
         final FlowPanel personalDisclaimerStepPanel = new FlowPanel();
+        personalDisclaimerStepPanel.getElement().getStyle().setMarginLeft(20, Unit.PX);
+        personalDisclaimerStepPanel.getElement().getStyle().setMarginRight(20, Unit.PX);
+
         personalDisclaimerForm = new TenantSurePersonalDisclaimerForm();
         personalDisclaimerForm.initContent();
         personalDisclaimerStepPanel.add(personalDisclaimerForm);
@@ -543,7 +546,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
             @Override
             public void onProceedToNext(AsyncCallback<VoidSerializable> callback) {
-                // this is not required;
+                // NOT APPLICABLE
             }
 
             @Override
@@ -553,7 +556,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
             @Override
             public void setNextButton(Button next) {
-                // this is not required;
+                // NOT APPLICABLE
             }
         };
     }
