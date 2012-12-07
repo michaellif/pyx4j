@@ -88,6 +88,8 @@ public class VistaDeployment {
         switch (application) {
         case Admin:
             return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaAdmin();
+        case Onboarding:
+            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaOnboarding();
         case CRM:
             target = DnsNameTarget.vistaCrm;
             break;

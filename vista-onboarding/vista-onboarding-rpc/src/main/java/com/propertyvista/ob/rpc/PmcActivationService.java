@@ -11,13 +11,15 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ob;
+package com.propertyvista.ob.rpc;
 
-import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.shared.meta.SiteMap;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class OnboardingSiteMap implements SiteMap {
+import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 
-    public static class Landing extends AppPlace {
-    }
+public interface PmcActivationService extends IService {
+
+    public void createAccount(AsyncCallback<AuthenticationResponse> callback, PmcAccountCreationRequest request);
+
 }

@@ -68,10 +68,16 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
     public abstract String getDefaultBaseURLprospectPortal(String pmcDnsName);
 
     /**
-     * This method should not be used directly since PMC may have custom DNS configuration
+     * This method should not be used directly
      * Use @see VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Admin, true);
      */
     public abstract String getDefaultBaseURLvistaAdmin();
+
+    /**
+     * This method should not be used directly
+     * Use @see VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Onboarding, true);
+     */
+    public abstract String getDefaultBaseURLvistaOnboarding();
 
     public abstract String getCaledonCompanyId();
 

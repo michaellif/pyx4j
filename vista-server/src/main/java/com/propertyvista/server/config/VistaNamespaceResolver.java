@@ -69,7 +69,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
             }
             if (servletPath.startsWith("/public/schema") || servletPath.startsWith("/public/version") || servletPath.startsWith("/static/")
                     || servletPath.startsWith("/demo/") || servletPath.startsWith("/public/status") || servletPath.startsWith("/o/")
-                    || servletPath.equals("/index.html")) {
+                    || servletPath.equals("/index.html") || servletPath.startsWith("/" + DeploymentConsts.ONBOARDING_URL)) {
                 return VistaNamespace.noNamespace;
             }
         }

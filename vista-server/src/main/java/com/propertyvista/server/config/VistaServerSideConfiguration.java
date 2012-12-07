@@ -169,6 +169,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public String getDefaultBaseURLvistaOnboarding() {
+        return getApplicationDeploymentProtocol() + "://" + "start" + getApplicationURLNamespace() + DeploymentConsts.ONBOARDING_URL;
+    }
+
+    @Override
     public String getApplicationEmailSender() {
         return "\"Property Vista Support\" <nobody@birchwoodsoftwaregroup.com>";
     }

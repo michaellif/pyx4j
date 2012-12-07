@@ -31,7 +31,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-portal-rpc</artifactId>
+            <artifactId>vista-onboarding-rpc</artifactId>
             <version>${project.version}</version>
         </dependency>
 

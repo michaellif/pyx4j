@@ -101,6 +101,18 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     }
 
     @Override
+    public String getDefaultBaseURLvistaOnboarding() {
+        switch (VistaDeployment.getSystemIdentification()) {
+        case production:
+            return "https://start.propertyvista.com/";
+        case staging:
+            return "https://start-staging02.propertyvista.com/";
+        default:
+            throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
+        }
+    }
+
+    @Override
     public String getCaledonCompanyId() {
         return "BIRCHWOOD";
     }

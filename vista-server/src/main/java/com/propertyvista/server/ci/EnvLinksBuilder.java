@@ -45,6 +45,17 @@ class EnvLinksBuilder extends XMLStringWriter {
         {
             startIdented("tr");
             td("");
+            td("Onboarding");
+
+            startIdented("td");
+            a(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Onboarding, true));
+            endIdented();
+            endIdented();
+        }
+
+        {
+            startIdented("tr");
+            td("");
             td("Admin");
 
             startIdented("td");

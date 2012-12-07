@@ -18,9 +18,11 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.portal.rpc.ob.OnboardingSiteMap;
+import com.propertyvista.ob.rpc.OnboardingSiteMap;
 
 public class OnboardingSite extends VistaSite {
+
+    public static final String ONBOARDING_INSERTION_ID = "vista.ob";
 
     public OnboardingSite() {
         super("vista-onboarding", OnboardingSiteMap.class);
@@ -32,7 +34,12 @@ public class OnboardingSite extends VistaSite {
 
         hideLoadingIndicator();
 
-        RootPanel.get().add(new Button("Start Here"));
+        RootPanel root = RootPanel.get(ONBOARDING_INSERTION_ID);
+        if (root == null) {
+            root = RootPanel.get();
+        }
+
+        root.add(new Button("Start Here"));
     }
 
     @Override

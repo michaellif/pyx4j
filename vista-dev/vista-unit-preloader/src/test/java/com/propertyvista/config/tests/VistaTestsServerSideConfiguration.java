@@ -148,6 +148,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public String getDefaultBaseURLvistaOnboarding() {
+        return getMainApplicationURL() + "o";
+    }
+
+    @Override
     public String getCaledonCompanyId() {
         return "BIRCHWOOD2";
     }
