@@ -11,6 +11,7 @@ codeServerPort
    9995  vista-admin-client.launch
    9996  vista-portal-ptapp.launch
    9997  vista-portal-resident.launch
+   9998  vista-ob-client.launch
 
    9991  pyx-tester-*.launch
 

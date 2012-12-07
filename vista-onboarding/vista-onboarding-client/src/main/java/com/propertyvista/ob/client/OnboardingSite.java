@@ -14,6 +14,8 @@
 package com.propertyvista.ob.client;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.RootPanel;
 
 import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.portal.rpc.ob.OnboardingSiteMap;
@@ -22,6 +24,15 @@ public class OnboardingSite extends VistaSite {
 
     public OnboardingSite() {
         super("vista-onboarding", OnboardingSiteMap.class);
+    }
+
+    @Override
+    public void onSiteLoad() {
+        super.onSiteLoad();
+
+        hideLoadingIndicator();
+
+        RootPanel.get().add(new Button("Start Here"));
     }
 
     @Override

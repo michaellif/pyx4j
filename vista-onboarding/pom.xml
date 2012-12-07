@@ -18,6 +18,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>vista-onboarding-rpc</module>
         <module>vista-onboarding-client</module>
         <module>vista-onboarding-server</module>
         <module>vista-onboarding-interface</module>

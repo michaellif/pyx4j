@@ -58,6 +58,12 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
+            <artifactId>vista-onboarding-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>        
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
             <artifactId>vista-biz-communication</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -13,29 +13,36 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-onboarding-server</artifactId>
-    <name>vista-onboarding-server</name>
+    <artifactId>vista-onboarding-rpc</artifactId>
+    <name>vista-onboarding-rpc</name>
 
     <dependencies>
 
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
         <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-onboarding-rpc</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-rpc</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-domain-srv</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-shared</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-server-common</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-site-shared</artifactId>
         </dependency>
 
     </dependencies>
+
+    <properties>
+        <project.jar-source-4gwt>true</project.jar-source-4gwt>
+    </properties>
 
 </project>
