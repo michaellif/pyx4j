@@ -342,14 +342,11 @@ public class CrmSiteMap implements SiteMap {
             public static class MerchantAccount extends CrmCrudAppPlace {
             }
 
-            @PlaceProperties(navigLabel = "Product Dictionary")
             public static class ProductDictionary extends CrmCrudAppPlace {
 
-                @PlaceProperties(navigLabel = "Service Item Type")
                 public static class ServiceItemType extends CrmCrudAppPlace {
                 }
 
-                @PlaceProperties(navigLabel = "Feature Item Type")
                 public static class FeatureItemType extends CrmCrudAppPlace {
                 }
             }
@@ -362,7 +359,7 @@ public class CrmSiteMap implements SiteMap {
             public static class Tax extends CrmCrudAppPlace {
             }
 
-            @PlaceProperties(navigLabel = "Lease Adjustment Reason")
+            @PlaceProperties(navigLabel = "Lease Adjustments")
             public static class LeaseAdjustmentReason extends CrmCrudAppPlace {
             }
         }
