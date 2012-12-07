@@ -14,7 +14,6 @@
 package com.propertyvista.portal.rpc.portal;
 
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.SiteMap;
 
@@ -30,8 +29,7 @@ public class PortalSiteMap implements SiteMap {
     public static class LoginWithToken extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Select Lease")
-    @NavigationItem(navigLabel = "Select Lease")
+    @PlaceProperties(navigLabel = "Select Lease", caption = "Select Lease")
     public static class LeaseContextSelection extends AppPlace {
     }
 
@@ -47,38 +45,28 @@ public class PortalSiteMap implements SiteMap {
     public static class Landing extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Potential Tenants")
     public static class PotentialTenants extends AppPlace {
 
     }
 
-    @PlaceProperties(caption = "Dashboard")
-    @NavigationItem(navigLabel = "Dashboard")
+    @PlaceProperties(navigLabel = "Dashboard", caption = "Dashboard")
     public static class Residents extends AppPlace {
 
-        @PlaceProperties(caption = "Personal Information")
-        @NavigationItem(navigLabel = "Personal Information")
         public static class PersonalInformation extends AppPlace {
         }
 
-        @PlaceProperties(caption = "Bill Summary")
-        @NavigationItem(navigLabel = "Bill Summary")
         public static class BillSummary extends AppPlace {
 
             public static class PayNow extends AppPlace {
             }
         }
 
-        @PlaceProperties(caption = "Billing History")
-        @NavigationItem(navigLabel = "Billing History")
         public static class BillingHistory extends AppPlace {
 
             public static class ViewBill extends AppPlace {
             }
         }
 
-        @PlaceProperties(caption = "Payment Methods")
-        @NavigationItem(navigLabel = "Payment Methods")
         public static class PaymentMethods extends AppPlace {
 
             public static class NewPaymentMethod extends AppPlace {
@@ -88,8 +76,6 @@ public class PortalSiteMap implements SiteMap {
             }
         }
 
-        @PlaceProperties(caption = "Maintenance")
-        @NavigationItem(navigLabel = "Maintenance")
         public static class Maintenance extends AppPlace {
 
             public static class NewMaintenanceRequest extends AppPlace {
@@ -99,13 +85,9 @@ public class PortalSiteMap implements SiteMap {
             }
         }
 
-        @PlaceProperties(caption = "Tenant Insurance")
-        @NavigationItem(navigLabel = "Tenant Insurance")
         public static class TenantInsurance extends AppPlace {
 
             /** this place is displayed to people who don't have tenant insurance */
-            @PlaceProperties(caption = "Provide Tenant Insurance")
-            @NavigationItem(navigLabel = "Provide Tenant Insurance")
             public static class ProvideTenantInsurance extends AppPlace {
 
             }
@@ -117,8 +99,7 @@ public class PortalSiteMap implements SiteMap {
 
                 }
 
-                @PlaceProperties(caption = "TenantSure Management")
-                @NavigationItem(navigLabel = "TenantSure Management")
+                @PlaceProperties(navigLabel = "TenantSure Management", caption = "TenantSure Management")
                 public static class Management extends AppPlace {
 
                     @PlaceProperties(caption = "Update Credit Card")
@@ -128,8 +109,7 @@ public class PortalSiteMap implements SiteMap {
 
                 }
 
-                @PlaceProperties(caption = "Get TenantSure")
-                @NavigationItem(navigLabel = "Get TenantSure")
+                @PlaceProperties(navigLabel = "Get TenantSure", caption = "Get TenantSure")
                 public static class TenantSurePurchase extends AppPlace {
 
                 }
@@ -138,8 +118,6 @@ public class PortalSiteMap implements SiteMap {
 
             public static class Other {
 
-                @PlaceProperties(caption = "Upload Certificate")
-                @NavigationItem(navigLabel = "Upload Certificate")
                 /** This place is for updating insurance other than TenantSure */
                 public static class UploadCertificate extends AppPlace {
 
@@ -151,8 +129,6 @@ public class PortalSiteMap implements SiteMap {
             public static class CoveredByOtherTenant extends AppPlace {
 
             }
-
         }
-
     }
 }

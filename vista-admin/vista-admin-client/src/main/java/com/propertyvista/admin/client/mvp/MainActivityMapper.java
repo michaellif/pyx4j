@@ -110,7 +110,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof AdminSiteMap.Management.OnboardingUsers) {
+                    } else if (place instanceof AdminSiteMap.Management.OnboardingUser) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new OnboardingUserEditorActivity(crudPlace);

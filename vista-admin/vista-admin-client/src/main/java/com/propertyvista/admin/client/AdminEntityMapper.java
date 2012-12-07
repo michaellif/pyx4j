@@ -33,7 +33,7 @@ public class AdminEntityMapper {
 
     public static void init() {
         register(AdminUser.class, AdminSiteMap.Administration.AdminUsers.class, DEFAULT_IMAGE);
-        register(OnboardingUser.class, AdminSiteMap.Management.OnboardingUsers.class, DEFAULT_IMAGE);
+        register(OnboardingUser.class, AdminSiteMap.Management.OnboardingUser.class, DEFAULT_IMAGE);
         register(PmcDTO.class, AdminSiteMap.Management.PMC.class, DEFAULT_IMAGE);
         register(TriggerDTO.class, AdminSiteMap.Management.Trigger.class, DEFAULT_IMAGE);
         register(Run.class, AdminSiteMap.Management.Run.class, DEFAULT_IMAGE);

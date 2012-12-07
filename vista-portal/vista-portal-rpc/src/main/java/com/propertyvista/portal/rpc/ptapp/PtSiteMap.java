@@ -14,7 +14,6 @@
 package com.propertyvista.portal.rpc.ptapp;
 
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SigningOutPlace;
@@ -48,88 +47,66 @@ public class PtSiteMap implements SiteMap {
     public static class PasswordChange extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Please Select an Application")
     @PlaceProperties(caption = "Please Select an Application")
     public static class ApplicationSelectionRequired extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Apartment")
     @PlaceProperties(caption = "Apartment Info")
     public static class Apartment extends AppPlace implements WizardStepPlace {
     }
 
-    @NavigationItem(navigLabel = "Tenants")
-    @PlaceProperties(caption = "Tenants")
     public static class Tenants extends AppPlace implements WizardStepPlace {
     }
 
-    @NavigationItem(navigLabel = "Information")
     @PlaceProperties(caption = "Information")
     public static class Info extends AppPlace implements WizardStepPlace {
     }
 
-    @NavigationItem(navigLabel = "Financial")
-    @PlaceProperties(caption = "Financial")
     public static class Financial extends AppPlace implements WizardStepPlace {
     }
 
-    @NavigationItem(navigLabel = "Charges")
-    @PlaceProperties(caption = "Charges")
     public static class Charges extends AppPlace implements WizardStepPlace {
     }
 
-    @NavigationItem(navigLabel = "Summary")
     @PlaceProperties(caption = "Application/Offer To Lease Summary")
     public static class Summary extends AppPlace implements WizardStepPlace {
     }
 
-    @NavigationItem(navigLabel = "Payment")
-    @PlaceProperties(caption = "Payment")
     public static class Payment extends AppPlace implements WizardStepPlace {
     }
 
-    @NavigationItem(navigLabel = "Completion")
-    @PlaceProperties(caption = "Completion")
     public static class Completion extends AppPlace {
     }
 
-    @PlaceProperties(caption = "")
     public static class ApplicationStatus extends AppPlace {
     }
 
-    @PlaceProperties(caption = "")
     public static class GenericMessage extends AppPlace {
     }
 
     // FIXME this is map of Mockup Move-In AKA Welcome AKA Wizard for approved tenants, needs review for real implementation    
     public static class WelcomeWizard extends AppPlace {
 
-        @NavigationItem(navigLabel = "Welcome")
         @PlaceProperties(caption = "Congratulations! You have been APPROVED")
-        public static class WelcomePlace extends AppPlace {
+        public static class Welcome extends AppPlace {
 
         }
 
-        @NavigationItem(navigLabel = "Lease")
-        @PlaceProperties(caption = "Residential Tenancy Agreement")
+        @PlaceProperties(navigLabel = "Lease", caption = "Residential Tenancy Agreement")
         public static class ReviewLease extends AppPlace implements WizardStepPlace {
 
         }
 
-        @NavigationItem(navigLabel = "Insurance")
         @PlaceProperties(caption = "Tenant Insurance")
         public static class Insurance extends AppPlace implements WizardStepPlace {
 
         }
 
-        @NavigationItem(navigLabel = "Schedule Move-In Day")
-        @PlaceProperties(caption = "Move-In Day Scheduler")
+        @PlaceProperties(navigLabel = "Schedule Move-In Day", caption = "Move-In Day Scheduler")
         public static class MoveInSchedule extends AppPlace implements WizardStepPlace {
 
         }
 
-        @NavigationItem(navigLabel = "Completion")
-        @PlaceProperties(caption = "")
         public static class Completion extends AppPlace {
 
         }

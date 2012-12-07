@@ -16,7 +16,6 @@ package com.propertyvista.admin.rpc;
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SigningOutPlace;
@@ -24,7 +23,6 @@ import com.pyx4j.site.shared.meta.SiteMap;
 
 public class AdminSiteMap implements SiteMap {
 
-    @PlaceProperties(caption = "Login")
     public static class Login extends AppPlace implements PublicPlace {
     }
 
@@ -38,7 +36,6 @@ public class AdminSiteMap implements SiteMap {
     public static class SigningOut extends AppPlace implements SigningOutPlace {
     }
 
-    @PlaceProperties(caption = "Password Reset Request")
     public static class PasswordResetRequest extends AppPlace implements PublicPlace {
 
     }
@@ -52,50 +49,43 @@ public class AdminSiteMap implements SiteMap {
     }
 
     public static class Management extends AppPlace {
-        @PlaceProperties(caption = "Property Management Company (PMC)")
-        @NavigationItem(navigLabel = "Property Management Companies (PMCs)")
+        @PlaceProperties(navigLabel = "Property Management Companies (PMCs)")
         public static class PMC extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Onboarding User")
-        @NavigationItem(navigLabel = "Onboarding Users")
-        public static class OnboardingUsers extends CrudAppPlace {
+        @PlaceProperties(navigLabel = "Onboarding Users")
+        public static class OnboardingUser extends CrudAppPlace {
         }
 
         public static class OnboardingMerchantAccounts extends CrudAppPlace {
 
         }
 
-        @PlaceProperties(caption = "Trigger")
-        @NavigationItem(navigLabel = "Triggers")
+        @PlaceProperties(navigLabel = "Triggers")
         public static class Trigger extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Run")
-        @NavigationItem(navigLabel = "Runs")
+        @PlaceProperties(navigLabel = "Runs")
         public static class Run extends CrudAppPlace {
         }
     }
 
     public static class Security extends AppPlace {
 
-        @PlaceProperties(caption = "Audit Records")
-        @NavigationItem(navigLabel = "Audit Records")
+        @PlaceProperties(navigLabel = "Audit Records")
         public static class AuditRecord extends CrudAppPlace {
 
         }
     }
 
     public static class Legal extends AppPlace {
-        @PlaceProperties(caption = "Terms and Conditions")
-        @NavigationItem(navigLabel = "Terms and Conditions")
+        @PlaceProperties(navigLabel = "Terms and Conditions", caption = "Terms and Conditions")
         public static class Terms extends CrudAppPlace {
         }
     }
 
     public static class Administration extends AppPlace {
-        @PlaceProperties(caption = "System Maintenance")
-        @NavigationItem(navigLabel = "System Maintenance")
+        @PlaceProperties(navigLabel = "System Maintenance", caption = "System Maintenance")
         public static class Maintenance extends CrudAppPlace {
             // set default place type as Viewer one (we have no lister for this item!)
             public Maintenance() {
@@ -103,8 +93,7 @@ public class AdminSiteMap implements SiteMap {
             }
         }
 
-        @PlaceProperties(caption = "Simulation")
-        @NavigationItem(navigLabel = "Simulations")
+        @PlaceProperties(navigLabel = "Simulations")
         public static class Simulation extends CrudAppPlace {
 
             public Simulation() {
@@ -112,8 +101,6 @@ public class AdminSiteMap implements SiteMap {
             }
         }
 
-        @PlaceProperties(caption = "Simulated Data Preload")
-        @NavigationItem(navigLabel = "Simulated Data Preload")
         public static class SimulatedDataPreload extends CrudAppPlace {
 
             public SimulatedDataPreload() {
@@ -124,36 +111,32 @@ public class AdminSiteMap implements SiteMap {
 
         public static class PadSimulation extends CrudAppPlace {
 
-            @PlaceProperties(caption = "Simulated PAD")
-            @NavigationItem(navigLabel = "Simulated PAD")
+            @PlaceProperties(navigLabel = "Simulated PAD", caption = "Simulated PAD")
             public static class PadSimFile extends CrudAppPlace {
             }
 
-            @PlaceProperties(caption = "PAD Batch")
-            @NavigationItem(navigLabel = "PAD Batches")
+            @PlaceProperties(navigLabel = "PAD Batches", caption = "PAD Batch")
             public static class PadSimBatch extends CrudAppPlace {
             }
         }
 
-        @PlaceProperties(caption = "User")
-        @NavigationItem(navigLabel = "Users")
+        @PlaceProperties(navigLabel = "Users", caption = "User")
         public static class AdminUsers extends CrudAppPlace {
         }
     }
 
-    @NavigationItem(navigLabel = "Alerts")
+    @PlaceProperties(navigLabel = "Alerts")
     public static class Alert extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Messages")
+    @PlaceProperties(navigLabel = "Messages")
     public static class Message extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Settings")
     public static class Settings extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Accounts")
+    @PlaceProperties(navigLabel = "Accounts")
     public static class Account extends CrudAppPlace {
     }
 }

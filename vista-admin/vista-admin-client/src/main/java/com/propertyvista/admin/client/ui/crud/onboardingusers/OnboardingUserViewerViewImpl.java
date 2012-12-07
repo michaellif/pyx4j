@@ -33,7 +33,7 @@ public class OnboardingUserViewerViewImpl extends AdminViewerViewImplBase<Onboar
     private final Button createPmcAction;
 
     public OnboardingUserViewerViewImpl() {
-        super(AdminSiteMap.Management.OnboardingUsers.class);
+        super(AdminSiteMap.Management.OnboardingUser.class);
         setForm(new OnboardingUserForm(true));
 
         passwordAction = new Button(i18n.tr("Change Password"), new ClickHandler() {

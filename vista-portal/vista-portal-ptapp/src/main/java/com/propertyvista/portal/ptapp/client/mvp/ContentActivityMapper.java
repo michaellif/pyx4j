@@ -95,7 +95,7 @@ public class ContentActivityMapper implements ActivityMapper {
                 return new InsuranceActivity(appPlace);
             } else if (place instanceof PtSiteMap.WelcomeWizard.Completion) {
                 return new com.propertyvista.portal.ptapp.client.activity.steps.welcomewizardmockup.CompletionActivity(appPlace);
-            } else if (place instanceof PtSiteMap.WelcomeWizard.WelcomePlace) {
+            } else if (place instanceof PtSiteMap.WelcomeWizard.Welcome) {
                 return new WelcomeActivity();
             }
         }

@@ -20,7 +20,7 @@ import com.propertyvista.admin.rpc.OnboardingUserDTO;
 public class OnboardingUserEditorViewImpl extends AdminEditorViewImplBase<OnboardingUserDTO> implements OnboardingUserEditorView {
 
     public OnboardingUserEditorViewImpl() {
-        super(AdminSiteMap.Management.OnboardingUsers.class);
+        super(AdminSiteMap.Management.OnboardingUser.class);
         setForm(new OnboardingUserForm());
     }
 

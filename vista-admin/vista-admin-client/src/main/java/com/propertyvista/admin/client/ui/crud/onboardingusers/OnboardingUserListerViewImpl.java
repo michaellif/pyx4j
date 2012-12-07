@@ -27,7 +27,7 @@ import com.propertyvista.admin.rpc.OnboardingUserDTO;
 public class OnboardingUserListerViewImpl extends AdminListerViewImplBase<OnboardingUserDTO> implements OnboardingUserListerView {
 
     public OnboardingUserListerViewImpl() {
-        super(AdminSiteMap.Management.OnboardingUsers.class);
+        super(AdminSiteMap.Management.OnboardingUser.class);
         setLister(new OnboardingUserLister());
     }
 
