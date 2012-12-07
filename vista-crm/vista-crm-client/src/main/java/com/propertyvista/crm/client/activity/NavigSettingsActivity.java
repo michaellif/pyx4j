@@ -72,7 +72,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
 
         folder = new NavigFolder(i18n.tr("Financial"));
 
-        folder.addNavigItem(new CrmSiteMap.Settings.Financial.RentPaymentSetup());
+        folder.addNavigItem(new CrmSiteMap.Settings.Financial.OnlinePaymentSetup());
 
         folder.addNavigItem(new CrmSiteMap.Settings.Financial.MerchantAccount());
         folder.addNavigItem(new CrmSiteMap.Settings.Financial.ProductDictionary());

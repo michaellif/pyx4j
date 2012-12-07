@@ -335,7 +335,7 @@ public class CrmSiteMap implements SiteMap {
 
         public static class Financial extends AppPlace {
 
-            public static class RentPaymentSetup extends CrmCrudAppPlace {
+            public static class OnlinePaymentSetup extends CrmCrudAppPlace {
             }
 
             @PlaceProperties(navigLabel = "Merchant Accounts")
@@ -399,7 +399,6 @@ public class CrmSiteMap implements SiteMap {
             public static class EmailTemplates extends CrmCrudAppPlace {
             }
 
-//            @PlaceProperties(caption = "Adjustment Taxes")
 //            @PlaceProperties(navigLabel = "Adjustment Taxes")
 //            public static class AdjustmentTax extends CRMCrudAppPlace {
 //            }
