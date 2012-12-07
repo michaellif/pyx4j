@@ -20,7 +20,7 @@ import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 public class PetPolicyEditorViewImpl extends CrmEditorViewImplBase<PetPolicyDTO> implements PetPolicyEditorView {
 
     public PetPolicyEditorViewImpl() {
-        super(CrmSiteMap.Settings.Policies.PetPolicy.class);
+        super(CrmSiteMap.Settings.Policies.Pet.class);
         setForm(new PetPolicyForm());
     }
 

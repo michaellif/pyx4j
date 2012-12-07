@@ -404,7 +404,7 @@ public class CrmSiteMap implements SiteMap {
             public static class IdAssignment extends CrmCrudAppPlace {
             }
 
-            public static class LeaseAdjustmentPolicy extends CrmCrudAppPlace {
+            public static class LeaseAdjustment extends CrmCrudAppPlace {
             }
 
             public static class LeaseTermination extends CrmCrudAppPlace {
@@ -415,7 +415,7 @@ public class CrmSiteMap implements SiteMap {
             public static class LegalDocumentation extends CrmCrudAppPlace {
             }
 
-            public static class PetPolicy extends CrmCrudAppPlace {
+            public static class Pet extends CrmCrudAppPlace {
             }
 
             public static class ProductTax extends CrmCrudAppPlace {

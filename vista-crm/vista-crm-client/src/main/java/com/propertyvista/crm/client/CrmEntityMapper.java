@@ -162,13 +162,13 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(DepositPolicy.class, CrmSiteMap.Settings.Policies.Deposits.class, defaultImage);
         AppPlaceEntityMapper.register(EmailTemplatesPolicy.class, CrmSiteMap.Settings.Policies.EmailTemplates.class, defaultImage);
         AppPlaceEntityMapper.register(IdAssignmentPolicy.class, CrmSiteMap.Settings.Policies.IdAssignment.class, defaultImage);
-        AppPlaceEntityMapper.register(LeaseAdjustmentPolicy.class, CrmSiteMap.Settings.Policies.LeaseAdjustmentPolicy.class, defaultImage);
+        AppPlaceEntityMapper.register(LeaseAdjustmentPolicy.class, CrmSiteMap.Settings.Policies.LeaseAdjustment.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseTerminationPolicy.class, CrmSiteMap.Settings.Policies.LeaseTermination.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseBillingPolicy.class, CrmSiteMap.Settings.Policies.Billing.class, defaultImage);
         AppPlaceEntityMapper.register(LegalDocumentation.class, CrmSiteMap.Settings.Policies.LegalDocumentation.class, defaultImage);
         AppPlaceEntityMapper.register(DatesPolicy.class, CrmSiteMap.Settings.Policies.Dates.class, defaultImage);
         AppPlaceEntityMapper.register(RestrictionsPolicy.class, CrmSiteMap.Settings.Policies.Restrictions.class, defaultImage);
-        AppPlaceEntityMapper.register(PetPolicy.class, CrmSiteMap.Settings.Policies.PetPolicy.class, defaultImage);
+        AppPlaceEntityMapper.register(PetPolicy.class, CrmSiteMap.Settings.Policies.Pet.class, defaultImage);
         AppPlaceEntityMapper.register(ProductTaxPolicy.class, CrmSiteMap.Settings.Policies.ProductTax.class, defaultImage);
         AppPlaceEntityMapper.register(ARPolicy.class, CrmSiteMap.Settings.Policies.AR.class, defaultImage);
         AppPlaceEntityMapper.register(TenantInsurancePolicy.class, CrmSiteMap.Settings.Policies.TenantInsurance.class, defaultImage);

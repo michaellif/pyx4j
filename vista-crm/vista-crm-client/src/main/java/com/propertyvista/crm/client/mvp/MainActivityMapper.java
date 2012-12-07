@@ -834,7 +834,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.PetPolicy) {
+                    } else if (place instanceof CrmSiteMap.Settings.Policies.Pet) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new PetPolicyListerActivity(crudPlace);
@@ -912,7 +912,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.LeaseAdjustmentPolicy) {
+                    } else if (place instanceof CrmSiteMap.Settings.Policies.LeaseAdjustment) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new LeaseAdjustmentPolicyListerActivity(crudPlace);
