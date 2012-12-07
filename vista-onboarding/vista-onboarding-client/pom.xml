@@ -49,7 +49,7 @@
     </dependencies>
 
     <properties>
-        <gwtModule>corp</gwtModule>
+        <gwtModule>ob</gwtModule>
         <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
     </properties>
 
