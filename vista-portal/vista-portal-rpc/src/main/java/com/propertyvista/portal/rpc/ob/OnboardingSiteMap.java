@@ -11,12 +11,12 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.corp;
+package com.propertyvista.portal.rpc.ob;
 
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
-public class CorpPortalSiteMap implements SiteMap {
+public class OnboardingSiteMap implements SiteMap {
 
     public static class Landing extends AppPlace {
     }

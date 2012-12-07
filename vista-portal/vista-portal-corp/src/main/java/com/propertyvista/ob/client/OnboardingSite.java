@@ -11,17 +11,22 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.corp.services;
+package com.propertyvista.ob.client;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.Command;
 
-import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.portal.rpc.ob.OnboardingSiteMap;
 
-import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
+public class OnboardingSite extends VistaSite {
 
-public interface PmcActivationService extends IService {
+    public OnboardingSite() {
+        super("vista-onboarding", OnboardingSiteMap.class);
+    }
 
-    public void createAccount(AsyncCallback<AuthenticationResponse> callback, PmcAccountCreationRequest request);
+    @Override
+    public void showMessageDialog(String message, String title, String buttonText, Command command) {
+        // TODO Auto-generated method stub
+    }
 
 }
