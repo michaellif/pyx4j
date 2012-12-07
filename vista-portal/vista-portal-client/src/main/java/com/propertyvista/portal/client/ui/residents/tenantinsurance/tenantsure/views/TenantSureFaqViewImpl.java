@@ -18,9 +18,15 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
+import com.pyx4j.commons.css.IStyleName;
+
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 
 public class TenantSureFaqViewImpl extends Composite implements TenantSureFaqView {
+
+    public enum Styles implements IStyleName {
+        TenantSureFaqQnA, TenantSureFaqQ, TenantSureFaqA
+    }
 
     private final Label faq;
 
