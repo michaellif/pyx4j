@@ -448,6 +448,14 @@
         </profile>
 
         <profile>
+            <id>deploy-target-www66</id>
+            <properties>
+                <deployContext>vista66</deployContext>
+                <vista-app-ping-url>http://static-66.birchwoodsoftwaregroup.com/</vista-app-ping-url>
+            </properties>
+        </profile>
+
+        <profile>
             <id>deploy-target-www33</id>
             <properties>
                 <deployContext>vista33</deployContext>
@@ -471,6 +479,14 @@
                 <deployContext>vista55</deployContext>
                 <vista-tomcat-url>http://qa.birchwoodsoftwaregroup.com</vista-tomcat-url>
                 <vista-app-ping-url>http://www55.birchwoodsoftwaregroup.com</vista-app-ping-url>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>deploy-target-www77</id>
+            <properties>
+                <deployContext>vista77</deployContext>
+                <vista-app-ping-url>http://static-77.birchwoodsoftwaregroup.com/</vista-app-ping-url>
             </properties>
         </profile>
 
