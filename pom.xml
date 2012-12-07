@@ -194,6 +194,7 @@
         <module>vista-shared</module>
         <module>vista-yardi</module>
         <module>vista-admin</module>
+        <module>vista-onboarding</module>
         <module>vista-crm</module>
         <module>vista-paypad</module>
         <module>vista-pmsite</module>
@@ -377,13 +378,13 @@
 						    <artifactId>jersey-test-framework-core</artifactId>
 						    <version>1.14</version>
 						</dependency>
-						  
+
 						<dependency>
 						    <groupId>com.sun.jersey.jersey-test-framework</groupId>
 						    <artifactId>jersey-test-framework-http</artifactId>
 						    <version>1.14</version>
 						</dependency>
-  
+
         </dependencies>
     </dependencyManagement>
 

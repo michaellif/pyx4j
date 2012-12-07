@@ -8,13 +8,13 @@
 
     <parent>
         <groupId>com.propertyvista</groupId>
-        <artifactId>vista-portal</artifactId>
+        <artifactId>vista-onboarding</artifactId>
         <version>1.0.6-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-portal-corp</artifactId>
-    <name>vista-portal-corp</name>
+    <artifactId>vista-onboarding-client</artifactId>
+    <name>vista-onboarding-client</name>
 
     <dependencies>
 
