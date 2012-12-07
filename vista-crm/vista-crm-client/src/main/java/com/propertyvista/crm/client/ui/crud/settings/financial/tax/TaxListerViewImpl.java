@@ -14,13 +14,13 @@
 package com.propertyvista.crm.client.ui.crud.settings.financial.tax;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Financial;
 import com.propertyvista.domain.financial.tax.Tax;
 
 public class TaxListerViewImpl extends CrmListerViewImplBase<Tax> implements TaxListerView {
 
     public TaxListerViewImpl() {
-        super(CrmSiteMap.Settings.Tax.class);
+        super(Financial.Tax.class);
         setLister(new TaxLister());
     }
 }

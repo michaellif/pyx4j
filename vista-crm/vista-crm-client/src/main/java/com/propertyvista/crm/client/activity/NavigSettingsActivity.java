@@ -27,6 +27,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Security;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.misc.VistaTODO;
 
@@ -57,26 +58,27 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
 
         NavigFolder folder = null;
 
-        folder = new NavigFolder(i18n.tr("Credit Checks"));
-        folder.addNavigItem(new CrmSiteMap.Settings.CreditChecks.CustomerCreditCheck().formListerPlace());
+        folder = new NavigFolder(i18n.tr("Credit Check"));
+        folder.addNavigItem(new CrmSiteMap.Settings.CreditCheck.CreditCheckSetup());
+        folder.addNavigItem(new CrmSiteMap.Settings.CreditCheck.CustomerCreditCheck().formListerPlace());
         list.add(folder);
 
+        folder = new NavigFolder(i18n.tr("Security"));
         if (SecurityController.checkBehavior(VistaCrmBehavior.Organization)) {
-            folder = new NavigFolder(i18n.tr("Security"));
             folder.addNavigItem(new CrmSiteMap.Settings.Security.AuditRecords());
-            list.add(folder);
         }
-
-        folder = new NavigFolder(i18n.tr("Settings"));
-        folder.addNavigItem(new CrmSiteMap.Settings.UserRole());
-        folder.addNavigItem(new CrmSiteMap.Settings.MerchantAccount());
+        folder.addNavigItem(new Security.UserRole());
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Financial"));
-        folder.addNavigItem(new CrmSiteMap.Settings.ProductDictionary());
-        folder.addNavigItem(new CrmSiteMap.Settings.Tax());
-        folder.addNavigItem(new CrmSiteMap.Settings.GlCodeCategory());
-        folder.addNavigItem(new CrmSiteMap.Settings.LeaseAdjustmentReason());
+
+        folder.addNavigItem(new CrmSiteMap.Settings.Financial.RentPaymentSetup());
+
+        folder.addNavigItem(new CrmSiteMap.Settings.Financial.MerchantAccount());
+        folder.addNavigItem(new CrmSiteMap.Settings.Financial.ProductDictionary());
+        folder.addNavigItem(new CrmSiteMap.Settings.Financial.Tax());
+        folder.addNavigItem(new CrmSiteMap.Settings.Financial.GlCodeCategory());
+        folder.addNavigItem(new CrmSiteMap.Settings.Financial.LeaseAdjustmentReason());
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Website"));

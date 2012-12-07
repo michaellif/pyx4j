@@ -331,10 +331,6 @@ public class CrmSiteMap implements SiteMap {
         }
     }
 
-    public static class Reports extends ReportsAppPlace {
-
-    }
-
     public static class Dashboard extends AppPlace {
 
         @PlaceProperties(caption = "Dashboard")
@@ -379,10 +375,19 @@ public class CrmSiteMap implements SiteMap {
             public static class AuditRecords extends CrmCrudAppPlace {
             }
 
+            @PlaceProperties(caption = "User Role")
+            @NavigationItem(navigLabel = "User Roles")
+            public static class UserRole extends CrmCrudAppPlace {
+            }
+
         }
 
         @NavigationItem
-        public static class CreditChecks extends AppPlace {
+        public static class CreditCheck extends AppPlace {
+
+            @NavigationItem
+            public static class CreditCheckSetup extends CrmCrudAppPlace {
+            }
 
             @NavigationItem
             public static class CustomerCreditCheck extends CrmCrudAppPlace {
@@ -391,59 +396,74 @@ public class CrmSiteMap implements SiteMap {
         }
 
         @NavigationItem
+        public static class Financial extends AppPlace {
+        
+            @NavigationItem
+            public static class RentPaymentSetup extends CrmCrudAppPlace {
+            }
+        
+            @PlaceProperties(caption = "Merchant Account")
+            @NavigationItem(navigLabel = "Merchant Accounts")
+            public static class MerchantAccount extends CrmCrudAppPlace {
+            }
+        
+            @PlaceProperties(caption = "Product Dictionary")
+            @NavigationItem(navigLabel = "Product Dictionary")
+            public static class ProductDictionary extends CrmCrudAppPlace {
+        
+                @PlaceProperties(caption = "Service Item Type")
+                @NavigationItem(navigLabel = "Service Item Type")
+                public static class ServiceItemType extends CrmCrudAppPlace {
+                }
+        
+                @PlaceProperties(caption = "Feature Item Type")
+                @NavigationItem(navigLabel = "Feature Item Type")
+                public static class FeatureItemType extends CrmCrudAppPlace {
+                }
+            }
+        
+            @PlaceProperties(caption = "GL Code Category")
+            @NavigationItem(navigLabel = "GL Codes")
+            public static class GlCodeCategory extends CrmCrudAppPlace {
+            }
+        
+            @PlaceProperties(caption = "Tax")
+            @NavigationItem(navigLabel = "Taxes")
+            public static class Tax extends CrmCrudAppPlace {
+            }
+        
+            @PlaceProperties(caption = "Lease Adjustment Reason")
+            @NavigationItem(navigLabel = "Lease Adjustment Reason")
+            public static class LeaseAdjustmentReason extends CrmCrudAppPlace {
+            }
+        }
+
+        @PlaceProperties(caption = "Content")
+        @NavigationItem(navigLabel = "Content")
+        public static class Content extends CrmCrudAppPlace {
+        
+            @PlaceProperties(caption = "Home Page Gadgets")
+            @NavigationItem(navigLabel = "Home Page Gadgets")
+            public static class HomePageGadgets extends CrmCrudAppPlace {
+            }
+        
+            @PlaceProperties(caption = "Page")
+            @NavigationItem(navigLabel = "Page")
+            public static class Page extends CrmCrudAppPlace {
+            }
+        }
+
+        @NavigationItem
         public static class Policies extends AppPlace {
-
-            @NavigationItem
-            public static class Dates extends CrmCrudAppPlace {
-            }
-
-            @NavigationItem
-            public static class Restrictions extends CrmCrudAppPlace {
-            }
-
-            @NavigationItem
-            public static class PetPolicy extends CrmCrudAppPlace {
-            }
 
             @PlaceProperties(caption = "Application Documentation")
             @NavigationItem(navigLabel = "Application Documentation")
             public static class ApplicationDocumentation extends CrmCrudAppPlace {
             }
 
-            @PlaceProperties(caption = "Legal Documentation - Terms and Conditions")
-            @NavigationItem(navigLabel = "Legal Documentation")
-            public static class LegalDocumentation extends CrmCrudAppPlace {
-            }
-
-            @PlaceProperties(caption = "Email Templates")
-            @NavigationItem(navigLabel = "Email Templates")
-            public static class EmailTemplates extends CrmCrudAppPlace {
-            }
-
-            @PlaceProperties(caption = "Product Taxes")
-            @NavigationItem(navigLabel = "Product Taxes")
-            public static class ProductTax extends CrmCrudAppPlace {
-            }
-
-//            @PlaceProperties(caption = "Adjustment Taxes")
-//            @NavigationItem(navigLabel = "Adjustment Taxes")
-//            public static class AdjustmentTax extends CRMCrudAppPlace {
-//            }
-
-            @PlaceProperties(caption = "Lease Adjustment")
-            @NavigationItem(navigLabel = "Lease Adjustment")
-            public static class LeaseAdjustmentPolicy extends CrmCrudAppPlace {
-            }
-
-            @PlaceProperties(caption = "Lease Termination")
-            @NavigationItem(navigLabel = "Lease Termination")
-            public static class LeaseTermination extends CrmCrudAppPlace {
-
-            }
-
-            @PlaceProperties(caption = "Deposits")
-            @NavigationItem(navigLabel = "Deposits")
-            public static class Deposits extends CrmCrudAppPlace {
+            @PlaceProperties(caption = "Aging Priority")
+            @NavigationItem(navigLabel = "Aging Priority")
+            public static class AR extends CrmCrudAppPlace {
             }
 
             @PlaceProperties(caption = "Background Check")
@@ -456,75 +476,63 @@ public class CrmSiteMap implements SiteMap {
             public static class Billing extends CrmCrudAppPlace {
             }
 
+            @NavigationItem
+            public static class Dates extends CrmCrudAppPlace {
+            }
+
+            @PlaceProperties(caption = "Deposits")
+            @NavigationItem(navigLabel = "Deposits")
+            public static class Deposits extends CrmCrudAppPlace {
+            }
+
+            @PlaceProperties(caption = "Email Templates")
+            @NavigationItem(navigLabel = "Email Templates")
+            public static class EmailTemplates extends CrmCrudAppPlace {
+            }
+
+//            @PlaceProperties(caption = "Adjustment Taxes")
+//            @NavigationItem(navigLabel = "Adjustment Taxes")
+//            public static class AdjustmentTax extends CRMCrudAppPlace {
+//            }
+
             @PlaceProperties(caption = "ID Assignment")
             @NavigationItem(navigLabel = "ID Assignment")
             public static class IdAssignment extends CrmCrudAppPlace {
             }
 
-            @PlaceProperties(caption = "Aging Priority")
-            @NavigationItem(navigLabel = "Aging Priority")
-            public static class AR extends CrmCrudAppPlace {
+            @PlaceProperties(caption = "Lease Adjustment")
+            @NavigationItem(navigLabel = "Lease Adjustment")
+            public static class LeaseAdjustmentPolicy extends CrmCrudAppPlace {
+            }
+
+            @PlaceProperties(caption = "Lease Termination")
+            @NavigationItem(navigLabel = "Lease Termination")
+            public static class LeaseTermination extends CrmCrudAppPlace {
+
+            }
+
+            @PlaceProperties(caption = "Legal Documentation - Terms and Conditions")
+            @NavigationItem(navigLabel = "Legal Documentation")
+            public static class LegalDocumentation extends CrmCrudAppPlace {
+            }
+
+            @NavigationItem
+            public static class PetPolicy extends CrmCrudAppPlace {
+            }
+
+            @PlaceProperties(caption = "Product Taxes")
+            @NavigationItem(navigLabel = "Product Taxes")
+            public static class ProductTax extends CrmCrudAppPlace {
+            }
+
+            @NavigationItem
+            public static class Restrictions extends CrmCrudAppPlace {
             }
 
             @PlaceProperties(caption = "Tenant Insurance")
             @NavigationItem(navigLabel = "Tenant Insurance")
             public static class TenantInsurance extends CrmCrudAppPlace {
             }
-        }
-
-        @PlaceProperties(caption = "User Role")
-        @NavigationItem(navigLabel = "User Roles")
-        public static class UserRole extends CrmCrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Merchant Account")
-        @NavigationItem(navigLabel = "Merchant Accounts")
-        public static class MerchantAccount extends CrmCrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Product Dictionary")
-        @NavigationItem(navigLabel = "Product Dictionary")
-        public static class ProductDictionary extends CrmCrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Service Item Type")
-        @NavigationItem(navigLabel = "Service Item Type")
-        public static class ServiceItemType extends CrmCrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Feature Item Type")
-        @NavigationItem(navigLabel = "Feature Item Type")
-        public static class FeatureItemType extends CrmCrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Content")
-        @NavigationItem(navigLabel = "Content")
-        public static class Content extends CrmCrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Page")
-        @NavigationItem(navigLabel = "Page")
-        public static class Page extends CrmCrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Home Page Gadgets")
-        @NavigationItem(navigLabel = "Home Page Gadgets")
-        public static class HomePageGadgets extends CrmCrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Tax")
-        @NavigationItem(navigLabel = "Taxes")
-        public static class Tax extends CrmCrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "GL Code Category")
-        @NavigationItem(navigLabel = "GL Codes")
-        public static class GlCodeCategory extends CrmCrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Lease Adjustment Reason")
-        @NavigationItem(navigLabel = "Lease Adjustment Reason")
-        public static class LeaseAdjustmentReason extends CrmCrudAppPlace {
         }
     }
 

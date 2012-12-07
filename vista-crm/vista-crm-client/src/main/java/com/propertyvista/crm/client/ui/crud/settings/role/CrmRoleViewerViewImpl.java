@@ -14,13 +14,13 @@
 package com.propertyvista.crm.client.ui.crud.settings.role;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Security;
 import com.propertyvista.domain.security.CrmRole;
 
 public class CrmRoleViewerViewImpl extends CrmViewerViewImplBase<CrmRole> implements CrmRoleViewerView {
 
     public CrmRoleViewerViewImpl() {
-        super(CrmSiteMap.Settings.UserRole.class);
+        super(Security.UserRole.class);
         setForm(new CrmRoleForm(true));
     }
 }

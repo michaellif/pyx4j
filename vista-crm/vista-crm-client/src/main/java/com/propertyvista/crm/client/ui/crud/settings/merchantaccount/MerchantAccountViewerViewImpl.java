@@ -14,13 +14,13 @@
 package com.propertyvista.crm.client.ui.crud.settings.merchantaccount;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Security;
 import com.propertyvista.domain.financial.MerchantAccount;
 
 public class MerchantAccountViewerViewImpl extends CrmViewerViewImplBase<MerchantAccount> implements MerchantAccountViewerView {
 
     public MerchantAccountViewerViewImpl() {
-        super(CrmSiteMap.Settings.UserRole.class);
+        super(Security.UserRole.class);
         setForm(new MerchantAccountForm(true));
     }
 }

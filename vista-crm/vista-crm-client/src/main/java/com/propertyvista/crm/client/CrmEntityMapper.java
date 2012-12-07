@@ -20,6 +20,10 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
+import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Content;
+import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Financial;
+import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Financial.ProductDictionary;
+import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Security;
 import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.domain.company.Employee;
@@ -111,8 +115,8 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(Concession.class, CrmSiteMap.Properties.Concession.class, defaultImage);
 
         AppPlaceEntityMapper.register(ProductItem.class, CrmSiteMap.Properties.Service.class, defaultImage);
-        AppPlaceEntityMapper.register(ServiceItemType.class, CrmSiteMap.Settings.ServiceItemType.class, defaultImage);
-        AppPlaceEntityMapper.register(FeatureItemType.class, CrmSiteMap.Settings.FeatureItemType.class, defaultImage);
+        AppPlaceEntityMapper.register(ServiceItemType.class, Financial.ProductDictionary.ServiceItemType.class, defaultImage);
+        AppPlaceEntityMapper.register(FeatureItemType.class, Financial.ProductDictionary.FeatureItemType.class, defaultImage);
         AppPlaceEntityMapper.register(MaintenanceRequest.class, CrmSiteMap.Tenants.MaintenanceRequest.class, defaultImage);
 
         AppPlaceEntityMapper.register(Customer.class, CrmSiteMap.Tenants.Tenant.class, CrmImages.INSTANCE.tenant());
@@ -134,20 +138,20 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(DepositLifecycle.class, CrmSiteMap.Finance.LeaseDeposit.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseAdjustment.class, CrmSiteMap.Finance.LeaseAdjustment.class, defaultImage);
 
-        AppPlaceEntityMapper.register(MerchantAccount.class, CrmSiteMap.Settings.MerchantAccount.class, defaultImage);
-        AppPlaceEntityMapper.register(GlCode.class, CrmSiteMap.Settings.GlCodeCategory.class, defaultImage);
-        AppPlaceEntityMapper.register(GlCodeCategory.class, CrmSiteMap.Settings.GlCodeCategory.class, defaultImage);
-        AppPlaceEntityMapper.register(LeaseAdjustmentReason.class, CrmSiteMap.Settings.LeaseAdjustmentReason.class, defaultImage);
-        AppPlaceEntityMapper.register(Tax.class, CrmSiteMap.Settings.Tax.class, defaultImage);
+        AppPlaceEntityMapper.register(MerchantAccount.class, Financial.MerchantAccount.class, defaultImage);
+        AppPlaceEntityMapper.register(GlCode.class, Financial.GlCodeCategory.class, defaultImage);
+        AppPlaceEntityMapper.register(GlCodeCategory.class, Financial.GlCodeCategory.class, defaultImage);
+        AppPlaceEntityMapper.register(LeaseAdjustmentReason.class, Financial.LeaseAdjustmentReason.class, defaultImage);
+        AppPlaceEntityMapper.register(Tax.class, Financial.Tax.class, defaultImage);
 
-        AppPlaceEntityMapper.register(CustomerCreditCheckDTO.class, CrmSiteMap.Settings.CreditChecks.CustomerCreditCheck.class, defaultImage);
+        AppPlaceEntityMapper.register(CustomerCreditCheckDTO.class, CrmSiteMap.Settings.CreditCheck.CustomerCreditCheck.class, defaultImage);
 
-        AppPlaceEntityMapper.register(CrmRole.class, CrmSiteMap.Settings.UserRole.class, defaultImage);
+        AppPlaceEntityMapper.register(CrmRole.class, Security.UserRole.class, defaultImage);
         AppPlaceEntityMapper.register(Employee.class, CrmSiteMap.Organization.Employee.class, defaultImage);
         AppPlaceEntityMapper.register(Portfolio.class, CrmSiteMap.Organization.Portfolio.class, defaultImage);
         AppPlaceEntityMapper.register(Vendor.class, CrmSiteMap.Organization.Vendor.class, defaultImage);
 
-        AppPlaceEntityMapper.register(HomePageGadget.class, CrmSiteMap.Settings.HomePageGadgets.class, defaultImage);
+        AppPlaceEntityMapper.register(HomePageGadget.class, Content.HomePageGadgets.class, defaultImage);
 
         AppPlaceEntityMapper.register(DashboardMetadata.class, CrmSiteMap.Dashboard.Manage.class, defaultImage);
         // TODO add report place mapping here

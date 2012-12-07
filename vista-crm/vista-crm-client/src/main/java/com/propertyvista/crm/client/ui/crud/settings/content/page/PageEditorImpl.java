@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.settings.content.page;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Content;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageEditorImpl extends CrmEditorViewImplBase<PageDescriptor> implements PageEditor {
     public PageEditorImpl() {
-        super(CrmSiteMap.Settings.Page.class, new PageForm());
+        super(Content.Page.class, new PageForm());
     }
 }

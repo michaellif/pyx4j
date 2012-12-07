@@ -17,7 +17,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Financial;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
@@ -32,7 +32,7 @@ public class ProductDictionaryViewImpl extends CrmViewerViewImplBase<ProductItem
     private final IListerView<Utility> utilityLister;
 
     public ProductDictionaryViewImpl() {
-        super(CrmSiteMap.Settings.ProductDictionary.class, true);
+        super(Financial.ProductDictionary.class, true);
 
         serviceLister = new ListerInternalViewImplBase<ServiceItemType>(new ServiceTypeLister());
         featureLister = new ListerInternalViewImplBase<FeatureItemType>(new FeatureTypeLister());

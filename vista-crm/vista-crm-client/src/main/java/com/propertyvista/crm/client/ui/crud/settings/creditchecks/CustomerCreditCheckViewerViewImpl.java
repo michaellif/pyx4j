@@ -20,7 +20,7 @@ import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
 public class CustomerCreditCheckViewerViewImpl extends CrmViewerViewImplBase<CustomerCreditCheckDTO> implements CustomerCreditCheckViewerView {
 
     public CustomerCreditCheckViewerViewImpl() {
-        super(CrmSiteMap.Settings.CreditChecks.CustomerCreditCheck.class, true);
+        super(CrmSiteMap.Settings.CreditCheck.CustomerCreditCheck.class, true);
         setForm(new CustomerCreditCheckForm(true));
     }
 

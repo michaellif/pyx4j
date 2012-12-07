@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.settings.content.gadgets;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Content;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 
 public class HomePageGadgetEditorImpl extends CrmEditorViewImplBase<HomePageGadget> implements HomePageGadgetEditor {
     public HomePageGadgetEditorImpl() {
-        super(CrmSiteMap.Settings.HomePageGadgets.class, new HomePageGadgetForm());
+        super(Content.HomePageGadgets.class, new HomePageGadgetForm());
     }
 }
