@@ -561,4 +561,9 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         };
     }
 
+    @Override
+    public void reportError(String message) {
+        MessageDialog.info(message);
+    }
+
 }

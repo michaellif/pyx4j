@@ -62,4 +62,6 @@ public interface TenantSurePurchaseView extends IsWidget {
     TenantSureQuoteDTO getAcceptedQuote();
 
     InsurancePaymentMethod getPaymentMethod();
+
+    void reportError(String message);
 }
