@@ -45,7 +45,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
-import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.SiteMap;
 
@@ -71,7 +70,6 @@ public class AppPlaceListingGenerator extends Generator {
             composer.addImport(AppPlaceHistoryMapper.class.getName());
             composer.addImport(AppPlace.class.getName());
             composer.addImport(AppPlaceInfo.class.getName());
-            composer.addImport(NavigationItem.class.getName());
             composer.addImport(PlaceProperties.class.getName());
             composer.addImport(SiteMap.class.getName());
             composer.addImport(I18n.class.getName());
@@ -156,25 +154,23 @@ public class AppPlaceListingGenerator extends Generator {
                 writer.println("if (place.getClass() == " + jClassType.getQualifiedSourceName() + ".class) {");
                 writer.indent();
 
-                PlaceProperties placeProperties = jClassType.getAnnotation(PlaceProperties.class);
-                String caption = I18nAnnotation.DEFAULT_VALUE;
+                String caption = null;
+                String navigLabel = null;
                 String staticContent = null;
+
+                PlaceProperties placeProperties = jClassType.getAnnotation(PlaceProperties.class);
                 if (placeProperties != null) {
                     caption = placeProperties.caption();
+                    navigLabel = placeProperties.navigLabel();
                     staticContent = placeProperties.staticContent();
                 }
-                if (I18nAnnotation.DEFAULT_VALUE.equals(caption)) {
+
+                // set names to class name if empty/default:
+                if (caption == null || I18nAnnotation.DEFAULT_VALUE.equals(caption)) {
                     caption = EnglishGrammar.capitalize(EnglishGrammar.classNameToEnglish(jClassType.getSimpleSourceName()));
                 }
-
-                NavigationItem navigationItem = jClassType.getAnnotation(NavigationItem.class);
-                String navigLabel = null;
-                if (navigationItem != null) {
-                    if (I18nAnnotation.DEFAULT_VALUE.equals(navigationItem.navigLabel())) {
-                        navigLabel = caption;
-                    } else {
-                        navigLabel = navigationItem.navigLabel();
-                    }
+                if (navigLabel == null || I18nAnnotation.DEFAULT_VALUE.equals(navigLabel)) {
+                    navigLabel = EnglishGrammar.capitalize(EnglishGrammar.classNameToEnglish(jClassType.getSimpleSourceName()));
                 }
 
                 writer.print("return new ");
@@ -191,27 +187,5 @@ public class AppPlaceListingGenerator extends Generator {
         writer.println("}");
 
         writer.println();
-
-        //getPlaceInfo()
-        writer.println("@Override");
-        writer.println("public List<AppPlace> getTopNavigation() {");
-        writer.indent();
-        writer.println("List<AppPlace> places = new ArrayList<AppPlace>();");
-
-        for (JClassType jClassType : placeClasses) {
-            String type = jClassType.getQualifiedSourceName();
-            NavigationItem navigationItem = jClassType.getAnnotation(NavigationItem.class);
-
-            if (!jClassType.isAbstract() && !jClassType.getEnclosingType().isAssignableFrom(placeType) && navigationItem != null) {
-                writer.println("places.add(new " + type + "());");
-            }
-        }
-
-        writer.println("return places;");
-        writer.outdent();
-        writer.println("}");
-
-        writer.println();
-
     }
 }

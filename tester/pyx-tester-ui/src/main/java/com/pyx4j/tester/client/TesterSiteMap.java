@@ -21,22 +21,18 @@
 package com.pyx4j.tester.client;
 
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.shared.meta.SiteMap;
 
 public class TesterSiteMap implements SiteMap {
 
-    @NavigationItem(navigLabel = "Landing")
     public static class Landing extends AppPlace {
     }
 
     public static class Folder extends AppPlace {
 
-        @NavigationItem(navigLabel = "FolderLayout")
         public static class FolderLayout extends AppPlace {
         }
 
-        @NavigationItem(navigLabel = "FolderValidation")
         public static class FolderValidation extends AppPlace {
         }
 
@@ -48,11 +44,9 @@ public class TesterSiteMap implements SiteMap {
 
     public static class Form extends AppPlace {
 
-        @NavigationItem(navigLabel = "FormBasic")
         public static class FormBasic extends AppPlace {
         }
 
-        @NavigationItem(navigLabel = "FormVisibility")
         public static class FormVisibility extends AppPlace {
         }
 
@@ -60,15 +54,12 @@ public class TesterSiteMap implements SiteMap {
 
     public static class NativeWidget extends AppPlace {
 
-        @NavigationItem(navigLabel = "NativeWidgetBasic")
         public static class NativeWidgetBasic extends AppPlace {
         }
 
-        @NavigationItem(navigLabel = "RichTextEditor")
         public static class RichTextEditor extends AppPlace {
         }
 
-        @NavigationItem(navigLabel = "Lister")
         public static class Lister extends AppPlace {
         }
     }

@@ -39,4 +39,9 @@ public @interface PlaceProperties {
     @I18n
     String staticContent() default "";
 
+    /**
+     * If not specified the navigLabel is taken from @PlaceProperties.caption
+     */
+    @I18n
+    String navigLabel() default I18nAnnotation.DEFAULT_VALUE;
 }

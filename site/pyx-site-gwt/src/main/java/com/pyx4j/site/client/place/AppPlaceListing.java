@@ -20,8 +20,6 @@
  */
 package com.pyx4j.site.client.place;
 
-import java.util.List;
-
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.site.shared.meta.SiteMap;
@@ -31,6 +29,4 @@ public interface AppPlaceListing {
     AppPlace getPlace(Class<? extends SiteMap> siteMapClass, String token);
 
     AppPlaceInfo getPlaceInfo(AppPlace place);
-
-    public List<AppPlace> getTopNavigation();
 }
