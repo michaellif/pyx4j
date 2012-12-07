@@ -66,6 +66,10 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
             this.descending = descending;
         }
 
+        public Sort(IObject<?> member, boolean descending) {
+            this(member.getPath().toString(), descending);
+        }
+
         public String getPropertyPath() {
             return this.propertyPath;
         }
