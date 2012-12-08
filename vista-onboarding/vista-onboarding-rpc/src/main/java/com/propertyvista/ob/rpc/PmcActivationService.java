@@ -16,10 +16,11 @@ package com.propertyvista.ob.rpc;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.security.rpc.AuthenticationResponse;
 
 public interface PmcActivationService extends IService {
 
-    public void createAccount(AsyncCallback<AuthenticationResponse> callback, PmcAccountCreationRequest request);
+    //Returns deferredCorrelationId
+    public void createAccount(AsyncCallback<String> callback, PmcAccountCreationRequest request);
 
+    public void obtainCrmURL(AsyncCallback<String> callback);
 }
