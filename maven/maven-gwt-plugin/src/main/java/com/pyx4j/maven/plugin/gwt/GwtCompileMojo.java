@@ -437,7 +437,7 @@ public class GwtCompileMojo extends AbstractGWTMojo {
             try {
                 compileThread.join();
             } catch (InterruptedException e) {
-                throw new Error("Compiler thread stopped.", e);
+                throw new MojoExecutionException("GWT Compiler thread stopped.", e);
             }
 
             if (executionError != null) {
@@ -447,10 +447,10 @@ public class GwtCompileMojo extends AbstractGWTMojo {
                 if (executionError instanceof JVMExitSecurityException) {
                     JVMExitSecurityException x = (JVMExitSecurityException) executionError;
                     if (x.getExitStatus() != 0) {
-                        throw new Error("Compiler execution error " + x.getExitStatus());
+                        throw new MojoFailureException("GWT Compiler execution error " + x.getExitStatus());
                     }
                 } else {
-                    throw new Error("Compiler execution error.", executionError);
+                    throw new MojoExecutionException("GWT Compiler execution error.", executionError);
                 }
             }
             long duration = (System.currentTimeMillis() - start);
