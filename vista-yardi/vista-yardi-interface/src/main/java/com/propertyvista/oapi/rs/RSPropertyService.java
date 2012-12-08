@@ -25,7 +25,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.Response;
 
 import com.propertyvista.oapi.PropertyService;
 import com.propertyvista.oapi.model.BuildingIO;
@@ -108,7 +108,8 @@ public class RSPropertyService {
         try {
             PropertyService.updateBuilding(buildingIO);
         } catch (Exception e) {
-            throw new WebApplicationException(e, Status.INTERNAL_SERVER_ERROR);
+            throw new WebApplicationException(Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build());
+
         }
     }
 
