@@ -20,8 +20,10 @@ import org.slf4j.LoggerFactory;
 import com.sun.jersey.test.framework.JerseyTest;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
+import com.propertyvista.test.preloader.BuildingDataModel;
 import com.propertyvista.test.preloader.LocationsDataModel;
 import com.propertyvista.test.preloader.PreloadConfig;
+import com.propertyvista.test.preloader.ProductItemTypesDataModel;
 
 public class RSOapiTestBase extends JerseyTest {
 
@@ -40,7 +42,18 @@ public class RSOapiTestBase extends JerseyTest {
         PreloadConfig config = new PreloadConfig();
         LocationsDataModel locationsDataModel = new LocationsDataModel(config);
         locationsDataModel.generate();
-
     }
 
+    protected void preloadBuilding() {
+        PreloadConfig config = new PreloadConfig();
+
+        LocationsDataModel locationsDataModel = new LocationsDataModel(config);
+        locationsDataModel.generate();
+
+        ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel(config);
+        productItemTypesDataModel.generate();
+
+        BuildingDataModel buildingDataModel = new BuildingDataModel(config, productItemTypesDataModel);
+        buildingDataModel.generate();
+    }
 }

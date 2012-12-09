@@ -23,6 +23,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.propertyvista.oapi.ReceivableService;
 import com.propertyvista.oapi.model.PaymentRecordIO;
 import com.propertyvista.oapi.model.TransactionIO;
 
@@ -45,31 +46,29 @@ public class RSReceivableService {
     @Path("/transactions")
     @Consumes({ MediaType.APPLICATION_XML })
     public void postTransactions(List<TransactionIO> transactions) {
-        // TODO Auto-generated method stub
-
+        for (TransactionIO transIO : transactions) {
+            ReceivableService.postTransaction(transIO);
+        }
     }
 
     @POST
     @Path("/{propertyCode}/runBilling")
     public void runBilling(@PathParam("propertyCode") String buildingCode) {
-        // TODO Auto-generated method stub
-
+        ReceivableService.runBilling(buildingCode);
     }
 
     @POST
     @Path("/reconcile")
     @Consumes({ MediaType.APPLICATION_XML })
     public void reconcilePaymentRecords(List<PaymentRecordIO> records) {
-        // TODO Auto-generated method stub
-
+        ReceivableService.reconcilePaymentRecords(records);
     }
 
     @GET
     @Path("/nonProcessed")
     @Produces({ MediaType.APPLICATION_XML })
     public List<PaymentRecordIO> getNonProcessedPaymentRecords() {
-        // TODO Auto-generated method stub
-        return null;
+        return ReceivableService.getNonProcessedPaymentRecords();
     }
 
 }

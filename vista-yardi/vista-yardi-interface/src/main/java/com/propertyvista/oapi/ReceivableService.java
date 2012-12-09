@@ -14,6 +14,7 @@
 package com.propertyvista.oapi;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -56,7 +57,7 @@ public class ReceivableService {
         // when that record is reconciled. So, here we return all the records where externalTransactionId is not set.
         List<PaymentRecordDTO> payments = ServerSideFactory.create(ExternalBillingFacade.class).getNonProcessedPaymentRecords();
         if (payments == null || payments.size() == 0) {
-            return null;
+            return Collections.emptyList();
         }
 
         List<PaymentRecordIO> records = new ArrayList<PaymentRecordIO>();

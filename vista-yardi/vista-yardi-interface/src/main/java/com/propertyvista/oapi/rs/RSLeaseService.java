@@ -24,10 +24,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.propertyvista.oapi.LeaseService;
 import com.propertyvista.oapi.model.LeaseIO;
 import com.propertyvista.oapi.model.TenantIO;
+import com.propertyvista.oapi.model.TenantsIO;
 
 //http://localhost:8888/vista/interfaces/oapi/rs/leases
 //https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/rs/leases
@@ -85,17 +87,24 @@ public class RSLeaseService {
     @POST
     @Path("/updateLease")
     @Consumes({ MediaType.APPLICATION_XML })
-    public void updateLease(LeaseIO leaseIO) {
-        // TODO Auto-generated method stub
+    public Response updateLease(LeaseIO leaseIO) {
+        //TODO mkoval implementation TBD
+        return Response.ok().build();
+    }
 
+    @POST
+    @Path("/{leaseId}/updateTenants_")
+    @Consumes({ MediaType.APPLICATION_XML })
+    public Response updateTenants(@PathParam("leaseId") String leaseId, List<TenantIO> tenantIOs) {
+        //TODO mkoval implementation TBD
+        return Response.ok().build();
     }
 
     @POST
     @Path("/{leaseId}/updateTenants")
     @Consumes({ MediaType.APPLICATION_XML })
-    public void updateTenants(@PathParam("leaseId") String leaseId, List<TenantIO> tenantIOs) {
-        // TODO Auto-generated method stub
-
+    public Response updateTenants(@PathParam("leaseId") String leaseId, TenantsIO tenantsIO) {
+        //TODO mkoval implementation TBD
+        return Response.ok().build();
     }
-
 }

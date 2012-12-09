@@ -13,11 +13,17 @@
  */
 package com.propertyvista.oapi.rs;
 
+import java.util.List;
+
+import junit.framework.Assert;
+
 import org.junit.Test;
 
+import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 
 import com.propertyvista.oapi.model.BuildingsIO;
+import com.propertyvista.oapi.model.UnitIO;
 
 public class RSPropertyServiceTest extends RSOapiTestBase {
 
@@ -26,10 +32,17 @@ public class RSPropertyServiceTest extends RSOapiTestBase {
     }
 
     @Test
-    public void testCreateBuilding() {
+    public void testGetBuildings() {
         WebResource webResource = resource();
-
         BuildingsIO buildings = webResource.path("buildings").get(BuildingsIO.class);
     }
 
+    @Test
+    public void testGetAllUnitsByPropertyCode_NonExistingPropertyCode() {
+        WebResource webResource = resource();
+        GenericType<List<UnitIO>> gt = new GenericType<List<UnitIO>>() {
+        };
+        List<UnitIO> units = webResource.path("buildings/MockCode/units").get(gt);
+        Assert.assertTrue(units.isEmpty());
+    }
 }
