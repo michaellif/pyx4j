@@ -16,9 +16,6 @@ package com.propertyvista.crm.client.ui.reports;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.reports.AbstractReportsView;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
@@ -38,21 +35,6 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
 
     public CrmReportsViewImpl() {
         super(factoryMap);
-    }
-
-    @Override
-    public IMemento getMemento() {
-        return null;
-    }
-
-    @Override
-    public void storeState(Place place) {
-
-    }
-
-    @Override
-    public void restoreState() {
-
     }
 
 }

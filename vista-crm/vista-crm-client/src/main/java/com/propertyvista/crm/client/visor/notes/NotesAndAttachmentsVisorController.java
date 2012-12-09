@@ -22,7 +22,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.crud.IView;
+import com.pyx4j.site.client.ui.IView;
 
 import com.propertyvista.crm.client.visor.IVisorController;
 import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;

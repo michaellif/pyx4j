@@ -7,18 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-09
+ * Created on 2011-05-04
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.viewfactories;
+package com.propertyvista.crm.client.ui.wizard.creditcheck;
 
-import java.util.HashMap;
+import com.propertyvista.crm.client.ui.crud.CrmWizardViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.dto.BuildingDTO;
 
-import com.pyx4j.site.client.ui.IView;
+public class CreditCheckWizardViewImpl extends CrmWizardViewImplBase<BuildingDTO> implements CreditCheckWizardView {
 
-public abstract class ViewFactoryBase {
-
-    protected static HashMap<Class<? extends IView>, IView> map = new HashMap<Class<? extends IView>, IView>();
-
+    public CreditCheckWizardViewImpl() {
+        super(CrmSiteMap.Properties.Building.class, new CreditCheckWizardForm());
+    }
 }

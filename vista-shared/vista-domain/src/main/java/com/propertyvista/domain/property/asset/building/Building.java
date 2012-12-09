@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Reference;
@@ -82,6 +83,7 @@ public interface Building extends PolicyNode {
     @ToString(index = 0)
     @Length(10)
     @Indexed(uniqueConstraint = true, ignoreCase = true)
+    @MemberColumn(notNull = true)
     IPrimitive<String> propertyCode();
 
     IPrimitive<String> externalId();

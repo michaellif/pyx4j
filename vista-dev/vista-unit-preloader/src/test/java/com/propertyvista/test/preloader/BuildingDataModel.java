@@ -77,6 +77,7 @@ public class BuildingDataModel {
     public void generate() {
 
         building = EntityFactory.create(Building.class);
+        building.propertyCode().setValue(String.valueOf(System.currentTimeMillis()).substring(5));
 
         generateParking();
         generateLockerArea();

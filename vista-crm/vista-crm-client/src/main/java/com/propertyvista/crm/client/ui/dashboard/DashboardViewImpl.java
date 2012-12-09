@@ -17,13 +17,11 @@ import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.ViewImplBase;
-import com.pyx4j.site.client.ui.crud.misc.IMemento;
 
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
@@ -100,22 +98,6 @@ public class DashboardViewImpl extends ViewImplBase implements DashboardView {
     @Override
     public Vector<Building> getSelectedBuildingsStubs() {
         return new Vector<Building>(buildingsFilterProvider.getSelectedBuildingsStubs());
-    }
-
-    @Override
-    public IMemento getMemento() {
-        // TODO not used
-        return null;
-    }
-
-    @Override
-    public void storeState(Place place) {
-        // TODO not used
-    }
-
-    @Override
-    public void restoreState() {
-        // TODO not used
     }
 
     private void updateCaption() {

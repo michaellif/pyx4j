@@ -7,18 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-09
+ * Created on 2011-05-04
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.viewfactories;
+package com.propertyvista.crm.client.ui.wizard.creditcheck;
 
-import java.util.HashMap;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.wizard.IWizardView;
 
-import com.pyx4j.site.client.ui.IView;
+import com.propertyvista.dto.BuildingDTO;
 
-public abstract class ViewFactoryBase {
+public interface CreditCheckWizardView extends IWizardView<BuildingDTO> {
 
-    protected static HashMap<Class<? extends IView>, IView> map = new HashMap<Class<? extends IView>, IView>();
-
+    interface Presenter extends IEditorView.Presenter {
+    }
 }
