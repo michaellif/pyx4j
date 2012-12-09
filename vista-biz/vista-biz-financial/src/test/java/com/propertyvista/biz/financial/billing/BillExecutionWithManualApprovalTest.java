@@ -44,7 +44,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
         setDate("15-Feb-2011");
 
-        createLease("1-Mar-2011", "31-May-2011");
+        createLease("01-Mar-2011", "31-May-2011");
 
         //==================== CYCLE 1 ======================//
 
@@ -56,7 +56,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
-        billingPeriodStartDate("1-Mar-2011").
+        billingPeriodStartDate("01-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
         numOfProductCharges(1);
         // @formatter:on
@@ -71,7 +71,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-Apr-2011").
+        billingPeriodStartDate("01-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(1);
         // @formatter:on
@@ -86,7 +86,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         billSequenceNumber(3).
         previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-May-2011").
+        billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").
         numOfProductCharges(1);
         // @formatter:on
@@ -101,7 +101,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         billSequenceNumber(3).
         previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-May-2011").
+        billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").
         numOfProductCharges(1);
         // @formatter:on
@@ -127,7 +127,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
         setDate("15-May-2011");
 
-        createLease("1-Mar-2009", "31-Aug-2011", null, new BigDecimal("300.00"));
+        createLease("01-Mar-2009", "31-Aug-2011", null, new BigDecimal("300.00"));
 
         advanceDate("22-May-2011");
         approveExistingLease(true);
@@ -139,7 +139,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.ZeroCycle).
-        billingPeriodStartDate("1-May-2011").
+        billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").
         numOfProductCharges(1);
         // @formatter:on
@@ -153,8 +153,8 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-June-2011").
-        billingPeriodEndDate("30-June-2011").
+        billingPeriodStartDate("01-Jun-2011").
+        billingPeriodEndDate("30-Jun-2011").
         numOfProductCharges(1);
         // @formatter:on
 
@@ -168,8 +168,8 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         billSequenceNumber(3).
         previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-July-2011").
-        billingPeriodEndDate("31-July-2011").
+        billingPeriodStartDate("01-Jul-2011").
+        billingPeriodEndDate("31-Jul-2011").
         numOfProductCharges(1);
         // @formatter:on
 
@@ -183,7 +183,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         billSequenceNumber(4).
         previousBillSequenceNumber(3).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-Aug-2011").
+        billingPeriodStartDate("01-Aug-2011").
         billingPeriodEndDate("31-Aug-2011").
         numOfProductCharges(1);
         // @formatter:on
@@ -220,7 +220,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.ZeroCycle).
-        billingPeriodStartDate("1-May-2011").
+        billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").
         numOfProductCharges(1);
         // @formatter:on
@@ -235,8 +235,8 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-June-2011").
-        billingPeriodEndDate("30-June-2011").
+        billingPeriodStartDate("01-Jun-2011").
+        billingPeriodEndDate("30-Jun-2011").
         numOfProductCharges(1);
         // @formatter:on
 

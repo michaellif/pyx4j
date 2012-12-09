@@ -42,7 +42,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         setDate("17-Mar-2011");
 
-        createLease("23-Mar-2011", "3-Aug-2011");
+        createLease("23-Mar-2011", "03-Aug-2011");
 
         BillableItem parking1 = addParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-10", Type.monetary);
@@ -87,7 +87,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-Apr-2011").
+        billingPeriodStartDate("01-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(5).
         serviceCharge("930.30").
@@ -131,8 +131,8 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
         billSequenceNumber(4).
         previousBillSequenceNumber(3).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-June-2011").
-        billingPeriodEndDate("30-June-2011").
+        billingPeriodStartDate("1-Jun-2011").
+        billingPeriodEndDate("30-Jun-2011").
         numOfProductCharges(6).
         serviceCharge("930.30").
         recurringFeatureCharges("160.58").

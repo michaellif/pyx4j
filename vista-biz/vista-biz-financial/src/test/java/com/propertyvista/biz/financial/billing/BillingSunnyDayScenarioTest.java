@@ -133,7 +133,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-Apr-2011").
+        billingPeriodStartDate("01-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(5).
         paymentReceivedAmount("-1603.05").
@@ -195,8 +195,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billSequenceNumber(4).
         previousBillSequenceNumber(3).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-June-2011").
-        billingPeriodEndDate("30-June-2011").
+        billingPeriodStartDate("1-Jun-2011").
+        billingPeriodEndDate("30-Jun-2011").
         numOfProductCharges(6).
         paymentReceivedAmount("-1448.50").
         serviceCharge("905.30").

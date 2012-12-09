@@ -51,7 +51,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         setDate("17-Mar-2011"); // create existing lease
 
         // When we create Existing Lease, the tenant is already living in the building
-        createLease("3-Mar-2009", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("300.00"));
+        createLease("03-Mar-2009", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("300.00"));
 
         //==================== CYCLE 1 ======================//
 
@@ -134,8 +134,8 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         setDate("17-Mar-2011"); // create existing lease
 
         // try existing lease from just earlier this month
-        createLease("3-Mar-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("-100.00"));
-        addBooking("3-Mar-2011");
+        createLease("03-Mar-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("-100.00"));
+        addBooking("03-Mar-2011");
         finalizeLeaseAdendum();
 
         //==================== CYCLE 1 ======================//

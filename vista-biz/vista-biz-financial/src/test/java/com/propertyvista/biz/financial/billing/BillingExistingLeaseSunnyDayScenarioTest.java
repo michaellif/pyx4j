@@ -47,7 +47,7 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
 
         setDate("15-May-2011");
 
-        createLease("1-Mar-2009", "31-Aug-2011", null, new BigDecimal("300.00"));
+        createLease("01-Mar-2009", "31-Aug-2011", null, new BigDecimal("300.00"));
 
         advanceDate("22-May-2011");
         approveExistingLease(true);
@@ -59,7 +59,7 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.ZeroCycle).
-        billingPeriodStartDate("1-May-2011").
+        billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").
         numOfProductCharges(1).
         paymentReceivedAmount("0.00").
@@ -80,8 +80,8 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-June-2011").
-        billingPeriodEndDate("30-June-2011").
+        billingPeriodStartDate("1-Jun-2011").
+        billingPeriodEndDate("30-Jun-2011").
         numOfProductCharges(1).
         paymentReceivedAmount("0.00").
         serviceCharge("930.30").
@@ -105,8 +105,8 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
         billSequenceNumber(3).
         previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-July-2011").
-        billingPeriodEndDate("31-July-2011").
+        billingPeriodStartDate("1-Jul-2011").
+        billingPeriodEndDate("31-Jul-2011").
         numOfProductCharges(1).
         paymentReceivedAmount("-1391.94").
         serviceCharge("930.30").

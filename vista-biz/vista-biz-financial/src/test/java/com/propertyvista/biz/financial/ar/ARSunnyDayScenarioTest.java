@@ -90,7 +90,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("18-Apr-2011");
 
         addBooking("25-Apr-2011");
-        addBooking("5-May-2011");
+        addBooking("05-May-2011");
         finalizeLeaseAdendum();
 
         runBilling(true, false);

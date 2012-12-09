@@ -41,7 +41,7 @@ public class BillingLeaseOnlyAgingScenarioTest extends FinancialTestBase {
 
     public void testScenario() {
 
-        createLease("1-Mar-2011", "31-Aug-2011");
+        createLease("01-Mar-2011", "31-Aug-2011");
 
         //==================== RUN 1 ======================//
 

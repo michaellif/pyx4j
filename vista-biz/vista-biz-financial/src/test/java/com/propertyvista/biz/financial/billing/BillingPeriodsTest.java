@@ -40,7 +40,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         setDate("01-Jan-2012");
 
-        createLease("23-Mar-2012", "3-Aug-2012");
+        createLease("23-Mar-2012", "03-Aug-2012");
 
         setLeaseBatchProcess();
         //==================== RUN 1 ======================//
@@ -159,12 +159,12 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(4).
         billingTypePeriodStartDay(1).
         billingTypePeriodTargetDay(14).
-        billingCyclePeriodStartDate("1-June-2012").
-        billingCyclePeriodEndDate("30-June-2012").
+        billingCyclePeriodStartDate("1-Jun-2012").
+        billingCyclePeriodEndDate("30-Jun-2012").
         billingCycleExecutionTargetDate("17-May-2012").
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-June-2012").
-        billingPeriodEndDate("30-June-2012");
+        billingPeriodStartDate("1-Jun-2012").
+        billingPeriodEndDate("30-Jun-2012");
         // @formatter:on
 
         assertEquals("Same Billing Cycle", billingTypeId, bill.billingCycle().billingType().id().toString());
@@ -181,12 +181,12 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(5).
         billingTypePeriodStartDay(1).
         billingTypePeriodTargetDay(14).
-        billingCyclePeriodStartDate("1-July-2012").
-        billingCyclePeriodEndDate("31-July-2012").
+        billingCyclePeriodStartDate("1-Jul-2012").
+        billingCyclePeriodEndDate("31-Jul-2012").
         billingCycleExecutionTargetDate("16-Jun-2012").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Jul-2012").
-        billingPeriodEndDate("31-July-2012");
+        billingPeriodEndDate("31-Jul-2012");
         // @formatter:on
 
         assertEquals("Same Billing Cycle", billingTypeId, bill.billingCycle().billingType().id().toString());
@@ -257,7 +257,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         setDate("01-Jan-2012");
 
-        createLease("23-Mar-2012", "3-Aug-2012");
+        createLease("23-Mar-2012", "03-Aug-2012");
 
         setLeaseBatchProcess();
         setDepositBatchProcess();
@@ -273,7 +273,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billingTypePeriodTargetDay(8).
         billingCyclePeriodStartDate("23-Mar-2012").
         billingCyclePeriodEndDate("22-Apr-2012").
-        billingCycleExecutionTargetDate("8-Mar-2012").
+        billingCycleExecutionTargetDate("08-Mar-2012").
         billType(Bill.BillType.First).
         billingPeriodStartDate("23-Mar-2012").
         billingPeriodEndDate("22-Apr-2012");
@@ -295,7 +295,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billingTypePeriodTargetDay(8).
         billingCyclePeriodStartDate("23-Apr-2012").
         billingCyclePeriodEndDate("22-May-2012").
-        billingCycleExecutionTargetDate("8-Apr-2012").
+        billingCycleExecutionTargetDate("08-Apr-2012").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("23-Apr-2012").
         billingPeriodEndDate("22-May-2012");
@@ -315,7 +315,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billingTypePeriodTargetDay(8).
         billingCyclePeriodStartDate("23-May-2012").
         billingCyclePeriodEndDate("22-Jun-2012").
-        billingCycleExecutionTargetDate("8-May-2012").
+        billingCycleExecutionTargetDate("08-May-2012").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("23-May-2012").
         billingPeriodEndDate("22-Jun-2012");
@@ -331,7 +331,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billingTypePeriodTargetDay(8).
         billingCyclePeriodStartDate("23-May-2012").
         billingCyclePeriodEndDate("22-Jun-2012").
-        billingCycleExecutionTargetDate("8-May-2012").
+        billingCycleExecutionTargetDate("08-May-2012").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("23-May-2012").
         billingPeriodEndDate("22-Jun-2012");
@@ -351,7 +351,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billingTypePeriodTargetDay(8).
         billingCyclePeriodStartDate("23-Jun-2012").
         billingCyclePeriodEndDate("22-Jul-2012").
-        billingCycleExecutionTargetDate("8-Jun-2012").
+        billingCycleExecutionTargetDate("08-Jun-2012").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("23-Jun-2012").
         billingPeriodEndDate("22-Jul-2012");
@@ -371,7 +371,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billingTypePeriodTargetDay(8).
         billingCyclePeriodStartDate("23-Jul-2012").
         billingCyclePeriodEndDate("22-Aug-2012").
-        billingCycleExecutionTargetDate("8-Jul-2012").
+        billingCycleExecutionTargetDate("08-Jul-2012").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("23-Jul-2012").
         billingPeriodEndDate("3-Aug-2012");
@@ -392,7 +392,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billingTypePeriodTargetDay(8).
         billingCyclePeriodStartDate("23-Aug-2012").
         billingCyclePeriodEndDate("22-Sep-2012").
-        billingCycleExecutionTargetDate("8-Aug-2012").
+        billingCycleExecutionTargetDate("08-Aug-2012").
         billType(Bill.BillType.Final).
         billingPeriodStartDate(null).
         billingPeriodEndDate(null);
@@ -430,7 +430,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         setDate("01-Jan-2012");
 
-        createLease(day + "-Mar-2012", "3-Aug-2012");
+        createLease(day + "-Mar-2012", "03-Aug-2012");
 
         setLeaseBatchProcess();
         setDepositBatchProcess();

@@ -13,10 +13,8 @@
  */
 package com.propertyvista.biz.financial;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.gwt.server.DateUtils;
 
 public class FinancialTestsUtils {
 
@@ -24,11 +22,7 @@ public class FinancialTestsUtils {
         if (date == null) {
             return null;
         }
-        try {
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yy");
-            return new LogicalDate(formatter.parse(date));
-        } catch (ParseException e) {
-            throw new Error(e);
-        }
+        return new LogicalDate(DateUtils.detectDateformat(date));
     }
+
 }

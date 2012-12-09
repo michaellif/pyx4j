@@ -79,7 +79,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         new BillTester(bill).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-May-2011").
+        billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").
         paymentReceivedAmount("-1972.24").
         serviceCharge("930.30").

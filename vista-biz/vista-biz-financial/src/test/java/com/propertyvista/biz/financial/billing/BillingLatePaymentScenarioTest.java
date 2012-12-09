@@ -79,7 +79,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-May-2011").
+        billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").
         paymentReceivedAmount("-1972.24").
         serviceCharge("930.30").
@@ -110,7 +110,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
 
         // @formatter:off
         new BillTester(bill).
-        billingPeriodStartDate("1-Jun-2011").
+        billingPeriodStartDate("01-Jun-2011").
         billingPeriodEndDate("30-Jun-2011").
         paymentReceivedAmount("-1041.94").
         serviceCharge("930.30").

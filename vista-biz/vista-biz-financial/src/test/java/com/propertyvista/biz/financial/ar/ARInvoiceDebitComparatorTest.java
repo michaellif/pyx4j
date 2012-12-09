@@ -67,7 +67,7 @@ public class ARInvoiceDebitComparatorTest extends FinancialTestBase {
         compareBucketAge("10-Oct-2010", "20-Jun-2010", 0);
         compareBucketAge("20-Jun-2011", "10-Oct-2011", 0);
         compareBucketAge("10-Oct-2011", "20-Jun-2011", 0);
-        compareBucketAge("2-Mar-2011", "3-Mar-2011", 0);
+        compareBucketAge("02-Mar-2011", "03-Mar-2011", 0);
 
         //Different buckets
         compareBucketAge("01-Mar-2011", "2-Mar-2011", -1);

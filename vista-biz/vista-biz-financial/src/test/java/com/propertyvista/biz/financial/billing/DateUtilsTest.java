@@ -30,60 +30,60 @@ public class DateUtilsTest extends VistaDBTestBase {
     public void testOverlappingRange() {
         {
             DateRange dateRange = BillDateUtils.getOverlappingRange(
-                    new DateRange(FinancialTestsUtils.getDate("1-Jul-2011"), FinancialTestsUtils.getDate("31-Jul-2011")),
-                    new DateRange(FinancialTestsUtils.getDate("1-Jul-2011"), FinancialTestsUtils.getDate("31-Jul-2011")));
-            assertEquals(FinancialTestsUtils.getDate("1-Jul-2011"), dateRange.getFromDate());
+                    new DateRange(FinancialTestsUtils.getDate("01-Jul-2011"), FinancialTestsUtils.getDate("31-Jul-2011")),
+                    new DateRange(FinancialTestsUtils.getDate("01-Jul-2011"), FinancialTestsUtils.getDate("31-Jul-2011")));
+            assertEquals(FinancialTestsUtils.getDate("01-Jul-2011"), dateRange.getFromDate());
             assertEquals(FinancialTestsUtils.getDate("31-Jul-2011"), dateRange.getToDate());
         }
 
         {
             DateRange dateRange = BillDateUtils.getOverlappingRange(
-                    new DateRange(FinancialTestsUtils.getDate("5-Jul-2011"), FinancialTestsUtils.getDate("4-Aug-2011")),
-                    new DateRange(FinancialTestsUtils.getDate("5-Jul-2011"), FinancialTestsUtils.getDate("31-Jul-2011")));
-            assertEquals(FinancialTestsUtils.getDate("5-Jul-2011"), dateRange.getFromDate());
+                    new DateRange(FinancialTestsUtils.getDate("05-Jul-2011"), FinancialTestsUtils.getDate("4-Aug-2011")),
+                    new DateRange(FinancialTestsUtils.getDate("05-Jul-2011"), FinancialTestsUtils.getDate("31-Jul-2011")));
+            assertEquals(FinancialTestsUtils.getDate("05-Jul-2011"), dateRange.getFromDate());
             assertEquals(FinancialTestsUtils.getDate("31-Jul-2011"), dateRange.getToDate());
         }
 
         {
             DateRange dateRange = BillDateUtils.getOverlappingRange(
-                    new DateRange(FinancialTestsUtils.getDate("8-Jul-2011"), FinancialTestsUtils.getDate("15-Jul-2011")),
-                    new DateRange(FinancialTestsUtils.getDate("5-Jul-2011"), FinancialTestsUtils.getDate("31-Jul-2011")));
-            assertEquals(FinancialTestsUtils.getDate("8-Jul-2011"), dateRange.getFromDate());
+                    new DateRange(FinancialTestsUtils.getDate("08-Jul-2011"), FinancialTestsUtils.getDate("15-Jul-2011")),
+                    new DateRange(FinancialTestsUtils.getDate("05-Jul-2011"), FinancialTestsUtils.getDate("31-Jul-2011")));
+            assertEquals(FinancialTestsUtils.getDate("08-Jul-2011"), dateRange.getFromDate());
             assertEquals(FinancialTestsUtils.getDate("15-Jul-2011"), dateRange.getToDate());
         }
 
         {
             DateRange dateRange = BillDateUtils.getOverlappingRange(
-                    new DateRange(FinancialTestsUtils.getDate("8-Jul-2011"), FinancialTestsUtils.getDate("15-Jul-2011")),
-                    new DateRange(FinancialTestsUtils.getDate("5-Jul-2011"), FinancialTestsUtils.getDate("31-Jul-2011")));
-            assertEquals(FinancialTestsUtils.getDate("8-Jul-2011"), dateRange.getFromDate());
+                    new DateRange(FinancialTestsUtils.getDate("08-Jul-2011"), FinancialTestsUtils.getDate("15-Jul-2011")),
+                    new DateRange(FinancialTestsUtils.getDate("05-Jul-2011"), FinancialTestsUtils.getDate("31-Jul-2011")));
+            assertEquals(FinancialTestsUtils.getDate("08-Jul-2011"), dateRange.getFromDate());
             assertEquals(FinancialTestsUtils.getDate("15-Jul-2011"), dateRange.getToDate());
         }
 
         {
             DateRange dateRange = BillDateUtils.getOverlappingRange(new DateRange(null, FinancialTestsUtils.getDate("15-Jul-2011")), new DateRange(
-                    FinancialTestsUtils.getDate("5-Jul-2011"), FinancialTestsUtils.getDate("31-Jul-2011")));
-            assertEquals(FinancialTestsUtils.getDate("5-Jul-2011"), dateRange.getFromDate());
+                    FinancialTestsUtils.getDate("05-Jul-2011"), FinancialTestsUtils.getDate("31-Jul-2011")));
+            assertEquals(FinancialTestsUtils.getDate("05-Jul-2011"), dateRange.getFromDate());
             assertEquals(FinancialTestsUtils.getDate("15-Jul-2011"), dateRange.getToDate());
         }
 
         {
             DateRange dateRange = BillDateUtils.getOverlappingRange(new DateRange(null, FinancialTestsUtils.getDate("15-Jul-2011")), new DateRange(
-                    FinancialTestsUtils.getDate("5-Jul-2011"), null));
-            assertEquals(FinancialTestsUtils.getDate("5-Jul-2011"), dateRange.getFromDate());
+                    FinancialTestsUtils.getDate("05-Jul-2011"), null));
+            assertEquals(FinancialTestsUtils.getDate("05-Jul-2011"), dateRange.getFromDate());
             assertEquals(FinancialTestsUtils.getDate("15-Jul-2011"), dateRange.getToDate());
         }
 
         {
             DateRange dateRange = BillDateUtils.getOverlappingRange(
-                    new DateRange(FinancialTestsUtils.getDate("8-Jul-2011"), FinancialTestsUtils.getDate("15-Jul-2011")),
+                    new DateRange(FinancialTestsUtils.getDate("08-Jul-2011"), FinancialTestsUtils.getDate("15-Jul-2011")),
                     new DateRange(FinancialTestsUtils.getDate("25-Jul-2011"), FinancialTestsUtils.getDate("31-Jul-2011")));
             assertEquals(null, dateRange);
         }
 
         {
             DateRange dateRange = BillDateUtils.getOverlappingRange(
-                    new DateRange(FinancialTestsUtils.getDate("8-Jul-2011"), FinancialTestsUtils.getDate("15-Jul-2011")),
+                    new DateRange(FinancialTestsUtils.getDate("08-Jul-2011"), FinancialTestsUtils.getDate("15-Jul-2011")),
                     new DateRange(FinancialTestsUtils.getDate("12-Jul-2011"), FinancialTestsUtils.getDate("12-Jul-2011")));
             assertEquals(FinancialTestsUtils.getDate("12-Jul-2011"), dateRange.getFromDate());
             assertEquals(FinancialTestsUtils.getDate("12-Jul-2011"), dateRange.getToDate());
@@ -97,13 +97,13 @@ public class DateUtilsTest extends VistaDBTestBase {
 
         {
             billingType.billingCycleStartDay().setValue(1);
-            LogicalDate date = BillDateUtils.calculateInitialBillingCycleStartDate(billingType, FinancialTestsUtils.getDate("8-Jul-2011"));
+            LogicalDate date = BillDateUtils.calculateInitialBillingCycleStartDate(billingType, FinancialTestsUtils.getDate("08-Jul-2011"));
             assertEquals(FinancialTestsUtils.getDate("01-Jul-2011"), date);
         }
 
         {
             billingType.billingCycleStartDay().setValue(2);
-            LogicalDate date = BillDateUtils.calculateInitialBillingCycleStartDate(billingType, FinancialTestsUtils.getDate("8-Jul-2011"));
+            LogicalDate date = BillDateUtils.calculateInitialBillingCycleStartDate(billingType, FinancialTestsUtils.getDate("08-Jul-2011"));
             assertEquals(FinancialTestsUtils.getDate("02-Jul-2011"), date);
         }
 

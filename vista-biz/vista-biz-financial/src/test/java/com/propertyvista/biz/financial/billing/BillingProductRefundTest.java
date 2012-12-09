@@ -85,7 +85,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-Apr-2011").
+        billingPeriodStartDate("01-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(2).
         paymentReceivedAmount("-1338.82").

@@ -89,7 +89,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
         new BillTester(bill).
         billSequenceNumber(2).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-Apr-2011").
+        billingPeriodStartDate("01-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         serviceCharge("800.00").
         recurringFeatureCharges("80.00"). // parking - full price
@@ -131,8 +131,8 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
         new BillTester(bill).
         billSequenceNumber(4).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-June-2011").
-        billingPeriodEndDate("30-June-2011").
+        billingPeriodStartDate("1-Jun-2011").
+        billingPeriodEndDate("30-Jun-2011").
         serviceCharge("1769.00"). // 930.30 - 30.30 - 31 (changed to EOM) + 900 (revised charge for may)
         recurringFeatureCharges("80.00").
         taxes("221.88").

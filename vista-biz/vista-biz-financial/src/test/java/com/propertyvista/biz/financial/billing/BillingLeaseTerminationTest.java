@@ -84,7 +84,7 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-Apr-2011").
+        billingPeriodStartDate("01-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(3).
         paymentReceivedAmount("-1418.33").
@@ -192,7 +192,7 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-Apr-2011").
+        billingPeriodStartDate("01-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(3).
         paymentReceivedAmount("-1418.33").
