@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.ob.rpc;
+package com.propertyvista.ob.rpc.services;
 
 public interface OnboardingAuthenticationService extends com.pyx4j.security.rpc.AuthenticationService {
 

@@ -23,6 +23,7 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.admin.server.security.VistaAdminAccessControlList;
 import com.propertyvista.crm.server.security.VistaCrmAccessControlList;
+import com.propertyvista.ob.server.security.OnboardingAccessControlList;
 import com.propertyvista.portal.server.security.VistaPortalAccessControlList;
 
 public class VistaAccessControlList extends ServletContainerAclBuilder {
@@ -48,6 +49,7 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
         merge(new VistaPortalAccessControlList());
         merge(new VistaCrmAccessControlList());
         merge(new VistaAdminAccessControlList());
+        merge(new OnboardingAccessControlList());
 
         freeze();
     }

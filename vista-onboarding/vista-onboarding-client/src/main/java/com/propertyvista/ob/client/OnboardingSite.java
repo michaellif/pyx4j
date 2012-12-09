@@ -13,12 +13,17 @@
  */
 package com.propertyvista.ob.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
+
 import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.ob.rpc.OnboardingSiteMap;
+import com.propertyvista.ob.rpc.services.OnboardingAuthenticationService;
 
 public class OnboardingSite extends VistaSite {
 
@@ -31,20 +36,40 @@ public class OnboardingSite extends VistaSite {
     @Override
     public void onSiteLoad() {
         super.onSiteLoad();
+        obtainAuthenticationData();
+    }
 
-        hideLoadingIndicator();
+    @Override
+    public void showMessageDialog(String message, String title, String buttonText, Command command) {
+        // TODO Auto-generated method stub
+    }
 
+    private void obtainAuthenticationData() {
+        ClientContext.obtainAuthenticationData((GWT.<OnboardingAuthenticationService> create(OnboardingAuthenticationService.class)),
+                new DefaultAsyncCallback<Boolean>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        hideLoadingIndicator();
+                        super.onFailure(caught);
+                    }
+
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        hideLoadingIndicator();
+                        initUI();
+                    }
+
+                });
+    }
+
+    private void initUI() {
         RootPanel root = RootPanel.get(ONBOARDING_INSERTION_ID);
         if (root == null) {
             root = RootPanel.get();
         }
 
         root.add(new Button("Start Here"));
-    }
-
-    @Override
-    public void showMessageDialog(String message, String title, String buttonText, Command command) {
-        // TODO Auto-generated method stub
     }
 
 }

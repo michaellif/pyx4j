@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,20 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-12
+ * Created on 2012-12-09
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.ob.rpc;
+package com.propertyvista.ob.server.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.rpc.shared.IService;
+import com.propertyvista.ob.rpc.services.OnboardingPublicActivationService;
 
-public interface PmcActivationService extends IService {
+public class OnboardingPublicActivationServiceImpl implements OnboardingPublicActivationService {
 
-    //Returns deferredCorrelationId
-    public void createAccount(AsyncCallback<String> callback, PmcAccountCreationRequest request);
+    @Override
+    public void checkDNSAvailability(AsyncCallback<Boolean> callback, String dnsName) {
+        // TODO Auto-generated method stub
 
-    public void obtainCrmURL(AsyncCallback<String> callback);
+    }
+
 }

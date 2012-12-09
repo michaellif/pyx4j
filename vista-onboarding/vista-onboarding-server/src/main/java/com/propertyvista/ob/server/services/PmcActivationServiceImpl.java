@@ -11,13 +11,23 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.ob.rpc;
+package com.propertyvista.ob.server.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.rpc.shared.IService;
+import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
+import com.propertyvista.ob.rpc.services.PmcActivationService;
 
-public interface OnboardingPublicActivationService extends IService {
+public class PmcActivationServiceImpl implements PmcActivationService {
 
-    public void checkDNSAvailability(AsyncCallback<Boolean> callback, String dnsName);
+    @Override
+    public void createAccount(AsyncCallback<String> callback, PmcAccountCreationRequest request) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void obtainCrmURL(AsyncCallback<String> callback) {
+        // TODO Auto-generated method stub
+    }
+
 }

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.ob.rpc;
+package com.propertyvista.ob.rpc.dto;
 
 import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.annotations.Caption;
