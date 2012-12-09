@@ -18,34 +18,31 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud;
+package com.pyx4j.site.client.ui.wizard;
 
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.ui.IView;
 
-import com.pyx4j.site.client.ui.crud.misc.IMemento;
+public interface IWizardView<E extends IEntity> extends IView {
 
-public interface IView extends IsWidget {
+    public interface Presenter extends IView.Presenter {
 
-    public interface Presenter {
+        void finish();
 
-        void populate();
-
-        @Deprecated
-        //TODO see if it is really needed for editor?
-        void refresh();
+        void cancel();
     }
 
-    IMemento getMemento();
+    void populate(E value);
 
-    void storeState(Place place);
+    void reset();
 
-    void restoreState();
+    public E getValue();
 
-    void showVisor(IsWidget widget, String caption);
+    public boolean isDirty();
 
-    void hideVisor();
+    void setPresenter(Presenter presenter);
 
-    boolean isVisorShown();
+    Presenter getPresenter();
 
+    boolean onSaveFail(Throwable caught);
 }

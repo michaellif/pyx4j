@@ -22,7 +22,7 @@ package com.pyx4j.site.client.ui.reports;
 
 import java.util.List;
 
-import com.pyx4j.site.client.ui.crud.IView;
+import com.pyx4j.site.client.ui.IView;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 public interface IReportsView extends IView {

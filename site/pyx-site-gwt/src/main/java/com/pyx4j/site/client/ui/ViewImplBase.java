@@ -23,6 +23,7 @@ package com.pyx4j.site.client.ui;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -34,7 +35,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
-import com.pyx4j.site.client.ui.crud.IView;
+import com.pyx4j.site.client.ui.crud.misc.IMemento;
+import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
@@ -63,6 +65,8 @@ public abstract class ViewImplBase extends DockLayoutPanel implements IView {
     private final int headerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
 
     private int footerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
+
+    private final IMemento memento = new MementoImpl();
 
     public ViewImplBase() {
         super(Unit.PX);
@@ -177,5 +181,19 @@ public abstract class ViewImplBase extends DockLayoutPanel implements IView {
         if (footerToolbar.getWidgetCount() == 0) {
             setWidgetSize(footerToolbarHolder, footerToolbarHeight);
         }
+    }
+
+    @Override
+    public IMemento getMemento() {
+        return memento;
+    }
+
+    @Override
+    public void storeState(Place place) {
+        memento.setCurrentPlace(place);
+    }
+
+    @Override
+    public void restoreState() {
     }
 }

@@ -18,18 +18,34 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud;
+package com.pyx4j.site.client.ui;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.ui.IView;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public interface IFormView<E extends IEntity> extends IView {
+import com.pyx4j.site.client.ui.crud.misc.IMemento;
 
-    void populate(E value);
+public interface IView extends IsWidget {
 
-    void reset();
+    public interface Presenter {
 
-    void setActiveTab(int index);
+        void populate();
 
-    int getActiveTab();
+        @Deprecated
+        //TODO see if it is really needed for editor?
+        void refresh();
+    }
+
+    IMemento getMemento();
+
+    void storeState(Place place);
+
+    void restoreState();
+
+    void showVisor(IsWidget widget, String caption);
+
+    void hideVisor();
+
+    boolean isVisorShown();
+
 }

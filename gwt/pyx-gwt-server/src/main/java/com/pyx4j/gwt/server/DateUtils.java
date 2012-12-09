@@ -163,7 +163,7 @@ public class DateUtils extends TimeUtils {
 
         "MM/dd/yyyy", "M/dd/yyyy", "MM/d/yyyy", "M/d/yyyy",
 
-        "MMM-dd-yyyy", "MMM/dd/yyyy", "dd-MMM-yyyy", };
+        "MMM-dd-yyyy", "MMM/dd/yyyy", "dd-MMM-yyyy", "d-MMM-yyyy", };
 
         str = str.trim();
 

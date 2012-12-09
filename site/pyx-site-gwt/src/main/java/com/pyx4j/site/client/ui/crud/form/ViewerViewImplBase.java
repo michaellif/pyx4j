@@ -21,6 +21,7 @@
 package com.pyx4j.site.client.ui.crud.form;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.ui.crud.FormViewImplBase;
 
 public class ViewerViewImplBase<E extends IEntity> extends FormViewImplBase<E> implements IViewerView<E> {
 
