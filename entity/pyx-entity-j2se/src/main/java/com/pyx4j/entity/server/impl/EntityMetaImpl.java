@@ -229,6 +229,11 @@ public class EntityMetaImpl implements EntityMeta {
     }
 
     @Override
+    public String getCaptionNL() {
+        return caption;
+    }
+
+    @Override
     public String getDescription() {
         return i18n.translate(i18nContext, description);
     }

@@ -499,6 +499,8 @@ public class EntityMetaWriter {
             // String fieldName, String caption, String description,
             writer.print(escapeSourceString(method.getName()));
             writer.print(", ");
+            writer.print(escapeSourceString(memberCaption));
+            writer.print(", ");
             writer.print(i18nEscapeSourceString(memberCaption));
             writer.print(", ");
             writer.print(i18nEscapeSourceString(memberDescription));

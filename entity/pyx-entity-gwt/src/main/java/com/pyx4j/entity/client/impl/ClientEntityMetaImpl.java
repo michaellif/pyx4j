@@ -46,6 +46,8 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     private final Class<? extends IEntity> expandedFromClass;
 
+    private final String captionNL;
+
     private final String caption;
 
     private final String description;
@@ -70,11 +72,12 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     private final String nullString;
 
-    public ClientEntityMetaImpl(Class<? extends IEntity> entityClass, Class<? extends IEntity> expandedFromClass, String caption, String description,
-            String watermark, boolean persistenceTransient, boolean rpcTransient, String toStringFormat, String nullString, String ownerMemberName,
-            String[] memberNamesToString, String[] businessEqualMemberNames) {
+    public ClientEntityMetaImpl(Class<? extends IEntity> entityClass, Class<? extends IEntity> expandedFromClass, String captionNL, String caption,
+            String description, String watermark, boolean persistenceTransient, boolean rpcTransient, String toStringFormat, String nullString,
+            String ownerMemberName, String[] memberNamesToString, String[] businessEqualMemberNames) {
         this.entityClass = entityClass;
         this.expandedFromClass = expandedFromClass;
+        this.captionNL = captionNL;
         this.caption = caption;
         this.description = description;
         this.watermark = watermark;
@@ -110,6 +113,11 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     @Override
     public String getCaption() {
         return caption;
+    }
+
+    @Override
+    public String getCaptionNL() {
+        return captionNL;
     }
 
     @Override

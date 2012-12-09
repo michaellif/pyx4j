@@ -56,9 +56,16 @@ public interface EntityMeta {
     public String getPersistenceName();
 
     /**
+     * Localized user preventable entity name
+     * 
      * See com.pyx4j.entity.annotations.Caption
      */
     public String getCaption();
+
+    /**
+     * Non Localized Caption, English name of the entity
+     */
+    public String getCaptionNL();
 
     /**
      * See com.pyx4j.entity.annotations.Caption
