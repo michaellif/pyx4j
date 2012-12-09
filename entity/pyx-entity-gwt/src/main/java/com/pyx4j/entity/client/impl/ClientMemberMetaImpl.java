@@ -37,6 +37,8 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     private final String fieldName;
 
+    private final String captionNL;
+
     private final String caption;
 
     /**
@@ -60,7 +62,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
     /**
      * Generic constructor
      */
-    public ClientMemberMetaImpl(String fieldName, String caption, String description, String watermark, Class<?> valueClass,
+    public ClientMemberMetaImpl(String fieldName, String captionNL, String caption, String description, String watermark, Class<?> valueClass,
             @SuppressWarnings("rawtypes") Class<? extends IObject> objectClass, ObjectClassType objectClassType, boolean valueClassIsNumber,
             boolean persistenceTransient, boolean rpcTransient, AttachLevel attachLevel, boolean ownedRelationships, boolean cascadePersist, boolean owner,
             boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat, String nullString, boolean isToStringMember) {
@@ -79,6 +81,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.indexed = indexed;
         this.data.objectClass = objectClass;
         this.data.objectClassType = objectClassType;
+        this.captionNL = captionNL;
         this.caption = caption;
         this.description = description;
         this.watermark = watermark;
@@ -93,8 +96,9 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.data.isToStringMember = isToStringMember;
     }
 
-    public ClientMemberMetaImpl(String fieldName, String caption, String description, String watermark, boolean indexed, MemberMetaData data) {
+    public ClientMemberMetaImpl(String fieldName, String captionNL, String caption, String description, String watermark, boolean indexed, MemberMetaData data) {
         this.fieldName = fieldName;
+        this.captionNL = captionNL;
         this.caption = caption;
         this.description = description;
         this.watermark = watermark;
@@ -113,6 +117,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
     @Override
     public String getCaption() {
         return caption;
+    }
+
+    @Override
+    public String getCaptionNL() {
+        return captionNL;
     }
 
     @Override

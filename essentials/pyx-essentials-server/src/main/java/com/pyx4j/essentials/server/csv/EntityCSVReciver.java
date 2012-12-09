@@ -233,7 +233,7 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
     protected String[] columnNames(IObject<?> member) {
         ImportColumn importColumn = member.getMeta().getAnnotation(ImportColumn.class);
         if (importColumn == null) {
-            return new String[] { member.getMeta().getCaption() };
+            return new String[] { member.getMeta().getCaptionNL(), member.getMeta().getCaption() };
         } else if (importColumn.ignore()) {
             return null;
         } else {

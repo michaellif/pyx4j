@@ -39,16 +39,27 @@ public interface MemberMeta {
     public String getFieldName();
 
     /**
+     * Localized user preventable filed name
+     * 
      * @see com.pyx4j.entity.annotations.Caption
      */
     public String getCaption();
 
     /**
+     * Non Localized Caption, English name of the filed
+     */
+    public String getCaptionNL();
+
+    /**
+     * Localized user preventable filed description
+     * 
      * @see com.pyx4j.entity.annotations.Caption
      */
     public String getDescription();
 
     /**
+     * Localized watermark
+     * 
      * @see com.pyx4j.entity.annotations.Caption
      */
     public String getWatermark();

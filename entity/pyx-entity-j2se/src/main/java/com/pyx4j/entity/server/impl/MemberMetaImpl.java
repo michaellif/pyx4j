@@ -272,62 +272,67 @@ public class MemberMetaImpl implements MemberMeta {
     }
 
     @Override
-    public String getFieldName() {
+    public final String getFieldName() {
         return fieldName;
     }
 
     @Override
-    public String getCaption() {
+    public final String getCaption() {
         return i18n.translate(i18nContext, caption);
     }
 
     @Override
-    public String getDescription() {
+    public final String getCaptionNL() {
+        return caption;
+    }
+
+    @Override
+    public final String getDescription() {
         return i18n.translate(i18nContext, description);
     }
 
     @Override
-    public String getWatermark() {
+    public final String getWatermark() {
         return i18n.translate(i18nContext, watermark);
     }
 
     @Override
-    public boolean isTransient() {
+    public final boolean isTransient() {
         return persistenceTransient;
     }
 
     @Override
-    public boolean isRpcTransient() {
+    public final boolean isRpcTransient() {
         return rpcTransient;
     }
 
     @Override
-    public boolean isDetached() {
+    public final boolean isDetached() {
         return attachLevel != AttachLevel.Attached;
     }
 
     @Override
-    public AttachLevel getAttachLevel() {
+    public final AttachLevel getAttachLevel() {
         return attachLevel;
     }
 
     @Override
-    public boolean isOwnedRelationships() {
+    public final boolean isOwnedRelationships() {
         return ownedRelationships;
     }
 
     @Override
-    public boolean isCascadePersist() {
+    public final boolean isCascadePersist() {
         return cascadePersist;
     }
 
     @Override
-    public boolean isCascadeDelete() {
+    public final boolean isCascadeDelete() {
         return cascadeDelete;
     }
 
     @Override
-    public boolean isOwner() {
+    public final boolean isOwner() {
         return owner;
     }
 

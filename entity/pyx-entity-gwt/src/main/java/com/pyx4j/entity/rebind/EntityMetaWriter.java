@@ -216,6 +216,9 @@ public class EntityMetaWriter {
         writer.print(expandedFromClassName);
         writer.print(".class, ");
 
+        writer.print(escapeSourceString(caption));
+        writer.print(", ");
+
         writer.print(i18nEscapeSourceString(caption));
         writer.print(", ");
 
