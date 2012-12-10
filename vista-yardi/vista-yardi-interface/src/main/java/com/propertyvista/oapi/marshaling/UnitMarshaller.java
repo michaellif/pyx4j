@@ -39,7 +39,7 @@ public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
             return null;
         }
         UnitIO unitIO = new UnitIO();
-        unitIO.number = unit.info().number().getValue();
+        unitIO.number = MarshallerUtils.getValue(unit.info().number());
 
         unitIO.floorplanName = MarshallerUtils.createIo(StringIO.class, unit.floorplan().name());
         unitIO.baths = MarshallerUtils.createIo(IntegerIO.class, unit.floorplan().bathrooms());

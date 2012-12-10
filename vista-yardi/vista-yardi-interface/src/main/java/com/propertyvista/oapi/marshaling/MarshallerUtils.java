@@ -14,7 +14,6 @@
 package com.propertyvista.oapi.marshaling;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -42,28 +41,27 @@ public class MarshallerUtils {
                     throw new RuntimeException(e);
                 }
             }
+        } else {
+            entity = null;
         }
     }
 
     /**
      * 
-     * Marshals elementIO->entity and adds entity to entity list.
+     * sets value for IPrimitive if primitiveIO is not null
      * 
      */
-
-    public static <T extends IEntity, E extends ElementIO> void add(Collection<T> entities, T entity, E elementIO, Marshaller<T, E> marshaller) {
-        set(entity, elementIO, marshaller);
-        if (entity != null) {
-            entities.add(entity);
-        }
-    }
-
     public static <T extends Serializable> void setValue(IPrimitive<T> primitive, PrimitiveIO<T> primitiveIO) {
         if (primitiveIO != null) {
             primitive.setValue(primitiveIO.getValue());
         }
     }
 
+    /**
+     * 
+     * returns PrimitiveIO if neither IPrimitive nor its value is null
+     * 
+     */
     public static <T extends Serializable, E extends PrimitiveIO<T>> E createIo(Class<E> classIO, IPrimitive<T> primitive) {
         if (primitive != null && !primitive.isNull()) {
             E primitiveIO;
@@ -74,6 +72,19 @@ public class MarshallerUtils {
             }
             primitiveIO.setValue(primitive.getValue());
             return primitiveIO;
+        }
+        return null;
+    }
+
+    /**
+     * 
+     * returns IPrimitive's value if neither IPrimitive nor its value is null
+     * 
+     */
+    public static <T extends Serializable> T getValue(IPrimitive<T> primitive) {
+        if (primitive != null && !primitive.isNull()) {
+            T result = primitive.getValue();
+            return result;
         }
         return null;
     }

@@ -41,7 +41,7 @@ public class UtilityMarshaller implements Marshaller<Utility, UtilityIO> {
             return null;
         }
         UtilityIO utilityIO = new UtilityIO();
-        utilityIO.name = utility.name().getValue();
+        utilityIO.name = MarshallerUtils.getValue(utility.name());
 
         return utilityIO;
     }
@@ -58,13 +58,16 @@ public class UtilityMarshaller implements Marshaller<Utility, UtilityIO> {
     public Utility unmarshal(UtilityIO utilityIO) throws Exception {
         Utility utility = EntityFactory.create(Utility.class);
         utility.name().setValue(utilityIO.name);
+
         return utility;
     }
 
     public List<Utility> unmarshal(Collection<UtilityIO> utilityIOList) throws Exception {
         List<Utility> utilities = new ArrayList<Utility>();
         for (UtilityIO utilityIO : utilityIOList) {
-            utilities.add(unmarshal(utilityIO));
+            Utility utility = EntityFactory.create(Utility.class);
+            MarshallerUtils.set(utility, utilityIO, UtilityMarshaller.getInstance());
+            utilities.add(utility);
         }
         return utilities;
     }

@@ -70,7 +70,9 @@ public class MediaMarshaller implements Marshaller<Media, MediaIO> {
     public List<Media> unmarshal(List<MediaIO> MediaIOList) throws Exception {
         List<Media> medias = new ArrayList<Media>();
         for (MediaIO mediaIO : MediaIOList) {
-            medias.add(unmarshal(mediaIO));
+            Media media = EntityFactory.create(Media.class);
+            MarshallerUtils.set(media, mediaIO, MediaMarshaller.getInstance());
+            medias.add(media);
         }
         return medias;
     }

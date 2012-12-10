@@ -72,7 +72,9 @@ public class ParkingMarshaller implements Marshaller<Parking, ParkingIO> {
     public List<Parking> unmarshal(Collection<ParkingIO> parkingIOList) throws Exception {
         List<Parking> parkings = new ArrayList<Parking>();
         for (ParkingIO parkingIO : parkingIOList) {
-            parkings.add(unmarshal(parkingIO));
+            Parking parking = EntityFactory.create(Parking.class);
+            MarshallerUtils.set(parking, parkingIO, ParkingMarshaller.getInstance());
+            parkings.add(parking);
         }
         return parkings;
     }

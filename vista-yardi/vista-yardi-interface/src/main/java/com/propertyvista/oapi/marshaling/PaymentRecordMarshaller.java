@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -40,7 +40,7 @@ public class PaymentRecordMarshaller implements Marshaller<PaymentRecordDTO, Pay
             return null;
         }
         PaymentRecordIO paymentIO = new PaymentRecordIO();
-        paymentIO.transactionId = payment.transactionId().getValue();
+        paymentIO.transactionId = MarshallerUtils.getValue(payment.transactionId());
 
         paymentIO.externalTransactionId = MarshallerUtils.createIo(StringIO.class, payment.externalTransactionId());
         paymentIO.leaseId = MarshallerUtils.createIo(StringIO.class, payment.leaseId());
@@ -54,6 +54,7 @@ public class PaymentRecordMarshaller implements Marshaller<PaymentRecordDTO, Pay
     public PaymentRecordDTO unmarshal(PaymentRecordIO paymentIO) {
         PaymentRecordDTO payment = EntityFactory.create(PaymentRecordDTO.class);
         payment.transactionId().setValue(paymentIO.transactionId);
+
         MarshallerUtils.setValue(payment.externalTransactionId(), paymentIO.externalTransactionId);
         MarshallerUtils.setValue(payment.leaseId(), paymentIO.leaseId);
         MarshallerUtils.setValue(payment.amount(), paymentIO.amount);

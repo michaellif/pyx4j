@@ -43,6 +43,7 @@ public class FloorplanAmenityMarshaller implements Marshaller<FloorplanAmenity, 
             return null;
         }
         FloorplanAmenityIO amenityIO = new FloorplanAmenityIO();
+
         amenityIO.name = MarshallerUtils.createIo(StringIO.class, amenity.name());
         amenityIO.description = MarshallerUtils.createIo(StringIO.class, amenity.description());
         amenityIO.type = MarshallerUtils.createIo(FloorplanAmenityTypeIO.class, amenity.type());
@@ -69,7 +70,9 @@ public class FloorplanAmenityMarshaller implements Marshaller<FloorplanAmenity, 
     public List<FloorplanAmenity> unmarshal(Collection<FloorplanAmenityIO> amenityIOList) throws Exception {
         List<FloorplanAmenity> amenities = new ArrayList<FloorplanAmenity>();
         for (FloorplanAmenityIO amenityIO : amenityIOList) {
-            amenities.add(unmarshal(amenityIO));
+            FloorplanAmenity amenity = EntityFactory.create(FloorplanAmenity.class);
+            MarshallerUtils.set(amenity, amenityIO, FloorplanAmenityMarshaller.getInstance());
+            amenities.add(amenity);
         }
         return amenities;
     }

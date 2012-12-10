@@ -25,7 +25,6 @@ import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.oapi.model.AddressIO;
 import com.propertyvista.oapi.model.types.StreetTypeIO;
-import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class AddressMarshaller implements Marshaller<AddressStructured, AddressIO> {
@@ -47,6 +46,7 @@ public class AddressMarshaller implements Marshaller<AddressStructured, AddressI
             return null;
         }
         AddressIO addressIO = new AddressIO();
+
         addressIO.country = MarshallerUtils.createIo(StringIO.class, address.country().name());
         addressIO.province = MarshallerUtils.createIo(StringIO.class, address.province().name());
         addressIO.city = MarshallerUtils.createIo(StringIO.class, address.city());
@@ -59,23 +59,21 @@ public class AddressMarshaller implements Marshaller<AddressStructured, AddressI
 
     @Override
     public AddressStructured unmarshal(AddressIO addressIO) throws Exception {
-        if (addressIO == null) {
-            return null;
-        }
         AddressStructured address = EntityFactory.create(AddressStructured.class);
-        if (addressIO.getAction() == Action.nil) {
-            address.set(null);
-        } else {
 
+        if (addressIO.country != null) {
             address.country().set(getCountry(addressIO.country.getValue()));
-            address.province().set(getProvince(addressIO.province.getValue()));
-
-            MarshallerUtils.setValue(address.city(), addressIO.city);
-            MarshallerUtils.setValue(address.postalCode(), addressIO.postalCode);
-            MarshallerUtils.setValue(address.streetNumber(), addressIO.streetNumber);
-            MarshallerUtils.setValue(address.streetName(), addressIO.streetName);
-            MarshallerUtils.setValue(address.streetType(), addressIO.streetType);
         }
+        if (addressIO.province != null) {
+            address.province().set(getProvince(addressIO.province.getValue()));
+        }
+
+        MarshallerUtils.setValue(address.city(), addressIO.city);
+        MarshallerUtils.setValue(address.postalCode(), addressIO.postalCode);
+        MarshallerUtils.setValue(address.streetNumber(), addressIO.streetNumber);
+        MarshallerUtils.setValue(address.streetName(), addressIO.streetName);
+        MarshallerUtils.setValue(address.streetType(), addressIO.streetType);
+
         return address;
     }
 

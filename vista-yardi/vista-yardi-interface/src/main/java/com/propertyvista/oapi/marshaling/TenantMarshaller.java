@@ -45,9 +45,10 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantI
         }
         TenantIO tenantIO = new TenantIO();
         Person person = participant.customer().person();
-        tenantIO.firstName = person.name().firstName().getValue();
-        tenantIO.lastName = person.name().lastName().getValue();
-        tenantIO.middleName = person.name().middleName().getValue();
+        tenantIO.firstName = MarshallerUtils.getValue(person.name().firstName());
+        tenantIO.lastName = MarshallerUtils.getValue(person.name().lastName());
+        tenantIO.middleName = MarshallerUtils.getValue(person.name().middleName());
+
         tenantIO.sex = MarshallerUtils.createIo(SexTypeIO.class, person.sex());
         tenantIO.phone = MarshallerUtils.createIo(StringIO.class, person.homePhone());
         tenantIO.email = MarshallerUtils.createIo(StringIO.class, person.email());
@@ -69,6 +70,7 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantI
         person.name().firstName().setValue(tenantIO.firstName);
         person.name().lastName().setValue(tenantIO.lastName);
         person.name().middleName().setValue(tenantIO.middleName);
+
         MarshallerUtils.setValue(person.sex(), tenantIO.sex);
         MarshallerUtils.setValue(person.homePhone(), tenantIO.phone);
         MarshallerUtils.setValue(person.email(), tenantIO.email);
@@ -79,7 +81,9 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantI
     public List<LeaseParticipant<?>> unmarshal(Collection<TenantIO> tenantIOList) {
         List<LeaseParticipant<?>> participants = new ArrayList<LeaseParticipant<?>>();
         for (TenantIO tenantIO : tenantIOList) {
-            participants.add(unmarshal(tenantIO));
+            LeaseParticipant<?> participant = EntityFactory.create(LeaseParticipant.class);
+            MarshallerUtils.set(participant, tenantIO, TenantMarshaller.getInstance());
+            participants.add(participant);
         }
         return participants;
     }

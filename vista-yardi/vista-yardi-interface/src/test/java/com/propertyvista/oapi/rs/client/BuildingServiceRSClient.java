@@ -50,7 +50,7 @@ public class BuildingServiceRSClient {
         if (isLocal) {
             url = new URL("http://localhost:8888/vista/interfaces/oapi/rs/buildings/updateBuilding");
         } else {
-            url = new URL("http://static-11.birchwoodsoftwaregroup.com/interfaces/oapi/rs/buildings/updateBuilding");
+            url = new URL("http://static-66.birchwoodsoftwaregroup.com/interfaces/oapi/rs/buildings/updateBuilding");
         }
         HttpURLConnection conn = null;
         OutputStreamWriter out = null;
@@ -126,7 +126,7 @@ public class BuildingServiceRSClient {
         if (isLocal) {
             url = new URL("http://localhost:8888/vista/interfaces/oapi/rs/buildings/" + buildingCode);
         } else {
-            url = new URL("http://static-11.birchwoodsoftwaregroup.com/interfaces/oapi/rs/buildings/" + buildingCode);
+            url = new URL("http://static-66.birchwoodsoftwaregroup.com/interfaces/oapi/rs/buildings/" + buildingCode);
         }
 
         HttpURLConnection conn = null;

@@ -13,6 +13,10 @@
  */
 package com.propertyvista.oapi.marshaling;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
@@ -38,14 +42,34 @@ public class AdvertisingBlurbMarshaller implements Marshaller<AdvertisingBlurb, 
             return null;
         }
         AdvertisingBlurbIO adBlurbIO = new AdvertisingBlurbIO();
+
         adBlurbIO.content = MarshallerUtils.createIo(StringIO.class, adBlurb.content());
         return adBlurbIO;
+    }
+
+    public List<AdvertisingBlurbIO> marshal(Collection<AdvertisingBlurb> adblurbs) {
+        List<AdvertisingBlurbIO> adblurbIOList = new ArrayList<AdvertisingBlurbIO>();
+        for (AdvertisingBlurb adblurb : adblurbs) {
+            adblurbIOList.add(marshal(adblurb));
+        }
+        return adblurbIOList;
     }
 
     @Override
     public AdvertisingBlurb unmarshal(AdvertisingBlurbIO adBlurbIO) throws Exception {
         AdvertisingBlurb adBlurb = EntityFactory.create(AdvertisingBlurb.class);
+
         MarshallerUtils.setValue(adBlurb.content(), adBlurbIO.content);
         return adBlurb;
+    }
+
+    public List<AdvertisingBlurb> unmarshal(Collection<AdvertisingBlurbIO> adblurbIOList) {
+        List<AdvertisingBlurb> adblurbs = new ArrayList<AdvertisingBlurb>();
+        for (AdvertisingBlurbIO adblurbIO : adblurbIOList) {
+            AdvertisingBlurb adblurb = EntityFactory.create(AdvertisingBlurb.class);
+            MarshallerUtils.set(adblurb, adblurbIO, AdvertisingBlurbMarshaller.getInstance());
+            adblurbs.add(adblurb);
+        }
+        return adblurbs;
     }
 }

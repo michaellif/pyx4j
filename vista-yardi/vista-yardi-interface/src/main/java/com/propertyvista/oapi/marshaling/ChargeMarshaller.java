@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -40,8 +40,9 @@ public class ChargeMarshaller implements Marshaller<ChargeDTO, ChargeIO> {
             return null;
         }
         ChargeIO chargeIO = new ChargeIO();
-        chargeIO.transactionId = charge.transactionId().getValue();
-        chargeIO.leaseId = charge.leaseId().getValue();
+        chargeIO.transactionId = MarshallerUtils.getValue(charge.transactionId());
+        chargeIO.leaseId = MarshallerUtils.getValue(charge.leaseId());
+
         chargeIO.amount = MarshallerUtils.createIo(BigDecimalIO.class, charge.amount());
         chargeIO.description = MarshallerUtils.createIo(StringIO.class, charge.description());
         chargeIO.fromDate = MarshallerUtils.createIo(LogicalDateIO.class, charge.fromDate());
@@ -54,6 +55,7 @@ public class ChargeMarshaller implements Marshaller<ChargeDTO, ChargeIO> {
         ChargeDTO charge = EntityFactory.create(ChargeDTO.class);
         charge.transactionId().setValue(chargeIO.transactionId);
         charge.leaseId().setValue(chargeIO.leaseId);
+
         MarshallerUtils.setValue(charge.amount(), chargeIO.amount);
         MarshallerUtils.setValue(charge.description(), chargeIO.description);
         MarshallerUtils.setValue(charge.fromDate(), chargeIO.fromDate); // Transaction.ChargeDetail.ServiceFromDate

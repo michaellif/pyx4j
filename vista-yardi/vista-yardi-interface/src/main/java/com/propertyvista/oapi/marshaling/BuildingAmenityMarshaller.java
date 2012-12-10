@@ -43,6 +43,7 @@ public class BuildingAmenityMarshaller implements Marshaller<BuildingAmenity, Bu
             return null;
         }
         BuildingAmenityIO amenityIO = new BuildingAmenityIO();
+
         amenityIO.name = MarshallerUtils.createIo(StringIO.class, amenity.name());
         amenityIO.description = MarshallerUtils.createIo(StringIO.class, amenity.description());
         amenityIO.type = MarshallerUtils.createIo(BuildingAmenityTypeIO.class, amenity.type());
@@ -69,7 +70,10 @@ public class BuildingAmenityMarshaller implements Marshaller<BuildingAmenity, Bu
     public List<BuildingAmenity> unmarshal(Collection<BuildingAmenityIO> amenityIOList) throws Exception {
         List<BuildingAmenity> amenities = new ArrayList<BuildingAmenity>();
         for (BuildingAmenityIO amenityIO : amenityIOList) {
-            amenities.add(unmarshal(amenityIO));
+            BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
+
+            MarshallerUtils.set(amenity, amenityIO, BuildingAmenityMarshaller.getInstance());
+            amenities.add(amenity);
         }
         return amenities;
     }

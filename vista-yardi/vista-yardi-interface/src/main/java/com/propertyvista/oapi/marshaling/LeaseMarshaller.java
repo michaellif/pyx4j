@@ -41,10 +41,10 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
             return null;
         }
         LeaseIO leaseIO = new LeaseIO();
-        leaseIO.propertyCode = lease.unit().building().propertyCode().getValue();
-        leaseIO.unitNumber = lease.unit().info().number().getValue();
+        leaseIO.leaseId = MarshallerUtils.getValue(lease.leaseId());
+        leaseIO.propertyCode = MarshallerUtils.getValue(lease.unit().building().propertyCode());
+        leaseIO.unitNumber = MarshallerUtils.getValue(lease.unit().info().number());
 
-        leaseIO.leaseId = lease.leaseId().getValue();
         leaseIO.status = MarshallerUtils.createIo(LeaseStatusIO.class, lease.status());
         leaseIO.paymentFrequency = MarshallerUtils.createIo(PaymentFrequencyIO.class, lease.paymentFrequency());
         leaseIO.leaseFrom = MarshallerUtils.createIo(LogicalDateIO.class, lease.leaseFrom());
@@ -59,12 +59,13 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
     public Lease unmarshal(LeaseIO leaseIO) {
         Lease lease = EntityFactory.create(Lease.class);
         lease.leaseId().setValue(leaseIO.leaseId);
+        lease.unit().building().propertyCode().setValue(leaseIO.propertyCode);
+        lease.unit().info().number().setValue(leaseIO.unitNumber);
+
         MarshallerUtils.setValue(lease.status(), leaseIO.status);
         MarshallerUtils.setValue(lease.paymentFrequency(), leaseIO.paymentFrequency);
         MarshallerUtils.setValue(lease.leaseFrom(), leaseIO.leaseFrom);
         MarshallerUtils.setValue(lease.leaseTo(), leaseIO.leaseTo);
-        lease.unit().building().propertyCode().setValue(leaseIO.propertyCode);
-        lease.unit().info().number().setValue(leaseIO.unitNumber);
         lease.leaseParticipants().addAll(TenantMarshaller.getInstance().unmarshal(leaseIO.tenants));
         return lease;
     }

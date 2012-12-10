@@ -13,17 +13,11 @@
  */
 package com.propertyvista.oapi.marshaling;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
-import com.propertyvista.oapi.model.AdvertisingBlurbIO;
 import com.propertyvista.oapi.model.MarketingIO;
-import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
@@ -45,37 +39,23 @@ public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
             return null;
         }
         MarketingIO marketingIO = new MarketingIO();
-        marketingIO.name = marketing.name().getValue();
+        marketingIO.name = MarshallerUtils.getValue(marketing.name());
+
         marketingIO.description = MarshallerUtils.createIo(StringIO.class, marketing.description());
 
         Persistence.service().retrieveMember(marketing.adBlurbs());
-        List<AdvertisingBlurbIO> adBlurbsIO = new ArrayList<AdvertisingBlurbIO>();
-        for (AdvertisingBlurb adBlurb : marketing.adBlurbs()) {
-            adBlurbsIO.add(AdvertisingBlurbMarshaller.getInstance().marshal(adBlurb));
-        }
-        marketingIO.blurbs = adBlurbsIO;
+        marketingIO.blurbs = AdvertisingBlurbMarshaller.getInstance().marshal(marketing.adBlurbs());
 
         return marketingIO;
     }
 
     @Override
     public Marketing unmarshal(MarketingIO marketingIO) throws Exception {
-        if (marketingIO == null) {
-            return null;
-        }
         Marketing marketing = EntityFactory.create(Marketing.class);
-        if (marketingIO.getAction() == Action.nil) {
-            marketing.set(null);
-        } else {
-            marketing.name().setValue(marketingIO.name);
-            MarshallerUtils.setValue(marketing.description(), marketingIO.description);
+        marketing.name().setValue(marketingIO.name);
+        MarshallerUtils.setValue(marketing.description(), marketingIO.description);
+        marketing.adBlurbs().addAll(AdvertisingBlurbMarshaller.getInstance().unmarshal(marketingIO.blurbs));
 
-            List<AdvertisingBlurb> adBlurbs = new ArrayList<AdvertisingBlurb>();
-            for (AdvertisingBlurbIO adBlurbIO : marketingIO.blurbs) {
-                adBlurbs.add(AdvertisingBlurbMarshaller.getInstance().unmarshal(adBlurbIO));
-            }
-            marketing.adBlurbs().addAll(adBlurbs);
-        }
         return marketing;
     }
 }

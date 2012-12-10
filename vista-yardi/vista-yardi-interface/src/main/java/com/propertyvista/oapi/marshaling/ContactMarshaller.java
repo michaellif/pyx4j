@@ -41,7 +41,7 @@ public class ContactMarshaller implements Marshaller<PropertyContact, ContactIO>
             return null;
         }
         ContactIO contactIO = new ContactIO();
-        contactIO.name = contact.name().getValue();
+        contactIO.name = MarshallerUtils.getValue(contact.name());
 
         contactIO.email = MarshallerUtils.createIo(StringIO.class, contact.email());
         contactIO.phone = MarshallerUtils.createIo(StringIO.class, contact.phone());
@@ -58,9 +58,11 @@ public class ContactMarshaller implements Marshaller<PropertyContact, ContactIO>
 
     @Override
     public PropertyContact unmarshal(ContactIO contactIO) throws Exception {
+
         PropertyContact contact = EntityFactory.create(PropertyContact.class);
-        MarshallerUtils.setValue(contact.email(), contactIO.email);
         contact.name().setValue(contactIO.name);
+
+        MarshallerUtils.setValue(contact.email(), contactIO.email);
         MarshallerUtils.setValue(contact.phone(), contactIO.phone);
         return contact;
     }
@@ -68,7 +70,9 @@ public class ContactMarshaller implements Marshaller<PropertyContact, ContactIO>
     public List<PropertyContact> unmarshal(List<ContactIO> contactIOList) throws Exception {
         List<PropertyContact> contacts = new ArrayList<PropertyContact>();
         for (ContactIO contactIO : contactIOList) {
-            contacts.add(unmarshal(contactIO));
+            PropertyContact contact = EntityFactory.create(PropertyContact.class);
+            MarshallerUtils.set(contact, contactIO, ContactMarshaller.getInstance());
+            contacts.add(contact);
         }
         return contacts;
     }
