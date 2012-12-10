@@ -5,6 +5,7 @@
 Jetty:
    8888  Vista Server      VistaServerSideConfigurationDev.devServerPort
    8881  Pyx Tests Server  TesterJettyLaunch
+   8882  Wallboard Monitor
 
 codeServerPort
    9994  vista-crm-client.launch
