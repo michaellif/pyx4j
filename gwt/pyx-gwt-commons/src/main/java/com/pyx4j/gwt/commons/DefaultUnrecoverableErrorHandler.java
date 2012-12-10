@@ -74,7 +74,7 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
 
     }
 
-    protected void selectError(final Throwable caught, final String errorCode) {
+    protected Throwable unwrapCause(Throwable caught) {
         Throwable cause = caught;
         while ((cause instanceof com.google.web.bindery.event.shared.UmbrellaException)
                 || ((cause instanceof UnrecoverableClientError) && (cause.getCause() != null) && (cause.getCause() != cause))) {
@@ -88,6 +88,11 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
                 cause = cause.getCause();
             }
         }
+        return cause;
+    }
+
+    protected void selectError(final Throwable caught, final String errorCode) {
+        Throwable cause = unwrapCause(caught);
         if (cause instanceof IsWarningException) {
             showWarning(cause.getMessage());
         } else if ((cause instanceof IncompatibleRemoteServiceException) || (cause instanceof ClientVersionMismatchError)) {
