@@ -3,4 +3,6 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <source path="svg"/>
+    
+    <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.svg.*" />
 </module>
