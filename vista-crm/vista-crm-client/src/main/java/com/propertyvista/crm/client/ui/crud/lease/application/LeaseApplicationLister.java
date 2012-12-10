@@ -62,7 +62,11 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
             new Builder(proto().numberOfApplicants(), true).sortable(false).searchable(false).title(i18n.tr("Applicants")).build(),
             new Builder(proto().numberOfGuarantors(), true).sortable(false).searchable(false).title(i18n.tr("Guarantors")).build(),
             
-            new Builder(proto().currentTerm().version().tenants()).build()
+            //TODO make this work
+            //new Builder(proto().currentTerm().version().tenants().$().leaseParticipant().customer().person().name().firstName(), false).build(),
+            //new Builder(proto().currentTerm().version().tenants().$().leaseParticipant().customer().person().name().lastName(), false).build(),
+            new Builder(proto().currentTerm().version().tenants()).searchable(false).build()
+            
         );//@formatter:on
     }
 
