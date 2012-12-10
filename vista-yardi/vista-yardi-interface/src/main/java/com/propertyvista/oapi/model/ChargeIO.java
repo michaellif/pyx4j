@@ -13,8 +13,11 @@
  */
 package com.propertyvista.oapi.model;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.propertyvista.oapi.xml.LogicalDateIO;
 
+@XmlRootElement
 public class ChargeIO extends TransactionIO {
 
     public ServiceIO service;

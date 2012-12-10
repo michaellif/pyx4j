@@ -23,7 +23,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -77,7 +76,11 @@ public class RSPropertyService {
     @Path("/{propertyCode}")
     @Produces({ MediaType.APPLICATION_XML })
     public BuildingIO getBuildingByPropertyCode(@PathParam("propertyCode") String propertyCode) {
-        return PropertyService.getBuildingByPropertyCode(propertyCode);
+        BuildingIO buildingIO = PropertyService.getBuildingByPropertyCode(propertyCode);
+        if (buildingIO == null) {
+            throw new RSServiceException(Response.Status.NOT_FOUND);
+        }
+        return buildingIO;
     }
 
     @GET
@@ -98,26 +101,31 @@ public class RSPropertyService {
     @Path("/{propertyCode}/units/{unitNumber}")
     @Produces({ MediaType.APPLICATION_XML })
     public UnitIO getUnitByNumber(@PathParam("propertyCode") String propertyCode, @PathParam("unitNumber") String unitNumber) {
-        return PropertyService.getUnitByNumber(propertyCode, unitNumber);
+        UnitIO unitIO = PropertyService.getUnitByNumber(propertyCode, unitNumber);
+        if (unitIO == null) {
+            throw new RSServiceException(Response.Status.NOT_FOUND);
+        }
+        return unitIO;
     }
 
     @POST
     @Path("/updateBuilding")
     @Consumes({ MediaType.APPLICATION_XML })
-    public void updateBuilding(BuildingIO buildingIO) {
+    public Response updateBuilding(BuildingIO buildingIO) {
         try {
             PropertyService.updateBuilding(buildingIO);
+            return Response.ok().build();
         } catch (Exception e) {
-            throw new WebApplicationException(Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build());
-
+            throw new RSServiceException(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
     @POST
     @Path("/{propertyCode}/units/updateUnit")
     @Consumes({ MediaType.APPLICATION_XML })
-    public void updateUnit(@PathParam("propertyCode") String propertyCode, UnitIO unitIO) {
-        // TODO Auto-generated method stub
+    public Response updateUnit(@PathParam("propertyCode") String propertyCode, UnitIO unitIO) {
+        //TODO mkoval implementation TBD
+        return Response.ok().build();
     }
 
 }

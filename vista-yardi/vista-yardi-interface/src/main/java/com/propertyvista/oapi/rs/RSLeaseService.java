@@ -29,7 +29,6 @@ import javax.ws.rs.core.Response;
 import com.propertyvista.oapi.LeaseService;
 import com.propertyvista.oapi.model.LeaseIO;
 import com.propertyvista.oapi.model.TenantIO;
-import com.propertyvista.oapi.model.TenantsIO;
 
 //http://localhost:8888/vista/interfaces/oapi/rs/leases
 //https://static-22.birchwoodsoftwaregroup.com/interfaces/oapi/rs/leases
@@ -74,6 +73,10 @@ public class RSLeaseService {
     @Path("/{leaseId}")
     @Produces({ MediaType.APPLICATION_XML })
     public LeaseIO getLeaseById(@PathParam("leaseId") String leaseId) {
+        LeaseIO leaseIO = LeaseService.getLeaseById(leaseId);
+        if (leaseIO == null) {
+            throw new RSServiceException(Response.Status.NOT_FOUND);
+        }
         return LeaseService.getLeaseById(leaseId);
     }
 
@@ -93,18 +96,11 @@ public class RSLeaseService {
     }
 
     @POST
-    @Path("/{leaseId}/updateTenants_")
+    @Path("/{leaseId}/updateTenants")
     @Consumes({ MediaType.APPLICATION_XML })
     public Response updateTenants(@PathParam("leaseId") String leaseId, List<TenantIO> tenantIOs) {
         //TODO mkoval implementation TBD
         return Response.ok().build();
     }
 
-    @POST
-    @Path("/{leaseId}/updateTenants")
-    @Consumes({ MediaType.APPLICATION_XML })
-    public Response updateTenants(@PathParam("leaseId") String leaseId, TenantsIO tenantsIO) {
-        //TODO mkoval implementation TBD
-        return Response.ok().build();
-    }
 }

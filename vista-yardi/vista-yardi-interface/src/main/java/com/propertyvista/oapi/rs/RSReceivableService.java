@@ -22,6 +22,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.propertyvista.oapi.ReceivableService;
 import com.propertyvista.oapi.model.PaymentRecordIO;
@@ -45,23 +46,40 @@ public class RSReceivableService {
     @POST
     @Path("/transactions")
     @Consumes({ MediaType.APPLICATION_XML })
-    public void postTransactions(List<TransactionIO> transactions) {
-        for (TransactionIO transIO : transactions) {
-            ReceivableService.postTransaction(transIO);
+    public Response postTransactions(List<TransactionIO> transactions) {
+        try {
+            for (TransactionIO transIO : transactions) {
+                ReceivableService.postTransaction(transIO);
+            }
+            return Response.ok().build();
+        } catch (Exception e) {
+            throw new RSServiceException(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
         }
+
     }
 
     @POST
     @Path("/{propertyCode}/runBilling")
-    public void runBilling(@PathParam("propertyCode") String buildingCode) {
-        ReceivableService.runBilling(buildingCode);
+    public Response runBilling(@PathParam("propertyCode") String buildingCode) {
+        try {
+            ReceivableService.runBilling(buildingCode);
+            return Response.ok().build();
+        } catch (Exception e) {
+            throw new RSServiceException(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
     }
 
     @POST
     @Path("/reconcile")
     @Consumes({ MediaType.APPLICATION_XML })
-    public void reconcilePaymentRecords(List<PaymentRecordIO> records) {
-        ReceivableService.reconcilePaymentRecords(records);
+    public Response reconcilePaymentRecords(List<PaymentRecordIO> records) {
+        try {
+            ReceivableService.reconcilePaymentRecords(records);
+            return Response.ok().build();
+        } catch (Exception e) {
+            throw new RSServiceException(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+
     }
 
     @GET

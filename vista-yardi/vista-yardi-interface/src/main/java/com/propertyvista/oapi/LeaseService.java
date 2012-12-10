@@ -14,6 +14,7 @@
 package com.propertyvista.oapi;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.pyx4j.entity.server.IEntityPersistenceService;
@@ -56,6 +57,9 @@ public class LeaseService {
         EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
         leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().leaseId(), leaseId));
         List<Lease> leases = service.query(leaseCriteria);
+        if (leases == null || leases.isEmpty()) {
+            return null;
+        }
 
         Lease lease = leases.get(0);
         service.retrieve(lease.unit().building());
@@ -68,6 +72,10 @@ public class LeaseService {
         EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
         leaseCriteria.eq(leaseCriteria.proto().leaseId(), leaseId);
         List<Lease> leases = service.query(leaseCriteria);
+        if (leases == null || leases.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         Lease lease = leases.get(0);
         service.retrieveMember(lease.leaseParticipants());
         for (LeaseParticipant<?> participant : lease.leaseParticipants()) {

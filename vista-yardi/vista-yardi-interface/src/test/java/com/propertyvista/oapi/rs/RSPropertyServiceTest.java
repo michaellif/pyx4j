@@ -15,13 +15,17 @@ package com.propertyvista.oapi.rs;
 
 import java.util.List;
 
+import javax.ws.rs.core.MediaType;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 
+import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.model.UnitIO;
 
@@ -38,11 +42,53 @@ public class RSPropertyServiceTest extends RSOapiTestBase {
     }
 
     @Test
+    public void testGetBuildingsByProvince_NonExistingProvince() {
+        WebResource webResource = resource();
+        BuildingsIO buildings = webResource.path("buildings;province=MockProvince").get(BuildingsIO.class);
+        Assert.assertTrue(buildings.buildings.isEmpty());
+    }
+
+    @Test
+    public void testGetBuildingByPropertyCode_NonExistingPropertyCode() {
+        WebResource webResource = resource();
+        ClientResponse response = webResource.path("buildings/MockCode").get(ClientResponse.class);
+        Assert.assertEquals(ClientResponse.Status.NOT_FOUND, response.getClientResponseStatus());
+    }
+
+    @Test
     public void testGetAllUnitsByPropertyCode_NonExistingPropertyCode() {
         WebResource webResource = resource();
         GenericType<List<UnitIO>> gt = new GenericType<List<UnitIO>>() {
         };
         List<UnitIO> units = webResource.path("buildings/MockCode/units").get(gt);
         Assert.assertTrue(units.isEmpty());
+    }
+
+    @Test
+    public void testGetUnitByNumber_NonExistingPropertyCodeAndUnitNumber() {
+        WebResource webResource = resource();
+        ClientResponse response = webResource.path("buildings/MockCode/units/MockNumber").get(ClientResponse.class);
+        Assert.assertEquals(ClientResponse.Status.NOT_FOUND, response.getClientResponseStatus());
+    }
+
+    //@Test
+    public void testUpdateBuilding() {
+        preloadBuilding("testCode");
+        WebResource webResource = resource();
+
+        BuildingIO building = new BuildingIO("testCode");
+        ClientResponse response = webResource.path("buildings/updateBuilding").accept(MediaType.APPLICATION_XML).post(ClientResponse.class, building);
+        Assert.assertEquals(ClientResponse.Status.OK, response.getClientResponseStatus());
+    }
+
+    @Test
+    public void testUpdateUnits() {
+        WebResource webResource = resource();
+
+        UnitIO unit = new UnitIO();
+        unit.number = "1";
+
+        ClientResponse response = webResource.path("buildings/MockCode/units/updateUnit").accept(MediaType.APPLICATION_XML).post(ClientResponse.class, unit);
+        Assert.assertEquals(ClientResponse.Status.OK, response.getClientResponseStatus());
     }
 }

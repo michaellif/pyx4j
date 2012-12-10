@@ -44,7 +44,7 @@ public class RSOapiTestBase extends JerseyTest {
         locationsDataModel.generate();
     }
 
-    protected void preloadBuilding() {
+    protected void preloadBuilding(String propertyCode) {
         PreloadConfig config = new PreloadConfig();
 
         LocationsDataModel locationsDataModel = new LocationsDataModel(config);
@@ -54,6 +54,6 @@ public class RSOapiTestBase extends JerseyTest {
         productItemTypesDataModel.generate();
 
         BuildingDataModel buildingDataModel = new BuildingDataModel(config, productItemTypesDataModel);
-        buildingDataModel.generate();
+        buildingDataModel.generate(propertyCode);
     }
 }

@@ -57,7 +57,9 @@ public class PropertyService {
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
         buildingCriteria.eq(buildingCriteria.proto().propertyCode(), propertyCode);
         List<Building> buildings = service.query(buildingCriteria);
-
+        if (buildings == null || buildings.isEmpty()) {
+            return null;
+        }
         return BuildingMarshaller.getInstance().marshal(buildings.get(0));
     }
 
@@ -87,6 +89,9 @@ public class PropertyService {
         unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().building().propertyCode(), propertyCode));
         unitCriteria.eq(unitCriteria.proto().info().number(), unitNumber);
         List<AptUnit> units = service.query(unitCriteria);
+        if (units == null || units.isEmpty()) {
+            return null;
+        }
         AptUnit unit = units.get(0);
         service.retrieve(unit.floorplan());
         service.retrieve(unit.building());

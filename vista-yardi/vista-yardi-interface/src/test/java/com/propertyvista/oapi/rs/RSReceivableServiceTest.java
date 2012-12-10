@@ -17,10 +17,13 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 
+import org.junit.Assert;
 import org.junit.Test;
 
+import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 
@@ -47,9 +50,45 @@ public class RSReceivableServiceTest extends RSOapiTestBase {
         GenericType<List<PaymentRecordIO>> genericType = new GenericType<List<PaymentRecordIO>>() {
         };
         List<PaymentRecordIO> payments = webResource.path("payments/nonProcessed").get(genericType);
+        Assert.assertTrue(payments.isEmpty());
     }
 
-    //@Test
+    @Test
+    public void testRunBilling_NonExistingPropertyCode() {
+        WebResource webResource = resource();
+
+        ClientResponse response = webResource.path("payments/MockCode/runBilling").accept(MediaType.APPLICATION_XML).post(ClientResponse.class);
+        Assert.assertEquals(ClientResponse.Status.OK, response.getClientResponseStatus());
+    }
+
+    @Test
+    public void testReconcilePaymentRecords_EmptyPaymentRecordsList() {
+        WebResource webResource = resource();
+
+        List<PaymentRecordIO> records = new ArrayList<PaymentRecordIO>();
+
+        ClientResponse response = webResource.path("payments/reconcile").accept(MediaType.APPLICATION_XML)
+                .post(ClientResponse.class, new GenericEntity<List<PaymentRecordIO>>(records) {
+                });
+        Assert.assertEquals(ClientResponse.Status.OK, response.getClientResponseStatus());
+    }
+
+    @Test
+    public void testReconcilePaymentRecords_MockPaymentRecordsList() {
+        WebResource webResource = resource();
+
+        List<PaymentRecordIO> records = new ArrayList<PaymentRecordIO>();
+        PaymentRecordIO record1 = new PaymentRecordIO();
+        record1.transactionId = "111";
+        record1.externalTransactionId = new StringIO("222");
+        records.add(record1);
+        ClientResponse response = webResource.path("payments/reconcile").accept(MediaType.APPLICATION_XML)
+                .post(ClientResponse.class, new GenericEntity<List<PaymentRecordIO>>(records) {
+                });
+        Assert.assertEquals(ClientResponse.Status.INTERNAL_SERVER_ERROR, response.getClientResponseStatus());
+    }
+
+    @Test
     public void testPostTransactions() {
         WebResource webResource = resource();
 
@@ -73,10 +112,21 @@ public class RSReceivableServiceTest extends RSOapiTestBase {
             transactions.add(payment);
         }
 
-        GenericType<List<TransactionIO>> gt = new GenericType<List<TransactionIO>>() {
-        };
-        webResource.path("payments/transactions").accept(MediaType.APPLICATION_XML).post(gt, transactions);
+        ClientResponse response = webResource.path("payments/transactions").accept(MediaType.APPLICATION_XML)
+                .post(ClientResponse.class, new GenericEntity<List<TransactionIO>>(transactions) {
+                });
 
     }
 
+    @Test
+    public void testPostTransactions_EmptyTransactionsList() {
+        WebResource webResource = resource();
+
+        List<TransactionIO> transactions = new ArrayList<TransactionIO>();
+
+        ClientResponse response = webResource.path("payments/transactions").accept(MediaType.APPLICATION_XML)
+                .post(ClientResponse.class, new GenericEntity<List<TransactionIO>>(transactions) {
+                });
+        Assert.assertEquals(ClientResponse.Status.OK, response.getClientResponseStatus());
+    }
 }
