@@ -42,13 +42,13 @@ import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.biz.system.AuditFacade;
-import com.propertyvista.biz.system.PmcActivationDeferredProcess;
 import com.propertyvista.biz.system.PmcFacade;
+import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
-import com.propertyvista.preloader.OnboardingUserPreloader;
+import com.propertyvista.ob.server.PmcActivationDeferredProcess;
 
 public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> implements PmcCrudService {
 
@@ -131,8 +131,9 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
         OnboardingUserCredential cred;
         if (dto.createPmcForExistingOnboardingUserRequest().isNull()) {
-            cred = OnboardingUserPreloader.createOnboardingUser(dto.person().name().firstName().getValue(), dto.person().name().lastName().getValue(), dto
-                    .email().getValue(), dto.password().getValue(), VistaOnboardingBehavior.ProspectiveClient, null);
+            cred = ServerSideFactory.create(UserManagementFacade.class).createOnboardingUser(dto.person().name().firstName().getValue(),
+                    dto.person().name().lastName().getValue(), dto.email().getValue(), dto.password().getValue(), VistaOnboardingBehavior.ProspectiveClient,
+                    null);
 
         } else {
             EntityQueryCriteria<OnboardingUserCredential> criteria = EntityQueryCriteria.create(OnboardingUserCredential.class);
@@ -163,7 +164,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     @Override
     public void activate(AsyncCallback<String> callback, Key entityId) {
         SecurityController.assertPermission(EntityPermission.permissionUpdate(Pmc.class));
-        callback.onSuccess(DeferredProcessRegistry.fork(new PmcActivationDeferredProcess(EntityFactory.createIdentityStub(Pmc.class, entityId)),
+        callback.onSuccess(DeferredProcessRegistry.fork(new PmcActivationDeferredProcess(EntityFactory.createIdentityStub(Pmc.class, entityId), null),
                 ThreadPoolNames.IMPORTS));
     }
 

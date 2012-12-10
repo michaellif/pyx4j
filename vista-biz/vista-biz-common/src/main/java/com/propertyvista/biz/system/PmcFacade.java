@@ -30,6 +30,8 @@ public interface PmcFacade {
 
     public void terminateCancelledPmc(Pmc pmcId);
 
+    public boolean checkDNSAvailability(String dnsName);
+
     public boolean reservedDnsName(String dnsName, String onboardingAccountId);
 
 }

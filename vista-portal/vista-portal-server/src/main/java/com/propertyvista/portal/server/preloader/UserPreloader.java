@@ -31,6 +31,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
@@ -41,7 +42,6 @@ import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
-import com.propertyvista.preloader.OnboardingUserPreloader;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
@@ -170,8 +170,8 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
                 final OnboardingUserCredential userCred = TaskRunner.runInAdminNamespace(new Callable<OnboardingUserCredential>() {
                     @Override
                     public OnboardingUserCredential call() {
-                        return OnboardingUserPreloader.createOnboardingUser(emp.name().firstName().getStringView(), emp.name().lastName().getStringView(),
-                                email, email, VistaOnboardingBehavior.Client, null);
+                        return ServerSideFactory.create(UserManagementFacade.class).createOnboardingUser(emp.name().firstName().getStringView(),
+                                emp.name().lastName().getStringView(), email, email, VistaOnboardingBehavior.Client, null);
                     }
                 });
 

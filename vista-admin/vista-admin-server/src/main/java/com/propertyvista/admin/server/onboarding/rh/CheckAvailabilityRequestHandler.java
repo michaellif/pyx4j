@@ -18,10 +18,11 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
+import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.onboarding.CheckAvailabilityRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 
@@ -40,7 +41,7 @@ public class CheckAvailabilityRequestHandler extends AbstractRequestHandler<Chec
 
         String dnsName = request.dnsName().getValue().toLowerCase(Locale.ENGLISH);
         ResponseIO response = EntityFactory.create(ResponseIO.class);
-        response.success().setValue(PmcNameValidator.canCreatePmcName(dnsName, null));
+        response.success().setValue(ServerSideFactory.create(PmcFacade.class).checkDNSAvailability(dnsName));
 
         return response;
     }

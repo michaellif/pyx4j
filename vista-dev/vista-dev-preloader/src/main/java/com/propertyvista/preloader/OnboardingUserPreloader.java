@@ -13,58 +13,23 @@
  */
 package com.propertyvista.preloader;
 
-import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.admin.domain.security.OnboardingUserCredential;
-import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
-import com.propertyvista.generator.SecurityGenerator;
-import com.propertyvista.server.common.security.PasswordEncryptor;
 
 public class OnboardingUserPreloader extends BaseVistaDevDataPreloader {
 
-    public static OnboardingUserCredential createOnboardingUser(String firstName, String lastName, String email, String password, VistaOnboardingBehavior role,
-            String onboardingAccountId) {
-        email = PasswordEncryptor.normalizeEmailAddress(email);
-        OnboardingUser user = EntityFactory.create(OnboardingUser.class);
-        user.firstName().setValue(firstName);
-        user.lastName().setValue(lastName);
-        user.name().setValue(CommonsStringUtils.nvl_concat(firstName, lastName, " "));
-        user.email().setValue(email);
-        Persistence.service().persist(user);
-
-        OnboardingUserCredential credential = EntityFactory.create(OnboardingUserCredential.class);
-        credential.setPrimaryKey(user.getPrimaryKey());
-
-        credential.user().set(user);
-        credential.behavior().setValue(role);
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
-        credential.enabled().setValue(Boolean.TRUE);
-        credential.onboardingAccountId().setValue(onboardingAccountId);
-
-        credential.interfaceUid().setValue("o" + user.getPrimaryKey().toString());
-
-        if (ApplicationMode.isDevelopment()) {
-            SecurityGenerator.assignSecurityQuestion(credential);
-        }
-
-        Persistence.service().persist(credential);
-
-        Persistence.service().commit();
-
-        return credential;
-    }
-
     @Override
     public String create() {
-        createOnboardingUser("PV Admin", "", "pvtestadm1n@gmail.com", "12345", VistaOnboardingBehavior.OnboardingAdministrator, "_a");
-        createOnboardingUser("Leonard", "Drimmer", "leonard@propertyvista.com", "leonard@propertyvista.com", VistaOnboardingBehavior.OnboardingAdministrator,
-                "_l");
-        createOnboardingUser("Equifax Admin", "", "pvtestequifax@gmail.com", "12345", VistaOnboardingBehavior.Equifax, "_e");
-        createOnboardingUser("Caledon Admin", "", "pvtestcaledon@gmail.com", "12345", VistaOnboardingBehavior.Caledon, "_c");
+        ServerSideFactory.create(UserManagementFacade.class).createOnboardingUser("PV Admin", "", "pvtestadm1n@gmail.com", "12345",
+                VistaOnboardingBehavior.OnboardingAdministrator, "_a");
+        ServerSideFactory.create(UserManagementFacade.class).createOnboardingUser("Leonard", "Drimmer", "leonard@propertyvista.com",
+                "leonard@propertyvista.com", VistaOnboardingBehavior.OnboardingAdministrator, "_l");
+        ServerSideFactory.create(UserManagementFacade.class).createOnboardingUser("Equifax Admin", "", "pvtestequifax@gmail.com", "12345",
+                VistaOnboardingBehavior.Equifax, "_e");
+        ServerSideFactory.create(UserManagementFacade.class).createOnboardingUser("Caledon Admin", "", "pvtestcaledon@gmail.com", "12345",
+                VistaOnboardingBehavior.Caledon, "_c");
 
         return "Created " + 3 + " Onboarding Users";
     }

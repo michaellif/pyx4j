@@ -27,6 +27,7 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -35,6 +36,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
+import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.server.common.security.UserAccessUtils;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -86,12 +88,16 @@ public class OnboardingPmcPreloader extends BaseVistaDevDataPreloader {
             @Override
             public String call() {
 
-                OnboardingUserPreloader.createOnboardingUser("Ostap", "Way", "OstapWay@gmail.com", "12345", VistaOnboardingBehavior.ProspectiveClient, "1");
-                OnboardingUserPreloader.createOnboardingUser("Pon", "Svirey", "PonSvirey@gmail.com", "12345", VistaOnboardingBehavior.ProspectiveClient, "2");
-                OnboardingUserPreloader.createOnboardingUser("Gramper", "33", "Gramper33@gmail.com", "12345", VistaOnboardingBehavior.ProspectiveClient, "3");
-                OnboardingUserPreloader.createOnboardingUser("Rennytona", "17", "rennytona17@gmail.com", "12345", VistaOnboardingBehavior.ProspectiveClient,
-                        "4");
-                OnboardingUserPreloader.createOnboardingUser("Georgey", "Ggg", "GeorgeyGgg@gmail.com", "12345", VistaOnboardingBehavior.ProspectiveClient, "5");
+                ServerSideFactory.create(UserManagementFacade.class).createOnboardingUser("Ostap", "Way", "OstapWay@gmail.com", "12345",
+                        VistaOnboardingBehavior.ProspectiveClient, "1");
+                ServerSideFactory.create(UserManagementFacade.class).createOnboardingUser("Pon", "Svirey", "PonSvirey@gmail.com", "12345",
+                        VistaOnboardingBehavior.ProspectiveClient, "2");
+                ServerSideFactory.create(UserManagementFacade.class).createOnboardingUser("Gramper", "33", "Gramper33@gmail.com", "12345",
+                        VistaOnboardingBehavior.ProspectiveClient, "3");
+                ServerSideFactory.create(UserManagementFacade.class).createOnboardingUser("Rennytona", "17", "rennytona17@gmail.com", "12345",
+                        VistaOnboardingBehavior.ProspectiveClient, "4");
+                ServerSideFactory.create(UserManagementFacade.class).createOnboardingUser("Georgey", "Ggg", "GeorgeyGgg@gmail.com", "12345",
+                        VistaOnboardingBehavior.ProspectiveClient, "5");
 
                 OnboardingPmcPreloader.createPmc("Free", "pmcFree", "1");
                 OnboardingPmcPreloader.createPmc("PMC User(1-5)", "pmc15", "2");

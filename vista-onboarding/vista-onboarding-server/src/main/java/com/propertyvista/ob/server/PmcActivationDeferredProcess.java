@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.system;
+package com.propertyvista.ob.server;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -19,6 +19,9 @@ import com.pyx4j.essentials.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.system.PmcFacade;
+import com.propertyvista.domain.security.OnboardingUser;
 
 public class PmcActivationDeferredProcess extends AbstractDeferredProcess {
 
@@ -26,8 +29,11 @@ public class PmcActivationDeferredProcess extends AbstractDeferredProcess {
 
     private final Pmc pmcId;
 
-    public PmcActivationDeferredProcess(Pmc pmcId) {
+    private final OnboardingUser sendNewPmcEmailToUser;
+
+    public PmcActivationDeferredProcess(Pmc pmcId, OnboardingUser sendNewPmcEmailToUser) {
         this.pmcId = pmcId;
+        this.sendNewPmcEmailToUser = sendNewPmcEmailToUser;
     }
 
     @Override
@@ -37,6 +43,9 @@ public class PmcActivationDeferredProcess extends AbstractDeferredProcess {
             Lifecycle.startElevatedUserContext();
             ServerSideFactory.create(PmcFacade.class).activatePmc(pmcId);
             Persistence.service().commit();
+            if (sendNewPmcEmailToUser != null) {
+                ServerSideFactory.create(CommunicationFacade.class).sendNewPmcEmail(sendNewPmcEmailToUser, pmcId);
+            }
         } finally {
             Persistence.service().endTransaction();
         }

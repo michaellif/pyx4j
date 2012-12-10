@@ -42,6 +42,8 @@ public class PmcFacadeImpl implements PmcFacade {
 
     @Override
     public void create(Pmc pmc) {
+        pmc.dnsName().setValue(pmc.dnsName().getValue().toLowerCase(Locale.ENGLISH));
+        pmc.namespace().setValue(pmc.namespace().getValue().replace('-', '_'));
         pmc.status().setValue(PmcStatus.Created);
         pmc.schemaVersion().setValue(ApplicationVersion.getProductVersion());
         pmc.schemaDataUpgradeSteps().setValue(VistaUpgrade.getPreloadSchemaDataUpgradeSteps());
@@ -107,6 +109,11 @@ public class PmcFacadeImpl implements PmcFacade {
         }
 
         Persistence.service().commit();
+    }
+
+    @Override
+    public boolean checkDNSAvailability(String dnsName) {
+        return PmcNameValidator.canCreatePmcName(dnsName, null);
     }
 
     @Override

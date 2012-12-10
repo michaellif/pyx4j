@@ -17,15 +17,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.system.PmcFacade;
+import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.onboarding.CreateOnboardingUserRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
-import com.propertyvista.preloader.OnboardingUserPreloader;
 
 public class CreateOnboardingUserRequestHandler extends AbstractRequestHandler<CreateOnboardingUserRequestIO> {
 
@@ -50,8 +51,10 @@ public class CreateOnboardingUserRequestHandler extends AbstractRequestHandler<C
             return response;
         }
 
-        OnboardingUserPreloader.createOnboardingUser(request.firstName().getValue(), request.lastName().getValue(), request.email().getValue(), request
-                .password().getValue(), VistaOnboardingBehavior.ProspectiveClient, request.onboardingAccountId().getValue());
+        ServerSideFactory.create(UserManagementFacade.class).createOnboardingUser(request.firstName().getValue(), request.lastName().getValue(),
+                request.email().getValue(), request.password().getValue(), VistaOnboardingBehavior.ProspectiveClient, request.onboardingAccountId().getValue());
+
+        Persistence.service().commit();
 
         response.success().setValue(Boolean.TRUE);
 

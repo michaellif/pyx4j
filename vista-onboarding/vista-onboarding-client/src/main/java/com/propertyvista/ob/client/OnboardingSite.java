@@ -14,6 +14,8 @@
 package com.propertyvista.ob.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -69,7 +71,15 @@ public class OnboardingSite extends VistaSite {
             root = RootPanel.get();
         }
 
-        root.add(new Button("Start Here"));
+        Button b;
+        root.add(b = new Button("Start Here"));
+        b.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                new OnboardingFlowSample().doTestPmcCreationStep1();
+            }
+        });
     }
 
 }

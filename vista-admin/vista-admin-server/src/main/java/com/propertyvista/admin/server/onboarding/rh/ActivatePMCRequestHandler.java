@@ -25,8 +25,8 @@ import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
-import com.propertyvista.biz.system.PmcActivationDeferredProcess;
 import com.propertyvista.config.ThreadPoolNames;
+import com.propertyvista.ob.server.PmcActivationDeferredProcess;
 import com.propertyvista.onboarding.ActivatePMCRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 
@@ -57,7 +57,7 @@ public class ActivatePMCRequestHandler extends AbstractRequestHandler<ActivatePM
         switch (pmc.status().getValue()) {
         case Created:
             updateFeatures(pmc, request);
-            DeferredProcessRegistry.fork(new PmcActivationDeferredProcess(pmc), ThreadPoolNames.IMPORTS);
+            DeferredProcessRegistry.fork(new PmcActivationDeferredProcess(pmc, null), ThreadPoolNames.IMPORTS);
             response.success().setValue(Boolean.TRUE);
             break;
         case Active:

@@ -27,6 +27,12 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface PmcAccountCreationRequest extends IEntity {
 
+    @NotNull
+    IPrimitive<String> firstName();
+
+    @NotNull
+    IPrimitive<String> lastName();
+
     @Editor(type = EditorType.email)
     @NotNull
     IPrimitive<String> email();

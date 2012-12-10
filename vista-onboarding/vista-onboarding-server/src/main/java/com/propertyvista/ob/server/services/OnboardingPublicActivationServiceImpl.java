@@ -15,14 +15,16 @@ package com.propertyvista.ob.server.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.server.ServerSideFactory;
+
+import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.ob.rpc.services.OnboardingPublicActivationService;
 
 public class OnboardingPublicActivationServiceImpl implements OnboardingPublicActivationService {
 
     @Override
     public void checkDNSAvailability(AsyncCallback<Boolean> callback, String dnsName) {
-        // TODO Auto-generated method stub
-
+        callback.onSuccess(ServerSideFactory.create(PmcFacade.class).checkDNSAvailability(dnsName));
     }
 
 }

@@ -21,8 +21,11 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
@@ -38,9 +41,12 @@ import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.AbstractUserCredential;
 import com.propertyvista.domain.security.CrmRole;
+import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
+import com.propertyvista.domain.security.VistaOnboardingBehavior;
+import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.common.security.VistaPasswordResetServiceImpl;
@@ -185,6 +191,41 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
                 behaviors.add(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion);
             }
         }
+    }
+
+    @Override
+    public OnboardingUserCredential createOnboardingUser(String firstName, String lastName, String email, String password, VistaOnboardingBehavior role,
+            String onboardingAccountId) {
+        email = PasswordEncryptor.normalizeEmailAddress(email);
+        OnboardingUser user = EntityFactory.create(OnboardingUser.class);
+        user.firstName().setValue(firstName);
+        user.lastName().setValue(lastName);
+        user.name().setValue(CommonsStringUtils.nvl_concat(firstName, lastName, " "));
+        user.email().setValue(email);
+        Persistence.service().persist(user);
+
+        OnboardingUserCredential credential = EntityFactory.create(OnboardingUserCredential.class);
+        credential.setPrimaryKey(user.getPrimaryKey());
+
+        if (onboardingAccountId == null) {
+            onboardingAccountId = "o" + user.getPrimaryKey();
+        }
+
+        credential.user().set(user);
+        credential.behavior().setValue(role);
+        credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
+        credential.enabled().setValue(Boolean.TRUE);
+        credential.onboardingAccountId().setValue(onboardingAccountId);
+
+        credential.interfaceUid().setValue("o" + user.getPrimaryKey().toString());
+
+        if (ApplicationMode.isDevelopment()) {
+            SecurityGenerator.assignSecurityQuestion(credential);
+        }
+
+        Persistence.service().persist(credential);
+
+        return credential;
     }
 
 }
