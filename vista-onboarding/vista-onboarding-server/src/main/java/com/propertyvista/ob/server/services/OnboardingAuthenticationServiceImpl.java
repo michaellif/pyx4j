@@ -27,7 +27,7 @@ import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Lifecycle;
 
-import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.ob.rpc.OnboardingApplicationBehavior;
 import com.propertyvista.ob.rpc.services.OnboardingAuthenticationService;
 
 public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.server.AuthenticationServiceImpl implements OnboardingAuthenticationService {
@@ -35,7 +35,7 @@ public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.serv
     protected String createSession(ClientSystemInfo clientSystemInfo) {
         UserVisit visit = new UserVisit(null, null);
         Set<Behavior> behaviors = new HashSet<Behavior>();
-        behaviors.add(VistaBasicBehavior.Onboarding);
+        behaviors.add(OnboardingApplicationBehavior.sessionActivated);
         String token = Lifecycle.beginSession(visit, behaviors);
         return token;
     }

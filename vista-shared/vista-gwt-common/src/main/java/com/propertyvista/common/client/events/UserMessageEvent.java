@@ -17,7 +17,7 @@ import com.google.gwt.event.shared.GwtEvent;
 
 import com.pyx4j.commons.IDebugId;
 
-import com.propertyvista.common.client.UserMessage;
+import com.propertyvista.common.client.site.UserMessage;
 
 public class UserMessageEvent extends GwtEvent<UserMessageHandler> {
 

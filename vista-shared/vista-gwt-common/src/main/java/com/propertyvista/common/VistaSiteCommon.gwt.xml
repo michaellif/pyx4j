@@ -12,9 +12,9 @@
     <inherits name='com.pyx4j.Commons' />
 	<inherits name='com.pyx4j.site.GwtSite' />
 
-    <inherits name='com.propertyvista.Domain' />
-    
-    <source path="client"/>
+    <source path="client/site"/>
+    <source path="client/events"/>
+    <source path="client/resources"/>
     
     <replace-with class="com.pyx4j.config.client.ClientApplicationBackendConfigRDB">
         <when-type-is class="com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendConfig"/>

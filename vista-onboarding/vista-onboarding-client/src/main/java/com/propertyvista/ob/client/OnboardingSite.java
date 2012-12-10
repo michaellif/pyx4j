@@ -20,16 +20,21 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 
-import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.ob.rpc.OnboardingSiteMap;
 import com.propertyvista.ob.rpc.services.OnboardingAuthenticationService;
 
 public class OnboardingSite extends VistaSite {
 
     public static final String ONBOARDING_INSERTION_ID = "vista.ob";
+
+    static {
+        ClientEntityFactory.ensureIEntityImplementations();
+    }
 
     public OnboardingSite() {
         super("vista-onboarding", OnboardingSiteMap.class);

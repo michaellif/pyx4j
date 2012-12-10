@@ -18,7 +18,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.common.client.Message;
+import com.propertyvista.common.client.site.Message;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.ui.GenericMessageView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;

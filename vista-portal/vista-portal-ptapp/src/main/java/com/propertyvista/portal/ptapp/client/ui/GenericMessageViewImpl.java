@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.Message;
+import com.propertyvista.common.client.site.Message;
 
 public class GenericMessageViewImpl extends FlowPanel implements GenericMessageView {
 

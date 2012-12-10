@@ -26,8 +26,8 @@ import com.pyx4j.security.client.ClientContext;
 import com.propertyvista.admin.client.ui.AdminPanel;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
-import com.propertyvista.common.client.Message;
-import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.common.client.site.Message;
+import com.propertyvista.common.client.site.VistaSite;
 
 public class AdminSite extends VistaSite {
 

@@ -26,10 +26,10 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ClentNavigUtils;
-import com.propertyvista.common.client.Message;
-import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
+import com.propertyvista.common.client.site.Message;
+import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.portal.client.themes.PortalTheme;
 import com.propertyvista.portal.client.ui.PortalScreen;

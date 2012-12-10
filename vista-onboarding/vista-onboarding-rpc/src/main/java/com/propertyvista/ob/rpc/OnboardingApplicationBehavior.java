@@ -7,23 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 13, 2012
- * @author stanp
+ * Created on 2012-12-09
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui;
+package com.propertyvista.ob.rpc;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.security.shared.Behavior;
 
-import com.propertyvista.common.client.site.UserMessage;
+public enum OnboardingApplicationBehavior implements Behavior {
 
-public interface RuntimeErrorView extends IsWidget {
+    sessionActivated,
 
-    void setPresenter(Presenter presenter);
+    accountCreationRequested,
 
-    public interface Presenter {
-        void backToOrigin();
-    }
+    accountCreated,
 
-    public void setError(UserMessage error);
 }

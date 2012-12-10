@@ -20,7 +20,7 @@ import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
-import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.ob.rpc.OnboardingApplicationBehavior;
 import com.propertyvista.ob.rpc.services.OnboardingAuthenticationService;
 import com.propertyvista.ob.rpc.services.OnboardingPublicActivationService;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;
@@ -33,8 +33,8 @@ public class OnboardingAccessControlList extends ServletContainerAclBuilder {
         grant(new IServiceExecutePermission(OnboardingAuthenticationService.class));
         grant(new IServiceExecutePermission(OnboardingPublicActivationService.class));
 
-        grant(VistaBasicBehavior.Onboarding, new IServiceExecutePermission(PmcRegistrationService.class));
-        grant(VistaBasicBehavior.Onboarding, new IServiceExecutePermission(DeferredProcessService.class));
+        grant(OnboardingApplicationBehavior.sessionActivated, new IServiceExecutePermission(PmcRegistrationService.class));
+        grant(OnboardingApplicationBehavior.sessionActivated, new IServiceExecutePermission(DeferredProcessService.class));
 
         freeze();
     }

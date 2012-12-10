@@ -11,7 +11,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.common.client;
+package com.propertyvista.common.client.site;
 
 import com.google.gwt.user.client.Command;
 
