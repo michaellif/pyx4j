@@ -91,11 +91,24 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
         return cause;
     }
 
+    protected boolean isVersionMismatch(Throwable cause) {
+        if ((cause instanceof IncompatibleRemoteServiceException) || (cause instanceof ClientVersionMismatchError)) {
+            return true;
+        } else if (cause instanceof RuntimeException) {
+            // TODO see if com.google.gwt.core.client.impl.AsyncFragmentLoader.HttpDownloadFailure was made public
+            String message = cause.getMessage();
+            if ((message != null) && message.contains("Download of") && message.contains("failed with status") && message.contains("404")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected void selectError(final Throwable caught, final String errorCode) {
         Throwable cause = unwrapCause(caught);
         if (cause instanceof IsWarningException) {
             showWarning(cause.getMessage());
-        } else if ((cause instanceof IncompatibleRemoteServiceException) || (cause instanceof ClientVersionMismatchError)) {
+        } else if (isVersionMismatch(cause)) {
             showReloadApplication();
         } else if (cause instanceof StatusCodeException) {
             int statusCode = ((StatusCodeException) cause).getStatusCode();
@@ -125,9 +138,6 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
                     showHttpStatusCode((StatusCodeException) cause, statusCode, errorCode);
                 }
             }
-        } else if ((cause instanceof RuntimeException) && ("HTTP download failed with status 404".equals(cause.getMessage()))) {
-            // TODO see if com.google.gwt.core.client.impl.AsyncFragmentLoader.HttpDownloadFailure was made public
-            showReloadApplication();
         } else {
             showDefaultError(cause, errorCode);
         }
