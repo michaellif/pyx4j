@@ -78,7 +78,8 @@ public class RSPropertyService {
     public BuildingIO getBuildingByPropertyCode(@PathParam("propertyCode") String propertyCode) {
         BuildingIO buildingIO = PropertyService.getBuildingByPropertyCode(propertyCode);
         if (buildingIO == null) {
-            throw new RSServiceException(Response.Status.NOT_FOUND);
+            String message = String.format("Building with propertyCode=%s not found", propertyCode);
+            throw new RSServiceException(Response.Status.NOT_FOUND, message);
         }
         return buildingIO;
     }
@@ -103,7 +104,8 @@ public class RSPropertyService {
     public UnitIO getUnitByNumber(@PathParam("propertyCode") String propertyCode, @PathParam("unitNumber") String unitNumber) {
         UnitIO unitIO = PropertyService.getUnitByNumber(propertyCode, unitNumber);
         if (unitIO == null) {
-            throw new RSServiceException(Response.Status.NOT_FOUND);
+            String message = String.format("Unit with propertyCode=%s and unitNumber=%s not found", propertyCode, unitNumber);
+            throw new RSServiceException(Response.Status.NOT_FOUND, message);
         }
         return unitIO;
     }
@@ -114,7 +116,7 @@ public class RSPropertyService {
     public Response updateBuilding(BuildingIO buildingIO) {
         try {
             PropertyService.updateBuilding(buildingIO);
-            return Response.ok().build();
+            return RSUtils.createSuccessResponse("Building updated successfully");
         } catch (Exception e) {
             throw new RSServiceException(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -125,7 +127,7 @@ public class RSPropertyService {
     @Consumes({ MediaType.APPLICATION_XML })
     public Response updateUnit(@PathParam("propertyCode") String propertyCode, UnitIO unitIO) {
         //TODO mkoval implementation TBD
-        return Response.ok().build();
+        return RSUtils.createSuccessResponse("Operation is not implemented");
     }
 
 }

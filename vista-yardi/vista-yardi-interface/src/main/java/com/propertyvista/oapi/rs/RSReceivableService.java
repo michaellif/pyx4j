@@ -51,7 +51,7 @@ public class RSReceivableService {
             for (TransactionIO transIO : transactions) {
                 ReceivableService.postTransaction(transIO);
             }
-            return Response.ok().build();
+            return RSUtils.createSuccessResponse("Transactions post successfully");
         } catch (Exception e) {
             throw new RSServiceException(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -63,7 +63,7 @@ public class RSReceivableService {
     public Response runBilling(@PathParam("propertyCode") String buildingCode) {
         try {
             ReceivableService.runBilling(buildingCode);
-            return Response.ok().build();
+            return RSUtils.createSuccessResponse("Billing successfully run");
         } catch (Exception e) {
             throw new RSServiceException(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -75,7 +75,7 @@ public class RSReceivableService {
     public Response reconcilePaymentRecords(List<PaymentRecordIO> records) {
         try {
             ReceivableService.reconcilePaymentRecords(records);
-            return Response.ok().build();
+            return RSUtils.createSuccessResponse("Records reconciled");
         } catch (Exception e) {
             throw new RSServiceException(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
         }

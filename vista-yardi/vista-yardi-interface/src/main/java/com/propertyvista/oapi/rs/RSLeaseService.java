@@ -75,7 +75,8 @@ public class RSLeaseService {
     public LeaseIO getLeaseById(@PathParam("leaseId") String leaseId) {
         LeaseIO leaseIO = LeaseService.getLeaseById(leaseId);
         if (leaseIO == null) {
-            throw new RSServiceException(Response.Status.NOT_FOUND);
+            String message = String.format("Lease with leaseId=%s not found", leaseId);
+            throw new RSServiceException(Response.Status.NOT_FOUND, message);
         }
         return LeaseService.getLeaseById(leaseId);
     }
@@ -92,7 +93,7 @@ public class RSLeaseService {
     @Consumes({ MediaType.APPLICATION_XML })
     public Response updateLease(LeaseIO leaseIO) {
         //TODO mkoval implementation TBD
-        return Response.ok().build();
+        return RSUtils.createSuccessResponse("Operation is not implemented");
     }
 
     @POST
@@ -100,7 +101,7 @@ public class RSLeaseService {
     @Consumes({ MediaType.APPLICATION_XML })
     public Response updateTenants(@PathParam("leaseId") String leaseId, List<TenantIO> tenantIOs) {
         //TODO mkoval implementation TBD
-        return Response.ok().build();
+        return RSUtils.createSuccessResponse("Operation is not implemented");
     }
 
 }
