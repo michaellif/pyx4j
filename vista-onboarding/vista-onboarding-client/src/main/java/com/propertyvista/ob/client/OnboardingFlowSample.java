@@ -13,23 +13,36 @@
  */
 package com.propertyvista.ob.client;
 
+import java.util.Arrays;
+
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.client.DeferredProcessDialog;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.ob.client.forms.PmcAccountCreationRequestForm;
+import com.propertyvista.ob.client.forms.PmcAccountCreationRequestForm.DnsCheckRequestHandler;
+import com.propertyvista.ob.client.forms.StepsProgress;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 import com.propertyvista.ob.rpc.services.OnboardingAuthenticationService;
+import com.propertyvista.ob.rpc.services.OnboardingPublicActivationService;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;
 
-/**
- * flow Execution Example
- */
 class OnboardingFlowSample {
+
+    private static final I18n i18n = I18n.get(OnboardingFlowSample.class);
+
+    private final AcceptsOneWidget panel;
+
+    public OnboardingFlowSample(AcceptsOneWidget panel) {
+        this.panel = panel;
+    }
 
     void doTestPmcCreationStep1() {
         AsyncCallback<Boolean> callback = new DefaultAsyncCallback<Boolean>() {
@@ -42,32 +55,59 @@ class OnboardingFlowSample {
     }
 
     private void doTestPmcCreationStep2() {
-        PmcAccountCreationRequest request = EntityFactory.create(PmcAccountCreationRequest.class);
 
-        String id = "p" + String.valueOf(System.currentTimeMillis());
-        request.name().setValue(id);
-        request.dnsName().setValue(id);
-        request.firstName().setValue("F");
-        request.lastName().setValue("L");
-        request.email().setValue(id + "@pyx4j.com");
-
-        AsyncCallback<String> callback = new DefaultAsyncCallback<String>() {
+        final AsyncCallback<String> accountRequestCreationCallback = new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String deferredCorrelationId) {
                 doTestPmcCreationStep3(deferredCorrelationId);
             }
         };
-        GWT.<PmcRegistrationService> create(PmcRegistrationService.class).createAccount(callback, request);
+        // TODO set this handler after it works
+        DnsCheckRequestHandler dnsCheckHandler = new DnsCheckRequestHandler() {
+            @Override
+            public void checkDns(AsyncCallback<Boolean> callback, String dnsName) {
+                GWT.<OnboardingPublicActivationService> create(OnboardingPublicActivationService.class).checkDNSAvailability(callback, dnsName);
+            }
+        };
+        PmcAccountCreationRequestForm accountRequestForm = new PmcAccountCreationRequestForm(new DnsCheckRequestHandler() {
+            @Override
+            public void checkDns(AsyncCallback<Boolean> callback, String dnsName) {
+                callback.onSuccess(true);
+            }
+        }) {
+            @Override
+            public void onSubmit(PmcAccountCreationRequest accountCreationRequest) {
+                GWT.<PmcRegistrationService> create(PmcRegistrationService.class).createAccount(accountRequestCreationCallback, accountCreationRequest);
+            }
+        };
+        accountRequestForm.initContent();
+        accountRequestForm.populate(EntityFactory.create(PmcAccountCreationRequest.class));
+        panel.setWidget(accountRequestForm);
+
     }
 
     private void doTestPmcCreationStep3(String deferredCorrelationId) {
-        DeferredProcessDialog d = new DeferredProcessDialog("PMC Activation", "Activating PMC ...", false) {
+        StepsProgress stepsProgress = new StepsProgress(1, true, Arrays.asList(//@formatter:off
+                i18n.tr("Reserving DNS Name"),
+                i18n.tr("Creating Private Database"),
+                i18n.tr("Achieving the World Peace"),
+                i18n.tr("Fighting World Hunger"),
+                i18n.tr("Creating a stone that cannot be lifted, and than lifting it"),
+                i18n.tr("Sending confirmation Email")
+                )) {//@formatter:on
             @Override
-            public void onDeferredSuccess(DeferredProcessProgressResponse result) {
-                super.onDeferredSuccess(result);
+            public void onStepsProgressComplete(boolean isSuccessful, String message) {
+                if (isSuccessful) {
+                    Window.alert("Happy Hannuka");
+                } else {
+                    MessageDialog.error(i18n.tr("Failed to create a new PMC"), message);
+                }
             }
         };
-        d.show();
-        d.startProgress(deferredCorrelationId);
+        stepsProgress.setWidth("40em");
+        stepsProgress.getElement().getStyle().setProperty("marginLeft", "auto");
+        stepsProgress.getElement().getStyle().setProperty("marginRight", "auto");
+        panel.setWidget(stepsProgress);
+        stepsProgress.startProgresss(deferredCorrelationId);
     }
 }

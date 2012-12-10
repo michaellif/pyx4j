@@ -14,11 +14,9 @@
 package com.propertyvista.ob.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -75,16 +73,8 @@ public class OnboardingSite extends VistaSite {
         if (root == null) {
             root = RootPanel.get();
         }
-
-        Button b;
-        root.add(b = new Button("Start Here"));
-        b.addClickHandler(new ClickHandler() {
-
-            @Override
-            public void onClick(ClickEvent event) {
-                new OnboardingFlowSample().doTestPmcCreationStep1();
-            }
-        });
+        SimplePanel panel = new SimplePanel();
+        root.add(panel);
+        new OnboardingFlowSample(panel).doTestPmcCreationStep1();
     }
-
 }
