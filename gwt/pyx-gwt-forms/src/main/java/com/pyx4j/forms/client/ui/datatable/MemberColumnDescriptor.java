@@ -63,8 +63,8 @@ public class MemberColumnDescriptor extends ColumnDescriptor {
         public Builder(IObject<?> member) {
             super(member.getPath().toString(), member.getMeta().getCaption());
             this.member = member;
-            if (EnumSet.of(ObjectClassType.EntityList).contains(member.getMeta().getObjectClassType())) {
-                this.sortable(false).searchable(false);
+            if (EnumSet.of(ObjectClassType.EntityList, ObjectClassType.EntitySet).contains(member.getMeta().getObjectClassType())) {
+                this.sortable(false);
             }
         }
 
