@@ -73,6 +73,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
     protected List<CompiledLocale> getLocale() {
         List<CompiledLocale> l = new Vector<CompiledLocale>();
         l.add(CompiledLocale.en);
+        l.add(CompiledLocale.en_GB);
         l.add(CompiledLocale.fr);
         if (ApplicationMode.isDevelopment() && !DemoData.vistaDemo) {
             l.add(CompiledLocale.ru);

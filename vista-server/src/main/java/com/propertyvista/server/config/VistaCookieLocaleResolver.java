@@ -22,7 +22,7 @@ public class VistaCookieLocaleResolver extends CookieLocaleResolver {
 
     @Override
     protected Iterable<Locale> getAvailableLocale() {
-        return Arrays.asList(Locale.ENGLISH, Locale.FRENCH, RU, new Locale("es"), Locale.SIMPLIFIED_CHINESE, Locale.TRADITIONAL_CHINESE);
+        return Arrays.asList(Locale.ENGLISH, Locale.UK, Locale.FRENCH, RU, new Locale("es"), Locale.SIMPLIFIED_CHINESE, Locale.TRADITIONAL_CHINESE);
     }
 
 }

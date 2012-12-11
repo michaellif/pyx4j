@@ -211,7 +211,7 @@
         <wicket.version>1.5.0</wicket.version>
 
         <google.translate.apiKey>AIzaSyB4epMBre3NeR-_1fgKFz3-V6iA1qpfh-M</google.translate.apiKey>
-        <i18n.translate>ru,fr,es,zh_CN,zh_TW</i18n.translate>
+        <i18n.translate>en_GB,ru,fr,es,zh_CN,zh_TW</i18n.translate>
         <poSaveLocation>true</poSaveLocation>
         <poSufix></poSufix>
     </properties>
