@@ -58,7 +58,7 @@ import com.propertyvista.admin.rpc.services.sim.SimulatedDataPreloadService;
 import com.propertyvista.admin.rpc.services.version.VistaTermsVersionService;
 import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.VistaAdminBehavior;
-import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
 public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
 

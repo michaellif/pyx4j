@@ -27,8 +27,8 @@ import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.admin.domain.security.AuditRecord;
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.AuditRecordEventType;
+import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.server.common.security.VistaAntiBot;
 import com.propertyvista.server.jobs.TaskRunner;
 

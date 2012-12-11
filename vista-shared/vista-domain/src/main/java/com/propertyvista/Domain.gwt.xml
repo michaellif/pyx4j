@@ -17,6 +17,6 @@
          <when-type-is class="com.propertyvista.shared.config.VistaDemo.VistaDemoConfiguration"/>
     </replace-with>
     
-    <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.domain.security.AbstractUserCredential" />
+    <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.domain.security.common.AbstractUserCredential" />
     
 </module>

@@ -22,7 +22,7 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
-import com.propertyvista.domain.security.AbstractUser;
+import com.propertyvista.domain.security.common.AbstractUser;
 
 public class VistaContext {
 

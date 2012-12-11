@@ -39,7 +39,7 @@ import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
 import com.propertyvista.crm.server.services.pub.CrmAuthenticationServiceImpl;
 import com.propertyvista.domain.security.SecurityQuestion;
-import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;

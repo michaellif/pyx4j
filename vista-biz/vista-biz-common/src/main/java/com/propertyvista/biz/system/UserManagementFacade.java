@@ -19,9 +19,9 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
-import com.propertyvista.domain.security.AbstractUser;
-import com.propertyvista.domain.security.AbstractUserCredential;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
+import com.propertyvista.domain.security.common.AbstractUser;
+import com.propertyvista.domain.security.common.AbstractUserCredential;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public interface UserManagementFacade {

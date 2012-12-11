@@ -28,8 +28,8 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
-import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.server.portal.services.PortalAuthenticationServiceImpl;
 
 public class PMSiteSession extends AuthenticatedWebSession {

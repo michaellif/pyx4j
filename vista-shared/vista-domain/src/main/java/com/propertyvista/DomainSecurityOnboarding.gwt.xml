@@ -2,10 +2,11 @@
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
-    <inherits name='com.pyx4j.rpc.RPCBlacklist'/>
-    <inherits name='com.pyx4j.site.SiteShared'/>
+    <inherits name='com.pyx4j.entity.EntityShared'/>
+   
+    <source path="domain/security/common"/>
+    <source path="domain/security/onboarding"/>
     
-    <inherits name='com.propertyvista.DomainSecurityOnboarding' />
+    <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.domain.security.common.AbstractUserCredential" />
     
-    <source path="rpc"/>
 </module>

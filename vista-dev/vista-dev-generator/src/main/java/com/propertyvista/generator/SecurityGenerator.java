@@ -19,7 +19,7 @@ import java.util.Vector;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
-import com.propertyvista.domain.security.AbstractUserCredential;
+import com.propertyvista.domain.security.common.AbstractUserCredential;
 
 public class SecurityGenerator {
 

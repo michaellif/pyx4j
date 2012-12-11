@@ -23,7 +23,7 @@ import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.admin.rpc.AdminSiteMap;
-import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
 public class AdminSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 

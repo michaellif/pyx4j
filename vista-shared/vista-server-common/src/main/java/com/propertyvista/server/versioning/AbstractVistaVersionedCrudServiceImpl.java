@@ -17,7 +17,7 @@ import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IVersionedEntity;
 
-import com.propertyvista.domain.security.AbstractUser;
+import com.propertyvista.domain.security.common.AbstractUser;
 
 public abstract class AbstractVistaVersionedCrudServiceImpl<E extends IVersionedEntity<?>> extends AbstractVersionedCrudServiceImpl<E> {
 

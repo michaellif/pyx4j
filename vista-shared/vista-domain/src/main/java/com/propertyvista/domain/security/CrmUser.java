@@ -15,6 +15,8 @@ package com.propertyvista.domain.security;
 
 import com.pyx4j.entity.annotations.Caption;
 
+import com.propertyvista.domain.security.common.AbstractUser;
+
 @Caption(name = "User")
 public interface CrmUser extends AbstractUser {
 

@@ -36,7 +36,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.media.ThumbnailSize;
-import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.server.common.blob.BlobService;

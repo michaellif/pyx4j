@@ -23,7 +23,7 @@ import com.propertyvista.admin.domain.security.AdminUserCredential;
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.security.AdminUser;
-import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 
 public class AdminAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<AdminUser, AdminUserCredential> implements AdminAuthenticationService {

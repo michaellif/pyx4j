@@ -18,7 +18,7 @@ import com.pyx4j.entity.server.AbstractListServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IVersionData;
 
-import com.propertyvista.domain.security.AbstractUser;
+import com.propertyvista.domain.security.common.AbstractUser;
 
 public abstract class AbstractVistaVersionDataListServiceImpl<E extends IVersionData<?>> extends AbstractListServiceImpl<E> implements
         AbstractVersionDataListService<E> {

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.ob.rpc;
+package com.propertyvista.domain.security.onboarding;
 
 import com.pyx4j.security.shared.Behavior;
 

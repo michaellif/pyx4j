@@ -21,29 +21,31 @@ import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.admin.server.services.AdminAuthenticationServiceImpl;
 import com.propertyvista.crm.server.services.pub.CrmAuthenticationServiceImpl;
-import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.ob.server.services.OnboardingAuthenticationServiceImpl;
 import com.propertyvista.portal.server.portal.services.PortalAuthenticationServiceImpl;
 import com.propertyvista.portal.server.ptapp.services.PtAuthenticationServiceImpl;
-import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 
 public class VistaAclRevalidator implements AclRevalidator {
 
     @Override
     public Set<Behavior> getCurrentBehaviours(Key principalPrimaryKey, Set<Behavior> currentBehaviours, long aclTimeStamp) {
-        VistaAuthenticationServicesImpl<?, ?> authenticationServices;
+        AclRevalidator aclRevalidator;
         if (currentBehaviours.contains(VistaBasicBehavior.CRM) || currentBehaviours.contains(VistaBasicBehavior.CRMPasswordChangeRequired)) {
-            authenticationServices = new CrmAuthenticationServiceImpl();
+            aclRevalidator = new CrmAuthenticationServiceImpl();
         } else if (currentBehaviours.contains(VistaBasicBehavior.Admin) || currentBehaviours.contains(VistaBasicBehavior.AdminPasswordChangeRequired)) {
-            authenticationServices = new AdminAuthenticationServiceImpl();
+            aclRevalidator = new AdminAuthenticationServiceImpl();
         } else if (currentBehaviours.contains(VistaBasicBehavior.ProspectiveApp)
                 || currentBehaviours.contains(VistaBasicBehavior.ProspectiveAppPasswordChangeRequired)) {
-            authenticationServices = new PtAuthenticationServiceImpl();
+            aclRevalidator = new PtAuthenticationServiceImpl();
         } else if (currentBehaviours.contains(VistaBasicBehavior.TenantPortal)
                 || currentBehaviours.contains(VistaBasicBehavior.TenantPortalPasswordChangeRequired)) {
-            authenticationServices = new PortalAuthenticationServiceImpl();
+            aclRevalidator = new PortalAuthenticationServiceImpl();
+        } else if (currentBehaviours.contains(VistaBasicBehavior.Onboarding)) {
+            aclRevalidator = new OnboardingAuthenticationServiceImpl();
         } else {
             return null;
         }
-        return authenticationServices.getCurrentBehaviours(principalPrimaryKey, currentBehaviours);
+        return aclRevalidator.getCurrentBehaviours(principalPrimaryKey, currentBehaviours, aclTimeStamp);
     }
 }

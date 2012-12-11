@@ -26,8 +26,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
-import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
@@ -36,9 +36,9 @@ import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
-import com.propertyvista.ob.rpc.OnboardingApplicationBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.onboarding.OnboardingApplicationBehavior;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;
 import com.propertyvista.ob.server.PmcActivationUserDeferredProcess;
@@ -95,7 +95,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
 
         log.info("New PMC {} created", credential.pmc());
 
-        Lifecycle.changeSession(OnboardingApplicationBehavior.sessionActivated, OnboardingApplicationBehavior.accountCreationRequested);
+        OnboardingAuthenticationServiceImpl.addSessionBehavior(OnboardingApplicationBehavior.accountCreationRequested);
 
         String vistaCrmUrl = VistaDeployment.getBaseApplicationURL(credential.pmc(), VistaBasicBehavior.CRM, true);
         Context.getVisit().setAttribute(vistaCrmUrlAttr, vistaCrmUrl);
@@ -113,6 +113,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
 
     @Override
     public void obtainCrmURL(AsyncCallback<String> callback) {
+        SecurityController.assertBehavior(OnboardingApplicationBehavior.accountCreated);
         callback.onSuccess((String) Context.getVisit().getAttribute(vistaCrmUrlAttr));
     }
 

@@ -22,7 +22,7 @@ import com.propertyvista.common.client.ui.components.security.AbstractAccountRec
 import com.propertyvista.common.client.ui.components.security.AccountRecoveryOptionsEditorView;
 import com.propertyvista.crm.client.ui.viewfactories.SecurityViewFactory;
 import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
-import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
 public class AccountRecoveryOptionsEditorActivity extends AbstractAccountRecoveryOptionsEditorActivity {
 

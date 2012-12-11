@@ -46,8 +46,8 @@ import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.ob.server.PmcActivationDeferredProcess;
 
 public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> implements PmcCrudService {

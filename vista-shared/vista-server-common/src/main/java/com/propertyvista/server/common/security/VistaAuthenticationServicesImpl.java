@@ -53,6 +53,7 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.security.rpc.SystemWallMessage;
+import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
@@ -62,15 +63,15 @@ import com.pyx4j.server.contexts.Lifecycle;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.security.AbstractUser;
-import com.propertyvista.domain.security.AbstractUserCredential;
-import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.common.AbstractUser;
+import com.propertyvista.domain.security.common.AbstractUserCredential;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.shared.VistaSystemIdentification;
 
 public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E extends AbstractUserCredential<U>> extends
-        com.pyx4j.security.server.AuthenticationServiceImpl {
+        com.pyx4j.security.server.AuthenticationServiceImpl implements AclRevalidator {
 
     private final static Logger log = LoggerFactory.getLogger(VistaAuthenticationServicesImpl.class);
 
@@ -144,6 +145,8 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             case Unavailable:
             case ReadOnly:
                 throw new UserRuntimeException(SystemMaintenance.getApplicationMaintenanceMessage());
+            default:
+                break;
             }
         }
         AccessKey.TokenParser token = new AccessKey.TokenParser(accessToken);
@@ -281,7 +284,8 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         }
     }
 
-    public final Set<Behavior> getCurrentBehaviours(Key principalPrimaryKey, Set<Behavior> currentBehaviours) {
+    @Override
+    public final Set<Behavior> getCurrentBehaviours(Key principalPrimaryKey, Set<Behavior> currentBehaviours, long aclTimeStamp) {
         E userCredential = Persistence.service().retrieve(credentialClass, principalPrimaryKey);
         if ((userCredential == null) || (!userCredential.enabled().isBooleanTrue())) {
             return null;

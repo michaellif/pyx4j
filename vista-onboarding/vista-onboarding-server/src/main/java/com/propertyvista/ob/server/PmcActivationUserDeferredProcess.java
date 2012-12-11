@@ -19,6 +19,7 @@ import com.pyx4j.server.contexts.Visit;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.ob.server.services.OnboardingAuthenticationServiceImpl;
 
 public class PmcActivationUserDeferredProcess extends PmcActivationDeferredProcess {
 
@@ -37,6 +38,8 @@ public class PmcActivationUserDeferredProcess extends PmcActivationDeferredProce
     @Override
     protected void onPmcCreated() {
         ServerSideFactory.create(CommunicationFacade.class).sendNewPmcEmail(sendNewPmcEmailToUser, pmcId);
+        visit.setAttribute(OnboardingAuthenticationServiceImpl.accountCreatedAttr, Boolean.TRUE);
+        visit.setAclRevalidationRequired();
     }
 
 }

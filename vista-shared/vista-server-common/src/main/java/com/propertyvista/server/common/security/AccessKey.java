@@ -25,8 +25,8 @@ import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.security.AbstractUser;
-import com.propertyvista.domain.security.AbstractUserCredential;
+import com.propertyvista.domain.security.common.AbstractUser;
+import com.propertyvista.domain.security.common.AbstractUserCredential;
 
 public class AccessKey {
 

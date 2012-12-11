@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.security;
+package com.propertyvista.domain.security.common;
 
 import java.util.Date;
 

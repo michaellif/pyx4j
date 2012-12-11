@@ -35,8 +35,8 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityStat
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
 import com.propertyvista.domain.dashboard.gadgets.common.AsOfDateCriterion;
-import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
 public class UnitAvailabilityStatusListServiceTestBase extends VistaDBTestBase {
 

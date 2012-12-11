@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.security.common.AbstractUser;
 
 @Caption(name = "User")
 @Table(namespace = VistaNamespace.adminNamespace)

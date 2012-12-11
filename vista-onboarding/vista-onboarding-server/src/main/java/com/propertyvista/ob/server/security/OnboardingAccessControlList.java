@@ -20,7 +20,7 @@ import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
-import com.propertyvista.ob.rpc.OnboardingApplicationBehavior;
+import com.propertyvista.domain.security.onboarding.OnboardingApplicationBehavior;
 import com.propertyvista.ob.rpc.services.OnboardingAuthenticationService;
 import com.propertyvista.ob.rpc.services.OnboardingPublicActivationService;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;

@@ -18,24 +18,43 @@ import java.util.Set;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
+import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
+import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
-import com.propertyvista.ob.rpc.OnboardingApplicationBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.onboarding.OnboardingApplicationBehavior;
 import com.propertyvista.ob.rpc.services.OnboardingAuthenticationService;
 
-public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.server.AuthenticationServiceImpl implements OnboardingAuthenticationService {
+public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.server.AuthenticationServiceImpl implements OnboardingAuthenticationService,
+        AclRevalidator {
+
+    public final static String accountCreatedAttr = OnboardingAuthenticationServiceImpl.class.getName() + ".accountCreated";
+
+    protected VistaBasicBehavior getApplicationBehavior() {
+        return VistaBasicBehavior.Onboarding;
+    }
+
+    @Override
+    public void obtainRecaptchaPublicKey(AsyncCallback<String> callback) {
+        callback.onSuccess(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
+    }
 
     protected String createSession(ClientSystemInfo clientSystemInfo) {
         UserVisit visit = new UserVisit(null, null);
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.add(OnboardingApplicationBehavior.sessionActivated);
+        behaviors.add(getApplicationBehavior());
         String token = Lifecycle.beginSession(visit, behaviors);
         return token;
     }
@@ -45,9 +64,35 @@ public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.serv
         callback.onSuccess(createAuthenticationResponse(createSession(clientSystemInfo)));
     }
 
-    @Override
-    public void obtainRecaptchaPublicKey(AsyncCallback<String> callback) {
-        callback.onSuccess(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
+    public static void addSessionBehavior(OnboardingApplicationBehavior behaviour) {
+        Set<Behavior> behaviors = new HashSet<Behavior>();
+        behaviors.addAll(SecurityController.getBehaviors());
+        behaviors.add(behaviour);
+        Lifecycle.changeSession(behaviors);
     }
 
+    @Override
+    @IgnoreSessionToken
+    public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String sessionToken) {
+        assertClientSystemInfo(clientSystemInfo);
+        if ((Context.getVisit() != null) && !SecurityController.checkBehavior(OnboardingApplicationBehavior.accountCreated)) {
+            if ((Context.getVisit().getAttribute(accountCreatedAttr) == Boolean.TRUE)) {
+                addSessionBehavior(OnboardingApplicationBehavior.accountCreationRequested);
+            }
+        }
+        callback.onSuccess(createAuthenticationResponse(sessionToken));
+    }
+
+    @Override
+    public Set<Behavior> getCurrentBehaviours(Key principalPrimaryKey, Set<Behavior> currentBehaviours, long aclTimeStamp) {
+        if ((Context.getVisit().getAttribute(accountCreatedAttr) == Boolean.TRUE)
+                && (!currentBehaviours.contains(OnboardingApplicationBehavior.accountCreated))) {
+            Set<Behavior> behaviors = new HashSet<Behavior>();
+            behaviors.addAll(currentBehaviours);
+            behaviors.add(OnboardingApplicationBehavior.accountCreated);
+            return behaviors;
+        } else {
+            return null;
+        }
+    }
 }

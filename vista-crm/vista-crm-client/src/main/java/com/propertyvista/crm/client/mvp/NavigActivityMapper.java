@@ -22,7 +22,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.crm.client.activity.NavigActivity;
 import com.propertyvista.crm.client.activity.NavigSettingsActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
 public class NavigActivityMapper implements ActivityMapper {
 

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.security;
+package com.propertyvista.domain.security.common;
 
 import java.util.Date;
 
@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+
 
 /**
  * Should be nice to move this to Server side domain package
