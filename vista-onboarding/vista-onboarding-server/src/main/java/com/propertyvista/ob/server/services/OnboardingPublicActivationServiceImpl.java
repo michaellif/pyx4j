@@ -13,18 +13,27 @@
  */
 package com.propertyvista.ob.server.services;
 
+import java.util.concurrent.Callable;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.ob.rpc.services.OnboardingPublicActivationService;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class OnboardingPublicActivationServiceImpl implements OnboardingPublicActivationService {
 
     @Override
-    public void checkDNSAvailability(AsyncCallback<Boolean> callback, String dnsName) {
-        callback.onSuccess(ServerSideFactory.create(PmcFacade.class).checkDNSAvailability(dnsName));
-    }
+    public void checkDNSAvailability(AsyncCallback<Boolean> callback, final String dnsName) {
+        callback.onSuccess(TaskRunner.runInAdminNamespace(new Callable<Boolean>() {
 
+            @Override
+            public Boolean call() throws Exception {
+                return ServerSideFactory.create(PmcFacade.class).checkDNSAvailability(dnsName);
+            }
+
+        }));
+    }
 }
