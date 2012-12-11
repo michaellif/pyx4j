@@ -65,18 +65,21 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
 
     private Timer progressTimer;
 
-    private final int pollIntervalInSeconds;
+    private static final int REAL_POLL_INTERVAL = 1000;
 
-    private final int SIM_POLL_INTERVAL = 200;
+    private static final int SIM_POLL_INTERVAL = 200;
 
     public PmcAccountCreationProgressActivity(AppPlace place) {
         this.view = OnboardingViewFactory.instance(PmcAccountCreationProgressView.class);
         this.defferedCorrelationId = place.getFirstArg("id");
+        if (this.defferedCorrelationId == null) {
+            throw new Error("no id progress id");
+        }
         this.service = GWT.<DeferredProcessService> create(DeferredProcessService.class);
 
         this.currentStep = PROGRESS_STEPS.get(0);
         this.currentStepStatus = StepStatus.INCOMPLETE;
-        this.pollIntervalInSeconds = 1;
+
     }
 
     @Override
@@ -95,9 +98,10 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
             public void onSuccess(DeferredProcessProgressResponse progress) {
                 if (progress.isCompleted()) {
                     progressTimer.cancel();
+                    progressTimer.scheduleRepeating(SIM_POLL_INTERVAL);
                 }
                 currentStepStatus = (currentStepStatus == StepStatus.INCOMPLETE) ? StepStatus.INPROGRESS : StepStatus.COMPLETE;
-                // wait on last step until the server completes
+                // don't finish the last step until server reports that it finished
                 if (!progress.isCompleted() & currentStepStatus.equals(PROGRESS_STEPS.get(PROGRESS_STEPS.size() - 1))) {
                     currentStepStatus = StepStatus.INPROGRESS;
                 }
@@ -116,6 +120,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
                         view.setStatus(currentStep, currentStepStatus);
                     } else {
                         // here we got to the final step. so:
+                        progressTimer.cancel();
                         onStepsProgressComplete(true, null);
                     }
                 }
@@ -145,7 +150,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
                 }
             }
         };
-        progressTimer.scheduleRepeating(this.pollIntervalInSeconds * 1000);
+        progressTimer.scheduleRepeating(REAL_POLL_INTERVAL);
 
     }
 
