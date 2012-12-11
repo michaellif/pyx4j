@@ -76,7 +76,7 @@ public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.serv
         assertClientSystemInfo(clientSystemInfo);
         if ((Context.getVisit() != null) && !SecurityController.checkBehavior(OnboardingApplicationBehavior.accountCreated)) {
             if ((Context.getVisit().getAttribute(accountCreatedAttr) == Boolean.TRUE)) {
-                addSessionBehavior(OnboardingApplicationBehavior.accountCreationRequested);
+                addSessionBehavior(OnboardingApplicationBehavior.accountCreated);
             }
         }
         callback.onSuccess(createAuthenticationResponse(sessionToken));

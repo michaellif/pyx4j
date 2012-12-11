@@ -42,7 +42,7 @@ public class OnboardingSite extends VistaSite {
     }
 
     public OnboardingSite() {
-        super("vista-onboarding", OnboardingSiteMap.class);
+        super("vista-onboarding", OnboardingSiteMap.class, new OnboardingAppPlaceDispatcher());
     }
 
     @Override
@@ -83,16 +83,7 @@ public class OnboardingSite extends VistaSite {
                     @Override
                     public void onSuccess(Boolean result) {
                         hideLoadingIndicator();
-                        ClientContext.authenticate(GWT.<OnboardingAuthenticationService> create(OnboardingAuthenticationService.class), null,
-                                new DefaultAsyncCallback<Boolean>() {
-
-                                    @Override
-                                    public void onSuccess(Boolean result) {
-                                        AppSite.getPlaceController().goTo(new OnboardingSiteMap.PmcAccountCreationRequest());
-                                    }
-
-                                });
-
+                        AppSite.getHistoryHandler().handleCurrentHistory();
                     }
 
                 });

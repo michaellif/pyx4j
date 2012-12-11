@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -28,6 +29,7 @@ import com.propertyvista.ob.client.views.OnboardingViewFactory;
 import com.propertyvista.ob.client.views.PmcAccountCreationRequestView;
 import com.propertyvista.ob.rpc.OnboardingSiteMap;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
+import com.propertyvista.ob.rpc.services.OnboardingAuthenticationService;
 import com.propertyvista.ob.rpc.services.OnboardingPublicActivationService;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;
 
@@ -59,12 +61,18 @@ public class PmcAccountCreationRequestActivity extends AbstractActivity implemen
 
     @Override
     public void createAccount() {
-        pmcRegistrationService.createAccount(new DefaultAsyncCallback<String>() {
-            @Override
-            public void onSuccess(String deferredCorellationId) {
-                goToProgressPlace(deferredCorellationId);
-            }
-        }, view.getPmcAccountCreationRequest());
+        if (ClientContext.isAuthenticated()) {
+            startAccountCreation();
+        } else {
+            ClientContext.authenticate(GWT.<OnboardingAuthenticationService> create(OnboardingAuthenticationService.class), null,
+                    new DefaultAsyncCallback<Boolean>() {
+                        @Override
+                        public void onSuccess(Boolean result) {
+                            startAccountCreation();
+                        }
+                    });
+        }
+
     }
 
     @Override
@@ -77,6 +85,15 @@ public class PmcAccountCreationRequestActivity extends AbstractActivity implemen
     public void refresh() {
         // TODO Auto-generated method stub
 
+    }
+
+    private void startAccountCreation() {
+        pmcRegistrationService.createAccount(new DefaultAsyncCallback<String>() {
+            @Override
+            public void onSuccess(String deferredCorellationId) {
+                goToProgressPlace(deferredCorellationId);
+            }
+        }, view.getPmcAccountCreationRequest());
     }
 
     private void goToProgressPlace(String deferredCorellationId) {

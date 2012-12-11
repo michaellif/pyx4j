@@ -28,6 +28,9 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessService;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -35,6 +38,7 @@ import com.propertyvista.ob.client.forms.StepStatusIndicator;
 import com.propertyvista.ob.client.forms.StepStatusIndicator.StepStatus;
 import com.propertyvista.ob.client.views.OnboardingViewFactory;
 import com.propertyvista.ob.client.views.PmcAccountCreationProgressView;
+import com.propertyvista.ob.rpc.OnboardingSiteMap;
 
 public class PmcAccountCreationProgressActivity extends AbstractActivity implements PmcAccountCreationProgressView.Presenter {
 
@@ -162,6 +166,14 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
 
     private void onStepsProgressComplete(boolean completedSuccess, String message) {
         if (completedSuccess) {
+            service.getStatus(null, PmcAccountCreationProgressActivity.this.defferedCorrelationId, true);
+
+            ClientContext.obtainAuthenticationData(new DefaultAsyncCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean result) {
+                    AppSite.getPlaceController().goTo(new OnboardingSiteMap.PmcAccountCreationComplete());
+                }
+            });
 
         } else {
             MessageDialog.error(i18n.tr("Failed to Create PMC"), message);
