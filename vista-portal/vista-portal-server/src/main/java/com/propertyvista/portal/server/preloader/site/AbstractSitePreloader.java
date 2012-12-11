@@ -362,6 +362,8 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         switch (cl) {
         case en:
             return ServerI18nFactory.get(AbstractSitePreloader.class, Locale.ENGLISH);
+        case en_GB:
+            return ServerI18nFactory.get(AbstractSitePreloader.class, Locale.UK);
         case fr:
             return ServerI18nFactory.get(AbstractSitePreloader.class, Locale.FRENCH);
         case ru:

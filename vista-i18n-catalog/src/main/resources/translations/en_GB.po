@@ -194,6 +194,10 @@ msgstr ""
 msgid "#0.000000"
 msgstr ""
 
+#: com/pyx4j/forms/client/ui/CMoneyField.java:37
+msgid "$"
+msgstr "£"
+
 #: com/propertyvista/portal/client/ui/residents/tenantinsurance/components/MoneyComboBox.java:36
 msgid "$#,##0"
 msgstr "£#,##0"

@@ -34,7 +34,7 @@ public enum CompiledLocale implements Serializable {
     en_US("English"),
 
     @Translate(value = "British English")
-    en_GB("English"),
+    en_GB("British"),
 
     @Translate(value = "French")
     fr("Fran\u00e7ais"),

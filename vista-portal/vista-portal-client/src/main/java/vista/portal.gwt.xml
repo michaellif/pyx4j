@@ -14,7 +14,7 @@
     <extend-property name="locale" values="zh_TW"/>
 
     <set-property-fallback name="locale" value="en_US"/>
-    <set-property name="locale" value="en_US,ru,fr,es,zh_CN,zh_TW"/>
+    <set-property name="locale" value="en_US,en_GB,ru,fr,es,zh_CN,zh_TW"/>
     
     <set-configuration-property name="locale.cookie" value="locale"/>
 	<set-configuration-property name="pyx.locale.default" value="en_US"/>
