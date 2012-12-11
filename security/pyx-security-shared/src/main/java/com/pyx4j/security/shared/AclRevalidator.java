@@ -31,7 +31,7 @@ public interface AclRevalidator {
      * 
      * @param principalPrimaryKey
      * @param aclTimeStamp
-     * @return null if no changes are required
+     * @return null if the user is no-longer active;currentBehaviours if no changes are required
      */
     public Set<Behavior> getCurrentBehaviours(Key principalPrimaryKey, Set<Behavior> currentBehaviours, long aclTimeStamp);
 
