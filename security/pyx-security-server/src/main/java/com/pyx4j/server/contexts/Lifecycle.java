@@ -21,8 +21,10 @@
 package com.pyx4j.server.contexts;
 
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -163,7 +165,13 @@ public class Lifecycle {
         //Context.getVisit().beginAnonymousSession(JAASHelper.anonymousLogin());
     }
 
-    @SuppressWarnings("unchecked")
+    public static void changeSession(Behavior... behaviour) {
+        Set<Behavior> behaviors = new HashSet<Behavior>();
+        behaviors.addAll(Arrays.asList(behaviour));
+        beginSession(Context.getVisit().getUserVisit(), behaviors);
+        Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
+    }
+
     public static String beginSession(UserVisit userVisit, Set<Behavior> behaviours) {
         Visit currentVisit = Context.getVisit();
         if ((currentVisit != null) && (userVisit != null) && (currentVisit.isUserLoggedIn())

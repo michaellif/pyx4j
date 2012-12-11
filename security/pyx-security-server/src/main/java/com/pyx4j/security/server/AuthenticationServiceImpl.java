@@ -112,6 +112,9 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
                     ar.setMaxInactiveInterval(24 * Consts.HOURS2SEC);
                     log.debug("session maxInactiveInterval {} sec", ar.getMaxInactiveInterval());
                 }
+                break;
+            default:
+                break;
             }
 
             // Make it serializable by RPC
