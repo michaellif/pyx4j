@@ -324,24 +324,21 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
     }
 
     public void setSorting(List<Sort> sorts) {
-
         dataTablePanel.getDataTableModel().setSortColumn(null);
         dataTablePanel.getDataTableModel().setSecondarySortColumn(null);
 
         if (sorts != null) {
-            boolean primarySet = false;
-            for (Sort sort : sorts) {
-                for (ColumnDescriptor column : dataTablePanel.getDataTableModel().getColumnDescriptors()) {
-                    if (column.getColumnName().compareTo(sort.getPropertyPath()) == 0) {
-                        dataTablePanel.getDataTableModel().setSortAscending(!sort.isDescending());
-                        if (!primarySet) {
-                            dataTablePanel.getDataTableModel().setSortColumn(column);
-                            primarySet = true;
-                        } else {
-                            dataTablePanel.getDataTableModel().setSecondarySortColumn(column);
-                        }
-                    }
-                }
+            if (sorts.size() > 0) {
+                Sort sort = sorts.get(0);
+                ColumnDescriptor column = dataTablePanel.getDataTableModel().getColumnDescriptor(sort.getPropertyPath());
+                dataTablePanel.getDataTableModel().setSortColumn(column);
+                dataTablePanel.getDataTableModel().setSortAscending(!sort.isDescending());
+            }
+            if (sorts.size() > 1) {
+                Sort sort = sorts.get(1);
+                ColumnDescriptor column = dataTablePanel.getDataTableModel().getColumnDescriptor(sort.getPropertyPath());
+                dataTablePanel.getDataTableModel().setSecondarySortColumn(column);
+                dataTablePanel.getDataTableModel().setSecondarySortAscending(!sort.isDescending());
             }
         }
     }

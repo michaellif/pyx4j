@@ -91,6 +91,15 @@ public class DataTableModel<E extends IEntity> {
         return null;
     }
 
+    public ColumnDescriptor getColumnDescriptor(String columnName) {
+        for (ColumnDescriptor descriptor : columnDescriptors) {
+            if (descriptor.getColumnName().equals(columnName)) {
+                return descriptor;
+            }
+        }
+        return null;
+    }
+
     public String getColumnName(int index) {
         return getColumnDescriptor(index).getColumnName();
     }
