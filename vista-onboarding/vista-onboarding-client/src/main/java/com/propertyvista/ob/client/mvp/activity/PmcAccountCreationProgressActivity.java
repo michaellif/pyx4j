@@ -146,7 +146,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
                     }
                     callback.onSuccess(response);
                 } else {
-                    service.continueExecution(callback, PmcAccountCreationProgressActivity.this.defferedCorrelationId);
+                    service.getStatus(callback, PmcAccountCreationProgressActivity.this.defferedCorrelationId, false);
                 }
             }
         };

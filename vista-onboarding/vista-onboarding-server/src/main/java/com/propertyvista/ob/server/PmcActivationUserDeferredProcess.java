@@ -13,6 +13,8 @@
  */
 package com.propertyvista.ob.server;
 
+import java.util.concurrent.Callable;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.server.contexts.Visit;
 
@@ -20,6 +22,7 @@ import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.ob.server.services.OnboardingAuthenticationServiceImpl;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class PmcActivationUserDeferredProcess extends PmcActivationDeferredProcess {
 
@@ -33,6 +36,17 @@ public class PmcActivationUserDeferredProcess extends PmcActivationDeferredProce
         super(pmcId);
         this.visit = visit;
         this.sendNewPmcEmailToUser = sendNewPmcEmailToUser;
+    }
+
+    @Override
+    public void execute() {
+        TaskRunner.runInAdminNamespace(new Callable<Void>() {
+            @Override
+            public Void call() {
+                PmcActivationUserDeferredProcess.super.execute();
+                return null;
+            }
+        });
     }
 
     @Override

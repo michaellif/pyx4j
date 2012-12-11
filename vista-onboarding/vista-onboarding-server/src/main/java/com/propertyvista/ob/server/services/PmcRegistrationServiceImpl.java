@@ -28,7 +28,6 @@ import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
-import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
@@ -100,13 +99,8 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
         String vistaCrmUrl = VistaDeployment.getBaseApplicationURL(credential.pmc(), VistaBasicBehavior.CRM, true);
         Context.getVisit().setAttribute(vistaCrmUrlAttr, vistaCrmUrl);
 
-        final Visit visit = Context.getVisit();
-        String deferredCorrelationId = TaskRunner.runInAdminNamespace(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                return DeferredProcessRegistry.fork(new PmcActivationUserDeferredProcess(credential.pmc(), visit, credential.user()), ThreadPoolNames.IMPORTS);
-            }
-        });
+        String deferredCorrelationId = DeferredProcessRegistry.fork(
+                new PmcActivationUserDeferredProcess(credential.pmc(), Context.getVisit(), credential.user()), ThreadPoolNames.IMPORTS);
 
         callback.onSuccess(deferredCorrelationId);
     }

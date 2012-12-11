@@ -219,6 +219,6 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         request.password().setValue(password);
         request.confirmPassword().setValue(password);
 
-        populate(request);
+        setValue(request);
     }
 }
