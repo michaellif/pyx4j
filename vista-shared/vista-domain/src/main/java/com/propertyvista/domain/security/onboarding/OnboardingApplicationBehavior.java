@@ -17,8 +17,6 @@ import com.pyx4j.security.shared.Behavior;
 
 public enum OnboardingApplicationBehavior implements Behavior {
 
-    sessionActivated,
-
     accountCreationRequested,
 
     accountCreated,

@@ -53,7 +53,6 @@ public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.serv
     protected String createSession(ClientSystemInfo clientSystemInfo) {
         UserVisit visit = new UserVisit(null, null);
         Set<Behavior> behaviors = new HashSet<Behavior>();
-        behaviors.add(OnboardingApplicationBehavior.sessionActivated);
         behaviors.add(getApplicationBehavior());
         String token = Lifecycle.beginSession(visit, behaviors);
         return token;
@@ -92,7 +91,7 @@ public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.serv
             behaviors.add(OnboardingApplicationBehavior.accountCreated);
             return behaviors;
         } else {
-            return null;
+            return currentBehaviours;
         }
     }
 }
