@@ -164,7 +164,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     @Override
     public void activate(AsyncCallback<String> callback, Key entityId) {
         SecurityController.assertPermission(EntityPermission.permissionUpdate(Pmc.class));
-        callback.onSuccess(DeferredProcessRegistry.fork(new PmcActivationDeferredProcess(EntityFactory.createIdentityStub(Pmc.class, entityId), null),
+        callback.onSuccess(DeferredProcessRegistry.fork(new PmcActivationDeferredProcess(EntityFactory.createIdentityStub(Pmc.class, entityId)),
                 ThreadPoolNames.IMPORTS));
     }
 

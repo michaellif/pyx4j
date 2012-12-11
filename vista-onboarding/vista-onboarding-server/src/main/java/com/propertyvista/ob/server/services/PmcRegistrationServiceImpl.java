@@ -26,16 +26,22 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.config.ThreadPoolNames;
+import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
+import com.propertyvista.ob.rpc.OnboardingApplicationBehavior;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;
-import com.propertyvista.ob.server.PmcActivationDeferredProcess;
+import com.propertyvista.ob.server.PmcActivationUserDeferredProcess;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class PmcRegistrationServiceImpl implements PmcRegistrationService {
@@ -44,11 +50,14 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
 
     private static final I18n i18n = I18n.get(PmcRegistrationServiceImpl.class);
 
+    private final static String vistaCrmUrlAttr = PmcRegistrationServiceImpl.class.getName() + ".vistaCrmUrl";
+
     @Override
     public void createAccount(AsyncCallback<String> callback, final PmcAccountCreationRequest request) {
-        String deferredCorrelationId = TaskRunner.runInAdminNamespace(new Callable<String>() {
+
+        final OnboardingUserCredential credential = TaskRunner.runInAdminNamespace(new Callable<OnboardingUserCredential>() {
             @Override
-            public String call() throws Exception {
+            public OnboardingUserCredential call() throws Exception {
 
                 if (!ServerSideFactory.create(PmcFacade.class).checkDNSAvailability(request.dnsName().getValue())) {
                     throw new UserRuntimeException(i18n.tr("Requested DNS name {0} already reserved", request.dnsName().getValue()));
@@ -80,7 +89,22 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
 
                 Persistence.service().commit();
 
-                return DeferredProcessRegistry.fork(new PmcActivationDeferredProcess(pmc, credential.user()), ThreadPoolNames.IMPORTS);
+                return credential;
+            }
+        });
+
+        log.info("New PMC {} created", credential.pmc());
+
+        Lifecycle.changeSession(OnboardingApplicationBehavior.sessionActivated, OnboardingApplicationBehavior.accountCreationRequested);
+
+        String vistaCrmUrl = VistaDeployment.getBaseApplicationURL(credential.pmc(), VistaBasicBehavior.CRM, true);
+        Context.getVisit().setAttribute(vistaCrmUrlAttr, vistaCrmUrl);
+
+        final Visit visit = Context.getVisit();
+        String deferredCorrelationId = TaskRunner.runInAdminNamespace(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                return DeferredProcessRegistry.fork(new PmcActivationUserDeferredProcess(credential.pmc(), visit, credential.user()), ThreadPoolNames.IMPORTS);
             }
         });
 
@@ -89,7 +113,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
 
     @Override
     public void obtainCrmURL(AsyncCallback<String> callback) {
-        // TODO Auto-generated method stub
+        callback.onSuccess((String) Context.getVisit().getAttribute(vistaCrmUrlAttr));
     }
 
 }

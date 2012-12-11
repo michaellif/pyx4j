@@ -57,7 +57,7 @@ public class ActivatePMCRequestHandler extends AbstractRequestHandler<ActivatePM
         switch (pmc.status().getValue()) {
         case Created:
             updateFeatures(pmc, request);
-            DeferredProcessRegistry.fork(new PmcActivationDeferredProcess(pmc, null), ThreadPoolNames.IMPORTS);
+            DeferredProcessRegistry.fork(new PmcActivationDeferredProcess(pmc), ThreadPoolNames.IMPORTS);
             response.success().setValue(Boolean.TRUE);
             break;
         case Active:
