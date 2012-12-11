@@ -34,6 +34,8 @@ public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>
 
     private static final I18n i18n = I18n.get(CMoneyField.class);
 
+    private static final String symbol = i18n.tr("$");
+
     public CMoneyField() {
         super();
         setFormat(new MoneyFormat());
@@ -59,7 +61,7 @@ public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>
             if (value == null) {
                 return "";
             } else {
-                return "$" + nf.format(value);
+                return symbol + nf.format(value);
             }
         }
 
@@ -70,7 +72,7 @@ public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>
             }
             try {
                 string = string.trim();
-                if (string.startsWith("$")) {
+                if (string.startsWith(symbol)) {
                     string = string.substring(1);
                 }
                 return new BigDecimal(nf.parse(string));
