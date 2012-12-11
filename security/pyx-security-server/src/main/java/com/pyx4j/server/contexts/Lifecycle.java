@@ -22,6 +22,7 @@ package com.pyx4j.server.contexts;
 
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -166,8 +167,12 @@ public class Lifecycle {
     }
 
     public static void changeSession(Behavior... behaviour) {
+        changeSession(Arrays.asList(behaviour));
+    }
+
+    public static void changeSession(Collection<Behavior> newBehaviours) {
         Set<Behavior> behaviors = new HashSet<Behavior>();
-        behaviors.addAll(Arrays.asList(behaviour));
+        behaviors.addAll(newBehaviours);
         beginSession(Context.getVisit().getUserVisit(), behaviors);
         Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
     }
