@@ -14,32 +14,43 @@
 package com.propertyvista.ob.client.mvp.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.ob.client.views.OnboardingViewFactory;
 import com.propertyvista.ob.client.views.PmcAccountCreationCompleteView;
+import com.propertyvista.ob.rpc.services.PmcRegistrationService;
 
 public class PmcAccountCreationCompleteActivity extends AbstractActivity implements PmcAccountCreationCompleteView.Presenter {
 
     private final PmcAccountCreationCompleteView view;
 
+    private final PmcRegistrationService service;
+
     public PmcAccountCreationCompleteActivity(AppPlace place) {
         view = OnboardingViewFactory.instance(PmcAccountCreationCompleteView.class);
+        service = GWT.<PmcRegistrationService> create(PmcRegistrationService.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        view.setCrmSiteUrl("http://yeshiva.org.il");
+        view.setCrmSiteUrl("");
+        populate();
     }
 
     @Override
     public void populate() {
-        // TODO Auto-generated method stub
-
+        service.obtainCrmURL(new DefaultAsyncCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                view.setCrmSiteUrl(result);
+            }
+        });
     }
 
     @Override

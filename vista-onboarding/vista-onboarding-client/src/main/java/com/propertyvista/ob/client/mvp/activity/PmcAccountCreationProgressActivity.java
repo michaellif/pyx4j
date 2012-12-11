@@ -28,14 +28,13 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.ob.client.forms.StepStatusIndicator;
 import com.propertyvista.ob.client.forms.StepStatusIndicator.StepStatus;
 import com.propertyvista.ob.client.views.OnboardingViewFactory;
 import com.propertyvista.ob.client.views.PmcAccountCreationProgressView;
-import com.propertyvista.ob.rpc.OnboardingSiteMap;
 
 public class PmcAccountCreationProgressActivity extends AbstractActivity implements PmcAccountCreationProgressView.Presenter {
 
@@ -150,6 +149,10 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
     }
 
     private void onStepsProgressComplete(boolean completedSuccess, String message) {
-        AppSite.getPlaceController().goTo(new OnboardingSiteMap.PmcAccountCreationComplete());
+        if (completedSuccess) {
+
+        } else {
+            MessageDialog.error(i18n.tr("Failed to Create PMC"), message);
+        }
     }
 }

@@ -37,17 +37,27 @@ public interface PmcAccountCreationRequest extends IEntity {
     @NotNull
     IPrimitive<String> email();
 
+    @Editor(type = EditorType.email)
+    @NotNull
+    @Transient(logTransient = true)
+    IPrimitive<String> confirmEmail();
+
     @NotNull
     @Editor(type = EditorType.password)
     @Transient(logTransient = true)
     IPrimitive<String> password();
 
     @NotNull
+    @Editor(type = EditorType.password)
+    @Transient(logTransient = true)
+    IPrimitive<String> confirmPassword();
+
+    @NotNull
     @Caption(name = "Company name")
     IPrimitive<String> name();
 
     @NotNull
-    @Caption(name = "DNS name")
+    @Caption(name = "URL")
     IPrimitive<String> dnsName();
 
     /**

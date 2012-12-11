@@ -54,12 +54,7 @@ public class PmcAccountCreationRequestActivity extends AbstractActivity implemen
 
     @Override
     public void checkDns(AsyncCallback<Boolean> callback, String dnsName) {
-        if (false) {
-            onboardingPublicActivationService.checkDNSAvailability(callback, dnsName);
-        } else {
-            callback.onSuccess(true);
-        }
-
+        onboardingPublicActivationService.checkDNSAvailability(callback, dnsName);
     }
 
     @Override

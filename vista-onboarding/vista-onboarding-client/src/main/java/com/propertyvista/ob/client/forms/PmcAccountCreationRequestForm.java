@@ -23,15 +23,16 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.events.DevShortcutEvent;
+import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEmailField;
-import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -41,7 +42,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
 
     public enum Style implements IStyleName {
 
-        DnsCheckLabelChecking, DnsCheckLabelAvailable, DnsCheckLabelNotAvailable, PmcAccountCreationSubmitButton
+        PmcAccountCreationSubmitButton
 
     }
 
@@ -55,7 +56,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
 
     private boolean isDnsAvailable;
 
-    private Label dnsNameCheckResult;
+    private boolean isDnsCheckResponseRecieved;
 
     private final DnsCheckRequestHandler dnsNameCheckRequestHandler;
 
@@ -81,16 +82,27 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
                 if (event.getValue() != null) {
+                    isDnsAvailable = false;
+                    isDnsCheckResponseRecieved = false;
                     PmcAccountCreationRequestForm.this.onDnsAvailabilityCheckRequested(event.getValue());
                 }
             }
         });
-        dnsNameCheckResult = new Label();
-        contentPanel.setWidget(row, 1, dnsNameCheckResult);
+        get(proto().dnsName()).addValueValidator(new EditableValueValidator<String>() {
+
+            @Override
+            public ValidationError isValid(CComponent<String, ?> component, String value) {
+                if (value != null && !isDnsAvailable && isDnsCheckResponseRecieved) {
+                    return new ValidationError(component, i18n.tr("DNS is not available"));
+                } else {
+                    return null;
+                }
+            }
+        });
 
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email())).build());
-        CEmailField emailConfirmation = new CEmailField(i18n.tr("Email Confirmation"), true);
-        emailConfirmation.addValueValidator(new EditableValueValidator<String>() {
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmEmail())).build());
+        get(proto().confirmEmail()).addValueValidator(new EditableValueValidator<String>() {
             @Override
             public ValidationError isValid(CComponent<String, ?> component, String emailConfirmationValue) {
                 String email = get(proto().email()).getValue();
@@ -101,12 +113,11 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
                 }
             }
         });
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(emailConfirmation).build());
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password())).build());
-        CPasswordTextField passwordConfirmation = new CPasswordTextField(i18n.tr("Password Confirmation"), true);
-        passwordConfirmation.addValueValidator(new EditableValueValidator<String>() {
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmPassword())).build());
+        get(proto().confirmPassword()).addValueValidator(new EditableValueValidator<String>() {
             @Override
             public ValidationError isValid(CComponent<String, ?> component, String passwordConfirmationValue) {
                 String password = get(proto().password()).getValue();
@@ -117,12 +128,14 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
                 }
             }
         });
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(passwordConfirmation).build());
 
         final Button submitButton = new Button(i18n.tr("Sign Up"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                onSubmit(getValue().duplicate(PmcAccountCreationRequest.class));
+                revalidate();
+                if (isValid()) {
+                    onSubmit(getValue().duplicate(PmcAccountCreationRequest.class));
+                }
             }
 
         });
@@ -140,6 +153,20 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
                 submitButton.setEnabled(isValid());
             }
         });
+
+        if (ApplicationMode.isDevelopment()) {
+            this.addDevShortcutHandler(new DevShortcutHandler() {
+                @Override
+                public void onDevShortcut(DevShortcutEvent event) {
+                    if (event.getKeyCode() == 'Q') {
+                        event.consume();
+                        devGeneratePmcData();
+                    }
+                }
+
+            });
+        }
+
         return contentPanel;
     }
 
@@ -153,32 +180,45 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
     }
 
     private void onDnsAvailabilityCheckRequested(String dnsName) {
-        this.dnsNameCheckResult.setText(i18n.tr("Checking Availability..."));
-        this.dnsNameCheckRequestHandler.checkDns(new AsyncCallback<Boolean>() {
+        if (dnsName.length() > 0) {
+            this.dnsNameCheckRequestHandler.checkDns(new AsyncCallback<Boolean>() {
 
-            @Override
-            public void onSuccess(Boolean result) {
-                setDnsAvailability(result);
-            }
+                @Override
+                public void onSuccess(Boolean result) {
+                    setDnsAvailability(result);
+                }
 
-            @Override
-            public void onFailure(Throwable caught) {
-                MessageDialog.error(i18n.tr("DNS Check Failed"), caught.getMessage());
-                PmcAccountCreationRequestForm.this.dnsNameCheckResult.setText("");
-            }
+                @Override
+                public void onFailure(Throwable caught) {
+                    setDnsAvailability(false);
+                    MessageDialog.error(i18n.tr("DNS availability check error"), caught.getMessage());
+                }
 
-        }, dnsName);
+            }, dnsName);
+        }
     }
 
     private void setDnsAvailability(boolean isDnsAvailable) {
         this.isDnsAvailable = isDnsAvailable;
-        if (isDnsAvailable) {
-            this.dnsNameCheckResult.setText(i18n.tr("DNS is Available"));
-            this.dnsNameCheckResult.setStyleName(Style.DnsCheckLabelAvailable.name());
-        } else {
-            this.dnsNameCheckResult.setText(i18n.tr("DNS is Not Available"));
-            this.dnsNameCheckResult.setStyleName(Style.DnsCheckLabelNotAvailable.name());
-        }
+        this.isDnsCheckResponseRecieved = true;
+        get(proto().dnsName()).revalidate();
     }
 
+    private void devGeneratePmcData() {
+        PmcAccountCreationRequest request = EntityFactory.create(PmcAccountCreationRequest.class);
+
+        String id = "p" + String.valueOf(System.currentTimeMillis());
+        request.name().setValue(id);
+        request.dnsName().setValue(id);
+        request.firstName().setValue("F");
+        request.lastName().setValue("L");
+        request.email().setValue(id + "@pyx4j.com");
+        request.confirmEmail().setValue(request.email().getValue());
+
+        String password = request.email().getValue();
+        request.password().setValue(password);
+        request.confirmPassword().setValue(password);
+
+        populate(request);
+    }
 }
