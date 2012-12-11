@@ -72,7 +72,7 @@ public class BuildingsGenerator {
         // building type
 //        BuildingInfo.Type buildingType = RandomUtil.random(BuildingInfo.Type.values());
 // randomator put very little 'residential' types!?
-        BuildingInfo.Type[] types = { BuildingInfo.Type.residential, BuildingInfo.Type.mixed_residential };
+        BuildingInfo.Type[] types = { BuildingInfo.Type.residential, BuildingInfo.Type.mixedResidential };
         BuildingInfo.Type buildingType = RandomUtil.random(types);
 
         String website = "www.property" + (counter + 1) + ".com";
