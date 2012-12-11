@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-11 24:54-0500\n"
+"POT-Creation-Date: 2012-12-11 01:36-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -369,7 +369,7 @@ msgstr ""
 msgid "ARPolicy"
 msgstr ""
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:232
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:233
 msgid "About us"
 msgstr ""
 
@@ -1405,7 +1405,7 @@ msgstr ""
 msgid "Behavior"
 msgstr ""
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:241
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:242
 msgid "Benefits"
 msgstr ""
 
@@ -1423,7 +1423,7 @@ msgid "Bill"
 msgstr ""
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:327
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:328
 msgid "Bill B., London, Ontario"
 msgstr ""
 
@@ -1991,7 +1991,7 @@ msgstr ""
 msgid "Card Type"
 msgstr ""
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:261
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:262
 msgid "Careers"
 msgstr ""
 
@@ -2493,7 +2493,7 @@ msgid "Construction Type"
 msgstr ""
 
 #: com/propertyvista/domain/communication/Contact.java:0
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:290
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:291
 msgid "Contact"
 msgstr ""
 
@@ -4133,7 +4133,7 @@ msgstr ""
 msgid "Feature V"
 msgstr ""
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:147
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:148
 msgid "Featured Apartments"
 msgstr ""
 
@@ -4263,7 +4263,7 @@ msgid "Find Apartment"
 msgstr ""
 
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:6
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:199
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:200
 msgid "Find an Apartment"
 msgstr ""
 
@@ -4619,7 +4619,7 @@ msgid "Gauge Chart Demo"
 msgstr ""
 
 #: com/propertyvista/portal/rpc/portal/dto/TenantDashboardDTO.java:2
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:232
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:233
 msgid "General"
 msgstr ""
 
@@ -5012,7 +5012,7 @@ msgid "I Decline"
 msgstr ""
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:327
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:328
 msgid ""
 "I just had the pleasure to dealing with your superintendent at my building. "
 "I just moved in three weeks ago and was greeted right away by Manolo the "
@@ -5026,7 +5026,7 @@ msgid ""
 msgstr ""
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:332
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:333
 msgid ""
 "I just wanted to let you know what a great job your superintendent Sean was "
 "doing.  He recently repaired my faucet and was very professional and "
@@ -5708,7 +5708,7 @@ msgid "Items"
 msgstr ""
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:332
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:333
 msgid "Jane L."
 msgstr ""
 
@@ -7362,7 +7362,7 @@ msgstr ""
 #: com/propertyvista/domain/site/News.java:0
 #: com/propertyvista/domain/site/gadgets/NewsGadgetContent.java:2
 #: com/propertyvista/pmsite/server/panels/NewsGadgetPanel.html:4
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:271
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:272
 msgid "News"
 msgstr ""
 
@@ -8007,11 +8007,11 @@ msgid "Other Providers Tenant Insurance Details"
 msgstr ""
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:354
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:355
 msgid "Ottawa, Toronto defy national sales trend ... for now"
 msgstr ""
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:251
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:252
 msgid "Our Vision"
 msgstr ""
 
@@ -8969,7 +8969,7 @@ msgstr ""
 msgid "Priority"
 msgstr ""
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:310
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:311
 msgid "Privacy"
 msgstr ""
 
@@ -9715,7 +9715,7 @@ msgid "Required Password Change On Next Log In"
 msgstr ""
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:354
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:355
 msgid ""
 "Resale housing activity in August remained stable for the second consecutive"
 " month, according to new stats from The Canadian Real Estate Association, "
@@ -9822,7 +9822,7 @@ msgstr ""
 #. Portal Page Type
 #: com/propertyvista/domain/site/PageDescriptor.java:1
 #: com/propertyvista/pmsite/server/pages/ResidentsPage.java:47
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:210
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:211
 msgid "Residents"
 msgstr ""
 
@@ -11160,7 +11160,7 @@ msgstr ""
 msgid "Termination Lease To"
 msgstr ""
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:300
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:301
 msgid "Terms Of Use"
 msgstr ""
 
@@ -11183,7 +11183,7 @@ msgstr ""
 
 #: com/propertyvista/domain/site/gadgets/TestimonialsGadgetContent.java:2
 #: com/propertyvista/pmsite/server/panels/TestimGadgetPanel.html:4
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:280
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:281
 msgid "Testimonials"
 msgstr ""
 
@@ -11204,7 +11204,7 @@ msgid "The Lead is converted to Lease already!"
 msgstr ""
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:348
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:349
 msgid ""
 "The Vancouver housing market may already be unaffordable for many, but there"
 " is enough demand to keep prices rising, according to a new forecast."
@@ -12135,7 +12135,7 @@ msgid "Values"
 msgstr ""
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:348
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:349
 msgid "Vancouver prices to keep rising"
 msgstr ""
 

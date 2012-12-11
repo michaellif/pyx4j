@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-11 24:54-0500\n"
+"POT-Creation-Date: 2012-12-11 01:35-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,7 +97,7 @@ msgstr ""
 #: com/propertyvista/portal/rpc/shared/dto/tenantinsurance/tenantsure/TenantSureCoverageDTO.java:2
 #: com/propertyvista/portal/rpc/shared/dto/tenantinsurance/tenantsure/TenantSurePremiumTaxDTO.java:2
 #: com/propertyvista/portal/rpc/shared/dto/tenantinsurance/tenantsure/TenantSureQuoteDTO.java:2
-#: com/pyx4j/forms/client/ui/CMoneyField.java:54
+#: com/pyx4j/forms/client/ui/CMoneyField.java:56
 #, java-format
 msgid "#,##0.00"
 msgstr ""
@@ -145,6 +145,10 @@ msgstr ""
 #, java-format
 msgid "#0.000000"
 msgstr ""
+
+#: com/pyx4j/forms/client/ui/CMoneyField.java:37
+msgid "$"
+msgstr "£"
 
 #. java-format
 #: com/propertyvista/domain/financial/Money.java:0
@@ -4535,7 +4539,7 @@ msgstr ""
 msgid "Invalid date format. Use MM/DD/YYYY format"
 msgstr ""
 
-#: com/pyx4j/forms/client/ui/CMoneyField.java:78
+#: com/pyx4j/forms/client/ui/CMoneyField.java:80
 #: com/pyx4j/forms/client/ui/CPercentageField.java:79
 msgid "Invalid money format. Enter valid number"
 msgstr ""
