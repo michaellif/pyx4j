@@ -70,8 +70,14 @@ public class ConfigInfoServlet extends HttpServlet {
         b.append("persistenceNamePrefix    : ").append(conf.persistenceNamePrefix()).append("\n");
         b.append("\nPersistenceConfiguration :\n  ").append(conf.getPersistenceConfiguration().toString().replaceAll("\n", "\n  ")).append("\n");
 
+        b.append(applicationConfigurationText());
+
         b.append("\n\nSystem Properties:\n").append(ServerSideConfiguration.getSystemProperties());
 
         return b.toString();
+    }
+
+    protected String applicationConfigurationText() {
+        return "";
     }
 }
