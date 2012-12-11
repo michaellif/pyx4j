@@ -29,6 +29,7 @@ import com.pyx4j.widgets.client.richtext.DefaultRichTextEditorTheme;
 import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 
 import com.propertyvista.ob.client.forms.PmcAccountCreationRequestForm;
+import com.propertyvista.ob.client.views.PmcAccountCreationCompleteViewImpl;
 
 public class OnboardingTheme extends Theme {
 
@@ -70,6 +71,22 @@ public class OnboardingTheme extends Theme {
         style.addProperty("font-size", "16pt");
         style.addProperty("border-radius", "10px");
         style.addProperty("margin-top", "30px");
+        addStyle(style);
+
+        style = new Style(".", PmcAccountCreationCompleteViewImpl.Styles.PmcAccountCreationCompleteLabel.name());
+        style.addProperty("margin-top", "100px");
+        style.addProperty("margin-left", "auto");
+        style.addProperty("margin-right", "auto");
+        style.addProperty("text-align", "center");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(".", PmcAccountCreationCompleteViewImpl.Styles.PmcAccountCreationCompleteAnchor.name());
+        style.addProperty("margin-top", "20px");
+        style.addProperty("margin-left", "auto");
+        style.addProperty("margin-right", "auto");
+        style.addProperty("text-align", "center");
+        style.addProperty("width", "100%");
         addStyle(style);
     }
 

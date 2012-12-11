@@ -17,6 +17,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
@@ -24,6 +25,10 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 
 public class PmcAccountCreationCompleteViewImpl extends Composite implements PmcAccountCreationCompleteView {
+
+    public enum Styles {
+        PmcAccountCreationCompleteLabel, PmcAccountCreationCompleteAnchor;
+    }
 
     private static final I18n i18n = I18n.get(PmcAccountCreationCompleteViewImpl.class);
 
@@ -34,11 +39,15 @@ public class PmcAccountCreationCompleteViewImpl extends Composite implements Pmc
         viewPanel.setSize("100%", "100%");
 
         Label completionCongratulationsMessage = new Label();
+        completionCongratulationsMessage.addStyleName(Styles.PmcAccountCreationCompleteLabel.name());
         completionCongratulationsMessage.setText(i18n.tr("Congratulations!"));
         viewPanel.add(completionCongratulationsMessage);
 
+        SimplePanel redirectPanel = new SimplePanel();
+        redirectPanel.addStyleName(Styles.PmcAccountCreationCompleteAnchor.name());
         redirectToCrmSite = new Anchor(i18n.tr("Go to your CRM!"));
-        viewPanel.add(redirectToCrmSite);
+        redirectPanel.setWidget(redirectToCrmSite);
+        viewPanel.add(redirectPanel);
 
         initWidget(viewPanel);
     }
