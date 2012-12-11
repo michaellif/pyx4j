@@ -13,11 +13,13 @@
  */
 package com.propertyvista.ob.client.forms;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.IStyleName;
@@ -39,7 +41,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
 
     public enum Style implements IStyleName {
 
-        DnsCheckLabelChecking, DnsCheckLabelAvailable, DnsCheckLabelNotAvailable
+        DnsCheckLabelChecking, DnsCheckLabelAvailable, DnsCheckLabelNotAvailable, PmcAccountCreationSubmitButton
 
     }
 
@@ -65,14 +67,16 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
     @Override
     public IsWidget createContent() {
         FormFlexPanel contentPanel = new FormFlexPanel();
+        final double SPACE = 10.0;
         int row = -1;
 
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().firstName())).build());
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lastName())).build());
+        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).build());
-
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dnsName())).build());
+        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
         get(proto().dnsName()).addValueChangeHandler(new ValueChangeHandler<String>() {
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
@@ -98,6 +102,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
             }
         });
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(emailConfirmation).build());
+        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password())).build());
         CPasswordTextField passwordConfirmation = new CPasswordTextField(i18n.tr("Password Confirmation"), true);
@@ -121,8 +126,12 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
             }
 
         });
+        submitButton.addStyleName(PmcAccountCreationRequestForm.Style.PmcAccountCreationSubmitButton.name());
         submitButton.setEnabled(false);
+
         contentPanel.setWidget(++row, 0, submitButton);
+        contentPanel.getFlexCellFormatter().setColSpan(row, 0, 2);
+        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         addValueChangeHandler(new ValueChangeHandler<PmcAccountCreationRequest>() {
             @Override

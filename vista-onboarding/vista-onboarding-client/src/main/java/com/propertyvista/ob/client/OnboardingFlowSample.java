@@ -13,10 +13,7 @@
  */
 package com.propertyvista.ob.client;
 
-import java.util.Arrays;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -24,11 +21,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.ob.client.forms.PmcAccountCreationRequestForm;
 import com.propertyvista.ob.client.forms.PmcAccountCreationRequestForm.DnsCheckRequestHandler;
-import com.propertyvista.ob.client.forms.StepsProgress;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 import com.propertyvista.ob.rpc.services.OnboardingAuthenticationService;
 import com.propertyvista.ob.rpc.services.OnboardingPublicActivationService;
@@ -87,27 +82,11 @@ class OnboardingFlowSample {
     }
 
     private void doTestPmcCreationStep3(String deferredCorrelationId) {
-        StepsProgress stepsProgress = new StepsProgress(1, true, Arrays.asList(//@formatter:off
-                i18n.tr("Reserving DNS Name"),
-                i18n.tr("Creating Private Database"),
-                i18n.tr("Achieving the World Peace"),
-                i18n.tr("Fighting World Hunger"),
-                i18n.tr("Creating a stone that cannot be lifted, and than lifting it"),
-                i18n.tr("Sending confirmation Email")
-                )) {//@formatter:on
-            @Override
-            public void onStepsProgressComplete(boolean isSuccessful, String message) {
-                if (isSuccessful) {
-                    Window.alert("Happy Hannuka");
-                } else {
-                    MessageDialog.error(i18n.tr("Failed to create a new PMC"), message);
-                }
-            }
-        };
-        stepsProgress.setWidth("40em");
-        stepsProgress.getElement().getStyle().setProperty("marginLeft", "auto");
-        stepsProgress.getElement().getStyle().setProperty("marginRight", "auto");
-        panel.setWidget(stepsProgress);
-        stepsProgress.startProgresss(deferredCorrelationId);
+//        stepsProgress.setWidth("40em");
+//        stepsProgress.getElement().getStyle().setProperty("marginLeft", "auto");
+//        stepsProgress.getElement().getStyle().setProperty("marginRight", "auto");
+//
+//        panel.setWidget(stepsProgress);
+//        stepsProgress.startProgresss(deferredCorrelationId);
     }
 }

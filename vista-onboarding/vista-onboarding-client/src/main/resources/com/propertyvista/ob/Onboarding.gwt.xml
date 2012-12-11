@@ -7,6 +7,7 @@
     
     <inherits name='com.propertyvista.ob.OnboardingRpc' />
 
+	<inherits name='com.pyx4j.Commons' />
 	<inherits name='com.propertyvista.common.VistaSiteCommon' />
 
     <source path="client"/>

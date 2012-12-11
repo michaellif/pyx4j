@@ -17,9 +17,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.resources.client.ImageResource;
 
-public interface StepsProgressResources extends ClientBundleWithLookup {
+public interface StepStatusResources extends ClientBundleWithLookup {
 
-    StepsProgressResources INSTANCE = GWT.<StepsProgressResources> create(StepsProgressResources.class);
+    StepStatusResources INSTANCE = GWT.<StepStatusResources> create(StepStatusResources.class);
 
     @Source("progress-step-in-progress.png")
     ImageResource inProgress();

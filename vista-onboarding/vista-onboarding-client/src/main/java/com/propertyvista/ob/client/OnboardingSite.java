@@ -18,11 +18,18 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.activity.AppActivityManager;
 
 import com.propertyvista.common.client.site.VistaSite;
+import com.propertyvista.ob.client.mvp.OnboardingActivityMapper;
+import com.propertyvista.ob.client.themes.OnboardingPalette;
+import com.propertyvista.ob.client.themes.OnboardingStyles;
+import com.propertyvista.ob.client.themes.OnboardingTheme;
 import com.propertyvista.ob.rpc.OnboardingSiteMap;
 import com.propertyvista.ob.rpc.services.OnboardingAuthenticationService;
 
@@ -41,6 +48,20 @@ public class OnboardingSite extends VistaSite {
     @Override
     public void onSiteLoad() {
         super.onSiteLoad();
+        getHistoryHandler().register(getPlaceController(), getEventBus(), new OnboardingSiteMap.Default());
+        StyleManger.installTheme(new OnboardingTheme(), new OnboardingPalette());
+
+        RootPanel root = RootPanel.get(ONBOARDING_INSERTION_ID);
+        if (root == null) {
+            root = RootPanel.get();
+        }
+        SimplePanel onboardingPanel = new SimplePanel();
+        onboardingPanel.setStyleName(OnboardingStyles.VistaObMainPanel.name());
+        root.add(onboardingPanel);
+
+        AppActivityManager activityManager = new AppActivityManager(new OnboardingActivityMapper(), AppSite.getEventBus());
+        activityManager.setDisplay(onboardingPanel);
+
         obtainAuthenticationData();
     }
 
@@ -62,19 +83,19 @@ public class OnboardingSite extends VistaSite {
                     @Override
                     public void onSuccess(Boolean result) {
                         hideLoadingIndicator();
-                        initUI();
+                        ClientContext.authenticate(GWT.<OnboardingAuthenticationService> create(OnboardingAuthenticationService.class), null,
+                                new DefaultAsyncCallback<Boolean>() {
+
+                                    @Override
+                                    public void onSuccess(Boolean result) {
+                                        AppSite.getPlaceController().goTo(new OnboardingSiteMap.PmcAccountCreationRequest());
+                                    }
+
+                                });
+
                     }
 
                 });
     }
 
-    private void initUI() {
-        RootPanel root = RootPanel.get(ONBOARDING_INSERTION_ID);
-        if (root == null) {
-            root = RootPanel.get();
-        }
-        SimplePanel panel = new SimplePanel();
-        root.add(panel);
-        new OnboardingFlowSample(panel).doTestPmcCreationStep1();
-    }
 }
