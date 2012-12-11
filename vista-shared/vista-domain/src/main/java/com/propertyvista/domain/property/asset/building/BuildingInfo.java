@@ -44,16 +44,24 @@ public interface BuildingInfo extends IEntity {
 
         commercial,
 
-        mixed_residential,
+        mixedResidential,
 
         residential,
 
         industrial,
 
+        socialHousing,
+
+        seniorHousing,
+
+        condo,
+
+        association,
+
         military,
 
         @Translate("Parking/Storage")
-        parking_storage,
+        parkingStorage,
 
         other;
 
