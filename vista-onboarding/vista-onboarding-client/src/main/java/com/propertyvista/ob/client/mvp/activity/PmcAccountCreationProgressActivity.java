@@ -67,6 +67,8 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
 
     private final int pollIntervalInSeconds;
 
+    private final int SIM_POLL_INTERVAL = 200;
+
     public PmcAccountCreationProgressActivity(AppPlace place) {
         this.view = OnboardingViewFactory.instance(PmcAccountCreationProgressView.class);
         this.defferedCorrelationId = place.getFirstArg("id");
@@ -90,12 +92,18 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
         final AsyncCallback<DeferredProcessProgressResponse> callback = new AsyncCallback<DeferredProcessProgressResponse>() {
 
             @Override
-            public void onSuccess(DeferredProcessProgressResponse result) {
+            public void onSuccess(DeferredProcessProgressResponse progress) {
+                if (progress.isCompleted()) {
+                    progressTimer.cancel();
+                }
                 currentStepStatus = (currentStepStatus == StepStatus.INCOMPLETE) ? StepStatus.INPROGRESS : StepStatus.COMPLETE;
+                // wait on last step until the server completes
+                if (!progress.isCompleted() & currentStepStatus.equals(PROGRESS_STEPS.get(PROGRESS_STEPS.size() - 1))) {
+                    currentStepStatus = StepStatus.INPROGRESS;
+                }
                 view.setStatus(currentStep, currentStepStatus);
 
                 if (currentStepStatus == StepStatus.COMPLETE) {
-
                     Iterator<String> steps = PROGRESS_STEPS.iterator();
                     while (steps.hasNext()) {
                         if (steps.next().equals(currentStep)) {
@@ -106,13 +114,12 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
                         currentStep = steps.next();
                         currentStepStatus = StepStatus.INPROGRESS;
                         view.setStatus(currentStep, currentStepStatus);
+                    } else {
+                        // here we got to the final step. so:
+                        onStepsProgressComplete(true, null);
                     }
                 }
 
-                if (result.isCompleted()) {
-                    onStepsProgressComplete(result.isCompletedSuccess(), result.getMessage());
-                    progressTimer.cancel();
-                }
             }
 
             @Override

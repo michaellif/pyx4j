@@ -14,8 +14,10 @@
 package com.propertyvista.biz.tenant.insurance;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
@@ -23,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -157,9 +160,19 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 }
             }
 
+            List<String> emails = new ArrayList<String>();
+            if (ApplicationMode.isDevelopment()) {
+                emails.add("artyom@propertyvista.com");
+            } else {
+                Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
+                emails.add(tenant.customer().user().email().getValue());
+            }
+            cfcApiClient.requestDocument(insuranceTenantSure.quoteId().getValue(), emails);
+
             insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Active);
             Persistence.service().persist(insuranceTenantSure);
             Persistence.service().commit();
+
         }
 
         createInsuranceCertificate(tenantId, tenantSureCertificateNumber, insuranceTenantSure);

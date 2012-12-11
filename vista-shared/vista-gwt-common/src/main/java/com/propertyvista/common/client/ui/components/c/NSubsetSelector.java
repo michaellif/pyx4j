@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.NFocusComponent;
 
-import com.propertyvista.common.client.ui.components.SubsetSelector;
 
 public class NSubsetSelector<OPTION_TYPE> extends NFocusComponent<Set<OPTION_TYPE>, SubsetSelector<OPTION_TYPE>, CSubsetSelector<OPTION_TYPE>, HTML> {
 

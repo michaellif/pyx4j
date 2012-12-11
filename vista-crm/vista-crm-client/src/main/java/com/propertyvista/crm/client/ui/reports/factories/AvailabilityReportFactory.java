@@ -31,9 +31,9 @@ import com.pyx4j.site.client.ui.reports.PropertyCriteriaFolder;
 import com.pyx4j.site.client.ui.reports.Report;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.SubsetSelector.Layout;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.c.CEnumSubsetSelector;
+import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
 import com.propertyvista.crm.rpc.dto.reports.AvailabilityReportDataDTO;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;

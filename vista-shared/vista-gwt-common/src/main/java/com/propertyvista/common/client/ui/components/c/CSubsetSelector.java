@@ -19,8 +19,7 @@ import java.util.Set;
 import com.pyx4j.forms.client.ui.CFocusComponent;
 import com.pyx4j.forms.client.ui.IFormat;
 
-import com.propertyvista.common.client.ui.components.SubsetSelector;
-import com.propertyvista.common.client.ui.components.SubsetSelector.Layout;
+import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
 
 public class CSubsetSelector<OPTION_TYPE> extends CFocusComponent<Set<OPTION_TYPE>, NSubsetSelector<OPTION_TYPE>> {
 

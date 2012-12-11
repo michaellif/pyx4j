@@ -19,7 +19,7 @@ import java.util.Set;
 
 import com.pyx4j.forms.client.ui.IFormat;
 
-import com.propertyvista.common.client.ui.components.SubsetSelector.Layout;
+import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
 
 public class CEnumSubsetSelector<E extends Enum<E>> extends CSubsetSelector<E> {
 

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.common.client.ui.components;
+package com.propertyvista.common.client.ui.components.c;
 
 import java.text.ParseException;
 import java.util.HashMap;
