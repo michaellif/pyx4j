@@ -24,6 +24,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.oapi.ReceivableService;
 import com.propertyvista.oapi.model.PaymentRecordIO;
 import com.propertyvista.oapi.model.TransactionIO;
@@ -43,43 +45,31 @@ import com.propertyvista.oapi.model.TransactionIO;
 @Path("/payments")
 public class RSReceivableService {
 
+    private static I18n i18n = I18n.get(RSReceivableService.class);
+
     @POST
     @Path("/transactions")
     @Consumes({ MediaType.APPLICATION_XML })
     public Response postTransactions(List<TransactionIO> transactions) {
-        try {
-            for (TransactionIO transIO : transactions) {
-                ReceivableService.postTransaction(transIO);
-            }
-            return RSUtils.createSuccessResponse("Transactions post successfully");
-        } catch (Exception e) {
-            throw new RSServiceException(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
+        for (TransactionIO transIO : transactions) {
+            ReceivableService.postTransaction(transIO);
         }
-
+        return RSUtils.createSuccessResponse(i18n.tr("Transactions post successfully"));
     }
 
     @POST
     @Path("/{propertyCode}/runBilling")
     public Response runBilling(@PathParam("propertyCode") String buildingCode) {
-        try {
-            ReceivableService.runBilling(buildingCode);
-            return RSUtils.createSuccessResponse("Billing successfully run");
-        } catch (Exception e) {
-            throw new RSServiceException(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
+        ReceivableService.runBilling(buildingCode);
+        return RSUtils.createSuccessResponse(i18n.tr("Billing successfully run"));
     }
 
     @POST
     @Path("/reconcile")
     @Consumes({ MediaType.APPLICATION_XML })
     public Response reconcilePaymentRecords(List<PaymentRecordIO> records) {
-        try {
-            ReceivableService.reconcilePaymentRecords(records);
-            return RSUtils.createSuccessResponse("Records reconciled");
-        } catch (Exception e) {
-            throw new RSServiceException(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-
+        ReceivableService.reconcilePaymentRecords(records);
+        return RSUtils.createSuccessResponse(i18n.tr("Records reconciled"));
     }
 
     @GET

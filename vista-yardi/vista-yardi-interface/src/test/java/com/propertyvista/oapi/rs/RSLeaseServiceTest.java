@@ -93,6 +93,6 @@ public class RSLeaseServiceTest extends RSOapiTestBase {
         WebResource webResource = resource();
 
         ClientResponse response = webResource.path("leases/mockId").get(ClientResponse.class);
-        Assert.assertEquals(ClientResponse.Status.NOT_FOUND, response.getClientResponseStatus());
+        Assert.assertEquals(ClientResponse.Status.INTERNAL_SERVER_ERROR, response.getClientResponseStatus());
     }
 }

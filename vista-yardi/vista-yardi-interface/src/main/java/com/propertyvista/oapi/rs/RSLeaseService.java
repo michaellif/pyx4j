@@ -26,6 +26,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.oapi.LeaseService;
 import com.propertyvista.oapi.model.LeaseIO;
 import com.propertyvista.oapi.model.TenantIO;
@@ -52,6 +54,8 @@ import com.propertyvista.oapi.model.TenantIO;
 @Path("/leases")
 public class RSLeaseService {
 
+    private static I18n i18n = I18n.get(RSLeaseService.class);
+
     @GET
     @Produces({ MediaType.APPLICATION_XML })
     public List<LeaseIO> getLeases(@QueryParam("propertyCode") String propertyCode) {
@@ -66,7 +70,6 @@ public class RSLeaseService {
             }
         }
         return filteredLeases;
-
     }
 
     @GET
@@ -75,8 +78,7 @@ public class RSLeaseService {
     public LeaseIO getLeaseById(@PathParam("leaseId") String leaseId) {
         LeaseIO leaseIO = LeaseService.getLeaseById(leaseId);
         if (leaseIO == null) {
-            String message = String.format("Lease with leaseId=%s not found", leaseId);
-            throw new RSServiceException(Response.Status.NOT_FOUND, message);
+            throw new RuntimeException(i18n.tr("Lease with leaseId={0} not found", leaseId));
         }
         return LeaseService.getLeaseById(leaseId);
     }
@@ -93,7 +95,7 @@ public class RSLeaseService {
     @Consumes({ MediaType.APPLICATION_XML })
     public Response updateLease(LeaseIO leaseIO) {
         //TODO mkoval implementation TBD
-        return RSUtils.createSuccessResponse("Operation is not implemented");
+        return RSUtils.createSuccessResponse(i18n.tr("Operation is not implemented"));
     }
 
     @POST
@@ -101,7 +103,7 @@ public class RSLeaseService {
     @Consumes({ MediaType.APPLICATION_XML })
     public Response updateTenants(@PathParam("leaseId") String leaseId, List<TenantIO> tenantIOs) {
         //TODO mkoval implementation TBD
-        return RSUtils.createSuccessResponse("Operation is not implemented");
+        return RSUtils.createSuccessResponse(i18n.tr("Operation is not implemented"));
     }
 
 }

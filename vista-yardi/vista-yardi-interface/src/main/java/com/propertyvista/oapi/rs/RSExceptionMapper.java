@@ -7,28 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 9, 2012
+ * Created on Dec 11, 2012
  * @author Mykola
  * @version $Id$
  */
 package com.propertyvista.oapi.rs;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
 /**
- * Defines server-side exception, will be in case of fail or data not found scenario.
+ * Maps all exceptions to RS response.
  */
-@SuppressWarnings("serial")
-public class RSServiceException extends WebApplicationException {
+@Provider
+public class RSExceptionMapper implements ExceptionMapper<Throwable> {
 
-    public RSServiceException(Response.Status status) {
-        super(Response.status(status).type(MediaType.TEXT_PLAIN).build());
-    }
-
-    public RSServiceException(Response.Status status, String message) {
-        super(Response.status(status).entity(message).type(MediaType.TEXT_PLAIN).build());
+    @Override
+    public Response toResponse(Throwable exception) {
+        return Response.serverError().status(Response.Status.INTERNAL_SERVER_ERROR).entity(exception.getMessage()).type(MediaType.TEXT_PLAIN).build();
     }
 
 }

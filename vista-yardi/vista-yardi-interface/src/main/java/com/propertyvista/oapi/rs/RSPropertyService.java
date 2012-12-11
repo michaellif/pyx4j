@@ -26,6 +26,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.oapi.PropertyService;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.BuildingsIO;
@@ -55,6 +57,8 @@ import com.propertyvista.oapi.model.UnitIO;
 @Path("/buildings")
 public class RSPropertyService {
 
+    private static I18n i18n = I18n.get(RSPropertyService.class);
+
     @GET
     @Produces({ MediaType.APPLICATION_XML })
     public BuildingsIO getBuildings(@QueryParam("province") String province) {
@@ -78,8 +82,7 @@ public class RSPropertyService {
     public BuildingIO getBuildingByPropertyCode(@PathParam("propertyCode") String propertyCode) {
         BuildingIO buildingIO = PropertyService.getBuildingByPropertyCode(propertyCode);
         if (buildingIO == null) {
-            String message = String.format("Building with propertyCode=%s not found", propertyCode);
-            throw new RSServiceException(Response.Status.NOT_FOUND, message);
+            throw new RuntimeException(i18n.tr("Building with propertyCode={0} not found", propertyCode));
         }
         return buildingIO;
     }
@@ -104,8 +107,7 @@ public class RSPropertyService {
     public UnitIO getUnitByNumber(@PathParam("propertyCode") String propertyCode, @PathParam("unitNumber") String unitNumber) {
         UnitIO unitIO = PropertyService.getUnitByNumber(propertyCode, unitNumber);
         if (unitIO == null) {
-            String message = String.format("Unit with propertyCode=%s and unitNumber=%s not found", propertyCode, unitNumber);
-            throw new RSServiceException(Response.Status.NOT_FOUND, message);
+            throw new RuntimeException(i18n.tr("Unit with propertyCode={0} and unitNumber={1} not found", propertyCode, unitNumber));
         }
         return unitIO;
     }
@@ -113,13 +115,9 @@ public class RSPropertyService {
     @POST
     @Path("/updateBuilding")
     @Consumes({ MediaType.APPLICATION_XML })
-    public Response updateBuilding(BuildingIO buildingIO) {
-        try {
-            PropertyService.updateBuilding(buildingIO);
-            return RSUtils.createSuccessResponse("Building updated successfully");
-        } catch (Exception e) {
-            throw new RSServiceException(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
+    public Response updateBuilding(BuildingIO buildingIO) throws Exception {
+        PropertyService.updateBuilding(buildingIO);
+        return RSUtils.createSuccessResponse(i18n.tr("Building updated successfully"));
     }
 
     @POST
@@ -127,7 +125,7 @@ public class RSPropertyService {
     @Consumes({ MediaType.APPLICATION_XML })
     public Response updateUnit(@PathParam("propertyCode") String propertyCode, UnitIO unitIO) {
         //TODO mkoval implementation TBD
-        return RSUtils.createSuccessResponse("Operation is not implemented");
+        return RSUtils.createSuccessResponse(i18n.tr("Operation is not implemented"));
     }
 
 }

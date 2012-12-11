@@ -52,7 +52,7 @@ public class RSPropertyServiceTest extends RSOapiTestBase {
     public void testGetBuildingByPropertyCode_NonExistingPropertyCode() {
         WebResource webResource = resource();
         ClientResponse response = webResource.path("buildings/MockCode").get(ClientResponse.class);
-        Assert.assertEquals(ClientResponse.Status.NOT_FOUND, response.getClientResponseStatus());
+        Assert.assertEquals(ClientResponse.Status.INTERNAL_SERVER_ERROR, response.getClientResponseStatus());
     }
 
     @Test
@@ -68,7 +68,7 @@ public class RSPropertyServiceTest extends RSOapiTestBase {
     public void testGetUnitByNumber_NonExistingPropertyCodeAndUnitNumber() {
         WebResource webResource = resource();
         ClientResponse response = webResource.path("buildings/MockCode/units/MockNumber").get(ClientResponse.class);
-        Assert.assertEquals(ClientResponse.Status.NOT_FOUND, response.getClientResponseStatus());
+        Assert.assertEquals(ClientResponse.Status.INTERNAL_SERVER_ERROR, response.getClientResponseStatus());
     }
 
     //@Test
