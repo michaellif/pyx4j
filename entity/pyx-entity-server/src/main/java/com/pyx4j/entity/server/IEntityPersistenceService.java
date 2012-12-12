@@ -113,6 +113,10 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> void retrieveMember(ICollection<T, ?> collectionMember, AttachLevel attachLevel);
 
+    /**
+     * @param criteria
+     * @return null if entity not found
+     */
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria);
 
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria, AttachLevel attachLevel);
@@ -126,8 +130,16 @@ public interface IEntityPersistenceService {
 
     public String getPropertyName(EntityMeta meta, Path path);
 
+    /**
+     * @param criteria
+     * @return never returns null, if not found returns empty list
+     */
     public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria);
 
+    /**
+     * @param criteria
+     * @return never returns null, if not found returns empty list
+     */
     public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria, AttachLevel attachLevel);
 
     public <T extends IEntity> ICursorIterator<T> query(String encodedCursorReference, EntityQueryCriteria<T> criteria, AttachLevel attachLevel);
