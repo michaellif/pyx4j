@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.domain.pmc.Pmc;
@@ -39,6 +40,8 @@ import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.portal.server.preloader.PmcCreator;
 
 public class PmcFacadeImpl implements PmcFacade {
+
+    private static final I18n i18n = I18n.get(PmcFacadeImpl.class);
 
     @Override
     public void create(Pmc pmc) {
@@ -141,6 +144,10 @@ public class PmcFacadeImpl implements PmcFacade {
         Pmc pmc = Persistence.service().retrieve(Pmc.class, pmcId.getPrimaryKey());
         // First time create preload
         if (pmc.status().getValue() == PmcStatus.Created) {
+            pmc.status().setValue(PmcStatus.Activating);
+            Persistence.service().persist(pmc);
+            Persistence.service().commit();
+
             EntityQueryCriteria<OnboardingUserCredential> credentialCrt = EntityQueryCriteria.create(OnboardingUserCredential.class);
             credentialCrt.add(PropertyCriterion.eq(credentialCrt.proto().pmc(), pmc));
             List<OnboardingUserCredential> creds = Persistence.service().query(credentialCrt);
@@ -169,6 +176,8 @@ public class PmcFacadeImpl implements PmcFacade {
             } finally {
                 Persistence.service().endTransaction();
             }
+        } else if (EnumSet.of(PmcStatus.Activating, PmcStatus.Terminated).contains(pmc.status().getValue())) {
+            throw new UserRuntimeException(i18n.tr("Invalid transition {0}", pmc.status().getValue()));
         } else {
             pmc.status().setValue(PmcStatus.Active);
             Persistence.service().persist(pmc);
@@ -176,5 +185,4 @@ public class PmcFacadeImpl implements PmcFacade {
         }
         CacheService.reset();
     }
-
 }

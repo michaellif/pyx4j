@@ -15,31 +15,33 @@ package com.propertyvista.ob.server.services;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ClientSystemInfo;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.security.shared.Behavior;
-import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
-import com.propertyvista.domain.security.onboarding.OnboardingApplicationBehavior;
+import com.propertyvista.ob.rpc.dto.OnboardingApplicationStatus;
+import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 import com.propertyvista.ob.rpc.services.OnboardingAuthenticationService;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.server.AuthenticationServiceImpl implements OnboardingAuthenticationService,
         AclRevalidator {
-
-    public final static String accountCreatedAttr = OnboardingAuthenticationServiceImpl.class.getName() + ".accountCreated";
 
     protected VistaBasicBehavior getApplicationBehavior() {
         return VistaBasicBehavior.Onboarding;
@@ -51,7 +53,8 @@ public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.serv
     }
 
     protected String createSession(ClientSystemInfo clientSystemInfo) {
-        UserVisit visit = new UserVisit(null, null);
+        OnboardingUserVisit visit = new OnboardingUserVisit();
+        visit.setStatus(OnboardingApplicationStatus.starting);
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.add(getApplicationBehavior());
         String token = Lifecycle.beginSession(visit, behaviors);
@@ -63,35 +66,41 @@ public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.serv
         callback.onSuccess(createAuthenticationResponse(createSession(clientSystemInfo)));
     }
 
-    public static void addSessionBehavior(OnboardingApplicationBehavior behaviour) {
-        Set<Behavior> behaviors = new HashSet<Behavior>();
-        behaviors.addAll(SecurityController.getBehaviors());
-        behaviors.add(behaviour);
-        Lifecycle.changeSession(behaviors);
-    }
-
     @Override
     @IgnoreSessionToken
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String sessionToken) {
         assertClientSystemInfo(clientSystemInfo);
-        if ((Context.getVisit() != null) && !SecurityController.checkBehavior(OnboardingApplicationBehavior.accountCreated)) {
-            if ((Context.getVisit().getAttribute(accountCreatedAttr) == Boolean.TRUE)) {
-                addSessionBehavior(OnboardingApplicationBehavior.accountCreated);
-            }
+        AuthenticationResponse ar = createAuthenticationResponse(sessionToken);
+
+        // Case of application reload
+        final OnboardingUserVisit visit = Context.getUserVisit(OnboardingUserVisit.class);
+        if (visit != null) {
+            TaskRunner.runInAdminNamespace(new Callable<Void>() {
+
+                @Override
+                public Void call() throws Exception {
+                    EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+                    criteria.eq(criteria.proto().namespace(), visit.pmcNamespace);
+                    Pmc pmc = Persistence.service().retrieve(criteria);
+                    switch (pmc.status().getValue()) {
+                    case Active:
+                        visit.status = OnboardingApplicationStatus.accountCreated;
+                        break;
+                    default:
+                        break;
+                    }
+                    return null;
+                }
+
+            });
+
         }
-        callback.onSuccess(createAuthenticationResponse(sessionToken));
+
+        callback.onSuccess(ar);
     }
 
     @Override
     public Set<Behavior> getCurrentBehaviours(Key principalPrimaryKey, Set<Behavior> currentBehaviours, long aclTimeStamp) {
-        if ((Context.getVisit().getAttribute(accountCreatedAttr) == Boolean.TRUE)
-                && (!currentBehaviours.contains(OnboardingApplicationBehavior.accountCreated))) {
-            Set<Behavior> behaviors = new HashSet<Behavior>();
-            behaviors.addAll(currentBehaviours);
-            behaviors.add(OnboardingApplicationBehavior.accountCreated);
-            return behaviors;
-        } else {
-            return currentBehaviours;
-        }
+        return currentBehaviours;
     }
 }

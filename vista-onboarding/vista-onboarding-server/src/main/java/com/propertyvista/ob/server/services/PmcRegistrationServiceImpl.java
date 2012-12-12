@@ -24,9 +24,9 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
@@ -37,7 +37,8 @@ import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
-import com.propertyvista.domain.security.onboarding.OnboardingApplicationBehavior;
+import com.propertyvista.ob.rpc.dto.OnboardingApplicationStatus;
+import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;
 import com.propertyvista.ob.server.PmcActivationUserDeferredProcess;
@@ -48,8 +49,6 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
     private final static Logger log = LoggerFactory.getLogger(PmcRegistrationServiceImpl.class);
 
     private static final I18n i18n = I18n.get(PmcRegistrationServiceImpl.class);
-
-    private final static String vistaCrmUrlAttr = PmcRegistrationServiceImpl.class.getName() + ".vistaCrmUrl";
 
     @Override
     public void createAccount(AsyncCallback<String> callback, final PmcAccountCreationRequest request) {
@@ -94,21 +93,35 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
 
         log.info("New PMC {} created", credential.pmc());
 
-        OnboardingAuthenticationServiceImpl.addSessionBehavior(OnboardingApplicationBehavior.accountCreationRequested);
+        OnboardingUserVisit visit = Context.getUserVisit(OnboardingUserVisit.class);
+        visit.setStatus(OnboardingApplicationStatus.accountCreation);
+        visit.setPmcNamespace(credential.pmc().namespace().getValue());
 
-        String vistaCrmUrl = VistaDeployment.getBaseApplicationURL(credential.pmc(), VistaBasicBehavior.CRM, true);
-        Context.getVisit().setAttribute(vistaCrmUrlAttr, vistaCrmUrl);
+        String deferredCorrelationId = DeferredProcessRegistry.fork(new PmcActivationUserDeferredProcess(credential.pmc(), visit, credential.user()),
+                ThreadPoolNames.IMPORTS);
 
-        String deferredCorrelationId = DeferredProcessRegistry.fork(
-                new PmcActivationUserDeferredProcess(credential.pmc(), Context.getVisit(), credential.user()), ThreadPoolNames.IMPORTS);
+        visit.setAccountCreationDeferredCorrelationId(deferredCorrelationId);
 
         callback.onSuccess(deferredCorrelationId);
     }
 
     @Override
     public void obtainCrmURL(AsyncCallback<String> callback) {
-        SecurityController.assertBehavior(OnboardingApplicationBehavior.accountCreated);
-        callback.onSuccess((String) Context.getVisit().getAttribute(vistaCrmUrlAttr));
+        final OnboardingUserVisit visit = Context.getUserVisit(OnboardingUserVisit.class);
+
+        callback.onSuccess(TaskRunner.runInAdminNamespace(new Callable<String>() {
+
+            @Override
+            public String call() throws Exception {
+                EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+                criteria.eq(criteria.proto().namespace(), visit.pmcNamespace);
+                Pmc pmc = Persistence.service().retrieve(criteria);
+
+                String vistaCrmUrl = VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true);
+                return vistaCrmUrl;
+            }
+
+        }));
     }
 
 }

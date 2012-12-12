@@ -16,23 +16,23 @@ package com.propertyvista.ob.server;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.security.OnboardingUser;
-import com.propertyvista.ob.server.services.OnboardingAuthenticationServiceImpl;
+import com.propertyvista.ob.rpc.dto.OnboardingApplicationStatus;
+import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class PmcActivationUserDeferredProcess extends PmcActivationDeferredProcess {
 
     private static final long serialVersionUID = 8272802910189364700L;
 
-    private final Visit visit;
+    private final OnboardingUserVisit visit;
 
     private final OnboardingUser sendNewPmcEmailToUser;
 
-    public PmcActivationUserDeferredProcess(Pmc pmcId, Visit visit, OnboardingUser sendNewPmcEmailToUser) {
+    public PmcActivationUserDeferredProcess(Pmc pmcId, OnboardingUserVisit visit, OnboardingUser sendNewPmcEmailToUser) {
         super(pmcId);
         this.visit = visit;
         this.sendNewPmcEmailToUser = sendNewPmcEmailToUser;
@@ -52,8 +52,7 @@ public class PmcActivationUserDeferredProcess extends PmcActivationDeferredProce
     @Override
     protected void onPmcCreated() {
         ServerSideFactory.create(CommunicationFacade.class).sendNewPmcEmail(sendNewPmcEmailToUser, pmcId);
-        visit.setAttribute(OnboardingAuthenticationServiceImpl.accountCreatedAttr, Boolean.TRUE);
-        visit.setAclRevalidationRequired();
+        visit.setStatus(OnboardingApplicationStatus.accountCreated);
     }
 
 }

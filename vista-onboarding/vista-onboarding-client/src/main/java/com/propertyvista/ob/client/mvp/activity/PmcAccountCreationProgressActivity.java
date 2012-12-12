@@ -28,8 +28,6 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -102,7 +100,13 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
             public void onSuccess(DeferredProcessProgressResponse progress) {
                 if (progress.isCompleted()) {
                     progressTimer.cancel();
-                    progressTimer.scheduleRepeating(SIM_POLL_INTERVAL);
+                    if (progress.isError()) {
+                        if (progress.getMessage() != null) {
+                            onStepsProgressComplete(false, progress.getMessage());
+                        }
+                    } else {
+                        progressTimer.scheduleRepeating(SIM_POLL_INTERVAL);
+                    }
                 }
                 currentStepStatus = (currentStepStatus == StepStatus.INCOMPLETE) ? StepStatus.INPROGRESS : StepStatus.COMPLETE;
                 // don't finish the last step until server reports that it finished
@@ -167,14 +171,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
     private void onStepsProgressComplete(boolean completedSuccess, String message) {
         if (completedSuccess) {
             service.getStatus(null, PmcAccountCreationProgressActivity.this.defferedCorrelationId, true);
-
-            ClientContext.obtainAuthenticationData(new DefaultAsyncCallback<Boolean>() {
-                @Override
-                public void onSuccess(Boolean result) {
-                    AppSite.getPlaceController().goTo(new OnboardingSiteMap.PmcAccountCreationComplete());
-                }
-            });
-
+            AppSite.getPlaceController().goTo(new OnboardingSiteMap.PmcAccountCreationComplete());
         } else {
             MessageDialog.error(i18n.tr("Failed to Create PMC"), message);
         }

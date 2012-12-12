@@ -7,18 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-12-09
+ * Created on 2012-12-12
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.security.onboarding;
+package com.propertyvista.ob.rpc.dto;
 
-import com.pyx4j.security.shared.Behavior;
+import java.io.Serializable;
 
-public enum OnboardingApplicationBehavior implements Behavior {
+public enum OnboardingApplicationStatus implements Serializable {
 
-    accountCreationRequested,
+    starting,
 
-    accountCreated,
+    accountCreation,
+
+    accountCreated
 
 }

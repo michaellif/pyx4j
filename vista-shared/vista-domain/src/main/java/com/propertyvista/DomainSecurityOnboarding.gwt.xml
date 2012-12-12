@@ -5,7 +5,6 @@
     <inherits name='com.pyx4j.entity.EntityShared'/>
    
     <source path="domain/security/common"/>
-    <source path="domain/security/onboarding"/>
     
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.domain.security.common.AbstractUserCredential" />
     

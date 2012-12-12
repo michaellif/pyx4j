@@ -202,6 +202,9 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         this.isDnsAvailable = isDnsAvailable;
         this.isDnsCheckResponseRecieved = true;
         get(proto().dnsName()).revalidate();
+        if (isDnsAvailable) {
+            this.refresh(true);
+        }
     }
 
     private void devGeneratePmcData() {

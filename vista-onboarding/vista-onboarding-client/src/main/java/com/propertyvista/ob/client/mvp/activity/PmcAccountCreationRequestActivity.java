@@ -97,9 +97,7 @@ public class PmcAccountCreationRequestActivity extends AbstractActivity implemen
     }
 
     private void goToProgressPlace(String deferredCorellationId) {
-        AppPlace progressPlace = new OnboardingSiteMap.PmcAccountCreationProgress();
-        progressPlace.placeArg("id", deferredCorellationId);
-        AppSite.getPlaceController().goTo(progressPlace);
+        AppSite.getPlaceController().goTo(new OnboardingSiteMap.PmcAccountCreationProgress().placeArg("id", deferredCorellationId));
     }
 
 }

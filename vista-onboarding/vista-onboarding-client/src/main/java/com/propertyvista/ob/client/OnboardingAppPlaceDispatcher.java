@@ -15,13 +15,14 @@ package com.propertyvista.ob.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AbstractAppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
-import com.propertyvista.domain.security.onboarding.OnboardingApplicationBehavior;
 import com.propertyvista.ob.rpc.OnboardingSiteMap;
+import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 
 public class OnboardingAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
@@ -37,10 +38,20 @@ public class OnboardingAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected void obtainDefaultAuthenticatedPlace(AsyncCallback<AppPlace> callback) {
-        if (SecurityController.checkBehavior(OnboardingApplicationBehavior.accountCreated)) {
-            callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationComplete());
-        } else if (SecurityController.checkBehavior(OnboardingApplicationBehavior.accountCreationRequested)) {
-            callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationProgress());
+        if (ClientContext.getUserVisit() instanceof OnboardingUserVisit) {
+            OnboardingUserVisit visit = (OnboardingUserVisit) ClientContext.getUserVisit();
+            switch (visit.status) {
+            case accountCreated:
+                callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationComplete());
+                break;
+            case accountCreation:
+                callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationProgress().placeArg("id", visit.accountCreationDeferredCorrelationId));
+                break;
+            default:
+                callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationRequest());
+                break;
+            }
+
         } else {
             callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationRequest());
         }
@@ -48,11 +59,7 @@ public class OnboardingAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback) {
-        if (targetPlace instanceof OnboardingSiteMap.PmcAccountCreationComplete) {
-            callback.onSuccess(SecurityController.checkBehavior(OnboardingApplicationBehavior.accountCreated));
-        } else {
-            callback.onSuccess(true);
-        }
+        callback.onSuccess(true);
     }
 
     @Override

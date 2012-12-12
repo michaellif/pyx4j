@@ -41,7 +41,7 @@ import com.propertyvista.domain.settings.PmcVistaFeatures;
 public interface Pmc extends IEntity {
 
     public enum PmcStatus {
-        Created, Active, Suspended, Cancelled, Terminated
+        Created, Activating, Active, Suspended, Cancelled, Terminated
     }
 
     @NotNull
