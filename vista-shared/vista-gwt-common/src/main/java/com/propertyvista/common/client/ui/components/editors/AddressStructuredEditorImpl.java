@@ -171,7 +171,7 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
                 get(proto().postalCode()).setTitle("Zip Code");
                 get(proto().province()).setTitle("State");
             } else if (getValue().country().name().getStringView().compareTo("United Kingdom") == 0) {
-                get(proto().county()).setVisible(true);
+                get(proto().county()).setVisible(false);
                 get(proto().postalCode()).setTitle("Postal Code");
                 get(proto().province()).setVisible(false);
             } else {
