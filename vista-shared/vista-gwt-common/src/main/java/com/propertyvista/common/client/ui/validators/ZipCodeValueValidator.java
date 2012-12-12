@@ -54,6 +54,8 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
             return ValidationUtils.isCanadianPostalCodeValid(value) ? null : new ValidationError(component, i18n.tr("Invalid Canadian Postal Code"));
         } else if ("United States".equals(c)) {
             return ValidationUtils.isUSZipCodeValid(value) ? null : new ValidationError(component, i18n.tr("Invalid US Zip Code"));
+        } else if ("United Kingdom".equals(c)) {
+            return ValidationUtils.isUKPostalCodeValid(value) ? null : new ValidationError(component, i18n.tr("Invalid UK Postal Code"));
         } else {
             return null;
         }

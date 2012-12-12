@@ -41,7 +41,9 @@ public class LocationsGenerator {
                 countriesByName.put(country.name().getValue(), country);
                 countries.add(country);
             }
-            country.provinces().add(province);
+            if (!province.name().isNull()) {
+                country.provinces().add(province);
+            }
         }
 
         return countries;

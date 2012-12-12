@@ -27,6 +27,8 @@ public class CountryReferenceAdapter implements ReferenceAdapter<Country> {
         String name = newEntity.name().getValue().toLowerCase();
         if (name.equals("us") || name.equals("usa")) {
             name = "united states";
+        } else if (name.equals("uk")) {
+            name = "united kingdom";
         }
         c.add(new PropertyCriterion(c.proto().name().getFieldName() + IndexAdapter.SECONDARY_PRROPERTY_SUFIX, Restriction.EQUAL, name));
         return c;

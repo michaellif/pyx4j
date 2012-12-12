@@ -40,6 +40,7 @@ public class ProvinceContryFilters {
         countryProvinceRequired.add("united states");
         countryProvinceRequired.add("us");
         countryProvinceRequired.add("usa");
+        countryProvinceRequired.add("uk");
     }
 
     /**

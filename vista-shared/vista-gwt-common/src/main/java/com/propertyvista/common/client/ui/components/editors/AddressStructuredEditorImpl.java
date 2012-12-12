@@ -162,14 +162,18 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
 
     private void checkCountry() {
         if (getValue() != null) {
-            if (getValue().country().name().getStringView().compareTo("United States") == 0) {
-                get(proto().county()).setVisible(true);
-                get(proto().postalCode()).setTitle("Zip Code");
-                get(proto().province()).setTitle("State");
-            } else if (getValue().country().name().getStringView().compareTo("Canada") == 0) {
+            if (getValue().country().name().getStringView().compareTo("Canada") == 0) {
                 get(proto().county()).setVisible(false);
                 get(proto().postalCode()).setTitle("Postal Code");
                 get(proto().province()).setTitle("Province");
+            } else if (getValue().country().name().getStringView().compareTo("United States") == 0) {
+                get(proto().county()).setVisible(true);
+                get(proto().postalCode()).setTitle("Zip Code");
+                get(proto().province()).setTitle("State");
+            } else if (getValue().country().name().getStringView().compareTo("United Kingdom") == 0) {
+                get(proto().county()).setVisible(true);
+                get(proto().postalCode()).setTitle("Postal Code");
+                get(proto().province()).setVisible(false);
             } else {
                 //TODO generic case for other countries
             }
