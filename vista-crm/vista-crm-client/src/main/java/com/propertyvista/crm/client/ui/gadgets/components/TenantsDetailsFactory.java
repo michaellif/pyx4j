@@ -36,7 +36,7 @@ public class TenantsDetailsFactory extends AbstractListerDetailsFactory<TenantDT
             super(TenantDTO.class);
             setColumnDescriptors(//@formatter:off
                     new Builder(proto().participantId()).build(),
-                    new Builder(proto().role()).build(),
+                    new Builder(proto().role()).sortable(false).searchable(false).build(),
                     
                     new Builder(proto().customer().person().name()).searchable(false).build(),
                     new Builder(proto().customer().person().name().firstName(), false).build(),

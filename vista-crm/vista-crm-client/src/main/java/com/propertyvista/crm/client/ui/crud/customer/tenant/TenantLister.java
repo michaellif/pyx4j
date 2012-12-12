@@ -32,7 +32,7 @@ public class TenantLister extends ListerBase<TenantDTO> {
 
         setColumnDescriptors(//@formatter:off
             new Builder(proto().participantId()).build(),
-            new Builder(proto().role()).build(),
+            new Builder(proto().role()).sortable(false).searchable(false).build(),
             
             new Builder(proto().customer().person().name()).searchable(false).build(),
             new Builder(proto().customer().person().name().firstName(), false).build(),
