@@ -102,7 +102,7 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
     }
 
     @SuppressWarnings("unchecked")
-    protected final void bindCompleateDBO() {
+    protected final void bindCompleteDBO() {
         bind((Class<IEntity>) dboProto.getValueClass(), dtoProto, dboProto);
     }
 
