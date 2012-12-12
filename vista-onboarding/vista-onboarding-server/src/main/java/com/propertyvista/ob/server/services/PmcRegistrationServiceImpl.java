@@ -27,14 +27,18 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.contexts.Context;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.ob.rpc.dto.OnboardingApplicationStatus;
@@ -97,8 +101,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
         visit.setStatus(OnboardingApplicationStatus.accountCreation);
         visit.setPmcNamespace(credential.pmc().namespace().getValue());
 
-        String deferredCorrelationId = DeferredProcessRegistry.fork(new PmcActivationUserDeferredProcess(credential.pmc(), visit, credential.user()),
-                ThreadPoolNames.IMPORTS);
+        String deferredCorrelationId = DeferredProcessRegistry.fork(new PmcActivationUserDeferredProcess(credential, visit), ThreadPoolNames.IMPORTS);
 
         visit.setAccountCreationDeferredCorrelationId(deferredCorrelationId);
 
@@ -117,11 +120,20 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
                 criteria.eq(criteria.proto().namespace(), visit.pmcNamespace);
                 Pmc pmc = Persistence.service().retrieve(criteria);
 
-                String vistaCrmUrl = VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true);
-                return vistaCrmUrl;
+                if ((pmc != null) && (pmc.status().getValue() == PmcStatus.Active)) {
+                    String vistaCrmBaseUrl = VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true);
+
+                    return vistaCrmBaseUrl;
+                } else {
+                    return null;
+                }
             }
 
         }));
     }
 
+    private static String getCrmAccessUrl(String vistaCrmBaseUrl, String token) {
+        return AppPlaceInfo.absoluteUrl(vistaCrmBaseUrl, CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
+
+    }
 }

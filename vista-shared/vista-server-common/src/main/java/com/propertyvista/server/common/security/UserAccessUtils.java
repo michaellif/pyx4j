@@ -13,9 +13,6 @@
  */
 package com.propertyvista.server.common.security;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -25,28 +22,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class UserAccessUtils {
 
     private static final I18n i18n = I18n.get(UserAccessUtils.class);
-
-    public static String createAccessToken(CrmUser user, int ttlDays) {
-        CrmUserCredential credential = Persistence.service().retrieve(CrmUserCredential.class, user.getPrimaryKey());
-        if (credential == null) {
-            throw new UserRuntimeException(i18n.tr("Invalid Login Or Password")); // TODO is this a correct message?
-        }
-        credential.accessKey().setValue(AccessKey.createAccessKey());
-        Calendar expire = new GregorianCalendar();
-        expire.add(Calendar.DATE, ttlDays);
-        credential.accessKeyExpire().setValue(expire.getTime());
-        Persistence.service().persist(credential);
-
-        String token = AccessKey.compressToken(user.email().getValue(), credential.accessKey().getValue());
-
-        return token;
-    }
 
     public static String getPmcInterfaceUidBase(OnboardingUserCredential credential) {
         return credential.interfaceUid().getStringView() + ":";

@@ -16,12 +16,16 @@ package com.propertyvista.ob.server;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.biz.communication.CommunicationFacade;
-import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.ob.rpc.dto.OnboardingApplicationStatus;
 import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
+import com.propertyvista.server.common.security.AccessKey;
+import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class PmcActivationUserDeferredProcess extends PmcActivationDeferredProcess {
@@ -30,12 +34,12 @@ public class PmcActivationUserDeferredProcess extends PmcActivationDeferredProce
 
     private final OnboardingUserVisit visit;
 
-    private final OnboardingUser sendNewPmcEmailToUser;
+    private final OnboardingUserCredential credential;
 
-    public PmcActivationUserDeferredProcess(Pmc pmcId, OnboardingUserVisit visit, OnboardingUser sendNewPmcEmailToUser) {
-        super(pmcId);
+    public PmcActivationUserDeferredProcess(OnboardingUserCredential credential, OnboardingUserVisit visit) {
+        super(credential.pmc());
         this.visit = visit;
-        this.sendNewPmcEmailToUser = sendNewPmcEmailToUser;
+        this.credential = credential;
     }
 
     @Override
@@ -51,8 +55,12 @@ public class PmcActivationUserDeferredProcess extends PmcActivationDeferredProce
 
     @Override
     protected void onPmcCreated() {
-        ServerSideFactory.create(CommunicationFacade.class).sendNewPmcEmail(sendNewPmcEmailToUser, pmcId);
+        ServerSideFactory.create(CommunicationFacade.class).sendNewPmcEmail(credential.user(), pmcId);
         visit.setStatus(OnboardingApplicationStatus.accountCreated);
+
+        CrmUser crmUser = EntityFactory.createIdentityStub(CrmUser.class, credential.crmUser().getValue());
+        AccessKey.createAccessToken(crmUser, CrmUserCredential.class, 1);
+        Persistence.service().commit();
     }
 
 }

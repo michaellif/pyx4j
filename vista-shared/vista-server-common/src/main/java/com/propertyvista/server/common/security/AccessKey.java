@@ -14,6 +14,7 @@
 package com.propertyvista.server.common.security;
 
 import java.nio.charset.Charset;
+import java.security.SecureRandom;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
@@ -65,7 +66,7 @@ public class AccessKey {
 
     public static String createAccessKey() {
         StringBuffer buf = new StringBuffer();
-        Random rnd = new Random();
+        Random rnd = new SecureRandom();
         for (int i = 0; i < ACCESS_KEY_LEN; i++) {
             char c = (char) (rnd.nextInt('z' - 'a') + 'a');
             buf.append(c);
