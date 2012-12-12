@@ -72,7 +72,7 @@ public class ExportDownloadDeferredProcess extends AbstractDeferredProcess {
         } finally {
             Persistence.service().endTransaction();
         }
-        complete = true;
+        completed = true;
     }
 
     private void createExportData() {
@@ -130,7 +130,7 @@ public class ExportDownloadDeferredProcess extends AbstractDeferredProcess {
 
     @Override
     public DeferredProcessProgressResponse status() {
-        if (complete) {
+        if (completed) {
             DeferredReportProcessProgressResponse r = new DeferredReportProcessProgressResponse();
             r.setCompleted();
             r.setDownloadLink(System.currentTimeMillis() + "/" + fileName);

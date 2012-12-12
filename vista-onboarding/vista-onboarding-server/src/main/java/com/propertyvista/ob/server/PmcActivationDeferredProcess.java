@@ -42,7 +42,7 @@ public class PmcActivationDeferredProcess extends AbstractDeferredProcess {
         } finally {
             Persistence.service().endTransaction();
         }
-        complete = true;
+        completed = true;
     }
 
     protected void onPmcCreated() {
