@@ -55,7 +55,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 
     @Override

@@ -53,7 +53,7 @@ public class SiteDescriptorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Si
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 
     @Override

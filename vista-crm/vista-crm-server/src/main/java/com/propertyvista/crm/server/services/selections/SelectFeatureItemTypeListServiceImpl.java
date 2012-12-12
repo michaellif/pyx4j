@@ -27,6 +27,6 @@ public class SelectFeatureItemTypeListServiceImpl extends AbstractListServiceImp
     @Override
     protected void bind() {
         bind(dtoProto.id(), dboProto.id());
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 }

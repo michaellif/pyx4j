@@ -26,7 +26,7 @@ public class ServiceItemTypeCrudServiceImpl extends AbstractCrudServiceImpl<Serv
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 
 }

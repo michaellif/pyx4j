@@ -49,7 +49,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
         bind(dtoProto.buildingCode(), dboProto.building().propertyCode());
     }
 

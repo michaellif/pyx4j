@@ -26,7 +26,7 @@ public class BuildingPersister extends AbstractPersister<Building, Building> {
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 
     @Override

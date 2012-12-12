@@ -32,7 +32,7 @@ public class AggregatedTransferCrudServiceImpl extends AbstractCrudServiceImpl<A
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 
     @Override

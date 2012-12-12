@@ -48,7 +48,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 
     @Override

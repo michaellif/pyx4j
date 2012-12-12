@@ -34,7 +34,7 @@ public class VistaTermsCrudServiceImpl extends AbstractVersionedCrudServiceImpl<
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 
     @Override

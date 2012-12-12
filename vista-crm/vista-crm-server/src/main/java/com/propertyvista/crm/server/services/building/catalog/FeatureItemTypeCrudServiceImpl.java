@@ -26,7 +26,7 @@ public class FeatureItemTypeCrudServiceImpl extends AbstractCrudServiceImpl<Feat
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 
 }

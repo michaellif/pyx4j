@@ -32,7 +32,7 @@ public class DelinquentTenantListServiceImpl extends AbstractCrudServiceDtoImpl<
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 
     @Override

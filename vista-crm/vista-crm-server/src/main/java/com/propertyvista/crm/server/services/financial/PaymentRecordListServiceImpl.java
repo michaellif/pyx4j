@@ -26,6 +26,6 @@ public class PaymentRecordListServiceImpl extends AbstractListServiceImpl<Paymen
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 }

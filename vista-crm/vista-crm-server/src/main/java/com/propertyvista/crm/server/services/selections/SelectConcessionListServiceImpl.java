@@ -27,6 +27,6 @@ public class SelectConcessionListServiceImpl extends AbstractListServiceImpl<Con
     @Override
     protected void bind() {
         bind(dtoProto.id(), dboProto.id());
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 }

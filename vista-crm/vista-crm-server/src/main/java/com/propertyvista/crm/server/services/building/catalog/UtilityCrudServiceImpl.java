@@ -26,6 +26,6 @@ public class UtilityCrudServiceImpl extends AbstractCrudServiceImpl<Utility> imp
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 }

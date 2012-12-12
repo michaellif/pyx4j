@@ -29,7 +29,7 @@ public class PadSimFileCrudServiceImpl extends AbstractCrudServiceImpl<PadSimFil
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 
     @Override

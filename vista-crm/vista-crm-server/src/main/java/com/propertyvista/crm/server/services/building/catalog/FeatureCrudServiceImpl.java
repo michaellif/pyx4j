@@ -28,7 +28,7 @@ public class FeatureCrudServiceImpl extends AbstractVersionedCrudServiceImpl<Fea
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 
     @Override

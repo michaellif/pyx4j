@@ -31,7 +31,7 @@ public class RunCrudServiceImpl extends AbstractCrudServiceImpl<Run> implements 
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 
     @Override

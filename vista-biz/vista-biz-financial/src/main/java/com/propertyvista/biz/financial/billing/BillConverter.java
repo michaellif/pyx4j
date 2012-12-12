@@ -26,6 +26,6 @@ public class BillConverter extends EntityDtoBinder<Bill, BillDTO> {
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 }

@@ -36,7 +36,7 @@ public class ServiceCrudServiceImpl extends AbstractVersionedCrudServiceImpl<Ser
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 
     @Override

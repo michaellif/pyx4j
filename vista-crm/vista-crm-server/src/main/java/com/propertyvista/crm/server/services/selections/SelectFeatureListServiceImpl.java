@@ -29,7 +29,7 @@ public class SelectFeatureListServiceImpl extends AbstractListServiceImpl<Featur
     @Override
     protected void bind() {
         bind(dtoProto.id(), dboProto.id());
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 
     @Override

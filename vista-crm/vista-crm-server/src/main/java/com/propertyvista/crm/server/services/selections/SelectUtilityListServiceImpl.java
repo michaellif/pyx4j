@@ -26,6 +26,6 @@ public class SelectUtilityListServiceImpl extends AbstractListServiceImpl<Utilit
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 }

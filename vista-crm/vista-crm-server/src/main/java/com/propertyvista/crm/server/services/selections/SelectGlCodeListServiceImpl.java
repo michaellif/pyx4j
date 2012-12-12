@@ -27,6 +27,6 @@ public class SelectGlCodeListServiceImpl extends AbstractListServiceImpl<GlCode>
     @Override
     protected void bind() {
         bind(dtoProto.id(), dboProto.id());
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 }

@@ -41,7 +41,7 @@ public class OnboardingMerchantAccountCrudServiceImpl extends AbstractCrudServic
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bindCompleteDBO();
     }
 
     public static void setCalulatedFileds(final OnboardingMerchantAccount entity, OnboardingMerchantAccountDTO dto) {
