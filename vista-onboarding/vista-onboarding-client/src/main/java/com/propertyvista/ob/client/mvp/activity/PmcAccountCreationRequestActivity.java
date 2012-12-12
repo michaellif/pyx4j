@@ -16,6 +16,7 @@ package com.propertyvista.ob.client.mvp.activity;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -24,6 +25,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.ob.client.views.OnboardingViewFactory;
 import com.propertyvista.ob.client.views.PmcAccountCreationRequestView;
@@ -57,6 +59,11 @@ public class PmcAccountCreationRequestActivity extends AbstractActivity implemen
     @Override
     public void checkDns(AsyncCallback<Boolean> callback, String dnsName) {
         onboardingPublicActivationService.checkDNSAvailability(callback, dnsName);
+    }
+
+    @Override
+    public void openTerms() {
+        Window.open(AppPlaceInfo.absoluteUrl(GWT.getHostPageBaseURL(), OnboardingSiteMap.PmcAccountTerms.class, null), null, null);
     }
 
     @Override

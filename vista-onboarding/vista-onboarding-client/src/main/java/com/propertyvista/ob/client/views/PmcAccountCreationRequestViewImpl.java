@@ -43,6 +43,12 @@ public class PmcAccountCreationRequestViewImpl extends Composite implements PmcA
             public void onSubmit(PmcAccountCreationRequest duplicate) {
                 presenter.createAccount();
             }
+
+            @Override
+            public void onTermsOpenRequest() {
+                presenter.openTerms();
+            }
+
         };
         form.initContent();
         form.asWidget().getElement().getStyle().setProperty("marginLeft", "auto");

@@ -27,6 +27,8 @@ public interface PmcAccountCreationRequestView extends IView {
 
         void createAccount();
 
+        void openTerms();
+
     }
 
     void setPresenter(Presenter presenter);

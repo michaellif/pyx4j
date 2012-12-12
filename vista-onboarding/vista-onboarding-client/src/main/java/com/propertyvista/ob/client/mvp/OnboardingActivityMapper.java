@@ -24,6 +24,8 @@ import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.propertyvista.ob.client.mvp.activity.PmcAccountCreationCompleteActivity;
 import com.propertyvista.ob.client.mvp.activity.PmcAccountCreationProgressActivity;
 import com.propertyvista.ob.client.mvp.activity.PmcAccountCreationRequestActivity;
+import com.propertyvista.ob.client.mvp.activity.PmcTermsActivity;
+import com.propertyvista.ob.client.views.PmcTermsView;
 import com.propertyvista.ob.rpc.OnboardingSiteMap;
 
 public class OnboardingActivityMapper implements AppActivityMapper {
@@ -41,6 +43,8 @@ public class OnboardingActivityMapper implements AppActivityMapper {
                     activity = new PmcAccountCreationProgressActivity((OnboardingSiteMap.PmcAccountCreationProgress) place);
                 } else if (place instanceof OnboardingSiteMap.PmcAccountCreationComplete) {
                     activity = new PmcAccountCreationCompleteActivity((OnboardingSiteMap.PmcAccountCreationComplete) place);
+                } else if (place instanceof PmcTermsView) {
+                    activity = new PmcTermsActivity();
                 }
                 callback.onSuccess(activity);
             }

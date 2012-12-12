@@ -36,4 +36,9 @@ public class OnboardingPublicActivationServiceImpl implements OnboardingPublicAc
 
         }));
     }
+
+    @Override
+    public void getPmcAccountTerms(AsyncCallback<String> callback) {
+        callback.onSuccess("<div style=\"text-align: center\">THESE ARE THE TERMS</div>");
+    }
 }

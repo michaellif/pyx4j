@@ -7,19 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-12-09
- * @author vlads
+ * Created on 2012-12-12
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.ob.rpc.services;
+package com.propertyvista.ob.client.views;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.rpc.shared.IService;
+public interface PmcTermsView extends IsWidget {
 
-public interface OnboardingPublicActivationService extends IService {
+    void populate(String termsHtml);
 
-    public void checkDNSAvailability(AsyncCallback<Boolean> callback, String dnsName);
-
-    public void getPmcAccountTerms(AsyncCallback<String> callback);
 }

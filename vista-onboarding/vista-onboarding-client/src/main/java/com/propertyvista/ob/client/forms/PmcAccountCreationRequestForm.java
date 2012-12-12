@@ -20,6 +20,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -111,11 +112,11 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
             }
         });
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().firstName())).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lastName())).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).build());
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().firstName())).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lastName())).build());
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email())).build());
@@ -147,6 +148,27 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
             }
         });
 
+        FlowPanel termsAgreementShortcutPanel = new FlowPanel();
+        Label termsAgreementLabel = new Label(i18n.tr("By clicking Sign Up, you are acknowledging that you have read and agree to our "));
+        termsAgreementLabel.getElement().getStyle().setDisplay(Display.INLINE);
+        termsAgreementShortcutPanel.add(termsAgreementLabel);
+        Anchor termsAnchor = new Anchor(i18n.tr("Terms of Service"));
+        termsAnchor.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                onTermsOpenRequest();
+            }
+        });
+        termsAgreementShortcutPanel.add(termsAnchor);
+        Label dot = new Label(".");
+        dot.getElement().getStyle().setDisplay(Display.INLINE);
+        termsAgreementShortcutPanel.add(dot);
+        contentPanel.setWidget(++row, 0, termsAgreementShortcutPanel);
+        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(SPACE + SPACE, Unit.PX);
+        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(SPACE + SPACE, Unit.PX);
+        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
         final Button submitButton = new Button(i18n.tr("Sign Up"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -161,8 +183,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         submitButton.setEnabled(false);
 
         contentPanel.setWidget(++row, 0, submitButton);
-        contentPanel.getFlexCellFormatter().setColSpan(row, 0, 2);
-        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         addValueChangeHandler(new ValueChangeHandler<PmcAccountCreationRequest>() {
             @Override
@@ -194,6 +215,10 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
     }
 
     public void onSubmit(PmcAccountCreationRequest duplicate) {
+
+    }
+
+    public void onTermsOpenRequest() {
 
     }
 

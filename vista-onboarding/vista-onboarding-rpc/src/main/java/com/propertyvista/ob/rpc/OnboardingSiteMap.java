@@ -21,6 +21,10 @@ public class OnboardingSiteMap implements SiteMap {
     public static class Landing extends AppPlace {
     }
 
+    public static class PmcAccountTerms extends AppPlace {
+
+    }
+
     public static class PmcAccountCreationRequest extends AppPlace {
     }
 
