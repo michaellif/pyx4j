@@ -28,7 +28,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -36,7 +36,7 @@ import com.propertyvista.ob.client.forms.StepStatusIndicator;
 import com.propertyvista.ob.client.forms.StepStatusIndicator.StepStatus;
 import com.propertyvista.ob.client.views.OnboardingViewFactory;
 import com.propertyvista.ob.client.views.PmcAccountCreationProgressView;
-import com.propertyvista.ob.rpc.OnboardingSiteMap;
+import com.propertyvista.ob.rpc.services.PmcRegistrationService;
 
 public class PmcAccountCreationProgressActivity extends AbstractActivity implements PmcAccountCreationProgressView.Presenter {
 
@@ -59,7 +59,9 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
 
     private final PmcAccountCreationProgressView view;
 
-    private final DeferredProcessService service;
+    private final DeferredProcessService deferredProcessStatusService;
+
+    private final PmcRegistrationService pmcRegService;
 
     private String currentStep;
 
@@ -71,17 +73,18 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
 
     private static final int SIM_POLL_INTERVAL = 200;
 
+    private static final String SIM_ID = "sim";
+
     public PmcAccountCreationProgressActivity(AppPlace place) {
         this.view = OnboardingViewFactory.instance(PmcAccountCreationProgressView.class);
         this.defferedCorrelationId = place.getFirstArg("id");
         if (this.defferedCorrelationId == null) {
             throw new Error("no id progress id");
         }
-        this.service = GWT.<DeferredProcessService> create(DeferredProcessService.class);
-
+        this.deferredProcessStatusService = GWT.<DeferredProcessService> create(DeferredProcessService.class);
+        this.pmcRegService = GWT.<PmcRegistrationService> create(PmcRegistrationService.class);
         this.currentStep = PROGRESS_STEPS.get(0);
         this.currentStepStatus = StepStatus.INCOMPLETE;
-
     }
 
     @Override
@@ -113,7 +116,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
                 if (!progress.isCompleted() & currentStepStatus.equals(PROGRESS_STEPS.get(PROGRESS_STEPS.size() - 1))) {
                     currentStepStatus = StepStatus.INPROGRESS;
                 }
-                view.setStatus(currentStep, currentStepStatus);
+                view.setStepStatus(currentStep, currentStepStatus);
 
                 if (currentStepStatus == StepStatus.COMPLETE) {
                     Iterator<String> steps = PROGRESS_STEPS.iterator();
@@ -125,7 +128,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
                     if (steps.hasNext()) {
                         currentStep = steps.next();
                         currentStepStatus = StepStatus.INPROGRESS;
-                        view.setStatus(currentStep, currentStepStatus);
+                        view.setStepStatus(currentStep, currentStepStatus);
                     } else {
                         // here we got to the final step. so:
                         progressTimer.cancel();
@@ -146,15 +149,15 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
         progressTimer = new Timer() {
             @Override
             public void run() {
-                if (ApplicationMode.isDevelopment() & PmcAccountCreationProgressActivity.this.defferedCorrelationId.equals("sim")) {
+                if (ApplicationMode.isDevelopment() & PmcAccountCreationProgressActivity.this.defferedCorrelationId.equals(SIM_ID)) {
                     DeferredProcessProgressResponse response = new DeferredProcessProgressResponse();
                     if (currentStep.equals(PROGRESS_STEPS.get(PROGRESS_STEPS.size() - 1)) & currentStepStatus == StepStatus.COMPLETE) {
-                        response.setCompleted();
                         response.setProgressMaximum(PROGRESS_STEPS.size());
+                        response.setCompleted();
                     }
                     callback.onSuccess(response);
                 } else {
-                    service.getStatus(callback, PmcAccountCreationProgressActivity.this.defferedCorrelationId, false);
+                    deferredProcessStatusService.getStatus(callback, PmcAccountCreationProgressActivity.this.defferedCorrelationId, false);
                 }
             }
         };
@@ -170,8 +173,15 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
 
     private void onStepsProgressComplete(boolean completedSuccess, String message) {
         if (completedSuccess) {
-            service.getStatus(null, PmcAccountCreationProgressActivity.this.defferedCorrelationId, true);
-            AppSite.getPlaceController().goTo(new OnboardingSiteMap.PmcAccountCreationComplete());
+            if (ApplicationMode.isDevelopment() & !this.defferedCorrelationId.equals(SIM_ID)) {
+                deferredProcessStatusService.getStatus(null, PmcAccountCreationProgressActivity.this.defferedCorrelationId, true);
+            }
+            pmcRegService.obtainCrmURL(new DefaultAsyncCallback<String>() {
+                @Override
+                public void onSuccess(String url) {
+                    view.setCrmSiteUrl(url);
+                }
+            });
         } else {
             MessageDialog.error(i18n.tr("Failed to Create PMC"), message);
         }

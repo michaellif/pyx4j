@@ -13,14 +13,23 @@
  */
 package com.propertyvista.ob.client.forms;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.widgets.client.Label;
 
 public class StepStatusIndicator extends Composite {
+
+    public enum Styles implements IStyleName {
+
+        StepStatusIndicatorPanel;
+
+    }
 
     public enum StepStatus {
 
@@ -31,8 +40,6 @@ public class StepStatusIndicator extends Composite {
 
     private Image inProgress;
 
-    private Image incomplete;
-
     private StepStatusIndicator.StepStatus status;
 
     private final String stepName;
@@ -40,12 +47,20 @@ public class StepStatusIndicator extends Composite {
     public StepStatusIndicator(String stepName) {
         this.stepName = stepName;
         FlowPanel stepStatusPanel = new FlowPanel();
+        stepStatusPanel.addStyleName(Styles.StepStatusIndicatorPanel.name());
+        stepStatusPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         stepStatusPanel.getElement().getStyle().setProperty("width", "100%");
 
-        Label stepNameLabel = new Label();
+        SimplePanel stepNameLabelHolder = new SimplePanel();
+        stepNameLabelHolder.getElement().getStyle().setFloat(Float.LEFT);
 
+        Label stepNameLabel = new Label();
         stepNameLabel.setText(stepName);
-        stepStatusPanel.add(stepNameLabel);
+        stepNameLabel.getElement().getStyle().setProperty("display", "table-cell");
+        stepNameLabel.getElement().getStyle().setProperty("verticalAlign", "middle");
+        stepNameLabelHolder.setWidget(stepNameLabel);
+
+        stepStatusPanel.add(stepNameLabelHolder);
 
         stepStatusPanel.add(complete = new Image(StepStatusResources.INSTANCE.complete()));
         complete.setVisible(false);
@@ -55,11 +70,6 @@ public class StepStatusIndicator extends Composite {
         inProgress.setVisible(false);
         inProgress.getElement().getStyle().setFloat(Float.RIGHT);
 
-//        stepStatusPanel.add(incomplete = new Image(StepStatusResources.INSTANCE.incomplete()));
-//        incomplete.setVisible(true);
-//        incomplete.getElement().getStyle().setFloat(Float.RIGHT);
-
-        stepNameLabel.getElement().getStyle().setProperty("display", "inline-block");
         stepNameLabel.setHeight("" + complete.getHeight() + "px");
 
         setStatus(StepStatus.INCOMPLETE);
@@ -69,7 +79,6 @@ public class StepStatusIndicator extends Composite {
     public void setStatus(StepStatusIndicator.StepStatus value) {
         this.status = value;
         complete.setVisible(value == StepStatus.COMPLETE);
-//        incomplete.setVisible(value == StepStatus.INCOMPLETE);
         inProgress.setVisible(value == StepStatus.INPROGRESS);
     }
 

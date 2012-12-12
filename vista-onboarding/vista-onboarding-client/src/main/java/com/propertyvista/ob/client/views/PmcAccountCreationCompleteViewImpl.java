@@ -24,37 +24,64 @@ import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 
+import com.propertyvista.ob.client.themes.OnboardingStyles;
+
 public class PmcAccountCreationCompleteViewImpl extends Composite implements PmcAccountCreationCompleteView {
 
     public enum Styles {
         PmcAccountCreationCompleteLabel, PmcAccountCreationCompleteAnchor;
     }
 
+    public static class PmcSiteRedirectPanel extends Composite {
+
+        private final Anchor redirectToCrmSite;
+
+        private final Label completionCongratulationsMessage;
+
+        public PmcSiteRedirectPanel() {
+            FlowPanel panel = new FlowPanel();
+            completionCongratulationsMessage = new Label();
+            completionCongratulationsMessage.addStyleName(Styles.PmcAccountCreationCompleteLabel.name());
+            completionCongratulationsMessage.setText(i18n.tr("Congratulations! Your PMC Account is Ready!"));
+            panel.add(completionCongratulationsMessage);
+
+            SimplePanel redirectPanel = new SimplePanel();
+            redirectPanel.addStyleName(Styles.PmcAccountCreationCompleteAnchor.name());
+            redirectToCrmSite = new Anchor(i18n.tr("Go to your CRM!"));
+            redirectPanel.setWidget(redirectToCrmSite);
+            panel.add(redirectPanel);
+
+            initWidget(panel);
+        }
+
+        public void setCrmSiteUrl(String crmSiteUrl) {
+            completionCongratulationsMessage.setVisible(crmSiteUrl != null);
+            redirectToCrmSite.setVisible(crmSiteUrl != null);
+            redirectToCrmSite.setHref(crmSiteUrl != null ? crmSiteUrl : "");
+        }
+
+    }
+
     private static final I18n i18n = I18n.get(PmcAccountCreationCompleteViewImpl.class);
 
-    private final Anchor redirectToCrmSite;
+    private final PmcSiteRedirectPanel completionPanel;
 
     public PmcAccountCreationCompleteViewImpl() {
-        FlowPanel viewPanel = new FlowPanel();
-        viewPanel.setSize("100%", "100%");
+        this.completionPanel = new PmcSiteRedirectPanel();
+        this.completionPanel.getElement().getStyle().setProperty("marginLeft", "auto");
+        this.completionPanel.getElement().getStyle().setProperty("marginRight", "auto");
+        this.completionPanel.getElement().getStyle().setProperty("width", "300px");
 
-        Label completionCongratulationsMessage = new Label();
-        completionCongratulationsMessage.addStyleName(Styles.PmcAccountCreationCompleteLabel.name());
-        completionCongratulationsMessage.setText(i18n.tr("Congratulations!"));
-        viewPanel.add(completionCongratulationsMessage);
+        SimplePanel panel = new SimplePanel();
+        panel.addStyleName(OnboardingStyles.VistaObView.name());
+        panel.setWidget(this.completionPanel);
 
-        SimplePanel redirectPanel = new SimplePanel();
-        redirectPanel.addStyleName(Styles.PmcAccountCreationCompleteAnchor.name());
-        redirectToCrmSite = new Anchor(i18n.tr("Go to your CRM!"));
-        redirectPanel.setWidget(redirectToCrmSite);
-        viewPanel.add(redirectPanel);
-
-        initWidget(viewPanel);
+        initWidget(panel);
     }
 
     @Override
     public void setCrmSiteUrl(String crimeSiteUrl) {
-        redirectToCrmSite.setHref(crimeSiteUrl);
+        this.completionPanel.setCrmSiteUrl(crimeSiteUrl);
     }
 
     @Override

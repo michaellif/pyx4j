@@ -29,6 +29,7 @@ import com.pyx4j.widgets.client.richtext.DefaultRichTextEditorTheme;
 import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 
 import com.propertyvista.ob.client.forms.PmcAccountCreationRequestForm;
+import com.propertyvista.ob.client.forms.StepStatusIndicator;
 import com.propertyvista.ob.client.views.PmcAccountCreationCompleteViewImpl;
 
 public class OnboardingTheme extends Theme {
@@ -63,7 +64,23 @@ public class OnboardingTheme extends Theme {
         style.addProperty("min-height", "500px");
         addStyle(style);
 
-        style = new Style(".", PmcAccountCreationRequestForm.Style.PmcAccountCreationSubmitButton.name());
+        style = new Style(".", OnboardingStyles.VistaObView.name());
+        style.addProperty("width", "700px");
+        style.addProperty("height", "500px");
+        style.addProperty("display", "table-cell");
+        style.addProperty("vertical-align", "middle");
+        addStyle(style);
+
+        style = new Style(".", StepStatusIndicator.Styles.StepStatusIndicatorPanel);
+        style.addGradient(ThemeColor.contrast1, ThemeColor.contrast2);
+        style.addProperty("padding-left", "20px");
+        style.addProperty("padding-right", "20px");
+        style.addProperty("padding-top", "5px");
+        style.addProperty("padding-bottom", "5px");
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(".", PmcAccountCreationRequestForm.Styles.PmcAccountCreationSubmitButton.name());
         style.addProperty("padding-left", "30px");
         style.addProperty("padding-right", "30px");
         style.addProperty("padding-top", "10px");
@@ -74,7 +91,6 @@ public class OnboardingTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", PmcAccountCreationCompleteViewImpl.Styles.PmcAccountCreationCompleteLabel.name());
-        style.addProperty("margin-top", "100px");
         style.addProperty("margin-left", "auto");
         style.addProperty("margin-right", "auto");
         style.addProperty("text-align", "center");

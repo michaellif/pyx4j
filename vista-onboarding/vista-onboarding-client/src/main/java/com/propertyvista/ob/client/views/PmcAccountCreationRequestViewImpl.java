@@ -17,10 +17,12 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 
 import com.propertyvista.ob.client.forms.PmcAccountCreationRequestForm;
+import com.propertyvista.ob.client.themes.OnboardingStyles;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 
 public class PmcAccountCreationRequestViewImpl extends Composite implements PmcAccountCreationRequestView {
@@ -43,10 +45,13 @@ public class PmcAccountCreationRequestViewImpl extends Composite implements PmcA
             }
         };
         form.initContent();
-        form.setWidth("100%");
-        form.setHeight("100%");
+        form.asWidget().getElement().getStyle().setProperty("marginLeft", "auto");
+        form.asWidget().getElement().getStyle().setProperty("marginRight", "auto");
 
-        initWidget(form.getWidget());
+        SimplePanel panel = new SimplePanel();
+        panel.addStyleName(OnboardingStyles.VistaObView.name());
+        panel.setWidget(form);
+        initWidget(panel);
     }
 
     @Override

@@ -14,14 +14,21 @@
 package com.propertyvista.ob.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
 
@@ -51,13 +58,14 @@ public class OnboardingSite extends VistaSite {
         getHistoryHandler().register(getPlaceController(), getEventBus(), new OnboardingSiteMap.Default());
         StyleManger.installTheme(new OnboardingTheme(), new OnboardingPalette());
 
-        RootPanel root = RootPanel.get(ONBOARDING_INSERTION_ID);
-        if (root == null) {
-            root = RootPanel.get();
-        }
+        RootPanel rootPanel = getRootPanel();
         SimplePanel onboardingPanel = new SimplePanel();
         onboardingPanel.setStyleName(OnboardingStyles.VistaObMainPanel.name());
-        root.add(onboardingPanel);
+        rootPanel.add(onboardingPanel);
+
+        if (ApplicationMode.isDevelopment()) {
+            addDevLogout();
+        }
 
         AppActivityManager activityManager = new AppActivityManager(new OnboardingActivityMapper(), AppSite.getEventBus());
         activityManager.setDisplay(onboardingPanel);
@@ -87,6 +95,41 @@ public class OnboardingSite extends VistaSite {
                     }
 
                 });
+    }
+
+    private void addDevLogout() {
+        if (ApplicationMode.isDevelopment()) {
+            RootPanel r = getRootPanel();
+            Anchor logoutAnchor = new Anchor();
+            logoutAnchor.getElement().getStyle().setFloat(Float.RIGHT);
+            logoutAnchor.setText("Developer Logout");
+            logoutAnchor.addClickHandler(new ClickHandler() {
+
+                @Override
+                public void onClick(ClickEvent event) {
+                    ClientContext.logout(GWT.<OnboardingAuthenticationService> create(OnboardingAuthenticationService.class),
+                            new DefaultAsyncCallback<AuthenticationResponse>() {
+                                @Override
+                                public void onSuccess(AuthenticationResponse result) {
+                                    // the place redirection should be handled automatically by security controller
+                                }
+                            });
+                }
+
+            });
+            SimplePanel panel = new SimplePanel();
+            panel.getElement().getStyle().setMarginTop(50, Unit.PX);
+            panel.add(logoutAnchor);
+            r.add(panel);
+        }
+    }
+
+    private RootPanel getRootPanel() {
+        RootPanel root = RootPanel.get(ONBOARDING_INSERTION_ID);
+        if (root == null) {
+            root = RootPanel.get();
+        }
+        return root;
     }
 
 }

@@ -27,6 +27,8 @@ public interface PmcAccountCreationProgressView extends IView {
 
     void init(List<String> stepNames);
 
-    void setStatus(String stepName, StepStatus status);
+    void setStepStatus(String stepName, StepStatus status);
+
+    void setCrmSiteUrl(String url);
 
 }

@@ -57,7 +57,7 @@ public interface PmcAccountCreationRequest extends IEntity {
     IPrimitive<String> name();
 
     @NotNull
-    @Caption(name = "URL")
+    @Caption(name = "Tenant Protal URL")
     IPrimitive<String> dnsName();
 
     /**

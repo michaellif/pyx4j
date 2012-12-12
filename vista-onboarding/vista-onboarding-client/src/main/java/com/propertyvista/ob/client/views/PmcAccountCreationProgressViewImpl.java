@@ -16,6 +16,7 @@ package com.propertyvista.ob.client.views;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -25,20 +26,35 @@ import com.pyx4j.site.client.ui.crud.misc.IMemento;
 
 import com.propertyvista.ob.client.forms.StepStatusIndicator;
 import com.propertyvista.ob.client.forms.StepStatusIndicator.StepStatus;
+import com.propertyvista.ob.client.views.PmcAccountCreationCompleteViewImpl.PmcSiteRedirectPanel;
 
 public class PmcAccountCreationProgressViewImpl extends Composite implements PmcAccountCreationProgressView {
 
     private final List<StepStatusIndicator> stepStatuses;
 
+    private final FlowPanel viewPanel;
+
     private final FlowPanel stepsPanel;
+
+    private final PmcSiteRedirectPanel pmcCreatedPanel;
 
     public PmcAccountCreationProgressViewImpl() {
         this.stepStatuses = new ArrayList<StepStatusIndicator>();
+
+        this.viewPanel = new FlowPanel();
+
         this.stepsPanel = new FlowPanel();
-        this.stepsPanel.setWidth("40em");
         this.stepsPanel.getElement().getStyle().setProperty("marginLeft", "auto");
         this.stepsPanel.getElement().getStyle().setProperty("marginRight", "auto");
-        initWidget(this.stepsPanel);
+        this.stepsPanel.getElement().getStyle().setProperty("width", "400px");
+        this.viewPanel.add(stepsPanel);
+
+        this.pmcCreatedPanel = new PmcAccountCreationCompleteViewImpl.PmcSiteRedirectPanel();
+        this.pmcCreatedPanel.getElement().getStyle().setMarginTop(30, Unit.PX);
+        this.pmcCreatedPanel.setHeight("100px");
+        this.viewPanel.add(pmcCreatedPanel);
+
+        initWidget(this.viewPanel);
     }
 
     @Override
@@ -50,16 +66,22 @@ public class PmcAccountCreationProgressViewImpl extends Composite implements Pmc
             stepsPanel.add(stepStatus);
             stepStatuses.add(stepStatus);
         }
+        setCrmSiteUrl(null);
     }
 
     @Override
-    public void setStatus(String stepName, StepStatus status) {
+    public void setStepStatus(String stepName, StepStatus status) {
         for (StepStatusIndicator stepStatus : stepStatuses) {
             if (stepStatus.getName().equals(stepName)) {
                 stepStatus.setStatus(status);
                 break;
             }
         }
+    }
+
+    @Override
+    public void setCrmSiteUrl(String url) {
+        pmcCreatedPanel.setCrmSiteUrl(url);
     }
 
     @Override
@@ -71,25 +93,21 @@ public class PmcAccountCreationProgressViewImpl extends Composite implements Pmc
     @Override
     public void storeState(Place place) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void restoreState() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void showVisor(IsWidget widget, String caption) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void hideVisor() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -97,5 +115,4 @@ public class PmcAccountCreationProgressViewImpl extends Composite implements Pmc
         // TODO Auto-generated method stub
         return false;
     }
-
 }

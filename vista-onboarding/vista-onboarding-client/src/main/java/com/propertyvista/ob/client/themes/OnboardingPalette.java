@@ -22,8 +22,8 @@ public class OnboardingPalette extends Palette {
 
         putThemeColor(ThemeColor.object1, "#607280");
         putThemeColor(ThemeColor.object2, "#666666");
-        putThemeColor(ThemeColor.contrast1, "#666666");
-        putThemeColor(ThemeColor.contrast2, "#666666");
+        putThemeColor(ThemeColor.contrast1, "#8D9FAD");
+        putThemeColor(ThemeColor.contrast2, "#607280");
         putThemeColor(ThemeColor.foreground, "#444444");
         putThemeColor(ThemeColor.background, "#8D9FAD");
 
