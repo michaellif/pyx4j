@@ -31,6 +31,14 @@ public class ValidationUtils {
         return value.matches("^\\d{5}(-\\d{4})?$");
     }
 
+    // see http://snipplr.com/view/7990/
+    public static boolean isUKPostalCodeValid(String value) {
+        return value
+                .toUpperCase()
+                .matches(
+                        "^([A-PR-UWYZ]([0-9]{1,2}|([A-HK-Y][0-9]|[A-HK-Y][0-9]([0-9]|[ABEHMNPRV-Y]))|[0-9][A-HJKS-UW])\\ [0-9][ABD-HJLNP-UW-Z]{2}|(GIR\\ 0AA)|(SAN\\ TA1)|(BFPO\\ (C\\/O\\ )?[0-9]{1,4})|((ASCN|BBND|[BFS]IQQ|PCRN|STHL|TDCU|TKCA)\\ 1ZZ))$");
+    }
+
     public static boolean isCorrectUrl(String value) {
         return value.matches("^\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
     }
