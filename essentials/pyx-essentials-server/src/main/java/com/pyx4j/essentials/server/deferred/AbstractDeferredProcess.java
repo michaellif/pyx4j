@@ -26,7 +26,7 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
 
     private static final long serialVersionUID = -7013680464201337453L;
 
-    protected boolean complete = false;
+    protected boolean completed = false;
 
     protected volatile boolean canceled;
 
@@ -38,7 +38,7 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
     @Override
     public DeferredProcessProgressResponse status() {
         DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
-        if (complete) {
+        if (completed) {
             r.setCompleted();
         } else if (canceled) {
             r.setCanceled();

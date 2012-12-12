@@ -43,7 +43,7 @@ public class DatastoreAdminRemoveAllDataDeferredProcess implements IDeferredProc
 
     protected volatile boolean canceled;
 
-    private boolean compleate;
+    private boolean completed;
 
     private int total;
 
@@ -60,7 +60,7 @@ public class DatastoreAdminRemoveAllDataDeferredProcess implements IDeferredProc
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void execute() {
-        if (canceled || compleate) {
+        if (canceled || completed) {
             return;
         }
         long start = System.currentTimeMillis();
@@ -105,7 +105,7 @@ public class DatastoreAdminRemoveAllDataDeferredProcess implements IDeferredProc
             encodedCursorReference = null;
             entityClass = null;
         }
-        compleate = true;
+        completed = true;
     }
 
     @Override
@@ -120,7 +120,7 @@ public class DatastoreAdminRemoveAllDataDeferredProcess implements IDeferredProc
             r.setProgress(total - queue.size());
             r.setProgressMaximum(total);
         }
-        if (compleate) {
+        if (completed) {
             r.setMessage(message.toString());
             r.setCompleted();
         } else {

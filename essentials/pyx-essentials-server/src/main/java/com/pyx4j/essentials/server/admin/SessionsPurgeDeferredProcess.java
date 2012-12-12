@@ -53,7 +53,7 @@ public class SessionsPurgeDeferredProcess implements IDeferredProcess {
 
     private int count = 0;
 
-    private boolean compleate;
+    private boolean completed;
 
     public SessionsPurgeDeferredProcess(boolean all) {
         if (all) {
@@ -65,7 +65,7 @@ public class SessionsPurgeDeferredProcess implements IDeferredProcess {
 
     @Override
     public void execute() {
-        if (canceled || compleate) {
+        if (canceled || completed) {
             return;
         }
         long start = System.currentTimeMillis();
@@ -104,7 +104,7 @@ public class SessionsPurgeDeferredProcess implements IDeferredProcess {
         if (primaryKeys.size() > 0) {
             datastore.delete(primaryKeys);
         }
-        compleate = true;
+        completed = true;
     }
 
     @Override
@@ -118,7 +118,7 @@ public class SessionsPurgeDeferredProcess implements IDeferredProcess {
         r.setProgress(count);
         if (canceled) {
             r.setCanceled();
-        } else if (compleate) {
+        } else if (completed) {
             r.setCompleted();
             r.setMessage(MessageFormat.format("Removed {0} sessions", count));
         }
