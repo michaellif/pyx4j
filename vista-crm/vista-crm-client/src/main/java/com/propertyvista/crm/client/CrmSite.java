@@ -149,6 +149,7 @@ public class CrmSite extends VistaSite {
                 VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
                 VistaFeaturesCustomizationClient.setGoogleAnalyticDisableForEmployee(descriptor.isGoogleAnalyticDisableForEmployee().getValue());
                 VistaFeaturesCustomizationClient.enviromentTitleVisible = descriptor.enviromentTitleVisible().getValue(Boolean.TRUE);
+                ClentNavigUtils.setCountryOfOperationLocale();
                 obtainAuthenticationData();
             }
 

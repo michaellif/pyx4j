@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.gadgets.forms;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm;
@@ -35,7 +36,7 @@ public class CollectionsSummaryForm extends ZoomableViewForm<CollectionsGadgetDa
     }
 
     public CollectionsSummaryForm() {
-        this(NumberFormat.getFormat("$#,##0.00"));
+        this(NumberFormat.getFormat(CMoneyField.symbol + "#,##0.00"));
     }
 
     @Override

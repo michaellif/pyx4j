@@ -11975,7 +11975,7 @@ msgstr ""
 
 #: com/propertyvista/crm/rpc/dto/gadgets/UnitAvailabilityStatusDTO.java:2
 msgid "Revenue Lost ($)"
-msgstr ""
+msgstr "Revenue Lost (£)"
 
 #: com/propertyvista/domain/tenant/CustomerCreditCheck.java:1
 msgid "Review"

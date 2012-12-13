@@ -16,12 +16,16 @@ package com.propertyvista.common.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.Window;
 
 import com.pyx4j.site.client.NavigationUri;
 
 import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class ClentNavigUtils {
 
@@ -35,16 +39,20 @@ public class ClentNavigUtils {
 
     public static List<CompiledLocale> obtainAvailableLocales() {
         List<CompiledLocale> locales = new ArrayList<CompiledLocale>();
-        for (String localeName : LocaleInfo.getAvailableLocaleNames()) {
-            if (localeName.equals("default")) {
-                localeName = "en_US";
-            }
-            CompiledLocale cl = CompiledLocale.valueOf(localeName);
-            if (DemoData.vistaDemo && cl == CompiledLocale.ru) {
-                continue;
-            }
-            if (!locales.contains(cl)) {
-                locales.add(cl);
+        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.UK) {
+            locales.add(CompiledLocale.en_GB);
+        } else {
+            for (String localeName : LocaleInfo.getAvailableLocaleNames()) {
+                if (localeName.equals("default")) {
+                    localeName = "en_US";
+                }
+                CompiledLocale cl = CompiledLocale.valueOf(localeName);
+                if (DemoData.vistaDemo && cl == CompiledLocale.ru) {
+                    continue;
+                }
+                if (!locales.contains(cl)) {
+                    locales.add(cl);
+                }
             }
         }
         return locales;
@@ -56,5 +64,17 @@ public class ClentNavigUtils {
             currentLocale = "en_US";
         }
         return CompiledLocale.valueOf(currentLocale);
+    }
+
+    public static void setCountryOfOperationLocale() {
+        CompiledLocale compiledLocale = getCurrentLocale();
+        if ((VistaFeatures.instance().countryOfOperation() == CountryOfOperation.UK) && (compiledLocale != CompiledLocale.en_GB)) {
+            ClentNavigUtils.changeApplicationLocale(CompiledLocale.en_GB);
+        }
+    }
+
+    public static void changeApplicationLocale(CompiledLocale locale) {
+        UrlBuilder builder = Window.Location.createUrlBuilder().setParameter("locale", locale.name());
+        Window.Location.replace(builder.buildString());
     }
 }

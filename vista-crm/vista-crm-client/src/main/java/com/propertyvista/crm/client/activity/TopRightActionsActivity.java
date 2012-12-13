@@ -15,9 +15,7 @@ package com.propertyvista.crm.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.config.shared.ApplicationBackend;
@@ -105,8 +103,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void setLocale(CompiledLocale locale) {
-        UrlBuilder builder = Window.Location.createUrlBuilder().setParameter("locale", locale.name());
-        Window.Location.replace(builder.buildString());
+        ClentNavigUtils.changeApplicationLocale(locale);
     }
 
     public TopRightActionsActivity withPlace(Place place) {
