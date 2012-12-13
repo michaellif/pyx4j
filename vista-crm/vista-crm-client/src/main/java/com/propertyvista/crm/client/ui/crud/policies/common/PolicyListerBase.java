@@ -20,13 +20,13 @@ import java.util.Queue;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -48,15 +48,11 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
         addActionItem(deleteButton = new Button(i18n.tr("Delete Checked Items"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new ConfirmDecline() {
+                MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new Command() {
                     @Override
-                    public void onConfirmed() {
+                    public void execute() {
                         Queue<P> checkedItems = new LinkedList<P>(getDataTablePanel().getDataTable().getCheckedItems());
                         validateAndRemoveRecursively(checkedItems);
-                    }
-
-                    @Override
-                    public void onDeclined() {
                     }
                 });
             }

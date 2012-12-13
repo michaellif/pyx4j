@@ -19,6 +19,7 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -32,7 +33,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -51,17 +51,12 @@ public class UtilityLister extends ListerBase<Utility> {
         addActionItem(new Button(i18n.tr("Delete Checked"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new ConfirmDecline() {
+                MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new Command() {
                     @Override
-                    public void onConfirmed() {
+                    public void execute() {
                         for (Utility item : getDataTablePanel().getDataTable().getCheckedItems()) {
                             getPresenter().delete(item.getPrimaryKey());
                         }
-                    }
-
-                    @Override
-                    public void onDeclined() {
-                        // TODO Auto-generated method stub
                     }
                 });
             }

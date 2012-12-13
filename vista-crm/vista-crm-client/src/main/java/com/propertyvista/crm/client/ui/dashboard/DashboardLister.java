@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -25,7 +26,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -42,9 +42,9 @@ public class DashboardLister extends ListerBase<DashboardMetadata> {
         addActionItem(new Button(i18n.tr("Delete Checked"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new ConfirmDecline() {
+                MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new Command() {
                     @Override
-                    public void onConfirmed() {
+                    public void execute() {
                         for (DashboardMetadata item : getDataTablePanel().getDataTable().getCheckedItems()) {
                             if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(item.ownerUser().getPrimaryKey())) {
                                 getPresenter().delete(item.getPrimaryKey());
@@ -52,10 +52,6 @@ public class DashboardLister extends ListerBase<DashboardMetadata> {
                                 MessageDialog.info(i18n.tr("You must be owner of dashboard \"{0}\" to delete it", item.name().getValue()));
                             }
                         }
-                    }
-
-                    @Override
-                    public void onDeclined() {
                     }
                 });
             }
