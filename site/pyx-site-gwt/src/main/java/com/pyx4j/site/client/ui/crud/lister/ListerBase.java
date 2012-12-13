@@ -20,14 +20,21 @@
  */
 package com.pyx4j.site.client.ui.crud.lister;
 
+import java.util.List;
+
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public abstract class ListerBase<E extends IEntity> extends BasicLister<E> implements IListerView<E> {
+
+    private static final I18n i18n = I18n.get(ListerBase.class);
 
     public interface ItemSelectionHandler<E> {
         void onSelect(E selectedItem);
@@ -48,8 +55,9 @@ public abstract class ListerBase<E extends IEntity> extends BasicLister<E> imple
         this.itemOpenPlaceClass = AppPlaceEntityMapper.resolvePlaceClass(clazz);
     }
 
-    public ListerBase(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew) {
-        super(clazz, allowZoomIn, allowAddNew);
+    public ListerBase(Class<E> clazz, boolean allowAddNew, boolean allowDelete) {
+        super(clazz, AppPlaceEntityMapper.resolvePlaceClass(clazz) != null, allowAddNew, allowDelete);
+        this.itemOpenPlaceClass = AppPlaceEntityMapper.resolvePlaceClass(clazz);
     }
 
     public boolean isOpenEditor() {
@@ -81,6 +89,18 @@ public abstract class ListerBase<E extends IEntity> extends BasicLister<E> imple
     @Override
     protected void onItemNew() {
         getPresenter().editNew(itemOpenPlaceClass);
+    }
+
+    @Override
+    protected void onItemsDelete(final List<E> items) {
+        MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new Command() {
+            @Override
+            public void execute() {
+                for (E item : items) {
+                    getPresenter().delete(item.getPrimaryKey());
+                }
+            }
+        });
     }
 
     @Override

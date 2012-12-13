@@ -35,6 +35,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterItem;
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -58,6 +59,8 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
     private WidgetsImages images;
 
     private Button addButton;
+
+    private Button delButton;
 
     private Button filterButton;
 
@@ -124,8 +127,26 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
                         .getCaption()), addActionHandler), 0);
     }
 
+    public void setDelActionHandler(ClickHandler delActionHandler) {
+        topActionsBar.getToolbar().insertItem(
+                delButton = new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("Delete Checked"), delActionHandler), 1);
+
+        delButton.setEnabled(false);
+        getDataTable().setHasCheckboxColumn(true);
+        getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
+            @Override
+            public void onCheck(boolean isAnyChecked) {
+                delButton.setEnabled(isAnyChecked);
+            }
+        });
+    }
+
     public Button getAddButton() {
         return addButton;
+    }
+
+    public Button getDelButton() {
+        return delButton;
     }
 
     public void setFilterApplyCommand(Command filterActionCommand) {
