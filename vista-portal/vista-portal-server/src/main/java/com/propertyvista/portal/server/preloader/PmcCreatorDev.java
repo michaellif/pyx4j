@@ -55,7 +55,13 @@ public class PmcCreatorDev {
         pmc.features().onlineApplication().setValue(Boolean.TRUE);
         pmc.features().xmlSiteExport().setValue(Boolean.TRUE);
         pmc.features().genericProductCatalog().setValue(VistaTODO.VISTA_2256_Generic_Product_Catalog);
-        pmc.features().countryOfOperation().setValue(CountryOfOperation.Canada);
+
+        if (pmcName.equals(DemoPmc.rockville.name())) {
+            pmc.features().countryOfOperation().setValue(CountryOfOperation.UK);
+        } else {
+            pmc.features().countryOfOperation().setValue(CountryOfOperation.Canada);
+        }
+
         pmc.equifaxInfo().approved().setValue(true);
         pmc.equifaxInfo().reportType().setValue(EquifaxReportType.longReport);
 
