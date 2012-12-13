@@ -21,6 +21,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.rpc.CrmCrudAppPlace;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
@@ -46,6 +47,11 @@ public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> imp
     @Override
     public void viewChild(Key id) {
         ((SiteViewer.Presenter) getPresenter()).viewChild(id);
+    }
+
+    @Override
+    public void viewChild(Key id, Class<? extends CrmCrudAppPlace> openPlaceClass) {
+        ((SiteViewer.Presenter) getPresenter()).viewChild(id, openPlaceClass);
     }
 
     @Override

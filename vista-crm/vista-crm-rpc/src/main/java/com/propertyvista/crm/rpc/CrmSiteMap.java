@@ -371,6 +371,9 @@ public class CrmSiteMap implements SiteMap {
 
             public static class Page extends CrmCrudAppPlace {
             }
+
+            public static class CityIntroPage extends CrmCrudAppPlace {
+            }
         }
 
         public static class Policies extends AppPlace {

@@ -111,6 +111,8 @@ import com.propertyvista.crm.client.activity.crud.organisation.PortfolioViewerAc
 import com.propertyvista.crm.client.activity.crud.organisation.VendorEditorActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.VendorListerActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.VendorViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.content.CityIntroPageEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.content.CityIntroPageViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.HomePageGadgetEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.HomePageGadgetViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.PageEditorActivity;
@@ -201,7 +203,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Content;
 import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Financial;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Financial.ProductDictionary;
 import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Security;
 
 public class MainActivityMapper implements AppActivityMapper {
@@ -720,6 +721,16 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new HomePageGadgetViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof Content.CityIntroPage) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new CityIntroPageEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new CityIntroPageViewerActivity(crudPlace);
                             break;
                         }
 

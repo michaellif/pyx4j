@@ -117,6 +117,9 @@ public interface SiteDescriptor extends Descriptor {
     IList<HomePageGadget> homePageGadgetsWide();
 
     @Owned
+    IList<CityIntroPage> cityIntroPages();
+
+    @Owned
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     @MemberColumn(name = "updateFlag")
     SiteDescriptorChanges _updateFlag();

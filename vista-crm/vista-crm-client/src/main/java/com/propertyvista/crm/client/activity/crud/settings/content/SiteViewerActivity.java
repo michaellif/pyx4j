@@ -24,6 +24,7 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteViewer;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
+import com.propertyvista.crm.rpc.CrmCrudAppPlace;
 import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Content;
 import com.propertyvista.crm.rpc.services.admin.SiteDescriptorCrudService;
 import com.propertyvista.dto.SiteDescriptorDTO;
@@ -41,9 +42,19 @@ public class SiteViewerActivity extends CrmViewerActivity<SiteDescriptorDTO> imp
     }
 
     @Override
+    public void viewChild(Key id, Class<? extends CrmCrudAppPlace> openPlaceClass) {
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formViewerPlace(id));
+    }
+
+    @Override
     public void editNew(Key parentid) {
-        AppSite.getPlaceController().goTo(
-                new Content.Page().formNewItemPlace(parentid).queryArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT,
+        AppSite.getPlaceController()
+                .goTo(new Content.Page().formNewItemPlace(parentid).queryArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT,
                         PageEditor.Presenter.PageParent.site.name()));
+    }
+
+    @Override
+    public void editNew(Key parentId, Class<? extends CrmCrudAppPlace> openPlaceClass) {
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentId));
     }
 }

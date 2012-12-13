@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.settings.content.site;
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
+import com.propertyvista.crm.rpc.CrmCrudAppPlace;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public interface SiteViewer extends IViewerView<SiteDescriptorDTO> {
@@ -24,11 +25,16 @@ public interface SiteViewer extends IViewerView<SiteDescriptorDTO> {
 
         void viewChild(Key id);
 
+        void viewChild(Key id, Class<? extends CrmCrudAppPlace> openPlaceClass);
+
         void editNew(Key parentid);
 
+        void editNew(Key parentid, Class<? extends CrmCrudAppPlace> openPlaceClass);
     }
 
     void viewChild(Key id);
+
+    void viewChild(Key id, Class<? extends CrmCrudAppPlace> openPlaceClass);
 
     void newChild(Key parentid);
 }

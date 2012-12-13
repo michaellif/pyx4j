@@ -20,6 +20,10 @@ import com.propertyvista.crm.client.ui.crud.settings.content.gadgets.HomePageGad
 import com.propertyvista.crm.client.ui.crud.settings.content.gadgets.HomePageGadgetEditorImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.gadgets.HomePageGadgetViewer;
 import com.propertyvista.crm.client.ui.crud.settings.content.gadgets.HomePageGadgetViewerImpl;
+import com.propertyvista.crm.client.ui.crud.settings.content.page.CityIntroPageEditor;
+import com.propertyvista.crm.client.ui.crud.settings.content.page.CityIntroPageEditorImpl;
+import com.propertyvista.crm.client.ui.crud.settings.content.page.CityIntroPageViewer;
+import com.propertyvista.crm.client.ui.crud.settings.content.page.CityIntroPageViewerImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditorImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageViewer;
@@ -91,6 +95,11 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new HomePageGadgetViewerImpl());
             } else if (HomePageGadgetEditor.class.equals(type)) {
                 map.put(type, new HomePageGadgetEditorImpl());
+
+            } else if (CityIntroPageViewer.class.equals(type)) {
+                map.put(type, new CityIntroPageViewerImpl());
+            } else if (CityIntroPageEditor.class.equals(type)) {
+                map.put(type, new CityIntroPageEditorImpl());
 
             } else if (ProductDictionaryView.class.equals(type)) {
                 map.put(type, new ProductDictionaryViewImpl());

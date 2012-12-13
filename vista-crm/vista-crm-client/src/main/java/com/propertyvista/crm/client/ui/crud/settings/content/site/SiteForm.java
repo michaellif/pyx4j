@@ -41,6 +41,7 @@ import com.pyx4j.widgets.client.dialog.OkDialog;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.settings.content.page.CityIntroPageFolder;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.PortalImageResourceFolder.SiteImageThumbnail;
 import com.propertyvista.domain.File;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
@@ -64,13 +65,10 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("Look And Feel"));
 
         int row = 0;
-
-        content.setH1(row++, 0, 1, i18n.tr("Look And Feel"));
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().enabled()), 10).build());
-
         CComponent<?, ?> skinComp;
         content.setWidget(row++, 0, new DecoratorBuilder(skinComp = inject(proto().skin()), 10).build());
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object1()), 10).build());
@@ -83,10 +81,48 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         }
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableMapView()), 10).build());
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableBuildingDetails()), 10).build());
+        selectTab(addTab(content));
 
+        content = new FormFlexPanel(proto().locales().getMeta().getCaption());
+        content.setWidget(0, 0, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
+        addTab(content);
+
+        content = new FormFlexPanel(proto().siteTitles().getMeta().getCaption());
+        content.setWidget(0, 0, inject(proto().siteTitles(), new SiteTitlesFolder(isEditable())));
+        addTab(content);
+
+        content = new FormFlexPanel(i18n.tr("Site Logos"));
+        content.setWidget(0, 0, inject(proto().logo(), new PortalImageResourceFolder(isEditable())));
+        addTab(content);
+
+        content = new FormFlexPanel(proto().slogan().getMeta().getCaption());
+        content.setWidget(0, 0, inject(proto().slogan(), new RichTextContentFolder(isEditable())));
+        addTab(content);
+
+        content = new FormFlexPanel(proto().banner().getMeta().getCaption());
+        content.setWidget(0, 0, inject(proto().banner(), new PortalImageResourceFolder(isEditable())));
+        addTab(content);
+
+        // home page gadgets
+        content = new FormFlexPanel(i18n.tr("Home Page Gadgets"));
+        content.setWidget(0, 0, createGadgetPanel());
+        addTab(content);
+
+        content = new FormFlexPanel(proto().socialLinks().getMeta().getCaption());
+        content.setWidget(0, 0, inject(proto().socialLinks(), new SocialLinkFolder(isEditable())));
+        addTab(content);
+
+        content = new FormFlexPanel(proto().childPages().getMeta().getCaption());
+        content.setWidget(0, 0, inject(proto().childPages(), new SitePageDescriptorFolder(this)));
+        addTab(content);
+
+        content = new FormFlexPanel(proto().cityIntroPages().getMeta().getCaption());
+        content.setWidget(0, 0, inject(proto().cityIntroPages(), new CityIntroPageFolder(this)));
+        addTab(content);
+
+        content = new FormFlexPanel(proto().crmLogo().getMeta().getCaption());
         HorizontalPanel imageLinkContainer = new HorizontalPanel();
         imageLinkContainer.setWidth("100%");
-        content.setH1(row++, 0, 1, proto().crmLogo().getMeta().getCaption());
         content.setWidget(row++, 0, imageLinkContainer);
         imageLinkContainer.add(inject(proto().crmLogo(), new CFile<File>(new Command() {
             @Override
@@ -122,33 +158,7 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         imageLinkContainer.setCellVerticalAlignment(imageLinkContainer.getWidget(0), HasVerticalAlignment.ALIGN_MIDDLE);
         imageLinkContainer.getWidget(0).setWidth("400px");
         imageLinkContainer.setCellWidth(thumb, "200px");
-
-        content.setH1(row++, 0, 1, proto().locales().getMeta().getCaption());
-        content.setWidget(row++, 0, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
-
-        content.setH1(row++, 0, 1, proto().siteTitles().getMeta().getCaption());
-        content.setWidget(row++, 0, inject(proto().siteTitles(), new SiteTitlesFolder(isEditable())));
-
-        content.setH1(row++, 0, 1, proto().logo().getMeta().getCaption());
-        content.setWidget(row++, 0, inject(proto().logo(), new PortalImageResourceFolder(isEditable())));
-
-        content.setH1(row++, 0, 1, proto().slogan().getMeta().getCaption());
-        content.setWidget(row++, 0, inject(proto().slogan(), new RichTextContentFolder(isEditable())));
-
-        content.setH1(row++, 0, 1, proto().banner().getMeta().getCaption());
-        content.setWidget(row++, 0, inject(proto().banner(), new PortalImageResourceFolder(isEditable())));
-
-        content.setH1(row++, 0, 1, proto().socialLinks().getMeta().getCaption());
-        content.setWidget(row++, 0, inject(proto().socialLinks(), new SocialLinkFolder(isEditable())));
-
-        // home page gadgets
-        content.setWidget(row++, 0, createGadgetPanel());
-
-        content.setH1(row++, 0, 1, proto().childPages().getMeta().getCaption());
-        content.setWidget(row++, 0, inject(proto().childPages(), new SitePageDescriptorFolder(this)));
-
-        selectTab(addTab(content));
-
+        addTab(content);
     }
 
     @Override
