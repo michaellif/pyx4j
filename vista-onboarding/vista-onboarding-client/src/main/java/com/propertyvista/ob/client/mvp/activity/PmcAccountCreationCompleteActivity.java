@@ -57,7 +57,6 @@ public class PmcAccountCreationCompleteActivity extends AbstractActivity impleme
     @Deprecated
     public void refresh() {
         // TODO Auto-generated method stub
-
     }
 
 }

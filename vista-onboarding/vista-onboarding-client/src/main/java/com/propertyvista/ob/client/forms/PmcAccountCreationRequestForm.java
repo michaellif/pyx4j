@@ -13,6 +13,7 @@
  */
 package com.propertyvista.ob.client.forms;
 
+import com.google.gwt.dom.client.Style.Clear;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -22,8 +23,10 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -48,7 +51,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
 
     public enum Styles implements IStyleName {
 
-        PmcAccountCreationSubmitButton
+        PmcUrlFieldNote, PmcAccountCreationSubmitButton
 
     }
 
@@ -78,18 +81,30 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         int row = -1;
 
         FlowPanel dnsNamePanel = new FlowPanel();
-        SimplePanel dnsNamePrefixHolder = new SimplePanel();
-        dnsNamePrefixHolder.setWidget(new DecoratorBuilder(inject(proto().dnsName()), 10).build());
-        dnsNamePrefixHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        dnsNamePanel.add(dnsNamePrefixHolder);
+        dnsNamePanel.getElement().getStyle().setMarginLeft(15, Unit.EM);
+        SimplePanel dnsSubdomainNameHolder = new SimplePanel();
+        dnsSubdomainNameHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        dnsSubdomainNameHolder.setWidget(new DecoratorBuilder(inject(proto().dnsName()), 10).labelWidth(3).build());
 
-        Label dnsNameSuffix = new Label(".propertyvista.com");
-        dnsNameSuffix.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        dnsNamePanel.add(dnsNameSuffix);
+        Label dnsDomainName = new Label(".propertyvista.com");
+        dnsDomainName.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+        dnsNamePanel.add(dnsSubdomainNameHolder);
+        dnsNamePanel.add(dnsDomainName);
+
+        if (false) {
+            (get(proto().dnsName())).setNote(PmcAccountCreationRequestFormResources.INSTANCE.urlFieldNote().getText(), NoteStyle.Info);
+        } else {
+            HTML note = new HTML(PmcAccountCreationRequestFormResources.INSTANCE.urlFieldNote().getText());
+            note.getElement().getStyle().setClear(Clear.BOTH);
+            note.getElement().getStyle().setDisplay(Display.BLOCK);
+            dnsNamePanel.add(note);
+        }
         contentPanel.setWidget(++row, 0, dnsNamePanel);
-        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_LEFT);
         contentPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_MIDDLE);
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
+
         get(proto().dnsName()).addValueChangeHandler(new ValueChangeHandler<String>() {
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
@@ -151,6 +166,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
             }
         });
 
+        HorizontalPanel signUpPanel = new HorizontalPanel();
         FlowPanel termsAgreementShortcutPanel = new FlowPanel();
         Label termsAgreementLabel = new Label(i18n.tr("By clicking Sign Up, you are acknowledging that you have read and agree to our "));
         termsAgreementLabel.getElement().getStyle().setDisplay(Display.INLINE);
@@ -167,10 +183,8 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         Label dot = new Label(".");
         dot.getElement().getStyle().setDisplay(Display.INLINE);
         termsAgreementShortcutPanel.add(dot);
-        contentPanel.setWidget(++row, 0, termsAgreementShortcutPanel);
-        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(SPACE + SPACE, Unit.PX);
-        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(SPACE + SPACE, Unit.PX);
-        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        termsAgreementShortcutPanel.getElement().getStyle().setPaddingRight(20, Unit.PX);
+        signUpPanel.add(termsAgreementShortcutPanel);
 
         final Button submitButton = new Button(i18n.tr("Sign Up"), new ClickHandler() {
             @Override
@@ -185,8 +199,13 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         submitButton.addStyleName(PmcAccountCreationRequestForm.Styles.PmcAccountCreationSubmitButton.name());
         submitButton.setEnabled(false);
 
-        contentPanel.setWidget(++row, 0, submitButton);
-        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        signUpPanel.add(submitButton);
+        signUpPanel.setCellHorizontalAlignment(termsAgreementShortcutPanel, HasHorizontalAlignment.ALIGN_CENTER);
+        signUpPanel.setCellVerticalAlignment(termsAgreementShortcutPanel, HasVerticalAlignment.ALIGN_BOTTOM);
+        signUpPanel.setCellWidth(termsAgreementShortcutPanel, "80%");
+        signUpPanel.setCellHorizontalAlignment(submitButton, HasHorizontalAlignment.ALIGN_CENTER);
+        signUpPanel.setCellVerticalAlignment(submitButton, HasVerticalAlignment.ALIGN_BOTTOM);
+        contentPanel.setWidget(++row, 0, signUpPanel);
 
         addValueChangeHandler(new ValueChangeHandler<PmcAccountCreationRequest>() {
             @Override

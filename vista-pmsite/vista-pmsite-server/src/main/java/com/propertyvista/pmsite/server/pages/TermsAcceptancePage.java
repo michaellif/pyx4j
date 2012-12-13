@@ -67,6 +67,7 @@ public class TermsAcceptancePage extends BasePage {
                 String result = null;
                 String result_en = null;
                 EntityQueryCriteria<VistaTerms> criteria = EntityQueryCriteria.create(VistaTerms.class);
+                criteria.eq(criteria.proto().target(), VistaTerms.Target.Tenant);
                 List<VistaTerms> list = Persistence.service().query(criteria);
                 VistaTerms terms = list.get(0);
                 setTermsKey(terms.version().getPrimaryKey());

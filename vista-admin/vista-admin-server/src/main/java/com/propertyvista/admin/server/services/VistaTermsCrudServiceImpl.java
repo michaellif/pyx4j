@@ -38,8 +38,10 @@ public class VistaTermsCrudServiceImpl extends AbstractVersionedCrudServiceImpl<
     }
 
     @Override
-    public void retrieveTerms(AsyncCallback<Key> callback) {
+    public void retrieveTerms(AsyncCallback<Key> callback, VistaTerms.Target target) {
+        assert target != null;
         EntityQueryCriteria<VistaTerms> criteria = EntityQueryCriteria.create(VistaTerms.class);
+        criteria.eq(criteria.proto().target(), target);
         criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
         List<Key> list = Persistence.service().queryKeys(criteria);
         if (!list.isEmpty()) {

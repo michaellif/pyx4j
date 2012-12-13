@@ -23,7 +23,7 @@ import com.propertyvista.admin.rpc.services.version.VistaTermsVersionService;
 public class VistaTermsViewerViewImpl extends AdminViewerViewImplBase<VistaTerms> implements VistaTermsViewerView {
 
     public VistaTermsViewerViewImpl() {
-        super(AdminSiteMap.Legal.Terms.class);
+        super(AdminSiteMap.Legal.PortalTerms.class);
         enableVersioning(VistaTerms.VistaTermsV.class, GWT.<VistaTermsVersionService> create(VistaTermsVersionService.class));
 
         setForm(new VistaTermsForm(true));

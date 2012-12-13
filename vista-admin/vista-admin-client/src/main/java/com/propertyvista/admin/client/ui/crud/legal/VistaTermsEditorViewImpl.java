@@ -20,7 +20,7 @@ import com.propertyvista.admin.rpc.AdminSiteMap;
 public class VistaTermsEditorViewImpl extends AdminEditorViewImplBase<VistaTerms> implements VistaTermsEditorView {
 
     public VistaTermsEditorViewImpl() {
-        super(AdminSiteMap.Legal.Terms.class);
+        super(AdminSiteMap.Legal.PortalTerms.class);
         setForm(new VistaTermsForm(false));
     }
 }

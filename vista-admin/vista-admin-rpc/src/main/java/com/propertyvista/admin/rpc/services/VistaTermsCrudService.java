@@ -22,5 +22,5 @@ import com.propertyvista.admin.domain.legal.VistaTerms;
 
 public interface VistaTermsCrudService extends AbstractVersionedCrudService<VistaTerms> {
 
-    public void retrieveTerms(AsyncCallback<Key> callback);
+    public void retrieveTerms(AsyncCallback<Key> callback, VistaTerms.Target target);
 }

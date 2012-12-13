@@ -79,8 +79,13 @@ public class AdminSiteMap implements SiteMap {
     }
 
     public static class Legal extends AppPlace {
-        @PlaceProperties(navigLabel = "Terms and Conditions", caption = "Terms and Conditions")
-        public static class Terms extends CrudAppPlace {
+
+        @PlaceProperties(navigLabel = "Tenant Portal Terms and Conditions", caption = "Tenant Portal Terms and Conditions")
+        public static class PortalTerms extends CrudAppPlace {
+        }
+
+        @PlaceProperties(navigLabel = "PMC Terms and Conditions", caption = "PMC Terms and Conditions")
+        public static class PmcTerms extends CrudAppPlace {
         }
     }
 

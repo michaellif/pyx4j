@@ -16,7 +16,6 @@ package com.propertyvista.admin.client.activity.crud.legal;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
@@ -27,15 +26,20 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.domain.legal.LegalDocument;
 import com.propertyvista.admin.domain.legal.VistaTerms;
+import com.propertyvista.admin.domain.legal.VistaTerms.Target;
 import com.propertyvista.admin.rpc.services.VistaTermsCrudService;
 import com.propertyvista.shared.CompiledLocale;
 
 public class VistaTermsDefaultActivity extends AbstractActivity {
+
     private final CrudAppPlace place;
 
-    public VistaTermsDefaultActivity(Place place) {
-        assert (place instanceof CrudAppPlace);
-        this.place = (CrudAppPlace) place;
+    private final Target target;
+
+    public VistaTermsDefaultActivity(CrudAppPlace place, VistaTerms.Target target) {
+        assert target != null;
+        this.target = target;
+        this.place = place;
     }
 
     @Override
@@ -51,11 +55,12 @@ public class VistaTermsDefaultActivity extends AbstractActivity {
                     LegalDocument doc = EntityFactory.create(LegalDocument.class);
                     doc.locale().setValue(CompiledLocale.en);
                     VistaTerms terms = EntityFactory.create(VistaTerms.class);
+                    terms.target().setValue(target);
                     terms.version().document().add(doc);
                     dst.formNewItemPlace(terms);
                 }
                 AppSite.getPlaceController().goTo(dst);
             }
-        });
+        }, target);
     }
 }

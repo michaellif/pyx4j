@@ -82,12 +82,14 @@ public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.serv
                     EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
                     criteria.eq(criteria.proto().namespace(), visit.pmcNamespace);
                     Pmc pmc = Persistence.service().retrieve(criteria);
-                    switch (pmc.status().getValue()) {
-                    case Active:
-                        visit.status = OnboardingApplicationStatus.accountCreated;
-                        break;
-                    default:
-                        break;
+                    if (pmc != null) {
+                        switch (pmc.status().getValue()) {
+                        case Active:
+                            visit.status = OnboardingApplicationStatus.accountCreated;
+                            break;
+                        default:
+                            break;
+                        }
                     }
                     return null;
                 }

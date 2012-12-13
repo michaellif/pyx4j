@@ -62,7 +62,7 @@ public interface PmcAccountCreationRequest extends IEntity {
     IPrimitive<CountryOfOperation> countryOfOperation();
 
     @NotNull
-    @Caption(name = "Tenant Protal URL")
+    @Caption(name = "URL")
     IPrimitive<String> dnsName();
 
     /**

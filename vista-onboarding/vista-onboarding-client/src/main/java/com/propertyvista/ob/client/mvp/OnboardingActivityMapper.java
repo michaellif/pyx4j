@@ -25,7 +25,6 @@ import com.propertyvista.ob.client.mvp.activity.PmcAccountCreationCompleteActivi
 import com.propertyvista.ob.client.mvp.activity.PmcAccountCreationProgressActivity;
 import com.propertyvista.ob.client.mvp.activity.PmcAccountCreationRequestActivity;
 import com.propertyvista.ob.client.mvp.activity.PmcTermsActivity;
-import com.propertyvista.ob.client.views.PmcTermsView;
 import com.propertyvista.ob.rpc.OnboardingSiteMap;
 
 public class OnboardingActivityMapper implements AppActivityMapper {
@@ -43,7 +42,7 @@ public class OnboardingActivityMapper implements AppActivityMapper {
                     activity = new PmcAccountCreationProgressActivity((OnboardingSiteMap.PmcAccountCreationProgress) place);
                 } else if (place instanceof OnboardingSiteMap.PmcAccountCreationComplete) {
                     activity = new PmcAccountCreationCompleteActivity((OnboardingSiteMap.PmcAccountCreationComplete) place);
-                } else if (place instanceof PmcTermsView) {
+                } else if (place instanceof OnboardingSiteMap.PmcAccountTerms) {
                     activity = new PmcTermsActivity();
                 }
                 callback.onSuccess(activity);

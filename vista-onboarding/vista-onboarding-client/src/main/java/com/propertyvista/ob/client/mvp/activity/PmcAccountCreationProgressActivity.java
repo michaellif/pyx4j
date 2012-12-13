@@ -113,7 +113,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
                 }
                 currentStepStatus = (currentStepStatus == StepStatus.INCOMPLETE) ? StepStatus.INPROGRESS : StepStatus.COMPLETE;
                 // don't finish the last step until server reports that it finished
-                if (!progress.isCompleted() & currentStepStatus.equals(PROGRESS_STEPS.get(PROGRESS_STEPS.size() - 1))) {
+                if (!progress.isCompleted() & currentStep.equals(PROGRESS_STEPS.get(PROGRESS_STEPS.size() - 1)) & currentStepStatus == StepStatus.COMPLETE) {
                     currentStepStatus = StepStatus.INPROGRESS;
                 }
                 view.setStepStatus(currentStep, currentStepStatus);
@@ -173,7 +173,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
 
     private void onStepsProgressComplete(boolean completedSuccess, String message) {
         if (completedSuccess) {
-            if (ApplicationMode.isDevelopment() & !this.defferedCorrelationId.equals(SIM_ID)) {
+            if (!this.defferedCorrelationId.equals(SIM_ID)) {
                 deferredProcessStatusService.getStatus(null, PmcAccountCreationProgressActivity.this.defferedCorrelationId, true);
             }
             pmcRegService.obtainCrmURL(new DefaultAsyncCallback<String>() {

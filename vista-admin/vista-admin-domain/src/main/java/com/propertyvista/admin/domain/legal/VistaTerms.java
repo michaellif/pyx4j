@@ -26,8 +26,13 @@ import com.propertyvista.domain.VistaNamespace;
 @Table(namespace = VistaNamespace.adminNamespace)
 public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
-    @Deprecated
-    IPrimitive<Integer> x(); // just workaround!!! 
+    public enum Target {
+
+        PMC, Tenant
+
+    }
+
+    IPrimitive<Target> target();
 
     @Table(namespace = VistaNamespace.adminNamespace)
     public interface VistaTermsV extends IVersionData<VistaTerms> {

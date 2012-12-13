@@ -58,6 +58,7 @@ import com.propertyvista.admin.client.activity.crud.simulatedpad.PadFileViewerAc
 import com.propertyvista.admin.client.activity.crud.simulation.SimulationEditorActivity;
 import com.propertyvista.admin.client.activity.crud.simulation.SimulationViewerActivity;
 import com.propertyvista.admin.client.activity.security.PasswordChangeActivity;
+import com.propertyvista.admin.domain.legal.VistaTerms.Target;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 
 public class MainActivityMapper implements AppActivityMapper {
@@ -193,10 +194,22 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new AccountViewerActivity(crudPlace);
                             break;
                         }
-                    } else if (place instanceof AdminSiteMap.Legal.Terms) {
+                    } else if (place instanceof AdminSiteMap.Legal.PortalTerms) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new VistaTermsDefaultActivity(crudPlace);
+                            activity = new VistaTermsDefaultActivity(crudPlace, Target.Tenant);
+                            break;
+                        case editor:
+                            activity = new VistaTermsEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new VistaTermsViewerActivity(crudPlace);
+                            break;
+                        }
+                    } else if (place instanceof AdminSiteMap.Legal.PmcTerms) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new VistaTermsDefaultActivity(crudPlace, Target.PMC);
                             break;
                         case editor:
                             activity = new VistaTermsEditorActivity(crudPlace);

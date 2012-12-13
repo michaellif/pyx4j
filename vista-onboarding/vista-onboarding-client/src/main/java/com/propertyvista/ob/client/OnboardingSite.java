@@ -31,6 +31,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.ob.client.mvp.OnboardingActivityMapper;
@@ -58,24 +59,14 @@ public class OnboardingSite extends VistaSite {
         getHistoryHandler().register(getPlaceController(), getEventBus(), new OnboardingSiteMap.Default());
         StyleManger.installTheme(new OnboardingTheme(), new OnboardingPalette());
 
-        RootPanel rootPanel = getRootPanel();
-        SimplePanel onboardingPanel = new SimplePanel();
-        onboardingPanel.setStyleName(OnboardingStyles.VistaObMainPanel.name());
-        rootPanel.add(onboardingPanel);
-
-        if (ApplicationMode.isDevelopment()) {
-            addDevLogout();
-        }
-
-        AppActivityManager activityManager = new AppActivityManager(new OnboardingActivityMapper(), AppSite.getEventBus());
-        activityManager.setDisplay(onboardingPanel);
+        createAndBindUI();
 
         obtainAuthenticationData();
     }
 
     @Override
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
-        // TODO Auto-generated method stub
+        MessageDialog.confirm(title, message, command);
     }
 
     private void obtainAuthenticationData() {
@@ -95,6 +86,20 @@ public class OnboardingSite extends VistaSite {
                     }
 
                 });
+    }
+
+    private void createAndBindUI() {
+        RootPanel rootPanel = getRootPanel();
+        SimplePanel onboardingPanel = new SimplePanel();
+        onboardingPanel.setStyleName(OnboardingStyles.VistaObMainPanel.name());
+        rootPanel.add(onboardingPanel);
+
+        if (ApplicationMode.isDevelopment()) {
+            addDevLogout();
+        }
+
+        AppActivityManager activityManager = new AppActivityManager(new OnboardingActivityMapper(), AppSite.getEventBus());
+        activityManager.setDisplay(onboardingPanel);
     }
 
     private void addDevLogout() {

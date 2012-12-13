@@ -59,7 +59,16 @@ public class OnboardingTheme extends Theme {
 
         addTheme(new DefaultTabTheme());
 
-        Style style = new Style(".", OnboardingStyles.VistaObMainPanel.name());
+        Style style = new Style("div, tr, td, th");
+        style.addProperty("vertical-align", "middle");
+        addStyle(style);
+
+        style = new Style(".TextBox");
+        style.addProperty("border-style", "inset");
+        style.addProperty("border-radius", "5px");
+        addStyle(style);
+
+        style = new Style(".", OnboardingStyles.VistaObMainPanel.name());
         style.addProperty("min-width", "700px");
         style.addProperty("min-height", "500px");
         addStyle(style);
@@ -78,6 +87,17 @@ public class OnboardingTheme extends Theme {
         style.addProperty("padding-top", "5px");
         style.addProperty("padding-bottom", "5px");
         style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(".", PmcAccountCreationRequestForm.Styles.PmcUrlFieldNote.name() + " p");
+        style.addProperty("padding-bottom", "5px");
+        style.addProperty("font-size", "5px");
+        style.addProperty("text-align", "justify");
+        style.addProperty("color", ThemeColor.object1, 0.7);
+        addStyle(style);
+
+        style = new Style(".", PmcAccountCreationRequestForm.Styles.PmcUrlFieldNote.name());
+        style.addProperty("margin-bottom", "10px");
         addStyle(style);
 
         style = new Style(".", PmcAccountCreationRequestForm.Styles.PmcAccountCreationSubmitButton.name());

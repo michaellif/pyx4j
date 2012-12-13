@@ -13,12 +13,17 @@
  */
 package com.propertyvista.ob.server.services;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.admin.domain.legal.LegalDocument;
+import com.propertyvista.admin.domain.legal.VistaTerms;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.ob.rpc.services.OnboardingPublicActivationService;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -39,6 +44,28 @@ public class OnboardingPublicActivationServiceImpl implements OnboardingPublicAc
 
     @Override
     public void getPmcAccountTerms(AsyncCallback<String> callback) {
-        callback.onSuccess("<div style=\"text-align: center\">THESE ARE THE TERMS</div>");
+        String terms = TaskRunner.runInAdminNamespace(new Callable<String>() {
+            @Override
+            public String call() {
+                String result = null;
+                EntityQueryCriteria<VistaTerms> criteria = EntityQueryCriteria.create(VistaTerms.class);
+                criteria.eq(criteria.proto().target(), VistaTerms.Target.PMC);
+                List<VistaTerms> list = Persistence.service().query(criteria);
+                if (!list.isEmpty()) {
+                    VistaTerms terms = list.get(0);
+                    for (LegalDocument doc : terms.version().document()) {
+                        if (doc.locale().getValue().getLanguage().startsWith("en")) {
+                            result = doc.content().getValue();
+                            break;
+                        }
+                    }
+                }
+                return result;
+            }
+        });
+        if (terms == null) {
+            throw new RuntimeException("Terms not found");
+        }
+        callback.onSuccess(terms);
     }
 }
