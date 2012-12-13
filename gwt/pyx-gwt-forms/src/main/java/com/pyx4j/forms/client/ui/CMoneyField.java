@@ -34,7 +34,7 @@ public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>
 
     private static final I18n i18n = I18n.get(CMoneyField.class);
 
-    private static final String symbol = i18n.tr("$");
+    public static final String symbol = i18n.tr("$");
 
     public CMoneyField() {
         super();
