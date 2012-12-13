@@ -64,6 +64,11 @@ public class VersionedLister<E extends IVersionedEntity<?>> extends ListerBase<E
         getDataTablePanel().addUpperActionItem(displayModeButton.asWidget());
     }
 
+    public VersionedLister(Class<E> clazz, boolean allowAddNew, boolean allowDelete) {
+        super(clazz, allowAddNew, allowDelete);
+        getDataTablePanel().addUpperActionItem(displayModeButton.asWidget());
+    }
+
     public VersionDisplayMode getVersionDisplayMode() {
         return versionDisplayMode;
     }

@@ -18,8 +18,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -36,27 +34,11 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
 
     private static final I18n i18n = I18n.get(PolicyListerBase.class);
 
-    private final Button deleteButton;
-
     protected List<ColumnDescriptor> defaultColumns;
 
     public PolicyListerBase(Class<P> clazz) {
-        super(clazz, true);
+        super(clazz, true, true);
         getDataTablePanel().setFilteringEnabled(false);
-        getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
-
-        addActionItem(deleteButton = new Button(i18n.tr("Delete Checked Items"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new Command() {
-                    @Override
-                    public void execute() {
-                        Queue<P> checkedItems = new LinkedList<P>(getDataTablePanel().getDataTable().getCheckedItems());
-                        validateAndRemoveRecursively(checkedItems);
-                    }
-                });
-            }
-        }));
 
         defaultColumns = Arrays.asList(//@formatter:off
                  new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
@@ -92,7 +74,17 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
     }
 
     public Button getDeleteButton() {
-        return deleteButton;
+        return getDataTablePanel().getDelButton();
+    }
+
+    @Override
+    protected void onItemsDelete(final List<P> items) {
+        MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new Command() {
+            @Override
+            public void execute() {
+                validateAndRemoveRecursively(new LinkedList<P>(items));
+            }
+        });
     }
 
     private void validateAndRemoveRecursively(final Queue<P> itemsToRemove) {

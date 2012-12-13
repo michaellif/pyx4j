@@ -26,8 +26,9 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class UnitOccupancyLister extends ListerBase<AptUnitOccupancySegment> {
 
     public UnitOccupancyLister() {
-        super(AptUnitOccupancySegment.class, true, false);
+        super(AptUnitOccupancySegment.class, false);
         getDataTablePanel().setFilteringEnabled(false);
+        setAllowZoomIn(true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().dateFrom()).sortable(false).build(),

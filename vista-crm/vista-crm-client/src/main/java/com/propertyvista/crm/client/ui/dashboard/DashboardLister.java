@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.ui.dashboard;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
@@ -25,7 +23,6 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -35,27 +32,7 @@ public class DashboardLister extends ListerBase<DashboardMetadata> {
     private static final I18n i18n = I18n.get(DashboardLister.class);
 
     public DashboardLister() {
-        super(DashboardMetadata.class, true);
-        getDataTablePanel().setFilteringEnabled(true);
-        getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
-
-        addActionItem(new Button(i18n.tr("Delete Checked"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new Command() {
-                    @Override
-                    public void execute() {
-                        for (DashboardMetadata item : getDataTablePanel().getDataTable().getCheckedItems()) {
-                            if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(item.ownerUser().getPrimaryKey())) {
-                                getPresenter().delete(item.getPrimaryKey());
-                            } else {
-                                MessageDialog.info(i18n.tr("You must be owner of dashboard \"{0}\" to delete it", item.name().getValue()));
-                            }
-                        }
-                    }
-                });
-            }
-        }));
+        super(DashboardMetadata.class, true, true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().type()).build(),
@@ -69,5 +46,21 @@ public class DashboardLister extends ListerBase<DashboardMetadata> {
     @Override
     public List<Sort> getDefaultSorting() {
         return Arrays.asList(new Sort(proto().name().getPath().toString(), false));
+    }
+
+    @Override
+    protected void onItemsDelete(final List<DashboardMetadata> items) {
+        MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new Command() {
+            @Override
+            public void execute() {
+                for (DashboardMetadata item : items) {
+                    if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(item.ownerUser().getPrimaryKey())) {
+                        getPresenter().delete(item.getPrimaryKey());
+                    } else {
+                        MessageDialog.info(i18n.tr("You must be owner of dashboard \"{0}\" to delete it", item.name().getValue()));
+                    }
+                }
+            }
+        });
     }
 }

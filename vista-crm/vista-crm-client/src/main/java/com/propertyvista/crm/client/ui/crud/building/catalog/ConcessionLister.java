@@ -21,15 +21,17 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionedLister;
 import com.propertyvista.domain.financial.offering.Concession;
 
 public class ConcessionLister extends VersionedLister<Concession> {
 
-    public ConcessionLister() {
-        super(Concession.class, true);
+    private final static I18n i18n = I18n.get(ConcessionLister.class);
 
+    public ConcessionLister() {
+        super(Concession.class, true, true);
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off
@@ -62,7 +64,7 @@ public class ConcessionLister extends VersionedLister<Concession> {
             new MemberColumnDescriptor.Builder(proto().version().condition()).build(),
             new MemberColumnDescriptor.Builder(proto().version().effectiveDate()).build(),
             new MemberColumnDescriptor.Builder(proto().version().expirationDate()).build()
-        );//@formatter:on
+        );//@formatter:on        
     }
 
     @Override

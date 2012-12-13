@@ -22,7 +22,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Content;
 import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Financial;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Financial.ProductDictionary;
 import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Security;
 import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
@@ -68,7 +67,6 @@ import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.domain.property.asset.Roof;
-import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
@@ -111,7 +109,6 @@ public class CrmEntityMapper {
 
         AppPlaceEntityMapper.register(Feature.class, CrmSiteMap.Properties.Feature.class, defaultImage);
         AppPlaceEntityMapper.register(Service.class, CrmSiteMap.Properties.Service.class, defaultImage);
-        AppPlaceEntityMapper.register(Utility.class, CrmSiteMap.Properties.Utility.class, defaultImage);
         AppPlaceEntityMapper.register(Concession.class, CrmSiteMap.Properties.Concession.class, defaultImage);
 
         AppPlaceEntityMapper.register(ProductItem.class, CrmSiteMap.Properties.Service.class, defaultImage);
