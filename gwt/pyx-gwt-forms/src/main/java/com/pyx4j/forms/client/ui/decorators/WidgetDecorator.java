@@ -339,13 +339,6 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
             return this;
         }
 
-        public void setTooltip(String tooltip) {
-            this.component.setTooltip(tooltip);
-        }
-
-        public void setNote(String note) {
-            this.component.setNote(note);
-        }
     }
 
     @Deprecated
