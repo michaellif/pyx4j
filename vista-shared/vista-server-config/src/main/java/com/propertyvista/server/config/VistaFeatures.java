@@ -14,6 +14,7 @@
 package com.propertyvista.server.config;
 
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.shared.config.VistaFeatures.VistaFeaturesCustomization;
 
@@ -60,6 +61,11 @@ public class VistaFeatures {
         @Override
         public boolean genericProductCatalog() {
             return threadLocale.get().genericProductCatalog().getValue(Boolean.FALSE);
+        }
+
+        @Override
+        public CountryOfOperation countryOfOperation() {
+            return threadLocale.get().countryOfOperation().getValue();
         }
     }
 

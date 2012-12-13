@@ -77,6 +77,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
 
                 pmc.onboardingAccountId().setValue(credential.onboardingAccountId().getValue());
 
+                pmc.features().countryOfOperation().setValue(request.countryOfOperation().getValue());
                 pmc.features().occupancyModel().setValue(Boolean.TRUE);
                 pmc.features().productCatalog().setValue(Boolean.TRUE);
                 pmc.features().leases().setValue(Boolean.TRUE);

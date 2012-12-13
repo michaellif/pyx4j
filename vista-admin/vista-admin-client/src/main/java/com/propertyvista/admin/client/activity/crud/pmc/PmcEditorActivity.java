@@ -25,6 +25,7 @@ import com.propertyvista.admin.client.ui.crud.pmc.PmcEditorView;
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 
 public class PmcEditorActivity extends EditorActivityBase<PmcDTO> {
 
@@ -51,6 +52,7 @@ public class PmcEditorActivity extends EditorActivityBase<PmcDTO> {
         entity.features().onlineApplication().setValue(Boolean.FALSE);
         entity.features().xmlSiteExport().setValue(Boolean.FALSE);
         entity.features().genericProductCatalog().setValue(Boolean.FALSE);
+        entity.features().countryOfOperation().setValue(CountryOfOperation.Canada);
 
         callback.onSuccess(entity);
 

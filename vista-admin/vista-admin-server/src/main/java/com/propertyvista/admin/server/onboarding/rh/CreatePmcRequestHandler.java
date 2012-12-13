@@ -32,6 +32,7 @@ import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.system.PmcFacade;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.onboarding.AccountInfoResponseIO;
 import com.propertyvista.onboarding.CreatePMCRequestIO;
 import com.propertyvista.onboarding.GetAccountInfoRequestIO;
@@ -82,6 +83,7 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
         pmc.features().onlineApplication().setValue(Boolean.FALSE);
         pmc.features().xmlSiteExport().setValue(Boolean.FALSE);
         pmc.features().genericProductCatalog().setValue(Boolean.FALSE);
+        pmc.features().countryOfOperation().setValue(CountryOfOperation.Canada);
 
         // TODO For future
 //        for (String dndAlias : request.dnsNameAliases()) {

@@ -23,6 +23,7 @@ import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 
 public class PmcDataModel {
 
@@ -37,6 +38,7 @@ public class PmcDataModel {
         pmc.features().occupancyModel().setValue(Boolean.TRUE);
         pmc.features().productCatalog().setValue(Boolean.TRUE);
         pmc.features().leases().setValue(Boolean.TRUE);
+        pmc.features().countryOfOperation().setValue(CountryOfOperation.Canada);
 
         pmc.status().setValue(PmcStatus.Active);
 

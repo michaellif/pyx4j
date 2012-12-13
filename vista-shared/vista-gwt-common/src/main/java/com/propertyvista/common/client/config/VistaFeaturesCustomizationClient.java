@@ -15,6 +15,7 @@ package com.propertyvista.common.client.config;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.shared.config.VistaFeatures.VistaFeaturesCustomization;
 
@@ -56,6 +57,11 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
         return features.genericProductCatalog().getValue(Boolean.FALSE);
     }
 
+    @Override
+    public CountryOfOperation countryOfOperation() {
+        return features.countryOfOperation().getValue();
+    }
+
     public static void setVistaFeatures(PmcVistaFeatures features) {
         VistaFeaturesCustomizationClient.features = features;
     }
@@ -67,4 +73,5 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
     public static void setGoogleAnalyticDisableForEmployee(boolean isGoogleAnalyticDisableForEmployee) {
         VistaFeaturesCustomizationClient.isGoogleAnalyticDisableForEmployee = isGoogleAnalyticDisableForEmployee;
     }
+
 }

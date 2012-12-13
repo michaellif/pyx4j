@@ -115,6 +115,9 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).build());
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().countryOfOperation())).build());
+        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
+
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().firstName())).build());
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lastName())).build());
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);

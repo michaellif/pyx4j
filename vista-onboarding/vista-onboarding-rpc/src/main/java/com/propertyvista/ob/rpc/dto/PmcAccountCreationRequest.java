@@ -23,6 +23,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.customizations.CountryOfOperation;
+
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface PmcAccountCreationRequest extends IEntity {
@@ -55,6 +57,9 @@ public interface PmcAccountCreationRequest extends IEntity {
     @NotNull
     @Caption(name = "Company name")
     IPrimitive<String> name();
+
+    @NotNull
+    IPrimitive<CountryOfOperation> countryOfOperation();
 
     @NotNull
     @Caption(name = "Tenant Protal URL")

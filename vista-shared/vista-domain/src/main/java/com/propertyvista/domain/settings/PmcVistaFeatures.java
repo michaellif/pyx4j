@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 
 @Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
@@ -42,4 +43,7 @@ public interface PmcVistaFeatures extends IEntity {
 
     @NotNull
     IPrimitive<Boolean> genericProductCatalog();
+
+    @NotNull
+    IPrimitive<CountryOfOperation> countryOfOperation();
 }

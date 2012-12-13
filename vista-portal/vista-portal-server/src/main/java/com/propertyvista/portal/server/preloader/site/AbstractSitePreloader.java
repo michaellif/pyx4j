@@ -36,6 +36,7 @@ import com.pyx4j.i18n.server.ServerI18nFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.domain.site.News;
@@ -58,6 +59,7 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.preloader.util.AbstractVistaDataPreloader;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
@@ -73,14 +75,15 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
     protected List<CompiledLocale> getLocale() {
         List<CompiledLocale> l = new Vector<CompiledLocale>();
         l.add(CompiledLocale.en);
-        l.add(CompiledLocale.en_GB);
-        l.add(CompiledLocale.fr);
-        if (ApplicationMode.isDevelopment() && !DemoData.vistaDemo) {
-            l.add(CompiledLocale.ru);
+        if (VistaFeatures.instance().countryOfOperation() != CountryOfOperation.UK) {
+            l.add(CompiledLocale.fr);
+            if (ApplicationMode.isDevelopment() && !DemoData.vistaDemo) {
+                l.add(CompiledLocale.ru);
+            }
+            l.add(CompiledLocale.es);
+            l.add(CompiledLocale.zh_CN);
+            l.add(CompiledLocale.zh_TW);
         }
-        l.add(CompiledLocale.es);
-        l.add(CompiledLocale.zh_CN);
-        l.add(CompiledLocale.zh_TW);
         return l;
     }
 

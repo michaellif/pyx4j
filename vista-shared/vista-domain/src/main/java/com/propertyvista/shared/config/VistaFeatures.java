@@ -18,6 +18,8 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 
+import com.propertyvista.domain.customizations.CountryOfOperation;
+
 public class VistaFeatures {
 
     public static interface VistaFeaturesCustomization {
@@ -33,6 +35,8 @@ public class VistaFeatures {
         boolean xmlSiteExport();
 
         boolean genericProductCatalog();
+
+        CountryOfOperation countryOfOperation();
     }
 
     private final static VistaFeaturesCustomization impl;

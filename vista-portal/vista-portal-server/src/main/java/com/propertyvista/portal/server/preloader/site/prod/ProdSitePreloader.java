@@ -17,11 +17,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.portal.server.preloader.site.AbstractSitePreloader;
 import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class ProdSitePreloader extends AbstractSitePreloader {
 
@@ -34,7 +36,10 @@ public class ProdSitePreloader extends AbstractSitePreloader {
     protected List<CompiledLocale> getLocale() {
         List<CompiledLocale> l = new Vector<CompiledLocale>();
         l.add(CompiledLocale.en);
-        l.add(CompiledLocale.fr);
+
+        if (VistaFeatures.instance().countryOfOperation() != CountryOfOperation.UK) {
+            l.add(CompiledLocale.fr);
+        }
         return l;
     }
 
