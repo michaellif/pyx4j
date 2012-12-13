@@ -1,40 +1,56 @@
 .vista-pmsite-contentWrap {
+	margin: 0px auto 0px;
+	width: 940px;
+	background: #fff;
+	padding: 0 20px 20px 20px;
 }
 
 .vista-pmsite-content {
     margin: 0 auto;
     margin-bottom:0;
-	width: 960px;
+	width: 940px;
 	/* anti-space trick */
 	font-size:0;
 }
 
 .infobox_body {
-	padding: 20px 20px;
-	float:left;
-//	border-left: solid 1px ${object2_50};
+	border-top: 4px solid #000000;
+//	background: #999;
+//  padding: 12px 0;
+//  margin-bottom: 1em;
 }
 
 .banner {
-	position: absolute;
+	/*position: relative;*/
 	vertical-align:top;
 	z-index: 100;
 	font-size:13px;
 }
 
 .banner_img {
+	border-top: 4px solid #000000;
+	background-image: url("images/landing.png"); 
+	background-color: #fff;
+	background-position: left 12px;
+    background-repeat: no-repeat;
+//  background-size: 940px 408px;
+    height: 408px;
+    width: 940px;
+    padding: 12px 0 12px;
 }
 
 .banner .infobox_header {
-	background: ${object2_90};
+	background: #fff;
 }
 
 .quickSearchPanel {
 	width: 300px;
-	background: ${object2_10};
+	/*background: #fff;*/
 }
 .quickSearchPanel .infobox_body {
       float:none;
+      margin-bottom: 1em;
+      background: #999999;
 }
 .quickSearchPanel h3 {
 	color: #555555;
@@ -45,16 +61,19 @@
 }
 
 .quickSearchPanel label {
-	color: #555555;
+	color: #fff;
 	display: block;
-	font-size: 13px;
-	padding: 0 0 3px;
+	font-size: 12px;
+	margin: 0 0 0 14px;
+	width: 128px;
 }
 
 .quickSearchPanel select {
-	color:${background_100};
-	width: 100%;
+	color: #999999;
+	width: 127px;
 	margin-bottom: 15px;
+	border: 1px solid #000000;
+	margin: 0 0 6px 14px;
 }
 
 .quickSearchPanel input[type=submit] {
@@ -62,25 +81,25 @@
 	border: medium none;
 	color: ${object1_10};
 	cursor: pointer;
-	font-size: 16px;
-	padding: 5px 0;
-	text-transform: uppercase;
-	width: 128px;
+	font-size: 12px;
+	padding: 1em;
+//	width: 74px;
 }
 
 .quickSearchPanel .submit {
 	background: ${object1_100};
-	height: 32px;
-	margin: 15px auto 0;
+	float: right;
 	overflow: hidden;
-	width: 128px;
+	width: 74px;
 	border: 2px splid ${object1_100};
 }
 
 .vista-pmsite-mainWrap {
 	display:inline-block;
-	background: ${object2_80};
+	background: #fff;
 	font-size:13px;
+	width: 100%;
+	/*padding: 0 20px;*/
 }
 
 .vista-pmsite-sidebarWrap {
@@ -100,9 +119,9 @@
 }
 
 .vista-pmsite-main {
-	width: 660px;
+	width: 622px;
+	float: right;
 	position: relative;
-	float: left;
 	background: ${bgC0lor_100};
 	display:inline-block;
 }
@@ -114,7 +133,7 @@
 }
 
 .testimBox .infobox_header {
-	padding: 0 0 0 20px;
+
 }
 
 .testimBox .infobox_body {
@@ -163,7 +182,7 @@
 	padding-top: 400px;
 	width: 300px;
 	display: inline-block;
-	background: ${object2_10};
+	background: #fff;
 }
 
 .newsBox {
@@ -171,32 +190,35 @@
 	display: inline-block;
 	min-height: 520px;
 	float: left;
-	background: ${object2_10};
+	background: #fff;
 }
 
 .newsBox .infobox_header {
-	background: ${object2_90};
+	background: #fff;
 }
 
 
 .newsBox .date {
-	color: ${object2_80};
-	padding-top: 10px;
+	color: #222222;
+	font-size: 12px;
+	margin-bottom: 15px;
 }
 
 .newsBox .headline {
-	padding-top: 10px;
 	color: ${object1_100};
-	font-size:15px;
+	font-family: monospace;
+	font-weight: bold;
 }
 
 .newsBox .text {
-	padding-top: 10px;
 	color: ${object2_100};
+	font-family: monospace;
+    font-size: 1em;
+    margin-bottom: 15px;
 }
 
 .newsBox .infobox_content {
-	padding: 10px 20px;
+	border-top: 4px solid #000000;
 }
 
 .infobox_content .read_more {
@@ -207,42 +229,55 @@
 }
 
 .infobox_header .read_more {
-	color: ${object2_10};
-	font-size: 16px;
-	line-height: 14px;
-	vertical-align: text-top;
-	padding-left: 10px;
+	color: #fff;
+	display: block;
+	background: #000000;
+	font-size: 12px;
+	width: 50px;
+	padding: 1em;
+	position: relative;
+	top: -70px;
+	float: right;
+	z-index: 5;
 }
 
 .infobox_header {
-	background: ${object2_100};
-	padding: 0 0 0 20px;
+	background: #fff;
+//	padding: 0 0 0 20px;
+	border-top: 1px solid #000000;
 }
 
 .infobox_header_title {
-	font-size: 22px;
-	line-height: 40px;
-	color: ${object2_10};
+	font-family: monospace;
+    font-weight: normal;
+	font-size: 1.17em;
+//	line-height: 40px;
+    display: block;
+    margin: 14px 0;
 }
 .infobox_header_title:lang(fr) {
 	font-size: 18px;
 }
 
 .promoBox {
-	height:280px;
-	float:left;
+	height:340px;
+	float: right;
 	overflow:hidden;
-	width: 100%;
+	width: 622px;
 }
 
 .promoBox .infobox_content {
-	width:139px;
+//	width:33%;
 	height:300px;
 	float:left;
-	margin-left:20px;
+//	margin-left:20px;
 }
 
 .promoBox .infobox_header {
+}
+
+.address {
+	margin: 12px 0;
 }
 
 .promoBox .infobox_content:first-child {
@@ -250,8 +285,9 @@
 }
 
 .promoBox .picture {
-	width:137px;
-	background:grey;
+	width:205px;
+	height: 205px;
+	background:#fff;
 }
 
 .promoBox a .picture {
