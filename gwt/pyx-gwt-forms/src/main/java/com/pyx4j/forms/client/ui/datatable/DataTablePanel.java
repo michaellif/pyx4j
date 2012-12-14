@@ -131,7 +131,7 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         topActionsBar.getToolbar().insertItem(
                 delButton = new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("Delete Checked"), delActionHandler), 1);
 
-        delButton.setEnabled(false);
+        delButton.setEnabled(getDataTableModel().isAnyChecked());
         getDataTable().setHasCheckboxColumn(true);
         getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
             @Override
@@ -201,6 +201,7 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
             dataItems.add(new DataItem<E>(entity));
         }
         getDataTableModel().populateData(dataItems, pageNumber, hasMoreData, totalRows);
+        delButton.setEnabled(getDataTableModel().isAnyChecked());
     }
 
     public void discard() {
