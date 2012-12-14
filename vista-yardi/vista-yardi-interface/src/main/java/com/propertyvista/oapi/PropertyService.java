@@ -78,7 +78,6 @@ public class PropertyService {
         for (AptUnit unit : units) {
             Persistence.service().retrieve(unit.floorplan());
             UnitIO unitIO = UnitMarshaller.getInstance().marshal(unit);
-            unitIO.propertyCode = propertyCode;
             unitsRS.add(unitIO);
         }
         return unitsRS;
