@@ -47,32 +47,17 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
 
     private static final I18n i18n = I18n.get(WizardForm.class);
 
-    private IWizardView<? extends IEntity> parentView;
-
     private TabPanel tabPanel;
 
     private double tabHeight;
 
     public WizardForm(Class<E> rootClass, double tabHeight) {
-        this(rootClass, null, false, tabHeight);
-    }
-
-    public WizardForm(Class<E> rootClass, boolean viewMode, double tabHeight) {
-        this(rootClass, null, viewMode, tabHeight);
+        this(rootClass, null, tabHeight);
     }
 
     public WizardForm(Class<E> rootClass, IEditableComponentFactory factory, double tabHeight) {
-        this(rootClass, factory, false, tabHeight);
-    }
-
-    public WizardForm(Class<E> rootClass, IEditableComponentFactory factory, boolean viewMode, double tabHeight) {
         super(rootClass, factory);
         this.tabHeight = tabHeight;
-
-        if (viewMode) {
-            setEditable(false);
-            setViewable(true);
-        }
     }
 
     @Override
@@ -85,12 +70,12 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
         tabPanel = new TabPanel(tabHeight, Unit.EM);
         tabPanel.setSize("100%", "100%");
 
-        createTabs();
+        createSteps();
 
         return tabPanel;
     }
 
-    abstract protected void createTabs();
+    abstract protected void createSteps();
 
     public Tab addTab(final FormFlexPanel panel) {
         final Tab tab = addTab(panel, panel.getTitle());
@@ -102,7 +87,7 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
                     if (validationResults.isValid()) {
                         tab.setTabWarning(null);
                     } else {
-                        tab.setTabWarning(FormFlexPanel.getMessagesText(validationResults));
+                        tab.setTabWarning(FormFlexPanel.getValidationMessage(validationResults));
                     }
                 }
             }
@@ -132,15 +117,6 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
 
     public void setTabVisible(Tab tab, boolean show) {
         tabPanel.setTabVisible(tab, show);
-    }
-
-    public void setParentView(IWizardView<? extends IEntity> parentView) {
-        this.parentView = parentView;
-    }
-
-    public IWizardView<? extends IEntity> getParentView() {
-        assert (parentView != null);
-        return parentView;
     }
 
     public void setActiveTab(int index) {

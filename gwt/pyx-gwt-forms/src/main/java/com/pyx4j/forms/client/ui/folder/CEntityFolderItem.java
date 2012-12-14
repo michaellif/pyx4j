@@ -67,10 +67,6 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     private ItemActionsBar actionsBar;
 
-    private boolean initiated = false;
-
-    private IFolderItemDecorator decorator;
-
     public CEntityFolderItem(Class<E> clazz) {
         this(clazz, true, true);
     }
@@ -91,28 +87,20 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     }
 
-    @Override
-    protected abstract IFolderItemDecorator<E> createDecorator();
+    protected abstract IFolderItemDecorator<E> createItemDecorator();
 
     @Override
-    public void initContent() {
-        super.initContent();
-        if (!initiated) {
-            if (getDecorator() instanceof IFolderItemDecorator) {
-                decorator = (IFolderItemDecorator) getDecorator();
-                EntityFolderImages images = decorator.getImages();
+    protected final IFolderItemDecorator<E> createDecorator() {
+        IFolderItemDecorator<E> decorator = createItemDecorator();
 
-                setActionImage(ActionType.Remove, images.delButton());
-                setActionImage(ActionType.Up, images.moveUpButton());
-                setActionImage(ActionType.Down, images.moveDownButton());
+        EntityFolderImages images = decorator.getImages();
 
-                actionsBar.init(decorator);
-                decorator.adoptItemActionsBar();
-            } else {
-                throw new Error("Correct decorator is missing");
-            }
-            initiated = true;
-        }
+        setActionImage(ActionType.Remove, images.delButton());
+        setActionImage(ActionType.Up, images.moveUpButton());
+        setActionImage(ActionType.Down, images.moveDownButton());
+
+        actionsBar.init(decorator);
+        return decorator;
     }
 
     public boolean isFirst() {
@@ -146,6 +134,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     @Override
     public IsWidget createContent() {
+        ((IFolderItemDecorator) getDecorator()).adoptItemActionsBar();
         editor = (CEntityForm<E>) create(EntityFactory.getEntityPrototype(clazz));
         adopt(editor);
         return editor;

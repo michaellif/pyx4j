@@ -60,7 +60,7 @@ public class ValidationResults {
         return results;
     }
 
-    public String getMessagesText(boolean html, boolean showLocation) {
+    public String getValidationMessage(boolean html, boolean showLocation) {
         StringBuilder messagesBuffer = new StringBuilder();
         LoopCounter c = new LoopCounter(validationErrors);
         if (html) {

@@ -71,7 +71,7 @@ public class PropertyCriteriaFolder extends CEntityFolder<PropertyCriterionEntit
     }
 
     @Override
-    protected IFolderDecorator<PropertyCriterionEntity> createDecorator() {
+    protected IFolderDecorator<PropertyCriterionEntity> createFolderDecorator() {
         return new BoxFolderDecorator<PropertyCriterionEntity>(images, i18n.tr("Add"), true);
     }
 

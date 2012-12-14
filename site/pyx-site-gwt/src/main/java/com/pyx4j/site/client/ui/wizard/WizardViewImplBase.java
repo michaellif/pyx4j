@@ -51,7 +51,6 @@ public class WizardViewImplBase<E extends IEntity> extends ViewImplBase implemen
         }
 
         this.form = (WizardForm<E>) form;
-        this.form.setParentView(this);
         this.form.initContent();
 
         LayoutPanel center = (LayoutPanel) getContentPane();
@@ -113,6 +112,6 @@ public class WizardViewImplBase<E extends IEntity> extends ViewImplBase implemen
     }
 
     protected void showValidationDialog() {
-        MessageDialog.error(i18n.tr("Error"), form.getValidationResults().getMessagesText(true, true));
+        MessageDialog.error(i18n.tr("Error"), form.getValidationResults().getValidationMessage(true, true));
     }
 }

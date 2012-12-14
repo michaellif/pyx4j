@@ -60,7 +60,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
         return new NativeEntityPanel<E>(this);
     }
 
-    public void initContent() {
+    public final void initContent() {
         assert initiated == false;
         if (!initiated) {
             asWidget();

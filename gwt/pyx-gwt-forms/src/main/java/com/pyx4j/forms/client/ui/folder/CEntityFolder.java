@@ -151,10 +151,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     protected CEntityFolderItem<E> createItem(boolean first) {
         return new CEntityFolderItem<E>(rowClass) {
             @Override
-            public IFolderItemDecorator<E> createDecorator() {
-                return createItemDecorator();
+            public IFolderItemDecorator<E> createItemDecorator() {
+                return CEntityFolder.this.createItemDecorator();
             }
-
         };
     }
 
@@ -175,20 +174,23 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         return item;
     }
 
+    protected abstract IFolderDecorator<E> createFolderDecorator();
+
     @Override
-    public void initContent() {
-        super.initContent();
+    protected final IFolderDecorator<E> createDecorator() {
+        IFolderDecorator<E> folderDecorator = createFolderDecorator();
+        folderDecorator.setAddButtonVisible(addable);
 
-        ((IFolderDecorator) getDecorator()).setAddButtonVisible(addable);
+        addValueChangeHandler(folderDecorator);
 
-        addValueChangeHandler((IFolderDecorator) getDecorator());
-
-        ((IFolderDecorator) getDecorator()).addItemAddClickHandler(new ClickHandler() {
+        folderDecorator.addItemAddClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 addItem();
             }
         });
+
+        return folderDecorator;
     }
 
     @SuppressWarnings("unchecked")
@@ -314,9 +316,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             ((TableFolderDecorator<E>) getDecorator()).setHeaderVisible(container.getWidgetCount() > 0);
         }
     }
-
-    @Override
-    protected abstract IFolderDecorator createDecorator();
 
     @Override
     public void adopt(final CComponent<?, ?> component) {

@@ -192,7 +192,7 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
         return results;
     }
 
-    public static String getMessagesText(ValidationResults validationResults) {
+    public static String getValidationMessage(ValidationResults validationResults) {
         StringBuilder messagesBuffer = new StringBuilder();
         ArrayList<ValidationError> validationErrors = validationResults.getValidationErrors();
 

@@ -224,7 +224,7 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
     protected void renderValidationMessage() {
         if ((this.component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
-            validationLabel.setText(component.getValidationResults().getMessagesText(false, false));
+            validationLabel.setText(component.getValidationResults().getValidationMessage(false, false));
             component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
         } else {
             validationLabel.setText(null);

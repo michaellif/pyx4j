@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.activity.crud;
+package com.pyx4j.site.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -250,43 +250,27 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     public void trySave(final boolean apply) {
+        AsyncCallback<Key> callback = new AsyncCallback<Key>() {
+            @Override
+            public void onSuccess(Key result) {
+                ReferenceDataManager.invalidate(entityClass);
+                onSaved(result);
+                if (apply) {
+                    onApplySuccess(result);
+                } else {
+                    onSaveSuccess(result);
+                }
+            }
 
+            @Override
+            public void onFailure(Throwable caught) {
+                onSaveFail(caught);
+            }
+        };
         if (isNewEntity()) {
-            service.create(new AsyncCallback<Key>() {
-                @Override
-                public void onSuccess(Key result) {
-                    ReferenceDataManager.invalidate(entityClass);
-                    onSaved(result);
-                    if (apply) {
-                        onApplySuccess(result);
-                    } else {
-                        onSaveSuccess(result);
-                    }
-                }
-
-                @Override
-                public void onFailure(Throwable caught) {
-                    onSaveFail(caught);
-                }
-            }, view.getValue());
+            service.create(callback, view.getValue());
         } else {
-            service.save(new AsyncCallback<Key>() {
-                @Override
-                public void onSuccess(Key result) {
-                    ReferenceDataManager.invalidate(entityClass);
-                    onSaved(result);
-                    if (apply) {
-                        onApplySuccess(result);
-                    } else {
-                        onSaveSuccess(result);
-                    }
-                }
-
-                @Override
-                public void onFailure(Throwable caught) {
-                    onSaveFail(caught);
-                }
-            }, view.getValue());
+            service.save(callback, view.getValue());
         }
     }
 

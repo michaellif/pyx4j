@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.activity.crud;
+package com.pyx4j.site.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;

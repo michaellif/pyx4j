@@ -97,7 +97,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.showErrorsUnconditional, PropertyName.repopulated)) {
                     if (folderItem.isUnconditionalValidationErrorRendering()) {
-                        validationMessageHolder.setHTML(folderItem.getValidationResults().getMessagesText(true, false));
+                        validationMessageHolder.setHTML(folderItem.getValidationResults().getValidationMessage(true, false));
                     } else {
                         ArrayList<ValidationError> errors = folderItem.getValidationResults().getValidationErrors();
                         ValidationResults results = new ValidationResults();
@@ -107,7 +107,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
                                 results.appendValidationError(validationError);
                             }
                         }
-                        validationMessageHolder.setHTML(results.getMessagesText(true, false));
+                        validationMessageHolder.setHTML(results.getValidationMessage(true, false));
                     }
                 }
             }

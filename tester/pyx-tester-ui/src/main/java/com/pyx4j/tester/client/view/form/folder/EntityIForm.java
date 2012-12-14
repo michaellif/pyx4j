@@ -95,7 +95,7 @@ public class EntityIForm extends CEntityForm<EntityI> {
         }
 
         @Override
-        protected IFolderDecorator<EntityII> createDecorator() {
+        protected IFolderDecorator<EntityII> createFolderDecorator() {
             return new BoxFolderDecorator<EntityII>(Images.INSTANCE, i18n.tr("Add EntityII"));
 
         }
@@ -148,7 +148,7 @@ public class EntityIForm extends CEntityForm<EntityI> {
         }
 
         @Override
-        protected IFolderDecorator<EntityIII> createDecorator() {
+        protected IFolderDecorator<EntityIII> createFolderDecorator() {
             return new BoxFolderDecorator<EntityIII>(Images.INSTANCE, i18n.tr("Add EntityIII"));
 
         }
@@ -190,7 +190,7 @@ public class EntityIForm extends CEntityForm<EntityI> {
         }
 
         @Override
-        protected IFolderDecorator<EntityIV> createDecorator() {
+        protected IFolderDecorator<EntityIV> createFolderDecorator() {
             return new TableFolderDecorator<EntityIV>(COLUMNS, Images.INSTANCE, i18n.tr("Add EntityIV"));
         }
 

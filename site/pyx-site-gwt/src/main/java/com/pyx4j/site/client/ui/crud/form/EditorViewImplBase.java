@@ -75,6 +75,6 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
     }
 
     protected void showValidationDialog() {
-        MessageDialog.error(i18n.tr("Error"), getForm().getValidationResults().getMessagesText(true, true));
+        MessageDialog.error(i18n.tr("Error"), getForm().getValidationResults().getValidationMessage(true, true));
     }
 }

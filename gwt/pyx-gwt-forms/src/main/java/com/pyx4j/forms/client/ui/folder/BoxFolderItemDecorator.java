@@ -109,7 +109,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
                 if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
                     String message = null;
                     if (folderItem.isUnconditionalValidationErrorRendering()) {
-                        message = getMessagesText(folderItem.getValidationResults());
+                        message = getValidationMessage(folderItem.getValidationResults());
                     } else {
                         ArrayList<ValidationError> errors = folderItem.getValidationResults().getValidationErrors();
                         ValidationResults results = new ValidationResults();
@@ -119,7 +119,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
                                 results.appendValidationError(validationError);
                             }
                         }
-                        message = getMessagesText(results);
+                        message = getValidationMessage(results);
                     }
                     toolbar.setWarningMessage(message.isEmpty() ? null : message);
                 }
@@ -133,7 +133,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         });
     }
 
-    public static String getMessagesText(ValidationResults validationResults) {
+    public static String getValidationMessage(ValidationResults validationResults) {
         StringBuilder messagesBuffer = new StringBuilder();
         ArrayList<ValidationError> validationErrors = validationResults.getValidationErrors();
 

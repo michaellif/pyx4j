@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.activity.crud;
+package com.pyx4j.site.client.activity;
 
 import java.util.List;
 

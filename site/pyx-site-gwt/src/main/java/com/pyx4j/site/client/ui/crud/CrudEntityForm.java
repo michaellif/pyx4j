@@ -100,7 +100,7 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
                     if (validationResults.isValid()) {
                         tab.setTabWarning(null);
                     } else {
-                        tab.setTabWarning(FormFlexPanel.getMessagesText(validationResults));
+                        tab.setTabWarning(FormFlexPanel.getValidationMessage(validationResults));
                     }
                 }
             }
