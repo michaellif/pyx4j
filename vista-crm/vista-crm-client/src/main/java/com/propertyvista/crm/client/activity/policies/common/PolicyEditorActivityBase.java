@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.policies.common;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.client.activity.EditorActivityBase;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 

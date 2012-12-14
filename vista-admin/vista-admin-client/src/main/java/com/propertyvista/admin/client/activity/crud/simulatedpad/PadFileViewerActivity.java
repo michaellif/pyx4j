@@ -20,7 +20,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.activity.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 

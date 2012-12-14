@@ -7,18 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-04
- * @author Vlad
+ * Created on May 19, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.wizard.creditcheck;
+package com.propertyvista.dto;
 
-import com.pyx4j.site.client.ui.wizard.IWizardView;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.dto.CreditCheckWizardDTO;
+@Transient
+public interface CreditCheckWizardDTO extends IEntity {
 
-public interface CreditCheckWizardView extends IWizardView<CreditCheckWizardDTO> {
-
-    interface Presenter extends IWizardView.Presenter {
-    }
 }

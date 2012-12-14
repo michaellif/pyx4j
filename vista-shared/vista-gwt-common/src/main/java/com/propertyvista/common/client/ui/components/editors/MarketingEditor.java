@@ -55,8 +55,8 @@ public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
             }
 
             @Override
-            protected IFolderDecorator<AdvertisingBlurb> createDecorator() {
-                TableFolderDecorator<AdvertisingBlurb> decor = (TableFolderDecorator<AdvertisingBlurb>) super.createDecorator();
+            protected IFolderDecorator<AdvertisingBlurb> createFolderDecorator() {
+                TableFolderDecorator<AdvertisingBlurb> decor = (TableFolderDecorator<AdvertisingBlurb>) super.createFolderDecorator();
                 decor.setShowHeader(false);
                 return decor;
             }

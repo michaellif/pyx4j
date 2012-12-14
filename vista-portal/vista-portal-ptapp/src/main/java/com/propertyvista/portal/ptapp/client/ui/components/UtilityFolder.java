@@ -71,8 +71,8 @@ public class UtilityFolder extends VistaTableFolder<ProductItemType> {
     }
 
     @Override
-    protected IFolderDecorator<ProductItemType> createDecorator() {
-        TableFolderDecorator<ProductItemType> decotator = (TableFolderDecorator<ProductItemType>) super.createDecorator();
+    protected IFolderDecorator<ProductItemType> createFolderDecorator() {
+        TableFolderDecorator<ProductItemType> decotator = (TableFolderDecorator<ProductItemType>) super.createFolderDecorator();
         decotator.setShowHeader(false);
         return decotator;
     }

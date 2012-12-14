@@ -49,7 +49,7 @@ public abstract class VistaBoxFolder<E extends IEntity> extends CEntityFolder<E>
     }
 
     @Override
-    protected IFolderDecorator<E> createDecorator() {
+    protected IFolderDecorator<E> createFolderDecorator() {
         return new VistaBoxFolderDecorator<E>(this);
     }
 

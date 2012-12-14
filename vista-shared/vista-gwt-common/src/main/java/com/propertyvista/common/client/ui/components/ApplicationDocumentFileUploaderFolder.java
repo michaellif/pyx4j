@@ -50,7 +50,7 @@ public class ApplicationDocumentFileUploaderFolder extends VistaTableFolder<Appl
     }
 
     @Override
-    protected IFolderDecorator<ApplicationDocumentFile> createDecorator() {
+    protected IFolderDecorator<ApplicationDocumentFile> createFolderDecorator() {
         TableFolderDecorator<ApplicationDocumentFile> folderDecorator = (TableFolderDecorator<ApplicationDocumentFile>) super.createDecorator();
         folderDecorator.setShowHeader(false);
         return folderDecorator;

@@ -107,7 +107,7 @@ public class PortfolioForm extends CrmEntityForm<Portfolio> {
         }
 
         @Override
-        protected IFolderDecorator<Building> createDecorator() {
+        protected IFolderDecorator<Building> createFolderDecorator() {
             return new VistaTableFolderDecorator<Building>(this, this.isEditable()) {
                 {
                     setShowHeader(false);

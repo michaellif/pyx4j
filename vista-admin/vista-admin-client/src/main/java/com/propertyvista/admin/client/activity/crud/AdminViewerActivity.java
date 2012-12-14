@@ -16,7 +16,7 @@ package com.propertyvista.admin.client.activity.crud;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.client.activity.ViewerActivityBase;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 

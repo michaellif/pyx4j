@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.crud.customer.tenant;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.activity.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.customer.tenant.PastTenantListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;

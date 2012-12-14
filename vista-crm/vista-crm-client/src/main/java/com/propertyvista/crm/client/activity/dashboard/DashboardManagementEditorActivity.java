@@ -20,7 +20,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.client.activity.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
 

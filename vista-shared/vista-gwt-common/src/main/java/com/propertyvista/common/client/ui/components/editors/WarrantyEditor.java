@@ -75,8 +75,8 @@ public class WarrantyEditor extends CEntityDecoratableForm<Warranty> {
         }
 
         @Override
-        protected IFolderDecorator<WarrantyItem> createDecorator() {
-            TableFolderDecorator<WarrantyItem> decor = (TableFolderDecorator<WarrantyItem>) super.createDecorator();
+        protected IFolderDecorator<WarrantyItem> createFolderDecorator() {
+            TableFolderDecorator<WarrantyItem> decor = (TableFolderDecorator<WarrantyItem>) super.createFolderDecorator();
             decor.setShowHeader(false);
             return decor;
         }

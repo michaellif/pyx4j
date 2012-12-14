@@ -111,8 +111,8 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
         }
 
         @Override
-        protected IFolderDecorator<VistaCrmBehaviorDTO> createDecorator() {
-            TableFolderDecorator<VistaCrmBehaviorDTO> folderDecorator = (TableFolderDecorator<VistaCrmBehaviorDTO>) super.createDecorator();
+        protected IFolderDecorator<VistaCrmBehaviorDTO> createFolderDecorator() {
+            TableFolderDecorator<VistaCrmBehaviorDTO> folderDecorator = (TableFolderDecorator<VistaCrmBehaviorDTO>) super.createFolderDecorator();
             folderDecorator.setShowHeader(false);
             return folderDecorator;
         }

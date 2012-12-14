@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.policies.backgroundcheck;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.activity.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;

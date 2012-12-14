@@ -51,7 +51,7 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
     }
 
     @Override
-    protected IFolderDecorator<CrmRole> createDecorator() {
+    protected IFolderDecorator<CrmRole> createFolderDecorator() {
         return new VistaTableFolderDecorator<CrmRole>(this, this.isEditable()) {
             {
                 setShowHeader(false);

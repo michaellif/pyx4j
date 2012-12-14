@@ -23,7 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.wizard.WizardForm;
 import com.pyx4j.site.client.ui.wizard.WizardViewImplBase;
-import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.components.AnchorButton;
@@ -34,12 +34,21 @@ public class CrmWizardViewImplBase<E extends IEntity> extends WizardViewImplBase
 
     protected String defaultCaption;
 
-    protected Button btnFinish;
+    protected Button btnPrevious;
 
-    public CrmWizardViewImplBase(Class<? extends CrudAppPlace> placeClass) {
+    protected Button btnNext;
+
+    public CrmWizardViewImplBase(Class<? extends AppPlace> placeClass) {
         super();
 
-        btnFinish = new Button(i18n.tr("Finish"), new ClickHandler() {
+        btnPrevious = new Button(i18n.tr("Previous"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+            }
+        });
+        addFooterToolbarItem(btnPrevious);
+
+        btnNext = new Button(i18n.tr("Next"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 if (!getForm().isValid()) {
@@ -50,7 +59,7 @@ public class CrmWizardViewImplBase<E extends IEntity> extends WizardViewImplBase
                 }
             }
         });
-        addFooterToolbarItem(btnFinish);
+        addFooterToolbarItem(btnNext);
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
         setCaption(defaultCaption);
@@ -66,6 +75,11 @@ public class CrmWizardViewImplBase<E extends IEntity> extends WizardViewImplBase
         enableButtons(false);
     }
 
+    public CrmWizardViewImplBase(Class<? extends AppPlace> placeClass, WizardForm<E> form) {
+        this(placeClass);
+        setForm(form);
+    }
+
     @Override
     protected void setForm(WizardForm<? extends E> form) {
         super.setForm(form);
@@ -75,11 +89,6 @@ public class CrmWizardViewImplBase<E extends IEntity> extends WizardViewImplBase
                 enableButtons(true);
             }
         });
-    }
-
-    public CrmWizardViewImplBase(Class<? extends CrudAppPlace> placeClass, WizardForm<E> form) {
-        this(placeClass);
-        setForm(form);
     }
 
     @Override

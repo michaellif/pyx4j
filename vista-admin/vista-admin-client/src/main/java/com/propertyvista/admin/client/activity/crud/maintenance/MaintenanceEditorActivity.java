@@ -16,7 +16,7 @@ package com.propertyvista.admin.client.activity.crud.maintenance;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.client.activity.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceEditorView;

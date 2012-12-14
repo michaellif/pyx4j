@@ -18,7 +18,7 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.activity.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.security.VistaCrmBehavior;

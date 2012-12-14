@@ -53,7 +53,7 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
             public void onClick(ClickEvent event) {
                 if (!getForm().isValid()) {
                     getForm().setUnconditionalValidationErrorRendering(true);
-                    throw new UserRuntimeException(getForm().getValidationResults().getMessagesText(true, false));
+                    throw new UserRuntimeException(getForm().getValidationResults().getValidationMessage(true, false));
                 }
                 getPresenter().save();
             }
@@ -65,7 +65,7 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
             public void onClick(ClickEvent event) {
                 if (!getForm().isValid()) {
                     getForm().setUnconditionalValidationErrorRendering(true);
-                    throw new UserRuntimeException(getForm().getValidationResults().getMessagesText(true, false));
+                    throw new UserRuntimeException(getForm().getValidationResults().getValidationMessage(true, false));
                 }
                 AdminEditorViewImplBase.this.getPresenter().apply();
             }

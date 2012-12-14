@@ -7,19 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-04
- * @author Vlad
+ * Created on 2011-05-21
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.wizard.creditcheck;
+package com.propertyvista.crm.rpc.services;
 
-import com.propertyvista.crm.client.ui.crud.CrmWizardViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.pyx4j.entity.rpc.AbstractWizardService;
+
 import com.propertyvista.dto.CreditCheckWizardDTO;
 
-public class CreditCheckWizardViewImpl extends CrmWizardViewImplBase<CreditCheckWizardDTO> implements CreditCheckWizardView {
+public interface CreditCheckWizardService extends AbstractWizardService<CreditCheckWizardDTO> {
 
-    public CreditCheckWizardViewImpl() {
-        super(CrmSiteMap.Administration.Settings.CreditCheckSetup.class, new CreditCheckWizardForm());
-    }
 }

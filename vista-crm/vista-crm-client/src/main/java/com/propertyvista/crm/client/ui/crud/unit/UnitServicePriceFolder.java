@@ -48,8 +48,8 @@ public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePrice
     }
 
     @Override
-    protected IFolderDecorator<AptUnitServicePriceDTO> createDecorator() {
-        IFolderDecorator<AptUnitServicePriceDTO> decor = super.createDecorator();
+    protected IFolderDecorator<AptUnitServicePriceDTO> createFolderDecorator() {
+        IFolderDecorator<AptUnitServicePriceDTO> decor = super.createFolderDecorator();
         if (decor instanceof TableFolderDecorator) {
             ((TableFolderDecorator<AptUnitServicePriceDTO>) decor).setShowHeader(false);
         }

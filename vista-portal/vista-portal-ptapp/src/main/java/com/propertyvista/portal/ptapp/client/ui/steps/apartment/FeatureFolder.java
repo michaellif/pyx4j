@@ -21,7 +21,6 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -45,12 +44,6 @@ public class FeatureFolder extends VistaTableFolder<BillableItem> {
 
         this.type = type;
         this.apartmentViewForm = apartmentViewForm;
-    }
-
-    @Override
-    protected IFolderDecorator<BillableItem> createDecorator() {
-        IFolderDecorator<BillableItem> decor = super.createDecorator();
-        return decor;
     }
 
     protected int getMaxCount() {

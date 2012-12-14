@@ -21,7 +21,7 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.activity.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillListerPresenter;

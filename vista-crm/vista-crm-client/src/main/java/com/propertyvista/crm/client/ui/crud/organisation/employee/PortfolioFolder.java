@@ -88,7 +88,7 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
     }
 
     @Override
-    protected IFolderDecorator<Portfolio> createDecorator() {
+    protected IFolderDecorator<Portfolio> createFolderDecorator() {
         return new VistaTableFolderDecorator<Portfolio>(this, this.isEditable()) {
             {
                 setShowHeader(false);

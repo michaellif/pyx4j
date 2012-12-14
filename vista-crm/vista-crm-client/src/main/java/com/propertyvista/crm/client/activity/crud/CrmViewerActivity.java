@@ -17,7 +17,7 @@ import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.client.activity.ViewerActivityBase;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -46,7 +46,6 @@ public class CrmViewerActivity<E extends IEntity> extends ViewerActivityBase<E> 
 
         entityClass = result.getEntityMeta().getDBOClass();
 
-        AppSite.instance();
         AppSite.getEventBus().fireEvent(new CrudNavigateEvent(place, result));
     }
 

@@ -99,7 +99,7 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
     }
 
     @Override
-    protected IFolderDecorator<Employee> createDecorator() {
+    protected IFolderDecorator<Employee> createFolderDecorator() {
         return new VistaTableFolderDecorator<Employee>(this, this.isEditable()) {
             {
                 setShowHeader(false);

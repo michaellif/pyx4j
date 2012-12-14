@@ -233,7 +233,7 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                         public void onClick(ClickEvent event) {
                             if (!isValid()) {
                                 setUnconditionalValidationErrorRendering(true);
-                                MessageDialog.error(i18n.tr("Error"), getValidationResults().getMessagesText(true, true));
+                                MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true));
                             } else {
                                 if (getValue().created().getValue() == null) {
                                     CrmUser user = EntityFactory.create(CrmUser.class);
@@ -340,8 +340,8 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                 }
 
                 @Override
-                protected IFolderDecorator<NoteAttachment> createDecorator() {
-                    BoxFolderDecorator<NoteAttachment> decorator = (BoxFolderDecorator<NoteAttachment>) super.createDecorator();
+                protected IFolderDecorator<NoteAttachment> createFolderDecorator() {
+                    BoxFolderDecorator<NoteAttachment> decorator = (BoxFolderDecorator<NoteAttachment>) super.createFolderDecorator();
                     decorator.setTitle(i18n.tr("Add Attachment"));
 
                     return decorator;

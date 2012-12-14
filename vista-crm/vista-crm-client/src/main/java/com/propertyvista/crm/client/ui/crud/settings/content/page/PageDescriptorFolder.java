@@ -44,12 +44,6 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     }
 
     @Override
-    public void initContent() {
-        super.initContent();
-        ((IFolderDecorator) getDecorator()).setAddButtonVisible(false);
-    }
-
-    @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().name(), "25em"));
@@ -65,9 +59,10 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     }
 
     @Override
-    protected IFolderDecorator<PageDescriptor> createDecorator() {
-        TableFolderDecorator<PageDescriptor> decor = (TableFolderDecorator<PageDescriptor>) super.createDecorator();
+    protected IFolderDecorator<PageDescriptor> createFolderDecorator() {
+        TableFolderDecorator<PageDescriptor> decor = (TableFolderDecorator<PageDescriptor>) super.createFolderDecorator();
         decor.setShowHeader(false);
+        decor.setAddButtonVisible(false);
         return decor;
     }
 

@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.activity.ListerActivityBase;
 
 import com.propertyvista.admin.client.ui.crud.pmc.PmcListerView;
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;

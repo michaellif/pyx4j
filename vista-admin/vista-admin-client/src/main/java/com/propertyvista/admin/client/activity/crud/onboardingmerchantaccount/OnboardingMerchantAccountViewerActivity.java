@@ -15,7 +15,7 @@ package com.propertyvista.admin.client.activity.crud.onboardingmerchantaccount;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.client.activity.ViewerActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.ui.crud.pmc.OnboardingMerchantAccountViewerView;

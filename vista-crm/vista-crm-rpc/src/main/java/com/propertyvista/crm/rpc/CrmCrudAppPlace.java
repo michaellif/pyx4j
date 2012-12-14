@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.rpc;
 
-import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public abstract class CrmCrudAppPlace extends CrudAppPlace {
@@ -34,9 +33,4 @@ public abstract class CrmCrudAppPlace extends CrudAppPlace {
         }
     }
 
-    @Override
-    public CrmCrudAppPlace copy(AppPlace place) {
-        super.copy(place);
-        return this;
-    }
 }

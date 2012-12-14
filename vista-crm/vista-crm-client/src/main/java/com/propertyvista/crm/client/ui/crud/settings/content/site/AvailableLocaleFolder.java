@@ -84,8 +84,8 @@ class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
     }
 
     @Override
-    protected IFolderDecorator<AvailableLocale> createDecorator() {
-        TableFolderDecorator<AvailableLocale> decor = (TableFolderDecorator<AvailableLocale>) super.createDecorator();
+    protected IFolderDecorator<AvailableLocale> createFolderDecorator() {
+        TableFolderDecorator<AvailableLocale> decor = (TableFolderDecorator<AvailableLocale>) super.createFolderDecorator();
         decor.setShowHeader(false);
         return decor;
     }

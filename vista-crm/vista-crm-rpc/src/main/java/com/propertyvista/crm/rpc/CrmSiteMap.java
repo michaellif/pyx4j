@@ -313,10 +313,10 @@ public class CrmSiteMap implements SiteMap {
 
         public static class Settings extends AppPlace {
 
-            public static class OnlinePaymentSetup extends CrmCrudAppPlace {
+            public static class OnlinePaymentSetup extends AppPlace {
             }
 
-            public static class CreditCheckSetup extends CrmCrudAppPlace {
+            public static class CreditCheckSetup extends AppPlace {
             }
         }
 

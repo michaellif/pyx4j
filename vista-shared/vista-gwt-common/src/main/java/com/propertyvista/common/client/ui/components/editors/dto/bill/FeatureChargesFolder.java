@@ -94,8 +94,8 @@ public class FeatureChargesFolder extends VistaBoxFolder<InvoiceProductCharge> {
         }
 
         @Override
-        protected IFolderDecorator<InvoiceSubLineItem> createDecorator() {
-            TableFolderDecorator<InvoiceSubLineItem> decor = (TableFolderDecorator<InvoiceSubLineItem>) super.createDecorator();
+        protected IFolderDecorator<InvoiceSubLineItem> createFolderDecorator() {
+            TableFolderDecorator<InvoiceSubLineItem> decor = (TableFolderDecorator<InvoiceSubLineItem>) super.createFolderDecorator();
             decor.setShowHeader(false);
             return decor;
         }

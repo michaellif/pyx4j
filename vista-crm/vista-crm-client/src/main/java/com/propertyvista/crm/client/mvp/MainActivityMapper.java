@@ -199,11 +199,13 @@ import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsu
 import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsurancePolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsurancePolicyViewerActivity;
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
+import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckWizardActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Content;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
+import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 
 public class MainActivityMapper implements AppActivityMapper {
 
@@ -221,7 +223,7 @@ public class MainActivityMapper implements AppActivityMapper {
                     CrudAppPlace crudPlace = (CrudAppPlace) place;
 
 // - Property-related:
-                    if (place instanceof CrmSiteMap.Properties.Complex) {
+                    if (crudPlace instanceof CrmSiteMap.Properties.Complex) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new ComplexEditorAcitvity(crudPlace);
@@ -234,7 +236,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Properties.Building) {
+                    } else if (crudPlace instanceof CrmSiteMap.Properties.Building) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new BuildingEditorActivity(crudPlace);
@@ -247,7 +249,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Properties.Elevator) {
+                    } else if (crudPlace instanceof CrmSiteMap.Properties.Elevator) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new ElevatorEditorActivity(crudPlace);
@@ -255,9 +257,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new ElevatorViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Properties.Boiler) {
+                    } else if (crudPlace instanceof CrmSiteMap.Properties.Boiler) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new BoilerEditorActivity(crudPlace);
@@ -265,9 +269,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new BoilerViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Properties.Roof) {
+                    } else if (crudPlace instanceof CrmSiteMap.Properties.Roof) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new RoofEditorActivity(crudPlace);
@@ -275,9 +281,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new RoofViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Properties.Parking) {
+                    } else if (crudPlace instanceof CrmSiteMap.Properties.Parking) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new ParkingEditorActivity(crudPlace);
@@ -285,9 +293,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new ParkingViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Properties.ParkingSpot) {
+                    } else if (crudPlace instanceof CrmSiteMap.Properties.ParkingSpot) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new ParkingSpotEditorActivity(crudPlace);
@@ -300,7 +310,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Properties.LockerArea) {
+                    } else if (crudPlace instanceof CrmSiteMap.Properties.LockerArea) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new LockerAreaEditorActivity(crudPlace);
@@ -308,9 +318,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new LockerAreaViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Properties.Locker) {
+                    } else if (crudPlace instanceof CrmSiteMap.Properties.Locker) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new LockerEditorActivity(crudPlace);
@@ -323,7 +335,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Properties.Floorplan) {
+                    } else if (crudPlace instanceof CrmSiteMap.Properties.Floorplan) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new FloorplanEditorActivity(crudPlace);
@@ -331,10 +343,12 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new FloorplanViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
                         // - Unit-related:
-                    } else if (place instanceof CrmSiteMap.Properties.Unit) {
+                    } else if (crudPlace instanceof CrmSiteMap.Properties.Unit) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new UnitEditorActivity(crudPlace);
@@ -347,7 +361,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Properties.UnitItem) {
+                    } else if (crudPlace instanceof CrmSiteMap.Properties.UnitItem) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new UnitItemEditorActivity(crudPlace);
@@ -355,9 +369,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new UnitItemViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Properties.UnitOccupancy) {
+                    } else if (crudPlace instanceof CrmSiteMap.Properties.UnitOccupancy) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new UnitOccupancyEditorActivity(crudPlace);
@@ -365,10 +381,12 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new UnitOccupancyViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
                         // - Marketing-related:
-                    } else if (place instanceof CrmSiteMap.Properties.Service) {
+                    } else if (crudPlace instanceof CrmSiteMap.Properties.Service) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new ServiceEditorActivity(crudPlace);
@@ -376,9 +394,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new ServiceViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Properties.Feature) {
+                    } else if (crudPlace instanceof CrmSiteMap.Properties.Feature) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new FeatureEditorActivity(crudPlace);
@@ -386,9 +406,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new FeatureViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Properties.Concession) {
+                    } else if (crudPlace instanceof CrmSiteMap.Properties.Concession) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new ConcessionEditorActivity(crudPlace);
@@ -396,10 +418,12 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new ConcessionViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
 // - Marketing-related:
-                    } else if (place instanceof Marketing.Lead) {
+                    } else if (crudPlace instanceof Marketing.Lead) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new LeadEditorActivity(crudPlace);
@@ -412,7 +436,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof Marketing.Appointment) {
+                    } else if (crudPlace instanceof Marketing.Appointment) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new AppointmentEditorActivity(crudPlace);
@@ -420,9 +444,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new AppointmentViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof Marketing.Showing) {
+                    } else if (crudPlace instanceof Marketing.Showing) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new ShowingEditorActivity(crudPlace);
@@ -430,17 +456,21 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new ShowingViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Marketing.FutureTenant) {
+                    } else if (crudPlace instanceof CrmSiteMap.Marketing.FutureTenant) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new FutureTenantListerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
 // - Tenant-related:
-                    } else if (place instanceof CrmSiteMap.Tenants.Tenant) {
+                    } else if (crudPlace instanceof CrmSiteMap.Tenants.Tenant) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new TenantEditorActivity(crudPlace);
@@ -453,7 +483,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Tenants.Guarantor) {
+                    } else if (crudPlace instanceof CrmSiteMap.Tenants.Guarantor) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new GuarantorEditorActivity(crudPlace);
@@ -466,20 +496,24 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Tenants.PastGuarantor) {
+                    } else if (crudPlace instanceof CrmSiteMap.Tenants.PastGuarantor) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new PastGuarantorListerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Tenants.Screening) {
+                    } else if (crudPlace instanceof CrmSiteMap.Tenants.Screening) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new CustomerScreeningEditorActivity(crudPlace);
                             break;
                         case viewer:
                             activity = new CustomerScreeningViewerActivity(crudPlace);
+                            break;
+                        default:
                             break;
                         }
 
@@ -491,9 +525,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new LeaseViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Tenants.LeaseTerm) {
+                    } else if (crudPlace instanceof CrmSiteMap.Tenants.LeaseTerm) {
                         switch (crudPlace.getType()) {
                         case viewer:
                             activity = new LeaseTermViewerActivity(crudPlace);
@@ -501,9 +537,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case editor:
                             activity = new LeaseTermEditorActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Tenants.LeaseApplication) {
+                    } else if (crudPlace instanceof CrmSiteMap.Tenants.LeaseApplication) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new LeaseApplicationListerActivity(crudPlace);
@@ -511,9 +549,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new LeaseApplicationViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Tenants.MaintenanceRequest) {
+                    } else if (crudPlace instanceof CrmSiteMap.Tenants.MaintenanceRequest) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new MaintenanceRequestListerActivity(crudPlace);
@@ -526,42 +566,50 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Tenants.PastTenant) {
+                    } else if (crudPlace instanceof CrmSiteMap.Tenants.PastTenant) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new PastTenantListerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Tenants.PastLease) {
+                    } else if (crudPlace instanceof CrmSiteMap.Tenants.PastLease) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new PastLeaseListerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 // - Financial-related:
 
-                    } else if (place instanceof CrmSiteMap.Finance.BillingCycle) {
+                    } else if (crudPlace instanceof CrmSiteMap.Finance.BillingCycle) {
                         switch (crudPlace.getType()) {
                         case viewer:
                             activity = new BillingCycleViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Finance.BillingCycle.Bills) {
+                    } else if (crudPlace instanceof CrmSiteMap.Finance.BillingCycle.Bills) {
                         activity = new BillingCycleBillListerActivity(crudPlace);
 
-                    } else if (place instanceof CrmSiteMap.Finance.BillingCycle.Leases) {
+                    } else if (crudPlace instanceof CrmSiteMap.Finance.BillingCycle.Leases) {
                         activity = new BillingCycleLeaseListerActivity(crudPlace);
 
-                    } else if (place instanceof CrmSiteMap.Finance.Bill) {
+                    } else if (crudPlace instanceof CrmSiteMap.Finance.Bill) {
                         switch (crudPlace.getType()) {
                         case viewer:
                             activity = new BillViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Finance.Payment) {
+                    } else if (crudPlace instanceof CrmSiteMap.Finance.Payment) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new PaymentEditorActivity(crudPlace);
@@ -569,9 +617,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new PaymentViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Finance.LeaseDeposit) {
+                    } else if (crudPlace instanceof CrmSiteMap.Finance.LeaseDeposit) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new DepositLifecycleEditorActivity(crudPlace);
@@ -579,9 +629,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new DepositLifecycleViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Finance.LeaseAdjustment) {
+                    } else if (crudPlace instanceof CrmSiteMap.Finance.LeaseAdjustment) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new LeaseAdjustmentEditorActivity(crudPlace);
@@ -589,9 +641,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new LeaseAdjustmentViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Finance.AggregatedTransfer) {
+                    } else if (crudPlace instanceof CrmSiteMap.Finance.AggregatedTransfer) {
                         switch (crudPlace.getType()) {
                         case viewer:
                             activity = new AggregatedTransferViewerActivity(crudPlace);
@@ -599,10 +653,12 @@ public class MainActivityMapper implements AppActivityMapper {
                         case lister:
                             activity = new AggregatedTransferListerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
 // - Organization-related:
-                    } else if (place instanceof CrmSiteMap.Organization.Employee) {
+                    } else if (crudPlace instanceof CrmSiteMap.Organization.Employee) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new EmployeeEditorActivity(crudPlace);
@@ -615,7 +671,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Organization.Portfolio) {
+                    } else if (crudPlace instanceof CrmSiteMap.Organization.Portfolio) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new PortfolioEditorActivity(crudPlace);
@@ -628,7 +684,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Organization.Vendor) {
+                    } else if (crudPlace instanceof CrmSiteMap.Organization.Vendor) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new VendorEditorActivity(crudPlace);
@@ -642,7 +698,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         }
 
 // - Report/Dashboard-related:
-                    } else if (place instanceof CrmSiteMap.Dashboard.Manage) {
+                    } else if (crudPlace instanceof CrmSiteMap.Dashboard.Manage) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new DashboardManagementEditorActivity(crudPlace);
@@ -658,7 +714,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         }
 
 // - Settings:
-                    } else if (place instanceof CrmSiteMap.Account.AccountData) {
+                    } else if (crudPlace instanceof CrmSiteMap.Account.AccountData) {
                         // the service that the Account related activities use doesn't care about the 'id' arg,
                         // but nevertheless the base "Activity" classes need it, so we just add a value let them be happy
                         switch (crudPlace.getType()) {
@@ -670,9 +726,11 @@ public class MainActivityMapper implements AppActivityMapper {
                             ((CrmSiteMap.Account.AccountData) place).formViewerPlace(new Key(1));
                             activity = new AccountViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof Financial.CustomerCreditCheck) {
+                    } else if (crudPlace instanceof Financial.CustomerCreditCheck) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new CustomerCreditCheckListerActivity(crudPlace);
@@ -688,10 +746,10 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof Financial.ProductDictionary) {
+                    } else if (crudPlace instanceof Financial.ProductDictionary) {
                         activity = new ProductDictionaryViewActivity(place);
 
-                    } else if (place instanceof CrmSiteMap.Administration.Content) {
+                    } else if (crudPlace instanceof Administration.Content) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new SiteEditorActivity(crudPlace);
@@ -704,7 +762,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof Content.Page) {
+                    } else if (crudPlace instanceof Content.Page) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new PageEditorActivity(crudPlace);
@@ -712,9 +770,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new PageViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof Content.HomePageGadgets) {
+                    } else if (crudPlace instanceof Content.HomePageGadgets) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new HomePageGadgetEditorActivity(crudPlace);
@@ -722,9 +782,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new HomePageGadgetViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof Content.CityIntroPage) {
+                    } else if (crudPlace instanceof Content.CityIntroPage) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new CityIntroPageEditorActivity(crudPlace);
@@ -732,9 +794,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new CityIntroPageViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof Financial.ProductDictionary.ServiceItemType) {
+                    } else if (crudPlace instanceof Financial.ProductDictionary.ServiceItemType) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new ServiceItemTypeEditorActivity(crudPlace);
@@ -742,8 +806,10 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new ServiceItemTypeViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
-                    } else if (place instanceof Financial.ProductDictionary.FeatureItemType) {
+                    } else if (crudPlace instanceof Financial.ProductDictionary.FeatureItemType) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new FeatureItemTypeEditorActivity(crudPlace);
@@ -751,9 +817,11 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new FeatureItemTypeViewerActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof Security.UserRole) {
+                    } else if (crudPlace instanceof Security.UserRole) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new CrmRoleEditorActivity(crudPlace);
@@ -766,7 +834,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof Financial.MerchantAccount) {
+                    } else if (crudPlace instanceof Financial.MerchantAccount) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new MerchantAccountEditorActivity(crudPlace);
@@ -779,7 +847,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof Financial.Tax) {
+                    } else if (crudPlace instanceof Financial.Tax) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new TaxEditorActivity(crudPlace);
@@ -792,7 +860,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof Financial.GlCodeCategory) {
+                    } else if (crudPlace instanceof Financial.GlCodeCategory) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new GlCodeCategoryEditorActivity(crudPlace);
@@ -805,7 +873,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof Financial.LeaseAdjustmentReason) {
+                    } else if (crudPlace instanceof Financial.LeaseAdjustmentReason) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new LeaseAdjustmentReasonEditorActivity(crudPlace);
@@ -819,7 +887,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         }
 
 // - Policies:
-                    } else if (place instanceof CrmSiteMap.Administration.Policies.ApplicationDocumentation) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.ApplicationDocumentation) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new ApplicationDocumentationPolicyListerActivicty(crudPlace);
@@ -832,7 +900,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Administration.Policies.LegalDocumentation) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.LegalDocumentation) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new LegalDocumentationPolicyListerActivicty(crudPlace);
@@ -845,7 +913,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Administration.Policies.Pet) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.Pet) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new PetPolicyListerActivity(crudPlace);
@@ -858,7 +926,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Administration.Policies.EmailTemplates) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.EmailTemplates) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new EmailTemplatesPolicyListerActivity(crudPlace);
@@ -871,7 +939,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Administration.Policies.Dates) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.Dates) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new DatesPolicyListerActivity(crudPlace);
@@ -884,7 +952,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Administration.Policies.Restrictions) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.Restrictions) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new RestrictionsPolicyListerActivity(crudPlace);
@@ -897,7 +965,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Administration.Policies.ProductTax) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.ProductTax) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new ProductTaxPolicyListerActivity(crudPlace);
@@ -910,7 +978,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Administration.Policies.LeaseTermination) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.LeaseTermination) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new LeaseTerminationPolicyListerActivity(crudPlace);
@@ -923,7 +991,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Administration.Policies.LeaseAdjustment) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.LeaseAdjustment) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new LeaseAdjustmentPolicyListerActivity(crudPlace);
@@ -936,7 +1004,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Administration.Policies.Deposits) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.Deposits) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new DepositPolicyListerActivity(crudPlace);
@@ -948,7 +1016,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new DepositPolicyViewerActivity(crudPlace);
                             break;
                         }
-                    } else if (place instanceof CrmSiteMap.Administration.Policies.BackgroundCheck) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.BackgroundCheck) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new BackgroundCheckPolicyListerActivity(crudPlace);
@@ -960,7 +1028,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new BackgroundCheckPolicyViewerActivity(crudPlace);
                             break;
                         }
-                    } else if (place instanceof CrmSiteMap.Administration.Policies.Billing) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.Billing) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new LeaseBillingPolicyListerActivity(crudPlace);
@@ -972,7 +1040,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new LeaseBillingPolicyViewerActivity(crudPlace);
                             break;
                         }
-                    } else if (place instanceof CrmSiteMap.Administration.Policies.IdAssignment) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.IdAssignment) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new IdAssignmentPolicyListerActivity(crudPlace);
@@ -985,7 +1053,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Administration.Policies.AR) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.AR) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new ARPolicyListerActivity(crudPlace);
@@ -998,7 +1066,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Administration.Policies.TenantInsurance) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.TenantInsurance) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new TenantInsurancePolicyListerActivity(crudPlace);
@@ -1011,7 +1079,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 // - Security
-                    } else if (place instanceof CrmSiteMap.Account.AccountRecoveryOptions) {
+                    } else if (crudPlace instanceof CrmSiteMap.Account.AccountRecoveryOptions) {
                         switch (crudPlace.getType()) {
                         case viewer:
                             activity = new AccountRecoveryOptionsViewerActivity(crudPlace);
@@ -1019,17 +1087,20 @@ public class MainActivityMapper implements AppActivityMapper {
                         case editor:
                             activity = new AccountRecoveryOptionsEditorActivity(crudPlace);
                             break;
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Account.LoginAttemptsLog) {
+                    } else if (crudPlace instanceof CrmSiteMap.Account.LoginAttemptsLog) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new LoginAttemptsListerActivity(crudPlace);
                             break;
-
+                        default:
+                            break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Administration.Security.AuditRecords) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Security.AuditRecords) {
                         activity = new CrmAuditRecordsListerActivity(place);
 
                     } // CRUD APP PLACE IF ENDS HERE
@@ -1037,7 +1108,8 @@ public class MainActivityMapper implements AppActivityMapper {
                     // Dashboard related stuff again
                 } else if (place instanceof CrmSiteMap.Dashboard.View) {
                     activity = new DashboardActivity((CrmSiteMap.Dashboard.View) place);
-
+                } else if (place instanceof Administration.Settings.CreditCheckSetup) {
+                    activity = new CreditCheckWizardActivity((Administration.Settings.CreditCheckSetup) place);
                 } else if (place instanceof CrmSiteMap.PasswordChange) {
                     activity = new PasswordChangeActivity(place);
 

@@ -60,8 +60,8 @@ class SitePageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     }
 
     @Override
-    protected IFolderDecorator<PageDescriptor> createDecorator() {
-        TableFolderDecorator<PageDescriptor> decor = (TableFolderDecorator<PageDescriptor>) super.createDecorator();
+    protected IFolderDecorator<PageDescriptor> createFolderDecorator() {
+        TableFolderDecorator<PageDescriptor> decor = (TableFolderDecorator<PageDescriptor>) super.createFolderDecorator();
         decor.setShowHeader(false);
         decor.setAddButtonVisible(false);
         return decor;

@@ -25,7 +25,6 @@ import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingEditorActivity extends CrmEditorActivity<BuildingDTO> implements BuildingEditorView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public BuildingEditorActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(BuildingEditorView.class), GWT.<BuildingCrudService> create(BuildingCrudService.class), BuildingDTO.class);
     }

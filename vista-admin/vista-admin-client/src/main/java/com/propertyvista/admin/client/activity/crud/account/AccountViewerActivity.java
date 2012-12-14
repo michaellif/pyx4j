@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.client.activity.ViewerActivityBase;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
