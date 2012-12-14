@@ -201,7 +201,9 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
             dataItems.add(new DataItem<E>(entity));
         }
         getDataTableModel().populateData(dataItems, pageNumber, hasMoreData, totalRows);
-        delButton.setEnabled(getDataTableModel().isAnyChecked());
+        if (delButton != null) {
+            delButton.setEnabled(getDataTableModel().isAnyChecked());
+        }
     }
 
     public void discard() {
