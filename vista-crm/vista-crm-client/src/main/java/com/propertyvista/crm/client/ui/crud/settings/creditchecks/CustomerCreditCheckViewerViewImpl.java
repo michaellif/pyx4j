@@ -14,13 +14,13 @@
 package com.propertyvista.crm.client.ui.crud.settings.creditchecks;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
 
 public class CustomerCreditCheckViewerViewImpl extends CrmViewerViewImplBase<CustomerCreditCheckDTO> implements CustomerCreditCheckViewerView {
 
     public CustomerCreditCheckViewerViewImpl() {
-        super(CrmSiteMap.Settings.CreditCheck.CustomerCreditCheck.class, true);
+        super(Financial.CustomerCreditCheck.class, true);
         setForm(new CustomerCreditCheckForm(true));
     }
 

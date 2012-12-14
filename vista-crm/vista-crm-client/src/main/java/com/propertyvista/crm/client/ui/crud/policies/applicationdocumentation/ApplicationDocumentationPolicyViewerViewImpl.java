@@ -21,7 +21,7 @@ public class ApplicationDocumentationPolicyViewerViewImpl extends CrmViewerViewI
         ApplicationDocumentationPolicyViewerView {
 
     public ApplicationDocumentationPolicyViewerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.ApplicationDocumentation.class);
+        super(CrmSiteMap.Administration.Policies.ApplicationDocumentation.class);
 
         setForm(new ApplicationDocumentationPolicyForm(true));
     }

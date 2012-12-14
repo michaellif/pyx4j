@@ -20,7 +20,7 @@ import com.propertyvista.domain.policy.dto.TenantInsurancePolicyDTO;
 public class TenantInsurancePolicyViewerViewImpl extends CrmViewerViewImplBase<TenantInsurancePolicyDTO> {
 
     public TenantInsurancePolicyViewerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.TenantInsurance.class);
+        super(CrmSiteMap.Administration.Policies.TenantInsurance.class);
         setForm(new TenantInsurancePolicyForm(true));
     }
 

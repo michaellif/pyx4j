@@ -21,7 +21,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Content;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Content;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implements PageViewer {

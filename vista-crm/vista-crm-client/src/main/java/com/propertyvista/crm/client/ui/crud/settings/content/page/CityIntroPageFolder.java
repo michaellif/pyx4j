@@ -35,7 +35,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteForm;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteViewer;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Content;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Content;
 import com.propertyvista.domain.site.CityIntroPage;
 
 public class CityIntroPageFolder extends VistaTableFolder<CityIntroPage> {

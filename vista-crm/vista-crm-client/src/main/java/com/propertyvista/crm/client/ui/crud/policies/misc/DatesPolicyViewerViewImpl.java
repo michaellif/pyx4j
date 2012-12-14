@@ -20,7 +20,7 @@ import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
 public class DatesPolicyViewerViewImpl extends CrmViewerViewImplBase<DatesPolicyDTO> implements DatesPolicyViewerView {
 
     public DatesPolicyViewerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.Dates.class);
+        super(CrmSiteMap.Administration.Policies.Dates.class);
         setForm(new DatesPolicyForm(true));
     }
 }

@@ -35,7 +35,7 @@ import com.propertyvista.crm.client.activity.login.GetSatisfaction;
 import com.propertyvista.crm.client.ui.TopRightActionsView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Financial;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.shared.CompiledLocale;
 import com.propertyvista.shared.config.VistaDemo;
@@ -151,7 +151,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public boolean isSettingsPlace() {
-        return (AppSite.getPlaceController().getWhere().getClass().getName().contains(CrmSiteMap.Settings.class.getName()));
+        return (AppSite.getPlaceController().getWhere().getClass().getName().contains(CrmSiteMap.Administration.class.getName()));
     }
 
     @Override

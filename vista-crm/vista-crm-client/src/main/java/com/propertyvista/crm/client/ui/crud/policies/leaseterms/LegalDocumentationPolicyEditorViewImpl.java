@@ -24,6 +24,6 @@ public class LegalDocumentationPolicyEditorViewImpl extends CrmEditorViewImplBas
     private static final I18n i18n = I18n.get(LegalDocumentationPolicyEditorViewImpl.class);
 
     public LegalDocumentationPolicyEditorViewImpl() {
-        super(CrmSiteMap.Settings.Policies.LegalDocumentation.class, new LegalDocumentationPolicyForm());
+        super(CrmSiteMap.Administration.Policies.LegalDocumentation.class, new LegalDocumentationPolicyForm());
     }
 }

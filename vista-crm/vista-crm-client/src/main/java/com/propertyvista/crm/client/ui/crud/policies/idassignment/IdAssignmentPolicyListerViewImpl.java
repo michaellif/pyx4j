@@ -21,7 +21,7 @@ import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 public class IdAssignmentPolicyListerViewImpl extends CrmListerViewImplBase<IdAssignmentPolicyDTO> implements IdAssignmentPolicyListerView {
 
     public IdAssignmentPolicyListerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.IdAssignment.class);
+        super(CrmSiteMap.Administration.Policies.IdAssignment.class);
         setLister(new IdAssignmentPolicyLister());
     }
 

@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.settings.role;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Security;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 import com.propertyvista.domain.security.CrmRole;
 
 public class CrmRoleEditorViewImpl extends CrmEditorViewImplBase<CrmRole> implements CrmRoleEditorView {

@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Security;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 import com.propertyvista.domain.security.CrmRole;
 
 public class CrmRoleListerViewImpl extends CrmListerViewImplBase<CrmRole> implements CrmRoleListerView {

@@ -21,7 +21,7 @@ import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 public class ProductTaxPolicyListerViewImpl extends CrmListerViewImplBase<ProductTaxPolicyDTO> implements ProductTaxPolicyListerView {
 
     public ProductTaxPolicyListerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.ProductTax.class);
+        super(CrmSiteMap.Administration.Policies.ProductTax.class);
         setLister(new ChargePolicyLister());
     }
 

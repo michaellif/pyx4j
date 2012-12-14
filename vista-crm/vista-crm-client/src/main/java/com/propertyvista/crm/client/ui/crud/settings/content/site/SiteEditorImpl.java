@@ -19,6 +19,6 @@ import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class SiteEditorImpl extends CrmEditorViewImplBase<SiteDescriptorDTO> implements SiteEditor {
     public SiteEditorImpl() {
-        super(CrmSiteMap.Settings.Content.class, new SiteForm());
+        super(CrmSiteMap.Administration.Content.class, new SiteForm());
     }
 }

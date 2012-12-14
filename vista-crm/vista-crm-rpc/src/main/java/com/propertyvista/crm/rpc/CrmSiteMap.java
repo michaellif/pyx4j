@@ -309,8 +309,16 @@ public class CrmSiteMap implements SiteMap {
 
     }
 
-    @PlaceProperties(navigLabel = "Administration")
-    public static class Settings extends AppPlace {
+    public static class Administration extends AppPlace {
+
+        public static class Settings extends AppPlace {
+
+            public static class OnlinePaymentSetup extends CrmCrudAppPlace {
+            }
+
+            public static class CreditCheckSetup extends CrmCrudAppPlace {
+            }
+        }
 
         public static class Security extends AppPlace {
 
@@ -323,20 +331,7 @@ public class CrmSiteMap implements SiteMap {
 
         }
 
-        public static class CreditCheck extends AppPlace {
-
-            public static class CreditCheckSetup extends CrmCrudAppPlace {
-            }
-
-            public static class CustomerCreditCheck extends CrmCrudAppPlace {
-            }
-
-        }
-
         public static class Financial extends AppPlace {
-
-            public static class OnlinePaymentSetup extends CrmCrudAppPlace {
-            }
 
             @PlaceProperties(navigLabel = "Merchant Accounts")
             public static class MerchantAccount extends CrmCrudAppPlace {
@@ -361,6 +356,9 @@ public class CrmSiteMap implements SiteMap {
 
             @PlaceProperties(navigLabel = "Lease Adjustments")
             public static class LeaseAdjustmentReason extends CrmCrudAppPlace {
+            }
+
+            public static class CustomerCreditCheck extends CrmCrudAppPlace {
             }
         }
 

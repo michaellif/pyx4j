@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.settings.content.page;
 import com.pyx4j.commons.Key;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Content;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Content;
 import com.propertyvista.domain.site.CityIntroPage;
 
 public class CityIntroPageViewerImpl extends CrmViewerViewImplBase<CityIntroPage> implements CityIntroPageViewer {

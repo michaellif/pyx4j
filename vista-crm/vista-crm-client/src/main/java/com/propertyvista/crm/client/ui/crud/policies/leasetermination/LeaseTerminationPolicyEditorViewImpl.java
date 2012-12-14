@@ -20,7 +20,7 @@ import com.propertyvista.domain.policy.dto.LeaseTerminationPolicyDTO;
 public class LeaseTerminationPolicyEditorViewImpl extends CrmEditorViewImplBase<LeaseTerminationPolicyDTO> implements LeaseTerminationPolicyEditorView {
 
     public LeaseTerminationPolicyEditorViewImpl() {
-        super(CrmSiteMap.Settings.Policies.LeaseTermination.class);
+        super(CrmSiteMap.Administration.Policies.LeaseTermination.class);
         setForm(new LeaseTerminationPolicyForm(false));
     }
 

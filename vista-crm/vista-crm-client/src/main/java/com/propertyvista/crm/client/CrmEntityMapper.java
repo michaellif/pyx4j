@@ -20,9 +20,9 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Content;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Financial;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Security;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Content;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.domain.company.Employee;
@@ -141,7 +141,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(LeaseAdjustmentReason.class, Financial.LeaseAdjustmentReason.class, defaultImage);
         AppPlaceEntityMapper.register(Tax.class, Financial.Tax.class, defaultImage);
 
-        AppPlaceEntityMapper.register(CustomerCreditCheckDTO.class, CrmSiteMap.Settings.CreditCheck.CustomerCreditCheck.class, defaultImage);
+        AppPlaceEntityMapper.register(CustomerCreditCheckDTO.class, Financial.CustomerCreditCheck.class, defaultImage);
 
         AppPlaceEntityMapper.register(CrmRole.class, Security.UserRole.class, defaultImage);
         AppPlaceEntityMapper.register(Employee.class, CrmSiteMap.Organization.Employee.class, defaultImage);
@@ -154,21 +154,21 @@ public class CrmEntityMapper {
         // TODO add report place mapping here
 
         // policies
-        AppPlaceEntityMapper.register(ApplicationDocumentationPolicy.class, CrmSiteMap.Settings.Policies.ApplicationDocumentation.class, defaultImage);
-        AppPlaceEntityMapper.register(BackgroundCheckPolicy.class, CrmSiteMap.Settings.Policies.BackgroundCheck.class, defaultImage);
-        AppPlaceEntityMapper.register(DepositPolicy.class, CrmSiteMap.Settings.Policies.Deposits.class, defaultImage);
-        AppPlaceEntityMapper.register(EmailTemplatesPolicy.class, CrmSiteMap.Settings.Policies.EmailTemplates.class, defaultImage);
-        AppPlaceEntityMapper.register(IdAssignmentPolicy.class, CrmSiteMap.Settings.Policies.IdAssignment.class, defaultImage);
-        AppPlaceEntityMapper.register(LeaseAdjustmentPolicy.class, CrmSiteMap.Settings.Policies.LeaseAdjustment.class, defaultImage);
-        AppPlaceEntityMapper.register(LeaseTerminationPolicy.class, CrmSiteMap.Settings.Policies.LeaseTermination.class, defaultImage);
-        AppPlaceEntityMapper.register(LeaseBillingPolicy.class, CrmSiteMap.Settings.Policies.Billing.class, defaultImage);
-        AppPlaceEntityMapper.register(LegalDocumentation.class, CrmSiteMap.Settings.Policies.LegalDocumentation.class, defaultImage);
-        AppPlaceEntityMapper.register(DatesPolicy.class, CrmSiteMap.Settings.Policies.Dates.class, defaultImage);
-        AppPlaceEntityMapper.register(RestrictionsPolicy.class, CrmSiteMap.Settings.Policies.Restrictions.class, defaultImage);
-        AppPlaceEntityMapper.register(PetPolicy.class, CrmSiteMap.Settings.Policies.Pet.class, defaultImage);
-        AppPlaceEntityMapper.register(ProductTaxPolicy.class, CrmSiteMap.Settings.Policies.ProductTax.class, defaultImage);
-        AppPlaceEntityMapper.register(ARPolicy.class, CrmSiteMap.Settings.Policies.AR.class, defaultImage);
-        AppPlaceEntityMapper.register(TenantInsurancePolicy.class, CrmSiteMap.Settings.Policies.TenantInsurance.class, defaultImage);
+        AppPlaceEntityMapper.register(ApplicationDocumentationPolicy.class, CrmSiteMap.Administration.Policies.ApplicationDocumentation.class, defaultImage);
+        AppPlaceEntityMapper.register(BackgroundCheckPolicy.class, CrmSiteMap.Administration.Policies.BackgroundCheck.class, defaultImage);
+        AppPlaceEntityMapper.register(DepositPolicy.class, CrmSiteMap.Administration.Policies.Deposits.class, defaultImage);
+        AppPlaceEntityMapper.register(EmailTemplatesPolicy.class, CrmSiteMap.Administration.Policies.EmailTemplates.class, defaultImage);
+        AppPlaceEntityMapper.register(IdAssignmentPolicy.class, CrmSiteMap.Administration.Policies.IdAssignment.class, defaultImage);
+        AppPlaceEntityMapper.register(LeaseAdjustmentPolicy.class, CrmSiteMap.Administration.Policies.LeaseAdjustment.class, defaultImage);
+        AppPlaceEntityMapper.register(LeaseTerminationPolicy.class, CrmSiteMap.Administration.Policies.LeaseTermination.class, defaultImage);
+        AppPlaceEntityMapper.register(LeaseBillingPolicy.class, CrmSiteMap.Administration.Policies.Billing.class, defaultImage);
+        AppPlaceEntityMapper.register(LegalDocumentation.class, CrmSiteMap.Administration.Policies.LegalDocumentation.class, defaultImage);
+        AppPlaceEntityMapper.register(DatesPolicy.class, CrmSiteMap.Administration.Policies.Dates.class, defaultImage);
+        AppPlaceEntityMapper.register(RestrictionsPolicy.class, CrmSiteMap.Administration.Policies.Restrictions.class, defaultImage);
+        AppPlaceEntityMapper.register(PetPolicy.class, CrmSiteMap.Administration.Policies.Pet.class, defaultImage);
+        AppPlaceEntityMapper.register(ProductTaxPolicy.class, CrmSiteMap.Administration.Policies.ProductTax.class, defaultImage);
+        AppPlaceEntityMapper.register(ARPolicy.class, CrmSiteMap.Administration.Policies.AR.class, defaultImage);
+        AppPlaceEntityMapper.register(TenantInsurancePolicy.class, CrmSiteMap.Administration.Policies.TenantInsurance.class, defaultImage);
 
         // DTO mappings:
         AppPlaceEntityMapper.register(LeaseDTO.class, CrmSiteMap.Tenants.Lease.class, defaultImage);

@@ -21,7 +21,7 @@ import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
 public class EmailTemplatesPolicyListerViewImpl extends CrmListerViewImplBase<EmailTemplatesPolicyDTO> implements EmailTemplatesPolicyListerView {
 
     public EmailTemplatesPolicyListerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.EmailTemplates.class);
+        super(CrmSiteMap.Administration.Policies.EmailTemplates.class);
         setLister(new EmailTemplatesPolicyLister());
     }
 

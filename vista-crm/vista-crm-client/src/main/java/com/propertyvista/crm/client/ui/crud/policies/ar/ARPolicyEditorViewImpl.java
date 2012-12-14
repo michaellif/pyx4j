@@ -20,7 +20,7 @@ import com.propertyvista.domain.policy.dto.ARPolicyDTO;
 public class ARPolicyEditorViewImpl extends CrmEditorViewImplBase<ARPolicyDTO> implements ARPolicyEditorView {
 
     public ARPolicyEditorViewImpl() {
-        super(CrmSiteMap.Settings.Policies.AR.class);
+        super(CrmSiteMap.Administration.Policies.AR.class);
         setForm(new ARPolicyForm());
     }
 

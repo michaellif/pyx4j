@@ -20,7 +20,7 @@ import com.propertyvista.domain.policy.dto.RestrictionsPolicyDTO;
 public class RestrictionsPolicyEditorViewImpl extends CrmEditorViewImplBase<RestrictionsPolicyDTO> implements RestrictionsPolicyEditorView {
 
     public RestrictionsPolicyEditorViewImpl() {
-        super(CrmSiteMap.Settings.Policies.Restrictions.class);
+        super(CrmSiteMap.Administration.Policies.Restrictions.class);
         setForm(new RestrictionsPolicyForm(false));
     }
 

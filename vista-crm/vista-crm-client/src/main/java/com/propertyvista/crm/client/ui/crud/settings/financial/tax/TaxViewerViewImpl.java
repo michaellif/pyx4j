@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.settings.financial.tax;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Financial;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.domain.financial.tax.Tax;
 
 public class TaxViewerViewImpl extends CrmViewerViewImplBase<Tax> implements TaxViewerView {

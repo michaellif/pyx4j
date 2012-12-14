@@ -20,7 +20,7 @@ import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 public class DepositPolicyViewerViewImpl extends CrmViewerViewImplBase<DepositPolicyDTO> implements DepositPolicyViewerView {
 
     public DepositPolicyViewerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.Deposits.class);
+        super(CrmSiteMap.Administration.Policies.Deposits.class);
         setForm(new DepositPolicyForm(true));
     }
 }

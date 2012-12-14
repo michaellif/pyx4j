@@ -21,7 +21,7 @@ import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 public class DepositPolicyListerViewImpl extends CrmListerViewImplBase<DepositPolicyDTO> implements DepositPolicyListerView {
 
     public DepositPolicyListerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.Deposits.class);
+        super(CrmSiteMap.Administration.Policies.Deposits.class);
         setLister(new DepositPolicyLister());
     }
 

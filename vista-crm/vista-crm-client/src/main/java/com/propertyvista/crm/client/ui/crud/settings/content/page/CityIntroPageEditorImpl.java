@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.settings.content.page;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Content;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Content;
 import com.propertyvista.domain.site.CityIntroPage;
 
 public class CityIntroPageEditorImpl extends CrmEditorViewImplBase<CityIntroPage> implements CityIntroPageEditor {

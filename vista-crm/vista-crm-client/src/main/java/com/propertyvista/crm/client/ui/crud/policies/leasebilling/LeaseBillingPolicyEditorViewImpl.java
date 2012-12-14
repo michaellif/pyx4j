@@ -20,7 +20,7 @@ import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 public class LeaseBillingPolicyEditorViewImpl extends CrmEditorViewImplBase<LeaseBillingPolicyDTO> implements LeaseBillingPolicyEditorView {
 
     public LeaseBillingPolicyEditorViewImpl() {
-        super(CrmSiteMap.Settings.Policies.Billing.class);
+        super(CrmSiteMap.Administration.Policies.Billing.class);
         setForm(new LeaseBillingPolicyForm());
     }
 

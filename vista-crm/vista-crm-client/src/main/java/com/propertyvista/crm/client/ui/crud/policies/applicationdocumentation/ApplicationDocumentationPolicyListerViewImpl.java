@@ -24,7 +24,7 @@ public class ApplicationDocumentationPolicyListerViewImpl extends CrmListerViewI
         ApplicationDocumentationPolicyListerView {
 
     public ApplicationDocumentationPolicyListerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.ApplicationDocumentation.class);
+        super(CrmSiteMap.Administration.Policies.ApplicationDocumentation.class);
         setLister(new ApplicationDocumentationPolicyLister());
     }
 

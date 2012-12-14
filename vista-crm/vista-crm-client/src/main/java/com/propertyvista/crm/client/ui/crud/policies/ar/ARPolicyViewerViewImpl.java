@@ -20,7 +20,7 @@ import com.propertyvista.domain.policy.dto.ARPolicyDTO;
 public class ARPolicyViewerViewImpl extends CrmViewerViewImplBase<ARPolicyDTO> implements ARPolicyViewerView {
 
     public ARPolicyViewerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.AR.class);
+        super(CrmSiteMap.Administration.Policies.AR.class);
         setForm(new ARPolicyForm(true));
     }
 }

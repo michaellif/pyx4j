@@ -20,7 +20,7 @@ import com.propertyvista.domain.policy.dto.BackgroundCheckPolicyDTO;
 public class BackgroundCheckPolicyViewerViewImpl extends CrmViewerViewImplBase<BackgroundCheckPolicyDTO> implements BackgroundCheckPolicyViewerView {
 
     public BackgroundCheckPolicyViewerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.BackgroundCheck.class);
+        super(CrmSiteMap.Administration.Policies.BackgroundCheck.class);
         setForm(new BackgroundCheckPolicyForm(true));
     }
 }

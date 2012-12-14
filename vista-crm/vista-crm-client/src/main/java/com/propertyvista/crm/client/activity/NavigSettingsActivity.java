@@ -27,7 +27,9 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Security;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Settings;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.misc.VistaTODO;
 
@@ -58,51 +60,49 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
 
         NavigFolder folder = null;
 
-        folder = new NavigFolder(i18n.tr("Credit Check"));
-        folder.addNavigItem(new CrmSiteMap.Settings.CreditCheck.CreditCheckSetup());
-        folder.addNavigItem(new CrmSiteMap.Settings.CreditCheck.CustomerCreditCheck().formListerPlace());
+        folder = new NavigFolder(i18n.tr("Settings"));
+        folder.addNavigItem(new Settings.OnlinePaymentSetup());
+        folder.addNavigItem(new Settings.CreditCheckSetup());
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Security"));
         if (SecurityController.checkBehavior(VistaCrmBehavior.Organization)) {
-            folder.addNavigItem(new CrmSiteMap.Settings.Security.AuditRecords());
+            folder.addNavigItem(new CrmSiteMap.Administration.Security.AuditRecords());
         }
         folder.addNavigItem(new Security.UserRole());
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Financial"));
-
-        folder.addNavigItem(new CrmSiteMap.Settings.Financial.OnlinePaymentSetup());
-
-        folder.addNavigItem(new CrmSiteMap.Settings.Financial.MerchantAccount());
-        folder.addNavigItem(new CrmSiteMap.Settings.Financial.ProductDictionary());
-        folder.addNavigItem(new CrmSiteMap.Settings.Financial.Tax());
-        folder.addNavigItem(new CrmSiteMap.Settings.Financial.GlCodeCategory());
-        folder.addNavigItem(new CrmSiteMap.Settings.Financial.LeaseAdjustmentReason());
+        folder.addNavigItem(new CrmSiteMap.Administration.Financial.MerchantAccount());
+        folder.addNavigItem(new CrmSiteMap.Administration.Financial.ProductDictionary());
+        folder.addNavigItem(new CrmSiteMap.Administration.Financial.Tax());
+        folder.addNavigItem(new CrmSiteMap.Administration.Financial.GlCodeCategory());
+        folder.addNavigItem(new CrmSiteMap.Administration.Financial.LeaseAdjustmentReason());
+        folder.addNavigItem(new Financial.CustomerCreditCheck().formListerPlace());
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Website"));
-        folder.addNavigItem(new CrmSiteMap.Settings.Content());
+        folder.addNavigItem(new CrmSiteMap.Administration.Content());
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Policies"));
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.AR());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.ApplicationDocumentation());
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.AR());
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.ApplicationDocumentation());
         if (!VistaTODO.Equifax_Short_VISTA_478) {
-            folder.addNavigItem(new CrmSiteMap.Settings.Policies.BackgroundCheck());
+            folder.addNavigItem(new CrmSiteMap.Administration.Policies.BackgroundCheck());
         }
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.Billing());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.Dates());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.Deposits());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.EmailTemplates());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.IdAssignment());
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.Billing());
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.Dates());
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.Deposits());
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.EmailTemplates());
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.IdAssignment());
 // TODO VISTA-2187       folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseTermination());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseAdjustment());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.LegalDocumentation());
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.LeaseAdjustment());
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.LegalDocumentation());
 //      folder.addNavigItem(new CrmSiteMap.Settings.Policies.Pet());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.ProductTax());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.Restrictions());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.TenantInsurance());
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.ProductTax());
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.Restrictions());
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.TenantInsurance());
         list.add(folder);
 
         return list;

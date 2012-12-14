@@ -32,7 +32,7 @@ public class NavigActivityMapper implements ActivityMapper {
     @Override
     public Activity getActivity(Place place) {
         if (SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
-            if (place.getClass().getName().contains(CrmSiteMap.Settings.class.getName())) {
+            if (place.getClass().getName().contains(CrmSiteMap.Administration.class.getName())) {
                 return new NavigSettingsActivity(place);
             } else {
                 return new NavigActivity(place);

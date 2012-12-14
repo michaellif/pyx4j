@@ -20,7 +20,7 @@ import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
 public class LegalDocumentationPolicyViewerViewImpl extends CrmViewerViewImplBase<LegalDocumentationPolicyDTO> implements LegalDocumentationPolicyViewerView {
 
     public LegalDocumentationPolicyViewerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.LegalDocumentation.class);
+        super(CrmSiteMap.Administration.Policies.LegalDocumentation.class);
         setForm(new LegalDocumentationPolicyForm(true));
     }
 }

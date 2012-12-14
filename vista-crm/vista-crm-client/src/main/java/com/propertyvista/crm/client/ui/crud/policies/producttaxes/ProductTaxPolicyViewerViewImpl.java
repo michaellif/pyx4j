@@ -20,7 +20,7 @@ import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 public class ProductTaxPolicyViewerViewImpl extends CrmViewerViewImplBase<ProductTaxPolicyDTO> implements ProductTaxPolicyViewerView {
 
     public ProductTaxPolicyViewerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.ProductTax.class);
+        super(CrmSiteMap.Administration.Policies.ProductTax.class);
         setForm(new ProductTaxPolicyForm(true));
     }
 }

@@ -21,7 +21,7 @@ import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 public class PetPolicyListerViewImpl extends CrmListerViewImplBase<PetPolicyDTO> implements PetPolicyListerView {
 
     public PetPolicyListerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.Pet.class);
+        super(CrmSiteMap.Administration.Policies.Pet.class);
         setLister(new PolicyListerBase<PetPolicyDTO>(PetPolicyDTO.class) {
         });
     }

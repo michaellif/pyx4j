@@ -201,9 +201,9 @@ import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsu
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Content;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Financial;
-import com.propertyvista.crm.rpc.CrmSiteMap.Settings.Security;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Content;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 
 public class MainActivityMapper implements AppActivityMapper {
 
@@ -672,7 +672,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.CreditCheck.CustomerCreditCheck) {
+                    } else if (place instanceof Financial.CustomerCreditCheck) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new CustomerCreditCheckListerActivity(crudPlace);
@@ -691,7 +691,7 @@ public class MainActivityMapper implements AppActivityMapper {
                     } else if (place instanceof Financial.ProductDictionary) {
                         activity = new ProductDictionaryViewActivity(place);
 
-                    } else if (place instanceof CrmSiteMap.Settings.Content) {
+                    } else if (place instanceof CrmSiteMap.Administration.Content) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new SiteEditorActivity(crudPlace);
@@ -819,7 +819,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         }
 
 // - Policies:
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.ApplicationDocumentation) {
+                    } else if (place instanceof CrmSiteMap.Administration.Policies.ApplicationDocumentation) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new ApplicationDocumentationPolicyListerActivicty(crudPlace);
@@ -832,7 +832,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.LegalDocumentation) {
+                    } else if (place instanceof CrmSiteMap.Administration.Policies.LegalDocumentation) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new LegalDocumentationPolicyListerActivicty(crudPlace);
@@ -845,7 +845,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.Pet) {
+                    } else if (place instanceof CrmSiteMap.Administration.Policies.Pet) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new PetPolicyListerActivity(crudPlace);
@@ -858,7 +858,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.EmailTemplates) {
+                    } else if (place instanceof CrmSiteMap.Administration.Policies.EmailTemplates) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new EmailTemplatesPolicyListerActivity(crudPlace);
@@ -871,7 +871,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.Dates) {
+                    } else if (place instanceof CrmSiteMap.Administration.Policies.Dates) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new DatesPolicyListerActivity(crudPlace);
@@ -884,7 +884,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.Restrictions) {
+                    } else if (place instanceof CrmSiteMap.Administration.Policies.Restrictions) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new RestrictionsPolicyListerActivity(crudPlace);
@@ -897,7 +897,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.ProductTax) {
+                    } else if (place instanceof CrmSiteMap.Administration.Policies.ProductTax) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new ProductTaxPolicyListerActivity(crudPlace);
@@ -910,7 +910,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.LeaseTermination) {
+                    } else if (place instanceof CrmSiteMap.Administration.Policies.LeaseTermination) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new LeaseTerminationPolicyListerActivity(crudPlace);
@@ -923,7 +923,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.LeaseAdjustment) {
+                    } else if (place instanceof CrmSiteMap.Administration.Policies.LeaseAdjustment) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new LeaseAdjustmentPolicyListerActivity(crudPlace);
@@ -936,7 +936,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.Deposits) {
+                    } else if (place instanceof CrmSiteMap.Administration.Policies.Deposits) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new DepositPolicyListerActivity(crudPlace);
@@ -948,7 +948,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new DepositPolicyViewerActivity(crudPlace);
                             break;
                         }
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.BackgroundCheck) {
+                    } else if (place instanceof CrmSiteMap.Administration.Policies.BackgroundCheck) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new BackgroundCheckPolicyListerActivity(crudPlace);
@@ -960,7 +960,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new BackgroundCheckPolicyViewerActivity(crudPlace);
                             break;
                         }
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.Billing) {
+                    } else if (place instanceof CrmSiteMap.Administration.Policies.Billing) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new LeaseBillingPolicyListerActivity(crudPlace);
@@ -972,7 +972,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new LeaseBillingPolicyViewerActivity(crudPlace);
                             break;
                         }
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.IdAssignment) {
+                    } else if (place instanceof CrmSiteMap.Administration.Policies.IdAssignment) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new IdAssignmentPolicyListerActivity(crudPlace);
@@ -985,7 +985,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.AR) {
+                    } else if (place instanceof CrmSiteMap.Administration.Policies.AR) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new ARPolicyListerActivity(crudPlace);
@@ -998,7 +998,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.TenantInsurance) {
+                    } else if (place instanceof CrmSiteMap.Administration.Policies.TenantInsurance) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new TenantInsurancePolicyListerActivity(crudPlace);
@@ -1029,7 +1029,7 @@ public class MainActivityMapper implements AppActivityMapper {
 
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Security.AuditRecords) {
+                    } else if (place instanceof CrmSiteMap.Administration.Security.AuditRecords) {
                         activity = new CrmAuditRecordsListerActivity(place);
 
                     } // CRUD APP PLACE IF ENDS HERE

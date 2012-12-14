@@ -20,7 +20,7 @@ import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
 public class EmailTemplatesPolicyEditorViewImpl extends CrmEditorViewImplBase<EmailTemplatesPolicyDTO> implements EmailTemplatesPolicyEditorView {
 
     public EmailTemplatesPolicyEditorViewImpl() {
-        super(CrmSiteMap.Settings.Policies.EmailTemplates.class);
+        super(CrmSiteMap.Administration.Policies.EmailTemplates.class);
         setForm(new EmailTemplatesPolicyForm());
     }
 

@@ -20,7 +20,7 @@ import com.propertyvista.dto.AuditRecordDTO;
 public class CrmAuditRecordListerViewImpl extends CrmListerViewImplBase<AuditRecordDTO> {
 
     public CrmAuditRecordListerViewImpl() {
-        super(CrmSiteMap.Settings.Security.AuditRecords.class);
+        super(CrmSiteMap.Administration.Security.AuditRecords.class);
         setLister(new CrmAuditRecordsLister());
     }
 }

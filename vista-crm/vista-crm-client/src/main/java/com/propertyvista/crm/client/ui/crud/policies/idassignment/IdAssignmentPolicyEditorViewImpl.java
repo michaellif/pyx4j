@@ -20,7 +20,7 @@ import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 public class IdAssignmentPolicyEditorViewImpl extends CrmEditorViewImplBase<IdAssignmentPolicyDTO> implements IdAssignmentPolicyEditorView {
 
     public IdAssignmentPolicyEditorViewImpl() {
-        super(CrmSiteMap.Settings.Policies.IdAssignment.class);
+        super(CrmSiteMap.Administration.Policies.IdAssignment.class);
         setForm(new IdAssignmentPolicyForm());
     }
 

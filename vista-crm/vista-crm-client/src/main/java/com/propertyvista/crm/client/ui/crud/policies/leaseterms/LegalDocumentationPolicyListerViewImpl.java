@@ -21,7 +21,7 @@ import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
 public class LegalDocumentationPolicyListerViewImpl extends CrmListerViewImplBase<LegalDocumentationPolicyDTO> implements LegalDocumentationPolicyListerView {
 
     public LegalDocumentationPolicyListerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.LegalDocumentation.class);
+        super(CrmSiteMap.Administration.Policies.LegalDocumentation.class);
         setLister(new LegalDocumentationPolicyLister());
     }
 

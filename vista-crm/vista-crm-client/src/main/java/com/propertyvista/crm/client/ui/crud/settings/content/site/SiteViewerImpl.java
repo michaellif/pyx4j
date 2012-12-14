@@ -30,7 +30,7 @@ public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> imp
     private static final I18n i18n = I18n.get(SiteViewerImpl.class);
 
     public SiteViewerImpl() {
-        super(CrmSiteMap.Settings.Content.class, new SiteForm(true));
+        super(CrmSiteMap.Administration.Content.class, new SiteForm(true));
 
         // Add actions:
         addHeaderToolbarItem(new Button(i18n.tr("Add Child Page"), new ClickHandler() {

@@ -21,7 +21,7 @@ import com.propertyvista.domain.policy.dto.LeaseTerminationPolicyDTO;
 public class LeaseTerminationPolicyListerViewImpl extends CrmListerViewImplBase<LeaseTerminationPolicyDTO> {
 
     public LeaseTerminationPolicyListerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.LeaseTermination.class);
+        super(CrmSiteMap.Administration.Policies.LeaseTermination.class);
         setLister(new LeaseTerminationPolicyLister());
     }
 
