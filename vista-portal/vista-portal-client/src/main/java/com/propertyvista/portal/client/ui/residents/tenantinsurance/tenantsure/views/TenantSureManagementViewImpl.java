@@ -22,6 +22,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -161,6 +162,14 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         });
         setControlButtonLayout(viewFaq);
 
+        Button aboutTenantSure = new Button(i18n.tr("About TenantSure / Contact Us"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.viewAboutTenantSure();
+            }
+        });
+        setControlButtonLayout(aboutTenantSure);
+
         Button makeAClaim = new Button(i18n.tr("Make a Claim"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -169,12 +178,18 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         });
         setControlButtonLayout(makeAClaim);
 
-        actionsPanel.add(viewCertificateButton);
+//        actionsPanel.add(viewCertificateButton);
         actionsPanel.add(makeAClaim);
-        actionsPanel.add(viewFaq);
         actionsPanel.add(updateCCButton);
         actionsPanel.add(updateCCAndPay);
         actionsPanel.add(cancelTenantSureButton);
+
+        actionsPanel.add(new HTML("&nbsp;")); // add separator 
+
+        // informations
+        actionsPanel.add(viewFaq);
+        actionsPanel.add(aboutTenantSure);
+
         return actionsPanel;
     }
 
@@ -188,7 +203,8 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     }
 
     private void onMakeAClaim() {
-        MessageDialog.info(i18n.tr("To make a claim please call {0}", TenantSureConstants.TENANTSURE_PHONE_NUMBER));
+        MessageDialog.info(i18n.tr("To make a claim please call contact {0} at {1}", TenantSureConstants.TENANTSURE_LEGAL_NAME,
+                TenantSureConstants.TENANTSURE_PHONE_NUMBER));
     }
 
     private static void setControlButtonLayout(Button button, boolean isVisible) {

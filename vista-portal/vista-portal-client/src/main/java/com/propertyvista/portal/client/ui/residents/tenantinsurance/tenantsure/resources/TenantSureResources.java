@@ -28,4 +28,7 @@ public interface TenantSureResources extends ClientBundleWithLookup {
     @Source("personal-disclaimer.html")
     TextResource personalDisclaimer();
 
+    @Source("tenant-sure-contact-info.html")
+    TextResource contactInfo();
+
 }

@@ -38,6 +38,7 @@ import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantSureInsuranceStatusViewer;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureAboutViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureFaqViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceViewImpl;
@@ -464,6 +465,18 @@ public class PortalTheme extends VistaTheme {
         {
             Style style = new Style("." + TenantSureFaqViewImpl.Styles.TenantSureFaqA.name());
             style.addProperty("text-align", "justify");
+            addStyle(style);
+        }
+
+        // TenantSure about View
+        {
+            Style style = new Style("." + TenantSureAboutViewImpl.Styles.TenantSureAboutContactInfo.name());
+            style.addProperty("marign-left", "auto");
+            style.addProperty("marign-right", "auto");
+            style.addProperty("padding-left", "20px");
+            style.addProperty("padding-right", "20px");
+            style.addProperty("padding-top", "20px");
+            style.addProperty("text-align", "center");
             addStyle(style);
         }
 

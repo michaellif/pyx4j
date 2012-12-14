@@ -66,6 +66,11 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
         AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSure.Faq());
     }
 
+    @Override
+    public void viewAboutTenantSure() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSure.About());
+    }
+
     private void populateStatus() {
         service.getStatus(new DefaultAsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO>() {
             @Override

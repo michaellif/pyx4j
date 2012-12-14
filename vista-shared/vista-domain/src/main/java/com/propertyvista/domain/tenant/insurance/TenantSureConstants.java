@@ -19,8 +19,12 @@ public class TenantSureConstants implements Serializable {
 
     private static final long serialVersionUID = -3683124450005723775L;
 
-    public static final String TENANTSURE_LEGAL_NAME = "TenantSure";
+    public static final String TENANTSURE_LEGAL_NAME = "Highcourt Partners Limited";
 
-    public static final String TENANTSURE_PHONE_NUMBER = "1-800-123-4567";
+    public static final String TENANTSURE_ADDRESS = "Suite 1200-372 Bay Street, Toronto ON CANADA M5H 2W9";
+
+    public static final String TENANTSURE_PHONE_NUMBER = "+1-647-931-2886";
+
+    public static final String TENANTSURE_EMAIL = "info@highcourtpartners.com";
 
 }

@@ -55,6 +55,8 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 /** This is an adapter class for CFC SOAP API */
 public class CfcApiClient implements ICfcApiClient {
 
+    private static final boolean ENABLE_WORKAROUNDS_FOR_CFC_UNDOCUMENTED_CRAP = true;
+
     private CFCAPI getApi() {
         CFCAPI api = null;
         try {
@@ -140,7 +142,13 @@ public class CfcApiClient implements ICfcApiClient {
         }
 
         TenantSureQuoteDTO tenantSureQuote = EntityFactory.create(TenantSureQuoteDTO.class);
-        tenantSureQuote.quoteId().setValue(quoteResponse.getQuoteData().getQuoteId());
+        if (ENABLE_WORKAROUNDS_FOR_CFC_UNDOCUMENTED_CRAP) {
+            // THIS IS ACCORDING TO REAL LIFE EXPERIENCE:
+            tenantSureQuote.quoteId().setValue(quoteResponse.getId());
+        } else {
+            // THIS IS ACCORDING TO THE DOCUMENTATION
+            tenantSureQuote.quoteId().setValue(quoteResponse.getQuoteData().getQuoteId());
+        }
 
         tenantSureQuote.grossPremium().setValue(new BigDecimal(quoteResponse.getGrossPremium()));
         tenantSureQuote.underwriterFee().setValue(new BigDecimal(quoteResponse.getFee()));

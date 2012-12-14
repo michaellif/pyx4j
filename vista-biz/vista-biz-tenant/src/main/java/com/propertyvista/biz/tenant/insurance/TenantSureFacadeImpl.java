@@ -49,11 +49,11 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 
 public class TenantSureFacadeImpl implements TenantSureFacade {
 
+    private static final boolean USE_CFC_API_MOCKUP_CLIENT = true;
+
     private static final I18n i18n = I18n.get(TenantSureFacadeImpl.class);
 
     private static final Logger log = LoggerFactory.getLogger(TenantSureFacadeImpl.class);
-
-    public static boolean mockup = true;
 
     private final ICfcApiClient cfcApiClient;
 
@@ -62,7 +62,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     }
 
     public TenantSureFacadeImpl() {
-        this(mockup ? new MockupCfcApiClient() : new CfcApiClient());
+        this(USE_CFC_API_MOCKUP_CLIENT ? new MockupCfcApiClient() : new CfcApiClient());
     }
 
     @Override
@@ -160,6 +160,11 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 }
             }
 
+            insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Active);
+            Persistence.service().persist(insuranceTenantSure);
+            Persistence.service().commit();
+
+            // send documentation to tenant
             List<String> emails = new ArrayList<String>();
             if (ApplicationMode.isDevelopment()) {
                 emails.add("artyom@propertyvista.com");
@@ -168,10 +173,6 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 emails.add(tenant.customer().user().email().getValue());
             }
             cfcApiClient.requestDocument(insuranceTenantSure.quoteId().getValue(), emails);
-
-            insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Active);
-            Persistence.service().persist(insuranceTenantSure);
-            Persistence.service().commit();
 
         }
 
@@ -235,8 +236,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
         if (insuranceTenantSure.status().getValue() != Status.PendingCancellation) {
             GregorianCalendar cal = new GregorianCalendar();
-            cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.MONTH));
-            cal.add(Calendar.DAY_OF_MONTH, 1);
+            cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+            cal.add(Calendar.MONTH, 1);
             status.nextPaymentDate().setValue(new LogicalDate(cal.getTime()));
         }
 

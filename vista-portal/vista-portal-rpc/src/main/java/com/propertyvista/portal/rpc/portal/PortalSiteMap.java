@@ -15,6 +15,7 @@ package com.propertyvista.portal.rpc.portal;
 
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
+import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
 public class PortalSiteMap implements SiteMap {
@@ -93,6 +94,11 @@ public class PortalSiteMap implements SiteMap {
             }
 
             public static class TenantSure {
+
+                @PlaceProperties(caption = "Tenant Sure Contact Info")
+                public static class About extends AppPlace implements PublicPlace {
+
+                }
 
                 @PlaceProperties(caption = "TenantSure FAQ")
                 public static class Faq extends AppPlace {
