@@ -33,13 +33,15 @@ public class AccessKey {
 
     private static final I18n i18n = I18n.get(AccessKey.class);
 
-    public static final int ACCESS_KEY_LEN = 16;
+    public static final int ACCESS_KEY_LEN = 17;
 
     public static class TokenParser {
 
         public String email;
 
         public String accessKey;
+
+        public boolean behaviorPasswordChangeRequired;
 
         public TokenParser(String base64Token) {
             if (base64Token == null) {
@@ -61,16 +63,33 @@ public class AccessKey {
                 throw new RuntimeExceptionSerializable(i18n.tr("Invalid Request"));
             }
             validateAccessKey(accessKey);
+
+            char encodedBehavior = accessKey.charAt(ACCESS_KEY_LEN - 1);
+            behaviorPasswordChangeRequired = false;
+            switch (encodedBehavior) {
+            case 'a':
+                break;
+            case 'b':
+                behaviorPasswordChangeRequired = true;
+                break;
+            default:
+                throw new RuntimeExceptionSerializable(i18n.tr("Invalid Request"));
+            }
         }
     }
 
-    public static String createAccessKey() {
+    public static String createAccessKey(boolean behaviorPasswordChangeRequired) {
         StringBuffer buf = new StringBuffer();
         Random rnd = new SecureRandom();
-        for (int i = 0; i < ACCESS_KEY_LEN; i++) {
+        for (int i = 0; i < ACCESS_KEY_LEN - 1; i++) {
             char c = (char) (rnd.nextInt('z' - 'a') + 'a');
             buf.append(c);
         }
+        char encodedBehavior = 'a';
+        if (behaviorPasswordChangeRequired) {
+            encodedBehavior = 'b';
+        }
+        buf.append(encodedBehavior);
         return buf.toString();
     }
 
@@ -88,6 +107,11 @@ public class AccessKey {
     }
 
     public static <U extends AbstractUser, E extends AbstractUserCredential<U>> String createAccessToken(U user, Class<E> credentialClass, int keyExpireDays) {
+        return createAccessToken(user, credentialClass, keyExpireDays, true);
+    }
+
+    public static <U extends AbstractUser, E extends AbstractUserCredential<U>> String createAccessToken(U user, Class<E> credentialClass, int keyExpireDays,
+            boolean passwordChangeRequired) {
         E credential = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
         if (credential == null) {
             return null;
@@ -96,7 +120,7 @@ public class AccessKey {
             return null;
         }
 
-        credential.accessKey().setValue(AccessKey.createAccessKey());
+        credential.accessKey().setValue(AccessKey.createAccessKey(passwordChangeRequired));
         Calendar expire = new GregorianCalendar();
         expire.add(Calendar.DATE, keyExpireDays);
         credential.accessKeyExpire().setValue(expire.getTime());

@@ -170,9 +170,9 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         U user = users.get(0);
 
         boolean credentialsOk = false;
+        E cr;
         try {
-
-            E cr = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
+            cr = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
             if (cr == null) {
                 throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
             }
@@ -196,7 +196,12 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         }
 
         Set<Behavior> behaviors = new HashSet<Behavior>();
-        behaviors.add(getPasswordChangeRequiredBehavior());
+        if (token.behaviorPasswordChangeRequired) {
+            behaviors.add(getPasswordChangeRequiredBehavior());
+        } else {
+            behaviors.addAll(getBehaviors(cr));
+            behaviors.add(getApplicationBehavior());
+        }
         UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
         visit.setEmail(user.email().getValue());
         log.info("authenticated {} as {}", user.email().getValue(), behaviors);

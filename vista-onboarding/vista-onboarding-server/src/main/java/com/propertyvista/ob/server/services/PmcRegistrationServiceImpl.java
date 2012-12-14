@@ -23,6 +23,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
@@ -46,6 +47,8 @@ import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;
 import com.propertyvista.ob.server.PmcActivationUserDeferredProcess;
+import com.propertyvista.server.common.security.AccessKey;
+import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class PmcRegistrationServiceImpl implements PmcRegistrationService {
@@ -101,6 +104,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
         OnboardingUserVisit visit = Context.getUserVisit(OnboardingUserVisit.class);
         visit.setStatus(OnboardingApplicationStatus.accountCreation);
         visit.setPmcNamespace(credential.pmc().namespace().getValue());
+        visit.setOnboardingUserPrimaryKey(credential.getPrimaryKey());
 
         String deferredCorrelationId = DeferredProcessRegistry.fork(new PmcActivationUserDeferredProcess(credential, visit), ThreadPoolNames.IMPORTS);
 
@@ -113,7 +117,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
     public void obtainCrmURL(AsyncCallback<String> callback) {
         final OnboardingUserVisit visit = Context.getUserVisit(OnboardingUserVisit.class);
 
-        callback.onSuccess(TaskRunner.runInAdminNamespace(new Callable<String>() {
+        String vistaCrmBaseUrl = TaskRunner.runInAdminNamespace(new Callable<String>() {
 
             @Override
             public String call() throws Exception {
@@ -122,15 +126,36 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
                 Pmc pmc = Persistence.service().retrieve(criteria);
 
                 if ((pmc != null) && (pmc.status().getValue() == PmcStatus.Active)) {
-                    String vistaCrmBaseUrl = VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true);
-
-                    return vistaCrmBaseUrl;
+                    return VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true);
                 } else {
                     return null;
                 }
             }
 
-        }));
+        });
+
+        String token = TaskRunner.runInTargetNamespace(visit.pmcNamespace, new Callable<String>() {
+
+            @Override
+            public String call() throws Exception {
+                EntityQueryCriteria<CrmUserCredential> criteria = EntityQueryCriteria.create(CrmUserCredential.class);
+                criteria.eq(criteria.proto().onboardingUser(), visit.onboardingUserPrimaryKey);
+                CrmUserCredential credential = Persistence.service().retrieve(criteria);
+                if ((credential != null) && (!credential.accessKey().isNull())) {
+                    Persistence.ensureRetrieve(credential.user(), AttachLevel.Attached);
+                    return AccessKey.compressToken(credential.user().email().getValue(), credential.accessKey().getValue());
+                } else {
+                    return null;
+                }
+            }
+
+        });
+
+        if (token != null) {
+            vistaCrmBaseUrl = getCrmAccessUrl(vistaCrmBaseUrl, token);
+        }
+
+        callback.onSuccess(vistaCrmBaseUrl);
     }
 
     private static String getCrmAccessUrl(String vistaCrmBaseUrl, String token) {

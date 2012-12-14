@@ -15,6 +15,9 @@ package com.propertyvista.ob.server;
 
 import java.util.concurrent.Callable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -31,6 +34,8 @@ import com.propertyvista.server.jobs.TaskRunner;
 public class PmcActivationUserDeferredProcess extends PmcActivationDeferredProcess {
 
     private static final long serialVersionUID = 8272802910189364700L;
+
+    private final static Logger log = LoggerFactory.getLogger(PmcActivationUserDeferredProcess.class);
 
     private final OnboardingUserVisit visit;
 
@@ -58,9 +63,28 @@ public class PmcActivationUserDeferredProcess extends PmcActivationDeferredProce
         ServerSideFactory.create(CommunicationFacade.class).sendNewPmcEmail(credential.user(), pmcId);
         visit.setStatus(OnboardingApplicationStatus.accountCreated);
 
-        CrmUser crmUser = EntityFactory.createIdentityStub(CrmUser.class, credential.crmUser().getValue());
-        AccessKey.createAccessToken(crmUser, CrmUserCredential.class, 1);
-        Persistence.service().commit();
+        final OnboardingUserCredential credentialUpdated = TaskRunner.runInAdminNamespace(new Callable<OnboardingUserCredential>() {
+            @Override
+            public OnboardingUserCredential call() {
+                return Persistence.service().retrieve(OnboardingUserCredential.class, credential.getPrimaryKey());
+            }
+        });
+        if (credentialUpdated == null) {
+            log.error("OnboardingUserCredential not found");
+        }
+
+        String token = TaskRunner.runInTargetNamespace(visit.pmcNamespace, new Callable<String>() {
+
+            @Override
+            public String call() throws Exception {
+                CrmUser crmUser = EntityFactory.createIdentityStub(CrmUser.class, credentialUpdated.crmUser().getValue());
+                return AccessKey.createAccessToken(crmUser, CrmUserCredential.class, 1, false);
+            }
+
+        });
+        if (token == null) {
+            log.error("Failed to create access token");
+        }
     }
 
 }
