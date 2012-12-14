@@ -62,7 +62,7 @@ public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {
     }
 
     @Override
-    public Building unmarshal(BuildingIO buildingIO) throws Exception {
+    public Building unmarshal(BuildingIO buildingIO) {
         Building building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(buildingIO.propertyCode);
 

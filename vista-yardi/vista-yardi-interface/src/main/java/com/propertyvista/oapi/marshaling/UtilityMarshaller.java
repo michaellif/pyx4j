@@ -55,14 +55,14 @@ public class UtilityMarshaller implements Marshaller<Utility, UtilityIO> {
     }
 
     @Override
-    public Utility unmarshal(UtilityIO utilityIO) throws Exception {
+    public Utility unmarshal(UtilityIO utilityIO) {
         Utility utility = EntityFactory.create(Utility.class);
         utility.name().setValue(utilityIO.name);
 
         return utility;
     }
 
-    public List<Utility> unmarshal(Collection<UtilityIO> utilityIOList) throws Exception {
+    public List<Utility> unmarshal(Collection<UtilityIO> utilityIOList) {
         List<Utility> utilities = new ArrayList<Utility>();
         for (UtilityIO utilityIO : utilityIOList) {
             Utility utility = EntityFactory.create(Utility.class);

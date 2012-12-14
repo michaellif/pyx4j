@@ -58,7 +58,7 @@ public class MediaMarshaller implements Marshaller<Media, MediaIO> {
     }
 
     @Override
-    public Media unmarshal(MediaIO mediaIO) throws Exception {
+    public Media unmarshal(MediaIO mediaIO) {
         Media media = EntityFactory.create(Media.class);
         MarshallerUtils.setValue(media.caption(), mediaIO.caption);
         MarshallerUtils.setValue(media.type(), mediaIO.mediaType);
@@ -67,7 +67,7 @@ public class MediaMarshaller implements Marshaller<Media, MediaIO> {
         return media;
     }
 
-    public List<Media> unmarshal(List<MediaIO> MediaIOList) throws Exception {
+    public List<Media> unmarshal(List<MediaIO> MediaIOList) {
         List<Media> medias = new ArrayList<Media>();
         for (MediaIO mediaIO : MediaIOList) {
             Media media = EntityFactory.create(Media.class);

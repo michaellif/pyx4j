@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.oapi.binder.BuildingPersister;
+import com.propertyvista.oapi.binder.UnitPersister;
 import com.propertyvista.oapi.marshaling.BuildingMarshaller;
 import com.propertyvista.oapi.marshaling.UnitMarshaller;
 import com.propertyvista.oapi.model.BuildingIO;
@@ -96,5 +97,13 @@ public class PropertyService {
         Persistence.service().retrieve(unit.building());
         return UnitMarshaller.getInstance().marshal(unit);
 
+    }
+
+    public static void updateUnit(UnitIO unitIO) {
+        AptUnit unitDTO = UnitMarshaller.getInstance().unmarshal(unitIO);
+
+        new UnitPersister().persist(unitDTO);
+
+        Persistence.service().commit();
     }
 }

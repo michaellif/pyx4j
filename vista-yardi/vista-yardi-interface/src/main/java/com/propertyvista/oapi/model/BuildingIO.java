@@ -36,32 +36,32 @@ public class BuildingIO extends AbstractElementIO {
 
     public BuildingInfoIO info;
 
-    @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "contact"))
-    public List<ContactIO> contacts = new ArrayList<ContactIO>();
-
     public MarketingIO marketing;
-
-    //mandatory for portal
-    @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "unit"))
-    public List<UnitIO> units = new ArrayList<UnitIO>();
-
-    @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "media"))
-    public List<MediaIO> medias = new ArrayList<MediaIO>();
 
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "amenity"))
     public List<BuildingAmenityIO> amenities = new ArrayList<BuildingAmenityIO>();
 
     @XmlElementWrapper
+    @XmlElements(@XmlElement(name = "utility"))
+    public List<UtilityIO> includedUtilities = new ArrayList<UtilityIO>();
+
+    @XmlElementWrapper
     @XmlElements(@XmlElement(name = "parking"))
     public List<ParkingIO> parkings = new ArrayList<ParkingIO>();
 
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "utility"))
-    public List<UtilityIO> includedUtilities = new ArrayList<UtilityIO>();
+    @XmlElements(@XmlElement(name = "contact"))
+    public List<ContactIO> contacts = new ArrayList<ContactIO>();
+
+    @XmlElementWrapper
+    @XmlElements(@XmlElement(name = "media"))
+    public List<MediaIO> medias = new ArrayList<MediaIO>();
+
+    //mandatory for portal
+    @XmlElementWrapper
+    @XmlElements(@XmlElement(name = "unit"))
+    public List<UnitIO> units = new ArrayList<UnitIO>();
 
     public BuildingIO() {
     }

@@ -13,8 +13,14 @@
  */
 package com.propertyvista.oapi.marshaling;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import java.util.List;
 
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.oapi.model.UnitIO;
 import com.propertyvista.oapi.xml.IntegerIO;
@@ -40,6 +46,7 @@ public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
         }
         UnitIO unitIO = new UnitIO();
         unitIO.number = MarshallerUtils.getValue(unit.info().number());
+        unitIO.propertyCode = MarshallerUtils.getValue(unit.building().propertyCode());
 
         unitIO.floorplanName = MarshallerUtils.createIo(StringIO.class, unit.floorplan().name());
         unitIO.baths = MarshallerUtils.createIo(IntegerIO.class, unit.floorplan().bathrooms());
@@ -48,19 +55,64 @@ public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
     }
 
     @Override
-    public AptUnit unmarshal(UnitIO unitIO) throws Exception {
+    public AptUnit unmarshal(UnitIO unitIO) {
         AptUnit unit = EntityFactory.create(AptUnit.class);
         unit.info().number().setValue(unitIO.number);
 
-        // EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
-        // floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), unitIO.floorplanName.value));
-        // floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().bathrooms(), unitIO.baths.value));
-        // floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().bedrooms(), unitIO.beds.value));
-        // List<Floorplan> floorplans = Persistence.service().query(floorplanCriteria);
+        // building
+        if (unitIO.propertyCode == null) {
+            throw new Error("Building not found for the unit.");
+        }
+        if (unitIO.floorplanName == null || unitIO.floorplanName.getValue() == null) {
+            throw new Error("Floorplan not found for the unit.");
+        }
+        if (unitIO.baths == null || unitIO.baths.getValue() == null) {
+            throw new Error("Number of baths not found for a unit");
+        }
+        if (unitIO.beds == null || unitIO.beds.getValue() == null) {
+            throw new Error("Number of beds not found for a unit");
+        }
+        if (unitIO.floorplanName == null || unitIO.floorplanName.getValue() == null) {
+            throw new Error("Floorplan Name not found in unit.");
+        }
 
-        MarshallerUtils.setValue(unit.floorplan().name(), unitIO.floorplanName);
-        MarshallerUtils.setValue(unit.floorplan().bathrooms(), unitIO.baths);
-        MarshallerUtils.setValue(unit.floorplan().bedrooms(), unitIO.beds);
+        // building
+        Building building;
+        {
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.eq(criteria.proto().propertyCode(), unitIO.propertyCode);
+            List<Building> buildings = Persistence.service().query(criteria);
+            if (buildings.size() > 0) {
+                building = buildings.get(0);
+            } else {
+                throw new Error("Building not found in the database");
+            }
+        }
+        unit.building().set(building);
+
+        // floorplan
+        Persistence.service().retrieve(building.floorplans());
+        for (Floorplan floorplan : building.floorplans()) {
+            if (floorplan.name().getValue().equals(unitIO.floorplanName)) {
+                if (!floorplan.bathrooms().getValue().equals(unitIO.baths.getValue())) {
+                    throw new Error("There is a problem with number of bathrooms in unit " + unitIO.number);
+                }
+                if (!floorplan.bedrooms().getValue().equals(unitIO.beds.getValue())) {
+                    throw new Error("There is a problem with number of bedrooms in unit " + unitIO.number);
+                }
+                unit.floorplan().set(floorplan);
+            }
+        }
+        if (unit.floorplan().isNull()) {
+            Floorplan floorplan = EntityFactory.create(Floorplan.class);
+            MarshallerUtils.setValue(floorplan.name(), unitIO.floorplanName);
+            MarshallerUtils.setValue(floorplan.bedrooms(), unitIO.beds);
+            MarshallerUtils.setValue(floorplan.bathrooms(), unitIO.baths);
+            floorplan.building().set(building);
+            Persistence.service().persist(floorplan);
+            unit.floorplan().set(floorplan);
+        }
+
         return unit;
     }
 }

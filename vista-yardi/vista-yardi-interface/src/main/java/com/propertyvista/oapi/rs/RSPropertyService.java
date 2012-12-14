@@ -123,9 +123,9 @@ public class RSPropertyService {
     @POST
     @Path("/{propertyCode}/units/updateUnit")
     @Consumes({ MediaType.APPLICATION_XML })
-    public Response updateUnit(@PathParam("propertyCode") String propertyCode, UnitIO unitIO) {
-        //TODO mkoval implementation TBD
-        return RSUtils.createSuccessResponse(i18n.tr("Operation is not implemented"));
+    public Response updateUnit(@PathParam("propertyCode") String propertyCode, UnitIO unitIO) throws Exception {
+        PropertyService.updateUnit(unitIO);
+        return RSUtils.createSuccessResponse(i18n.tr("Unit updated successfully"));
     }
 
 }

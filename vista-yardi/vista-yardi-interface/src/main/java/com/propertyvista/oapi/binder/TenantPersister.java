@@ -16,12 +16,12 @@ package com.propertyvista.oapi.binder;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public class BuildingPersister extends AbstractPersister<Building, Building> {
+public class TenantPersister extends AbstractPersister<AptUnit, AptUnit> {
 
-    public BuildingPersister() {
-        super(Building.class, Building.class);
+    public TenantPersister() {
+        super(AptUnit.class, AptUnit.class);
     }
 
     @Override
@@ -30,9 +30,10 @@ public class BuildingPersister extends AbstractPersister<Building, Building> {
     }
 
     @Override
-    public Building retrieve(Building dto) {
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.eq(criteria.proto().propertyCode(), dto.propertyCode());
+    public AptUnit retrieve(AptUnit dto) {
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+        criteria.eq(criteria.proto().building().propertyCode(), dto.building().propertyCode());
+        criteria.eq(criteria.proto().info().number(), dto.info().number());
         return Persistence.service().retrieve(criteria);
     }
 }
