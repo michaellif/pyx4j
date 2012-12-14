@@ -141,60 +141,61 @@ select {
 }
 
 .navigation {
-	width: 960px;
-	/*display:inline-block;*/
-	/*vertical-align: text-bottom;*/
-	/*top: 10%;*/
-	text-align:center;
-	position:absolute; left:0; bottom:0%;
-	overflow:hidden;
-	/*height:50px;*/
-	/*padding-bottom: 30px;*/
+	height: 60px;
+	position: absolute;
+	top: 65%;
+	width: 100%;
+    /*background: ${object1_100}*/
 }
 
 .navigation ul {
 	list-style: none outside none;
 	margin: 0;
 	padding: 0;
+	text-align: center;
 }
 
 .navigation ul li {
-	display: inline;
-	border-top: 1px solid #000000;
-	margin: 0 4px;
-	padding: 7px;
+	 display: inline-block;
+     margin: 0 4px;
 }
 
 .navigation ul li span {
 	font-size: 12px;
-	line-height: 50px;
-	padding: 2px 0;
-	margin:0 10px;
-	display: inline-block;
-	width: 100px;
+	border-top: 1px solid #000;
+    border-collapse: collapse;
+    color: #000;
+    display: block;
+    padding: 10px 20px;
+    text-align: left;
+    text-decoration: none;
+    width: 120px;
+}
+
+.navigation ul li span:hover {
+	border-top: 4px solid #000;
+    padding-top: 7px;
 }
 
 .navigation span:lang(fr) {
 	font-size: 16px;
-	margin:0 5px;
+	margin-left: 15px;
+	margin-right: 15px;
 }
 
 .navigation a {
-	color: #000000;
+	color: ${object1_10};
 	text-decoration: none;
+	float: left;
 }
 
+.navigation a:hover {
+	color: ${contrast1_100};
+}
 
 .navigation .active a {
-	color: ${object1_20};
-}
-
-.navigation a:hover span {
-	border-bottom:1px solid ${object1_20};
-}
-
-.navigation .active a span {
-	border-bottom:2px solid ${object1_20};
+	color: ${contrast1_10};
+	background-color: ${contrast1_100};
 }
 
 .navigation .active a:hover {
