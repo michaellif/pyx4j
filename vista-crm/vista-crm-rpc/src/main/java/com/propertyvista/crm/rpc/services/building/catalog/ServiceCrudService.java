@@ -16,12 +16,12 @@ package com.propertyvista.crm.rpc.services.building.catalog;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.Service;
 
-public interface ServiceCrudService extends AbstractVersionedCrudService<Service> {
+public interface ServiceCrudService extends AbstractCrudService<Service> {
 
     public void retrieveCatalog(AsyncCallback<ProductCatalog> callback, Key entityId);
 }

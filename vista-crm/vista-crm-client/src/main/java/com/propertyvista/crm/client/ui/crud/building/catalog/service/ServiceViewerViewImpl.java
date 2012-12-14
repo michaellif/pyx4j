@@ -24,6 +24,6 @@ public class ServiceViewerViewImpl extends CrmViewerViewImplBase<Service> implem
 
     public ServiceViewerViewImpl() {
         super(CrmSiteMap.Properties.Service.class, new ServiceForm(true));
-        enableVersioning(Service.ServiceV.class, GWT.<ServiceVersionService> create(ServiceVersionService.class));
+        enableHistorying(Service.ServiceV.class, GWT.<ServiceVersionService> create(ServiceVersionService.class));
     }
 }

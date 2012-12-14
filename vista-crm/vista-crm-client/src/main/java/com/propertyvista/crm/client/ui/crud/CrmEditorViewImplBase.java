@@ -19,12 +19,16 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 import com.pyx4j.site.client.ui.crud.form.EditorViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.ConfirmDecline;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 
@@ -50,7 +54,25 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
                     getForm().setUnconditionalValidationErrorRendering(true);
                     showValidationDialog();
                 } else {
-                    getPresenter().save();
+                    if (getForm().getValue().getPrimaryKey() == null) {
+                        getPresenter().save();
+                    } else if (getForm().getValue() instanceof IVersionedEntity) {
+                        MessageDialog.confirm(i18n.tr("Save"), i18n.tr("Save it as new version?"), new ConfirmDecline() {
+                            @SuppressWarnings("unchecked")
+                            @Override
+                            public void onConfirmed() {
+                                getForm().setValue((E) VersionedEntityUtils.createNextVersion((IVersionedEntity<?>) getForm().getValue()));
+                                getPresenter().save();
+                            }
+
+                            @Override
+                            public void onDeclined() {
+                                getPresenter().save();
+                            }
+                        });
+                    } else {
+                        getPresenter().save();
+                    }
                 }
             }
         });

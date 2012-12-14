@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
@@ -28,7 +28,7 @@ import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 
-public class ServiceCrudServiceImpl extends AbstractVersionedCrudServiceImpl<Service> implements ServiceCrudService {
+public class ServiceCrudServiceImpl extends AbstractCrudServiceImpl<Service> implements ServiceCrudService {
 
     public ServiceCrudServiceImpl() {
         super(Service.class);
