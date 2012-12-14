@@ -13,16 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content.site;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmCrudAppPlace;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> implements SiteViewer {
@@ -33,15 +33,24 @@ public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> imp
         super(CrmSiteMap.Administration.Content.class, new SiteForm(true));
 
         // Add actions:
-        addHeaderToolbarItem(new Button(i18n.tr("Add Child Page"), new ClickHandler() {
+        addAction(new MenuItem(i18n.tr("Add Child Page"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 Key valueKey = getForm().getValue().getPrimaryKey();
                 if (valueKey != null) { // shouldn't be new unsaved value!..
                     newChild(valueKey);
                 }
             }
-        }).asWidget());
+        }));
+        addAction(new MenuItem(i18n.tr("Add City Page"), new Command() {
+            @Override
+            public void execute() {
+                Key parentId = getForm().getValue().getPrimaryKey();
+                if (parentId != null) {
+                    ((SiteViewer.Presenter) getPresenter()).editNew(parentId, Administration.Content.CityIntroPage.class);
+                }
+            }
+        }));
     }
 
     @Override

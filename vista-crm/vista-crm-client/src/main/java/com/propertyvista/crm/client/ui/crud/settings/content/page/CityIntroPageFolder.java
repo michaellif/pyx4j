@@ -17,20 +17,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CTextField;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteForm;
@@ -49,18 +45,7 @@ public class CityIntroPageFolder extends VistaTableFolder<CityIntroPage> {
         super(CityIntroPage.class, parent.isEditable());
         this.parent = parent;
         this.viewer = (!parent.isEditable() ? (SiteViewer) parent.getParentView() : null);
-        setAddable(true);
-    }
-
-    @Override
-    protected void createNewEntity(final CityIntroPage newEntity, final AsyncCallback<CityIntroPage> callback) {
-        new CityInputDialog() {
-            @Override
-            void onInputComplete(String input) {
-                newEntity.cityName().setValue(input);
-                callback.onSuccess(newEntity);
-            }
-        }.show();
+        setAddable(false);
     }
 
     @Override
@@ -110,23 +95,5 @@ public class CityIntroPageFolder extends VistaTableFolder<CityIntroPage> {
             }
             return super.createCell(column);
         }
-    }
-
-    abstract class CityInputDialog extends OkCancelDialog {
-        private final CTextField city = new CTextField();
-
-        public CityInputDialog() {
-            super(i18n.tr("Enter City"));
-
-            setBody(new WidgetDecorator.Builder(city).customLabel(i18n.tr("City")).build());
-        }
-
-        @Override
-        public boolean onClickOk() {
-            onInputComplete(city.getValue());
-            return true;
-        }
-
-        abstract void onInputComplete(String input);
     }
 }

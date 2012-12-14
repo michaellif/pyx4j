@@ -14,9 +14,13 @@
 package com.propertyvista.crm.server.services;
 
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.crm.rpc.services.CityIntroPageCrudService;
 import com.propertyvista.domain.site.CityIntroPage;
+import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.server.common.reference.PMSiteContentCache;
 
 public class CityIntroPageCrudServiceImpl extends AbstractCrudServiceImpl<CityIntroPage> implements CityIntroPageCrudService {
 
@@ -29,4 +33,16 @@ public class CityIntroPageCrudServiceImpl extends AbstractCrudServiceImpl<CityIn
         this.bindCompleteDBO();
     }
 
+    @Override
+    protected void persist(CityIntroPage entity, CityIntroPage dto) {
+        EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
+        SiteDescriptor site = Persistence.service().retrieve(criteria);
+        if (entity.getPrimaryKey() == null) {
+            site.cityIntroPages().add(entity);
+            Persistence.service().merge(site);
+        } else {
+            super.persist(entity, dto);
+        }
+        PMSiteContentCache.siteDescriptorUpdated();
+    }
 }

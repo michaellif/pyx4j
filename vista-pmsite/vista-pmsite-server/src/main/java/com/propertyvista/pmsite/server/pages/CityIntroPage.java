@@ -7,27 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 10, 2012
+ * Created on Dec 13, 2012
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.domain.site;
+package com.propertyvista.pmsite.server.pages;
 
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+public class CityIntroPage extends LandingPage {
+    private static final long serialVersionUID = 1L;
 
-import com.propertyvista.domain.ref.Province;
+    public CityIntroPage() {
 
-public interface CityIntroPage extends IEntity {
-    @NotNull
-    IPrimitive<String> cityName();
-
-    @NotNull
-    Province province();
-
-    @Owned
-    IList<HtmlContent> content();
+    }
 }

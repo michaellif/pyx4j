@@ -67,6 +67,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
+import com.propertyvista.pmsite.server.pages.CityIntroPage;
 import com.propertyvista.pmsite.server.pages.FindAptPage;
 import com.propertyvista.pmsite.server.pages.InquiryPage;
 import com.propertyvista.pmsite.server.pages.InquirySuccessPage;
@@ -98,10 +99,13 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
     public static String ParamNameFloorplan = "fpId";
 
+    public static String ParamNameCity = "city";
+
     private static final Map<String, Class<? extends Page>> MountMap = new HashMap<String, Class<? extends Page>>();
 
     static {
         MountMap.put("", LandingPage.class);
+        MountMap.put("city/#{" + ParamNameCity + "}", CityIntroPage.class);
         MountMap.put("signin", SignInPage.class);
         MountMap.put("findapt", FindAptPage.class);
         MountMap.put("aptlist", AptListPage.class);
