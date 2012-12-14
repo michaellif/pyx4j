@@ -33,14 +33,16 @@ public interface IVersionedEntity<VERSIONED_ITEM extends IVersionData<?>> extend
 
     public enum SaveAction {
 
+        saveNonVersioned, //Default, Save as regular Entity, if saving new version() the previous would be finalized
+
         saveAsDraft, // Default: When saving owner save child as Draft : default 
 
-        saveAsFinal, // When saving owner finalize child
+        saveAsFinal // When saving owner finalize child
 
-        saveNonVersioned // When saving owner finalize child but do not create new version
     }
 
     /**
+     * Default: saveNonVersioned
      * in preload set : saveAction().setValue(SaveAction.saveAsFinal)
      */
     @ManagedColumn

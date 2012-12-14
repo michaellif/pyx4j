@@ -73,4 +73,15 @@ public class VersionedEntityUtils {
         return pk.equalsIgnoreVersion((Key) otherValue.get(IEntity.PRIMARY_KEY))
                 && (entity1.getInstanceValueClass().equals(((IEntity) entity2).getInstanceValueClass()));
     }
+
+    public static <T extends IVersionedEntity<?>> T createNextVersion(T entity) {
+        @SuppressWarnings("unchecked")
+        Class<T> entityClass = (Class<T>) entity.getValueClass();
+        T clone = entity.duplicate(entityClass);
+        clone.version().set(EntityGraph.businessDuplicate(entity.version()));
+        clone.version().fromDate().setValue(null);
+        clone.version().toDate().setValue(null);
+        clone.version().versionNumber().setValue(null);
+        return clone;
+    }
 }

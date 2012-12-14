@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -71,103 +72,154 @@ public class TableModleVersioned {
     }
 
     public static List<IVersionData<IVersionedEntity<?>>> update(PersistenceContext persistenceContext, Mappings mappings, IEntity entity, boolean newEntity,
-            MemberOperationsMeta member) {
+            MemberOperationsMeta versionDataMember) {
+        return new VersionDataUpdater(persistenceContext, mappings, entity, versionDataMember).update(newEntity);
+    }
 
-        List<IVersionData<IVersionedEntity<?>>> update = new ArrayList<IVersionData<IVersionedEntity<?>>>();
-        IVersionedEntity<?> versionedEntity = (IVersionedEntity<?>) entity;
+    private static class VersionDataUpdater {
+
+        private final PersistenceContext persistenceContext;
+
+        private final List<IVersionData<IVersionedEntity<?>>> update = new ArrayList<IVersionData<IVersionedEntity<?>>>();
+
+        private final IVersionedEntity<?> versionedEntity;
+
+        private final MemberOperationsMeta versionDataMember;
+
+        private IVersionData<IVersionedEntity<?>> versionData;
+
+        private final Class<? extends IVersionData<IVersionedEntity<?>>> versionDataEntityClass;
+
+        private final TableModel tm;
 
         @SuppressWarnings("unchecked")
-        IVersionData<IVersionedEntity<?>> memberEntity = (IVersionData<IVersionedEntity<?>>) member.getMember(entity);
-        // Force creation of the data entity on finalize
-        if (memberEntity.isNull() && (versionedEntity.saveAction().getValue() != SaveAction.saveAsFinal)) {
+        VersionDataUpdater(PersistenceContext persistenceContext, Mappings mappings, IEntity entity, MemberOperationsMeta member) {
+            this.persistenceContext = persistenceContext;
+            this.versionedEntity = (IVersionedEntity<?>) entity;
+            this.versionDataMember = member;
+            this.versionData = (IVersionData<IVersionedEntity<?>>) member.getMember(entity);
+            this.versionDataEntityClass = (Class<? extends IVersionData<IVersionedEntity<?>>>) member.getMemberMeta().getValueClass();
+            this.tm = mappings.getTableModel(persistenceContext, versionDataEntityClass);
+        }
+
+        List<IVersionData<IVersionedEntity<?>>> update(boolean newEntity) {
+
+            versionData.holder().set(versionedEntity);
+            versionData.createdByUserKey().setValue(persistenceContext.getCurrentUserKey());
+
+            switch (versionedEntity.saveAction().getValue(SaveAction.saveNonVersioned)) {
+            case saveNonVersioned: {
+                if (versionData.fromDate().isNull()) {
+                    versionData.fromDate().setValue(persistenceContext.getTimeNow());
+                }
+                if (versionData.getPrimaryKey() == null) {
+                    updateExistingCurrent();
+                }
+
+                //Save using EntityPersistenceService
+                update.add(versionData);
+            }
+                break;
+            case saveAsDraft: {
+                // Save draft
+                versionData.fromDate().setValue(null);
+                versionData.toDate().setValue(null);
+                versionData.versionNumber().setValue(null);
+
+                // Find existing Draft
+                IVersionData<IVersionedEntity<?>> existingDraft = getExistingDraft();
+
+                if (existingDraft != null) {
+                    if (!EqualsHelper.equals(versionData.getPrimaryKey(), existingDraft.getPrimaryKey())) {
+                        throw new Error("Attempt to override draft " + existingDraft.getDebugExceptionInfoString() + " with other data "
+                                + versionData.getDebugExceptionInfoString());
+                    }
+                } else {
+                    versionData.setPrimaryKey(null);
+                }
+
+                //Save using EntityPersistenceService
+                update.add(versionData);
+                versionedEntity.setPrimaryKey(versionedEntity.getPrimaryKey().asDraftKey());
+            }
+                break;
+            case saveAsFinal: {
+                // Finalize do not creates new IVersionData from draft.
+
+                // Find existing Draft
+                IVersionData<IVersionedEntity<?>> existingDraft = getExistingDraft();
+
+                if (existingDraft != null) {
+                    if (!EqualsHelper.equals(versionData.getPrimaryKey(), existingDraft.getPrimaryKey())) {
+                        versionData = EntityGraph.businessDuplicate(versionData);
+                        versionData.setPrimaryKey(null);
+                        versionData.holder().set(versionedEntity);
+                        ((IEntity) versionDataMember.getMember(versionedEntity)).set(versionData);
+                    }
+                    //TODO make it work
+                } else if (false && !newEntity && existingDraft == null) {
+                    throw new Error("Can't finalize version when Draft was not created");
+                } else if (versionData.getPrimaryKey() != null) {
+                    // TODO optimize new item creation if no data changed; for now Finalize create new data anyway, 
+                    versionData = EntityGraph.businessDuplicate(versionData);
+                    versionData.setPrimaryKey(null);
+                    versionData.holder().set(versionedEntity);
+                    ((IEntity) versionDataMember.getMember(versionedEntity)).set(versionData);
+                }
+                versionData.fromDate().setValue(persistenceContext.getTimeNow());
+                versionData.toDate().setValue(null);
+
+                //Save using EntityPersistenceService
+                update.add(versionData);
+
+                updateExistingCurrent();
+
+                versionedEntity.setPrimaryKey(versionedEntity.getPrimaryKey().asCurrentKey());
+            }
+                break;
+            }
+            versionedEntity.saveAction().setValue(null);
             return update;
         }
-        @SuppressWarnings("unchecked")
-        Class<? extends IVersionData<IVersionedEntity<?>>> targetEntityClass = (Class<? extends IVersionData<IVersionedEntity<?>>>) member.getMemberMeta()
-                .getValueClass();
-        TableModel tm = mappings.getTableModel(persistenceContext, targetEntityClass);
 
-        // Find existing Draft
-        IVersionData<IVersionedEntity<?>> existingDraft = null;
-        EntityQueryCriteria<? extends IVersionData<IVersionedEntity<?>>> draftCriteria = EntityQueryCriteria.create(targetEntityClass);
-        draftCriteria.add(PropertyCriterion.eq(draftCriteria.proto().holder(), entity));
-        draftCriteria.add(PropertyCriterion.isNull(draftCriteria.proto().fromDate()));
-        draftCriteria.add(PropertyCriterion.isNull(draftCriteria.proto().toDate()));
-        List<? extends IVersionData<IVersionedEntity<?>>> draftsExisting = tm.query(persistenceContext, draftCriteria, 2, AttachLevel.IdOnly);
-        if (draftsExisting.size() > 1) {
-            throw new Error("Duplicate Draft versions found in " + entity.getDebugExceptionInfoString());
-        } else if (draftsExisting.size() > 0) {
-            existingDraft = draftsExisting.get(0);
+        private IVersionData<IVersionedEntity<?>> getExistingDraft() {
+            EntityQueryCriteria<? extends IVersionData<IVersionedEntity<?>>> criteria = EntityQueryCriteria.create(versionDataEntityClass);
+            criteria.add(PropertyCriterion.eq(criteria.proto().holder(), versionedEntity));
+            criteria.isDraft(criteria.proto());
+            List<? extends IVersionData<IVersionedEntity<?>>> draftsExisting = tm.query(persistenceContext, criteria, 2, AttachLevel.IdOnly);
+            if (draftsExisting.size() > 1) {
+                throw new Error("Duplicate Draft versions found in " + versionedEntity.getDebugExceptionInfoString());
+            } else if (draftsExisting.size() > 0) {
+                return draftsExisting.get(0);
+            } else {
+                return null;
+            }
         }
 
-        memberEntity.holder().set(versionedEntity);
-        memberEntity.createdByUserKey().setValue(persistenceContext.getCurrentUserKey());
-
-        if (versionedEntity.saveAction().getValue() != SaveAction.saveAsFinal) {
-            // Save draft
-            memberEntity.fromDate().setValue(null);
-            memberEntity.toDate().setValue(null);
-            memberEntity.versionNumber().setValue(null);
-
-            if (existingDraft != null) {
-                if (!memberEntity.getPrimaryKey().equals(existingDraft.getPrimaryKey())) {
-                    throw new Error("Attempt to override draft " + existingDraft.getDebugExceptionInfoString() + " with other data "
-                            + memberEntity.getDebugExceptionInfoString());
-                }
-            } else {
-                memberEntity.setPrimaryKey(null);
-            }
-
-            //Save using EntityPersistenceService
-            update.add(memberEntity);
-            entity.setPrimaryKey(entity.getPrimaryKey().asDraftKey());
-        } else {
-            // Finalize do not creates new IVersionData from draft.
-            if (existingDraft != null) {
-                if (!memberEntity.getPrimaryKey().equals(existingDraft.getPrimaryKey())) {
-                    memberEntity = EntityGraph.businessDuplicate(memberEntity);
-                    memberEntity.setPrimaryKey(null);
-                    memberEntity.holder().set(versionedEntity);
-                    ((IEntity) member.getMember(versionedEntity)).set(memberEntity);
-                }
-                //TODO make it work
-            } else if (false && !newEntity && existingDraft == null) {
-                throw new Error("Can't finalize version when Draft was not created");
-            } else if (memberEntity.getPrimaryKey() != null) {
-                // TODO optimize new item creation if no data changed; for now Finalize create new data anyway, 
-                memberEntity = EntityGraph.businessDuplicate(memberEntity);
-                memberEntity.setPrimaryKey(null);
-                memberEntity.holder().set(versionedEntity);
-                ((IEntity) member.getMember(versionedEntity)).set(memberEntity);
-            }
-            memberEntity.fromDate().setValue(persistenceContext.getTimeNow());
-            memberEntity.toDate().setValue(null);
-
-            //Save using EntityPersistenceService
-            update.add(memberEntity);
-
-            EntityQueryCriteria<? extends IVersionData<IVersionedEntity<?>>> criteriaCurrent = EntityQueryCriteria.create(targetEntityClass);
-            criteriaCurrent.add(PropertyCriterion.eq(criteriaCurrent.proto().holder(), entity));
-            criteriaCurrent.add(PropertyCriterion.isNotNull(criteriaCurrent.proto().fromDate()));
-            criteriaCurrent.add(PropertyCriterion.isNull(criteriaCurrent.proto().toDate()));
-
-            List<? extends IVersionData<IVersionedEntity<?>>> existing = tm.query(persistenceContext, criteriaCurrent, 1, AttachLevel.Attached);
-            if (existing.size() > 0) {
-                IVersionData<IVersionedEntity<?>> memberEntityExisting = existing.get(0);
-
+        private void updateExistingCurrent() {
+            IVersionData<IVersionedEntity<?>> memberEntityExisting = getExistingCurrent();
+            if (memberEntityExisting != null) {
                 // End effective period of currently active entity
                 memberEntityExisting.toDate().setValue(persistenceContext.getTimeNow());
                 update.add(memberEntityExisting);
-
-                memberEntity.versionNumber().setValue(memberEntityExisting.versionNumber().getValue() + 1);
-
+                versionData.versionNumber().setValue(memberEntityExisting.versionNumber().getValue() + 1);
             } else {
                 // Initial item creation
-                memberEntity.versionNumber().setValue(1);
+                versionData.versionNumber().setValue(1);
             }
-            entity.setPrimaryKey(entity.getPrimaryKey().asCurrentKey());
         }
-        versionedEntity.saveAction().setValue(null);
-        return update;
+
+        private IVersionData<IVersionedEntity<?>> getExistingCurrent() {
+            EntityQueryCriteria<? extends IVersionData<IVersionedEntity<?>>> criteria = EntityQueryCriteria.create(versionDataEntityClass);
+            criteria.add(PropertyCriterion.eq(criteria.proto().holder(), versionedEntity));
+            criteria.isCurrent(criteria.proto());
+            List<? extends IVersionData<IVersionedEntity<?>>> existing = tm.query(persistenceContext, criteria, 1, AttachLevel.Attached);
+            if (existing.size() > 0) {
+                return existing.get(0);
+            } else {
+                return null;
+            }
+
+        }
     }
 }

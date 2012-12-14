@@ -33,6 +33,7 @@ import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.version.ItemA;
 import com.pyx4j.entity.test.shared.domain.version.ItemA.ItemAVersion;
@@ -60,8 +61,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemA1.version().name().setValue(draftName);
 
         //Key == null, Save draft value ?
-        // Assumed
-        //itemA1.saveAction().setValue(SaveAction.saveAsDraft);
+        itemA1.saveAction().setValue(SaveAction.saveAsDraft);
         srv.persist(itemA1);
         // Key assigned and versions not set in the key
         assertEquals("assigned version", Key.VERSION_DRAFT, itemA1.getPrimaryKey().getVersion());
@@ -265,6 +265,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemA1.version().testId().setValue(testId);
 
         //Save initial value (Draft then finalize)
+        itemA1.saveAction().setValue(SaveAction.saveAsDraft);
         srv.persist(itemA1);
         itemA1.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemA1);
@@ -325,17 +326,18 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         String testId = uniqueString();
         srv.startTransaction();
 
+        setDBTime("2011-01-01");
+
         // Initial item
         ItemA itemA1 = EntityFactory.create(ItemA.class);
         itemA1.testId().setValue(testId);
 
         final String currentName = "V0-" + uniqueString();
-        itemA1.versions().add(itemA1.versions().$());
-        itemA1.versions().get(0).fromDate().setValue(DateUtils.detectDateformat("2011-01-01"));
-        itemA1.versions().get(0).name().setValue(currentName);
-        itemA1.versions().get(0).testId().setValue(testId);
+        itemA1.version().name().setValue(currentName);
+        itemA1.version().testId().setValue(testId);
 
         //Save initial value
+        itemA1.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemA1);
 
         ItemA itemA1draft = EntityFactory.create(ItemA.class);
@@ -348,6 +350,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemA1draft.version().testId().setValue(testId);
 
         //Save Draft
+        itemA1draft.saveAction().setValue(SaveAction.saveAsDraft);
         srv.persist(itemA1draft);
 
         // Retrieval of item as draft
@@ -393,7 +396,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             itemA1r.setPrimaryKey(itemA1.getPrimaryKey());
 
             srv.retrieve(itemA1r);
-            assertTrue("version is not null", !itemA1r.version().isNull());
+            assertFalse("version is not null", itemA1r.version().isNull());
             assertEquals("getSpecific", draftV2Name, itemA1r.version().name().getValue());
         }
 
@@ -411,6 +414,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemA1.version().name().setValue(origName);
         itemA1.version().testId().setValue(testId);
 
+        itemA1.saveAction().setValue(SaveAction.saveAsDraft);
         srv.persist(itemA1);
 
         // Finalize as of (current) date
@@ -438,6 +442,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         setDBTime("2011-02-01");
         final String newName = "V2-" + uniqueString();
         itemA1.version().name().setValue(newName);
+        itemA1.saveAction().setValue(SaveAction.saveAsDraft);
         srv.persist(itemA1);
         itemA1.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemA1);
@@ -446,6 +451,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         final String draftName = "D1-" + uniqueString();
         itemA1.setPrimaryKey(itemA1.getPrimaryKey().asDraftKey());
         itemA1.version().name().setValue(draftName);
+        itemA1.saveAction().setValue(SaveAction.saveAsDraft);
         srv.persist(itemA1);
 
         // Verify values, Current has the value of last  finalize
@@ -486,6 +492,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemA1.version().testId().setValue(testId);
 
         //(Draft then finalize)
+        itemA1.saveAction().setValue(SaveAction.saveAsDraft);
         srv.persist(itemA1);
         // Finalize
         itemA1.saveAction().setValue(SaveAction.saveAsFinal);
@@ -502,6 +509,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemB1.version().testId().setValue(testId);
         itemB1.version().itemAFixed().set(itemA1);
         //(Draft then finalize)
+        itemB1.saveAction().setValue(SaveAction.saveAsDraft);
         srv.persist(itemB1);
         itemB1.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemB1);
@@ -510,6 +518,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         // Update A1
         itemA1.version().name().setValue("V2A1-" + uniqueString());
         //(Draft then finalize)
+        itemA1.saveAction().setValue(SaveAction.saveAsDraft);
         srv.persist(itemA1);
         // Finalize
         itemA1.saveAction().setValue(SaveAction.saveAsFinal);
@@ -546,6 +555,50 @@ public abstract class VersionTestCase extends DatastoreTestBase {
                 assertEquals("ref not updated", origAName, itemB1r.version().itemAFixed().version().name().getValue());
             }
         }
+    }
+
+    public void testNonVersionedAppoach() {
+        String testId = uniqueString();
+        srv.startTransaction();
+        setDBTime("2010-01-01");
+
+        final String v1Name = "V1-" + uniqueString();
+        final String v1uName = "V1u-" + uniqueString();
+        final String v2Name = "V2-" + uniqueString();
+
+        // Initial item
+        ItemA itemA1 = EntityFactory.create(ItemA.class);
+        itemA1.testId().setValue(testId);
+        itemA1.version().name().setValue(v1Name);
+        itemA1.version().testId().setValue(testId);
+
+        //Save
+        srv.persist(itemA1);
+        {
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asCurrentKey());
+            assertFalse("current is no null", itemA1r.version().isNull());
+        }
+        {
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asDraftKey());
+            assertTrue("draft is null", itemA1r.version().isNull());
+        }
+
+        // Update the same version
+        itemA1.version().name().setValue(v1uName);
+        srv.persist(itemA1);
+
+        // Add new version
+        ItemA itemA2 = VersionedEntityUtils.createNextVersion(itemA1);
+        itemA2.version().name().setValue(v2Name);
+        srv.persist(itemA2);
+
+        // Verify VersionData
+        {
+            EntityQueryCriteria<ItemA.ItemAVersion> criteria = EntityQueryCriteria.create(ItemA.ItemAVersion.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            assertEquals("VersionData.size()", 2, srv.query(criteria).size());
+        }
+
     }
 
     //TODO implement in future
@@ -663,6 +716,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         ItemA itemA0 = EntityFactory.create(ItemA.class);
         itemA0.testId().setValue(testId);
         itemA0.name().setValue("A0-" + uniqueString());
+        itemA0.saveAction().setValue(SaveAction.saveAsDraft);
         srv.persist(itemA0);
 
         // Initial item with final
@@ -672,6 +726,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemA1.version().name().setValue("VA1-" + uniqueString());
         itemA1.version().testId().setValue(testId);
         //(Draft then finalize)
+        itemA1.saveAction().setValue(SaveAction.saveAsDraft);
         srv.persist(itemA1);
         itemA1.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemA1);
@@ -692,6 +747,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         itemA3.version().name().setValue("VA3v-" + uniqueString());
         itemA3.version().testId().setValue(testId);
         //(Draft then finalize)
+        itemA3.saveAction().setValue(SaveAction.saveAsDraft);
         srv.persist(itemA3);
         itemA3.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemA3);
@@ -726,7 +782,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
             List<ItemA> list = srv.query(criteria);
-            assertEquals("draft data", 2, list.size());
+            assertEquals("draft data", 3, list.size());
         }
 
         // List/Find Draft, Ass sort by version date
@@ -738,7 +794,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             criteria.asc(criteria.proto().version().name());
 
             List<ItemA> list = srv.query(criteria);
-            assertEquals("draft data", 2, list.size());
+            assertEquals("draft data", 3, list.size());
         }
 
         // List/Find Draft by version() data
@@ -832,6 +888,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             itemA1.version().dataAv().setValue(currentNameA);
 
             //Save initial value (Draft then finalize)
+            itemA1.saveAction().setValue(SaveAction.saveAsDraft);
             srv.persist(itemA1);
             itemA1.saveAction().setValue(SaveAction.saveAsFinal);
             srv.persist(itemA1);
@@ -847,6 +904,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             itemB1.version().dataBv().setValue(currentNameB);
 
             //Save initial value (Draft then finalize)
+            itemB1.saveAction().setValue(SaveAction.saveAsDraft);
             srv.persist(itemB1);
             itemB1.saveAction().setValue(SaveAction.saveAsFinal);
             srv.persist(itemB1);
@@ -854,10 +912,12 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
         // Test Query Super by Owner
         {
+            @SuppressWarnings("rawtypes")
             EntityQueryCriteria<PolymorphicVersionedSuper.PolymorphicVersionDataSuper> criteria = EntityQueryCriteria
                     .create(PolymorphicVersionedSuper.PolymorphicVersionDataSuper.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
             criteria.add(PropertyCriterion.eq(criteria.proto().holder(), itemB1));
+            @SuppressWarnings("rawtypes")
             List<PolymorphicVersionedSuper.PolymorphicVersionDataSuper> found = srv.query(criteria);
             Assert.assertEquals("retrieved size", 1, found.size());
         }
