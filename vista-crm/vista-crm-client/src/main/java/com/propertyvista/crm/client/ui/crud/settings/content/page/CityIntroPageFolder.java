@@ -65,7 +65,7 @@ public class CityIntroPageFolder extends VistaTableFolder<CityIntroPage> {
 
     @Override
     protected IFolderDecorator<CityIntroPage> createFolderDecorator() {
-        TableFolderDecorator<CityIntroPage> decor = (TableFolderDecorator<CityIntroPage>) super.createDecorator();
+        TableFolderDecorator<CityIntroPage> decor = (TableFolderDecorator<CityIntroPage>) super.createFolderDecorator();
         decor.setShowHeader(false);
         decor.setAddButtonVisible(false);
         return decor;
