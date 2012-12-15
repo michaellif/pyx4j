@@ -42,7 +42,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
 
     public abstract IsWidget createContent();
 
-    protected IDecorator createDecorator() {
+    protected IDecorator<?> createDecorator() {
         return null;
     }
 
@@ -64,7 +64,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
         assert initiated == false;
         if (!initiated) {
             asWidget();
-            IDecorator decorator = createDecorator();
+            IDecorator<?> decorator = createDecorator();
             if (decorator == null) {
                 getWidget().setWidget(createContent());
             } else {
