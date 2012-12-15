@@ -4,7 +4,7 @@ img,form,fieldset {
 
 form,fieldset {
 	position: relative;
-	top: 420px;
+	top: 438px;
 	z-index: 1;
 	margin: 0;
 	padding: 0;
@@ -96,7 +96,7 @@ select {
 	width: 980px;
 	background: #fff;
 	position:relative;
-	border-top: 4px solid #000000;
+	border-top: 6px solid #000000;
 }
 
 .header .main {
@@ -217,29 +217,28 @@ select {
 
 ul.footer_locations {
 	list-style-type: none;
-	display: inline-block;
-	width:790px;
-	vertical-align:top;
-	padding: 0;
-	margin-left: 10px;
-	margin-top: 20px;
+//	display: block;
+	position: relative;
+	width:300px;
+	padding: 0 20px;
+	left: 150px; 
 }
 
 ul.footer_locations label {
 	display: block;
 	text-transform: uppercase;
 	padding-bottom: 10px;
-	color: ${object2_10};
+	color:#000000;
+	width: 300px;
 }
 
 ul.footer_locations li {
 	float: left;
-	width: 195px;
-	font-weight: bold;
+	width: 120px;
 }
 
 .footer_locations a {
-	color:  ${object1_20};
+	color:  #000000;
 }
 
 .footer_locations a:hover {
@@ -248,6 +247,7 @@ ul.footer_locations li {
 
 .footer_links {
 	text-align: center;
+	padding-top: 20px;
 }
 
 .footer_link:first-child {
@@ -256,11 +256,14 @@ ul.footer_locations li {
 
 .footer_link {
 	padding: 0 10px;
-	border-left: 1px solid ${object1_20};
+	border-left: 1px solid #000000;
+//	position: relative;
+	display: inline-block;
+//	top: 200px;
 }
 
 .footer_link a {
-	color:  ${object1_20};
+	color:  #000000;
 }
 
 .footer_link a:hover {
@@ -268,35 +271,38 @@ ul.footer_locations li {
 }
 
 .locale {
-	margin-top:40px;
-	text-align:center;
+	margin-top:20px;
+//	text-align:center;
 	white-space: nowrap;
 }
 
 .langItem {
-	margin-left: 10px;
+	display: block;
+	position: relative;
+	margin-left: 20px;
 	padding: 0 3px;
-	text-align: center;
+	top: -160px;
+	width: 300px;
+
 }
 
 .langItem:first-child {
-	margin-left: 0;
+//	margin-left: 0;
 }
 
 .langItem a {
-	color: ${object1_20};
+	color: #000000;
 }
 
 .footer_copyright {
 	text-align: center;
 	line-height: 60px;
-	color: ${object1_20};
+	color: #000000;
 }
 .footer_social {
 	display:inline-block;
 	width:140px;
 	vertical-align:top;
-	padding: 0;
 	margin-left: 10px;
 	margin-top: 20px;
 }
@@ -307,7 +313,7 @@ ul.footer_locations li {
 	display: block;
 	text-transform: uppercase;
 	padding-bottom: 10px;
-	color: ${object2_10};
+	color: #000000;
 }
 .iconSocial {
 	display:inline-block;
@@ -330,10 +336,9 @@ ul.footer_locations li {
 .legal_poweredby {
 	text-align: center;
 	line-height: 20px;
-	color: ${object1_20};
+	color: #000000;
 }
 .powered_product {
-	color: ${object1_20};
 }
 .powered_by {
 	
