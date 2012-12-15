@@ -38,8 +38,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ProvidesResize;
-import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.gwt.commons.BrowserType;
@@ -84,7 +82,7 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
 
     private final DockPanel container;
 
-    private final SimplePanel contentHolder;
+//    private final SimplePanel contentHolder;
 
     private int clientWindowLeft;
 
@@ -126,21 +124,8 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
 
         container = new DockPanel();
         DOM.setStyleAttribute(container.getElement(), "cursor", "default");
-        if (BrowserType.isIE()) {
-            // limit min size for safe resizing
-            DOM.setStyleAttribute(container.getElement(), "minWidth", "300px");
-            DOM.setStyleAttribute(container.getElement(), "minHeight", "200px");
-        }
         captionPanel = new CaptionPanel();
         container.add(captionPanel, DockPanel.NORTH);
-
-        contentHolder = new SimplePanel();
-        contentHolder.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogContentHolder.name());
-        container.add(contentHolder, DockPanel.CENTER);
-
-        if (!BrowserType.isIE8()) {
-            container.setCellHeight(contentHolder, "100%");
-        }
 
         setWidget(container);
 
@@ -151,8 +136,8 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
     }
 
     public void setContentWidget(Widget widget) {
-        contentHolder.setWidget(widget);
-        widget.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogContent.name());
+        container.add(widget, DockPanel.CENTER);
+        container.setCellHeight(widget, "100%");
     }
 
     public void setCaption(String caption) {
@@ -271,9 +256,9 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
             setPixelSize(width - 2 * DRAG_ZONE_WIDTH, height - 2 * DRAG_ZONE_WIDTH);
             setPopupPosition(left, top);
 
-            if (contentHolder.getWidget() instanceof RequiresResize) {
-                ((RequiresResize) contentHolder.getWidget()).onResize();
-            }
+//            if (contentHolder.getWidget() instanceof RequiresResize) {
+//                ((RequiresResize) contentHolder.getWidget()).onResize();
+//            }
 
         }
     }

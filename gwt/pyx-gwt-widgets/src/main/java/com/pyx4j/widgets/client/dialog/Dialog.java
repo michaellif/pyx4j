@@ -145,6 +145,7 @@ public class Dialog extends DialogPanel {
         setCaption(caption);
 
         content = new ContentPanel();
+        content.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogContent.name());
         setContentWidget(content);
 
         setDialogOptions(options);
@@ -161,12 +162,7 @@ public class Dialog extends DialogPanel {
         if (body != null) {
             content.add(body, DockPanel.CENTER);
             content.setCellWidth(body, "100%");
-            if (BrowserType.isIE()) {
-                // leave some space for action buttons at the bottom
-                content.setCellHeight(body, "80%");
-            } else {
-                content.setCellHeight(body, "100%");
-            }
+            content.setCellHeight(body, "100%");
         }
     }
 
