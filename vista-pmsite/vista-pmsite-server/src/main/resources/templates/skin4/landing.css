@@ -1,14 +1,14 @@
 .vista-pmsite-contentWrap {
 	margin: 0px auto 0px;
-	width: 940px;
+	width: 960px;
 	background: #fff;
-	padding: 0 20px 20px 20px;
+	//padding: 0 20px 20px 20px;
 }
 
 .vista-pmsite-content {
     margin: 0 auto;
     margin-bottom:0;
-	width: 940px;
+	//width: 960px;
 	/* anti-space trick */
 	font-size:0;
 }
@@ -35,7 +35,8 @@
 	background-color: #fff;
     background-repeat: no-repeat;
     height: 408px;
-    width: 940px;
+    width: 920px;
+    margin-left: 20px;
     padding: 0 0 30px;
 }
 
@@ -102,7 +103,6 @@
 	background: #fff;
 	font-size:13px;
 	width: 100%;
-//	padding: 0 20px;
 }
 
 .vista-pmsite-sidebarWrap {
@@ -119,14 +119,16 @@
 	display:inline-block;
 	min-width:300px;
 	min-height:380px;
+	margin-left: 20px;
 }
 
 .vista-pmsite-main {
-	width: 622px;
+	width: 602px;
 	float: right;
 	position: relative;
 	background: ${bgC0lor_100};
 	display:inline-block;
+	margin-right: 20px;
 }
 
 .testimBox {
@@ -142,7 +144,7 @@
 .testimBox .infobox_body {
 	border-top: 5px solid #000000;
 	padding-top: 12px;
-	width: 622px;
+	width: 612px;
 }
 
 .testimBox .infobox_decor {
@@ -168,7 +170,7 @@
 
 .testimBox .infobox_content {
 	//float: right;
-	width: 265px;
+	width: 255px;
 	height: 140px;
 	padding: 20px;
 	background: #CCCCCC;
@@ -198,7 +200,6 @@
 .newsBox {
 	width: 300px;
 	display: inline-block;
-//	min-height: 520px;
 	float: right;
 	background: #fff;
 }
@@ -248,7 +249,6 @@
 
 .infobox_header .read_more {
 	color: #fff;
-//	display: block;
 	background: #000000;
 	font-size: 12px;
 	width: 50px;
@@ -257,13 +257,11 @@
 	bottom: -210px;
 	float: right;
 	text-decoration:none;
-	//margin-right: 22px;
 	z-index: 1;
 }
 
 .infobox_header {
 	background: #fff;
-//	padding: 0 0 0 20px;
 	border-top: 1px solid #000000;
 }
 
@@ -281,13 +279,13 @@
 
 .promoBox {
 	height:340px;
-	float: right;
+	float: left;
 	overflow:hidden;
-	width: 622px;
+	width: 100%;
 }
 
 .promoBox .infobox_content {
-	width: 204px;
+	width: 197px;
 	height:300px;
 	float:left;
 	border-top: 5px solid #000000;
@@ -308,13 +306,12 @@
 }
 
 .promoBox .picture {
-	//width:205px;
-	height: 205px;
+	//width:190px;
+	height: 200px;
 	background:#fff;
 }
 
 .promoBox a .picture {
-//	border:1px solid ${contrast1_100};
 }
 
 .promoBox a:hover + .address {
