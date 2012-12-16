@@ -177,6 +177,11 @@ select {
     padding-top: 7px;
 }
 
+.navigation .active span {
+	border-top: 4px solid #000;
+	padding-top: 7px;
+}
+
 .navigation span:lang(fr) {
 	font-size: 16px;
 	margin-left: 15px;
@@ -191,14 +196,6 @@ select {
 
 .navigation a:hover {
 	color: ${contrast1_100};
-}
-
-.navigation .active a {
-	color: ${contrast1_10};
-	background-color: ${contrast1_100};
-}
-
-.navigation .active a:hover {
 }
 
 /*
