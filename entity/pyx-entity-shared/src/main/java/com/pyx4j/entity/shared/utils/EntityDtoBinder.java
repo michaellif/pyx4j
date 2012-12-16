@@ -287,12 +287,12 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
             IObject dboM = dbo.getMember(b.dboMemberPath);
             if (b.binder == null) {
                 if (dtoM instanceof ICollection) {
-                    if (EntityGraph.update((ICollection<IEntity, ?>) dtoM, (ICollection<IEntity, ?>) dboM, processed)) {
+                    if (EntityGraph.update((ICollection<IEntity, ?>) dboM, (ICollection<IEntity, ?>) dtoM, processed)) {
                         onUpdateDBOmember(dto, dbo, dboM);
                         updated = true;
                     }
                 } else if (dtoM instanceof IEntity) {
-                    if (EntityGraph.update((IEntity) dtoM, (IEntity) dboM, processed)) {
+                    if (EntityGraph.update((IEntity) dboM, (IEntity) dtoM, processed)) {
                         onUpdateDBOmember(dto, dbo, dboM);
                         updated = true;
                     }

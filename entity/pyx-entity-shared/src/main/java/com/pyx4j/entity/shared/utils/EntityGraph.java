@@ -297,11 +297,36 @@ public class EntityGraph {
         }
     }
 
-    public static <D extends IEntity, S extends D> boolean update(S src, D dst) {
-        return update(src, dst, new HashSet<IEntity>());
+    /**
+     * Set value only if the value is different
+     * 
+     * @param valueMemeber
+     * @param value
+     * @return true if the value is changed
+     */
+    public static <S extends Serializable> boolean updateMember(IPrimitive<S> valueMember, S value) {
+        if (!EqualsHelper.equals(valueMember.getValue(), value)) {
+            valueMember.setValue(value);
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public static boolean updateMembers(IEntity src, IEntity dst, IPrimitive<?>... protoValues) {
+    public static <D extends IEntity, S extends D> boolean updateMember(D dst, S src) {
+        if (src.getValue() != dst.getValue()) {
+            dst.set(src);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static <D extends IEntity, S extends D> boolean update(D dst, S src) {
+        return update(dst, src, new HashSet<IEntity>());
+    }
+
+    public static boolean updateMembers(IEntity dst, IEntity src, IPrimitive<?>... protoValues) {
         boolean updated = false;
         for (IPrimitive<?> member : protoValues) {
             if (!src.getMember(member.getFieldName()).equals(dst.getMember(member.getFieldName()))) {
@@ -313,7 +338,7 @@ public class EntityGraph {
     }
 
     @SuppressWarnings("unchecked")
-    public static boolean update(IEntity src, IEntity dst, Set<IEntity> processed) {
+    public static boolean update(IEntity dst, IEntity src, Set<IEntity> processed) {
         if ((src == dst) || (processed.contains(src))) {
             return false;
         } else if ((!src.getInstanceValueClass().equals(dst.getInstanceValueClass()))) {
@@ -337,19 +362,19 @@ public class EntityGraph {
                 if (entDstMember.isNull() && entDstMember.isNull()) {
                     continue;
                 } else if (memberMeta.isOwnedRelationships()) {
-                    updated |= update(entSrcMember, entDstMember, processed);
+                    updated |= update(entDstMember, entSrcMember, processed);
                 } else {
-                    if (update(entSrcMember, entDstMember, processed)) {
+                    if (update(entDstMember, entSrcMember, processed)) {
                         entDstMember.setPrimaryKey(entSrcMember.getPrimaryKey());
                         updated = true;
                     }
                 }
                 break;
             case EntitySet:
-                updated |= update((ISet<IEntity>) src.getMember(memberName), (ISet<IEntity>) dst.getMember(memberName), processed);
+                updated |= update((ISet<IEntity>) dst.getMember(memberName), (ISet<IEntity>) src.getMember(memberName), processed);
                 break;
             case EntityList:
-                updated |= update((IList<IEntity>) src.getMember(memberName), (IList<IEntity>) dst.getMember(memberName), processed);
+                updated |= update((IList<IEntity>) dst.getMember(memberName), (IList<IEntity>) src.getMember(memberName), processed);
             default:
                 if (memberName.equals(IEntity.PRIMARY_KEY)) {
                     if ((src.getPrimaryKey() != null) && !EqualsHelper.classEquals(src.getPrimaryKey(), dst.getPrimaryKey())) {
@@ -365,7 +390,7 @@ public class EntityGraph {
         return updated;
     }
 
-    public static boolean update(ICollection<IEntity, ?> src, ICollection<IEntity, ?> dst, Set<IEntity> processed) {
+    public static boolean update(ICollection<IEntity, ?> dst, ICollection<IEntity, ?> src, Set<IEntity> processed) {
         boolean updated = false;
         for (IEntity srcItem : (ICollection<IEntity, ?>) src) {
             //find
@@ -373,7 +398,7 @@ public class EntityGraph {
             for (IEntity dstItem : dst) {
                 if (srcItem.equals(dstItem) || srcItem.businessEquals(dstItem)) {
                     found = true;
-                    updated |= update(srcItem, dstItem, processed);
+                    updated |= update(dstItem, srcItem, processed);
                     break;
                 }
             }

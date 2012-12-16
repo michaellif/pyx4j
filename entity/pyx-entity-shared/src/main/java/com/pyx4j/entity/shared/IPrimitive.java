@@ -38,4 +38,7 @@ public interface IPrimitive<TYPE extends Serializable> extends IObject<TYPE>, Co
 
     public TYPE getValue(TYPE defaultValueIfNull);
 
+    // TODO suggestions. See EntityGraph.updateMember
+    //boolean  update(TYPE value);
+
 }
