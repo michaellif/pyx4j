@@ -143,7 +143,7 @@ select {
 .navigation {
 	height: 60px;
 	position: absolute;
-	top: 65%;
+	top: 68%;
 	width: 100%;
     /*background: ${object1_100}*/
 }

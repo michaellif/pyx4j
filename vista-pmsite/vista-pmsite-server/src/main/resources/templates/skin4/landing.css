@@ -14,6 +14,12 @@
 }
 
 .infobox_body {
+	overflow:hidden;
+}
+
+.infobox_body .selectField{
+    float: left;
+    padding-bottom: 10px;
 }
 
 .banner {
@@ -46,8 +52,9 @@
       margin-bottom: 1em;
       background: #999999;
       border-top: 5px solid #000000;
-      padding-bottom: 12px;
+      padding-top: 10px;
 }
+
 .quickSearchPanel h3 {
 	color: #555555;
 	font-size: 16px;
@@ -66,7 +73,7 @@
 
 .quickSearchPanel select {
 	color: #999999;
-	width: 272px;
+	width: 128px;
 	margin-bottom: 15px;
 	border: 1px solid #000000;
 	margin: 0 0 6px 14px;
@@ -135,17 +142,16 @@
 .testimBox .infobox_body {
 	border-top: 5px solid #000000;
 	padding-top: 12px;
-	display: inline-block;
 	width: 622px;
 }
 
 .testimBox .infobox_decor {
-//	position: relative ;
-//	top: 10px;
-	display:inline-block;
+	float: right;
+	width: 305px;
+}
+
+.testimBox .infobox_decor:first-child {
 	float: left;
-	width: 290px;
-	margin-right: 20px;
 }
 
 .testimBox .callout_line {
@@ -161,10 +167,9 @@
 }
 
 .testimBox .infobox_content {
-	width: 250px;
+	//float: right;
+	width: 265px;
 	height: 140px;
-//	overflow: hidden;
-	margin-right:20pxs;
 	padding: 20px;
 	background: #CCCCCC;
 	font-family: monospace;
@@ -251,7 +256,9 @@
 	position: relative;
 	bottom: -210px;
 	float: right;
-	margin-right: 22px;
+	text-decoration:none;
+	//margin-right: 22px;
+	z-index: 1;
 }
 
 .infobox_header {
@@ -292,6 +299,7 @@
 }
 
 .address {
+	display: inline-block;
 	margin: 12px 0;
 }
 
@@ -300,7 +308,7 @@
 }
 
 .promoBox .picture {
-//	width:205px;
+	//width:205px;
 	height: 205px;
 	background:#fff;
 }
@@ -309,8 +317,8 @@
 //	border:1px solid ${contrast1_100};
 }
 
-.promoBox a:hover .picture {
-	border:1px solid ${contrast2_100};
+.promoBox a:hover + .address {
+	border-bottom: 3px solid #000000;
 }
 
 .wideGadgetBox {
