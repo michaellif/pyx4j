@@ -29,11 +29,12 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.IHistoricVersioning;
 import com.propertyvista.domain.financial.offering.Service.ServiceV;
 
 @ToStringFormat("{1}, {0}")
 @DiscriminatorValue("service")
-public interface Service extends Product<ServiceV> {
+public interface Service extends Product<ServiceV>, IHistoricVersioning {
 
     @I18n
     @XmlType(name = "ServiceType")

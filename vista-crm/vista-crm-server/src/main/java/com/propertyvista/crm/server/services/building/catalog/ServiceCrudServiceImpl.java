@@ -19,7 +19,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
@@ -74,11 +73,9 @@ public class ServiceCrudServiceImpl extends AbstractCrudServiceImpl<Service> imp
 
     @Override
     protected void persist(Service entity, Service dto) {
-        boolean isApproveFinal = entity.saveAction().getValue() == SaveAction.saveAsFinal;
         super.persist(entity, dto);
-        if (isApproveFinal) {
-            // update unit market prices here:
-            ServerSideFactory.create(ProductCatalogFacade.class).updateUnitMarketPrice(entity);
-        }
+
+        // update unit market prices here:
+        ServerSideFactory.create(ProductCatalogFacade.class).updateUnitMarketPrice(entity);
     }
 }

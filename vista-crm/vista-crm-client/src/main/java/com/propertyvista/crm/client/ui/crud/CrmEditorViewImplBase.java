@@ -27,25 +27,42 @@ import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 import com.pyx4j.site.client.ui.crud.form.EditorViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.dialog.ConfirmDecline;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.components.AnchorButton;
+import com.propertyvista.domain.IHistoricVersioning;
 
 public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
 
     private static final I18n i18n = I18n.get(CrmEditorViewImplBase.class);
 
-    protected String defaultCaption;
+    protected final String defaultCaption;
 
-    protected Button btnApply;
+    protected final Button btnApply;
 
-    protected Button btnSave;
+    protected final Button btnSave;
+
+    protected final Button btnSaveAsNew;
 
     protected EditMode mode;
 
     public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         super();
+
+        btnSaveAsNew = new Button(i18n.tr("Create Version"), new ClickHandler() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onClick(ClickEvent event) {
+                if (!getForm().isValid()) {
+                    getForm().setUnconditionalValidationErrorRendering(true);
+                    showValidationDialog();
+                } else {
+                    getForm().setValue((E) VersionedEntityUtils.createNextVersion((IVersionedEntity<?>) getForm().getValue()));
+                    getPresenter().save();
+                }
+            }
+        });
+        addFooterToolbarItem(btnSaveAsNew);
+        btnSaveAsNew.setVisible(false); // set visibility in populate...
 
         btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
             @Override
@@ -54,25 +71,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
                     getForm().setUnconditionalValidationErrorRendering(true);
                     showValidationDialog();
                 } else {
-                    if (getForm().getValue().getPrimaryKey() == null) {
-                        getPresenter().save();
-                    } else if (getForm().getValue() instanceof IVersionedEntity) {
-                        MessageDialog.confirm(i18n.tr("Save"), i18n.tr("Save it as new version?"), new ConfirmDecline() {
-                            @SuppressWarnings("unchecked")
-                            @Override
-                            public void onConfirmed() {
-                                getForm().setValue((E) VersionedEntityUtils.createNextVersion((IVersionedEntity<?>) getForm().getValue()));
-                                getPresenter().save();
-                            }
-
-                            @Override
-                            public void onDeclined() {
-                                getPresenter().save();
-                            }
-                        });
-                    } else {
-                        getPresenter().save();
-                    }
+                    getPresenter().save();
                 }
             }
         });
@@ -125,6 +124,9 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     @Override
     public void populate(E value) {
         enableButtons(false);
+
+        btnSaveAsNew.setVisible(value instanceof IHistoricVersioning && value.getPrimaryKey() != null);
+
         if (EditMode.newItem.equals(mode)) {
             setCaption(defaultCaption + " " + i18n.tr("New Item..."));
             getForm().setActiveTab(0);
