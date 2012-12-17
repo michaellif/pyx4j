@@ -290,6 +290,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public int paymentSSHDPort() {
+        return 8822;
+    }
+
+    @Override
     public String openIdProviderDomain() {
         return "dev.birchwoodsoftwaregroup.com";
     }

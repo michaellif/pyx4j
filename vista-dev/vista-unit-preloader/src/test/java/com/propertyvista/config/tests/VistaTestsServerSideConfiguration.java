@@ -158,6 +158,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public int paymentSSHDPort() {
+        return 8822;
+    }
+
+    @Override
     public String openIdDomain() {
         return null;
     }

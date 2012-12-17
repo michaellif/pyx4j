@@ -7,6 +7,8 @@ Jetty:
    8881  Pyx Tests Server  TesterJettyLaunch
    8882  Wallboard Monitor
 
+   8822  SSHD Interface
+
 codeServerPort
    9994  vista-crm-client.launch
    9995  vista-admin-client.launch

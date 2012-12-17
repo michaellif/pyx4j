@@ -27,6 +27,11 @@ public class VistaServerSideConfiguration55 extends VistaServerSideConfiguration
     }
 
     @Override
+    public int paymentSSHDPort() {
+        return 8825;
+    }
+
+    @Override
     public String getApplicationURLNamespace() {
         return "-55.birchwoodsoftwaregroup.com/";
     }

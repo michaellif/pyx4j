@@ -13,18 +13,24 @@
  */
 package com.propertyvista.config;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
 import com.pyx4j.config.server.LifecycleListener;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
+import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.server.config.VistaFeaturesLifecycleListener;
 import com.propertyvista.shared.config.VistaSettings;
 
 public abstract class AbstractVistaServerSideConfiguration extends EssentialsServerSideConfiguration {
+
+    public File getConfigDirectory() {
+        return new File(new File(LoggerConfig.getContainerHome(), "conf"), LoggerConfig.getContextName());
+    }
 
     @Override
     public Collection<LifecycleListener> getLifecycleListeners() {
@@ -80,6 +86,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
     public abstract String getDefaultBaseURLvistaOnboarding();
 
     public abstract String getCaledonCompanyId();
+
+    public abstract int paymentSSHDPort();
 
     public boolean isGoogleAnalyticDisableForEmployee() {
         return false;
