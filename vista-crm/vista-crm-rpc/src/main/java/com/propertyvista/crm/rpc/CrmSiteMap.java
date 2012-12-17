@@ -15,7 +15,9 @@ package com.propertyvista.crm.rpc;
 
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
+import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SigningOutPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
@@ -276,6 +278,18 @@ public class CrmSiteMap implements SiteMap {
 
         public static class Edit extends CrmCrudAppPlace {
         }
+    }
+
+    @PlaceProperties(navigLabel = "Reports", caption = "Dashboard")
+    public static class Reports extends ReportsAppPlace {
+
+        public Reports(ReportMetadata m) {
+            super(m);
+        }
+
+        public Reports() {
+        }
+
     }
 
     public static class Dashboard extends AppPlace {

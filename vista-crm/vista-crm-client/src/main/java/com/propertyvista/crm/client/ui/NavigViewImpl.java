@@ -44,6 +44,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.NavigationIDs;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 
@@ -415,8 +416,8 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
     }
 
     private String getNavigLabel(AppPlace place) {
-        if (place instanceof CrmSiteMap.Report) {
-            return ((CrmSiteMap.Report) place).getName();
+        if (place instanceof ReportsAppPlace) {
+            return ((ReportsAppPlace) place).getReportMetadata().getEntityMeta().getCaption();
         } else if (place instanceof CrmSiteMap.Dashboard.View) {
             return ((CrmSiteMap.Dashboard.View) place).getName();
         }

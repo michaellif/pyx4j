@@ -198,6 +198,7 @@ import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsP
 import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsurancePolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsurancePolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsurancePolicyViewerActivity;
+import com.propertyvista.crm.client.activity.reports.CrmReportsActivity;
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckWizardActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -697,7 +698,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-// - Report/Dashboard-related:
+// - Dashboard-related:
                     } else if (crudPlace instanceof CrmSiteMap.Dashboard.Manage) {
                         switch (crudPlace.getType()) {
                         case editor:
@@ -1108,6 +1109,8 @@ public class MainActivityMapper implements AppActivityMapper {
                     // Dashboard related stuff again
                 } else if (place instanceof CrmSiteMap.Dashboard.View) {
                     activity = new DashboardActivity((CrmSiteMap.Dashboard.View) place);
+                } else if (place instanceof CrmSiteMap.Reports) {
+                    activity = new CrmReportsActivity((CrmSiteMap.Reports) place);
                 } else if (place instanceof Administration.Settings.CreditCheckSetup) {
                     activity = new CreditCheckWizardActivity((Administration.Settings.CreditCheckSetup) place);
                 } else if (place instanceof CrmSiteMap.PasswordChange) {
