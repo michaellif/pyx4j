@@ -31,6 +31,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.site.VistaSite;
@@ -56,7 +57,7 @@ public class OnboardingSite extends VistaSite {
     @Override
     public void onSiteLoad() {
         super.onSiteLoad();
-        getHistoryHandler().register(getPlaceController(), getEventBus(), new OnboardingSiteMap.Default());
+        getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
         StyleManger.installTheme(new OnboardingTheme(), new OnboardingPalette());
 
         createAndBindUI();

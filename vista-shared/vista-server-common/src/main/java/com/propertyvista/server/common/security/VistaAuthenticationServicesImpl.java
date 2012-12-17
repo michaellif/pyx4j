@@ -201,6 +201,10 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         } else {
             behaviors.addAll(getBehaviors(cr));
             behaviors.add(getApplicationBehavior());
+            // This is one time login, reset token
+            cr.accessKey().setValue(null);
+            Persistence.service().persist(cr);
+            Persistence.service().commit();
         }
         UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
         visit.setEmail(user.email().getValue());
