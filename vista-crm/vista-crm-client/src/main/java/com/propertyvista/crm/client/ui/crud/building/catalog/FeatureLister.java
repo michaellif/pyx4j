@@ -21,12 +21,12 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
-import com.propertyvista.common.client.ui.components.versioning.VersionedLister;
 import com.propertyvista.domain.financial.offering.Feature;
 
-public class FeatureLister extends VersionedLister<Feature> {
+public class FeatureLister extends ListerBase<Feature> {
 
     private final static I18n i18n = I18n.get(FeatureLister.class);
 

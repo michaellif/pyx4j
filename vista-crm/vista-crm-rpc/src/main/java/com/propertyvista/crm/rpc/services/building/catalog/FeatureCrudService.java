@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.rpc.services.building.catalog;
 
-import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.financial.offering.Feature;
 
-public interface FeatureCrudService extends AbstractVersionedCrudService<Feature> {
+public interface FeatureCrudService extends AbstractCrudService<Feature> {
 
 }

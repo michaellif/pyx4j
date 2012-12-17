@@ -32,12 +32,13 @@ import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.IHistoricVersioning;
 import com.propertyvista.domain.financial.offering.Product.ProductV;
 
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface Product<V extends ProductV<?>> extends IVersionedEntity<V> {
+public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, IHistoricVersioning {
 
     @Owner
     @NotNull

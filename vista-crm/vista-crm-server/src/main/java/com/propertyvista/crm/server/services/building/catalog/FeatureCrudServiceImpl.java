@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.server.services.building.catalog;
 
-import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.building.catalog.FeatureCrudService;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 
-public class FeatureCrudServiceImpl extends AbstractVersionedCrudServiceImpl<Feature> implements FeatureCrudService {
+public class FeatureCrudServiceImpl extends AbstractCrudServiceImpl<Feature> implements FeatureCrudService {
 
     public FeatureCrudServiceImpl() {
         super(Feature.class);
