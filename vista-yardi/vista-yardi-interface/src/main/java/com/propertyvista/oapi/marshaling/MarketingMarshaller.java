@@ -50,7 +50,7 @@ public class MarketingMarshaller implements Marshaller<Marketing, MarketingIO> {
     }
 
     @Override
-    public Marketing unmarshal(MarketingIO marketingIO) throws Exception {
+    public Marketing unmarshal(MarketingIO marketingIO) {
         Marketing marketing = EntityFactory.create(Marketing.class);
         marketing.name().setValue(marketingIO.name);
         MarshallerUtils.setValue(marketing.description(), marketingIO.description);

@@ -45,9 +45,15 @@ public class UnitPersistenceTest extends WSOapiTestBase {
 
         UnitIO unitIO = createUnit("1", propertyCode);
         AptUnit unit = UnitMarshaller.getInstance().unmarshal(unitIO);
+
+        System.out.println("++++++++++" + unit);
+
         new UnitPersister().persist(unit);
 
         unit = new UnitPersister().retrieve(unit);
+
+        System.out.println("++++++++++" + unit);
+
         UnitIO unitIO2 = UnitMarshaller.getInstance().marshal(unit);
 
         assertEquals(unitIO.number, unitIO2.number);

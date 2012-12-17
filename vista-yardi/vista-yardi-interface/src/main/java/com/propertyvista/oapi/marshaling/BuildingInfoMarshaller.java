@@ -45,7 +45,7 @@ public class BuildingInfoMarshaller implements Marshaller<BuildingInfo, Building
     }
 
     @Override
-    public BuildingInfo unmarshal(BuildingInfoIO buildingInfoIO) throws Exception {
+    public BuildingInfo unmarshal(BuildingInfoIO buildingInfoIO) {
         if (buildingInfoIO == null) {
             return null;
         }

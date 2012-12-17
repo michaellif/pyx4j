@@ -58,7 +58,7 @@ public class AddressMarshaller implements Marshaller<AddressStructured, AddressI
     }
 
     @Override
-    public AddressStructured unmarshal(AddressIO addressIO) throws Exception {
+    public AddressStructured unmarshal(AddressIO addressIO) {
         AddressStructured address = EntityFactory.create(AddressStructured.class);
 
         if (addressIO.country != null) {
