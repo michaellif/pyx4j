@@ -83,7 +83,6 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
             criteria = ReportCriteriaBuilder.build(UnitAvailabilityStatus.class, metadata.availbilityTableCriteria());
         } else {
             criteria = EntityQueryCriteria.create(UnitAvailabilityStatus.class);
-            ;
             if (!metadata.vacancyStatus().isEmpty()) {
                 criteria.add(PropertyCriterion.in(criteria.proto().vacancyStatus(), metadata.vacancyStatus()));
             } else {
