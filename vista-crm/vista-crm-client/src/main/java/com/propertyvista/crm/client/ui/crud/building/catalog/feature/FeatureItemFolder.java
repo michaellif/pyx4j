@@ -140,7 +140,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
             get(proto().isDefault()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
-                    if (event.getValue().booleanValue()) {
+                    if (event.getValue() != null && event.getValue().booleanValue()) {
                         for (int i = 0; i < FeatureItemFolder.this.getItemCount(); ++i) {
                             for (CComponent<?, ?> comp : FeatureItemFolder.this.getItem(i).getComponents()) {
                                 if (comp instanceof FeatureItemEditor && !comp.equals(FeatureItemEditor.this)) {
