@@ -58,9 +58,11 @@ body {
 }
 
 input,select,textarea {
-	color: ${background_100};
+//	color: ${background_100};
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
+	border: 1px solid #000000;
+	margin: 0 3px 0 0;
 }
 
 table {
@@ -84,7 +86,8 @@ a:hover {
 select {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
-	color: ${background_100};
+//	color: ${background_100};
+	color: #999999;
 }
 
 .header {
@@ -93,14 +96,14 @@ select {
 
 .main {
 	margin: 0px auto 0px;
-	width: 960px;
+	width: 980px;
 	background: #fff;
 	position:relative;
 	border-top: 6px solid #000000;
 }
 
 .header .main {
-	margin-top: 0 auto;
+	margin: 0 auto;
 	height: 130px;
 }
 
@@ -143,7 +146,7 @@ select {
 .navigation {
 	height: 60px;
 	position: absolute;
-	top: 68%;
+	top: 65%;
 	width: 100%;
     /*background: ${object1_100}*/
 }
@@ -177,11 +180,6 @@ select {
     padding-top: 7px;
 }
 
-.navigation .active span {
-	border-top: 4px solid #000;
-	padding-top: 7px;
-}
-
 .navigation span:lang(fr) {
 	font-size: 16px;
 	margin-left: 15px;
@@ -198,6 +196,14 @@ select {
 	color: ${contrast1_100};
 }
 
+.navigation .active a {
+	color: ${contrast1_10};
+//	background-color: ${contrast1_100};
+}
+
+.navigation .active a:hover {
+}
+
 /*
  * Footer
  */
@@ -208,10 +214,8 @@ select {
 
 #footer .main {
 	height:100%;
-	border-top: 1px solid #000000;
 }
 .footer_wrap {
-	padding: 0px 20px;
 }
 
 ul.footer_locations {
@@ -273,7 +277,6 @@ ul.footer_locations li {
 	margin-top:20px;
 //	text-align:center;
 	white-space: nowrap;
-	height: 0px;
 }
 
 .langItem {
@@ -354,17 +357,14 @@ ul.footer_locations li {
  */
 .vista-pmsite-main .caption {
 	background-size: 100% 100%;
-	background: ${object2_90};
-	height: 70px;
+	border-top: 1px solid #000000;
+//	background: ${object2_90};
+//	height: 70px;
 	overflow: hidden;
-	padding: 0 0 0 30px;
+//	padding: 0 0 0 30px;
 }
 
 .vista-pmsite-main .caption h1 {
-	font-size: 36px;
-	font-weight: normal;
-	line-height: 70px;
-	color: ${object2_10};
 }
 .caption2 {
 	height:60px;
@@ -392,9 +392,10 @@ ul.footer_locations li {
 }
 
 .vista-pmsite-sidebarWrap {
-		background-color:${object2_10};	
+	background-color:${object2_10};	
 }
 
 .vista-pmsite-main .content{
-		background-color:${object2_100};	
+	background-color:#fff;
+	border-top: 5px solid #000000;
 }
