@@ -17,8 +17,10 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface InsuranceTenantSureDetails extends IEntity {
@@ -39,7 +41,7 @@ public interface InsuranceTenantSureDetails extends IEntity {
 
     IPrimitive<BigDecimal> underwriterFee();
 
-    // TODO 
-    IPrimitive<String> taxes();
+    @Owned
+    IList<InsuranceTenantSureTax> taxes();
 
 }

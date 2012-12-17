@@ -36,6 +36,7 @@ import com.cfcprograms.api.CFCAPI;
 import com.cfcprograms.api.CFCAPISoap;
 import com.cfcprograms.api.ObjectFactory;
 import com.cfcprograms.api.OptionQuote;
+import com.cfcprograms.api.OutputTax;
 import com.cfcprograms.api.Result;
 import com.cfcprograms.api.SimpleClient;
 import com.cfcprograms.api.SimpleClientResponse;
@@ -48,6 +49,7 @@ import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureC
 import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureTenantAdapter;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTax;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
@@ -152,8 +154,16 @@ public class CfcApiClient implements ICfcApiClient {
 
         tenantSureQuote.grossPremium().setValue(new BigDecimal(quoteResponse.getGrossPremium()));
         tenantSureQuote.underwriterFee().setValue(new BigDecimal(quoteResponse.getFee()));
-        // TODO deal with taxes
+
+        for (OutputTax tax : quoteResponse.getQuoteData().getApplicableTaxes().getOutputTax()) {
+            InsuranceTenantSureTax tenantSureTax = EntityFactory.create(InsuranceTenantSureTax.class);
+            tenantSureTax.absoluteAmount().setValue(tax.getAbsoluteAmount());
+            tenantSureTax.description().setValue(tax.getDescription());
+            tenantSureTax.buinessLine().setValue(tax.getBusinessLine());
+            tenantSureQuote.taxBreakdown().add(tenantSureTax);
+        }
         tenantSureQuote.totalMonthlyPayable().setValue(new BigDecimal(quoteResponse.getTotalPayable()));
+
         tenantSureQuote.coverage().set(coverageRequest.duplicate(TenantSureCoverageDTO.class));
         return tenantSureQuote;
     }

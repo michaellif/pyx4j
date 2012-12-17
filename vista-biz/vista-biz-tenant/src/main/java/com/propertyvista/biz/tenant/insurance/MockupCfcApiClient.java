@@ -22,6 +22,7 @@ import org.apache.commons.lang.RandomStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTax;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
@@ -47,6 +48,19 @@ public class MockupCfcApiClient implements ICfcApiClient {
         quote.totalMonthlyPayable().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
         quote.quoteId().setValue("MockupTSQuote-" + RandomStringUtils.randomAlphanumeric(10));
         quote.coverage().set(coverageRequest.duplicate(TenantSureCoverageDTO.class));
+
+        InsuranceTenantSureTax taxMpt = EntityFactory.create(InsuranceTenantSureTax.class);
+        taxMpt.absoluteAmount().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
+        taxMpt.description().setValue("MPT");
+        taxMpt.buinessLine().setValue("buiness line");
+        quote.taxBreakdown().add(taxMpt);
+
+        InsuranceTenantSureTax taxMft = EntityFactory.create(InsuranceTenantSureTax.class);
+        taxMft.absoluteAmount().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
+        taxMft.description().setValue("MFT");
+        taxMft.buinessLine().setValue("buiness line");
+        quote.taxBreakdown().add(taxMft);
+
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {

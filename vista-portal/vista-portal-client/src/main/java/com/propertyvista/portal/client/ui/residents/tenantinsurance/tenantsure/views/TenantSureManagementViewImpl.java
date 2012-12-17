@@ -203,7 +203,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     }
 
     private void onMakeAClaim() {
-        MessageDialog.info(i18n.tr("To make a claim please call contact {0} at {1}", TenantSureConstants.TENANTSURE_LEGAL_NAME,
+        MessageDialog.info(i18n.tr("To make a claim please call {0} at {1}", TenantSureConstants.TENANTSURE_LEGAL_NAME,
                 TenantSureConstants.TENANTSURE_PHONE_NUMBER));
     }
 

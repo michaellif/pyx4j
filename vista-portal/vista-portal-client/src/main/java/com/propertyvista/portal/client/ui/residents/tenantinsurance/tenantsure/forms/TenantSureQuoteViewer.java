@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.theme.BillingTheme;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePremiumTaxDTO;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTax;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
 public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
@@ -37,8 +37,8 @@ public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
                 int row = 0;
                 addDetailRecord(contentPanel, ++row, quote.grossPremium().getMeta().getCaption(), quote.grossPremium().getStringView());
                 addDetailRecord(contentPanel, ++row, quote.underwriterFee().getMeta().getCaption(), quote.underwriterFee().getStringView());
-                for (TenantSurePremiumTaxDTO tax : quote.taxBreakdown()) {
-                    addDetailRecord(contentPanel, ++row, tax.taxName().getValue(), tax.absoluteAmount().getStringView());
+                for (InsuranceTenantSureTax tax : quote.taxBreakdown()) {
+                    addDetailRecord(contentPanel, ++row, tax.description().getValue(), tax.absoluteAmount().getStringView());
                 }
                 addTotalRecord(contentPanel, ++row, quote.totalMonthlyPayable().getMeta().getCaption(), quote.totalMonthlyPayable().getStringView());
             } else {
@@ -72,7 +72,6 @@ public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
         table.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailTotal.name());
         table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailTotalTitle.name());
         table.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingDetailTotalAmount.name());
-
     }
 
 }

@@ -38,6 +38,7 @@ import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.CancellationType;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.Status;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTax;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -110,7 +111,9 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         insuranceTenantSure.details().deductible().setValue(quote.coverage().deductible().getValue());
         insuranceTenantSure.details().grossPremium().setValue(quote.grossPremium().getValue());
         insuranceTenantSure.details().underwriterFee().setValue(quote.underwriterFee().getValue());
-        // TODO fill details with taxes: "ts.details().taxes().setAll(BLA_BLA_BLA)"
+        for (InsuranceTenantSureTax tax : quote.taxBreakdown()) {
+            insuranceTenantSure.details().taxes().add(tax);
+        }
 
         Persistence.service().persist(insuranceTenantSure);
 
@@ -229,7 +232,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
         status.quote().grossPremium().setValue(insuranceTenantSure.details().grossPremium().getValue());
         status.quote().underwriterFee().setValue(insuranceTenantSure.details().underwriterFee().getValue());
-        // TODO add taxes        
+        status.quote().taxBreakdown().addAll(insuranceTenantSure.details().taxes());
         status.quote().totalMonthlyPayable().setValue(insuranceTenantSure.monthlyPayable().getValue());
 
         status.expiryDate().setValue(insuranceTenantSure.insuranceCertificate().expiryDate().getValue());
