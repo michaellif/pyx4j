@@ -35,6 +35,7 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
     @ServiceExecution(waitCaption = "Saving...")
     public void finish(AsyncCallback<VoidSerializable> callback, CreditCheckWizardDTO editableEntity) {
         System.out.println("++++++++save");
+        callback.onSuccess(null);
     }
 
 }
