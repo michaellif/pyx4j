@@ -321,6 +321,12 @@
             </dependency>
 
             <dependency>
+                <groupId>com.jcraft</groupId>
+                <artifactId>jsch</artifactId>
+                <version>0.1.49</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.hsqldb</groupId>
                 <artifactId>hsqldb</artifactId>
                 <version>2.2.8</version>
@@ -373,17 +379,17 @@
                 <version>2.2.7</version>
             </dependency>
 
-						<dependency>
-						    <groupId>com.sun.jersey.jersey-test-framework</groupId>
-						    <artifactId>jersey-test-framework-core</artifactId>
-						    <version>1.14</version>
-						</dependency>
+			<dependency>
+			    <groupId>com.sun.jersey.jersey-test-framework</groupId>
+			    <artifactId>jersey-test-framework-core</artifactId>
+			    <version>1.14</version>
+			</dependency>
 
-						<dependency>
-						    <groupId>com.sun.jersey.jersey-test-framework</groupId>
-						    <artifactId>jersey-test-framework-http</artifactId>
-						    <version>1.14</version>
-						</dependency>
+			<dependency>
+			    <groupId>com.sun.jersey.jersey-test-framework</groupId>
+			    <artifactId>jersey-test-framework-http</artifactId>
+			    <version>1.14</version>
+			</dependency>
 
         </dependencies>
     </dependencyManagement>
