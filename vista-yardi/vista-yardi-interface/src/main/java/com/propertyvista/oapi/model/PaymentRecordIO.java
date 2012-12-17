@@ -36,4 +36,14 @@ public class PaymentRecordIO extends AbstractElementIO {
     public BigDecimalIO amount;
 
     public StringIO paymentType;
+
+    @Override
+    public boolean equals(Object obj) {
+        return transactionId == ((PaymentRecordIO) obj).transactionId;
+    }
+
+    @Override
+    public int hashCode() {
+        return transactionId.hashCode();
+    }
 }

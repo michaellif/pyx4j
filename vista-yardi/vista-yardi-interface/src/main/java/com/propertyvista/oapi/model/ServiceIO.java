@@ -39,4 +39,14 @@ public class ServiceIO extends AbstractElementIO {
         this.description = description;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return (chargeCode == ((ServiceIO) obj).chargeCode && leaseId == ((ServiceIO) obj).leaseId);
+    }
+
+    @Override
+    public int hashCode() {
+        return (chargeCode + " " + leaseId).hashCode();
+    }
+
 }

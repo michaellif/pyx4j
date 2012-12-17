@@ -52,4 +52,13 @@ public class LeaseIO extends AbstractElementIO {
         this.leaseId = leaseId;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return (propertyCode == ((LeaseIO) obj).propertyCode && unitNumber == ((LeaseIO) obj).unitNumber && leaseId == ((LeaseIO) obj).leaseId);
+    }
+
+    @Override
+    public int hashCode() {
+        return (propertyCode + " " + unitNumber + " " + leaseId).hashCode();
+    }
 }

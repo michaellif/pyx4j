@@ -28,9 +28,21 @@ public class MarketingIO extends AbstractElementIO {
     @XmlAttribute
     public String name;
 
+    public String newName;
+
     public StringIO description;
 
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "blurb", type = AdvertisingBlurbIO.class))
     public List<AdvertisingBlurbIO> blurbs = new ArrayList<AdvertisingBlurbIO>();
+
+    @Override
+    public boolean equals(Object obj) {
+        return name == ((MarketingIO) obj).name;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 }

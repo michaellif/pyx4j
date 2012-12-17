@@ -36,11 +36,11 @@ public class TenantIO extends AbstractElementIO {
     @XmlAttribute
     public String lastName;
 
-    public StringIO newFirstName;
+    public String newFirstName;
 
-    public StringIO newLastName;
+    public String newMiddleName;
 
-    public StringIO newMiddleName;
+    public String newLastName;
 
     public LogicalDateIO birthDate;
 
@@ -56,6 +56,16 @@ public class TenantIO extends AbstractElementIO {
     public TenantIO(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (firstName == ((TenantIO) obj).firstName && lastName == ((TenantIO) obj).lastName && middleName == ((TenantIO) obj).middleName);
+    }
+
+    @Override
+    public int hashCode() {
+        return (firstName + " " + middleName + " " + lastName).hashCode();
     }
 
 }

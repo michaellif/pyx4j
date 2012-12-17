@@ -33,4 +33,14 @@ public class ParkingIO extends AbstractElementIO {
 
     public DoubleIO levels;
 
+    @Override
+    public boolean equals(Object obj) {
+        return name == ((ParkingIO) obj).name;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
 }

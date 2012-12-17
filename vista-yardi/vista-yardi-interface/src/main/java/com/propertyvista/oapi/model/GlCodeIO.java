@@ -27,4 +27,14 @@ public class GlCodeIO extends AbstractElementIO {
 
     public GlCodeCategoryIO glCodeCategory;
 
+    @Override
+    public boolean equals(Object obj) {
+        return codeId == ((GlCodeIO) obj).codeId;
+    }
+
+    @Override
+    public int hashCode() {
+        return codeId.hashCode();
+    }
+
 }

@@ -70,4 +70,14 @@ public class BuildingIO extends AbstractElementIO {
         this.propertyCode = propertyCode;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return propertyCode == ((BuildingIO) obj).propertyCode;
+    }
+
+    @Override
+    public int hashCode() {
+        return propertyCode.hashCode();
+    }
+
 }

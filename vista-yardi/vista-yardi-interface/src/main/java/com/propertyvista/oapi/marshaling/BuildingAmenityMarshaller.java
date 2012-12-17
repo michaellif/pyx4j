@@ -44,7 +44,7 @@ public class BuildingAmenityMarshaller implements Marshaller<BuildingAmenity, Bu
         }
         BuildingAmenityIO amenityIO = new BuildingAmenityIO();
 
-        amenityIO.name = MarshallerUtils.createIo(StringIO.class, amenity.name());
+        amenityIO.name = MarshallerUtils.getValue(amenity.name());
         amenityIO.description = MarshallerUtils.createIo(StringIO.class, amenity.description());
         amenityIO.type = MarshallerUtils.createIo(BuildingAmenityTypeIO.class, amenity.type());
         return amenityIO;
@@ -61,7 +61,7 @@ public class BuildingAmenityMarshaller implements Marshaller<BuildingAmenity, Bu
     @Override
     public BuildingAmenity unmarshal(BuildingAmenityIO amenityIO) {
         BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
-        MarshallerUtils.setValue(amenity.name(), amenityIO.name);
+        amenity.name().setValue(amenityIO.name);
         MarshallerUtils.setValue(amenity.description(), amenityIO.description);
         MarshallerUtils.setValue(amenity.type(), amenityIO.type);
         return amenity;

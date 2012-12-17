@@ -19,10 +19,22 @@ import com.propertyvista.oapi.xml.StringIO;
 
 public class BuildingAmenityIO extends AbstractElementIO {
 
+    public String name;
+
+    public String newName;
+
     public BuildingAmenityTypeIO type;
 
-    public StringIO name;
-
     public StringIO description;
+
+    @Override
+    public boolean equals(Object obj) {
+        return name == ((BuildingAmenityIO) obj).name;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 
 }

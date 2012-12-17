@@ -29,4 +29,14 @@ public class ContactIO extends AbstractElementIO {
 
     public StringIO phone;
 
+    @Override
+    public boolean equals(Object obj) {
+        return name == ((ContactIO) obj).name;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
 }

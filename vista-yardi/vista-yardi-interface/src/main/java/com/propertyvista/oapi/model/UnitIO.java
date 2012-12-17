@@ -38,4 +38,14 @@ public class UnitIO extends AbstractElementIO {
 
     public IntegerIO baths;
 
+    @Override
+    public boolean equals(Object obj) {
+        return (propertyCode == ((UnitIO) obj).propertyCode && number == ((UnitIO) obj).number);
+    }
+
+    @Override
+    public int hashCode() {
+        return (propertyCode + " " + number).hashCode();
+    }
+
 }

@@ -89,18 +89,20 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
 
         // amenities
         for (int i = 0; i < buildingIO.amenities.size(); i++) {
+            assertEquals(buildingIO.amenities.get(i).name, buildingIO2.amenities.get(i).name);
             assertEquals(buildingIO.amenities.get(i).description.getValue(), buildingIO2.amenities.get(i).description.getValue());
-            assertEquals(buildingIO.amenities.get(i).name.getValue(), buildingIO2.amenities.get(i).name.getValue());
             assertEquals(buildingIO.amenities.get(i).type.getValue(), buildingIO2.amenities.get(i).type.getValue());
         }
 
         // parkings
-//        for (int i = 0; i < buildingIO.parkings.size(); i++) {
-//            assertEquals(buildingIO.parkings.get(i).name, buildingIO2.parkings.get(i).name);
-//            assertEquals(buildingIO.parkings.get(i).description.getValue(), buildingIO2.parkings.get(i).description.getValue());
-//            assertEquals(buildingIO.parkings.get(i).levels.getValue(), buildingIO2.parkings.get(i).levels.getValue());
-//            assertEquals(buildingIO.parkings.get(i).type.getValue(), buildingIO2.parkings.get(i).type.getValue());
-//        }
+        for (int i = 0; i < buildingIO.parkings.size(); i++) {
+            ParkingIO parking = buildingIO2.parkings.get(buildingIO2.parkings.indexOf(buildingIO.parkings.get(i)));
+            assertEquals(buildingIO.parkings.get(i).name, parking.name);
+            assertEquals(buildingIO.parkings.get(i).description.getValue(), parking.description.getValue());
+            assertEquals(buildingIO.parkings.get(i).levels.getValue(), parking.levels.getValue());
+            assertEquals(buildingIO.parkings.get(i).type.getValue(), parking.type.getValue());
+
+        }
 
         // contacts
         for (int i = 0; i < buildingIO.contacts.size(); i++) {
@@ -164,12 +166,12 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
         // amenities
         BuildingAmenityIO amenity1 = new BuildingAmenityIO();
         amenity1.description = new StringIO("amenity description");
-        amenity1.name = new StringIO("amenity name");
+        amenity1.name = "amenity name";
         amenity1.type = new BuildingAmenityTypeIO(BuildingAmenity.Type.elevator);
 
         BuildingAmenityIO amenity2 = new BuildingAmenityIO();
         amenity2.description = new StringIO("amenity description 2");
-        amenity2.name = new StringIO("amenity name 2");
+        amenity2.name = "amenity name 2";
         amenity2.type = new BuildingAmenityTypeIO(BuildingAmenity.Type.businessCenter);
 
         // utilities

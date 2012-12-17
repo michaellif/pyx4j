@@ -16,6 +16,7 @@ package com.propertyvista.oapi.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
@@ -29,7 +30,10 @@ import com.propertyvista.oapi.xml.StringIO;
 public class FloorplanIO extends AbstractElementIO {
 
     //mandatory for portal
-    public StringIO name;
+    @XmlAttribute
+    public String name;
+
+    public String newName;
 
     //mandatory for portal
     public StringIO marketingName;
@@ -67,5 +71,15 @@ public class FloorplanIO extends AbstractElementIO {
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "media", type = MediaIO.class))
     public List<MediaIO> medias = new ArrayList<MediaIO>();
+
+    @Override
+    public boolean equals(Object obj) {
+        return name == ((FloorplanIO) obj).name;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 
 }

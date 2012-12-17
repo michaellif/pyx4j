@@ -13,16 +13,30 @@
  */
 package com.propertyvista.oapi.model;
 
+import javax.xml.bind.annotation.XmlAttribute;
+
 import com.propertyvista.oapi.model.types.FloorplanAmenityTypeIO;
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class FloorplanAmenityIO extends AbstractElementIO {
 
-    public FloorplanAmenityTypeIO type;
+    @XmlAttribute
+    public String name;
 
-    public StringIO name;
+    public String newName;
+
+    public FloorplanAmenityTypeIO type;
 
     public StringIO description;
 
+    @Override
+    public boolean equals(Object obj) {
+        return name == ((FloorplanAmenityIO) obj).name;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 }

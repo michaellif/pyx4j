@@ -23,6 +23,18 @@ public class PhoneIO extends AbstractElementIO {
     @XmlAttribute
     public String number;
 
+    public String newNumber;
+
     public StringIO description;
+
+    @Override
+    public boolean equals(Object obj) {
+        return number == ((PhoneIO) obj).number;
+    }
+
+    @Override
+    public int hashCode() {
+        return number.hashCode();
+    }
 
 }
