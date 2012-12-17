@@ -30,7 +30,7 @@ class SSHDPasswordAuthenticator implements PasswordAuthenticator {
 
     SSHDPasswordAuthenticator() {
         credentials = CredentialsFileStorage.getCredentials(new File(((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance())
-                .getConfigDirectory(), "sftp-paymen-credentials.properties"));
+                .getConfigDirectory(), "sftp-payment-credentials.properties"));
     }
 
     @Override
