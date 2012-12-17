@@ -7,44 +7,51 @@
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
-	border-left: solid 1px ${object2_20};
-	border-right: solid 1px ${object2_20};
-	background: ${object2_10};
+	background: white;
+}
+
+.vista-pmsite-legalPage .vista-pmsite-content{
+	margin: 0px 80px;
 }
 
 .vista-pmsite-legalPage .caption {
-	background-size: 100% 100%;
-	background: ${object2_90};
-	height: 70px;
+	//background-size: 100% 100%;
+	background: white;
+	border-top: 1px solid #000;
+	height: 30px;
 	overflow: hidden;
-	padding: 0 0 0 30px;
+	padding: 5px 0px;
 }
 
 .vista-pmsite-legalPage .caption h1 {
-	font-size: 36px;
-	font-weight: normal;
-	line-height: 70px;
-	color: ${object2_10};
+	font-family: monospace;
+    font-size: 14pt;
+    font-weight: normal;
+	color: black;
 }
 
 .vista-pmsite-legalPage .legalFormWrap {
+	//margin: 0px 80px;
+	border-top: 5px solid #000;	
 }
 
 .vista-pmsite-legalPage .legalContent {
 	height:500px;
 	padding:20px 80px;
 	overflow:auto;
-	color: ${foreground_100};
-	background-color:${object2_100};	
+	color: white;
+	background-color: #999999;
 	line-height: 20px;
 }
 .vista-pmsite-legalPage .acceptForm {
-	padding:20px 80px;
+	top: 0;
+	padding:20px 0px;
 }
+
 .vista-pmsite-legalPage .legalFormWrap input[type=submit] {
-	background: ${object1_100};
-	border: 2px solid ${object1_100};
-	color: ${object1_10};
+	background: #999999;
+	//border: 2px solid ${object1_100};
+	color: white;
 	cursor: pointer;
 	font-size: 16px;
 	text-transform: uppercase;

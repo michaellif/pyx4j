@@ -7,8 +7,6 @@
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
-	//border-left: solid 1px ${object2_20};
-	//border-right: solid 1px ${object2_20};
 	background: white;
 }
 
@@ -19,7 +17,7 @@
 	height: 30px;
 	overflow: hidden;
 	//padding: 0 0 0 30px;
-	padding: 10px 0px;
+	padding: 5px 0px;
 	margin: 0px 20px;
 }
 
