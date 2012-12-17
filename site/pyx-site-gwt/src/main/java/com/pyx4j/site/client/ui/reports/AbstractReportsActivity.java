@@ -78,14 +78,6 @@ public abstract class AbstractReportsActivity extends AbstractActivity implement
         }, settings);
     }
 
-    protected ReportMetadata retrieveReportSettings(AppPlace place) {
-        if (place instanceof ReportsAppPlace) {
-            return ((ReportsAppPlace) place).getReportMetadata();
-        } else {
-            return null;
-        }
-    }
-
     @Override
     public void loadSettings(final String id) {
         reportsSettingsPersistenceService.load(new DefaultAsyncCallback<ReportMetadata>() {
@@ -146,5 +138,13 @@ public abstract class AbstractReportsActivity extends AbstractActivity implement
 
         }, (ReportMetadata) EntityFactory.getEntityPrototype(retrieveReportSettings(place).getInstanceValueClass()));
 
+    }
+
+    protected ReportMetadata retrieveReportSettings(AppPlace place) {
+        if (place instanceof ReportsAppPlace) {
+            return ((ReportsAppPlace) place).getReportMetadata();
+        } else {
+            return null;
+        }
     }
 }

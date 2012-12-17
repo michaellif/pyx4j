@@ -25,7 +25,7 @@ import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 @I18n(strategy = I18nStrategy.IgnoreAll)
-public abstract class ReportsAppPlace extends AppPlace {
+public class ReportsAppPlace extends AppPlace {
 
     private final ReportMetadata metadata;
 
