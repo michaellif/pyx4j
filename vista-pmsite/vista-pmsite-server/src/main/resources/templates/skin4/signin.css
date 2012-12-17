@@ -1,5 +1,5 @@
 .vista-pmsite-signInPage {
-    color: ${foreground_100};
+    //color: ${foreground_100};
     font-size: 16px;
 }
 
@@ -7,36 +7,43 @@
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
-	border-left: solid 1px ${object2_20};
-	border-right: solid 1px ${object2_20};
-	background: ${object2_10};
+	//border-left: solid 1px ${object2_20};
+	//border-right: solid 1px ${object2_20};
+	background: white;
 }
 
 .vista-pmsite-signInPage .vista-pmsite-content .caption {
-	background-size: 100% 100%;
-	background: ${object2_90};
-	height: 70px;
+	//background-size: 100% 100%;
+	background: white;
+	border-top: 1px solid #000;
+	height: 30px;
 	overflow: hidden;
-	padding: 0 0 0 30px;
+	//padding: 0 0 0 30px;
+	padding: 10px 0px;
+	margin: 0px 20px;
 }
 
 .vista-pmsite-signInPage .vista-pmsite-content .caption h1 {
-	font-size: 36px;
-	font-weight: normal;
-	line-height: 70px;
-	color: ${object2_10};
+	font-family: monospace;
+    font-size: 14pt;
+    font-weight: normal;
 }
 
 .vista-pmsite-signInPage .content {
 	min-height: 396px;
-	color: ${foreground_100};
+	//color: ${foreground_100};
 	line-height: 20px;
 	overflow: hidden;
-	padding: 30px 30px 0;
-	background-color:${object2_100};	
+	//padding: 30px 30px 0;
+	margin: 0px 20px;
+	background-color: white;
+	border-top: 5px solid #000;	
 }
-.vista-pmsite-signInPage .signInFormWrap {
+.vista-pmsite-signInPage #signInForm {
+	top: 0;
 	padding:20px;
+	width: 60%;
+	background: #999999;
 }
 
 .vista-pmsite-signInPage .signInFormWrap input[type=submit] {
@@ -51,7 +58,7 @@
 }
 
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput {
-	padding:20px 0 0 60px;
+	padding:20px 0 0 40px;
 }
 
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput label {
@@ -64,7 +71,7 @@
 }
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput .pwdreset {
 	float:right;
-	margin-right:370px;
+	margin-right:75px;
 	text-decoration:underline;
 }
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput.hint a {

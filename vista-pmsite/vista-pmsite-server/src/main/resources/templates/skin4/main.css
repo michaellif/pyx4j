@@ -208,8 +208,10 @@ select {
 
 #footer .main {
 	height:100%;
+	border-top: 1px solid #000000;
 }
 .footer_wrap {
+	padding: 0px 20px;
 }
 
 ul.footer_locations {
@@ -271,6 +273,7 @@ ul.footer_locations li {
 	margin-top:20px;
 //	text-align:center;
 	white-space: nowrap;
+	height: 0px;
 }
 
 .langItem {
