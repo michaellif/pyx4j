@@ -111,6 +111,15 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     }
 
     @Override
+    public int paymentSSHDPort() {
+        if (VistaTODO.codeBaseIsProdBranch) {
+            return 0;
+        } else {
+            return super.paymentSSHDPort();
+        }
+    }
+
+    @Override
     public String getGoogleAnalyticsKey() {
         // If there are problem with tracker enable here to test locally
         //return VistaSettings.googleAnalyticsDevKey;
