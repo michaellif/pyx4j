@@ -1041,8 +1041,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().serviceType(), leaseType));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());
 
-        Service service = Persistence.service().retrieve(serviceCriteria);
-        if (service != null) {
+        for (Service service : Persistence.service().query(serviceCriteria)) {
             EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);
             productCriteria.add(PropertyCriterion.eq(productCriteria.proto().type(), ServiceItemType.class));
             productCriteria.add(PropertyCriterion.eq(productCriteria.proto().product(), service.version()));
@@ -1052,6 +1051,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             if (serviceItem != null) {
                 setService(leaseTerm, serviceItem);
                 succeeded = true;
+                break; // use first found service/item  
             }
         }
 
