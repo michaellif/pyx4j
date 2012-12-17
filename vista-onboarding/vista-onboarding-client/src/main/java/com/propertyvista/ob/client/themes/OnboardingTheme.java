@@ -91,7 +91,6 @@ public class OnboardingTheme extends Theme {
 
         style = new Style(".", PmcAccountCreationRequestForm.Styles.PmcUrlFieldNote.name() + " p");
         style.addProperty("padding-bottom", "5px");
-        style.addProperty("font-size", "5px");
         style.addProperty("text-align", "justify");
         style.addProperty("color", ThemeColor.object1, 0.7);
         addStyle(style);
