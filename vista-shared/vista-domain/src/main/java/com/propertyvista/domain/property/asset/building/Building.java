@@ -126,6 +126,9 @@ public interface Building extends PolicyNode {
     @Detached(level = AttachLevel.Detached)
     IList<BuildingAmenity> amenities();
 
+    /*
+     * included/external Utilities are necessary for Starlight old site (RentStarlight.com) integration!
+     */
     @Detached(level = AttachLevel.Detached)
     IList<Utility> includedUtilities();
 
