@@ -170,6 +170,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
+    public void pingConnection() {
+        startContext(ConnectionTarget.forRead);
+        endContext();
+    }
+
+    @Override
     public void dispose() {
         connectionProvider.dispose();
     }
