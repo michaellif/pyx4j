@@ -59,17 +59,20 @@ public class AptDetailsPage extends BasePage {
         super(params);
 
         String propCode = null;
-        try {
-            propCode = params.get(PMSiteApplication.ParamNameBuilding).toString();
-        } catch (Exception e) {
-            // redirect to findapt page
-            redirectOrFail(FindAptPage.class, "Invalid parameter: " + PMSiteApplication.ParamNameBuilding);
+        propCode = params.get(PMSiteApplication.ParamNameBuilding).toString();
+        if (propCode == null) {
+            // we may get indexed arg
+            String propRef = null;
+            propRef = params.get(0).toString();
+            if (propRef != null) {
+                propCode = propRef.substring(propRef.lastIndexOf("-") + 1);
+            }
         }
 
         final Building propInfo = PropertyFinder.getBuildingDetails(propCode);
         if (propInfo == null) {
             // redirect to findapt page
-            redirectOrFail(FindAptPage.class, "Could not get building details");
+            redirectOrFail(FindAptPage.class, "Could not get building details: " + propCode);
         }
         final Map<Floorplan, List<AptUnit>> fpUnits = PropertyFinder.getBuildingFloorplans(propInfo);
         if (fpUnits == null || fpUnits.size() < 1) {
