@@ -3,6 +3,11 @@
     font-size: 16px;
 }
 
+.vista-pmsite-findAptPage .vista-pmsite-content .content {
+    background-color:#fff;
+    border-top: 5px solid #000000;
+}
+
 #advancedSearchCriteriaForm1 {
 	top: 0;
 	height: 383px;
@@ -22,6 +27,7 @@
 //	height: 70px;
 //	overflow: hidden;
 //	padding: 0 0 0 30px;
+	border-top: 1px solid #000000;
 }
 
 .vista-pmsite-findAptPage .vista-pmsite-main .caption h1 {
@@ -90,6 +96,11 @@
 .advancedSearchWideWrap .searchTypeSelButton input[type=radio] {
 	display:none;
 }
+
+.advancedSearchWideWrap .amenityList input[type=checkbox] {
+	border: 1px solid #000000;
+}
+
 .advancedSearchWideWrap .searchTypeBox {
 	float:left;
 	clear:both;
@@ -107,6 +118,8 @@
 .advancedSearchWideWrap .searchTypeBox select {
 	width:214px;
 	margin: 0;
+	border: 1px solid #000000;
+    color: #999999;
 }
 .advancedSearchWideWrap .searchTypeBox input[type=text] {
 	color:${background_100};
@@ -134,9 +147,10 @@
 	text-align:center;
 }
 .advancedSearchWideWrap .searchCommonBox select {
-//	color:${background_100};
 	width:55px;
 	margin: 0;
+	border: 1px solid #000000;
+    color: #999999;
 }
 .advancedSearchWideWrap .searchCommonBox input[type=text] {
 	color:${background_100};
@@ -144,6 +158,7 @@
 	width:53px;
 	float: left;
 	margin:0px;
+	border: 1px solid #000000;
 }
 .advancedSearchWideWrap .searchAmenityBox {
 	float:left;
