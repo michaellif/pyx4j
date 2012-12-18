@@ -27,7 +27,6 @@ import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -41,6 +40,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 

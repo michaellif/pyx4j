@@ -14,7 +14,8 @@
 package com.propertyvista.admin.client.ui.components;
 
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Anchor;
+
+import com.pyx4j.widgets.client.Anchor;
 
 public class AnchorButton extends Anchor {
 

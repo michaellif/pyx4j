@@ -18,7 +18,6 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -30,6 +29,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.admin.client.activity.NavigFolder;
 
