@@ -43,12 +43,12 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.dto.LeaseTermDTO;
 
@@ -100,6 +100,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         LeaseTermTenant tenant = EntityFactory.create(LeaseTermTenant.class);
 
         tenant.leaseTermV().setPrimaryKey(leaseTerm.getValue().version().getPrimaryKey());
+        tenant.leaseTermV().setValueDetached();
         if (!isApplicantPresent()) {
             tenant.role().setValue(LeaseTermParticipant.Role.Applicant);
             tenant.relationship().setValue(PersonRelationship.Other); // just do not leave it empty - it's mandatory field!
@@ -254,8 +255,8 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             get(proto().effectiveScreening()).setVisible(!getValue().effectiveScreening().isNull());
 
             if (isEditable()) {
-                ClientPolicyManager
-                        .setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().leaseParticipant().participantId()), getValue().getPrimaryKey());
+                ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().leaseParticipant().participantId()), getValue()
+                        .getPrimaryKey());
 
                 get(proto().leaseParticipant().customer().person().email()).setMandatory(!getValue().leaseParticipant().customer().user().isNull());
 

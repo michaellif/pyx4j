@@ -40,13 +40,13 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.lease.Guarantor;
-import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseTermDTO;
 
 public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermGuarantor> {
@@ -88,6 +88,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
         LeaseTermGuarantor guarantor = EntityFactory.create(LeaseTermGuarantor.class);
 
         guarantor.leaseTermV().setPrimaryKey(leaseTerm.getValue().version().getPrimaryKey());
+        guarantor.leaseTermV().setValueDetached();
         guarantor.role().setValue(LeaseTermParticipant.Role.Guarantor);
         guarantor.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
 
@@ -123,23 +124,20 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
             FormFlexPanel left = new FormFlexPanel();
             int row = -1;
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().participantId()), 7).build());
-            left.setWidget(++row, 0,
-                    inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class) {
-                        @Override
-                        public Key getLinkKey() {
-                            return GuarantorInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();
-                        }
-                    }));
+            left.setWidget(++row, 0, inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class) {
+                @Override
+                public Key getLinkKey() {
+                    return GuarantorInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();
+                }
+            }));
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().sex()), 7).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().birthDate()), 9).build());
             if (isEditable()) {
                 left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CSimpleEntityComboBox<Tenant>()), 25).build());
             } else {
-                left.setWidget(
-                        ++row,
-                        0,
-                        new DecoratorBuilder(inject(proto().tenant(),
-                                new CEntityCrudHyperlink<Tenant>(AppPlaceEntityMapper.resolvePlace(Tenant.class)))).build());
+                left.setWidget(++row, 0,
+                        new DecoratorBuilder(inject(proto().tenant(), new CEntityCrudHyperlink<Tenant>(AppPlaceEntityMapper.resolvePlace(Tenant.class))))
+                                .build());
             }
 
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());

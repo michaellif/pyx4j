@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -56,6 +57,7 @@ public class FeatureLister extends ListerBase<Feature> {
                 Feature feature = EntityFactory.create(Feature.class);
                 feature.featureType().setValue(getSelectedType());
                 feature.catalog().setPrimaryKey(getPresenter().getParent());
+                feature.catalog().setAttachLevel(AttachLevel.IdOnly);
                 getPresenter().editNew(getItemOpenPlaceClass(), feature);
                 return true;
             }

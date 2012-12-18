@@ -54,6 +54,7 @@ public class ServiceLister extends ListerBase<Service> {
                 Service newService = EntityFactory.create(Service.class);
                 newService.serviceType().setValue(getSelectedType());
                 newService.catalog().setPrimaryKey(getPresenter().getParent());
+                newService.catalog().setValueDetached();
                 getPresenter().editNew(getItemOpenPlaceClass(), newService);
                 return true;
             }

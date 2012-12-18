@@ -20,7 +20,6 @@ import java.util.Map;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -64,7 +63,7 @@ public class UnitMarketPriceCalculator {
      * All Service should be taken into account, Units may be moved from one service to another
      */
     static void updateUnitMarketPrice(Service service) {
-        if (service.catalog().building().getAttachLevel() == AttachLevel.Detached) {
+        if (service.catalog().isValueDetached()) {
             Persistence.service().retrieve(service.catalog());
         }
         updateUnitMarketPrice(service.catalog().building());
