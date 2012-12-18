@@ -42,11 +42,13 @@ import com.cfcprograms.api.SimpleClient;
 import com.cfcprograms.api.SimpleClientResponse;
 
 import com.pyx4j.config.server.Credentials;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 
 import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureCoverageRequestAdapter;
 import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureTenantAdapter;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTax;
@@ -210,7 +212,8 @@ public class CfcApiClient implements ICfcApiClient {
     }
 
     private static Credentials getCredentials() {
-        return CredentialsFileStorage.getCredentials(new File(System.getProperty("user.dir", "."), "cfcprograms-tenantsure-credentials.properties"));
+        AbstractVistaServerSideConfiguration config = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance());
+        return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), "cfcprograms-tenantsure-credentials.properties"));
     }
 
     private boolean isSuccessfulCode(String code) {

@@ -60,6 +60,6 @@ public class VistaServerSideConfiguration22 extends VistaServerSideConfiguration
 
     @Override
     public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
-        return VistaSMTPMailServiceConfig.getGmailConfig("www22-");
+        return VistaSMTPMailServiceConfig.getGmailConfig(this);
     }
 }

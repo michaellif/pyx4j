@@ -31,9 +31,11 @@ import com.jcraft.jsch.SftpException;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.Credentials;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.payment.pad.data.PadAkFile;
 import com.propertyvista.shared.VistaSystemIdentification;
@@ -74,8 +76,8 @@ public class CaledonPadSftpClient {
     }
 
     private static Credentials getCredentials() {
-        File credentialsFile = new File(System.getProperty("user.dir", "."), "caledon-credentials.properties");
-        return CredentialsFileStorage.getCredentials(credentialsFile);
+        AbstractVistaServerSideConfiguration config = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance());
+        return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), "caledon-credentials.properties"));
     }
 
     private static String sftpHost() {

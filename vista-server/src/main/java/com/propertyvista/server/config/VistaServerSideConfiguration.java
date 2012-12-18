@@ -90,6 +90,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         return this;
     }
 
+    @Override
     public File getConfigDirectory() {
         return new File(new File(LoggerConfig.getContainerHome(), "conf"), LoggerConfig.getContextName());
     }
@@ -215,7 +216,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
-        return VistaSMTPMailServiceConfig.getGmailConfig("");
+        return VistaSMTPMailServiceConfig.getGmailConfig(this);
     }
 
     @Override

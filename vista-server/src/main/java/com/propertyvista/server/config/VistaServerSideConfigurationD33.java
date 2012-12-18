@@ -50,6 +50,6 @@ public class VistaServerSideConfigurationD33 extends VistaServerSideConfiguratio
 
     @Override
     public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
-        return VistaSMTPMailServiceConfig.getGmailConfig("www33-");
+        return VistaSMTPMailServiceConfig.getGmailConfig(this);
     }
 }

@@ -136,7 +136,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
 
     @Override
     public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
-        return VistaSMTPMailServiceConfig.getGmailConfig("prod-");
+        return VistaSMTPMailServiceConfig.getGmailConfig(this);
     }
 
     @Override
