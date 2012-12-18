@@ -38,6 +38,10 @@ public class Anchor extends com.google.gwt.user.client.ui.Anchor implements IFoc
         addClickHandler(handler);
     }
 
+    public Anchor(String text, boolean asHTML) {
+        this(text, asHTML, DEFAULT_HREF);
+    }
+
     public Anchor(String text, boolean asHTML, String href) {
         super(text, asHTML, href);
         setStylePrimaryName(getElement(), DefaultWidgetsTheme.StyleName.Anchor.name());
