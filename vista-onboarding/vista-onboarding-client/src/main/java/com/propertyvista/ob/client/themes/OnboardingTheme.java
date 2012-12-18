@@ -89,7 +89,20 @@ public class OnboardingTheme extends Theme {
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
-        style = new Style(".", PmcAccountCreationRequestForm.Styles.PmcUrlFieldNote.name() + " p");
+        style = new Style(".", PmcAccountCreationCompleteViewImpl.Styles.PmcAccountCreationCompleteAnchor.name());
+        style.addProperty("margin-top", "20px");
+        style.addProperty("margin-left", "auto");
+        style.addProperty("margin-right", "auto");
+        style.addProperty("text-align", "center");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        initPmcAccountRequestFormLayoutAndStyles();
+    }
+
+    private void initPmcAccountRequestFormLayoutAndStyles() {
+
+        Style style = new Style(".", PmcAccountCreationRequestForm.Styles.PmcUrlFieldNote.name() + " p");
         style.addProperty("padding-bottom", "5px");
         style.addProperty("text-align", "justify");
         style.addProperty("color", ThemeColor.object1, 0.7);
@@ -116,13 +129,14 @@ public class OnboardingTheme extends Theme {
         style.addProperty("width", "100%");
         addStyle(style);
 
-        style = new Style(".", PmcAccountCreationCompleteViewImpl.Styles.PmcAccountCreationCompleteAnchor.name());
-        style.addProperty("margin-top", "20px");
-        style.addProperty("margin-left", "auto");
-        style.addProperty("margin-right", "auto");
-        style.addProperty("text-align", "center");
-        style.addProperty("width", "100%");
+        style = new Style("." + PmcAccountCreationRequestForm.Styles.PmcUrlFieldNote.name() + " .ValidationLabel");
+        style.addProperty("width", "10em");
         addStyle(style);
+
+        style = new Style("." + PmcAccountCreationRequestForm.Styles.PmcAccountCreationRequestForm.name() + " .ValidationLabel");
+        style.addProperty("width", "25em");
+        addStyle(style);
+
     }
 
 }

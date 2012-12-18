@@ -52,7 +52,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
 
     public enum Styles implements IStyleName {
 
-        PmcUrlFieldNote, PmcAccountCreationSubmitButton
+        PmcAccountCreationRequestForm, PmcUrlNamePanel, PmcUrlFieldNote, PmcAccountCreationSubmitButton
 
     }
 
@@ -77,14 +77,18 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
 
     @Override
     public IsWidget createContent() {
+        FlowPanel formPanel = new FlowPanel();
         FormFlexPanel contentPanel = new FormFlexPanel();
+        contentPanel.addStyleName(Styles.PmcAccountCreationRequestForm.name());
         final double SPACE = 10.0;
         int row = -1;
 
         FlowPanel dnsNamePanel = new FlowPanel();
+        dnsNamePanel.addStyleName(Styles.PmcUrlFieldNote.name());
         dnsNamePanel.getElement().getStyle().setMarginLeft(15, Unit.EM);
+
         SimplePanel dnsSubdomainNameHolder = new SimplePanel();
-        dnsSubdomainNameHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        dnsSubdomainNameHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
         dnsSubdomainNameHolder.setWidget(new DecoratorBuilder(inject(proto().dnsName()), 10).labelWidth(3).build());
 
         Label dnsDomainName = new Label(".propertyvista.com");
@@ -101,10 +105,11 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
             note.getElement().getStyle().setDisplay(Display.BLOCK);
             dnsNamePanel.add(note);
         }
-        contentPanel.setWidget(++row, 0, dnsNamePanel);
-        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_LEFT);
-        contentPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_MIDDLE);
-        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
+        formPanel.add(dnsNamePanel);
+
+//        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_LEFT);
+//        contentPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_MIDDLE);
+//        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
         get(proto().dnsName()).addValueChangeHandler(new ValueChangeHandler<String>() {
             @Override
@@ -198,7 +203,6 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
 
         });
         submitButton.addStyleName(PmcAccountCreationRequestForm.Styles.PmcAccountCreationSubmitButton.name());
-        submitButton.setEnabled(false);
 
         signUpPanel.add(submitButton);
         signUpPanel.setCellHorizontalAlignment(termsAgreementShortcutPanel, HasHorizontalAlignment.ALIGN_CENTER);
@@ -207,14 +211,6 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         signUpPanel.setCellHorizontalAlignment(submitButton, HasHorizontalAlignment.ALIGN_CENTER);
         signUpPanel.setCellVerticalAlignment(submitButton, HasVerticalAlignment.ALIGN_BOTTOM);
         contentPanel.setWidget(++row, 0, signUpPanel);
-
-        addValueChangeHandler(new ValueChangeHandler<PmcAccountCreationRequest>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<PmcAccountCreationRequest> event) {
-                revalidate();
-                submitButton.setEnabled(isValid());
-            }
-        });
 
         if (ApplicationMode.isDevelopment()) {
             this.addDevShortcutHandler(new DevShortcutHandler() {
@@ -229,7 +225,8 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
             });
         }
 
-        return contentPanel;
+        formPanel.add(contentPanel);
+        return formPanel;
     }
 
     @Override
