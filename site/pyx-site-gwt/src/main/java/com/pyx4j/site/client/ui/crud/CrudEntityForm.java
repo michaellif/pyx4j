@@ -34,10 +34,10 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
@@ -45,50 +45,31 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     private static final I18n i18n = I18n.get(CrudEntityForm.class);
 
-    private IFormView<? extends IEntity> parentView;
+    private IFormView<? extends IEntity> view;
 
-    private TabPanel tabPanel;
+    private final TabPanel tabPanel = new TabPanel(StyleManger.getTheme().getTabHeight(), Unit.EM);
 
-    private double tabHeight;
-
-    public CrudEntityForm(Class<E> rootClass, double tabHeight) {
-        this(rootClass, null, false, tabHeight);
+    public CrudEntityForm(Class<E> rootClass, IFormView<? extends IEntity> view) {
+        this(rootClass, null, view);
     }
 
-    public CrudEntityForm(Class<E> rootClass, boolean viewMode, double tabHeight) {
-        this(rootClass, null, viewMode, tabHeight);
-    }
-
-    public CrudEntityForm(Class<E> rootClass, IEditableComponentFactory factory, double tabHeight) {
-        this(rootClass, factory, false, tabHeight);
-    }
-
-    public CrudEntityForm(Class<E> rootClass, IEditableComponentFactory factory, boolean viewMode, double tabHeight) {
+    public CrudEntityForm(Class<E> rootClass, IEditableComponentFactory factory, IFormView<? extends IEntity> view) {
         super(rootClass, factory);
-        this.tabHeight = tabHeight;
+        this.view = view;
 
-        if (viewMode) {
+        if (view instanceof IViewerView) {
             setEditable(false);
             setViewable(true);
         }
-    }
 
-    @Override
-    protected IDecorator createDecorator() {
-        return null;
+        tabPanel.setSize("100%", "100%");
+
     }
 
     @Override
     public IsWidget createContent() {
-        tabPanel = new TabPanel(tabHeight, Unit.EM);
-        tabPanel.setSize("100%", "100%");
-
-        createTabs();
-
         return tabPanel;
     }
-
-    abstract protected void createTabs();
 
     public Tab addTab(final FormFlexPanel panel) {
         final Tab tab = addTab(panel, panel.getTitle());
@@ -132,13 +113,9 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
         tabPanel.setTabVisible(tab, show);
     }
 
-    public void setParentView(IFormView<? extends IEntity> parentView) {
-        this.parentView = parentView;
-    }
-
     public IFormView<? extends IEntity> getParentView() {
-        assert (parentView != null);
-        return parentView;
+        assert (view != null);
+        return view;
     }
 
     public void setActiveTab(int index) {

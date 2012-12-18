@@ -78,4 +78,8 @@ public class Theme {
         return discriminator;
     }
 
+    public double getTabHeight() {
+        return 2.6;
+    }
+
 }

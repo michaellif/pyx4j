@@ -49,7 +49,7 @@ public class FormViewImplBase<E extends IEntity> extends ViewImplBase implements
         }
 
         this.form = (CrudEntityForm<E>) form;
-        this.form.setParentView(this);
+
         this.form.initContent();
 
         LayoutPanel center = (LayoutPanel) getContentPane();

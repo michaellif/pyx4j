@@ -35,7 +35,6 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
@@ -47,27 +46,18 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
 
     private static final I18n i18n = I18n.get(WizardForm.class);
 
-    private TabPanel tabPanel;
+    private final TabPanel tabPanel = new TabPanel(StyleManger.getTheme().getTabHeight(), Unit.EM);
 
-    private double tabHeight;
-
-    public WizardForm(Class<E> rootClass, double tabHeight) {
-        this(rootClass, null, tabHeight);
+    public WizardForm(Class<E> rootClass) {
+        this(rootClass, null);
     }
 
-    public WizardForm(Class<E> rootClass, IEditableComponentFactory factory, double tabHeight) {
+    public WizardForm(Class<E> rootClass, IEditableComponentFactory factory) {
         super(rootClass, factory);
-        this.tabHeight = tabHeight;
-    }
-
-    @Override
-    protected IDecorator createDecorator() {
-        return null;
     }
 
     @Override
     public IsWidget createContent() {
-        tabPanel = new TabPanel(tabHeight, Unit.EM);
         tabPanel.setSize("100%", "100%");
 
         createSteps();
