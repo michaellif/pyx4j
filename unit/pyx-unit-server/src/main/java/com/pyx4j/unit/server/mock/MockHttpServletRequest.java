@@ -207,7 +207,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     @Override
     public Cookie[] getCookies() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override
