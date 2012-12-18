@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
-import com.pyx4j.essentials.server.dev.DevSession;
+import com.pyx4j.server.contexts.DevSession;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.SystemConfig;

@@ -16,8 +16,8 @@ package com.propertyvista.server.config;
 import javax.servlet.ServletContextEvent;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.essentials.server.dev.DevSession;
 import com.pyx4j.quartz.SchedulerHelper;
+import com.pyx4j.server.contexts.DevSession;
 import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.payment.sshd.PaymentSSHDServer;

@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.essentials.server.dev.DevSession;
+import com.pyx4j.server.contexts.DevSession;
 
 @SuppressWarnings("serial")
 public class VistaDevSessionServlet extends HttpServlet {

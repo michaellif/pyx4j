@@ -28,9 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.essentials.server.dev.DevSession;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.server.contexts.AntiDoS;
+import com.pyx4j.server.contexts.DevSession;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.server.common.security.DevelopmentSecurity;

@@ -18,7 +18,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.essentials.server.dev.DevSession;
+import com.pyx4j.server.contexts.DevSession;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.dev.DevelopmentUser;
