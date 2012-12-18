@@ -258,8 +258,6 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ServiceItemType.class));
             serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().product(), service.version()));
             serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), currentValue.lease().unit()));
-            serviceCriteria
-                    .add(PropertyCriterion.ne(serviceCriteria.proto().id(), currentValue.version().leaseProducts().serviceItem().item().getPrimaryKey()));
 
             currentValue.selectedServiceItems().addAll(Persistence.service().query(serviceCriteria));
         }

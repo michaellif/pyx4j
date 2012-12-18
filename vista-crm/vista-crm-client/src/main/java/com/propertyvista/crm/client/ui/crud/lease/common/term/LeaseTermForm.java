@@ -61,6 +61,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
     protected LeaseTermForm(IFormView<LeaseTermDTO> view) {
         super(LeaseTermDTO.class, view);
+
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
         addTab(createTenantsTab(i18n.tr("Tenants")));
         addTab(createGuarantorsTab(i18n.tr("Guarantors")));

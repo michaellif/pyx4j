@@ -13,11 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
-
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.misc.VistaTODO;
 
@@ -46,25 +43,7 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
     public void updateServiceValue(LeaseTermDTO value) {
         LeaseTermForm form = (LeaseTermForm) getForm();
 
-        @SuppressWarnings("unchecked")
-        CEntityForm<BillableItem> billableItemForm = (CEntityForm<BillableItem>) form.get(form.proto().version().leaseProducts().serviceItem());
-
-//TODO     revert after investigation:    
-//        billableItemForm.setValue(value.version().leaseProducts().serviceItem());
-        billableItemForm.populate(value.version().leaseProducts().serviceItem());
-
-        billableItemForm.get(billableItemForm.proto().item()).refresh(true);
-
-        form.get(form.proto().version().leaseProducts().featureItems()).setValue(value.version().leaseProducts().featureItems());
-        if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
-            form.get(form.proto().version().leaseProducts().concessions()).setValue(value.version().leaseProducts().concessions());
-        }
-
         // update non-editable runtime data:
-// TODO : _2 uncomment then        
-//        form.getValue().billingAccount().deposits().clear();
-//        form.getValue().billingAccount().deposits().addAll(value.billingAccount().deposits());
-
         form.getValue().selectedServiceItems().clear();
         form.getValue().selectedServiceItems().addAll(value.selectedServiceItems());
 
@@ -73,5 +52,11 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
 
         form.getValue().selectedConcessions().clear();
         form.getValue().selectedConcessions().addAll(value.selectedConcessions());
+
+        form.get(form.proto().version().leaseProducts().serviceItem()).setValue(value.version().leaseProducts().serviceItem());
+        form.get(form.proto().version().leaseProducts().featureItems()).setValue(value.version().leaseProducts().featureItems());
+        if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
+            form.get(form.proto().version().leaseProducts().concessions()).setValue(value.version().leaseProducts().concessions());
+        }
     }
 }
