@@ -23,14 +23,16 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
@@ -169,8 +171,9 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
             // send documentation to tenant
             List<String> emails = new ArrayList<String>();
-            if (ApplicationMode.isDevelopment()) {
-                emails.add("artyom@propertyvista.com");
+            SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
+            if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
+                emails.add(mailConfig.getForwardAllTo());
             } else {
                 Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
                 emails.add(tenant.customer().user().email().getValue());
