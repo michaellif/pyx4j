@@ -4,8 +4,9 @@
 }
 
 .vista-pmsite-findAptPage .vista-pmsite-content .content {
-    background-color:#fff;
+//  background-color:#fff;
     border-top: 5px solid #000000;
+    background: url("images/FreeCableTV.png") no-repeat right;
 }
 
 #advancedSearchCriteriaForm1 {
@@ -19,22 +20,16 @@
     background: #fff;
     padding: 0 20px 20px;
     width: 920px;
-//  height: 500px;
 }
 
 .vista-pmsite-findAptPage .vista-pmsite-main .caption {
-//	background-size: 100% 100%;
-//	height: 70px;
-//	overflow: hidden;
-//	padding: 0 0 0 30px;
+	padding: 5px 0;
 	border-top: 1px solid #000000;
 }
 
 .vista-pmsite-findAptPage .vista-pmsite-main .caption h1 {
     font-family: monospace;
     font-size: 14pt;
-    font-weight: normal;
-    margin: 5px 0;
     color: #000000;
   }
 
@@ -143,7 +138,7 @@
 }
 .advancedSearchWideWrap .searchCommonBox .searchField .inputJoinBox {
 	display:inline-block;
-	width:23px;
+	width:25px;
 	text-align:center;
 }
 .advancedSearchWideWrap .searchCommonBox select {
@@ -154,9 +149,9 @@
 }
 .advancedSearchWideWrap .searchCommonBox input[type=text] {
 	color:${background_100};
-	display:inline-block;
+//	display:inline-block;
 	width:53px;
-	float: left;
+//	float: left;
 	margin:0px;
 	border: 1px solid #000000;
 }
