@@ -34,9 +34,12 @@ public class InheritableUserContext implements Serializable {
 
     final Locale locale;
 
+    final DevSession devSession;
+
     InheritableUserContext(Visit abstractVisit) {
         this.abstractVisit = abstractVisit;
         namespace = NamespaceManager.getNamespace();
         locale = I18nManager.getThreadLocale();
+        devSession = DevSession.getSession();
     }
 }

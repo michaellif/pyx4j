@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.dev;
+package com.pyx4j.server.contexts;
 
 import java.security.SecureRandom;
 import java.util.Hashtable;
@@ -31,7 +31,6 @@ import com.google.gwt.user.server.Util;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.server.contexts.Context;
 
 /**
  * This is session using for development of applications, it is detached from container session.
@@ -57,10 +56,14 @@ public class DevSession {
     }
 
     public static DevSession getSession() {
+        DevSession session = Context.getDevSession();
+        if (session != null) {
+            return session;
+        }
         if (Context.getRequest() == null) {
             return new DevSession();
         }
-        DevSession session = (DevSession) Context.getRequest().getAttribute(DEV_SESSION_REQUEST_ATTRIBUTE);
+        session = (DevSession) Context.getRequest().getAttribute(DEV_SESSION_REQUEST_ATTRIBUTE);
         if (session == null) {
             session = singleSession;
         }

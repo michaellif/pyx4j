@@ -47,6 +47,8 @@ public class Context {
 
         HttpSession session;
 
+        DevSession devSession;
+
         Visit abstractVisit;
 
         boolean sessionEnd;
@@ -114,6 +116,14 @@ public class Context {
         if (s != null) {
             requestLocal.get().sessionEnd = false;
         }
+    }
+
+    static DevSession getDevSession() {
+        return requestLocal.get().devSession;
+    }
+
+    static void setDevSession(DevSession devSession) {
+        requestLocal.get().devSession = devSession;
     }
 
     public static boolean isSessionEnd() {

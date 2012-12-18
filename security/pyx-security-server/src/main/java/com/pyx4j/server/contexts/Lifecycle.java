@@ -230,6 +230,7 @@ public class Lifecycle {
 
     public static void inheritUserContext(InheritableUserContext inheritableUserContext) {
         Context.setVisit(inheritableUserContext.abstractVisit);
+        Context.setDevSession(inheritableUserContext.devSession);
         NamespaceManager.setNamespace(inheritableUserContext.namespace);
         I18nManager.setThreadLocale(inheritableUserContext.locale);
     }
