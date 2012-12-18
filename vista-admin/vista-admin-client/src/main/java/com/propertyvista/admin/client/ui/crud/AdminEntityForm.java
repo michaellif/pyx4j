@@ -17,18 +17,14 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.admin.client.ui.components.AdminEditorsComponentFactory;
-import com.propertyvista.common.client.theme.VistaTheme;
 
 public abstract class AdminEntityForm<E extends IEntity> extends CrudEntityForm<E> {
 
-    public AdminEntityForm(Class<E> rootClass) {
-        this(rootClass, false);
-    }
-
-    public AdminEntityForm(Class<E> rootClass, boolean viewMode) {
-        super(rootClass, new AdminEditorsComponentFactory(), viewMode, VistaTheme.defaultTabHeight);
+    public AdminEntityForm(Class<E> rootClass, IFormView<E> view) {
+        super(rootClass, new AdminEditorsComponentFactory(), view);
     }
 
     // decoration stuff:

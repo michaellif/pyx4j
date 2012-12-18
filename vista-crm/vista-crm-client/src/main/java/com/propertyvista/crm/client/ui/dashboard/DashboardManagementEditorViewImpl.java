@@ -20,7 +20,8 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 public class DashboardManagementEditorViewImpl extends CrmEditorViewImplBase<DashboardMetadata> implements DashboardManagementEditorView {
 
     public DashboardManagementEditorViewImpl() {
-        super(CrmSiteMap.Dashboard.Manage.class, new DashboardManagementForm());
+        super(CrmSiteMap.Dashboard.Manage.class);
+        setForm(new DashboardManagementForm(this));
     }
 
     @Override

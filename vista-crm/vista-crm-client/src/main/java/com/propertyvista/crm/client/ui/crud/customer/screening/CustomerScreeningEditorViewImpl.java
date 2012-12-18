@@ -19,7 +19,8 @@ import com.propertyvista.domain.tenant.CustomerScreening;
 
 public class CustomerScreeningEditorViewImpl extends CrmEditorViewImplBase<CustomerScreening> implements CustomerScreeningEditorView {
     public CustomerScreeningEditorViewImpl() {
-        super(CrmSiteMap.Tenants.Screening.class, new CustomerScreeningForm());
+        super(CrmSiteMap.Tenants.Screening.class);
+        setForm(new CustomerScreeningForm(this));
     }
 
     @Override

@@ -19,6 +19,7 @@ import com.propertyvista.dto.DepositLifecycleDTO;
 
 public class DepositLifecycleEditorViewImpl extends CrmEditorViewImplBase<DepositLifecycleDTO> implements DepositLifecycleEditorView {
     public DepositLifecycleEditorViewImpl() {
-        super(CrmSiteMap.Finance.LeaseDeposit.class, new DepositLifecycleForm());
+        super(CrmSiteMap.Finance.LeaseDeposit.class);
+        setForm(new DepositLifecycleForm(this));
     }
 }

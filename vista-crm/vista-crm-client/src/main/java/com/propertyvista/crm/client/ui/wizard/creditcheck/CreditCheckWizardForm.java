@@ -18,7 +18,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.wizard.WizardForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.dto.CreditCheckWizardDTO;
 
 public class CreditCheckWizardForm extends WizardForm<CreditCheckWizardDTO> {
@@ -26,7 +25,7 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckWizardDTO> {
     private static final I18n i18n = I18n.get(CreditCheckWizardForm.class);
 
     public CreditCheckWizardForm() {
-        super(CreditCheckWizardDTO.class, VistaTheme.defaultTabHeight);
+        super(CreditCheckWizardDTO.class);
     }
 
     @Override

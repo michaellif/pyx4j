@@ -29,7 +29,7 @@ public class AccountRecoveryOptionsViewerViewImpl extends ViewerViewImplBase<Acc
     private final Button btnEdit;
 
     public AccountRecoveryOptionsViewerViewImpl() {
-        setForm(new AccountRecoveryOptionsForm(true));
+        setForm(new AccountRecoveryOptionsForm(this));
         setCaption(i18n.tr("Account Recovery Options"));
         btnEdit = new Button(i18n.tr("Update"), new ClickHandler() {
 

@@ -35,7 +35,8 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
     private final MenuItem accountRecoveryOptionsAction;
 
     public EmployeeViewerViewImpl() {
-        super(CrmSiteMap.Organization.Employee.class, new EmployeeForm(true));
+        super(CrmSiteMap.Organization.Employee.class);
+        setForm(new EmployeeForm(this));
 
         // Add actions:        
         passwordAction = new MenuItem(i18n.tr("Change Password"), new Command() {

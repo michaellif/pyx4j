@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.building.mech;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.editors.LicenseEditor;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
@@ -24,12 +25,8 @@ public class BoilerForm extends MechBaseForm<BoilerDTO> {
 
     private static final I18n i18n = I18n.get(BoilerForm.class);
 
-    public BoilerForm() {
-        this(false);
-    }
-
-    public BoilerForm(boolean viewMode) {
-        super(BoilerDTO.class, viewMode);
+    public BoilerForm(IFormView<BoilerDTO> view) {
+        super(BoilerDTO.class, view);
     }
 
     @Override

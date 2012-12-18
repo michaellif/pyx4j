@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.crm.client.resources.CrmResources;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -29,12 +30,8 @@ public class BackgroundCheckPolicyForm extends PolicyDTOTabPanelBasedForm<Backgr
 
     private final static I18n i18n = I18n.get(BackgroundCheckPolicyForm.class);
 
-    public BackgroundCheckPolicyForm() {
-        this(false);
-    }
-
-    public BackgroundCheckPolicyForm(boolean viewMode) {
-        super(BackgroundCheckPolicyDTO.class, viewMode);
+    public BackgroundCheckPolicyForm(IFormView<BackgroundCheckPolicyDTO> view) {
+        super(BackgroundCheckPolicyDTO.class, view);
     }
 
     @Override

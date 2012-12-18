@@ -21,7 +21,7 @@ public class DatesPolicyEditorViewImpl extends CrmEditorViewImplBase<DatesPolicy
 
     public DatesPolicyEditorViewImpl() {
         super(CrmSiteMap.Administration.Policies.Dates.class);
-        setForm(new DatesPolicyForm());
+        setForm(new DatesPolicyForm(this));
     }
 
 }

@@ -21,6 +21,6 @@ public class LeaseAdjustmentPolicyViewerViewImpl extends CrmViewerViewImplBase<L
 
     public LeaseAdjustmentPolicyViewerViewImpl() {
         super(CrmSiteMap.Administration.Policies.LeaseAdjustment.class);
-        setForm(new LeaseAdjustmentPolicyForm(true));
+        setForm(new LeaseAdjustmentPolicyForm(this));
     }
 }

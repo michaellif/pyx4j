@@ -21,7 +21,7 @@ public class AdminUserEditorViewImpl extends AdminEditorViewImplBase<AdminUserDT
 
     public AdminUserEditorViewImpl() {
         super(AdminSiteMap.Administration.AdminUsers.class);
-        setForm(new AdminUserForm());
+        setForm(new AdminUserForm(this));
     }
 
 }

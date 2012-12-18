@@ -60,7 +60,7 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
         addAction(closeAction);
 
         // set main form here:
-        setForm(new AppointmentForm(true));
+        setForm(new AppointmentForm(this));
     }
 
     @Override

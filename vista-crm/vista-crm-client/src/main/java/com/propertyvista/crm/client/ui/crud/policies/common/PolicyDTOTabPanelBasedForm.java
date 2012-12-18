@@ -33,6 +33,7 @@ import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -53,23 +54,14 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
     // This list MUST be ordered in descending order by the NodeType hierarchy
     private static final List<NodeType> AVAILABLE_NODE_TYPES = Arrays.asList(//@formatter:off
             new NodeType.Builder(OrganizationPoliciesNode.class).hasOnlyOneInstance().build(),
-//          new NodeType.Builder(Country.class).build(),
             new NodeType.Builder(Province.class).build(),
             new NodeType.Builder(Complex.class).build(),
             new NodeType.Builder(Building.class).build()
-// reserved for future:
-//          Floorplan.class,
-//          AptUnit.class,
-
-
     );//@formatter:on
 
-    public PolicyDTOTabPanelBasedForm(Class<POLICY_DTO> policyDTOClass, final boolean viewMode) {
-        super(policyDTOClass, viewMode);
-    }
+    public PolicyDTOTabPanelBasedForm(Class<POLICY_DTO> policyDTOClass, final IFormView<POLICY_DTO> view) {
+        super(policyDTOClass, view);
 
-    @Override
-    public void createTabs() {
         selectTab(addTab(createScopeTab(i18n.tr("Scope"))));
         for (FormFlexPanel customTab : createCustomTabPanels()) {
             addTab(customTab);

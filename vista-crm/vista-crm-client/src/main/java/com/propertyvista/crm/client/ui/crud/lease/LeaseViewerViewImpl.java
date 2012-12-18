@@ -135,7 +135,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         adjustmentLister = new ListerInternalViewImplBase<LeaseAdjustment>(new LeaseAdjustmentLister());
 
         // set main form here:
-        setForm(new LeaseForm() {
+        setForm(new LeaseForm(this) {
             @Override
             public void onTenantInsuranceOwnerClicked(Tenant tenantId) {
                 ((LeaseViewerView.Presenter) getPresenter()).onInsuredTenantClicked(tenantId);

@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.ProductItemType;
@@ -23,16 +24,9 @@ public class ProductDictionaryViewForm extends CrmEntityForm<ProductItemType> {
 
     private static final I18n i18n = I18n.get(ProductDictionaryViewForm.class);
 
-    public ProductDictionaryViewForm() {
-        this(false);
-    }
+    public ProductDictionaryViewForm(IFormView<ProductItemType> view) {
+        super(ProductItemType.class, view);
 
-    public ProductDictionaryViewForm(boolean viewMode) {
-        super(ProductItemType.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;

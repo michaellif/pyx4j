@@ -34,6 +34,7 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
@@ -58,16 +59,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
     protected static final I18n i18n = I18n.get(LeaseTermForm.class);
 
-    protected LeaseTermForm() {
-        this(false);
-    }
-
-    protected LeaseTermForm(boolean viewMode) {
-        super(LeaseTermDTO.class, viewMode);
-    }
-
-    @Override
-    protected void createTabs() {
+    protected LeaseTermForm(IFormView<LeaseTermDTO> view) {
+        super(LeaseTermDTO.class, view);
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
         addTab(createTenantsTab(i18n.tr("Tenants")));
         addTab(createGuarantorsTab(i18n.tr("Guarantors")));

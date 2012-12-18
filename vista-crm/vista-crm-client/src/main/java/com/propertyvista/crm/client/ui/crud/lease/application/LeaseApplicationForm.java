@@ -18,6 +18,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.editors.dto.FinancialViewForm;
@@ -35,12 +36,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     private Tab onlineStatusTab;
 
-    public LeaseApplicationForm() {
-        super(LeaseApplicationDTO.class);
-    }
-
-    @Override
-    public void createTabs() {
+    public LeaseApplicationForm(IFormView<LeaseApplicationDTO> view) {
+        super(LeaseApplicationDTO.class, view);
         createCommonContent();
 
         addTab(createInfoTab());

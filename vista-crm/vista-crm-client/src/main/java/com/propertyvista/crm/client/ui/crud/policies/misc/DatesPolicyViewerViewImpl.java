@@ -21,6 +21,6 @@ public class DatesPolicyViewerViewImpl extends CrmViewerViewImplBase<DatesPolicy
 
     public DatesPolicyViewerViewImpl() {
         super(CrmSiteMap.Administration.Policies.Dates.class);
-        setForm(new DatesPolicyForm(true));
+        setForm(new DatesPolicyForm(this));
     }
 }

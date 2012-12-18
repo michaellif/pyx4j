@@ -19,6 +19,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -38,16 +39,8 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
 
     private static final I18n i18n = I18n.get(GuarantorForm.class);
 
-    public GuarantorForm() {
-        this(false);
-    }
-
-    public GuarantorForm(boolean viewMode) {
-        super(GuarantorDTO.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
+    public GuarantorForm(IFormView<GuarantorDTO> view) {
+        super(GuarantorDTO.class, view);
 
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
         addTab(createPaymentMethodsTab(i18n.tr("Payment Methods")));

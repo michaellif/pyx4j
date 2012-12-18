@@ -39,7 +39,8 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
     private final MenuItem cancelAction;
 
     public PaymentViewerViewImpl() {
-        super(CrmSiteMap.Finance.Payment.class, new PaymentForm(true));
+        super(CrmSiteMap.Finance.Payment.class);
+        setForm(new PaymentForm(this));
 
         cancelAction = new MenuItem(i18n.tr("Cancel"), new Command() {
             @Override

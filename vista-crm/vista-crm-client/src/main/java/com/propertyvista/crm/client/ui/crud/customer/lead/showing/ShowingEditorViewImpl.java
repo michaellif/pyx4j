@@ -22,7 +22,7 @@ public class ShowingEditorViewImpl extends CrmEditorViewImplBase<ShowingDTO> imp
 
     public ShowingEditorViewImpl() {
         super(Marketing.Showing.class);
-        setForm(new ShowingForm());
+        setForm(new ShowingForm(this));
     }
 
     @Override

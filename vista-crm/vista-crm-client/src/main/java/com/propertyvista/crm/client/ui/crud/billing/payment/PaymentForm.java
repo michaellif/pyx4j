@@ -33,6 +33,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
@@ -56,7 +57,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentForm.class);
 
-    private Widget paymentMethodEditorSeparator;
+    private final Widget paymentMethodEditorSeparator;
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
@@ -82,16 +83,9 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         }
     };
 
-    public PaymentForm() {
-        this(false);
-    }
+    public PaymentForm(IFormView<PaymentRecordDTO> view) {
+        super(PaymentRecordDTO.class, view);
 
-    public PaymentForm(boolean viewMode) {
-        super(PaymentRecordDTO.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         content.setWidget(0, 0, createDetailsPanel());

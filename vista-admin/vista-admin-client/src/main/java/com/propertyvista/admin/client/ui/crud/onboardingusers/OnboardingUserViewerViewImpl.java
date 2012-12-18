@@ -34,7 +34,7 @@ public class OnboardingUserViewerViewImpl extends AdminViewerViewImplBase<Onboar
 
     public OnboardingUserViewerViewImpl() {
         super(AdminSiteMap.Management.OnboardingUser.class);
-        setForm(new OnboardingUserForm(true));
+        setForm(new OnboardingUserForm(this));
 
         passwordAction = new Button(i18n.tr("Change Password"), new ClickHandler() {
             @Override

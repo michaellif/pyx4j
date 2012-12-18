@@ -29,7 +29,8 @@ public class PageViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implem
     private static final I18n i18n = I18n.get(PageViewerImpl.class);
 
     public PageViewerImpl() {
-        super(Content.Page.class, new PageForm(true));
+        super(Content.Page.class);
+        setForm(new PageForm(this));
 
         // Add actions:
         addHeaderToolbarItem(new Button(i18n.tr("Add Child Page"), new ClickHandler() {

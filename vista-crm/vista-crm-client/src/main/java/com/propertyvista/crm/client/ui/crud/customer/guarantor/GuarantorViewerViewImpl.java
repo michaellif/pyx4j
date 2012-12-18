@@ -34,7 +34,7 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
         super(CrmSiteMap.Tenants.Guarantor.class);
 
         //set main form here:
-        setForm(new GuarantorForm(true));
+        setForm(new GuarantorForm(this));
 
         passwordAction = new MenuItem(i18n.tr("Change Password"), new Command() {
             @Override

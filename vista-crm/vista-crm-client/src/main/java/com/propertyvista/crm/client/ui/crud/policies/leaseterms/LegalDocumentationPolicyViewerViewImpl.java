@@ -21,6 +21,6 @@ public class LegalDocumentationPolicyViewerViewImpl extends CrmViewerViewImplBas
 
     public LegalDocumentationPolicyViewerViewImpl() {
         super(CrmSiteMap.Administration.Policies.LegalDocumentation.class);
-        setForm(new LegalDocumentationPolicyForm(true));
+        setForm(new LegalDocumentationPolicyForm(this));
     }
 }

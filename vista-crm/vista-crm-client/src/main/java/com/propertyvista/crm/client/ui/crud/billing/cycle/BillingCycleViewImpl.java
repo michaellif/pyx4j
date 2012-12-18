@@ -20,6 +20,7 @@ import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 public class BillingCycleViewImpl extends CrmViewerViewImplBase<BillingCycleDTO> implements BillingCycleView {
 
     public BillingCycleViewImpl() {
-        super(CrmSiteMap.Finance.BillingCycle.class, new BillingCycleForm(), true);
+        super(CrmSiteMap.Finance.BillingCycle.class, true);
+        setForm(new BillingCycleForm(this));
     }
 }

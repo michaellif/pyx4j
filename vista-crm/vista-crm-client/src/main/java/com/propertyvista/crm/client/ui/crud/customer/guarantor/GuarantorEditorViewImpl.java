@@ -20,6 +20,7 @@ import com.propertyvista.dto.GuarantorDTO;
 public class GuarantorEditorViewImpl extends CrmEditorViewImplBase<GuarantorDTO> implements GuarantorEditorView {
 
     public GuarantorEditorViewImpl() {
-        super(CrmSiteMap.Tenants.Guarantor.class, new GuarantorForm());
+        super(CrmSiteMap.Tenants.Guarantor.class);
+        setForm(new GuarantorForm(this));
     }
 }

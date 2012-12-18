@@ -20,6 +20,7 @@ import com.propertyvista.domain.financial.GlCodeCategory;
 public class GlCodeCategoryViewerViewImpl extends CrmViewerViewImplBase<GlCodeCategory> implements GlCodeCategoryViewerView {
 
     public GlCodeCategoryViewerViewImpl() {
-        super(Financial.GlCodeCategory.class, new GlCodeCategoryForm(true));
+        super(Financial.GlCodeCategory.class);
+        setForm(new GlCodeCategoryForm(this));
     }
 }

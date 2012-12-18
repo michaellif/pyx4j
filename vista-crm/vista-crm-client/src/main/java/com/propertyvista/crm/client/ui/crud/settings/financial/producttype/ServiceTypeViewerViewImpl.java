@@ -15,12 +15,12 @@ package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial.ProductDictionary;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class ServiceTypeViewerViewImpl extends CrmViewerViewImplBase<ServiceItemType> implements ServiceTypeViewerView {
 
     public ServiceTypeViewerViewImpl() {
-        super(Financial.ProductDictionary.ServiceItemType.class, new ServiceTypeForm(true));
+        super(Financial.ProductDictionary.ServiceItemType.class);
+        setForm(new ServiceTypeForm(this));
     }
 }

@@ -21,7 +21,7 @@ public class LeaseTerminationPolicyEditorViewImpl extends CrmEditorViewImplBase<
 
     public LeaseTerminationPolicyEditorViewImpl() {
         super(CrmSiteMap.Administration.Policies.LeaseTermination.class);
-        setForm(new LeaseTerminationPolicyForm(false));
+        setForm(new LeaseTerminationPolicyForm(this));
     }
 
 }

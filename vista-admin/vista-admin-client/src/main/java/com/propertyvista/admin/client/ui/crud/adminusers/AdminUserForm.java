@@ -21,6 +21,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.rpc.AdminUserDTO;
@@ -35,8 +36,8 @@ public class AdminUserForm extends AdminEntityForm<AdminUserDTO> {
 
     private Condition isNewUserCondition;
 
-    public AdminUserForm(boolean viewMode) {
-        super(AdminUserDTO.class, viewMode);
+    public AdminUserForm(IFormView<AdminUserDTO> view) {
+        super(AdminUserDTO.class, view);
 
         conditionalVisibilityMap = new HashMap<CComponent<?, ?>, Condition>();
 
@@ -53,14 +54,9 @@ public class AdminUserForm extends AdminEntityForm<AdminUserDTO> {
                 return getValue().id().isNull();
             }
         };
-
+        createTabs();
     }
 
-    public AdminUserForm() {
-        this(false);
-    }
-
-    @Override
     public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
@@ -73,8 +69,8 @@ public class AdminUserForm extends AdminEntityForm<AdminUserDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(addVisibilityCondition(inject(proto().passwordConfirm()), isNewUserCondition)).build());
         content.setWidget(++row, 0, new DecoratorBuilder(addVisibilityCondition(inject(proto().enabled()), isSelfManagedUserCondition)).build());
         content.setWidget(++row, 0, new DecoratorBuilder(addVisibilityCondition(inject(proto().role()), isSelfManagedUserCondition)).build());
-        content.setWidget(++row, 0,
-                new DecoratorBuilder(addVisibilityCondition(inject(proto().requiredPasswordChangeOnNextLogIn()), isSelfManagedUserCondition)).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(
+                addVisibilityCondition(inject(proto().requiredPasswordChangeOnNextLogIn()), isSelfManagedUserCondition)).build());
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().credentialUpdated())).build());
 

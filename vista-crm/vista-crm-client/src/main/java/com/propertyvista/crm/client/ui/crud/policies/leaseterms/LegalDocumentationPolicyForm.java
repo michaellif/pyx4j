@@ -19,6 +19,7 @@ import java.util.List;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -27,12 +28,8 @@ import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 
 public class LegalDocumentationPolicyForm extends PolicyDTOTabPanelBasedForm<LegalDocumentationPolicyDTO> {
 
-    public LegalDocumentationPolicyForm() {
-        this(false);
-    }
-
-    public LegalDocumentationPolicyForm(boolean viewMode) {
-        super(LegalDocumentationPolicyDTO.class, viewMode);
+    public LegalDocumentationPolicyForm(IFormView<LegalDocumentationPolicyDTO> view) {
+        super(LegalDocumentationPolicyDTO.class, view);
     }
 
     @Override

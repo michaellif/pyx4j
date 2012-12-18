@@ -23,7 +23,8 @@ import com.propertyvista.domain.financial.offering.Service;
 public class ServiceViewerViewImpl extends CrmViewerViewImplBase<Service> implements ServiceViewerView {
 
     public ServiceViewerViewImpl() {
-        super(CrmSiteMap.Properties.Service.class, new ServiceForm(true));
+        super(CrmSiteMap.Properties.Service.class);
+        setForm(new ServiceForm(this));
         enableHistorying(Service.ServiceV.class, GWT.<ServiceVersionService> create(ServiceVersionService.class));
     }
 }

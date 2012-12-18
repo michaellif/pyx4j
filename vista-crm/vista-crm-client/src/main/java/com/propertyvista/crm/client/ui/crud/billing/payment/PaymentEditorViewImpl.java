@@ -19,6 +19,7 @@ import com.propertyvista.dto.PaymentRecordDTO;
 
 public class PaymentEditorViewImpl extends CrmEditorViewImplBase<PaymentRecordDTO> implements PaymentEditorView {
     public PaymentEditorViewImpl() {
-        super(CrmSiteMap.Finance.Payment.class, new PaymentForm());
+        super(CrmSiteMap.Finance.Payment.class);
+        setForm(new PaymentForm(this));
     }
 }

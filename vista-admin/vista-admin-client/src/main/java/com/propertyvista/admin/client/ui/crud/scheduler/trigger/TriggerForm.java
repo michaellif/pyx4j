@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
@@ -30,16 +31,9 @@ public class TriggerForm extends AdminEntityForm<TriggerDTO> {
 
     private static final I18n i18n = I18n.get(TriggerForm.class);
 
-    public TriggerForm() {
-        this(false);
-    }
+    public TriggerForm(IFormView<TriggerDTO> view) {
+        super(TriggerDTO.class, view);
 
-    public TriggerForm(boolean viewMode) {
-        super(TriggerDTO.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         Tab tab = addTab(createDetailsTab());
         selectTab(tab);
 

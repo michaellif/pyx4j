@@ -26,6 +26,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
@@ -46,16 +47,9 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
 
     private static final I18n i18n = I18n.get(ShowingForm.class);
 
-    public ShowingForm() {
-        this(false);
-    }
+    public ShowingForm(IFormView<ShowingDTO> view) {
+        super(ShowingDTO.class, view);
 
-    public ShowingForm(boolean viewMode) {
-        super(ShowingDTO.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;

@@ -20,6 +20,7 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -33,16 +34,9 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
     private static final I18n i18n = I18n.get(FloorplanForm.class);
 
-    public FloorplanForm() {
-        this(false);
-    }
+    public FloorplanForm(IFormView<FloorplanDTO> view) {
+        super(FloorplanDTO.class, view);
 
-    public FloorplanForm(boolean viewMode) {
-        super(FloorplanDTO.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         Tab tab = addTab(createGeneralTab(i18n.tr("General")));
         selectTab(tab);
 

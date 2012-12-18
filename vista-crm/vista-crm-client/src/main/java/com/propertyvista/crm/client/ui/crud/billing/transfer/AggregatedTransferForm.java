@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.AggregatedTransfer;
@@ -23,15 +24,11 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
 
     private static final I18n i18n = I18n.get(AggregatedTransferForm.class);
 
-    public AggregatedTransferForm() {
-        this(false);
+    public AggregatedTransferForm(IFormView<AggregatedTransfer> view) {
+        super(AggregatedTransfer.class, view);
+        createTabs();
     }
 
-    public AggregatedTransferForm(boolean viewMode) {
-        super(AggregatedTransfer.class, viewMode);
-    }
-
-    @Override
     public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 

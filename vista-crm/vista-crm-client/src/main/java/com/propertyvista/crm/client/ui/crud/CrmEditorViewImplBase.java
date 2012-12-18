@@ -104,11 +104,6 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         enableButtons(false);
     }
 
-    public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {
-        this(placeClass);
-        setForm(form);
-    }
-
     @Override
     protected void setForm(CrudEntityForm<? extends E> form) {
         super.setForm(form);

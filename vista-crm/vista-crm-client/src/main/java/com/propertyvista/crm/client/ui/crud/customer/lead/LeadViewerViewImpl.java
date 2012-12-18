@@ -108,7 +108,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
         addAction(closeAction);
 
         // set main form here:
-        setForm(new LeadForm(true));
+        setForm(new LeadForm(this));
     }
 
     @Override

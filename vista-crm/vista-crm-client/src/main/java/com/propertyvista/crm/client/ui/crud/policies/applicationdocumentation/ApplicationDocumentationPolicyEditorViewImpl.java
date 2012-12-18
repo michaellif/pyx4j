@@ -21,6 +21,7 @@ public class ApplicationDocumentationPolicyEditorViewImpl extends CrmEditorViewI
         ApplicationDocumentationPolicyEdtiorView {
 
     public ApplicationDocumentationPolicyEditorViewImpl() {
-        super(CrmSiteMap.Administration.Policies.ApplicationDocumentation.class, new ApplicationDocumentationPolicyForm());
+        super(CrmSiteMap.Administration.Policies.ApplicationDocumentation.class);
+        setForm(new ApplicationDocumentationPolicyForm(this));
     }
 }

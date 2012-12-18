@@ -16,6 +16,7 @@ package com.propertyvista.admin.client.ui.crud.padsimulation.batch;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
@@ -26,16 +27,9 @@ public class PadBatchForm extends AdminEntityForm<PadSimBatch> {
 
     private static final I18n i18n = I18n.get(PadBatchForm.class);
 
-    public PadBatchForm() {
-        this(false);
-    }
+    public PadBatchForm(IFormView<PadSimBatch> view) {
+        super(PadSimBatch.class, view);
 
-    public PadBatchForm(boolean viewMode) {
-        super(PadSimBatch.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;

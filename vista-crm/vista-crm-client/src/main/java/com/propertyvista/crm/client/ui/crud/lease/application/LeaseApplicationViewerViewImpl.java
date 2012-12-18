@@ -76,7 +76,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         super(CrmSiteMap.Tenants.LeaseApplication.class);
 
         //set main form here:
-        setForm(new LeaseApplicationForm());
+        setForm(new LeaseApplicationForm(this));
 
         // Actions:
 

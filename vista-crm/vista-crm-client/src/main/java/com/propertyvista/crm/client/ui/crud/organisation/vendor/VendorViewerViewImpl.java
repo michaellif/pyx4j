@@ -20,6 +20,7 @@ import com.propertyvista.domain.property.vendor.Vendor;
 public class VendorViewerViewImpl extends CrmViewerViewImplBase<Vendor> implements VendorViewerView {
 
     public VendorViewerViewImpl() {
-        super(CrmSiteMap.Organization.Vendor.class, new VendorForm(true));
+        super(CrmSiteMap.Organization.Vendor.class);
+        setForm(new VendorForm(this));
     }
 }

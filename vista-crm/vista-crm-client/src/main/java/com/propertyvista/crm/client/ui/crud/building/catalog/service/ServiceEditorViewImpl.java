@@ -20,7 +20,8 @@ import com.propertyvista.domain.financial.offering.Service;
 public class ServiceEditorViewImpl extends CrmEditorViewImplBase<Service> implements ServiceEditorView {
 
     public ServiceEditorViewImpl() {
-        super(CrmSiteMap.Properties.Service.class, new ServiceForm());
+        super(CrmSiteMap.Properties.Service.class);
+        setForm(new ServiceForm(this));
     }
 
 }

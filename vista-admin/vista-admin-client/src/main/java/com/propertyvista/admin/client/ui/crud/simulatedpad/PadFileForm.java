@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
@@ -25,16 +26,9 @@ public class PadFileForm extends AdminEntityForm<PadSimFile> {
 
     private static final I18n i18n = I18n.get(PadFileForm.class);
 
-    public PadFileForm() {
-        this(false);
-    }
+    public PadFileForm(IFormView<PadSimFile> view) {
+        super(PadSimFile.class, view);
 
-    public PadFileForm(boolean viewMode) {
-        super(PadSimFile.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
 

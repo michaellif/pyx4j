@@ -21,7 +21,7 @@ public class TriggerEditorViewImpl extends AdminEditorViewImplBase<TriggerDTO> i
 
     public TriggerEditorViewImpl() {
         super(AdminSiteMap.Management.Trigger.class);
-        setForm(new TriggerForm());
+        setForm(new TriggerForm(this));
     }
 
 }

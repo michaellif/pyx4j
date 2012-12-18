@@ -20,7 +20,8 @@ import com.propertyvista.dto.ComplexDTO;
 public class ComplexEditorViewImpl extends CrmEditorViewImplBase<ComplexDTO> implements ComplexEditorView {
 
     public ComplexEditorViewImpl() {
-        super(CrmSiteMap.Properties.Complex.class, new ComplexForm());
+        super(CrmSiteMap.Properties.Complex.class);
+        setForm(new ComplexForm(this));
     }
 
 }

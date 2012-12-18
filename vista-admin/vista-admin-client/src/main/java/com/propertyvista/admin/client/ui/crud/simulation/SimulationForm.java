@@ -15,6 +15,7 @@ package com.propertyvista.admin.client.ui.crud.simulation;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.rpc.SimulationDTO;
@@ -23,12 +24,9 @@ public class SimulationForm extends AdminEntityForm<SimulationDTO> {
 
     private final static I18n i18n = I18n.get(SimulationForm.class);
 
-    public SimulationForm(boolean viewable) {
-        super(SimulationDTO.class, viewable);
-    }
+    public SimulationForm(IFormView<SimulationDTO> view) {
+        super(SimulationDTO.class, view);
 
-    @Override
-    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
 

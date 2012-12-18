@@ -27,6 +27,7 @@ import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -42,16 +43,9 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
 
     private boolean prevTwoStepVerificationValue;
 
-    public CrmRoleForm() {
-        this(false);
-    }
+    public CrmRoleForm(IFormView<CrmRole> view) {
+        super(CrmRole.class, view);
 
-    public CrmRoleForm(boolean viewMode) {
-        super(CrmRole.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;

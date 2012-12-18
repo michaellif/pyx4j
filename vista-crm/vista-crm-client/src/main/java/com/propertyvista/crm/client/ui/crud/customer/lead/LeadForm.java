@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
@@ -52,12 +53,17 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
     private static final I18n i18n = I18n.get(LeadForm.class);
 
-    public LeadForm() {
-        this(false);
-    }
+    public LeadForm(IFormView<Lead> view) {
+        super(Lead.class, view);
 
-    public LeadForm(boolean viewMode) {
-        super(Lead.class, viewMode);
+        Tab tab = addTab(createGuestsTab(i18n.tr("Guests")));
+        selectTab(tab);
+
+        addTab(createDetailsTab(i18n.tr("Details")));
+
+        tab = addTab(createAppointmentsTab(), i18n.tr("Appointments"));
+        setTabEnabled(tab, !isEditable());
+
     }
 
     @Override
@@ -79,19 +85,6 @@ public class LeadForm extends CrmEntityForm<Lead> {
                 return hasContact ? null : new ValidationError(component, i18n.tr("No contact info provided"));
             }
         });
-    }
-
-    @Override
-    public void createTabs() {
-
-        Tab tab = addTab(createGuestsTab(i18n.tr("Guests")));
-        selectTab(tab);
-
-        addTab(createDetailsTab(i18n.tr("Details")));
-
-        tab = addTab(createAppointmentsTab(), i18n.tr("Appointments"));
-        setTabEnabled(tab, !isEditable());
-
     }
 
     private FormFlexPanel createGuestsTab(String title) {

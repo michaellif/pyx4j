@@ -18,6 +18,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -28,16 +29,9 @@ public class UnitOccupancyForm extends CrmEntityForm<AptUnitOccupancySegment> {
 
     private static final I18n i18n = I18n.get(UnitOccupancyForm.class);
 
-    public UnitOccupancyForm() {
-        this(false);
-    }
+    public UnitOccupancyForm(IFormView<AptUnitOccupancySegment> view) {
+        super(AptUnitOccupancySegment.class, view);
 
-    public UnitOccupancyForm(boolean viewMode) {
-        super(AptUnitOccupancySegment.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;

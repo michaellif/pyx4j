@@ -40,7 +40,7 @@ public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> imp
         dashboardButton.setMenu(dashboardsMenu);
         addHeaderToolbarItem(dashboardButton);
 
-        setForm(new ComplexForm(true));
+        setForm(new ComplexForm(this));
     }
 
     @Override

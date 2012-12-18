@@ -26,6 +26,7 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -50,16 +51,8 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
 
     private Label noRequirementsLabel;
 
-    public TenantForm() {
-        this(false);
-    }
-
-    public TenantForm(boolean viewMode) {
-        super(TenantDTO.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
+    public TenantForm(IFormView<TenantDTO> view) {
+        super(TenantDTO.class, view);
 
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
         addTab(createContactsTab(i18n.tr("Emergency Contacts")));

@@ -16,6 +16,7 @@ package com.propertyvista.admin.client.ui.crud.onboardingusers;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
@@ -27,16 +28,8 @@ public class OnboardingUserForm extends AdminEntityForm<OnboardingUserDTO> {
 
     private final static I18n i18n = I18n.get(OnboardingUserForm.class);
 
-    public OnboardingUserForm(boolean viewMode) {
-        super(OnboardingUserDTO.class, viewMode);
-    }
-
-    public OnboardingUserForm() {
-        super(OnboardingUserDTO.class, false);
-    }
-
-    @Override
-    public void createTabs() {
+    public OnboardingUserForm(IFormView<OnboardingUserDTO> view) {
+        super(OnboardingUserDTO.class, view);
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
         content.setH1(++row, 0, 1, i18n.tr("General"));

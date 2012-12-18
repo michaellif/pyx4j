@@ -15,6 +15,7 @@ package com.propertyvista.admin.client.ui.crud.pmc;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.rpc.PmcDTO;
@@ -23,16 +24,9 @@ public class PmcFormNewItem extends AdminEntityForm<PmcDTO> {
 
     private static final I18n i18n = I18n.get(PmcFormNewItem.class);
 
-    public PmcFormNewItem() {
-        this(false);
-    }
+    public PmcFormNewItem(IFormView<PmcDTO> view) {
+        super(PmcDTO.class, view);
 
-    public PmcFormNewItem(boolean viewMode) {
-        super(PmcDTO.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;

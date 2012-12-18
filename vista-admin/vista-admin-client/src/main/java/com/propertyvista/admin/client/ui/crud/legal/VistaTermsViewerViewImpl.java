@@ -25,7 +25,6 @@ public class VistaTermsViewerViewImpl extends AdminViewerViewImplBase<VistaTerms
     public VistaTermsViewerViewImpl() {
         super(AdminSiteMap.Legal.PortalTerms.class);
         enableVersioning(VistaTerms.VistaTermsV.class, GWT.<VistaTermsVersionService> create(VistaTermsVersionService.class));
-
-        setForm(new VistaTermsForm(true));
+        setForm(new VistaTermsForm(this));
     }
 }

@@ -20,6 +20,7 @@ import com.propertyvista.admin.rpc.AdminSiteMap;
 public class PadBatchViewerViewImpl extends AdminViewerViewImplBase<PadSimBatch> implements PadBatchViewerView {
 
     public PadBatchViewerViewImpl() {
-        super(AdminSiteMap.Administration.PadSimulation.PadSimBatch.class, new PadBatchForm(true));
+        super(AdminSiteMap.Administration.PadSimulation.PadSimBatch.class);
+        setForm(new PadBatchForm(this));
     }
 }

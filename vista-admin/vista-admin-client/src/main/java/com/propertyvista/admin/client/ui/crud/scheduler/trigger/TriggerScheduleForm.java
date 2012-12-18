@@ -21,6 +21,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.domain.scheduler.ScheduleType;
@@ -30,16 +31,9 @@ public class TriggerScheduleForm extends AdminEntityForm<TriggerSchedule> {
 
     private static final I18n i18n = I18n.get(TriggerScheduleForm.class);
 
-    public TriggerScheduleForm() {
-        this(false);
-    }
+    public TriggerScheduleForm(IFormView<TriggerSchedule> view) {
+        super(TriggerSchedule.class, view);
 
-    public TriggerScheduleForm(boolean viewMode) {
-        super(TriggerSchedule.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;

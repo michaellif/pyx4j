@@ -23,7 +23,8 @@ import com.propertyvista.domain.financial.offering.Concession;
 public class ConcessionViewerViewImpl extends CrmViewerViewImplBase<Concession> implements ConcessionViewerView {
 
     public ConcessionViewerViewImpl() {
-        super(CrmSiteMap.Properties.Concession.class, new ConcessionForm(true));
+        super(CrmSiteMap.Properties.Concession.class);
+        setForm(new ConcessionForm(this));
         enableVersioning(Concession.ConcessionV.class, GWT.<ConcessionVersionService> create(ConcessionVersionService.class));
     }
 }

@@ -16,6 +16,7 @@ package com.propertyvista.admin.client.ui.crud.pmc;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
@@ -27,16 +28,9 @@ public class OnboardingMerchantAccountForm extends AdminEntityForm<OnboardingMer
 
     private static final I18n i18n = I18n.get(OnboardingMerchantAccountForm.class);
 
-    public OnboardingMerchantAccountForm(boolean viewMode) {
-        super(OnboardingMerchantAccountDTO.class, viewMode);
-    }
+    public OnboardingMerchantAccountForm(IFormView<OnboardingMerchantAccountDTO> view) {
+        super(OnboardingMerchantAccountDTO.class, view);
 
-    public OnboardingMerchantAccountForm() {
-        this(false);
-    }
-
-    @Override
-    protected void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class))),

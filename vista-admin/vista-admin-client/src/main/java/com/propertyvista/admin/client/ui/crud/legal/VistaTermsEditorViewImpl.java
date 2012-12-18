@@ -21,6 +21,6 @@ public class VistaTermsEditorViewImpl extends AdminEditorViewImplBase<VistaTerms
 
     public VistaTermsEditorViewImpl() {
         super(AdminSiteMap.Legal.PortalTerms.class);
-        setForm(new VistaTermsForm(false));
+        setForm(new VistaTermsForm(this));
     }
 }

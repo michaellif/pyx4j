@@ -39,7 +39,7 @@ public class ProductDictionaryViewImpl extends CrmViewerViewImplBase<ProductItem
         utilityLister = new ListerInternalViewImplBase<Utility>(new UtilityLister());
 
         // set main form here: 
-        setForm(new ProductDictionaryViewForm());
+        setForm(new ProductDictionaryViewForm(this));
     }
 
     @Override

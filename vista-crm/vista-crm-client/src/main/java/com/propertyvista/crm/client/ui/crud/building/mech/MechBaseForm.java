@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.editors.MaintenanceEditor;
@@ -28,16 +29,8 @@ public abstract class MechBaseForm<E extends LicensedWarrantedMaintained> extend
 
     private static final I18n i18n = I18n.get(MechBaseForm.class);
 
-    protected MechBaseForm(Class<E> entityClass) {
-        this(entityClass, false);
-    }
-
-    protected MechBaseForm(Class<E> entityClass, boolean viewMode) {
-        super(entityClass, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
+    protected MechBaseForm(Class<E> entityClass, IFormView<E> view) {
+        super(entityClass, view);
 
         Tab tab = addTab(createGeneralTab());
         selectTab(tab);

@@ -21,7 +21,7 @@ public class BackgroundCheckPolicyEditorViewImpl extends CrmEditorViewImplBase<B
 
     public BackgroundCheckPolicyEditorViewImpl() {
         super(CrmSiteMap.Administration.Policies.BackgroundCheck.class);
-        setForm(new BackgroundCheckPolicyForm());
+        setForm(new BackgroundCheckPolicyForm(this));
     }
 
 }

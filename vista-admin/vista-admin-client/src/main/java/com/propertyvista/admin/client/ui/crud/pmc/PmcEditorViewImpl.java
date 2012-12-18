@@ -21,9 +21,9 @@ import com.propertyvista.admin.rpc.PmcDTO;
 
 public class PmcEditorViewImpl extends AdminEditorViewImplBase<PmcDTO> implements PmcEditorView {
 
-    private final CrudEntityForm<PmcDTO> existingItemForm = new PmcForm();
+    private final CrudEntityForm<PmcDTO> existingItemForm = new PmcForm(this);
 
-    private final CrudEntityForm<PmcDTO> newItemForm = new PmcFormNewItem();
+    private final CrudEntityForm<PmcDTO> newItemForm = new PmcFormNewItem(this);
 
     public PmcEditorViewImpl() {
         super(AdminSiteMap.Management.PMC.class);

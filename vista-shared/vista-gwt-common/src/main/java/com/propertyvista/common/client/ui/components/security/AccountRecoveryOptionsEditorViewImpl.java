@@ -32,7 +32,7 @@ public class AccountRecoveryOptionsEditorViewImpl extends EditorViewImplBase<Acc
     private final Button btnCancel;
 
     public AccountRecoveryOptionsEditorViewImpl() {
-        setForm(new AccountRecoveryOptionsForm());
+        setForm(new AccountRecoveryOptionsForm(this));
         setCaption(i18n.tr("Account Recovery Options"));
 
         btnCancel = new Button(i18n.tr("Cancel"), new ClickHandler() {

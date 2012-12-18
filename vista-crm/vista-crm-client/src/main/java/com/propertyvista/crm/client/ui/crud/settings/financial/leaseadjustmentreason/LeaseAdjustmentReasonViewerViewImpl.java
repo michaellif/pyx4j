@@ -20,6 +20,7 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 public class LeaseAdjustmentReasonViewerViewImpl extends CrmViewerViewImplBase<LeaseAdjustmentReason> implements LeaseAdjustmentReasonViewerView {
 
     public LeaseAdjustmentReasonViewerViewImpl() {
-        super(Financial.LeaseAdjustmentReason.class, new LeaseAdjustmentReasonForm(true));
+        super(Financial.LeaseAdjustmentReason.class);
+        setForm(new LeaseAdjustmentReasonForm(this));
     }
 }

@@ -39,7 +39,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         super(CrmSiteMap.Tenants.Tenant.class);
 
         //set main form here:
-        setForm(new TenantForm(true));
+        setForm(new TenantForm(this));
 
         addHeaderToolbarItem(new Button(i18n.tr("Maintenance Requests"), new ClickHandler() {
             @Override

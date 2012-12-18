@@ -37,7 +37,8 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
     private Button offerAcceptButton;
 
     public LeaseTermViewerViewImpl() {
-        super(CrmSiteMap.Tenants.LeaseTerm.class, new LeaseTermForm(true));
+        super(CrmSiteMap.Tenants.LeaseTerm.class);
+        setForm(new LeaseTermForm(this));
         enableVersioning(LeaseTerm.LeaseTermV.class, GWT.<LeaseTermVersionService> create(LeaseTermVersionService.class));
 
         addHeaderToolbarItem(new Button(i18n.tr("Charges"), new ClickHandler() {

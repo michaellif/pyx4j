@@ -22,6 +22,6 @@ public class OnboardingMerchantAccountEditorViewImpl extends AdminEditorViewImpl
 
     public OnboardingMerchantAccountEditorViewImpl() {
         super(AdminSiteMap.Management.OnboardingMerchantAccounts.class);
-        setForm(new OnboardingMerchantAccountForm());
+        setForm(new OnboardingMerchantAccountForm(this));
     }
 }

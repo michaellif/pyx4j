@@ -28,6 +28,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
@@ -55,16 +56,8 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
 
     private IdUploaderFolder fileUpload;
 
-    public CustomerScreeningForm() {
-        this(false);
-    }
-
-    public CustomerScreeningForm(boolean viewMode) {
-        super(CustomerScreening.class, viewMode);
-    }
-
-    @Override
-    protected void createTabs() {
+    public CustomerScreeningForm(IFormView<CustomerScreening> view) {
+        super(CustomerScreening.class, view);
 
         Tab tab = addTab(createIdentificationDocumentsTab(i18n.tr("Identification Documents")));
         selectTab(tab);
@@ -173,14 +166,14 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
         FormFlexPanel main = new FormFlexPanel(title);
 
         int row = 0;
-        main.setWidget(row++, 0,
-                new DecoratorBuilder(inject(proto().version().legalQuestions().suedForRent()), 10, 45).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().suedForRent()), 10, 45).labelAlignment(Alignment.left)
+                .useLabelSemicolon(false).build());
         main.setHR(row++, 0, 1);
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().suedForDamages()), 10, 45).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
         main.setHR(row++, 0, 1);
-        main.setWidget(row++, 0,
-                new DecoratorBuilder(inject(proto().version().legalQuestions().everEvicted()), 10, 45).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().everEvicted()), 10, 45).labelAlignment(Alignment.left)
+                .useLabelSemicolon(false).build());
         main.setHR(row++, 0, 1);
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().defaultedOnLease()), 10, 45).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());

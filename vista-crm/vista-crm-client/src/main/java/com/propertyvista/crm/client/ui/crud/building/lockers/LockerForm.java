@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.building.lockers;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.property.asset.Locker;
@@ -23,16 +24,9 @@ public class LockerForm extends CrmEntityForm<Locker> {
 
     private static final I18n i18n = I18n.get(LockerForm.class);
 
-    public LockerForm() {
-        this(false);
-    }
+    public LockerForm(IFormView<Locker> view) {
+        super(Locker.class, view);
 
-    public LockerForm(boolean viewMode) {
-        super(Locker.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;

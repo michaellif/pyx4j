@@ -89,7 +89,7 @@ public class DashboardManagementViewerViewImpl extends CrmViewerViewImplBase<Das
 
     public DashboardManagementViewerViewImpl() {
         super(CrmSiteMap.Dashboard.Manage.class);
-        setForm(new DashboardManagementForm(true));
+        setForm(new DashboardManagementForm(this));
 
         addHeaderToolbarItem(takeOwnershipButton = new Button(i18n.tr("Take Ownership"), new ClickHandler() {
             @Override

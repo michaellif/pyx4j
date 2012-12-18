@@ -49,7 +49,7 @@ public class TriggerViewerViewImpl extends AdminViewerViewImplBase<TriggerDTO> i
 
         runLister = new ListerInternalViewImplBase<Run>(new RunLister());
 
-        setForm(new TriggerForm(true));
+        setForm(new TriggerForm(this));
 
         // Add actions:
         Button refresh = new Button(i18n.tr("Refresh"), new ClickHandler() {

@@ -30,6 +30,7 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
@@ -49,12 +50,8 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
 
     private final static I18n i18n = I18n.get(ProductTaxPolicyForm.class);
 
-    public ProductTaxPolicyForm() {
-        this(false);
-    }
-
-    public ProductTaxPolicyForm(boolean viewMode) {
-        super(ProductTaxPolicyDTO.class, viewMode);
+    public ProductTaxPolicyForm(IFormView<ProductTaxPolicyDTO> view) {
+        super(ProductTaxPolicyDTO.class, view);
     }
 
     @Override

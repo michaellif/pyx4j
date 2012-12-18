@@ -17,6 +17,7 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -25,16 +26,9 @@ public class FeatureForm extends CrmEntityForm<Feature> {
 
     private static final I18n i18n = I18n.get(FeatureForm.class);
 
-    public FeatureForm() {
-        this(false);
-    }
+    public FeatureForm(IFormView<Feature> view) {
+        super(Feature.class, view);
 
-    public FeatureForm(boolean viewMode) {
-        super(Feature.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;

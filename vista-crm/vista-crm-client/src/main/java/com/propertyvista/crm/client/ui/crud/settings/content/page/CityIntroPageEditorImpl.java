@@ -20,7 +20,8 @@ import com.propertyvista.domain.site.CityIntroPage;
 public class CityIntroPageEditorImpl extends CrmEditorViewImplBase<CityIntroPage> implements CityIntroPageEditor {
 
     public CityIntroPageEditorImpl() {
-        super(Content.CityIntroPage.class, new CityIntroPageForm());
+        super(Content.CityIntroPage.class);
+        setForm(new CityIntroPageForm(this));
     }
 
 }

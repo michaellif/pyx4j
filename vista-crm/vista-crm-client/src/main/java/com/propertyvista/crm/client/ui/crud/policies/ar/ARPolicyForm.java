@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.ARPolicyDTO;
@@ -26,12 +27,8 @@ public class ARPolicyForm extends PolicyDTOTabPanelBasedForm<ARPolicyDTO> {
 
     private static final I18n i18n = I18n.get(ARPolicyForm.class);
 
-    public ARPolicyForm() {
-        this(false);
-    }
-
-    public ARPolicyForm(boolean viewMode) {
-        super(ARPolicyDTO.class, viewMode);
+    public ARPolicyForm(IFormView<ARPolicyDTO> view) {
+        super(ARPolicyDTO.class, view);
     }
 
     @Override

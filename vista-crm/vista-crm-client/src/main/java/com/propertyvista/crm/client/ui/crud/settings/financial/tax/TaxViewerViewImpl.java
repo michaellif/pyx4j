@@ -20,6 +20,8 @@ import com.propertyvista.domain.financial.tax.Tax;
 public class TaxViewerViewImpl extends CrmViewerViewImplBase<Tax> implements TaxViewerView {
 
     public TaxViewerViewImpl() {
-        super(Financial.Tax.class, new TaxForm(true));
+        super(Financial.Tax.class);
+        setForm(new TaxForm(this));
+
     }
 }

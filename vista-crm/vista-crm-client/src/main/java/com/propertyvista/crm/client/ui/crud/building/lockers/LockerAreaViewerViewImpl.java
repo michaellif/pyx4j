@@ -31,7 +31,7 @@ public class LockerAreaViewerViewImpl extends CrmViewerViewImplBase<LockerAreaDT
         lockerLister = new ListerInternalViewImplBase<Locker>(new LockerLister(/* readOnly */));
 
         // set main form here:
-        setForm(new LockerAreaForm(true));
+        setForm(new LockerAreaForm(this));
     }
 
     @Override

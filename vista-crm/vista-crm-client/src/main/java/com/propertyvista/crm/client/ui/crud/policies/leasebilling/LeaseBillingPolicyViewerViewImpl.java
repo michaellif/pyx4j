@@ -21,6 +21,6 @@ public class LeaseBillingPolicyViewerViewImpl extends CrmViewerViewImplBase<Leas
 
     public LeaseBillingPolicyViewerViewImpl() {
         super(CrmSiteMap.Administration.Policies.Billing.class);
-        setForm(new LeaseBillingPolicyForm(true));
+        setForm(new LeaseBillingPolicyForm(this));
     }
 }

@@ -24,7 +24,8 @@ import com.propertyvista.misc.VistaTODO;
 public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO> implements LeaseTermEditorView {
 
     public LeaseTermEditorViewImpl() {
-        super(CrmSiteMap.Tenants.LeaseTerm.class, new LeaseTermForm());
+        super(CrmSiteMap.Tenants.LeaseTerm.class);
+        setForm(new LeaseTermForm(this));
     }
 
     @Override

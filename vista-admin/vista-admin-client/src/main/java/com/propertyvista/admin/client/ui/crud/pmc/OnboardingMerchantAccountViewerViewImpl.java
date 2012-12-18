@@ -22,7 +22,7 @@ public class OnboardingMerchantAccountViewerViewImpl extends AdminViewerViewImpl
 
     public OnboardingMerchantAccountViewerViewImpl() {
         super(AdminSiteMap.Management.OnboardingMerchantAccounts.class);
-        setForm(new OnboardingMerchantAccountForm(true));
+        setForm(new OnboardingMerchantAccountForm(this));
     }
 
 }

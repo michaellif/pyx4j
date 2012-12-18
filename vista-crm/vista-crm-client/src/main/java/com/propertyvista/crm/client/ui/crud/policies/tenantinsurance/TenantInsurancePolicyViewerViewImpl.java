@@ -21,7 +21,7 @@ public class TenantInsurancePolicyViewerViewImpl extends CrmViewerViewImplBase<T
 
     public TenantInsurancePolicyViewerViewImpl() {
         super(CrmSiteMap.Administration.Policies.TenantInsurance.class);
-        setForm(new TenantInsurancePolicyForm(true));
+        setForm(new TenantInsurancePolicyForm(this));
     }
 
 }

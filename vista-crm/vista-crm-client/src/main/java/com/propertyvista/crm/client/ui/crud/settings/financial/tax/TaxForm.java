@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.settings.financial.tax;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.tax.Tax;
@@ -23,16 +24,9 @@ public class TaxForm extends CrmEntityForm<Tax> {
 
     private static final I18n i18n = I18n.get(TaxForm.class);
 
-    public TaxForm() {
-        this(false);
-    }
+    public TaxForm(IFormView<Tax> view) {
+        super(Tax.class, view);
 
-    public TaxForm(boolean viewMode) {
-        super(Tax.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;

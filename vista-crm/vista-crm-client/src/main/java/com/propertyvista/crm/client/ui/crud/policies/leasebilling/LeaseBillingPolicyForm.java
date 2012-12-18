@@ -31,6 +31,7 @@ import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -50,12 +51,8 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
     private SimplePanel maxFeeHolder;
 
-    public LeaseBillingPolicyForm() {
-        this(false);
-    }
-
-    public LeaseBillingPolicyForm(boolean viewMode) {
-        super(LeaseBillingPolicyDTO.class, viewMode);
+    public LeaseBillingPolicyForm(IFormView<LeaseBillingPolicyDTO> view) {
+        super(LeaseBillingPolicyDTO.class, view);
     }
 
     @Override

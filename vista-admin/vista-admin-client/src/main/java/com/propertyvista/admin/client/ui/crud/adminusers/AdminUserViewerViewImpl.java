@@ -31,7 +31,7 @@ public class AdminUserViewerViewImpl extends AdminViewerViewImplBase<AdminUserDT
 
     public AdminUserViewerViewImpl() {
         super(AdminSiteMap.Administration.AdminUsers.class);
-        setForm(new AdminUserForm(true));
+        setForm(new AdminUserForm(this));
 
         passwordAction = new Button(i18n.tr("Change Password"), new ClickHandler() {
             @Override

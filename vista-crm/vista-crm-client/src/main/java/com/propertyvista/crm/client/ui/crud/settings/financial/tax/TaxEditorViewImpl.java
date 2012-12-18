@@ -19,6 +19,7 @@ import com.propertyvista.domain.financial.tax.Tax;
 
 public class TaxEditorViewImpl extends CrmEditorViewImplBase<Tax> implements TaxEditorView {
     public TaxEditorViewImpl() {
-        super(Financial.Tax.class, new TaxForm());
+        super(Financial.Tax.class);
+        setForm(new TaxForm(this));
     }
 }

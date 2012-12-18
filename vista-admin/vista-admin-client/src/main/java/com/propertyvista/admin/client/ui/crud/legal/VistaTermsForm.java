@@ -20,6 +20,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.domain.legal.LegalDocument;
@@ -30,12 +31,9 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 public class VistaTermsForm extends AdminEntityForm<VistaTerms> {
     private final static I18n i18n = I18n.get(VistaTermsForm.class);
 
-    public VistaTermsForm(boolean viewMode) {
-        super(VistaTerms.class, viewMode);
-    }
+    public VistaTermsForm(IFormView<VistaTerms> view) {
+        super(VistaTerms.class, view);
 
-    @Override
-    protected void createTabs() {
         FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
 
         main.setWidget(0, 0, inject(proto().version().document(), new VistaTermsDocumentFolder()));

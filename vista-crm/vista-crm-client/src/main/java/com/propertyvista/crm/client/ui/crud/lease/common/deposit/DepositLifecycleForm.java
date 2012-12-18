@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.lease.common.deposit;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.dto.DepositLifecycleDTO;
@@ -23,16 +24,9 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycleDTO> {
 
     private static final I18n i18n = I18n.get(DepositLifecycleForm.class);
 
-    public DepositLifecycleForm() {
-        this(false);
-    }
+    public DepositLifecycleForm(IFormView<DepositLifecycleDTO> view) {
+        super(DepositLifecycleDTO.class, view);
 
-    public DepositLifecycleForm(boolean viewMode) {
-        super(DepositLifecycleDTO.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;

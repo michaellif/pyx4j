@@ -23,7 +23,8 @@ import com.propertyvista.domain.financial.offering.Feature;
 public class FeatureViewerViewImpl extends CrmViewerViewImplBase<Feature> implements FeatureViewerView {
 
     public FeatureViewerViewImpl() {
-        super(CrmSiteMap.Properties.Feature.class, new FeatureForm(true));
+        super(CrmSiteMap.Properties.Feature.class);
+        setForm(new FeatureForm(this));
         enableHistorying(Feature.FeatureV.class, GWT.<FeatureVersionService> create(FeatureVersionService.class));
     }
 }

@@ -21,6 +21,6 @@ public class CrmRoleViewerViewImpl extends CrmViewerViewImplBase<CrmRole> implem
 
     public CrmRoleViewerViewImpl() {
         super(Security.UserRole.class);
-        setForm(new CrmRoleForm(true));
+        setForm(new CrmRoleForm(this));
     }
 }

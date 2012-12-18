@@ -21,7 +21,7 @@ public class PadFileEditorViewImpl extends AdminEditorViewImplBase<PadSimFile> i
 
     public PadFileEditorViewImpl() {
         super(AdminSiteMap.Administration.PadSimulation.PadSimFile.class);
-        setForm(new PadFileForm());
+        setForm(new PadFileForm(this));
     }
 
 }

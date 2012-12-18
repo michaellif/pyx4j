@@ -21,7 +21,7 @@ public class CustomerCreditCheckViewerViewImpl extends CrmViewerViewImplBase<Cus
 
     public CustomerCreditCheckViewerViewImpl() {
         super(Financial.CustomerCreditCheck.class, true);
-        setForm(new CustomerCreditCheckForm(true));
+        setForm(new CustomerCreditCheckForm(this));
     }
 
 }

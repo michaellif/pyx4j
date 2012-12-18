@@ -15,13 +15,13 @@ package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial.ProductDictionary;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 
 public class FeatureTypeEditorViewImpl extends CrmEditorViewImplBase<FeatureItemType> implements FeatureTypeEditorView {
 
     public FeatureTypeEditorViewImpl() {
-        super(Financial.ProductDictionary.FeatureItemType.class, new FeatureTypeForm());
+        super(Financial.ProductDictionary.FeatureItemType.class);
+        setForm(new FeatureTypeForm(this));
     }
 
 }

@@ -26,8 +26,8 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.domain.security.SecurityQuestion;
 import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
 
@@ -35,16 +35,9 @@ public class AccountRecoveryOptionsForm extends CrudEntityForm<AccountRecoveryOp
 
     private static final I18n i18n = I18n.get(AccountRecoveryOptionsForm.class);
 
-    public AccountRecoveryOptionsForm() {
-        super(AccountRecoveryOptionsDTO.class, VistaTheme.defaultTabHeight);
-    }
+    public AccountRecoveryOptionsForm(IFormView<AccountRecoveryOptionsDTO> view) {
+        super(AccountRecoveryOptionsDTO.class, view);
 
-    public AccountRecoveryOptionsForm(boolean viewMode) {
-        super(AccountRecoveryOptionsDTO.class, viewMode, VistaTheme.defaultTabHeight);
-    }
-
-    @Override
-    protected void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
 
@@ -66,7 +59,6 @@ public class AccountRecoveryOptionsForm extends CrudEntityForm<AccountRecoveryOp
         get(proto().securityAnswer()).setVisible(false);
 
         selectTab(addTab(content));
-
     }
 
     public void setSecurityQuestionRequired(boolean isSecurityQuestionEntiryRequired) {

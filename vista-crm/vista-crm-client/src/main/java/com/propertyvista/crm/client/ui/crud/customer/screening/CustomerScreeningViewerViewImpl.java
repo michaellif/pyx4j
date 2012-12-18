@@ -23,7 +23,8 @@ import com.propertyvista.domain.tenant.CustomerScreening;
 public class CustomerScreeningViewerViewImpl extends CrmViewerViewImplBase<CustomerScreening> implements CustomerScreeningViewerView {
 
     public CustomerScreeningViewerViewImpl() {
-        super(CrmSiteMap.Tenants.Screening.class, new CustomerScreeningForm(true));
+        super(CrmSiteMap.Tenants.Screening.class);
+        setForm(new CustomerScreeningForm(this));
         enableVersioning(CustomerScreening.CustomerScreeningV.class, GWT.<CustomerScreeningVersionService> create(CustomerScreeningVersionService.class));
     }
 

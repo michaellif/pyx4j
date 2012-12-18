@@ -106,7 +106,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         billingCycleLister = new ListerInternalViewImplBase<BillingCycleDTO>(new BillingCycleLister());
 
         // set main form here:
-        setForm(new BuildingForm(true));
+        setForm(new BuildingForm(this));
 
         Button dashboardButton = new Button(i18n.tr("Dashboard"));
         dashboardsMenu = dashboardButton.createMenu();

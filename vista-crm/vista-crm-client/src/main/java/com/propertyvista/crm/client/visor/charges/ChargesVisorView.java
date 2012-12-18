@@ -18,12 +18,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.dto.BillDTO;
 
@@ -33,7 +33,7 @@ public class ChargesVisorView extends ScrollPanel {
 
     private final ChargesVisorController controller;
 
-    private final CrmEntityForm<BillDataDTO> form;
+    private final CEntityForm<BillDataDTO> form;
 
     public ChargesVisorView(ChargesVisorController controller) {
         this.controller = controller;
@@ -58,7 +58,7 @@ public class ChargesVisorView extends ScrollPanel {
         });
     }
 
-    private class ChargesForm extends CrmEntityForm<BillDataDTO> {
+    private class ChargesForm extends CEntityForm<BillDataDTO> {
 
         public ChargesForm() {
             super(BillDataDTO.class);
@@ -73,9 +73,5 @@ public class ChargesVisorView extends ScrollPanel {
             return main;
         }
 
-        @Override
-        protected void createTabs() {
-            // TODO Auto-generated method stub
-        }
     }
 }

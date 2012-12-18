@@ -30,7 +30,8 @@ public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> imp
     private static final I18n i18n = I18n.get(SiteViewerImpl.class);
 
     public SiteViewerImpl() {
-        super(CrmSiteMap.Administration.Content.class, new SiteForm(true));
+        super(CrmSiteMap.Administration.Content.class);
+        setForm(new SiteForm(this));
 
         // Add actions:
         addAction(new MenuItem(i18n.tr("Add Child Page"), new Command() {

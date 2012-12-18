@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -45,12 +46,8 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
 
     private final Map<GadgetType, CComponent<?, ?>> panelMap = new HashMap<GadgetType, CComponent<?, ?>>();
 
-    public HomePageGadgetForm() {
-        this(false);
-    }
-
-    public HomePageGadgetForm(boolean viewMode) {
-        super(HomePageGadget.class, viewMode);
+    public HomePageGadgetForm(IFormView<HomePageGadget> view) {
+        super(HomePageGadget.class, view);
         mainPanel = new SimplePanel();
         mainPanel.setSize("100%", "100%");
 
@@ -58,20 +55,17 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         panelMap.put(GadgetType.news, getNewsContentEditor());
         panelMap.put(GadgetType.testimonials, getTestimContentEditor());
         panelMap.put(GadgetType.promo, getPromoContentEditor());
-    }
 
-    @Override
-    public void createTabs() {
-        FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
+        FormFlexPanel generalPanel = new FormFlexPanel(i18n.tr("General"));
 
         int row = 0;
-        main.setH1(row++, 0, 1, i18n.tr("General"));
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().area()), 10).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
-        main.setWidget(row++, 0, mainPanel);
+        generalPanel.setH1(row++, 0, 1, i18n.tr("General"));
+        generalPanel.setWidget(row++, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
+        generalPanel.setWidget(row++, 0, new DecoratorBuilder(inject(proto().area()), 10).build());
+        generalPanel.setWidget(row++, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
+        generalPanel.setWidget(row++, 0, mainPanel);
 
-        selectTab(addTab(main));
+        selectTab(addTab(generalPanel));
 
     }
 

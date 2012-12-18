@@ -20,6 +20,7 @@ import com.propertyvista.domain.financial.offering.Concession;
 public class ConcessionEditorViewImpl extends CrmEditorViewImplBase<Concession> implements ConcessionEditorView {
 
     public ConcessionEditorViewImpl() {
-        super(CrmSiteMap.Properties.Concession.class, new ConcessionForm());
+        super(CrmSiteMap.Properties.Concession.class);
+        setForm(new ConcessionForm(this));
     }
 }

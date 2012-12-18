@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.settings.content.page;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.RichTextContentFolder;
@@ -23,17 +24,9 @@ import com.propertyvista.domain.site.CityIntroPage;
 public class CityIntroPageForm extends CrmEntityForm<CityIntroPage> {
     private static final I18n i18n = I18n.get(CityIntroPageForm.class);
 
-    public CityIntroPageForm() {
-        this(false);
+    public CityIntroPageForm(IFormView<CityIntroPage> view) {
+        super(CityIntroPage.class, view);
 
-    }
-
-    public CityIntroPageForm(boolean viewMode) {
-        super(CityIntroPage.class, viewMode);
-    }
-
-    @Override
-    protected void createTabs() {
         FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
 
         int row = 0;

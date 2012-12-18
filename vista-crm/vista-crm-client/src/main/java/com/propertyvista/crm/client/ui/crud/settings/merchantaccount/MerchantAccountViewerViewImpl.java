@@ -21,6 +21,6 @@ public class MerchantAccountViewerViewImpl extends CrmViewerViewImplBase<Merchan
 
     public MerchantAccountViewerViewImpl() {
         super(Security.UserRole.class);
-        setForm(new MerchantAccountForm(true));
+        setForm(new MerchantAccountForm(this));
     }
 }

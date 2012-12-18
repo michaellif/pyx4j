@@ -19,6 +19,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -33,16 +34,9 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     private static final I18n i18n = I18n.get(EmployeeForm.class);
 
-    public EmployeeForm() {
-        this(false);
-    }
+    public EmployeeForm(IFormView<EmployeeDTO> view) {
+        super(EmployeeDTO.class, view);
 
-    public EmployeeForm(boolean viewMode) {
-        super(EmployeeDTO.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         selectTab(addTab(createInfoTab(i18n.tr("Personal Information"))));
         addTab(createPrivilegesTab(i18n.tr("Privileges")));
         addTab(createAuditingConfigurationTab(i18n.tr("Auditing Configuration")));

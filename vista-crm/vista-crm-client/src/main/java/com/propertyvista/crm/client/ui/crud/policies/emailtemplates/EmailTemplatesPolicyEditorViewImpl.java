@@ -21,7 +21,7 @@ public class EmailTemplatesPolicyEditorViewImpl extends CrmEditorViewImplBase<Em
 
     public EmailTemplatesPolicyEditorViewImpl() {
         super(CrmSiteMap.Administration.Policies.EmailTemplates.class);
-        setForm(new EmailTemplatesPolicyForm());
+        setForm(new EmailTemplatesPolicyForm(this));
     }
 
 }

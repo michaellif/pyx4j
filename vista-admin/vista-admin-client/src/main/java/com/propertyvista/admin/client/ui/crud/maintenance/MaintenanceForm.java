@@ -21,6 +21,7 @@ import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.shared.VistaSystemIdentification;
@@ -29,16 +30,9 @@ public class MaintenanceForm extends AdminEntityForm<SystemMaintenanceState> {
 
     private static final I18n i18n = I18n.get(MaintenanceForm.class);
 
-    public MaintenanceForm() {
-        this(false);
-    }
+    public MaintenanceForm(IFormView<SystemMaintenanceState> view) {
+        super(SystemMaintenanceState.class, view);
 
-    public MaintenanceForm(boolean viewMode) {
-        super(SystemMaintenanceState.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;

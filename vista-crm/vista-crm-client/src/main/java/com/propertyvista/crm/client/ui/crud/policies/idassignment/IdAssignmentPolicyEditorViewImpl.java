@@ -21,7 +21,7 @@ public class IdAssignmentPolicyEditorViewImpl extends CrmEditorViewImplBase<IdAs
 
     public IdAssignmentPolicyEditorViewImpl() {
         super(CrmSiteMap.Administration.Policies.IdAssignment.class);
-        setForm(new IdAssignmentPolicyForm());
+        setForm(new IdAssignmentPolicyForm(this));
     }
 
 }

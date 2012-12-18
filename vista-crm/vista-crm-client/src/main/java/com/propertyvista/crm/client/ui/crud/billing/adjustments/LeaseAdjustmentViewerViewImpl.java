@@ -30,7 +30,8 @@ public class LeaseAdjustmentViewerViewImpl extends CrmViewerViewImplBase<LeaseAd
     private final MenuItem submitAction;
 
     public LeaseAdjustmentViewerViewImpl() {
-        super(CrmSiteMap.Finance.LeaseAdjustment.class, new LeaseAdjustmentForm(true));
+        super(CrmSiteMap.Finance.LeaseAdjustment.class);
+        setForm(new LeaseAdjustmentForm(this));
 
         submitAction = new MenuItem(i18n.tr("Submit"), new Command() {
             @Override

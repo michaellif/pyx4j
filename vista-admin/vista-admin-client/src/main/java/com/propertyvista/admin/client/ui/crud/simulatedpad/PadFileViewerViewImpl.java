@@ -38,7 +38,7 @@ public class PadFileViewerViewImpl extends AdminViewerViewImplBase<PadSimFile> i
 
         batchLister = new ListerInternalViewImplBase<PadSimBatch>(new PadBatchLister());
 
-        setForm(new PadFileForm(true));
+        setForm(new PadFileForm(this));
 
         Button replyReconciliation = new Button(i18n.tr("Reply Reconciliation"), new ClickHandler() {
             @Override

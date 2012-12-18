@@ -29,6 +29,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
@@ -50,7 +51,6 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.note.NotesAndAttachmentsDTO;
@@ -93,7 +93,7 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
         return controller;
     }
 
-    public class NotesAndAttachmentsForm extends CrmEntityForm<NotesAndAttachmentsDTO> {
+    public class NotesAndAttachmentsForm extends CEntityForm<NotesAndAttachmentsDTO> {
 
         public NotesAndAttachmentsForm() {
             super(NotesAndAttachmentsDTO.class);
@@ -369,9 +369,5 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
             }
         }
 
-        @Override
-        protected void createTabs() {
-            // TODO Auto-generated method stub
-        }
     }
 }

@@ -15,6 +15,7 @@ package com.propertyvista.admin.client.ui.crud.scheduler.run;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.domain.scheduler.Run;
@@ -23,16 +24,9 @@ public class RunForm extends AdminEntityForm<Run> {
 
     private static final I18n i18n = I18n.get(RunForm.class);
 
-    public RunForm() {
-        this(false);
-    }
+    public RunForm(IFormView<Run> view) {
+        super(Run.class, view);
 
-    public RunForm(boolean viewMode) {
-        super(Run.class, viewMode);
-    }
-
-    @Override
-    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
 

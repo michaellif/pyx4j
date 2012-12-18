@@ -17,6 +17,7 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -37,8 +38,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     private Tab chargesTab;
 
-    protected LeaseFormBase(Class<DTO> clazz) {
-        super(clazz, true);
+    protected LeaseFormBase(Class<DTO> clazz, IFormView<DTO> view) {
+        super(clazz, view);
     }
 
     protected void createCommonContent() {

@@ -22,7 +22,8 @@ import com.propertyvista.domain.site.CityIntroPage;
 public class CityIntroPageViewerImpl extends CrmViewerViewImplBase<CityIntroPage> implements CityIntroPageViewer {
 
     public CityIntroPageViewerImpl() {
-        super(Content.CityIntroPage.class, new CityIntroPageForm(true));
+        super(Content.CityIntroPage.class);
+        setForm(new CityIntroPageForm(this));
     }
 
     @Override

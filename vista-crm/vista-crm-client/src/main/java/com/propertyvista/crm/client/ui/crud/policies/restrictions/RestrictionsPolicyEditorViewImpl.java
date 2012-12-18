@@ -21,7 +21,7 @@ public class RestrictionsPolicyEditorViewImpl extends CrmEditorViewImplBase<Rest
 
     public RestrictionsPolicyEditorViewImpl() {
         super(CrmSiteMap.Administration.Policies.Restrictions.class);
-        setForm(new RestrictionsPolicyForm(false));
+        setForm(new RestrictionsPolicyForm(this));
     }
 
 }

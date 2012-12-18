@@ -46,7 +46,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
     private final MenuItem cancelAction;
 
     public MaintenanceRequestViewerViewImpl() {
-        super(CrmSiteMap.Tenants.MaintenanceRequest.class, new MaintenanceRequestForm(true));
+        super(CrmSiteMap.Tenants.MaintenanceRequest.class);
+        setForm(new MaintenanceRequestForm(this));
 
         scheduleAction = new MenuItem(i18n.tr("Schedule..."), new Command() {
             @Override

@@ -21,7 +21,7 @@ public class PetPolicyEditorViewImpl extends CrmEditorViewImplBase<PetPolicyDTO>
 
     public PetPolicyEditorViewImpl() {
         super(CrmSiteMap.Administration.Policies.Pet.class);
-        setForm(new PetPolicyForm());
+        setForm(new PetPolicyForm(this));
     }
 
 }
