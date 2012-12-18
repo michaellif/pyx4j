@@ -28,6 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.biz.tenant.ScreeningFacade;
@@ -69,7 +70,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         }
 
         ServerSideFactory.create(ScreeningFacade.class).calculateSuggestedDecision(
-                dto.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue(), dto.leaseApproval());
+                ServerSideFactory.create(BillingFacade.class).getMaxLeaseTermMonthlyTotal(dto.currentTerm()), dto.leaseApproval());
 
         dto.masterApplicationStatus().set(
                 ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(dto.leaseApplication().onlineApplication()));

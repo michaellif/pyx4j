@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.StatisticsRecord;
@@ -21,6 +23,7 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 public class BillingFacadeImpl implements BillingFacade {
 
@@ -94,5 +97,10 @@ public class BillingFacadeImpl implements BillingFacade {
         LogicalDate startDate = BillDateUtils.calculateSubsiquentBillingCycleStartDate(cycle.billingType().paymentFrequency().getValue(), cycle
                 .billingCycleStartDate().getValue());
         return BillDateUtils.calculateBillingCycleTargetExecutionDate(cycle.billingType().paymentFrequency().getValue(), startDate);
+    }
+
+    @Override
+    public BigDecimal getMaxLeaseTermMonthlyTotal(LeaseTerm leaseTerm) {
+        return BillingUtils.getMaxLeaseTermMonthlyTotal(leaseTerm);
     }
 }
