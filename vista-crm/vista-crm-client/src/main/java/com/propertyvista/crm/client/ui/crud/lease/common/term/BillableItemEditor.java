@@ -169,7 +169,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 if (isEditable()) {
                     // set editable for non-agreed leases (and multiple service items):
                     get(proto().agreedPrice()).setEditable(!isLeaseApproved);
-                    get(proto().item()).setEditable(!isLeaseApproved && !leaseTerm.getValue().selectedServiceItems().isEmpty());
+                    get(proto().item()).setEditable(!isLeaseApproved && leaseTerm.getValue().selectedServiceItems().size() > 1);
                 }
             } else if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
                 // show/hide effective dates (hide expiration for non-recurring; show in editor, hide in viewer if empty):
