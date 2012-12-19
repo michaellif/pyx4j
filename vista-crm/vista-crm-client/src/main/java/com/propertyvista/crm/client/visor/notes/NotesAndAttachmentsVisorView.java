@@ -40,6 +40,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -50,7 +51,6 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.resources.CrmImages;
-import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.note.NotesAndAttachmentsDTO;
@@ -188,7 +188,7 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
 
                 private final boolean viewable;
 
-                private AnchorButton btnCancel;
+                private Anchor btnCancel;
 
                 public NoteEditor(boolean viewable) {
                     super(NotesAndAttachments.class);
@@ -259,7 +259,7 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                     btnSave.setVisible(false);
                     tb.addItem(btnSave);
 
-                    btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
+                    btnCancel = new Anchor(i18n.tr("Cancel"), new ClickHandler() {
                         @Override
                         public void onClick(ClickEvent event) {
                             if (getValue().getPrimaryKey() == null) {

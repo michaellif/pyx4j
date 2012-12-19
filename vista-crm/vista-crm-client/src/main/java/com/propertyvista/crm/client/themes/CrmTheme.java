@@ -41,7 +41,6 @@ import com.propertyvista.crm.client.ui.SearchBox;
 import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
-import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.KeywordsBox;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
@@ -359,15 +358,6 @@ public class CrmTheme extends VistaTheme {
         style = new Style(buttonEx + "-down-hovering");
         style.addProperty("border-color", ThemeColor.foreground);
         style.addProperty("cursor", "pointer");
-        addStyle(style);
-        //
-        // default AnchorButton: 
-        buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX);
-        style = new Style(buttonEx);
-        style.addProperty("color", ThemeColor.object1, 0.95);
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("font-weight", "bolder");
-        style.addProperty("padding", "3px 6px");
         addStyle(style);
 
         style = new Style(buttonEx + ":hover");
