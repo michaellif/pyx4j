@@ -31,14 +31,19 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IntegrityConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class ListerActivityBase<E extends IEntity> extends AbstractActivity implements IListerView.Presenter<E> {
+
+    private static final I18n i18n = I18n.get(ListerActivityBase.class);
 
     private final IListerView<E> view;
 
@@ -210,7 +215,11 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
             @Override
             public void onFailure(Throwable caught) {
                 onDeleted(itemID, false);
-                throw new UnrecoverableClientError(caught);
+                if (caught instanceof IntegrityConstraintUserRuntimeException) {
+                    MessageDialog.error(i18n.tr("Item Deletion"), caught.getMessage());
+                } else {
+                    throw new UnrecoverableClientError(caught);
+                }
             }
         }, itemID);
     }
