@@ -36,7 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
@@ -55,6 +54,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IntegrityConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
@@ -1161,7 +1161,8 @@ public class TableModel {
             log.error("{} SQL delete error", tableName, e);
             debugErrors(persistenceContext, e);
             if (dialect.isIntegrityConstraintException(e)) {
-                throw new UserRuntimeException(i18n.tr("Unable to delete \"{0}\". The record is referenced by another record.", entityMeta().getCaption()));
+                throw new IntegrityConstraintUserRuntimeException(i18n.tr("Unable to delete \"{0}\". The record is referenced by another record.", entityMeta()
+                        .getCaption()), EntityFactory.getEntityPrototype(entityMeta().getEntityClass()));
             } else {
                 throw new RuntimeException(e);
             }
