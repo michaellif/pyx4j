@@ -157,6 +157,12 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("display", "inline-block");
         addStyle(style);
 
+        style = new Style(".", StyleName.Toolbar, " .", StyleName.Anchor);
+        style.addProperty("color", ThemeColor.object1, 1);
+        style.addProperty("font-size", "1.1em");
+        style.addProperty("font-weight", "bolder");
+        style.addProperty("padding", "3px 6px");
+        addStyle(style);
     }
 
     protected void initRateItStyle() {

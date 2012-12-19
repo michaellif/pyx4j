@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractWizardService;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -119,15 +118,6 @@ public class WizardActivityBase<E extends IEntity> extends AbstractActivity impl
                 onPopulateSuccess(result);
             }
         });
-    }
-
-    /**
-     * Descendants may override this method to perform some initialization.
-     * 
-     * @param callback
-     */
-    protected void createNewEntity(AsyncCallback<E> callback) {
-        callback.onSuccess(EntityFactory.create(getEntityClass()));
     }
 
     public void onPopulateSuccess(E result) {

@@ -38,13 +38,10 @@ import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
 public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
-
-    private static final I18n i18n = I18n.get(WizardForm.class);
 
     private final TabPanel tabPanel = new TabPanel(StyleManger.getTheme().getTabHeight(), Unit.EM);
 
@@ -59,16 +56,11 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
     @Override
     public IsWidget createContent() {
         tabPanel.setSize("100%", "100%");
-
-        createSteps();
-
         return tabPanel;
     }
 
-    abstract protected void createSteps();
-
-    public Tab addTab(final FormFlexPanel panel) {
-        final Tab tab = addTab(panel, panel.getTitle());
+    public Tab addStep(final FormFlexPanel panel) {
+        final Tab tab = addStep(panel, panel.getTitle());
         panel.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
@@ -85,12 +77,20 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
         return tab;
     }
 
-    public Tab addTab(Widget content, String tabTitle) {
+    public Tab addStep(Widget content, String tabTitle) {
         Tab tab = null;
         ScrollPanel scroll = new ScrollPanel(content);
         tab = new Tab(scroll, tabTitle, null, false);
         tabPanel.addTab(tab);
         return tab;
+    }
+
+    @Override
+    public void onReset() {
+        if (tabPanel.getTabs().size() > 0) {
+            tabPanel.selectTab(0);
+        }
+        super.onReset();
     }
 
     public void setTabEnabled(Tab tab, boolean enabled) {
@@ -161,4 +161,15 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
         }
 
     }
+
+    public void goToPrevious() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void goToNext() {
+        // TODO Auto-generated method stub
+
+    }
+
 }

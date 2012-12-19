@@ -20,12 +20,18 @@
  */
 package com.pyx4j.site.client.ui.wizard;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.ViewImplBase;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class WizardViewImplBase<E extends IEntity> extends ViewImplBase implements IWizardView<E> {
@@ -36,11 +42,47 @@ public class WizardViewImplBase<E extends IEntity> extends ViewImplBase implemen
 
     private IWizardView.Presenter presenter;
 
-    public WizardViewImplBase() {
+    private final Button btnPrevious;
+
+    private final Button btnNext;
+
+    public WizardViewImplBase(Class<? extends AppPlace> placeClass) {
         super();
+        setCaption(placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
+
+        btnPrevious = new Button(i18n.tr("Previous"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                form.goToPrevious();
+            }
+        });
+        addFooterToolbarItem(btnPrevious);
+
+        btnNext = new Button(i18n.tr("Next"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                form.goToNext();
+                if (!getForm().isValid()) {
+                    getForm().setUnconditionalValidationErrorRendering(true);
+                    showValidationDialog();
+                } else {
+                    getPresenter().finish();
+                }
+            }
+        });
+        addFooterToolbarItem(btnNext);
+
+        Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                getPresenter().cancel();
+            }
+        });
+        addFooterToolbarItem(btnCancel);
+
     }
 
-    protected void setForm(WizardForm<? extends E> form) {
+    protected void setForm(WizardForm<E> form) {
         if (getContentPane() == null) { // finalise UI here:
             setContentPane(new LayoutPanel());
             setSize("100%", "100%");
@@ -50,7 +92,7 @@ public class WizardViewImplBase<E extends IEntity> extends ViewImplBase implemen
             return; // already!?.
         }
 
-        this.form = (WizardForm<E>) form;
+        this.form = form;
         this.form.initContent();
 
         LayoutPanel center = (LayoutPanel) getContentPane();
@@ -72,7 +114,6 @@ public class WizardViewImplBase<E extends IEntity> extends ViewImplBase implemen
 
     @Override
     public void reset() {
-        setCaption(null);
         assert (form != null);
         form.reset();
     }
