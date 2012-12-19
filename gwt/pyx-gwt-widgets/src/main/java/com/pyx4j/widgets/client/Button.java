@@ -206,7 +206,7 @@ public class Button extends FocusPanel implements IFocusWidget {
         }
     }
 
-    static class ButtonFacesHandler implements MouseOverHandler, MouseOutHandler, MouseDownHandler, MouseUpHandler {
+    static class ButtonFacesHandler implements MouseOverHandler, MouseOutHandler, MouseDownHandler, MouseUpHandler, ClickHandler {
 
         private Button button;
 
@@ -223,6 +223,7 @@ public class Button extends FocusPanel implements IFocusWidget {
             button.addMouseOutHandler(this);
             button.addMouseDownHandler(this);
             button.addMouseUpHandler(this);
+            button.addClickHandler(this);
         }
 
         public void enable(boolean flag) {
@@ -271,6 +272,13 @@ public class Button extends FocusPanel implements IFocusWidget {
                 button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
                 button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
             }
+        }
+
+        @Override
+        public void onClick(ClickEvent event) {
+            // fix for Buttons like remain in Mouse Over position after they are clicked.
+            button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
+            button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
         }
 
         public Button getButton() {
