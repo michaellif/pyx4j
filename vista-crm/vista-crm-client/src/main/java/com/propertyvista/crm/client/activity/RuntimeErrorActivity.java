@@ -16,8 +16,9 @@ package com.propertyvista.crm.client.activity;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+
+import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.RuntimeErrorView;
@@ -41,6 +42,6 @@ public class RuntimeErrorActivity extends AbstractActivity implements RuntimeErr
 
     @Override
     public void backToOrigin() {
-        History.back();
+        AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
     }
 }
