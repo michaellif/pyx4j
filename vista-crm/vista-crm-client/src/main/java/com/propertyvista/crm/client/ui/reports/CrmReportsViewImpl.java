@@ -29,7 +29,6 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
 
     static {
         factoryMap = new HashMap<Class<? extends ReportMetadata>, ReportFactory<?>>();
-
         factoryMap.put(AvailabilityReportMetadata.class, new AvailabilityReportFactory());
     }
 

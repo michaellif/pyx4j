@@ -101,9 +101,9 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
 
         }
 
-        criteria.add(PropertyCriterion.le(criteria.proto().statusFrom(), metadata.asOf()));
-        criteria.add(PropertyCriterion.ge(criteria.proto().statusUntil(), metadata.asOf()));
-        criteria.add(PropertyCriterion.ne(criteria.proto().vacancyStatus(), null));
+        criteria.le(criteria.proto().statusFrom(), metadata.asOf());
+        criteria.ge(criteria.proto().statusUntil(), metadata.asOf());
+        criteria.ne(criteria.proto().vacancyStatus(), null);
 
         return criteria;
     }
