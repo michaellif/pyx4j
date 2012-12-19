@@ -219,7 +219,8 @@ public class BillingUtils {
             monthly = monthly.add(leaseTerm.version().leaseProducts().serviceItem().agreedPrice().getValue());
             for (BillableItem feature : leaseTerm.version().leaseProducts().featureItems()) {
                 // add feature monthly price if active within current from-to period (not prorated)
-                if (feature.effectiveDate().getValue().before(to) && feature.expirationDate().getValue().after(from)) {
+                if ((feature.effectiveDate().isNull() || feature.effectiveDate().getValue().before(to))
+                        && (feature.expirationDate().isNull() || feature.expirationDate().getValue().after(from))) {
                     monthly = monthly.add(feature.agreedPrice().getValue());
                 }
             }
