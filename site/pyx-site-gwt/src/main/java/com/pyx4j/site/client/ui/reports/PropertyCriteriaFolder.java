@@ -30,6 +30,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
@@ -45,11 +46,11 @@ public class PropertyCriteriaFolder extends CEntityFolder<PropertyCriterionEntit
 
     private final EntityFolderImages images;
 
-    private final List<ColumnDescriptor> availableCriteriaColumns;
+    private final List<MemberColumnDescriptor> availableCriteriaColumns;
 
     private final Class<? extends IEntity> tableEntityClass;
 
-    public PropertyCriteriaFolder(EntityFolderImages images, Class<? extends IEntity> tableEntityClass, List<ColumnDescriptor> availableCriteriaColumns) {
+    public PropertyCriteriaFolder(EntityFolderImages images, Class<? extends IEntity> tableEntityClass, List<MemberColumnDescriptor> availableCriteriaColumns) {
         super(PropertyCriterionEntity.class);
         this.images = images;
         this.availableCriteriaColumns = availableCriteriaColumns;
@@ -98,7 +99,7 @@ public class PropertyCriteriaFolder extends CEntityFolder<PropertyCriterionEntit
 
         private final ListBox comboBox;
 
-        public PropertyClassChoserDialog(List<ColumnDescriptor> columnDescriptors) {
+        public PropertyClassChoserDialog(List<MemberColumnDescriptor> columnDescriptors) {
             super(i18n.tr("Choose criteria"));
             comboBox = new ListBox();
             for (ColumnDescriptor descriptor : columnDescriptors) {
