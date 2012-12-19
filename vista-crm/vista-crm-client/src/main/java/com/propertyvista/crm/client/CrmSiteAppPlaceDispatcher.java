@@ -63,7 +63,9 @@ public class CrmSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     public AppPlace getUserMessagePlace() {
-        return new CrmSiteMap.RuntimeError();
+        AppPlace place = new CrmSiteMap.RuntimeError();
+        place.setStable(false);
+        return place;
     }
 
     @Override

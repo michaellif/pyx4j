@@ -27,6 +27,13 @@ import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 public class OnboardingAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
+    public AppPlace getUserMessagePlace() {
+        AppPlace place = new OnboardingSiteMap.RuntimeError();
+        place.setStable(false);
+        return place;
+    }
+
+    @Override
     protected boolean isApplicationAuthenticated() {
         return SecurityController.checkBehavior(VistaBasicBehavior.Onboarding);
     }
