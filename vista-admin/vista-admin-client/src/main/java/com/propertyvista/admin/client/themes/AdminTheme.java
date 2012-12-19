@@ -31,7 +31,6 @@ import com.propertyvista.admin.client.ui.NavigViewImpl;
 import com.propertyvista.admin.client.ui.SearchBox;
 import com.propertyvista.admin.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.admin.client.ui.ShortCutsViewImpl;
-import com.propertyvista.admin.client.ui.components.AnchorButton;
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.common.client.theme.DraggerMixin;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
@@ -300,16 +299,6 @@ public class AdminTheme extends VistaTheme {
         style.addProperty("border-top-color", ThemeColor.object1, 0.95);
         style.addProperty("border-right-color", ThemeColor.object1, 0.1);
         style.addProperty("border-bottom-color", ThemeColor.object1, 0.1);
-        addStyle(style);
-
-        //
-        // default AnchorButton:
-        buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX);
-        style = new Style(buttonEx);
-        style.addProperty("color", ThemeColor.object1, 0.95);
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("font-weight", "bolder");
-        style.addProperty("padding", "3px 6px");
         addStyle(style);
 
         style = new Style(buttonEx + ":hover");

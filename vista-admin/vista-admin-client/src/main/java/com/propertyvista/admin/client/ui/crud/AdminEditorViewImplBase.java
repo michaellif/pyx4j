@@ -25,9 +25,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 import com.pyx4j.site.client.ui.crud.form.EditorViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
-
-import com.propertyvista.admin.client.ui.components.AnchorButton;
 
 public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
 
@@ -72,7 +71,7 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
         });
         addFooterToolbarItem(btnApply);
 
-        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
+        Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 getPresenter().cancel();

@@ -26,9 +26,9 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 import com.pyx4j.site.client.ui.crud.form.EditorViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.domain.IHistoricVersioning;
 
 public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
@@ -93,7 +93,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
         setCaption(defaultCaption);
 
-        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
+        Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 getPresenter().cancel();

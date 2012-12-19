@@ -13,13 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.wizard.creditcheck;
 
-import com.propertyvista.crm.client.ui.crud.CrmWizardViewImplBase;
+import com.pyx4j.site.client.ui.wizard.WizardViewImplBase;
+
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.CreditCheckWizardDTO;
 
-public class CreditCheckWizardViewImpl extends CrmWizardViewImplBase<CreditCheckWizardDTO> implements CreditCheckWizardView {
+public class CreditCheckWizardViewImpl extends WizardViewImplBase<CreditCheckWizardDTO> implements CreditCheckWizardView {
 
     public CreditCheckWizardViewImpl() {
-        super(CrmSiteMap.Administration.Settings.CreditCheckSetup.class, new CreditCheckWizardForm());
+        super(CrmSiteMap.Administration.Settings.CreditCheckSetup.class);
+        setForm(new CreditCheckWizardForm());
     }
 }

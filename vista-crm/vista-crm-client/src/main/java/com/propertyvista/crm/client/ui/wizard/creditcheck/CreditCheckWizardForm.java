@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.wizard.creditcheck;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.wizard.WizardForm;
-import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.dto.CreditCheckWizardDTO;
 
@@ -26,31 +25,37 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckWizardDTO> {
 
     public CreditCheckWizardForm() {
         super(CreditCheckWizardDTO.class);
+        addStep(createPricingStep(i18n.tr("Pricing")));
+        addStep(createBusinessInfoStep(i18n.tr("Business Information")));
+        addStep(createPersonalInfoStep(i18n.tr("Personal Information")));
+        addStep(createConfirmationStep(i18n.tr("Confirmation")));
     }
 
-    @Override
-    public void createSteps() {
-
-        Tab tab = null;
-
-        tab = addTab(createGeneralTab(i18n.tr("General")));
-        selectTab(tab);
-
-    }
-
-    @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-
-    }
-
-    private FormFlexPanel createGeneralTab(String title) {
+    private FormFlexPanel createPricingStep(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
-
         int row = 0;
-        main.setH1(row++, 0, 2, i18n.tr("Summary"));
-
+        main.setH1(row++, 0, 2, i18n.tr("Pricing"));
         return main;
     }
 
+    private FormFlexPanel createBusinessInfoStep(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
+        int row = 0;
+        main.setH1(row++, 0, 2, i18n.tr("Business Information"));
+        return main;
+    }
+
+    private FormFlexPanel createPersonalInfoStep(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
+        int row = 0;
+        main.setH1(row++, 0, 2, i18n.tr("Personal Information"));
+        return main;
+    }
+
+    private FormFlexPanel createConfirmationStep(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
+        int row = 0;
+        main.setH1(row++, 0, 2, i18n.tr("Confirmation"));
+        return main;
+    }
 }
