@@ -15,10 +15,15 @@ package com.propertyvista.portal.client;
 
 import com.google.gwt.user.client.Window;
 
-import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
+import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
+import com.propertyvista.domain.DemoData;
 
 public class VistaPortalWicketFragmentUnrecoverableErrorHandler extends VistaUnrecoverableErrorHandler {
+
+    public VistaPortalWicketFragmentUnrecoverableErrorHandler() {
+        super(DemoData.vistaDemo);
+    }
 
     @Override
     protected void showMessage(String userMessage, String debugMessage, UserMessageType messageType) {

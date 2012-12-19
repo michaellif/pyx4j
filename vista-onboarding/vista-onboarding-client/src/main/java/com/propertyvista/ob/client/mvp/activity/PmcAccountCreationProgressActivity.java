@@ -27,10 +27,10 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessService;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.ob.client.forms.StepStatusIndicator;
 import com.propertyvista.ob.client.forms.StepStatusIndicator.StepStatus;
@@ -97,16 +97,14 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
     public void populate() {
         view.init(PROGRESS_STEPS);
 
-        final AsyncCallback<DeferredProcessProgressResponse> callback = new AsyncCallback<DeferredProcessProgressResponse>() {
+        final AsyncCallback<DeferredProcessProgressResponse> callback = new DefaultAsyncCallback<DeferredProcessProgressResponse>() {
 
             @Override
             public void onSuccess(DeferredProcessProgressResponse progress) {
                 if (progress.isCompleted()) {
                     progressTimer.cancel();
                     if (progress.isError()) {
-                        if (progress.getMessage() != null) {
-                            onStepsProgressComplete(false, progress.getMessage());
-                        }
+                        throw new UnrecoverableClientError(progress.getMessage() != null ? progress.getMessage() : i18n.tr("Account Creation Failed!"));
                     } else {
                         progressTimer.scheduleRepeating(SIM_POLL_INTERVAL);
                     }
@@ -132,7 +130,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
                     } else {
                         // here we got to the final step. so:
                         progressTimer.cancel();
-                        onStepsProgressComplete(true, null);
+                        onStepsProgressComplete();
                     }
                 }
 
@@ -141,7 +139,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
             @Override
             public void onFailure(Throwable caught) {
                 progressTimer.cancel();
-                onStepsProgressComplete(false, caught.getMessage());
+                super.onFailure(caught);
             }
 
         };
@@ -171,19 +169,15 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
         // TODO Auto-generated method stub
     }
 
-    private void onStepsProgressComplete(boolean completedSuccess, String message) {
-        if (completedSuccess) {
-            if (!this.defferedCorrelationId.equals(SIM_ID)) {
-                deferredProcessStatusService.getStatus(null, PmcAccountCreationProgressActivity.this.defferedCorrelationId, true);
-            }
-            pmcRegService.obtainCrmURL(new DefaultAsyncCallback<String>() {
-                @Override
-                public void onSuccess(String url) {
-                    view.setCrmSiteUrl(url);
-                }
-            });
-        } else {
-            MessageDialog.error(i18n.tr("Failed to Create PMC"), message);
+    private void onStepsProgressComplete() {
+        if (!this.defferedCorrelationId.equals(SIM_ID)) {
+            deferredProcessStatusService.getStatus(null, PmcAccountCreationProgressActivity.this.defferedCorrelationId, true);
         }
+        pmcRegService.obtainCrmURL(new DefaultAsyncCallback<String>() {
+            @Override
+            public void onSuccess(String url) {
+                view.setCrmSiteUrl(url);
+            }
+        });
     }
 }

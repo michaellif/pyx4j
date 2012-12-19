@@ -26,11 +26,12 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ClentNavigUtils;
-import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
+import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.site.Message;
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.common.client.theme.VistaPalette;
+import com.propertyvista.domain.DemoData;
 import com.propertyvista.portal.client.themes.PortalTheme;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -55,7 +56,7 @@ public class PortalSite extends VistaSite {
     public void onSiteLoad() {
         super.onSiteLoad();
 
-        UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler());
+        UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler(DemoData.vistaDemo));
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
 

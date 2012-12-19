@@ -44,10 +44,10 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ClentNavigUtils;
-import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.common.client.events.UserMessageEvent;
 import com.propertyvista.common.client.events.UserMessageHandler;
+import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.site.Message;
 import com.propertyvista.common.client.site.VistaSite;
@@ -58,6 +58,7 @@ import com.propertyvista.crm.client.ui.LogoViewImpl;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
+import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
@@ -78,7 +79,7 @@ public class CrmSite extends VistaSite {
     public void onSiteLoad() {
         super.onSiteLoad();
 
-        UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler());
+        UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler(DemoData.vistaDemo));
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
 

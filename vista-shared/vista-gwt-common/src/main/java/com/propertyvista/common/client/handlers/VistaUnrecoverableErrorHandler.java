@@ -11,7 +11,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.common.client;
+package com.propertyvista.common.client.handlers;
 
 import java.util.Date;
 
@@ -27,13 +27,15 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.events.UserMessageEvent;
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
-import com.propertyvista.domain.DemoData;
 
 public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHandler {
 
     private static final I18n i18n = I18n.get(VistaUnrecoverableErrorHandler.class);
 
-    public VistaUnrecoverableErrorHandler() {
+    private final boolean isDemo;
+
+    public VistaUnrecoverableErrorHandler(boolean isDemo) {
+        this.isDemo = isDemo;
         UncaughtHandler.setUnrecoverableErrorHandler(this);
     }
 
@@ -100,7 +102,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
         StringBuilder debugMessage = new StringBuilder();
 
-        if (!DemoData.vistaDemo && ApplicationMode.isDevelopment()) {
+        if (!isDemo && ApplicationMode.isDevelopment()) {
             debugMessage.append(new Date());
             if (errorCode != null) {
                 debugMessage.append("ErrorCode [" + errorCode + "]");

@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ClientEntityFactory;
+import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -34,6 +35,9 @@ import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.events.UserMessageEvent;
+import com.propertyvista.common.client.events.UserMessageHandler;
+import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.ob.client.mvp.OnboardingActivityMapper;
 import com.propertyvista.ob.client.themes.OnboardingPalette;
@@ -57,6 +61,16 @@ public class OnboardingSite extends VistaSite {
     @Override
     public void onSiteLoad() {
         super.onSiteLoad();
+        UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler(false));
+        // subscribe to UserMessageEvent fired from VistaUnrecoverableErrorHandler
+        getEventBus().addHandler(UserMessageEvent.getType(), new UserMessageHandler() {
+            @Override
+            public void onUserMessage(UserMessageEvent event) {
+                setUserMessage(event.getUserMessage());
+                getPlaceController().goToUserMessagePlace();
+            }
+        });
+
         getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
         StyleManger.installTheme(new OnboardingTheme(), new OnboardingPalette());
 

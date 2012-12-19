@@ -17,6 +17,7 @@
     <source path="client/resources"/>
     <source path="client/ui/components/c"/>
     <source path="client/viewfactories"/>
+    <source path="client/handlers"/>
     
     <replace-with class="com.pyx4j.config.client.ClientApplicationBackendConfigRDB">
         <when-type-is class="com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendConfig"/>
