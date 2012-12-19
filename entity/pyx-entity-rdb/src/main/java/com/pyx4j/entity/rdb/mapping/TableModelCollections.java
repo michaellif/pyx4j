@@ -487,9 +487,6 @@ public class TableModelCollections {
         StringBuilder sql = new StringBuilder();
         Dialect dialect = persistenceContext.getDialect();
         try {
-            if (member.getOwnerValueAdapter() instanceof ValueAdapterEntityPolymorphic) {
-                throw new Error("TODO delete by Polymorphic Owner");
-            }
             sql.append("DELETE FROM ");
             if (dialect.isMultitenantSeparateSchemas()) {
                 sql.append(NamespaceManager.getNamespace()).append('.');
