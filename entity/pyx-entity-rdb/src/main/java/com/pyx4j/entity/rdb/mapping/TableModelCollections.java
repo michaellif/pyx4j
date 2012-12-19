@@ -41,12 +41,16 @@ import com.pyx4j.entity.rdb.dialect.HSQLDialect;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IntegrityConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.ObjectClassType;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 public class TableModelCollections {
 
     private static final Logger log = LoggerFactory.getLogger(TableModelCollections.class);
+
+    private static final I18n i18n = I18n.get(TableModelCollections.class);
 
     public static void validate(IEntity entity, MemberOperationsMeta member) {
         int maxLength = member.getMemberMeta().getLength();
@@ -189,7 +193,8 @@ public class TableModelCollections {
             // Never update
             return;
         }
-        Collection<Object> collectionMember = (Collection<Object>) member.getMember(entity);
+        IObject<?> memberObject = member.getMember(entity);
+        Collection<Object> collectionMember = (Collection<Object>) memberObject;
         if (((IObject<?>) collectionMember).getAttachLevel() == AttachLevel.Detached) {
             return;
         }
@@ -307,7 +312,13 @@ public class TableModelCollections {
         } catch (SQLException e) {
             log.error("{} Cursor SQL: {}", member.sqlName(), sql);
             log.error("{} SQL update error", member.sqlName(), e);
-            throw new RuntimeException(e);
+            if (dialect.isIntegrityConstraintException(e)) {
+                // TODO Use proper caption.
+                throw new IntegrityConstraintUserRuntimeException(i18n.tr("Unable to delete \"{0}\". The record is referenced by another record.", memberObject
+                        .getMeta().getCaption()), null);
+            } else {
+                throw new RuntimeException(e);
+            }
         } finally {
             SQLUtils.closeQuietly(rs);
             SQLUtils.closeQuietly(stmt);
@@ -476,9 +487,6 @@ public class TableModelCollections {
         StringBuilder sql = new StringBuilder();
         Dialect dialect = persistenceContext.getDialect();
         try {
-            if (member.getOwnerValueAdapter() instanceof ValueAdapterEntityPolymorphic) {
-                throw new Error("TODO delete by Polymorphic Owner");
-            }
             sql.append("DELETE FROM ");
             if (dialect.isMultitenantSeparateSchemas()) {
                 sql.append(NamespaceManager.getNamespace()).append('.');
