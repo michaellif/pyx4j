@@ -107,6 +107,7 @@ public class OnboardingSite extends VistaSite {
         RootPanel rootPanel = getRootPanel();
         SimplePanel onboardingPanel = new SimplePanel();
         onboardingPanel.setStyleName(OnboardingStyles.VistaObMainPanel.name());
+
         rootPanel.add(onboardingPanel);
 
         if (ApplicationMode.isDevelopment()) {

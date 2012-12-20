@@ -72,10 +72,9 @@ public class PmcAccountCreationCompleteViewImpl extends Composite implements Pmc
         this.completionPanel.getElement().getStyle().setProperty("marginRight", "auto");
         this.completionPanel.getElement().getStyle().setProperty("width", "300px");
 
-        SimplePanel panel = new SimplePanel();
+        FlowPanel panel = new FlowPanel();
         panel.addStyleName(OnboardingStyles.VistaObView.name());
-        panel.setWidget(this.completionPanel);
-
+        panel.add(completionPanel);
         initWidget(panel);
     }
 

@@ -31,6 +31,7 @@ import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 import com.propertyvista.ob.client.forms.PmcAccountCreationRequestForm;
 import com.propertyvista.ob.client.forms.StepStatusIndicator;
 import com.propertyvista.ob.client.views.PmcAccountCreationCompleteViewImpl;
+import com.propertyvista.ob.client.views.RuntimeErrorViewImpl;
 
 public class OnboardingTheme extends Theme {
 
@@ -69,8 +70,9 @@ public class OnboardingTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", OnboardingStyles.VistaObMainPanel.name());
-        style.addProperty("min-width", "700px");
-        style.addProperty("min-height", "500px");
+        style.addProperty("width", "700px");
+        style.addProperty("margin-left", "auto");
+        style.addProperty("margin-right", "auto");
         addStyle(style);
 
         style = new Style(".", OnboardingStyles.VistaObView.name());
@@ -98,6 +100,7 @@ public class OnboardingTheme extends Theme {
         addStyle(style);
 
         initPmcAccountRequestFormLayoutAndStyles();
+        initRuntimeErrorViewStyles();
     }
 
     private void initPmcAccountRequestFormLayoutAndStyles() {
@@ -137,6 +140,23 @@ public class OnboardingTheme extends Theme {
         style.addProperty("width", "25em");
         addStyle(style);
 
+    }
+
+    private void initRuntimeErrorViewStyles() {
+        Style style = new Style("." + RuntimeErrorViewImpl.Styles.RuntimeErrorTitle.name());
+        style.addProperty("text-align", "center");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("font-size", "1.2em");
+        addStyle(style);
+
+        style = new Style("." + RuntimeErrorViewImpl.Styles.RuntimeErrorMessage.name());
+        style.addProperty("padding-top", "20px");
+        style.addProperty("padding-bottom", "20px");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
+        style = new Style("." + RuntimeErrorViewImpl.Styles.RuntimeErrorAck.name());
+        addStyle(style);
     }
 
 }
