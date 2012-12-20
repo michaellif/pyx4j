@@ -28,13 +28,13 @@ import com.pyx4j.site.client.ui.reports.Report;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.crm.rpc.dto.reports.CreditCheckReportsDataDTO;
+import com.propertyvista.crm.rpc.dto.reports.CustomerCreditCheckReportDataDTO;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 
-public class CreditCheckReportFactory implements ReportFactory<CustomerCreditCheckReportMetadata> {
+public class CustomerCreditCheckReportFactory implements ReportFactory<CustomerCreditCheckReportMetadata> {
 
-    private static final I18n i18n = I18n.get(CreditCheckReportFactory.class);
+    private static final I18n i18n = I18n.get(CustomerCreditCheckReportFactory.class);
 
     private static ColumnDescriptor[] CREDITCHECK_TABLE_COLUMNS;
 
@@ -93,7 +93,7 @@ public class CreditCheckReportFactory implements ReportFactory<CustomerCreditChe
 
             @Override
             public void setData(Object data) {
-                CreditCheckReportsDataDTO reportData = (CreditCheckReportsDataDTO) data;
+                CustomerCreditCheckReportDataDTO reportData = (CustomerCreditCheckReportDataDTO) data;
                 SafeHtmlBuilder bb = new SafeHtmlBuilder();
                 bb.appendHtmlConstant("<div style=\"text-align: center; font-size: 22pt\">");
                 bb.appendEscaped(i18n.tr("Customer Credit Check Report"));

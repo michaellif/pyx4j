@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.site.server.services.reports.ReportGenerator;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
-import com.propertyvista.crm.rpc.dto.reports.CreditCheckReportsDataDTO;
+import com.propertyvista.crm.rpc.dto.reports.CustomerCreditCheckReportDataDTO;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 
@@ -38,7 +38,7 @@ public class CustomerCreditCheckReportGenerator implements ReportGenerator {
             Persistence.service().retrieveMember(status.screening());
             Persistence.service().retrieveMember(status.screening().screene());
         }
-        CreditCheckReportsDataDTO reportData = new CreditCheckReportsDataDTO();
+        CustomerCreditCheckReportDataDTO reportData = new CustomerCreditCheckReportDataDTO();
         reportData.unitStatuses = new Vector<CustomerCreditCheck>(statuses);
 
         reportData.maxAmountChecked = meta.maxAmountChecked().getValue();

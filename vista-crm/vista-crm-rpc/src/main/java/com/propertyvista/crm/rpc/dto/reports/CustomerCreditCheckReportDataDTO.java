@@ -21,7 +21,9 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 
-public class CreditCheckReportsDataDTO implements Serializable {
+public class CustomerCreditCheckReportDataDTO implements Serializable {
+
+    private static final long serialVersionUID = 3975713068991763562L;
 
     public LogicalDate minCreditCheckDate;
 
