@@ -43,7 +43,7 @@ public class CustomerCreditCheckReportFactory implements ReportFactory<CustomerC
 
         CREDITCHECK_TABLE_COLUMNS = new ColumnDescriptor[] {
 
-        new MemberColumnDescriptor.Builder(proto.screening().screene().person().name()).title(i18n.tr("Screene")).searchable(false).build(),
+        new MemberColumnDescriptor.Builder(proto.screening().screene().person().name()).title(i18n.tr("Tenant")).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto.screening().screene().person().name().firstName()).searchableOnly().build(),
                 new MemberColumnDescriptor.Builder(proto.screening().screene().person().name().lastName()).searchableOnly().build(),
                 new MemberColumnDescriptor.Builder(proto.creditCheckDate()).build(),

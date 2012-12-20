@@ -30,7 +30,7 @@ public class CustomerCreditCheckLister extends ListerBase<CustomerCreditCheckDTO
     public CustomerCreditCheckLister() {
         super(CustomerCreditCheckDTO.class, false);
         setColumnDescriptors(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().screening().screene().person().name()).title(i18n.tr("Screene")).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().screening().screene().person().name()).title(i18n.tr("Tenant")).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().screening().screene().person().name().firstName()).searchableOnly().build(),
                 new MemberColumnDescriptor.Builder(proto().screening().screene().person().name().lastName()).searchableOnly().build(),
                 new MemberColumnDescriptor.Builder(proto().creditCheckDate()).build(),
