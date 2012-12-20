@@ -20,6 +20,7 @@
  */
 package com.pyx4j.site.rpc;
 
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
@@ -39,6 +40,11 @@ public class ReportsAppPlace extends AppPlace {
 
     public ReportMetadata getReportMetadata() {
         return metadata;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return super.equals(other) && (other instanceof ReportsAppPlace) && EntityGraph.fullyEqual(this.metadata, ((ReportsAppPlace) other).metadata);
     }
 
 }
