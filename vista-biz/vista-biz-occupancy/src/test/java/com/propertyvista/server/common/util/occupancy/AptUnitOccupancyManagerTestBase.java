@@ -32,7 +32,6 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.UserVisit;
@@ -103,7 +102,6 @@ public class AptUnitOccupancyManagerTestBase {
         serviceItem.description().setValue("a mockup unit");
 
         service.version().items().add(serviceItem);
-        service.saveAction().setValue(SaveAction.saveAsFinal);
 
         unit.building().productCatalog().services().add(service);
         Persistence.service().merge(service);

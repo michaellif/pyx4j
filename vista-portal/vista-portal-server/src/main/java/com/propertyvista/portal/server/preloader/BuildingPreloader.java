@@ -23,7 +23,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
@@ -295,15 +294,12 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             Persistence.service().setTransactionSystemTime(DateUtils.detectDateformat("2008-01-01"));
             try {
                 for (Concession concession : building.productCatalog().concessions()) {
-                    concession.saveAction().setValue(SaveAction.saveAsFinal);
                     Persistence.service().persist(concession);
                 }
                 for (Feature feature : building.productCatalog().features()) {
-                    feature.saveAction().setValue(SaveAction.saveAsFinal);
                     Persistence.service().persist(feature);
                 }
                 for (Service service : building.productCatalog().services()) {
-                    service.saveAction().setValue(SaveAction.saveAsFinal);
                     Persistence.service().persist(service);
                 }
             } finally {

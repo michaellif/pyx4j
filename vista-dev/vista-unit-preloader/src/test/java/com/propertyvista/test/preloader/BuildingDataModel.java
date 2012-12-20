@@ -22,7 +22,6 @@ import java.util.Map;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -141,7 +140,6 @@ public class BuildingDataModel {
         standardResidentialService.version().name().setValue("Standard Residential Unit");
         standardResidentialService.version().description().setValue("Standard Residential Unit Lease for 1 year term");
 
-        standardResidentialService.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.service().persist(standardResidentialService);
 
     }
@@ -156,7 +154,6 @@ public class BuildingDataModel {
         productItem.description().setValue(productItem.type().name().getValue());
 
         standardResidentialService.version().items().add(productItem);
-        standardResidentialService.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.service().persist(standardResidentialService);
 
         return productItem;
@@ -217,13 +214,11 @@ public class BuildingDataModel {
             break;
         }
 
-        feature.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.service().persist(feature);
 
         standardResidentialService = Persistence.retrieveDraftForEdit(Service.class, standardResidentialService.getPrimaryKey());
 
         standardResidentialService.version().features().add(feature);
-        standardResidentialService.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.service().persist(standardResidentialService);
 
     }
