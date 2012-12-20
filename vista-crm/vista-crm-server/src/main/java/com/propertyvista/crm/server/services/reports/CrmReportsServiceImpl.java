@@ -23,7 +23,9 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
 import com.propertyvista.crm.server.services.reports.generators.AvailabilityReportsGenerator;
+import com.propertyvista.crm.server.services.reports.generators.CustomerCreditCheckReportGenerator;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
+import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 
 public class CrmReportsServiceImpl extends AbstractReportsService implements CrmReportsService {
 
@@ -33,6 +35,7 @@ public class CrmReportsServiceImpl extends AbstractReportsService implements Crm
         reportsGeneratorMap = new ConcurrentHashMap<Class<? extends ReportMetadata>, ReportGenerator>();
 
         reportsGeneratorMap.put(AvailabilityReportMetadata.class, new AvailabilityReportsGenerator());
+        reportsGeneratorMap.put(CustomerCreditCheckReportMetadata.class, new CustomerCreditCheckReportGenerator());
     }
 
     public CrmReportsServiceImpl() {
