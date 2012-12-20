@@ -179,11 +179,23 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         itemSelectionHandlers.add(handler);
     }
 
+    public void remItemSelectionHandler(ItemSelectionHandler handler) {
+        if (itemSelectionHandlers != null) {
+            itemSelectionHandlers.remove(handler);
+        }
+    }
+
     public void addCheckSelectionHandler(CheckSelectionHandler handler) {
         if (checkSelectionHandlers == null) {
             checkSelectionHandlers = new ArrayList<CheckSelectionHandler>(2);
         }
         checkSelectionHandlers.add(handler);
+    }
+
+    public void remCheckSelectionHandler(CheckSelectionHandler handler) {
+        if (checkSelectionHandlers != null) {
+            checkSelectionHandlers.remove(handler);
+        }
     }
 
     public void addSortChangeHandler(SortChangeHandler<E> handler) {
@@ -194,11 +206,23 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         sortChangeHandlers.add(handler);
     }
 
+    public void remSortChangeHandler(SortChangeHandler<E> handler) {
+        if (sortChangeHandlers != null) {
+            sortChangeHandlers.remove(handler);
+        }
+    }
+
     public void addColumnSelectionChangeHandler(ColumnSelectionHandler handler) {
         if (columnSelectionHandlers == null) {
             columnSelectionHandlers = new ArrayList<ColumnSelectionHandler>(2);
         }
         columnSelectionHandlers.add(handler);
+    }
+
+    public void remColumnSelectionChangeHandler(ColumnSelectionHandler handler) {
+        if (columnSelectionHandlers != null) {
+            columnSelectionHandlers.remove(handler);
+        }
     }
 
 // UI & behaviour setup:

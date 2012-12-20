@@ -70,7 +70,7 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
 
     private final IMemento memento = new MementoImpl();
 
-    private boolean allowZoomIn;
+    private DataTable.ItemSelectionHandler zoomInHandler;
 
     public BasicLister(Class<E> clazz) {
         this.clazz = clazz;
@@ -140,22 +140,7 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
 
     public BasicLister(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew) {
         this(clazz);
-        this.allowZoomIn = allowZoomIn;
-        if (allowZoomIn) {
-            // item selection stuff:
-            dataTablePanel.getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
-                @Override
-                public void onSelect(int selectedRow) {
-                    E item = getDataTablePanel().getDataTable().getSelectedItem();
-                    if (item != null) {
-                        onItemSelect(item);
-                    }
-                }
-            });
-            dataTablePanel.getDataTable().setHasDetailsNavigation(true);
-        } else {
-            dataTablePanel.getDataTable().setHasDetailsNavigation(false);
-        }
+        setAllowZoomIn(allowZoomIn);
 
         // new item stuff:
         if (allowAddNew) {
@@ -168,8 +153,40 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         }
     }
 
+    public BasicLister(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew, boolean allowDelete) {
+        this(clazz, allowZoomIn, allowAddNew);
+        // delete items stuff:
+        if (allowDelete) {
+            dataTablePanel.setDelActionHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    onItemsDelete(getDataTablePanel().getDataTable().getCheckedItems());
+                }
+            });
+        }
+    }
+
     public boolean isAllowZoomIn() {
-        return allowZoomIn;
+        return (zoomInHandler != null);
+    }
+
+    public void setAllowZoomIn(boolean allowZoomIn) {
+        if (allowZoomIn) {
+            dataTablePanel.getDataTable().addItemSelectionHandler(zoomInHandler = new DataTable.ItemSelectionHandler() {
+                @Override
+                public void onSelect(int selectedRow) {
+                    E item = getDataTablePanel().getDataTable().getSelectedItem();
+                    if (item != null) {
+                        onItemSelect(item);
+                    }
+                }
+            });
+            dataTablePanel.getDataTable().setHasDetailsNavigation(true);
+        } else {
+            dataTablePanel.getDataTable().setHasDetailsNavigation(false);
+            dataTablePanel.getDataTable().remItemSelectionHandler(zoomInHandler);
+            zoomInHandler = null;
+        }
     }
 
     public void setDataSource(ListerDataSource<E> dataSource) {
@@ -200,10 +217,13 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
     protected void onObtainSuccess() {
     }
 
+    protected void onItemNew() {
+    }
+
     protected void onItemSelect(E item) {
     }
 
-    protected void onItemNew() {
+    protected void onItemsDelete(List<E> items) {
     }
 
     public void setColumnDescriptors(ColumnDescriptor... columnDescriptors) {
