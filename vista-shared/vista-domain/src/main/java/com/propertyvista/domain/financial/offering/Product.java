@@ -60,7 +60,7 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, IHi
         @Detached
         IList<ProductItem> items();
 
-        @Length(25)
+        @Length(50)
         @ToString(index = 1)
         IPrimitive<String> name();
 
