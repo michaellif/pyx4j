@@ -1,18 +1,19 @@
 .vista-pmsite-cityPage {
 }
-.vista-pmsite-cityPage .vista-pmsite-content {
-	background: url("images/inner_bg.png") no-repeat;
-}
-.vista-pmsite-cityPage .vista-pmsite-contentWrap {
-	background: url("images/inner_content_bg.png") repeat-x #37393F;
+.vista-pmsite-cityPage .vista-pmsite-mainWrap {
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
+    background: ${background_10};
 }
 .vista-pmsite-cityPage .vista-pmsite-sidebar {
 	display: inline-block;
 	width: 211px;
+	color: ${object2_100};
 	vertical-align: top;
 }
 .vista-pmsite-cityPage .secondaryNavig {
-	color:#aaa;
+	color: ${object2_100};
 }
 .vista-pmsite-cityPage .secondaryNavig h3 {
 	width:100%;
@@ -28,25 +29,22 @@
 	margin: 10px;
 }
 .advancedSearchNarrowWrap input[type=submit] {
-	background:
-		url("images/btn.png")
-		no-repeat;
-	border: none;
+	background: ${object1_100};
+	border: 2px solid ${object1_100};
+	color: ${object1_10};
+	cursor: pointer;
+	font-size: 16px;
+	margin: 15px auto 0;
+	text-transform: uppercase;
 	width: 128px;
 	height: 32px;
-	padding: 5px 0;
-	color: #000000;
-	font-size: 16px;
-	text-shadow: 0 1px 0 #CCCCCC;
-	text-transform: uppercase;
-	cursor: pointer;
-	margin-top:30px;
 }
 
 .advancedSearchNarrowWrap label {
 	display: block;
 	padding: 4px 0;
 	white-space: nowrap;
+	color: ${object2_100};
 }
 
 .advancedSearchNarrowWrap .inputBlockFrame {
@@ -59,15 +57,16 @@
 }
 .advancedSearchNarrowWrap .searchTypeSelButton {
 	float: left;
-	width: 70px;
+	width: 90px;
 	font-size: 14px;
 	letter-spacing: 0px;
-	box-shadow:-1px -1px 1px #404247, 1px 1px 1px #24262a;
-	border-radius:3px;
+	background-color:${contrast2_100};
 	margin-left: 10px;
-	padding: 3px 10px;
-	background-color: #22242a;
+	padding: 3px 0;
 	text-align: center;
+}
+.advancedSearchNarrowWrap .searchTypeSelButton label {
+	color:${foreground_100};
 }
 
 .advancedSearchNarrowWrap .searchTypeSelButton:first-child {
@@ -85,16 +84,29 @@
 .advancedSearchNarrowWrap .searchTypeSelButton input[type=radio] {
 	display: none;
 }
-
+.advancedSearchNarrowWrap .searchTypeSelButton.typeselActiveHover {
+	background-color:${object1_100};
+}
+.advancedSearchNarrowWrap .searchTypeSelButton.typeselActiveHover label {
+	color:${object1_20};
+}
+.advancedSearchNarrowWrap .searchTypeSelButton.typeselActive {
+	background-color:${object1_100};
+}
+.advancedSearchNarrowWrap .searchTypeSelButton.typeselActive label {
+	color:${object2_10};
+}
 .advancedSearchNarrowWrap .searchTypeBox {
 	height:100px;
 }
 
 .advancedSearchNarrowWrap .searchTypeBox select {
+	color:${background_100};
 	width: 188px;
 	margin: 1px;
 }
 .advancedSearchNarrowWrap .searchTypeBox input[type=text] {
+	color:${background_100};
 	width: 184px;
 	margin: 1px;
 }
@@ -113,11 +125,13 @@
 }
 
 .advancedSearchNarrowWrap .searchCommonBox select {
+	color:${background_100};
 	width: 82px;
 	margin: 1px;
 }
 
 .advancedSearchNarrowWrap .searchCommonBox input[type=text] {
+	color:${background_100};
 	width: 76px;
 	margin: 1px;
 }
@@ -127,8 +141,9 @@
 	text-align:center;
 }
 .advancedSearchNarrowWrap .searchAmenityBox {
-	border-top: 1px dotted #5d5e63;
+	border-top: 1px dotted ${object2_100};
 	padding-top: 10px;
+	margin-bottom: 30px;
 }
 
 .advancedSearchNarrowWrap .searchAmenityBox .searchField>label {
@@ -148,42 +163,31 @@
 .advancedSearchNarrowWrap .searchAmenityBox .amenityList label {
 	display: inline-block;
 	width: 70px;
+	color: ${object2_100};
 }
 .advancedSearchNarrowWrap .searchAmenityBox .amenityList label:lang(fr) {
 	width: 165px;
 }
 
-.advancedSearchNarrowWrap .typeselActiveHover {
-	background-color: #557329 !important;
-}
-
-.advancedSearchNarrowWrap .typeselActive {
-	background-color: #85B329 !important;
-	color:#333 !important;
-	box-shadow:-1px -1px 1px #000 inset, 1px 1px 1px #113300;
-	padding-top: 2px !important;
-	padding-bottom: 4px !important;
-}
 .vista-pmsite-cityPage .vista-pmsite-main {
 	display: inline-block;
-	width: 744px;
+	width: 745px;
 	vertical-align: top;
 }
 .vista-pmsite-cityPage .cityPageWrap {
 	line-height:1.6em;
-    background-color: white;
-    color: #333333;
-    min-height: 520px;
-    overflow: hidden;
-    padding: 30px 30px 0;
+	min-height: 396px;
+	color: ${foreground_100};
+	overflow: hidden;
+	padding: 30px 30px 0;
 }
 .vista-pmsite-cityPage .cityPageWrap .cityProperties h3 {
 	font-size:18px;
 	margin:20px 0;
 }
 .vista-pmsite-cityPage .cityPageWrap .propertyLink {
-	color: #339900;
+	color:  ${object1_80};
 }
 .vista-pmsite-cityPage .cityPageWrap .propertyLink:hover {
-	color: #B5E329;
+	color:  ${object1_40};
 }

@@ -21,6 +21,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.forms.client.events.AsyncValueChangeEvent;
+import com.pyx4j.forms.client.events.AsyncValueChangeHandler;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.widgets.client.dialog.CancelOption;
@@ -36,7 +38,7 @@ public class AvailableLocaleSelectorDialog extends Dialog implements CancelOptio
         super("Select Locale");
         setDialogOptions(this);
 
-        CEntityComboBox<AvailableLocale> localeSelector = new CEntityComboBox<AvailableLocale>(AvailableLocale.class);
+        final CEntityComboBox<AvailableLocale> localeSelector = new CEntityComboBox<AvailableLocale>(AvailableLocale.class);
         localeSelector.setNoSelectionText("Select Locale");
         if (usedLocales != null) {
             final Set<CompiledLocale> clSet = new HashSet<CompiledLocale>();
@@ -50,7 +52,22 @@ public class AvailableLocaleSelectorDialog extends Dialog implements CancelOptio
                 }
             });
         }
+        // this triggers option load
         localeSelector.setValueByString("");
+        // this handler will fire when options loaded
+        localeSelector.addAsyncValueChangeHandler(new AsyncValueChangeHandler<AvailableLocale>() {
+            @Override
+            public void onAsyncChange(AsyncValueChangeEvent<AvailableLocale> event) {
+                int optSize = localeSelector.getOptions().size();
+                if (optSize == 0) {
+                    panel.add(new Label("Sorry, no more items to choose from."));
+                } else {
+                    panel.add(localeSelector);
+                    localeSelector.getWidget().getEditor().setVisibleItemCount(optSize + 1);
+                }
+            }
+        });
+
         localeSelector.addValueChangeHandler(new ValueChangeHandler<AvailableLocale>() {
             @Override
             public void onValueChange(ValueChangeEvent<AvailableLocale> event) {
@@ -58,14 +75,6 @@ public class AvailableLocaleSelectorDialog extends Dialog implements CancelOptio
                 hide();
             }
         });
-
-        int optSize = localeSelector.getOptions().size();
-        if (optSize == 0) {
-            panel.add(new Label("Sorry, no more items to choose from."));
-        } else {
-            panel.add(localeSelector);
-            localeSelector.getWidget().getEditor().setVisibleItemCount(optSize + 1);
-        }
 
         setBody(panel);
     }

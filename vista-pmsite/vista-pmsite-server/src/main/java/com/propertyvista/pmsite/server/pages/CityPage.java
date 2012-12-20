@@ -113,7 +113,9 @@ public class CityPage extends BasePage {
         }
         add(new Label("cityPageContent", html).setEscapeModelStrings(false));
 
-        // add property links
+        // add property links title
+        add(new Label("cityPropertiesTitle", i18n.tr("Properties in {0}, {1}", city.name().getValue(), city.province().name().getValue())));
+        // link panel
         RepeatingView linkPanel = new RepeatingView("propertyEntry");
         add(linkPanel);
         for (Building building : PropertyFinder.getPropertyList(searchCrit)) {
@@ -155,7 +157,7 @@ public class CityPage extends BasePage {
 
     @Override
     public String getLocalizedPageTitle() {
-        return i18n.tr("Renting Properties in {0}, {1}", city.name().getValue(), city.province().name().getValue());
+        return i18n.tr("Rent Apartments in {0}, {1}", city.name().getValue(), city.province().name().getValue());
     }
 
     @Override

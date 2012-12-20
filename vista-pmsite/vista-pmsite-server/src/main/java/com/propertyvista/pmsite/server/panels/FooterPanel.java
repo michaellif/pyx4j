@@ -36,9 +36,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.SocialLink.SocialSite;
+import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
-import com.propertyvista.pmsite.server.pages.AptListPage;
+import com.propertyvista.pmsite.server.pages.CityPage;
 
 public class FooterPanel extends Panel {
 
@@ -65,10 +66,8 @@ public class FooterPanel extends Panel {
                     String _prov2 = city.province().code().getValue();
                     if (_city != null && _prov != null && _prov2 != null) {
                         PageParameters params = new PageParameters();
-                        params.add("city", _city);
-                        params.add("province", _prov);
-                        params.add("searchType", "city");
-                        BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", AptListPage.class, params);
+                        params.set(PMSiteApplication.ParamNameCityProv, preprocess(_city) + "-" + _prov);
+                        BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", CityPage.class, params);
                         link.add(new Label("city", _city + " (" + _prov2 + ")"));
                         item.add(link);
                     }
@@ -130,5 +129,9 @@ public class FooterPanel extends Panel {
             devTs.setVisible(false);
         }
         add(devTs);
+    }
+
+    private String preprocess(String cityName) {
+        return cityName.replaceAll("[\\W_]", "");
     }
 }

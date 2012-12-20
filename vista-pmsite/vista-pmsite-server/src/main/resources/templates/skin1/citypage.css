@@ -1,18 +1,18 @@
 .vista-pmsite-cityPage {
 }
-.vista-pmsite-cityPage .vista-pmsite-content {
-	background: url("images/inner_bg.png") no-repeat;
-}
-.vista-pmsite-cityPage .vista-pmsite-contentWrap {
-	background: url("images/inner_content_bg.png") repeat-x #37393F;
+.vista-pmsite-cityPage .vista-pmsite-mainWrap {
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
 }
 .vista-pmsite-cityPage .vista-pmsite-sidebar {
 	display: inline-block;
 	width: 211px;
 	vertical-align: top;
+	border-right:1px solid ${foreground_20};
 }
 .vista-pmsite-cityPage .secondaryNavig {
-	color:#aaa;
+	color: ${foreground_60};
 }
 .vista-pmsite-cityPage .secondaryNavig h3 {
 	width:100%;
@@ -28,19 +28,15 @@
 	margin: 10px;
 }
 .advancedSearchNarrowWrap input[type=submit] {
-	background:
-		url("images/btn.png")
-		no-repeat;
-	border: none;
+	background: ${contrast1_100};
+	border: 2px solid ${contrast1_120};
+	color: ${contrast1_10};
+	cursor: pointer;
+	font-size: 16px;
+	margin: 15px auto 0;
+	text-transform: uppercase;
 	width: 128px;
 	height: 32px;
-	padding: 5px 0;
-	color: #000000;
-	font-size: 16px;
-	text-shadow: 0 1px 0 #CCCCCC;
-	text-transform: uppercase;
-	cursor: pointer;
-	margin-top:30px;
 }
 
 .advancedSearchNarrowWrap label {
@@ -62,11 +58,10 @@
 	width: 70px;
 	font-size: 14px;
 	letter-spacing: 0px;
-	box-shadow:-1px -1px 1px #404247, 1px 1px 1px #24262a;
-	border-radius:3px;
+	color:${foreground_100};
+	background-color:${foreground_10};
 	margin-left: 10px;
 	padding: 3px 10px;
-	background-color: #22242a;
 	text-align: center;
 }
 
@@ -127,8 +122,9 @@
 	text-align:center;
 }
 .advancedSearchNarrowWrap .searchAmenityBox {
-	border-top: 1px dotted #5d5e63;
+	border-top: 1px dotted ${foreground_60};
 	padding-top: 10px;
+	margin-bottom: 30px;
 }
 
 .advancedSearchNarrowWrap .searchAmenityBox .searchField>label {
@@ -154,15 +150,13 @@
 }
 
 .advancedSearchNarrowWrap .typeselActiveHover {
-	background-color: #557329 !important;
+	color:${foreground_10} !important;
+	background-color:${foreground_60} !important;
 }
 
 .advancedSearchNarrowWrap .typeselActive {
-	background-color: #85B329 !important;
-	color:#333 !important;
-	box-shadow:-1px -1px 1px #000 inset, 1px 1px 1px #113300;
-	padding-top: 2px !important;
-	padding-bottom: 4px !important;
+	color:${foreground_10} !important;
+	background-color:${foreground_60} !important;
 }
 .vista-pmsite-cityPage .vista-pmsite-main {
 	display: inline-block;
@@ -171,19 +165,21 @@
 }
 .vista-pmsite-cityPage .cityPageWrap {
 	line-height:1.6em;
-    background-color: white;
-    color: #333333;
-    min-height: 520px;
-    overflow: hidden;
-    padding: 30px 30px 0;
+	min-height: 396px;
+	color: ${foreground_100};
+	border-top:1px solid ${foreground_20};
+	background-color: ${background_10};
+	overflow: hidden;
+	padding: 30px 30px 0;
 }
 .vista-pmsite-cityPage .cityPageWrap .cityProperties h3 {
 	font-size:18px;
 	margin:20px 0;
 }
 .vista-pmsite-cityPage .cityPageWrap .propertyLink {
-	color: #339900;
+	color: ${object1_100};
 }
 .vista-pmsite-cityPage .cityPageWrap .propertyLink:hover {
-	color: #B5E329;
+	color: ${contrast2_100};
 }
+
