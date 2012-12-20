@@ -25,6 +25,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -51,6 +52,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.domain.File;
 import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.note.NotesAndAttachmentsDTO;
@@ -340,12 +342,26 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                 }
 
                 @Override
+                protected void addItem() {
+                    new NotesAttachmentUploadDialog() {
+                        @Override
+                        protected void onUploadComplete(UploadResponse<File> serverUploadResponse) {
+                            NoteAttachment attachment = EntityFactory.create(NoteAttachment.class);
+                            attachment.file().blobKey().setValue(serverUploadResponse.uploadKey);
+                            attachment.file().fileName().setValue(serverUploadResponse.fileName);
+                            attachment.file().fileSize().setValue(serverUploadResponse.fileSize);
+                            attachment.file().contentMimeType().setValue(serverUploadResponse.fileContentType);
+
+                            AttachmentsEditorFolder.this.addItem(attachment);
+                        }
+                    }.show();
+                }
+
+                @Override
                 protected IFolderDecorator<NoteAttachment> createFolderDecorator() {
                     BoxFolderDecorator<NoteAttachment> decorator = (BoxFolderDecorator<NoteAttachment>) super.createFolderDecorator();
                     decorator.setTitle(i18n.tr("Add Attachment"));
-
                     return decorator;
-
                 }
 
                 private class AttachmentEditor extends CEntityDecoratableForm<NoteAttachment> {
@@ -361,7 +377,7 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                         int row = -1;
 
                         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).build());
-                        //content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file())).build());
+                        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file())).build());
 
                         return content;
                     }
