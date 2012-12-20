@@ -54,7 +54,7 @@ public class PmcCreatorDev {
         pmc.features().leases().setValue(Boolean.TRUE);
         pmc.features().onlineApplication().setValue(Boolean.TRUE);
         pmc.features().xmlSiteExport().setValue(Boolean.TRUE);
-        pmc.features().genericProductCatalog().setValue(VistaTODO.VISTA_2256_Generic_Product_Catalog);
+        pmc.features().defaultProductCatalog().setValue(VistaTODO.VISTA_2256_Default_Product_Catalog);
 
         if (pmcName.equals(DemoPmc.rockville.name())) {
             pmc.features().countryOfOperation().setValue(CountryOfOperation.UK);

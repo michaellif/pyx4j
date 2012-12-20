@@ -24,7 +24,7 @@ public interface VistaTODO {
     /**
      * TODO: Do not forget to turn it on/off during/after production release !!!
      */
-    public static boolean removedForProduction = true;
+    public static boolean removedForProduction = false;
 
     /**
      * Set <code>true</code> to let PtApp show a demo wizard for approved tenants
@@ -63,5 +63,5 @@ public interface VistaTODO {
 
     public static boolean VISTA_2245_Simple_Lease_Renewal = true;
 
-    public static boolean VISTA_2256_Generic_Product_Catalog = true;
+    public static boolean VISTA_2256_Default_Product_Catalog = true;
 }

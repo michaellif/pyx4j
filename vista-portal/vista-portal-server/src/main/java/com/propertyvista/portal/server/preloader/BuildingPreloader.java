@@ -30,7 +30,7 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
-import com.propertyvista.biz.preloader.GenericProductCatalogFacade;
+import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
@@ -156,8 +156,8 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
             // Service Catalog:
 
-            if (VistaFeatures.instance().genericProductCatalog()) {
-                ServerSideFactory.create(GenericProductCatalogFacade.class).createFor(building);
+            if (VistaFeatures.instance().defaultProductCatalog()) {
+                ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(building);
             } else {
                 new ProductCatalogGenerator(productItemTypes).createProductCatalog(building.productCatalog());
             }
@@ -171,7 +171,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 MediaGenerator.generatedBuildingMedia(building);
             }
 
-            if (!VistaFeatures.instance().genericProductCatalog()) {
+            if (!VistaFeatures.instance().defaultProductCatalog()) {
                 building.includedUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
                 if (DataGenerator.randomBoolean()) {
                     building.includedUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
@@ -230,8 +230,8 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             List<AptUnit> units = generator.createUnits(building, floorplans, config().numFloors, config().numUnitsPerFloor);
             unitCount += units.size();
             for (AptUnit unit : units) {
-                if (VistaFeatures.instance().genericProductCatalog()) {
-                    ServerSideFactory.create(GenericProductCatalogFacade.class).addUnit(building, unit, false);
+                if (VistaFeatures.instance().defaultProductCatalog()) {
+                    ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(building, unit, false);
                 } else {
                     new ProductCatalogGenerator(productItemTypes).createAptUnitServices(building.productCatalog(), unit);
                 }

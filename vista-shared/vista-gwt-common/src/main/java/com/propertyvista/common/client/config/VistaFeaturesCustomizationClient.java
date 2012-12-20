@@ -53,8 +53,8 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
     }
 
     @Override
-    public boolean genericProductCatalog() {
-        return features.genericProductCatalog().getValue(Boolean.FALSE);
+    public boolean defaultProductCatalog() {
+        return features.defaultProductCatalog().getValue(Boolean.FALSE);
     }
 
     @Override

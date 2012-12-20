@@ -59,8 +59,8 @@ public class VistaFeatures {
         }
 
         @Override
-        public boolean genericProductCatalog() {
-            return threadLocale.get().genericProductCatalog().getValue(Boolean.FALSE);
+        public boolean defaultProductCatalog() {
+            return threadLocale.get().defaultProductCatalog().getValue(Boolean.FALSE);
         }
 
         @Override

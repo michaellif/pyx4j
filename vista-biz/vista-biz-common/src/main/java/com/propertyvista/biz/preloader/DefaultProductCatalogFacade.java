@@ -16,7 +16,7 @@ package com.propertyvista.biz.preloader;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public interface GenericProductCatalogFacade {
+public interface DefaultProductCatalogFacade {
 
     /**
      * Creates new empty catalog for the specified building.

@@ -51,7 +51,7 @@ public class PmcEditorActivity extends EditorActivityBase<PmcDTO> {
         entity.features().leases().setValue(Boolean.TRUE);
         entity.features().onlineApplication().setValue(Boolean.FALSE);
         entity.features().xmlSiteExport().setValue(Boolean.FALSE);
-        entity.features().genericProductCatalog().setValue(Boolean.FALSE);
+        entity.features().defaultProductCatalog().setValue(Boolean.FALSE);
         entity.features().countryOfOperation().setValue(CountryOfOperation.Canada);
 
         callback.onSuccess(entity);

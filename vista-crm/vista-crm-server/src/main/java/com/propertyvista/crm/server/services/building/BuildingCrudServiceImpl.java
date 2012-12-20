@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
-import com.propertyvista.biz.preloader.GenericProductCatalogFacade;
+import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.server.services.admin.MerchantAccountCrudServiceImpl;
 import com.propertyvista.domain.GeoLocation;
@@ -121,9 +121,9 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     protected void create(Building entity, BuildingDTO dto) {
         super.create(entity, dto);
 
-        if (VistaFeatures.instance().genericProductCatalog()) {
-            ServerSideFactory.create(GenericProductCatalogFacade.class).createFor(entity);
-            ServerSideFactory.create(GenericProductCatalogFacade.class).persistFor(entity);
+        if (VistaFeatures.instance().defaultProductCatalog()) {
+            ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(entity);
+            ServerSideFactory.create(DefaultProductCatalogFacade.class).persistFor(entity);
         }
     }
 

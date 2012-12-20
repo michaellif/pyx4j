@@ -39,7 +39,7 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public class GenericProductCatalogFacadeImpl implements GenericProductCatalogFacade {
+public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFacade {
 
     @Override
     public void createFor(Building building) {

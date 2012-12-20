@@ -58,7 +58,7 @@ public class ARTransactionManager {
         }
 
         if (invoiceLineItem.amount().getValue().compareTo(BigDecimal.ZERO) == 0) {
-            if (VistaFeatures.instance().genericProductCatalog()) {
+            if (VistaFeatures.instance().defaultProductCatalog()) {
                 // TODO : avoid exception in this case till now... Ask Michael what to do 
             } else {
                 throw new ARException("The LineItem has 0 value");

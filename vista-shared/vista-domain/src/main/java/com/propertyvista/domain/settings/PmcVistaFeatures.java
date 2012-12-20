@@ -42,7 +42,7 @@ public interface PmcVistaFeatures extends IEntity {
     IPrimitive<Boolean> xmlSiteExport();
 
     @NotNull
-    IPrimitive<Boolean> genericProductCatalog();
+    IPrimitive<Boolean> defaultProductCatalog();
 
     @NotNull
     IPrimitive<CountryOfOperation> countryOfOperation();

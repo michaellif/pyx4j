@@ -86,7 +86,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
                 pmc.features().leases().setValue(Boolean.TRUE);
                 pmc.features().onlineApplication().setValue(Boolean.FALSE);
                 pmc.features().xmlSiteExport().setValue(Boolean.FALSE);
-                pmc.features().genericProductCatalog().setValue(Boolean.FALSE);
+                pmc.features().defaultProductCatalog().setValue(Boolean.FALSE);
 
                 ServerSideFactory.create(PmcFacade.class).create(pmc);
 
