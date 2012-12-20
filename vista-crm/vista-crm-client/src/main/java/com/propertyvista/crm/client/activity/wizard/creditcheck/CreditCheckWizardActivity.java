@@ -21,13 +21,13 @@ import com.propertyvista.crm.client.activity.crud.CrmWizardActivity;
 import com.propertyvista.crm.client.ui.crud.viewfactories.WizardViewFactory;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.CreditCheckWizardView;
 import com.propertyvista.crm.rpc.services.CreditCheckWizardService;
-import com.propertyvista.dto.CreditCheckWizardDTO;
+import com.propertyvista.dto.CreditCheckSetupDTO;
 
-public class CreditCheckWizardActivity extends CrmWizardActivity<CreditCheckWizardDTO> implements CreditCheckWizardView.Presenter {
+public class CreditCheckWizardActivity extends CrmWizardActivity<CreditCheckSetupDTO> implements CreditCheckWizardView.Presenter {
 
     public CreditCheckWizardActivity(AppPlace place) {
         super(place, WizardViewFactory.instance(CreditCheckWizardView.class), GWT.<CreditCheckWizardService> create(CreditCheckWizardService.class),
-                CreditCheckWizardDTO.class);
+                CreditCheckSetupDTO.class);
     }
 
 }

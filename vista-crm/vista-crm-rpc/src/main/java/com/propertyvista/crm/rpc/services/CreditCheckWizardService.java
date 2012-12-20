@@ -15,8 +15,8 @@ package com.propertyvista.crm.rpc.services;
 
 import com.pyx4j.entity.rpc.AbstractWizardService;
 
-import com.propertyvista.dto.CreditCheckWizardDTO;
+import com.propertyvista.dto.CreditCheckSetupDTO;
 
-public interface CreditCheckWizardService extends AbstractWizardService<CreditCheckWizardDTO> {
+public interface CreditCheckWizardService extends AbstractWizardService<CreditCheckSetupDTO> {
 
 }

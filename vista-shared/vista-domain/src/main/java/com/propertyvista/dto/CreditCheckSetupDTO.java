@@ -17,6 +17,6 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 
 @Transient
-public interface CreditCheckWizardDTO extends IEntity {
+public interface CreditCheckSetupDTO extends IEntity {
 
 }

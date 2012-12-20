@@ -20,20 +20,20 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.CreditCheckWizardService;
-import com.propertyvista.dto.CreditCheckWizardDTO;
+import com.propertyvista.dto.CreditCheckSetupDTO;
 
 public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
 
     @Override
-    public void create(AsyncCallback<CreditCheckWizardDTO> callback) {
-        CreditCheckWizardDTO creditCheck = EntityFactory.create(CreditCheckWizardDTO.class);
+    public void create(AsyncCallback<CreditCheckSetupDTO> callback) {
+        CreditCheckSetupDTO creditCheck = EntityFactory.create(CreditCheckSetupDTO.class);
         callback.onSuccess(creditCheck);
 
     }
 
     @Override
     @ServiceExecution(waitCaption = "Saving...")
-    public void finish(AsyncCallback<VoidSerializable> callback, CreditCheckWizardDTO editableEntity) {
+    public void finish(AsyncCallback<VoidSerializable> callback, CreditCheckSetupDTO editableEntity) {
         System.out.println("++++++++save");
         callback.onSuccess(null);
     }
