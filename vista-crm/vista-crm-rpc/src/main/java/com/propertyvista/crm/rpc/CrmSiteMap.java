@@ -278,6 +278,10 @@ public class CrmSiteMap implements SiteMap {
 
         public static class Edit extends CrmCrudAppPlace {
         }
+
+        public static class CustomerCreditCheck extends CrmCrudAppPlace {
+        }
+
     }
 
     @PlaceProperties(navigLabel = "Reports", caption = "Dashboard")
@@ -372,8 +376,6 @@ public class CrmSiteMap implements SiteMap {
             public static class LeaseAdjustmentReason extends CrmCrudAppPlace {
             }
 
-            public static class CustomerCreditCheck extends CrmCrudAppPlace {
-            }
         }
 
         public static class Content extends CrmCrudAppPlace {

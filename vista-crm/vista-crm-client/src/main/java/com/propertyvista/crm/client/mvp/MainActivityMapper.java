@@ -731,7 +731,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Financial.CustomerCreditCheck) {
+                    } else if (crudPlace instanceof CrmSiteMap.Report.CustomerCreditCheck) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new CustomerCreditCheckListerActivity(crudPlace);

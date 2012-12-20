@@ -27,7 +27,6 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Settings;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -78,7 +77,6 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         folder.addNavigItem(new CrmSiteMap.Administration.Financial.Tax());
         folder.addNavigItem(new CrmSiteMap.Administration.Financial.GlCodeCategory());
         folder.addNavigItem(new CrmSiteMap.Administration.Financial.LeaseAdjustmentReason());
-        folder.addNavigItem(new Financial.CustomerCreditCheck().formListerPlace());
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Website"));

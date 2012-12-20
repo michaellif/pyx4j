@@ -43,7 +43,6 @@ import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, BoardUpdateHandler {
@@ -148,16 +147,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         list.add(folder);
 
         //Reports
-        if (VistaTODO.isAfterBeta04Version) {
-            folder = new NavigFolder(i18n.tr("Reports"), CrmImages.INSTANCE.reportsNormal(), CrmImages.INSTANCE.reportsHover(),
-                    CrmImages.INSTANCE.reportsActive());
-            folder.addNavigItem(new CrmSiteMap.Report.Management());
-            list.add(folder);
-        }
-
-        folder = new NavigFolder(i18n.tr("Reports"), CrmImages.INSTANCE.reportsNormal(), CrmImages.INSTANCE.reportsHover(), CrmImages.INSTANCE.reportsActive());
-        folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(AvailabilityReportMetadata.class)));
-        folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(CustomerCreditCheckReportMetadata.class)));
+        folder = makeReportsFolder();
         list.add(folder);
 
         {
@@ -197,4 +187,12 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         view.setNavigFolders(navigFolders);
     }
 
+    private NavigFolder makeReportsFolder() {
+        NavigFolder folder = new NavigFolder(i18n.tr("Reports"), CrmImages.INSTANCE.reportsNormal(), CrmImages.INSTANCE.reportsHover(),
+                CrmImages.INSTANCE.reportsActive());
+        folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(AvailabilityReportMetadata.class)));
+        folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(CustomerCreditCheckReportMetadata.class)));
+        folder.addNavigItem(new CrmSiteMap.Report.CustomerCreditCheck().formListerPlace()); // TODO this one is just temporary until the real report is ready
+        return folder;
+    }
 }
