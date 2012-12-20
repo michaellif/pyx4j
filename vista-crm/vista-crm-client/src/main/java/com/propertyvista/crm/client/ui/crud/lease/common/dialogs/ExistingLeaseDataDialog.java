@@ -54,7 +54,7 @@ public class ExistingLeaseDataDialog extends SelectEnumDialog<Service.ServiceTyp
     }
 
     public ExistingLeaseDataDialog(AptUnit selectedUnitId) {
-        super(i18n.tr("Lease Data"), EnumSet.allOf(Service.ServiceType.class));
+        super(i18n.tr("Lease Data"), Service.ServiceType.unitRelated());
         this.selectedUnitId = selectedUnitId;
     }
 

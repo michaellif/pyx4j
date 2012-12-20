@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Vector;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -51,9 +50,6 @@ import com.propertyvista.misc.VistaTODO;
 public class OccupancyFacadeImpl implements OccupancyFacade {
 
     private static final I18n i18n = I18n.get(OccupancyFacadeImpl.class);
-
-    private static final Vector<Service.ServiceType> SERVICES_PROVIDED_BY_UNIT = new Vector<Service.ServiceType>(Arrays.asList(
-            Service.ServiceType.residentialUnit, Service.ServiceType.commercialUnit));
 
     @Override
     public AptUnitOccupancySegment getOccupancySegment(AptUnit unit, LogicalDate date) {
@@ -888,10 +884,9 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
 
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), unit.building()));
-        criteria.add(PropertyCriterion.in(criteria.proto().serviceType(), SERVICES_PROVIDED_BY_UNIT));
+        criteria.add(PropertyCriterion.in(criteria.proto().serviceType(), Service.ServiceType.unitRelated()));
 
-        List<Service> services = Persistence.secureQuery(criteria);
-        for (Service service : services) {
+        for (Service service : Persistence.secureQuery(criteria)) {
             Persistence.service().retrieve(service.version().items());
             for (ProductItem item : service.version().items()) {
                 if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(unitPk)) {

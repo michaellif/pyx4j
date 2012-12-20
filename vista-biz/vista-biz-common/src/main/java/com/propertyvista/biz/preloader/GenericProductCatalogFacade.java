@@ -44,6 +44,7 @@ public interface GenericProductCatalogFacade {
      * 
      * @param building
      * @param unit
+     * @param marketPrice
      * @param persist
      *            - if persist affected services immediately or persistFor(...) will be called later
      */

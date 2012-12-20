@@ -91,9 +91,7 @@ public class ProductCatalogGenerator {
 
     public void buildEligibilityMatrix(ProductCatalog catalog) {
         for (Service srv : catalog.services()) {
-            if (srv.serviceType().getValue().equals(Service.ServiceType.residentialUnit)
-                    || srv.serviceType().getValue().equals(Service.ServiceType.commercialUnit)) {
-
+            if (Service.ServiceType.unitRelated().contains(srv.serviceType().getValue())) {
                 int count = catalog.features().size();
                 for (int i = 0; i < count; ++i) {
                     srv.version().features().add(catalog.features().get(i));
@@ -132,8 +130,7 @@ public class ProductCatalogGenerator {
         int count = 0;
         switch (type) {
         case residentialUnit:
-// VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
-//        case residentialShortTermUnit:
+        case residentialShortTermUnit:
         case commercialUnit:
             return new ArrayList<ProductItem>();
 // VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
@@ -328,10 +325,10 @@ public class ProductCatalogGenerator {
         List<ProductItem> serviceItems = new ArrayList<ProductItem>();
 
         BigDecimal price = createUnitMarketRent(unit);
-//      Service.Type type = RandomUtil.random(EnumSet.of(Type.residentialUnit, Type.residentialShortTermUnit, Type.commercialUnit));
 
-        serviceItems.add(createBuildingElementServices(catalog, unit, ServiceType.residentialUnit, price));
-        serviceItems.add(createBuildingElementServices(catalog, unit, ServiceType.commercialUnit, price));
+        for (ServiceType type : ServiceType.unitRelated()) {
+            serviceItems.add(createBuildingElementServices(catalog, unit, type, price));
+        }
 
         return serviceItems;
     }

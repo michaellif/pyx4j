@@ -73,8 +73,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
         EntitySelectorTableDialog<?> buildingElementSelectionBox = null;
         switch (parent.getValue().serviceType().getValue()) {
         case residentialUnit:
-// VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
-//        case residentialShortTermUnit:
+        case residentialShortTermUnit:
         case commercialUnit:
             List<AptUnit> alreadySelected = new ArrayList<AptUnit>(getValue().size());
             for (ProductItem item : getValue()) {
@@ -136,8 +135,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             Class<? extends IEntity> buildingElementClass = null;
             switch (parent.getValue().serviceType().getValue()) {
             case residentialUnit:
-// VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
-//            case residentialShortTermUnit:
+            case residentialShortTermUnit:
             case commercialUnit:
                 buildingElementClass = AptUnit.class;
                 isViewable = true;

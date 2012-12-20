@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.dialogs;
 
-import java.util.EnumSet;
-
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -41,7 +39,7 @@ public class LeaseApplicationDataDialog extends SelectEnumDialog<Service.Service
     }
 
     public LeaseApplicationDataDialog(AptUnit selectedUnitId) {
-        super(i18n.tr("Select Lease Type"), EnumSet.allOf(Service.ServiceType.class));
+        super(i18n.tr("Select Lease Type"), Service.ServiceType.unitRelated());
         this.selectedUnitId = selectedUnitId;
     }
 

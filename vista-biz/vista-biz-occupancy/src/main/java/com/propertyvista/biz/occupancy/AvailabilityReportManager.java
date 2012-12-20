@@ -15,12 +15,10 @@ package com.propertyvista.biz.occupancy;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -36,7 +34,6 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.Service.ServiceType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
@@ -332,16 +329,13 @@ public class AvailabilityReportManager {
 
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), unit.building()));
-        criteria.add(PropertyCriterion.in(criteria.proto().serviceType(),
-                new Vector<Service.ServiceType>(Arrays.asList(Service.ServiceType.residentialUnit, Service.ServiceType.commercialUnit))));
+        criteria.add(PropertyCriterion.in(criteria.proto().serviceType(), Service.ServiceType.unitRelated()));
 
-        List<Service> services = Persistence.secureQuery(criteria);
-
-        for (Service service : services) {
+        for (Service service : Persistence.secureQuery(criteria)) {
             Persistence.service().retrieve(service.version().items());
             for (ProductItem item : service.version().items()) {
                 if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(unit.getPrimaryKey())) {
-                    if (service.serviceType().getValue() == ServiceType.residentialUnit) {
+                    if (service.serviceType().getValue() == Service.ServiceType.residentialUnit) {
                         residentialUnitMarketRent = item.price().getValue();
                         break;
                     }

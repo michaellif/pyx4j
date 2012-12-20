@@ -15,12 +15,12 @@ package com.propertyvista.generator;
 
 import java.util.List;
 
-
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.Service.ServiceType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.generator.gdo.ProductItemTypesGDO;
 
@@ -31,12 +31,12 @@ public class ProductItemTypesGenerator {
     public ProductItemTypesGenerator() {
         gdo = new ProductItemTypesGDO();
 
-        // preload types:
-        createChargeItemType("Residential Unit", Service.ServiceType.residentialUnit, 5110);
-        createChargeItemType("Commercial Unit", Service.ServiceType.commercialUnit, 5110);
+        // preload unit-related types:
+        for (ServiceType type : ServiceType.unitRelated()) {
+            createChargeItemType(type.toString(), type, 5110);
+        }
 /*
  * VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
- * createChargeItemType("Short Term Residential Unit", Service.ServiceType.residentialShortTermUnit, 5110);
  * createChargeItemType("Roof Spot", Service.ServiceType.roof, 5110);
  * createChargeItemType("Billboard", Service.ServiceType.sundry, 5110);
  * createChargeItemType("Garage", Service.ServiceType.garage, 5110);

@@ -19,7 +19,6 @@ import java.util.List;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -46,8 +45,7 @@ public class MockupDepositPolicyPreloader extends AbstractPolicyPreloader<Deposi
         DepositPolicy policy = EntityFactory.create(DepositPolicy.class);
 
         EntityQueryCriteria<ServiceItemType> srvType = EntityQueryCriteria.create(ServiceItemType.class);
-        srvType.add(new OrCriterion(PropertyCriterion.eq(srvType.proto().serviceType(), Service.ServiceType.commercialUnit), PropertyCriterion.eq(srvType
-                .proto().serviceType(), Service.ServiceType.residentialUnit)));
+        srvType.add(PropertyCriterion.in(srvType.proto().serviceType(), Service.ServiceType.unitRelated()));
         List<ServiceItemType> services = Persistence.service().query(srvType);
         for (ServiceItemType pit : services) {
 

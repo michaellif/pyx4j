@@ -43,7 +43,7 @@ public class UnitMarketPriceCalculator {
             productCatalog = Persistence.service().retrieve(criteria);
             Persistence.service().retrieveMember(productCatalog.services());
             for (Service service : productCatalog.services()) {
-                if (service.serviceType().getValue() == Service.ServiceType.residentialUnit) {
+                if (Service.ServiceType.unitRelated().contains(service.serviceType().getValue())) {
                     Persistence.service().retrieve(service.version().items());
                 }
             }
@@ -74,7 +74,7 @@ public class UnitMarketPriceCalculator {
 
         //Find only first Service/ ProductItem that apply to units
         for (Service service : productCatalog.services()) {
-            if (service.serviceType().getValue() == Service.ServiceType.residentialUnit) {
+            if (Service.ServiceType.unitRelated().contains(service.serviceType().getValue())) {
                 for (ProductItem item : service.version().items()) {
                     if (item.element().isInstanceOf(AptUnit.class)) {
                         if (!firstItemsInCatalog.containsKey(item.element())) {

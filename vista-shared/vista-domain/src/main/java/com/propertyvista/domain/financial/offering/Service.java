@@ -14,6 +14,7 @@
 package com.propertyvista.domain.financial.offering;
 
 import java.util.Date;
+import java.util.EnumSet;
 
 import javax.xml.bind.annotation.XmlType;
 
@@ -30,6 +31,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.offering.Service.ServiceV;
+import com.propertyvista.misc.VistaTODO;
 
 @ToStringFormat("{1}, {0}")
 @DiscriminatorValue("service")
@@ -41,11 +43,12 @@ public interface Service extends Product<ServiceV> {
 
         residentialUnit,
 
+        residentialShortTermUnit,
+
         commercialUnit;
 
         /*
          * VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
-         * residentialShortTermUnit,
          * 
          * roof,
          * 
@@ -55,6 +58,14 @@ public interface Service extends Product<ServiceV> {
          * 
          * storage;
          */
+
+        public static EnumSet<ServiceType> unitRelated() {
+            if (VistaTODO.removedForProduction) {
+                return EnumSet.of(residentialUnit);
+            } else {
+                return EnumSet.of(residentialUnit, residentialShortTermUnit, commercialUnit);
+            }
+        }
 
         @Override
         public String toString() {

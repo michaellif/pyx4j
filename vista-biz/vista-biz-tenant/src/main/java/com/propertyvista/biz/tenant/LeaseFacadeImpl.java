@@ -117,7 +117,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         // TODO could be more variants in the future:
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        lease.type().setValue(Service.ServiceType.residentialUnit);
+
+        if (lease.type().isNull()) {
+            lease.type().setValue(Service.ServiceType.residentialUnit);
+        } else if (!Service.ServiceType.unitRelated().contains(lease.type().getValue())) {
+            throw new IllegalStateException(SimpleMessageFormat.format("Unsupported Lease Type (\"{0}\")", lease.type().getValue()));
+        }
 
         if (lease.currentTerm().isNull()) {
             lease.currentTerm().set(EntityFactory.create(LeaseTerm.class));

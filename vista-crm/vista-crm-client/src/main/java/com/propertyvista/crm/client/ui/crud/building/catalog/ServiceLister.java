@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.building.catalog;
 
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -48,7 +47,7 @@ public class ServiceLister extends ListerBase<Service> {
 
     @Override
     protected void onItemNew() {
-        new SelectEnumDialog<Service.ServiceType>(i18n.tr("Select Service Type"), EnumSet.allOf(Service.ServiceType.class)) {
+        new SelectEnumDialog<Service.ServiceType>(i18n.tr("Select Service Type"), Service.ServiceType.unitRelated()) {
             @Override
             public boolean onClickOk() {
                 Service newService = EntityFactory.create(Service.class);
