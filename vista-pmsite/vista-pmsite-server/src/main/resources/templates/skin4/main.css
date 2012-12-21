@@ -353,11 +353,11 @@ ul.footer_locations li {
  * Content
  */
 .vista-pmsite-main .caption {
-	//background-size: 100% 100%;
+//	background-size: 100% 100%;
 	background: white;
 	height: 30px;
 	overflow: hidden;
-	padding: 5px 0 30px 30px;
+	padding: 5px 0 5px 0;
 }
 
 .vista-pmsite-main .caption h1 {

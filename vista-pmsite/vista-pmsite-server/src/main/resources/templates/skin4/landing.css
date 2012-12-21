@@ -85,16 +85,15 @@
 	border: medium none;
 	color: ${object1_10};
 	cursor: pointer;
-	font-size: 12px;
-	padding: 1em;
-//	width: 74px;
+	font-size: 16px;
+	padding: 10px;
 }
 
 .quickSearchPanel .submit {
 	background: ${object1_100};
 	float: right;
 	overflow: hidden;
-	width: 74px;
+	width: 76px;
 	border: 2px splid ${object1_100};
 }
 
@@ -135,6 +134,7 @@
 	float: left;
 	overflow:hidden;
 	width: 100%;
+	height: 400px;
 }
 
 .testimBox .infobox_header {
@@ -144,12 +144,15 @@
 .testimBox .infobox_body {
 	border-top: 5px solid #000000;
 	padding-top: 12px;
-	width: 612px;
+	width: 602px;
+	margin-top: 0;
+	position: absolute;
+	overflow: hidden;
 }
 
 .testimBox .infobox_decor {
 	float: right;
-	width: 305px;
+	width: 301px;
 }
 
 .testimBox .infobox_decor:first-child {
@@ -164,23 +167,16 @@
 
 .testimBox .callout {
 	position: relative;
-//	top:140px;
 	left:135px;
 }
 
 .testimBox .infobox_content {
-	//float: right;
 	width: 255px;
-	height: 140px;
+	height: 150px;
 	padding: 20px;
 	background: #CCCCCC;
 	font-family: monospace;
-    font-size: 12pt;
-
-//	border: 1px solid ${object2_80};
-//	border-radius: 15px;
-	-moz-border-radius: 15px;
-	-webkit-border-radius: 15px;	
+    font-size: 12pt;	
 }
 
 .testimBox .name {
@@ -191,17 +187,20 @@
 
 #narrowSpacer {
 	float: left;
-	padding-top: 340px;
+	padding-top: 5px;
 	width: 300px;
 	display: inline-block;
 	background: #fff;
+	margin-top: 340px;
+	border-top: 1px solid #000000;
 }
 
 .newsBox {
 	width: 300px;
-	display: inline-block;
-	float: right;
+	display: block;
+//	float: left;
 	background: #fff;
+	border-top: 1px solid #000000;
 }
 
 .newsBox .infobox_header {
@@ -250,14 +249,14 @@
 .infobox_header .read_more {
 	color: #fff;
 	background: #000000;
-	font-size: 12px;
 	width: 50px;
 	padding: 1em;
 	position: relative;
-	bottom: -210px;
+	bottom: -220px;
 	float: right;
 	text-decoration:none;
 	z-index: 1;
+	right: 5px;
 }
 
 .infobox_header {
