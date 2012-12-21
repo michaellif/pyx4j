@@ -186,3 +186,8 @@
 	background-color:${object1_100} !important;
 	width:214px;
 }
+
+.vista-pmsite-findAptPage .advancedSearchCriteria {
+	top: 0;
+	height: 383px;
+}
