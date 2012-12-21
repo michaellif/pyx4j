@@ -22,7 +22,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
-import com.propertyvista.biz.preloader.GenericProductCatalogFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.oapi.binder.BuildingPersister;
@@ -110,7 +109,7 @@ public class PropertyService {
 
         new UnitPersister().persist(unitDTO);
         if (VistaFeatures.instance().defaultProductCatalog()) {
-            ServerSideFactory.create(GenericProductCatalogFacade.class).addUnit(unitDTO.building(), unitDTO, true);
+            ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(unitDTO.building(), unitDTO, true);
         }
         Persistence.service().commit();
     }
