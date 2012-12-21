@@ -16,12 +16,12 @@ package com.propertyvista.oapi.binder;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.Lease;
 
-public class LeasePersister extends AbstractPersister<AptUnit, AptUnit> {
+public class LeasePersister extends AbstractPersister<Lease, Lease> {
 
     public LeasePersister() {
-        super(AptUnit.class, AptUnit.class);
+        super(Lease.class, Lease.class);
     }
 
     @Override
@@ -30,10 +30,9 @@ public class LeasePersister extends AbstractPersister<AptUnit, AptUnit> {
     }
 
     @Override
-    public AptUnit retrieve(AptUnit dto) {
-        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        criteria.eq(criteria.proto().building().propertyCode(), dto.building().propertyCode());
-        criteria.eq(criteria.proto().info().number(), dto.info().number());
+    public Lease retrieve(Lease dto) {
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.eq(criteria.proto().leaseId(), dto.leaseId());
         return Persistence.service().retrieve(criteria);
     }
 }

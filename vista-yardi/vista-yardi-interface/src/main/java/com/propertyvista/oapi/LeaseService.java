@@ -25,6 +25,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.oapi.binder.LeasePersister;
 import com.propertyvista.oapi.marshaling.LeaseMarshaller;
 import com.propertyvista.oapi.marshaling.TenantMarshaller;
 import com.propertyvista.oapi.model.LeaseIO;
@@ -79,11 +80,19 @@ public class LeaseService {
         Lease lease = leases.get(0);
         service.retrieveMember(lease.leaseParticipants());
         for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
-            TenantIO tenantIO = TenantMarshaller.getInstance().marshal(participant);
+            TenantIO tenantIO = TenantMarshaller.getInstance().marshal(participant.customer().person());
             tenantIO.leaseId = leaseId;
             tenantsIO.add(tenantIO);
         }
 
         return tenantsIO;
+    }
+
+    public static void updateLease(LeaseIO leaseIO) {
+        Lease leaseDTO = LeaseMarshaller.getInstance().unmarshal(leaseIO);
+
+        new LeasePersister().persist(leaseDTO);
+
+        Persistence.service().commit();
     }
 }

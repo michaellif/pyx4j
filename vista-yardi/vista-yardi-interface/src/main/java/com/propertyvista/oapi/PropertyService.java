@@ -16,10 +16,13 @@ package com.propertyvista.oapi;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
+import com.propertyvista.biz.preloader.GenericProductCatalogFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.oapi.binder.BuildingPersister;
@@ -29,6 +32,7 @@ import com.propertyvista.oapi.marshaling.UnitMarshaller;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.model.UnitIO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class PropertyService {
 
@@ -62,7 +66,10 @@ public class PropertyService {
         Building buildingDTO = BuildingMarshaller.getInstance().unmarshal(buildingIO);
 
         new BuildingPersister().persist(buildingDTO);
-
+        if (VistaFeatures.instance().defaultProductCatalog()) {
+            ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(buildingDTO);
+            ServerSideFactory.create(DefaultProductCatalogFacade.class).persistFor(buildingDTO);
+        }
         Persistence.service().commit();
     }
 
@@ -102,7 +109,9 @@ public class PropertyService {
         AptUnit unitDTO = UnitMarshaller.getInstance().unmarshal(unitIO);
 
         new UnitPersister().persist(unitDTO);
-
+        if (VistaFeatures.instance().defaultProductCatalog()) {
+            ServerSideFactory.create(GenericProductCatalogFacade.class).addUnit(unitDTO.building(), unitDTO, true);
+        }
         Persistence.service().commit();
     }
 }

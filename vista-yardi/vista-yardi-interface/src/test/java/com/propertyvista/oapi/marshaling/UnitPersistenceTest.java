@@ -38,7 +38,7 @@ public class UnitPersistenceTest extends WSOapiTestBase {
     @Test
     public void testUpdateUnitPersistance() {
         String propertyCode = Long.toString(System.currentTimeMillis());
-        propertyCode = propertyCode.substring(0, 6);
+        propertyCode = propertyCode.substring(propertyCode.length() - 6, propertyCode.length());
         BuildingIO buildingIO = createBuilding(propertyCode);
         Building building = BuildingMarshaller.getInstance().unmarshal(buildingIO);
         new BuildingPersister().persist(building);

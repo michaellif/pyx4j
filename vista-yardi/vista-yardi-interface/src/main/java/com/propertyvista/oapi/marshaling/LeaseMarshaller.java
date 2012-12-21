@@ -13,10 +13,25 @@
  */
 package com.propertyvista.oapi.marshaling;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.gwt.server.DateUtils;
 
+import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.oapi.model.LeaseIO;
 import com.propertyvista.oapi.model.types.LeaseStatusIO;
 import com.propertyvista.oapi.model.types.PaymentFrequencyIO;
@@ -48,26 +63,82 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
         leaseIO.status = MarshallerUtils.createIo(LeaseStatusIO.class, lease.status());
         leaseIO.paymentFrequency = MarshallerUtils.createIo(PaymentFrequencyIO.class, lease.paymentFrequency());
         leaseIO.leaseFrom = MarshallerUtils.createIo(LogicalDateIO.class, lease.leaseFrom());
-        leaseIO.leaseTo = MarshallerUtils.createIo(LogicalDateIO.class, lease.leaseTo());
+        leaseIO.leaseTo = MarshallerUtils.createIo(LogicalDateIO.class, lease.currentTerm().termTo());
 
         Persistence.service().retrieve(lease.leaseParticipants());
-        leaseIO.tenants.addAll(TenantMarshaller.getInstance().marshal(lease.leaseParticipants()));
+        List<Person> persons = new ArrayList<Person>();
+        for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
+            Person person = participant.customer().person();
+            persons.add(person);
+        }
+        leaseIO.tenants.addAll(TenantMarshaller.getInstance().marshal(persons));
         return leaseIO;
     }
 
     @Override
     public Lease unmarshal(LeaseIO leaseIO) {
-        Lease lease = EntityFactory.create(Lease.class);
-        lease.leaseId().setValue(leaseIO.leaseId);
-        lease.unit().building().propertyCode().setValue(leaseIO.propertyCode);
-        lease.unit().info().number().setValue(leaseIO.unitNumber);
 
-        MarshallerUtils.setValue(lease.status(), leaseIO.status);
-        MarshallerUtils.setValue(lease.paymentFrequency(), leaseIO.paymentFrequency);
-        MarshallerUtils.setValue(lease.leaseFrom(), leaseIO.leaseFrom);
-        MarshallerUtils.setValue(lease.leaseTo(), leaseIO.leaseTo);
-        lease.leaseParticipants().addAll(TenantMarshaller.getInstance().unmarshal(leaseIO.tenants));
+        // unit
+        AptUnit unit;
+        {
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.eq(criteria.proto().building().propertyCode(), leaseIO.propertyCode);
+            criteria.eq(criteria.proto().info().number(), leaseIO.unitNumber);
+            List<AptUnit> units = Persistence.service().query(criteria);
+            if (units.size() > 0) {
+                unit = units.get(0);
+            } else {
+                throw new Error("Unit not found in the database");
+            }
+        }
+
+        Date leaseEnd = null;
+        switch (leaseIO.leaseTerm.getValue()) {
+        case months6:
+            leaseEnd = DateUtils.monthAdd(leaseIO.leaseFrom.getValue(), 6 + 1);
+            break;
+        case months12:
+            leaseEnd = DateUtils.monthAdd(leaseIO.leaseFrom.getValue(), 12 + 1);
+            break;
+        case months18:
+            leaseEnd = DateUtils.monthAdd(leaseIO.leaseFrom.getValue(), 18 + 1);
+            break;
+        case other:
+            leaseEnd = DateUtils.monthAdd(leaseIO.leaseFrom.getValue(), 12 + 1);
+            break;
+        }
+
+        LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
+        System.out.println("a");
+        Lease lease = leaseFacade.create(Lease.Status.ExistingLease);
+
+        lease.type().setValue(leaseIO.leaseType.getValue());
+
+        lease.currentTerm().termFrom().setValue(leaseIO.leaseFrom.getValue());
+        lease.currentTerm().termTo().setValue(new LogicalDate(leaseEnd));
+//        lease.currentTerm()
+
+        lease.expectedMoveIn().setValue(leaseIO.leaseFrom.getValue());
+
+        boolean asApplicant = true;
+
+        List<Person> persons = TenantMarshaller.getInstance().unmarshal(leaseIO.tenants);
+        for (Person person : persons) {
+            Customer customer = EntityFactory.create(Customer.class);
+            customer.person().set(person);
+
+            LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
+            tenantInLease.leaseParticipant().customer().set(customer);
+            tenantInLease.role().setValue(asApplicant ? LeaseTermParticipant.Role.Applicant : LeaseTermParticipant.Role.CoApplicant);
+            lease.currentTerm().version().tenants().add(tenantInLease);
+            asApplicant = false;
+        }
+        lease = leaseFacade.init(lease);
+
+        if (unit.getPrimaryKey() != null) {
+            leaseFacade.setUnit(lease, unit);
+        }
+
         return lease;
     }
-
 }

@@ -20,12 +20,11 @@ import java.util.List;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.oapi.model.TenantIO;
 import com.propertyvista.oapi.model.types.SexTypeIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantIO> {
+public class TenantMarshaller implements Marshaller<Person, TenantIO> {
 
     private static class SingletonHolder {
         public static final TenantMarshaller INSTANCE = new TenantMarshaller();
@@ -39,12 +38,11 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantI
     }
 
     @Override
-    public TenantIO marshal(LeaseParticipant<?> participant) {
-        if (participant == null || participant.isNull()) {
+    public TenantIO marshal(Person person) {
+        if (person == null || person.isNull()) {
             return null;
         }
         TenantIO tenantIO = new TenantIO();
-        Person person = participant.customer().person();
         tenantIO.firstName = MarshallerUtils.getValue(person.name().firstName());
         tenantIO.lastName = MarshallerUtils.getValue(person.name().lastName());
         tenantIO.middleName = MarshallerUtils.getValue(person.name().middleName());
@@ -55,17 +53,16 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantI
         return tenantIO;
     }
 
-    public List<TenantIO> marshal(Collection<LeaseParticipant<?>> participants) {
+    public List<TenantIO> marshal(Collection<Person> participants) {
         List<TenantIO> tenants = new ArrayList<TenantIO>();
-        for (LeaseParticipant<?> participant : participants) {
+        for (Person participant : participants) {
             tenants.add(marshal(participant));
         }
         return tenants;
     }
 
     @Override
-    public LeaseParticipant<?> unmarshal(TenantIO tenantIO) {
-        LeaseParticipant<?> participant = EntityFactory.create(LeaseParticipant.class);
+    public Person unmarshal(TenantIO tenantIO) {
         Person person = EntityFactory.create(Person.class);
         person.name().firstName().setValue(tenantIO.firstName);
         person.name().lastName().setValue(tenantIO.lastName);
@@ -74,14 +71,13 @@ public class TenantMarshaller implements Marshaller<LeaseParticipant<?>, TenantI
         MarshallerUtils.setValue(person.sex(), tenantIO.sex);
         MarshallerUtils.setValue(person.homePhone(), tenantIO.phone);
         MarshallerUtils.setValue(person.email(), tenantIO.email);
-        participant.customer().person().set(person);
-        return participant;
+        return person;
     }
 
-    public List<LeaseParticipant<?>> unmarshal(Collection<TenantIO> tenantIOList) {
-        List<LeaseParticipant<?>> participants = new ArrayList<LeaseParticipant<?>>();
+    public List<Person> unmarshal(Collection<TenantIO> tenantIOList) {
+        List<Person> participants = new ArrayList<Person>();
         for (TenantIO tenantIO : tenantIOList) {
-            LeaseParticipant<?> participant = EntityFactory.create(LeaseParticipant.class);
+            Person participant = EntityFactory.create(Person.class);
             MarshallerUtils.set(participant, tenantIO, TenantMarshaller.getInstance());
             participants.add(participant);
         }

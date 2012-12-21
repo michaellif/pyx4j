@@ -94,8 +94,8 @@ public class RSLeaseService {
     @Path("/updateLease")
     @Consumes({ MediaType.APPLICATION_XML })
     public Response updateLease(LeaseIO leaseIO) {
-        //TODO mkoval implementation TBD
-        return RSUtils.createSuccessResponse(i18n.tr("Operation is not implemented"));
+        LeaseService.updateLease(leaseIO);
+        return RSUtils.createSuccessResponse(i18n.tr("Lease updated successfully"));
     }
 
     @POST
