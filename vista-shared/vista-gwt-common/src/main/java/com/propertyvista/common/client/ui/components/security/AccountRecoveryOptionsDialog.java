@@ -15,9 +15,9 @@ package com.propertyvista.common.client.ui.components.security;
 
 import com.google.gwt.user.client.Timer;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -67,10 +67,18 @@ public class AccountRecoveryOptionsDialog extends OkCancelDialog {
         service.updateRecoveryOptions(new DefaultAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {
-                if (result != null) {
-                    ClientContext.authenticated(result);
-                }
                 MessageDialog.info(i18n.tr("Account recovery options were updated successfully"));
+                onUpdateRecoveryOptionsSuccess(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
+                    MessageDialog.error("", caught.getMessage());
+                    onUpdateRecoveryOptionsFail((UserRuntimeException) caught);
+                } else {
+                    super.onFailure(caught);
+                }
             }
         }, recoveryOptions);
         return true;
@@ -85,6 +93,14 @@ public class AccountRecoveryOptionsDialog extends OkCancelDialog {
     @Override
     protected String optionTextOk() {
         return i18n.tr("Update");
+    }
+
+    protected void onUpdateRecoveryOptionsSuccess(AuthenticationResponse result) {
+
+    }
+
+    protected void onUpdateRecoveryOptionsFail(UserRuntimeException caught) {
+
     }
 
 }

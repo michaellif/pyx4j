@@ -27,8 +27,6 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.activity.AlertActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountEditorActivity;
-import com.propertyvista.crm.client.activity.crud.account.AccountRecoveryOptionsEditorActivity;
-import com.propertyvista.crm.client.activity.crud.account.AccountRecoveryOptionsViewerActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountViewerActivity;
 import com.propertyvista.crm.client.activity.crud.account.LoginAttemptsListerActivity;
 import com.propertyvista.crm.client.activity.crud.auditrecords.CrmAuditRecordsListerActivity;
@@ -1080,17 +1078,6 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 // - Security
-                    } else if (crudPlace instanceof CrmSiteMap.Account.AccountRecoveryOptions) {
-                        switch (crudPlace.getType()) {
-                        case viewer:
-                            activity = new AccountRecoveryOptionsViewerActivity(crudPlace);
-                            break;
-                        case editor:
-                            activity = new AccountRecoveryOptionsEditorActivity(crudPlace);
-                            break;
-                        default:
-                            break;
-                        }
 
                     } else if (crudPlace instanceof CrmSiteMap.Account.LoginAttemptsLog) {
                         switch (crudPlace.getType()) {
