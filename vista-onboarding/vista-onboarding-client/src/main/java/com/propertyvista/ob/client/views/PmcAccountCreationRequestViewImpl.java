@@ -13,11 +13,12 @@
  */
 package com.propertyvista.ob.client.views;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 
@@ -51,12 +52,12 @@ public class PmcAccountCreationRequestViewImpl extends Composite implements PmcA
 
         };
         form.initContent();
-        form.asWidget().getElement().getStyle().setProperty("marginLeft", "auto");
-        form.asWidget().getElement().getStyle().setProperty("marginRight", "auto");
+        form.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        form.asWidget().getElement().getStyle().setWidth(300, Unit.PX);
 
-        SimplePanel panel = new SimplePanel();
+        FlowPanel panel = new FlowPanel();
         panel.addStyleName(OnboardingStyles.VistaObView.name());
-        panel.setWidget(form);
+        panel.add(form);
         initWidget(panel);
     }
 

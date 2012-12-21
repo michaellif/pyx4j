@@ -85,11 +85,9 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
 
         FlowPanel dnsNamePanel = new FlowPanel();
         dnsNamePanel.addStyleName(Styles.PmcUrlFieldNote.name());
-        dnsNamePanel.getElement().getStyle().setMarginLeft(15, Unit.EM);
-
         SimplePanel dnsSubdomainNameHolder = new SimplePanel();
         dnsSubdomainNameHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-        dnsSubdomainNameHolder.setWidget(new DecoratorBuilder(inject(proto().dnsName()), 10).labelWidth(3).build());
+        dnsSubdomainNameHolder.setWidget(new DecoratorBuilder(inject(proto().dnsName()), 10).customLabel("").labelWidth(0).useLabelSemicolon(false).build());
 
         Label dnsDomainName = new Label(".propertyvista.com");
         dnsDomainName.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -98,8 +96,6 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         dnsNamePanel.add(dnsDomainName);
 
         if (false) {
-            (get(proto().dnsName())).setNote(PmcAccountCreationRequestFormResources.INSTANCE.urlFieldNote().getText(), NoteStyle.Info);
-        } else {
             HTML note = new HTML(PmcAccountCreationRequestFormResources.INSTANCE.urlFieldNote().getText());
             note.getElement().getStyle().setClear(Clear.BOTH);
             note.getElement().getStyle().setDisplay(Display.BLOCK);
@@ -133,18 +129,20 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
             }
         });
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).customLabel("").labelWidth(0).useLabelSemicolon(false).customLabel("")
+                .labelWidth(0).useLabelSemicolon(false).build());
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().countryOfOperation())).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().countryOfOperation())).customLabel("").labelWidth(0).useLabelSemicolon(false)
+                .build());
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().firstName())).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lastName())).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().firstName())).customLabel("").labelWidth(0).useLabelSemicolon(false).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lastName())).customLabel("").labelWidth(0).useLabelSemicolon(false).build());
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email())).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmEmail())).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email())).customLabel("").labelWidth(0).useLabelSemicolon(false).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmEmail())).customLabel("").labelWidth(0).useLabelSemicolon(false).build());
         get(proto().confirmEmail()).addValueValidator(new EditableValueValidator<String>() {
             @Override
             public ValidationError isValid(CComponent<String, ?> component, String emailConfirmationValue) {
@@ -158,8 +156,9 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         });
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password())).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmPassword())).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password())).customLabel("").labelWidth(0).useLabelSemicolon(false).build());
+        contentPanel
+                .setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmPassword())).customLabel("").labelWidth(0).useLabelSemicolon(false).build());
         get(proto().confirmPassword()).addValueValidator(new EditableValueValidator<String>() {
             @Override
             public ValidationError isValid(CComponent<String, ?> component, String passwordConfirmationValue) {
@@ -173,6 +172,9 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         });
 
         HorizontalPanel signUpPanel = new HorizontalPanel();
+        signUpPanel.getElement().getStyle().setMarginLeft(1, Unit.EM);
+        signUpPanel.getElement().getStyle().setMarginTop(30, Unit.PX);
+        signUpPanel.setWidth("26em");
         FlowPanel termsAgreementShortcutPanel = new FlowPanel();
         Label termsAgreementLabel = new Label(i18n.tr("By clicking Sign Up, you are acknowledging that you have read and agree to our "));
         termsAgreementLabel.getElement().getStyle().setDisplay(Display.INLINE);
@@ -206,10 +208,10 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
 
         signUpPanel.add(submitButton);
         signUpPanel.setCellHorizontalAlignment(termsAgreementShortcutPanel, HasHorizontalAlignment.ALIGN_CENTER);
-        signUpPanel.setCellVerticalAlignment(termsAgreementShortcutPanel, HasVerticalAlignment.ALIGN_BOTTOM);
-        signUpPanel.setCellWidth(termsAgreementShortcutPanel, "80%");
+        signUpPanel.setCellVerticalAlignment(termsAgreementShortcutPanel, HasVerticalAlignment.ALIGN_MIDDLE);
+        signUpPanel.setCellWidth(termsAgreementShortcutPanel, "60%");
         signUpPanel.setCellHorizontalAlignment(submitButton, HasHorizontalAlignment.ALIGN_CENTER);
-        signUpPanel.setCellVerticalAlignment(submitButton, HasVerticalAlignment.ALIGN_BOTTOM);
+        signUpPanel.setCellVerticalAlignment(submitButton, HasVerticalAlignment.ALIGN_MIDDLE);
         contentPanel.setWidget(++row, 0, signUpPanel);
 
         if (ApplicationMode.isDevelopment()) {

@@ -30,39 +30,46 @@ import com.propertyvista.domain.customizations.CountryOfOperation;
 public interface PmcAccountCreationRequest extends IEntity {
 
     @NotNull
+    @Caption(watermark = "First Name")
     IPrimitive<String> firstName();
 
     @NotNull
+    @Caption(watermark = "Last Name")
     IPrimitive<String> lastName();
 
     @Editor(type = EditorType.email)
     @NotNull
+    @Caption(watermark = "Email")
     IPrimitive<String> email();
 
     @Editor(type = EditorType.email)
     @NotNull
     @Transient(logTransient = true)
+    @Caption(watermark = "Confirm Email")
     IPrimitive<String> confirmEmail();
 
     @NotNull
     @Editor(type = EditorType.password)
     @Transient(logTransient = true)
+    @Caption(watermark = "Password")
     IPrimitive<String> password();
 
     @NotNull
     @Editor(type = EditorType.password)
     @Transient(logTransient = true)
+    @Caption(watermark = "Confirm Password")
     IPrimitive<String> confirmPassword();
 
     @NotNull
-    @Caption(name = "Company name")
+    @Caption(name = "Company Name (Legal Name)", watermark = "Company Name (Legal Name)")
     IPrimitive<String> name();
 
     @NotNull
+    @Caption(watermark = "Country of Operation")
     IPrimitive<CountryOfOperation> countryOfOperation();
 
     @NotNull
-    @Caption(name = "URL")
+    @Caption(name = "URL", watermark = "url")
     IPrimitive<String> dnsName();
 
     /**

@@ -42,13 +42,13 @@ public class OnboardingTheme extends Theme {
         addTheme(new DefaultFormFlexPanelTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
-                return ThemeColor.foreground;
+                return ThemeColor.background;
             }
         });
         addTheme(new DefaultEntityFolderTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
-                return ThemeColor.foreground;
+                return ThemeColor.background;
             }
         });
         addTheme(new DefaultRichTextEditorTheme());
@@ -66,7 +66,6 @@ public class OnboardingTheme extends Theme {
 
         style = new Style(".TextBox");
         style.addProperty("border-style", "inset");
-        style.addProperty("border-radius", "5px");
         addStyle(style);
 
         style = new Style(".", OnboardingStyles.VistaObMainPanel.name());
@@ -120,9 +119,8 @@ public class OnboardingTheme extends Theme {
         style.addProperty("padding-right", "30px");
         style.addProperty("padding-top", "10px");
         style.addProperty("padding-bottom", "10px");
-        style.addProperty("font-size", "16pt");
+        style.addProperty("font-size", "1.2em");
         style.addProperty("border-radius", "10px");
-        style.addProperty("margin-top", "30px");
         addStyle(style);
 
         style = new Style(".", PmcAccountCreationCompleteViewImpl.Styles.PmcAccountCreationCompleteLabel.name());
