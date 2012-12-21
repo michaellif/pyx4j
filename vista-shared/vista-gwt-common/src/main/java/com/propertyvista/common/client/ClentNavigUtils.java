@@ -20,7 +20,9 @@ import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.client.NavigationUri;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.customizations.CountryOfOperation;
@@ -69,8 +71,24 @@ public class ClentNavigUtils {
     public static void setCountryOfOperationLocale() {
         CompiledLocale compiledLocale = getCurrentLocale();
         if ((VistaFeatures.instance().countryOfOperation() == CountryOfOperation.UK) && (compiledLocale != CompiledLocale.en_GB)) {
-            ClentNavigUtils.changeApplicationLocale(CompiledLocale.en_GB);
+            if (isLocaleAvailable(CompiledLocale.en_GB)) {
+                ClentNavigUtils.changeApplicationLocale(CompiledLocale.en_GB);
+            } else if (ApplicationMode.isDevelopment()) {
+                MessageDialog.warn("Warning", "(dev) This PMC Locale was not compiled in this development versions");
+            }
         }
+    }
+
+    public static boolean isLocaleAvailable(CompiledLocale locale) {
+        for (String localeName : LocaleInfo.getAvailableLocaleNames()) {
+            if (localeName.equals("default")) {
+                localeName = "en_US";
+            }
+            if (localeName.equals(locale.name())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void changeApplicationLocale(CompiledLocale locale) {
