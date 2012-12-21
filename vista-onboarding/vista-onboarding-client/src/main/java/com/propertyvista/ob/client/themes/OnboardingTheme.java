@@ -31,6 +31,7 @@ import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 import com.propertyvista.ob.client.forms.PmcAccountCreationRequestForm;
 import com.propertyvista.ob.client.forms.StepStatusIndicator;
 import com.propertyvista.ob.client.views.PmcAccountCreationCompleteViewImpl;
+import com.propertyvista.ob.client.views.PmcAccountCreationRequestViewImpl;
 import com.propertyvista.ob.client.views.RuntimeErrorViewImpl;
 
 public class OnboardingTheme extends Theme {
@@ -138,20 +139,29 @@ public class OnboardingTheme extends Theme {
         style.addProperty("width", "25em");
         addStyle(style);
 
-        // this is for text on the left
+        style = new Style("." + PmcAccountCreationRequestViewImpl.Styles.SignUpCaption.name());
+        style.addProperty("text-align", "center");
+        style.addProperty("margin-bottom", "2em");
+        style.addProperty("font-style", "bold");
+        style.addProperty("font-size", "2em");
+        style.addProperty("color", "#607280");
+        addStyle(style);
 
-        style = new Style("." + OnboardingStyles.SignUpTextDetails.name());
+        // this is for text on the left
+        style = new Style("." + OnboardingStyles.SignUpText.name());
+        style.addProperty("margin-right", "20px");
+        addStyle(style);
 
         style = new Style("." + OnboardingStyles.SignUpTextSection.name());
         style.addProperty("margin-bottom", "20px");
         style.addProperty("font-size", "14px");
         addStyle(style);
 
-        style = new Style("." + OnboardingStyles.SignUpSubCaption.name());
+        style = new Style("." + OnboardingStyles.SignUpSectionCaption.name());
         style.addProperty("font-style", "italic");
         addStyle(style);
 
-        style = new Style("." + OnboardingStyles.SignUpTextDetails.name());
+        style = new Style("." + OnboardingStyles.SignUpSectionDetails.name());
         addStyle(style);
 
     }
