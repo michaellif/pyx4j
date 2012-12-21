@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.activity.crud.account;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -28,7 +27,9 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.dialog.Dialog.Type;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ui.components.security.AccountRecoveryOptionsDialog;
 import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
@@ -49,12 +50,11 @@ public class MandatoryAccountRecoveryOptionsSetupActivity extends AbstractActivi
     @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
         panel.setWidget(new SimplePanel());
-
-        MessageDialog.confirm(i18n.tr(""), i18n.tr("Because of the privileges associated with your account, you must setup password recovery options."),
-                new Command() {
-
+        MessageDialog.show(i18n.tr(""), i18n.tr("Because of the privileges associated with your account, you must setup password recovery options."),
+                Type.Confirm, new OkOption() {
                     @Override
-                    public void execute() {
+                    public boolean onClickOk() {
+
                         accountRecoveryOptionsService.obtainRecoveryOptions(new DefaultAsyncCallback<AccountRecoveryOptionsDTO>() {
                             @Override
                             public void onSuccess(AccountRecoveryOptionsDTO result) {
@@ -62,6 +62,8 @@ public class MandatoryAccountRecoveryOptionsSetupActivity extends AbstractActivi
                             }
 
                         }, EntityFactory.create(AuthenticationRequest.class));
+
+                        return true;
                     }
                 });
 
@@ -83,6 +85,11 @@ public class MandatoryAccountRecoveryOptionsSetupActivity extends AbstractActivi
             @Override
             protected void onUpdateRecoveryOptionsFail(com.pyx4j.commons.UserRuntimeException caught) {
                 showRecoveryOptionsDialog(accountRecoveryOptions);
+            };
+            
+            @Override
+            public boolean onClickCancel() {                
+                return false;
             };
             
         }.show();//@formatter:on
