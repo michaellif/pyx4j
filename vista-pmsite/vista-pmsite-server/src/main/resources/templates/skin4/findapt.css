@@ -9,7 +9,7 @@
     background: url("images/FreeCableTV.png") no-repeat right;
 }
 
-#advancedSearchCriteriaForm1 {
+.vista-pmsite-findAptPage #advancedSearchCriteriaForm1 {
 	top: 0;
 	height: 383px;
 }
@@ -112,7 +112,7 @@
 	width: 214px;
 }
 .advancedSearchWideWrap .searchTypeBox select {
-	width:214px;
+	width:212px;
 	margin: 0;
 	border: 1px solid #000000;
     color: #999999;
