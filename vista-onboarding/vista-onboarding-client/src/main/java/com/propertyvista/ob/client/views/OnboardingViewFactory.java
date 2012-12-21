@@ -24,7 +24,7 @@ public class OnboardingViewFactory extends ViewFactoryBase {
         if (type.equals(PmcAccountCreationRequestView.class)) {
             map.put(type, new PmcAccountCreationRequestViewImpl());
         } else if (type.equals(PmcAccountCreationProgressView.class)) {
-            map.put(type, new PmcAccountCreationProgressViewImpl());
+            map.put(type, new PmcAccountCreationProgressViewAltImpl());
         } else if (type.equals(PmcAccountCreationCompleteView.class)) {
             map.put(type, new PmcAccountCreationCompleteViewImpl());
         } else if (type.equals(PmcTermsView.class)) {
