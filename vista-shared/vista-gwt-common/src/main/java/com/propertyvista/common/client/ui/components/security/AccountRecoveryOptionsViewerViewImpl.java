@@ -29,7 +29,7 @@ public class AccountRecoveryOptionsViewerViewImpl extends ViewerViewImplBase<Acc
     private final Button btnEdit;
 
     public AccountRecoveryOptionsViewerViewImpl() {
-        setForm(new AccountRecoveryOptionsForm(this));
+        setForm(null);
         setCaption(i18n.tr("Account Recovery Options"));
         btnEdit = new Button(i18n.tr("Update"), new ClickHandler() {
 
@@ -43,6 +43,6 @@ public class AccountRecoveryOptionsViewerViewImpl extends ViewerViewImplBase<Acc
 
     @Override
     public void setSecurityQuestionRequired(boolean isSecurityQuestionEntiryRequired) {
-        ((AccountRecoveryOptionsForm) getForm()).setSecurityQuestionRequired(isSecurityQuestionEntiryRequired);
+//        ((AccountRecoveryOptionsForm) getForm()).setSecurityQuestionRequired(isSecurityQuestionEntiryRequired);
     }
 }

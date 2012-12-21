@@ -32,7 +32,7 @@ public class AccountRecoveryOptionsEditorViewImpl extends EditorViewImplBase<Acc
     private final Button btnCancel;
 
     public AccountRecoveryOptionsEditorViewImpl() {
-        setForm(new AccountRecoveryOptionsForm(this));
+        setForm(null);
         setCaption(i18n.tr("Account Recovery Options"));
 
         btnCancel = new Button(i18n.tr("Cancel"), new ClickHandler() {
@@ -60,7 +60,6 @@ public class AccountRecoveryOptionsEditorViewImpl extends EditorViewImplBase<Acc
 
     @Override
     public void setSecurityQuestionRequired(boolean isSecurityQuestionEntiryRequired) {
-        ((AccountRecoveryOptionsForm) getForm()).setSecurityQuestionRequired(isSecurityQuestionEntiryRequired);
     }
 
     @Override

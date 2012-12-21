@@ -19,24 +19,29 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.CrudEntityForm;
-import com.pyx4j.site.client.ui.crud.IFormView;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.security.SecurityQuestion;
 import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
 
-public class AccountRecoveryOptionsForm extends CrudEntityForm<AccountRecoveryOptionsDTO> {
+public class AccountRecoveryOptionsForm extends CEntityDecoratableForm<AccountRecoveryOptionsDTO> {
 
     private static final I18n i18n = I18n.get(AccountRecoveryOptionsForm.class);
 
-    public AccountRecoveryOptionsForm(IFormView<AccountRecoveryOptionsDTO> view) {
-        super(AccountRecoveryOptionsDTO.class, view);
+    public AccountRecoveryOptionsForm(boolean isEditable) {
+        super(AccountRecoveryOptionsDTO.class);
+        setEditable(isEditable);
+    }
+
+    @Override
+    public IsWidget createContent() {
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
@@ -58,7 +63,7 @@ public class AccountRecoveryOptionsForm extends CrudEntityForm<AccountRecoveryOp
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityAnswer(), new CPasswordTextField())).build());
         get(proto().securityAnswer()).setVisible(false);
 
-        selectTab(addTab(content));
+        return content;
     }
 
     public void setSecurityQuestionRequired(boolean isSecurityQuestionEntiryRequired) {

@@ -16,13 +16,18 @@ package com.propertyvista.crm.client.activity.crud.account;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.security.AccountRecoveryOptionsViewerView;
+import com.propertyvista.common.client.ui.components.security.AccountRecoveryOptionsDialog;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeViewerView;
@@ -30,16 +35,23 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactor
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
+import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
+import com.propertyvista.portal.rpc.shared.services.AbstractAccountRecoveryOptionsService;
 
 /**
  * This one should use separate service (just for self management)
  */
 public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implements EmployeeViewerView.Presenter {
 
+    private final AbstractAccountRecoveryOptionsService accountRecoveryOptionsService;
+
     public AccountViewerActivity(CrudAppPlace place) {
         super(place, OrganizationViewFactory.instance(EmployeeViewerView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(CrmUserService.class));
+        accountRecoveryOptionsService = GWT.<AbstractAccountRecoveryOptionsService> create(CrmAccountRecoveryOptionsUserService.class);
     }
 
     @Override
@@ -58,10 +70,31 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
     }
 
     @Override
-    public void goToAccountRecoveryOptions(String password) {
-        CrudAppPlace place = new CrmSiteMap.Account.AccountRecoveryOptions().formViewerPlace(new Key(-1));
-        place.placeArg(AccountRecoveryOptionsViewerView.ARG_PASSWORD, password);
-        AppSite.getPlaceController().goTo(place);
+    public void goToAccountRecoveryOptions(final String password) {
+
+        AuthenticationRequest authRequest = EntityFactory.create(AuthenticationRequest.class);
+        authRequest.password().setValue(password);
+        accountRecoveryOptionsService.obtainRecoveryOptions(new DefaultAsyncCallback<AccountRecoveryOptionsDTO>() {
+            @Override
+            public void onSuccess(AccountRecoveryOptionsDTO result) {
+                new AccountRecoveryOptionsDialog(//@formatter:off
+                        password,
+                        result,
+                        SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion),
+                        accountRecoveryOptionsService
+                ).show();//@formatter:on
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
+                    MessageDialog.error("", caught.getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
+            }
+        }, authRequest);
+
     }
 
     @Override
