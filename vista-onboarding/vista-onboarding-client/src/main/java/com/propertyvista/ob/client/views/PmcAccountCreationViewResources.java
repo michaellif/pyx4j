@@ -7,16 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-12-10
+ * Created on 2012-12-21
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.ob.client.themes;
+package com.propertyvista.ob.client.views;
 
-import com.pyx4j.commons.css.IStyleName;
+import com.google.gwt.core.shared.GWT;
+import com.google.gwt.resources.client.ClientBundleWithLookup;
+import com.google.gwt.resources.client.TextResource;
 
-public enum OnboardingStyles implements IStyleName {
+public interface PmcAccountCreationViewResources extends ClientBundleWithLookup {
 
-    VistaObMainPanel, VistaObView, SignUpSubCaption, SignUpTextDetails, SignUpTextSection;
+    public static PmcAccountCreationViewResources INSTANCE = GWT.create(PmcAccountCreationViewResources.class);
 
+    @Source("sign-up-screen-text.html")
+    TextResource singUpText();
 }

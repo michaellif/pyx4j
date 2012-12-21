@@ -138,6 +138,22 @@ public class OnboardingTheme extends Theme {
         style.addProperty("width", "25em");
         addStyle(style);
 
+        // this is for text on the left
+
+        style = new Style("." + OnboardingStyles.SignUpTextDetails.name());
+
+        style = new Style("." + OnboardingStyles.SignUpTextSection.name());
+        style.addProperty("margin-bottom", "20px");
+        style.addProperty("font-size", "14px");
+        addStyle(style);
+
+        style = new Style("." + OnboardingStyles.SignUpSubCaption.name());
+        style.addProperty("font-style", "italic");
+        addStyle(style);
+
+        style = new Style("." + OnboardingStyles.SignUpTextDetails.name());
+        addStyle(style);
+
     }
 
     private void initRuntimeErrorViewStyles() {

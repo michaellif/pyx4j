@@ -18,6 +18,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
@@ -55,8 +56,14 @@ public class PmcAccountCreationRequestViewImpl extends Composite implements PmcA
         form.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         form.asWidget().getElement().getStyle().setWidth(300, Unit.PX);
 
+        HTML text = new HTML();
+        text.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+        text.getElement().getStyle().setWidth(400, Unit.PX);
+        text.setHTML(PmcAccountCreationViewResources.INSTANCE.singUpText().getText());
+
         FlowPanel panel = new FlowPanel();
         panel.addStyleName(OnboardingStyles.VistaObView.name());
+        panel.add(text);
         panel.add(form);
         initWidget(panel);
     }
