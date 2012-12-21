@@ -162,9 +162,11 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 new ProductCatalogGenerator(productItemTypes).createProductCatalog(building.productCatalog());
             }
 
-            BuildingMerchantAccount bma = building.merchantAccounts().$();
-            bma.merchantAccount().set(merchantAccount);
-            building.merchantAccounts().add(bma);
+            if (merchantAccount != null) {
+                BuildingMerchantAccount bma = building.merchantAccounts().$();
+                bma.merchantAccount().set(merchantAccount);
+                building.merchantAccounts().add(bma);
+            }
 
             //Media
             if (this.getParameter(VistaDataPreloaderParameter.attachMedia) != Boolean.FALSE) {
