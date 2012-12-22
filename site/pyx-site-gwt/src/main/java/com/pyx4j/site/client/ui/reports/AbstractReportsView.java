@@ -23,8 +23,7 @@ package com.pyx4j.site.client.ui.reports;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -124,23 +123,23 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
 
         addHeaderToolbarItem(new Button(i18n.tr("Refresh")));
 
-        addHeaderToolbarItem(new Button(i18n.tr("Load..."), new ClickHandler() {
+        addHeaderToolbarItem(new Button(i18n.tr("Load..."), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 onLoadSettingsClicked();
             }
         }));
 
-        addHeaderToolbarItem(new Button(i18n.tr("Save As..."), new ClickHandler() {
+        addHeaderToolbarItem(new Button(i18n.tr("Save As..."), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 onSaveSettingsAsClicked();
             }
         }));
-        addHeaderToolbarItem(new Button(i18n.tr("Save"), new ClickHandler() {
 
+        addHeaderToolbarItem(new Button(i18n.tr("Save"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 onSaveSettingsClicked();
             }
         }));

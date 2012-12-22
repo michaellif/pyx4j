@@ -20,8 +20,7 @@
  */
 package com.pyx4j.site.client.ui.wizard;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -50,31 +49,25 @@ public class WizardViewImplBase<E extends IEntity> extends ViewImplBase implemen
         super();
         setCaption(placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
 
-        btnPrevious = new Button(i18n.tr("Previous"), new ClickHandler() {
+        btnPrevious = new Button(i18n.tr("Previous"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
-                form.goToPrevious();
+            public void execute() {
+                form.previous();
             }
         });
         addFooterToolbarItem(btnPrevious);
 
-        btnNext = new Button(i18n.tr("Next"), new ClickHandler() {
+        btnNext = new Button(i18n.tr("Next"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
-                form.goToNext();
-                if (!getForm().isValid()) {
-                    getForm().setUnconditionalValidationErrorRendering(true);
-                    showValidationDialog();
-                } else {
-                    getPresenter().finish();
-                }
+            public void execute() {
+                form.next();
             }
         });
         addFooterToolbarItem(btnNext);
 
-        Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new ClickHandler() {
+        Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 getPresenter().cancel();
             }
         });
@@ -152,7 +145,4 @@ public class WizardViewImplBase<E extends IEntity> extends ViewImplBase implemen
         MessageDialog.error(i18n.tr("Error"), message);
     }
 
-    protected void showValidationDialog() {
-        MessageDialog.error(i18n.tr("Error"), form.getValidationResults().getValidationMessage(true, true));
-    }
 }

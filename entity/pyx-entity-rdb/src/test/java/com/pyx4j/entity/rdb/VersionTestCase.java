@@ -557,7 +557,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         }
     }
 
-    public void testNonVersionedAppoach() {
+    public void testNonConclusiveVersioningAppoach() {
         String testId = uniqueString();
         srv.startTransaction();
         setDBTime("2010-01-01");

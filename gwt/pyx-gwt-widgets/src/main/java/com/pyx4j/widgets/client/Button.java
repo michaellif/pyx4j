@@ -56,6 +56,8 @@ public class Button extends FocusPanel implements IFocusWidget {
 
     private DropDownPanel popup;
 
+    private Command command;
+
     public Button(Image image) {
         this(image, (String) null);
     }
@@ -64,19 +66,19 @@ public class Button extends FocusPanel implements IFocusWidget {
         this((Image) null, text);
     }
 
-    public Button(Image image, ClickHandler handler) {
+    public Button(Image image, Command command) {
         this(image);
-        addClickHandler(handler);
+        this.command = command;
     }
 
-    public Button(String text, ClickHandler handler) {
+    public Button(String text, Command command) {
         this((Image) null, text);
-        addClickHandler(handler);
+        this.command = command;
     }
 
-    public Button(Image image, String text, ClickHandler handler) {
+    public Button(Image image, String text, Command command) {
         this(image, text);
-        addClickHandler(handler);
+        this.command = command;
     }
 
     public Button(Image image, final String text) {
@@ -108,6 +110,22 @@ public class Button extends FocusPanel implements IFocusWidget {
             setImageVisible(true);
         }
 
+        addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (popup != null) {
+                    if (popup.isShowing()) {
+                        popup.hide();
+                    } else {
+                        popup.showRelativeTo(Button.this);
+                    }
+                } else {
+                    if (command != null) {
+                        command.execute();
+                    }
+                }
+            }
+        });
     }
 
     public ButtonMenuBar createMenu() {
@@ -116,23 +134,17 @@ public class Button extends FocusPanel implements IFocusWidget {
     }
 
     public void setMenu(ButtonMenuBar menu) {
-        Image menuIndicator = new Image(ImageFactory.getImages().viewMenu());
-        textLabel.getElement().getStyle().setProperty("paddingRight", (menuIndicator.getWidth() + 5) + "px");
-        textLabel.getElement().getStyle().setProperty("background", "url('" + menuIndicator.getUrl() + "') no-repeat scroll right 90%");
-
-        popup = new DropDownPanel();
-        popup.setWidget(menu);
-
-        addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (popup.isShowing()) {
-                    popup.hide();
-                } else {
-                    popup.showRelativeTo(Button.this);
-                }
-            }
-        });
+        if (menu == null) {
+            popup = null;
+            textLabel.getElement().getStyle().setProperty("paddingRight", "0");
+            textLabel.getElement().getStyle().setProperty("background", "none");
+        } else {
+            Image menuIndicator = new Image(ImageFactory.getImages().viewMenu());
+            textLabel.getElement().getStyle().setProperty("paddingRight", (menuIndicator.getWidth() + 5) + "px");
+            textLabel.getElement().getStyle().setProperty("background", "url('" + menuIndicator.getUrl() + "') no-repeat scroll right 90%");
+            popup = new DropDownPanel();
+            popup.setWidget(menu);
+        }
     }
 
     public void setTextLabel(String label) {

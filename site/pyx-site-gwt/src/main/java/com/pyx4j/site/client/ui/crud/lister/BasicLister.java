@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -144,9 +142,9 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
 
         // new item stuff:
         if (allowAddNew) {
-            dataTablePanel.setAddActionHandler(new ClickHandler() {
+            dataTablePanel.setAddActionCommand(new Command() {
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
                     onItemNew();
                 }
             });
@@ -157,9 +155,9 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         this(clazz, allowZoomIn, allowAddNew);
         // delete items stuff:
         if (allowDelete) {
-            dataTablePanel.setDelActionHandler(new ClickHandler() {
+            dataTablePanel.setDelActionCommand(new Command() {
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
                     onItemsDelete(getDataTablePanel().getDataTable().getCheckedItems());
                 }
             });

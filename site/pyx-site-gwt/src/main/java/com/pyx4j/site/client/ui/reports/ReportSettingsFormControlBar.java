@@ -21,9 +21,8 @@
 package com.pyx4j.site.client.ui.reports;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -50,9 +49,9 @@ public abstract class ReportSettingsFormControlBar extends Composite {
         isAdvanced = false;
 
         controlPanelToolbar = new Toolbar();
-        controlPanelToolbar.addItem(modeToggle = new Anchor(i18n.tr("advanced"), new ClickHandler() {
+        controlPanelToolbar.addItem(modeToggle = new Anchor(i18n.tr("advanced"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 isAdvanced = !isAdvanced;
                 updateModeToggleButtonLabel();
                 onSettingsModeToggled(isAdvanced);
@@ -60,9 +59,9 @@ public abstract class ReportSettingsFormControlBar extends Composite {
         }));
         modeToggle.getElement().getStyle().setMarginRight(2, Unit.EM);
 
-        controlPanelToolbar.addItem(apply = new Button(i18n.tr("Apply"), new ClickHandler() {
+        controlPanelToolbar.addItem(apply = new Button(i18n.tr("Apply"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 onApply();
             }
         }));

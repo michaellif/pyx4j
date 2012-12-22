@@ -23,8 +23,7 @@ package com.pyx4j.forms.client.ui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ProvidesResize;
@@ -50,10 +49,10 @@ public class NativeEntityPanel<E extends IObject<?>> extends FlowPanel implement
         this.container = container;
 
         if (false) {
-            Button debugButton = new Button("Debug", new ClickHandler() {
+            Button debugButton = new Button("Debug", new Command() {
 
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
                     log.info(container.getValue().toString());
                     new EntityViewerDialog(container.getValue()).show();
                 }

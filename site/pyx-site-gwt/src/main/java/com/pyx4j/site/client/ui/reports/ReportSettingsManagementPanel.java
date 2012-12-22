@@ -23,8 +23,7 @@ package com.pyx4j.site.client.ui.reports;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -52,9 +51,9 @@ public abstract class ReportSettingsManagementPanel extends Composite {
         HorizontalPanel buttonsPanel = new HorizontalPanel();
         buttonsPanel.setHeight("100%");
         buttonsPanel.getElement().getStyle().setProperty("margin", "auto");
-        loadButton = new Button(i18n.tr("Load"), new ClickHandler() {
+        loadButton = new Button(i18n.tr("Load"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 if (settingsIdsList.getSelectedIndex() != -1) {
                     onLoadRequest(settingsIdsList.getItemText(settingsIdsList.getSelectedIndex()));
                 }
@@ -64,9 +63,9 @@ public abstract class ReportSettingsManagementPanel extends Composite {
         buttonsPanel.add(loadButton);
         buttonsPanel.setCellVerticalAlignment(loadButton, HasVerticalAlignment.ALIGN_MIDDLE);
 
-        deleteButton = new Button(i18n.tr("Delete"), new ClickHandler() {
+        deleteButton = new Button(i18n.tr("Delete"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 if (settingsIdsList.getSelectedIndex() != -1) {
                     onDeleteRequest(settingsIdsList.getItemText(settingsIdsList.getSelectedIndex()));
                 }

@@ -23,6 +23,7 @@ package com.pyx4j.widgets.client;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 
 public class Anchor extends com.google.gwt.user.client.ui.Anchor implements IFocusWidget {
@@ -33,9 +34,14 @@ public class Anchor extends com.google.gwt.user.client.ui.Anchor implements IFoc
         this(text, false, DEFAULT_HREF);
     }
 
-    public Anchor(String text, ClickHandler handler) {
+    public Anchor(String text, final Command command) {
         this(text, false, DEFAULT_HREF);
-        addClickHandler(handler);
+        addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                command.execute();
+            }
+        });
     }
 
     public Anchor(String text, boolean asHTML) {

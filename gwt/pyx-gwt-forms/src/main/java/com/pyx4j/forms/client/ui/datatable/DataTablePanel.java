@@ -121,15 +121,15 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         return entityPrototype;
     }
 
-    public void setAddActionHandler(ClickHandler addActionHandler) {
+    public void setAddActionCommand(Command addActionCommand) {
         topActionsBar.getToolbar().insertItem(
                 addButton = new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("New {0}", entityPrototype.getEntityMeta()
-                        .getCaption()), addActionHandler), 0);
+                        .getCaption()), addActionCommand), 0);
     }
 
-    public void setDelActionHandler(ClickHandler delActionHandler) {
+    public void setDelActionCommand(Command delActionCommand) {
         topActionsBar.getToolbar().insertItem(
-                delButton = new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("Delete Checked"), delActionHandler), 1);
+                delButton = new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("Delete Checked"), delActionCommand), 1);
 
         delButton.setEnabled(getDataTableModel().isAnyChecked());
         getDataTable().setHasCheckboxColumn(true);

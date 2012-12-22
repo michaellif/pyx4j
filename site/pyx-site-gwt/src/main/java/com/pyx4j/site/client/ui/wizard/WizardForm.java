@@ -34,23 +34,25 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
 public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
 
+    private static final I18n i18n = I18n.get(WizardForm.class);
+
     private final TabPanel tabPanel = new TabPanel(StyleManger.getTheme().getTabHeight(), Unit.EM);
 
-    public WizardForm(Class<E> rootClass) {
-        this(rootClass, null);
-    }
+    private final IWizardView<? extends IEntity> view;
 
-    public WizardForm(Class<E> rootClass, IEditableComponentFactory factory) {
-        super(rootClass, factory);
+    public WizardForm(Class<E> rootClass, IWizardView<? extends IEntity> view) {
+        super(rootClass);
+        this.view = view;
     }
 
     @Override
@@ -91,30 +93,6 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
             tabPanel.selectTab(0);
         }
         super.onReset();
-    }
-
-    public void setTabEnabled(Tab tab, boolean enabled) {
-        tabPanel.setTabEnabled(tab, enabled);
-    }
-
-    public boolean isTabEnabled(Tab tab) {
-        return tabPanel.isTabEnabled(tab);
-    }
-
-    public void selectTab(Tab tab) {
-        tabPanel.selectTab(tab);
-    }
-
-    public void setTabVisible(Tab tab, boolean show) {
-        tabPanel.setTabVisible(tab, show);
-    }
-
-    public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
-    }
-
-    public int getActiveTab() {
-        return tabPanel.getSelectedIndex();
     }
 
     public String toStringForPrint() {
@@ -162,14 +140,27 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
 
     }
 
-    public void goToPrevious() {
+    public void previous() {
         // TODO Auto-generated method stub
 
     }
 
-    public void goToNext() {
-        // TODO Auto-generated method stub
+    public void next() {
 
+    }
+
+    protected final void finish() {
+        if (!isValid()) {
+            setUnconditionalValidationErrorRendering(true);
+            MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true));
+        } else {
+            view.getPresenter().finish();
+        }
+
+    }
+
+    public boolean isLast() {
+        return tabPanel.getSelectedIndex() == tabPanel.size() - 1;
     }
 
 }

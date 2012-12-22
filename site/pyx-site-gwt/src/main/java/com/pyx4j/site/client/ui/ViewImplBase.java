@@ -21,9 +21,8 @@
 package com.pyx4j.site.client.ui;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -124,10 +123,9 @@ public abstract class ViewImplBase extends DockLayoutPanel implements IView {
         header.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorHeader.name());
         visorHolder.addNorth(header, 3);
 
-        Button backButton = new Button(new Image(SiteImages.INSTANCE.backButton()), i18n.tr("Back"), new ClickHandler() {
-
+        Button backButton = new Button(new Image(SiteImages.INSTANCE.backButton()), i18n.tr("Back"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 hideVisor();
             }
         });
