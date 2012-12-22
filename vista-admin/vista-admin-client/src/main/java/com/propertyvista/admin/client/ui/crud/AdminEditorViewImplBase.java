@@ -13,114 +13,14 @@
  */
 package com.propertyvista.admin.client.ui.crud;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Command;
-
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 import com.pyx4j.site.client.ui.crud.form.EditorViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.Button;
 
 public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
 
-    private static final I18n i18n = I18n.get(AdminEditorViewImplBase.class);
-
-    protected String defaultCaption;
-
-    protected Button btnApply;
-
-    protected Button btnSave;
-
-    protected EditMode mode;
-
     public AdminEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        super();
-
-        defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
-
-        setCaption(defaultCaption);
-
-        btnSave = new Button(i18n.tr("Save"), new Command() {
-            @Override
-            public void execute() {
-                if (!getForm().isValid()) {
-                    getForm().setUnconditionalValidationErrorRendering(true);
-                    throw new UserRuntimeException(getForm().getValidationResults().getValidationMessage(true, false));
-                }
-                getPresenter().save();
-            }
-        });
-        addFooterToolbarItem(btnSave);
-
-        btnApply = new Button(i18n.tr("Apply"), new Command() {
-            @Override
-            public void execute() {
-                if (!getForm().isValid()) {
-                    getForm().setUnconditionalValidationErrorRendering(true);
-                    throw new UserRuntimeException(getForm().getValidationResults().getValidationMessage(true, false));
-                }
-                AdminEditorViewImplBase.this.getPresenter().apply();
-            }
-        });
-        addFooterToolbarItem(btnApply);
-
-        Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
-            @Override
-            public void execute() {
-                getPresenter().cancel();
-            }
-        });
-        addFooterToolbarItem(btnCancel);
-
-        enableButtons(false);
+        super(placeClass);
     }
 
-    public AdminEditorViewImplBase(Class<? extends CrudAppPlace> placeClass, CrudEntityForm<E> form) {
-        this(placeClass);
-        setForm(form);
-    }
-
-    @Override
-    protected void setForm(CrudEntityForm<? extends E> form) {
-        super.setForm(form);
-
-        this.getForm().addValueChangeHandler(new ValueChangeHandler<E>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<E> event) {
-                enableButtons(true);
-            }
-        });
-    }
-
-    @Override
-    public void populate(E value) {
-        enableButtons(false);
-        if (EditMode.newItem.equals(mode)) {
-            setCaption(defaultCaption + " " + i18n.tr("New Item..."));
-            getForm().setActiveTab(0);
-        } else {
-            setCaption(defaultCaption + " " + (value == null ? "" : value.getStringView()));
-        }
-
-        super.populate(value);
-    }
-
-    @Override
-    public void setEditMode(EditMode mode) {
-        this.mode = mode;
-    }
-
-    protected void enableButtons(boolean enable) {
-//        
-// TODO Currently buttons are enabled always - more precise form dirty-state mechanics should be implemented!..
-//        
-//        btnApply.setEnabled(enable);
-//        btnSave.setEnabled(enable);
-    }
 }
