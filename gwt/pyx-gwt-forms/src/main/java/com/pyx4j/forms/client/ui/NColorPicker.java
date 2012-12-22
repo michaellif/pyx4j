@@ -27,31 +27,41 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ColorUtil;
 import com.pyx4j.forms.client.ui.NColorPicker.ColorButton;
+import com.pyx4j.svg.basic.Group;
+import com.pyx4j.svg.basic.SvgFactory;
+import com.pyx4j.svg.basic.SvgRoot;
+import com.pyx4j.svg.gwt.ColorPicker;
+import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
-import com.pyx4j.svg.basic.Group;
-import com.pyx4j.svg.basic.SvgFactory;
-import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
-import com.pyx4j.svg.basic.SvgRoot;
-import com.pyx4j.svg.gwt.ColorPicker;
 
 public class NColorPicker extends NFocusComponent<Integer, ColorButton, CColorPicker, ColorButton> implements INativeFocusComponent<Integer> {
+
+    // value is rgb integer or hue degrees depending on the value of CColorPicker.isHueOnly()
+    private Integer nativeValue;
+
+    private ColorButton button;
 
     public NColorPicker(final CColorPicker colorPicker) {
         super(colorPicker);
     }
 
+    private ColorButton getButton() {
+        if (button == null) {
+            button = new ColorButton();
+        }
+        return button;
+    }
+
     @Override
     protected ColorButton createEditor() {
-        return new ColorButton();
+        return getButton();
     }
 
     @Override
     protected ColorButton createViewer() {
-        ColorButton button = new ColorButton();
-        button.setEnabled(false);
-        return button;
+        return getButton();
     }
 
     @Override
@@ -61,24 +71,34 @@ public class NColorPicker extends NFocusComponent<Integer, ColorButton, CColorPi
     }
 
     @Override
+    public void setViewable(boolean viewable) {
+        super.setViewable(viewable);
+        getButton().setEnabled(!viewable);
+    }
+
+    @Override
     public void setNativeValue(Integer value) {
-        ColorButton button;
-        if (isViewable()) {
-            button = getViewer();
-        } else {
-            button = getEditor();
-        }
-        button.setValue(value);
+        nativeValue = value;
+        getButton().onColorChange();
     }
 
     @Override
     public Integer getNativeValue() {
-        if (!isViewable()) {
-            return getEditor().getValue();
-        } else {
-            assert false : "getNativeValue() shouldn't be called in viewable mode";
+        return nativeValue;
+    }
+
+    public Integer toColor(Integer value) {
+        if (value == null) {
+            return null;
         }
-        return null;
+        return getCComponent().isHueOnly() ? ColorUtil.hsbToRgb(value / 360.0f, 1.0f, 1.0f) : value;
+    }
+
+    public Integer fromColor(Integer color) {
+        if (color == null) {
+            return null;
+        }
+        return getCComponent().isHueOnly() ? Math.round(ColorUtil.rgbToHsb(color)[0] * 360) : color;
     }
 
     static void testRGBColorValueRange(int r, int g, int b, int a) {
@@ -128,9 +148,6 @@ public class NColorPicker extends NFocusComponent<Integer, ColorButton, CColorPi
     }
 
     public class ColorButton extends Button implements IFocusWidget {
-
-        private Integer color;
-
         public ColorButton() {
             super("");
 
@@ -147,11 +164,11 @@ public class NColorPicker extends NFocusComponent<Integer, ColorButton, CColorPi
 
                 @Override
                 public void onClick(ClickEvent event) {
-                String header = getCComponent().isHueOnly()?"Hue Picker":"Color Picker";
-                   new ColorPickerDialog(header) {
+                    String header = getCComponent().isHueOnly() ? "Hue Picker" : "Color Picker";
+                    new ColorPickerDialog(header) {
                         @Override
                         public boolean onClickOk() {
-                            setValue(colorPicker.getColor());
+                            getCComponent().setValue(fromColor(colorPicker.getColor()));
                             return true;
                         }
                     }.show();
@@ -159,35 +176,17 @@ public class NColorPicker extends NFocusComponent<Integer, ColorButton, CColorPi
             });
         }
 
-        public Integer getValue() {
-            return color;
-        }
+        public void onColorChange() {
+            Integer color = toColor(getNativeValue());
+            getTextLabelComponent().getElement().getStyle().setBackgroundColor(color == null ? "" : ColorUtil.rgbToHex(color));
+            setTextLabel(getNativeValue() == null ? "" : String.valueOf(getNativeValue()));
 
-        public void setValue(Integer color) {
-
-         	String textString;
-         	String colorString;
-        	this.color = color;
-        	float[] hsb;
-            if (color == null) {
-                colorString = "#fff";
-                textString = "";
-            } else {
-                if (getCComponent().isHueOnly()) {
-                    colorString = ColorUtil.rgbToHex(color);
-               	    hsb = ColorUtil.rgbToHsb(color);
-               	    textString = Integer.toString((int)Math.round((hsb[0]*360)));
-                } else {
-                    colorString = ColorUtil.rgbToHex(color);
-                    textString = colorString;
-                }
+            // TODO calculate contrast color for text label
+            if (color != null) {
+                int hue = Math.round(ColorUtil.rgbToHsb(color)[0] * 360);
+                getTextLabelComponent().getElement().getStyle().setProperty("color", (hue > 40 && hue < 190) ? "inherit" : "white");
             }
-            setButtonLabel(colorString, textString);
-        }
 
-        public void setButtonLabel(String color, String text) {
-            getTextLabelComponent().getElement().getStyle().setBackgroundColor(color);
-            setTextLabel(text);
         }
 
         @Override
@@ -203,42 +202,41 @@ public class NColorPicker extends NFocusComponent<Integer, ColorButton, CColorPi
 
     abstract class ColorPickerDialog extends OkCancelDialog {
 
-    	ColorPicker colorPicker;
-    	
-        public ColorPickerDialog(String header) {
-         	super(header);
-             
-           SimplePanel content = new SimplePanel();
-           SvgFactory svgFactory = new SvgFactoryForGwt();
-           
-           SvgRoot svgroot = svgFactory.getSvgRoot();
-           ((Widget) svgroot).setSize("230px", "240px");
-           
-           int hue, pickerColor;
-           float[] hsb;
-           Integer color = getEditor().color;          
-           if (color == null) {
-        	   hue = 0;
-        	   pickerColor = 0;
-           } else {
-         	   hsb = ColorUtil.rgbToHsb(color);
-        	   hue = (int) Math.round((hsb[0]*360));
-        	   pickerColor = color.intValue();
-           }
+        ColorPicker colorPicker;
 
-           if(header.equals("Hue Picker")) {
-               colorPicker = new ColorPicker(svgFactory, (Widget) svgroot, ColorPicker.PickerType.Hue, 90, hue);        	   
-           } else {
-               colorPicker = new ColorPicker(svgFactory, (Widget) svgroot, ColorPicker.PickerType.Color, 90, pickerColor);        	   
-           }
-        	   
+        public ColorPickerDialog(String header) {
+            super(header);
+
+            SimplePanel content = new SimplePanel();
+            SvgFactory svgFactory = new SvgFactoryForGwt();
+
+            SvgRoot svgroot = svgFactory.getSvgRoot();
+            ((Widget) svgroot).setSize("230px", "240px");
+
+            int hue, pickerColor;
+            float[] hsb;
+            Integer color = toColor(getNativeValue());
+            if (color == null) {
+                hue = 0;
+                pickerColor = 0;
+            } else {
+                hsb = ColorUtil.rgbToHsb(color);
+                hue = Math.round((hsb[0] * 360));
+                pickerColor = color.intValue();
+            }
+
+            if (getCComponent().isHueOnly()) {
+                colorPicker = new ColorPicker(svgFactory, (Widget) svgroot, ColorPicker.PickerType.Hue, 90, hue);
+            } else {
+                colorPicker = new ColorPicker(svgFactory, (Widget) svgroot, ColorPicker.PickerType.Color, 90, pickerColor);
+            }
+
             Group g = svgFactory.createGroup();
             g.add(colorPicker);
             svgroot.add(g);
-            content.setWidget((Widget) svgroot);      
-            
+            content.setWidget((Widget) svgroot);
+
             setBody(content);
         }
-
     }
 }
