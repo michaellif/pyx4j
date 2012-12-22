@@ -13,8 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -48,9 +47,9 @@ public class NoTenantInsuranceStatusViewer extends CEntityViewer<NoInsuranceTena
         explanationMessage.setHTML(value.noInsuranceStatusMessage().getValue());
         contentPanel.add(explanationMessage);
 
-        Anchor goToInsuranceScreenAnchor = new Anchor(i18n.tr("Provide proof of insurance"), new ClickHandler() {
+        Anchor goToInsuranceScreenAnchor = new Anchor(i18n.tr("Provide proof of insurance"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.ProvideTenantInsurance());
             }
         });

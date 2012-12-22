@@ -16,8 +16,7 @@ package com.propertyvista.crm.client.ui.crud.billing.bill;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -66,9 +65,9 @@ public class BillLister extends ListerBase<BillDataDTO> {
         );//@formatter:on
 
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
-        addActionItem(new Button(i18n.tr("Confirm Checked"), new ClickHandler() {
+        addActionItem(new Button(i18n.tr("Confirm Checked"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 if (!getLister().getDataTablePanel().getDataTable().getCheckedItems().isEmpty()) {
                     MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to Confirm checked bills?"), new ConfirmDecline() {
                         @Override

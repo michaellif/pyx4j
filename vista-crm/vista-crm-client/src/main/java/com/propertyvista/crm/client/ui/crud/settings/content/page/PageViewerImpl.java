@@ -13,8 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content.page;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
@@ -33,9 +32,9 @@ public class PageViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implem
         setForm(new PageForm(this));
 
         // Add actions:
-        addHeaderToolbarItem(new Button(i18n.tr("Add Child Page"), new ClickHandler() {
+        addHeaderToolbarItem(new Button(i18n.tr("Add Child Page"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 Key valueKey = getForm().getValue().getPrimaryKey();
                 if (valueKey != null) { // shouldn't be new unsaved value!..
                     newChild(valueKey);

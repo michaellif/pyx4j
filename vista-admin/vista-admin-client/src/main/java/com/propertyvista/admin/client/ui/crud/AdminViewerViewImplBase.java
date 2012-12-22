@@ -13,8 +13,7 @@
  */
 package com.propertyvista.admin.client.ui.crud;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.AbstractVersionDataListService;
@@ -52,9 +51,9 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
         setCaption(defaultCaption);
 
         if (!viewOnly) {
-            editButton = new Button(i18n.tr("Edit"), new ClickHandler() {
+            editButton = new Button(i18n.tr("Edit"), new Command() {
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
                     getPresenter().edit();
                 }
             });
@@ -119,9 +118,9 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
 
     protected <V extends IVersionData<?>> void enableVersioning(final Class<V> entityVersionClass, final AbstractVersionDataListService<V> entityVersionService) {
 
-        selectVersion = new Button(i18n.tr("Select Version"), new ClickHandler() {
+        selectVersion = new Button(i18n.tr("Select Version"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 new VersionSelectorDialog<V>(entityVersionClass, getForm().getValue().getPrimaryKey()) {
                     @Override
                     public boolean onClickOk() {
@@ -138,9 +137,9 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
         });
         addHeaderToolbarItem(selectVersion.asWidget());
 
-        finalizeButton = new Button(i18n.tr("Finalize"), new ClickHandler() {
+        finalizeButton = new Button(i18n.tr("Finalize"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 getPresenter().approveFinal();
             }
         });

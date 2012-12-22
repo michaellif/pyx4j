@@ -21,11 +21,10 @@ import java.util.Set;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -207,9 +206,9 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
         titlePanel = new FlowPanel();
         titlePanel.setWidth("100%");
 
-        Button returnButton = new Button(i18n.tr("return to summary"), new ClickHandler() {
+        Button returnButton = new Button(i18n.tr("return to summary"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 switchToDisplayMode(null);
             }
         });

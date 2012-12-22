@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.INonConclusiveVersioning;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
@@ -28,8 +28,7 @@ import com.pyx4j.site.client.ui.crud.form.EditorViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
-
-import com.propertyvista.domain.IHistoricVersioning;
+import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 
 public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
 
@@ -41,67 +40,67 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
 
     protected final Button btnSave;
 
-    protected final Button btnSaveAsNew;
-
     protected EditMode mode;
 
     public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         super();
 
-        btnSaveAsNew = new Button(i18n.tr("Create Version"), new ClickHandler() {
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onClick(ClickEvent event) {
-                if (!getForm().isValid()) {
-                    getForm().setUnconditionalValidationErrorRendering(true);
-                    showValidationDialog();
-                } else {
-                    getForm().setValue((E) VersionedEntityUtils.createNextVersion((IVersionedEntity<?>) getForm().getValue()));
-                    getPresenter().save();
-                }
-            }
-        });
-        addFooterToolbarItem(btnSaveAsNew);
-        btnSaveAsNew.setVisible(false); // set visibility in populate...
+        defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
+        setCaption(defaultCaption);
 
-        btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
+        btnSave = new Button(i18n.tr("Save"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
-                if (!getForm().isValid()) {
-                    getForm().setUnconditionalValidationErrorRendering(true);
-                    showValidationDialog();
-                } else {
-                    getPresenter().save();
-                }
+            public void execute() {
+                save();
             }
         });
         addFooterToolbarItem(btnSave);
 
-        btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
+        btnApply = new Button(i18n.tr("Apply"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
-                if (!getForm().isValid()) {
-                    getForm().setUnconditionalValidationErrorRendering(true);
-                    showValidationDialog();
-                } else {
-                    getPresenter().apply();
-                }
+            public void execute() {
+                apply();
             }
         });
         addFooterToolbarItem(btnApply);
 
-        defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
-        setCaption(defaultCaption);
-
-        Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new ClickHandler() {
+        Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 getPresenter().cancel();
             }
         });
         addFooterToolbarItem(btnCancel);
 
         enableButtons(false);
+    }
+
+    private void apply() {
+        if (!getForm().isValid()) {
+            getForm().setUnconditionalValidationErrorRendering(true);
+            showValidationDialog();
+        } else {
+            getPresenter().apply();
+        }
+    }
+
+    private void save() {
+        if (!getForm().isValid()) {
+            getForm().setUnconditionalValidationErrorRendering(true);
+            showValidationDialog();
+        } else {
+            getPresenter().save();
+        }
+    }
+
+    private void saveAsNew() {
+        if (!getForm().isValid()) {
+            getForm().setUnconditionalValidationErrorRendering(true);
+            showValidationDialog();
+        } else {
+            getForm().setValue((E) VersionedEntityUtils.createNextVersion((IVersionedEntity<?>) getForm().getValue()));
+            getPresenter().save();
+        }
     }
 
     @Override
@@ -119,8 +118,24 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     @Override
     public void populate(E value) {
         enableButtons(false);
-
-        btnSaveAsNew.setVisible(value instanceof IHistoricVersioning && value.getPrimaryKey() != null);
+        if (value instanceof INonConclusiveVersioning && value.getPrimaryKey() != null) {
+            ButtonMenuBar menu = btnSave.createMenu();
+            menu.addItem(i18n.tr("Save as New Version"), new Command() {
+                @Override
+                public void execute() {
+                    saveAsNew();
+                }
+            });
+            menu.addItem(i18n.tr("Save Current"), new Command() {
+                @Override
+                public void execute() {
+                    save();
+                }
+            });
+            btnSave.setMenu(menu);
+        } else {
+            btnSave.setMenu(null);
+        }
 
         if (EditMode.newItem.equals(mode)) {
             setCaption(defaultCaption + " " + i18n.tr("New Item..."));

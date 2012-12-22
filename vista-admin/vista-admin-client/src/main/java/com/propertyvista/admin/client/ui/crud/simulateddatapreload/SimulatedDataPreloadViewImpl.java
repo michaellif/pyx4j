@@ -14,8 +14,7 @@
 package com.propertyvista.admin.client.ui.crud.simulateddatapreload;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -37,23 +36,22 @@ public class SimulatedDataPreloadViewImpl implements SimulatedDataPreloadView {
         viewPanel = new FormFlexPanel();
         viewPanel.setWidth("100%");
         int row = -1;
-        viewPanel.setWidget(++row, 0, arrearsHistoryGenerationButton = new Button("Generate arrears snapshots history", new ClickHandler() {
+        viewPanel.setWidget(++row, 0, arrearsHistoryGenerationButton = new Button("Generate arrears snapshots history", new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.generateArrearsSnapshotsHistory();
 
             }
         }));
-        viewPanel.setWidget(++row, 0, maintenanceRequestsGenerationButton = new Button("Generate maintenance requests", new ClickHandler() {
+        viewPanel.setWidget(++row, 0, maintenanceRequestsGenerationButton = new Button("Generate maintenance requests", new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.generateMaintenanceRequests();
 
             }
         }));
         arrearsHistoryGenerationButton.getElement().getStyle().setWidth(20, Unit.EM);
         maintenanceRequestsGenerationButton.getElement().getStyle().setWidth(20, Unit.EM);
-
     }
 
     @Override

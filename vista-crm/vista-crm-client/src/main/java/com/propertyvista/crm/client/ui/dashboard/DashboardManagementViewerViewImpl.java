@@ -18,8 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.rpc.AbstractListService;
@@ -91,15 +89,15 @@ public class DashboardManagementViewerViewImpl extends CrmViewerViewImplBase<Das
         super(CrmSiteMap.Dashboard.Manage.class);
         setForm(new DashboardManagementForm(this));
 
-        addHeaderToolbarItem(takeOwnershipButton = new Button(i18n.tr("Take Ownership"), new ClickHandler() {
+        addHeaderToolbarItem(takeOwnershipButton = new Button(i18n.tr("Take Ownership"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((DashboardManagementViewerView.Presenter) getPresenter()).takeOwnership(getForm().getValue().<DashboardMetadata> createIdentityStub());
             }
         }));
-        addHeaderToolbarItem(changeOwnershipButton = new Button(i18n.tr("Change Ownership"), new ClickHandler() {
+        addHeaderToolbarItem(changeOwnershipButton = new Button(i18n.tr("Change Ownership"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 new NewDashboardOwnerSelectionDialog().show();
             }
         }));

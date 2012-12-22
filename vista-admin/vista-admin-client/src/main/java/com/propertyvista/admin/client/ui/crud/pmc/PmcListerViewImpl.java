@@ -17,8 +17,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.client.ReportDialog;
@@ -39,9 +38,9 @@ public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implement
         setLister(new PmcLister());
 
         {
-            Button downloadFull = new Button("QA Download images.csv", new ClickHandler() {
+            Button downloadFull = new Button("QA Download images.csv", new Command() {
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
                     EntityQueryCriteria<PmcDTO> criteria = EntityQueryCriteria.create(PmcDTO.class);
                     // TODO move to activity use and call ListerActivityBase.constructSearchCriteria()
                     HashMap<String, Serializable> params = new HashMap<String, Serializable>();
@@ -56,9 +55,9 @@ public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implement
         }
 
         {
-            Button downloadFull = new Button("QA Download buildings.csv", new ClickHandler() {
+            Button downloadFull = new Button("QA Download buildings.csv", new Command() {
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
                     EntityQueryCriteria<PmcDTO> criteria = EntityQueryCriteria.create(PmcDTO.class);
                     // TODO move to activity use and call ListerActivityBase.constructSearchCriteria()
                     ReportDialog d = new ReportDialog("Report", "Creating report...");
@@ -70,9 +69,9 @@ public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implement
         }
 
         {
-            Button downloadFull = new Button("DB integrity check.csv", new ClickHandler() {
+            Button downloadFull = new Button("DB integrity check.csv", new Command() {
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
                     EntityQueryCriteria<PmcDTO> criteria = EntityQueryCriteria.create(PmcDTO.class);
 
                     ReportDialog d = new ReportDialog("DB Summary", "Creating DB summary...");

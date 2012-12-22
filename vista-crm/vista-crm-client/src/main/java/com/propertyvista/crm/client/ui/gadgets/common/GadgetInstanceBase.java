@@ -17,9 +17,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -261,9 +260,9 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
         errorMessage.getElement().getStyle().setPaddingTop(1, Unit.EM);
         errorMessage.getElement().getStyle().setPaddingBottom(2, Unit.EM);
         errorPanel.add(errorMessage);
-        errorPanel.add(new Button(i18n.tr("Try to reload"), new ClickHandler() {
+        errorPanel.add(new Button(i18n.tr("Try to reload"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 populate();
             }
         }));

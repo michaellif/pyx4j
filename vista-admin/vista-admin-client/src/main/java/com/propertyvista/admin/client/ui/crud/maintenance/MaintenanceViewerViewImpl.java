@@ -13,8 +13,7 @@
  */
 package com.propertyvista.admin.client.ui.crud.maintenance;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.i18n.shared.I18n;
@@ -35,9 +34,9 @@ public class MaintenanceViewerViewImpl extends AdminViewerViewImplBase<SystemMai
         setForm(new MaintenanceForm(this));
 
         // Add actions:
-        btnResetCache = new Button(i18n.tr("Reset Global Cache"), new ClickHandler() {
+        btnResetCache = new Button(i18n.tr("Reset Global Cache"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((MaintenanceViewerActivity) getPresenter()).resetGlobalCache();
             }
         });

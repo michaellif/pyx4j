@@ -13,10 +13,9 @@
  */
 package com.propertyvista.admin.client.ui.crud;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.IEntity;
@@ -47,9 +46,9 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
 
         setCaption(defaultCaption);
 
-        btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
+        btnSave = new Button(i18n.tr("Save"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 if (!getForm().isValid()) {
                     getForm().setUnconditionalValidationErrorRendering(true);
                     throw new UserRuntimeException(getForm().getValidationResults().getValidationMessage(true, false));
@@ -59,9 +58,9 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
         });
         addFooterToolbarItem(btnSave);
 
-        btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
+        btnApply = new Button(i18n.tr("Apply"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 if (!getForm().isValid()) {
                     getForm().setUnconditionalValidationErrorRendering(true);
                     throw new UserRuntimeException(getForm().getValidationResults().getValidationMessage(true, false));
@@ -71,9 +70,9 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
         });
         addFooterToolbarItem(btnApply);
 
-        Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new ClickHandler() {
+        Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 getPresenter().cancel();
             }
         });

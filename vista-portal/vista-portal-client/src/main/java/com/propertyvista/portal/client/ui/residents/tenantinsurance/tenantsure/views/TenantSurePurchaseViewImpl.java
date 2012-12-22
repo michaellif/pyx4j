@@ -99,9 +99,9 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
             cancelButton.addStyleName(Styles.TSPurchaseViewCancelButton.name());
 
             buttonsPanel.add(cancelButton);
-            nextStepButton = new Button(i18n.tr("Buy TenantSure"), new ClickHandler() {
+            nextStepButton = new Button(i18n.tr("Buy TenantSure"), new Command() {
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
                     StepDriver.this.steps.get(currentStep).onProceedToNext(new AsyncCallback<VoidSerializable>() {
 
                         @Override
@@ -524,9 +524,9 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         label.setText(i18n.tr("Payment Processed Successfuly: an email with your insurance policy has been sent to your email."));
         finishStepPanel.add(label);
 
-        Anchor returnToInsuranceManagement = new Anchor(i18n.tr("return to Tenant Insurance"), new ClickHandler() {
+        Anchor returnToInsuranceManagement = new Anchor(i18n.tr("return to Tenant Insurance"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.onPaymentProcessingSuccessAccepted();
             }
         });

@@ -18,12 +18,11 @@ import java.util.Vector;
 
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -78,15 +77,15 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
         buttons.getElement().getStyle().setPaddingTop(5, Unit.PX);
         buttons.getElement().getStyle().setPaddingRight(10, Unit.PX);
 
-        buttons.add(chooseBuildingsButton = new Button("", new ClickHandler() {
+        buttons.add(chooseBuildingsButton = new Button("", new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 selectBuildings();
             }
         }));
-        buttons.add(allBuilidngsButton = new Button(i18n.tr("Reset"), new ClickHandler() {
+        buttons.add(allBuilidngsButton = new Button(i18n.tr("Reset"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 selectAllBuildings();
             }
         }));

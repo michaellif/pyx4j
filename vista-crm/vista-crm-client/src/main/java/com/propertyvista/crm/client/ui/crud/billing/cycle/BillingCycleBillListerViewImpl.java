@@ -13,8 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.i18n.shared.I18n;
@@ -42,9 +41,9 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
 
         // Add actions:
 
-        approveAction = new Button(i18n.tr("Confirm Selected"), new ClickHandler() {
+        approveAction = new Button(i18n.tr("Confirm Selected"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 if (!getLister().getDataTablePanel().getDataTable().getCheckedItems().isEmpty()) {
                     ((BillingCycleBillListerView.Presenter) getPresenter()).confirm(getLister().getDataTablePanel().getDataTable().getCheckedItems());
                 }
@@ -52,9 +51,9 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
         });
         addHeaderToolbarItem(approveAction.asWidget());
 
-        rejectAction = new Button(i18n.tr("Reject Selected"), new ClickHandler() {
+        rejectAction = new Button(i18n.tr("Reject Selected"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 if (!getLister().getDataTablePanel().getDataTable().getCheckedItems().isEmpty()) {
                     new ReasonBox(i18n.tr("Reject Selected")) {
                         @Override
@@ -73,9 +72,9 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
         });
         addHeaderToolbarItem(rejectAction.asWidget());
 
-        print = new Button(i18n.tr("Print Selected"), new ClickHandler() {
+        print = new Button(i18n.tr("Print Selected"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 if (!getLister().getDataTablePanel().getDataTable().getCheckedItems().isEmpty()) {
                     ((BillingCycleBillListerView.Presenter) getPresenter()).print(getLister().getDataTablePanel().getDataTable().getCheckedItems());
                 }

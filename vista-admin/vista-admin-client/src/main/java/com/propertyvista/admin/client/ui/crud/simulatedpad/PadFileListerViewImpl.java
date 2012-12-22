@@ -13,8 +13,7 @@
  */
 package com.propertyvista.admin.client.ui.crud.simulatedpad;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -32,9 +31,9 @@ public class PadFileListerViewImpl extends AdminListerViewImplBase<PadSimFile> i
         setLister(new PadFileLister());
 
         // Add actions:
-        Button loadPadFile = new Button(i18n.tr("Load"), new ClickHandler() {
+        Button loadPadFile = new Button(i18n.tr("Load"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((PadFileListerView.Presenter) getPresenter()).loadPadFile();
             }
         });

@@ -13,8 +13,7 @@
  */
 package com.propertyvista.admin.client.ui.crud.scheduler.trigger;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -52,25 +51,25 @@ public class TriggerViewerViewImpl extends AdminViewerViewImplBase<TriggerDTO> i
         setForm(new TriggerForm(this));
 
         // Add actions:
-        Button refresh = new Button(i18n.tr("Refresh"), new ClickHandler() {
+        Button refresh = new Button(i18n.tr("Refresh"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((TriggerViewerView.Presenter) getPresenter()).refresh();
             }
         });
         addHeaderToolbarItem(refresh.asWidget());
 
-        runImmediately = new Button(i18n.tr("Run Immediatly"), new ClickHandler() {
+        runImmediately = new Button(i18n.tr("Run Immediatly"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((TriggerViewerView.Presenter) getPresenter()).runImmediately();
             }
         });
         addHeaderToolbarItem(runImmediately.asWidget());
 
-        runForDate = new Button(i18n.tr("Run for Date..."), new ClickHandler() {
+        runForDate = new Button(i18n.tr("Run for Date..."), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 new ScheduleBox() {
                     @Override
                     public boolean onClickOk() {

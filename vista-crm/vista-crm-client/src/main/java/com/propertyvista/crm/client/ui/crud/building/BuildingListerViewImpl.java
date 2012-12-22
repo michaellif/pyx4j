@@ -13,8 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -39,10 +38,10 @@ public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> i
 
         if ((!VistaFeatures.instance().leases() && SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement))
                 || SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
-            upload = new Button(i18n.tr("Upload Update"), new ClickHandler() {
+            upload = new Button(i18n.tr("Upload Update"), new Command() {
 
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
                     UpdateUploadDialog.show();
                 }
             });

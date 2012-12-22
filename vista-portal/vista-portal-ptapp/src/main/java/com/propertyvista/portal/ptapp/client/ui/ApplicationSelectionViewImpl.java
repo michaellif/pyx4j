@@ -16,8 +16,7 @@ package com.propertyvista.portal.ptapp.client.ui;
 import java.util.Vector;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -55,9 +54,9 @@ public class ApplicationSelectionViewImpl implements ApplicationSelectionView {
         lister.setSize("100%", "100%");
         content.setWidget(++row, 0, lister);
 
-        final Button approveSelectionButton = new Button(i18n.tr("Continue"), new ClickHandler() {
+        final Button approveSelectionButton = new Button(i18n.tr("Continue"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 OnlineApplicationContextDTO selectedApplication = lister.getSelectedItem();
 
                 if (selectedApplication != null) {

@@ -14,8 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.gwt.commons.Print;
@@ -41,9 +40,9 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
         setForm(new LeaseTermForm(this));
         enableVersioning(LeaseTerm.LeaseTermV.class, GWT.<LeaseTermVersionService> create(LeaseTermVersionService.class));
 
-        addHeaderToolbarItem(new Button(i18n.tr("Charges"), new ClickHandler() {
+        addHeaderToolbarItem(new Button(i18n.tr("Charges"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 if (!isVisorShown()) {
                     ((LeaseTermViewerView.Presenter) getPresenter()).getChargesVisorController().show(LeaseTermViewerViewImpl.this);
                 }
@@ -51,9 +50,9 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
         }));
 
         if (false) {
-            addHeaderToolbarItem(new Button(i18n.tr("Print"), new ClickHandler() {
+            addHeaderToolbarItem(new Button(i18n.tr("Print"), new Command() {
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
 //              Print.it(getForm().toStringForPrint());
                     Print.preview(getForm().toStringForPrint());
 
@@ -61,9 +60,9 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
             }));
         }
 
-        addHeaderToolbarItem(offerAcceptButton = new Button(i18n.tr("Accept"), new ClickHandler() {
+        addHeaderToolbarItem(offerAcceptButton = new Button(i18n.tr("Accept"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((LeaseTermViewerView.Presenter) getPresenter()).accept();
             }
         }));

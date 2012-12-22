@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.visor.notes;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -230,9 +228,9 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
 
                     Toolbar tb = new Toolbar();
 
-                    btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
+                    btnSave = new Button(i18n.tr("Save"), new Command() {
                         @Override
-                        public void onClick(ClickEvent event) {
+                        public void execute() {
                             if (!isValid()) {
                                 setUnconditionalValidationErrorRendering(true);
                                 MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true));
@@ -261,9 +259,9 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                     btnSave.setVisible(false);
                     tb.addItem(btnSave);
 
-                    btnCancel = new Anchor(i18n.tr("Cancel"), new ClickHandler() {
+                    btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
                         @Override
-                        public void onClick(ClickEvent event) {
+                        public void execute() {
                             if (getValue().getPrimaryKey() == null) {
                                 ((NotesAndAttachmentsFolder) getParent().getParent()).removeItem((CEntityFolderItem<NotesAndAttachments>) getParent());
                             } else {

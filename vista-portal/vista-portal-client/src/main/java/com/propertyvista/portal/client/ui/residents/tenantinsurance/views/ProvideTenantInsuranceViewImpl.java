@@ -15,6 +15,7 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.views;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -70,10 +71,10 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
         getTenantSurePanel.add(getTenantSureButton);
         viewPanel.add(getTenantSurePanel);
 
-        Anchor provideInsuranceByOtherProvider = new Anchor(i18n.tr("I (we) already have Tenant Insurance"), new ClickHandler() {
+        Anchor provideInsuranceByOtherProvider = new Anchor(i18n.tr("I (we) already have Tenant Insurance"), new Command() {
 
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.onUpdateInsuranceByOtherProvider();
             }
         });

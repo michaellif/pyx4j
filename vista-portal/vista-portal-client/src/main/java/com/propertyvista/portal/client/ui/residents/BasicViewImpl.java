@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ui.residents;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -68,9 +69,9 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
         });
         add(DecorationUtils.inline(submitButton));
 
-        cancel = new Anchor(i18n.tr("Cancel"), new ClickHandler() {
+        cancel = new Anchor(i18n.tr("Cancel"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.cancel();
             }
         });

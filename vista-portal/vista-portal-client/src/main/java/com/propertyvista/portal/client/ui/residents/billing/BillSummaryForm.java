@@ -16,8 +16,7 @@ package com.propertyvista.portal.client.ui.residents.billing;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -53,16 +52,16 @@ public class BillSummaryForm extends CEntityDecoratableForm<BillSummaryDTO> {
         int row = -1;
         content.setBR(++row, 0, 2);
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentBalance()), 10).build());
-        content.setWidget(row, 1, payButton = new Button(i18n.tr("Pay Now"), new ClickHandler() {
+        content.setWidget(row, 1, payButton = new Button(i18n.tr("Pay Now"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.payNow();
             }
         }));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentBill().dueDate()), 10).build());
-        content.setWidget(row, 1, new Anchor(i18n.tr("View Current Bill"), new ClickHandler() {
+        content.setWidget(row, 1, new Anchor(i18n.tr("View Current Bill"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.viewCurrentBill();
             }
         }));

@@ -13,8 +13,7 @@
  */
 package com.propertyvista.admin.client.ui.crud.onboardingusers;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -36,19 +35,19 @@ public class OnboardingUserViewerViewImpl extends AdminViewerViewImplBase<Onboar
         super(AdminSiteMap.Management.OnboardingUser.class);
         setForm(new OnboardingUserForm(this));
 
-        passwordAction = new Button(i18n.tr("Change Password"), new ClickHandler() {
+        passwordAction = new Button(i18n.tr("Change Password"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((OnboardingUserViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().getPrimaryKey(), getForm().getValue().name()
                         .getStringView());
             }
         });
         addHeaderToolbarItem(passwordAction.asWidget());
 
-        createPmcAction = new Button(i18n.tr("Create PMC"), new ClickHandler() {
+        createPmcAction = new Button(i18n.tr("Create PMC"), new Command() {
 
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((OnboardingUserViewerView.Presenter) getPresenter()).createPmc(getForm().getValue());
             }
 

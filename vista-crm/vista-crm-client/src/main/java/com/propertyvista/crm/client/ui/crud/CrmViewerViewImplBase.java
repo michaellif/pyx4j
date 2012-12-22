@@ -80,10 +80,10 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         setCaption(defaultCaption);
 
         // Notes button:
-        addHeaderToolbarItem(new Button(i18n.tr("Notes"), new ClickHandler() {
+        addHeaderToolbarItem(new Button(i18n.tr("Notes"), new Command() {
             @SuppressWarnings("unchecked")
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 if (!isVisorShown()) {
                     ((CrmViewerActivity<E>) getPresenter()).getNotesAndAttachmentsController().show(CrmViewerViewImplBase.this);
                 }
@@ -92,9 +92,9 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
         // Edit button:
         if (!viewOnly) {
-            editButton = new Button(i18n.tr("Edit"), new ClickHandler() {
+            editButton = new Button(i18n.tr("Edit"), new Command() {
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
                     getPresenter().edit();
                 }
             });

@@ -16,8 +16,6 @@ package com.propertyvista.common.client.moveinwizardmockup.components;
 import java.util.ArrayList;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.user.client.Command;
@@ -71,10 +69,10 @@ public class MultiDisclosurePanel implements IsWidget {
         FormFlexPanel continuationPanel = new FormFlexPanel();
         continuationPanel.setWidget(0, 0, widget);
 
-        continuationPanel.setWidget(1, 0, new Button((customButtonLabel == null ? i18n.tr("Continue") : customButtonLabel), new ClickHandler() {
+        continuationPanel.setWidget(1, 0, new Button((customButtonLabel == null ? i18n.tr("Continue") : customButtonLabel), new Command() {
 
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 boolean openNext = false;
                 for (DisclosurePanel panel : disclosurePanels) {
                     if (openNext) {

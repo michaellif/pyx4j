@@ -20,6 +20,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -194,9 +195,9 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         termsAgreementShortcutPanel.getElement().getStyle().setPaddingRight(20, Unit.PX);
         signUpPanel.add(termsAgreementShortcutPanel);
 
-        final Button submitButton = new Button(i18n.tr("Sign Up"), new ClickHandler() {
+        final Button submitButton = new Button(i18n.tr("Sign Up"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 revalidate();
                 if (isValid()) {
                     onSubmit(getValue().duplicate(PmcAccountCreationRequest.class));

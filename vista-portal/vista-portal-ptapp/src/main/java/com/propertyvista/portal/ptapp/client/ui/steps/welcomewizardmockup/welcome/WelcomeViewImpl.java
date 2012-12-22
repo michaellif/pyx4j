@@ -18,9 +18,8 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -101,13 +100,10 @@ public class WelcomeViewImpl extends AbstractLoginViewImpl {
         letsGetStartedLabel.getElement().getStyle().setPaddingBottom(20, Unit.PX);
         startPanel.add(letsGetStartedLabel);
 
-        Button startButton = new Button(i18n.tr("START"), new ClickHandler() {
-
+        Button startButton = new Button(i18n.tr("START"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
-
+            public void execute() {
             }
-
         });
 
         startButton.getElement().getStyle().setFontSize(15, Unit.PX);

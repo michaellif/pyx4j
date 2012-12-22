@@ -13,8 +13,7 @@
  */
 package com.propertyvista.admin.client.ui.crud.simulatedpad;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
@@ -40,17 +39,17 @@ public class PadFileViewerViewImpl extends AdminViewerViewImplBase<PadSimFile> i
 
         setForm(new PadFileForm(this));
 
-        Button replyReconciliation = new Button(i18n.tr("Reply Reconciliation"), new ClickHandler() {
+        Button replyReconciliation = new Button(i18n.tr("Reply Reconciliation"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((PadFileViewerView.Presenter) getPresenter()).replyReconciliation();
             }
         });
         addHeaderToolbarItem(replyReconciliation.asWidget());
 
-        Button replyAcknowledgment = new Button(i18n.tr("Reply Acknowledgment"), new ClickHandler() {
+        Button replyAcknowledgment = new Button(i18n.tr("Reply Acknowledgment"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((PadFileViewerView.Presenter) getPresenter()).replyAcknowledgment();
             }
         });

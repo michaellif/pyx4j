@@ -14,8 +14,6 @@
 package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.insurance;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
@@ -113,9 +111,9 @@ public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
         content.setWidget(++row, 0, inject(proto().existingInsurance(), new InsuranceAlreadyAvailabileForm()));
         get(proto().existingInsurance()).setVisible(false);
 
-        content.setWidget(++row, 0, existingInsuranceConfirmationButton = new Button(i18n.tr("Save and Continue"), new ClickHandler() {
+        content.setWidget(++row, 0, existingInsuranceConfirmationButton = new Button(i18n.tr("Save and Continue"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 if (onExistingInsuranceConfirmedHandler != null) {
                     onExistingInsuranceConfirmedHandler.execute();
                 }

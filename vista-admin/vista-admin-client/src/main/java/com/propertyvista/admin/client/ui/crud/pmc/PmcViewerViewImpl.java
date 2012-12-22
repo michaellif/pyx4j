@@ -17,8 +17,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.client.ReportDialog;
@@ -45,9 +44,9 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
         super(AdminSiteMap.Management.PMC.class);
         setForm(new PmcForm(this));
 
-        Button upload = new Button("Upload import", new ClickHandler() {
+        Button upload = new Button("Upload import", new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ImportUploadDialog d = new ImportUploadDialog(getForm().getValue());
                 d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
                 d.show();
@@ -55,9 +54,9 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
         });
         addHeaderToolbarItem(upload.asWidget());
 
-        Button downloadFull = new Button("Download export.xml", new ClickHandler() {
+        Button downloadFull = new Button("Download export.xml", new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 PmcExportDownloadDTO request = EntityFactory.create(PmcExportDownloadDTO.class);
                 request.pmcId().setValue(getForm().getValue().getPrimaryKey());
                 request.exportImages().setValue(true);
@@ -71,9 +70,9 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
         });
         addHeaderToolbarItem(downloadFull.asWidget());
 
-        Button downloadNoImages = new Button("Download export.xml (no images)", new ClickHandler() {
+        Button downloadNoImages = new Button("Download export.xml (no images)", new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 PmcExportDownloadDTO request = EntityFactory.create(PmcExportDownloadDTO.class);
                 request.pmcId().setValue(getForm().getValue().getPrimaryKey());
                 request.exportImages().setValue(false);
@@ -87,38 +86,38 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
         });
         addHeaderToolbarItem(downloadNoImages.asWidget());
 
-        Button resetCache = new Button("Reset Cache", new ClickHandler() {
+        Button resetCache = new Button("Reset Cache", new Command() {
 
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((PmcViewerView.Presenter) getPresenter()).resetCache();
             }
         });
         addHeaderToolbarItem(resetCache);
 
-        cancelBtn = new Button("Cancel PMC", new ClickHandler() {
+        cancelBtn = new Button("Cancel PMC", new Command() {
 
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((PmcViewerView.Presenter) getPresenter()).cancelPmc();
 
             }
         });
         addHeaderToolbarItem(cancelBtn);
 
-        suspendBtn = new Button("Suspend", new ClickHandler() {
+        suspendBtn = new Button("Suspend", new Command() {
 
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((PmcViewerView.Presenter) getPresenter()).suspend();
             }
         });
         addHeaderToolbarItem(suspendBtn);
 
-        activateBtn = new Button("Activate", new ClickHandler() {
+        activateBtn = new Button("Activate", new Command() {
 
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((PmcViewerView.Presenter) getPresenter()).activate();
 
             }

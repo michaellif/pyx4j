@@ -22,6 +22,6 @@ public class CreditCheckWizardViewImpl extends WizardViewImplBase<CreditCheckSet
 
     public CreditCheckWizardViewImpl() {
         super(CrmSiteMap.Administration.Settings.CreditCheckSetup.class);
-        setForm(new CreditCheckWizardForm());
+        setForm(new CreditCheckWizardForm(this));
     }
 }

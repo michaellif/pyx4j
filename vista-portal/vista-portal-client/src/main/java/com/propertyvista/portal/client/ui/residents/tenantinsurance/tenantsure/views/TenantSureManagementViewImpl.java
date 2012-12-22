@@ -17,8 +17,6 @@ import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -126,26 +124,26 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         actionsPanel.getElement().getStyle().setMarginTop(50, Unit.PX);
         actionsPanel.getElement().getStyle().setMarginBottom(50, Unit.PX);
 
-        updateCCButton = new Button(i18n.tr("Update Credit Card Details"), new ClickHandler() {
+        updateCCButton = new Button(i18n.tr("Update Credit Card Details"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.updateCreditCardDetails();
             }
         });
         setControlButtonLayout(updateCCButton);
 
-        updateCCAndPay = new Button(i18n.tr("Update Credid Card and Pay"), new ClickHandler() {
+        updateCCAndPay = new Button(i18n.tr("Update Credid Card and Pay"), new Command() {
 
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.updateCreditCardDetails();
             }
         });
         setControlButtonLayout(updateCCAndPay);
 
-        cancelTenantSureButton = new Button(i18n.tr("Cancel TenantSure"), new ClickHandler() {
+        cancelTenantSureButton = new Button(i18n.tr("Cancel TenantSure"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 TenantSureManagementViewImpl.this.onCancelTenantSure();
             }
         });
@@ -154,25 +152,25 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         Button viewCertificateButton = new Button(i18n.tr("View Insurance Certificate"));
         setControlButtonLayout(viewCertificateButton);
 
-        Button viewFaq = new Button(i18n.tr("FAQ"), new ClickHandler() {
+        Button viewFaq = new Button(i18n.tr("FAQ"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.viewFaq();
             }
         });
         setControlButtonLayout(viewFaq);
 
-        Button aboutTenantSure = new Button(i18n.tr("About TenantSure / Contact Us"), new ClickHandler() {
+        Button aboutTenantSure = new Button(i18n.tr("About TenantSure / Contact Us"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.viewAboutTenantSure();
             }
         });
         setControlButtonLayout(aboutTenantSure);
 
-        Button makeAClaim = new Button(i18n.tr("Make a Claim"), new ClickHandler() {
+        Button makeAClaim = new Button(i18n.tr("Make a Claim"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 TenantSureManagementViewImpl.this.onMakeAClaim();
             }
         });

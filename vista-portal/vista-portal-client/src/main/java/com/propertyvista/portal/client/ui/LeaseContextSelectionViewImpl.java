@@ -16,8 +16,7 @@ package com.propertyvista.portal.client.ui;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -54,10 +53,10 @@ public class LeaseContextSelectionViewImpl implements LeaseContextSelectionView 
         content.setSize("100%", "100%");
         content.setWidget(++row, 0, lister);
 
-        final Button chooseButton = new Button(i18n.tr("Continue"), new ClickHandler() {
+        final Button chooseButton = new Button(i18n.tr("Continue"), new Command() {
 
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 LeaseContextChoiceDTO choice = lister.getSelectedItem();
                 if (choice != null) {
                     presenter.setLeaseContext(choice.leaseStub().<Lease> detach());
