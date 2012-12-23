@@ -13,7 +13,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Created on 2011-05-03
  * @author Vlad
  * @version $Id$
@@ -212,6 +212,7 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         });
     }
 
+    //TODO Misha rename to populate
     protected void onObtainSuccess() {
     }
 
