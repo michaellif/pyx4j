@@ -364,20 +364,17 @@ ul.footer_locations li {
 	font-family: monospace;
     font-size: 14pt;
     font-weight: normal;
-	//line-height: 70px;
-	//color: ${object2_10};
+//  line-height: 70px;
+//  color: ${object2_10};
 }
 .caption2 {
-	height:60px;
-	background: ${object2_90};
 }
 .vista-pmsite-main .caption2 h1 {
-	font-size: 16px;
-	font-weight: bold;
-	text-transform: uppercase;
-	padding: 22px 0 0 24px;
-	color: ${object2_10};
-	float: left;
+	font-family: monospace;
+    font-size: 14pt;
+    font-weight: normal;
+	padding: 5px 0;
+	border-top: 1px solid #000000;
 }
 .vista-pmsite-main .caption2 .rightControl {
 	height:25px;
@@ -393,7 +390,7 @@ ul.footer_locations li {
 }
 
 .vista-pmsite-sidebarWrap {
-	background-color:${object2_10};	
+//	background-color:${object2_10};	
 }
 
 .vista-pmsite-main .content{

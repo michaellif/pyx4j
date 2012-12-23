@@ -1,76 +1,87 @@
 .vista-pmsite-aptListPage {
 }
 .vista-pmsite-aptListPage .vista-pmsite-mainWrap {
-	width: 960px;
+	width: 920px;
 	margin: 0 auto;
 	overflow: hidden;
-    background: ${background_10};
+    background: #fff;
+    padding: 0 20px;
 }
 .vista-pmsite-aptListPage .vista-pmsite-sidebar {
 	display: inline-block;
-	width: 211px;
-	color: ${object2_100};
+	width: 280px;
+	color: #fff;
 	vertical-align: top;
+	margin-right: 20px;
+	background: #fff;
+	border-top: 1px solid #000000;
+	float: left;
 }
+
+.vista-pmsite-aptListPage #advancedSearchCriteriaForm1 {
+	height: 500px;
+    top: 0;
+}
+
 .vista-pmsite-aptListPage .secondaryNavig {
 	color: ${object2_100};
 }
 .vista-pmsite-aptListPage .secondaryNavig h3 {
 	width:100%;
-	text-align:center;
-	text-transform:uppercase;
-	font-size:14px;
-	font-weight:bold;
-	padding: 10px 0;
-	margin-top:5px;
+	font-size:14pt;
+	padding: 5px 0;
+	font-family: monospace;
+	font-weight: normal;
 }
+
 .advancedSearchNarrowWrap {
-	width: 190px;
-	margin: 10px;
+	width: 280px;
+	border-top: 5px solid #000000;
+	background: #999999;
 }
 .advancedSearchNarrowWrap input[type=submit] {
 	background: ${object1_100};
 	border: 2px solid ${object1_100};
 	color: ${object1_10};
 	cursor: pointer;
-	font-size: 16px;
-	margin: 15px auto 0;
-	text-transform: uppercase;
-	width: 128px;
-	height: 32px;
+    float: right;
+    font-size: 16px;
+    height: 42px;
+    margin: 20px 0;
+    width: 76px;
 }
 
 .advancedSearchNarrowWrap label {
 	display: block;
 	padding: 4px 0;
 	white-space: nowrap;
-	color: ${object2_100};
+	color: #fff;
 }
 
 .advancedSearchNarrowWrap .inputBlockFrame {
-	width: 100%;
 	margin-top: 20px;
 }
 
 .advancedSearchNarrowWrap .searchTypeSelBox {
 	height:40px;
+	margin-top: 20px; 
 }
 .advancedSearchNarrowWrap .searchTypeSelButton {
 	float: left;
 	width: 90px;
 	font-size: 14px;
-	letter-spacing: 0px;
-	background-color:${contrast2_100};
-	margin-left: 10px;
+//	letter-spacing: 0px;
+	background-color: #CCCCCC;
 	padding: 3px 0;
 	text-align: center;
+	margin-left: 30px;
 }
 .advancedSearchNarrowWrap .searchTypeSelButton label {
 	color:${foreground_100};
 }
 
 .advancedSearchNarrowWrap .searchTypeSelButton:first-child {
-	margin-left: 0px;
+//	margin-left: 0px;
 }
 
 .advancedSearchNarrowWrap .searchTypeSelButton .spacer_by {
@@ -86,29 +97,35 @@
 }
 .advancedSearchNarrowWrap .searchTypeSelButton.typeselActiveHover {
 	background-color:${object1_100};
+//	margin: 0 20px 5px 0;
 }
 .advancedSearchNarrowWrap .searchTypeSelButton.typeselActiveHover label {
 	color:${object1_20};
 }
 .advancedSearchNarrowWrap .searchTypeSelButton.typeselActive {
 	background-color:${object1_100};
+//	margin: 0 0 5px 0px;
+	
 }
 .advancedSearchNarrowWrap .searchTypeSelButton.typeselActive label {
 	color:${object2_10};
 }
 .advancedSearchNarrowWrap .searchTypeBox {
 	height:100px;
+	padding-left: 30px;
 }
 
 .advancedSearchNarrowWrap .searchTypeBox select {
-	color:${background_100};
-	width: 188px;
+	color: #999999;
+	width: 210px;
 	margin: 1px;
+	border: 1px solid #000000;
 }
 .advancedSearchNarrowWrap .searchTypeBox input[type=text] {
 	color:${background_100};
-	width: 184px;
+	width: 210px;
 	margin: 1px;
+	border: 1px solid #000000;
 }
 
 .advancedSearchNarrowWrap .errorPanel {
@@ -122,28 +139,34 @@
 }
 
 .advancedSearchNarrowWrap .searchCommonBox {
+	padding-left: 30px;
 }
 
 .advancedSearchNarrowWrap .searchCommonBox select {
-	color:${background_100};
-	width: 82px;
+	width: 92px;
 	margin: 1px;
+	border: 1px solid #000000;
+    color: #999999;
 }
 
 .advancedSearchNarrowWrap .searchCommonBox input[type=text] {
 	color:${background_100};
-	width: 76px;
+	width: 92px;
 	margin: 1px;
+	border: 1px solid #000000;
 }
 .advancedSearchNarrowWrap .searchCommonBox .searchField .inputJoinBox {
 	display:inline-block;
-	width:22px;
+	width:26px;
 	text-align:center;
+	color: #fff;
 }
 .advancedSearchNarrowWrap .searchAmenityBox {
-	border-top: 1px dotted ${object2_100};
+	border-top: 1px solid #fff;
 	padding-top: 10px;
-	margin-bottom: 30px;
+	margin-left: 30px;
+	margin-bottom: 10px;
+	width:210px;
 }
 
 .advancedSearchNarrowWrap .searchAmenityBox .searchField>label {
@@ -163,24 +186,26 @@
 .advancedSearchNarrowWrap .searchAmenityBox .amenityList label {
 	display: inline-block;
 	width: 70px;
-	color: ${object2_100};
 }
 .advancedSearchNarrowWrap .searchAmenityBox .amenityList label:lang(fr) {
 	width: 165px;
 }
 
 .vista-pmsite-aptListPage .vista-pmsite-main {
+//	position: relative;
 	display: inline-block;
-	width: 745px;
+	width: 620px;
 	vertical-align: top;
+	float: right;
 }
 .vista-pmsite-aptListPage .apartmentListingWrap {
 	width:100%;
-	background: ${object2_100};
+	background: #fff;
 }
 .vista-pmsite-aptListPage .apartmentListingWrap .listing_listview {
 	padding-bottom:40px;
 	min-height:600px;
+	border-top: 5px solid #000000;
 }
 
 #aptListModeSwitch {
@@ -212,11 +237,12 @@
 	height:650px;
 }
 .apartmentListingWrap .listingEntry {
-	padding:20px;
-	color: ${foreground_100};
+	padding:20px 0;
+	border-top: 1px solid #000000;
+//	color: ${foreground_100};
 }
 .apartmentListingWrap .listingEntry:hover {
-	background-color:${object1_100};
+	background-color:#CCCCCC;
 }
 .apartmentListingWrap .listingEntry:first-child {
 }
@@ -233,8 +259,8 @@
 .apartmentListingWrap .listingEntry .infoBox {
 	display: inline-block;
 	vertical-align: top;
-	width:450px;
-	padding:0 20px;
+	width:430px;
+//	padding:0 20px;
 } 
 .apartmentListingWrap .listingEntry .infoBoxEntry {
 	padding:4px 0;
@@ -242,7 +268,7 @@
 .apartmentListingWrap .listingEntry .infoBoxEntry .infoBoxCaption {
 	display: inline-block;
 	vertical-align: top;
-	width:80px;
+	width:75px;
 	text-align:right;
 	padding-right:8px;
 	font-weight:normal;
@@ -279,12 +305,13 @@
 	display: inline-block;
 	vertical-align: top;
 	width:80px;
-	padding:0 20px;
+	padding-left:20px;
+	float: right;
 } 
 .apartmentListingWrap .listingEntry .controlButton {
 	float:right;
 	padding:6px 0;
-	border-bottom: 1px solid ${foreground_20}
+	border-bottom: 1px solid #999999;
 }
 .apartmentListingWrap .notFoundNote {
 	font-size:18px;
@@ -304,7 +331,7 @@
 	color:${foreground_50};
 }
 a.listingCtlButton {
-	color:${foreground_50} !important;
+	color:#CCCCCC !important;
 	text-decoration:none;
 }
 .apartmentListingWrap .listingEntry:hover .listingCtlButton {
