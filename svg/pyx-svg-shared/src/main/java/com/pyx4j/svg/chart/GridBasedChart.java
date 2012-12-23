@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.IsSvgElement;
 import com.pyx4j.svg.basic.Path;
@@ -239,16 +240,17 @@ public abstract class GridBasedChart implements IsSvgElement {
         maxValue = calculateMaxValue();
 
         //adjust width for value labels
-        if (maxValue % MetricPrefix.T.getFactor() != maxValue)
+        if (maxValue % MetricPrefix.T.getFactor() != maxValue) {
             valuePostfix = MetricPrefix.T;
-        else if (maxValue % MetricPrefix.G.getFactor() != maxValue)
+        } else if (maxValue % MetricPrefix.G.getFactor() != maxValue) {
             valuePostfix = MetricPrefix.G;
-        else if (maxValue % MetricPrefix.M.getFactor() != maxValue)
+        } else if (maxValue % MetricPrefix.M.getFactor() != maxValue) {
             valuePostfix = MetricPrefix.M;
-        else if (maxValue % MetricPrefix.K.getFactor() != maxValue)
+        } else if (maxValue % MetricPrefix.K.getFactor() != maxValue) {
             valuePostfix = MetricPrefix.K;
-        else
+        } else {
             valuePostfix = MetricPrefix.NONE;
+        }
         //round up the maximum value to avoid lots of decimal places
         maxValue = Math.round(maxValue / valuePostfix.getFactor()) * valuePostfix.getFactor();
         Set<Entry<Metric, List<Double>>> dataset = datasource.getDataSet().entrySet();
@@ -256,18 +258,17 @@ public abstract class GridBasedChart implements IsSvgElement {
         numOfSeries = 0;
         for (Entry<Metric, List<Double>> entry : dataset) {
             int size = entry.getValue().size();
-            if (numOfSeries < size)
+            if (numOfSeries < size) {
                 numOfSeries = size;
+            }
         }
 
-        int maxValLabelLength = String.valueOf(maxValue / valuePostfix.getFactor()).length() * DEFAULT_FONT_SIZE + VALUE_LABEL_PADDING;
-        int xstart = PADDING + maxValLabelLength;
-        int ystart = configurator.getHeight() - PADDING - DEFAULT_FONT_SIZE;
+        int xstart = 0;
+        int ystart = configurator.getHeight();
 
-        int yMetricLabel = ystart + PADDING;
         int xend = configurator.getWidth() - PADDING;
         int yend = PADDING;
-        if (configurator.getTitle() != null && configurator.getTitle().length() > 0) {
+        if (CommonsStringUtils.isStringSet(configurator.getTitle())) {
             //adjust height to accommodate chart title
             Text title = factory.createText(configurator.getTitle(), configurator.getWidth() / 2, yend + TITLE_FONT_SIZE);
             title.setAttribute("font-size", String.valueOf(TITLE_FONT_SIZE));
@@ -276,6 +277,32 @@ public abstract class GridBasedChart implements IsSvgElement {
             yend += TITLE_FONT_SIZE + TITLE_PADDING;
 
         }
+
+        if (CommonsStringUtils.isStringSet(configurator.getHorisontalAxisTitle())) {
+            ystart -= DEFAULT_FONT_SIZE;
+            Text hAxisTitle = factory.createText(configurator.getHorisontalAxisTitle(), configurator.getWidth() / 2, ystart);
+            hAxisTitle.setAttribute("font-size", String.valueOf(DEFAULT_FONT_SIZE));
+            hAxisTitle.setAttribute("text-anchor", "middle");
+            container.add(hAxisTitle);
+            ystart -= PADDING;
+        }
+
+        ystart -= DEFAULT_FONT_SIZE;
+        int yMetricLabel = ystart;
+        ystart -= PADDING;
+
+        if (CommonsStringUtils.isStringSet(configurator.getVerticalAxisTitle())) {
+            int x = xstart + PADDING + DEFAULT_FONT_SIZE / 2;
+            int y = (configurator.getHeight() + configurator.getVerticalAxisTitle().length() * DEFAULT_FONT_SIZE / 2) / 2;
+            Text vAxisTitle = factory.createText(configurator.getVerticalAxisTitle(), x, y);
+            vAxisTitle.setAttribute("font-size", String.valueOf(DEFAULT_FONT_SIZE));
+            vAxisTitle.setTransform("rotate(-90," + x + "," + y + ")");
+            container.add(vAxisTitle);
+            xstart += DEFAULT_FONT_SIZE;
+        }
+
+        int maxValLabelLength = String.valueOf(maxValue / valuePostfix.getFactor()).length() * DEFAULT_FONT_SIZE + VALUE_LABEL_PADDING;
+        xstart += PADDING + maxValLabelLength;
 
         if (configurator.isLegend()) {
             Group legend = createLegend(numOfSeries);
@@ -293,8 +320,9 @@ public abstract class GridBasedChart implements IsSvgElement {
 
         metricPoints.add((double) xstart);
         int times = configurator.isZeroBased() ? numOfMetrics - 1 : numOfMetrics;
-        for (int i = 1; i <= times; i++)
+        for (int i = 1; i <= times; i++) {
             metricPoints.add(xstart + metricSpacing * i);
+        }
 
         //draw metrics axis
         String metricA = "M" + xstart + "," + ystart + "L" + xend + "," + ystart;
@@ -310,16 +338,19 @@ public abstract class GridBasedChart implements IsSvgElement {
                 lbl.setAttribute("font-size", String.valueOf(DEFAULT_FONT_SIZE));
                 lbl.setAttribute("text-anchor", "middle");
                 container.add(lbl);
-            } else
+            } else {
                 firstPass = false;
+            }
         }
 
         //draw metric grid lines
         String metricGL = "";
         if (configurator.getGridType() == GridType.Both || configurator.getGridType() == GridType.Metric) {
             for (Double xx : metricPoints) {
-                if (xx > 0)//skip the first
+                //skip the first
+                if (xx > 0) {
                     metricGL += "M" + xx + "," + ystart + "L" + xx + "," + yend;
+                }
             }
         }
 
@@ -391,8 +422,9 @@ public abstract class GridBasedChart implements IsSvgElement {
     }
 
     private Group createLegend(int numOfSeries) {
-        if (numOfSeries <= 0)
+        if (numOfSeries <= 0) {
             return null;
+        }
         List<String> sdesc = datasource.getSeriesDescription();
         List<String> seriesDescription = new ArrayList<String>(numOfSeries);
         for (int i = 0; i < numOfSeries; i++) {
@@ -419,10 +451,12 @@ public abstract class GridBasedChart implements IsSvgElement {
             y += legentHeight;
 
             legG.add(li);
-            if (legendWidth < li.getWidth())
+            if (legendWidth < li.getWidth()) {
                 legendWidth = li.getWidth();
-            if (iconsize == 0)
+            }
+            if (iconsize == 0) {
                 iconsize = li.getIconSize();
+            }
         }
         int w = legendWidth + LEGEND_FRAME_PADDING;
 

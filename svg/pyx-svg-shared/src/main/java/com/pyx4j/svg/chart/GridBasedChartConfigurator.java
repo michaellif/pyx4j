@@ -23,6 +23,7 @@ package com.pyx4j.svg.chart;
 import com.pyx4j.svg.basic.SvgFactory;
 
 public class GridBasedChartConfigurator extends BasicChartConfigurator {
+
     private final int width;
 
     private final int height;
@@ -30,6 +31,10 @@ public class GridBasedChartConfigurator extends BasicChartConfigurator {
     private GridType gridType;
 
     private String title;
+
+    private String verticalAxisTitle;
+
+    private String horisontalAxisTitle;
 
     private boolean zeroBased;
 
@@ -64,6 +69,22 @@ public class GridBasedChartConfigurator extends BasicChartConfigurator {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getVerticalAxisTitle() {
+        return verticalAxisTitle;
+    }
+
+    public void setVerticalAxisTitle(String verticalAxisTitle) {
+        this.verticalAxisTitle = verticalAxisTitle;
+    }
+
+    public String getHorisontalAxisTitle() {
+        return horisontalAxisTitle;
+    }
+
+    public void setHorisontalAxisTitle(String horisontalAxisTitle) {
+        this.horisontalAxisTitle = horisontalAxisTitle;
     }
 
     public int getWidth() {
