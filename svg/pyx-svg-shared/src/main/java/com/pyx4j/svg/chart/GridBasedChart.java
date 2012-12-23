@@ -252,7 +252,8 @@ public abstract class GridBasedChart implements IsSvgElement {
             valuePostfix = MetricPrefix.NONE;
         }
         //round up the maximum value to avoid lots of decimal places
-        maxValue = Math.round(maxValue / valuePostfix.getFactor()) * valuePostfix.getFactor();
+        // And allow to see all the value, use ceil
+        maxValue = Math.ceil(10.0 * maxValue / valuePostfix.getFactor()) * valuePostfix.getFactor() / 10.0;
         Set<Entry<Metric, List<Double>>> dataset = datasource.getDataSet().entrySet();
         //find out number of series
         numOfSeries = 0;
