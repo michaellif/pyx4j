@@ -15,11 +15,12 @@
  * the License.
  *
  * Created on May 31, 2011
- * @author Dad
+ * @author vadims
  * @version $Id$
  */
 package com.pyx4j.svg.chart;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -29,7 +30,6 @@ import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.Rect;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.Text;
-import com.pyx4j.svg.basic.TickProducer;
 import com.pyx4j.svg.chart.DataSource.Metric;
 import com.pyx4j.svg.util.Utils;
 
@@ -60,13 +60,14 @@ public class BarChart2D extends GridBasedChart {
         double labelWidth = String.valueOf(getMaxValue()).length() * Text.DEFAULT_FONT_SIZE * 0.65;
         boolean labelVertical = (labelWidth > barWidth) ? true : false;
 
-        ChartTheme theme = configurator.getTheme();
+        Iterator<String> colors = configurator.getColorIterator();
+
         Set<Entry<Metric, List<Double>>> dataset = configurator.getDatasourse().getDataSet().entrySet();
         double hShift = Utils.round(numOfSeries / 2d, 2);
         for (int idx = 0; idx < numOfSeries; idx++) {
 
             int metricIdx = configurator.isZeroBased() ? 0 : 1;
-            String color = theme.getNextColor();
+            String color = colors.next();
             for (Entry<Metric, List<Double>> entry : dataset) {
                 List<Double> values = entry.getValue();
                 Double value;
@@ -84,7 +85,7 @@ public class BarChart2D extends GridBasedChart {
 
                 double height = getTickProducer().getValuePosition(value);
                 double y = Utils.round((ystart - height), 2);
-                //TODO does not work as inline html element 
+                //TODO does not work as inline html element
 /*
  * Animator anim = new Animator(Type.set);
  * anim.setAttribute("attributeName", "fill");

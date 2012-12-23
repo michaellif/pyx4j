@@ -15,59 +15,15 @@
  * the License.
  *
  * Created on May 11, 2011
- * @author Dad
+ * @author vadims
  * @version $Id$
  */
 package com.pyx4j.svg.chart;
 
-public enum ChartTheme {
+public class ChartTheme {
 
-    Bright() {
+    public static final ChartColors bright = new ChartColorsCollection("#910E76", "#E87A04", "#99B118", "#0E508D", "#FFC91F", "#788E08", "#900E1B", "#38B8BF");
 
-        private final String[] colors = { "#910E76", "#E87A04", "#99B118", "#0E508D", "#FFC91F", "#788E08", "#900E1B", "#38B8BF" };
-
-        private int iterator = -1;
-
-        @Override
-        public String getNextColor() {
-            if (iterator == (colors.length - 1))
-                iterator = 0;
-            else
-                ++iterator;
-
-            return colors[iterator];
-        }
-
-        @Override
-        public void rewind() {
-            iterator = -1;
-        }
-
-    },
-
-    Monochrome() {
-        private final String[] colors = { "#000000", "#666362", "#BDBDBD", "#565051", "#736F6E", "#F2F2F2", "#3E3535" };
-
-        private int iterator = -1;
-
-        @Override
-        public String getNextColor() {
-            if (iterator == (colors.length - 1))
-                iterator = 0;
-            else
-                ++iterator;
-
-            return colors[iterator];
-        }
-
-        @Override
-        public void rewind() {
-            iterator = -1;
-        }
-    };
-
-    public abstract String getNextColor();
-
-    public abstract void rewind();
+    public static final ChartColors monochrome = new ChartColorsCollection("#000000", "#666362", "#BDBDBD", "#565051", "#736F6E", "#F2F2F2", "#3E3535");
 
 }

@@ -15,23 +15,28 @@
  * the License.
  *
  * Created on May 29, 2011
- * @author Dad
+ * @author vadims
  * @version $Id$
  */
 package com.pyx4j.svg.chart;
 
+import java.util.Iterator;
+
 import com.pyx4j.svg.basic.SvgFactory;
 
 public abstract class BasicChartConfigurator {
+
     private static final int DEFAULT_LABEL_PRECISION = 2;
 
     private final DataSource datasourse;
 
     private final SvgFactory factory;
 
-    private ChartTheme theme;
+    private ChartColors chartColors;
 
     private boolean legend;
+
+    private String legendBackgroundColor;
 
     private boolean showValueLabels;
 
@@ -42,18 +47,22 @@ public abstract class BasicChartConfigurator {
         assert datasource != null;
         this.factory = factory;
         this.datasourse = datasource;
-        theme = ChartTheme.Monochrome;
+        chartColors = ChartTheme.monochrome;
         legend = false;
         showValueLabels = false;
         labelPrecision = DEFAULT_LABEL_PRECISION;
     }
 
-    public ChartTheme getTheme() {
-        return theme;
+    public ChartColors getChartColors() {
+        return chartColors;
     }
 
-    public void setTheme(ChartTheme theme) {
-        this.theme = theme;
+    public void setChartColors(ChartColors chartColors) {
+        this.chartColors = chartColors;
+    }
+
+    public Iterator<String> getColorIterator() {
+        return new ChartColorsCircularIterator(getChartColors());
     }
 
     public boolean isLegend() {
@@ -62,6 +71,14 @@ public abstract class BasicChartConfigurator {
 
     public void setLegend(boolean legend) {
         this.legend = legend;
+    }
+
+    public String getLegendBackgroundColor() {
+        return legendBackgroundColor;
+    }
+
+    public void setLegendBackgroundColor(String legendBackgroundColor) {
+        this.legendBackgroundColor = legendBackgroundColor;
     }
 
     public DataSource getDatasourse() {

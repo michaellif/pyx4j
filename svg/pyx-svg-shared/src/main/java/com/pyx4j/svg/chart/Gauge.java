@@ -20,6 +20,7 @@
  */
 package com.pyx4j.svg.chart;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -98,7 +99,7 @@ public class Gauge extends ArcBasedChart {
         double xInner;
         double yInner;
 
-        configurator.getTheme().rewind();
+        Iterator<String> colors = configurator.getColorIterator();
 
         if (seriestitle != null && seriestitle.length() > 0) {
             xStart = x;
@@ -157,7 +158,7 @@ public class Gauge extends ArcBasedChart {
             yInner = yTmp;
 
             Path p = factory.createPath(path);
-            p.setFill(configurator.getTheme().getNextColor());
+            p.setFill(colors.next());
             container.add(p);
 
         }

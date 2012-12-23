@@ -15,7 +15,7 @@
  * the License.
  *
  * Created on May 29, 2011
- * @author Dad
+ * @author vadims
  * @version $Id$
  */
 package com.pyx4j.svg.chart;

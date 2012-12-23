@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2012 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,26 +14,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 11, 2011
- * @author vadims
+ * Created on 2012-12-22
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.svg.gwt.basic;
+package com.pyx4j.svg.chart;
 
-import com.google.gwt.user.client.ui.Widget;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 
-import com.pyx4j.svg.basic.SvgElement;
+public class ChartColorsCollection implements ChartColors {
 
-public class SvgElementImpl extends Widget implements SvgElement {
+    private final Collection<String> colors;
 
-    @Override
-    public void setAttribute(String param, String value) {
-        getElement().setAttribute(param, value);
+    public ChartColorsCollection(Collection<String> colors) {
+        this.colors = colors;
+    }
+
+    public ChartColorsCollection(String... colors) {
+        this.colors = Arrays.asList(colors);
     }
 
     @Override
-    public String getAttribute(String param) {
-        return getElement().getAttribute(param);
+    public Iterator<String> iterator() {
+        return colors.iterator();
     }
 
 }

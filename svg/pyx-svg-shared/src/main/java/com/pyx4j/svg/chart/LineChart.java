@@ -15,11 +15,12 @@
  * the License.
  *
  * Created on May 31, 2011
- * @author Dad
+ * @author vadims
  * @version $Id$
  */
 package com.pyx4j.svg.chart;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -58,13 +59,13 @@ public class LineChart extends GridBasedChart {
 
         List<Text> labels = new LinkedList<Text>();
 
-        ChartTheme theme = configurator.getTheme();
+        Iterator<String> colors = configurator.getColorIterator();
         Set<Entry<Metric, List<Double>>> dataset = configurator.getDatasourse().getDataSet().entrySet();
 
         for (int idx = 0; idx < numOfSeries; idx++) {
             int metricIdx = configurator.isZeroBased() ? 0 : 1;
             String path = "M";
-            String color = theme.getNextColor();
+            String color = colors.next();
             for (Entry<Metric, List<Double>> entry : dataset) {
                 List<Double> values = entry.getValue();
                 Double value;
@@ -80,7 +81,7 @@ public class LineChart extends GridBasedChart {
                 //draw series data
                 double x = Utils.round(metricPoints.get(metricIdx), 2);
                 double y = Utils.round((ystart - getTickProducer().getValuePosition(value)), 2);
- 
+
                 Circle dot = factory.createCircle((int) x, (int) y, DOT_RADIUS);
                 dot.setFill(color);
                 dot.setStroke(color);

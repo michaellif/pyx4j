@@ -15,7 +15,7 @@
  * the License.
  *
  * Created on May 4, 2011
- * @author Dad
+ * @author vadims
  * @version $Id$
  */
 package com.pyx4j.svg.test;
@@ -116,7 +116,7 @@ public class SvgTestFactory {
 
         ArcBasedChartConfigurator config = new ArcBasedChartConfigurator(factory, Data_Source);
         config.setLegend(true);
-        config.setTheme(ChartTheme.Bright);
+        config.setChartColors(ChartTheme.bright);
         config.setRadius(100);
 
         PieChart2D pchart = new PieChart2D(config);
@@ -133,7 +133,7 @@ public class SvgTestFactory {
         Group g = factory.createGroup();
 
         ArcBasedChartConfigurator config = new ArcBasedChartConfigurator(factory, Data_Source);
-        config.setTheme(ChartTheme.Bright);
+        config.setChartColors(ChartTheme.bright);
         config.setRadius(100);
         config.setScaleMaximum(1000d);
         config.setShowValueLabels(true);
@@ -156,7 +156,7 @@ public class SvgTestFactory {
         config.setTitle("Line Chart");
         config.setGridType(GridType.Value);
         config.setZeroBased(true);
-        config.setTheme(ChartTheme.Bright);
+        config.setChartColors(ChartTheme.bright);
 
         GridBasedChart lchart = new LineChart(config);
         g.add(lchart);
@@ -173,7 +173,7 @@ public class SvgTestFactory {
         config.setLegend(true);
         config.setTitle("Bar Chart");
         config.setGridType(GridType.Both);
-        config.setTheme(ChartTheme.Bright);
+        config.setChartColors(ChartTheme.bright);
 
         GridBasedChart bchart = new BarChart2D(config);
         g.add(bchart);

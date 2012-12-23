@@ -20,6 +20,8 @@
  */
 package com.pyx4j.svg.chart;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -60,11 +62,14 @@ public class PieChart2D extends ArcBasedChart {
             total += entry.getValue();
         }
 
-        if (total == 0)
+        if (total == 0) {
             return 0;
+        }
+
         double x2;
         double y2;
-        configurator.getTheme().rewind();
+        Iterator<String> colors = configurator.getColorIterator();
+
         if (seriestitle != null && seriestitle.length() > 0) {
             xx = x;
             yy = y + PADDING;
@@ -91,42 +96,55 @@ public class PieChart2D extends ArcBasedChart {
         int legendWidth = 0;
         int iconsize = 0;
 
-        Group legG = null;
-        if (configurator.isLegend())
-            legG = factory.createGroup();
+        List<LegendItem> legendItems = new ArrayList<LegendItem>();
 
         if (series.entrySet().size() == 1) { // 100%
             Circle c = factory.createCircle(xx, yy, radius);
-            c.setFill(configurator.getTheme().getNextColor());
+            c.setFill(colors.next());
             c.setStrokeWidth("0");
             container.add(c);
-
         } else {
             double valueSum = 0;
             for (Entry<Metric, Double> entry : series.entrySet()) {
                 double value = entry.getValue() * 2 * Math.PI / total;
-                valueSum += value;
-                String arc = value > Math.PI ? "1,1 " : "0,1 ";
-                String path = "M" + xx + "," + yy + "L" + x2 + "," + y2 + "A" + radius + "," + radius + " 0 " + arc;
-                x2 = Utils.round(xx - radius * Math.cos(valueSum), 2);
-                y2 = Utils.round(yy - radius * Math.sin(valueSum), 2);
+                String color = colors.next();
 
-                path += x2 + "," + y2 + "Z";
-                Path p = factory.createPath(path);
-                String color = configurator.getTheme().getNextColor();
-                p.setFill(color);
-                p.setStrokeWidth("0");
-                p.setStroke(color);
+                valueSum += value;
+                if (value > 0) {
+                    String arc = value > Math.PI ? "1,1 " : "0,1 ";
+                    double xe = Utils.round(xx - radius * Math.cos(valueSum), 2);
+                    double ye = Utils.round(yy - radius * Math.sin(valueSum), 2);
+
+                    if ((xe == x2) && (ye == y2) && value != 0) {
+                        Circle c = factory.createCircle(xx, yy, radius);
+                        c.setFill(color);
+                        c.setStrokeWidth("0");
+                        container.add(c);
+                    } else {
+                        String path = "M" + xx + "," + yy + "L" + x2 + "," + y2 + "A" + radius + "," + radius + " 0 " + arc + xe + "," + ye + "Z";
+                        Path p = factory.createPath(path);
+                        p.setFill(color);
+                        p.setStrokeWidth("0");
+                        p.setStroke(color);
+                        container.add(p);
+                    }
+
+                    x2 = xe;
+                    y2 = ye;
+                }
+
                 if (configurator.isLegend()) {
                     LegendItem li = createLegendItem(entry.getKey().getCaption(), 0, legY, color);
                     legentHeight = li.getHeight() + Y_SHIFT;
                     legY += legentHeight;
 
-                    legG.add(li);
-                    if (legendWidth < li.getWidth())
+                    legendItems.add(li);
+                    if (legendWidth < li.getWidth()) {
                         legendWidth = li.getWidth();
-                    if (iconsize == 0)
+                    }
+                    if (iconsize == 0) {
                         iconsize = li.getIconSize();
+                    }
                 }
                 if (configurator.isShowValueLabels()) {
                     //TODO finish
@@ -134,13 +152,21 @@ public class PieChart2D extends ArcBasedChart {
                     // labels.add(label);
 
                 }
-                container.add(p);
 
             }
             if (configurator.isLegend()) {
+                Group legG = factory.createGroup();
                 Rect frame = factory.createRect(-iconsize - LEGEND_FRAME_PADDING, -iconsize * 2 - LEGEND_FRAME_PADDING, legendWidth + LEGEND_FRAME_PADDING,
                         legY + LEGEND_FRAME_PADDING, 0, 0);
+                if (configurator.getLegendBackgroundColor() != null) {
+                    frame.setFill(configurator.getLegendBackgroundColor());
+                }
                 legG.add(frame);
+
+                for (LegendItem li : legendItems) {
+                    legG.add(li);
+                }
+
                 legG.setTransform("translate(" + (xx + radius + X_SHIFT) + "," + (yy - (legY - legentHeight) / 2) + ")");
                 container.add(legG);
                 computedwidth += legendWidth + LEGEND_FRAME_PADDING;
