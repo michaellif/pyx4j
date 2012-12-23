@@ -81,7 +81,7 @@ public class PieChart2DGadget extends GadgetInstanceBase<com.propertyvista.domai
 
         ArcBasedChartConfigurator config = new ArcBasedChartConfigurator(factory, ds);
         config.setLegend(true);
-        config.setTheme(ChartTheme.Bright);
+        config.setChartColors(ChartTheme.bright);
         config.setRadius(65);
 
         SvgRoot svgroot = factory.getSvgRoot();

@@ -100,7 +100,7 @@ public class LineChartGadget extends GadgetInstanceBase<com.propertyvista.domain
         config.setLegend(true);
         config.setZeroBased(true);
         config.setGridType(GridType.Value);
-        config.setTheme(ChartTheme.Bright);
+        config.setChartColors(ChartTheme.bright);
         config.setShowValueLabels(true);
 
         SvgRoot svgroot = factory.getSvgRoot();

@@ -64,7 +64,7 @@ public class GaugeGadget extends GadgetInstanceBase<com.propertyvista.domain.das
 
         ArcBasedChartConfigurator config = new ArcBasedChartConfigurator(factory, ds);
         config.setScaleMaximum(100d);
-        config.setTheme(ChartTheme.Bright);
+        config.setChartColors(ChartTheme.bright);
         config.setRadius(80);
         config.setShowValueLabels(true);
 

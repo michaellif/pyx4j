@@ -50,7 +50,7 @@ public class TurnoverAnalysisChartFactory {
     private GridBasedChartConfigurator createConfigurator(DataSource ds, int width, int height) {
         GridBasedChartConfigurator config = new GridBasedChartConfigurator(svgFactory, ds, width, height);
         config.setGridType(GridType.Both);
-        config.setTheme(ChartTheme.Bright);
+        config.setChartColors(ChartTheme.bright);
         config.setShowValueLabels(true);
         config.setZeroBased(false);
         return config;

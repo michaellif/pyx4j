@@ -67,7 +67,7 @@ public class ArrearsYoyAnalysisChartFactory {
 
         GridBasedChartConfigurator config = new GridBasedChartConfigurator(svgFactory, dataSource, width, height);
         config.setGridType(GridType.Both);
-        config.setTheme(ChartTheme.Bright);
+        config.setChartColors(ChartTheme.bright);
         config.setShowValueLabels(false);
         config.setLegend(true);
         config.setZeroBased(false);

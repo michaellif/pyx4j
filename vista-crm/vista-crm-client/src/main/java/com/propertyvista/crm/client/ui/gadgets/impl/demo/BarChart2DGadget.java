@@ -99,7 +99,7 @@ public class BarChart2DGadget extends GadgetInstanceBase<BarChart2DGadgetMetadat
         GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, ds, 700, 200);
         config.setLegend(true);
         config.setGridType(GridType.Both);
-        config.setTheme(ChartTheme.Bright);
+        config.setChartColors(ChartTheme.bright);
 
         SvgRoot svgroot = factory.getSvgRoot();
         svgroot.add(new BarChart2D(config));

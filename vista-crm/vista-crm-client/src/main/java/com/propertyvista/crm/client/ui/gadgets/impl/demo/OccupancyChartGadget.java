@@ -87,7 +87,7 @@ public class OccupancyChartGadget extends GadgetInstanceBase<OccupancyChartGadge
         GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, ds, 600, 200);
         config.setLegend(true);
         config.setGridType(GridType.Both);
-        config.setTheme(ChartTheme.Bright);
+        config.setChartColors(ChartTheme.bright);
 
         SvgRoot svgroot = factory.getSvgRoot();
         svgroot.add(new BarChart2D(config));
