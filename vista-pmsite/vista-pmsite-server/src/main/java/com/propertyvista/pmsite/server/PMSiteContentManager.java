@@ -316,6 +316,10 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public Map<String, List<String>> getProvinceCityMap() {
+        return getProvinceCityMap(false);
+    }
+
+    public Map<String, List<String>> getProvinceCityMap(boolean useCode) {
         Map<String, List<String>> provCityMap = new HashMap<String, List<String>>();
         List<City> cities = getCities();
         for (City city : cities) {
@@ -323,7 +327,7 @@ public class PMSiteContentManager implements Serializable {
             if (cityName == null) {
                 continue;
             }
-            String provName = city.province().name().getValue();
+            String provName = useCode ? city.province().code().getValue() : city.province().name().getValue();
             if (provName == null) {
                 continue;
             }
@@ -410,13 +414,16 @@ public class PMSiteContentManager implements Serializable {
         return mediasVisible;
     }
 
-    public List<PromoDataModel> getPromotions() {
+    public List<PromoDataModel> getPromotions(String city) {
         ArrayList<PromoDataModel> promo = new ArrayList<PromoDataModel>();
 
         // TODO promo building lookup
         EntityListCriteria<Building> dbCriteria = EntityListCriteria.create(Building.class);
         // account for visibility type
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().marketing().visibility(), PublicVisibilityType.global));
+        if (city != null) {
+            dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));
+        }
         dbCriteria.setPageSize(4);
         List<Building> buildings = PropertyFinder.getPropertyList(null, dbCriteria);
         for (Building bld : buildings) {

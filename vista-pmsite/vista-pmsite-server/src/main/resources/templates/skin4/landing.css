@@ -316,6 +316,9 @@
 .promoBox a:hover + .address {
 	border-bottom: 3px solid #000000;
 }
+.promoBox .citySelectionForm {
+	display:inline-block;
+}
 
 .wideGadgetBox {
 	float:left;

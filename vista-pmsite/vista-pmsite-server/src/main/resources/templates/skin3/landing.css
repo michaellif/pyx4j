@@ -261,6 +261,9 @@
 .promoBox a:hover .picture {
 	border:1px solid ${contrast2_100};
 }
+.promoBox .citySelectionForm {
+	display:inline-block;
+}
 
 .wideGadgetBox {
 	float:left;

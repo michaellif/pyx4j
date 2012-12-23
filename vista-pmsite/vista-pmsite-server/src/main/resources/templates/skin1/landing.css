@@ -228,6 +228,9 @@
 	font-size:16px;
 	padding-left:10px;
 }
+.promoBox .citySelectionForm {
+	display:inline-block;
+}
 
 .wideGadgetBox {
 	padding: 20px 10px;
