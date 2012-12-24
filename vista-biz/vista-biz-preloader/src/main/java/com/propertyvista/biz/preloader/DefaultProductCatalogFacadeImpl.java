@@ -117,6 +117,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
             switch (service.serviceType().getValue()) {
             case commercialUnit:
             case residentialUnit:
+            case residentialShortTermUnit:
                 service.version().items().add(createUnitItem(unit, service));
                 if (persist) {
                     Persistence.service().persist(service);

@@ -164,7 +164,6 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         // fill runtime editor data:
         fillServiceEligibilityData(currentValue);
-        fillserviceItems(currentValue);
 
         callback.onSuccess(currentValue);
     }

@@ -67,7 +67,7 @@ public class ProductCatalogGenerator {
 
     public List<Service> createServices(ProductCatalog catalog) {
         List<Service> items = new ArrayList<Service>(Service.ServiceType.values().length);
-        for (Service.ServiceType type : EnumSet.allOf(Service.ServiceType.class)) {
+        for (Service.ServiceType type : Service.ServiceType.unitRelated()) {
             items.add(createService(catalog, type));
         }
         return items;

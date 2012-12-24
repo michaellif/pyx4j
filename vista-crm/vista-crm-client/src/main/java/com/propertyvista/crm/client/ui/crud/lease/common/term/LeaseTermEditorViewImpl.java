@@ -36,7 +36,15 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
 
         this.getValue().lease().billingAccount().set(value.lease().billingAccount());
 
-        updateServiceValue(value);
+        form.getValue().selectedServiceItems().clear();
+        form.getValue().selectedServiceItems().addAll(value.selectedServiceItems());
+        if (form.getValue().selectedServiceItems().size() > 1) {
+            // in case of multiple services available - clear all service-related data
+            // and allow user to select the service he/she wants to use:
+            clearServiceData(value);
+        } else {
+            updateServiceValue(value);
+        }
     }
 
     @Override
@@ -44,9 +52,6 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
         LeaseTermForm form = (LeaseTermForm) getForm();
 
         // update non-editable runtime data:
-        form.getValue().selectedServiceItems().clear();
-        form.getValue().selectedServiceItems().addAll(value.selectedServiceItems());
-
         form.getValue().selectedFeatureItems().clear();
         form.getValue().selectedFeatureItems().addAll(value.selectedFeatureItems());
 
@@ -57,6 +62,19 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
         form.get(form.proto().version().leaseProducts().featureItems()).setValue(value.version().leaseProducts().featureItems());
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
             form.get(form.proto().version().leaseProducts().concessions()).setValue(value.version().leaseProducts().concessions());
+        }
+    }
+
+    private void clearServiceData(LeaseTermDTO value) {
+        LeaseTermForm form = (LeaseTermForm) getForm();
+
+        form.getValue().selectedFeatureItems().clear();
+        form.getValue().selectedConcessions().clear();
+
+        form.get(form.proto().version().leaseProducts().serviceItem()).reset();
+        form.get(form.proto().version().leaseProducts().featureItems()).reset();
+        if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
+            form.get(form.proto().version().leaseProducts().concessions()).reset();
         }
     }
 }
