@@ -23,6 +23,12 @@
         <when-type-is class="com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendConfig"/>
     </replace-with>
     
+    <extend-property name="locale" values="en_US"/>
+    <set-property name="locale" value="en_US"/>
+    <set-property-fallback name="locale" value="en_US"/>
+    <set-configuration-property name="locale.cookie" value="locale"/>
+    <set-configuration-property name="pyx.locale.default" value="en_US"/>
+    
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.common.client.*" />
     
 </module>
