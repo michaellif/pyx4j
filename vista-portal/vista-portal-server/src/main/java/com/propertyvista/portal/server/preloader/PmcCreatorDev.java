@@ -58,6 +58,8 @@ public class PmcCreatorDev {
 
         if (pmcName.equals(DemoPmc.rockville.name())) {
             pmc.features().countryOfOperation().setValue(CountryOfOperation.UK);
+        } else if (pmcName.equals(DemoPmc.redridge.name())) {
+            pmc.features().countryOfOperation().setValue(CountryOfOperation.US);
         } else {
             pmc.features().countryOfOperation().setValue(CountryOfOperation.Canada);
         }
