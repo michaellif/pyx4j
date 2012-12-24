@@ -334,13 +334,15 @@ public abstract class GridBasedChart implements IsSvgElement {
         for (Double xx : metricPoints) {
             metricA += "M" + xx + "," + ystart + "L" + xx + "," + tickEnd;
             //draw metric labels
-            if (!firstPass) {
-                Text lbl = factory.createText(metriciterator.next().getCaption(), xx.intValue(), yMetricLabel);
-                lbl.setAttribute("font-size", String.valueOf(DEFAULT_FONT_SIZE));
-                lbl.setAttribute("text-anchor", "middle");
-                container.add(lbl);
-            } else {
-                firstPass = false;
+            if (configurator.getGridType() == GridType.Both || configurator.getGridType() == GridType.Metric) {
+                if (!firstPass) {
+                    Text lbl = factory.createText(metriciterator.next().getCaption(), xx.intValue(), yMetricLabel);
+                    lbl.setAttribute("font-size", String.valueOf(DEFAULT_FONT_SIZE));
+                    lbl.setAttribute("text-anchor", "middle");
+                    container.add(lbl);
+                } else {
+                    firstPass = false;
+                }
             }
         }
 
