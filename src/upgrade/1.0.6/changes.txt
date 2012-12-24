@@ -10,5 +10,5 @@ VISTA-2314 Add AlphanumIndexAdapter on Building.propertyCode   property_code_s
 
 
 VISTA-2282 i18n  table PaymentsSummary
-       Cheque->check
-       eCheque->eCheck
+       Cheque    -> p_check
+       e_Cheque  -> e_check
