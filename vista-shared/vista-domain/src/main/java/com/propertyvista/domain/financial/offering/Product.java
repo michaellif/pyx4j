@@ -51,6 +51,8 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, INo
     @OrderColumn
     IPrimitive<Integer> orderInCatalog();
 
+    IPrimitive<Boolean> isDefaultCatalogItem();
+
     @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
     @AbstractEntity
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)

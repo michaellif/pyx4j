@@ -23,6 +23,7 @@ package com.propertyvista.biz.preloader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
@@ -47,10 +48,22 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
             Persistence.service().retrieve(building);
         }
 
-        building.productCatalog().services().clear();
+        Iterator<Service> serviceIterator = building.productCatalog().services().iterator();
+        while (serviceIterator.hasNext()) {
+            Service service = serviceIterator.next();
+            if (service.isDefaultCatalogItem().isBooleanTrue()) {
+                serviceIterator.remove();
+            }
+        }
         building.productCatalog().services().addAll(createDefaultServices(building.productCatalog()));
 
-        building.productCatalog().features().clear();
+        Iterator<Feature> featureIterator = building.productCatalog().features().iterator();
+        while (featureIterator.hasNext()) {
+            Feature feature = featureIterator.next();
+            if (feature.isDefaultCatalogItem().isBooleanTrue()) {
+                featureIterator.remove();
+            }
+        }
         building.productCatalog().features().addAll(createDefaultFeatures(building.productCatalog()));
 
         building.productCatalog().concessions().clear();
@@ -77,10 +90,14 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
             Persistence.service().persist(concession);
         }
         for (Feature feature : building.productCatalog().features()) {
-            Persistence.service().persist(feature);
+            if (feature.isDefaultCatalogItem().isBooleanTrue()) {
+                Persistence.service().persist(feature);
+            }
         }
         for (Service service : building.productCatalog().services()) {
-            Persistence.service().persist(service);
+            if (service.isDefaultCatalogItem().isBooleanTrue()) {
+                Persistence.service().persist(service);
+            }
         }
     }
 
@@ -132,8 +149,9 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     private Service createService(ProductCatalog catalog, ServiceItemType type) {
         Service item = EntityFactory.create(Service.class);
-        item.catalog().set(catalog);
+        item.isDefaultCatalogItem().setValue(true);
 
+        item.catalog().set(catalog);
         item.serviceType().setValue(type.serviceType().getValue());
         item.version().name().setValue(type.name().getValue());
 
@@ -165,11 +183,11 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     private Feature createFeature(ProductCatalog catalog, Feature.Type type, List<FeatureItemType> itemTypes) {
         Feature item = EntityFactory.create(Feature.class);
-        item.catalog().set(catalog);
+        item.isDefaultCatalogItem().setValue(true);
 
+        item.catalog().set(catalog);
         item.featureType().setValue(type);
         item.version().name().setValue(type.toString());
-
         item.version().recurring().setValue(true);
         item.version().mandatory().setValue(false);
 
