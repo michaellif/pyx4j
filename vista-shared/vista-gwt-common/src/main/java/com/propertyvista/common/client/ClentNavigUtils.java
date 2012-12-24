@@ -56,6 +56,17 @@ public class ClentNavigUtils {
                     locales.add(cl);
                 }
             }
+
+            switch (VistaFeatures.instance().countryOfOperation()) {
+            case Canada:
+                locales.remove(CompiledLocale.en_US);
+                break;
+            case US:
+                locales.remove(CompiledLocale.en_CA);
+                break;
+            default:
+                break;
+            }
         }
         return locales;
     }
@@ -70,13 +81,28 @@ public class ClentNavigUtils {
 
     public static void setCountryOfOperationLocale() {
         CompiledLocale compiledLocale = getCurrentLocale();
-        if ((VistaFeatures.instance().countryOfOperation() == CountryOfOperation.UK) && (compiledLocale != CompiledLocale.en_GB)) {
-            if (isLocaleAvailable(CompiledLocale.en_GB)) {
-                ClentNavigUtils.changeApplicationLocale(CompiledLocale.en_GB);
-            } else if (ApplicationMode.isDevelopment()) {
-                MessageDialog.warn("Warning", "(dev) This PMC Locale was not compiled in this development versions");
+        switch (VistaFeatures.instance().countryOfOperation()) {
+        case Canada:
+            if ((compiledLocale == CompiledLocale.en_US) && (isLocaleAvailable(CompiledLocale.en_CA))) {
+                ClentNavigUtils.changeApplicationLocale(CompiledLocale.en_CA);
             }
+            break;
+        case US:
+            if ((compiledLocale == CompiledLocale.en_CA) && (isLocaleAvailable(CompiledLocale.en_US))) {
+                ClentNavigUtils.changeApplicationLocale(CompiledLocale.en_US);
+            }
+            break;
+        case UK:
+            if (compiledLocale != CompiledLocale.en_GB) {
+                if (isLocaleAvailable(CompiledLocale.en_GB)) {
+                    ClentNavigUtils.changeApplicationLocale(CompiledLocale.en_GB);
+                } else if (ApplicationMode.isDevelopment()) {
+                    MessageDialog.warn("Warning", "(dev) This PMC Locale was not compiled in this development versions");
+                }
+            }
+            break;
         }
+
     }
 
     public static boolean isLocaleAvailable(CompiledLocale locale) {
