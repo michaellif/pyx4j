@@ -55,12 +55,12 @@ public interface PaymentFeesDTO extends IEntity {
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> cheque();
+    IPrimitive<BigDecimal> check();
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    @Caption(name = "eCheque")
-    IPrimitive<BigDecimal> eCheque();
+    @Caption(name = "eCheck")
+    IPrimitive<BigDecimal> eCheck();
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)

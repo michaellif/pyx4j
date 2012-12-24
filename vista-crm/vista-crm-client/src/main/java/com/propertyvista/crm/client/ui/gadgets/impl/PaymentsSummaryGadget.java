@@ -71,8 +71,8 @@ public class PaymentsSummaryGadget extends GadgetInstanceBase<PaymentsSummaryGad
                         new MemberColumnDescriptor.Builder(proto.merchantAccount().accountNumber()).title(i18n.ntr("Merchant Account")).build(),
                         new MemberColumnDescriptor.Builder(proto.status()).build(),
                         new MemberColumnDescriptor.Builder(proto.cash()).build(),
-                        new MemberColumnDescriptor.Builder(proto.cheque()).build(),
-                        new MemberColumnDescriptor.Builder(proto.eCheque()).build(),
+                        new MemberColumnDescriptor.Builder(proto.check()).build(),
+                        new MemberColumnDescriptor.Builder(proto.eCheck()).build(),
                         new MemberColumnDescriptor.Builder(proto.eft()).build(),
                         new MemberColumnDescriptor.Builder(proto.cc()).build(),
                         new MemberColumnDescriptor.Builder(proto.interac()).build()
@@ -247,8 +247,8 @@ public class PaymentsSummaryGadget extends GadgetInstanceBase<PaymentsSummaryGad
         feesTableModel.setColumnDescriptors(Arrays.asList(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto.paymentFeeMeasure()).sortable(false).width("20%").build(),
                 new MemberColumnDescriptor.Builder(proto.cash()).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.cheque()).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.eCheque()).sortable(false).build(),
+                new MemberColumnDescriptor.Builder(proto.check()).sortable(false).build(),
+                new MemberColumnDescriptor.Builder(proto.eCheck()).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto.eft()).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto.cc()).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto.interacCaledon()).sortable(false).build(),

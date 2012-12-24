@@ -41,7 +41,7 @@ public interface CheckInfo extends PaymentDetails {
 
     @NotNull
     @ToString(index = 1)
-    @Caption(name = "Cheque Number")
+    @Caption(name = "Check Number")
     IPrimitive<String> checkNo();
 
     @NotNull

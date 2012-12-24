@@ -60,7 +60,7 @@
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-onboarding-server</artifactId>
             <version>${project.version}</version>
-        </dependency>        
+        </dependency>
 
         <dependency>
             <groupId>com.propertyvista</groupId>

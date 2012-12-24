@@ -57,8 +57,8 @@ public class PaymentsSummaryHelperTest extends PaymentsSummaryHelperTestBase {
             assertEquals(new LogicalDate(detectDateformat("01-May-2010")), summary.snapshotDay().getValue());
 
             assertEquals(new BigDecimal("250.00"), summary.cash().getValue());
-            assertEquals(new BigDecimal("0.00"), summary.cheque().getValue());
-            assertEquals(new BigDecimal("100.00"), summary.eCheque().getValue());
+            assertEquals(new BigDecimal("0.00"), summary.check().getValue());
+            assertEquals(new BigDecimal("100.00"), summary.eCheck().getValue());
             assertEquals(new BigDecimal("0.00"), summary.eft().getValue());
             assertEquals(new BigDecimal("200.00"), summary.cc().getValue());
             assertEquals(new BigDecimal("0.00"), summary.interac().getValue());
@@ -72,8 +72,8 @@ public class PaymentsSummaryHelperTest extends PaymentsSummaryHelperTestBase {
             assertEquals(new LogicalDate(detectDateformat("02-May-2010")), summary.snapshotDay().getValue());
 
             assertEquals(new BigDecimal("0.00"), summary.cash().getValue());
-            assertEquals(new BigDecimal("0.00"), summary.cheque().getValue());
-            assertEquals(new BigDecimal("0.00"), summary.eCheque().getValue());
+            assertEquals(new BigDecimal("0.00"), summary.check().getValue());
+            assertEquals(new BigDecimal("0.00"), summary.eCheck().getValue());
             assertEquals(new BigDecimal("0.00"), summary.eft().getValue());
             assertEquals(new BigDecimal("0.00"), summary.cc().getValue());
             assertEquals(new BigDecimal("0.00"), summary.interac().getValue());

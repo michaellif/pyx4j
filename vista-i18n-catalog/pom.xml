@@ -129,6 +129,7 @@
                         <configuration>
                             <poSaveLocation>true</poSaveLocation>
                             <keysFile>vista-all-keys.pot</keysFile>
+                            <sourceLanguage>en</sourceLanguage>
                             <includes>
                                 <include>com.pyx4j*</include>
                                 <include>com.propertyvista*</include>

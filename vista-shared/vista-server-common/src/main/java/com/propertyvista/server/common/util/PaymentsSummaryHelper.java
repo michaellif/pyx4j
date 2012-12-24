@@ -61,8 +61,8 @@ public final class PaymentsSummaryHelper {
             PaymentsSummary proto = EntityFactory.create(PaymentsSummary.class);
 
             bind(PaymentType.Cash, proto.cash());
-            bind(PaymentType.Check, proto.cheque());
-            bind(PaymentType.Echeck, proto.eCheque());
+            bind(PaymentType.Check, proto.check());
+            bind(PaymentType.Echeck, proto.eCheck());
             bind(PaymentType.CreditCard, proto.cc());
             bind(PaymentType.EFT, proto.eft());
             bind(PaymentType.Interac, proto.interac());

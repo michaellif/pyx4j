@@ -24,4 +24,6 @@
     <generate-with class="com.propertyvista.crm.rebind.GadgetFactoryGenerator">
     	<when-type-is class="com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory"/>
   	</generate-with>
+    
+    <set-property name="user.agent" value="opera,safari,gecko1_8,ie8,ie9"/>
 </module>

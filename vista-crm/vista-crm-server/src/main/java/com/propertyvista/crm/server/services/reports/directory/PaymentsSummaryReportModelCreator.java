@@ -125,8 +125,8 @@ public class PaymentsSummaryReportModelCreator implements GadgetReportModelCreat
     private Vector<String> makePaymentFeeLabelList(PaymentFeesDTO fees) {
         Vector<String> labels = new Vector<String>();
         addIfNotNull(labels, makePaymentFeeLabel(fees.cash(), fees.paymentFeeMeasure().getValue()));
-        addIfNotNull(labels, makePaymentFeeLabel(fees.cheque(), fees.paymentFeeMeasure().getValue()));
-        addIfNotNull(labels, makePaymentFeeLabel(fees.eCheque(), fees.paymentFeeMeasure().getValue()));
+        addIfNotNull(labels, makePaymentFeeLabel(fees.check(), fees.paymentFeeMeasure().getValue()));
+        addIfNotNull(labels, makePaymentFeeLabel(fees.eCheck(), fees.paymentFeeMeasure().getValue()));
         addIfNotNull(labels, makePaymentFeeLabel(fees.eft(), fees.paymentFeeMeasure().getValue()));
         addIfNotNull(labels, makePaymentFeeLabel(fees.cc(), fees.paymentFeeMeasure().getValue()));
         addIfNotNull(labels, makePaymentFeeLabel(fees.interacCaledon(), fees.paymentFeeMeasure().getValue()));

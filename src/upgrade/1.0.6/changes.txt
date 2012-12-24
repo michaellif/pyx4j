@@ -7,3 +7,8 @@ PaymentMethod  now have id_discriminator
 
 VISTA-2314 Add AlphanumIndexAdapter on Building.propertyCode   property_code_s
   see old migration for apt_unit.info_number_s
+
+
+VISTA-2282 i18n  table PaymentsSummary
+       Cheque->check
+       eCheque->eCheck

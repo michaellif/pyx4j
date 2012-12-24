@@ -28,8 +28,8 @@ public class PaymentFeesHelper {
         switch (measure) {
         case absolute:
             fees.cash().setValue(null);
-            fees.cheque().setValue(null);
-            fees.eCheque().setValue(typeInfo.eChequeFee().getValue());
+            fees.check().setValue(null);
+            fees.eCheck().setValue(typeInfo.eChequeFee().getValue());
             fees.eft().setValue(typeInfo.eftFee().getValue());
             fees.interacCaledon().setValue(typeInfo.interacCaledonFee().getValue());
             fees.interacVisa().setValue(typeInfo.interacCaledonFee().getValue());

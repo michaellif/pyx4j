@@ -24,11 +24,9 @@ public enum PaymentType {
 
     Cash,
 
-    // TODO move to en_CA translation
-    @Translate("Cheque")
     Check,
 
-    @Translate("eCheque")
+    @Translate("eCheck")
     Echeck,
 
     EFT,

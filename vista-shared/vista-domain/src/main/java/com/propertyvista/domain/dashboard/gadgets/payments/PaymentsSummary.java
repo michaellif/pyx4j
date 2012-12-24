@@ -47,11 +47,11 @@ public interface PaymentsSummary extends IEntity {
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> cheque();
+    IPrimitive<BigDecimal> check();
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> eCheque();
+    IPrimitive<BigDecimal> eCheck();
 
     @Caption(name = "EFT")
     @Format("#,##0.00")
