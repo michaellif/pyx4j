@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.common.client.ClentNavigUtils;
+import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.shared.CompiledLocale;
 
@@ -165,7 +165,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         languageMenu.setAnimationEnabled(false);
         languageMenu.setFocusOnHoverEnabled(true);
         languages = new MenuBar(true);
-        MenuItem item = new MenuItem(ClentNavigUtils.getCurrentLocale().toString(), languages);
+        MenuItem item = new MenuItem(ClientNavigUtils.getCurrentLocale().toString(), languages);
         languageMenu.addItem(item);
         languageMenu.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 

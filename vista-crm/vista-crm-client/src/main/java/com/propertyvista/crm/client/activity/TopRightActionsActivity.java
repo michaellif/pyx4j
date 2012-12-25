@@ -28,7 +28,7 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.common.client.ClentNavigUtils;
+import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.login.GetSatisfaction;
@@ -98,12 +98,12 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     }
 
     private void obtainAvailableLocales() {
-        view.setAvailableLocales(ClentNavigUtils.obtainAvailableLocales());
+        view.setAvailableLocales(ClientNavigUtils.obtainAvailableLocales());
     }
 
     @Override
     public void setLocale(CompiledLocale locale) {
-        ClentNavigUtils.changeApplicationLocale(locale);
+        ClientNavigUtils.changeApplicationLocale(locale);
     }
 
     public TopRightActionsActivity withPlace(Place place) {

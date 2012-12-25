@@ -32,7 +32,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.common.client.ClentNavigUtils;
+import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -112,7 +112,7 @@ public class PtAppSite extends VistaSite {
                 super.onFailure(caught);
             }
 
-        }, ClentNavigUtils.getCurrentLocale());
+        }, ClientNavigUtils.getCurrentLocale());
 
     }
 

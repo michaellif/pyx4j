@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -29,7 +29,7 @@ import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.shared.CompiledLocale;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class ClentNavigUtils {
+public class ClientNavigUtils {
 
     /**
      * Used for inter-modules redirections.
@@ -60,9 +60,11 @@ public class ClentNavigUtils {
             switch (VistaFeatures.instance().countryOfOperation()) {
             case Canada:
                 locales.remove(CompiledLocale.en_US);
+                locales.remove(CompiledLocale.en_GB);
                 break;
             case US:
                 locales.remove(CompiledLocale.en_CA);
+                locales.remove(CompiledLocale.en_GB);
                 break;
             default:
                 break;
@@ -84,18 +86,18 @@ public class ClentNavigUtils {
         switch (VistaFeatures.instance().countryOfOperation()) {
         case Canada:
             if ((compiledLocale == CompiledLocale.en_US) && (isLocaleAvailable(CompiledLocale.en_CA))) {
-                ClentNavigUtils.changeApplicationLocale(CompiledLocale.en_CA);
+                ClientNavigUtils.changeApplicationLocale(CompiledLocale.en_CA);
             }
             break;
         case US:
             if ((compiledLocale == CompiledLocale.en_CA) && (isLocaleAvailable(CompiledLocale.en_US))) {
-                ClentNavigUtils.changeApplicationLocale(CompiledLocale.en_US);
+                ClientNavigUtils.changeApplicationLocale(CompiledLocale.en_US);
             }
             break;
         case UK:
             if (compiledLocale != CompiledLocale.en_GB) {
                 if (isLocaleAvailable(CompiledLocale.en_GB)) {
-                    ClentNavigUtils.changeApplicationLocale(CompiledLocale.en_GB);
+                    ClientNavigUtils.changeApplicationLocale(CompiledLocale.en_GB);
                 } else if (ApplicationMode.isDevelopment()) {
                     MessageDialog.warn("Warning", "(dev) This PMC Locale was not compiled in this development versions");
                 }

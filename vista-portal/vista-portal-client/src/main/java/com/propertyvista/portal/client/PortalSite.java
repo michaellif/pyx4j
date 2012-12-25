@@ -25,7 +25,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.common.client.ClentNavigUtils;
+import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.site.Message;
@@ -81,7 +81,7 @@ public class PortalSite extends VistaSite {
                                 StyleManger.installTheme(new PortalTheme(descriptor.skin().getValue()), new VistaPalette(descriptor.palette()));
                                 VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
                             }
-                        }, ClentNavigUtils.getCurrentLocale());
+                        }, ClientNavigUtils.getCurrentLocale());
                         getHistoryHandler().handleCurrentHistory();
                     }
 

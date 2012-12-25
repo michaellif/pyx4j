@@ -28,7 +28,7 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.common.client.ClentNavigUtils;
+import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.portal.ptapp.client.ui.TopRightActionsView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
@@ -77,7 +77,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     }
 
     private void obtainAvailableLocales() {
-        view.setAvailableLocales(ClentNavigUtils.obtainAvailableLocales());
+        view.setAvailableLocales(ClientNavigUtils.obtainAvailableLocales());
     }
 
     @Override

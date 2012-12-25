@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.commons.Key;
 
-import com.propertyvista.common.client.ClentNavigUtils;
+import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.domain.File;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.site.SiteImageResource;
@@ -28,29 +28,29 @@ public class MediaUtils {
 
     public static Image createPublicMediaImage(Key mediaId, ThumbnailSize size) {
         if (mediaId == null) {
-            return new Image(ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + "0/" + size.name() + "."
+            return new Image(ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + "0/" + size.name() + "."
                     + ImageConsts.THUMBNAIL_TYPE);
         } else {
-            return new Image(ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaId.toString() + "/" + size.name() + "."
+            return new Image(ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaId.toString() + "/" + size.name() + "."
                     + ImageConsts.THUMBNAIL_TYPE);
         }
     }
 
     public static String createApplicationDocumentUrl(File file) {
-        return ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.applicationDocumentServletMapping + file.id().getStringView() + "/"
+        return ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.applicationDocumentServletMapping + file.id().getStringView() + "/"
                 + file.fileName().getStringView();
     }
 
     public static String createSiteImageResourceUrl(SiteImageResource resource) {
-        return ClentNavigUtils.getDeploymentBaseURL() + resource.id().getStringView() + "/" + resource.fileName().getStringView()
+        return ClientNavigUtils.getDeploymentBaseURL() + resource.id().getStringView() + "/" + resource.fileName().getStringView()
                 + DeploymentConsts.siteImageResourceServletMapping;
     }
 
     public static String createSiteLogoUrl() {
-        return ClentNavigUtils.getDeploymentBaseURL() + "/logo.png" + DeploymentConsts.siteImageResourceServletMapping;
+        return ClientNavigUtils.getDeploymentBaseURL() + "/logo.png" + DeploymentConsts.siteImageResourceServletMapping;
     }
 
     public static String createCrmLogoUrl() {
-        return ClentNavigUtils.getDeploymentBaseURL() + "/logo-crm.png" + DeploymentConsts.siteImageResourceServletMapping;
+        return ClientNavigUtils.getDeploymentBaseURL() + "/logo-crm.png" + DeploymentConsts.siteImageResourceServletMapping;
     }
 }
