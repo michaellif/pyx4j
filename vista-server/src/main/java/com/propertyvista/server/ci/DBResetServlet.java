@@ -334,6 +334,8 @@ public class DBResetServlet extends HttpServlet {
         Pmc pmc = PmcCreatorDev.createPmc(pmcDnsName);
         Persistence.service().commit();
 
+        VistaDeployment.changePmcContext();
+
         NamespaceManager.setNamespace(pmc.namespace().getValue());
         o(out, "\n--- Preload  " + pmcDnsName + " ---\n");
         if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
