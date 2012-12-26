@@ -58,9 +58,9 @@ public class EntityFactory {
      * Create shell entity that has only class information and primary key.
      * isValueDetached() will return true for such entity.
      */
-    public static <T extends IEntity> T createIdentityStub(Class<T> entityClass, Key privareKey) {
+    public static <T extends IEntity> T createIdentityStub(Class<T> entityClass, Key primaryKey) {
         T entity = create(entityClass);
-        entity.setPrimaryKey(privareKey);
+        entity.setPrimaryKey(primaryKey);
         entity.setValueDetached();
         return entity;
     }
