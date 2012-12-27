@@ -28,7 +28,6 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
     public void create(AsyncCallback<CreditCheckSetupDTO> callback) {
         CreditCheckSetupDTO creditCheck = EntityFactory.create(CreditCheckSetupDTO.class);
         callback.onSuccess(creditCheck);
-
     }
 
     @Override

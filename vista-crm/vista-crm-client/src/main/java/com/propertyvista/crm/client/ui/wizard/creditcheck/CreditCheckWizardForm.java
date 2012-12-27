@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.wizard.creditcheck;
 
+import com.google.gwt.user.client.ui.HTML;
+
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -44,8 +46,8 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         main.setWidget(
                 ++row,
                 0,
-                inject(proto().creditReportOption(), new CRadioGroupEnum<CreditCheckSetupDTO.CreditReportOption>(CreditCheckSetupDTO.CreditReportOption.class,
-                        Layout.HORISONTAL)));
+                new DecoratorBuilder(inject(proto().creditReportOption(), new CRadioGroupEnum<CreditCheckSetupDTO.CreditReportOption>(
+                        CreditCheckSetupDTO.CreditReportOption.class, Layout.VERTICAL))).build());
         return main;
     }
 
@@ -53,10 +55,12 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = 0;
         main.setH1(row++, 0, 2, i18n.tr("Business Information"));
-        main.setWidget(++row, 0, inject(proto().companyType()));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().companyType())).build());
+        main.setWidget(++row, 0, new HTML("&nbsp;"));
         main.setWidget(++row, 0, inject(proto().businessAddress(), new AddressSimpleEditor()));
-        main.setWidget(++row, 0, inject(proto().businessNumber()));
-        main.setWidget(++row, 0, inject(proto().businessEstablishedDate()));
+        main.setWidget(++row, 0, new HTML("&nbsp;"));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().businessNumber())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().businessEstablishedDate())).build());
         return main;
     }
 
@@ -65,10 +69,12 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         int row = 0;
         main.setH1(++row, 0, 2, i18n.tr("Personal Information"));
         main.setWidget(++row, 0, inject(proto().name(), new NameEditor()));
+        main.setWidget(++row, 0, new HTML("&nbsp;"));
         main.setWidget(++row, 0, inject(proto().personalAddress(), new AddressSimpleEditor()));
-        main.setWidget(++row, 0, inject(proto().email()));
-        main.setWidget(++row, 0, inject(proto().dateOfBirth()));
-        main.setWidget(++row, 0, inject(proto().sin()));
+        main.setWidget(++row, 0, new HTML("&nbsp;"));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dateOfBirth())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sin())).build());
 
         return main;
     }

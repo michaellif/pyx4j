@@ -54,6 +54,11 @@ public interface CreditCheckSetupDTO extends IEntity {
 
         SoleProprietorship, Partnership, Corporation, Cooperative;
 
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        };
+
     }
 
     // PRICING SECTION --------------------------------------------------------
@@ -69,7 +74,7 @@ public interface CreditCheckSetupDTO extends IEntity {
     IPrimitive<CompanyType> companyType();
 
     @NotNull
-    IPrimitive<AddressSimple> businessAddress();
+    AddressSimple businessAddress();
 
     @Caption(name = "Business Number / Employer Identification")
     IPrimitive<String> businessNumber();
@@ -83,9 +88,9 @@ public interface CreditCheckSetupDTO extends IEntity {
     // PERSONAL INFORMATION SECTION -------------------------------------------
 
     @NotNull
-    IPrimitive<Name> name();
+    Name name();
 
-    IPrimitive<AddressSimple> personalAddress();
+    AddressSimple personalAddress();
 
     @NotNull
     @Editor(type = EditorType.email)
@@ -93,11 +98,12 @@ public interface CreditCheckSetupDTO extends IEntity {
 
     IPrimitive<LogicalDate> dateOfBirth();
 
+    @Caption(name = "SIN / SSN")
     IPrimitive<String> sin();
 
     // TODO add id doc upload
 
     // CONFIRMATION SECTION ---------------------------------------------------
 
-    IPrimitive<CreditCardInfo> creditCardInfo();
+    CreditCardInfo creditCardInfo();
 }
