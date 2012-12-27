@@ -27,7 +27,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.INonConclusiveVersioning;
+import com.pyx4j.entity.shared.IInconclusiveVersioning;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
@@ -38,7 +38,7 @@ import com.propertyvista.domain.financial.offering.Product.ProductV;
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, INonConclusiveVersioning {
+public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, IInconclusiveVersioning {
 
     @Owner
     @NotNull

@@ -73,6 +73,16 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         this(placeClass, false);
     }
 
+    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {
+        this(placeClass);
+        setForm(form);
+    }
+
+    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form, boolean viewOnly) {
+        this(placeClass, viewOnly);
+        setForm(form);
+    }
+
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, boolean viewOnly) {
         this.viewOnly = viewOnly;
 
@@ -112,16 +122,6 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         breadcumbsService = GWT.<BreadcrumbsService> create(BreadcrumbsService.class);
         breadcrumbsBar = new BreadcrumbsBar();
         setBreadcrumbsBar(breadcrumbsBar);
-    }
-
-    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {
-        this(placeClass);
-        setForm(form);
-    }
-
-    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form, boolean viewOnly) {
-        this(placeClass, viewOnly);
-        setForm(form);
     }
 
     public MenuItemSeparator addActionSeparator() {
