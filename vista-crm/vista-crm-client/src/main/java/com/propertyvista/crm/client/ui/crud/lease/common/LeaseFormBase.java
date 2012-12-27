@@ -139,7 +139,6 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         main.setWidget(++row, 0, datesPanel);
 
         // Move dates: ------------------------------------------------------------------------------------------------------------------------------
-        main.setBR(++row, 0, 1);
         datesPanel = new FormFlexPanel();
 
         datesRow = -1; // first column:
