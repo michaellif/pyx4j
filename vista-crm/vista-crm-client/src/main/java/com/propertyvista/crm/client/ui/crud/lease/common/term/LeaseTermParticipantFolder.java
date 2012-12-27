@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease.common.term;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -67,6 +68,15 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
     protected abstract void addParticipants(List<Customer> customers);
 
     protected abstract void addParticipant();
+
+    /**
+     * override in order to supply parent on new Item creation
+     * 
+     * @return - parent (LeaseTerm) primary Key
+     */
+    protected Key getParentKey() {
+        return null;
+    }
 
     private List<Customer> retrieveExistingCustomers() {
         List<Customer> customers = new ArrayList<Customer>(getValue().size());

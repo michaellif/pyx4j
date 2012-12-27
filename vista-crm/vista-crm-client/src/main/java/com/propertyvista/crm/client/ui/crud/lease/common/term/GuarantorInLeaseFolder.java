@@ -22,12 +22,12 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
@@ -49,17 +49,17 @@ import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.LeaseTermDTO;
 
 public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermGuarantor> {
 
     static final I18n i18n = I18n.get(GuarantorInLeaseFolder.class);
 
-    private final CEntityForm<LeaseTermDTO> leaseTerm;
+    public GuarantorInLeaseFolder() {
+        this(false);
+    }
 
-    public GuarantorInLeaseFolder(CEntityForm<LeaseTermDTO> parent, boolean modifiable) {
+    public GuarantorInLeaseFolder(boolean modifiable) {
         super(LeaseTermGuarantor.class, modifiable);
-        this.leaseTerm = parent;
     }
 
     @Override
@@ -96,11 +96,12 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
     private LeaseTermGuarantor createGuarantor() {
         LeaseTermGuarantor guarantor = EntityFactory.create(LeaseTermGuarantor.class);
 
-        guarantor.leaseTermV().setPrimaryKey(leaseTerm.getValue().version().getPrimaryKey());
+        guarantor.leaseTermV().setPrimaryKey(getParentKey());
         guarantor.leaseTermV().setValueDetached();
         guarantor.role().setValue(LeaseTermParticipant.Role.Guarantor);
         guarantor.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
 
+        assert (guarantor.leaseTermV().isNull());
         return guarantor;
     }
 
@@ -118,6 +119,15 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
             CEntityFolderItem i = (CEntityFolderItem) c;
             ((GuarantorInLeaseEditor) i.getComponents().iterator().next()).updateTenantList();
         }
+    }
+
+    /**
+     * override in order to supply current Tenants list
+     * 
+     * @return - current Tenants list
+     */
+    protected IList<LeaseTermTenant> getLeaseTermTenants() {
+        return null;
     }
 
     private class GuarantorInLeaseEditor extends CEntityDecoratableForm<LeaseTermGuarantor> {
@@ -199,7 +209,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
 
         private List<Tenant> getLeaseCustomerTenants() {
             List<Tenant> l = new ArrayList<Tenant>();
-            for (LeaseTermTenant t : leaseTerm.getValue().version().tenants()) {
+            for (LeaseTermTenant t : getLeaseTermTenants()) {
                 l.add(t.leaseParticipant());
             }
             return l;

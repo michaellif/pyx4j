@@ -19,6 +19,7 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.IList;
@@ -215,7 +216,12 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         main.setH1(++row, 0, 2, proto().version().tenants().getMeta().getCaption());
 
         TenantInLeaseFolder tf;
-        main.setWidget(++row, 0, inject(proto().version().tenants(), tf = new TenantInLeaseFolder(this, isEditable())));
+        main.setWidget(++row, 0, inject(proto().version().tenants(), tf = new TenantInLeaseFolder(isEditable()) {
+            @Override
+            protected Key getParentKey() {
+                return LeaseTermForm.this.getValue().version().getPrimaryKey();
+            }
+        }));
         tf.addValueChangeHandler(new ValueChangeHandler<IList<LeaseTermTenant>>() {
             @Override
             public void onValueChange(ValueChangeEvent<IList<LeaseTermTenant>> event) {
@@ -226,8 +232,17 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         });
 
         main.setH1(++row, 0, 2, proto().version().guarantors().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().version().guarantors(), new GuarantorInLeaseFolder(this, isEditable())));
+        main.setWidget(++row, 0, inject(proto().version().guarantors(), new GuarantorInLeaseFolder(isEditable()) {
+            @Override
+            protected Key getParentKey() {
+                return LeaseTermForm.this.getValue().version().getPrimaryKey();
+            }
 
+            @Override
+            protected IList<LeaseTermTenant> getLeaseTermTenants() {
+                return LeaseTermForm.this.getValue().version().tenants();
+            }
+        }));
         return main;
     }
 

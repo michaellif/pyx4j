@@ -30,7 +30,6 @@ import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -52,17 +51,17 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.util.ValidationUtils;
-import com.propertyvista.dto.LeaseTermDTO;
 
 public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTenant> {
 
     static final I18n i18n = I18n.get(TenantInLeaseFolder.class);
 
-    private final CEntityForm<LeaseTermDTO> leaseTerm;
+    public TenantInLeaseFolder() {
+        this(false);
+    }
 
-    public TenantInLeaseFolder(CEntityForm<LeaseTermDTO> parent, boolean modifiable) {
+    public TenantInLeaseFolder(boolean modifiable) {
         super(LeaseTermTenant.class, modifiable);
-        this.leaseTerm = parent;
     }
 
     @Override
@@ -108,7 +107,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
     LeaseTermTenant createTenant() {
         LeaseTermTenant tenant = EntityFactory.create(LeaseTermTenant.class);
 
-        tenant.leaseTermV().setPrimaryKey(leaseTerm.getValue().version().getPrimaryKey());
+        tenant.leaseTermV().setPrimaryKey(getParentKey());
         tenant.leaseTermV().setValueDetached();
         if (!isApplicantPresent()) {
             tenant.role().setValue(LeaseTermParticipant.Role.Applicant);
@@ -116,6 +115,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         }
         tenant.percentage().setValue(calcPercentage());
 
+        assert (tenant.leaseTermV().isNull());
         return tenant;
     }
 

@@ -25,6 +25,8 @@ import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
 import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceCertificateForm.TenantOwnerClickHandler;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.TenantInsuranceCertificateFolder;
+import com.propertyvista.crm.client.ui.crud.lease.common.term.GuarantorInLeaseFolder;
+import com.propertyvista.crm.client.ui.crud.lease.common.term.TenantInLeaseFolder;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -74,7 +76,6 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     }
 
-    @SuppressWarnings("deprecation")
     private FormFlexPanel createDetailsTab(String title) {
         // Lease details: ---------------------------------------------------------------------------------------------------------------------------
         FormFlexPanel detailsLeft = new FormFlexPanel();
