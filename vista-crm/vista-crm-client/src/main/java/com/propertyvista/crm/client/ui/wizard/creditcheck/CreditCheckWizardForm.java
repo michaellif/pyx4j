@@ -25,6 +25,7 @@ import com.pyx4j.widgets.client.RadioGroup.Layout;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardInfoEditor;
+import com.propertyvista.domain.pmc.info.CreditCheckPricing;
 import com.propertyvista.dto.CreditCheckSetupDTO;
 
 public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
@@ -46,8 +47,9 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         main.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().creditReportOption(), new CRadioGroupEnum<CreditCheckSetupDTO.CreditReportOption>(
-                        CreditCheckSetupDTO.CreditReportOption.class, Layout.VERTICAL))).build());
+                new DecoratorBuilder(inject(proto().creditCheckPricing().creditPricingOption(),
+                        new CRadioGroupEnum<CreditCheckPricing.CreditCheckPricingOption>(CreditCheckPricing.CreditCheckPricingOption.class, Layout.VERTICAL)))
+                        .build());
         return main;
     }
 
@@ -55,12 +57,12 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = 0;
         main.setH1(row++, 0, 2, i18n.tr("Business Information"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().companyType())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().businessInformation().companyType())).build());
         main.setWidget(++row, 0, new HTML("&nbsp;"));
-        main.setWidget(++row, 0, inject(proto().businessAddress(), new AddressSimpleEditor()));
+        main.setWidget(++row, 0, inject(proto().businessInformation().businessAddress(), new AddressSimpleEditor()));
         main.setWidget(++row, 0, new HTML("&nbsp;"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().businessNumber())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().businessEstablishedDate())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().businessInformation().businessNumber())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().businessInformation().businessEstablishedDate())).build());
         return main;
     }
 
@@ -68,13 +70,13 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = 0;
         main.setH1(++row, 0, 2, i18n.tr("Personal Information"));
-        main.setWidget(++row, 0, inject(proto().name(), new NameEditor()));
+        main.setWidget(++row, 0, inject(proto().personalInformation().name(), new NameEditor()));
         main.setWidget(++row, 0, new HTML("&nbsp;"));
-        main.setWidget(++row, 0, inject(proto().personalAddress(), new AddressSimpleEditor()));
+        main.setWidget(++row, 0, inject(proto().personalInformation().personalAddress(), new AddressSimpleEditor()));
         main.setWidget(++row, 0, new HTML("&nbsp;"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dateOfBirth())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sin())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().personalInformation().email())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().personalInformation().dateOfBirth())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().personalInformation().sin())).build());
 
         return main;
     }

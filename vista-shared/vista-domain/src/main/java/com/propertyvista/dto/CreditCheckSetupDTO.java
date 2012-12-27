@@ -13,95 +13,25 @@
  */
 package com.propertyvista.dto;
 
-import javax.xml.bind.annotation.XmlType;
-
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo;
-import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.pmc.info.CreditCheckBusinessInformation;
+import com.propertyvista.domain.pmc.info.CreditCheckPricing;
+import com.propertyvista.domain.pmc.info.PersonalInformation;
 
 @Transient
 public interface CreditCheckSetupDTO extends IEntity {
 
-    @I18n(context = "Credit Report Option")
-    @XmlType(name = "CreditReportOption")
-    public enum CreditReportOption {
-
-        ReccomendationReport,
-
-        FullCreditReport;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        };
-
-    }
-
-    @I18n(context = "Company Type")
-    @XmlType(name = "CompanyType")
-    public enum CompanyType {
-
-        SoleProprietorship, Partnership, Corporation, Cooperative;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        };
-
-    }
-
-    // PRICING SECTION --------------------------------------------------------
-
-    @NotNull
-    IPrimitive<CreditReportOption> creditReportOption();
+    CreditCheckPricing creditCheckPricing();
 
     // BUSINESS INFORMATION SECTION--------------------------------------------
 
-    // TODO not sure that this is actually what was the poet's intention in the specs...
-    // TODO also I'm suspecting that the set acceptable values can change based on the country
-    @NotNull
-    IPrimitive<CompanyType> companyType();
-
-    @NotNull
-    AddressSimple businessAddress();
-
-    @Caption(name = "Business Number / Employer Identification")
-    IPrimitive<String> businessNumber();
-
-    IPrimitive<LogicalDate> businessEstablishedDate();
-
-    // TODO add buisness proof license upload
-
-    // TODO add Articles of Incorporation upload
+    CreditCheckBusinessInformation businessInformation();
 
     // PERSONAL INFORMATION SECTION -------------------------------------------
-
-    @NotNull
-    Name name();
-
-    AddressSimple personalAddress();
-
-    @NotNull
-    @Editor(type = EditorType.email)
-    IPrimitive<String> email();
-
-    IPrimitive<LogicalDate> dateOfBirth();
-
-    @Caption(name = "SIN / SSN")
-    IPrimitive<String> sin();
-
-    // TODO add id doc upload
+    PersonalInformation personalInformation();
 
     // CONFIRMATION SECTION ---------------------------------------------------
 
