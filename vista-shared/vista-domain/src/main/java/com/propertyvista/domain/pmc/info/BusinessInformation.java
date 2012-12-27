@@ -26,7 +26,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.contact.AddressSimple;
 
-public interface CreditCheckBusinessInformation extends IEntity {
+public interface BusinessInformation extends IEntity {
 
     @I18n(context = "Company Type")
     @XmlType(name = "CompanyType")
@@ -54,6 +54,7 @@ public interface CreditCheckBusinessInformation extends IEntity {
     IPrimitive<String> businessNumber();
 
     IPrimitive<LogicalDate> businessEstablishedDate();
+    
 
     // TODO add buisness proof license upload
 

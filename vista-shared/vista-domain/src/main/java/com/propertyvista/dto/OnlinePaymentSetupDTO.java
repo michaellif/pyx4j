@@ -15,31 +15,19 @@ package com.propertyvista.dto;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.AccountType;
+import com.propertyvista.domain.pmc.info.BusinessInformation;
+import com.propertyvista.domain.pmc.info.PersonalInformation;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
 public interface OnlinePaymentSetupDTO extends IEntity {
-
-    @I18n
-    enum CompanyType {
-        blabla, blablabla;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
 
     // Pricing:
 
@@ -49,17 +37,10 @@ public interface OnlinePaymentSetupDTO extends IEntity {
     IPrimitive<String> legal();
 
     // Business Info:
-    IPrimitive<CompanyType> companyType();
-
-    IPrimitive<String> companyName();
-
-    AddressSimple companyAddress();
-
-    IPrimitive<String> businessNumber();
-
-    IPrimitive<LogicalDate> establishingDate();
+    BusinessInformation businessInformation();
 
     // Personal Info:
+    PersonalInformation personalInformation();
 
     // Banking Info:
     interface PropertyAccountInfo extends IEntity {

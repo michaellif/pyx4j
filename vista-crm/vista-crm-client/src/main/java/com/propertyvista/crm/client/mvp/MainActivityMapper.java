@@ -199,6 +199,7 @@ import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsu
 import com.propertyvista.crm.client.activity.reports.CrmReportsActivity;
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckWizardActivity;
+import com.propertyvista.crm.client.activity.wizard.onlinepayment.OnlinePaymentWizardActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Content;
@@ -1100,6 +1101,8 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new CrmReportsActivity((CrmSiteMap.Reports) place);
                 } else if (place instanceof Administration.Settings.CreditCheckSetup) {
                     activity = new CreditCheckWizardActivity((Administration.Settings.CreditCheckSetup) place);
+                } else if (place instanceof Administration.Settings.OnlinePaymentSetup) {
+                    activity = new OnlinePaymentWizardActivity((Administration.Settings.OnlinePaymentSetup) place);
                 } else if (place instanceof CrmSiteMap.PasswordChange) {
                     activity = new PasswordChangeActivity(place);
 

@@ -17,7 +17,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.payment.CreditCardInfo;
-import com.propertyvista.domain.pmc.info.CreditCheckBusinessInformation;
+import com.propertyvista.domain.pmc.info.BusinessInformation;
 import com.propertyvista.domain.pmc.info.CreditCheckPricing;
 import com.propertyvista.domain.pmc.info.PersonalInformation;
 
@@ -28,7 +28,7 @@ public interface CreditCheckSetupDTO extends IEntity {
 
     // BUSINESS INFORMATION SECTION--------------------------------------------
 
-    CreditCheckBusinessInformation businessInformation();
+    BusinessInformation businessInformation();
 
     // PERSONAL INFORMATION SECTION -------------------------------------------
     PersonalInformation personalInformation();

@@ -18,6 +18,8 @@ import com.pyx4j.site.client.ui.IView;
 
 import com.propertyvista.crm.client.ui.wizard.creditcheck.CreditCheckWizardView;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.CreditCheckWizardViewImpl;
+import com.propertyvista.crm.client.ui.wizard.onlinepayment.OnlinePaymentWizardView;
+import com.propertyvista.crm.client.ui.wizard.onlinepayment.OnlinePaymentWizardViewImpl;
 
 public class WizardViewFactory extends ViewFactoryBase {
 
@@ -25,6 +27,8 @@ public class WizardViewFactory extends ViewFactoryBase {
         if (!map.containsKey(type)) {
             if (CreditCheckWizardView.class.equals(type)) {
                 map.put(type, new CreditCheckWizardViewImpl());
+            } else if (OnlinePaymentWizardView.class.equals(type)) {
+                map.put(type, new OnlinePaymentWizardViewImpl());
             }
         }
         @SuppressWarnings("unchecked")
