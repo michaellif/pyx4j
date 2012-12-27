@@ -31,5 +31,6 @@ public interface LeaseViewerViewBase<DTO extends LeaseDTO> extends IViewerView<D
 
         void viewTerm(LeaseTerm leaseTermId);
 
+        void editTerm(LeaseTerm leaseTermId);
     }
 }

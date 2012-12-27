@@ -26,6 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.YesNoOption;
@@ -45,6 +46,8 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<LeaseApplicationDTO> implements LeaseApplicationViewerView {
 
     private static final I18n i18n = I18n.get(LeaseApplicationViewerViewImpl.class);
+
+    private final Button editButton;
 
     private final MenuItem viewLease;
 
@@ -78,8 +81,16 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         //set main form here:
         setForm(new LeaseApplicationForm(this));
 
-        // Actions:
+        // Buttons:
+        editButton = new Button(i18n.tr("Edit"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerViewBase.Presenter) getPresenter()).editTerm(getForm().getValue().currentTerm());
+            }
+        });
+        addHeaderToolbarItem(editButton.asWidget());
 
+        // Actions:
         viewLease = new MenuItem(i18n.tr("View Lease"), new Command() {
             @Override
             public void execute() {
@@ -255,6 +266,10 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(moreInfoAction, status.isDraft() && status != Status.Created);
         setActionVisible(declineAction, status.isDraft());
         setActionVisible(cancelAction, status != Status.Cancelled);
+
+        // edit/view terms enabling logic:
+        editButton.setVisible(status.isDraft());
+        termsButton.setVisible(!status.isDraft());
     }
 
     private abstract class ActionBox extends ReasonBox {

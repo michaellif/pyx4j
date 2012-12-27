@@ -31,15 +31,17 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     private static final I18n i18n = I18n.get(LeaseViewerViewImpl.class);
 
+    protected final Button termsButton;
+
     protected final MenuItem viewFutureTerm;
 
     public LeaseViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         super(placeClass, true);
 
-        Button viewsButton = new Button(i18n.tr("View Term"));
-        Button.ButtonMenuBar viewsMenu = viewsButton.createMenu();
-        viewsButton.setMenu(viewsMenu);
-        addHeaderToolbarItem(viewsButton.asWidget());
+        termsButton = new Button(i18n.tr("View Term"));
+        Button.ButtonMenuBar viewsMenu = termsButton.createMenu();
+        termsButton.setMenu(viewsMenu);
+        addHeaderToolbarItem(termsButton.asWidget());
 
         MenuItem viewCurrentTerm = new MenuItem(i18n.tr("Current"), new Command() {
             @Override
