@@ -30,6 +30,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.ob.client.views.OnboardingViewFactory;
 import com.propertyvista.ob.client.views.PmcAccountCreationRequestView;
 import com.propertyvista.ob.rpc.OnboardingSiteMap;
+import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 import com.propertyvista.ob.rpc.services.OnboardingAuthenticationService;
 import com.propertyvista.ob.rpc.services.OnboardingPublicActivationService;
@@ -98,13 +99,15 @@ public class PmcAccountCreationRequestActivity extends AbstractActivity implemen
         pmcRegistrationService.createAccount(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String deferredCorellationId) {
-                goToProgressPlace(deferredCorellationId);
+                OnboardingUserVisit visit = (OnboardingUserVisit) ClientContext.getUserVisit();
+                visit.accountCreationDeferredCorrelationId = deferredCorellationId;
+                goToProgressPlace();
             }
         }, view.getPmcAccountCreationRequest());
     }
 
-    private void goToProgressPlace(String deferredCorellationId) {
-        AppSite.getPlaceController().goTo(new OnboardingSiteMap.PmcAccountCreationProgress().placeArg("id", deferredCorellationId));
+    private void goToProgressPlace() {
+        AppSite.getPlaceController().goTo(new OnboardingSiteMap.PmcAccountCreationProgress());
     }
 
 }

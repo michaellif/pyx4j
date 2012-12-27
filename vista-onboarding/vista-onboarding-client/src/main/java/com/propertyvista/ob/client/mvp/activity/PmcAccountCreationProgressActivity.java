@@ -30,6 +30,7 @@ import com.pyx4j.essentials.rpc.deferred.DeferredProcessService;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.ob.client.forms.StepStatusIndicator;
@@ -37,6 +38,7 @@ import com.propertyvista.ob.client.forms.StepStatusIndicator.StepStatus;
 import com.propertyvista.ob.client.views.OnboardingViewFactory;
 import com.propertyvista.ob.client.views.PmcAccountCreationProgressView;
 import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;
+import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;
 
 public class PmcAccountCreationProgressActivity extends AbstractActivity implements PmcAccountCreationProgressView.Presenter {
@@ -57,7 +59,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
             i18n.tr("Complete")
     );//@formatter:on
 
-    private final String defferedCorrelationId;
+    private String defferedCorrelationId;
 
     private final PmcAccountCreationProgressView view;
 
@@ -79,10 +81,6 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
 
     public PmcAccountCreationProgressActivity(AppPlace place) {
         this.view = OnboardingViewFactory.instance(PmcAccountCreationProgressView.class);
-        this.defferedCorrelationId = place.getFirstArg("id");
-        if (this.defferedCorrelationId == null) {
-            throw new Error("no id progress id");
-        }
         this.deferredProcessStatusService = GWT.<DeferredProcessService> create(DeferredProcessService.class);
         this.pmcRegService = GWT.<PmcRegistrationService> create(PmcRegistrationService.class);
         this.currentStep = PROGRESS_STEPS.get(0);
@@ -97,6 +95,9 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
 
     @Override
     public void populate() {
+        OnboardingUserVisit visit = (OnboardingUserVisit) ClientContext.getUserVisit();
+        defferedCorrelationId = visit.accountCreationDeferredCorrelationId;
+
         view.init(PROGRESS_STEPS);
 
         final AsyncCallback<DeferredProcessProgressResponse> callback = new DefaultAsyncCallback<DeferredProcessProgressResponse>() {
