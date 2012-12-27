@@ -88,7 +88,8 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         dnsNamePanel.addStyleName(Styles.PmcUrlFieldNote.name());
         SimplePanel dnsSubdomainNameHolder = new SimplePanel();
         dnsSubdomainNameHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-        dnsSubdomainNameHolder.setWidget(new DecoratorBuilder(inject(proto().dnsName()), 10).customLabel("").labelWidth(0).useLabelSemicolon(false).build());
+        dnsSubdomainNameHolder.setWidget(new DecoratorBuilder(inject(proto().dnsName()), 10).customLabel("").labelWidth(0).useLabelSemicolon(false)
+                .mandatoryMarker(false).build());
 
         Label dnsDomainName = new Label(".propertyvista.com");
         dnsDomainName.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -130,20 +131,25 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
             }
         });
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).customLabel("").labelWidth(0).useLabelSemicolon(false).customLabel("")
-                .labelWidth(0).useLabelSemicolon(false).build());
+        contentPanel.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().name())).customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).customLabel("")
+                        .labelWidth(0).build());
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().countryOfOperation())).customLabel("").labelWidth(0).useLabelSemicolon(false)
-                .build());
+                .mandatoryMarker(false).build());
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().firstName())).customLabel("").labelWidth(0).useLabelSemicolon(false).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lastName())).customLabel("").labelWidth(0).useLabelSemicolon(false).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().firstName())).customLabel("").labelWidth(0).useLabelSemicolon(false)
+                .mandatoryMarker(false).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lastName())).customLabel("").labelWidth(0).useLabelSemicolon(false)
+                .mandatoryMarker(false).build());
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email())).customLabel("").labelWidth(0).useLabelSemicolon(false).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmEmail())).customLabel("").labelWidth(0).useLabelSemicolon(false).build());
+        contentPanel.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().email())).customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmEmail())).customLabel("").labelWidth(0).useLabelSemicolon(false)
+                .mandatoryMarker(false).build());
         get(proto().confirmEmail()).addValueValidator(new EditableValueValidator<String>() {
             @Override
             public ValidationError isValid(CComponent<String, ?> component, String emailConfirmationValue) {
@@ -157,9 +163,10 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         });
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password())).customLabel("").labelWidth(0).useLabelSemicolon(false).build());
-        contentPanel
-                .setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmPassword())).customLabel("").labelWidth(0).useLabelSemicolon(false).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password())).customLabel("").labelWidth(0).useLabelSemicolon(false)
+                .mandatoryMarker(false).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmPassword())).customLabel("").labelWidth(0).useLabelSemicolon(false)
+                .mandatoryMarker(false).build());
         get(proto().confirmPassword()).addValueValidator(new EditableValueValidator<String>() {
             @Override
             public ValidationError isValid(CComponent<String, ?> component, String passwordConfirmationValue) {
