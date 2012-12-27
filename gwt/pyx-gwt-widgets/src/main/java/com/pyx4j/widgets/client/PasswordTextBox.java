@@ -20,10 +20,48 @@
  */
 package com.pyx4j.widgets.client;
 
-public class PasswordTextBox extends com.google.gwt.user.client.ui.PasswordTextBox implements ITextWidget {
+public class PasswordTextBox extends com.google.gwt.user.client.ui.PasswordTextBox implements ITextWidget, WatermarkComponent {
+
+    private TextWatermark watermark;
 
     public PasswordTextBox() {
         setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
+    }
+
+    @Override
+    public void setWatermark(String text) {
+        if (watermark == null) {
+            watermark = new TextWatermark(this) {
+
+                @Override
+                String getText() {
+                    return PasswordTextBox.super.getText();
+                }
+
+                @Override
+                void setText(String text) {
+                    PasswordTextBox.super.setText(text);
+                }
+            };
+        }
+        watermark.setWatermark(text);
+    }
+
+    @Override
+    public void setText(String text) {
+        super.setText(text);
+        if (watermark != null) {
+            watermark.show();
+        }
+    }
+
+    @Override
+    public String getText() {
+        if (watermark != null && watermark.isShown()) {
+            return null;
+        } else {
+            return super.getText();
+        }
     }
 
     @Override

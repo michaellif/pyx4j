@@ -87,7 +87,7 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         this(new Builder(component));
     }
 
-    protected WidgetDecorator(Builder builder) {
+    protected WidgetDecorator(final Builder builder) {
 
         setStyleName(WidgetDecorator.name());
 
@@ -128,8 +128,10 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
         mandatoryImageHolder = new SpaceHolder();
         mandatoryImageHolder.setStyleName(WidgetDecoratorMandatoryImage.name());
-        renderMandatoryStar();
 
+        if (builder.mandatoryMarker) {
+            renderMandatoryStar();
+        }
         label.setVisible(component.isVisible());
         setVisible(component.isVisible());
 
@@ -148,7 +150,9 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
                 } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.showErrorsUnconditional, PropertyName.repopulated,
                         PropertyName.enabled, PropertyName.editable)) {
                     renderValidationMessage();
-                    renderMandatoryStar();
+                    if (builder.mandatoryMarker) {
+                        renderMandatoryStar();
+                    }
                 }
             }
         });
@@ -206,19 +210,21 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
     }
 
     protected void renderMandatoryStar() {
-        if (!((CComponent<?, ?>) component).isMandatoryConditionMet()) {
-            if (mandatoryImage == null) {
-                mandatoryImage = new Image();
-                mandatoryImage.setResource(ImageFactory.getImages().mandatory());
-                mandatoryImage.setTitle("This field is mandatory");
+        if (mandatoryImageHolder != null) {
+            if (!((CComponent<?, ?>) component).isMandatoryConditionMet()) {
+                if (mandatoryImage == null) {
+                    mandatoryImage = new Image();
+                    mandatoryImage.setResource(ImageFactory.getImages().mandatory());
+                    mandatoryImage.setTitle("This field is mandatory");
 
-                if (component.getDebugId() != null) {
-                    mandatoryImage.ensureDebugId(new CompositeDebugId(component.getDebugId(), DebugIds.MandatoryImage).debugId());
+                    if (component.getDebugId() != null) {
+                        mandatoryImage.ensureDebugId(new CompositeDebugId(component.getDebugId(), DebugIds.MandatoryImage).debugId());
+                    }
                 }
+                mandatoryImageHolder.setWidget(mandatoryImage);
+            } else {
+                mandatoryImageHolder.clear();
             }
-            mandatoryImageHolder.setWidget(mandatoryImage);
-        } else {
-            mandatoryImageHolder.clear();
         }
     }
 
@@ -283,6 +289,8 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
         private boolean readOnlyMode = false;
 
+        private boolean mandatoryMarker = true;
+
         private Alignment labelAlignment = Alignment.right;
 
         private Alignment componentAlignment = Alignment.left;
@@ -321,6 +329,11 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
         public Builder readOnlyMode(boolean readOnlyMode) {
             this.readOnlyMode = readOnlyMode;
+            return this;
+        }
+
+        public Builder mandatoryMarker(boolean visible) {
+            this.mandatoryMarker = visible;
             return this;
         }
 
