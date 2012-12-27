@@ -57,12 +57,11 @@ public class PmcAccountCreationCompleteViewImpl extends Composite implements Pmc
 
         public void setCrmSiteUrl(OnboardingCrmURL crmSiteUrl) {
             completionCongratulationsMessage.setVisible(crmSiteUrl != null);
-            completionCongratulationsMessage.setText(crmSiteUrl != null ? i18n.tr("Congratulations! Your CRM website is ready at {0}", crmSiteUrl.urlVisible)
-                    : "&nbsp;");
+            completionCongratulationsMessage.setText(crmSiteUrl != null ? i18n.tr("Congratulations! Your CRM website is ready at: ") : "&nbsp;");
             redirectToCrmSite.setVisible(crmSiteUrl != null);
+            redirectToCrmSite.setText(crmSiteUrl != null ? crmSiteUrl.urlVisible : "");
             redirectToCrmSite.setHref(crmSiteUrl != null ? crmSiteUrl.urlWithToken : "");
         }
-
     }
 
     private static final I18n i18n = I18n.get(PmcAccountCreationCompleteViewImpl.class);
@@ -73,7 +72,7 @@ public class PmcAccountCreationCompleteViewImpl extends Composite implements Pmc
         this.completionPanel = new PmcSiteRedirectPanel();
         this.completionPanel.getElement().getStyle().setProperty("marginLeft", "auto");
         this.completionPanel.getElement().getStyle().setProperty("marginRight", "auto");
-        this.completionPanel.getElement().getStyle().setProperty("width", "300px");
+        this.completionPanel.getElement().getStyle().setProperty("width", "700px");
 
         FlowPanel panel = new FlowPanel();
         panel.addStyleName(OnboardingStyles.VistaObView.name());

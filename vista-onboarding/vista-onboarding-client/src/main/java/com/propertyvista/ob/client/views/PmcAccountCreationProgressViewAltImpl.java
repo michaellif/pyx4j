@@ -104,7 +104,7 @@ public class PmcAccountCreationProgressViewAltImpl extends Composite implements 
 
                 // draw connecting sticks
                 for (int step = 1; step <= numOfSteps - 1; ++step) {
-                    context.setFillStyle(step <= completeStep ? completeColor : incompleteColor);
+                    context.setFillStyle(step < completeStep ? completeColor : incompleteColor);
                     context.beginPath();
                     context.rect(startX + step * radius + (step - 1) * (space + radius), height / 2 - connectorHalfHeight, radius * 2, 2 * connectorHalfHeight);
                     context.closePath();
