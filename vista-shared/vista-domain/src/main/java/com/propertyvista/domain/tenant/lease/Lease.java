@@ -20,7 +20,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -211,7 +210,6 @@ public interface Lease extends IEntity {
 
     @NotNull
     @ToString(index = 2)
-    @Caption(name = "Selected Unit")
     AptUnit unit();
 
     /**
@@ -249,7 +247,6 @@ public interface Lease extends IEntity {
     @ToString(index = 3)
     IPrimitive<Status> status();
 
-    @Caption(name = "Completion Reason")
     IPrimitive<CompletionType> completion();
 
     @ReadOnly
