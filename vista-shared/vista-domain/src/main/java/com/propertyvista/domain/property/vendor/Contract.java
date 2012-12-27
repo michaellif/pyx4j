@@ -25,8 +25,6 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.media.Document;
-
 public interface Contract extends IEntity {
 
     @ToString(index = 1)
@@ -49,5 +47,4 @@ public interface Contract extends IEntity {
     @MemberColumn(name = "contractEnd")
     IPrimitive<LogicalDate> end();
 
-    Document document();
 }
