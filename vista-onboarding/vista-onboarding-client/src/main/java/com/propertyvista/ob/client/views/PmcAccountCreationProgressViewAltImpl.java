@@ -33,6 +33,7 @@ import com.propertyvista.ob.client.forms.StepStatusIndicator.StepStatus;
 import com.propertyvista.ob.client.themes.OnboardingStyles;
 import com.propertyvista.ob.client.themes.OnboardingTheme;
 import com.propertyvista.ob.client.views.PmcAccountCreationCompleteViewImpl.PmcSiteRedirectPanel;
+import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;
 
 public class PmcAccountCreationProgressViewAltImpl extends Composite implements PmcAccountCreationProgressView {
 
@@ -198,7 +199,7 @@ public class PmcAccountCreationProgressViewAltImpl extends Composite implements 
     }
 
     @Override
-    public void setCrmSiteUrl(String url) {
+    public void setCrmSiteUrl(OnboardingCrmURL url) {
         pleaseWait.setHTML("&nbsp;");
         pmcCreatedPanel.setCrmSiteUrl(url);
     }

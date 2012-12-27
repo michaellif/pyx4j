@@ -25,6 +25,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.ob.client.themes.OnboardingStyles;
+import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;
 
 public class PmcAccountCreationCompleteViewImpl extends Composite implements PmcAccountCreationCompleteView {
 
@@ -54,10 +55,10 @@ public class PmcAccountCreationCompleteViewImpl extends Composite implements Pmc
             initWidget(panel);
         }
 
-        public void setCrmSiteUrl(String crmSiteUrl) {
+        public void setCrmSiteUrl(OnboardingCrmURL crmSiteUrl) {
             completionCongratulationsMessage.setVisible(crmSiteUrl != null);
             redirectToCrmSite.setVisible(crmSiteUrl != null);
-            redirectToCrmSite.setHref(crmSiteUrl != null ? crmSiteUrl : "");
+            redirectToCrmSite.setHref(crmSiteUrl != null ? crmSiteUrl.urlWithToken : "");
         }
 
     }
@@ -79,7 +80,7 @@ public class PmcAccountCreationCompleteViewImpl extends Composite implements Pmc
     }
 
     @Override
-    public void setCrmSiteUrl(String crimeSiteUrl) {
+    public void setCrmSiteUrl(OnboardingCrmURL crimeSiteUrl) {
         this.completionPanel.setCrmSiteUrl(crimeSiteUrl);
     }
 

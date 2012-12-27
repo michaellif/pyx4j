@@ -23,6 +23,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.ob.client.views.OnboardingViewFactory;
 import com.propertyvista.ob.client.views.PmcAccountCreationCompleteView;
+import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;
 
 public class PmcAccountCreationCompleteActivity extends AbstractActivity implements PmcAccountCreationCompleteView.Presenter {
@@ -39,15 +40,15 @@ public class PmcAccountCreationCompleteActivity extends AbstractActivity impleme
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        view.setCrmSiteUrl("");
+        view.setCrmSiteUrl(null);
         populate();
     }
 
     @Override
     public void populate() {
-        service.obtainCrmURL(new DefaultAsyncCallback<String>() {
+        service.obtainCrmURL(new DefaultAsyncCallback<OnboardingCrmURL>() {
             @Override
-            public void onSuccess(String result) {
+            public void onSuccess(OnboardingCrmURL result) {
                 view.setCrmSiteUrl(result);
             }
         });

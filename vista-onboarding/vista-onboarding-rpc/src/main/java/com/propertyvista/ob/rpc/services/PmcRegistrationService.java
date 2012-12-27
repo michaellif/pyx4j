@@ -17,13 +17,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
+import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
-
 
 public interface PmcRegistrationService extends IService {
 
     //Returns deferredCorrelationId
     public void createAccount(AsyncCallback<String> callback, PmcAccountCreationRequest request);
 
-    public void obtainCrmURL(AsyncCallback<String> callback);
+    public void obtainCrmURL(AsyncCallback<OnboardingCrmURL> callback);
 }

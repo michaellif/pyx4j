@@ -18,6 +18,7 @@ import java.util.List;
 import com.pyx4j.site.client.ui.IView;
 
 import com.propertyvista.ob.client.forms.StepStatusIndicator.StepStatus;
+import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;
 
 public interface PmcAccountCreationProgressView extends IView {
 
@@ -29,6 +30,6 @@ public interface PmcAccountCreationProgressView extends IView {
 
     void setStepStatus(String stepName, StepStatus status);
 
-    void setCrmSiteUrl(String url);
+    void setCrmSiteUrl(OnboardingCrmURL url);
 
 }

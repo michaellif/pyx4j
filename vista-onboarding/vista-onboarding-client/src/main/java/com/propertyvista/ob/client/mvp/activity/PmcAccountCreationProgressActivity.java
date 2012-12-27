@@ -36,6 +36,7 @@ import com.propertyvista.ob.client.forms.StepStatusIndicator;
 import com.propertyvista.ob.client.forms.StepStatusIndicator.StepStatus;
 import com.propertyvista.ob.client.views.OnboardingViewFactory;
 import com.propertyvista.ob.client.views.PmcAccountCreationProgressView;
+import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;
 
 public class PmcAccountCreationProgressActivity extends AbstractActivity implements PmcAccountCreationProgressView.Presenter {
@@ -174,9 +175,9 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
         if (!this.defferedCorrelationId.equals(SIM_ID)) {
             deferredProcessStatusService.getStatus(null, PmcAccountCreationProgressActivity.this.defferedCorrelationId, true);
         }
-        pmcRegService.obtainCrmURL(new DefaultAsyncCallback<String>() {
+        pmcRegService.obtainCrmURL(new DefaultAsyncCallback<OnboardingCrmURL>() {
             @Override
-            public void onSuccess(String url) {
+            public void onSuccess(OnboardingCrmURL url) {
                 view.setCrmSiteUrl(url);
             }
         });

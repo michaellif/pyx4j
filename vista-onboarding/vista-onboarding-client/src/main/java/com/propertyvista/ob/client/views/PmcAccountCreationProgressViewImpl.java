@@ -27,6 +27,7 @@ import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.propertyvista.ob.client.forms.StepStatusIndicator;
 import com.propertyvista.ob.client.forms.StepStatusIndicator.StepStatus;
 import com.propertyvista.ob.client.views.PmcAccountCreationCompleteViewImpl.PmcSiteRedirectPanel;
+import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;
 
 public class PmcAccountCreationProgressViewImpl extends Composite implements PmcAccountCreationProgressView {
 
@@ -80,7 +81,7 @@ public class PmcAccountCreationProgressViewImpl extends Composite implements Pmc
     }
 
     @Override
-    public void setCrmSiteUrl(String url) {
+    public void setCrmSiteUrl(OnboardingCrmURL url) {
         pmcCreatedPanel.setCrmSiteUrl(url);
     }
 

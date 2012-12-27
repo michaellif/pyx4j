@@ -43,6 +43,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.ob.rpc.dto.OnboardingApplicationStatus;
+import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;
 import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;
@@ -114,10 +115,12 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
     }
 
     @Override
-    public void obtainCrmURL(AsyncCallback<String> callback) {
+    public void obtainCrmURL(AsyncCallback<OnboardingCrmURL> callback) {
         final OnboardingUserVisit visit = Context.getUserVisit(OnboardingUserVisit.class);
 
-        String vistaCrmBaseUrl = TaskRunner.runInAdminNamespace(new Callable<String>() {
+        OnboardingCrmURL onboardingCrmURL = new OnboardingCrmURL();
+
+        onboardingCrmURL.urlVisible = TaskRunner.runInAdminNamespace(new Callable<String>() {
 
             @Override
             public String call() throws Exception {
@@ -152,10 +155,12 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
         });
 
         if (token != null) {
-            vistaCrmBaseUrl = getCrmAccessUrl(vistaCrmBaseUrl, token);
+            onboardingCrmURL.urlWithToken = getCrmAccessUrl(onboardingCrmURL.urlVisible, token);
+        } else {
+            onboardingCrmURL.urlWithToken = onboardingCrmURL.urlVisible;
         }
 
-        callback.onSuccess(vistaCrmBaseUrl);
+        callback.onSuccess(onboardingCrmURL);
     }
 
     private static String getCrmAccessUrl(String vistaCrmBaseUrl, String token) {

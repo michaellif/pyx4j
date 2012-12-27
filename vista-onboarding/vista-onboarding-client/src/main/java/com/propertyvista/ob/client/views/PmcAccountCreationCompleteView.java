@@ -15,12 +15,14 @@ package com.propertyvista.ob.client.views;
 
 import com.pyx4j.site.client.ui.IView;
 
+import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;
+
 public interface PmcAccountCreationCompleteView extends IView {
 
     interface Presenter extends IView.Presenter {
 
     }
 
-    void setCrmSiteUrl(String crimeSiteUrl);
+    void setCrmSiteUrl(OnboardingCrmURL crimeSiteUrl);
 
 }
