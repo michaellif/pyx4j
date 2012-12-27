@@ -57,6 +57,8 @@ public class PmcAccountCreationCompleteViewImpl extends Composite implements Pmc
 
         public void setCrmSiteUrl(OnboardingCrmURL crmSiteUrl) {
             completionCongratulationsMessage.setVisible(crmSiteUrl != null);
+            completionCongratulationsMessage.setText(crmSiteUrl != null ? i18n.tr("Congratulations! Your CRM website is ready at {0}", crmSiteUrl.urlVisible)
+                    : "&nbsp;");
             redirectToCrmSite.setVisible(crmSiteUrl != null);
             redirectToCrmSite.setHref(crmSiteUrl != null ? crmSiteUrl.urlWithToken : "");
         }
