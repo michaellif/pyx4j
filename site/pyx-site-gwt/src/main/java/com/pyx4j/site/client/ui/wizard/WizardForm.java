@@ -20,45 +20,51 @@
  */
 package com.pyx4j.site.client.ui.wizard;
 
-import com.google.gwt.dom.client.Style.Unit;
+import java.util.List;
+
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.tabpanel.Tab;
-import com.pyx4j.widgets.client.tabpanel.TabPanel;
+import com.pyx4j.widgets.client.tabpanel.WizardPanel;
 
 public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
 
     private static final I18n i18n = I18n.get(WizardForm.class);
 
-    private final TabPanel tabPanel = new TabPanel(StyleManger.getTheme().getTabHeight(), Unit.EM);
+    private final WizardPanel wizardPanel;
 
     private final IWizardView<? extends IEntity> view;
 
-    public WizardForm(Class<E> rootClass, IWizardView<? extends IEntity> view) {
+    public WizardForm(Class<E> rootClass, final IWizardView<? extends IEntity> view) {
         super(rootClass);
         this.view = view;
+        wizardPanel = new WizardPanel();
+        wizardPanel.addSelectionHandler(new SelectionHandler<Tab>() {
+
+            @Override
+            public void onSelection(SelectionEvent<Tab> event) {
+                view.onStepChange();
+            }
+        });
     }
 
     @Override
     public IsWidget createContent() {
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
+        wizardPanel.setSize("100%", "100%");
+        return wizardPanel;
     }
 
     public Tab addStep(final FormFlexPanel panel) {
@@ -83,69 +89,37 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
         Tab tab = null;
         ScrollPanel scroll = new ScrollPanel(content);
         tab = new Tab(scroll, tabTitle, null, false);
-        tabPanel.addTab(tab);
+        wizardPanel.addTab(tab);
         return tab;
     }
 
     @Override
     public void onReset() {
-        if (tabPanel.getTabs().size() > 0) {
-            tabPanel.selectTab(0);
+        if (wizardPanel.getTabs().size() > 0) {
+            wizardPanel.selectTab(0);
         }
+
+        List<Tab> tabs = wizardPanel.getTabs();
+        for (int i = 1; i < tabs.size(); i++) {
+            tabs.get(i).setTabEnabled(false);
+        }
+
         super.onReset();
     }
 
-    public String toStringForPrint() {
-        //Traverse tabs of TabPanel
-        //for enabled - create Caption + body
-        //Expand all collapsed containers and folder items
-        //add html+body tags
-        VerticalPanel printWidget = new VerticalPanel();
-        printWidget.setWidth("100%");
-        for (final Tab tab : tabPanel.getTabs()) {
-            if (!tab.isTabEnabled()) {
-                continue;
-            }
-            tab.setTabVisible(true);
-            printWidget.add(new Label(tab.getTabTitle()));
-            printWidget.add(tab.getWidget(0));
-        }
-        StringBuilder html = new StringBuilder();
-        //generate styles
-        html.append("<style>" + StyleManger.getThemeString() + "</style>");
-        html.append("<body>" + printWidget.toString() + "</body>");
-        return html.toString();
-    }
-
-    // decoration stuff:
-    protected class DecoratorBuilder extends WidgetDecorator.Builder {
-
-        public DecoratorBuilder(CComponent<?, ?> component) {
-            super(component);
-            readOnlyMode(!isEditable());
-        }
-
-        public DecoratorBuilder(CComponent<?, ?> component, double componentWidth) {
-            super(component);
-            readOnlyMode(!isEditable());
-            componentWidth(componentWidth);
-        }
-
-        public DecoratorBuilder(CComponent<?, ?> component, double componentWidth, double labelWidth) {
-            super(component);
-            readOnlyMode(!isEditable());
-            componentWidth(componentWidth);
-            labelWidth(labelWidth);
-        }
-
-    }
-
     public void previous() {
-        // TODO Auto-generated method stub
-
+        int index = wizardPanel.getSelectedIndex();
+        if (index > 0) {
+            wizardPanel.selectTab(index - 1);
+        }
     }
 
     public void next() {
+        int index = wizardPanel.getSelectedIndex();
+        if (index < wizardPanel.size() - 1) {
+            wizardPanel.setTabEnabled(index + 1, true);
+            wizardPanel.selectTab(index + 1);
+        }
 
     }
 
@@ -159,8 +133,12 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
 
     }
 
+    public boolean isFirst() {
+        return wizardPanel.getSelectedIndex() == 0;
+    }
+
     public boolean isLast() {
-        return tabPanel.getSelectedIndex() == tabPanel.size() - 1;
+        return wizardPanel.getSelectedIndex() == wizardPanel.size() - 1;
     }
 
 }

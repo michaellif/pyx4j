@@ -20,9 +20,10 @@
  */
 package com.pyx4j.widgets.client.tabpanel;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +38,6 @@ import com.google.gwt.event.logical.shared.HasCloseHandlers;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.DeckLayoutPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -49,6 +48,7 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseEvent;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseHandler;
 import com.pyx4j.widgets.client.event.shared.HasBeforeCloseHandlers;
@@ -64,11 +64,11 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
 
     private final HashMap<TabBarItem, Tab> tabs = new HashMap<TabBarItem, Tab>();
 
-    private EventBus eventBus;
-
     private Tab selectedTab;
 
-    public TabPanel(double barHeight, Unit barUnit) {
+    public TabPanel() {
+        double barHeight = StyleManger.getTheme().getTabHeight();
+        Unit barUnit = Unit.EM;
 
         LayoutPanel panel = new LayoutPanel();
         initWidget(panel);
@@ -153,6 +153,10 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
         }
     }
 
+    public void setTabEnabled(int index, boolean enabled) {
+        setTabEnabled(tabs.get(tabBar.getTabBarItem(index)), enabled);
+    }
+
     public boolean isTabEnabled(Tab tab) {
         return tab.isTabEnabled();
     }
@@ -221,8 +225,12 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
         return tabBar.getTabBarIndex(selectedTab.getTabBarItem());
     }
 
-    public Collection<Tab> getTabs() {
-        return tabs.values();
+    public List<Tab> getTabs() {
+        List<Tab> list = new ArrayList<Tab>();
+        for (int i = 0; i < size(); i++) {
+            list.add(tabs.get(tabBar.getTabBarItem(i)));
+        }
+        return list;
     }
 
     public DeckLayoutPanel getDeck() {
@@ -255,13 +263,6 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
     @Override
     public HandlerRegistration addCloseHandler(CloseHandler<Tab> handler) {
         return addHandler(handler, CloseEvent.getType());
-    }
-
-    @Override
-    public void fireEvent(GwtEvent<?> event) {
-        if (eventBus != null) {
-            eventBus.fireEventFromSource(event, this);
-        }
     }
 
     @Override

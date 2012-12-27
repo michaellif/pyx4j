@@ -45,4 +45,6 @@ public interface IWizardView<E extends IEntity> extends IView {
     Presenter getPresenter();
 
     boolean onSaveFail(Throwable caught);
+
+    void onStepChange();
 }

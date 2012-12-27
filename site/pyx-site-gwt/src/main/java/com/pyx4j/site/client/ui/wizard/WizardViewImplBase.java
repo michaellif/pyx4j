@@ -53,6 +53,7 @@ public class WizardViewImplBase<E extends IEntity> extends ViewImplBase implemen
             @Override
             public void execute() {
                 form.previous();
+                calculateButtonsState();
             }
         });
         addFooterToolbarItem(btnPrevious);
@@ -61,6 +62,7 @@ public class WizardViewImplBase<E extends IEntity> extends ViewImplBase implemen
             @Override
             public void execute() {
                 form.next();
+                calculateButtonsState();
             }
         });
         addFooterToolbarItem(btnNext);
@@ -103,12 +105,14 @@ public class WizardViewImplBase<E extends IEntity> extends ViewImplBase implemen
     public void populate(E value) {
         assert (form != null);
         form.populate(value);
+        calculateButtonsState();
     }
 
     @Override
     public void reset() {
         assert (form != null);
         form.reset();
+        calculateButtonsState();
     }
 
     @Override
@@ -145,4 +149,18 @@ public class WizardViewImplBase<E extends IEntity> extends ViewImplBase implemen
         MessageDialog.error(i18n.tr("Error"), message);
     }
 
+    protected void calculateButtonsState() {
+        if (form.isLast()) {
+            btnNext.setCaption(i18n.tr("Finish"));
+        } else {
+            btnNext.setCaption(i18n.tr("Next"));
+        }
+
+        btnPrevious.setEnabled(!form.isFirst());
+    }
+
+    @Override
+    public void onStepChange() {
+        calculateButtonsState();
+    }
 }

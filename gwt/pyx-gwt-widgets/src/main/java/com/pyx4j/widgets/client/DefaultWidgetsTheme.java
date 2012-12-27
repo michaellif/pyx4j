@@ -112,6 +112,13 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("display", "inline-block");
         style.addGradient(ThemeColor.foreground, 0, ThemeColor.foreground, 0.2);
         style.addProperty("cursor", "pointer");
+        style.addProperty("-webkit-touch-callout", "none");
+        style.addProperty("-webkit-user-select", "none");
+        style.addProperty("-khtml-user-select", "none");
+        style.addProperty("-moz-user-select", "none");
+        style.addProperty("-ms-user-select", "none");
+        style.addProperty("user-select", "none");
+
         addStyle(style);
 
         style = new Style(".", StyleName.ButtonContent);

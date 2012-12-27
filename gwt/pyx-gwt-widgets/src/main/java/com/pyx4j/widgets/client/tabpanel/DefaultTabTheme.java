@@ -29,7 +29,7 @@ import com.pyx4j.commons.css.ThemeColor;
 public class DefaultTabTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        TabPanel, TabDeckPanel, TabBar, TabBarItem, TabBarItemLeft, TabBarItemRight, TabBarItemLabel, TabBarAction, TabBarItemImage, TabList, TabListItem
+        TabPanel, TabDeckPanel, TabBar, TabBarItem, TabBarItemLeft, TabBarItemRight, TabBarItemLabel, TabBarAction, TabBarItemImage, TabList, TabListItem, WizardPanel
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -37,10 +37,11 @@ public class DefaultTabTheme extends Theme {
     }
 
     public DefaultTabTheme() {
-        initStyles();
+        initTabPanelStyles();
+        initWizardPanelStyles();
     }
 
-    protected void initStyles() {
+    protected void initTabPanelStyles() {
 
         Style style = new Style(".", StyleName.TabPanel);
         addStyle(style);
@@ -70,6 +71,12 @@ public class DefaultTabTheme extends Theme {
         style.addProperty("border-top", "1px solid");
         style.addProperty("border-top-color", ThemeColor.foreground, 0.6);
         style.addProperty("background", ThemeColor.object1, 1);
+        style.addProperty("-webkit-touch-callout", "none");
+        style.addProperty("-webkit-user-select", "none");
+        style.addProperty("-khtml-user-select", "none");
+        style.addProperty("-moz-user-select", "none");
+        style.addProperty("-ms-user-select", "none");
+        style.addProperty("user-select", "none");
         style.addProperty("color", ThemeColor.foreground, 0);
         addStyle(style);
 
@@ -143,5 +150,29 @@ public class DefaultTabTheme extends Theme {
         style.addProperty("background", ThemeColor.foreground, 0.5);
         style.addProperty("color", ThemeColor.foreground, 0);
         addStyle(style);
+    }
+
+    protected void initWizardPanelStyles() {
+        Style style = new Style(".", StyleName.WizardPanel, " .", StyleName.TabBar);
+        style.addProperty("text-align", "center");
+        style.addProperty("counter-reset", "stepNumber");
+        style.addProperty("border", "none");
+        style.addProperty("padding", "0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.WizardPanel, " .", StyleName.TabBarItemLabel, ":before");
+        style.addProperty("counter-increment", "stepNumber");
+        style.addProperty("content", "counter(stepNumber)\". \"");
+        addStyle(style);
+
+        style = new Style(".", StyleName.WizardPanel, " .", StyleName.TabBarItem);
+        style.addProperty("height", "auto");
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.foreground, 0.6);
+        style.addProperty("margin-top", "5px");
+        style.addProperty("margin-left", "4px");
+        style.addProperty("margin-right", "4px");
+        addStyle(style);
+
     }
 }

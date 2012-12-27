@@ -20,6 +20,6 @@
  */
 package com.pyx4j.entity.shared;
 
-public interface INonConclusiveVersioning {
+public interface IInconclusiveVersioning {
 
 }

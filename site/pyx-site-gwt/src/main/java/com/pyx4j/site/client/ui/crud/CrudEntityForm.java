@@ -20,7 +20,6 @@
  */
 package com.pyx4j.site.client.ui.crud;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -36,18 +35,15 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
 public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
 
-    private static final I18n i18n = I18n.get(CrudEntityForm.class);
-
     private IFormView<? extends IEntity> view;
 
-    private final TabPanel tabPanel = new TabPanel(StyleManger.getTheme().getTabHeight(), Unit.EM);
+    private final TabPanel tabPanel;
 
     public CrudEntityForm(Class<E> rootClass, IFormView<? extends IEntity> view) {
         this(rootClass, null, view);
@@ -62,6 +58,7 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
             setViewable(true);
         }
 
+        tabPanel = new TabPanel();
         tabPanel.setSize("100%", "100%");
 
     }
