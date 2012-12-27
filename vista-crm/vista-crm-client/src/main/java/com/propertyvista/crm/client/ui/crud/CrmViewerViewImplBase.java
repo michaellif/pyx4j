@@ -53,6 +53,8 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     protected final String defaultCaption;
 
+    private Button notesButton;
+
     private Button editButton;
 
     private Button versioningButton;
@@ -90,7 +92,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         setCaption(defaultCaption);
 
         // Notes button:
-        addHeaderToolbarItem(new Button(i18n.tr("Notes"), new Command() {
+        addHeaderToolbarItem((notesButton = new Button(i18n.tr("Notes"), new Command() {
             @SuppressWarnings("unchecked")
             @Override
             public void execute() {
@@ -98,7 +100,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
                     ((CrmViewerActivity<E>) getPresenter()).getNotesAndAttachmentsController().show(CrmViewerViewImplBase.this);
                 }
             }
-        }).asWidget());
+        })).asWidget());
 
         // Edit button:
         if (!viewOnly) {
@@ -167,6 +169,14 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
             action.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
         }
         actionsButton.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
+    }
+
+    public void setNotesEnabled(boolean enabled) {
+        notesButton.setEnabled(enabled);
+    }
+
+    public void setNotesVisible(boolean visible) {
+        notesButton.setVisible(visible);
     }
 
     public void setEditingVisible(boolean visible) {

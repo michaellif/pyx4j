@@ -356,6 +356,9 @@ public class CrmSiteMap implements SiteMap {
             }
 
             public static class ProductDictionary extends CrmCrudAppPlace {
+                public ProductDictionary() {
+                    super(Type.viewer);
+                }
 
                 public static class ServiceItemType extends CrmCrudAppPlace {
                 }

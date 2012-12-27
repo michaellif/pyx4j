@@ -33,6 +33,7 @@ public class ProductDictionaryViewImpl extends CrmViewerViewImplBase<ProductItem
 
     public ProductDictionaryViewImpl() {
         super(Financial.ProductDictionary.class, true);
+        setNotesVisible(false); // disable notes for this view
 
         serviceLister = new ListerInternalViewImplBase<ServiceItemType>(new ServiceTypeLister());
         featureLister = new ListerInternalViewImplBase<FeatureItemType>(new FeatureTypeLister());
