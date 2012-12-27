@@ -93,7 +93,6 @@
 	background: ${object1_100};
 	float: right;
 	overflow: hidden;
-	width: 76px;
 	border: 2px splid ${object1_100};
 }
 
@@ -317,7 +316,8 @@
 	border-bottom: 3px solid #000000;
 }
 .promoBox .citySelectionForm {
-	display:inline-block;
+//	display:inline-block;
+	margin-bottom: 20px;
 }
 
 .wideGadgetBox {

@@ -170,6 +170,7 @@ select {
     text-align: left;
     text-decoration: none;
     width: 120px;
+    white-space:nowrap;
 }
 
 .navigation ul li span:hover {

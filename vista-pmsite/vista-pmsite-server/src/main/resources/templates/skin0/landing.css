@@ -153,7 +153,8 @@
 	padding-left:10px;
 }
 .promoBox .citySelectionForm {
-	display:inline-block;
+//	display:inline-block;
+	margin-bottom: 20px;
 }
 
 .testimBox {
