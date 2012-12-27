@@ -32,7 +32,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
@@ -141,4 +143,23 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
         return wizardPanel.getSelectedIndex() == wizardPanel.size() - 1;
     }
 
+    // decoration stuff:
+    protected class DecoratorBuilder extends WidgetDecorator.Builder {
+
+        public DecoratorBuilder(CComponent<?, ?> component) {
+            super(component);
+        }
+
+        public DecoratorBuilder(CComponent<?, ?> component, double componentWidth) {
+            super(component);
+            componentWidth(componentWidth);
+        }
+
+        public DecoratorBuilder(CComponent<?, ?> component, double componentWidth, double labelWidth) {
+            super(component);
+            componentWidth(componentWidth);
+            labelWidth(labelWidth);
+        }
+
+    }
 }
