@@ -43,16 +43,17 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
     private final static I18n i18n = I18n.get(PmcAccountCreationProgressActivity.class);
 
     private final static List<String> PROGRESS_STEPS = Arrays.asList(//@formatter:off
-            i18n.tr("Creating and verifyng DNS name"),
-            i18n.tr("Reserving DNS name"),
-            i18n.tr("Creating private database"),
-            i18n.tr("Loading company profile"),
-            i18n.tr("Loading initial data"),
-            i18n.tr("Validating loaded data"),
-            i18n.tr("Applying security policies"),
-            i18n.tr("Validating security policies"),
-            i18n.tr("Almost there... final configuration Health Check"),
-            i18n.tr("Sending confirmation Email")
+            i18n.tr("Creating and verifyng DNS name..."),
+            i18n.tr("Reserving DNS name..."),
+            i18n.tr("Creating private database..."),
+            i18n.tr("Loading company profile..."),
+            i18n.tr("Loading initial data..."),
+            i18n.tr("Validating loaded data..."),
+            i18n.tr("Applying security policies..."),
+            i18n.tr("Validating security policies..."),
+            i18n.tr("Almost there: final configuration Health Check..."),
+            i18n.tr("Sending confirmation Email..."),
+            i18n.tr("Complete")
     );//@formatter:on
 
     private final String defferedCorrelationId;

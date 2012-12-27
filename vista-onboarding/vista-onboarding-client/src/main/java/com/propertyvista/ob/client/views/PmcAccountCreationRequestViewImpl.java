@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.widgets.client.Label;
@@ -34,12 +33,6 @@ import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 public class PmcAccountCreationRequestViewImpl extends Composite implements PmcAccountCreationRequestView {
 
     public static final I18n i18n = I18n.get(PmcAccountCreationRequestViewImpl.class);
-
-    public enum Styles implements IStyleName {
-
-        SignUpCaption;
-
-    }
 
     private final PmcAccountCreationRequestForm form;
 
@@ -66,9 +59,9 @@ public class PmcAccountCreationRequestViewImpl extends Composite implements PmcA
         };
 
         Label caption = new Label();
-        caption.addStyleName(Styles.SignUpCaption.name());
+        caption.addStyleName(OnboardingStyles.OnboardingCaption.name());
         caption.getElement().getStyle().setClear(Clear.BOTH);
-        caption.setText(i18n.tr("Sign Up For Property Vista"));
+        caption.setText(i18n.tr("Sign Up For PropertyVista"));
 
         form.initContent();
         form.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);

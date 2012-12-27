@@ -13,6 +13,8 @@
  */
 package com.propertyvista.ob.client.themes;
 
+import com.google.gwt.canvas.dom.client.CssColor;
+
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
@@ -31,13 +33,18 @@ import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 import com.propertyvista.ob.client.forms.PmcAccountCreationRequestForm;
 import com.propertyvista.ob.client.forms.StepStatusIndicator;
 import com.propertyvista.ob.client.views.PmcAccountCreationCompleteViewImpl;
-import com.propertyvista.ob.client.views.PmcAccountCreationRequestViewImpl;
+import com.propertyvista.ob.client.views.PmcAccountCreationProgressViewAltImpl;
 import com.propertyvista.ob.client.views.RuntimeErrorViewImpl;
 
 public class OnboardingTheme extends Theme {
 
-    public OnboardingTheme() {
+    public final static CssColor COLOR_PROGRESS_CIRCLE_COMPLETE = CssColor.make(0x77, 0xCC, 0x77);
 
+    public final static CssColor COLOR_PROGRESS_CIRCLE_INCOMPLETE = CssColor.make(0xDD, 0xDD, 0xDD);
+
+    private final static String COLOR_SPECIAL_FOREGROUND = "#607280";
+
+    public OnboardingTheme() {
         addTheme(new DefaultWidgetsTheme());
         addTheme(new DefaultWidgetDecoratorTheme());
         addTheme(new DefaultFormFlexPanelTheme() {
@@ -61,6 +68,14 @@ public class OnboardingTheme extends Theme {
 
         addTheme(new DefaultTabTheme());
 
+        initCommonStuff();
+        initPmcAccountRequestFormLayoutAndStyles();
+        initPmcAccountCreationProgressViewStyles();
+        initPmcAccountCreationCompleteStyles();
+        initRuntimeErrorViewStyles();
+    }
+
+    private void initCommonStuff() {
         Style style = new Style("div, tr, td, th");
         style.addProperty("vertical-align", "middle");
         addStyle(style);
@@ -82,25 +97,15 @@ public class OnboardingTheme extends Theme {
         style.addProperty("vertical-align", "middle");
         addStyle(style);
 
-        style = new Style(".", StepStatusIndicator.Styles.StepStatusIndicatorPanel);
-        style.addGradient(ThemeColor.contrast1, ThemeColor.contrast2);
-        style.addProperty("padding-left", "20px");
-        style.addProperty("padding-right", "20px");
-        style.addProperty("padding-top", "5px");
-        style.addProperty("padding-bottom", "5px");
-        style.addProperty("font-weight", "bold");
-        addStyle(style);
-
-        style = new Style(".", PmcAccountCreationCompleteViewImpl.Styles.PmcAccountCreationCompleteAnchor.name());
-        style.addProperty("margin-top", "20px");
-        style.addProperty("margin-left", "auto");
-        style.addProperty("margin-right", "auto");
+        style = new Style("." + OnboardingStyles.OnboardingCaption.name());
         style.addProperty("text-align", "center");
-        style.addProperty("width", "100%");
+        style.addProperty("margin-bottom", "40px");
+        style.addProperty("font-family", "Tahoma");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("font-size", "2.5em");
+        style.addProperty("color", COLOR_SPECIAL_FOREGROUND);
         addStyle(style);
 
-        initPmcAccountRequestFormLayoutAndStyles();
-        initRuntimeErrorViewStyles();
     }
 
     private void initPmcAccountRequestFormLayoutAndStyles() {
@@ -124,27 +129,12 @@ public class OnboardingTheme extends Theme {
         style.addProperty("border-radius", "10px");
         addStyle(style);
 
-        style = new Style(".", PmcAccountCreationCompleteViewImpl.Styles.PmcAccountCreationCompleteLabel.name());
-        style.addProperty("margin-left", "auto");
-        style.addProperty("margin-right", "auto");
-        style.addProperty("text-align", "center");
-        style.addProperty("width", "100%");
-        addStyle(style);
-
         style = new Style("." + PmcAccountCreationRequestForm.Styles.PmcUrlFieldNote.name() + " .ValidationLabel");
         style.addProperty("width", "10em");
         addStyle(style);
 
         style = new Style("." + PmcAccountCreationRequestForm.Styles.PmcAccountCreationRequestForm.name() + " .ValidationLabel");
         style.addProperty("width", "25em");
-        addStyle(style);
-
-        style = new Style("." + PmcAccountCreationRequestViewImpl.Styles.SignUpCaption.name());
-        style.addProperty("text-align", "center");
-        style.addProperty("margin-bottom", "2em");
-        style.addProperty("font-style", "bold");
-        style.addProperty("font-size", "2em");
-        style.addProperty("color", "#607280");
         addStyle(style);
 
         // this is for text on the left
@@ -166,6 +156,40 @@ public class OnboardingTheme extends Theme {
 
     }
 
+    private void initPmcAccountCreationProgressViewStyles() {
+
+        Style style = new Style(".", StepStatusIndicator.Styles.StepStatusIndicatorPanel);
+        style.addGradient(ThemeColor.contrast1, ThemeColor.contrast2);
+        style.addProperty("padding-left", "20px");
+        style.addProperty("padding-right", "20px");
+        style.addProperty("padding-top", "5px");
+        style.addProperty("padding-bottom", "5px");
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(".", PmcAccountCreationCompleteViewImpl.Styles.PmcAccountCreationCompleteAnchor.name());
+        style.addProperty("margin-top", "20px");
+        style.addProperty("margin-left", "auto");
+        style.addProperty("margin-right", "auto");
+        style.addProperty("text-align", "center");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(".", PmcAccountCreationProgressViewAltImpl.Styles.PleaseWaitLabel.name());
+        style.addProperty("margin-bottom", "30px");
+        style.addProperty("font-style", "italic");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("font-family", "Tahoma");
+        style.addProperty("color", COLOR_SPECIAL_FOREGROUND);
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
+        style = new Style(".", PmcAccountCreationProgressViewAltImpl.Styles.ProgressStepDetails.name());
+        style.addProperty("margin-top", "30px");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+    }
+
     private void initRuntimeErrorViewStyles() {
         Style style = new Style("." + RuntimeErrorViewImpl.Styles.RuntimeErrorTitle.name());
         style.addProperty("text-align", "center");
@@ -180,6 +204,19 @@ public class OnboardingTheme extends Theme {
         addStyle(style);
 
         style = new Style("." + RuntimeErrorViewImpl.Styles.RuntimeErrorAck.name());
+        addStyle(style);
+    }
+
+    private void initPmcAccountCreationCompleteStyles() {
+        Style style = new Style(".", PmcAccountCreationCompleteViewImpl.Styles.PmcAccountCreationCompleteLabel.name());
+        style.addProperty("margin-left", "auto");
+        style.addProperty("margin-right", "auto");
+        style.addProperty("font-family", "Tahoma");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("font-size", "1.2em");
+        style.addProperty("text-align", "center");
+        style.addProperty("color", COLOR_SPECIAL_FOREGROUND);
+        style.addProperty("width", "100%");
         addStyle(style);
     }
 

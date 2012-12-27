@@ -17,6 +17,6 @@ import com.pyx4j.commons.css.IStyleName;
 
 public enum OnboardingStyles implements IStyleName {
 
-    VistaObMainPanel, VistaObView, SignUpText, SignUpTextSection, SignUpSectionCaption, SignUpSectionDetails;
+    VistaObMainPanel, VistaObView, SignUpText, SignUpTextSection, SignUpSectionCaption, SignUpSectionDetails, OnboardingCaption;
 
 }
