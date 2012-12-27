@@ -29,7 +29,9 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -68,6 +70,13 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
     @Override
     protected String getAddItemDialogBody() {
         return i18n.tr("Do you want to select existing Guarantor?");
+    }
+
+    @Override
+    public IFolderItemDecorator<LeaseTermGuarantor> createItemDecorator() {
+        BoxFolderItemDecorator<LeaseTermGuarantor> decor = (BoxFolderItemDecorator<LeaseTermGuarantor>) super.createItemDecorator();
+        decor.setExpended(false);
+        return decor;
     }
 
     @Override

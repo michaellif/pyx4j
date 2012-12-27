@@ -31,6 +31,8 @@ import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -71,6 +73,13 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
     @Override
     protected String getAddItemDialogBody() {
         return i18n.tr("Do you want to select existing Tenant?");
+    }
+
+    @Override
+    public IFolderItemDecorator<LeaseTermTenant> createItemDecorator() {
+        BoxFolderItemDecorator<LeaseTermTenant> decor = (BoxFolderItemDecorator<LeaseTermTenant>) super.createItemDecorator();
+        decor.setExpended(false);
+        return decor;
     }
 
     @Override
