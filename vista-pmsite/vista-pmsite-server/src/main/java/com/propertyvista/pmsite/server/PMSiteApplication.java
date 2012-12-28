@@ -164,7 +164,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
                 }
                 // If given lang is not supported the above method will set the default locale,
                 // and we will need to redirect to corresponding url
-                String siteLang = ((PMSiteWebRequest) request).getSiteLocale().lang().getValue().getLanguage();
+                String siteLang = ((PMSiteWebRequest) request).getSiteLocale().lang().getValue().name();
                 if (lang.isEmpty() || !lang.toString().equalsIgnoreCase(siteLang)) {
                     PageParameters newParams = new PageParameters(info.getPageParameters());
                     newParams.set(ParamNameLang, siteLang);
