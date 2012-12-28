@@ -20,7 +20,7 @@
  */
 package com.pyx4j.essentials.server.deferred;
 
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 
 public abstract class AbstractDeferredProcess implements IDeferredProcess {
 

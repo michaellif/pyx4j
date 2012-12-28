@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.client;
+package com.pyx4j.gwt.client.deferred;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +29,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessService;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.widgets.client.ProgressBar;
 
 public class DeferredProgressPanel extends FlowPanel {

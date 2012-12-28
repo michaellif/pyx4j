@@ -23,7 +23,7 @@ package com.pyx4j.essentials.server.download;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.gwt.shared.DownloadFormat;
 
 public class MimeMap {
 

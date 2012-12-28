@@ -39,7 +39,19 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-rpc-shared</artifactId>
+            <artifactId>pyx-gwt-widgets</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-rpc-gwt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+                
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -38,8 +38,8 @@ import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.MimeMap;
+import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
 

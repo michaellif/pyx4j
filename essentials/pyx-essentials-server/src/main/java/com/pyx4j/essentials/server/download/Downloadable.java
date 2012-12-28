@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.server.contexts.Context;
 
 public class Downloadable implements Serializable {

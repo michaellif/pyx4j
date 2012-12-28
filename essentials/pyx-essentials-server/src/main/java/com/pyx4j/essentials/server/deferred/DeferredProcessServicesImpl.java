@@ -23,8 +23,8 @@ package com.pyx4j.essentials.server.deferred;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public class DeferredProcessServicesImpl implements DeferredProcessServices {

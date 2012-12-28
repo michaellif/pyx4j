@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.rpc.deferred;
+package com.pyx4j.gwt.rpc.deferred;
 
 import java.io.Serializable;
 

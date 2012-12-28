@@ -54,8 +54,8 @@ import com.pyx4j.entity.shared.impl.PrimitiveHandler;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.rpc.ImportColumn;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 public class EntityCSVReciver<E extends IEntity> implements CSVReciver {

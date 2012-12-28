@@ -22,7 +22,7 @@ package com.pyx4j.essentials.server.deferred;
 
 import java.io.Serializable;
 
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 
 public interface IDeferredProcess extends Serializable {
 

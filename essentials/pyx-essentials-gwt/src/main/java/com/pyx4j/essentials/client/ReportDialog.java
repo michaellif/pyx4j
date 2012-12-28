@@ -32,12 +32,13 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.rpc.report.ReportService;
+import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.site.client.NavigationUri;

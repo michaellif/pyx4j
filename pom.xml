@@ -108,6 +108,9 @@
         <module>gwt/pyx-gwt-widgets</module>
         <module>gwt/pyx-gwt-forms</module>
 
+        <module>gwt/pyx-gwt-shared</module>
+        <module>gwt/pyx-gwt-client</module>
+
         <module>gwt/pyx-gwt-dnd</module>
 
         <module>gwt/pyx-gwt-serialization</module>

@@ -25,8 +25,8 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import com.pyx4j.commons.Consts;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.MimeMap;
+import com.pyx4j.gwt.shared.DownloadFormat;
 
 public class ReportTableCSVFormater implements ReportTableFormater {
 

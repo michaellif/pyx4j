@@ -21,7 +21,7 @@
 package com.pyx4j.essentials.server.upload;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.rpc.upload.UploadResponse;
+import com.pyx4j.gwt.rpc.upload.UploadResponse;
 
 public interface UploadReciver<U extends IEntity, R extends IEntity> {
 

@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.client.upload;
+package com.pyx4j.gwt.client.upload;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -40,13 +40,13 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.client.DeferredProgressListener;
-import com.pyx4j.essentials.client.DeferredProgressPanel;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
-import com.pyx4j.essentials.rpc.upload.UploadId;
-import com.pyx4j.essentials.rpc.upload.UploadResponse;
-import com.pyx4j.essentials.rpc.upload.UploadService;
+import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
+import com.pyx4j.gwt.client.deferred.DeferredProgressPanel;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.rpc.upload.UploadId;
+import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.gwt.rpc.upload.UploadService;
+import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.IServiceBase;

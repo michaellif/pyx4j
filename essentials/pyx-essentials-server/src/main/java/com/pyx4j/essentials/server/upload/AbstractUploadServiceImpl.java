@@ -29,17 +29,17 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.essentials.rpc.upload.UploadId;
-import com.pyx4j.essentials.rpc.upload.UploadResponse;
-import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.rpc.upload.UploadId;
+import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public abstract class UploadServiceImpl<U extends IEntity, R extends IEntity> implements UploadService<U, R>, UploadReciver<U, R> {
+public abstract class AbstractUploadServiceImpl<U extends IEntity, R extends IEntity> implements UploadService<U, R>, UploadReciver<U, R> {
 
-    private static final I18n i18n = I18n.get(UploadServiceImpl.class);
+    private static final I18n i18n = I18n.get(AbstractUploadServiceImpl.class);
 
     protected void onPepareUpload(U data, UploadId id) {
     }

@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.rpc.upload;
+package com.pyx4j.gwt.rpc.upload;
 
 import java.io.Serializable;
 

@@ -23,7 +23,7 @@ package com.pyx4j.essentials.rpc.admin;
 import java.util.Vector;
 
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.VoidSerializable;
 

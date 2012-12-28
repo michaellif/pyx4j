@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessService;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public class DeferredProcessServiceImpl implements DeferredProcessService {

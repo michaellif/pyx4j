@@ -26,8 +26,8 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.essentials.rpc.admin.DBMaintenanceRequest;
 import com.pyx4j.essentials.rpc.admin.DBMaintenanceServices;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.rpc.j2se.J2SEService;
 
 public class DBMaintenance {

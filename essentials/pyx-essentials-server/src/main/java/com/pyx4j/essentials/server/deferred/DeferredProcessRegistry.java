@@ -25,7 +25,7 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 

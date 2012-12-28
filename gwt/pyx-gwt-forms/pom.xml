@@ -33,6 +33,13 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
             <artifactId>pyx-gwt-widgets</artifactId>
             <version>${project.version}</version>
         </dependency>

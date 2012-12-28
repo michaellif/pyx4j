@@ -37,12 +37,12 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.ReportColumn;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 import com.pyx4j.essentials.server.download.Downloadable;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.security.shared.SecurityController;
 
 public class SearchReportDeferredProcess<E extends IEntity> implements IDeferredProcess {

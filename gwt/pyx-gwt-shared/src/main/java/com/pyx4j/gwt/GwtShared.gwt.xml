@@ -5,7 +5,6 @@
     <inherits name='com.google.gwt.user.User'/>
 
     <inherits name='com.pyx4j.entity.EntityShared'/>
-    <inherits name='com.pyx4j.gwt.GwtShared'/>
     
     <source path="rpc"/>
     <source path="shared"/>

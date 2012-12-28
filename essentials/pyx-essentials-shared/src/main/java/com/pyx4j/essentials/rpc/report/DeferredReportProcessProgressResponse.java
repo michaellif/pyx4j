@@ -20,7 +20,7 @@
  */
 package com.pyx4j.essentials.rpc.report;
 
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 
 @SuppressWarnings("serial")
 public class DeferredReportProcessProgressResponse extends DeferredProcessProgressResponse {

@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.client;
+package com.pyx4j.gwt.client.deferred;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.CloseOption;

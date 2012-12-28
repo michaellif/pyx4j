@@ -41,10 +41,10 @@ import com.google.appengine.api.taskqueue.TaskHandle;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
 
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.Downloadable;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.gwt.shared.DownloadFormat;
 
 @SuppressWarnings("serial")
 public class DeferredProcessTaskWorkerServlet extends HttpServlet {

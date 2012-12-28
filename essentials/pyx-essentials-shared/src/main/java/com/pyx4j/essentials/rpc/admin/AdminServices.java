@@ -21,7 +21,7 @@
 package com.pyx4j.essentials.rpc.admin;
 
 import com.pyx4j.entity.rpc.EntityServices;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.VoidSerializable;
 

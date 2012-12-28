@@ -33,9 +33,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 
 public class DatastoreAdminRemoveAllDataDeferredProcess implements IDeferredProcess {
 

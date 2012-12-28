@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.rpc.report;
+package com.pyx4j.gwt.shared;
 
 import java.util.Collection;
 import java.util.Vector;

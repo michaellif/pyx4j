@@ -21,9 +21,9 @@
 package com.pyx4j.essentials.server.upload;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.rpc.upload.UploadResponse;
 
 @SuppressWarnings("serial")
 public class UploadDeferredProcess<U extends IEntity, R extends IEntity> implements IDeferredProcess {
