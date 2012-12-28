@@ -86,7 +86,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
     private FormFlexPanel createPricingStep(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = 0;
-        main.setWidget(++row, 0, new HTML(i18n.tr("Provided By")));
+        main.setWidget(++row, 0, new OnlinePaymentPricingTab());
         return main;
     }
 
