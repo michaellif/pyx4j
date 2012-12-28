@@ -34,9 +34,9 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
@@ -110,22 +110,43 @@ public class Button extends FocusPanel implements IFocusWidget {
             setImageVisible(true);
         }
 
-        addClickHandler(new ClickHandler() {
+        super.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 if (popup != null) {
                     if (popup.isShowing()) {
                         popup.hide();
-                    } else {
+                    } else if (isEnabled()) {
                         popup.showRelativeTo(Button.this);
                     }
                 } else {
-                    if (command != null) {
+                    if (isEnabled() && (command != null)) {
                         command.execute();
                     }
                 }
             }
         });
+    }
+
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+
+    /**
+     * @deprecated Use setCommand(new Command(){})
+     */
+    @Override
+    @Deprecated
+    public HandlerRegistration addClickHandler(final ClickHandler handler) {
+        ClickHandler wrapper = new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (isEnabled()) {
+                    handler.onClick(event);
+                }
+            }
+        };
+        return addDomHandler(wrapper, ClickEvent.getType());
     }
 
     public ButtonMenuBar createMenu() {
@@ -157,15 +178,6 @@ public class Button extends FocusPanel implements IFocusWidget {
     protected HTML getTextLabelComponent() {
         return textLabel;
     }
-
-    @Override
-    public void onBrowserEvent(Event event) {
-        if (isEnabled()) {
-            super.onBrowserEvent(event);
-        } else {
-            event.stopPropagation();
-        }
-    };
 
     public void setCaption(String text) {
         textLabel.setText(text);
@@ -216,6 +228,11 @@ public class Button extends FocusPanel implements IFocusWidget {
                 image.ensureDebugId(baseID + "-image");
             }
         }
+    }
+
+    @Override
+    protected void onUnload() {
+        buttonFacesHandler.onUnload();
     }
 
     static class ButtonFacesHandler implements MouseOverHandler, MouseOutHandler, MouseDownHandler, MouseUpHandler, ClickHandler {
@@ -270,6 +287,11 @@ public class Button extends FocusPanel implements IFocusWidget {
             }
         }
 
+        public void onUnload() {
+            // fix for Buttons remain in Mouse Over position after they are clicked.
+            mouseOver = false;
+        }
+
         @Override
         public void onMouseDown(MouseDownEvent event) {
             if (isEnabled()) {
@@ -288,7 +310,7 @@ public class Button extends FocusPanel implements IFocusWidget {
 
         @Override
         public void onClick(ClickEvent event) {
-            // fix for Buttons like remain in Mouse Over position after they are clicked.
+            // fix for Buttons remain in Mouse Over position after they are clicked.
             button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
             button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
         }
