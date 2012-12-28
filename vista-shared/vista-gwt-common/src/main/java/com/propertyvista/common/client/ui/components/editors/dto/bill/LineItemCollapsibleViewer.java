@@ -13,13 +13,22 @@
  */
 package com.propertyvista.common.client.ui.components.editors.dto.bill;
 
+import java.util.Collection;
+
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CEntityCollapsableViewer;
+import com.pyx4j.forms.client.ui.BaseCollapsableDecorator;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityContainer;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.widgets.client.event.shared.ToggleEvent;
+import com.pyx4j.widgets.client.event.shared.ToggleHandler;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.BillingTheme;
@@ -32,14 +41,56 @@ import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceSubLineItem;
 import com.propertyvista.dto.InvoiceLineItemGroupDTO;
 
-public class LineItemCollapsibleViewer extends CEntityCollapsableViewer<InvoiceLineItemGroupDTO> {
+public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemGroupDTO> implements ToggleHandler {
+
+    private final SimplePanel collapsedPanel = new SimplePanel();
+
+    private final SimplePanel expandedPanel = new SimplePanel();
 
     public LineItemCollapsibleViewer() {
-        super(VistaImages.INSTANCE);
         setWidth("46em");
     }
 
     @Override
+    protected IDecorator<?> createDecorator() {
+        BaseCollapsableDecorator<?> decorator = new BaseCollapsableDecorator<InvoiceLineItemGroupDTO>(VistaImages.INSTANCE);
+        decorator.addToggleHandler(this);
+        return decorator;
+    }
+
+    @Override
+    public final IsWidget createContent() {
+        VerticalPanel mainPanel = new VerticalPanel();
+        mainPanel.setWidth("100%");
+        mainPanel.add(collapsedPanel);
+        mainPanel.add(expandedPanel);
+        setCollapsed(true);
+        return mainPanel;
+    }
+
+    @Override
+    public Collection<? extends CComponent<?, ?>> getComponents() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    protected void setComponentsValue(InvoiceLineItemGroupDTO value, boolean fireEvent, boolean populate) {
+        collapsedPanel.setWidget(createCollapsedContent(value));
+        expandedPanel.setWidget(createExpandedContent(value));
+        setCollapsed(true);
+    }
+
+    public void setCollapsed(boolean collapsed) {
+        ((BaseCollapsableDecorator<?>) getDecorator()).setCollapsed(collapsed);
+    }
+
+    @Override
+    public void onToggle(ToggleEvent event) {
+        collapsedPanel.setVisible(!event.isToggleOn());
+        expandedPanel.setVisible(event.isToggleOn());
+    }
+
     public IsWidget createCollapsedContent(InvoiceLineItemGroupDTO value) {
         FlexTable content = new FlexTable();
 
@@ -61,7 +112,6 @@ public class LineItemCollapsibleViewer extends CEntityCollapsableViewer<InvoiceL
         return content;
     }
 
-    @Override
     public IsWidget createExpandedContent(InvoiceLineItemGroupDTO value) {
 
         FlexTable content = new FlexTable();
@@ -154,4 +204,5 @@ public class LineItemCollapsibleViewer extends CEntityCollapsableViewer<InvoiceL
         }
         return "";
     }
+
 }
