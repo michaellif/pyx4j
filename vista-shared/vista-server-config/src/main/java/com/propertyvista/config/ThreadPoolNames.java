@@ -13,7 +13,7 @@
  */
 package com.propertyvista.config;
 
-import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
 public class ThreadPoolNames {
 

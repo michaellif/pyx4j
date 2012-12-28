@@ -16,7 +16,7 @@ package com.propertyvista.crm.server.services.billing;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;

@@ -20,12 +20,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
-import com.pyx4j.essentials.server.deferred.DeferredProcessorThread;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
+import com.pyx4j.gwt.server.deferred.DeferredProcessorThread;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;

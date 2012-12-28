@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.server.services.billing;
 
-import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.server.deferred.IDeferredProcess;
 
 import com.propertyvista.crm.rpc.services.billing.StartBuildingBillingDTO;
 import com.propertyvista.domain.property.asset.building.Building;
