@@ -266,6 +266,8 @@ public class Button extends FocusPanel implements IFocusWidget {
                 button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
                 button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
                 button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+                // IE8: fix for Buttons remain in Mouse Over position after they are clicked in filter
+                mouseOver = false;
             }
         }
 
