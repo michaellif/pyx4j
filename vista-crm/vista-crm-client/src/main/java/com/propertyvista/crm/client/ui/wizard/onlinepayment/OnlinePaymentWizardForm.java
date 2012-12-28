@@ -29,6 +29,8 @@ import com.pyx4j.site.client.ui.wizard.WizardForm;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.crm.client.ui.wizard.common.BusinessInformationForm;
+import com.propertyvista.crm.client.ui.wizard.common.PersonalInformationForm;
 import com.propertyvista.dto.OnlinePaymentSetupDTO;
 import com.propertyvista.dto.OnlinePaymentSetupDTO.PropertyAccountInfo;
 
@@ -84,30 +86,27 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
     private FormFlexPanel createPricingStep(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = 0;
-        main.setH1(row++, 0, 2, i18n.tr("Pricing"));
-
         main.setWidget(++row, 0, new HTML(i18n.tr("Provided By")));
         return main;
     }
 
     private FormFlexPanel createBusinessInfoStep(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
-        int row = 0;
-        main.setH1(row++, 0, 2, i18n.tr("Business Information"));
+        int row = -1;
+        main.setWidget(++row, 0, inject(proto().businessInformation(), new BusinessInformationForm()));
         return main;
     }
 
     private FormFlexPanel createPersonalInfoStep(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Personal Information"));
+        main.setWidget(++row, 0, inject(proto().personalInformation(), new PersonalInformationForm()));
         return main;
     }
 
     private FormFlexPanel createPropertyAndBankingStep(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Property and Banking"));
         main.setWidget(++row, 0, inject(proto().propertyAccounts(), new PropertyAccountInfoFolder()));
         get(proto().propertyAccounts()).addValueValidator(new EditableValueValidator<List<PropertyAccountInfo>>() {
             @Override
@@ -124,8 +123,8 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
 
     private FormFlexPanel createConfirmationStep(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
-        int row = 0;
-        main.setH1(row++, 0, 2, i18n.tr("Confirmation"));
+        int row = -1;
+        main.setH1(++row, 0, 2, i18n.tr("Confirmation"));
         return main;
     }
 }
