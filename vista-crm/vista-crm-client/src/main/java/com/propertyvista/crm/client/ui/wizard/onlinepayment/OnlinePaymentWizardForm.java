@@ -13,23 +13,71 @@
  */
 package com.propertyvista.crm.client.ui.wizard.onlinepayment;
 
+import java.util.List;
+
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
+
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.wizard.IWizardView;
 import com.pyx4j.site.client.ui.wizard.WizardForm;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.dto.OnlinePaymentSetupDTO;
+import com.propertyvista.dto.OnlinePaymentSetupDTO.PropertyAccountInfo;
 
 public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
 
     private static final I18n i18n = I18n.get(OnlinePaymentWizardForm.class);
+
+    public static class PropertyAccountInfoForm extends CEntityDecoratableForm<OnlinePaymentSetupDTO.PropertyAccountInfo> {
+
+        public PropertyAccountInfoForm() {
+            super(PropertyAccountInfo.class);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            FormFlexPanel panel = new FormFlexPanel();
+            int row = -1;
+            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().averageMonthlyRent())).build());
+            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfRentedUnits())).build());
+            panel.setWidget(++row, 0, new HTML("&nbsp;"));
+            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().transitNumber())).build());
+            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().institutionNumber())).build());
+            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNumber())).build());
+            return panel;
+        }
+    }
+
+    public static class PropertyAccountInfoFolder extends VistaBoxFolder<OnlinePaymentSetupDTO.PropertyAccountInfo> {
+
+        public PropertyAccountInfoFolder() {
+            super(PropertyAccountInfo.class);
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof PropertyAccountInfo) {
+                return new PropertyAccountInfoForm();
+            }
+            return super.create(member);
+        }
+
+    }
 
     public OnlinePaymentWizardForm(IWizardView<OnlinePaymentSetupDTO> view) {
         super(OnlinePaymentSetupDTO.class, view);
         addStep(createPricingStep(i18n.tr("Pricing")));
         addStep(createBusinessInfoStep(i18n.tr("Business Information")));
         addStep(createPersonalInfoStep(i18n.tr("Personal Information")));
-        addStep(createPersonalInfoStep(i18n.tr("Property and Banking")));
+        addStep(createPropertyAndBankingStep(i18n.tr("Property and Banking")));
         addStep(createConfirmationStep(i18n.tr("Confirmation")));
     }
 
@@ -37,6 +85,8 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = 0;
         main.setH1(row++, 0, 2, i18n.tr("Pricing"));
+
+        main.setWidget(++row, 0, new HTML(i18n.tr("Provided By")));
         return main;
     }
 
@@ -49,8 +99,26 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
 
     private FormFlexPanel createPersonalInfoStep(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
-        int row = 0;
-        main.setH1(row++, 0, 2, i18n.tr("Personal Information"));
+        int row = -1;
+        main.setH1(++row, 0, 2, i18n.tr("Personal Information"));
+        return main;
+    }
+
+    private FormFlexPanel createPropertyAndBankingStep(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
+        int row = -1;
+        main.setH1(++row, 0, 2, i18n.tr("Property and Banking"));
+        main.setWidget(++row, 0, inject(proto().propertyAccounts(), new PropertyAccountInfoFolder()));
+        get(proto().propertyAccounts()).addValueValidator(new EditableValueValidator<List<PropertyAccountInfo>>() {
+            @Override
+            public ValidationError isValid(CComponent<List<PropertyAccountInfo>, ?> component, List<PropertyAccountInfo> value) {
+                if (value != null && value.size() < 1) {
+                    return new ValidationError(component, i18n.tr("At least one property account is required"));
+                } else {
+                    return null;
+                }
+            }
+        });
         return main;
     }
 

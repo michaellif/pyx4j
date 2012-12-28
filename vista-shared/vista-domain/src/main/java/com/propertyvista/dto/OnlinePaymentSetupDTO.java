@@ -15,6 +15,8 @@ package com.propertyvista.dto;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -48,6 +50,7 @@ public interface OnlinePaymentSetupDTO extends IEntity {
         @NotNull
         Building property();
 
+        @Editor(type = EditorType.money)
         IPrimitive<BigDecimal> averageMonthlyRent();
 
         IPrimitive<Integer> numberOfRentedUnits();
