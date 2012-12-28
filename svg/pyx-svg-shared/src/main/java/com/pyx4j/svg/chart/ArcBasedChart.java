@@ -26,13 +26,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.IsSvgElement;
 import com.pyx4j.svg.basic.SvgElement;
 import com.pyx4j.svg.basic.SvgFactory;
+import com.pyx4j.svg.basic.Text;
 import com.pyx4j.svg.chart.DataSource.Metric;
 
-public abstract class ArcBasedChart implements IsSvgElement {
+public abstract class ArcBasedChart extends ChartBase implements IsSvgElement {
 
     private final DataSource datasource;
 
@@ -67,13 +69,23 @@ public abstract class ArcBasedChart implements IsSvgElement {
         int x = radius + PADDING;
         int y = radius + PADDING;
 
+        if (CommonsStringUtils.isStringSet(configurator.getTitle())) {
+            //adjust height to accommodate chart title
+            Text title = factory.createText(configurator.getTitle(), radius + PADDING, y - radius);
+            title.setAttribute("font-size", String.valueOf(TITLE_FONT_SIZE));
+            title.setAttribute("text-anchor", "middle");
+            container.add(title);
+            y += TITLE_FONT_SIZE + TITLE_PADDING;
+        }
+
         Set<Entry<Metric, List<Double>>> dataset = datasource.getDataSet().entrySet();
         //find out number of series
         int numOfSeries = 0;
         for (Entry<Metric, List<Double>> entry : dataset) {
             int size = entry.getValue().size();
-            if (numOfSeries < size)
+            if (numOfSeries < size) {
                 numOfSeries = size;
+            }
         }
 
         for (int idx = 0; idx < numOfSeries; idx++) {
@@ -81,9 +93,9 @@ public abstract class ArcBasedChart implements IsSvgElement {
             for (Entry<Metric, List<Double>> entry : dataset) {
                 List<Double> values = entry.getValue();
                 Double value;
-                if (values == null || values.size() == 0)
+                if (values == null || values.size() == 0) {
                     value = 0.0;
-                else {
+                } else {
                     try {
                         value = values.get(idx);
                     } catch (Exception ex) {
@@ -93,19 +105,20 @@ public abstract class ArcBasedChart implements IsSvgElement {
                 series.put(entry.getKey(), value);
             }
 
-            String SeriesTitle = null;
+            String seriesTitle = null;
             if (sdesc != null) {
                 try {
-                    SeriesTitle = sdesc.get(idx);
+                    seriesTitle = sdesc.get(idx);
                 } catch (Exception e) {
                     ;
                 }
             }
 
-            computedWidth = drawSeries(series, x, y, SeriesTitle);
+            computedWidth = drawSeries(series, x, y, seriesTitle);
             y += radius * 2 + PADDING;
-            if (SeriesTitle != null && SeriesTitle.length() > 0)
+            if (seriesTitle != null && seriesTitle.length() > 0) {
                 y += 2 * PADDING;
+            }
         }
         computedHeight = y + radius + PADDING;
 

@@ -34,8 +34,6 @@ import com.pyx4j.svg.util.Utils;
 
 public class Gauge extends ArcBasedChart {
 
-    private final static int TITLE_FONT_SIZE = 20;
-
     private final static int SCALE_LABEL_SPACING = 10;
 
     private final static int RIM_WIDTH = 20;

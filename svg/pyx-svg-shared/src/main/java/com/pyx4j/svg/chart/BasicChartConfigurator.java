@@ -34,6 +34,8 @@ public abstract class BasicChartConfigurator {
 
     private ChartColors chartColors;
 
+    private String title;
+
     private boolean legend;
 
     private String legendBackgroundColor;
@@ -49,6 +51,7 @@ public abstract class BasicChartConfigurator {
         this.datasourse = datasource;
         chartColors = ChartTheme.monochrome;
         legend = false;
+        title = null;
         showValueLabels = false;
         labelPrecision = DEFAULT_LABEL_PRECISION;
     }
@@ -63,6 +66,14 @@ public abstract class BasicChartConfigurator {
 
     public Iterator<String> getColorIterator() {
         return new ChartColorsCircularIterator(getChartColors());
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public boolean isLegend() {

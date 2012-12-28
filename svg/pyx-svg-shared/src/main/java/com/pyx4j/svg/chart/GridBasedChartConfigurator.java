@@ -30,8 +30,6 @@ public class GridBasedChartConfigurator extends BasicChartConfigurator {
 
     private GridType gridType;
 
-    private String title;
-
     private String verticalAxisTitle;
 
     private String horisontalAxisTitle;
@@ -48,7 +46,6 @@ public class GridBasedChartConfigurator extends BasicChartConfigurator {
         //  assert width < 1;
         //  assert height < 1;
         gridType = GridType.Value;
-        title = null;
         this.width = width;
         this.height = height;
         zeroBased = false;
@@ -61,14 +58,6 @@ public class GridBasedChartConfigurator extends BasicChartConfigurator {
 
     public void setGridType(GridType gridType) {
         this.gridType = gridType;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getVerticalAxisTitle() {

@@ -39,7 +39,7 @@ import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.common.Tick;
 import com.pyx4j.svg.common.Tick.Rank;
 
-public abstract class GridBasedChart implements IsSvgElement {
+public abstract class GridBasedChart extends ChartBase implements IsSvgElement {
     /**
      * Default max value of the graph, for the cases when actual max value that is present in the data set is 0.
      * It's used to avoid the bug that causes the points that represent zero to be drawn not on the X-axis.
@@ -65,10 +65,6 @@ public abstract class GridBasedChart implements IsSvgElement {
     private static int DEFAULT_FONT_SIZE = 11;
 
     private final static int LEGEND_FRAME_PADDING = 5;
-
-    private final static int TITLE_FONT_SIZE = 20;
-
-    private final static int TITLE_PADDING = 10;
 
     private static int VALUE_LABEL_PADDING = 7;
 
