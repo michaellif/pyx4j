@@ -45,7 +45,7 @@ public class DataItem<E extends IEntity> {
     }
 
     public Object getCellValue(ColumnDescriptor descriptor) {
-        return descriptor.convert(entity);
+        return descriptor.getCellValue(entity);
     }
 
 }

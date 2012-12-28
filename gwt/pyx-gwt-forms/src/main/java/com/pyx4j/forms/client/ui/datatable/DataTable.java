@@ -310,7 +310,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
 //
 // Internals:
-//    
+//
     public void renderTable() {
 
         assert model.getColumnDescriptors() != null : "getColumnDescriptors() shouldn't be null";
@@ -441,9 +441,11 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 if (!columnDescriptor.isVisible()) {
                     continue;
                 }
-                HTML contentHtml;
+                Widget contentHtml;
                 Object value = dataItem.getCellValue(columnDescriptor);
-                if (value == null || value.equals("")) {
+                if (value instanceof Widget) {
+                    contentHtml = (Widget) value;
+                } else if (value == null || value.equals("")) {
                     contentHtml = new HTML("&nbsp;");
                 } else {
                     contentHtml = new HTML(value.toString());
@@ -475,7 +477,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 ++rowIndex;
             }
         }
-        //TODO implement 
+        //TODO implement
         //this.ensureDebugId(model.getDebugId());
     }
 
@@ -602,7 +604,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         }
     }
 
-    // Check box column item class: 
+    // Check box column item class:
     protected class SelectionCheckBox extends CheckBox {
 
         public SelectionCheckBox(final int rowIndex, boolean checked) {

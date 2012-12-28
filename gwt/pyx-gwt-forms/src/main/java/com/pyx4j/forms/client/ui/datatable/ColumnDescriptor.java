@@ -113,6 +113,13 @@ public class ColumnDescriptor {
         return entity.toString();
     }
 
+    /**
+     * May return Widget to be shown in DataTable
+     */
+    public Object getCellValue(IEntity entity) {
+        return convert(entity);
+    }
+
     @Override
     public String toString() {
         return builder.columnName + "[" + builder.columnTitle + "]";
