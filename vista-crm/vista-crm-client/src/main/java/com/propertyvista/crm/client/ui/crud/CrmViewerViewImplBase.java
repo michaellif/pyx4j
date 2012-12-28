@@ -59,7 +59,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     private Button versioningButton;
 
-    private Button historyingButton;
+    private Button revisionsButton;
 
     private MenuItem editDraft;
 
@@ -263,7 +263,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     }
 
     protected <V extends IVersionData<?>> void enableVersioning(final Class<V> entityVersionClass, final AbstractVersionDataListService<V> entityVersionService) {
-        assert historyingButton == null : "Historying is enabled already!?";
+        assert revisionsButton == null : "Revisioning is enabled already!?";
 
         if (editButton != null) {
             editButton.removeFromParent();
@@ -316,10 +316,10 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     protected <V extends IVersionData<?>> void enableHistorying(final Class<V> entityVersionClass, final AbstractVersionDataListService<V> entityVersionService) {
         assert versioningButton == null : "Versioning is enabled already!?";
 
-        historyingButton = new Button(i18n.tr("History"));
-        addHeaderToolbarItem(historyingButton);
+        revisionsButton = new Button(i18n.tr("Revisions"));
+        addHeaderToolbarItem(revisionsButton);
 
-        historyingButton.addClickHandler(new ClickHandler() {
+        revisionsButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 new VersionSelectorDialog<V>(entityVersionClass, getForm().getValue().getPrimaryKey()) {
