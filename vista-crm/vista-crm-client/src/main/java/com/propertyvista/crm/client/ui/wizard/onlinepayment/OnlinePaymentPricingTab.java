@@ -37,8 +37,6 @@ public class OnlinePaymentPricingTab extends Composite {
         contentPanel = new FormFlexPanel();
         contentPanel.setWidth("500px");
 
-        contentPanel.setH1(++row, 0, 1, i18n.tr("Pricing Information For Online Payments"));
-
         contentPanel.setWidget(++row, 0, makePoweredByPanel());
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 

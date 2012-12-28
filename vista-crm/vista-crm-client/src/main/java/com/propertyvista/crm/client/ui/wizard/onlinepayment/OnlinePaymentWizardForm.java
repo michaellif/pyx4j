@@ -86,6 +86,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
     private FormFlexPanel createPricingStep(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = 0;
+        main.setH1(++row, 0, 1, i18n.tr("Pricing Information for Online Payments"));
         main.setWidget(++row, 0, new OnlinePaymentPricingTab());
         return main;
     }
@@ -93,6 +94,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
     private FormFlexPanel createBusinessInfoStep(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
+        main.setH1(++row, 0, 1, i18n.tr("Business Information"));
         main.setWidget(++row, 0, inject(proto().businessInformation(), new BusinessInformationForm()));
         return main;
     }
@@ -100,6 +102,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
     private FormFlexPanel createPersonalInfoStep(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
+        main.setH1(++row, 0, 1, i18n.tr("Personal Information"));
         main.setWidget(++row, 0, inject(proto().personalInformation(), new PersonalInformationForm()));
         return main;
     }
@@ -107,6 +110,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
     private FormFlexPanel createPropertyAndBankingStep(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
+        main.setH1(++row, 0, 1, i18n.tr("Priperty and Banking"));
         main.setWidget(++row, 0, inject(proto().propertyAccounts(), new PropertyAccountInfoFolder()));
         get(proto().propertyAccounts()).addValueValidator(new EditableValueValidator<List<PropertyAccountInfo>>() {
             @Override
