@@ -37,6 +37,7 @@ import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.version.ItemA;
 import com.pyx4j.entity.test.shared.domain.version.ItemA.ItemAVersion;
+import com.pyx4j.entity.test.shared.domain.version.ItemAInconclusive;
 import com.pyx4j.entity.test.shared.domain.version.ItemB;
 import com.pyx4j.entity.test.shared.domain.version.OwnedByVerOneToManyChild;
 import com.pyx4j.entity.test.shared.domain.version.OwnedByVerOneToManyParent;
@@ -154,34 +155,29 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         // Initial item
         ItemA itemA1 = EntityFactory.create(ItemA.class);
         itemA1.testId().setValue(testId);
-
-        itemA1.versions().add(itemA1.versions().$());
-        itemA1.versions().add(itemA1.versions().$());
-        itemA1.versions().add(itemA1.versions().$());
-
-        final String v1Name = "V1-" + uniqueString();
-        itemA1.versions().get(0).fromDate().setValue(DateUtils.detectDateformat("2011-01-01"));
-        itemA1.versions().get(0).toDate().setValue(DateUtils.detectDateformat("2011-02-01"));
-        itemA1.versions().get(0).name().setValue(v1Name);
-        itemA1.versions().get(0).testId().setValue(testId);
-
-        final String currentName = "V0-" + uniqueString();
-        itemA1.versions().get(1).fromDate().setValue(DateUtils.detectDateformat("2011-02-01"));
-        itemA1.versions().get(1).toDate().setValue(null);
-        itemA1.versions().get(1).name().setValue(currentName);
-        itemA1.versions().get(1).testId().setValue(testId);
-
+        srv.persist(itemA1);
         final String draftName = "Draft-" + uniqueString();
-        itemA1.versions().get(2).fromDate().setValue(null);
-        itemA1.versions().get(2).toDate().setValue(null);
-        itemA1.versions().get(2).name().setValue(draftName);
-        itemA1.versions().get(2).testId().setValue(testId);
-
-        //Save
+        itemA1.version().name().setValue(draftName);
+        itemA1.version().testId().setValue(testId);
         srv.persist(itemA1);
 
-        // Key assigned and versions not set in the key
-        assertEquals("assigned version", Key.VERSION_CURRENT, itemA1.getPrimaryKey().getVersion());
+        final String v1Name = "V1-" + uniqueString();
+        ItemA.ItemAVersion v1 = EntityFactory.create(ItemA.ItemAVersion.class);
+        v1.holder().set(itemA1);
+        v1.fromDate().setValue(DateUtils.detectDateformat("2011-01-01"));
+        v1.toDate().setValue(DateUtils.detectDateformat("2011-02-01"));
+        v1.name().setValue(v1Name);
+        v1.testId().setValue(testId);
+        srv.persist(v1);
+
+        final String currentName = "V0-" + uniqueString();
+        ItemA.ItemAVersion v0 = EntityFactory.create(ItemA.ItemAVersion.class);
+        v0.holder().set(itemA1);
+        v0.fromDate().setValue(DateUtils.detectDateformat("2011-02-01"));
+        v0.toDate().setValue(null);
+        v0.name().setValue(currentName);
+        v0.testId().setValue(testId);
+        srv.persist(v0);
 
         // Verify VersionData
         {
@@ -211,7 +207,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         // Retrieval of item before current existed
         {
             setDBTime("2010-01-01");
-            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey());
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asCurrentKey());
             assertTrue("current is null", itemA1r.version().isNull());
         }
 
@@ -229,14 +225,14 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
         // Retrieval of version Data by itself, verify PK of owner/holder
         {
-            ItemAVersion itemA1r = srv.retrieve(ItemAVersion.class, itemA1.versions().get(0).getPrimaryKey());
+            ItemAVersion itemA1r = srv.retrieve(ItemAVersion.class, v0.getPrimaryKey());
         }
 
         // Retrieval of item itself, by default returns current
         {
             setDBTime("2011-03-02");
             ItemA itemA1r = EntityFactory.create(ItemA.class);
-            itemA1r.setPrimaryKey(itemA1.getPrimaryKey());
+            itemA1r.setPrimaryKey(itemA1.getPrimaryKey().asCurrentKey());
 
             srv.retrieve(itemA1r);
             assertTrue("version is not null", !itemA1r.version().isNull());
@@ -567,7 +563,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         final String v2Name = "V2-" + uniqueString();
 
         // Initial item
-        ItemA itemA1 = EntityFactory.create(ItemA.class);
+        ItemAInconclusive itemA1 = EntityFactory.create(ItemAInconclusive.class);
         itemA1.testId().setValue(testId);
         itemA1.version().name().setValue(v1Name);
         itemA1.version().testId().setValue(testId);
@@ -575,11 +571,11 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         //Save
         srv.persist(itemA1);
         {
-            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asCurrentKey());
+            ItemAInconclusive itemA1r = srv.retrieve(ItemAInconclusive.class, itemA1.getPrimaryKey().asCurrentKey());
             assertFalse("current is no null", itemA1r.version().isNull());
         }
         {
-            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asDraftKey());
+            ItemAInconclusive itemA1r = srv.retrieve(ItemAInconclusive.class, itemA1.getPrimaryKey().asDraftKey());
             assertTrue("draft is null", itemA1r.version().isNull());
         }
 
@@ -588,13 +584,14 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         srv.persist(itemA1);
 
         // Add new version
-        ItemA itemA2 = VersionedEntityUtils.createNextVersion(itemA1);
+        ItemAInconclusive itemA2 = VersionedEntityUtils.createNextVersion(itemA1);
         itemA2.version().name().setValue(v2Name);
         srv.persist(itemA2);
 
         // Verify VersionData
         {
-            EntityQueryCriteria<ItemA.ItemAVersion> criteria = EntityQueryCriteria.create(ItemA.ItemAVersion.class);
+            EntityQueryCriteria<ItemAInconclusive.ItemAInconclusiveVersion> criteria = EntityQueryCriteria
+                    .create(ItemAInconclusive.ItemAInconclusiveVersion.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
             assertEquals("VersionData.size()", 2, srv.query(criteria).size());
         }

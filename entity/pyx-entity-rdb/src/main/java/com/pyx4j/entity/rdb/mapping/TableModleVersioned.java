@@ -29,6 +29,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IInconclusiveVersioning;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
@@ -102,12 +103,17 @@ public class TableModleVersioned {
             this.tm = mappings.getTableModel(persistenceContext, versionDataEntityClass);
         }
 
-        List<IVersionData<IVersionedEntity<?>>> update(boolean newEntity) {
+        private List<IVersionData<IVersionedEntity<?>>> update(boolean newEntity) {
 
             versionData.holder().set(versionedEntity);
             versionData.createdByUserKey().setValue(persistenceContext.getCurrentUserKey());
 
-            switch (versionedEntity.saveAction().getValue(SaveAction.saveNonVersioned)) {
+            SaveAction defaultSaveAction = SaveAction.saveAsDraft;
+            if (versionedEntity instanceof IInconclusiveVersioning) {
+                defaultSaveAction = SaveAction.saveNonVersioned;
+            }
+
+            switch (versionedEntity.saveAction().getValue(defaultSaveAction)) {
             case saveNonVersioned: {
                 if (versionData.fromDate().isNull()) {
                     versionData.fromDate().setValue(persistenceContext.getTimeNow());
