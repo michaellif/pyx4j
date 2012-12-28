@@ -167,6 +167,7 @@
 	display: inline-block;
 	min-height: 520px;
 	float: left;
+	clear:left;
 }
 
 .newsBox .infobox_header {

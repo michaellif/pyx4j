@@ -36,7 +36,6 @@ select:focus {
 }
 
 html,body {
-	height: 100%;
 	width: 100%;
 	color: ${foreground_100};
 }
