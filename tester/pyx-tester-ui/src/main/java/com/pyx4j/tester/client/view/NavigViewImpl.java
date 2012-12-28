@@ -61,6 +61,7 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
         nativeWidgetRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.NativeWidget.NativeWidgetBasic(), "Native Widgets")));
         nativeWidgetRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.NativeWidget.RichTextEditor(), "Rich Text Editor")));
         nativeWidgetRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.NativeWidget.Lister(), "Lister")));
+        nativeWidgetRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.NativeWidget.CImage(), "CImage")));
         nativeWidgetRoot.setState(true);
         tree.addItem(nativeWidgetRoot);
 
