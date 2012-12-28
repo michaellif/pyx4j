@@ -35,7 +35,7 @@ import com.pyx4j.commons.IDebugId;
 public class BoxFolderItemToolbar extends HorizontalPanel {
 
     public static enum DebugIds implements IDebugId {
-        CollapseImage, Caption, Decorator, ImageWarn, TitleIcon;
+        Caption, Decorator, ImageWarn, TitleIcon;
 
         @Override
         public String debugId() {
@@ -46,8 +46,6 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
     private final BoxFolderItemDecorator<?> decorator;
 
     private final SimplePanel actionsPanelHolder;
-
-    private final Image collapseImage;
 
     private final Label caption;
 
@@ -60,23 +58,6 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         this.decorator = decorator;
 
         setWidth("100%");
-
-        SimplePanel collapseImageHolder = new SimplePanel();
-        collapseImageHolder.getElement().getStyle().setPadding(2, Unit.PX);
-
-        collapseImage = new Image();
-        //Fix the ensureDebugId initialisation
-        collapseImage.setResource(decorator.getImages().collapse());
-        collapseImage.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                setExpended(!decorator.isExpended());
-            }
-        });
-
-        collapseImageHolder.setWidget(collapseImage);
-
-        add(collapseImageHolder);
 
         HorizontalPanel captionHolder = new HorizontalPanel();
         captionHolder.getElement().getStyle().setMarginLeft(5, Unit.PX);
@@ -118,7 +99,6 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         caption.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.Caption).debugId());
         titleIcon.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.TitleIcon).debugId());
         warnImage.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.ImageWarn).debugId());
-        collapseImage.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.CollapseImage).debugId());
 
         update(decorator.isExpended());
 
@@ -133,7 +113,6 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
             setCaption(decorator.getFolderItem().getValue().getStringView());
         }
         caption.setVisible(!expanded);
-        collapseImage.setResource(expanded ? decorator.getImages().collapse() : decorator.getImages().expand());
     }
 
     protected void setTitleIcon(ImageResource icon) {
@@ -147,10 +126,6 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
 
     protected void setCaption(String text) {
         caption.setText(text);
-    }
-
-    public void setCollapseButtonVisible(boolean collapsible) {
-        collapseImage.setVisible(collapsible);
     }
 
     public void setActionsBar(ItemActionsBar actionsPanel) {

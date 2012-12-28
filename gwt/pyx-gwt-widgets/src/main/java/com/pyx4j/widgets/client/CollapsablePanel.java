@@ -25,8 +25,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.event.shared.BeforeToggleEvent;
 import com.pyx4j.widgets.client.event.shared.BeforeToggleHandler;
@@ -43,7 +43,9 @@ public class CollapsablePanel extends SimplePanel implements HasToggleHandlers {
 
     private final Image collapseImage;
 
-    private boolean collapsed = false;
+    private boolean expended = true;
+
+    private boolean collapsible = true;
 
     public CollapsablePanel(WidgetsImages images) {
         this.images = images;
@@ -56,7 +58,7 @@ public class CollapsablePanel extends SimplePanel implements HasToggleHandlers {
         collapseImage.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                setCollapsed(!collapsed);
+                setExpended(!expended);
             }
         });
         mainPanel.add(collapseImage);
@@ -68,15 +70,15 @@ public class CollapsablePanel extends SimplePanel implements HasToggleHandlers {
         super.setWidget(mainPanel);
     }
 
-    public void setCollapsed(boolean collapsed) {
-        BeforeToggleEvent event = BeforeToggleEvent.fire(this, !collapsed);
+    public void setExpended(boolean expended) {
+        BeforeToggleEvent event = BeforeToggleEvent.fire(this, expended);
         if (event != null && event.isCanceled()) {
             return;
         }
-        collapseImage.setResource(collapsed ? images.expand() : images.collapse());
-        this.collapsed = collapsed;
+        collapseImage.setResource(expended ? images.collapse() : images.expand());
+        this.expended = expended;
 
-        ToggleEvent.fire(this, !collapsed);
+        ToggleEvent.fire(this, expended);
     }
 
     @Override
@@ -90,8 +92,24 @@ public class CollapsablePanel extends SimplePanel implements HasToggleHandlers {
     }
 
     @Override
-    public void setWidget(IsWidget w) {
+    public void setWidget(Widget w) {
         contentHolder.setWidget(w);
+    }
+
+    public void setCollapsible(boolean collapsible) {
+        this.collapsible = collapsible;
+        collapseImage.setVisible(collapsible);
+        if (collapsible == false) {
+            setExpended(true);
+        }
+    }
+
+    public boolean isCollapsible() {
+        return collapsible;
+    }
+
+    public boolean isExpended() {
+        return expended;
     }
 
 }

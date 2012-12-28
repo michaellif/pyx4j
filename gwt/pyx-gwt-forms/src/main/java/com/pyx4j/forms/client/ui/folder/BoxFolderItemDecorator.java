@@ -47,6 +47,9 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.CollapsablePanel;
+import com.pyx4j.widgets.client.event.shared.ToggleEvent;
+import com.pyx4j.widgets.client.event.shared.ToggleHandler;
 
 public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
 
@@ -61,9 +64,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         }
     }
 
-    private boolean expended = true;
-
-    private boolean collapsible = true;
+    private CollapsablePanel collapsablePanel;
 
     private BoxFolderItemToolbar toolbar;
 
@@ -81,9 +82,21 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
         setStyleName(EntityFolderBoxItemDecorator.name());
 
+        collapsablePanel = new CollapsablePanel(images);
+        setWidget(collapsablePanel);
+
+        collapsablePanel.addToggleHandler(new ToggleHandler() {
+
+            @Override
+            public void onToggle(ToggleEvent event) {
+                contentHolder.setVisible(event.isToggleOn());
+                toolbar.update(event.isToggleOn());
+            }
+        });
+
         VerticalPanel mainPanel = new VerticalPanel();
         mainPanel.setWidth("100%");
-        setWidget(mainPanel);
+        collapsablePanel.setWidget(mainPanel);
 
         toolbar = new BoxFolderItemToolbar(this);
         mainPanel.add(toolbar);
@@ -104,7 +117,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.isEventOfType(PropertyName.repopulated)) {
-                    toolbar.update(expended);
+                    toolbar.update(collapsablePanel.isExpended());
                 }
                 if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
                     String message = null;
@@ -128,7 +141,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         folderItem.addValueChangeHandler(new ValueChangeHandler<E>() {
             @Override
             public void onValueChange(ValueChangeEvent<E> event) {
-                toolbar.update(expended);
+                toolbar.update(collapsablePanel.isExpended());
             }
         });
     }
@@ -149,25 +162,19 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     }
 
     public void setExpended(boolean expended) {
-        this.expended = expended;
-        contentHolder.setVisible(expended);
-        toolbar.update(expended);
+        collapsablePanel.setExpended(expended);
     }
 
     public void setCollapsible(boolean collapsible) {
-        this.collapsible = collapsible;
-        toolbar.setCollapseButtonVisible(collapsible);
-        if (collapsible == false) {
-            setExpended(true);
-        }
+        collapsablePanel.setCollapsible(collapsible);
     }
 
     public boolean isCollapsible() {
-        return collapsible;
+        return collapsablePanel.isCollapsible();
     }
 
     public boolean isExpended() {
-        return expended;
+        return collapsablePanel.isExpended();
     }
 
     @Override
