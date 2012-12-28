@@ -22,14 +22,14 @@ package com.pyx4j.entity.test.shared.domain.version;
 
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IInconclusiveVersioning;
+import com.pyx4j.entity.shared.ILooseVersioning;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.test.shared.domain.version.ItemAInconclusive.ItemAInconclusiveVersion;
 
 @Table(prefix = "test")
-public interface ItemAInconclusive extends IVersionedEntity<ItemAInconclusiveVersion>, IInconclusiveVersioning {
+public interface ItemAInconclusive extends IVersionedEntity<ItemAInconclusiveVersion>, ILooseVersioning {
 
     IPrimitive<String> testId();
 

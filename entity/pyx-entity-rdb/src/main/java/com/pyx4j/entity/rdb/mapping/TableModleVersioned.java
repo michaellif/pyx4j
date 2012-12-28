@@ -29,7 +29,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IInconclusiveVersioning;
+import com.pyx4j.entity.shared.ILooseVersioning;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
@@ -109,7 +109,7 @@ public class TableModleVersioned {
             versionData.createdByUserKey().setValue(persistenceContext.getCurrentUserKey());
 
             SaveAction defaultSaveAction = SaveAction.saveAsDraft;
-            if (versionedEntity instanceof IInconclusiveVersioning) {
+            if (versionedEntity instanceof ILooseVersioning) {
                 defaultSaveAction = SaveAction.saveNonVersioned;
             }
 

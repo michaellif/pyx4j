@@ -25,7 +25,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IInconclusiveVersioning;
+import com.pyx4j.entity.shared.ILooseVersioning;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
@@ -128,7 +128,7 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
     @Override
     public void populate(E value) {
         enableButtons(false);
-        if (value instanceof IInconclusiveVersioning && value.getPrimaryKey() != null) {
+        if (value instanceof ILooseVersioning && value.getPrimaryKey() != null) {
             ButtonMenuBar menu = btnSave.createMenu();
             menu.addItem(i18n.tr("Save as New Version"), new Command() {
                 @Override
