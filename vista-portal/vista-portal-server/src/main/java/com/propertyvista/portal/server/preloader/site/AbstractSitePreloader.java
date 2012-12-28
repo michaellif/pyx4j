@@ -44,6 +44,7 @@ import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PortalImageResource;
+import com.propertyvista.domain.site.PortalImageSet;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SiteImageResource;
@@ -504,15 +505,20 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             }
         }
         // banner image
-        fileName = "banner.png";
-        siteImage = makeSiteImage(fileName, cType);
-        if (siteImage != null) {
-            for (LocaleInfo li : siteLocale) {
-                // banner
-                PortalImageResource res = site.banner().$();
-                res.locale().set(li.aLocale);
-                res.imageResource().set(siteImage);
-                site.banner().add(res);
+        String[] banners = new String[] { "banner.png", "banner1.png", "banner2.png", "banner3.png", "banner4.png" };
+        SiteImageResource[] siteImages = new SiteImageResource[banners.length];
+        for (int i = 0; i < banners.length; i++) {
+            siteImages[i] = makeSiteImage(banners[i], cType);
+        }
+        for (LocaleInfo li : siteLocale) {
+            PortalImageSet res = site.banner().$();
+            res.locale().set(li.aLocale);
+            site.banner().add(res);
+            // banners
+            for (SiteImageResource img : siteImages) {
+                if (img != null) {
+                    res.imageSet().add(img);
+                }
             }
         }
         // slogan image

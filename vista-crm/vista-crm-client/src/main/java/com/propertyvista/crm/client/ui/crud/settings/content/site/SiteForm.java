@@ -94,7 +94,7 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         addTab(content);
 
         content = new FormFlexPanel(proto().banner().getMeta().getCaption());
-        content.setWidget(0, 0, inject(proto().banner(), new PortalImageResourceFolder(isEditable())));
+        content.setWidget(0, 0, inject(proto().banner(), new PortalImageSetFolder(isEditable())));
         addTab(content);
 
         // home page gadgets

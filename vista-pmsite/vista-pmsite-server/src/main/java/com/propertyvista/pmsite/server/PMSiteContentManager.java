@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Vector;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -45,6 +46,7 @@ import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PortalImageResource;
+import com.propertyvista.domain.site.PortalImageSet;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptorChanges;
 import com.propertyvista.domain.site.SiteImageResource;
@@ -477,18 +479,19 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public SiteImageResource getSiteBanner(AvailableLocale locale) {
-        SiteImageResource banner = null;
+        List<SiteImageResource> bannerSet = null;
         String lang = locale.lang().getValue().name();
-        IList<PortalImageResource> allBanners = getSiteDescriptor().banner();
-        for (PortalImageResource bannerRc : allBanners) {
-            if (bannerRc.locale().lang().getValue().name().equals(lang)) {
-                banner = bannerRc.imageResource();
+        IList<PortalImageSet> allBanners = getSiteDescriptor().banner();
+        for (PortalImageSet banner : allBanners) {
+            if (banner.locale().lang().getValue().name().equals(lang)) {
+                bannerSet = banner.imageSet();
+                break;
             }
         }
-        if (banner == null && allBanners.size() > 0) {
-            banner = allBanners.get(0).imageResource();
+        if (bannerSet == null && allBanners.size() > 0) {
+            bannerSet = allBanners.get(0).imageSet();
         }
-        return banner;
+        return bannerSet.get(new Random().nextInt(bannerSet.size()));
     }
 
     public String getSiteSlogan(AvailableLocale locale) {
