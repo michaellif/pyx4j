@@ -25,6 +25,6 @@ public class FeatureViewerViewImpl extends CrmViewerViewImplBase<Feature> implem
     public FeatureViewerViewImpl() {
         super(CrmSiteMap.Properties.Feature.class);
         setForm(new FeatureForm(this));
-        enableHistorying(Feature.FeatureV.class, GWT.<FeatureVersionService> create(FeatureVersionService.class));
+        enableLooseVersioning(Feature.FeatureV.class, GWT.<FeatureVersionService> create(FeatureVersionService.class));
     }
 }

@@ -263,7 +263,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     }
 
     protected <V extends IVersionData<?>> void enableVersioning(final Class<V> entityVersionClass, final AbstractVersionDataListService<V> entityVersionService) {
-        assert revisionsButton == null : "Revisioning is enabled already!?";
+        assert revisionsButton == null : "Loose Versioning is enabled already!?";
 
         if (editButton != null) {
             editButton.removeFromParent();
@@ -313,7 +313,8 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         versioningMenu.addItem(selectVersion);
     }
 
-    protected <V extends IVersionData<?>> void enableHistorying(final Class<V> entityVersionClass, final AbstractVersionDataListService<V> entityVersionService) {
+    protected <V extends IVersionData<?>> void enableLooseVersioning(final Class<V> entityVersionClass,
+            final AbstractVersionDataListService<V> entityVersionService) {
         assert versioningButton == null : "Versioning is enabled already!?";
 
         revisionsButton = new Button(i18n.tr("Revisions"));
