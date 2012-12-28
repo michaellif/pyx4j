@@ -491,7 +491,7 @@ public class PMSiteContentManager implements Serializable {
         if (bannerSet == null && allBanners.size() > 0) {
             bannerSet = allBanners.get(0).imageSet();
         }
-        return bannerSet.get(new Random().nextInt(bannerSet.size()));
+        return bannerSet.size() > 0 ? bannerSet.get(new Random().nextInt(bannerSet.size())) : null;
     }
 
     public String getSiteSlogan(AvailableLocale locale) {
