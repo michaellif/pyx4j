@@ -126,6 +126,8 @@ public class CrmTheme extends VistaTheme {
         initReportsStyles();
 
         initKeywordBoxStyles();
+
+        initWizardPanelStyles();
     }
 
     @Override
@@ -639,6 +641,12 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style("." + KeywordsBox.DEFAULT_STYLE_PREFIX + KeywordsBox.StyleSuffix.KeywordsAdderButton);
         style.addProperty("display", "inline-block");
+        addStyle(style);
+    }
+
+    private void initWizardPanelStyles() {
+        Style style = new Style("." + DefaultTabTheme.StyleName.WizardPanel, " .", DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH1Label);
+        style.addProperty("text-align", "center");
         addStyle(style);
     }
 
