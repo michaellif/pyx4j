@@ -26,7 +26,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.essentials.rpc.admin.DatastoreAdminServices;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
-import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public class DatastoreAdminServicesImpl implements DatastoreAdminServices {

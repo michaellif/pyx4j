@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.deferred;
+package com.pyx4j.gwt.server.deferred;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

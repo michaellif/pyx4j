@@ -35,8 +35,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.essentials.rpc.admin.AdminServices;
 import com.pyx4j.essentials.rpc.admin.NetworkSimulation;
-import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.essentials.server.dev.NetworkSimulationServiceFilter;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 

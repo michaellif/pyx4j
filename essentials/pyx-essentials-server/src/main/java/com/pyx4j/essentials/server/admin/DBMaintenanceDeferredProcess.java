@@ -31,8 +31,8 @@ import com.pyx4j.entity.server.search.SearchResultIterator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.admin.DBMaintenanceRequest;
 import com.pyx4j.essentials.rpc.admin.IDBMaintenanceProcessor;
-import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.server.deferred.IDeferredProcess;
 import com.pyx4j.security.shared.SecurityController;
 
 public class DBMaintenanceDeferredProcess implements IDeferredProcess {

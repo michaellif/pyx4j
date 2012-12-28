@@ -25,8 +25,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.rpc.report.ReportService;
-import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.essentials.server.download.Downloadable;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public class ReportServiceImpl<E extends IEntity> implements ReportService<E> {

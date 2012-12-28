@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.essentials.server.deferred.IDeferredProcess;
+import com.pyx4j.gwt.server.deferred.IDeferredProcess;
 
 public class AdminCronJobsFactory implements CronJobsFactory {
 

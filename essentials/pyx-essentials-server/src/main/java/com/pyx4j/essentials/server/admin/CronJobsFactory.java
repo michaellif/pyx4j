@@ -22,7 +22,7 @@ package com.pyx4j.essentials.server.admin;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.pyx4j.essentials.server.deferred.IDeferredProcess;
+import com.pyx4j.gwt.server.deferred.IDeferredProcess;
 
 public interface CronJobsFactory {
 

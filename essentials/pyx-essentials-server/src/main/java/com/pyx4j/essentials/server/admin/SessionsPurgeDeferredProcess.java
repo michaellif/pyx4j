@@ -38,8 +38,8 @@ import com.google.appengine.api.datastore.Query;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.server.deferred.IDeferredProcess;
 
 public class SessionsPurgeDeferredProcess implements IDeferredProcess {
 

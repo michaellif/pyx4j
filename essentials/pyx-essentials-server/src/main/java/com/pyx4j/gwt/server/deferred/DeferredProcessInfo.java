@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,22 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-05-07
+ * Created on Jan 29, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.deferred;
+package com.pyx4j.gwt.server.deferred;
 
 import java.io.Serializable;
 
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 
-public interface IDeferredProcess extends Serializable {
+final class DeferredProcessInfo implements Serializable {
 
-    public void execute();
+    private static final long serialVersionUID = -1334460222092134555L;
 
-    public void cancel();
+    IDeferredProcess process;
 
-    public DeferredProcessProgressResponse status();
+    DeferredProcessProgressResponse status;
+
+    DeferredProcessInfo(IDeferredProcess process) {
+        this.process = process;
+    }
+
+    void setProcessErrorWithStatusMessage(String message) {
+        DeferredProcessProgressResponse status = new DeferredProcessProgressResponse();
+        status.setErrorStatusMessage(message);
+        this.status = status;
+        this.process = null;
+    }
 
 }

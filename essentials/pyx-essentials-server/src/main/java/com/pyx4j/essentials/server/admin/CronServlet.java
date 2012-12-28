@@ -30,8 +30,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.essentials.server.deferred.DeferredProcessTaskWorkerServlet;
-import com.pyx4j.essentials.server.deferred.IDeferredProcess;
+import com.pyx4j.gwt.server.deferred.DeferredProcessTaskWorkerServlet;
+import com.pyx4j.gwt.server.deferred.IDeferredProcess;
 
 @SuppressWarnings("serial")
 public class CronServlet extends HttpServlet {
