@@ -64,7 +64,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
         mainPanel.setWidth("100%");
         mainPanel.add(collapsedPanel);
         mainPanel.add(expandedPanel);
-        setCollapsed(true);
+        setExpended(false);
         return mainPanel;
     }
 
@@ -78,11 +78,11 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     protected void setComponentsValue(InvoiceLineItemGroupDTO value, boolean fireEvent, boolean populate) {
         collapsedPanel.setWidget(createCollapsedContent(value));
         expandedPanel.setWidget(createExpandedContent(value));
-        setCollapsed(true);
+        setExpended(false);
     }
 
-    public void setCollapsed(boolean collapsed) {
-        ((BaseCollapsableDecorator<?>) getDecorator()).setCollapsed(collapsed);
+    public void setExpended(boolean expended) {
+        ((BaseCollapsableDecorator<?>) getDecorator()).setExpended(expended);
     }
 
     @Override
