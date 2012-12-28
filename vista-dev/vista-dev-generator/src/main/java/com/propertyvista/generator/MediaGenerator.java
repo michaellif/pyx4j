@@ -19,11 +19,11 @@ import java.util.Map;
 
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.domain.File;
 import com.propertyvista.domain.PublicVisibilityType;

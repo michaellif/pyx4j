@@ -13,7 +13,7 @@
  */
 package com.propertyvista.ob.server.security;
 
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessService;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.log4gwt.rpc.LogServices;
 import com.pyx4j.rpc.shared.IServiceAdapter;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;

@@ -14,7 +14,7 @@
 package com.propertyvista.admin.server.security;
 
 import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessService;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 

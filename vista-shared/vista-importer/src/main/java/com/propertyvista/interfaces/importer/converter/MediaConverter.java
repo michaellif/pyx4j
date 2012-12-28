@@ -33,9 +33,9 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.essentials.j2se.util.FileIOUtils;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.MediaUploadService;

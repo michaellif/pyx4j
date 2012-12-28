@@ -15,12 +15,12 @@ package com.propertyvista.crm.server.services.billing;
 
 import java.io.ByteArrayOutputStream;
 
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 import com.pyx4j.essentials.server.download.Downloadable;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.billing.BillingUtils;

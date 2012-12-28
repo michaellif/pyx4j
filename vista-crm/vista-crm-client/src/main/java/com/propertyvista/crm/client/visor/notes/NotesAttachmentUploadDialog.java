@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.visor.notes;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 
-import com.pyx4j.essentials.client.upload.UploadPanel;
-import com.pyx4j.essentials.rpc.upload.UploadResponse;
+import com.pyx4j.gwt.client.upload.UploadPanel;
+import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.rpc.services;
 
-import com.pyx4j.essentials.rpc.upload.UploadService;
+import com.pyx4j.gwt.rpc.upload.UploadService;
 
 import com.propertyvista.crm.rpc.dto.NoteAttachmentUploadDTO;
 import com.propertyvista.domain.File;

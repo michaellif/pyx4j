@@ -34,6 +34,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.client.ConfirmCommand;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -269,18 +270,15 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addAction(activateAction);
 
-        moveOutAction = new MenuItem(i18n.tr("Move Out"), new Command() {
-            @Override
-            public void execute() {
-                MessageDialog.confirm(i18n.tr("Move Out"), i18n.tr("This will make this unit available to other leases (Tenant has brought the key).")
-                        + "<br/><br/>" + i18n.tr("Are you sure you would like to continue?"), new Command() {
+        moveOutAction = new MenuItem(i18n.tr("Move Out"), new ConfirmCommand(i18n.tr("Move Out"),
+                i18n.tr("This will make this unit available to other leases (Tenant has brought the key).") + "<br/><br/>"
+                        + i18n.tr("Are you sure you would like to continue?"), new Command() {
                     @Override
                     public void execute() {
                         ((LeaseViewerView.Presenter) getPresenter()).moveOut();
                     }
-                });
-            }
-        });
+                }));
+
         addAction(moveOutAction);
 
         closeAction = new MenuItem(i18n.tr("Close"), new Command() {

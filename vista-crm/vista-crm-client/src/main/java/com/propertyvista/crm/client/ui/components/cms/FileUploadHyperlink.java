@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.components.cms;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.forms.client.ui.CFile;
+import com.pyx4j.gwt.rpc.upload.UploadResponse;
 
 import com.propertyvista.crm.client.ui.components.media.MediaUploadDialog;
 import com.propertyvista.domain.File;

@@ -20,12 +20,12 @@ import org.apache.commons.io.FilenameUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
-import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
-import com.pyx4j.essentials.server.upload.UploadServiceImpl;
+import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
+import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.dto.MediaUploadDTO;
@@ -35,7 +35,7 @@ import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 import com.propertyvista.server.domain.FileBlob;
 
-public class MediaUploadServiceImpl extends UploadServiceImpl<MediaUploadDTO, File> implements MediaUploadService {
+public class MediaUploadServiceImpl extends AbstractUploadServiceImpl<MediaUploadDTO, File> implements MediaUploadService {
 
     private static final I18n i18n = I18n.get(MediaUploadServiceImpl.class);
 

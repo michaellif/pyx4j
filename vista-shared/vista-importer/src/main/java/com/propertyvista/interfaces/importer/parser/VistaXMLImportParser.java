@@ -17,7 +17,7 @@ import java.io.ByteArrayInputStream;
 
 import org.xml.sax.InputSource;
 
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.interfaces.importer.ImportUtils;
 import com.propertyvista.interfaces.importer.model.ImportIO;

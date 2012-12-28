@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.essentials.rpc.upload.UploadResponse;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.rpc.upload.UploadResponse;
 
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
 import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;

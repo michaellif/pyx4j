@@ -13,7 +13,7 @@
  */
 package com.propertyvista.interfaces.importer.parser;
 
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.interfaces.importer.model.ImportIO;
 

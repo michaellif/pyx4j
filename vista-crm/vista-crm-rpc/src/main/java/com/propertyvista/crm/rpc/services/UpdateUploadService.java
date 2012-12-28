@@ -16,8 +16,8 @@ package com.propertyvista.crm.rpc.services;
 import java.util.Collection;
 import java.util.EnumSet;
 
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
-import com.pyx4j.essentials.rpc.upload.UploadService;
+import com.pyx4j.gwt.rpc.upload.UploadService;
+import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
 import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;

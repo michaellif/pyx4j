@@ -21,12 +21,12 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
-import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
-import com.pyx4j.essentials.server.upload.UploadServiceImpl;
+import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
+import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
@@ -38,7 +38,7 @@ import com.propertyvista.server.domain.FileBlob;
  * @see com.propertyvista.portal.rpc.DeploymentConsts#mediaImagesServletMapping
  * 
  */
-public class SiteImageResourceUploadServiceImpl extends UploadServiceImpl<IEntity, SiteImageResource> implements SiteImageResourceUploadService {
+public class SiteImageResourceUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, SiteImageResource> implements SiteImageResourceUploadService {
 
     private static final I18n i18n = I18n.get(SiteImageResourceUploadServiceImpl.class);
 

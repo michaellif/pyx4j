@@ -17,11 +17,11 @@ import org.apache.commons.io.FilenameUtils;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
-import com.pyx4j.essentials.server.upload.UploadServiceImpl;
+import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
+import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.dto.NoteAttachmentUploadDTO;
@@ -30,7 +30,7 @@ import com.propertyvista.domain.File;
 import com.propertyvista.server.domain.FileBlob;
 import com.propertyvista.server.domain.NoteAttachmentBlob;
 
-public class NoteAttachmentUploadServiceImpl extends UploadServiceImpl<NoteAttachmentUploadDTO, File> implements NoteAttachmentUploadService {
+public class NoteAttachmentUploadServiceImpl extends AbstractUploadServiceImpl<NoteAttachmentUploadDTO, File> implements NoteAttachmentUploadService {
 
     private static final I18n i18n = I18n.get(NoteAttachmentUploadServiceImpl.class);
 

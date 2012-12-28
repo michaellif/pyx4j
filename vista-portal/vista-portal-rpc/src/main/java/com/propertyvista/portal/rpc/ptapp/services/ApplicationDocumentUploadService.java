@@ -17,8 +17,8 @@ import java.util.Collection;
 import java.util.EnumSet;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
-import com.pyx4j.essentials.rpc.upload.UploadService;
+import com.pyx4j.gwt.rpc.upload.UploadService;
+import com.pyx4j.gwt.shared.DownloadFormat;
 
 public interface ApplicationDocumentUploadService extends UploadService<IEntity, IEntity> {
 

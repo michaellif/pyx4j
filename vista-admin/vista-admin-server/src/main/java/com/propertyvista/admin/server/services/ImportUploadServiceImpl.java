@@ -24,13 +24,13 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
-import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.essentials.server.deferred.DeferredProcessorThread;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
-import com.pyx4j.essentials.server.upload.UploadServiceImpl;
+import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
+import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
@@ -50,7 +50,7 @@ import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 
-public class ImportUploadServiceImpl extends UploadServiceImpl<ImportUploadDTO, ImportUploadResponseDTO> implements ImportUploadService {
+public class ImportUploadServiceImpl extends AbstractUploadServiceImpl<ImportUploadDTO, ImportUploadResponseDTO> implements ImportUploadService {
 
     private final static Logger log = LoggerFactory.getLogger(ImportUploadServiceImpl.class);
 

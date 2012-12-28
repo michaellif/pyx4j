@@ -20,13 +20,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
-import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.essentials.server.deferred.DeferredProcessorThread;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
-import com.pyx4j.essentials.server.upload.UploadServiceImpl;
+import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
+import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -43,7 +43,7 @@ import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 
-public class UpdateUploadServiceImpl extends UploadServiceImpl<ImportUploadDTO, ImportUploadResponseDTO> implements UpdateUploadService {
+public class UpdateUploadServiceImpl extends AbstractUploadServiceImpl<ImportUploadDTO, ImportUploadResponseDTO> implements UpdateUploadService {
 
     private static final I18n i18n = I18n.get(MediaUploadServiceImpl.class);
 
