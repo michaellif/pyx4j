@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.gwt.shared;
+package com.pyx4j.gwt.test.shared;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -27,6 +27,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
+
+import com.pyx4j.gwt.shared.DownloadFormat;
 
 public class DownloadFormatTest {
     /**
