@@ -96,4 +96,10 @@ public class NImage<T extends IFile> extends NComponent<List<T>, ImageHolder, CI
         }
         return widget;
     }
+
+    @Override
+    public void editImage() {
+        // TODO Auto-generated method stub
+
+    }
 }

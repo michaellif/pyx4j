@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.tester.client.view.widget;
+package com.pyx4j.tester.client.view.cimage;
 
 import com.google.gwt.user.client.ui.IsWidget;
 

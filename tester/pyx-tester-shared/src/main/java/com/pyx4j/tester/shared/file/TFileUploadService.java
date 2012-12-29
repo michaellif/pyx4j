@@ -18,26 +18,17 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.tester.client.activity;
+package com.pyx4j.tester.shared.file;
 
-import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import java.util.Collection;
+import java.util.EnumSet;
 
-import com.pyx4j.tester.client.TesterVeiwFactory;
-import com.pyx4j.tester.client.view.cimage.CImageView;
+import com.pyx4j.gwt.rpc.upload.UploadService;
+import com.pyx4j.gwt.shared.DownloadFormat;
+import com.pyx4j.tester.domain.TFile;
 
-public class CImageViewActivity extends AbstractActivity {
+public interface TFileUploadService extends UploadService<TFile, TFile> {
 
-    private final CImageView view;
-
-    public CImageViewActivity() {
-        this.view = (CImageView) TesterVeiwFactory.retreive(CImageView.class);
-    }
-
-    @Override
-    public void start(AcceptsOneWidget container, EventBus eventBus) {
-        container.setWidget(view);
-    }
+    public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG);
 
 }

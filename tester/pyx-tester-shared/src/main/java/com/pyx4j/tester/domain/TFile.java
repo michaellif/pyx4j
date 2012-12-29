@@ -18,26 +18,10 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.tester.client.activity;
+package com.pyx4j.tester.domain;
 
-import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.pyx4j.entity.shared.IFile;
 
-import com.pyx4j.tester.client.TesterVeiwFactory;
-import com.pyx4j.tester.client.view.cimage.CImageView;
-
-public class CImageViewActivity extends AbstractActivity {
-
-    private final CImageView view;
-
-    public CImageViewActivity() {
-        this.view = (CImageView) TesterVeiwFactory.retreive(CImageView.class);
-    }
-
-    @Override
-    public void start(AcceptsOneWidget container, EventBus eventBus) {
-        container.setWidget(view);
-    }
+public interface TFile extends IFile {
 
 }

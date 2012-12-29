@@ -42,6 +42,8 @@ public class ImageHolder extends DockPanel implements IWidget {
 
         List<String> getImageUrls();
 
+        void editImage();
+
     }
 
     final Image image = new Image();
@@ -56,7 +58,7 @@ public class ImageHolder extends DockPanel implements IWidget {
 
     private final ImageDataProvider imageList;
 
-    private int curIdx = 0;
+    private int curIdx = -1;
 
     public ImageHolder(CImage.Type type, ImageDataProvider imageList) {
         this.type = type;
@@ -75,12 +77,16 @@ public class ImageHolder extends DockPanel implements IWidget {
     }
 
     public void reset() {
-        curIdx = 0;
+        curIdx = -1;
         onModelChange();
     }
 
     public void onModelChange() {
-        setUrl(imageList.getImageUrls().get(curIdx));
+        if (curIdx >= 0) {
+            setUrl(imageList.getImageUrls().get(curIdx));
+        } else {
+            setUrl("");
+        }
         viewControls.syncState();
     }
 
@@ -139,6 +145,7 @@ public class ImageHolder extends DockPanel implements IWidget {
             label.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
+                    imageList.editImage();
                 }
             });
             add(label);

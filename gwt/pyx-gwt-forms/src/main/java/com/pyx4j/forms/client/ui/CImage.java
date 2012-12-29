@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.FileURLBuilder;
 
 /*
@@ -23,6 +24,8 @@ public class CImage<E extends IFile> extends CComponent<List<E>, NImage<E>> {
     private FileURLBuilder<E> imageFileUrlBuilder;
 
     private FileURLBuilder<E> thumbnailFileUrlBuilder;
+
+    private UploadService<E, E> service;
 
     public CImage(Type type) {
         this.type = type;
@@ -52,5 +55,13 @@ public class CImage<E extends IFile> extends CComponent<List<E>, NImage<E>> {
 
     public void setThumbnailFileUrlBuilder(FileURLBuilder<E> fileURLBuilder) {
         this.thumbnailFileUrlBuilder = fileURLBuilder;
+    }
+
+    public void setUploadService(UploadService<E, E> service) {
+        this.service = service;
+    }
+
+    public UploadService<E, E> getUploadService() {
+        return service;
     }
 }

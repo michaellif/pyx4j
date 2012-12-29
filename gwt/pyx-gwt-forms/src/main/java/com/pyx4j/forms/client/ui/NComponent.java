@@ -52,9 +52,6 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         super();
         this.cComponent = cComponent;
         this.triggerImageResource = triggerImageResource;
-
-        setViewable(cComponent.isViewable());
-
     }
 
     public WIDGET getEditor() {

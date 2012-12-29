@@ -20,13 +20,35 @@
  */
 package com.pyx4j.entity.shared;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.i18n.annotations.I18n;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @EmbeddedEntity
 public interface IFile extends IEntity {
 
+    @ToString(index = 0)
     IPrimitive<String> fileName();
 
+    @MemberColumn(name = "updated_timestamp")
+    IPrimitive<Long> timestamp();
+
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+    IPrimitive<Integer> cacheVersion();
+
+    IPrimitive<Integer> fileSize();
+
+    IPrimitive<String> contentMimeType();
+
+    /**
+     * TODO Used to access just upload files ???
+     */
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+    IPrimitive<String> accessKey();
+
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+    IPrimitive<Key> blobKey();
 }

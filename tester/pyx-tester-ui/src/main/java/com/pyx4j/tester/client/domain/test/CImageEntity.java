@@ -18,18 +18,13 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.tester.client.view.widget;
+package com.pyx4j.tester.client.domain.test;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.tester.domain.TFile;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+public interface CImageEntity extends IEntity {
 
-public class CImageViewImpl extends ScrollPanel implements CImageView {
-
-    public CImageViewImpl() {
-        setSize("100%", "100%");
-        FormFlexPanel content = new FormFlexPanel();
-
-        add(content);
-    }
+    IList<TFile> files();
 }

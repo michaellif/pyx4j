@@ -35,6 +35,26 @@
         <url-pattern>/srv/*</url-pattern>
     </servlet-mapping>
     
+	<servlet>
+        <servlet-name>UploadServlet</servlet-name>
+        <servlet-class>com.pyx4j.tester.server.file.TestUploadServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>UploadServlet</servlet-name>
+        <url-pattern>/upload/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>FileResourceServlet</servlet-name>
+        <servlet-class>com.pyx4j.tester.server.file.TFileResourceServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FileResourceServlet</servlet-name>
+        <url-pattern>/download/*</url-pattern>
+    </servlet-mapping>
+    
     <!-- Default page to serve -->
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>

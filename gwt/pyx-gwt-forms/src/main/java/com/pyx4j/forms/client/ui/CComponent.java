@@ -407,6 +407,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     protected abstract WIDGET_TYPE createWidget();
 
     protected void onWidgetCreated() {
+        widget.setViewable(isViewable());
         applyAccessibilityRules();
         widget.setWidth(getWidth());
         widget.setHeight(getHeight());
