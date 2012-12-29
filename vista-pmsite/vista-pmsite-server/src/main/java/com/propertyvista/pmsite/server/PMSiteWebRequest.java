@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,6 +27,7 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.i18n.server.CookieLocaleResolver;
 import com.pyx4j.i18n.server.I18nManager;
 
+import com.propertyvista.config.VistaLocale;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.server.common.reference.PMSiteContentCache;
@@ -81,7 +82,7 @@ public class PMSiteWebRequest extends ServletWebRequest {
             // this will return either current or fist available locale
             locale = getCurrentOrDefaultLocale(contentManager.getAllAvailableLocale());
         }
-        I18nManager.setThreadLocale(getLocale(locale.lang().getValue()));
+        I18nManager.setThreadLocale(VistaLocale.toPmcLocale(locale.lang().getValue()));
         siteLocale = locale;
         // need locale on the client for GWT modules ?
         Cookie localeCookie = new Cookie(CookieLocaleResolver.COOKIE_NAME, siteLocale.lang().getValue().name());

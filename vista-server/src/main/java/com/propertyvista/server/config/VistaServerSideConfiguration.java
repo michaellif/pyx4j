@@ -38,6 +38,7 @@ import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.VistaCookieLocaleResolver;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.misc.VistaDevPreloadConfig;
