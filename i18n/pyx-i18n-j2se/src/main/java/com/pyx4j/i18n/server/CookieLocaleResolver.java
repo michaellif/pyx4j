@@ -55,13 +55,37 @@ public class CookieLocaleResolver implements LocaleResolver {
                 break;
             }
         }
+        // Select Locale
+        Locale languageMatch = null;
         if (localeCookie != null) {
+            String language;
+            String country;
+
+            String[] localeParts = localeCookie.split("_");
+            if (localeParts.length > 1) {
+                language = localeParts[0];
+                country = localeParts[1];
+            } else {
+                language = localeCookie;
+                country = "";
+            }
+
             for (Locale l : getAvailableLocale()) {
-                if (localeCookie.equals(l.getLanguage())) {
-                    return l;
+                if (language.equals(l.getLanguage())) {
+                    if (languageMatch == null) {
+                        languageMatch = l;
+                    }
+                    if (country.equals(l.getCountry())) {
+                        return l;
+                    }
                 }
             }
         }
-        return getDefaultLocale();
+
+        if (languageMatch != null) {
+            return languageMatch;
+        } else {
+            return getDefaultLocale();
+        }
     }
 }
