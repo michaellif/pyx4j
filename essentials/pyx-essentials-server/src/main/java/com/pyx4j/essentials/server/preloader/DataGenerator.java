@@ -87,6 +87,11 @@ public class DataGenerator {
             throw new Error("Can't generate unique value for Ids:" + duplicatesId);
         }
 
+        private void cleanUpDuplicates(String duplicatesId) {
+            if (duplicates != null) {
+                duplicates.remove(duplicatesId);
+            }
+        }
     }
 
     private static final ThreadLocal<GeneratorContext> generatorLocal = new ThreadLocal<GeneratorContext>() {
@@ -98,6 +103,10 @@ public class DataGenerator {
 
     public static void cleanup() {
         generatorLocal.remove();
+    }
+
+    public static void cleanRandomDuplicates(String duplicatesId) {
+        generatorLocal.get().cleanUpDuplicates(duplicatesId);
     }
 
     public static void setRandomSeed(long seed) {
