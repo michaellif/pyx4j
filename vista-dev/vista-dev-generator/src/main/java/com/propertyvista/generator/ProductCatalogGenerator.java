@@ -18,7 +18,9 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
@@ -40,23 +42,46 @@ public class ProductCatalogGenerator {
 
     private static final I18n i18n = I18n.get(ProductCatalogGenerator.class);
 
-    private final ProductItemTypesGDO serviceItemTypes;
+    private final ProductItemTypesGDO productItemTypes;
 
-    public ProductCatalogGenerator(ProductItemTypesGDO serviceItemTypes) {
-        this.serviceItemTypes = serviceItemTypes;
+    private static final String ConcessionId = "ConcessionId";
+
+    private static final String ConcessionTypeId = "Concession.Type.Id";
+
+    private static final String IncludedUtilitiesId = "IncludedUtilitiesId";
+
+    private static final String ExcludedUtilitiesId = "ExcludedUtilitiesId";
+
+    public ProductCatalogGenerator(long seed) {
+        if (seed != 0) {
+            DataGenerator.setRandomSeed(seed);
+        }
+
+        productItemTypes = new ProductItemTypesGDO();
+        {
+            EntityQueryCriteria<ServiceItemType> criteria = EntityQueryCriteria.create(ServiceItemType.class);
+            productItemTypes.serviceItemTypes.addAll(Persistence.service().query(criteria));
+        }
+        {
+            EntityQueryCriteria<FeatureItemType> criteria = EntityQueryCriteria.create(FeatureItemType.class);
+            productItemTypes.featureItemTypes.addAll(Persistence.service().query(criteria));
+        }
     }
 
     private List<ServiceItemType> getServiceItemTypes() {
-        return this.serviceItemTypes.serviceItemTypes;
+        return this.productItemTypes.serviceItemTypes;
     }
 
     private List<FeatureItemType> getFeatureItemTypes() {
-        return this.serviceItemTypes.featureItemTypes;
+        return this.productItemTypes.featureItemTypes;
     }
 
-    //TODO rename create to something
-    public void createProductCatalog(ProductCatalog catalog) {
-        DataGenerator.setRandomSeed(RandomUtil.randomInt(1024));
+    public void generateProductCatalog(ProductCatalog catalog) {
+
+        DataGenerator.cleanRandomDuplicates(ConcessionId);
+        DataGenerator.cleanRandomDuplicates(ConcessionTypeId);
+        DataGenerator.cleanRandomDuplicates(IncludedUtilitiesId);
+        DataGenerator.cleanRandomDuplicates(ExcludedUtilitiesId);
 
         catalog.services().addAll(createServices(catalog));
         catalog.features().addAll(createFeatures(catalog));
@@ -100,7 +125,7 @@ public class ProductCatalogGenerator {
 
             int count = Math.min(2, catalog.concessions().size());
             for (int i = 0; i < count; ++i) {
-                srv.version().concessions().add(RandomUtil.random(catalog.concessions(), "concessions", count));
+                srv.version().concessions().add(RandomUtil.random(catalog.concessions(), ConcessionId, count));
             }
         }
     }
@@ -229,7 +254,7 @@ public class ProductCatalogGenerator {
         item.catalog().set(catalog);
 
         item.version().fromDate().setValue(DateUtils.detectDateformat("2012-01-01"));
-        item.version().type().setValue(RandomUtil.random(Concession.Type.values(), "Concession.Type", Concession.Type.values().length));
+        item.version().type().setValue(RandomUtil.random(Concession.Type.values(), ConcessionTypeId, Concession.Type.values().length));
 
         if (item.version().type().getValue() == Concession.Type.percentageOff) {
             item.version().value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
@@ -269,7 +294,7 @@ public class ProductCatalogGenerator {
         if (!allowedItemTypes.isEmpty()) {
             int maxItems = Math.min(DataGenerator.randomInt(allowedItemTypes.size()) + 1, allowedItemTypes.size());
             for (int i = 0; i < maxItems; ++i) {
-                items.add(RandomUtil.random(allowedItemTypes, "IncludedUtilities", maxItems));
+                items.add(RandomUtil.random(allowedItemTypes, IncludedUtilitiesId, maxItems));
             }
         }
 
@@ -288,7 +313,7 @@ public class ProductCatalogGenerator {
         if (!allowedItemTypes.isEmpty()) {
             int maxItems = Math.min(DataGenerator.randomInt(allowedItemTypes.size()) + 1, allowedItemTypes.size());
             for (int i = 0; i < maxItems; ++i) {
-                items.add(RandomUtil.random(allowedItemTypes, "ExcludedUtilities", maxItems));
+                items.add(RandomUtil.random(allowedItemTypes, ExcludedUtilitiesId, maxItems));
             }
         }
 

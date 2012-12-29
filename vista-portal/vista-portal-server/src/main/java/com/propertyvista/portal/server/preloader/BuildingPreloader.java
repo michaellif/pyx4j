@@ -37,11 +37,9 @@ import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.asset.Boiler;
@@ -62,7 +60,6 @@ import com.propertyvista.generator.BuildingsGenerator;
 import com.propertyvista.generator.MediaGenerator;
 import com.propertyvista.generator.PreloadData;
 import com.propertyvista.generator.ProductCatalogGenerator;
-import com.propertyvista.generator.gdo.ProductItemTypesGDO;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
@@ -91,23 +88,14 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
     }
 
     private String generate() {
-        BuildingsGenerator generator = new BuildingsGenerator(config().buildingsGenerationSeed);
-
-        ProductItemTypesGDO productItemTypes = new ProductItemTypesGDO();
-        {
-            EntityQueryCriteria<ServiceItemType> criteria = EntityQueryCriteria.create(ServiceItemType.class);
-            productItemTypes.serviceItemTypes.addAll(Persistence.service().query(criteria));
-        }
-        {
-            EntityQueryCriteria<FeatureItemType> criteria = EntityQueryCriteria.create(FeatureItemType.class);
-            productItemTypes.featureItemTypes.addAll(Persistence.service().query(criteria));
-        }
+        BuildingsGenerator buildingGenerator = new BuildingsGenerator(config().buildingsGenerationSeed);
+        ProductCatalogGenerator productCatalogGenerator = new ProductCatalogGenerator(0);
 
         // create some complexes:
         List<Complex> complexes = new Vector<Complex>();
-        complexes.add(generator.createComplex("Complex #1"));
-        complexes.add(generator.createComplex("Complex #2"));
-        complexes.add(generator.createComplex("Complex #3"));
+        complexes.add(buildingGenerator.createComplex("Complex #1"));
+        complexes.add(buildingGenerator.createComplex("Complex #2"));
+        complexes.add(buildingGenerator.createComplex("Complex #3"));
 
         Persistence.service().persist(complexes);
         List<Complex> complexesWithBuildings = new Vector<Complex>();
@@ -115,7 +103,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         // create some management companies:
         List<PropertyManager> managements = new Vector<PropertyManager>();
         for (String mngName : PreloadData.MANAGEMENT_COMPANY) {
-            managements.add(generator.createPropertyManager(mngName));
+            managements.add(buildingGenerator.createPropertyManager(mngName));
         }
         Persistence.service().persist(managements);
 
@@ -131,7 +119,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         Persistence.service().persist(portfolios);
 
         int unitCount = 0;
-        List<Building> buildings = generator.createBuildings(config().numResidentialBuildings);
+        List<Building> buildings = buildingGenerator.createBuildings(config().numResidentialBuildings);
 
         SharedGeoLocator.setMode(Mode.updateCache);
         int noGeoCount = 0;
@@ -159,7 +147,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             if (VistaFeatures.instance().defaultProductCatalog()) {
                 ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(building);
             } else {
-                new ProductCatalogGenerator(productItemTypes).createProductCatalog(building.productCatalog());
+                productCatalogGenerator.generateProductCatalog(building.productCatalog());
             }
 
             if (merchantAccount != null) {
@@ -174,6 +162,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
 
             if (!VistaFeatures.instance().defaultProductCatalog()) {
+                DataGenerator.cleanRandomDuplicates(Utility.class.getName());
                 building.includedUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
                 if (DataGenerator.randomBoolean()) {
                     building.includedUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
@@ -185,43 +174,43 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 //            building.dashboard().set(DataGenerator.random(availableDashboards.buildingDashboards));
 
             // Elevators
-            List<Elevator> elevators = generator.createElevators(building, config().numElevators);
+            List<Elevator> elevators = buildingGenerator.createElevators(building, config().numElevators);
             for (Elevator elevator : elevators) {
                 Persistence.service().persist(elevator.warranty().contract().contractor());
                 Persistence.service().persist(elevator.maintenance().contract().contractor());
             }
 
             // Boilers
-            List<Boiler> boilers = generator.createBoilers(building, config().numBoilers);
+            List<Boiler> boilers = buildingGenerator.createBoilers(building, config().numBoilers);
             for (Boiler boiler : boilers) {
                 Persistence.service().persist(boiler.warranty().contract().contractor());
                 Persistence.service().persist(boiler.maintenance().contract().contractor());
             }
 
             // Roofs
-            List<Roof> roofs = generator.createRoofs(building, config().numRoofs);
+            List<Roof> roofs = buildingGenerator.createRoofs(building, config().numRoofs);
             for (Roof roof : roofs) {
                 Persistence.service().persist(roof.warranty().contract().contractor());
                 Persistence.service().persist(roof.maintenance().contract().contractor());
             }
 
             // Parking:
-            List<Parking> parkings = generator.createParkings(building, config().numParkings);
+            List<Parking> parkings = buildingGenerator.createParkings(building, config().numParkings);
             for (Parking parking : parkings) {
-                generator.createParkingSpots(parking, config().numParkingSpots);
+                buildingGenerator.createParkingSpots(parking, config().numParkingSpots);
             }
 
             // Lockers:
-            List<LockerArea> lockerAreas = generator.createLockerAreas(building, config().numLockerAreas);
+            List<LockerArea> lockerAreas = buildingGenerator.createLockerAreas(building, config().numLockerAreas);
             for (LockerArea item : lockerAreas) {
-                generator.createLockers(item, config().numLockers);
+                buildingGenerator.createLockers(item, config().numLockers);
             }
 
             // Amenities:
-            generator.createBuildingAmenities(building, 1 + RandomUtil.randomInt(5));
+            buildingGenerator.createBuildingAmenities(building, 1 + RandomUtil.randomInt(5));
 
             // Floorplans:
-            List<Floorplan> floorplans = generator.createFloorplans(building, config().numFloorplans);
+            List<Floorplan> floorplans = buildingGenerator.createFloorplans(building, config().numFloorplans);
             for (Floorplan floorplan : floorplans) {
                 if (this.getParameter(VistaDataPreloaderParameter.attachMedia) != Boolean.FALSE) {
                     MediaGenerator.attachGeneratedFloorplanMedia(floorplan);
@@ -229,13 +218,13 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
 
             // Units:
-            List<AptUnit> units = generator.createUnits(building, floorplans, config().numFloors, config().numUnitsPerFloor);
+            List<AptUnit> units = buildingGenerator.createUnits(building, floorplans, config().numFloors, config().numUnitsPerFloor);
             unitCount += units.size();
             for (AptUnit unit : units) {
                 if (VistaFeatures.instance().defaultProductCatalog()) {
                     ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(building, unit, false);
                 } else {
-                    new ProductCatalogGenerator(productItemTypes).createAptUnitServices(building.productCatalog(), unit);
+                    productCatalogGenerator.createAptUnitServices(building.productCatalog(), unit);
                 }
             }
 
@@ -249,11 +238,11 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             buildingLockerCriteria.add(PropertyCriterion.eq(buildingLockerCriteria.proto().building(), building));
             List<LockerArea> buildingockers = Persistence.service().query(buildingLockerCriteria);
 
-            EntityQueryCriteria<Roof> buildingRoofsCriteria = EntityQueryCriteria.create(Roof.class);
-            buildingRoofsCriteria.add(PropertyCriterion.eq(buildingRoofsCriteria.proto().building(), building));
-            List<Roof> buildingRoofs = Persistence.service().query(buildingRoofsCriteria);
-
 // VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
+//            EntityQueryCriteria<Roof> buildingRoofsCriteria = EntityQueryCriteria.create(Roof.class);
+//            buildingRoofsCriteria.add(PropertyCriterion.eq(buildingRoofsCriteria.proto().building(), building));
+//            List<Roof> buildingRoofs = Persistence.service().query(buildingRoofsCriteria);
+//
 //            for (Service service : building.productCatalog().services()) {
 //                switch (service.version().type().getValue()) {
 //                case garage:
