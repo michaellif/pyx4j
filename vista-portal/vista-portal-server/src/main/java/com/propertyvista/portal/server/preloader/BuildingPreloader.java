@@ -229,35 +229,22 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
 
             // fill Service Catalog with building elements:
-
-            EntityQueryCriteria<Parking> buildingParkingsCriteria = EntityQueryCriteria.create(Parking.class);
-            buildingParkingsCriteria.add(PropertyCriterion.eq(buildingParkingsCriteria.proto().building(), building));
-            List<Parking> buildingParkings = Persistence.service().query(buildingParkingsCriteria);
-
-            EntityQueryCriteria<LockerArea> buildingLockerCriteria = EntityQueryCriteria.create(LockerArea.class);
-            buildingLockerCriteria.add(PropertyCriterion.eq(buildingLockerCriteria.proto().building(), building));
-            List<LockerArea> buildingockers = Persistence.service().query(buildingLockerCriteria);
-
 // VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
-//            EntityQueryCriteria<Roof> buildingRoofsCriteria = EntityQueryCriteria.create(Roof.class);
-//            buildingRoofsCriteria.add(PropertyCriterion.eq(buildingRoofsCriteria.proto().building(), building));
-//            List<Roof> buildingRoofs = Persistence.service().query(buildingRoofsCriteria);
-//
 //            for (Service service : building.productCatalog().services()) {
 //                switch (service.version().type().getValue()) {
 //                case garage:
 //                    for (ProductItem item : service.version().items()) {
-//                        item.element().set(RandomUtil.random(buildingParkings));
+//                        item.element().set(RandomUtil.random(parkings));
 //                    }
 //                    break;
 //                case storage:
 //                    for (ProductItem item : service.version().items()) {
-//                        item.element().set(RandomUtil.random(buildingockers));
+//                        item.element().set(RandomUtil.random(lockerAreas));
 //                    }
 //                    break;
 //                case roof:
 //                    for (ProductItem item : service.version().items()) {
-//                        item.element().set(RandomUtil.random(buildingRoofs));
+//                        item.element().set(RandomUtil.random(roofs));
 //                    }
 //                    break;
 //                }
@@ -267,12 +254,12 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 switch (feature.featureType().getValue()) {
                 case parking:
                     for (ProductItem item : feature.version().items()) {
-                        item.element().set(RandomUtil.random(buildingParkings));
+                        item.element().set(RandomUtil.random(parkings));
                     }
                     break;
                 case locker:
                     for (ProductItem item : feature.version().items()) {
-                        item.element().set(RandomUtil.random(buildingockers));
+                        item.element().set(RandomUtil.random(lockerAreas));
                     }
                     break;
                 }
