@@ -78,7 +78,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void onStop() {
-        view.getLister().storeState(view.getMemento().getCurrentPlace());
+        view.storeState(view.getMemento().getCurrentPlace());
         view.discard();
         super.onStop();
     }
