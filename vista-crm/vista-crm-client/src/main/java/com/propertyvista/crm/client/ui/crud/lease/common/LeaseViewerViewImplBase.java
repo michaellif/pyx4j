@@ -38,7 +38,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
     public LeaseViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         super(placeClass, true);
 
-        termsButton = new Button(i18n.tr("View Term"));
+        termsButton = new Button(i18n.tr("Terms"));
         Button.ButtonMenuBar viewsMenu = termsButton.createMenu();
         termsButton.setMenu(viewsMenu);
         addHeaderToolbarItem(termsButton.asWidget());

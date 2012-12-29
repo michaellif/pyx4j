@@ -46,7 +46,7 @@ public abstract class LeaseTermSelectorDialog extends EntitySelectorTableDialog<
     }
 
     public LeaseTermSelectorDialog(boolean isMultiselect, List<LeaseTerm> alreadySelected) {
-        this(isMultiselect, alreadySelected, i18n.tr("Select LeaseTerm"));
+        this(isMultiselect, alreadySelected, i18n.tr("Select Term"));
     }
 
     public LeaseTermSelectorDialog(boolean isMultiselect, List<LeaseTerm> alreadySelected, String caption) {
