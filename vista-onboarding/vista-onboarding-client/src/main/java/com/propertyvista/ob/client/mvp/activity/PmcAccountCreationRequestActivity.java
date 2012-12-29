@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -16,6 +16,7 @@ package com.propertyvista.ob.client.mvp.activity;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -27,6 +28,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.ob.client.views.OnboardingViewFactory;
 import com.propertyvista.ob.client.views.PmcAccountCreationRequestView;
 import com.propertyvista.ob.rpc.OnboardingSiteMap;
@@ -35,6 +37,7 @@ import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 import com.propertyvista.ob.rpc.services.OnboardingAuthenticationService;
 import com.propertyvista.ob.rpc.services.OnboardingPublicActivationService;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;
+import com.propertyvista.shared.CompiledLocale;
 
 public class PmcAccountCreationRequestActivity extends AbstractActivity implements PmcAccountCreationRequestView.Presenter {
 
@@ -53,7 +56,17 @@ public class PmcAccountCreationRequestActivity extends AbstractActivity implemen
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
-        view.setPmcAccountCreationRequest(EntityFactory.create(PmcAccountCreationRequest.class));
+        PmcAccountCreationRequest req = EntityFactory.create(PmcAccountCreationRequest.class);
+
+        String currentLocale = LocaleInfo.getCurrentLocale().getLocaleName();
+        if (CompiledLocale.en_GB.equals(currentLocale)) {
+            req.countryOfOperation().setValue(CountryOfOperation.UK);
+        } else if (CompiledLocale.en_US.equals(currentLocale)) {
+            req.countryOfOperation().setValue(CountryOfOperation.US);
+        } else {
+            req.countryOfOperation().setValue(CountryOfOperation.Canada);
+        }
+        view.setPmcAccountCreationRequest(req);
         panel.setWidget(view);
     }
 
@@ -64,7 +77,7 @@ public class PmcAccountCreationRequestActivity extends AbstractActivity implemen
 
     @Override
     public void openTerms() {
-        Window.open(AppPlaceInfo.absoluteUrl(GWT.getHostPageBaseURL(), OnboardingSiteMap.PmcAccountTerms.class, null), null, null);
+        Window.open(AppPlaceInfo.absoluteUrl(GWT.getHostPageBaseURL(), OnboardingSiteMap.PmcAccountTerms.class), null, null);
     }
 
     @Override

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.config;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 import com.pyx4j.i18n.server.CookieLocaleResolver;
@@ -21,12 +22,20 @@ public class VistaCookieLocaleResolver extends CookieLocaleResolver {
 
     @Override
     protected Locale getDefaultLocale() {
-        return VistaLocale.getPmcDefaultEnglishLocale();
+        if (VistaDeployment.isSystemNamespace()) {
+            return Locale.ENGLISH;
+        } else {
+            return VistaLocale.getPmcDefaultEnglishLocale();
+        }
     }
 
     @Override
     protected Iterable<Locale> getAvailableLocale() {
-        return VistaLocale.getPmcLocale();
+        if (VistaDeployment.isSystemNamespace()) {
+            return Arrays.asList(Locale.ENGLISH);
+        } else {
+            return VistaLocale.getPmcLocale();
+        }
     }
 
 }

@@ -55,6 +55,11 @@ public class VistaDeployment {
         return ((VistaSystemIdentification.staging == VistaDeployment.getSystemIdentification()));
     }
 
+    public static boolean isSystemNamespace() {
+        String namespace = NamespaceManager.getNamespace();
+        return VistaNamespace.noNamespace.equals(namespace) || VistaNamespace.adminNamespace.equals(namespace);
+    }
+
     public static Pmc getCurrentPmc() {
         final String namespace = NamespaceManager.getNamespace();
         assert (!namespace.equals(VistaNamespace.adminNamespace)) : "PMC not available when running in admin namespace";
