@@ -81,7 +81,7 @@ import com.propertyvista.pmsite.server.pages.StaticPage;
 import com.propertyvista.pmsite.server.pages.TermsAcceptancePage;
 import com.propertyvista.pmsite.server.pages.TermsDeclinedPage;
 import com.propertyvista.pmsite.server.pages.UnitDetailsPage;
-import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class PMSiteApplication extends AuthenticatedWebApplication {
 

@@ -42,7 +42,7 @@ import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.portal.server.portal.services.PortalAuthenticationServiceImpl;
 import com.propertyvista.server.jobs.TaskRunner;
-import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 @AuthorizeInstantiation(PMSiteSession.VistaTermsAcceptanceRequiredRole)
 public class TermsAcceptancePage extends BasePage {

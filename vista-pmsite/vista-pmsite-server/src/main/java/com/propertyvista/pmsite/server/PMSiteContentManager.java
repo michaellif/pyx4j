@@ -61,7 +61,7 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.shared.SiteWasNotSetUpUserRuntimeException;
 import com.propertyvista.portal.server.portal.PropertyFinder;
-import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class PMSiteContentManager implements Serializable {
 

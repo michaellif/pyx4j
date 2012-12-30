@@ -35,7 +35,7 @@ import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.shared.SiteWasNotSetUpUserRuntimeException;
-import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 @IgnoreSessionToken
 public class SiteThemeServicesImpl implements SiteThemeServices {

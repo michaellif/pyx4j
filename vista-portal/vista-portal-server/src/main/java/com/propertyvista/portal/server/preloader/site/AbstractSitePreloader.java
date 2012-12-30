@@ -59,8 +59,8 @@ import com.propertyvista.domain.site.gadgets.TestimonialsGadgetContent;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.preloader.util.AbstractVistaDataPreloader;
 import com.propertyvista.server.common.blob.BlobService;
-import com.propertyvista.shared.CompiledLocale;
 import com.propertyvista.shared.config.VistaFeatures;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 

@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
-import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public interface SiteThemeServices extends IService {
 

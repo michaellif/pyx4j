@@ -43,7 +43,7 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.site.AvailableLocale;
-import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
 

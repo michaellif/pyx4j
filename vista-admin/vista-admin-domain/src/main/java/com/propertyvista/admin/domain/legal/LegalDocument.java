@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 @Table(namespace = VistaNamespace.adminNamespace)
 public interface LegalDocument extends IEntity {

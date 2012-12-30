@@ -28,7 +28,7 @@ import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.generator.BuildingsGenerator;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
-import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class LegalDocumentationPolicyPreloader extends AbstractPolicyPreloader<LegalDocumentation> {
 

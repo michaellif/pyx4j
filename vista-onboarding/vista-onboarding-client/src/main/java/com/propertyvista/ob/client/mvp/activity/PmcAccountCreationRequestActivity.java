@@ -37,7 +37,7 @@ import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 import com.propertyvista.ob.rpc.services.OnboardingAuthenticationService;
 import com.propertyvista.ob.rpc.services.OnboardingPublicActivationService;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;
-import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class PmcAccountCreationRequestActivity extends AbstractActivity implements PmcAccountCreationRequestView.Presenter {
 

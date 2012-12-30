@@ -28,7 +28,7 @@ import com.propertyvista.admin.domain.legal.LegalDocument;
 import com.propertyvista.admin.domain.legal.VistaTerms;
 import com.propertyvista.admin.domain.legal.VistaTerms.Target;
 import com.propertyvista.admin.rpc.services.VistaTermsCrudService;
-import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class VistaTermsDefaultActivity extends AbstractActivity {
 

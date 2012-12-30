@@ -33,7 +33,7 @@ import com.propertyvista.portal.ptapp.client.ui.TopRightActionsView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
-import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 

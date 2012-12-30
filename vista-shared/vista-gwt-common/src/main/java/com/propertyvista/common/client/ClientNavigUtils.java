@@ -26,8 +26,8 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.customizations.CountryOfOperation;
-import com.propertyvista.shared.CompiledLocale;
 import com.propertyvista.shared.config.VistaFeatures;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class ClientNavigUtils {
 

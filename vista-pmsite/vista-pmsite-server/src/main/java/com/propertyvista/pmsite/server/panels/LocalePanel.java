@@ -23,7 +23,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.LocalizedPageLink;
-import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class LocalePanel extends Panel {
 

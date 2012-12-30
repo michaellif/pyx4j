@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.shared;
+package com.propertyvista.shared.i18n;
 
 import java.io.Serializable;
 import java.util.EnumSet;

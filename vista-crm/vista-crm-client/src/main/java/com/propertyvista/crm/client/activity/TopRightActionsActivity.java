@@ -37,8 +37,8 @@ import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.shared.CompiledLocale;
 import com.propertyvista.shared.config.VistaDemo;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 

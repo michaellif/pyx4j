@@ -29,7 +29,7 @@ import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
 import com.propertyvista.domain.site.AvailableLocale;
-import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class AvailableLocaleSelectorDialog extends Dialog implements CancelOption {
     private final VerticalPanel panel = new VerticalPanel();

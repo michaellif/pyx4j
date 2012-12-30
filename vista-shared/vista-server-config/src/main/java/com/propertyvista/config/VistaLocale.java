@@ -17,8 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import com.propertyvista.shared.CompiledLocale;
 import com.propertyvista.shared.config.VistaFeatures;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class VistaLocale {
 

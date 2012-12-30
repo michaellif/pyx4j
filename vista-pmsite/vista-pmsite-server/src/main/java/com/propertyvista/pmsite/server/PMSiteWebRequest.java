@@ -31,7 +31,7 @@ import com.propertyvista.config.VistaLocale;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.server.common.reference.PMSiteContentCache;
-import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class PMSiteWebRequest extends ServletWebRequest {
 

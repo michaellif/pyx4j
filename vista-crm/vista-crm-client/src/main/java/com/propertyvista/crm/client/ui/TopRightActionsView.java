@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public interface TopRightActionsView extends IsWidget {
 

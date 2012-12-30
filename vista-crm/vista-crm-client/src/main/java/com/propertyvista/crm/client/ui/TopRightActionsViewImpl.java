@@ -21,7 +21,7 @@ import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
-import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class TopRightActionsViewImpl extends FlowPanel implements TopRightActionsView {
 

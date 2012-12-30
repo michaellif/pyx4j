@@ -4,8 +4,8 @@
 <module>
     <inherits name='com.pyx4j.rpc.RPCBlacklist'/>
     <inherits name='com.pyx4j.site.SiteShared'/>
-    
-    <inherits name='com.propertyvista.DomainSecurityOnboarding' />
-    
+
+    <inherits name='com.propertyvista.DomainOnboarding' />
+
     <source path="rpc"/>
 </module>

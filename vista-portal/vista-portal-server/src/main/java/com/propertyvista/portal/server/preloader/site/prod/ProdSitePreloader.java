@@ -22,8 +22,8 @@ import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.portal.server.preloader.site.AbstractSitePreloader;
-import com.propertyvista.shared.CompiledLocale;
 import com.propertyvista.shared.config.VistaFeatures;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class ProdSitePreloader extends AbstractSitePreloader {
 
