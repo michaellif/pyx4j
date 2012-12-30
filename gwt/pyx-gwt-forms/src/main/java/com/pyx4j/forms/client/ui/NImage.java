@@ -20,14 +20,18 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.forms.client.ui.CImage.Type;
+import com.pyx4j.gwt.client.upload.FileUploadDialog;
+import com.pyx4j.gwt.client.upload.FileUploadReciver;
+import com.pyx4j.i18n.shared.I18n;
 
 public class NImage<T extends IFile> extends NComponent<List<T>, ImageHolder, CImage<T>, ImageHolder> implements ImageHolder.ImageDataProvider {
+
+    private static final I18n i18n = I18n.get(NImage.class);
 
     private final List<IFile> imageFiles;
 
@@ -43,19 +47,18 @@ public class NImage<T extends IFile> extends NComponent<List<T>, ImageHolder, CI
 
     @Override
     public void setNativeValue(List<T> values) {
-        if (values == null) {
-            return;
-        }
         imageUrls.clear();
-        for (T value : values) {
-            imageFiles.add(value);
-            imageUrls.add(getCComponent().getImageUrl(value));
+        if (values != null) {
+            for (T value : values) {
+                imageFiles.add(value);
+                imageUrls.add(getCComponent().getImageUrl(value));
+            }
         }
         createWidget().reset();
     }
 
     @Override
-    public List<T> getNativeValue() throws ParseException {
+    public List<T> getNativeValue() {
         List<T> value = new ArrayList<T>();
         for (IFile file : imageFiles) {
             value.add(getCComponent().getNewValue(file));
@@ -99,7 +102,18 @@ public class NImage<T extends IFile> extends NComponent<List<T>, ImageHolder, CI
 
     @Override
     public void editImage() {
-        // TODO Auto-generated method stub
+        //TODO What is the best way customize title
+        new FileUploadDialog<T>(i18n.tr("Upload Image File"), null, getCComponent().getUploadService(), new FileUploadReciver<T>() {
+
+            @Override
+            public void onUploadComplete(T uploadResponse) {
+                //TODO What is the best way to add to native value
+                List<T> value = new ArrayList<T>();
+                value.addAll(getNativeValue());
+                value.add(uploadResponse);
+                getCComponent().setValue(value);
+            }
+        }).show();
 
     }
 }

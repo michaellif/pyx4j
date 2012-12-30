@@ -23,6 +23,7 @@ package com.pyx4j.gwt.client.upload;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.client.ClientDeploymentConfig;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.gwt.client.deferred.DeferredProgressPanel;
@@ -91,11 +93,11 @@ public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePan
     public UploadPanel(UploadService<U, R> service) {
         this.service = service;
         uploadForm = new FormPanel();
-        uploadForm.setAction("upload/" + GWT.getModuleName() + "/" + ((IServiceBase) service).getServiceClassId());
         uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
         uploadForm.setMethod(FormPanel.METHOD_POST);
         uploadForm.addSubmitCompleteHandler(this);
         uploadForm.addSubmitHandler(this);
+        setServletPath(ClientDeploymentConfig.getUploadServletMapping());
 
         this.setWidget(uploadForm);
         FlowPanel content = new FlowPanel();
@@ -116,6 +118,14 @@ public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePan
         line.add(deferredProgressPanel = new DeferredProgressPanel("70px", "20px", false, this));
         deferredProgressPanel.getElement().getStyle().setPaddingLeft(25, Style.Unit.PX);
         deferredProgressPanel.setVisible(false);
+
+        service.obtainSupportedExtensions(new DefaultAsyncCallback<Vector<String>>() {
+
+            @Override
+            public void onSuccess(Vector<String> result) {
+                supportedExtensions.addAll(result);
+            }
+        });
     }
 
     public void setServletPath(String path) {

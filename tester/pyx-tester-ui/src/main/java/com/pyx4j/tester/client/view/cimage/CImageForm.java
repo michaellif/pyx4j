@@ -20,6 +20,7 @@
  */
 package com.pyx4j.tester.client.view.cimage;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -29,6 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.CImageEntity;
 import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
 import com.pyx4j.tester.domain.TFile;
+import com.pyx4j.tester.shared.file.TFileUploadService;
 
 public class CImageForm extends CEntityForm<CImageEntity> {
 
@@ -48,6 +50,7 @@ public class CImageForm extends CEntityForm<CImageEntity> {
 
         CImage<TFile> cImage = new CImage<TFile>(CImage.Type.multiple);
         cImage.setImageFileUrlBuilder(new CImageFileURLBuilder());
+        cImage.setUploadService(GWT.<TFileUploadService> create(TFileUploadService.class));
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().files(), cImage)));
 

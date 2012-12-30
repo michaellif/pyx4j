@@ -24,6 +24,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.i18n.annotations.I18n;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
@@ -44,9 +45,10 @@ public interface IFile extends IEntity {
     IPrimitive<String> contentMimeType();
 
     /**
-     * TODO Used to access just upload files ???
+     * Used to access just upload files
      */
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+    @Transient
     IPrimitive<String> accessKey();
 
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)

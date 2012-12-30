@@ -20,6 +20,8 @@
  */
 package com.pyx4j.gwt.rpc.upload;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -40,7 +42,9 @@ public interface UploadService<U extends IEntity, R extends IEntity> extends ISe
 
     public static final String ResponseProcessWillContinue = "_CONTINUE_";
 
-    public void getMaxFileSize(AsyncCallback<Long> callback);
+    public void obtainMaxFileSize(AsyncCallback<Long> callback);
+
+    public void obtainSupportedExtensions(AsyncCallback<Vector<String>> callback);
 
     public void prepareUpload(AsyncCallback<UploadId> callback, U data);
 

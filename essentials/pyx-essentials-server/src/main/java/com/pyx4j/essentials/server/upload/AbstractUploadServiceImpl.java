@@ -22,6 +22,7 @@ package com.pyx4j.essentials.server.upload;
 
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Vector;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -45,7 +46,7 @@ public abstract class AbstractUploadServiceImpl<U extends IEntity, R extends IEn
     }
 
     @Override
-    public void getMaxFileSize(AsyncCallback<Long> callback) {
+    public void obtainMaxFileSize(AsyncCallback<Long> callback) {
         callback.onSuccess(getMaxSize());
     }
 
@@ -81,6 +82,11 @@ public abstract class AbstractUploadServiceImpl<U extends IEntity, R extends IEn
         } else {
             throw new RuntimeException("Process " + uploadId.getDeferredCorrelationId() + " not found");
         }
+    }
+
+    @Override
+    public void obtainSupportedExtensions(AsyncCallback<Vector<String>> callback) {
+        callback.onSuccess(new Vector<String>(getSupportedExtensions()));
     }
 
     /**

@@ -22,18 +22,16 @@ package com.pyx4j.tester.server.file;
 
 import java.util.Collection;
 
-import org.apache.commons.io.FilenameUtils;
-
-import com.pyx4j.essentials.server.download.MimeMap;
-import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
-import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.essentials.server.upload.AbstractFileUploadServiceImpl;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.tester.domain.TFile;
 import com.pyx4j.tester.shared.file.TFileUploadService;
 
-public class TFileUploadServiceImpl extends AbstractUploadServiceImpl<TFile, TFile> implements TFileUploadService {
+public class TFileUploadServiceImpl extends AbstractFileUploadServiceImpl<TFile> implements TFileUploadService {
+
+    public TFileUploadServiceImpl() {
+        super(TFile.class);
+    }
 
     @Override
     public long getMaxSize() {
@@ -51,13 +49,9 @@ public class TFileUploadServiceImpl extends AbstractUploadServiceImpl<TFile, TFi
     }
 
     @Override
-    public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadRecived(UploadData data, UploadDeferredProcess<TFile, TFile> process,
-            UploadResponse<TFile> response) {
-
-        response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
-
-        TFileTestStorage.persist(data.data, response.fileName, response.fileContentType);
-
-        return ProcessingStatus.completed;
+    protected TFile fileUploadRecived(byte[] data, TFile uploadData) {
+        uploadData.blobKey().setValue(TFileTestStorage.persist(data, uploadData.fileName().getValue(), uploadData.contentMimeType().getValue()));
+        return uploadData;
     }
+
 }

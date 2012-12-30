@@ -18,32 +18,35 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.gwt.client.upload;
+
+import java.util.Collection;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IFile;
-import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
+import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
-public class NImageUploadDialog<E extends IFile> extends VerticalPanel implements OkCancelOption, OkOptionText {
+public class FileUploadDialog<E extends IFile> extends VerticalPanel implements OkCancelOption, OkOptionText {
 
-    private static final I18n i18n = I18n.get(NImageUploadDialog.class);
+    private static final I18n i18n = I18n.get(FileUploadDialog.class);
 
     private final UploadPanel<E, E> uploadPanel;
 
     private final Dialog dialog;
 
-    public NImageUploadDialog(UploadService<E, E> service) {
-        dialog = new Dialog(i18n.tr("Upload Image File"), this, null);
+    public FileUploadDialog(String dialogTitle, final E uploadData, UploadService<E, E> service, FileUploadReciver<E> uploadReciver) {
 
-        uploadPanel = new UploadPanel<E, E>(service) {
+        dialog = new Dialog(dialogTitle, this, null);
+
+        uploadPanel = new FileUploadPanel<E>(service, uploadReciver) {
 
             @Override
             protected void onUploadSubmit() {
@@ -60,19 +63,15 @@ public class NImageUploadDialog<E extends IFile> extends VerticalPanel implement
             @Override
             protected void onUploadComplete(UploadResponse<E> serverUploadResponse) {
                 dialog.hide();
-                NImageUploadDialog.this.onUploadComplete(serverUploadResponse);
+                super.onUploadComplete(serverUploadResponse);
             }
 
             @Override
             protected E getUploadData() {
-//                MediaUploadDTO dto = EntityFactory.create(MediaUploadDTO.class);
-//                dto.target().setValue(getImageTarget());
-                return null;
+                return uploadData;
             }
 
         };
-        //uploadPanel.setSupportedExtensions(MediaUploadService.supportedFormats);
-        //uploadPanel.setServletPath(GWT.getModuleBaseURL() + DeploymentConsts.uploadServletMapping);
 
         uploadPanel.setSize("400px", "60px");
         uploadPanel.getElement().getStyle().setMarginTop(50, Style.Unit.PX);
@@ -80,6 +79,10 @@ public class NImageUploadDialog<E extends IFile> extends VerticalPanel implement
 
         dialog.setBody(uploadPanel);
         dialog.setPixelSize(460, 150);
+    }
+
+    public void setSupportedExtensions(Collection<DownloadFormat> formats) {
+        uploadPanel.setSupportedExtensions(formats);
     }
 
     public void show() {

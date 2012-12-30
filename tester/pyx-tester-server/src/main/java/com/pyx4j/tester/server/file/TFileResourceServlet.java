@@ -33,6 +33,8 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
+import com.pyx4j.essentials.server.upload.FileUploadRegistry;
+import com.pyx4j.tester.domain.TFile;
 
 @SuppressWarnings("serial")
 public class TFileResourceServlet extends HttpServlet {
@@ -47,8 +49,14 @@ public class TFileResourceServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_GONE);
             return;
         } else {
-
-            byte[] data = TFileTestStorage.retrieve(new Key(id));
+            Key key;
+            if (id.startsWith("u")) {
+                TFile file = FileUploadRegistry.get(id.substring(1));
+                key = file.blobKey().getValue();
+            } else {
+                key = new Key(id);
+            }
+            byte[] data = TFileTestStorage.retrieve(key);
             if (data == null) {
                 log.debug("no such document {} {}", id, filename);
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);

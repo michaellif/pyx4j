@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2012 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,23 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2012-12-28
+ * Created on 2012-12-30
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.tester.shared.file;
+package com.pyx4j.tester.shared;
 
-import com.pyx4j.gwt.shared.FileURLBuilder;
-import com.pyx4j.tester.domain.TFile;
+import com.pyx4j.security.rpc.AuthenticationService;
 
-public abstract class TFileURLBuilder implements FileURLBuilder<TFile> {
+public interface TesterAuthenticationService extends AuthenticationService {
 
-    @Override
-    public String getUrl(TFile image) {
-        if (image.id().isNull()) {
-            return "download/u" + image.accessKey().getStringView() + "/" + image.fileName().getStringView();
-        } else {
-            return "download/" + image.id().getStringView() + "/" + image.fileName().getStringView();
-        }
-    }
 }

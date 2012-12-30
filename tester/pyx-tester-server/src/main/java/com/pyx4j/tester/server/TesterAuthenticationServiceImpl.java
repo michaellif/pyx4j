@@ -31,7 +31,7 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.server.AuthenticationServiceImpl;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Lifecycle;
-import com.pyx4j.tester.rpc.TesterAuthenticationService;
+import com.pyx4j.tester.shared.TesterAuthenticationService;
 
 public class TesterAuthenticationServiceImpl extends AuthenticationServiceImpl implements TesterAuthenticationService {
 

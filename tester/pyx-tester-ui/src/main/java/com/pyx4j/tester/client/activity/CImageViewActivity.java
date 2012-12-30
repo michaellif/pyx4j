@@ -24,6 +24,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.tester.client.SessionControl;
 import com.pyx4j.tester.client.TesterVeiwFactory;
 import com.pyx4j.tester.client.view.cimage.CImageView;
 
@@ -38,6 +39,7 @@ public class CImageViewActivity extends AbstractActivity {
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
         container.setWidget(view);
+        SessionControl.ensureSession();
     }
 
 }
