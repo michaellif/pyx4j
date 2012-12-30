@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CEntityViewer;
+import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -215,7 +216,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             dataPanel.setHTML(++row, 0, value.currentBalance().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(1, Unit.EM);
-            dataPanel.setHTML(row, 1, "$" + value.currentBalance().getValue());
+            dataPanel.setHTML(row, 1, CMoneyField.symbol + value.currentBalance().getValue());
 
             dataPanel.setHTML(++row, 0, value.currentBill().dueDate().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
