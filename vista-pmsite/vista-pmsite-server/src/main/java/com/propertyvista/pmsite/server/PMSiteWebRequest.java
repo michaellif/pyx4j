@@ -84,8 +84,8 @@ public class PMSiteWebRequest extends ServletWebRequest {
         }
         I18nManager.setThreadLocale(VistaLocale.toPmcLocale(locale.lang().getValue()));
         siteLocale = locale;
-        // need locale on the client for GWT modules ?
-        Cookie localeCookie = new Cookie(CookieLocaleResolver.COOKIE_NAME, siteLocale.lang().getValue().name());
+        // the same locale will be used on the client for GWT modules.
+        Cookie localeCookie = new Cookie(CookieLocaleResolver.COOKIE_NAME, CookieLocaleResolver.getCurrentLocaleCookieValue());
         localeCookie.setPath("/");
         ((WebResponse) RequestCycle.get().getResponse()).addCookie(localeCookie);
     }
@@ -134,22 +134,4 @@ public class PMSiteWebRequest extends ServletWebRequest {
         }
     }
 
-    protected Locale getLocale(CompiledLocale cl) {
-        switch (cl) {
-        case en:
-            return Locale.ENGLISH;
-        case fr:
-            return Locale.FRENCH;
-        case ru:
-            return new Locale("ru", "RU");
-        case es:
-            return new Locale("es");
-        case zh_CN:
-            return Locale.SIMPLIFIED_CHINESE;
-        case zh_TW:
-            return Locale.TRADITIONAL_CHINESE;
-        default:
-            return Locale.ENGLISH;
-        }
-    }
 }
