@@ -63,10 +63,10 @@ public class CookieLocaleResolver implements LocaleResolver {
 
             String[] localeParts = localeCookie.split("_");
             if (localeParts.length > 1) {
-                language = localeParts[0];
-                country = localeParts[1];
+                language = localeParts[0].toLowerCase(Locale.ENGLISH);
+                country = localeParts[1].toLowerCase(Locale.ENGLISH);
             } else {
-                language = localeCookie;
+                language = localeCookie.toLowerCase(Locale.ENGLISH);
                 country = "";
             }
 
@@ -75,7 +75,7 @@ public class CookieLocaleResolver implements LocaleResolver {
                     if (languageMatch == null) {
                         languageMatch = l;
                     }
-                    if (country.equals(l.getCountry())) {
+                    if (country.equalsIgnoreCase(l.getCountry())) {
                         return l;
                     }
                 }
@@ -86,6 +86,15 @@ public class CookieLocaleResolver implements LocaleResolver {
             return languageMatch;
         } else {
             return getDefaultLocale();
+        }
+    }
+
+    public static String getCurrentLocaleCookieValue() {
+        Locale locale = I18nManager.getThreadLocale();
+        if (locale.getCountry() != null) {
+            return locale.getLanguage() + "_" + locale.getCountry();
+        } else {
+            return locale.getLanguage();
         }
     }
 }
