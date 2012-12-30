@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -19,6 +19,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.config.client.ClientDeploymentConfig;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.client.ApplicationCommon;
 import com.pyx4j.forms.client.ImageFactory;
@@ -31,6 +32,7 @@ import com.pyx4j.site.shared.meta.SiteMap;
 import com.pyx4j.widgets.client.GlassPanel;
 
 import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public abstract class VistaSite extends AppSite {
 
@@ -57,6 +59,9 @@ public abstract class VistaSite extends AppSite {
             ClientLogger.addAppender(new RPCAppender(Level.WARN));
         }
         RootPanel.get().add(GlassPanel.instance());
+
+        ClientDeploymentConfig.setDownloadServletMapping(DeploymentConsts.downloadServletMapping);
+        ClientDeploymentConfig.setUploadServletMapping(DeploymentConsts.uploadServletMapping);
     }
 
     public static VistaSite instance() {
