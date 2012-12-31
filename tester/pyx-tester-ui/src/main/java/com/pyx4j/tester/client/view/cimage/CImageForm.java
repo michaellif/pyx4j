@@ -49,7 +49,8 @@ public class CImageForm extends CEntityForm<CImageEntity> {
         main.setH2(++row, 0, 1, i18n.tr("CImage is here"));
 
         CImage<TFile> cImage = new CImage<TFile>(CImage.Type.multiple);
-        cImage.setImageFileUrlBuilder(new CImageFileURLBuilder());
+        cImage.setImageFileUrlBuilder(new CImageFileURLBuilder(false));
+        cImage.setThumbnailFileUrlBuilder(new CImageFileURLBuilder(true));
         cImage.setUploadService(GWT.<TFileUploadService> create(TFileUploadService.class));
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().files(), cImage)));

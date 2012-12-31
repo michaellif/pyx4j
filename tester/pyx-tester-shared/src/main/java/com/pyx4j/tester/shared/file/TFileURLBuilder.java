@@ -21,16 +21,28 @@
 package com.pyx4j.tester.shared.file;
 
 import com.pyx4j.gwt.shared.FileURLBuilder;
+import com.pyx4j.site.shared.Dimension;
 import com.pyx4j.tester.domain.TFile;
 
 public abstract class TFileURLBuilder implements FileURLBuilder<TFile> {
 
+    public static final Dimension THUMBNAIL_SMALL = new Dimension(70, 50);
+
+    //see web.xml for now
+    public static String servletMapping = "file-view/";
+
+    private final boolean thumbnail;
+
+    public TFileURLBuilder(boolean thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
     @Override
     public String getUrl(TFile image) {
         if (image.id().isNull()) {
-            return "download/u" + image.accessKey().getStringView() + "/" + image.fileName().getStringView();
+            return servletMapping + (thumbnail ? "t" : "") + "u" + image.accessKey().getStringView() + "/" + image.fileName().getStringView();
         } else {
-            return "download/" + image.id().getStringView() + "/" + image.fileName().getStringView();
+            return servletMapping + (thumbnail ? "t" : "") + image.id().getStringView() + "/" + image.fileName().getStringView();
         }
     }
 }

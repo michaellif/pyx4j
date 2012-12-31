@@ -52,7 +52,7 @@
 
     <servlet-mapping>
         <servlet-name>FileResourceServlet</servlet-name>
-        <url-pattern>/download/*</url-pattern>
+        <url-pattern>/file-view/*</url-pattern>
     </servlet-mapping>
     
     <!-- Default page to serve -->

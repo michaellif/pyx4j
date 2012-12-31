@@ -35,6 +35,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 import com.pyx4j.tester.domain.TFile;
+import com.pyx4j.tester.shared.file.TFileURLBuilder;
 
 @SuppressWarnings("serial")
 public class TFileResourceServlet extends HttpServlet {
@@ -50,6 +51,13 @@ public class TFileResourceServlet extends HttpServlet {
             return;
         } else {
             Key key;
+
+            boolean thumbnail = false;
+            if (id.startsWith("t")) {
+                id = id.substring(1);
+                thumbnail = true;
+            }
+
             if (id.startsWith("u")) {
                 TFile file = FileUploadRegistry.get(id.substring(1));
                 key = file.blobKey().getValue();
@@ -62,6 +70,9 @@ public class TFileResourceServlet extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 return;
             } else {
+                if (thumbnail) {
+                    data = ImageThumbnailCreator.resample(data, TFileURLBuilder.THUMBNAIL_SMALL);
+                }
                 response.getOutputStream().write(data);
             }
         }

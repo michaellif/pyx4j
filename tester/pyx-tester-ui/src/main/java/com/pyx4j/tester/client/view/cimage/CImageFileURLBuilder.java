@@ -26,6 +26,10 @@ import com.pyx4j.tester.shared.file.TFileURLBuilder;
 
 public class CImageFileURLBuilder extends TFileURLBuilder {
 
+    public CImageFileURLBuilder(boolean thumbnail) {
+        super(thumbnail);
+    }
+
     @Override
     public String getUrl(TFile image) {
         return NavigationUri.getDeploymentBaseURL() + super.getUrl(image);
