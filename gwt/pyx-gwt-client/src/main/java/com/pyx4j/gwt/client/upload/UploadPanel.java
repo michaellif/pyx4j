@@ -123,7 +123,9 @@ public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePan
 
             @Override
             public void onSuccess(Vector<String> result) {
-                supportedExtensions.addAll(result);
+                if (result != null) {
+                    supportedExtensions.addAll(result);
+                }
             }
         });
     }

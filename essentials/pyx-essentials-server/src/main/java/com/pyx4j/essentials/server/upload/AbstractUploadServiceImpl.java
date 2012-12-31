@@ -86,7 +86,12 @@ public abstract class AbstractUploadServiceImpl<U extends IEntity, R extends IEn
 
     @Override
     public void obtainSupportedExtensions(AsyncCallback<Vector<String>> callback) {
-        callback.onSuccess(new Vector<String>(getSupportedExtensions()));
+        Collection<String> extensions = getSupportedExtensions();
+        if (extensions != null) {
+            callback.onSuccess(new Vector<String>(extensions));
+        } else {
+            callback.onSuccess(null);
+        }
     }
 
     /**
