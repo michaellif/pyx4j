@@ -80,6 +80,13 @@ public class VistaDBReset {
 
             new VistaAdminDataPreloaders().preloadAll();
 
+            if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+                NamespaceManager.setNamespace(VistaNamespace.expiringNamespace);
+                RDBUtils.ensureNamespace();
+                RDBUtils.initNameSpaceSpecificEntityTables();
+                Persistence.service().commit();
+            }
+
             Persistence.service().commit();
 
             NamespaceManager.setNamespace(VistaNamespace.demoNamespace);

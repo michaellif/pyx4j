@@ -232,6 +232,17 @@ public class DBResetServlet extends HttpServlet {
                                     } finally {
                                         NamespaceManager.setNamespace(requestNamespace);
                                     }
+
+                                    if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+                                        NamespaceManager.setNamespace(VistaNamespace.expiringNamespace);
+                                        try {
+                                            RDBUtils.ensureNamespace();
+                                            RDBUtils.initNameSpaceSpecificEntityTables();
+                                            Persistence.service().commit();
+                                        } finally {
+                                            NamespaceManager.setNamespace(requestNamespace);
+                                        }
+                                    }
                                 }
 
                                 switch (type) {

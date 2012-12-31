@@ -45,6 +45,7 @@ import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo.EquifaxReportType;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.crm.rpc.dto.CustomerCreditCheckLongReportDTO;
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
@@ -134,11 +135,11 @@ public class EquifaxCreditCheck {
 
         if (equifaxInfo.reportType().getValue() == EquifaxReportType.longReport) {
             final CustomerCreditCheckReport report = EntityFactory.create(CustomerCreditCheckReport.class);
-            report.pmc().set(equifaxInfo.pmc());
+            report.pmc().setValue(equifaxInfo.pmc().getPrimaryKey());
             report.customer().setValue(customer.getPrimaryKey());
             report.data().setValue(EquifaxEncryptedStorage.encrypt(XmlCreator.toStorageXMl(efxResponse)));
 
-            TaskRunner.runInAdminNamespace(new Callable<Void>() {
+            TaskRunner.runInTargetNamespace(VistaNamespace.expiringNamespace, new Callable<Void>() {
                 @Override
                 public Void call() {
                     Persistence.service().persist(report);
@@ -204,7 +205,7 @@ public class EquifaxCreditCheck {
         criteria.eq(criteria.proto().id(), ccc.creditCheckReport());
         criteria.eq(criteria.proto().pmc(), pmc);
 
-        byte[] xmlData = TaskRunner.runInAdminNamespace(new Callable<byte[]>() {
+        byte[] xmlData = TaskRunner.runInTargetNamespace(VistaNamespace.expiringNamespace, new Callable<byte[]>() {
             @Override
             public byte[] call() {
                 CustomerCreditCheckReport cr = Persistence.service().retrieve(criteria);

@@ -16,11 +16,8 @@ package com.propertyvista.server.domain;
 import java.util.Date;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
@@ -29,7 +26,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.domain.VistaNamespace;
 
 @RpcTransient
@@ -38,15 +34,16 @@ import com.propertyvista.domain.VistaNamespace;
 public interface CustomerCreditCheckReport extends IEntity {
 
     @ReadOnly
-    @Owner
     @MemberColumn(notNull = true)
-    @JoinColumn
-    @Indexed(uniqueConstraint = true)
-    Pmc pmc();
+    IPrimitive<Key> pmc();
 
     @Timestamp(Timestamp.Update.Created)
+    @ReadOnly
+    @MemberColumn(notNull = true)
     IPrimitive<Date> created();
 
+    @ReadOnly
+    @MemberColumn(notNull = true)
     IPrimitive<Key> customer();
 
     @RpcTransient
