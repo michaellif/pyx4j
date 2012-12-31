@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.shared.AttachLevel;
 
+import com.propertyvista.crm.rpc.dto.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
@@ -43,4 +44,9 @@ public interface ScreeningFacade {
     CustomerScreening retrivePersonScreeningDraftOrFinal(Customer customerId, AttachLevel attachLevel);
 
     CustomerCreditCheck retrivePersonCreditCheck(Customer customerId);
+
+    /**
+     * @return null if Report storage already expired
+     */
+    CustomerCreditCheckLongReportDTO retriveLongReport(Customer customerId);
 }

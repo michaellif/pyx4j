@@ -17,6 +17,7 @@ import java.io.StringWriter;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 
@@ -32,6 +33,8 @@ import ca.equifax.uat.to.ParameterType.Value;
 import ca.equifax.uat.to.ScoringProductType;
 import ca.equifax.uat.to.ScoringProductType.Parameters;
 import ca.equifax.uat.to.ScoringProductType.Parameters.Parameter;
+
+import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.equifax.model.EquifaxParameter;
 
@@ -143,6 +146,30 @@ public class XmlCreator {
         } catch (Throwable e) {
             log.error("to XML Error", e);
             return e.getMessage();
+        }
+    }
+
+    public static String toStorageXMl(EfxTransmit efxResponse) {
+        try {
+            QName qname = new QName("http://www.equifax.ca/XMLSchemas/EfxToCust", "CNEfxTransmitToCust");
+            JAXBElement<EfxTransmit> element = new JAXBElement<EfxTransmit>(qname, EfxTransmit.class, efxResponse);
+
+            JAXBContext context = JAXBContext.newInstance(EfxTransmit.class);
+            Marshaller m = context.createMarshaller();
+            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.FALSE);
+            StringWriter xml = new StringWriter();
+            m.marshal(element, xml);
+            return xml.toString();
+        } catch (JAXBException e) {
+            throw new Error(e);
+        }
+    }
+
+    public static EfxTransmit fromStorageXMl(String xml) {
+        try {
+            return MarshallUtil.unmarshal(EfxTransmit.class, xml);
+        } catch (JAXBException e) {
+            throw new Error(e);
         }
     }
 }

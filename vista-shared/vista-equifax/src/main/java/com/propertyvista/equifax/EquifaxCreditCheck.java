@@ -16,6 +16,7 @@ package com.propertyvista.equifax;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,14 +31,20 @@ import ca.equifax.uat.to.CNConsAndCommRequestType;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.dev.EntityFileLogger;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo;
+import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo.EquifaxReportType;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
+import com.propertyvista.crm.rpc.dto.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
@@ -46,6 +53,7 @@ import com.propertyvista.equifax.request.EquifaxHttpClient;
 import com.propertyvista.equifax.request.EquifaxModelMapper;
 import com.propertyvista.equifax.request.XmlCreator;
 import com.propertyvista.server.domain.CustomerCreditCheckReport;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class EquifaxCreditCheck {
 
@@ -124,10 +132,21 @@ public class EquifaxCreditCheck {
             EntityFileLogger.logXml("equifax", "response", XmlCreator.devToXMl(efxResponse));
         }
 
-        //TODO
-        if (false) {
-            CustomerCreditCheckReport report = EntityFactory.create(CustomerCreditCheckReport.class);
-            report.data().setValue(null);
+        if (equifaxInfo.reportType().getValue() == EquifaxReportType.longReport) {
+            final CustomerCreditCheckReport report = EntityFactory.create(CustomerCreditCheckReport.class);
+            report.pmc().set(equifaxInfo.pmc());
+            report.customer().setValue(customer.getPrimaryKey());
+            report.data().setValue(EquifaxEncryptedStorage.encrypt(XmlCreator.toStorageXMl(efxResponse)));
+
+            TaskRunner.runInAdminNamespace(new Callable<Void>() {
+                @Override
+                public Void call() {
+                    Persistence.service().persist(report);
+                    Persistence.service().commit();
+                    return null;
+                }
+            });
+            pcc.creditCheckReport().setValue(report.getPrimaryKey());
         }
 
         reportsLoop: for (EfxReportType efxReportType : efxResponse.getEfxReport()) {
@@ -176,5 +195,42 @@ public class EquifaxCreditCheck {
         pcc.creditCheckResult().setValue(creditCheckResult);
 
         return pcc;
+    }
+
+    public static CustomerCreditCheckLongReportDTO createLongReport(CustomerCreditCheck ccc) {
+        Pmc pmc = VistaDeployment.getCurrentPmc();
+
+        final EntityQueryCriteria<CustomerCreditCheckReport> criteria = EntityQueryCriteria.create(CustomerCreditCheckReport.class);
+        criteria.eq(criteria.proto().id(), ccc.creditCheckReport());
+        criteria.eq(criteria.proto().pmc(), pmc);
+
+        byte[] xmlData = TaskRunner.runInAdminNamespace(new Callable<byte[]>() {
+            @Override
+            public byte[] call() {
+                CustomerCreditCheckReport cr = Persistence.service().retrieve(criteria);
+                if (cr == null) {
+                    return null;
+                } else {
+                    return cr.data().getValue();
+                }
+            }
+        });
+
+        if (xmlData == null) {
+            return null;
+        }
+
+        EfxTransmit efxResponse;
+        try {
+            efxResponse = XmlCreator.fromStorageXMl(EquifaxEncryptedStorage.decrypt(xmlData));
+        } catch (Exception e) {
+            log.error("data error", e);
+            if (ApplicationMode.isDevelopment()) {
+                throw new DevInfoUnRecoverableRuntimeException(e);
+            } else {
+                throw new UnRecoverableRuntimeException(i18n.tr("Equifax data strage error"));
+            }
+        }
+        return EquifaxLongReportModelMapper.createLongReport(efxResponse, ccc);
     }
 }

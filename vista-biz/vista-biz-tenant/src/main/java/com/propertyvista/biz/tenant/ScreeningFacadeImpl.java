@@ -36,9 +36,11 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo;
+import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo.EquifaxReportType;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.crm.rpc.dto.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
 import com.propertyvista.domain.tenant.Customer;
@@ -226,5 +228,18 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         criteria.add(PropertyCriterion.ge(criteria.proto().creditCheckDate(), DateUtils.addDays(new Date(), -30)));
         criteria.desc(criteria.proto().creditCheckDate());
         return Persistence.service().retrieve(criteria);
+    }
+
+    @Override
+    public CustomerCreditCheckLongReportDTO retriveLongReport(Customer customerId) {
+        PmcEquifaxInfo equifaxInfo = getCurrentPmcEquifaxInfo();
+        if (!isCreditCheckActivated(equifaxInfo)) {
+            throw new UserRuntimeException(i18n.tr("Credit Check interface was not activated in Onboarding"));
+        }
+        if (equifaxInfo.reportType().getValue() != EquifaxReportType.longReport) {
+            throw new UserRuntimeException(i18n.tr("Credit Check Long Reports was not activated"));
+        }
+        CustomerCreditCheck ccc = retrivePersonCreditCheck(customerId);
+        return EquifaxCreditCheck.createLongReport(ccc);
     }
 }
