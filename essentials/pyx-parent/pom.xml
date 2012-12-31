@@ -460,13 +460,23 @@
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi</artifactId>
-                <version>3.8</version>
+                <version>3.9</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
-                <version>3.8</version>
+                <version>3.9</version>
+            </dependency>
+
+            <!-- poi need this  -->
+            <dependency>
+                <groupId>dom4j</groupId>
+                <artifactId>dom4j</artifactId>
+                <version>1.6.1</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -497,66 +507,110 @@
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-bridge</artifactId>
                 <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-gvt</artifactId>
                 <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-util</artifactId>
                 <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-svg-dom</artifactId>
                 <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-dom</artifactId>
                 <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-script</artifactId>
                 <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-css</artifactId>
                 <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-svggen</artifactId>
                 <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-awt-util</artifactId>
                 <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-swing</artifactId>
                 <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-transcoder</artifactId>
                 <version>${batikVersion}</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xalan</groupId><artifactId>xalan</artifactId></exclusion>
+                </exclusions>
             </dependency>
 
         </dependencies>
