@@ -20,19 +20,25 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
 
 public class GetPropertyConfigurationsMapper {
 
-    // TODO this later will go into the Model
-    private final List<Building> buildings = new ArrayList<Building>();
-
-    public void map(Properties properties) {
-        for (Property property : properties.getProperties()) {
+    /**
+     * Maps properties from YARDI System to building
+     * 
+     * @param properties
+     *            the properties to map
+     * @return the properties list
+     */
+    public List<Building> map(List<Property> properties) {
+        List<Building> buildings = new ArrayList<Building>();
+        for (Property property : properties) {
             Building building = map(property);
             buildings.add(building);
         }
+
+        return buildings;
     }
 
     /**
@@ -74,7 +80,4 @@ public class GetPropertyConfigurationsMapper {
         return building;
     }
 
-    public List<Building> getBuildings() {
-        return buildings;
-    }
 }

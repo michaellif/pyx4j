@@ -33,8 +33,7 @@ public class GetPropertyConfigurationLifecycle {
     public List<Building> download(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
         Properties properties = YardiTransactions.getPropertyConfigurations(c, yp);
         GetPropertyConfigurationsMapper mapper = new GetPropertyConfigurationsMapper();
-        mapper.map(properties);
-        List<Building> buildings = mapper.getBuildings();
+        List<Building> buildings = mapper.map(properties.getProperties());
         return buildings;
     }
 

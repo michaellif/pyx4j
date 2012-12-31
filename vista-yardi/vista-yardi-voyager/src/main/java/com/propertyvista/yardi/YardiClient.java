@@ -38,6 +38,8 @@ public class YardiClient {
 
     private final static Logger log = LoggerFactory.getLogger(YardiClient.class);
 
+    private final String serviceURL;
+
     /**
      * Use to name transaction log files
      */
@@ -48,15 +50,16 @@ public class YardiClient {
     public Long transactionId = 0l;
 
     public YardiClient() {
+        //default service URL
+        serviceURL = "https://www.iyardiasp.com/8223thirddev/webservices/itfresidenttransactions20.asmx";
     }
 
-    private String getServiceURL() {
-        //TODO make it configurable
-        return "https://www.iyardiasp.com/8223thirddev/webservices/itfresidenttransactions20.asmx";
+    public YardiClient(String serviceURL) {
+        this.serviceURL = serviceURL;
     }
 
     public ItfResidentTransactions2_0 getResidentTransactionsService() throws AxisFault {
-        ItfResidentTransactions2_0Stub serviceStub = new ItfResidentTransactions2_0Stub(getServiceURL());
+        ItfResidentTransactions2_0Stub serviceStub = new ItfResidentTransactions2_0Stub(serviceURL);
         addMessageContextListener("ResidentTransactions", serviceStub, null);
         setTransportOptions(serviceStub);
         return serviceStub;

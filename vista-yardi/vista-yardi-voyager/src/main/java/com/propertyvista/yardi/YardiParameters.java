@@ -26,6 +26,9 @@ public class YardiParameters {
 
     private String interfaceEntity;
 
+    private String serviceURL;
+
+    //TODO mkoval have to be move out
     private String yardiPropertyId;
 
     private String tenantId;
@@ -96,6 +99,14 @@ public class YardiParameters {
 
     public void setInterfaceEntity(String interfaceEntity) {
         this.interfaceEntity = interfaceEntity;
+    }
+
+    public String getServiceURL() {
+        return serviceURL;
+    }
+
+    public void setServiceURL(String serviceURL) {
+        this.serviceURL = serviceURL;
     }
 
     public String getYardiPropertyId() {

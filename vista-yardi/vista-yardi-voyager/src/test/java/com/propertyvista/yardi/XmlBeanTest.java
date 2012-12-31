@@ -14,6 +14,7 @@
 package com.propertyvista.yardi;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
@@ -38,10 +39,10 @@ import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
-import com.propertyvista.yardi.bean.mits.YardiCustomer;
-import com.propertyvista.yardi.bean.mits.YardiCustomers;
 import com.propertyvista.yardi.bean.mits.Identification;
 import com.propertyvista.yardi.bean.mits.PropertyId;
+import com.propertyvista.yardi.bean.mits.YardiCustomer;
+import com.propertyvista.yardi.bean.mits.YardiCustomers;
 import com.propertyvista.yardi.bean.resident.PhysicalProperty;
 import com.propertyvista.yardi.bean.resident.RTCustomer;
 import com.propertyvista.yardi.bean.resident.ResidentTransactions;
@@ -87,10 +88,10 @@ public class XmlBeanTest {
 
         // convert them into vista buildings
         GetPropertyConfigurationsMapper mapper = new GetPropertyConfigurationsMapper();
-        mapper.map(properties);
+        List<Building> buildings = mapper.map(properties.getProperties());
 
-        Assert.assertEquals("Converted size", properties.getProperties().size(), mapper.getBuildings().size());
-        for (Building building : mapper.getBuildings()) {
+        Assert.assertEquals("Converted size", properties.getProperties().size(), buildings.size());
+        for (Building building : buildings) {
             log.debug("Building {}", building);
             Assert.assertNotNull(building.propertyCode());
         }
