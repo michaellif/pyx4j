@@ -22,11 +22,13 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class DashboardServiceImpl implements DashboardService {
 
@@ -50,10 +52,12 @@ public class DashboardServiceImpl implements DashboardService {
         dashboard.billSummary().set(BillSummaryServiceImpl.retrieve());
         dashboard.maintanances().addAll(MaintenanceServiceImpl.listOpenIssues());
 
-        dashboard.tenantInsuranceStatus().set(
-                ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
-                        TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
+        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
+            dashboard.tenantInsuranceStatus().set(
+                    ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
+                            TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
 
+        }
         callback.onSuccess(dashboard);
     }
 
