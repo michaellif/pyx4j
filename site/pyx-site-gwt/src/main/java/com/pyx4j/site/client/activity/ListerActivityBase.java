@@ -13,7 +13,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Created on 2011-05-03
  * @author Vlad
  * @version $Id$
@@ -30,14 +30,17 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IntegrityConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.EntityFiltersBuilder;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -51,9 +54,11 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private final AbstractListService<E> service;
 
-    private Key parentID;
+    private Key parentId;
 
     private Class<? extends IEntity> parentClass;
+
+    private List<Criterion> externalFilters;
 
     public ListerActivityBase(Place place, IListerView<E> view, AbstractListService<E> service, Class<E> entityClass) {
         // development correctness checks:
@@ -61,17 +66,33 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         assert (service != null);
         assert (entityClass != null);
 
+        this.parentId = null;
         this.view = view;
         this.service = service;
         this.dataSource = new ListerDataSource<E>(entityClass, service);
         view.setPresenter(this);
 
         view.getMemento().setCurrentPlace(place);
+
+        EntityFiltersBuilder<E> filters = EntityFiltersBuilder.create(entityClass);
+
+        String val;
+        if ((val = ((AppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
+            String ownerMemberName = EntityFactory.getEntityMeta(entityClass).getOwnerMemberName();
+            IEntity owner = (IEntity) filters.proto().getMember(ownerMemberName);
+            filters.eq(owner, EntityFactory.createIdentityStub(owner.getValueClass(), new Key(val)));
+        }
+        //TODO VladS add other filters
+
+        if (filters.getFilters().size() > 0) {
+            externalFilters = filters.getFilters();
+        }
     }
 
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         view.discard();
+        view.getLister().setExternalFilters(externalFilters);
         populate();
         containerWidget.setWidget(view);
     }
@@ -98,7 +119,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public Key getParent() {
-        return parentID;
+        return parentId;
     }
 
     @Override
@@ -107,13 +128,13 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
-    public void setParent(Key parentID) {
-        setParent(parentID, null);
+    public void setParent(Key parentId) {
+        setParent(parentId, null);
     }
 
     @Override
     public void setParent(Key parentID, Class<? extends IEntity> parentClass) {
-        this.parentID = parentID; // save parent id for newItem creation...
+        this.parentId = parentID; // save parent id for newItem creation...
         this.parentClass = parentClass; // save parent class for polymorphic queries...
         dataSource.setParentFiltering(parentID, parentClass);
     }
@@ -152,7 +173,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     public void retrieveData(int pageNumber) {
 
         // TODO : check this optimization:
-        // Fix/Optimization for new parent Entity. e.g. Do not go to server to get empty list 
+        // Fix/Optimization for new parent Entity. e.g. Do not go to server to get empty list
 //        if (isFilterCreateEmptyDataSet()) {
 //            view.populateData(new Vector<E>(), pageNumber, false, 0);
 //            return;
@@ -180,9 +201,9 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     public void editNew(Class<? extends CrudAppPlace> openPlaceClass) {
         if (canCreateNewItem()) {
             if (parentClass != null) {
-                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentID, parentClass));
+                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentId, parentClass));
             } else {
-                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentID));
+                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentId));
             }
         }
     }

@@ -25,6 +25,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends CHyperlink<E> {
@@ -34,8 +35,7 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
         setCommand(new Command() {
             @Override
             public void execute() {
-                System.out.println("++++++++++++++++" + getValue().getParent());
-                //AppSite.getPlaceController().goTo(place);
+                AppSite.getPlaceController().goTo(place.formListerPlace(getValue().getOwner().getPrimaryKey()));
             }
         });
         setFormat(new IFormat<E>() {

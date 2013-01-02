@@ -13,7 +13,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Created on Jun 11, 2011
  * @author michaellif
  * @version $Id$
@@ -68,7 +68,7 @@ public abstract class CrudAppPlace extends AppPlace {
     public CrudAppPlace formListerPlace(Key parentID) {
         setType(Type.lister);
         if (parentID != null) {
-            placeArg(ARG_NAME_PARENT_ID, parentID.toString());
+            queryArg(ARG_NAME_PARENT_ID, parentID.toString());
         }
         return this;
     }

@@ -68,6 +68,8 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
 
     private final IMemento memento = new MementoImpl();
 
+    private List<Criterion> externalFilters;
+
     private DataTable.ItemSelectionHandler zoomInHandler;
 
     public BasicLister(Class<E> clazz) {
@@ -383,13 +385,25 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         return memento;
     }
 
+    /**
+     * Do not store and restore filters set on this lister.
+     * The lister filter is created by navigation link, e.g. parent filter
+     */
+
+    public void setExternalFilters(List<Criterion> externalFilters) {
+        this.externalFilters = externalFilters;
+    }
+
     public void storeState(Place place) {
         getMemento().setCurrentPlace(place);
-        getMemento().clear();
+        if (externalFilters == null) {
 
-        getMemento().putInteger(MementoKeys.page.name(), getPageNumber());
-        getMemento().putObject(MementoKeys.filterData.name(), getFilters());
-        getMemento().putObject(MementoKeys.sortingData.name(), getSorting());
+            getMemento().clear();
+
+            getMemento().putInteger(MementoKeys.page.name(), getPageNumber());
+            getMemento().putObject(MementoKeys.filterData.name(), getFilters());
+            getMemento().putObject(MementoKeys.sortingData.name(), getSorting());
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -398,10 +412,12 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         List<Criterion> filters = getDefaultFilters();
         List<Sort> sorts = getDefaultSorting();
 
-        if (getMemento().mayRestore()) {
+        if (getMemento().mayRestore() && ((externalFilters == null))) {
             pageNumber = getMemento().getInteger(MementoKeys.page.name());
             filters = (List<Criterion>) getMemento().getObject(MementoKeys.filterData.name());
             sorts = (List<Sort>) getMemento().getObject(MementoKeys.sortingData.name());
+        } else if (externalFilters != null) {
+            filters = externalFilters;
         }
 
         setFilters(filters);
