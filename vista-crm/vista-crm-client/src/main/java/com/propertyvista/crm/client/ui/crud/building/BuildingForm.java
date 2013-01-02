@@ -193,8 +193,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         main.setWidget(row++, 1,
-                new DecoratorBuilder(inject(proto().floorplans(), new CEntityCollectionCrudHyperlink(AppPlaceEntityMapper.resolvePlace(Floorplan.class))), 15)
-                        .build());
+                new DecoratorBuilder(inject(proto().floorplans(), new CEntityCollectionCrudHyperlink(AppPlaceEntityMapper.resolvePlaceClass(Floorplan.class))),
+                        15).build());
 
         main.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());
         main.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(true, false)));
