@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -60,11 +61,12 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
     protected static final I18n i18n = I18n.get(LeaseTermForm.class);
 
+    private Widget featuresHeader, concessionsHeader;
+
     protected LeaseTermForm(IFormView<LeaseTermDTO> view) {
         super(LeaseTermDTO.class, view);
 
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
-        addTab(createProductsTab(i18n.tr("Products")));
     }
 
     @Override
@@ -86,6 +88,11 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
             get(proto().termFrom()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
             get(proto().termTo()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
+        } else {
+            featuresHeader.setVisible(!getValue().version().leaseProducts().featureItems().isEmpty());
+            if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
+                concessionsHeader.setVisible(!getValue().version().leaseProducts().concessions().isEmpty());
+            }
         }
 
         setUnitNote(getValue().unitMoveOutNote().getValue());
@@ -212,6 +219,22 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, datesPanel);
 
+        LeaseTermEditorView leaseTermEditorView = (isEditable() ? (LeaseTermEditorView) getParentView() : null);
+
+        // Products : -----------------------------------------------------------------------------------------------------------
+        main.setH1(++row, 0, 2, proto().version().leaseProducts().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, leaseTermEditorView)));
+
+        main.setH2(++row, 0, 2, proto().version().leaseProducts().featureItems().getMeta().getCaption());
+        featuresHeader = main.getWidget(row, 0);
+        main.setWidget(++row, 0, inject(proto().version().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this, leaseTermEditorView)));
+
+        if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
+            main.setH2(++row, 0, 2, proto().version().leaseProducts().concessions().getMeta().getCaption());
+            concessionsHeader = main.getWidget(row, 0);
+            main.setWidget(++row, 0, inject(proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
+        }
+
         // Tenants/Guarantors: --------------------------------------------------------------------------------------------------
         main.setH1(++row, 0, 2, proto().version().tenants().getMeta().getCaption());
 
@@ -243,25 +266,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                 return LeaseTermForm.this.getValue().version().tenants();
             }
         }));
-        return main;
-    }
-
-    private FormFlexPanel createProductsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
-
-        LeaseTermEditorView leaseTermEditorView = (isEditable() ? (LeaseTermEditorView) getParentView() : null);
-
-        int row = -1;
-        main.setWidget(++row, 0, inject(proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, leaseTermEditorView)));
-
-        main.setH1(++row, 0, 2, proto().version().leaseProducts().featureItems().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().version().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this, leaseTermEditorView)));
-
-        if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
-            main.setH1(++row, 0, 2, proto().version().leaseProducts().concessions().getMeta().getCaption());
-            main.setWidget(++row, 0, inject(proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
-        }
-
         return main;
     }
 

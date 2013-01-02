@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
+import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -40,6 +42,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     protected static final I18n i18n = I18n.get(LeaseFormBase.class);
 
     private Tab chargesTab;
+
+    private Widget featuresHeader, concessionsHeader;
 
     protected LeaseFormBase(Class<DTO> clazz, IFormView<DTO> view) {
         super(clazz, view);
@@ -70,6 +74,11 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         get(proto().terminationLeaseTo()).setVisible(!getValue().terminationLeaseTo().isNull());
 
         get(proto().unit()).setNote(getValue().unitMoveOutNote().getValue());
+
+        featuresHeader.setVisible(!getValue().currentTerm().version().leaseProducts().featureItems().isEmpty());
+        if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
+            concessionsHeader.setVisible(!getValue().currentTerm().version().leaseProducts().concessions().isEmpty());
+        }
     }
 
     public void onTenantInsuranceOwnerClicked(Tenant tenantId) {
@@ -164,6 +173,20 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         datesPanel.getColumnFormatter().setWidth(1, "50%");
         main.setWidget(++row, 0, datesPanel);
 
+        // Products: --------------------------------------------------------------------------------------------------------------------------------
+        main.setH1(++row, 0, 2, proto().currentTerm().version().leaseProducts().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().currentTerm().version().leaseProducts().serviceItem(), new BillableItemViewer()));
+
+        main.setH2(++row, 0, 2, proto().currentTerm().version().leaseProducts().featureItems().getMeta().getCaption());
+        featuresHeader = main.getWidget(row, 0);
+        main.setWidget(++row, 0, inject(proto().currentTerm().version().leaseProducts().featureItems(), new BillableItemFolder()));
+
+        if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
+            main.setH2(++row, 0, 2, proto().currentTerm().version().leaseProducts().concessions().getMeta().getCaption());
+            concessionsHeader = main.getWidget(row, 0);
+            main.setWidget(++row, 0, inject(proto().currentTerm().version().leaseProducts().concessions(), new ConcessionFolder()));
+        }
+
         // Tenants/Guarantors: ----------------------------------------------------------------------------------------------------------------------
         main.setH1(++row, 0, 2, proto().currentTerm().version().tenants().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().currentTerm().version().tenants(), new TenantInLeaseFolder()));
@@ -171,18 +194,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         main.setH1(++row, 0, 2, proto().currentTerm().version().guarantors().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().currentTerm().version().guarantors(), new GuarantorInLeaseFolder()));
 
-        // Products: --------------------------------------------------------------------------------------------------------------------------------
-        main.setH1(++row, 0, 2, i18n.tr("Service"));
-        main.setWidget(++row, 0, inject(proto().currentTerm().version().leaseProducts().serviceItem(), new BillableItemViewer()));
-
-        main.setH1(++row, 0, 2, proto().currentTerm().version().leaseProducts().featureItems().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().currentTerm().version().leaseProducts().featureItems(), new BillableItemFolder()));
-
-        if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
-            main.setH1(++row, 0, 2, proto().currentTerm().version().leaseProducts().concessions().getMeta().getCaption());
-            main.setWidget(++row, 0, inject(proto().currentTerm().version().leaseProducts().concessions(), new ConcessionFolder()));
-        }
-
+        // Insurance: --------------------------------------------------------------------------------------------------------------------------------
         main.setH1(++row, 0, 2, i18n.tr("Tenant Insurance"));
         main.setWidget(++row, 0, inject(proto().tenantInsuranceCertificates(), new TenantInsuranceCertificateFolder(new TenantOwnerClickHandler() {
             @Override
