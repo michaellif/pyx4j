@@ -19,6 +19,7 @@ import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity.ReturnBehaviour;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -28,6 +29,8 @@ import com.propertyvista.dto.LeaseTermDTO;
 public interface LeaseTermEditorView extends IEditorView<LeaseTermDTO> {
 
     interface Presenter extends IEditorView.Presenter {
+
+        void setSelectedBuilding(Building item);
 
         void setSelectedUnit(AptUnit item);
 
@@ -39,6 +42,8 @@ public interface LeaseTermEditorView extends IEditorView<LeaseTermDTO> {
 
         ReturnBehaviour getReturnBehaviour();
     }
+
+    void updateBuildingValue(Building value);
 
     void updateUnitValue(LeaseTermDTO value);
 

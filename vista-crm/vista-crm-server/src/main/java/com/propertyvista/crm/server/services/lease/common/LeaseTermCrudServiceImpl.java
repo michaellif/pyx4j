@@ -120,6 +120,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         if (!dto.lease().unit().isNull()) {
             Persistence.ensureRetrieve(dto.lease().unit().building(), AttachLevel.ToStringMembers);
+            dto.building().set(dto.lease().unit().building());
 
             if (retrieveTraget == RetrieveTraget.Edit) {
                 // fill runtime editor data:

@@ -31,6 +31,7 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -104,6 +105,11 @@ public class LeaseTermEditorActivity extends CrmEditorActivity<LeaseTermDTO> imp
         } else {
             super.goToEditor(entityID);
         }
+    }
+
+    @Override
+    public void setSelectedBuilding(Building item) {
+        ((LeaseTermEditorView) getView()).updateBuildingValue(item);
     }
 
     @Override

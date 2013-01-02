@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.misc.VistaTODO;
 
@@ -26,11 +27,24 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
     }
 
     @Override
+    public void updateBuildingValue(Building value) {
+        LeaseTermForm form = (LeaseTermForm) getForm();
+
+        form.get(form.proto().building()).setValue(value);
+
+        // just clear all unit-related data:
+        form.get(form.proto().lease().unit()).reset();
+        form.get(form.proto().lease().unit()).setEditable(true);
+
+        clearServiceData();
+    }
+
+    @Override
     public void updateUnitValue(LeaseTermDTO value) {
         LeaseTermForm form = (LeaseTermForm) getForm();
 
         form.get(form.proto().lease().unit()).setValue(value.lease().unit());
-        form.get(form.proto().lease().unit().building()).setValue(value.lease().unit().building());
+        form.get(form.proto().building()).setValue(value.lease().unit().building());
 
         form.setUnitNote(value.unitMoveOutNote().getValue());
 
@@ -41,7 +55,7 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
         if (form.getValue().selectedServiceItems().size() > 1) {
             // in case of multiple services available - clear all service-related data
             // and allow user to select the service he/she wants to use:
-            clearServiceData(value);
+            clearServiceData();
         } else {
             updateServiceValue(value);
         }
@@ -65,7 +79,7 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
         }
     }
 
-    private void clearServiceData(LeaseTermDTO value) {
+    private void clearServiceData() {
         LeaseTermForm form = (LeaseTermForm) getForm();
 
         form.getValue().selectedFeatureItems().clear();

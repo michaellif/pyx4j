@@ -38,8 +38,8 @@ public class PolicyFacadeImpl implements PolicyFacade {
         if (entity instanceof CustomerScreening) {
             // TODO Find  LeaseTerm that have application
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().leaseParticipants().$().customer().personScreening(), entity));
-            criteria.desc(criteria.proto()._Units().$()._Leases().$().updated());
+            criteria.add(PropertyCriterion.eq(criteria.proto().units().$()._Leases().$().leaseParticipants().$().customer().personScreening(), entity));
+            criteria.desc(criteria.proto().units().$()._Leases().$().updated());
             node = Persistence.service().retrieve(criteria);
         } else {
             // TODO use the same code as in BreadcrumbsHelper

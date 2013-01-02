@@ -27,7 +27,6 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -38,13 +37,14 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
-import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
+import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
@@ -84,7 +84,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lease, get(proto().lease().leaseId()), getValue().lease().getPrimaryKey());
 
-            get(proto().lease().unit()).setEditable(isDraft);
+            get(proto().building()).setEditable(isDraft);
+            get(proto().lease().unit()).setEditable(isDraft && !getValue().building().isNull());
 
             get(proto().termFrom()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
             get(proto().termTo()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
@@ -103,6 +104,61 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         FormFlexPanel detailsLeft = new FormFlexPanel();
 
         int detailsRow = -1; // first column:
+
+        detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().building(), new CEntitySelectorHyperlink<Building>() {
+            @Override
+            protected AppPlace getTargetPlace() {
+                return AppPlaceEntityMapper.resolvePlace(Building.class, getValue().getPrimaryKey());
+            }
+
+            @Override
+            protected AbstractEntitySelectorDialog<Building> getSelectorDialog() {
+                return new BuildingSelectorDialog() {
+                    @Override
+                    protected void setFilters(List<Criterion> filters) {
+                        assert (filters != null);
+
+                        LeaseTermDTO currentValue = LeaseTermForm.this.getValue();
+                        if (currentValue.lease().status().getValue() == Lease.Status.ExistingLease) { // existing lease:
+
+                            filters.add(PropertyCriterion.eq(proto().units().$().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.pending));
+                            filters.add(PropertyCriterion.eq(proto().units().$().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
+                            filters.add(PropertyCriterion.le(proto().units().$().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
+
+                        } else if (currentValue.lease().status().getValue() == Lease.Status.Application) { // lease application:
+
+                            filters.add(PropertyCriterion
+                                    .eq(proto().units().$().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
+                            filters.add(PropertyCriterion.eq(proto().units().$().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
+                            if (!currentValue.termFrom().isNull()) {
+                                filters.add(PropertyCriterion
+                                        .le(proto().units().$().unitOccupancySegments().$().dateFrom(), currentValue.termFrom().getValue()));
+                            } else {
+                                filters.add(PropertyCriterion.le(proto().units().$().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
+                            }
+
+                            // TODO: filter by lease type also!!!
+//                            filters.add(PropertyCriterion.in(proto().units().$().productItems().$().product().holder().serviceType(), currentValue.lease().type()));
+
+                        } else {
+                            assert false : "Weird! Value shouln'd be edited in this lease status!";
+                        }
+
+                        super.setFilters(filters);
+                    };
+
+                    @SuppressWarnings("unchecked")
+                    @Override
+                    public boolean onClickOk() {
+                        if (!getSelectedItems().isEmpty()) {
+                            ((LeaseTermEditorView.Presenter) ((IEditorView<LeaseTermDTO>) getParentView()).getPresenter())
+                                    .setSelectedBuilding(getSelectedItems().get(0));
+                        }
+                        return !getSelectedItems().isEmpty();
+                    }
+                };
+            }
+        }), 20).build());
 
         detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease().unit(), new CEntitySelectorHyperlink<AptUnit>() {
             @Override
@@ -138,12 +194,10 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 //                            filters.add(PropertyCriterion.in(proto().productItems().$().product().holder().serviceType(), currentValue.lease().type()));
 
                         } else {
-                            assert false : "Incorrect situation! Value shouln'd be edited in this lease status!";
+                            assert false : "Weird! Value shouln'd be edited in this lease status!";
                         }
 
-                        // and finalized current Product only:
-                        filters.add(PropertyCriterion.isNotNull(proto().productItems().$().product().fromDate()));
-                        filters.add(PropertyCriterion.isNull(proto().productItems().$().product().toDate()));
+                        filters.add(PropertyCriterion.eq(proto().building(), currentValue.building()));
 
                         super.setFilters(filters);
                     };
@@ -160,16 +214,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                 };
             }
         }), 20).build());
-
-        if (isEditable()) {
-            detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease().unit().building(), new CEntityLabel<Building>()), 20).build());
-        } else {
-            detailsLeft.setWidget(
-                    ++detailsRow,
-                    0,
-                    new DecoratorBuilder(inject(proto().lease().unit().building(),
-                            new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))), 20).build());
-        }
 
         detailsLeft.setBR(++detailsRow, 0, 1);
         detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel())).customLabel(i18n.tr("Term Type")).build());

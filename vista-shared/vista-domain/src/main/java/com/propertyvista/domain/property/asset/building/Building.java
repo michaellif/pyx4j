@@ -147,7 +147,7 @@ public interface Building extends PolicyNode {
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<AptUnit> _Units();
+    ISet<AptUnit> units();
 
     @Owned
     @Detached(level = AttachLevel.Detached)

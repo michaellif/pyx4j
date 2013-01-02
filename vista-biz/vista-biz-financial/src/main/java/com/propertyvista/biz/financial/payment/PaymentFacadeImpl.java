@@ -70,7 +70,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         }
 
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().billingAccount(), paymentRecord.billingAccount()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().units().$()._Leases().$().billingAccount(), paymentRecord.billingAccount()));
         Building building = Persistence.service().retrieve(criteria);
         PaymentMethodPersister.persistLeasePaymentMethod(building, paymentRecord.paymentMethod());
 

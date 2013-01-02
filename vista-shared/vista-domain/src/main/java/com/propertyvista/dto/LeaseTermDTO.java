@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
@@ -32,6 +33,8 @@ public interface LeaseTermDTO extends LeaseTerm {
 
     // -----------------------------------------------------
     // temporary runtime data:
+
+    Building building();
 
     IList<ProductItem> selectedServiceItems();
 

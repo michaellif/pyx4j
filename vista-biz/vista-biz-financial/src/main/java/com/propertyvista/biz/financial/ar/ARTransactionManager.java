@@ -138,7 +138,7 @@ public class ARTransactionManager {
         Building building;
         {
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().billingAccount(), billingAccount));
+            criteria.add(PropertyCriterion.eq(criteria.proto().units().$()._Leases().$().billingAccount(), billingAccount));
             building = Persistence.service().retrieve(criteria);
         }
 
