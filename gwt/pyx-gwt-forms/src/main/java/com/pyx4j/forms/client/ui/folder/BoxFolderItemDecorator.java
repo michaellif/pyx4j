@@ -122,7 +122,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
                 if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
                     String message = null;
                     if (folderItem.isUnconditionalValidationErrorRendering()) {
-                        message = getValidationMessage(folderItem.getValidationResults());
+                        message = folderItem.getValidationResults().getValidationShortMessage();
                     } else {
                         ArrayList<ValidationError> errors = folderItem.getValidationResults().getValidationErrors();
                         ValidationResults results = new ValidationResults();
@@ -132,7 +132,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
                                 results.appendValidationError(validationError);
                             }
                         }
-                        message = getValidationMessage(results);
+                        message = results.getValidationShortMessage();
                     }
                     toolbar.setWarningMessage(message.isEmpty() ? null : message);
                 }
@@ -144,21 +144,6 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
                 toolbar.update(collapsablePanel.isExpended());
             }
         });
-    }
-
-    public static String getValidationMessage(ValidationResults validationResults) {
-        StringBuilder messagesBuffer = new StringBuilder();
-        ArrayList<ValidationError> validationErrors = validationResults.getValidationErrors();
-
-        if (validationErrors.size() > 1) {
-            messagesBuffer.append(i18n.tr("error 1 of {0}", (validationErrors.size()))).append(" - ");
-        }
-
-        if (validationErrors.size() > 0) {
-            messagesBuffer.append(validationErrors.get(0).getMessageString(false));
-        }
-
-        return messagesBuffer.toString();
     }
 
     public void setExpended(boolean expended) {
@@ -190,7 +175,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
     @Override
     public void adoptItemActionsBar() {
-        ItemActionsBar actionsBar = getFolderItem().getItemActionsBar();
+        final ItemActionsBar actionsBar = getFolderItem().getItemActionsBar();
         actionsBar.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         if (BrowserType.isIE7()) {
             actionsBar.getElement().getStyle().setMarginRight(40, Unit.PX);
@@ -201,7 +186,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         addDomHandler(new MouseOverHandler() {
             @Override
             public void onMouseOver(MouseOverEvent event) {
-                getFolderItem().getItemActionsBar().setHover(true);
+                actionsBar.setHover(true);
             }
         }, MouseOverEvent.getType());
 
@@ -209,7 +194,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
             @Override
             public void onMouseOut(MouseOutEvent event) {
-                getFolderItem().getItemActionsBar().setHover(false);
+                actionsBar.setHover(false);
             }
         }, MouseOutEvent.getType());
 

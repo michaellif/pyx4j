@@ -18,17 +18,17 @@
  * @author stanp
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.forms.client.ui.decorators;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.widgets.client.CollapsablePanel;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
-public class BaseCollapsableDecorator<E extends IEntity> extends CollapsablePanel implements IDecorator<CEntityContainer<E>> {
+public class FormCollapsableDecorator<E extends IEntity> extends CollapsablePanel implements IDecorator<CEntityContainer<E>> {
 
-    public BaseCollapsableDecorator(WidgetsImages images) {
+    public FormCollapsableDecorator(WidgetsImages images) {
         super(images);
     }
 

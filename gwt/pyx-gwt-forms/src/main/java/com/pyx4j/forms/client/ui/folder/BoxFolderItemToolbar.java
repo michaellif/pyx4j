@@ -95,7 +95,6 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         add(actionsPanelHolder);
 
         decorator.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.Decorator).debugId());
-
         caption.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.Caption).debugId());
         titleIcon.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.TitleIcon).debugId());
         warnImage.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.ImageWarn).debugId());
@@ -108,14 +107,14 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         decorator.setExpended(expended);
     }
 
-    protected void update(boolean expanded) {
+    public void update(boolean expanded) {
         if (decorator.getFolderItem() != null && decorator.getFolderItem().getValue() != null) {
             setCaption(decorator.getFolderItem().getValue().getStringView());
         }
         caption.setVisible(!expanded);
     }
 
-    protected void setTitleIcon(ImageResource icon) {
+    public void setTitleIcon(ImageResource icon) {
         if (icon != null) {
             titleIcon.setResource(icon);
             titleIcon.setVisible(true);

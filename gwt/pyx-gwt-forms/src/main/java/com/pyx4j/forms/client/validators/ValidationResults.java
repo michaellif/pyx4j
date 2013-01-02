@@ -24,8 +24,11 @@ import java.util.ArrayList;
 
 import com.pyx4j.commons.LoopCounter;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.i18n.shared.I18n;
 
 public class ValidationResults {
+
+    private static final I18n i18n = I18n.get(ValidationResults.class);
 
     private final ArrayList<ValidationError> validationErrors = new ArrayList<ValidationError>();
 
@@ -85,6 +88,21 @@ public class ValidationResults {
                 }
             }
         }
+        return messagesBuffer.toString();
+    }
+
+    public String getValidationShortMessage() {
+        StringBuilder messagesBuffer = new StringBuilder();
+        ArrayList<ValidationError> validationErrors = getValidationErrors();
+
+        if (validationErrors.size() > 1) {
+            messagesBuffer.append(i18n.tr("error 1 of {0}", (validationErrors.size()))).append(" - ");
+        }
+
+        if (validationErrors.size() > 0) {
+            messagesBuffer.append(validationErrors.get(0).getMessageString(false));
+        }
+
         return messagesBuffer.toString();
     }
 
