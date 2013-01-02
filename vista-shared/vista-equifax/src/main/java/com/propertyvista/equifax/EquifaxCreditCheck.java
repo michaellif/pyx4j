@@ -54,6 +54,7 @@ import com.propertyvista.equifax.request.EquifaxHttpClient;
 import com.propertyvista.equifax.request.EquifaxModelMapper;
 import com.propertyvista.equifax.request.XmlCreator;
 import com.propertyvista.server.domain.CustomerCreditCheckReport;
+import com.propertyvista.server.domain.CustomerCreditCheckReportNoBackup;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class EquifaxCreditCheck {
@@ -205,10 +206,17 @@ public class EquifaxCreditCheck {
         criteria.eq(criteria.proto().id(), ccc.creditCheckReport());
         criteria.eq(criteria.proto().pmc(), pmc);
 
+        final EntityQueryCriteria<CustomerCreditCheckReportNoBackup> criteria2 = EntityQueryCriteria.create(CustomerCreditCheckReportNoBackup.class);
+        criteria2.eq(criteria2.proto().id(), ccc.creditCheckReport());
+        criteria2.eq(criteria2.proto().pmc(), pmc);
+
         byte[] xmlData = TaskRunner.runInTargetNamespace(VistaNamespace.expiringNamespace, new Callable<byte[]>() {
             @Override
             public byte[] call() {
                 CustomerCreditCheckReport cr = Persistence.service().retrieve(criteria);
+                if (cr == null) {
+                    cr = Persistence.service().retrieve(criteria2);
+                }
                 if (cr == null) {
                     return null;
                 } else {

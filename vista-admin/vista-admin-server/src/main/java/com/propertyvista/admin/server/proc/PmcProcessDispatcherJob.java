@@ -236,6 +236,7 @@ public class PmcProcessDispatcherJob implements Job {
 
             try {
                 pmcProcess.complete(context);
+                Persistence.service().persist(run.stats());
             } catch (Throwable e) {
                 log.error("pmcProcess execution error", e);
                 run.errorMessage().setValue(e.getMessage());

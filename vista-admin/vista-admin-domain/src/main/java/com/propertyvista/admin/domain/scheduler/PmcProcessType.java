@@ -58,6 +58,8 @@ public enum PmcProcessType implements Serializable {
 
     updatePaymentsSummary,
 
+    equifaxRetention,
+
     // Used for scheduler testing
     test;
 

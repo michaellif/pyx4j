@@ -28,6 +28,9 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
 
+/**
+ * The data in this table will not bee stored in backup for 52 days (60 - 8 days).
+ */
 @RpcTransient
 @Table(namespace = VistaNamespace.expiringNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
