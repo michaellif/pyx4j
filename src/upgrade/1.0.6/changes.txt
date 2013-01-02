@@ -12,3 +12,9 @@ VISTA-2314 Add AlphanumIndexAdapter on Building.propertyCode   property_code_s
 VISTA-2282 i18n  table PaymentsSummary
        Cheque    -> p_check
        e_Cheque  -> e_check
+
+VISTA-2305
+ new shema _expiring_
+ new tables  CustomerCreditCheckReportNoBackup and    CustomerCreditCheckReport
+ in admin change: constraints on table scheduler_trigger  triggerType and populationType
+ preload new process in admin equifaxRetention  manualy using admin to run every day.
