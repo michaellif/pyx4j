@@ -27,6 +27,8 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
     @Override
     public void create(AsyncCallback<CreditCheckSetupDTO> callback) {
         CreditCheckSetupDTO creditCheck = EntityFactory.create(CreditCheckSetupDTO.class);
+        creditCheck.businessInformation().companyName().setValue("TODO: Get Company Name from the PMC Onboarding Info");
+
         callback.onSuccess(creditCheck);
     }
 

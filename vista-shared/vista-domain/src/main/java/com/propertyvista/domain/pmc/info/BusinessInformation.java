@@ -41,6 +41,9 @@ public interface BusinessInformation extends IEntity {
 
     }
 
+    @NotNull
+    IPrimitive<String> companyName();
+
     // TODO not sure that this is actually what was the poet's intention in the specs...
     // TODO also I'm suspecting that the set acceptable values can change based on the country
     @NotNull
@@ -54,7 +57,6 @@ public interface BusinessInformation extends IEntity {
     IPrimitive<String> businessNumber();
 
     IPrimitive<LogicalDate> businessEstablishedDate();
-    
 
     // TODO add buisness proof license upload
 

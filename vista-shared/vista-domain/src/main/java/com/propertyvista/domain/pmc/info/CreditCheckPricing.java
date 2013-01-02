@@ -28,7 +28,7 @@ public interface CreditCheckPricing extends IEntity {
     @XmlType(name = "CreditReportOption")
     public enum CreditCheckPricingOption {
 
-        ReccomendationReport,
+        RecomendationReport,
 
         FullCreditReport;
 

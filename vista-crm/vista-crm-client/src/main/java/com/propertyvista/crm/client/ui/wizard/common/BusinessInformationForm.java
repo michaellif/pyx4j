@@ -32,6 +32,7 @@ public class BusinessInformationForm extends CEntityDecoratableForm<BusinessInfo
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().companyName())).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().companyType())).build());
         main.setWidget(++row, 0, new HTML("&nbsp;"));
         main.setWidget(++row, 0, inject(proto().businessAddress(), new AddressSimpleEditor()));
