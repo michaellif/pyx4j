@@ -58,9 +58,13 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
 
             @Override
             public void onSelection(SelectionEvent<Tab> event) {
-                view.onStepChange();
+                onStepChange(event);
             }
         });
+    }
+
+    protected void onStepChange(SelectionEvent<Tab> event) {
+        view.onStepChange();
     }
 
     @Override
