@@ -8,7 +8,7 @@
     <extend-property name="locale" values="ru"/>
     <extend-property name="locale" values="fr"/>
 
-    <set-property name="locale" value="en_CA,en_GB,ru,fr"/>
+    <set-property name="locale" value="en_US,en_CA,en_GB,ru,fr"/>
     <set-property-fallback name="locale" value="en_CA"/>
 
 </module>
