@@ -23,9 +23,9 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.BaseCollapsableDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityContainer;
+import com.pyx4j.forms.client.ui.decorators.BasicCollapsableDecorator;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.widgets.client.event.shared.ToggleEvent;
 import com.pyx4j.widgets.client.event.shared.ToggleHandler;
@@ -53,7 +53,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
 
     @Override
     protected IDecorator<?> createDecorator() {
-        BaseCollapsableDecorator<?> decorator = new BaseCollapsableDecorator<InvoiceLineItemGroupDTO>(VistaImages.INSTANCE);
+        BasicCollapsableDecorator<?> decorator = new BasicCollapsableDecorator<InvoiceLineItemGroupDTO>(VistaImages.INSTANCE);
         decorator.addToggleHandler(this);
         return decorator;
     }
@@ -82,7 +82,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     }
 
     public void setExpended(boolean expended) {
-        ((BaseCollapsableDecorator<?>) getDecorator()).setExpended(expended);
+        ((BasicCollapsableDecorator<?>) getDecorator()).setExpended(expended);
     }
 
     @Override
