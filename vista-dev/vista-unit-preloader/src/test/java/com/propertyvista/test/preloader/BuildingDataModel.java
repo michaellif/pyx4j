@@ -94,14 +94,14 @@ public class BuildingDataModel {
 
     private void generateParking() {
         Parking parking = EntityFactory.create(Parking.class);
-        building._Parkings().setAttachLevel(AttachLevel.Attached);
-        building._Parkings().add(parking);
+        building.parkings().setAttachLevel(AttachLevel.Attached);
+        building.parkings().add(parking);
     }
 
     private void generateLockerArea() {
         LockerArea lockerArea = EntityFactory.create(LockerArea.class);
-        building._LockerAreas().setAttachLevel(AttachLevel.Attached);
-        building._LockerAreas().add(lockerArea);
+        building.lockerAreas().setAttachLevel(AttachLevel.Attached);
+        building.lockerAreas().add(lockerArea);
     }
 
     private void createServiceMeta() {
@@ -177,7 +177,7 @@ public class BuildingDataModel {
         switch (feature.featureType().getValue()) {
         case parking:
             feature.version().recurring().setValue(true);
-            for (Parking parking : building._Parkings()) {
+            for (Parking parking : building.parkings()) {
                 for (ProductItemType productItemType : featureMeta.get(Feature.Type.parking)) {
                     generateParkingFeatureItem(feature, parking, productItemType);
                 }
@@ -185,7 +185,7 @@ public class BuildingDataModel {
             break;
         case locker:
             feature.version().recurring().setValue(true);
-            for (LockerArea lockerArea : building._LockerAreas()) {
+            for (LockerArea lockerArea : building.lockerAreas()) {
                 for (ProductItemType productItemType : featureMeta.get(Feature.Type.locker)) {
                     generateLockerAreaFeatureItem(feature, lockerArea, productItemType);
                 }

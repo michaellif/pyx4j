@@ -162,7 +162,7 @@ public class BuildingsGenerator {
         List<Elevator> items = new ArrayList<Elevator>();
         for (int i = 0; i < num; i++) {
             Elevator item = EntityFactory.create(Elevator.class);
-            owner._Elevators().add(item);
+            owner.elevators().add(item);
 
             item.type().setValue("Elevator");
             item.make().setValue("Bosh");
@@ -188,7 +188,7 @@ public class BuildingsGenerator {
         List<Boiler> items = new ArrayList<Boiler>();
         for (int i = 0; i < num; i++) {
             Boiler item = EntityFactory.create(Boiler.class);
-            owner._Boilers().add(item);
+            owner.boilers().add(item);
 
             item.type().setValue("Boiler");
             item.make().setValue("Electra");
@@ -222,7 +222,7 @@ public class BuildingsGenerator {
         List<Roof> items = new ArrayList<Roof>();
         for (int i = 0; i < num; i++) {
             Roof item = EntityFactory.create(Roof.class);
-            owner._Roofs().add(item);
+            owner.roofs().add(item);
 
             item.type().setValue(RandomUtil.randomEnum(RoofType.class).toString());
             item.year().setValue(RandomUtil.randomLogicalDate());
@@ -246,7 +246,7 @@ public class BuildingsGenerator {
 
     private LockerArea createLockerArea(Building owner, int index) {
         LockerArea lockerArea = EntityFactory.create(LockerArea.class);
-        owner._LockerAreas().add(lockerArea);
+        owner.lockerAreas().add(lockerArea);
 
         lockerArea.name().setValue("LockerArea" + index);
         lockerArea.levels().setValue((double) RandomUtil.randomInt(3));
@@ -293,7 +293,7 @@ public class BuildingsGenerator {
 
     private Parking createParking(Building building, int index) {
         Parking parking = EntityFactory.create(Parking.class);
-        building._Parkings().add(parking);
+        building.parkings().add(parking);
 
         int levels = 1 + RandomUtil.randomInt(5);
         parking.name().setValue("Parking" + index);

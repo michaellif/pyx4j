@@ -151,31 +151,31 @@ public interface Building extends PolicyNode {
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<Elevator> _Elevators();
+    ISet<Elevator> elevators();
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<Boiler> _Boilers();
+    ISet<Boiler> boilers();
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<Parking> _Parkings();
+    ISet<Parking> parkings();
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<LockerArea> _LockerAreas();
+    ISet<LockerArea> lockerAreas();
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<Roof> _Roofs();
+    ISet<Roof> roofs();
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
-    ISet<BuildingArrearsSnapshot> _ArrearsSnapshots();
+    ISet<BuildingArrearsSnapshot> arrearsSnapshots();
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<UnitTurnoverStats> _UnitTurnoverStats();
+    ISet<UnitTurnoverStats> unitTurnoverStats();
 
     @Owned
     @Detached(level = AttachLevel.Detached)
