@@ -30,12 +30,15 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends CHyperlink<E> {
 
-    public CEntityCollectionCrudHyperlink(final CrudAppPlace place) {
+    public CEntityCollectionCrudHyperlink(final Class<? extends CrudAppPlace> placeClass) {
         super((String) null);
         setCommand(new Command() {
             @Override
             public void execute() {
-                AppSite.getPlaceController().goTo(place.formListerPlace(getValue().getOwner().getPrimaryKey()));
+                if (getValue().getOwner().getPrimaryKey() != null) {
+                    CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
+                    AppSite.getPlaceController().goTo(place.formListerPlace(getValue().getOwner().getPrimaryKey()));
+                }
             }
         });
         setFormat(new IFormat<E>() {
@@ -54,6 +57,11 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
             }
         });
 
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        this.setEnabled((getValue() != null) && (getValue().getOwner().getPrimaryKey() != null));
     }
 
     /**
