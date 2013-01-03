@@ -21,6 +21,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.CreditCheckWizardService;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.dto.CreditCheckSetupDTO;
@@ -30,8 +32,8 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
     @Override
     public void create(AsyncCallback<CreditCheckSetupDTO> callback) {
         CreditCheckSetupDTO creditCheck = EntityFactory.create(CreditCheckSetupDTO.class);
-        creditCheck.businessInformation().companyName().setValue("TODO: Get Company Name from the PMC Onboarding Info");
-
+        Pmc pmc = VistaDeployment.getCurrentPmc();
+        creditCheck.businessInformation().companyName().setValue(pmc.name().getValue());
         callback.onSuccess(creditCheck);
     }
 
