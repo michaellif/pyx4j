@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -20,6 +22,7 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.CreditCheckWizardService;
+import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.dto.CreditCheckSetupDTO;
 
 public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
@@ -37,6 +40,14 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
     public void finish(AsyncCallback<VoidSerializable> callback, CreditCheckSetupDTO editableEntity) {
         System.out.println("++++++++save");
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void obtatinFee(AsyncCallback<AbstractEquifaxFee> callback) {
+        AbstractEquifaxFee p = EntityFactory.create(AbstractEquifaxFee.class);
+        p.shortReport().setValue(new BigDecimal("10.0"));
+        callback.onSuccess(p);
+
     }
 
 }

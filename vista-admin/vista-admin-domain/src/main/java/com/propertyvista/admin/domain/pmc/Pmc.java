@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.admin.domain.pmc.fee.PmcEquifaxFee;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 
@@ -71,6 +72,10 @@ public interface Pmc extends IEntity {
     @Owned
     @Detached(level = AttachLevel.Detached)
     PmcEquifaxInfo equifaxInfo();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    PmcEquifaxFee equifaxFee();
 
     @Owned
     @Detached(level = AttachLevel.Detached)
