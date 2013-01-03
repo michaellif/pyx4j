@@ -71,6 +71,10 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public MultitenancyType getMultitenancyType();
 
+    public boolean forceQualifiedNames();
+
+    public String tablesSchema();
+
     /**
      * Applicable for MultitenancyType.SeparateSchemas
      */

@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.SQLUtils;
+import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.server.contexts.NamespaceManager;
 
@@ -55,24 +56,16 @@ public class TableMetadata {
 
     private Map<String, String> foreignKeysReference;
 
-    public static TableMetadata getTableMetadata(PersistenceContext persistenceContext, String name) throws SQLException {
+    public static TableMetadata getTableMetadata(PersistenceContext persistenceContext, Configuration configuration, String name) throws SQLException {
         ResultSet rs = null;
         try {
             DatabaseMetaData dbMeta = persistenceContext.getConnection().getMetaData();
-            String storedName = name;
-            if (dbMeta.storesLowerCaseIdentifiers()) {
-                storedName = name.toLowerCase(Locale.ENGLISH);
-            } else if (dbMeta.storesUpperCaseIdentifiers()) {
-                storedName = name.toUpperCase(Locale.ENGLISH);
-            }
+            String storedName = toDbCase(name, dbMeta);
             String schema = null;
             if (persistenceContext.getDialect().isMultitenantSeparateSchemas()) {
-                schema = NamespaceManager.getNamespace();
-                if (dbMeta.storesLowerCaseIdentifiers()) {
-                    schema = schema.toLowerCase(Locale.ENGLISH);
-                } else if (dbMeta.storesUpperCaseIdentifiers()) {
-                    schema = schema.toUpperCase(Locale.ENGLISH);
-                }
+                schema = toDbCase(NamespaceManager.getNamespace(), dbMeta);
+            } else if (configuration.forceQualifiedNames()) {
+                schema = toDbCase(configuration.tablesSchema(), dbMeta);
             }
             rs = dbMeta.getTables(null, schema, storedName, null);
             if (rs.next()) {
@@ -85,6 +78,16 @@ public class TableMetadata {
         }
     }
 
+    private static String toDbCase(String name, DatabaseMetaData dbMeta) throws SQLException {
+        if (dbMeta.storesLowerCaseIdentifiers()) {
+            return name.toLowerCase(Locale.ENGLISH);
+        } else if (dbMeta.storesUpperCaseIdentifiers()) {
+            return name.toUpperCase(Locale.ENGLISH);
+        } else {
+            return name;
+        }
+    }
+
     public static boolean isTableExists(PersistenceContext persistenceContext, String name) throws SQLException {
         return isTableExists(persistenceContext.getDialect(), persistenceContext.getConnection(), NamespaceManager.getNamespace(), name);
     }
@@ -93,20 +96,10 @@ public class TableMetadata {
         ResultSet rs = null;
         try {
             DatabaseMetaData dbMeta = connection.getMetaData();
-            String storedName = name;
-            if (dbMeta.storesLowerCaseIdentifiers()) {
-                storedName = name.toLowerCase(Locale.ENGLISH);
-            } else if (dbMeta.storesUpperCaseIdentifiers()) {
-                storedName = name.toUpperCase(Locale.ENGLISH);
-            }
+            String storedName = toDbCase(name, dbMeta);
             String schema = null;
             if (dialect.isMultitenantSeparateSchemas() && (namespace != null)) {
-                schema = namespace;
-                if (dbMeta.storesLowerCaseIdentifiers()) {
-                    schema = schema.toLowerCase(Locale.ENGLISH);
-                } else if (dbMeta.storesUpperCaseIdentifiers()) {
-                    schema = schema.toUpperCase(Locale.ENGLISH);
-                }
+                schema = toDbCase(namespace, dbMeta);
             }
             rs = dbMeta.getTables(null, schema, storedName, null);
             if (rs.next()) {
@@ -135,8 +128,8 @@ public class TableMetadata {
             SQLUtils.closeQuietly(crs);
         }
 
-        log.debug("table {} @ {} ", name, schema);
-        log.debug("columns {} " + columnsMetadata);
+        log.trace("table {} @ {} ", name, schema);
+        log.trace("columns {}", columnsMetadata);
     }
 
     void readForeignKeys(PersistenceContext persistenceContext) throws SQLException {

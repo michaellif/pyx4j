@@ -80,6 +80,10 @@ public class Mappings {
         this.configuration = configuration;
     }
 
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
     public DatabaseType getDatabaseType() {
         return configuration.databaseType();
     }

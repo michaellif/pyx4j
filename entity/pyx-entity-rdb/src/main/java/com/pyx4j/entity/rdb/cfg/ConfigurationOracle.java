@@ -98,6 +98,16 @@ public abstract class ConfigurationOracle implements Configuration {
     }
 
     @Override
+    public boolean forceQualifiedNames() {
+        return true;
+    }
+
+    @Override
+    public String tablesSchema() {
+        return userName();
+    }
+
+    @Override
     public String sharedSequencesSchema() {
         return null;
     }

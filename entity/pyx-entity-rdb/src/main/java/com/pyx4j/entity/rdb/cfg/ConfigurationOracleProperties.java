@@ -27,54 +27,23 @@ import com.pyx4j.config.server.PropertiesConfiguration;
 
 public class ConfigurationOracleProperties extends ConfigurationOracle {
 
-    protected String jdbcConnectionUrl;
+    protected ConfigurationProperties properties;
 
     protected String tnsName;
-
-    protected String host;
-
-    protected int port = 1521;
 
     protected String serviceName;
 
     protected String sid;
 
-    protected String user;
-
-    protected String password;
-
-    protected String dbAdministrationUserName;
-
-    protected String dbAdministrationPassword;
-
-    protected int initialPoolSize = 1;
-
-    protected int minPoolSize = 3;
-
-    protected int maxPoolSize = 15;
-
-    protected int initialBackgroundProcessPoolSize = 1;
-
-    protected int minBackgroundProcessPoolSize = 2;
-
-    protected int maxBackgroundProcessPoolSize = 40;
-
-    protected int maxPoolPreparedStatements = 1000;
-
-    protected int unreturnedConnectionTimeout = 60;
-
-    protected int unreturnedConnectionBackgroundProcessTimeout = 60 * 60;
-
-    private int tablesIdentityOffset;
-
-    private boolean createForeignKeys = true;
-
-    private Ddl ddl = Ddl.auto;
+    public ConfigurationOracleProperties() {
+        properties = new ConfigurationProperties();
+        properties.port = 1521;
+    }
 
     @Override
     public String connectionUrl() {
-        if (CommonsStringUtils.isStringSet(jdbcConnectionUrl)) {
-            return jdbcConnectionUrl;
+        if (CommonsStringUtils.isStringSet(properties.jdbcConnectionUrl)) {
+            return properties.jdbcConnectionUrl;
         } else {
             return super.connectionUrl();
         }
@@ -82,12 +51,12 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
 
     @Override
     public String dbHost() {
-        return host;
+        return properties.host;
     }
 
     @Override
     public int dbPort() {
-        return port;
+        return properties.port;
     }
 
     @Override
@@ -107,117 +76,106 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
 
     @Override
     public String userName() {
-        return user;
+        return properties.user;
     }
 
     @Override
     public String password() {
-        return password;
+        return properties.password;
     }
 
     @Override
     public String dbAdministrationUserName() {
-        return dbAdministrationUserName;
+        return properties.dbAdministrationUserName;
     }
 
     @Override
     public String dbAdministrationPassword() {
-        return dbAdministrationPassword;
+        return properties.dbAdministrationPassword;
     }
 
     @Override
     public int initialPoolSize() {
-        return initialPoolSize;
+        return properties.initialPoolSize;
     }
 
     @Override
     public int minPoolSize() {
-        return minPoolSize;
+        return properties.minPoolSize;
     }
 
     @Override
     public int maxPoolSize() {
-        return maxPoolSize;
+        return properties.maxPoolSize;
     }
 
     @Override
     public int initialBackgroundProcessPoolSize() {
-        return initialBackgroundProcessPoolSize;
+        return properties.initialBackgroundProcessPoolSize;
     }
 
     @Override
     public int minBackgroundProcessPoolSize() {
-        return minBackgroundProcessPoolSize;
+        return properties.minBackgroundProcessPoolSize;
     }
 
     @Override
     public int maxBackgroundProcessPoolSize() {
-        return maxBackgroundProcessPoolSize;
+        return properties.maxBackgroundProcessPoolSize;
     }
 
     @Override
     public int maxPoolPreparedStatements() {
-        return maxPoolPreparedStatements;
-    }
-
-    @Override
-    public boolean createForeignKeys() {
-        return createForeignKeys;
+        return properties.maxPoolPreparedStatements;
     }
 
     @Override
     public int unreturnedConnectionTimeout() {
-        return unreturnedConnectionTimeout;
+        return properties.unreturnedConnectionTimeout;
     }
 
     @Override
     public int unreturnedConnectionBackgroundProcessTimeout() {
-        return unreturnedConnectionBackgroundProcessTimeout;
+        return properties.unreturnedConnectionBackgroundProcessTimeout;
     }
 
     @Override
     public int tablesIdentityOffset() {
-        return tablesIdentityOffset;
+        return properties.tablesIdentityOffset;
     }
 
     @Override
     public Ddl ddl() {
-        return ddl;
+        return properties.ddl;
+    }
+
+    @Override
+    public boolean forceQualifiedNames() {
+        return properties.forceQualifiedNames;
+    }
+
+    @Override
+    public String tablesSchema() {
+        if (properties.tablesSchema == null) {
+            return userName();
+        } else {
+            return properties.tablesSchema;
+        }
+    }
+
+    @Override
+    public boolean createForeignKeys() {
+        return properties.createForeignKeys;
     }
 
     public void readProperties(String prefix, Map<String, String> properties) {
         PropertiesConfiguration c = new PropertiesConfiguration(prefix, properties);
 
-        this.jdbcConnectionUrl = c.getValue("jdbcConnectionUrl", this.jdbcConnectionUrl);
-
-        this.host = c.getValue("host", this.host);
-        this.port = c.getIntegerValue("port", this.port);
         this.sid = c.getValue("sid", this.sid);
         this.tnsName = c.getValue("tnsName", this.tnsName);
         this.serviceName = c.getValue("serviceName", this.serviceName);
 
-        this.user = c.getValue("user", this.user);
-        this.password = c.getValue("password", this.password);
-
-        this.dbAdministrationUserName = c.getValue("dbAdministrationUserName", this.user);
-        this.dbAdministrationPassword = c.getValue("dbAdministrationPassword", this.password);
-
-        this.createForeignKeys = c.getBooleanValue("createForeignKeys", this.createForeignKeys);
-
-        this.initialPoolSize = c.getIntegerValue("initialPoolSize", this.initialPoolSize);
-        this.minPoolSize = c.getIntegerValue("minPoolSize", this.minPoolSize);
-        this.maxPoolSize = c.getIntegerValue("maxPoolSize", this.maxPoolSize);
-        this.maxPoolPreparedStatements = c.getIntegerValue("maxPoolPreparedStatements", this.maxPoolPreparedStatements);
-        this.unreturnedConnectionTimeout = c.getIntegerValue("unreturnedConnectionTimeout", this.unreturnedConnectionTimeout);
-
-        this.initialBackgroundProcessPoolSize = c.getIntegerValue("initialBackgroundProcessPoolSize", this.initialBackgroundProcessPoolSize);
-        this.minBackgroundProcessPoolSize = c.getIntegerValue("minBackgroundProcessPoolSize", this.minBackgroundProcessPoolSize);
-        this.maxBackgroundProcessPoolSize = c.getIntegerValue("maxBackgroundProcessPoolSize", this.maxBackgroundProcessPoolSize);
-        this.unreturnedConnectionBackgroundProcessTimeout = c.getIntegerValue("unreturnedConnectionBackgroundProcessTimeout",
-                this.unreturnedConnectionBackgroundProcessTimeout);
-
-        this.tablesIdentityOffset = c.getIntegerValue("tablesIdentityOffset", this.tablesIdentityOffset);
-        this.ddl = c.getEnumValue("ddl", Ddl.class, ddl);
+        this.properties.readProperties(c);
     }
 
 }

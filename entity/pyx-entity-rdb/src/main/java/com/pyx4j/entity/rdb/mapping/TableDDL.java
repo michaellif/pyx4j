@@ -43,7 +43,6 @@ import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 class TableDDL {
 
@@ -89,19 +88,11 @@ class TableDDL {
 
     private static final boolean NS_PART_OF_PK = true;
 
-    static String getFullTableName(Dialect dialect, String tableName) {
-        if (dialect.isMultitenantSeparateSchemas()) {
-            return NamespaceManager.getNamespace() + "." + tableName;
-        } else {
-            return tableName;
-        }
-    }
-
     static List<String> sqlCreate(Dialect dialect, TableModel tableModel, int tablesIdentityOffset) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
         sql.append("CREATE TABLE ");
-        sql.append(getFullTableName(dialect, tableModel.tableName));
+        sql.append(tableModel.getFullTableName());
         sql.append(" (");
         sql.append(dialect.getNamingConvention().sqlIdColumnName()).append(' ').append(dialect.getSqlType(Long.class));
         if (tableModel.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
@@ -158,7 +149,7 @@ class TableDDL {
         Map<String, IndexDef> indexValidations = new HashMap<String, IndexDef>();
 
         for (IndexDef indexDef : indexes) {
-            sqls.add(createIndexSql(dialect, tableModel.tableName, indexDef));
+            sqls.add(createIndexSql(dialect, tableModel, indexDef));
 
             if (indexValidations.containsKey(indexDef.name)) {
                 throw new AssertionError("Duplicate indexes " + indexDef.debugInfo() + " and " + indexValidations.get(indexDef.name).debugInfo());
@@ -175,13 +166,13 @@ class TableDDL {
         for (MemberOperationsMeta member : tableModel.operationsMeta().getColumnMembers()) {
             for (String sqlName : member.getValueAdapter().getColumnNames(member.sqlName())) {
                 if (member.hasNotNullConstraint() && (member.getSubclassDiscriminators() != null)) {
-                    sqls.add(createPolymorphicNotNullConstraint(dialect, tableModel.tableName, sqlName, member));
+                    sqls.add(createPolymorphicNotNullConstraint(dialect, tableModel, sqlName, member));
                 }
             }
             if (member.getValueAdapter() instanceof ValueAdapterEntityPolymorphic) {
-                sqls.add(createPolymorphicDiscriminatorConstraint(dialect, tableModel.tableName, member));
+                sqls.add(createPolymorphicDiscriminatorConstraint(dialect, tableModel, member));
             } else if (member.getValueAdapter() instanceof ValueAdapterEnum) {
-                sqls.add(createEnumConstraint(dialect, tableModel.tableName, member));
+                sqls.add(createEnumConstraint(dialect, tableModel, member));
             }
         }
 
@@ -193,7 +184,7 @@ class TableDDL {
 
     private static String createDiscriminatorColumnConstraint(Dialect dialect, TableModel tableModel) {
         StringBuilder sql = new StringBuilder();
-        sql.append("ALTER TABLE ").append(getFullTableName(dialect, tableModel.tableName));
+        sql.append("ALTER TABLE ").append(tableModel.getFullTableName());
         sql.append(" ADD CONSTRAINT ");
         sql.append(dialect.getNamingConvention().sqlConstraintName(tableModel.tableName, dialect.sqlDiscriminatorColumnName()));
         sql.append(" CHECK ");
@@ -214,14 +205,14 @@ class TableDDL {
         return sql.toString();
     }
 
-    private static String createPolymorphicDiscriminatorConstraint(Dialect dialect, String tableName, MemberOperationsMeta member) {
+    private static String createPolymorphicDiscriminatorConstraint(Dialect dialect, TableModel tableModel, MemberOperationsMeta member) {
         ValueAdapterEntityPolymorphic adapter = (ValueAdapterEntityPolymorphic) member.getValueAdapter();
         String sqlName = adapter.getDiscriminatorColumnName(member.sqlName());
 
         StringBuilder sql = new StringBuilder();
-        sql.append("ALTER TABLE ").append(getFullTableName(dialect, tableName));
+        sql.append("ALTER TABLE ").append(tableModel.getFullTableName());
         sql.append(" ADD CONSTRAINT ");
-        sql.append(dialect.getNamingConvention().sqlConstraintName(tableName, sqlName + "_d"));
+        sql.append(dialect.getNamingConvention().sqlConstraintName(tableModel.tableName, sqlName + "_d"));
         sql.append(" CHECK ");
         sql.append(" (").append(sqlName).append(" IN (");
         boolean first = true;
@@ -240,11 +231,11 @@ class TableDDL {
         return sql.toString();
     }
 
-    private static String createEnumConstraint(Dialect dialect, String tableName, MemberOperationsMeta member) {
+    private static String createEnumConstraint(Dialect dialect, TableModel tableModel, MemberOperationsMeta member) {
         StringBuilder sql = new StringBuilder();
-        sql.append("ALTER TABLE ").append(getFullTableName(dialect, tableName));
+        sql.append("ALTER TABLE ").append(tableModel.getFullTableName());
         sql.append(" ADD CONSTRAINT ");
-        sql.append(dialect.getNamingConvention().sqlConstraintName(tableName, member.sqlName() + "_e"));
+        sql.append(dialect.getNamingConvention().sqlConstraintName(tableModel.tableName, member.sqlName() + "_e"));
         sql.append(" CHECK ");
         sql.append(" (").append(member.sqlName()).append(" IN (");
         boolean first = true;
@@ -270,11 +261,11 @@ class TableDDL {
         return sql.toString();
     }
 
-    private static String createPolymorphicNotNullConstraint(Dialect dialect, String tableName, String sqlName, MemberOperationsMeta member) {
+    private static String createPolymorphicNotNullConstraint(Dialect dialect, TableModel tableModel, String sqlName, MemberOperationsMeta member) {
         StringBuilder sql = new StringBuilder();
-        sql.append("ALTER TABLE ").append(getFullTableName(dialect, tableName));
+        sql.append("ALTER TABLE ").append(tableModel.getFullTableName());
         sql.append(" ADD CONSTRAINT ");
-        sql.append(dialect.getNamingConvention().sqlConstraintName(tableName, sqlName));
+        sql.append(dialect.getNamingConvention().sqlConstraintName(tableModel.tableName, sqlName));
         sql.append(" CHECK ");
         sql.append(" (");
         List<String> discriminators = new ArrayList<String>(member.getSubclassDiscriminators());
@@ -297,9 +288,9 @@ class TableDDL {
         return sql.toString();
     }
 
-    static String sqlCreateForeignKey(Dialect dialect, String tableFrom, String indexColName, String tableTo) {
+    static String sqlCreateForeignKey(Dialect dialect, TableModel tableModel, String tableFrom, String indexColName, String tableTo) {
         StringBuilder sql = new StringBuilder();
-        sql.append("ALTER TABLE ").append(getFullTableName(dialect, tableFrom));
+        sql.append("ALTER TABLE ").append(tableModel.getFullTableName(tableFrom));
         sql.append(" ADD CONSTRAINT ");
         sql.append(dialect.getNamingConvention().sqlForeignKeyName(tableFrom, indexColName, tableTo));
         sql.append(" FOREIGN KEY ");
@@ -310,7 +301,7 @@ class TableDDL {
             sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName());
         }
         sql.append(") REFERENCES ");
-        sql.append(getFullTableName(dialect, tableTo));
+        sql.append(tableModel.getFullTableName(tableTo));
         sql.append("(").append(dialect.getNamingConvention().sqlIdColumnName());
         if (dialect.isMultitenantSharedSchema() && NS_PART_OF_PK) {
             sql.append(", ");
@@ -359,7 +350,7 @@ class TableDDL {
 
     }
 
-    private static String createIndexSql(Dialect dialect, String tableName, final IndexDef indexDef) {
+    private static String createIndexSql(Dialect dialect, TableModel tableModel, final IndexDef indexDef) {
         List<String> columnsSorted = new Vector<String>();
         columnsSorted.addAll(indexDef.columns.keySet());
         Collections.sort(columnsSorted, new Comparator<String>() {
@@ -377,11 +368,11 @@ class TableDDL {
         }
         sql.append("INDEX ");
         if (!CommonsStringUtils.isStringSet(indexDef.name)) {
-            indexDef.name = dialect.getNamingConvention().sqlTableIndexName(tableName, columnsSorted);
+            indexDef.name = dialect.getNamingConvention().sqlTableIndexName(tableModel.tableName, columnsSorted);
         }
         sql.append(indexDef.name);
 
-        sql.append(" ON ").append(getFullTableName(dialect, tableName)).append(" (");
+        sql.append(" ON ").append(tableModel.getFullTableName()).append(" (");
         boolean first = true;
         if (dialect.isMultitenantSharedSchema()) {
             sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName());
@@ -417,7 +408,7 @@ class TableDDL {
                 ColumnMetadata columnMeta = tableMetadata.getColumn(sqlName);
                 if (columnMeta == null) {
                     StringBuilder sql = new StringBuilder("ALTER TABLE ");
-                    sql.append(getFullTableName(dialect, tableModel.tableName));
+                    sql.append(tableModel.getFullTableName());
                     sql.append(" ADD "); // [ column ]
                     sql.append(sqlName).append(' ');
                     member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
@@ -439,7 +430,7 @@ class TableDDL {
                     continue;
                 }
                 StringBuilder sql = new StringBuilder("ALTER TABLE ");
-                sql.append(getFullTableName(dialect, tableModel.tableName));
+                sql.append(tableModel.getFullTableName());
                 sql.append(" ADD "); // [ column ]
                 sql.append(member.sqlName()).append(' ');
                 sql.append(indexSqlType(dialect, member));
@@ -473,7 +464,7 @@ class TableDDL {
         return sql.toString();
     }
 
-    public static List<String> sqlCreateCollectionMember(Dialect dialect, MemberOperationsMeta member, int tablesIdentityOffset) {
+    public static List<String> sqlCreateCollectionMember(Dialect dialect, TableModel tableModel, MemberOperationsMeta member, int tablesIdentityOffset) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
 
@@ -481,7 +472,7 @@ class TableDDL {
 
         sql.append("CREATE TABLE ");
 
-        sql.append(getFullTableName(dialect, tableName));
+        sql.append(tableModel.getFullTableName(tableName));
 
         sql.append(" (");
         if (dialect.isMultitenantSharedSchema()) {
@@ -519,7 +510,7 @@ class TableDDL {
         sqlIdx.append("CREATE INDEX ");
         sqlIdx.append(dialect.getNamingConvention().sqlTableIndexName(tableName,
                 Arrays.asList(dialect.getNamingConvention().sqlAutoGeneratedJoinOwnerColumnName())));
-        sqlIdx.append(" ON ").append(getFullTableName(dialect, tableName)).append(" (")
+        sqlIdx.append(" ON ").append(tableModel.getFullTableName(tableName)).append(" (")
                 .append(dialect.getNamingConvention().sqlAutoGeneratedJoinOwnerColumnName()).append(")");
 
         sqls.add(sqlIdx.toString());
@@ -531,17 +522,19 @@ class TableDDL {
         return sqls;
     }
 
-    public static List<String> validateAndAlterCollectionMember(Dialect dialect, TableMetadata memberTableMetadata, MemberOperationsMeta member) {
+    public static List<String> validateAndAlterCollectionMember(Dialect dialect, TableModel tableModel, TableMetadata memberTableMetadata,
+            MemberOperationsMeta member) {
         List<String> alterSqls = new Vector<String>();
 
-        alterSqls.add(alterColumn(dialect, memberTableMetadata, dialect.getNamingConvention().sqlAutoGeneratedJoinOwnerColumnName(), Long.class,
+        String fullTableName = tableModel.getFullTableName(memberTableMetadata.getTableName());
+        alterSqls.add(alterColumn(dialect, fullTableName, memberTableMetadata, dialect.getNamingConvention().sqlAutoGeneratedJoinOwnerColumnName(), Long.class,
                 dialect.getSqlType(Long.class)));
 
         for (String sqlName : member.getValueAdapter().getColumnNames(dialect.getNamingConvention().sqlAutoGeneratedJoinValueColumnName())) {
             ColumnMetadata columnMeta = memberTableMetadata.getColumn(sqlName);
             if (columnMeta == null) {
                 StringBuilder sql = new StringBuilder("ALTER TABLE ");
-                sql.append(getFullTableName(dialect, memberTableMetadata.getTableName()));
+                sql.append(fullTableName);
                 sql.append(" ADD "); // [ column ]
                 sql.append(sqlName).append(' ');
                 member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
@@ -554,19 +547,19 @@ class TableDDL {
         }
 
         if (member.getMemberMeta().getObjectClassType() == ObjectClassType.EntityList) {
-            alterSqls.add(alterColumn(dialect, memberTableMetadata, dialect.getNamingConvention().sqlAutoGeneratedJoinOrderColumnName(), Integer.class,
-                    dialect.getSqlType(Integer.class)));
+            alterSqls.add(alterColumn(dialect, fullTableName, memberTableMetadata, dialect.getNamingConvention().sqlAutoGeneratedJoinOrderColumnName(),
+                    Integer.class, dialect.getSqlType(Integer.class)));
         }
 
         return alterSqls;
     }
 
-    private static String alterColumn(Dialect dialect, TableMetadata tableMetadata, String sqlName, Class<?> klass, String sqlType) {
+    private static String alterColumn(Dialect dialect, String fullTableName, TableMetadata tableMetadata, String sqlName, Class<?> klass, String sqlType) {
         ColumnMetadata columnMeta = tableMetadata.getColumn(sqlName);
         if (columnMeta == null) {
-            StringBuilder sql = new StringBuilder("alter table ");
-            sql.append(getFullTableName(dialect, tableMetadata.getTableName()));
-            sql.append(" add "); // [ column ]
+            StringBuilder sql = new StringBuilder("ALTER TABLE ");
+            sql.append(fullTableName);
+            sql.append(" ADD "); // [ column ]
             sql.append(sqlName).append(' ');
             sql.append(sqlType);
             return sql.toString();

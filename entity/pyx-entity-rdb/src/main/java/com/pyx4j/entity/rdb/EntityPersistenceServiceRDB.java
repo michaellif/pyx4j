@@ -436,7 +436,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public TableMetadata getTableMetadata(EntityMeta entityMeta) throws SQLException {
         startContext(ConnectionTarget.forRead);
         try {
-            return TableMetadata.getTableMetadata(getPersistenceContext(), TableModel.getTableName(getPersistenceContext().getDialect(), entityMeta));
+            return TableMetadata.getTableMetadata(getPersistenceContext(), configuration,
+                    TableModel.getTableName(getPersistenceContext().getDialect(), entityMeta));
         } finally {
             endContext();
         }
@@ -1210,7 +1211,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public <T extends IEntity> void retrieveMember(ICollection<T, ?> collectionMember, AttachLevel attachLevel) {
         switch (collectionMember.getAttachLevel()) {
         case Attached:
-            // There are no distinction in IdOnly/Attached  for now  
+            // There are no distinction in IdOnly/Attached  for now
             //TODO throw new RuntimeException("Values of " + collectionMember.getPath() + " already Attached");
             retrieve(collectionMember);
 

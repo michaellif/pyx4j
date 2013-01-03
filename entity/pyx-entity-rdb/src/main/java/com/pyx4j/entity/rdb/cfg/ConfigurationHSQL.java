@@ -82,6 +82,16 @@ public abstract class ConfigurationHSQL implements Configuration {
     }
 
     @Override
+    public boolean forceQualifiedNames() {
+        return false;
+    }
+
+    @Override
+    public String tablesSchema() {
+        return null;
+    }
+
+    @Override
     public String sharedSequencesSchema() {
         return null;
     }
