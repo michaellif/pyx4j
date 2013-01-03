@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,12 +27,12 @@ public class VistaConfigurationMySQLProperties extends ConfigurationPostgreSQLPr
 
     public VistaConfigurationMySQLProperties(File configDirectory, Map<String, String> properties) {
         File dbCredentialsFile = new File(configDirectory, "db-credentials.properties");
+        readProperties("db", properties);
         if (dbCredentialsFile.canRead()) {
             Credentials credentials = CredentialsFileStorage.getCredentials(dbCredentialsFile);
             this.user = credentials.userName;
             this.password = credentials.password;
         }
-        readProperties("db", properties);
     }
 
     @Override
