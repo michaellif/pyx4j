@@ -19,7 +19,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Widget;
@@ -37,6 +36,7 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardInfoEditor;
 import com.propertyvista.crm.client.ui.wizard.common.BusinessInformationForm;
 import com.propertyvista.crm.client.ui.wizard.common.PersonalInformationForm;
+import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.domain.pmc.info.CreditCheckPricing;
 import com.propertyvista.domain.pmc.info.CreditCheckPricing.CreditCheckPricingOption;
 import com.propertyvista.dto.CreditCheckSetupDTO;
@@ -61,12 +61,21 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
 
     private Label setupFeeLabel;
 
-    public CreditCheckWizardForm(IWizardView<CreditCheckSetupDTO> view) {
+    private AbstractEquifaxFee creditCheckFees;
+
+    private final Command onDisplayTermsOfServiceRequest;
+
+    public CreditCheckWizardForm(IWizardView<CreditCheckSetupDTO> view, Command onDisplayTermsOfServiceRequest) {
         super(CreditCheckSetupDTO.class, view);
+        this.onDisplayTermsOfServiceRequest = onDisplayTermsOfServiceRequest;
         addStep(createPricingStep(PRICING_STEP_NAME));
         addStep(createBusinessInfoStep(BUSINESS_INFO_STEP_NAME));
         addStep(createPersonalInfoStep(PERSONAL_INFO_STEP_NAME));
         addStep(createConfirmationStep(CONFIRMATION_STEP_NAME));
+    }
+
+    public void setPricingOptions(AbstractEquifaxFee creditCheckFees) {
+        this.creditCheckFees = creditCheckFees;
     }
 
     @Override
@@ -74,16 +83,25 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         super.onStepChange(event);
         if (event.getSelectedItem().getTabTitle().equals(PERSONAL_INFO_STEP_NAME)) {
             companyNameLabel.setText(get(proto().businessInformation()).getValue().companyName().getValue());
+
         } else if (event.getSelectedItem().getTabTitle().equals(CONFIRMATION_STEP_NAME)) {
-            // TODO make normal fees propagation
-            BigDecimal costPerApplicant = new BigDecimal("19.99");
-            BigDecimal setupFee = new BigDecimal("150.00");
+            BigDecimal costPerApplicant = null;
+            BigDecimal setupFee = null;
+
             if (get(proto().creditCheckPricing().creditPricingOption()).getValue() == CreditCheckPricingOption.RecomendationReport) {
-                setupFee = new BigDecimal("00.00");
+                costPerApplicant = creditCheckFees.recommendationReportPerApplicant().getValue();
+                setupFee = creditCheckFees.recommendationReportSetUp().getValue();
+            } else {
+                costPerApplicant = creditCheckFees.fullCreditReportReportPerApplicant().getValue();
+                setupFee = creditCheckFees.fullCreditReportReportSetUp().getValue();
             }
 
             costPerApplicantLabel.setText(i18n.tr("Cost per applicant is: ${0,number,#,##0.00}", costPerApplicant));
-            setupFeeLabel.setText(i18n.tr("Setup Fee of ${0,number,#,##0.00} will be charged", setupFee));
+            if (BigDecimal.ZERO.equals(setupFee)) {
+                setupFeeLabel.setText(i18n.tr("No Set Up Fee!"));
+            } else {
+                setupFeeLabel.setText(i18n.tr("Setup Fee of ${0,number,#,##0.00} will be charged", setupFee));
+            }
         }
     }
 
@@ -191,9 +209,10 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         return serviceAgreement;
     }
 
-    protected void onDisplayTermsOfService() {
-        // TODO implement display of 
-        Window.alert(i18n.tr("Not Yet Implemented"));
+    private void onDisplayTermsOfService() {
+        if (onDisplayTermsOfServiceRequest != null) {
+            onDisplayTermsOfServiceRequest.execute();
+        }
     }
 
 }

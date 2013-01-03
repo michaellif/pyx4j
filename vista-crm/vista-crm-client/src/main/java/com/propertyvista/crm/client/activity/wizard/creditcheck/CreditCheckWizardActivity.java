@@ -15,12 +15,14 @@ package com.propertyvista.crm.client.activity.wizard.creditcheck;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmWizardActivity;
 import com.propertyvista.crm.client.ui.crud.viewfactories.WizardViewFactory;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.CreditCheckWizardView;
 import com.propertyvista.crm.rpc.services.CreditCheckWizardService;
+import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.dto.CreditCheckSetupDTO;
 
 public class CreditCheckWizardActivity extends CrmWizardActivity<CreditCheckSetupDTO> implements CreditCheckWizardView.Presenter {
@@ -30,4 +32,15 @@ public class CreditCheckWizardActivity extends CrmWizardActivity<CreditCheckSetu
                 CreditCheckSetupDTO.class);
     }
 
+    @Override
+    protected void populateView(final CreditCheckSetupDTO result) {
+        ((CreditCheckWizardService) getService()).obtatinFee(new DefaultAsyncCallback<AbstractEquifaxFee>() {
+            @Override
+            public void onSuccess(AbstractEquifaxFee creditCheckFees) {
+                CreditCheckWizardActivity.super.populateView(result);
+                ((CreditCheckWizardView) CreditCheckWizardActivity.this.getView()).setCreditCheckFees(creditCheckFees);
+            }
+        });
+
+    }
 }
