@@ -20,19 +20,27 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.OnlinePaymentWizardService;
+import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 import com.propertyvista.dto.OnlinePaymentSetupDTO;
 
 public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardService {
 
     @Override
     public void create(AsyncCallback<OnlinePaymentSetupDTO> callback) {
-        callback.onSuccess(EntityFactory.create(OnlinePaymentSetupDTO.class));
+        OnlinePaymentSetupDTO onlinePaymentSetup = EntityFactory.create(OnlinePaymentSetupDTO.class);
+        onlinePaymentSetup.propertyAccounts().add(onlinePaymentSetup.propertyAccounts().$());
+        callback.onSuccess(onlinePaymentSetup);
     }
 
     @Override
     @ServiceExecution(waitCaption = "Submitting...")
     public void finish(AsyncCallback<VoidSerializable> callback, OnlinePaymentSetupDTO editableEntity) {
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void obtainPaymentFees(AsyncCallback<AbstractPaymentFees> callback) {
+        callback.onSuccess(EntityFactory.create(AbstractPaymentFees.class));
     }
 
 }

@@ -13,10 +13,14 @@
  */
 package com.propertyvista.crm.rpc.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.rpc.AbstractWizardService;
 
+import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 import com.propertyvista.dto.OnlinePaymentSetupDTO;
 
 public interface OnlinePaymentWizardService extends AbstractWizardService<OnlinePaymentSetupDTO> {
 
+    void obtainPaymentFees(AsyncCallback<AbstractPaymentFees> paymentFees);
 }
