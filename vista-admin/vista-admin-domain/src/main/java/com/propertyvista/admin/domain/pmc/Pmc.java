@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
@@ -73,6 +74,8 @@ public interface Pmc extends IEntity {
     @Detached(level = AttachLevel.Detached)
     PmcEquifaxInfo equifaxInfo();
 
+    //TODO
+    @Transient
     @Owned
     @Detached(level = AttachLevel.Detached)
     PmcEquifaxFee equifaxFee();
