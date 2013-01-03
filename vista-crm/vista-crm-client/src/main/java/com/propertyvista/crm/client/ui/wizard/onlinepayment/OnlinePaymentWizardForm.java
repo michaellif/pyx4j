@@ -81,6 +81,8 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
 
     }
 
+    private OnlinePaymentPricingTab onlinePaymentPricingTab;
+
     public OnlinePaymentWizardForm(IWizardView<OnlinePaymentSetupDTO> view) {
         super(OnlinePaymentSetupDTO.class, view);
         addStep(createPricingStep(i18n.tr("Pricing")));
@@ -91,14 +93,14 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
     }
 
     public void setPaymentFees(AbstractPaymentFees paymentFees) {
-        // TODO Auto-generated method stub
+        onlinePaymentPricingTab.setPaymentFees(paymentFees);
     }
 
     private FormFlexPanel createPricingStep(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = 0;
         main.setH1(++row, 0, 1, i18n.tr("Pricing Information for Online Payments"));
-        main.setWidget(++row, 0, new OnlinePaymentPricingTab());
+        main.setWidget(++row, 0, onlinePaymentPricingTab = new OnlinePaymentPricingTab());
         return main;
     }
 

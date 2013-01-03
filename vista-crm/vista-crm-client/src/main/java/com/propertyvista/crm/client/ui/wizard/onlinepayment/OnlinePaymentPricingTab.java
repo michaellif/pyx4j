@@ -26,6 +26,8 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
+import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
+
 public class OnlinePaymentPricingTab extends Composite {
 
     private static final I18n i18n = I18n.get(OnlinePaymentPricingTab.class);
@@ -43,12 +45,12 @@ public class OnlinePaymentPricingTab extends Composite {
         contentPanel.setWidget(++row, 0, makePriceListPanel());
         // TODO add line
         Label setUpFeeExplanation = new Label();
-        setUpFeeExplanation.setText(OnlinePaymentPricingResources.INSTANCE.setUpFeePricing().getText());
+        setUpFeeExplanation.setText(OnlinePaymentPricingResources.INSTANCE.setUpFeePricingExplanation().getText());
         contentPanel.setWidget(++row, 0, setUpFeeExplanation);
 
         // TODO add line
         Label otherText = new Label();
-        otherText.setHTML(OnlinePaymentPricingResources.INSTANCE.otherText().getText());
+        otherText.setHTML(OnlinePaymentPricingResources.INSTANCE.marketingText().getText());
 
         contentPanel.setWidget(+row, 0, otherText);
 
@@ -56,6 +58,10 @@ public class OnlinePaymentPricingTab extends Composite {
         containerPanel.setWidget(0, 0, contentPanel);
         containerPanel.getFlexCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
         initWidget(containerPanel);
+    }
+
+    public void setPaymentFees(AbstractPaymentFees paymentFees) {
+        // TODO implement propagation of payment fees   
     }
 
     private Widget makePriceListPanel() {

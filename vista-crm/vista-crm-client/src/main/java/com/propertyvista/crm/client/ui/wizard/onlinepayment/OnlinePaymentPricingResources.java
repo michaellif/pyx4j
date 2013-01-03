@@ -50,8 +50,8 @@ public interface OnlinePaymentPricingResources extends ClientBundleWithLookup {
     ImageResource visaDebitLogo();
 
     @Source("set-up-fee-pricing.txt")
-    TextResource setUpFeePricing();
+    TextResource setUpFeePricingExplanation();
 
-    @Source("other-text.txt")
-    TextResource otherText();
+    @Source("marketing-text.txt")
+    TextResource marketingText();
 }
