@@ -47,6 +47,7 @@ import com.propertyvista.admin.rpc.services.OnboardingUserPasswordChangeManagedS
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.admin.rpc.services.PmcDataReportService;
 import com.propertyvista.admin.rpc.services.SimulationService;
+import com.propertyvista.admin.rpc.services.Vista2PmcService;
 import com.propertyvista.admin.rpc.services.VistaTermsCrudService;
 import com.propertyvista.admin.rpc.services.scheduler.RunCrudService;
 import com.propertyvista.admin.rpc.services.scheduler.RunDataCrudService;
@@ -91,6 +92,7 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(RunCrudService.class));
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(RunDataCrudService.class));
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(SelectPmcListService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(Vista2PmcService.class));
 
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(Trigger.class, EntityPermission.ALL));
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(Run.class, EntityPermission.ALL));

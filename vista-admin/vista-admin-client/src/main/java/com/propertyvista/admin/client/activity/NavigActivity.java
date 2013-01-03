@@ -90,6 +90,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         // Administration
         folder = new NavigFolder("System Administration");
         folder.addNavigItem(new AdminSiteMap.Administration.Maintenance());
+        folder.addNavigItem(new AdminSiteMap.Administration.SystemDefaults());
         folder.addNavigItem(new AdminSiteMap.Administration.Simulation());
         if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
             folder.addNavigItem(new AdminSiteMap.Administration.SimulatedDataPreload());

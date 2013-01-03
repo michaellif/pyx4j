@@ -90,12 +90,22 @@ public class AdminSiteMap implements SiteMap {
     }
 
     public static class Administration extends AppPlace {
+
         @PlaceProperties(navigLabel = "System Maintenance", caption = "System Maintenance")
         public static class Maintenance extends CrudAppPlace {
             // set default place type as Viewer one (we have no lister for this item!)
             public Maintenance() {
                 formViewerPlace(new Key(-1));
             }
+        }
+
+        @PlaceProperties(navigLabel = "System Defaults", caption = "System Defaults")
+        public static class SystemDefaults extends CrudAppPlace {
+            // set default place type as Viewer one (we have no lister for this item!)
+            public SystemDefaults() {
+                formViewerPlace(new Key(-1));
+            }
+
         }
 
         @PlaceProperties(navigLabel = "Simulations")

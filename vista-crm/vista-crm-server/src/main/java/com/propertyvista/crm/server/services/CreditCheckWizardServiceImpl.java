@@ -45,10 +45,10 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
     @Override
     public void obtatinFee(AsyncCallback<AbstractEquifaxFee> callback) {
         AbstractEquifaxFee p = EntityFactory.create(AbstractEquifaxFee.class);
-        p.recommendationReportPerApplicant().setValue(new BigDecimal("19.99"));
-        p.recommendationReportSetUp().setValue(BigDecimal.ZERO);
-        p.fullCreditReportReportPerApplicant().setValue(new BigDecimal("19.99"));
-        p.fullCreditReportReportSetUp().setValue(new BigDecimal("150.00"));
+        p.recommendationReportPerApplicantFee().setValue(new BigDecimal("19.99"));
+        p.recommendationReportSetUpFee().setValue(BigDecimal.ZERO);
+        p.fullCreditReportReportPerApplicantFee().setValue(new BigDecimal("19.99"));
+        p.fullCreditReportReportSetUpFee().setValue(new BigDecimal("150.00"));
 
         callback.onSuccess(p);
 

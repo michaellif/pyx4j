@@ -44,6 +44,10 @@ import com.propertyvista.admin.client.ui.crud.simulation.SimulationEditorView;
 import com.propertyvista.admin.client.ui.crud.simulation.SimulationEdtiorViewImpl;
 import com.propertyvista.admin.client.ui.crud.simulation.SimulationViewerView;
 import com.propertyvista.admin.client.ui.crud.simulation.SimulationViewerViewImpl;
+import com.propertyvista.admin.client.ui.crud.systemdefaults.VistaSystemDefaultsEditorView;
+import com.propertyvista.admin.client.ui.crud.systemdefaults.VistaSystemDefaultsEditorViewImpl;
+import com.propertyvista.admin.client.ui.crud.systemdefaults.VistaSystemDefaultsViewerView;
+import com.propertyvista.admin.client.ui.crud.systemdefaults.VistaSystemDefaultsViewerViewImpl;
 
 public class AdministrationVeiwFactory extends ViewFactoryBase {
 
@@ -53,6 +57,12 @@ public class AdministrationVeiwFactory extends ViewFactoryBase {
                 map.put(type, new MaintenanceViewerViewImpl());
             } else if (MaintenanceEditorView.class.equals(type)) {
                 map.put(type, new MaintenanceEditorViewImpl());
+
+            } else if (VistaSystemDefaultsViewerView.class.equals(type)) {
+                map.put(type, new VistaSystemDefaultsViewerViewImpl());
+
+            } else if (VistaSystemDefaultsEditorView.class.equals(type)) {
+                map.put(type, new VistaSystemDefaultsEditorViewImpl());
 
             } else if (SimulationViewerView.class.equals(type)) {
                 map.put(type, new SimulationViewerViewImpl());

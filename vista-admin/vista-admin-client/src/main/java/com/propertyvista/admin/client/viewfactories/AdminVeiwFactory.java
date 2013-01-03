@@ -55,6 +55,7 @@ public class AdminVeiwFactory extends ViewFactoryBase {
             } else if (SettingsView.class.equals(type)) {
                 map.put(type, new SettingsViewImpl());
             }
+
         }
 
         @SuppressWarnings("unchecked")
