@@ -310,10 +310,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         finalize(lease);
 
-        ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
-
-        updateUnitRentPrice(lease);
-
         Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
 
         if (bill.billStatus().getValue() == Bill.BillStatus.Failed) {
@@ -333,6 +329,10 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 }
             }
         }
+
+        ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
+
+        updateUnitRentPrice(lease);
     }
 
     void recordApplicationData(LeaseTerm leaseTerm) {
@@ -434,10 +434,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         finalize(lease);
 
-        ServerSideFactory.create(OccupancyFacade.class).migratedApprove(lease.unit().<AptUnit> createIdentityStub());
-
-        updateUnitRentPrice(lease);
-
         BillingFacade billingFacade = ServerSideFactory.create(BillingFacade.class);
         Bill bill = billingFacade.runBilling(lease);
         if (bill.billStatus().getValue() != Bill.BillStatus.Failed) {
@@ -453,6 +449,10 @@ public class LeaseFacadeImpl implements LeaseFacade {
         } else {
             throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to failed first time bill"));
         }
+
+        ServerSideFactory.create(OccupancyFacade.class).migratedApprove(lease.unit().<AptUnit> createIdentityStub());
+
+        updateUnitRentPrice(lease);
     }
 
     // TODO review code here

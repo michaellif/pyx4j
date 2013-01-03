@@ -268,7 +268,7 @@ public class BillingManager {
         Persistence.service().retrieve(lease.unit());
 
         if (previousBill == null) {
-            if (lease.status().getValue() == Lease.Status.ExistingLease && lease.leaseFrom().getValue().before(lease.creationDate().getValue())) {
+            if (lease.leaseFrom().getValue().before(lease.creationDate().getValue())) {
                 return getExistingLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().building(), lease.leaseFrom().getValue(), lease
                         .creationDate().getValue());
             } else {

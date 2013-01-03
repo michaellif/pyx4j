@@ -157,6 +157,8 @@ public class LeaseLifecycleSimulator {
         lease.currentTerm().termTo().setValue(leaseTo);
         lease.expectedMoveIn().setValue(leaseFrom);
 
+        lease.creationDate().setValue(reservedOn);
+
         setUpBillableItemsEffectiveTime(lease);
 
         clearEvents();
