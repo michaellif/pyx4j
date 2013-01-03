@@ -25,6 +25,7 @@ import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
+import com.propertyvista.admin.client.ui.components.EquifaxFeeQuoteForm;
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
@@ -154,8 +155,18 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
     private FormFlexPanel createEquifaxlTab() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("Equifax"));
 
+        FormFlexPanel equifaxFeeQuotePanel = new FormFlexPanel();
+        int rowFeeQuote = -1;
+        equifaxFeeQuotePanel.setH1(++rowFeeQuote, 0, 2, i18n.tr("Equifax Fee Quote"));
+        equifaxFeeQuotePanel.setWidget(++rowFeeQuote, 0, inject(proto().equifaxFeeQuote(), new EquifaxFeeQuoteForm()));
+
         int row = -1;
+
+        content.setWidget(++row, 0, equifaxFeeQuotePanel);
+        equifaxFeeQuotePanel.getFlexCellFormatter().setColSpan(row, 0, 2);
+
         content.setH1(++row, 0, 2, i18n.tr("Equifax"));
+        int row2 = row; // save this row for other column
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().approved()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().reportType()), 15).build());
 
@@ -163,6 +174,12 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().securityCode()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().customerCode()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().customerReferenceNumber()), 15).build());
+
+        content.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().equifaxInfo().equifaxSignUpFee())).labelWidth(25).componentWidth(6).build());
+        get(proto().equifaxInfo().equifaxSignUpFee()).setViewable(true);
+        content.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().equifaxInfo().equifaxPerApplicantCreditCheckFee())).labelWidth(25).componentWidth(6)
+                .build());
+        get(proto().equifaxInfo().equifaxPerApplicantCreditCheckFee()).setViewable(true);
 
         return content;
     }

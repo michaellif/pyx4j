@@ -19,6 +19,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
+import com.propertyvista.admin.client.ui.components.EquifaxFeeQuoteForm;
 import com.propertyvista.admin.client.ui.components.MerchantAccountForm;
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.rpc.VistaSystemDefaultsDTO;
@@ -51,10 +52,7 @@ public class VistaSystemDefaultsForm extends AdminEntityForm<VistaSystemDefaults
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("Equifax"));
         int row = -1;
         panel.setH1(++row, 0, 1, i18n.tr("Default Fees"));
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxFees().recommendationReportSetUpFee())).labelWidth(25).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxFees().recommendationReportPerApplicantFee())).labelWidth(25).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxFees().fullCreditReportReportPerApplicantFee())).labelWidth(25).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxFees().fullCreditReportReportSetUpFee())).labelWidth(25).build());
+        panel.setWidget(++row, 0, inject(proto().equifaxFees(), new EquifaxFeeQuoteForm()));
 
         panel.setH1(++row, 0, 1, i18n.tr("Merchant Account"));
         panel.setWidget(++row, 0, inject(proto().equifaxMerchantAccount(), new MerchantAccountForm()));

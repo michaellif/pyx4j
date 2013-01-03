@@ -13,7 +13,11 @@
  */
 package com.propertyvista.admin.domain.pmc;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -62,5 +66,11 @@ public interface PmcEquifaxInfo extends IEntity {
 
     @Length(12)
     IPrimitive<String> customerReferenceNumber();
+
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> equifaxSignUpFee();
+
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> equifaxPerApplicantCreditCheckFee();
 
 }
