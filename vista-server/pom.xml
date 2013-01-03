@@ -492,6 +492,7 @@
             <id>deploy-target-www77</id>
             <properties>
                 <deployContext>vista77</deployContext>
+                <vista-tomcat-url>http://qa.birchwoodsoftwaregroup.com</vista-tomcat-url>
                 <vista-app-ping-url>http://static-77.birchwoodsoftwaregroup.com/</vista-app-ping-url>
             </properties>
         </profile>
