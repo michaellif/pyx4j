@@ -38,6 +38,7 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
     public ConfigurationOracleProperties() {
         properties = new ConfigurationProperties();
         properties.port = 1521;
+        properties.forceQualifiedNames = true;
     }
 
     @Override
