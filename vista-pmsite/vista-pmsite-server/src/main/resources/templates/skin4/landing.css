@@ -14,12 +14,13 @@
 }
 
 .infobox_body {
+	border-top: 5px solid #000000;
 	overflow:hidden;
 }
 
 .infobox_body .selectField{
     float: left;
-    padding-bottom: 10px;
+    padding-bottom: 15px;
 }
 
 .banner {
@@ -34,7 +35,9 @@
 	background-image: url("images/landing.png"); 
 	background-color: #fff;
     background-repeat: no-repeat;
-    height: 408px;
+    background-position: right top;
+    background-size: 620px 375px;
+    height: 375px;
     width: 920px;
     margin-left: 20px;
     padding: 0 0 30px;
@@ -45,15 +48,15 @@
 }
 
 .quickSearchPanel {
-	width: 300px;
-	/*background: #fff;*/
+	width: 280px;
+	background: #fff;
 }
 .quickSearchPanel .infobox_body {
       float:none;
-      margin-bottom: 1em;
+      margin-bottom: 14px;
       background: #999999;
       border-top: 5px solid #000000;
-      padding-top: 10px;
+      padding: 25px 20px;
 }
 
 .quickSearchPanel h3 {
@@ -68,24 +71,22 @@
 	color: #fff;
 	display: block;
 	font-size: 12px;
-	margin: 0 0 0 14px;
-	width: 128px;
+//	width: 128px;
 }
 
 .quickSearchPanel select {
 	color: #999999;
-	width: 128px;
+	width: 240px;
 	margin-bottom: 15px;
 	border: 1px solid #000000;
-	margin: 0 0 6px 14px;
+	margin: 0 0 6px 0;
 }
 
 .quickSearchPanel input[type=submit] {
 	background: none repeat scroll 0 0 transparent;
 	border: medium none;
-	color: ${object1_10};
+	color:#fff;
 	cursor: pointer;
-	font-size: 16px;
 	padding: 10px;
 }
 
@@ -112,16 +113,14 @@
 }
 
 .vista-pmsite-sidebar {
-	position: relative;
 	float: left;
-	display:inline-block;
-	min-width:300px;
-	min-height:380px;
+	width:280px;
 	margin-left: 20px;
+	border-top: 1px solid #000000;
 }
 
 .vista-pmsite-main {
-	width: 602px;
+	width: 620px;
 	float: right;
 	position: relative;
 	background: ${bgC0lor_100};
@@ -130,28 +129,21 @@
 }
 
 .testimBox {
+	border-top: 1px solid #000000;
 	float: left;
 	overflow:hidden;
 	width: 100%;
-	height: 400px;
 }
 
 .testimBox .infobox_header {
-	height: 36px;
 }
 
 .testimBox .infobox_body {
-	border-top: 5px solid #000000;
 	padding-top: 12px;
-	width: 602px;
-	margin-top: 0;
-	position: absolute;
-	overflow: hidden;
 }
 
 .testimBox .infobox_decor {
 	float: right;
-	width: 301px;
 }
 
 .testimBox .infobox_decor:first-child {
@@ -184,22 +176,8 @@
 	padding: 10px 0 0 0;
 }
 
-#narrowSpacer {
-	float: left;
-	padding-top: 5px;
-	width: 300px;
-	display: inline-block;
-	background: #fff;
-	margin-top: 340px;
-	border-top: 1px solid #000000;
-}
-
 .newsBox {
-	width: 300px;
-	display: block;
-//	float: left;
-	background: #fff;
-	border-top: 1px solid #000000;
+	min-height: 380px;
 }
 
 .newsBox .infobox_header {
@@ -248,46 +226,37 @@
 .infobox_header .read_more {
 	color: #fff;
 	background: #000000;
-	width: 50px;
-	padding: 1em;
-	position: relative;
-	bottom: -220px;
-	float: right;
-	text-decoration:none;
-	z-index: 1;
-	right: 5px;
+	padding: 7px;
 }
 
 .infobox_header {
 	background: #fff;
-	border-top: 1px solid #000000;
 }
 
 .infobox_header_title {
 	font-family: monospace;
     font-weight: normal;
 	font-size: 14pt;
-//	line-height: 40px;
-    display: block;
-    margin: 5px 0;
+    display: inline-block;
+    margin: 5px 20px 5px 0;
 }
 .infobox_header_title:lang(fr) {
 	font-size: 18px;
 }
 
 .promoBox {
-	height:340px;
+	border-top: 1px solid #000000;
 	float: left;
 	overflow:hidden;
 	width: 100%;
+	margin-bottom: 20px;
 }
 
 .promoBox .infobox_content {
-	width: 197px;
-	height:300px;
+	width: 140px;
 	float:left;
 	border-top: 5px solid #000000;
-	margin-right: 3px;
+	margin-right: 5px;
 	overflow: hidden;
 }
 
@@ -304,8 +273,6 @@
 }
 
 .promoBox .picture {
-	//width:190px;
-	height: 200px;
 	background:#fff;
 }
 
@@ -316,8 +283,7 @@
 	border-bottom: 3px solid #000000;
 }
 .promoBox .citySelectionForm {
-//	display:inline-block;
-	margin-bottom: 20px;
+	margin: 10px 0;
 }
 
 .wideGadgetBox {

@@ -4,7 +4,6 @@ img,form,fieldset {
 
 form,fieldset {
 	position: relative;
-	top: 438px;
 	z-index: 1;
 	margin: 0;
 	padding: 0;
@@ -84,7 +83,8 @@ a:hover {
 select {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
-	color: ${background_100};
+	color: #999999;
+	border: 1px solid #000000;
 }
 
 .header {
@@ -184,9 +184,6 @@ select {
 }
 
 .navigation span:lang(fr) {
-	font-size: 16px;
-	margin-left: 15px;
-	margin-right: 15px;
 }
 
 .navigation a {
@@ -216,12 +213,10 @@ select {
 }
 
 ul.footer_locations {
-	list-style-type: none;
-//	display: block;
-	position: relative;
-	width:300px;
-	padding: 0 20px;
-	left: 150px; 
+    display: inline-block;
+    list-style-type: none;
+    padding: 0;
+    vertical-align: top;
 }
 
 ul.footer_locations label {
@@ -234,7 +229,8 @@ ul.footer_locations label {
 
 ul.footer_locations li {
 	float: left;
-	width: 120px;
+    width: 192px;
+    font-weight: bold;
 }
 
 .footer_locations a {
@@ -272,23 +268,17 @@ ul.footer_locations li {
 
 .locale {
 	margin-top:40px;
-//	text-align:center;
+	text-align:center;
 	white-space: nowrap;
-	height: 0px;
 }
 
 .langItem {
-	display: block;
-	position: relative;
 	margin-left: 20px;
 	padding: 0 3px;
-	top: -160px;
-	width: 300px;
-
 }
 
 .langItem:first-child {
-//	margin-left: 0;
+	margin-left: 0;
 }
 
 .langItem a {
