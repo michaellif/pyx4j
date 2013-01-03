@@ -30,8 +30,8 @@ public class VistaConfigurationMySQLProperties extends ConfigurationPostgreSQLPr
         readProperties("db", properties);
         if (dbCredentialsFile.canRead()) {
             Credentials credentials = CredentialsFileStorage.getCredentials(dbCredentialsFile);
-            this.user = credentials.userName;
-            this.password = credentials.password;
+            this.properties.user = credentials.userName;
+            this.properties.password = credentials.password;
         }
     }
 
