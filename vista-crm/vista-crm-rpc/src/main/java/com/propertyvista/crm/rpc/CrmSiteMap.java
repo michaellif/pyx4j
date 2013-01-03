@@ -331,9 +331,11 @@ public class CrmSiteMap implements SiteMap {
 
         public static class Settings extends AppPlace {
 
+            @PlaceProperties(caption = "Online Payment Setup")
             public static class OnlinePaymentSetup extends AppPlace {
             }
 
+            @PlaceProperties(caption = "Credit Check Setup")
             public static class CreditCheckSetup extends AppPlace {
             }
         }

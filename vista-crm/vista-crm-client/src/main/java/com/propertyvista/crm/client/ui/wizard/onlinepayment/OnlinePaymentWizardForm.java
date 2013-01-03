@@ -15,7 +15,14 @@ package com.propertyvista.crm.client.ui.wizard.onlinepayment;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -27,6 +34,9 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.wizard.IWizardView;
 import com.pyx4j.site.client.ui.wizard.WizardForm;
+import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.Label;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -41,10 +51,13 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
 
     private static final I18n i18n = I18n.get(OnlinePaymentWizardForm.class);
 
+    private static final String CONFIRMATION_STEP_TITLE = i18n.tr("Confirmation");
+
     public static class PropertyAccountInfoForm extends CEntityDecoratableForm<OnlinePaymentSetupDTO.PropertyAccountInfo> {
 
         public PropertyAccountInfoForm() {
             super(PropertyAccountInfo.class);
+
         }
 
         @Override
@@ -83,17 +96,31 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
 
     private OnlinePaymentPricingTab onlinePaymentPricingTab;
 
-    public OnlinePaymentWizardForm(IWizardView<OnlinePaymentSetupDTO> view) {
+    private final Command onTermsOfServiceDisplayRequest;
+
+    private Label companyNameLabel;
+
+    public OnlinePaymentWizardForm(IWizardView<OnlinePaymentSetupDTO> view, Command onTermsOfServiceDisplayRequest) {
         super(OnlinePaymentSetupDTO.class, view);
+        this.onTermsOfServiceDisplayRequest = onTermsOfServiceDisplayRequest;
+
         addStep(createPricingStep(i18n.tr("Pricing")));
         addStep(createBusinessInfoStep(i18n.tr("Business Information")));
         addStep(createPersonalInfoStep(i18n.tr("Personal Information")));
         addStep(createPropertyAndBankingStep(i18n.tr("Property and Banking")));
-        addStep(createConfirmationStep(i18n.tr("Confirmation")));
+        addStep(createConfirmationStep(CONFIRMATION_STEP_TITLE));
     }
 
     public void setPaymentFees(AbstractPaymentFees paymentFees) {
         onlinePaymentPricingTab.setPaymentFees(paymentFees);
+    }
+
+    @Override
+    protected void onStepChange(SelectionEvent<Tab> event) {
+        super.onStepChange(event);
+        if (event.getSelectedItem().getTabTitle().equals(CONFIRMATION_STEP_TITLE)) {
+            companyNameLabel.setText(get(proto().businessInformation()).getValue().companyName().getValue());
+        }
     }
 
     private FormFlexPanel createPricingStep(String title) {
@@ -142,7 +169,33 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Confirmation"));
+        main.setWidget(++row, 0, makeServiceAgreementLabel());
+
         return main;
+    }
+
+    private HTMLPanel makeServiceAgreementLabel() {
+        HTMLPanel panel = new HTMLPanel(OnlinePaymentPricingResources.INSTANCE.serviceAgreement().getText());
+
+        Element termsOfServiceAnchorElement = panel.getElementById(OnlinePaymentPricingResources.TERMS_OF_SERVICE_ANCHOR_ID);
+        String termsOfServiceAnchorText = termsOfServiceAnchorElement.getChild(0).getNodeValue();
+        Anchor termsOfServiceAnchor = new Anchor(termsOfServiceAnchorText);
+        termsOfServiceAnchor.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (onTermsOfServiceDisplayRequest != null) {
+                    onTermsOfServiceDisplayRequest.execute();
+                }
+            }
+        });
+        panel.addAndReplaceElement(termsOfServiceAnchor, OnlinePaymentPricingResources.TERMS_OF_SERVICE_ANCHOR_ID);
+
+        companyNameLabel = new Label();
+        companyNameLabel.getElement().getStyle().setDisplay(Display.INLINE);
+        panel.addAndReplaceElement(companyNameLabel, OnlinePaymentPricingResources.COMPANY_NAME_ID);
+
+        return panel;
+
     }
 
 }

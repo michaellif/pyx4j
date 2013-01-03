@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.wizard.onlinepayment;
 
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
+
 import com.pyx4j.site.client.ui.wizard.WizardViewImplBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -22,8 +25,14 @@ import com.propertyvista.dto.OnlinePaymentSetupDTO;
 public class OnlinePaymentWizardViewImpl extends WizardViewImplBase<OnlinePaymentSetupDTO> implements OnlinePaymentWizardView {
 
     public OnlinePaymentWizardViewImpl() {
-        super(CrmSiteMap.Administration.Settings.CreditCheckSetup.class);
-        setForm(new OnlinePaymentWizardForm(this));
+        super(CrmSiteMap.Administration.Settings.OnlinePaymentSetup.class);
+        setForm(new OnlinePaymentWizardForm(this, new Command() {
+            @Override
+            public void execute() {
+                // TODO open terms 
+                Window.alert("TODO: here be ToS");
+            }
+        }));
     }
 
     @Override

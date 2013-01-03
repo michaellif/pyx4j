@@ -49,9 +49,17 @@ public interface OnlinePaymentPricingResources extends ClientBundleWithLookup {
     @Source("visa-debit-logo.png")
     ImageResource visaDebitLogo();
 
-    @Source("set-up-fee-pricing.txt")
+    // TODO this is supposed to be a template that is filled with values of the prices
+    @Source("set-up-fee-pricing.html")
     TextResource setUpFeePricingExplanation();
 
-    @Source("marketing-text.txt")
+    @Source("marketing-text.html")
     TextResource marketingText();
+
+    public static String TERMS_OF_SERVICE_ANCHOR_ID = "OnlinePaymentSetupWizard-TermsOfService";
+
+    public static String COMPANY_NAME_ID = "OnlinePaymentSetupWizard-CompanyName";
+
+    @Source("service-agreement.html")
+    TextResource serviceAgreement();
 }
