@@ -34,7 +34,6 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
 
         // just clear all unit-related data:
         form.get(form.proto().lease().unit()).reset();
-        form.get(form.proto().lease().unit()).setEditable(true);
 
         clearServiceData();
     }

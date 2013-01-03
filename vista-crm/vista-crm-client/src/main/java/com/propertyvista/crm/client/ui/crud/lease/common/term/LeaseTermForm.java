@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -85,15 +84,22 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lease, get(proto().lease().leaseId()), getValue().lease().getPrimaryKey());
 
             get(proto().building()).setEditable(isDraft);
-            get(proto().lease().unit()).setEditable(isDraft && !getValue().building().isNull());
+            get(proto().lease().unit()).setEditable(isDraft);
 
             get(proto().termFrom()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
             get(proto().termTo()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
+
+            // hide initial balance for existing leases:
+            get(proto().lease().billingAccount().carryforwardBalance()).setVisible(getValue().lease().status().getValue() == Lease.Status.ExistingLease);
         } else {
             featuresHeader.setVisible(!getValue().version().leaseProducts().featureItems().isEmpty());
             if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
                 concessionsHeader.setVisible(!getValue().version().leaseProducts().concessions().isEmpty());
             }
+
+            // hide initial balance for new leases:
+            get(proto().lease().billingAccount().carryforwardBalance()).setVisible(
+                    getValue().lease().leaseFrom().getValue().before(getValue().lease().creationDate().getValue()));
         }
 
         setUnitNote(getValue().unitMoveOutNote().getValue());
@@ -231,6 +237,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         detailsRight.setWidget(++detailsRow, 0,
                 new DecoratorBuilder(inject(proto().lease().completion(), new CEnumLabel())).customLabel(i18n.tr("Lease Completion")).build());
 
+        detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease().billingAccount().carryforwardBalance()), 10).build());
+
         // form full details:
         FormFlexPanel detailsPanel = new FormFlexPanel();
 
@@ -323,9 +331,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             @Override
             public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (value != null) {
-                    if (getValue().lease().status().getValue() == Lease.Status.ExistingLease) { // existing lease:
-                        return value.before(TimeUtils.today()) ? null : new ValidationError(component, i18n.tr("The Date Must Be Earlier Than Today's Date"));
-                    } else if (getValue().lease().status().getValue() == Lease.Status.Application) { // lease application:
+                    if (getValue().lease().status().getValue() == Lease.Status.Application) { // lease application:
                         Date dateToCompare = getValue().lease().creationDate().isNull() ? ClientContext.getServerDate() : getValue().lease().creationDate()
                                 .getValue();
                         return !value.before(dateToCompare) ? null : new ValidationError(component, i18n

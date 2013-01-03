@@ -103,8 +103,10 @@ public interface BillingAccount extends IEntity {
     /**
      * for newly created/converted existing leases:
      */
+    @NotNull
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
+    @Caption(name = "Initial Balance")
     IPrimitive<BigDecimal> carryforwardBalance();
 
     @Owned(cascade = {})

@@ -151,7 +151,11 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
 
         ServerSideFactory.create(LeaseFacade.class).approveExistingLease(leaseId);
-        ServerSideFactory.create(LeaseFacade.class).activate(leaseId);
+        // activate, actually, existing lease only:  
+        Persistence.service().retrieve(leaseId);
+        if (leaseId.leaseFrom().getValue().before(leaseId.creationDate().getValue())) {
+            ServerSideFactory.create(LeaseFacade.class).activate(leaseId);
+        }
 
         Persistence.service().commit();
         callback.onSuccess(null);

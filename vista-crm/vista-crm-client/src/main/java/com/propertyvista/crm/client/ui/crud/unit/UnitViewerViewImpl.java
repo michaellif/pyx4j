@@ -84,7 +84,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         canScopeOffMarket = false;
         minRenovationEndDate = null;
 
-        leaseAction = new MenuItem(i18n.tr("Create Existing Lease..."), new Command() {
+        leaseAction = new MenuItem(i18n.tr("Create Lease..."), new Command() {
             @Override
             public void execute() {
                 if (getForm().getValue().isPresentInCatalog().isBooleanTrue()) {

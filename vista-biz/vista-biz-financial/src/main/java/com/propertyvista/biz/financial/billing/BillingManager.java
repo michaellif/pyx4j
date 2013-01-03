@@ -268,12 +268,11 @@ public class BillingManager {
         Persistence.service().retrieve(lease.unit());
 
         if (previousBill == null) {
-            if (billingAccount.carryforwardBalance().isNull()) {
-                return getNewLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().building(), lease.currentTerm().termFrom().getValue());
-
+            if (lease.leaseFrom().getValue().before(lease.creationDate().getValue())) {
+                return getExistingLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().building(), lease.leaseFrom().getValue(), lease
+                        .creationDate().getValue());
             } else {
-                return getExistingLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().building(), lease.currentTerm().termFrom().getValue(),
-                        lease.creationDate().getValue());
+                return getNewLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().building(), lease.leaseFrom().getValue());
             }
         } else {
             return getSubsiquentBillingCycle(previousBill.billingCycle());

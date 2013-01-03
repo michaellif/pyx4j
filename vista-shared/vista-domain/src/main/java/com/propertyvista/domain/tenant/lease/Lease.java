@@ -38,6 +38,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.BillingAccount;
@@ -54,6 +55,7 @@ public interface Lease extends IEntity {
         /**
          * Existing/Imported lease which is created but pending approval to become 'Active' and participate in billing.
          */
+        @Translate("Lease")
         ExistingLease,
 
         /**
