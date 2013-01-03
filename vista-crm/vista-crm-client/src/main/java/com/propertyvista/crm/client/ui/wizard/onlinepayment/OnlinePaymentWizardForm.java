@@ -23,6 +23,8 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -109,6 +111,8 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         addStep(createPersonalInfoStep(i18n.tr("Personal Information")));
         addStep(createPropertyAndBankingStep(i18n.tr("Property and Banking")));
         addStep(createConfirmationStep(CONFIRMATION_STEP_TITLE));
+        addStep(createSignatureStep(i18n.tr("Signature")));
+
     }
 
     public void setPaymentFees(AbstractPaymentFees paymentFees) {
@@ -170,6 +174,35 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Confirmation"));
         main.setWidget(++row, 0, makeServiceAgreementLabel());
+
+        return main;
+    }
+
+    private FormFlexPanel createSignatureStep(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
+        int row = -1;
+        main.setH1(++row, 0, 1, i18n.tr("Signature"));
+
+        HorizontalPanel caledonPaymentMethodsLogoHeader = new HorizontalPanel();
+        caledonPaymentMethodsLogoHeader.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        Label caledonCaption = new Label();
+        caledonCaption.setText("Caledon Card Services");
+
+        caledonPaymentMethodsLogoHeader.add(caledonCaption);
+        caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentPricingResources.INSTANCE.visaLogo()));
+        caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentPricingResources.INSTANCE.masterCardLogo()));
+        caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentPricingResources.INSTANCE.visaDebitLogo()));
+        caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentPricingResources.INSTANCE.echequeLogo()));
+        main.setWidget(++row, 0, caledonPaymentMethodsLogoHeader);
+
+        HorizontalPanel paypadPaymentMethodsLogoHader = new HorizontalPanel();
+        paypadPaymentMethodsLogoHader.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        Label paypadCaption = new Label();
+        paypadCaption.setText("Payment Pad Inc.");
+        paypadPaymentMethodsLogoHader.add(paypadCaption);
+        paypadPaymentMethodsLogoHader.add(new Image(OnlinePaymentPricingResources.INSTANCE.interacLogo()));
+        paypadPaymentMethodsLogoHader.add(new Image(OnlinePaymentPricingResources.INSTANCE.directBankingLogo()));
+        main.setWidget(++row, 0, paypadPaymentMethodsLogoHader);
 
         return main;
     }
