@@ -186,7 +186,7 @@ public class SchedulerHelper {
                     sqlResourceName = "tables_oracle.sql";
                     break;
                 case PostgreSQL:
-                    sqlResourceName = "tables_postgresql.sql";
+                    sqlResourceName = "tables_postgres.sql";
                     break;
                 default:
                     throw new Error("Unsupported databaseType " + ((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType());

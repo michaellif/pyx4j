@@ -127,7 +127,7 @@
         <jettyVersion>8.1.8.v20121106</jettyVersion>
 
         <jasperreportsVersion>4.5.1</jasperreportsVersion>
-        <quartzVersion>2.1.5</quartzVersion>
+        <quartzVersion>2.1.6</quartzVersion>
         <batikVersion>1.7</batikVersion>
 
         <!-- Used for speed up the GWT compiler for developers -->
