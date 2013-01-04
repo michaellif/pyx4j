@@ -17,12 +17,14 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -155,6 +157,9 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         //     - why payment pad doesn't have "I <company name> agree to accept <bla bla bla...>", but caledon has.
         //     - if payment pad indeed needs "I <company name> agree to accept <bla bla bla...>" checkbox, what should be in placed instead of <bla bla bla>
         // TODO since "I agree" checkboxes don't use the default decorator how can they be validated? 
+        final int TOP_I_AGREE_PANEL_PADDING = 20;
+        final int AGREEMENTS_SEPARATOR_PADDING = 20;
+        final String TERMS_VIEWER_HEIGHT = "15em";
 
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
@@ -171,15 +176,20 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentWizardResources.INSTANCE.echequeLogo()));
         main.setWidget(++row, 0, caledonPaymentMethodsLogoHeader);
 
-        main.setWidget(++row, 0, inject(proto().caledonAgreement(), new LegalTermsContentViewer("20em")));
+        LegalTermsContentViewer caledonTermsContentViewer = new LegalTermsContentViewer(TERMS_VIEWER_HEIGHT);
+        main.setWidget(++row, 0, inject(proto().caledonAgreement(), caledonTermsContentViewer));
 
         HorizontalPanel caledonTermsAgreementPanel = new HorizontalPanel();
         caledonTermsAgreementPanel.add(inject(proto().caledonIAgree()));
         caledonTermsAgreementLabel = new Label();
         caledonTermsAgreementPanel.add(caledonTermsAgreementLabel);
         main.setWidget(++row, 0, caledonTermsAgreementPanel);
+        main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(TOP_I_AGREE_PANEL_PADDING, Unit.PX);
 
         main.setWidget(++row, 0, new HTML("&nbsp;")); // separator
+        main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(AGREEMENTS_SEPARATOR_PADDING, Unit.PX);
+        main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(AGREEMENTS_SEPARATOR_PADDING, Unit.PX);
 
         HorizontalPanel paypadPaymentMethodsLogoHader = new HorizontalPanel();
         paypadPaymentMethodsLogoHader.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -190,13 +200,16 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         paypadPaymentMethodsLogoHader.add(new Image(OnlinePaymentWizardResources.INSTANCE.directBankingLogo()));
         main.setWidget(++row, 0, paypadPaymentMethodsLogoHader);
 
-        main.setWidget(++row, 0, inject(proto().paymentPadAgreement(), new LegalTermsContentViewer("20em")));
+        LegalTermsContentViewer paymentPadTermsViewer = new LegalTermsContentViewer(TERMS_VIEWER_HEIGHT);
+        main.setWidget(++row, 0, inject(proto().paymentPadAgreement(), paymentPadTermsViewer));
 
         HorizontalPanel paypadTermsAgreementPanel = new HorizontalPanel();
         paypadTermsAgreementPanel.add(inject(proto().paymentPadIAgree()));
         paypadTermsAgreementLabel = new Label();
         paypadTermsAgreementPanel.add(paypadTermsAgreementLabel);
         main.setWidget(++row, 0, paypadTermsAgreementPanel);
+        main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(TOP_I_AGREE_PANEL_PADDING, Unit.PX);
 
         // add Validators:
         get(proto().caledonIAgree()).addValueValidator(new EditableValueValidator<Boolean>() {
