@@ -49,8 +49,8 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
         AbstractEquifaxFee p = EntityFactory.create(AbstractEquifaxFee.class);
         p.recommendationReportPerApplicantFee().setValue(new BigDecimal("19.99"));
         p.recommendationReportSetUpFee().setValue(BigDecimal.ZERO);
-        p.fullCreditReportReportPerApplicantFee().setValue(new BigDecimal("19.99"));
-        p.fullCreditReportReportSetUpFee().setValue(new BigDecimal("150.00"));
+        p.fullCreditReportPerApplicantFee().setValue(new BigDecimal("19.99"));
+        p.fullCreditReportSetUpFee().setValue(new BigDecimal("150.00"));
 
         callback.onSuccess(p);
 

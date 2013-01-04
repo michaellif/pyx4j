@@ -92,8 +92,8 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
                 costPerApplicant = creditCheckFees.recommendationReportPerApplicantFee().getValue();
                 setupFee = creditCheckFees.recommendationReportSetUpFee().getValue();
             } else {
-                costPerApplicant = creditCheckFees.fullCreditReportReportPerApplicantFee().getValue();
-                setupFee = creditCheckFees.fullCreditReportReportSetUpFee().getValue();
+                costPerApplicant = creditCheckFees.fullCreditReportPerApplicantFee().getValue();
+                setupFee = creditCheckFees.fullCreditReportSetUpFee().getValue();
             }
 
             costPerApplicantLabel.setText(i18n.tr("Cost per applicant is: ${0,number,#,##0.00}", costPerApplicant));

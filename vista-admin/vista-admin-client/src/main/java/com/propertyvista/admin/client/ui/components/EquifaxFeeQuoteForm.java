@@ -34,8 +34,8 @@ public class EquifaxFeeQuoteForm extends CEntityDecoratableForm<AbstractEquifaxF
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recommendationReportSetUpFee())).labelWidth(25).componentWidth(6).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recommendationReportPerApplicantFee())).labelWidth(25).componentWidth(6).build());
         panel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(1, Unit.EM);
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullCreditReportReportSetUpFee())).labelWidth(25).componentWidth(6).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullCreditReportReportPerApplicantFee())).labelWidth(25).componentWidth(6).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullCreditReportSetUpFee())).labelWidth(25).componentWidth(6).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullCreditReportPerApplicantFee())).labelWidth(25).componentWidth(6).build());
 
         return panel;
     }

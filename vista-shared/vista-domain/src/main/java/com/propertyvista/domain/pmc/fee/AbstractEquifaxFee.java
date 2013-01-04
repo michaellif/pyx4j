@@ -41,11 +41,11 @@ public interface AbstractEquifaxFee extends IEntity {
     @NotNull
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> fullCreditReportReportPerApplicantFee();
+    IPrimitive<BigDecimal> fullCreditReportPerApplicantFee();
 
     @NotNull
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> fullCreditReportReportSetUpFee();
+    IPrimitive<BigDecimal> fullCreditReportSetUpFee();
 
 }
