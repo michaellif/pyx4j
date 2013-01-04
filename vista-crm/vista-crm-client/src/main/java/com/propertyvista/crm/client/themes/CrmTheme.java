@@ -42,6 +42,7 @@ import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.crm.client.ui.components.KeywordsBox;
+import com.propertyvista.crm.client.ui.components.LegalTermsContentViewer;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 
@@ -128,6 +129,8 @@ public class CrmTheme extends VistaTheme {
         initKeywordBoxStyles();
 
         initWizardPanelStyles();
+
+        initLegalTermsContentViewerStyles();
     }
 
     @Override
@@ -647,6 +650,24 @@ public class CrmTheme extends VistaTheme {
     private void initWizardPanelStyles() {
         Style style = new Style("." + DefaultTabTheme.StyleName.WizardPanel, " .", DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH1Label);
         style.addProperty("text-align", "center");
+        addStyle(style);
+    }
+
+    private void initLegalTermsContentViewerStyles() {
+        Style style = new Style("." + LegalTermsContentViewer.Styles.LegalTermsContentViewerCaption);
+        style.addProperty("text-align", "center");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("font-size", "1.2em");
+        addStyle(style);
+
+        style = new Style("." + LegalTermsContentViewer.Styles.LegalTermsContentViewerHolder);
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "inset");
+        style.addProperty("border-color", ThemeColor.background);
+        addStyle(style);
+
+        style = new Style("." + LegalTermsContentViewer.Styles.LegalTermsContentViewerContent);
+        style.addProperty("margin", "15px");
         addStyle(style);
     }
 

@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.Label;
@@ -25,6 +26,10 @@ import com.pyx4j.widgets.client.Label;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 
 public class LegalTermsContentViewer extends CEntityViewer<LegalTermsContent> {
+
+    public enum Styles implements IStyleName {
+        LegalTermsContentViewerCaption, LegalTermsContentViewerHolder, LegalTermsContentViewerContent;
+    }
 
     private final String contentHeight;
 
@@ -34,21 +39,24 @@ public class LegalTermsContentViewer extends CEntityViewer<LegalTermsContent> {
 
     @Override
     public IsWidget createContent(LegalTermsContent legalTermsContent) {
-        FlowPanel panel = new FlowPanel();
-        Label label = new Label();
-        label.setText(legalTermsContent.localizedCaption().getValue());
+        FlowPanel contentPanel = new FlowPanel();
+        Label caption = new Label();
+        caption.addStyleName(Styles.LegalTermsContentViewerCaption.name());
+        caption.setText(legalTermsContent.localizedCaption().getValue());
 
-        panel.add(label);
+        contentPanel.add(caption);
 
         HTML content = new HTML();
+        content.addStyleName(Styles.LegalTermsContentViewerContent.name());
         content.setHTML(legalTermsContent.content().getValue());
 
         ScrollPanel contentHolder = new ScrollPanel();
+        contentHolder.addStyleName(Styles.LegalTermsContentViewerHolder.name());
         contentHolder.setHeight(contentHeight);
         contentHolder.setWidget(content);
-        panel.add(contentHolder);
+        contentPanel.add(contentHolder);
 
-        return panel;
+        return contentPanel;
     }
 
     @Override
