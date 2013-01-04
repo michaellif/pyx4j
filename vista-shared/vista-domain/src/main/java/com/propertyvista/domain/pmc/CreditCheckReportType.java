@@ -7,23 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-12-27
- * @author ArtyomB
+ * Created on 2013-01-04
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.pmc.info;
+package com.propertyvista.domain.pmc;
 
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+@I18n(context = "Credit Report Option")
+public enum CreditCheckReportType {
 
-import com.propertyvista.domain.pmc.CreditCheckReportType;
+    RecomendationReport,
 
-/** this is a step of a Credit Check setup wizard */
-public interface CreditCheckPricing extends IEntity {
+    FullCreditReport;
 
-    @NotNull
-    IPrimitive<CreditCheckReportType> creditPricingOption();
+    @Override
+    public String toString() {
+        return I18nEnum.toString(this);
+    };
 
 }

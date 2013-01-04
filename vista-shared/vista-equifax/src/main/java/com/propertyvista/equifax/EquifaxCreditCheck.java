@@ -41,11 +41,11 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo;
-import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo.EquifaxReportType;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.crm.rpc.dto.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
@@ -134,7 +134,7 @@ public class EquifaxCreditCheck {
             EntityFileLogger.logXml("equifax", "response", XmlCreator.devToXMl(efxResponse));
         }
 
-        if (equifaxInfo.reportType().getValue() == EquifaxReportType.longReport) {
+        if (equifaxInfo.reportType().getValue() == CreditCheckReportType.FullCreditReport) {
             final CustomerCreditCheckReport report = EntityFactory.create(CustomerCreditCheckReport.class);
             report.pmc().setValue(equifaxInfo.pmc().getPrimaryKey());
             report.customer().setValue(customer.getPrimaryKey());

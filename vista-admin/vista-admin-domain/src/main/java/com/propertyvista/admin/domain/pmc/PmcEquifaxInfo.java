@@ -30,19 +30,12 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.CreditCheckReportType;
 
 @Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
 @Caption(name = "PMC Equifax Info")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PmcEquifaxInfo extends IEntity {
-
-    public enum EquifaxReportType {
-
-        longReport,
-
-        shortReport;
-
-    }
 
     @ReadOnly
     @Owner
@@ -53,7 +46,7 @@ public interface PmcEquifaxInfo extends IEntity {
 
     IPrimitive<Boolean> approved();
 
-    IPrimitive<EquifaxReportType> reportType();
+    IPrimitive<CreditCheckReportType> reportType();
 
     @Length(10)
     IPrimitive<String> customerNumber();

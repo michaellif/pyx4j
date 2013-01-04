@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.xml.XMLEntityParser;
 
-import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo;
+import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.onboarding.EquifaxReportType;
 import com.propertyvista.onboarding.OnboardingRole;
@@ -82,15 +82,15 @@ public class OnboardingXMLUtils {
         }
     }
 
-    public static PmcEquifaxInfo.EquifaxReportType convertEquifaxReportType(EquifaxReportType value) {
+    public static CreditCheckReportType convertEquifaxReportType(EquifaxReportType value) {
         if (value == null) {
             return null;
         }
         switch (value) {
         case LongReportForm:
-            return PmcEquifaxInfo.EquifaxReportType.longReport;
+            return CreditCheckReportType.FullCreditReport;
         case ShortReportForm:
-            return PmcEquifaxInfo.EquifaxReportType.shortReport;
+            return CreditCheckReportType.RecomendationReport;
         default:
             throw new IllegalArgumentException();
         }

@@ -18,3 +18,5 @@ VISTA-2305
  new tables  CustomerCreditCheckReportNoBackup and    CustomerCreditCheckReport
  in admin change: constraints on table scheduler_trigger  triggerType and populationType
  preload new process in admin equifaxRetention  manualy using admin to run every day.
+
+ PmcEquifaxInfo.reportType values changed to RecomendationReport (was shortReport), FullCreditReport (was longReport)

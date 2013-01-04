@@ -36,9 +36,8 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardInfoEditor;
 import com.propertyvista.crm.client.ui.wizard.common.BusinessInformationForm;
 import com.propertyvista.crm.client.ui.wizard.common.PersonalInformationForm;
+import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
-import com.propertyvista.domain.pmc.info.CreditCheckPricing;
-import com.propertyvista.domain.pmc.info.CreditCheckPricing.CreditCheckPricingOption;
 import com.propertyvista.dto.CreditCheckSetupDTO;
 
 public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
@@ -88,7 +87,7 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
             BigDecimal costPerApplicant = null;
             BigDecimal setupFee = null;
 
-            if (get(proto().creditCheckPricing().creditPricingOption()).getValue() == CreditCheckPricingOption.RecomendationReport) {
+            if (get(proto().creditCheckPricing().creditPricingOption()).getValue() == CreditCheckReportType.RecomendationReport) {
                 costPerApplicant = creditCheckFees.recommendationReportPerApplicantFee().getValue();
                 setupFee = creditCheckFees.recommendationReportSetUpFee().getValue();
             } else {
@@ -113,7 +112,7 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
                 ++row,
                 0,
                 new DecoratorBuilder(inject(proto().creditCheckPricing().creditPricingOption(),
-                        new CRadioGroupEnum<CreditCheckPricing.CreditCheckPricingOption>(CreditCheckPricing.CreditCheckPricingOption.class, Layout.VERTICAL)))
+                        new CRadioGroupEnum<CreditCheckReportType>(CreditCheckReportType.class, Layout.VERTICAL)))
                         .build());
         return main;
     }

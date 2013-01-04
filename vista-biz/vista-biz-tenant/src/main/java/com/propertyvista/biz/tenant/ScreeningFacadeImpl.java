@@ -36,12 +36,12 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo;
-import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo.EquifaxReportType;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
@@ -236,8 +236,8 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         if (!isCreditCheckActivated(equifaxInfo)) {
             throw new UserRuntimeException(i18n.tr("Credit Check interface was not activated in Onboarding"));
         }
-        if (equifaxInfo.reportType().getValue() != EquifaxReportType.longReport) {
-            throw new UserRuntimeException(i18n.tr("Credit Check Long Reports was not activated"));
+        if (equifaxInfo.reportType().getValue() != CreditCheckReportType.FullCreditReport) {
+            throw new UserRuntimeException(i18n.tr("Credit Check Full Credit Report was not activated"));
         }
         CustomerCreditCheck ccc = retrivePersonCreditCheck(customerId);
         return EquifaxCreditCheck.createLongReport(ccc);

@@ -26,13 +26,13 @@ import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
-import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo.EquifaxReportType;
 import com.propertyvista.admin.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.customizations.CountryOfOperation;
+import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.generator.PreloadData;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.server.preloader.ido.OnboardingMerchantAccountImport;
@@ -65,7 +65,7 @@ public class PmcCreatorDev {
         }
 
         pmc.equifaxInfo().approved().setValue(true);
-        pmc.equifaxInfo().reportType().setValue(EquifaxReportType.longReport);
+        pmc.equifaxInfo().reportType().setValue(CreditCheckReportType.FullCreditReport);
 
         ServerSideFactory.create(PmcFacade.class).create(pmc);
 
