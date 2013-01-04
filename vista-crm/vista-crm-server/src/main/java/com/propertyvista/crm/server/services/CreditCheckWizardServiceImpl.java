@@ -14,18 +14,22 @@
 package com.propertyvista.crm.server.services;
 
 import java.math.BigDecimal;
+import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.CreditCheckWizardService;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.dto.CreditCheckSetupDTO;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
 
@@ -38,9 +42,19 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
     }
 
     @Override
-    @ServiceExecution(waitCaption = "Saving...")
-    public void finish(AsyncCallback<VoidSerializable> callback, CreditCheckSetupDTO editableEntity) {
-        System.out.println("++++++++save");
+    public void finish(AsyncCallback<VoidSerializable> callback, final CreditCheckSetupDTO entity) {
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
+
+        TaskRunner.runInAdminNamespace(new Callable<Void>() {
+            @Override
+            public Void call() {
+                ServerSideFactory.create(PaymentMethodFacade.class).persistPmcPaymentMethod(entity.creditCardInfo(), pmc);
+                return null;
+            }
+        });
+
+        Persistence.service().commit();
+
         callback.onSuccess(null);
     }
 

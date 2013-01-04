@@ -87,7 +87,7 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
             BigDecimal costPerApplicant = null;
             BigDecimal setupFee = null;
 
-            if (get(proto().creditCheckPricing().creditPricingOption()).getValue() == CreditCheckReportType.RecomendationReport) {
+            if (get(proto().creditPricingOption()).getValue() == CreditCheckReportType.RecomendationReport) {
                 costPerApplicant = creditCheckFees.recommendationReportPerApplicantFee().getValue();
                 setupFee = creditCheckFees.recommendationReportSetUpFee().getValue();
             } else {
@@ -111,9 +111,8 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         main.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().creditCheckPricing().creditPricingOption(),
-                        new CRadioGroupEnum<CreditCheckReportType>(CreditCheckReportType.class, Layout.VERTICAL)))
-                        .build());
+                new DecoratorBuilder(inject(proto().creditPricingOption(), new CRadioGroupEnum<CreditCheckReportType>(CreditCheckReportType.class,
+                        Layout.VERTICAL))).build());
         return main;
     }
 

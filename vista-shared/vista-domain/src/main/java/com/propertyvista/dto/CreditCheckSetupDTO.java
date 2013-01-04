@@ -14,17 +14,20 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.pmc.info.BusinessInformation;
-import com.propertyvista.domain.pmc.info.CreditCheckPricing;
 import com.propertyvista.domain.pmc.info.PersonalInformation;
 
 @Transient
 public interface CreditCheckSetupDTO extends IEntity {
 
-    CreditCheckPricing creditCheckPricing();
+    @NotNull
+    IPrimitive<CreditCheckReportType> creditPricingOption();
 
     // BUSINESS INFORMATION SECTION--------------------------------------------
 

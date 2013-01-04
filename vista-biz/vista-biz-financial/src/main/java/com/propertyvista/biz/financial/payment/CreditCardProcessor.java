@@ -117,14 +117,21 @@ class CreditCardProcessor {
         } else {
             Validate.isTrue(!ccInfo.creditCardNumber().isNull(), "Card number is required when creating token");
             //Create Unique token using PMC Id
-            Pmc pmc = VistaDeployment.getCurrentPmc();
-            String prefix;
-            if (VistaDeployment.isVistaProduction()) {
-                prefix = "";
+            String prefix = "";
+
+            if (VistaDeployment.isSystemNamespace()) {
+                prefix = "v2p";
             } else {
-                prefix = "TEST" + new SimpleDateFormat("MMddHHmm").format(new Date());
+                Pmc pmc = VistaDeployment.getCurrentPmc();
+                prefix += pmc.id().getStringView();
             }
-            token.code().setValue(prefix + pmc.id().getStringView() + "V" + cc.id().getStringView());
+
+            if (VistaDeployment.isVistaProduction()) {
+                prefix += "";
+            } else {
+                prefix += "TEST" + new SimpleDateFormat("MMddHHmm").format(new Date());
+            }
+            token.code().setValue(prefix + "V" + cc.id().getStringView());
         }
 
         IPaymentProcessor proc = new CaledonPaymentProcessor();

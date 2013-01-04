@@ -15,8 +15,11 @@ package com.propertyvista.biz.financial.payment;
 
 import java.util.List;
 
+import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -35,4 +38,6 @@ public interface PaymentMethodFacade {
     InsurancePaymentMethod persistInsurancePaymentMethod(String merchantTerminalId, InsurancePaymentMethod paymentMethod, Tenant tenantId);
 
     InsurancePaymentMethod retrieveInsurancePaymentMethod(Tenant tenantId);
+
+    PmcPaymentMethod persistPmcPaymentMethod(CreditCardInfo creditCardInfo, Pmc pmc);
 }

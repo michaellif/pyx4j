@@ -18,12 +18,17 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSourceConst;
+import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -76,4 +81,13 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
         return PaymentMethodPersister.persistInsurancePaymentMethod(merchantTerminalId, paymentMethod);
     }
 
+    @Override
+    public PmcPaymentMethod persistPmcPaymentMethod(CreditCardInfo creditCardInfo, Pmc pmc) {
+        PmcPaymentMethod pmcPaymentMethod = EntityFactory.create(PmcPaymentMethod.class);
+        pmcPaymentMethod.pmc().set(pmc);
+        pmcPaymentMethod.details().set(creditCardInfo);
+        pmcPaymentMethod.type().setValue(PaymentType.CreditCard);
+        //TODO get MerchantTerminalId
+        return PaymentMethodPersister.persistPaymentMethod(pmcPaymentMethod, null, new MerchantTerminalSourceConst("BIRCHWT6"));
+    }
 }
