@@ -36,10 +36,10 @@ import com.propertyvista.common.client.resources.VistaResources;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 
-public class PaymentMethodForm<E extends PaymentMethod> extends PaymentMethodEditor<E> {
+public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentMethodEditor<E> {
 
     private static final I18n i18n = I18n.get(PaymentMethodForm.class);
 

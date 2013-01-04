@@ -7,54 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-20
+ * Created on 2013-01-04
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.domain.payment;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-
-import com.propertyvista.domain.contact.AddressStructured;
 
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @Table
-public interface PaymentMethod extends IEntity {
-
-    @NotNull
-    @ToString(index = 0)
-    @Caption(name = "Payment Type")
-    @Editor(type = EditorType.radiogroup)
-    @MemberColumn(name = "paymentType")
-    IPrimitive<PaymentType> type();
-
-    @Owned
-    @ToString(index = 1)
-    @Caption(name = "Payment Attributes")
-    PaymentDetails details();
-
-    // Billing Address:
-    IPrimitive<Boolean> sameAsCurrent();
-
-    @EmbeddedEntity
-    AddressStructured billingAddress();
-
-    /**
-     * Indicates if this method is deleted (still persists in DB but not used anymore!).
-     */
-    IPrimitive<Boolean> isDeleted();
+public interface PaymentMethod extends AbstractPaymentMethod {
 
 }

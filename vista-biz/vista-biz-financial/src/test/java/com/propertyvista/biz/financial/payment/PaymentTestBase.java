@@ -34,7 +34,7 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -103,7 +103,7 @@ public class PaymentTestBase extends FinancialTestBase {
         return paymentMethod;
     }
 
-    private void createPaymentMethodDetails(PaymentMethod paymentMethod, PaymentType type) {
+    private void createPaymentMethodDetails(AbstractPaymentMethod paymentMethod, PaymentType type) {
         paymentMethod.type().setValue(type);
         switch (type) {
         case Echeck: {
@@ -124,7 +124,7 @@ public class PaymentTestBase extends FinancialTestBase {
 
     }
 
-    protected void setNewPaymentMethodDetails(PaymentMethod paymentMethod) {
+    protected void setNewPaymentMethodDetails(AbstractPaymentMethod paymentMethod) {
         switch (paymentMethod.type().getValue()) {
         case Echeck:
             setEcheckInfoDetails((EcheckInfo) paymentMethod.details().cast());

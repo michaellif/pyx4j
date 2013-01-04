@@ -45,10 +45,10 @@ import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.InteracInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentDetails;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 
-public class PaymentMethodEditor<E extends PaymentMethod> extends CEntityDecoratableForm<E> {
+public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntityDecoratableForm<E> {
 
     private static final I18n i18n = I18n.get(PaymentMethodEditor.class);
 

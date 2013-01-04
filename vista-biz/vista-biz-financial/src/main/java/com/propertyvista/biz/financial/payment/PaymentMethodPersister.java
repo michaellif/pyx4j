@@ -30,14 +30,14 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.util.DomainUtil;
 
 class PaymentMethodPersister {
 
-    private static boolean isAccountNumberChange(PaymentMethod paymentMethod, PaymentMethod origPaymentMethod) {
+    private static boolean isAccountNumberChange(AbstractPaymentMethod paymentMethod, AbstractPaymentMethod origPaymentMethod) {
         switch (paymentMethod.type().getValue()) {
         case Echeck:
             EcheckInfo eci = paymentMethod.details().cast();
@@ -138,7 +138,7 @@ class PaymentMethodPersister {
         return persistPaymentMethod(paymentMethod, origPaymentMethod, new MerchantTerminalSourceConst(merchantTerminalId));
     }
 
-    private static <E extends PaymentMethod> E persistPaymentMethod(E paymentMethod, E origPaymentMethod, MerchantTerminalSource merchantTerminalSource) {
+    private static <E extends AbstractPaymentMethod> E persistPaymentMethod(E paymentMethod, E origPaymentMethod, MerchantTerminalSource merchantTerminalSource) {
         if (paymentMethod.id().isNull()) {
             // New Value validation
             switch (paymentMethod.type().getValue()) {
