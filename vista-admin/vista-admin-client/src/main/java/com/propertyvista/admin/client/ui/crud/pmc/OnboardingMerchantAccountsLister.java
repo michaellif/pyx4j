@@ -17,9 +17,9 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.OnboardingMerchantAccountDTO;
+import com.propertyvista.domain.pmc.Pmc;
 
 public class OnboardingMerchantAccountsLister extends BasicLister<OnboardingMerchantAccountDTO> {
 

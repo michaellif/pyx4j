@@ -22,10 +22,10 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.config.ThreadPoolNames;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.ob.server.PmcActivationDeferredProcess;
 import com.propertyvista.onboarding.ActivatePMCRequestIO;
 import com.propertyvista.onboarding.ResponseIO;

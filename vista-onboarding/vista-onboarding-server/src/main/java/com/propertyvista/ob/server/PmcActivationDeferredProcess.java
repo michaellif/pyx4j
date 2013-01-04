@@ -18,8 +18,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.server.contexts.Lifecycle;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.biz.system.PmcFacade;
+import com.propertyvista.domain.pmc.Pmc;
 
 public class PmcActivationDeferredProcess extends AbstractDeferredProcess {
 

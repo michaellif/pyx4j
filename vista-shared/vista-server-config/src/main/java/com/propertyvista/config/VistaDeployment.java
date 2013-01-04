@@ -21,10 +21,10 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.PmcDnsName;
-import com.propertyvista.admin.domain.pmc.PmcDnsName.DnsNameTarget;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.PmcDnsName;
+import com.propertyvista.domain.pmc.PmcDnsName.DnsNameTarget;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.server.config.VistaFeatures;

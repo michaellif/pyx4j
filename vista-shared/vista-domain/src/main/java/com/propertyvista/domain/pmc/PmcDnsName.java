@@ -7,58 +7,74 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 5, 2012
+ * Created on Mar 16, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.domain.scheduler;
-
-import java.util.Date;
+package com.propertyvista.domain.pmc;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.pmc.Pmc;
 
+@Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-@Table(prefix = "scheduler", namespace = VistaNamespace.adminNamespace)
-public interface RunData extends IEntity {
+public interface PmcDnsName extends IEntity {
 
-    @Detached
-    @Owner
-    @MemberColumn(notNull = true)
-    @Indexed
-    @JoinColumn
-    Run execution();
+    @I18n
+    public enum DnsNameTarget {
 
-    IPrimitive<RunDataStatus> status();
+        vistaCrm,
 
-    @Format("MM/dd/yyyy HH:mm")
-    IPrimitive<Date> started();
+        residentPortal,
 
-    IPrimitive<String> errorMessage();
+        prospectPortal;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
 
     @ReadOnly
+    @Indexed
+    @Owner
+    @MemberColumn(notNull = true)
+    @JoinColumn
     Pmc pmc();
 
-    @Caption(name = "Statistics")
-    @Owned(forceCreation = true, cascade = {})
-    RunStats stats();
+    @OrderColumn
+    IPrimitive<Integer> odr();
 
-    @Format("MM/dd/yyyy HH:mm")
-    @Timestamp(Timestamp.Update.Updated)
-    IPrimitive<Date> updated();
+    @Length(253)
+    @Indexed(uniqueConstraint = true, ignoreCase = true)
+    @NotNull
+    IPrimitive<String> dnsName();
+
+    @Caption(name = "Active")
+    IPrimitive<Boolean> enabled();
+
+    @NotNull
+    IPrimitive<DnsNameTarget> target();
+
+    IPrimitive<Boolean> httpsEnabled();
+
+    @Length(150)
+    IPrimitive<String> googleAPIKey();
+
+    @Length(15)
+    IPrimitive<String> googleAnalyticsId();
 }

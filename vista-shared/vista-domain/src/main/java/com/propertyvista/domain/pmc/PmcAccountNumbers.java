@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.domain.pmc;
+package com.propertyvista.domain.pmc;
 
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Table;

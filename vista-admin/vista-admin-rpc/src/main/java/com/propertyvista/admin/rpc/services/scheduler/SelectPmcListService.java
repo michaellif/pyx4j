@@ -15,7 +15,7 @@ package com.propertyvista.admin.rpc.services.scheduler;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.Pmc;
 
 public interface SelectPmcListService extends AbstractListService<Pmc> {
 

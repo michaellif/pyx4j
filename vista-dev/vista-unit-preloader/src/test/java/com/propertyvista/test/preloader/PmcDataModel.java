@@ -19,11 +19,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.customizations.CountryOfOperation;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 
 public class PmcDataModel {
 

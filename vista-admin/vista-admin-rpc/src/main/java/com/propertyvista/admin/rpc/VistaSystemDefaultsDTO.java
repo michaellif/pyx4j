@@ -16,8 +16,8 @@ package com.propertyvista.admin.rpc;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.admin.domain.pmc.fee.DefaultEquifaxFee;
-import com.propertyvista.admin.domain.pmc.fee.DefaultPaymentFees;
+import com.propertyvista.admin.domain.vista2pmc.DefaultEquifaxFee;
+import com.propertyvista.admin.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.admin.domain.vista2pmc.EquifaxMerchantAccount;
 import com.propertyvista.admin.domain.vista2pmc.TenantSureMerchantAccount;
 

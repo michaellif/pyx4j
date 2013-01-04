@@ -21,12 +21,12 @@ import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.report.ReportServiceImpl;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.DBIntegrityCheckService;
 import com.propertyvista.admin.server.qa.DBIntegrityCheckDeferredProcess;
 import com.propertyvista.config.ThreadPoolNames;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 
 public class DBIntegrityCheckServiceImpl extends ReportServiceImpl<PmcDTO> implements DBIntegrityCheckService {
 

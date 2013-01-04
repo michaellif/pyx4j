@@ -39,13 +39,13 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.crm.rpc.dto.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;

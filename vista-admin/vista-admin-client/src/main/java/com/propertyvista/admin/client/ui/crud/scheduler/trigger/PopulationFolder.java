@@ -28,10 +28,10 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.scheduler.TriggerPmc;
 import com.propertyvista.admin.rpc.services.scheduler.SelectPmcListService;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.domain.pmc.Pmc;
 
 public class PopulationFolder extends VistaTableFolder<TriggerPmc> {
 

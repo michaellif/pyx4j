@@ -28,13 +28,13 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
-import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
-import com.propertyvista.admin.domain.pmc.ReservedPmcNames;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.admin.server.upgrade.VistaUpgrade;
+import com.propertyvista.domain.pmc.OnboardingMerchantAccount;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.ReservedPmcNames;
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.portal.server.preloader.PmcCreator;

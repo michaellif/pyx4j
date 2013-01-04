@@ -11,14 +11,14 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.domain.pmc.fee;
+package com.propertyvista.admin.domain.vista2pmc;
 
 import com.pyx4j.entity.annotations.Table;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
+import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 
 @Table(prefix = "fee", namespace = VistaNamespace.adminNamespace)
-public interface DefaultEquifaxFee extends AbstractEquifaxFee {
+public interface DefaultPaymentFees extends AbstractPaymentFees {
 
 }

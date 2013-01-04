@@ -13,7 +13,7 @@
  */
 package com.propertyvista.biz.system;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.Pmc;
 
 /**
  * PMC management

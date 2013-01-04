@@ -33,10 +33,10 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.biz.system.UserManagementFacade;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.server.common.security.UserAccessUtils;
 import com.propertyvista.server.jobs.TaskRunner;

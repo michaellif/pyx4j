@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationSummary;
-import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
+import com.propertyvista.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.payment.pad.CaledonPadReconciliationParser;
 
 class PadCaledonReconciliation {

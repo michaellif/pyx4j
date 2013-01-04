@@ -11,16 +11,13 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.domain.pmc;
+package com.propertyvista.domain.pmc;
 
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -30,12 +27,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.pmc.CreditCheckReportType;
 
 @Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
-@Caption(name = "PMC Equifax Info")
+@Caption(name = "PMC Payment Type Info")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface PmcEquifaxInfo extends IEntity {
+public interface PmcPaymentTypeInfo extends IEntity {
 
     @ReadOnly
     @Owner
@@ -44,26 +40,45 @@ public interface PmcEquifaxInfo extends IEntity {
     @Indexed(uniqueConstraint = true)
     Pmc pmc();
 
-    IPrimitive<Boolean> approved();
+    IPrimitive<Boolean> ccVisaPaymentAvailable();
 
-    IPrimitive<CreditCheckReportType> reportType();
+    /**
+     * this fee is percent of a transaction
+     */
+    IPrimitive<BigDecimal> ccVisaFee();
 
-    @Length(10)
-    IPrimitive<String> customerNumber();
+    IPrimitive<Boolean> ccMasterCardPaymentAvailable();
 
-    @Length(2)
-    IPrimitive<String> securityCode();
+    IPrimitive<BigDecimal> ccMasterCardFee();
 
-    @Length(4)
-    IPrimitive<String> customerCode();
+    IPrimitive<Boolean> ccDiscoverPaymentAvailable();
 
-    @Length(12)
-    IPrimitive<String> customerReferenceNumber();
+    IPrimitive<BigDecimal> ccDiscoverFee();
 
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> equifaxSignUpFee();
+    IPrimitive<Boolean> ccAmexPaymentAvailable();
 
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> equifaxPerApplicantCreditCheckFee();
+    IPrimitive<BigDecimal> ccAmexFee();
+
+    //--
+
+    IPrimitive<Boolean> eCheckPaymentAvailable();
+
+    IPrimitive<BigDecimal> eChequeFee();
+
+    IPrimitive<Boolean> eftPaymentAvailable();
+
+    IPrimitive<BigDecimal> eftFee();
+
+    IPrimitive<Boolean> interacCaledonPaymentAvailable();
+
+    IPrimitive<BigDecimal> interacCaledonFee();
+
+    IPrimitive<Boolean> interacPaymentPadPaymentAvailable();
+
+    IPrimitive<BigDecimal> interacPaymentPadFee();
+
+    IPrimitive<Boolean> interacVisaPaymentAvailable();
+
+    IPrimitive<BigDecimal> interacVisaFee();
 
 }

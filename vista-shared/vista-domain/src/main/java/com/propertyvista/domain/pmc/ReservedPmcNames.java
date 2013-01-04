@@ -7,37 +7,39 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 7, 2012
+ * Created on Apr 26, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.domain.pmc;
+package com.propertyvista.domain.pmc;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owner;
+import java.util.Date;
+
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.financial.AbstractMerchantAccount;
 
 @Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface OnboardingMerchantAccount extends AbstractMerchantAccount {
+public interface ReservedPmcNames extends IEntity {
 
+    @Indexed(uniqueConstraint = true, ignoreCase = true)
+    @NotNull
+    @Length(63)
+    IPrimitive<String> dnsName();
+
+    @NotNull
+    IPrimitive<String> onboardingAccountId();
+
+    @Timestamp(Timestamp.Update.Created)
     @ReadOnly
-    @Owner
-    @MemberColumn(notNull = true)
-    @JoinColumn
-    Pmc pmc();
-
-    // aka external id for updates from onboarding
-    IPrimitive<String> onboardingBankAccountId();
-
-    IPrimitive<Key> merchantAccountKey();
-
+    IPrimitive<Date> created();
 }

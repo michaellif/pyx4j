@@ -43,8 +43,6 @@ import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.scheduler.Run;
 import com.propertyvista.admin.domain.scheduler.RunData;
 import com.propertyvista.admin.domain.scheduler.RunDataStatus;
@@ -53,6 +51,8 @@ import com.propertyvista.admin.domain.scheduler.RunStatus;
 import com.propertyvista.admin.domain.scheduler.Trigger;
 import com.propertyvista.admin.domain.scheduler.TriggerPmc;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.server.jobs.PmcProcessFactory;

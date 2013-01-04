@@ -33,7 +33,7 @@ import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.ob.rpc.dto.OnboardingApplicationStatus;
 import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;

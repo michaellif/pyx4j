@@ -28,7 +28,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 
-import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.config.VistaDeployment;
@@ -41,6 +40,7 @@ import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;

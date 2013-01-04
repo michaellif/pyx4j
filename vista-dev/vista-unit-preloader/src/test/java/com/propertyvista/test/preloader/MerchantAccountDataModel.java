@@ -20,11 +20,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.pmc.OnboardingMerchantAccount;
 
 public class MerchantAccountDataModel {
 

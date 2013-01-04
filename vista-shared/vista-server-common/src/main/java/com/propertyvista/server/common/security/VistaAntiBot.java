@@ -20,8 +20,8 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.ReCaptchaAntiBot;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.admin.domain.pmc.PmcDnsName.DnsNameTarget;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.pmc.PmcDnsName.DnsNameTarget;
 
 public class VistaAntiBot extends ReCaptchaAntiBot {
 

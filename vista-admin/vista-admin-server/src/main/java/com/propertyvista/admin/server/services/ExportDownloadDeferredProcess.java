@@ -34,8 +34,8 @@ import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.rpc.PmcExportDownloadDTO;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.interfaces.importer.BuildingRetriever;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;

@@ -15,9 +15,9 @@ package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.admin.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO.PaymentFeeMeasure;
+import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
 
 public class PaymentFeesHelper {
 

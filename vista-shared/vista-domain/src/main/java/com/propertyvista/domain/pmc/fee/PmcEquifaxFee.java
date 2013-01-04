@@ -11,14 +11,20 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.domain.pmc.fee;
+package com.propertyvista.domain.pmc.fee;
 
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
+import com.propertyvista.domain.pmc.Pmc;
 
+//TODO
+@Transient
 @Table(prefix = "fee", namespace = VistaNamespace.adminNamespace)
-public interface DefaultPaymentFees extends AbstractPaymentFees {
+public interface PmcEquifaxFee extends AbstractEquifaxFee {
 
+    @Owner
+    Pmc pmc();
 }

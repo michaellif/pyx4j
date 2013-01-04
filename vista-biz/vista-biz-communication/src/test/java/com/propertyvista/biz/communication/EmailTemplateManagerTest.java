@@ -30,7 +30,6 @@ import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
 import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
 import com.propertyvista.biz.communication.mail.template.model.BuildingT;
@@ -45,6 +44,7 @@ import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;

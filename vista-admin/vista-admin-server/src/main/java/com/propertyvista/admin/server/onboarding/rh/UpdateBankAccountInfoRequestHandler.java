@@ -22,9 +22,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.system.OnboardingPaymentFacade;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.onboarding.BankAccountInfo;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.onboarding.UpdateBankAccountInfoRequestIO;

@@ -35,7 +35,6 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
 import com.propertyvista.biz.communication.mail.template.EmailTemplateRootObjectLoader;
@@ -44,6 +43,7 @@ import com.propertyvista.biz.communication.mail.template.model.PasswordRequestAd
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;

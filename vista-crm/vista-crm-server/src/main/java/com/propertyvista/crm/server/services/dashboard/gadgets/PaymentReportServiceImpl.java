@@ -34,8 +34,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
 import com.propertyvista.crm.server.services.dashboard.util.Util;
@@ -45,6 +43,8 @@ import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.server.common.util.PaymentsSummaryHelper;
 import com.propertyvista.server.jobs.TaskRunner;

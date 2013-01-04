@@ -15,8 +15,8 @@ package com.propertyvista.admin.server.services.scheduler;
 
 import com.pyx4j.entity.server.AbstractListServiceImpl;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.rpc.services.scheduler.SelectPmcListService;
+import com.propertyvista.domain.pmc.Pmc;
 
 public class SelectPmcListServiceImpl extends AbstractListServiceImpl<Pmc> implements SelectPmcListService {
 

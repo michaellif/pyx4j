@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.domain.pmc;
+package com.propertyvista.domain.pmc;
 
 import java.util.Date;
 
@@ -33,8 +33,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.admin.domain.pmc.fee.PmcEquifaxFee;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.fee.PmcEquifaxFee;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 
 @Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)

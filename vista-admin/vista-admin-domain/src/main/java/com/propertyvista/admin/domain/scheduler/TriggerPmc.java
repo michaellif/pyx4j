@@ -24,8 +24,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.Pmc;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Table(prefix = "scheduler", namespace = VistaNamespace.adminNamespace)

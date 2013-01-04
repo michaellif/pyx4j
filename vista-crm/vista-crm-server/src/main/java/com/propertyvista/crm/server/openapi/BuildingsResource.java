@@ -37,8 +37,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.crm.server.openapi.model.BuildingRS;
 import com.propertyvista.crm.server.openapi.model.BuildingsRS;
 import com.propertyvista.crm.server.openapi.model.FloorplanRS;
@@ -46,6 +44,8 @@ import com.propertyvista.crm.server.openapi.model.util.Converter;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;

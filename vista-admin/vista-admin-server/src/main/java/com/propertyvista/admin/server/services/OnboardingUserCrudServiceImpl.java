@@ -22,12 +22,12 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.rpc.OnboardingUserDTO;
 import com.propertyvista.admin.rpc.services.OnboardingUserCrudService;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CrmUserCredential;

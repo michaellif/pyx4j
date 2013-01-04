@@ -13,7 +13,7 @@
  */
 package com.propertyvista.biz.communication;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;

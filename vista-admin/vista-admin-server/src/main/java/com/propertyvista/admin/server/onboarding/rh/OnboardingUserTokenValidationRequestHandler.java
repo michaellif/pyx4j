@@ -29,10 +29,10 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 
-import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.system.PmcFacade;
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.onboarding.OnboardingUserPasswordResetQuestionResponseIO;
 import com.propertyvista.onboarding.OnboardingUserTokenValidationRequestIO;

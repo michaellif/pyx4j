@@ -20,9 +20,9 @@ import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.rpc.OnboardingUserDTO;
 import com.propertyvista.admin.rpc.PmcDTO;
+import com.propertyvista.domain.pmc.Pmc;
 
 public class OnboardingUserForm extends AdminEntityForm<OnboardingUserDTO> {
 

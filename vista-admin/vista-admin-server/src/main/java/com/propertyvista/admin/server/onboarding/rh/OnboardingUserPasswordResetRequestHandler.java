@@ -33,12 +33,12 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO;

@@ -18,8 +18,8 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountStatus;
+import com.propertyvista.domain.pmc.OnboardingMerchantAccount;
 
 @Transient
 public interface OnboardingMerchantAccountDTO extends OnboardingMerchantAccount {

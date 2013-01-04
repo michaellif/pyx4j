@@ -29,12 +29,12 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.payment.CCInformation;

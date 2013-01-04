@@ -21,9 +21,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.CreditCheckWizardService;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.dto.CreditCheckSetupDTO;
 

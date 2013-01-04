@@ -22,8 +22,8 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.domain.security.common.AbstractUserCredential;

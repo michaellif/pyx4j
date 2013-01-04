@@ -32,10 +32,10 @@ import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.server.preloader.VistaAdminDataPreloaders;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.server.preloader.PmcCreatorDev;

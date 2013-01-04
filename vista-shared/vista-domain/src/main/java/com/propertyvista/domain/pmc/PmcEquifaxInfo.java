@@ -7,74 +7,62 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 16, 2012
+ * Created on 2011-06-13
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.domain.pmc;
+package com.propertyvista.domain.pmc;
+
+import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.VistaNamespace;
 
 @Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
+@Caption(name = "PMC Equifax Info")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface PmcDnsName extends IEntity {
-
-    @I18n
-    public enum DnsNameTarget {
-
-        vistaCrm,
-
-        residentPortal,
-
-        prospectPortal;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
+public interface PmcEquifaxInfo extends IEntity {
 
     @ReadOnly
-    @Indexed
     @Owner
     @MemberColumn(notNull = true)
     @JoinColumn
+    @Indexed(uniqueConstraint = true)
     Pmc pmc();
 
-    @OrderColumn
-    IPrimitive<Integer> odr();
+    IPrimitive<Boolean> approved();
 
-    @Length(253)
-    @Indexed(uniqueConstraint = true, ignoreCase = true)
-    @NotNull
-    IPrimitive<String> dnsName();
+    IPrimitive<CreditCheckReportType> reportType();
 
-    @Caption(name = "Active")
-    IPrimitive<Boolean> enabled();
+    @Length(10)
+    IPrimitive<String> customerNumber();
 
-    @NotNull
-    IPrimitive<DnsNameTarget> target();
+    @Length(2)
+    IPrimitive<String> securityCode();
 
-    IPrimitive<Boolean> httpsEnabled();
+    @Length(4)
+    IPrimitive<String> customerCode();
 
-    @Length(150)
-    IPrimitive<String> googleAPIKey();
+    @Length(12)
+    IPrimitive<String> customerReferenceNumber();
 
-    @Length(15)
-    IPrimitive<String> googleAnalyticsId();
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> equifaxSignUpFee();
+
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> equifaxPerApplicantCreditCheckFee();
+
 }

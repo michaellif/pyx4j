@@ -34,14 +34,14 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;

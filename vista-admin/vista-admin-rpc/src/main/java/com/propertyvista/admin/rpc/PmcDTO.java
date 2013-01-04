@@ -25,11 +25,11 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
-import com.propertyvista.admin.domain.pmc.PmcDnsName;
-import com.propertyvista.admin.domain.pmc.PmcEquifaxInfo;
-import com.propertyvista.admin.domain.pmc.fee.PmcEquifaxFee;
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.pmc.PmcDnsName;
+import com.propertyvista.domain.pmc.PmcEquifaxInfo;
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.domain.pmc.fee.PmcEquifaxFee;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 

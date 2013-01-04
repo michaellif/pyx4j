@@ -22,11 +22,11 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.AdminUserCredential;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
