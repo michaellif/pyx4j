@@ -54,7 +54,12 @@ public class AdminTheme extends VistaTheme {
         addTheme(new HorizontalAlignCenterMixin());
 
         addTheme(new DefaultWidgetsTheme());
-        addTheme(new DefaultWidgetDecoratorTheme());
+        addTheme(new DefaultWidgetDecoratorTheme() {
+            @Override
+            protected ThemeColor getBackgroundColor() {
+                return ThemeColor.foreground;
+            }
+        });
         addTheme(new DefaultFormFlexPanelTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {

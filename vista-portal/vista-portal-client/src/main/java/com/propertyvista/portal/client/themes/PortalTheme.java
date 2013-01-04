@@ -68,6 +68,11 @@ public class PortalTheme extends VistaTheme {
                 addStyle(style);
 
             }
+
+            @Override
+            protected ThemeColor getBackgroundColor() {
+                return ThemeColor.foreground;
+            }
         });
 
         addTheme(new DefaultFormFlexPanelTheme() {
