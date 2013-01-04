@@ -33,6 +33,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.tester.client.TesterSiteMap;
 import com.pyx4j.tester.client.activity.FormTesterActivity;
 import com.pyx4j.tester.client.view.form.FormTesterView;
+import com.pyx4j.tester.client.view.form.FormTesterView.TestFormType;
 
 public class NavigViewImpl extends SimplePanel implements NavigView {
 
@@ -43,29 +44,26 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
         Tree tree = new Tree();
 
         TreeItem formRoot = new TreeItem("Form");
-        AppPlace place = new TesterSiteMap.FormTester();
-        place.queryArg(FormTesterActivity.FORM_TYPE, FormTesterView.TestFormType.FormBasic.name());
-        formRoot.addItem(new TreeItem(new NavigItemAnchor(place, FormTesterView.TestFormType.FormBasic.name())));
+        formRoot.addItem(createNavigItem(FormTesterView.TestFormType.FormBasic));
+        formRoot.addItem(createNavigItem(FormTesterView.TestFormType.ImageForm));
+        formRoot.addItem(createNavigItem(FormTesterView.TestFormType.FolderLayout));
         formRoot.setState(true);
         tree.addItem(formRoot);
-
-        TreeItem folderRoot = new TreeItem("Folders");
-        folderRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Folder.FolderValidation(), "E")));
-        place = new TesterSiteMap.FormTester();
-        place.queryArg(FormTesterActivity.FORM_TYPE, FormTesterView.TestFormType.FolderLayout.name());
-        folderRoot.addItem(new TreeItem(new NavigItemAnchor(place, FormTesterView.TestFormType.FolderLayout.name())));
-        folderRoot.setState(true);
-        tree.addItem(folderRoot);
 
         TreeItem nativeWidgetRoot = new TreeItem("Native Widgets");
         nativeWidgetRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.NativeWidget.NativeWidgetBasic(), "Native Widgets")));
         nativeWidgetRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.NativeWidget.RichTextEditor(), "Rich Text Editor")));
         nativeWidgetRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.NativeWidget.Lister(), "Lister")));
-        nativeWidgetRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.NativeWidget.CImage(), "CImage")));
         nativeWidgetRoot.setState(true);
         tree.addItem(nativeWidgetRoot);
 
         setWidget(tree);
+    }
+
+    private TreeItem createNavigItem(TestFormType formType) {
+        AppPlace place = new TesterSiteMap.FormTester();
+        place.queryArg(FormTesterActivity.FORM_TYPE, formType.name());
+        return new TreeItem(new NavigItemAnchor(place, formType.name()));
     }
 
     @Override

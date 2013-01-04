@@ -18,13 +18,20 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.tester.client.domain.test;
+package com.pyx4j.tester.client.view.form;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.tester.domain.TFile;
+import com.pyx4j.tester.shared.file.TFileURLBuilder;
 
-public interface CImageEntity extends IEntity {
+public class ImageFileURLBuilder extends TFileURLBuilder {
 
-    IList<TFile> files();
+    public ImageFileURLBuilder(boolean thumbnail) {
+        super(thumbnail);
+    }
+
+    @Override
+    public String getUrl(TFile image) {
+        return NavigationUri.getDeploymentBaseURL() + super.getUrl(image);
+    }
 }

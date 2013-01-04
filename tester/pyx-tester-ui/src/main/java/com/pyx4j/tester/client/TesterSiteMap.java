@@ -63,8 +63,5 @@ public class TesterSiteMap implements SiteMap {
         public static class Lister extends AppPlace {
         }
 
-        public static class CImage extends AppPlace {
-        }
-
     }
 }

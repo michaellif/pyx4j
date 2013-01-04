@@ -28,8 +28,6 @@ import com.pyx4j.tester.client.view.CComponentView;
 import com.pyx4j.tester.client.view.CComponentViewImpl;
 import com.pyx4j.tester.client.view.NavigView;
 import com.pyx4j.tester.client.view.NavigViewImpl;
-import com.pyx4j.tester.client.view.cimage.CImageView;
-import com.pyx4j.tester.client.view.cimage.CImageViewImpl;
 import com.pyx4j.tester.client.view.form.FormTesterView;
 import com.pyx4j.tester.client.view.form.FormTesterViewImpl;
 import com.pyx4j.tester.client.view.form.folder.FolderLayoutView;
@@ -65,8 +63,6 @@ public class TesterVeiwFactory {
                 map.put(type, new ListerViewImpl());
             } else if (FormTesterView.class.equals(type)) {
                 map.put(type, new FormTesterViewImpl());
-            } else if (CImageView.class.equals(type)) {
-                map.put(type, new CImageViewImpl());
             }
         }
         return map.get(type);

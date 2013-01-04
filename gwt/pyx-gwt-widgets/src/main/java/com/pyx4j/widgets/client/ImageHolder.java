@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.widgets.client;
 
 import java.util.List;
 
@@ -32,13 +32,13 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.forms.client.ui.CImage.Type;
-import com.pyx4j.widgets.client.IWidget;
-import com.pyx4j.widgets.client.ImageFactory;
-
 public class ImageHolder extends DockPanel implements IWidget {
 
-    interface ImageDataProvider {
+    public enum Type {
+        single, multiple
+    }
+
+    public interface ImageDataProvider {
 
         List<String> getImageUrls();
 
@@ -48,7 +48,7 @@ public class ImageHolder extends DockPanel implements IWidget {
 
     final Image image = new Image();
 
-    private final CImage.Type type;
+    private final Type type;
 
     private final ViewerControlPanel viewControls = new ViewerControlPanel();
 
@@ -60,7 +60,7 @@ public class ImageHolder extends DockPanel implements IWidget {
 
     private int curIdx = -1;
 
-    public ImageHolder(CImage.Type type, ImageDataProvider imageList) {
+    public ImageHolder(Type type, ImageDataProvider imageList) {
         this.type = type;
         this.imageList = imageList;
         setSize("150px", "150px");

@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.tester.client.view.cimage;
+package com.pyx4j.tester.client.view.form;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -27,17 +27,17 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.tester.client.domain.test.CImageEntity;
+import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
 import com.pyx4j.tester.domain.TFile;
 import com.pyx4j.tester.shared.file.TFileUploadService;
 
-public class CImageForm extends CEntityForm<CImageEntity> {
+public class EntityIImageForm extends CEntityForm<EntityI> {
 
-    private static final I18n i18n = I18n.get(CImageForm.class);
+    private static final I18n i18n = I18n.get(EntityIImageForm.class);
 
-    public CImageForm() {
-        super(CImageEntity.class);
+    public EntityIImageForm() {
+        super(EntityI.class);
     }
 
     @Override
@@ -49,8 +49,8 @@ public class CImageForm extends CEntityForm<CImageEntity> {
         main.setH2(++row, 0, 1, i18n.tr("CImage is here"));
 
         CImage<TFile> cImage = new CImage<TFile>(CImage.Type.multiple);
-        cImage.setImageFileUrlBuilder(new CImageFileURLBuilder(false));
-        cImage.setThumbnailFileUrlBuilder(new CImageFileURLBuilder(true));
+        cImage.setImageFileUrlBuilder(new ImageFileURLBuilder(false));
+        cImage.setThumbnailFileUrlBuilder(new ImageFileURLBuilder(true));
         cImage.setUploadService(GWT.<TFileUploadService> create(TFileUploadService.class));
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().files(), cImage)));

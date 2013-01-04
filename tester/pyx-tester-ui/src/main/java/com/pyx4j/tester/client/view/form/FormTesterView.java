@@ -28,7 +28,7 @@ public interface FormTesterView extends IsWidget {
 
     public enum TestFormType {
 
-        FormBasic, FormVisibility, FolderLayout, FolderValidation;
+        FormBasic, FormVisibility, FolderLayout, FolderValidation, ImageForm;
 
     };
 

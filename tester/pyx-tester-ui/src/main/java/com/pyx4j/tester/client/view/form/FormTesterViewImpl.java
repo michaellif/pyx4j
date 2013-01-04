@@ -141,18 +141,24 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
         lbl.setHTML(formType.name());
 
         if (!map.containsKey(formType)) {
-            if (TestFormType.FormBasic == formType) {
-                EntityIFormWithoutLists form = new EntityIFormWithoutLists();
-                form.initContent();
-                currentForm = form;
-                form.populateNew();
-                map.put(formType, form);
-            } else if (TestFormType.FolderLayout == formType) {
-                EntityIForm form = new EntityIForm();
-                form.initContent();
-                currentForm = form;
-                form.populateNew();
-                map.put(formType, form);
+            switch (formType) {
+            case FormBasic:
+                currentForm = new EntityIFormWithoutLists();
+                break;
+            case FolderLayout:
+                currentForm = new EntityIForm();
+                break;
+            case ImageForm:
+                currentForm = new EntityIImageForm();
+                break;
+            default:
+                break;
+            }
+
+            if (currentForm != null) {
+                currentForm.initContent();
+                currentForm.populateNew();
+                map.put(formType, currentForm);
             }
         }
 

@@ -26,9 +26,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.tester.client.TesterUtils;
+import com.pyx4j.tester.domain.TFile;
 
 public class DomainFactory {
 
@@ -154,7 +156,18 @@ public class DomainFactory {
 
         retVal.personalId().set(createPersonalIdentity());
 
+        List<TFile> fileList = new ArrayList<TFile>();
+        fileList.add(createTFile(1));
+        fileList.add(createTFile(2));
+        retVal.files().addAll(fileList);
+
         return retVal;
+    }
+
+    private static TFile createTFile(int key) {
+        TFile tfile = EntityFactory.create(TFile.class);
+        tfile.setPrimaryKey(new Key(key));
+        return tfile;
     }
 
     public static List<ListerDataItem> createListerData(int cols, int rows) {

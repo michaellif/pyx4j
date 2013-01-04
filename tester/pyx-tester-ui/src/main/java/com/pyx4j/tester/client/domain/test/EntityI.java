@@ -37,6 +37,7 @@ import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.tester.domain.TFile;
 
 public interface EntityI extends IEntity {
 
@@ -138,13 +139,13 @@ public interface EntityI extends IEntity {
     EntityV entitySelectorBox();
 
     IPersonalIdentity personalId();
-    
+
     @Editor(type = EditorType.hue)
     IPrimitive<Integer> hue();
 
     @Editor(type = EditorType.color)
     IPrimitive<Integer> color();
 
-    
-    
+    IList<TFile> files();
+
 }

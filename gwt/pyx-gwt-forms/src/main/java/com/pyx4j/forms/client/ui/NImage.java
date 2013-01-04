@@ -24,10 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.shared.IFile;
-import com.pyx4j.forms.client.ui.CImage.Type;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
 import com.pyx4j.gwt.client.upload.FileUploadReciver;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.ImageHolder;
 
 public class NImage<T extends IFile> extends NComponent<List<T>, ImageHolder, CImage<T>, ImageHolder> implements ImageHolder.ImageDataProvider {
 
@@ -95,7 +95,7 @@ public class NImage<T extends IFile> extends NComponent<List<T>, ImageHolder, CI
 
     private ImageHolder createWidget() {
         if (widget == null) {
-            widget = new ImageHolder(Type.multiple, this);
+            widget = new ImageHolder(ImageHolder.Type.multiple, this);
         }
         return widget;
     }

@@ -28,7 +28,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.tester.client.TesterSiteMap;
-import com.pyx4j.tester.client.activity.CImageViewActivity;
 import com.pyx4j.tester.client.activity.FolderLayoutActivity;
 import com.pyx4j.tester.client.activity.FolderValidationActivity;
 import com.pyx4j.tester.client.activity.FormTesterActivity;
@@ -60,8 +59,6 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new ListerActivity(place);
                 } else if (place instanceof TesterSiteMap.FormTester) {
                     activity = new FormTesterActivity(place);
-                } else if (place instanceof TesterSiteMap.NativeWidget.CImage) {
-                    activity = new CImageViewActivity();
                 }
 
                 callback.onSuccess(activity);
