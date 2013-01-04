@@ -27,14 +27,14 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
-public class DefaultWidgetDecoratorTheme extends Theme {
+public abstract class DefaultWidgetDecoratorTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         WidgetDecorator, WidgetDecoratorLabelHolder, WidgetDecoratorLabel, WidgetDecoratorMandatoryImage, WidgetDecoratorInfoImage,
 
         WidgetDecoratorContentPanel, WidgetDecoratorComponent, WidgetDecoratorComponentHolder,
 
-        FormDecorator, FormDecoratorCollapsedCaption
+        EntityContainerDecorator, EntityContainerDecoratorCollapsedCaption
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -110,10 +110,23 @@ public class DefaultWidgetDecoratorTheme extends Theme {
         style.addProperty("background-color", "#f8d8d8");
         addStyle(style);
 
-        style = new Style(".", StyleName.FormDecoratorCollapsedCaption);
+        style = new Style(".", StyleName.EntityContainerDecoratorCollapsedCaption);
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
+        style = new Style(".", StyleName.EntityContainerDecorator);
+        style.addProperty("margin", "6px 0px");
+        style.addProperty("border", "dotted 1px");
+        style.addProperty("border-color", getBackgroundColor());
+        addStyle(style);
+
+        style = new Style(".", StyleName.EntityContainerDecorator, ":hover");
+        style.addProperty("border", "solid 1px");
+        style.addProperty("border-color", getBackgroundColor());
+        addStyle(style);
+
     }
+
+    protected abstract ThemeColor getBackgroundColor();
 }

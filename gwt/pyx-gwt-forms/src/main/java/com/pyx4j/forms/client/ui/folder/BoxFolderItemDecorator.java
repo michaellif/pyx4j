@@ -21,7 +21,6 @@
 package com.pyx4j.forms.client.ui.folder;
 
 import static com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderBoxItem;
-import static com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderBoxItemDecorator;
 
 import java.util.ArrayList;
 
@@ -46,6 +45,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.DecoratorDebugIds;
+import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerDecoratorToolbar;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.forms.client.validators.ValidationResults;
@@ -81,7 +81,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     public BoxFolderItemDecorator(EntityFolderImages images, String removeLabel) {
         super(images);
 
-        setStyleName(EntityFolderBoxItemDecorator.name());
+        setStyleName(DefaultWidgetDecoratorTheme.StyleName.EntityContainerDecorator.name());
 
         collapsablePanel = new CollapsablePanel(images);
         setWidget(collapsablePanel);

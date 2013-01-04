@@ -54,6 +54,8 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
     public EntityContainerCollapsableDecorator(WidgetsImages images) {
         super(images);
 
+        setStyleName(DefaultWidgetDecoratorTheme.StyleName.EntityContainerDecorator.name());
+
         addToggleHandler(new ToggleHandler() {
 
             @Override

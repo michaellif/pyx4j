@@ -61,7 +61,7 @@ public class DataTableFilterHeader extends HorizontalPanel {
         add(collapseImageHolder);
 
         caption = new Label("Filter");
-        caption.setStyleName(DefaultWidgetDecoratorTheme.StyleName.FormDecoratorCollapsedCaption.name());
+        caption.setStyleName(DefaultWidgetDecoratorTheme.StyleName.EntityContainerDecoratorCollapsedCaption.name());
 
         add(caption);
         setCellVerticalAlignment(caption, HorizontalPanel.ALIGN_MIDDLE);

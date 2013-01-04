@@ -54,7 +54,12 @@ public class TesterTheme extends Theme {
 
         addTheme(new DefaultWidgetsTheme());
 
-        addTheme(new DefaultWidgetDecoratorTheme());
+        addTheme(new DefaultWidgetDecoratorTheme() {
+            @Override
+            protected ThemeColor getBackgroundColor() {
+                return ThemeColor.object1;
+            }
+        });
 
         addTheme(new DefaultFormFlexPanelTheme() {
 
