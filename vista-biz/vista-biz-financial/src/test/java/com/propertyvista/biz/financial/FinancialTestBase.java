@@ -322,8 +322,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
         lease.currentTerm().version().tenants().add(tenantInLease);
 
-        lease.approvalDate().setValue(lease.currentTerm().termFrom().getValue());
-
         lease.billingAccount().carryforwardBalance().setValue(carryforwardBalance);
 
         lease.creationDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
