@@ -61,8 +61,12 @@ public class WizardViewImplBase<E extends IEntity> extends ViewImplBase implemen
         btnNext = new Button(i18n.tr("Next"), new Command() {
             @Override
             public void execute() {
-                form.next();
-                calculateButtonsState();
+                if (form.isLast()) {
+                    presenter.finish();
+                } else {
+                    form.next();
+                    calculateButtonsState();
+                }
             }
         });
         addFooterToolbarItem(btnNext);
