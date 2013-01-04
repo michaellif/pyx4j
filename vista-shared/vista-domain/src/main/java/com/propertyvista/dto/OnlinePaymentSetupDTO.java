@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.payment.AccountType;
 import com.propertyvista.domain.pmc.info.BusinessInformation;
 import com.propertyvista.domain.pmc.info.PersonalInformation;
+import com.propertyvista.domain.pmc.info.PmcSignature;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -75,12 +76,19 @@ public interface OnlinePaymentSetupDTO extends IEntity {
     IList<PropertyAccountInfo> propertyAccounts();
 
     // Confirmation:
+
+    // caledon
     LegalTermsContent caledonAgreement();
 
     IPrimitive<Boolean> caledonIAgree();
 
+    PmcSignature caledonAgreementSignature();
+
+    // payment pad
     LegalTermsContent paymentPadAgreement();
 
     IPrimitive<Boolean> paymentPadIAgree();
+
+    PmcSignature paymentPadAgreementSignature();
 
 }

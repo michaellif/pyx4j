@@ -41,6 +41,7 @@ import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.components.LegalTermsContentViewer;
+import com.propertyvista.crm.client.ui.components.PmcSignatureForm;
 import com.propertyvista.crm.client.ui.wizard.common.BusinessInformationForm;
 import com.propertyvista.crm.client.ui.wizard.common.PersonalInformationForm;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
@@ -64,6 +65,10 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
     private Label caledonTermsAgreementLabel;
 
     private Label paypadTermsAgreementLabel;
+
+    private PmcSignatureForm caledonSignatureForm;
+
+    private PmcSignatureForm paymentPadSignatureForm;
 
     public OnlinePaymentWizardForm(IWizardView<OnlinePaymentSetupDTO> view, Command onTermsOfServiceDisplayRequest) {
         super(OnlinePaymentSetupDTO.class, view);
@@ -89,8 +94,14 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
             companyNameLabel.setText(get(proto().businessInformation()).getValue().companyName().getValue());
         } else if (event.getSelectedItem().getTabTitle().equals(SIGNATURE_STEP_TITLE)) {
             String companyName = get(proto().businessInformation()).getValue().companyName().getValue();
-            caledonTermsAgreementLabel.setText(i18n.tr("I {0} agree to accept Visa Debit in a Card Not Present tranactions environment", companyName));
-            paypadTermsAgreementLabel.setText(i18n.tr("I {0} agree to accept Payment Pad Terms and Conditions", companyName)); // TODO ask Leonard what to write here
+
+            String companyOwnersFullName = (get(proto().personalInformation())).getValue().name().firstName().getValue() + " "
+                    + (get(proto().personalInformation())).getValue().name().lastName().getValue();
+            caledonSignatureForm.setFullName(companyOwnersFullName);
+            paymentPadSignatureForm.setFullName(companyOwnersFullName);
+
+            caledonTermsAgreementLabel.setText(i18n.tr("I, {0} agree to accept Visa Debit in a Card Not Present transactions environment", companyName));
+            paypadTermsAgreementLabel.setText(i18n.tr("I, {0} agree to accept Payment Pad Terms and Conditions", companyName)); // TODO ask Leonard what to write here
         }
     }
 
@@ -165,6 +176,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Signature"));
 
+        // CALEDON START
         HorizontalPanel caledonPaymentMethodsLogoHeader = new HorizontalPanel();
         caledonPaymentMethodsLogoHeader.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         Label caledonCaption = new Label();
@@ -186,6 +198,11 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         main.setWidget(++row, 0, caledonTermsAgreementPanel);
         main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(TOP_I_AGREE_PANEL_PADDING, Unit.PX);
+
+        caledonSignatureForm = new PmcSignatureForm();
+        main.setWidget(++row, 0, inject(proto().caledonAgreementSignature(), caledonSignatureForm));
+        main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        // CALEDON END
 
         main.setWidget(++row, 0, new HTML("&nbsp;")); // separator
         main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(AGREEMENTS_SEPARATOR_PADDING, Unit.PX);
@@ -211,7 +228,11 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(TOP_I_AGREE_PANEL_PADDING, Unit.PX);
 
-        // add Validators:
+        paymentPadSignatureForm = new PmcSignatureForm();
+        main.setWidget(++row, 0, inject(proto().paymentPadAgreementSignature(), paymentPadSignatureForm));
+        main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
+        // add Validators:        
         get(proto().caledonIAgree()).addValueValidator(new EditableValueValidator<Boolean>() {
             @Override
             public ValidationError isValid(CComponent<Boolean, ?> component, Boolean value) {
