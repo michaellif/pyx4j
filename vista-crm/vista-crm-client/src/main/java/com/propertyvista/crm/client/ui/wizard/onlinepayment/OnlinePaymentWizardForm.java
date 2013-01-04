@@ -26,9 +26,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -40,9 +38,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.crm.client.ui.components.LegalTermsContentViewer;
 import com.propertyvista.crm.client.ui.wizard.common.BusinessInformationForm;
 import com.propertyvista.crm.client.ui.wizard.common.PersonalInformationForm;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
@@ -55,52 +51,17 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
 
     private static final String CONFIRMATION_STEP_TITLE = i18n.tr("Confirmation");
 
-    public static class PropertyAccountInfoForm extends CEntityDecoratableForm<OnlinePaymentSetupDTO.PropertyAccountInfo> {
-
-        public PropertyAccountInfoForm() {
-            super(PropertyAccountInfo.class);
-
-        }
-
-        @Override
-        public IsWidget createContent() {
-            FormFlexPanel panel = new FormFlexPanel();
-            int row = -1;
-            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().averageMonthlyRent())).build());
-            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfRentedUnits())).build());
-            panel.setWidget(++row, 0, new HTML("&nbsp;"));
-            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().transitNumber())).build());
-            int irow = row; // save the row that will hold the image with the cheque guide
-            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().institutionNumber())).build());
-            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNumber())).build());
-
-            panel.setWidget(irow, 1, new Image(VistaImages.INSTANCE.canadianChequeGuide()));
-            panel.getFlexCellFormatter().setRowSpan(irow, 1, 3);
-            return panel;
-        }
-    }
-
-    public static class PropertyAccountInfoFolder extends VistaBoxFolder<OnlinePaymentSetupDTO.PropertyAccountInfo> {
-
-        public PropertyAccountInfoFolder() {
-            super(PropertyAccountInfo.class);
-        }
-
-        @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof PropertyAccountInfo) {
-                return new PropertyAccountInfoForm();
-            }
-            return super.create(member);
-        }
-
-    }
+    private static final String SIGNATURE_STEP_TITLE = i18n.tr("Signature");
 
     private OnlinePaymentPricingTab onlinePaymentPricingTab;
 
     private final Command onTermsOfServiceDisplayRequest;
 
     private Label companyNameLabel;
+
+    private Label caledonTermsAgreementLabel;
+
+    private Label paypadTermsAgreementLabel;
 
     public OnlinePaymentWizardForm(IWizardView<OnlinePaymentSetupDTO> view, Command onTermsOfServiceDisplayRequest) {
         super(OnlinePaymentSetupDTO.class, view);
@@ -111,7 +72,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         addStep(createPersonalInfoStep(i18n.tr("Personal Information")));
         addStep(createPropertyAndBankingStep(i18n.tr("Property and Banking")));
         addStep(createConfirmationStep(CONFIRMATION_STEP_TITLE));
-        addStep(createSignatureStep(i18n.tr("Signature")));
+        addStep(createSignatureStep(SIGNATURE_STEP_TITLE));
 
     }
 
@@ -124,6 +85,10 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         super.onStepChange(event);
         if (event.getSelectedItem().getTabTitle().equals(CONFIRMATION_STEP_TITLE)) {
             companyNameLabel.setText(get(proto().businessInformation()).getValue().companyName().getValue());
+        } else if (event.getSelectedItem().getTabTitle().equals(SIGNATURE_STEP_TITLE)) {
+            String companyName = get(proto().businessInformation()).getValue().companyName().getValue();
+            caledonTermsAgreementLabel.setText(i18n.tr("I {0} agree to accept Visa Debit in a Card Not Present tranactions environment", companyName));
+            paypadTermsAgreementLabel.setText(i18n.tr("I {0} agree to accept Payment Pad Terms and Conditions", companyName)); // TODO ask Leonard what to write here
         }
     }
 
@@ -136,6 +101,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
     }
 
     private FormFlexPanel createBusinessInfoStep(String title) {
+        // TODO should we have some text that explains why we collect this information as in Equifax wizard? if yes what is the text?
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Business Information"));
@@ -144,6 +110,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
     }
 
     private FormFlexPanel createPersonalInfoStep(String title) {
+        // TODO should we have some text that explains why we collect this information as in Equifax wizard? if yes what is the text?
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Personal Information"));
@@ -152,6 +119,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
     }
 
     private FormFlexPanel createPropertyAndBankingStep(String title) {
+        // TODO what is 'refundable deposit'?
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Property and Banking"));
@@ -170,6 +138,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
     }
 
     private FormFlexPanel createConfirmationStep(String title) {
+        // TODO why do we need this step if it just repeats the information from the previous step? why not just go from "Property and Banking" straight to "Signature"?
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Confirmation"));
@@ -179,6 +148,14 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
     }
 
     private FormFlexPanel createSignatureStep(String title) {
+        // TODO need to add actual signature, but pending the following questions:
+        //     - why the text on the spec PDF indicates that there may be more than one person?
+        //     - the full text above the signature is required
+        //     - the full text of the agreements is required
+        //     - why payment pad doesn't have "I <company name> agree to accept <bla bla bla...>", but caledon has.
+        //     - if payment pad indeed needs "I <company name> agree to accept <bla bla bla...>" checkbox, what should be in placed instead of <bla bla bla>
+        // TODO since "I agree" checkboxes don't use the default decorator how can they be validated? 
+
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Signature"));
@@ -187,30 +164,68 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         caledonPaymentMethodsLogoHeader.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         Label caledonCaption = new Label();
         caledonCaption.setText("Caledon Card Services");
-
         caledonPaymentMethodsLogoHeader.add(caledonCaption);
-        caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentPricingResources.INSTANCE.visaLogo()));
-        caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentPricingResources.INSTANCE.masterCardLogo()));
-        caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentPricingResources.INSTANCE.visaDebitLogo()));
-        caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentPricingResources.INSTANCE.echequeLogo()));
+        caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentWizardResources.INSTANCE.visaLogo()));
+        caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentWizardResources.INSTANCE.masterCardLogo()));
+        caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentWizardResources.INSTANCE.visaDebitLogo()));
+        caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentWizardResources.INSTANCE.echequeLogo()));
         main.setWidget(++row, 0, caledonPaymentMethodsLogoHeader);
+
+        main.setWidget(++row, 0, inject(proto().caledonAgreement(), new LegalTermsContentViewer("20em")));
+
+        HorizontalPanel caledonTermsAgreementPanel = new HorizontalPanel();
+        caledonTermsAgreementPanel.add(inject(proto().caledonIAgree()));
+        caledonTermsAgreementLabel = new Label();
+        caledonTermsAgreementPanel.add(caledonTermsAgreementLabel);
+        main.setWidget(++row, 0, caledonTermsAgreementPanel);
+
+        main.setWidget(++row, 0, new HTML("&nbsp;")); // separator
 
         HorizontalPanel paypadPaymentMethodsLogoHader = new HorizontalPanel();
         paypadPaymentMethodsLogoHader.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         Label paypadCaption = new Label();
         paypadCaption.setText("Payment Pad Inc.");
         paypadPaymentMethodsLogoHader.add(paypadCaption);
-        paypadPaymentMethodsLogoHader.add(new Image(OnlinePaymentPricingResources.INSTANCE.interacLogo()));
-        paypadPaymentMethodsLogoHader.add(new Image(OnlinePaymentPricingResources.INSTANCE.directBankingLogo()));
+        paypadPaymentMethodsLogoHader.add(new Image(OnlinePaymentWizardResources.INSTANCE.interacLogo()));
+        paypadPaymentMethodsLogoHader.add(new Image(OnlinePaymentWizardResources.INSTANCE.directBankingLogo()));
         main.setWidget(++row, 0, paypadPaymentMethodsLogoHader);
 
+        main.setWidget(++row, 0, inject(proto().paymentPadAgreement(), new LegalTermsContentViewer("20em")));
+
+        HorizontalPanel paypadTermsAgreementPanel = new HorizontalPanel();
+        paypadTermsAgreementPanel.add(inject(proto().paymentPadIAgree()));
+        paypadTermsAgreementLabel = new Label();
+        paypadTermsAgreementPanel.add(paypadTermsAgreementLabel);
+        main.setWidget(++row, 0, paypadTermsAgreementPanel);
+
+        // add Validators:
+        get(proto().caledonIAgree()).addValueValidator(new EditableValueValidator<Boolean>() {
+            @Override
+            public ValidationError isValid(CComponent<Boolean, ?> component, Boolean value) {
+                if (value != null && !value) {
+                    return new ValidationError(component, i18n.tr("You must agree with Caledon terms to continue."));
+                } else {
+                    return null;
+                }
+            }
+        });
+        get(proto().paymentPadIAgree()).addValueValidator(new EditableValueValidator<Boolean>() {
+            @Override
+            public ValidationError isValid(CComponent<Boolean, ?> component, Boolean value) {
+                if (value != null && !value) {
+                    return new ValidationError(component, i18n.tr("You must agree with Payment Pad terms to continue."));
+                } else {
+                    return null;
+                }
+            }
+        });
         return main;
     }
 
     private HTMLPanel makeServiceAgreementLabel() {
-        HTMLPanel panel = new HTMLPanel(OnlinePaymentPricingResources.INSTANCE.serviceAgreement().getText());
+        HTMLPanel panel = new HTMLPanel(OnlinePaymentWizardResources.INSTANCE.serviceAgreement().getText());
 
-        Element termsOfServiceAnchorElement = panel.getElementById(OnlinePaymentPricingResources.TERMS_OF_SERVICE_ANCHOR_ID);
+        Element termsOfServiceAnchorElement = panel.getElementById(OnlinePaymentWizardResources.TERMS_OF_SERVICE_ANCHOR_ID);
         String termsOfServiceAnchorText = termsOfServiceAnchorElement.getChild(0).getNodeValue();
         Anchor termsOfServiceAnchor = new Anchor(termsOfServiceAnchorText);
         termsOfServiceAnchor.addClickHandler(new ClickHandler() {
@@ -221,14 +236,13 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
                 }
             }
         });
-        panel.addAndReplaceElement(termsOfServiceAnchor, OnlinePaymentPricingResources.TERMS_OF_SERVICE_ANCHOR_ID);
+        panel.addAndReplaceElement(termsOfServiceAnchor, OnlinePaymentWizardResources.TERMS_OF_SERVICE_ANCHOR_ID);
 
         companyNameLabel = new Label();
         companyNameLabel.getElement().getStyle().setDisplay(Display.INLINE);
-        panel.addAndReplaceElement(companyNameLabel, OnlinePaymentPricingResources.COMPANY_NAME_ID);
+        panel.addAndReplaceElement(companyNameLabel, OnlinePaymentWizardResources.COMPANY_NAME_ID);
 
         return panel;
-
     }
 
 }

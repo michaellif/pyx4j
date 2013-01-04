@@ -45,12 +45,12 @@ public class OnlinePaymentPricingTab extends Composite {
         contentPanel.setWidget(++row, 0, makePriceListPanel());
         // TODO add line
         Label setUpFeeExplanation = new Label();
-        setUpFeeExplanation.setText(OnlinePaymentPricingResources.INSTANCE.setUpFeePricingExplanation().getText());
+        setUpFeeExplanation.setText(OnlinePaymentWizardResources.INSTANCE.setUpFeePricingExplanation().getText());
         contentPanel.setWidget(++row, 0, setUpFeeExplanation);
 
         // TODO add line
         Label otherText = new Label();
-        otherText.setHTML(OnlinePaymentPricingResources.INSTANCE.marketingText().getText());
+        otherText.setHTML(OnlinePaymentWizardResources.INSTANCE.marketingText().getText());
 
         contentPanel.setWidget(+row, 0, otherText);
 
@@ -67,11 +67,11 @@ public class OnlinePaymentPricingTab extends Composite {
     private Widget makePriceListPanel() {
         FormFlexPanel priceListPanel = new FormFlexPanel();
         int row = -1;
-        makePaymentMethodPriceRow(priceListPanel, ++row, new Image(OnlinePaymentPricingResources.INSTANCE.echequeLogo()), "$1.50", i18n.tr(" per transaction"));
-        makePaymentMethodPriceRow(priceListPanel, ++row, new Image(OnlinePaymentPricingResources.INSTANCE.interacLogo()), "$1.50", i18n.tr(" per transaction"));
-        makePaymentMethodPriceRow(priceListPanel, ++row, new Image(OnlinePaymentPricingResources.INSTANCE.directBankingLogo()), "$1.50",
+        makePaymentMethodPriceRow(priceListPanel, ++row, new Image(OnlinePaymentWizardResources.INSTANCE.echequeLogo()), "$1.50", i18n.tr(" per transaction"));
+        makePaymentMethodPriceRow(priceListPanel, ++row, new Image(OnlinePaymentWizardResources.INSTANCE.interacLogo()), "$1.50", i18n.tr(" per transaction"));
+        makePaymentMethodPriceRow(priceListPanel, ++row, new Image(OnlinePaymentWizardResources.INSTANCE.directBankingLogo()), "$1.50",
                 i18n.tr(" per transaction"));
-        makePaymentMethodPriceRow(priceListPanel, ++row, new Image(OnlinePaymentPricingResources.INSTANCE.visaDebitLogo()), "0.75%",
+        makePaymentMethodPriceRow(priceListPanel, ++row, new Image(OnlinePaymentWizardResources.INSTANCE.visaDebitLogo()), "0.75%",
                 i18n.tr(" of amount processed"));
 
         // TODO add line
@@ -80,8 +80,8 @@ public class OnlinePaymentPricingTab extends Composite {
         priceListPanel.setWidget(++row, 0, startingFromLabel);
         priceListPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
-        makePaymentMethodPriceRow(priceListPanel, ++row, new Image(OnlinePaymentPricingResources.INSTANCE.visaLogo()), "1.50%", i18n.tr("of amount processed"));
-        makePaymentMethodPriceRow(priceListPanel, ++row, new Image(OnlinePaymentPricingResources.INSTANCE.masterCardLogo()), "2.20%",
+        makePaymentMethodPriceRow(priceListPanel, ++row, new Image(OnlinePaymentWizardResources.INSTANCE.visaLogo()), "1.50%", i18n.tr("of amount processed"));
+        makePaymentMethodPriceRow(priceListPanel, ++row, new Image(OnlinePaymentWizardResources.INSTANCE.masterCardLogo()), "2.20%",
                 i18n.tr("of amount processed"));
 
         return priceListPanel;
@@ -116,40 +116,40 @@ public class OnlinePaymentPricingTab extends Composite {
         poweredByPanel.setWidgetTopHeight(poweredByCaption, 0, Unit.PX, 20, Unit.PX);
 
         int firstRowYStart = 30;
-        Image caledonLogo = new Image(OnlinePaymentPricingResources.INSTANCE.caledonLogo());
+        Image caledonLogo = new Image(OnlinePaymentWizardResources.INSTANCE.caledonLogo());
         poweredByPanel.add(caledonLogo);
         poweredByPanel.setWidgetLeftWidth(caledonLogo, 100, Unit.PX, caledonLogo.getWidth(), Unit.PX);
         poweredByPanel.setWidgetTopHeight(caledonLogo, firstRowYStart, Unit.PX, caledonLogo.getHeight(), Unit.PX);
 
-        Image paypadLogo = new Image(OnlinePaymentPricingResources.INSTANCE.paymentPadLogo());
+        Image paypadLogo = new Image(OnlinePaymentWizardResources.INSTANCE.paymentPadLogo());
         poweredByPanel.add(paypadLogo);
         poweredByPanel.setWidgetRightWidth(paypadLogo, 100, Unit.PX, paypadLogo.getWidth(), Unit.PX);
         poweredByPanel.setWidgetTopHeight(paypadLogo, firstRowYStart, Unit.PX, paypadLogo.getHeight(), Unit.PX);
 
         // TODO add line
         int secondRowYStart = 100;
-        Image visaLogo = new Image(OnlinePaymentPricingResources.INSTANCE.visaLogo());
+        Image visaLogo = new Image(OnlinePaymentWizardResources.INSTANCE.visaLogo());
         poweredByPanel.add(visaLogo);
         poweredByPanel.setWidgetLeftWidth(visaLogo, 30, Unit.PX, visaLogo.getWidth(), Unit.PX);
         poweredByPanel.setWidgetTopHeight(visaLogo, secondRowYStart, Unit.PX, visaLogo.getHeight(), Unit.PX);
 
-        Image debitLogo = new Image(OnlinePaymentPricingResources.INSTANCE.debitLogo());
+        Image debitLogo = new Image(OnlinePaymentWizardResources.INSTANCE.debitLogo());
         poweredByPanel.add(debitLogo);
         poweredByPanel.setWidgetLeftWidth(debitLogo, width / 2 - debitLogo.getWidth() / 2, Unit.PX, debitLogo.getWidth(), Unit.PX);
         poweredByPanel.setWidgetTopHeight(debitLogo, secondRowYStart, Unit.PX, debitLogo.getHeight(), Unit.PX);
 
-        Image masterCardLogo = new Image(OnlinePaymentPricingResources.INSTANCE.masterCardLogo());
+        Image masterCardLogo = new Image(OnlinePaymentWizardResources.INSTANCE.masterCardLogo());
         poweredByPanel.add(masterCardLogo);
         poweredByPanel.setWidgetRightWidth(masterCardLogo, 30, Unit.PX, masterCardLogo.getWidth(), Unit.PX);
         poweredByPanel.setWidgetTopHeight(masterCardLogo, secondRowYStart, Unit.PX, masterCardLogo.getHeight(), Unit.PX);
 
         int thirdRowYStart = 180;
-        Image echequeLogo = new Image(OnlinePaymentPricingResources.INSTANCE.echequeLogo());
+        Image echequeLogo = new Image(OnlinePaymentWizardResources.INSTANCE.echequeLogo());
         poweredByPanel.add(echequeLogo);
         poweredByPanel.setWidgetLeftWidth(echequeLogo, 100, Unit.PX, echequeLogo.getWidth(), Unit.PX);
         poweredByPanel.setWidgetTopHeight(echequeLogo, thirdRowYStart, Unit.PX, echequeLogo.getHeight(), Unit.PX);
 
-        Image directBankingLogo = new Image(OnlinePaymentPricingResources.INSTANCE.directBankingLogo());
+        Image directBankingLogo = new Image(OnlinePaymentWizardResources.INSTANCE.directBankingLogo());
         poweredByPanel.add(directBankingLogo);
         poweredByPanel.setWidgetRightWidth(directBankingLogo, 100, Unit.PX, directBankingLogo.getWidth(), Unit.PX);
         poweredByPanel.setWidgetTopHeight(directBankingLogo, thirdRowYStart, Unit.PX, directBankingLogo.getHeight(), Unit.PX);

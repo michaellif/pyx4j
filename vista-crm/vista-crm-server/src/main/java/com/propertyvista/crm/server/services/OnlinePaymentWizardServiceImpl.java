@@ -19,6 +19,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.OnlinePaymentWizardService;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 import com.propertyvista.dto.OnlinePaymentSetupDTO;
@@ -29,6 +31,25 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
     public void create(AsyncCallback<OnlinePaymentSetupDTO> callback) {
         OnlinePaymentSetupDTO onlinePaymentSetup = EntityFactory.create(OnlinePaymentSetupDTO.class);
         onlinePaymentSetup.propertyAccounts().add(onlinePaymentSetup.propertyAccounts().$());
+        Pmc pmc = VistaDeployment.getCurrentPmc();
+        onlinePaymentSetup.businessInformation().companyName().setValue(pmc.name().getValue());
+
+        // TODO retrieve terms
+        StringBuilder contentBuilder = new StringBuilder(); // create content that has multiple lines to check scrolling of the viewer
+        for (int i = 0; i < 100; ++i) {
+            contentBuilder.append("Content ");
+            for (int j = 0; j < 100; ++j) {
+                contentBuilder.append("content ");
+            }
+            contentBuilder.append("content.<br/>");
+        }
+        onlinePaymentSetup.caledonAgreement().localizedCaption().setValue("Merchant Processing Application Agreement & Pre-Authorized Debit Agreement");
+
+        onlinePaymentSetup.caledonAgreement().content().setValue(contentBuilder.toString());
+
+        onlinePaymentSetup.paymentPadAgreement().localizedCaption().setValue("Pre-Authorized Debit Agreement and Interac Online");
+        onlinePaymentSetup.paymentPadAgreement().content().setValue(contentBuilder.toString());
+
         callback.onSuccess(onlinePaymentSetup);
     }
 

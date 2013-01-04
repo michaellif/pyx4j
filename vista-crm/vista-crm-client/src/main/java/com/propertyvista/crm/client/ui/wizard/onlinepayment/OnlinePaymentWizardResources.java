@@ -18,9 +18,9 @@ import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.TextResource;
 
-public interface OnlinePaymentPricingResources extends ClientBundleWithLookup {
+public interface OnlinePaymentWizardResources extends ClientBundleWithLookup {
 
-    public static final OnlinePaymentPricingResources INSTANCE = GWT.create(OnlinePaymentPricingResources.class);
+    public static final OnlinePaymentWizardResources INSTANCE = GWT.create(OnlinePaymentWizardResources.class);
 
     @Source("caledon-logo.png")
     ImageResource caledonLogo();
