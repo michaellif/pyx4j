@@ -22,4 +22,7 @@ public interface Vista2PmcFacade {
 
     AbstractPaymentFees getPaymentFees();
 
+    String getTenantSureMerchantTerminalId();
+
+    String getVistaMerchantTerminalId();
 }

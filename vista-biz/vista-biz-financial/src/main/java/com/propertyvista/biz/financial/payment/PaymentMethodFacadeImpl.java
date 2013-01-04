@@ -22,7 +22,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSourceConst;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -75,10 +74,10 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
-    public InsurancePaymentMethod persistInsurancePaymentMethod(String merchantTerminalId, InsurancePaymentMethod paymentMethod, Tenant tenantId) {
+    public InsurancePaymentMethod persistInsurancePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId) {
         Validate.isTrue(paymentMethod.tenant().equals(tenantId));
         Validate.isTrue(PaymentType.avalableInInsurance().contains(paymentMethod.type().getValue()));
-        return PaymentMethodPersister.persistInsurancePaymentMethod(merchantTerminalId, paymentMethod);
+        return PaymentMethodPersister.persistInsurancePaymentMethod(paymentMethod);
     }
 
     @Override
@@ -88,6 +87,11 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
         pmcPaymentMethod.details().set(creditCardInfo);
         pmcPaymentMethod.type().setValue(PaymentType.CreditCard);
         //TODO get MerchantTerminalId
-        return PaymentMethodPersister.persistPaymentMethod(pmcPaymentMethod, null, new MerchantTerminalSourceConst("BIRCHWT6"));
+        return PaymentMethodPersister.persistPaymentMethod(pmcPaymentMethod, null, new MerchantTerminalSourceVista());
+    }
+
+    @Override
+    public PmcPaymentMethod persistPmcPaymentMethod(PmcPaymentMethod paymentMethod) {
+        return PaymentMethodPersister.persistPmcPaymentMethod(paymentMethod);
     }
 }

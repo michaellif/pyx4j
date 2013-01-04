@@ -20,7 +20,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.payment.CreditCardFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
@@ -29,13 +29,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 class TenantSurePayments {
 
     private static String tenantSureMerchantTerminalId() {
-        if (VistaDeployment.isVistaProduction()) {
-            //TODO
-            throw new Error("Not Implemented");
-        } else {
-            return "BIRCHWT6";
-        }
-
+        return ServerSideFactory.create(Vista2PmcFacade.class).getTenantSureMerchantTerminalId();
     }
 
     static InsurancePaymentMethod getPaymentMethod(Tenant tenantId) {
@@ -43,7 +37,7 @@ class TenantSurePayments {
     }
 
     static InsurancePaymentMethod updatePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId) {
-        return ServerSideFactory.create(PaymentMethodFacade.class).persistInsurancePaymentMethod(tenantSureMerchantTerminalId(), paymentMethod, tenantId);
+        return ServerSideFactory.create(PaymentMethodFacade.class).persistInsurancePaymentMethod(paymentMethod, tenantId);
     }
 
     static InsuranceTenantSureTransaction preAuthorization(InsuranceTenantSureTransaction transaction) {

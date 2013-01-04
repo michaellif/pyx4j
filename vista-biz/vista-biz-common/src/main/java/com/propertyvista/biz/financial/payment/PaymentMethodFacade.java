@@ -35,9 +35,11 @@ public interface PaymentMethodFacade {
 
     List<LeasePaymentMethod> retrieveLeasePaymentMethods(Customer customer);
 
-    InsurancePaymentMethod persistInsurancePaymentMethod(String merchantTerminalId, InsurancePaymentMethod paymentMethod, Tenant tenantId);
+    InsurancePaymentMethod persistInsurancePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId);
 
     InsurancePaymentMethod retrieveInsurancePaymentMethod(Tenant tenantId);
 
     PmcPaymentMethod persistPmcPaymentMethod(CreditCardInfo creditCardInfo, Pmc pmc);
+
+    PmcPaymentMethod persistPmcPaymentMethod(PmcPaymentMethod paymentMethod);
 }

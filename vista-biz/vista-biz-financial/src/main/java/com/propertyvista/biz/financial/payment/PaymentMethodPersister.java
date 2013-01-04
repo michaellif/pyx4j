@@ -21,7 +21,6 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSource;
 import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSourceBuilding;
-import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSourceConst;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
@@ -31,6 +30,7 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.util.DomainUtil;
@@ -102,7 +102,7 @@ class PaymentMethodPersister {
         return persistPaymentMethod(paymentMethod, origPaymentMethod, new MerchantTerminalSourceBuilding(building));
     }
 
-    static InsurancePaymentMethod persistInsurancePaymentMethod(String merchantTerminalId, InsurancePaymentMethod paymentMethod) {
+    static InsurancePaymentMethod persistInsurancePaymentMethod(InsurancePaymentMethod paymentMethod) {
         InsurancePaymentMethod origPaymentMethod = null;
         if (!paymentMethod.id().isNull()) {
             // Keep history of payment methods that were used.
@@ -135,7 +135,43 @@ class PaymentMethodPersister {
         }
         Validate.isTrue(!paymentMethod.tenant().isNull(), "Owner (tenant) is required for PaymentMethod");
 
-        return persistPaymentMethod(paymentMethod, origPaymentMethod, new MerchantTerminalSourceConst(merchantTerminalId));
+        return persistPaymentMethod(paymentMethod, origPaymentMethod, new MerchantTerminalSourceTenantSure());
+    }
+
+    static PmcPaymentMethod persistPmcPaymentMethod(PmcPaymentMethod paymentMethod) {
+        PmcPaymentMethod origPaymentMethod = null;
+        if (!paymentMethod.id().isNull()) {
+            // Keep history of payment methods that were used.
+            origPaymentMethod = Persistence.service().retrieve(PmcPaymentMethod.class, paymentMethod.getPrimaryKey());
+            if (isAccountNumberChange(paymentMethod, origPaymentMethod)) {
+                EntityQueryCriteria<InsuranceTenantSureTransaction> criteria = EntityQueryCriteria.create(InsuranceTenantSureTransaction.class);
+                criteria.eq(criteria.proto().paymentMethod(), paymentMethod);
+                criteria.ne(criteria.proto().status(), InsuranceTenantSureTransaction.TransactionStatus.Draft);
+                if (Persistence.service().count(criteria) != 0) {
+                    origPaymentMethod.isDeleted().setValue(true);
+                    Persistence.service().merge(origPaymentMethod);
+                    EntityGraph.makeDuplicate(paymentMethod);
+                    switch (paymentMethod.type().getValue()) {
+                    case CreditCard:
+                        CreditCardInfo cc = paymentMethod.details().cast();
+                        cc.token().setValue(null);
+                        break;
+                    case Echeck:
+                        EcheckInfo eci = paymentMethod.details().cast();
+                        if (eci.accountNo().newNumber().isNull()) {
+                            EcheckInfo origeci = origPaymentMethod.details().cast();
+                            eci.accountNo().newNumber().setValue(origeci.accountNo().number().getValue());
+                        }
+                    default:
+                        break;
+                    }
+                    origPaymentMethod = null;
+                }
+            }
+        }
+        Validate.isTrue(!paymentMethod.pmc().isNull(), "Owner (pmc) is required for PaymentMethod");
+
+        return persistPaymentMethod(paymentMethod, origPaymentMethod, new MerchantTerminalSourceVista());
     }
 
     static <E extends AbstractPaymentMethod> E persistPaymentMethod(E paymentMethod, E origPaymentMethod, MerchantTerminalSource merchantTerminalSource) {

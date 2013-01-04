@@ -18,7 +18,7 @@ import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.admin.domain.vista2pmc.DefaultEquifaxFee;
 import com.propertyvista.admin.domain.vista2pmc.DefaultPaymentFees;
-import com.propertyvista.admin.domain.vista2pmc.EquifaxMerchantAccount;
+import com.propertyvista.admin.domain.vista2pmc.VistaMerchantAccount;
 import com.propertyvista.admin.domain.vista2pmc.TenantSureMerchantAccount;
 
 @Transient
@@ -28,7 +28,7 @@ public interface VistaSystemDefaultsDTO extends IEntity {
 
     DefaultEquifaxFee equifaxFees();
 
-    EquifaxMerchantAccount equifaxMerchantAccount();
+    VistaMerchantAccount equifaxMerchantAccount();
 
     TenantSureMerchantAccount tenantSureMerchantAccount();
 }

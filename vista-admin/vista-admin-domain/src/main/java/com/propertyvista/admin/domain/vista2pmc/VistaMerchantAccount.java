@@ -19,6 +19,6 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.financial.AbstractMerchantAccount;
 
 @Table(namespace = VistaNamespace.adminNamespace)
-public interface EquifaxMerchantAccount extends AbstractMerchantAccount {
+public interface VistaMerchantAccount extends AbstractMerchantAccount {
 
 }
