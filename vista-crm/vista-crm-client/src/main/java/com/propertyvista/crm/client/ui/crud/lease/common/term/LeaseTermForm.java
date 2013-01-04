@@ -28,7 +28,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -43,7 +42,6 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
@@ -52,7 +50,6 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
-import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -279,7 +276,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         // Products : -----------------------------------------------------------------------------------------------------------
 
         CComponent<?, ?> comp = inject(proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, leaseTermEditorView));
-        comp.setDecorator(new EntityContainerCollapsableDecorator<BillableItem>(VistaImages.INSTANCE));
+//        comp.setDecorator(new EntityContainerCollapsableDecorator<BillableItem>(VistaImages.INSTANCE));
 
         main.setH1(++row, 0, 2, proto().version().leaseProducts().getMeta().getCaption());
         main.setWidget(++row, 0, comp);
@@ -339,8 +336,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (value != null) {
                     if (getValue().lease().status().getValue() == Lease.Status.Application) { // lease application:
-                        Date dateToCompare = getValue().lease().creationDate().isNull() ? ClientContext.getServerDate() : getValue().lease().creationDate()
-                                .getValue();
+                        LogicalDate dateToCompare = getValue().lease().creationDate().isNull() ? new LogicalDate(ClientContext.getServerDate()) : getValue()
+                                .lease().creationDate().getValue();
                         return !value.before(dateToCompare) ? null : new ValidationError(component, i18n
                                 .tr("The Date Must Be Later Than Or Equal To Application Creaion Date"));
                     }
