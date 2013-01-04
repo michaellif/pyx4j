@@ -53,6 +53,7 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
 
     public EntityContainerCollapsableDecorator(WidgetsImages images) {
         super(images);
+
         addToggleHandler(new ToggleHandler() {
 
             @Override
@@ -85,11 +86,11 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
     }
 
     @Override
-    public void setComponent(final CEntityContainer<E> viewer) {
-        setWidget(viewer.createContent());
-        toolbar.setEntityContainer(viewer);
+    public void setComponent(final CEntityContainer<E> entityContainer) {
+        contentHolder.setWidget(entityContainer.createContent());
+        toolbar.setEntityContainer(entityContainer);
 
-        viewer.addPropertyChangeHandler(new PropertyChangeHandler() {
+        entityContainer.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.isEventOfType(PropertyName.repopulated)) {
@@ -97,10 +98,10 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
                 }
                 if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
                     String message = null;
-                    if (viewer.isUnconditionalValidationErrorRendering()) {
-                        message = viewer.getValidationResults().getValidationShortMessage();
+                    if (entityContainer.isUnconditionalValidationErrorRendering()) {
+                        message = entityContainer.getValidationResults().getValidationShortMessage();
                     } else {
-                        ArrayList<ValidationError> errors = viewer.getValidationResults().getValidationErrors();
+                        ArrayList<ValidationError> errors = entityContainer.getValidationResults().getValidationErrors();
                         ValidationResults results = new ValidationResults();
                         for (ValidationError validationError : errors) {
                             CComponent<?, ?> originator = validationError.getOriginator();
@@ -114,7 +115,7 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
                 }
             }
         });
-        viewer.addValueChangeHandler(new ValueChangeHandler<E>() {
+        entityContainer.addValueChangeHandler(new ValueChangeHandler<E>() {
             @Override
             public void onValueChange(ValueChangeEvent<E> event) {
                 toolbar.update(isExpended());
