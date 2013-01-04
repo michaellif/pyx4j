@@ -362,6 +362,38 @@ END;
 $$
 LANGUAGE plpgsql VOLATILE;
 
+/**
+***     ===============================================================================================
+***
+***             Most useful for re-creating  sequences in development environment 
+***             for schema comparison. 
+***
+***     ===============================================================================================
+**/
+
+CREATE OR REPLACE FUNCTION _dba_.recreate_dev_sequences(v_seq_schema_name TEXT) RETURNS VOID AS
+$$
+DECLARE
+        v_seq_name              VARCHAR(64);
+        v_max_value             BIGINT;
+BEGIN
+        FOR     v_seq_name IN 
+        SELECT  relname
+        FROM    pg_class a
+        JOIN    pg_namespace b ON (a.relnamespace = b.oid)
+        WHERE   a.relkind = 'S'
+        AND     b.nspname = v_seq_schema_name
+        LOOP
+               EXECUTE 'SELECT nextval('''||v_seq_schema_name||'.'||v_seq_name||''')' INTO v_max_value;
+               EXECUTE 'DROP SEQUENCE '||v_seq_schema_name||'.'||v_seq_name;
+               EXECUTE 'CREATE SEQUENCE '||v_seq_schema_name||'.'||v_seq_name||' START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1';   
+               EXECUTE 'ALTER SEQUENCE '||v_seq_schema_name||'.'||v_seq_name||' RESTART WITH '||v_max_value;                                          
+        END LOOP;
+END;
+$$
+LANGUAGE plpgsql VOLATILE;
+
+
 CREATE OR REPLACE FUNCTION _dba_.table_diff (v_source_schema text, v_target_schema text, v_table text)
 RETURNS TABLE (table_name VARCHAR(64),column_name VARCHAR(64),data_type	VARCHAR(64),is_nullable	BOOLEAN,schema_version VARCHAR(12))
 AS
