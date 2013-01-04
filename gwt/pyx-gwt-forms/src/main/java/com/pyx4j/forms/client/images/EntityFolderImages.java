@@ -36,8 +36,6 @@ public interface EntityFolderImages extends WidgetsImages, IconButtonImages {
 
     MoveDownIconButtonImages moveDownButton();
 
-    ImageResource warn();
-
     public interface MoveUpIconButtonImages extends IconButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)

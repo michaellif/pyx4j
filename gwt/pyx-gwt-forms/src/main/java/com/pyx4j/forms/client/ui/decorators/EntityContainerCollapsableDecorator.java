@@ -26,9 +26,9 @@ import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.widgets.client.CollapsablePanel;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
-public class FormCollapsableDecorator<E extends IEntity> extends CollapsablePanel implements IDecorator<CEntityContainer<E>> {
+public class EntityContainerCollapsableDecorator<E extends IEntity> extends CollapsablePanel implements IDecorator<CEntityContainer<E>> {
 
-    public FormCollapsableDecorator(WidgetsImages images) {
+    public EntityContainerCollapsableDecorator(WidgetsImages images) {
         super(images);
     }
 

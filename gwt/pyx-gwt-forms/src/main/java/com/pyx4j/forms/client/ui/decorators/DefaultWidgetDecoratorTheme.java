@@ -32,7 +32,9 @@ public class DefaultWidgetDecoratorTheme extends Theme {
     public static enum StyleName implements IStyleName {
         WidgetDecorator, WidgetDecoratorLabelHolder, WidgetDecoratorLabel, WidgetDecoratorMandatoryImage, WidgetDecoratorInfoImage,
 
-        WidgetDecoratorContentPanel, WidgetDecoratorComponent, WidgetDecoratorComponentHolder
+        WidgetDecoratorContentPanel, WidgetDecoratorComponent, WidgetDecoratorComponentHolder,
+
+        FormDecorator, FormDecoratorCollapsedCaption
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -107,5 +109,11 @@ public class DefaultWidgetDecoratorTheme extends Theme {
         style.addProperty("border-color", "#f79494");
         style.addProperty("background-color", "#f8d8d8");
         addStyle(style);
+
+        style = new Style(".", StyleName.FormDecoratorCollapsedCaption);
+        style.addProperty("font-size", "1.1em");
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
     }
 }

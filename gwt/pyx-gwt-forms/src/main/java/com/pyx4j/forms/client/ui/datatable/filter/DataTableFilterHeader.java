@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.images.EntityFolderImages;
-import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
+import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
 public class DataTableFilterHeader extends HorizontalPanel {
@@ -61,7 +61,7 @@ public class DataTableFilterHeader extends HorizontalPanel {
         add(collapseImageHolder);
 
         caption = new Label("Filter");
-        caption.setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderBoxDecoratorCollapsedCaption.name());
+        caption.setStyleName(DefaultWidgetDecoratorTheme.StyleName.FormDecoratorCollapsedCaption.name());
 
         add(caption);
         setCellVerticalAlignment(caption, HorizontalPanel.ALIGN_MIDDLE);

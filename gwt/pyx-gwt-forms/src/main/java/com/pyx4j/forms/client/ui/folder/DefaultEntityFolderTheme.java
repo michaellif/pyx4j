@@ -34,7 +34,7 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         EntityFolderRemoveButton, EntityFolderUpButton, EntityFolderDownButton, EntityFolderCustomButton,
 
         //Box
-        EntityFolderBoxItem, EntityFolderBoxDecorator, EntityFolderBoxItemDecorator, EntityFolderBoxDecoratorCollapsedCaption,
+        EntityFolderBoxItem, EntityFolderBoxDecorator, EntityFolderBoxItemDecorator,
 
         //Table
         EntityFolderRowItem, EntityFolderTableDecorator, EntityFolderRowItemDecorator, EntityFolderTableHeader, EntityFolderTableHeaderLabel
@@ -86,11 +86,6 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         style = new Style(".", StyleName.EntityFolderBoxItemDecorator, ":hover");
         style.addProperty("border", "solid 1px");
         style.addProperty("border-color", getBackgroundColor());
-        addStyle(style);
-
-        style = new Style(".", StyleName.EntityFolderBoxDecoratorCollapsedCaption);
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("font-weight", "bold");
         addStyle(style);
 
         style = new Style(".", StyleName.EntityFolderRowItemDecorator);

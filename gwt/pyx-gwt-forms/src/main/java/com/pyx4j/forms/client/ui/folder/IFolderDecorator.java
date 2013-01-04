@@ -24,7 +24,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
@@ -39,14 +38,5 @@ public interface IFolderDecorator<E extends IEntity> extends IDecorator<CEntityF
 
     @Override
     void setComponent(CEntityFolder<E> folder);
-
-    public enum DecoratorsIds implements IDebugId {
-        ActionPanel, Validation, Label, Mandatory, BoxFolderItemToolbar, TableFolderDecorator, TableFolderItemDecorator;
-
-        @Override
-        public String debugId() {
-            return name();
-        }
-    }
 
 }

@@ -35,6 +35,8 @@ public interface WidgetsImages extends ClientBundle {
 
     ImageResource collapse();
 
+    ImageResource warn();
+
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     ImageResource viewMenu();
 

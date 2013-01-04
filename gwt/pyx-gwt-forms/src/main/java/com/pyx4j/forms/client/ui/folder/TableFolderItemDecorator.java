@@ -41,6 +41,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
+import com.pyx4j.forms.client.ui.decorators.DecoratorDebugIds;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.forms.client.validators.ValidationResults;
 
@@ -126,16 +127,16 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     @Override
     public void onSetDebugId(IDebugId parentDebugId) {
         this.parentDebugId = parentDebugId;
-        validationMessageHolder.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(IFolderDecorator.DecoratorsIds.TableFolderItemDecorator,
-                IFolderDecorator.DecoratorsIds.Label)).debugId());
+        validationMessageHolder.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(DecoratorDebugIds.TableFolderItemDecorator,
+                DecoratorDebugIds.Label)).debugId());
     }
 
     @Override
     public void adoptItemActionsBar() {
         ItemActionsBar actionsBar = getFolderItem().getItemActionsBar();
         actionsPanelHolder.setWidget(actionsBar);
-        actionsBar.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(IFolderDecorator.DecoratorsIds.TableFolderItemDecorator,
-                IFolderDecorator.DecoratorsIds.ActionPanel)).debugId());
+        actionsBar.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(DecoratorDebugIds.TableFolderItemDecorator,
+                DecoratorDebugIds.ActionPanel)).debugId());
         addDomHandler(new MouseOverHandler() {
             @Override
             public void onMouseOver(MouseOverEvent event) {

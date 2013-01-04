@@ -45,6 +45,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.ui.decorators.DecoratorDebugIds;
 
 public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E> {
 
@@ -89,9 +90,8 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
                 mandatoryImage.setTitle("This field is mandatory");
                 mandatoryImage.setVisible(false);
 
-                mandatoryImage.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.TableFolderDecorator, column.getObject().getMeta()
-                        .getFieldName()
-                        + "-" + IFolderDecorator.DecoratorsIds.Mandatory).debugId());
+                mandatoryImage.ensureDebugId(new CompositeDebugId(DecoratorDebugIds.TableFolderDecorator, column.getObject().getMeta().getFieldName() + "-"
+                        + DecoratorDebugIds.Mandatory).debugId());
 
                 headerLabelPanel.add(mandatoryImage);
                 headerLabelPanel.setCellWidth(mandatoryImage, "1px");

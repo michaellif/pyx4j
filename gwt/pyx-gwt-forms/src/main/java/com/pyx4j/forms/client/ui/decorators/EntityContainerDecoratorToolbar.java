@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui.folder;
+package com.pyx4j.forms.client.ui.decorators;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -26,13 +26,16 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.forms.client.ui.CEntityContainer;
+import com.pyx4j.widgets.client.images.WidgetsImages;
 
-public class BoxFolderItemToolbar extends HorizontalPanel {
+public class EntityContainerDecoratorToolbar extends HorizontalPanel {
 
     public static enum DebugIds implements IDebugId {
         Caption, Decorator, ImageWarn, TitleIcon;
@@ -43,7 +46,7 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         }
     }
 
-    private final BoxFolderItemDecorator<?> decorator;
+    private CEntityContainer<?> entityContainer;
 
     private final SimplePanel actionsPanelHolder;
 
@@ -53,24 +56,18 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
 
     private final Image titleIcon;
 
-    public BoxFolderItemToolbar(final BoxFolderItemDecorator<?> decorator) {
+    private final HorizontalPanel captionHolder;
 
-        this.decorator = decorator;
+    public EntityContainerDecoratorToolbar(WidgetsImages images) {
 
         setWidth("100%");
 
-        HorizontalPanel captionHolder = new HorizontalPanel();
+        captionHolder = new HorizontalPanel();
         captionHolder.getElement().getStyle().setMarginLeft(5, Unit.PX);
         captionHolder.getElement().getStyle().setMarginRight(5, Unit.PX);
-        captionHolder.addDomHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                setExpended(!decorator.isExpended());
-            }
-        }, ClickEvent.getType());
 
         caption = new Label("");
-        caption.setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderBoxDecoratorCollapsedCaption.name());
+        caption.setStyleName(DefaultWidgetDecoratorTheme.StyleName.FormDecoratorCollapsedCaption.name());
 
         titleIcon = new Image();
         titleIcon.getElement().getStyle().setMarginTop(2, Unit.PX);
@@ -85,7 +82,7 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         setCellVerticalAlignment(captionHolder, HorizontalPanel.ALIGN_MIDDLE);
         setCellWidth(captionHolder, "100%");
 
-        warnImage = new Image(decorator.getImages().warn());
+        warnImage = new Image(images.warn());
         warnImage.setVisible(false);
         warnImage.getElement().getStyle().setMargin(2, Unit.PX);
         warnImage.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
@@ -94,27 +91,26 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         actionsPanelHolder = new SimplePanel();
         add(actionsPanelHolder);
 
-        decorator.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.Decorator).debugId());
-        caption.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.Caption).debugId());
-        titleIcon.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.TitleIcon).debugId());
-        warnImage.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.ImageWarn).debugId());
-
-        update(decorator.isExpended());
+        caption.ensureDebugId(new CompositeDebugId(DecoratorDebugIds.BoxFolderItemToolbar, DebugIds.Caption).debugId());
+        titleIcon.ensureDebugId(new CompositeDebugId(DecoratorDebugIds.BoxFolderItemToolbar, DebugIds.TitleIcon).debugId());
+        warnImage.ensureDebugId(new CompositeDebugId(DecoratorDebugIds.BoxFolderItemToolbar, DebugIds.ImageWarn).debugId());
 
     }
 
-    private void setExpended(boolean expended) {
-        decorator.setExpended(expended);
+    public void addCaptionHolderClickHandler(ClickHandler clickHandler) {
+        captionHolder.addDomHandler(clickHandler, ClickEvent.getType());
     }
 
     public void update(boolean expanded) {
-        if (decorator.getFolderItem() != null && decorator.getFolderItem().getValue() != null) {
-            setCaption(decorator.getFolderItem().getValue().getStringView());
+        if (entityContainer != null && entityContainer.getValue() != null) {
+            setCaption(entityContainer.getValue().getStringView());
         }
         caption.setVisible(!expanded);
     }
 
-    public void setTitleIcon(ImageResource icon) {
+    public void setEntityContainer(CEntityContainer<?> entityContainer) {
+        this.entityContainer = entityContainer;
+        ImageResource icon = entityContainer.getIcon();
         if (icon != null) {
             titleIcon.setResource(icon);
             titleIcon.setVisible(true);
@@ -127,8 +123,8 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         caption.setText(text);
     }
 
-    public void setActionsBar(ItemActionsBar actionsPanel) {
-        actionsPanelHolder.setWidget(actionsPanel);
+    public void setActionsBar(IsWidget actionsBar) {
+        actionsPanelHolder.setWidget(actionsBar);
     }
 
     public void setWarningMessage(String message) {

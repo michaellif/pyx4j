@@ -26,6 +26,8 @@ import static com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme.StyleNam
 import java.util.ArrayList;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -43,17 +45,16 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.decorators.DecoratorDebugIds;
+import com.pyx4j.forms.client.ui.decorators.EntityContainerDecoratorToolbar;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.gwt.commons.BrowserType;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.CollapsablePanel;
 import com.pyx4j.widgets.client.event.shared.ToggleEvent;
 import com.pyx4j.widgets.client.event.shared.ToggleHandler;
 
 public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
-
-    private static final I18n i18n = I18n.get(BoxFolderItemDecorator.class);
 
     public static enum DebugIds implements IDebugId {
         BoxFolderItemDecorator, ToolBar;
@@ -66,7 +67,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
     private CollapsablePanel collapsablePanel;
 
-    private BoxFolderItemToolbar toolbar;
+    private EntityContainerDecoratorToolbar toolbar;
 
     private SimplePanel contentHolder;
 
@@ -98,7 +99,17 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         mainPanel.setWidth("100%");
         collapsablePanel.setWidget(mainPanel);
 
-        toolbar = new BoxFolderItemToolbar(this);
+        ensureDebugId(new CompositeDebugId(DecoratorDebugIds.BoxFolderItemToolbar, EntityContainerDecoratorToolbar.DebugIds.Decorator).debugId());
+
+        toolbar = new EntityContainerDecoratorToolbar(this.getImages());
+        toolbar.addCaptionHolderClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                setExpended(!isExpended());
+            }
+        });
+        toolbar.update(isExpended());
+
         mainPanel.add(toolbar);
 
         contentHolder = new SimplePanel();
@@ -112,7 +123,8 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     public void setComponent(final CEntityFolderItem<E> folderItem) {
         super.setComponent(folderItem);
         contentHolder.setWidget(getContent());
-        toolbar.setTitleIcon(folderItem.getIcon());
+        toolbar.setEntityContainer(folderItem);
+
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
@@ -180,8 +192,8 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         if (BrowserType.isIE7()) {
             actionsBar.getElement().getStyle().setMarginRight(40, Unit.PX);
         }
-        actionsBar.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar,
-                IFolderDecorator.DecoratorsIds.ActionPanel)).debugId());
+        actionsBar.ensureDebugId(new CompositeDebugId(parentDebugId,
+                new CompositeDebugId(DecoratorDebugIds.BoxFolderItemToolbar, DecoratorDebugIds.ActionPanel)).debugId());
 
         addDomHandler(new MouseOverHandler() {
             @Override

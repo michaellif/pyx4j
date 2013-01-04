@@ -67,8 +67,6 @@ public interface FormImages extends ClientBundleWithLookup {
 
     ImageResource formTooltipInfo();
 
-    ImageResource formTooltipWarn();
-
     // ----
 
     ImageResource groupBoxOpen();
