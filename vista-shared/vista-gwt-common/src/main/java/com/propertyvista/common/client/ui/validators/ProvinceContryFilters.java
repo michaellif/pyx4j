@@ -69,7 +69,7 @@ public class ProvinceContryFilters {
 
             @Override
             public void onValueChange(ValueChangeEvent<Country> event) {
-                if (event.getValue() != null & !event.getValue().isNull()) {
+                if (event.getValue() != null && !event.getValue().isNull()) {
                     if ((provinceCombo.getValue() != null)
                             && (!EqualsHelper.equals(event.getValue().name().getValue(), provinceCombo.getValue().country().name().getValue()))) {
                         provinceCombo.setValue(null);
