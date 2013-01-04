@@ -26,6 +26,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
+import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.server.AuthenticationServiceImpl;
@@ -35,6 +36,7 @@ import com.pyx4j.tester.shared.TesterAuthenticationService;
 
 public class TesterAuthenticationServiceImpl extends AuthenticationServiceImpl implements TesterAuthenticationService {
 
+    @IgnoreSessionToken
     @Override
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, AuthenticationRequest request) {
         callback.onSuccess(createAuthenticationResponse(Lifecycle.beginSession(new UserVisit(new Key("t" + System.currentTimeMillis()), null), null)));

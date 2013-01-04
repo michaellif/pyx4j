@@ -20,6 +20,7 @@
  */
 package com.pyx4j.tester.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ClosingEvent;
@@ -34,8 +35,12 @@ import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.log4gwt.rpcappender.RPCAppender;
 import com.pyx4j.log4gwt.shared.Level;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.tester.client.ui.TesterPanel;
+import com.pyx4j.tester.shared.TesterAuthenticationService;
 import com.pyx4j.widgets.client.GlassPanel;
 
 public class TesterSite extends AppSite {
@@ -78,7 +83,24 @@ public class TesterSite extends AppSite {
 
         SessionInactiveDialog.register();
 
-        TesterSite.getHistoryHandler().handleCurrentHistory();
+        ClientContext.obtainAuthenticationData(GWT.<AuthenticationService> create(TesterAuthenticationService.class), new DefaultAsyncCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (result) {
+                    TesterSite.getHistoryHandler().handleCurrentHistory();
+                } else {
+                    ClientContext.authenticate(GWT.<AuthenticationService> create(TesterAuthenticationService.class), null,
+                            new DefaultAsyncCallback<Boolean>() {
+                                @Override
+                                public void onSuccess(Boolean result) {
+                                    TesterSite.getHistoryHandler().handleCurrentHistory();
+
+                                }
+                            });
+                }
+            }
+        });
+
     }
 
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
