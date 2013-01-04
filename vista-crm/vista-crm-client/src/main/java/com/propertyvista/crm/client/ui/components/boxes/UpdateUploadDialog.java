@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud;
+package com.propertyvista.crm.client.ui.components.boxes;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;

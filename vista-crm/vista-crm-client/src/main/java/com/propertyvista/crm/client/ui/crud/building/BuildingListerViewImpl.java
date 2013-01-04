@@ -19,8 +19,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.crm.client.ui.components.boxes.UpdateUploadDialog;
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.UpdateUploadDialog;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.BuildingDTO;
