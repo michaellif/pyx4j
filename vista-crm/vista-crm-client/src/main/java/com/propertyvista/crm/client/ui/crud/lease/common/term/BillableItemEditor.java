@@ -151,6 +151,16 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         return main;
     }
 
+    void updateServiceItemEditability() {
+        if (isEditable()) {
+            boolean isLeaseApproved = !leaseTerm.getValue().lease().approvalDate().isNull();
+
+            // set editable for non-approved leases (and multiple service items):
+            get(proto().agreedPrice()).setEditable(!isLeaseApproved);
+            get(proto().item()).setEditable(!isLeaseApproved && leaseTerm.getValue().selectedServiceItems().size() > 1);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     protected void onValueSet(boolean populate) {
@@ -158,18 +168,12 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
         // tweak UI for ProductItem:
         if (!getValue().item().isEmpty()) {
-            boolean isLeaseApproved = !leaseTerm.getValue().lease().approvalDate().isNull();
-
             if (getValue().item().type().isInstanceOf(ServiceItemType.class)) {
                 // hide effective dates:
                 get(proto().effectiveDate()).setVisible(false);
                 get(proto().expirationDate()).setVisible(false);
 
-                if (isEditable()) {
-                    // set editable for non-agreed leases (and multiple service items):
-                    get(proto().agreedPrice()).setEditable(!isLeaseApproved);
-                    get(proto().item()).setEditable(!isLeaseApproved && leaseTerm.getValue().selectedServiceItems().size() > 1);
-                }
+                updateServiceItemEditability();
             } else if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
                 // show/hide effective dates (hide expiration for non-recurring; show in editor, hide in viewer if empty):
                 boolean recurring = isRecurringFeature(getValue().item().product());
@@ -187,7 +191,8 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
                     item.setRemovable(!isMandatoryFeature(getValue().item().product()));
 
-                    if (isLeaseApproved) {
+                    // if lease is approved:
+                    if (!leaseTerm.getValue().lease().approvalDate().isNull()) {
                         LogicalDate expirationDate = item.getValue().expirationDate().getValue();
                         if ((expirationDate != null) && expirationDate.before(ClientContext.getServerDate())) {
                             item.setViewable(true);
