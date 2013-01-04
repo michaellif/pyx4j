@@ -32,10 +32,9 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
     public CustomerCreditCheckForm(IFormView<CustomerCreditCheckDTO> view) {
         super(CustomerCreditCheckDTO.class, view);
 
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
-        content.setH1(++row, 0, 1, i18n.tr("Screene"));
-        content.setWidget(++row, 0, inject(proto().screening().screene().person().name(), new NameEditor()));
+        content.setWidget(++row, 0, inject(proto().screening().screene().person().name(), new NameEditor(i18n.tr("Customer"))));
 
         content.setH1(++row, 0, 1, i18n.tr("Details"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheckDate())).build());
