@@ -28,12 +28,12 @@ public class TenantIO extends AbstractElementIO {
     public String leaseId;
 
     @XmlAttribute
+    public String tenantId;
+
     public String firstName;
 
-    @XmlAttribute
     public String middleName;
 
-    @XmlAttribute
     public String lastName;
 
     public String newFirstName;

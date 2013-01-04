@@ -33,6 +33,7 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.oapi.model.LeaseIO;
+import com.propertyvista.oapi.model.TenantIO;
 import com.propertyvista.oapi.model.types.LeaseStatusIO;
 import com.propertyvista.oapi.model.types.PaymentFrequencyIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
@@ -65,13 +66,15 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
         leaseIO.leaseFrom = MarshallerUtils.createIo(LogicalDateIO.class, lease.leaseFrom());
         leaseIO.leaseTo = MarshallerUtils.createIo(LogicalDateIO.class, lease.currentTerm().termTo());
 
-        Persistence.service().retrieve(lease.leaseParticipants());
+        Persistence.service().retrieveMember(lease.leaseParticipants());
         List<Person> persons = new ArrayList<Person>();
         for (LeaseParticipant<?> participant : lease.leaseParticipants()) {
             Person person = participant.customer().person();
             persons.add(person);
         }
-        leaseIO.tenants.addAll(TenantMarshaller.getInstance().marshal(persons));
+        List<TenantIO> tenants = new ArrayList<TenantIO>();
+        tenants.addAll(TenantMarshaller.getInstance().marshal(persons));
+        leaseIO.tenants = tenants;
         return leaseIO;
     }
 
@@ -109,7 +112,6 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
         }
 
         LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-        System.out.println("a");
         Lease lease = leaseFacade.create(Lease.Status.ExistingLease);
 
         lease.type().setValue(leaseIO.leaseType.getValue());

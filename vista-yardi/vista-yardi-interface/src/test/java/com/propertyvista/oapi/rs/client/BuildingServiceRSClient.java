@@ -32,7 +32,8 @@ public class BuildingServiceRSClient {
 
     public static void main(String[] args) throws MalformedURLException {
 
-        String buildingCode = String.valueOf(System.currentTimeMillis()).substring(5);
+        String buildingCode = String.valueOf(System.currentTimeMillis());
+        buildingCode = buildingCode.substring(buildingCode.length() - 8, buildingCode.length());
         createBuilding(buildingCode);
         getBuilding(buildingCode);
     }
