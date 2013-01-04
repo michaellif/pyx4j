@@ -18,12 +18,12 @@ import java.net.URL;
 
 import javax.xml.ws.Endpoint;
 
+import org.junit.After;
 import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.oapi.PortAllocator;
 import com.propertyvista.test.preloader.LocationsDataModel;
 import com.propertyvista.test.preloader.PreloadConfig;
 
@@ -35,9 +35,19 @@ public class WSOapiTestBase {
 
     private Class<?> serviceClass;
 
+    Endpoint endpoint = null;
+
     @Before
     public void initDB() throws Exception {
         VistaTestDBSetup.init();
+    }
+
+    @After
+    public void stop() {
+        if (endpoint != null) {
+            endpoint.stop();
+        }
+        endpoint = null;
     }
 
     public int getPort() {
@@ -53,8 +63,9 @@ public class WSOapiTestBase {
     }
 
     void publish(Class<?> serviceClass) throws Exception {
+        assert endpoint == null;
         this.serviceClass = serviceClass;
-        port = PortAllocator.allocatePort();
+        port = 7771;
         int monitorPort = port;
         //For TCP/IP monitor
         if (false) {
@@ -63,7 +74,7 @@ public class WSOapiTestBase {
         }
         String address = getAddress(monitorPort);
         log.info("Address: {}", address);
-        Endpoint.publish(address, Class.forName(serviceClass.getName() + "Impl").newInstance());
+        endpoint = Endpoint.publish(address, Class.forName(serviceClass.getName() + "Impl").newInstance());
     }
 
     int getHttpStatusCode(String address) throws Exception {

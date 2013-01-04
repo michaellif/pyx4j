@@ -9,6 +9,10 @@ Jetty:
 
    8822  SSHD Interface
 
+tests
+
+   7771  ports for applications in unit tests
+
 codeServerPort
    9994  vista-crm-client.launch
    9995  vista-admin-client.launch
