@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -178,15 +177,13 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         main.setWidget(++row, 0, datesPanel);
 
         // Products: --------------------------------------------------------------------------------------------------------------------------------
-        CComponent<?, ?> comp = inject(proto().currentTerm().version().leaseProducts().serviceItem(), new BillableItemViewer() {
+        main.setH1(++row, 0, 2, proto().currentTerm().version().leaseProducts().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().currentTerm().version().leaseProducts().serviceItem(), new BillableItemViewer() {
             @Override
             protected com.pyx4j.forms.client.ui.decorators.IDecorator<?> createDecorator() {
                 return new EntityContainerCollapsableDecorator<BillableItem>(VistaImages.INSTANCE);
             };
-        });
-
-        main.setH1(++row, 0, 2, proto().currentTerm().version().leaseProducts().getMeta().getCaption());
-        main.setWidget(++row, 0, comp);
+        }));
 
         main.setH2(++row, 0, 2, proto().currentTerm().version().leaseProducts().featureItems().getMeta().getCaption());
         featuresHeader = main.getWidget(row, 0);

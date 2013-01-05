@@ -277,15 +277,13 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         LeaseTermEditorView leaseTermEditorView = (isEditable() ? (LeaseTermEditorView) getParentView() : null);
 
         // Products : -----------------------------------------------------------------------------------------------------------
-        CComponent<?, ?> comp = inject(proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, leaseTermEditorView) {
+        main.setH1(++row, 0, 2, proto().version().leaseProducts().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, leaseTermEditorView) {
             @Override
             protected com.pyx4j.forms.client.ui.decorators.IDecorator<?> createDecorator() {
                 return new EntityContainerCollapsableDecorator<BillableItem>(VistaImages.INSTANCE);
             };
-        });
-
-        main.setH1(++row, 0, 2, proto().version().leaseProducts().getMeta().getCaption());
-        main.setWidget(++row, 0, comp);
+        }));
 
         main.setH2(++row, 0, 2, proto().version().leaseProducts().featureItems().getMeta().getCaption());
         featuresHeader = main.getWidget(row, 0);
