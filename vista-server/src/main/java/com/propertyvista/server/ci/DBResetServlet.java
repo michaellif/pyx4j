@@ -329,7 +329,7 @@ public class DBResetServlet extends HttpServlet {
         if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
             return name;
         } else {
-            return "test-" + name;
+            return name;
         }
     }
 
