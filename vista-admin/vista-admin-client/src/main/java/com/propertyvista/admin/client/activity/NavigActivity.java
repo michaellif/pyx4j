@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -74,6 +74,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new AdminSiteMap.Management.PMC());
         folder.addNavigItem(new AdminSiteMap.Management.OnboardingUser());
         folder.addNavigItem(new AdminSiteMap.Management.Trigger());
+        folder.addNavigItem(new AdminSiteMap.Management.BillingSetup());
         list.add(folder);
 
         // Security
@@ -90,7 +91,6 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         // Administration
         folder = new NavigFolder("System Administration");
         folder.addNavigItem(new AdminSiteMap.Administration.Maintenance());
-        folder.addNavigItem(new AdminSiteMap.Administration.SystemDefaults());
         folder.addNavigItem(new AdminSiteMap.Administration.Simulation());
         if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
             folder.addNavigItem(new AdminSiteMap.Administration.SimulatedDataPreload());

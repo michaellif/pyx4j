@@ -68,6 +68,13 @@ public class AdminSiteMap implements SiteMap {
         @PlaceProperties(navigLabel = "Runs")
         public static class Run extends CrudAppPlace {
         }
+
+        public static class BillingSetup extends CrudAppPlace {
+            // set default place type as Viewer one (we have no lister for this item!)
+            public BillingSetup() {
+                formViewerPlace(new Key(-1));
+            }
+        }
     }
 
     public static class Security extends AppPlace {
@@ -97,15 +104,6 @@ public class AdminSiteMap implements SiteMap {
             public Maintenance() {
                 formViewerPlace(new Key(-1));
             }
-        }
-
-        @PlaceProperties(navigLabel = "System Defaults", caption = "System Defaults")
-        public static class SystemDefaults extends CrudAppPlace {
-            // set default place type as Viewer one (we have no lister for this item!)
-            public SystemDefaults() {
-                formViewerPlace(new Key(-1));
-            }
-
         }
 
         @PlaceProperties(navigLabel = "Simulations")

@@ -20,7 +20,7 @@ import com.propertyvista.admin.rpc.VistaSystemDefaultsDTO;
 public class VistaSystemDefaultsEditorViewImpl extends AdminEditorViewImplBase<VistaSystemDefaultsDTO> implements VistaSystemDefaultsEditorView {
 
     public VistaSystemDefaultsEditorViewImpl() {
-        super(AdminSiteMap.Administration.SystemDefaults.class);
+        super(AdminSiteMap.Management.BillingSetup.class);
         setForm(new VistaSystemDefaultsForm(this));
     }
 

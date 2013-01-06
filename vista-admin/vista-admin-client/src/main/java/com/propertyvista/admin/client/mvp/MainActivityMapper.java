@@ -139,7 +139,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof AdminSiteMap.Administration.SystemDefaults) {
+                    } else if (place instanceof AdminSiteMap.Management.BillingSetup) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new VistaSystemDefaultsEditorAcitvity(crudPlace);

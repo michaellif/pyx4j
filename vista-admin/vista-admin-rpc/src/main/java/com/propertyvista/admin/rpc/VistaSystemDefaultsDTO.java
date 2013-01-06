@@ -28,7 +28,7 @@ public interface VistaSystemDefaultsDTO extends IEntity {
 
     DefaultEquifaxFee equifaxFees();
 
-    VistaMerchantAccount equifaxMerchantAccount();
+    VistaMerchantAccount vistaMerchantAccount();
 
     TenantSureMerchantAccount tenantSureMerchantAccount();
 }
