@@ -20,6 +20,7 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.admin.domain.vista2pmc.DefaultEquifaxFee;
+import com.propertyvista.admin.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.admin.domain.vista2pmc.TenantSureMerchantAccount;
 import com.propertyvista.admin.domain.vista2pmc.VistaMerchantAccount;
 
@@ -44,12 +45,25 @@ public class V2BPreloader extends AbstractDataPreloader {
             Persistence.service().persist(ma);
         }
         {
-            DefaultEquifaxFee efxFeee = EntityFactory.create(DefaultEquifaxFee.class);
-            efxFeee.recommendationReportPerApplicantFee().setValue(new BigDecimal("19.99"));
-            efxFeee.recommendationReportSetUpFee().setValue(new BigDecimal("0"));
-            efxFeee.fullCreditReportPerApplicantFee().setValue(new BigDecimal("19.11"));
-            efxFeee.fullCreditReportSetUpFee().setValue(new BigDecimal("150"));
-            Persistence.service().persist(efxFeee);
+            DefaultEquifaxFee fee = EntityFactory.create(DefaultEquifaxFee.class);
+            fee.recommendationReportPerApplicantFee().setValue(new BigDecimal("19.99"));
+            fee.recommendationReportSetUpFee().setValue(new BigDecimal("0"));
+            fee.fullCreditReportPerApplicantFee().setValue(new BigDecimal("19.11"));
+            fee.fullCreditReportSetUpFee().setValue(new BigDecimal("150"));
+            Persistence.service().persist(fee);
+        }
+        {
+            DefaultPaymentFees fee = EntityFactory.create(DefaultPaymentFees.class);
+            fee.ccVisaFee().setValue(new BigDecimal("1.5"));
+            fee.ccMasterCardFee().setValue(new BigDecimal("2.22"));
+            fee.ccDiscoverFee().setValue(null);
+            fee.ccAmexFee().setValue(null);
+            fee.eChequeFee().setValue(new BigDecimal("1.50"));
+            fee.eftFee().setValue(new BigDecimal("1.50"));
+            fee.interacCaledonFee().setValue(new BigDecimal("1.50"));
+            fee.interacPaymentPadFee().setValue(new BigDecimal("19.99"));
+            fee.interacVisaFee().setValue(new BigDecimal("0.75"));
+            Persistence.service().persist(fee);
         }
         return null;
     }

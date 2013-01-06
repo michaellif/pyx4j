@@ -13,12 +13,37 @@
  */
 package com.propertyvista.domain.pmc.fee;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface AbstractPaymentFees extends IEntity {
 
+    /**
+     * this fee is percent of a transaction
+     */
+    IPrimitive<BigDecimal> ccVisaFee();
+
+    IPrimitive<BigDecimal> ccMasterCardFee();
+
+    IPrimitive<BigDecimal> ccDiscoverFee();
+
+    IPrimitive<BigDecimal> ccAmexFee();
+
+    //--
+
+    IPrimitive<BigDecimal> eChequeFee();
+
+    IPrimitive<BigDecimal> eftFee();
+
+    IPrimitive<BigDecimal> interacCaledonFee();
+
+    IPrimitive<BigDecimal> interacPaymentPadFee();
+
+    IPrimitive<BigDecimal> interacVisaFee();
 }

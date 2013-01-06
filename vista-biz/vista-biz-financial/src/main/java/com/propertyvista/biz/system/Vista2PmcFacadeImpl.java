@@ -23,10 +23,12 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.admin.domain.vista2pmc.DefaultEquifaxFee;
+import com.propertyvista.admin.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.biz.financial.payment.MerchantTerminalSourceTenantSure;
 import com.propertyvista.biz.financial.payment.MerchantTerminalSourceVista;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 import com.propertyvista.domain.pmc.fee.PmcEquifaxFee;
@@ -61,18 +63,37 @@ public class Vista2PmcFacadeImpl implements Vista2PmcFacade {
             }
         });
 
-        AbstractEquifaxFee efxFeee = EntityFactory.create(AbstractEquifaxFee.class);
-        setNonNullMember(efxFeee.recommendationReportPerApplicantFee(), pmc.equifaxFee(), defaultEfxFeee);
-        setNonNullMember(efxFeee.recommendationReportSetUpFee(), pmc.equifaxFee(), defaultEfxFeee);
-        setNonNullMember(efxFeee.fullCreditReportPerApplicantFee(), pmc.equifaxFee(), defaultEfxFeee);
-        setNonNullMember(efxFeee.fullCreditReportSetUpFee(), pmc.equifaxFee(), defaultEfxFeee);
-        return efxFeee;
+        AbstractEquifaxFee fee = EntityFactory.create(AbstractEquifaxFee.class);
+        setNonNullMember(fee.recommendationReportPerApplicantFee(), pmc.equifaxFee(), defaultEfxFeee);
+        setNonNullMember(fee.recommendationReportSetUpFee(), pmc.equifaxFee(), defaultEfxFeee);
+        setNonNullMember(fee.fullCreditReportPerApplicantFee(), pmc.equifaxFee(), defaultEfxFeee);
+        setNonNullMember(fee.fullCreditReportSetUpFee(), pmc.equifaxFee(), defaultEfxFeee);
+        return fee;
     }
 
     @Override
     public AbstractPaymentFees getPaymentFees() {
-        // TODO Auto-generated method stub
-        return null;
+        final Pmc pmc = VistaDeployment.getCurrentPmc().duplicate();
+        DefaultPaymentFees defaultFeee = TaskRunner.runInAdminNamespace(new Callable<DefaultPaymentFees>() {
+            @Override
+            public DefaultPaymentFees call() {
+                Persistence.service().retrieveMember(pmc.paymentTypeInfo());
+                return Persistence.service().retrieve(EntityQueryCriteria.create(DefaultPaymentFees.class));
+            }
+        });
+        PmcPaymentTypeInfo pmcFee = pmc.paymentTypeInfo();
+
+        AbstractPaymentFees fee = EntityFactory.create(AbstractPaymentFees.class);
+        setNonNullMember(fee.ccVisaFee(), pmcFee, defaultFeee);
+        setNonNullMember(fee.ccMasterCardFee(), pmcFee, defaultFeee);
+        setNonNullMember(fee.ccDiscoverFee(), pmcFee, defaultFeee);
+        setNonNullMember(fee.ccAmexFee(), pmcFee, defaultFeee);
+        setNonNullMember(fee.eChequeFee(), pmcFee, defaultFeee);
+        setNonNullMember(fee.eftFee(), pmcFee, defaultFeee);
+        setNonNullMember(fee.interacCaledonFee(), pmcFee, defaultFeee);
+        setNonNullMember(fee.interacPaymentPadFee(), pmcFee, defaultFeee);
+        setNonNullMember(fee.interacVisaFee(), pmcFee, defaultFeee);
+        return fee;
     }
 
     @Override
