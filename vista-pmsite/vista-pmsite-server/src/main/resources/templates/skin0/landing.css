@@ -56,6 +56,7 @@
 	width: 128px;
 }
 
+
 .quickSearchPanel .submit {
 	background: url("images/btn.png") no-repeat scroll 0 0
 		transparent;
@@ -63,6 +64,10 @@
 	margin: 15px auto 0;
 	overflow: hidden;
 	width: 128px;
+}
+
+.quickSearchPanel .submit:hover {
+	background-position:0 -32px;
 }
 
 .vista-pmsite-mainWrap {

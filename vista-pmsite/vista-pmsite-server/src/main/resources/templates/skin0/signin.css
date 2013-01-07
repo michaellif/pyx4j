@@ -52,6 +52,10 @@
 	padding:20px 0 0 60px;
 }
 
+.vista-pmsite-signInPage .signInFormWrap .signInFormInput:hover input[type=submit]{
+	background-position:0 -32px;
+}
+
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput label {
 	display:inline-block;
 	width:120px;

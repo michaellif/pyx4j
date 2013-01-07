@@ -62,6 +62,10 @@
     margin-top:30px;
 }
 
+.advancedSearchWideWrap:hover input[type=submit] {
+	background-position:0 -32px;
+}	
+
 .advancedSearchWideWrap label {
 	display:block;
 	padding:6px 0;
@@ -115,7 +119,6 @@
 }
 .advancedSearchWideWrap .searchTypeBox input[type=text] {
 	width:262px;
-	margin:1px;
 }
 .advancedSearchWideWrap .searchCommonBox {
 	clear:both;
@@ -167,7 +170,8 @@
 }
 .advancedSearchWideWrap .searchAmenityBox .amenityList label {
 	display:inline-block;
-	width:88px;
+	width: 89px;
+	padding-bottom: 0;
 }
 .advancedSearchWideWrap .searchAmenityBox .amenityList label:lang(fr) {
 	display:inline-block;

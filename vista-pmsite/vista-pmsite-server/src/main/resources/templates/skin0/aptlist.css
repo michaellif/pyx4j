@@ -43,6 +43,10 @@
 	margin-top:30px;
 }
 
+.advancedSearchNarrowWrap:hover input[type=submit] {
+	background-position:0 -32px;
+}
+
 .advancedSearchNarrowWrap label {
 	display: block;
 	padding: 4px 0;
