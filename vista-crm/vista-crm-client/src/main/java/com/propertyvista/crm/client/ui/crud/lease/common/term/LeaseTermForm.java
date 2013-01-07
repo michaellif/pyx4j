@@ -168,6 +168,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                 };
             }
         }), 20).build());
+        get(proto().building()).setMandatory(true);
 
         detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease().unit(), new CEntitySelectorHyperlink<AptUnit>() {
             @Override
