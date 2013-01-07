@@ -28,7 +28,7 @@ public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
     public enum Target {
 
-        PMC, Tenant
+        PMC, Tenant, PmcCaledonTemplate, PmcPaymentPad;
 
     }
 

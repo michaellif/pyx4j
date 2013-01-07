@@ -29,6 +29,6 @@ public interface LegalDocument extends IEntity {
     IPrimitive<CompiledLocale> locale();
 
     @Editor(type = Editor.EditorType.richtextarea)
-    @Length(20845)
+    @Length(30000)
     IPrimitive<String> content();
 }

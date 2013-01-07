@@ -31,33 +31,10 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
     @Override
     public String create() {
 
-        String tenantVistaTerms = "Tenant VistaTerms preload failed";
-        String pmcVistaTerms = "Pmc VistaTerms preload failed";
-        try {
-            tenantVistaTerms = IOUtils.getTextResource("TenantVistaTerms.html", VistaTermsPreloader.class);
-            pmcVistaTerms = IOUtils.getTextResource("PmcVistaTerms.html", VistaTermsPreloader.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        LegalDocument tenantTermsDoc = EntityFactory.create(LegalDocument.class);
-        tenantTermsDoc.locale().setValue(CompiledLocale.en);
-        tenantTermsDoc.content().setValue(tenantVistaTerms);
-        VistaTerms tenantTerms = EntityFactory.create(VistaTerms.class);
-        tenantTerms.target().setValue(Target.Tenant);
-        tenantTerms.version().document().add(tenantTermsDoc);
-        tenantTerms.saveAction().setValue(SaveAction.saveAsFinal);
-        Persistence.service().persist(tenantTerms);
-        Persistence.service().commit();
-
-        VistaTerms pmcTerms = EntityFactory.create(VistaTerms.class);
-        LegalDocument pmcTermsDoc = EntityFactory.create(LegalDocument.class);
-        pmcTermsDoc.locale().setValue(CompiledLocale.en);
-        pmcTermsDoc.content().setValue(pmcVistaTerms);
-        pmcTerms.target().setValue(Target.PMC);
-        pmcTerms.version().document().add(pmcTermsDoc);
-        pmcTerms.saveAction().setValue(SaveAction.saveAsFinal);
-        Persistence.service().persist(pmcTerms);
-        Persistence.service().commit();
+        createTerms(Target.Tenant, "TenantVistaTerms.html");
+        createTerms(Target.PMC, "PmcVistaTerms.html");
+        createTerms(Target.PmcCaledonTemplate, "PmcCaledonTemplateVistaTerms.html");
+        createTerms(Target.PmcPaymentPad, "PmcPaymentPadVistaTerms.html");
 
         return null;
     }
@@ -65,6 +42,28 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
     @Override
     public String delete() {
         return null;
+    }
+
+    public void createTerms(VistaTerms.Target target, String termsSourceFile) {
+
+        String termsContent;
+        try {
+            termsContent = IOUtils.getTextResource(termsSourceFile, VistaTermsPreloader.class);
+        } catch (IOException e) {
+            throw new Error(e);
+        }
+
+        LegalDocument legalDocument = EntityFactory.create(LegalDocument.class);
+        legalDocument.locale().setValue(CompiledLocale.en);
+        legalDocument.content().setValue(termsContent);
+
+        VistaTerms vistaTerms = EntityFactory.create(VistaTerms.class);
+        vistaTerms.target().setValue(target);
+        vistaTerms.version().document().add(legalDocument);
+        vistaTerms.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.service().persist(vistaTerms);
+        Persistence.service().commit();
+
     }
 
 }
