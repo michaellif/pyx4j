@@ -175,10 +175,12 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
 
             Persistence.service().commit();
         } finally {
-            if (success) {
-                ScreeningPayments.compleateTransaction(pcc.transactionId().getValue());
-            } else {
-                ScreeningPayments.preAuthorizationReversal(pcc.transactionId().getValue());
+            if (!pcc.transactionId().isNull()) {
+                if (success) {
+                    ScreeningPayments.compleateTransaction(pcc.transactionId().getValue());
+                } else {
+                    ScreeningPayments.preAuthorizationReversal(pcc.transactionId().getValue());
+                }
             }
         }
 

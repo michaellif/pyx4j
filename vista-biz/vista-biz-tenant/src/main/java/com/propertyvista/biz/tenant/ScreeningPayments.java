@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.tenant;
 
+import java.math.BigDecimal;
 import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
@@ -62,6 +63,11 @@ class ScreeningPayments {
         default:
             throw new IllegalArgumentException();
         }
+
+        if (transaction.amount().getValue().compareTo(BigDecimal.ZERO) == 0) {
+            return null;
+        }
+
         transaction.paymentMethod().set(equifaxInfo.paymentMethod());
         if (equifaxInfo.paymentMethod().isNull()) {
             throw new UserRuntimeException(i18n.tr("Credit Card is not setup for Credit Check payments"));
@@ -72,6 +78,7 @@ class ScreeningPayments {
             public Void call() {
                 Persistence.service().persist(transaction);
                 Persistence.service().commit();
+                Persistence.service().retrieve(transaction.paymentMethod());
                 return null;
             }
         });
@@ -112,7 +119,9 @@ class ScreeningPayments {
         final CustomerCreditCheckTransaction transaction = TaskRunner.runInAdminNamespace(new Callable<CustomerCreditCheckTransaction>() {
             @Override
             public CustomerCreditCheckTransaction call() {
-                return Persistence.service().retrieve(CustomerCreditCheckTransaction.class, transactionId);
+                CustomerCreditCheckTransaction transaction = Persistence.service().retrieve(CustomerCreditCheckTransaction.class, transactionId);
+                Persistence.service().retrieve(transaction.paymentMethod());
+                return transaction;
             }
         });
 
@@ -140,7 +149,9 @@ class ScreeningPayments {
         final CustomerCreditCheckTransaction transaction = TaskRunner.runInAdminNamespace(new Callable<CustomerCreditCheckTransaction>() {
             @Override
             public CustomerCreditCheckTransaction call() {
-                return Persistence.service().retrieve(CustomerCreditCheckTransaction.class, transactionId);
+                CustomerCreditCheckTransaction transaction = Persistence.service().retrieve(CustomerCreditCheckTransaction.class, transactionId);
+                Persistence.service().retrieve(transaction.paymentMethod());
+                return transaction;
             }
         });
 
