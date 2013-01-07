@@ -54,7 +54,7 @@ public class BuildingsMerger {
             }
 
             if (existing == null) {
-                log.info("Did not find a bulding for property code {}", imported.propertyCode().getValue());
+                log.debug("Did not find a bulding for property code {}", imported.propertyCode().getValue());
                 merged.add(imported);
             } else {
                 merge(imported, existing);

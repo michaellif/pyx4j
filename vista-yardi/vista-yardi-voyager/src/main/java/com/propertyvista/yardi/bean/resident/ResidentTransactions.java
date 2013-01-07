@@ -23,10 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ResidentTransactions {
     private List<Property> properties = new ArrayList<Property>();
 
-    public ResidentTransactions() {
-        System.out.println("ResidentTransactions");
-    }
-
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

@@ -45,7 +45,7 @@ public class GetResidentTransactionsLifecycle {
     }
 
     public Model download(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
-        ResidentTransactions transactions = YardiTransactions.getResidentTransactions(c, yp);
+        ResidentTransactions transactions = YardiTransactions.getResidentTransactions(c, yp, yp.getYardiPropertyId());
 
         GetResidentTransactionsMapper mapper = new GetResidentTransactionsMapper();
         mapper.map(transactions);

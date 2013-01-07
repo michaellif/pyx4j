@@ -28,8 +28,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.yardi.Model;
-import com.propertyvista.yardi.bean.mits.YardiCustomer;
 import com.propertyvista.yardi.bean.mits.Information;
+import com.propertyvista.yardi.bean.mits.YardiCustomer;
 import com.propertyvista.yardi.bean.resident.Property;
 import com.propertyvista.yardi.bean.resident.RTCustomer;
 import com.propertyvista.yardi.bean.resident.RTUnit;
@@ -90,8 +90,8 @@ public class GetResidentTransactionsMapper {
         Information info = unitFrom.getUnit().getInformation();
         unitTo.info().number().setValue(info.getUnitId());
 
-        unitTo.info()._bedrooms().setValue(info.getUnitBedrooms());
-        unitTo.info()._bathrooms().setValue(info.getUnitBathrooms());
+        unitTo.info()._bedrooms().setValue(info.getUnitBedrooms() != null ? info.getUnitBedrooms().intValue() : null);
+        unitTo.info()._bathrooms().setValue(info.getUnitBathrooms() != null ? info.getUnitBathrooms().intValue() : null);
         unitTo.info().area().setValue(info.getMaxSquareFeet().doubleValue());
         unitTo.info().areaUnits().setValue(AreaMeasurementUnit.sqFeet);
 

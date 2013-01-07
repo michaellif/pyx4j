@@ -42,6 +42,8 @@ public class YardiServicesClient {
         //test services
         propertyService.updateBuildings(yp);
         propertyService.updateBuilding("anya_4", yp);
+        propertyService.updateUnits("anya_4", yp);
+        //throws exception 
+        //propertyService.updateUnit("anya_4", "555", yp);
     }
-
 }

@@ -13,8 +13,11 @@
  */
 package com.propertyvista.yardi;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
@@ -22,12 +25,19 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
+import com.propertyvista.yardi.bean.resident.RTCustomer;
+import com.propertyvista.yardi.bean.resident.RTUnit;
+import com.propertyvista.yardi.bean.resident.ResidentTransactions;
 import com.propertyvista.yardi.mapper.GetPropertyConfigurationsMapper;
+import com.propertyvista.yardi.mapper.UnitsMapper;
 import com.propertyvista.yardi.merger.BuildingsMerger;
+import com.propertyvista.yardi.merger.UnitsMerger;
 
 /**
  * Represents property service functionality based on YARDI System api
@@ -66,9 +76,7 @@ public class YardiPropertyService {
             throw new YardiServiceException(String.format("Fail to update building with property code %s by data from YARDI System", propertyCode), e);
         }
 
-        if (log.isDebugEnabled()) {
-            log.debug("Did not find a building for property code {}", propertyCode);
-        }
+        log.info("Did not find a building for property code {}", propertyCode);
     }
 
     private Building getBuilding(String propertyCode) {
@@ -122,10 +130,144 @@ public class YardiPropertyService {
     }
 
     private void update(Building building) {
-        Persistence.service().persist(building);
+        try {
+            Persistence.service().persist(building);
+            log.info("Building with property code {} successfully updated", building.propertyCode().getValue());
+        } catch (Exception e) {
+            log.error(String.format("Errors during updating building %s", building.propertyCode().getValue()), e);
+        }
+    }
 
-        if (log.isDebugEnabled()) {
-            log.debug("Building with property code {} successfully updated", building.propertyCode().getValue());
+    /**
+     * Updates/creates units for building with corresponding <code>propertyCode</code> basing on property data from YARDI system
+     * 
+     * @param propertyCode
+     *            the property code
+     * @param yp
+     *            the YARDI System connection parameters
+     * @throws YardiServiceException
+     *             if operation fails
+     */
+    public void updateUnits(String propertyCode, YardiParameters yp) throws YardiServiceException {
+        Validate.notEmpty(propertyCode, "propertyCode parameter can not be empty or null");
+        validate(yp);
+
+        YardiClient client = new YardiClient(yp.getServiceURL());
+        Building building = getBuilding(propertyCode);
+        if (building == null) {
+            throw new YardiServiceException(String.format("Unable to update units for non persisted building with property code %s", propertyCode));
+        }
+        Persistence.service().retrieve(building.floorplans());
+
+        try {
+            ResidentTransactions residentTransactions = YardiTransactions.getResidentTransactions(client, yp, propertyCode);
+            mergeUnits(building, getUnits(propertyCode), getYardiUnits(residentTransactions));
+        } catch (Exception e) {
+            throw new YardiServiceException(String.format("Fail to update units for building with property code %s by data from YARDI System", propertyCode), e);
+        }
+    }
+
+    /**
+     * Updates/creates unit with <code>unitId</code> for building with <code>propertyCode</code> basing on property data from YARDI system
+     * 
+     * @param propertyCode
+     *            the property code
+     * @param unitId
+     *            the unit number
+     * @param yp
+     *            the YARDI System connection parameters
+     * @throws YardiServiceException
+     *             if operation fails
+     */
+    public void updateUnit(String propertyCode, String unitId, YardiParameters yp) throws YardiServiceException {
+        Validate.notEmpty(propertyCode, "propertyCode parameter can not be empty or null");
+        Validate.notEmpty(unitId, "unitId parameter can not be empty or null");
+        validate(yp);
+
+        YardiClient client = new YardiClient(yp.getServiceURL());
+        Building building = getBuilding(propertyCode);
+        if (building == null) {
+            throw new YardiServiceException(String.format("Unable to update unit %s for non persisted building with property code %s", unitId, propertyCode));
+        }
+        Persistence.service().retrieve(building.floorplans());
+
+        try {
+            ResidentTransactions residentTransactions = YardiTransactions.getResidentTransactions(client, yp, propertyCode);
+            mergeUnit(building, getUnit(unitId, propertyCode), getYardiUnit(unitId, residentTransactions));
+
+        } catch (Exception e) {
+            throw new YardiServiceException(String.format("Fail to update unit %s for building with property code %s by data from YARDI System", unitId,
+                    propertyCode), e);
+        }
+    }
+
+    private List<AptUnit> getUnits(String propertyCode) {
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().building().propertyCode(), propertyCode));
+        return Persistence.service().query(criteria);
+    }
+
+    private AptUnit getUnit(String unitId, String propertyCode) {
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().building().propertyCode(), propertyCode));
+        criteria.eq(criteria.proto().info().number(), unitId);
+        List<AptUnit> units = Persistence.service().query(criteria);
+
+        return !units.isEmpty() ? units.get(0) : null;
+    }
+
+    private List<RTUnit> getYardiUnits(ResidentTransactions residentTransactions) {
+        List<com.propertyvista.yardi.bean.resident.Property> yardiProperties = residentTransactions.getProperties();
+
+        return yardiProperties.isEmpty() ? new ArrayList<RTUnit>() : getUnits(yardiProperties.get(0).getCustomers());
+    }
+
+    private RTUnit getYardiUnit(String unitId, ResidentTransactions residentTransactions) {
+        List<RTUnit> yardiUnits = getYardiUnits(residentTransactions);
+        for (RTUnit rtUnit : yardiUnits) {
+            if (unitId.equals(rtUnit.getUnitId())) {
+                return rtUnit;
+            }
+        }
+        return null;
+    }
+
+    private List<RTUnit> getUnits(List<RTCustomer> customers) {
+        Map<String, RTUnit> units = new HashMap<String, RTUnit>();
+        if (customers != null) {
+            for (RTCustomer customer : customers) {
+                units.put(customer.getRtunit().getUnitId(), customer.getRtunit());
+            }
+        }
+
+        //list of unique units
+        return new ArrayList<RTUnit>(units.values());
+    }
+
+    private void mergeUnits(Building building, List<AptUnit> existing, List<RTUnit> yardiUnits) {
+        UnitsMapper mapper = new UnitsMapper();
+        List<AptUnit> imported = mapper.map(building, yardiUnits);
+
+        List<AptUnit> merged = new UnitsMerger().merge(imported, existing);
+        for (AptUnit unit : merged) {
+            update(unit);
+        }
+    }
+
+    private void mergeUnit(Building building, AptUnit existing, RTUnit yardiUnit) {
+        if (existing != null && yardiUnit != null) {
+            mergeUnits(building, Arrays.asList(existing), Arrays.asList(yardiUnit));
+        }
+    }
+
+    private void update(AptUnit unit) {
+        try {
+            Persistence.service().persist(unit);
+            log.info("Unit {} for building {} successfully updated", unit.info().number().getValue(), unit.building().propertyCode().getValue());
+        } catch (Exception e) {
+            log.error(
+                    String.format("Errors during updating unit %s for building %s", unit.info().number().getValue(), unit.building().propertyCode().getValue()),
+                    e);
         }
     }
 

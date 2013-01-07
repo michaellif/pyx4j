@@ -16,6 +16,11 @@ package com.propertyvista.yardi.mapper;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.axiom.om.OMElement;
+import org.apache.commons.lang.StringUtils;
+
+import com.propertyvista.yardi.YardiConstants;
+
 public class YardiXmlUtil {
 
     private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd MMM yyyy");
@@ -38,4 +43,25 @@ public class YardiXmlUtil {
 
         return xml;
     }
+
+    /**
+     * Converts element to string. Updates default namespace URI in case it is missed.
+     * 
+     * @param element
+     *            the element to convert
+     * @return string element's representation
+     */
+    public static String elementToString(OMElement element) {
+        return StringUtils.isEmpty(element.getDefaultNamespace().getNamespaceURI()) ? updateDefaultNamespaceURI(element) : element.toString();
+    }
+
+    private static String updateDefaultNamespaceURI(final OMElement element) {
+        element.declareDefaultNamespace(YardiConstants.NAMESPACE);
+        return clearEmptyNamespace(element.toString());
+    }
+
+    private static String clearEmptyNamespace(String xml) {
+        return xml.replace("xmlns=\"\"", StringUtils.EMPTY);
+    }
+
 }

@@ -50,11 +50,11 @@ public class YardiExample {
         try {
             // the order of this call should match the document order
             YardiTransactions.ping(c);
-            YardiTransactions.getResidentTransactions(c, yp);
+            YardiTransactions.getResidentTransactions(c, yp, yp.getYardiPropertyId());
 
             // ANYA, use the first line if you want to send stuff, second to retrieve
             //send(c, yp);
-            retrieve(c, yp);
+            //retrieve(c, yp);
 
             //YardiTransactions.getResidentTransactions(c, yp);
             //YardiTransactions.getResidentsLeaseCharges(c, yp);
@@ -93,13 +93,13 @@ public class YardiExample {
     }
 
     private static void retrieve(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
-        YardiTransactions.getResidentTransactions(c, yp);
+        //       YardiTransactions.getResidentTransactions(c, yp);
 //    YardiTransactions.getResidentTransaction(c, yp);
         YardiTransactions.getResidentTransactionsByChargeDate(c, yp);
         YardiTransactions.getResidentTransactionsByApplicationDate(c, yp);
         YardiTransactions.getResidentsLeaseCharges(c, yp);
 //    YardiTransactions.getResidentLeaseCharges(c, yp);
-        YardiTransactions.getUnitInformationLogin(c, yp);
+        //       YardiTransactions.getUnitInformationLogin(c, yp);
         YardiTransactions.getVendors(c, yp);
         YardiTransactions.getExportChartOfAccounts(c, yp);
         YardiTransactions.getPropertyConfigurations(c, yp);

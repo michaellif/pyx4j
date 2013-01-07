@@ -15,8 +15,10 @@ package com.propertyvista.yardi.merger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +38,28 @@ public class UnitsMerger {
 
     // loaded from the database, look up by building.id
     private final Map<Key, Building> buildingsById = new HashMap<Key, Building>();
+
+    public List<AptUnit> merge(List<AptUnit> importedList, List<AptUnit> existingList) {
+        Set<AptUnit> merged = new HashSet<AptUnit>();
+        merged.addAll(existingList);
+
+        Map<String, AptUnit> existingUnitsByNumber = unitsByNumber(existingList);
+
+        for (AptUnit imported : importedList) {
+            AptUnit existing = existingUnitsByNumber.get(imported.info().number());
+            merged.add(existing != null ? merge(imported, existing) : imported);
+        }
+
+        return new ArrayList<AptUnit>(merged);
+    }
+
+    private Map<String, AptUnit> unitsByNumber(List<AptUnit> existingList) {
+        Map<String, AptUnit> unitsByNumber = new HashMap<String, AptUnit>();
+        for (AptUnit unit : existingList) {
+            unitsByNumber.put(unit.info().number().getValue(), unit);
+        }
+        return unitsByNumber;
+    }
 
     /**
      * Merge two lists, one is what comes to us form an external system - imported
@@ -60,13 +84,13 @@ public class UnitsMerger {
             buildingsById.put(building.id().getValue(), building);
         }
 
-        List<AptUnit> mergedUnits = merge(imported.getAptUnits(), existing.getAptUnits());
+        List<AptUnit> mergedUnits = mergeInner(imported.getAptUnits(), existing.getAptUnits());
         merged.getAptUnits().addAll(mergedUnits);
 
         return merged;
     }
 
-    private List<AptUnit> merge(List<AptUnit> importedList, List<AptUnit> existingList) {
+    private List<AptUnit> mergeInner(List<AptUnit> importedList, List<AptUnit> existingList) {
         List<AptUnit> merged = new ArrayList<AptUnit>();
         for (AptUnit imported : importedList) {
 
@@ -111,9 +135,13 @@ public class UnitsMerger {
         return merged;
     }
 
-    private void merge(AptUnit imported, AptUnit existing) {
+    private AptUnit merge(AptUnit imported, AptUnit existing) {
 
+        //info
         merge(imported.info(), existing.info());
+
+        //floorplan
+        existing.floorplan().set(imported.floorplan());
 
         // marketing
         existing.marketing().name().setValue(imported.marketing().name().getValue());
@@ -121,6 +149,8 @@ public class UnitsMerger {
         // financial
         existing.financial()._unitRent().setValue(imported.financial()._unitRent().getValue());
         existing.financial()._marketRent().setValue(imported.financial()._marketRent().getValue());
+
+        return existing;
     }
 
     private void merge(AptUnitInfo imported, AptUnitInfo existing) {

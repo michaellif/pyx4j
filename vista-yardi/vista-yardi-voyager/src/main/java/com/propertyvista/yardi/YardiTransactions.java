@@ -60,6 +60,7 @@ import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.resident.PhysicalProperty;
 import com.propertyvista.yardi.bean.resident.ResidentTransactions;
+import com.propertyvista.yardi.mapper.YardiXmlUtil;
 
 public class YardiTransactions {
 
@@ -108,21 +109,30 @@ public class YardiTransactions {
         GetPropertyConfigurationsResponse response = c.getResidentTransactionsService().getPropertyConfigurations(l);
         String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
 
-        log.debug("Result: {}", xml);
+        if (log.isDebugEnabled()) {
+            log.debug("GetPropertyConfigurations Result: {}", xml);
+        }
+
         Properties properties = MarshallUtil.unmarshal(Properties.class, xml);
-        log.debug("\n--- GetPropertyConfigurations ---\n{}\n", properties);
+
+        if (log.isDebugEnabled()) {
+            log.debug("\n--- GetPropertyConfigurations ---\n{}\n", properties);
+        }
+
         return properties;
     }
 
     /**
      * Allows export of all units and corresponding occupancy status for a given property/property list.
+     * Comments: returns truncated unit's information!!!
      * 
      * @param c
      * @throws RemoteException
      * @throws AxisFault
      * @throws JAXBException
      */
-    public static void getUnitInformationLogin(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
+    public static PhysicalProperty getUnitInformation_Login(YardiClient c, YardiParameters yp, String propertyId) throws AxisFault, RemoteException,
+            JAXBException {
         c.transactionId++;
         c.setCurrentAction(Action.GetUnitInformation);
 
@@ -132,15 +142,23 @@ public class YardiTransactions {
         l.setServerName(yp.getServerName());
         l.setDatabase(yp.getDatabase());
         l.setPlatform(yp.getPlatform());
-        l.setYardiPropertyId(yp.getYardiPropertyId());
         l.setInterfaceEntity(yp.getInterfaceEntity());
+        l.setYardiPropertyId(propertyId);
 
         GetUnitInformation_LoginResponse response = c.getResidentTransactionsService().getUnitInformation_Login(l);
-        String xml = response.getGetUnitInformation_LoginResult().getExtraElement().toString();
-        log.info("UnitInformationLogin: {}", xml);
+        String xml = YardiXmlUtil.elementToString(response.getGetUnitInformation_LoginResult().getExtraElement());
+
+        if (log.isDebugEnabled()) {
+            log.debug("GetUnitInformation Result: {}", xml);
+        }
 
         PhysicalProperty physicalProperty = MarshallUtil.unmarshal(PhysicalProperty.class, xml);
-        log.info("\n--- GetUnitInformation ---\n{}\n", physicalProperty);
+
+        if (log.isDebugEnabled()) {
+            log.debug("\n--- GetUnitInformation ---\n{}\n", physicalProperty);
+        }
+
+        return physicalProperty;
     }
 
     /**
@@ -148,7 +166,8 @@ public class YardiTransactions {
      * 
      * @throws JAXBException
      */
-    public static ResidentTransactions getResidentTransactions(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
+    public static ResidentTransactions getResidentTransactions(YardiClient c, YardiParameters yp, String propertyId) throws AxisFault, RemoteException,
+            JAXBException {
         c.transactionId++;
         c.setCurrentAction(Action.GetResidentTransactions);
 
@@ -158,12 +177,13 @@ public class YardiTransactions {
         l.setServerName(yp.getServerName());
         l.setDatabase(yp.getDatabase());
         l.setPlatform(yp.getPlatform());
-        l.setYardiPropertyId(yp.getYardiPropertyId());
         l.setInterfaceEntity(yp.getInterfaceEntity());
+        l.setYardiPropertyId(propertyId);
 
         GetResidentTransactions_LoginResponse response = c.getResidentTransactionsService().getResidentTransactions_Login(l);
         String xml = response.getGetResidentTransactions_LoginResult().getExtraElement().toString();
-        log.debug("GetResidentTransactions: {}", xml);
+
+        log.info("GetResidentTransactions: {}", xml);
 
         ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
         return transactions;
