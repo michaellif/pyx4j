@@ -52,9 +52,22 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
                 PmcPaymentMethod paymentMethod = ServerSideFactory.create(PaymentMethodFacade.class).persistPmcPaymentMethod(dto.creditCardInfo(), pmc);
                 Persistence.service().retrieveMember(pmc.equifaxInfo());
                 pmc.equifaxInfo().paymentMethod().set(paymentMethod);
+                pmc.equifaxInfo().approved().setValue(false);
+                pmc.equifaxInfo().reportType().setValue(dto.creditPricingOption().getValue());
 
-                pmc.equifaxInfo().equifaxSignUpFee().setValue(dto.equifaxSignUpFee().getValue());
-                pmc.equifaxInfo().equifaxPerApplicantCreditCheckFee().setValue(dto.equifaxPerApplicantCreditCheckFee().getValue());
+                AbstractEquifaxFee fee = ServerSideFactory.create(Vista2PmcFacade.class).getEquifaxFee();
+                switch (dto.creditPricingOption().getValue()) {
+                case FullCreditReport:
+                    pmc.equifaxInfo().equifaxSignUpFee().setValue(fee.fullCreditReportSetUpFee().getValue());
+                    pmc.equifaxInfo().equifaxPerApplicantCreditCheckFee().setValue(fee.fullCreditReportPerApplicantFee().getValue());
+                    break;
+                case RecomendationReport:
+                    pmc.equifaxInfo().equifaxSignUpFee().setValue(fee.recommendationReportSetUpFee().getValue());
+                    pmc.equifaxInfo().equifaxPerApplicantCreditCheckFee().setValue(fee.recommendationReportPerApplicantFee().getValue());
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+                }
 
                 Persistence.service().persist(pmc.equifaxInfo());
                 return null;

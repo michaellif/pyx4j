@@ -13,8 +13,6 @@
  */
 package com.propertyvista.dto;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -42,7 +40,4 @@ public interface CreditCheckSetupDTO extends IEntity {
 
     CreditCardInfo creditCardInfo();
 
-    IPrimitive<BigDecimal> equifaxSignUpFee();
-
-    IPrimitive<BigDecimal> equifaxPerApplicantCreditCheckFee();
 }
