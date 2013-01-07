@@ -75,13 +75,13 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         view.getMemento().setCurrentPlace(place);
 
         EntityFiltersBuilder<E> filters = EntityFiltersBuilder.create(entityClass);
-        parsExternalFilters((AppPlace) place, entityClass, filters);
+        parseExternalFilters((AppPlace) place, entityClass, filters);
         if (filters.getFilters().size() > 0) {
             externalFilters = filters.getFilters();
         }
     }
 
-    protected void parsExternalFilters(AppPlace place, Class<E> entityClass, EntityFiltersBuilder<E> filters) {
+    protected void parseExternalFilters(AppPlace place, Class<E> entityClass, EntityFiltersBuilder<E> filters) {
         String val;
         if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
             String ownerMemberName = EntityFactory.getEntityMeta(entityClass).getOwnerMemberName();
