@@ -26,18 +26,49 @@ import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends CHyperlink<E> {
 
-    public CEntityCollectionCrudHyperlink(final Class<? extends CrudAppPlace> placeClass) {
+    public interface AppPlaceBuilder<E extends ICollection<?, ?>> {
+
+        AppPlace createAppPlace(E value);
+
+    }
+
+    public static class AppPlaceByOwner<E extends ICollection<?, ?>> implements AppPlaceBuilder<E> {
+
+        final Class<? extends CrudAppPlace> placeClass;
+
+        public AppPlaceByOwner(final Class<? extends CrudAppPlace> placeClass) {
+            this.placeClass = placeClass;
+        }
+
+        @Override
+        public AppPlace createAppPlace(E value) {
+            if (value.getOwner().getPrimaryKey() != null) {
+                CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
+                return place.formListerPlace(value.getOwner().getPrimaryKey());
+            } else {
+                return null;
+            }
+        }
+
+    }
+
+    public CEntityCollectionCrudHyperlink(Class<? extends CrudAppPlace> placeClass) {
+        this(new AppPlaceByOwner<E>(placeClass));
+    }
+
+    public CEntityCollectionCrudHyperlink(final AppPlaceBuilder<E> placeBuilder) {
         super((String) null);
         setCommand(new Command() {
             @Override
             public void execute() {
-                if (getValue().getOwner().getPrimaryKey() != null) {
-                    CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
-                    AppSite.getPlaceController().goTo(place.formListerPlace(getValue().getOwner().getPrimaryKey()));
+                AppPlace place = placeBuilder.createAppPlace(getValue());
+                if (place != null) {
+                    AppSite.getPlaceController().goTo(place);
                 }
             }
         });
