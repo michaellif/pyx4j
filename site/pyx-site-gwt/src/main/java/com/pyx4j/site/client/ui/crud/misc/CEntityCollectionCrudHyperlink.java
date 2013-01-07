@@ -37,11 +37,11 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
 
     }
 
-    public static class AppPlaceByOwner<E extends ICollection<?, ?>> implements AppPlaceBuilder<E> {
+    public static class AppPlaceByOwnerBuilder<E extends ICollection<?, ?>> implements AppPlaceBuilder<E> {
 
         final Class<? extends CrudAppPlace> placeClass;
 
-        public AppPlaceByOwner(final Class<? extends CrudAppPlace> placeClass) {
+        public AppPlaceByOwnerBuilder(final Class<? extends CrudAppPlace> placeClass) {
             this.placeClass = placeClass;
         }
 
@@ -57,8 +57,27 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
 
     }
 
+    public static class FixedAppPlaceBuilder<E extends ICollection<?, ?>> implements AppPlaceBuilder<E> {
+
+        AppPlace place;
+
+        public FixedAppPlaceBuilder(final AppPlace place) {
+            this.place = place;
+        }
+
+        @Override
+        public AppPlace createAppPlace(E value) {
+            return place;
+        }
+
+    }
+
     public CEntityCollectionCrudHyperlink(Class<? extends CrudAppPlace> placeClass) {
-        this(new AppPlaceByOwner<E>(placeClass));
+        this(new AppPlaceByOwnerBuilder<E>(placeClass));
+    }
+
+    public CEntityCollectionCrudHyperlink(AppPlace place) {
+        this(new FixedAppPlaceBuilder<E>(place));
     }
 
     public CEntityCollectionCrudHyperlink(final AppPlaceBuilder<E> placeBuilder) {
