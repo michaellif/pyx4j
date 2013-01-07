@@ -50,7 +50,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.domain.util.ValidationUtils;
 
 public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTenant> {
 
@@ -146,11 +145,14 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     for (LeaseTermTenant item : value) {
                         if (applicant) {
                             if (item.role().getValue() == LeaseTermParticipant.Role.Applicant) {
-                                return new ValidationError(component, i18n.tr("Just one applicant could be selected!"));
+                                return new ValidationError(component, i18n.tr("Just one Applicant could be selected!"));
                             }
                         } else {
                             applicant = (item.role().getValue() == LeaseTermParticipant.Role.Applicant);
                         }
+                    }
+                    if (!applicant) {
+                        return new ValidationError(component, i18n.tr("At least one Applicant should be present!"));
                     }
                 }
                 return null;
@@ -229,21 +231,22 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     }
                 });
 
-                get(proto().leaseParticipant().customer().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                        if (event.getValue() != null) {
-                            boolean mature = ValidationUtils.isOlderThen18(event.getValue());
-
-                            if (!mature) {
-                                get(proto().role()).setValue(LeaseTermParticipant.Role.Dependent);
-                                get(proto().percentage()).setValue(BigDecimal.ZERO);
-                            }
-                            get(proto().role()).setEditable(mature);
-                            get(proto().percentage()).setEditable(mature);
-                        }
-                    }
-                });
+// TODO: disable age restriction tweaks so far...                 
+//                get(proto().leaseParticipant().customer().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+//                    @Override
+//                    public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+//                        if (event.getValue() != null) {
+//                            boolean mature = ValidationUtils.isOlderThen18(event.getValue());
+//
+//                            if (!mature) {
+//                                get(proto().role()).setValue(LeaseTermParticipant.Role.Dependent);
+//                                get(proto().percentage()).setValue(BigDecimal.ZERO);
+//                            }
+//                            get(proto().role()).setEditable(mature);
+//                            get(proto().percentage()).setEditable(mature);
+//                        }
+//                    }
+//                });
             }
 
             // assemble main panel:
@@ -276,11 +279,12 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
                 get(proto().percentage()).setEditable(getValue().role().getValue() != LeaseTermParticipant.Role.Dependent);
 
-                if (!getValue().leaseParticipant().customer().person().birthDate().isNull()) {
-                    if (!ValidationUtils.isOlderThen18(getValue().leaseParticipant().customer().person().birthDate().getValue())) {
-                        get(proto().role()).setEditable(false);
-                    }
-                }
+// TODO: disable age restriction tweaks so far...                 
+//                if (!getValue().leaseParticipant().customer().person().birthDate().isNull()) {
+//                    if (!ValidationUtils.isOlderThen18(getValue().leaseParticipant().customer().person().birthDate().getValue())) {
+//                        get(proto().role()).setEditable(false);
+//                    }
+//                }
             }
 
             get(proto().relationship()).setVisible(getValue().role().getValue() != LeaseTermParticipant.Role.Applicant);
