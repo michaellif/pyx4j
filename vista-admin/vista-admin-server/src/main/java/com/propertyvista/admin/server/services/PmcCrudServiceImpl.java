@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -44,8 +44,8 @@ import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.ob.server.PmcActivationDeferredProcess;
@@ -75,6 +75,9 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
         Persistence.service().retrieveMember(entity.equifaxInfo());
         dto.equifaxInfo().set(entity.equifaxInfo().duplicate());
+
+        Persistence.service().retrieveMember(entity.equifaxFee());
+        dto.equifaxFeeQuote().set(entity.equifaxFee().duplicate());
 
         dto.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.CRM, true));
         dto.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.TenantPortal, false));
@@ -115,6 +118,12 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             Persistence.service().retrieveMember(entity.equifaxInfo());
             entity.equifaxInfo().set(dto.equifaxInfo());
             Persistence.service().persist(entity.equifaxInfo());
+        }
+
+        if (!dto.equifaxFeeQuote().isNull()) {
+            Persistence.service().retrieveMember(entity.equifaxFee());
+            entity.equifaxFee().set(dto.equifaxFeeQuote());
+            Persistence.service().persist(entity.equifaxFee());
         }
 
         CacheService.reset();
