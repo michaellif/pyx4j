@@ -15,6 +15,7 @@ package com.propertyvista.crm.rpc.dto;
 
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.pmc.payment.CustomerCreditCheckTransaction;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
@@ -24,5 +25,7 @@ import com.propertyvista.domain.tenant.CustomerCreditCheck;
 public interface CustomerCreditCheckDTO extends CustomerCreditCheck {
 
     CustomerCreditCheckTransaction transaction();
+
+    IPrimitive<String> transactionRef();
 
 }
