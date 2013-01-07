@@ -46,6 +46,7 @@ import com.propertyvista.crm.client.ui.components.LegalTermsContentViewer;
 import com.propertyvista.crm.client.ui.components.PmcSignatureForm;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
+import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CreditCheckReportTypeSelector;
 
 public class CrmTheme extends VistaTheme {
 
@@ -135,6 +136,7 @@ public class CrmTheme extends VistaTheme {
         initKeywordBoxStyles();
 
         initWizardPanelStyles();
+        initCreditCheckReportTypeSelectorStyles();
         initPmcSignatureFormStyles();
         initLegalTermsContentViewerStyles();
     }
@@ -688,6 +690,79 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("text-align", "center");
         style.addProperty("font-weight", "bold");
         style.addProperty("font-size", "1.5em");
+        addStyle(style);
+    }
+
+    private void initCreditCheckReportTypeSelectorStyles() {
+        Style style = new Style("." + CreditCheckReportTypeSelector.Styles.CreditCheckReportTypePanel.name());
+        style.addProperty("height", "50em");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("border-width", "2px");
+        style.addProperty("border-style", "inset");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-radius", "5px");
+        addStyle(style);
+
+        style = new Style("." + CreditCheckReportTypeSelector.Styles.CreditCheckReportTypePanel.name() + ":hover");
+        style.addProperty("border-width", "2px");
+        style.addProperty("border-style", "outset");
+        style.addProperty("background-color", ThemeColor.object2);
+        addStyle(style);
+
+        style = new Style("." + CreditCheckReportTypeSelector.Styles.CreditCheckReportTypePanel.name() + "-"
+                + CreditCheckReportTypeSelector.StyleDependent.Selected.name());
+        style.addProperty("border-style", "outset");
+        style.addProperty("border-width", "2px");
+        style.addProperty("background-color", ThemeColor.object1);
+        addStyle(style);
+
+        style = new Style("." + CreditCheckReportTypeSelector.Styles.CreditCheckReportTypePanel.name() + "-"
+                + CreditCheckReportTypeSelector.StyleDependent.Selected.name() + ":hover");
+        style.addProperty("background-color", ThemeColor.object1);
+        addStyle(style);
+
+        style = new Style("." + CreditCheckReportTypeSelector.Styles.CreditCheckReportTypeLabel.name());
+        style.addProperty("text-align", "center");
+        style.addProperty("font-size", "2em");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("padding-top", "20px");
+        style.addProperty("padding-bottom", "20px");
+        addStyle(style);
+
+        style = new Style("." + CreditCheckReportTypeSelector.Styles.CreditCheckPoweredByLabel.name());
+        style.addProperty("text-align", "center");
+        style.addProperty("font-size", "1.2em");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("padding-bottom", "10px");
+        addStyle(style);
+
+        style = new Style("." + CreditCheckReportTypeSelector.Styles.CreditCheckPoweredByLogo.name());
+        style.addProperty("display", "block");
+        style.addProperty("margin-left", "auto");
+        style.addProperty("margin-right", "auto");
+        style.addProperty("margin-bottom", "20px");
+        addStyle(style);
+
+        style = new Style("." + CreditCheckReportTypeSelector.Styles.CreditCheckReportTypePerApplicantFee.name());
+        style.addProperty("text-align", "center");
+        style.addProperty("font-size", "1.5em");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("padding-bottom", "5px");
+        addStyle(style);
+
+        style = new Style("." + CreditCheckReportTypeSelector.Styles.CreditCheckReportTypeSetupFee.name());
+        style.addProperty("text-align", "center");
+        style.addProperty("font-size", "1em");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("padding-bottom", "20px");
+        addStyle(style);
+
+        style = new Style("." + CreditCheckReportTypeSelector.Styles.CreditCheckReportDetailsLabel.name());
+        style.addProperty("display", "table-cell");
+        style.addProperty("vertical-align", "center");
+        style.addProperty("height", "20em");
+        style.addProperty("padding-left", "1em");
+        style.addProperty("padding-right", "1em");
         addStyle(style);
     }
 

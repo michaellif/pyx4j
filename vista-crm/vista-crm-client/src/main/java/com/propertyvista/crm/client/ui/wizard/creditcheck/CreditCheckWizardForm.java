@@ -23,19 +23,19 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.wizard.IWizardView;
 import com.pyx4j.site.client.ui.wizard.WizardForm;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
-import com.pyx4j.widgets.client.RadioGroup.Layout;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardInfoEditor;
+import com.propertyvista.crm.client.ui.components.WidgetDecoratorRightLabel;
 import com.propertyvista.crm.client.ui.wizard.common.BusinessInformationForm;
 import com.propertyvista.crm.client.ui.wizard.common.PersonalInformationForm;
+import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CCreditCheckReportTypeSelector;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.dto.CreditCheckSetupDTO;
@@ -75,6 +75,10 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
 
     public void setPricingOptions(AbstractEquifaxFee creditCheckFees) {
         this.creditCheckFees = creditCheckFees;
+        ((CCreditCheckReportTypeSelector) (get(proto().creditPricingOption()))).setFees(CreditCheckReportType.RecomendationReport, creditCheckFees
+                .recommendationReportSetUpFee().getValue(), creditCheckFees.recommendationReportPerApplicantFee().getValue());
+        ((CCreditCheckReportTypeSelector) (get(proto().creditPricingOption()))).setFees(CreditCheckReportType.FullCreditReport, creditCheckFees
+                .fullCreditReportSetUpFee().getValue(), creditCheckFees.fullCreditReportPerApplicantFee().getValue());
     }
 
     @Override
@@ -87,16 +91,19 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
             BigDecimal costPerApplicant = null;
             BigDecimal setupFee = null;
 
-            if (get(proto().creditPricingOption()).getValue() == CreditCheckReportType.RecomendationReport) {
+            switch (get(proto().creditPricingOption()).getValue()) {
+            case RecomendationReport:
                 costPerApplicant = creditCheckFees.recommendationReportPerApplicantFee().getValue();
                 setupFee = creditCheckFees.recommendationReportSetUpFee().getValue();
-            } else {
+                break;
+            case FullCreditReport:
                 costPerApplicant = creditCheckFees.fullCreditReportPerApplicantFee().getValue();
                 setupFee = creditCheckFees.fullCreditReportSetUpFee().getValue();
+                break;
             }
 
             costPerApplicantLabel.setText(i18n.tr("Cost per applicant is: ${0,number,#,##0.00}", costPerApplicant));
-            if (BigDecimal.ZERO.equals(setupFee)) {
+            if (new BigDecimal("0.00").equals(setupFee) | BigDecimal.ZERO.equals(setupFee)) {
                 setupFeeLabel.setText(i18n.tr("No Set Up Fee!"));
             } else {
                 setupFeeLabel.setText(i18n.tr("Setup Fee of ${0,number,#,##0.00} will be charged", setupFee));
@@ -106,13 +113,12 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
 
     private FormFlexPanel createPricingStep(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
-        int row = 0;
-        main.setH1(row++, 0, 2, i18n.tr("Pricing"));
-        main.setWidget(
-                ++row,
-                0,
-                new DecoratorBuilder(inject(proto().creditPricingOption(), new CRadioGroupEnum<CreditCheckReportType>(CreditCheckReportType.class,
-                        Layout.VERTICAL))).build());
+        int row = -1;
+        main.setH1(++row, 0, 2, i18n.tr("Pricing"));
+        main.setWidget(++row, 0,
+                new WidgetDecoratorRightLabel(inject(proto().creditPricingOption(), new CCreditCheckReportTypeSelector(CreditCheckWizardResources.INSTANCE)),
+                        50, 0));
+        main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         return main;
     }
 

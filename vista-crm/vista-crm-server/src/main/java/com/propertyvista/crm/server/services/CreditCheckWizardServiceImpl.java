@@ -82,7 +82,6 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
     @Override
     public void obtatinFee(AsyncCallback<AbstractEquifaxFee> callback) {
         callback.onSuccess(ServerSideFactory.create(Vista2PmcFacade.class).getEquifaxFee());
-
     }
 
 }

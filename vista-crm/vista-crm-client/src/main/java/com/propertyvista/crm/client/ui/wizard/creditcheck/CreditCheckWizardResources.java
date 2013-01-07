@@ -15,9 +15,12 @@ package com.propertyvista.crm.client.ui.wizard.creditcheck;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.TextResource;
 
-public interface CreditCheckWizardResources extends ClientBundleWithLookup {
+import com.propertyvista.crm.client.ui.wizard.creditcheck.components.ReportTypeDetailsResources;
+
+public interface CreditCheckWizardResources extends ClientBundleWithLookup, ReportTypeDetailsResources {
 
     public static CreditCheckWizardResources INSTANCE = GWT.create(CreditCheckWizardResources.class);
 
@@ -47,4 +50,15 @@ public interface CreditCheckWizardResources extends ClientBundleWithLookup {
     @Source("confirmation-and-payment-service-agreement.html")
     TextResource confirmationAnPaymentServiceAgreement();
 
+    @Override
+    @Source("recommendation-report-description.html")
+    public TextResource recommendationReportDescription();
+
+    @Override
+    @Source("full-credit-report-description.html")
+    public TextResource fullCreditReportDescription();
+
+    @Override
+    @Source("equifax-logo.png")
+    public ImageResource equifaxLogo();
 }
