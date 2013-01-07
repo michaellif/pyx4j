@@ -22,57 +22,29 @@ package com.pyx4j.site.client.activity;
 
 import java.util.List;
 
-import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IntegrityConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityFiltersBuilder;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class ListerActivityBase<E extends IEntity> extends AbstractActivity implements IListerView.Presenter<E> {
-
-    private static final I18n i18n = I18n.get(ListerActivityBase.class);
-
-    private final IListerView<E> view;
-
-    private final ListerDataSource<E> dataSource;
-
-    private final AbstractListService<E> service;
-
-    private Key parentId;
-
-    private Class<? extends IEntity> parentClass;
+public class ListerActivityBase<E extends IEntity> extends ListerController<E> implements Activity {
 
     private List<Criterion> externalFilters;
 
     public ListerActivityBase(Place place, IListerView<E> view, AbstractListService<E> service, Class<E> entityClass) {
-        // development correctness checks:
-        assert (view != null);
-        assert (service != null);
-        assert (entityClass != null);
+        super(view, service, entityClass);
 
-        this.parentId = null;
-        this.view = view;
-        this.service = service;
-        this.dataSource = new ListerDataSource<E>(entityClass, service);
-        view.setPresenter(this);
-
-        view.getMemento().setCurrentPlace(place);
+        getView().getMemento().setCurrentPlace(place);
 
         EntityFiltersBuilder<E> filters = EntityFiltersBuilder.create(entityClass);
         parseExternalFilters((AppPlace) place, entityClass, filters);
@@ -92,161 +64,24 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
-        view.discard();
-        view.getLister().setExternalFilters(externalFilters);
+        getView().discard();
+        getView().getLister().setExternalFilters(externalFilters);
         populate();
-        containerWidget.setWidget(view);
+        containerWidget.setWidget(getView());
     }
 
     @Override
     public void onStop() {
-        view.storeState(view.getMemento().getCurrentPlace());
-        view.discard();
-        super.onStop();
-    }
-
-    public IListerView<E> getView() {
-        return view;
-    }
-
-    public AbstractListService<E> getService() {
-        return service;
+        getView().storeState(getView().getMemento().getCurrentPlace());
+        getView().discard();
     }
 
     @Override
-    public ListerDataSource<E> getDataSource() {
-        return dataSource;
+    public String mayStop() {
+        return null;
     }
 
     @Override
-    public Key getParent() {
-        return parentId;
-    }
-
-    @Override
-    public Class<? extends IEntity> getParentClass() {
-        return parentClass;
-    }
-
-    @Override
-    public void setParent(Key parentId) {
-        setParent(parentId, null);
-    }
-
-    @Override
-    public void setParent(Key parentID, Class<? extends IEntity> parentClass) {
-        this.parentId = parentID; // save parent id for newItem creation...
-        this.parentClass = parentClass; // save parent class for polymorphic queries...
-        dataSource.setParentFiltering(parentID, parentClass);
-    }
-
-    @Override
-    public void setPreDefinedFilters(List<Criterion> filters) {
-        dataSource.setPreDefinedFilters(filters);
-    }
-
-    @Override
-    public void addPreDefinedFilters(List<Criterion> filters) {
-        dataSource.addPreDefinedFilters(filters);
-    }
-
-    @Override
-    public void addPreDefinedFilter(Criterion filter) {
-        dataSource.addPreDefinedFilter(filter);
-    }
-
-    @Override
-    public void clearPreDefinedFilters() {
-        dataSource.clearPreDefinedFilters();
-    }
-
-    @Override
-    public void populate() {
-        view.getLister().restoreState();
-    }
-
-    // TODO : check this optimization (in retrieveData):
-//    protected boolean isFilterCreateEmptyDataSet() {
-//        return (parentFiltering != null) && (parentID == null);
-//    }
-
-    @Override
-    public void retrieveData(int pageNumber) {
-
-        // TODO : check this optimization:
-        // Fix/Optimization for new parent Entity. e.g. Do not go to server to get empty list
-//        if (isFilterCreateEmptyDataSet()) {
-//            view.populateData(new Vector<E>(), pageNumber, false, 0);
-//            return;
-//        }
-
-        view.getLister().obtain(pageNumber);
-    }
-
-    @Override
-    public void refresh() {
-        retrieveData(view.getPageNumber());
-    }
-
-    @Override
-    public void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formViewerPlace(itemID));
-    }
-
-    @Override
-    public void edit(Class<? extends CrudAppPlace> openPlaceClass, Key itemID) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formEditorPlace(itemID));
-    }
-
-    @Override
-    public void editNew(Class<? extends CrudAppPlace> openPlaceClass) {
-        if (canCreateNewItem()) {
-            if (parentClass != null) {
-                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentId, parentClass));
-            } else {
-                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentId));
-            }
-        }
-    }
-
-    @Override
-    public void editNew(Class<? extends CrudAppPlace> openPlaceClass, E newItem) {
-        if (canCreateNewItem()) {
-            AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(newItem));
-        }
-    }
-
-    /**
-     * Empty methods, implementations don't need to call it.
-     */
-    @Override
-    public boolean canCreateNewItem() {
-        return true;
-    }
-
-    @Override
-    public void delete(final Key itemID) {
-        service.delete(new AsyncCallback<Boolean>() {
-
-            @Override
-            public void onSuccess(Boolean result) {
-                onDeleted(itemID, true);
-                retrieveData(view.getPageNumber());
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                onDeleted(itemID, false);
-                if (caught instanceof IntegrityConstraintUserRuntimeException) {
-                    MessageDialog.error(i18n.tr("Item Deletion"), caught.getMessage());
-                } else {
-                    throw new UnrecoverableClientError(caught);
-                }
-            }
-        }, itemID);
-    }
-
-    protected void onDeleted(Key itemID, boolean isSuccessful) {
-        view.onDeleted(itemID, isSuccessful);
+    public void onCancel() {
     }
 }
