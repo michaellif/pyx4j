@@ -24,8 +24,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Vector;
+
+import com.pyx4j.gwt.server.IOUtils;
 
 public class CSVLoad {
 
@@ -57,22 +60,22 @@ public class CSVLoad {
         return -1;
     }
 
-    public static void loadResourceFile(String resourceName, CSVReciver reciver) {
+    public static void loadResourceFile(String resourceName, Charset charset, CSVReciver reciver) {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
         if (is == null) {
             throw new RuntimeException("Resouce [" + resourceName + "] not found");
         }
-        loadFile(is, reciver);
-    }
-
-    public static void loadFile(InputStream is, CSVReciver reciver) {
-        loadFile(is, new CSVParser(), reciver);
+        loadFile(is, charset, new CSVParser(), reciver);
     }
 
     public static void loadFile(InputStream is, TextParser parser, CSVReciver reciver) {
+        loadFile(is, Charset.forName("Cp1252"), parser, reciver);
+    }
+
+    public static void loadFile(InputStream in, Charset charset, TextParser parser, CSVReciver reciver) {
         int lineNumber = 0;
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            BufferedReader reader = new BufferedReader((charset == null) ? new InputStreamReader(in) : new InputStreamReader(in, charset));
             String line = null;
             boolean header = true;
 
@@ -96,19 +99,21 @@ public class CSVLoad {
         } catch (Exception e) {
             throw new RuntimeException("Load file error, Line# " + lineNumber + "; " + e.getMessage(), e);
         } finally {
-            try {
-                if (is != null) {
-                    is.close();
-                }
-            } catch (IOException ignore) {
-                is = null;
-            }
+            IOUtils.closeQuietly(in);
         }
     }
 
+    public static String[] loadUTF8File(String resourceName, final String columName) {
+        return loadFile(resourceName, Charset.forName("UTF-8"), columName);
+    }
+
     public static String[] loadFile(String resourceName, final String columName) {
+        return loadFile(resourceName, Charset.forName("Cp1252"), columName);
+    }
+
+    public static String[] loadFile(String resourceName, Charset charset, final String columName) {
         final List<String> data = new Vector<String>();
-        loadResourceFile(resourceName, new CSVReciver() {
+        loadResourceFile(resourceName, charset, new CSVReciver() {
 
             int columnIndex = 0;
 

@@ -20,6 +20,7 @@
  */
 package com.pyx4j.essentials.server.csv;
 
+import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -540,7 +541,7 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         DownloadFormat format = DownloadFormat.valueByExtension(FilenameUtils.getExtension(resourceName));
         switch (format) {
         case CSV:
-            CSVLoad.loadResourceFile(resourceName, this);
+            CSVLoad.loadResourceFile(resourceName, Charset.forName("Cp1252"), this);
             break;
         case XLSX:
         case XLS:
