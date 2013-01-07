@@ -77,6 +77,7 @@ import com.propertyvista.pmsite.server.pages.PwdChangePage;
 import com.propertyvista.pmsite.server.pages.PwdResetPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.SignInPage;
+import com.propertyvista.pmsite.server.pages.SignInWithTermsPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
 import com.propertyvista.pmsite.server.pages.TermsAcceptancePage;
 import com.propertyvista.pmsite.server.pages.TermsDeclinedPage;
@@ -107,6 +108,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         MountMap.put("", LandingPage.class);
         MountMap.put("city/#{" + ParamNameCityProv + "}", CityPage.class);
         MountMap.put("signin", SignInPage.class);
+        MountMap.put("signterms", SignInWithTermsPage.class);
         MountMap.put("findapt", FindAptPage.class);
         MountMap.put("aptlist", AptListPage.class);
         MountMap.put("aptinfo", AptDetailsPage.class);
@@ -422,7 +424,8 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
             // redirect to LegalAcceptancePage
             PageParameters pp = new PageParameters();
             pp.add(ParamNameTarget, getReturnToTargetUrl());
-            throw new RestartResponseException(TermsAcceptancePage.class, pp);
+//            throw new RestartResponseException(TermsAcceptancePage.class, pp);
+            throw new RestartResponseException(SignInWithTermsPage.class, pp);
         } else {
             // redirect to home page
             throw new RestartResponseException(getHomePage());

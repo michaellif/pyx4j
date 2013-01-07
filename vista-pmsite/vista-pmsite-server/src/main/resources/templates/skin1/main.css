@@ -74,6 +74,7 @@ select {
 	background-color: ${background_100};
 	color: ${foreground_100};
 }
+.hidden { display:none; }
 
 .header {
 	width: 100%;

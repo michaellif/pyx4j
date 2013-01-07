@@ -32,12 +32,14 @@
 
 .vista-pmsite-legalPage .legalFormWrap {
 	//margin: 0px 80px;
-	border-top: 5px solid #000;	
+	border-top: 5px solid #000;
+	background-color:#999999;
+	padding:20px 60px;
 }
 
 .vista-pmsite-legalPage .legalContent {
 	height:500px;
-	padding:20px 80px;
+	padding:20px;
 	overflow:auto;
 	color: white;
 	background-color: #999999;
@@ -45,7 +47,17 @@
 }
 .vista-pmsite-legalPage .acceptForm {
 	top: 0;
-	padding:20px 0px;
+}
+
+.vista-pmsite-legalPage table.acceptNote {
+	width:100%;
+}
+.vista-pmsite-legalPage table.acceptNote td {
+	padding:20px;
+}
+.vista-pmsite-legalPage .accept2 {
+	padding:20px;
+	text-align:right;
 }
 
 .vista-pmsite-legalPage .legalFormWrap input[type=submit] {

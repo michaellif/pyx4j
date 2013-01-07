@@ -28,19 +28,36 @@
 }
 
 .vista-pmsite-legalPage .legalFormWrap {
+	padding:20px 60px;
 }
 
 .vista-pmsite-legalPage .legalContent {
 	height:500px;
-	padding:20px 80px;
+	padding:20px;
 	overflow:auto;
 	color: ${foreground_100};
 	border-top:1px solid ${foreground_20};
 	line-height: 20px;
 }
 .vista-pmsite-legalPage .acceptForm {
-	padding:20px 80px;
 }
+
+.vista-pmsite-legalPage table.acceptNote {
+	width:100%;
+}
+.vista-pmsite-legalPage table.acceptNote td {
+	padding:20px;
+}
+.vista-pmsite-legalPage .accept2 {
+	padding:20px;
+	text-align:right;
+}
+.vista-pmsite-legalPage a.termsPtr {
+	text-decoration:underline;
+}
+.vista-pmsite-legalPage a.termsPtr:hover {
+}
+
 .vista-pmsite-legalPage .legalFormWrap input[type=submit] {
 	background: ${object1_100};
 	border: 2px solid ${object1_100};

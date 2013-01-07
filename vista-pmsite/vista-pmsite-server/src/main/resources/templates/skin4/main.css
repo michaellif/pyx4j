@@ -86,6 +86,7 @@ select {
 	color: #999999;
 	border: 1px solid #000000;
 }
+.hidden { display:none; }
 
 .header {
 	width: 100%;

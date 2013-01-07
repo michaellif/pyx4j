@@ -81,6 +81,7 @@ select {
 	-moz-border-radius: 3px;
 	color: ${background_100};
 }
+.hidden { display:none; }
 
 .header {
 	width: 100%;
