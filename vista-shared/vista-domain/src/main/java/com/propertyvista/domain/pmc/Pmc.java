@@ -34,6 +34,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.fee.PmcEquifaxFee;
+import com.propertyvista.domain.pmc.payment.CustomerCreditCheckTransaction;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 
 @Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
@@ -76,6 +77,10 @@ public interface Pmc extends IEntity {
     @Owned
     @Detached(level = AttachLevel.Detached)
     PmcEquifaxFee equifaxFee();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<CustomerCreditCheckTransaction> creditCheckTransaction();
 
     @Owned
     @Detached(level = AttachLevel.Detached)

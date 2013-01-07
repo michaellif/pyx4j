@@ -63,7 +63,10 @@ class ScreeningPayments {
             throw new IllegalArgumentException();
         }
         transaction.paymentMethod().set(equifaxInfo.paymentMethod());
-        Persistence.service().persist(transaction);
+        if (equifaxInfo.paymentMethod().isNull()) {
+            throw new UserRuntimeException(i18n.tr("Credit Card is not setup for Credit Check payments"));
+        }
+
         TaskRunner.runAutonomousTransation(VistaNamespace.adminNamespace, new Callable<Void>() {
             @Override
             public Void call() {

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -158,7 +158,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
         FormFlexPanel equifaxFeeQuotePanel = new FormFlexPanel();
         int rowFeeQuote = -1;
         equifaxFeeQuotePanel.setH1(++rowFeeQuote, 0, 2, i18n.tr("Equifax Fee Quote"));
-        equifaxFeeQuotePanel.setWidget(++rowFeeQuote, 0, inject(proto().equifaxFeeQuote(), new EquifaxFeeQuoteForm()));
+        equifaxFeeQuotePanel.setWidget(++rowFeeQuote, 0, inject(proto().equifaxFeeQuote(), new EquifaxFeeQuoteForm(false)));
 
         int row = -1;
 

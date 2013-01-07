@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -23,8 +23,11 @@ import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 
 public class EquifaxFeeQuoteForm extends CEntityDecoratableForm<AbstractEquifaxFee> {
 
-    public EquifaxFeeQuoteForm() {
+    private final boolean makeMandatory;
+
+    public EquifaxFeeQuoteForm(boolean makeMandatory) {
         super(AbstractEquifaxFee.class);
+        this.makeMandatory = makeMandatory;
     }
 
     @Override
@@ -37,7 +40,18 @@ public class EquifaxFeeQuoteForm extends CEntityDecoratableForm<AbstractEquifaxF
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullCreditReportSetUpFee())).labelWidth(25).componentWidth(6).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullCreditReportPerApplicantFee())).labelWidth(25).componentWidth(6).build());
 
+        if (makeMandatory) {
+            get(proto().recommendationReportSetUpFee()).setMandatory(true);
+            get(proto().recommendationReportPerApplicantFee()).setMandatory(true);
+            get(proto().fullCreditReportSetUpFee()).setMandatory(true);
+            get(proto().fullCreditReportPerApplicantFee()).setMandatory(true);
+        }
+
         return panel;
+    }
+
+    void setMandatory() {
+
     }
 
 }

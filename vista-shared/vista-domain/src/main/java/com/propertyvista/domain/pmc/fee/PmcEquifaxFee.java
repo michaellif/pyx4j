@@ -32,4 +32,5 @@ public interface PmcEquifaxFee extends AbstractEquifaxFee {
     @JoinColumn
     @Indexed(uniqueConstraint = true)
     Pmc pmc();
+
 }

@@ -45,6 +45,7 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
     @Override
     public void finish(AsyncCallback<VoidSerializable> callback, final CreditCheckSetupDTO dto) {
         final Pmc pmc = VistaDeployment.getCurrentPmc();
+        final AbstractEquifaxFee fee = ServerSideFactory.create(Vista2PmcFacade.class).getEquifaxFee();
 
         TaskRunner.runInAdminNamespace(new Callable<Void>() {
             @Override
@@ -55,7 +56,6 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
                 pmc.equifaxInfo().approved().setValue(false);
                 pmc.equifaxInfo().reportType().setValue(dto.creditPricingOption().getValue());
 
-                AbstractEquifaxFee fee = ServerSideFactory.create(Vista2PmcFacade.class).getEquifaxFee();
                 switch (dto.creditPricingOption().getValue()) {
                 case FullCreditReport:
                     pmc.equifaxInfo().equifaxSignUpFee().setValue(fee.fullCreditReportSetUpFee().getValue());

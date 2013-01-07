@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -52,7 +52,7 @@ public class VistaSystemDefaultsForm extends AdminEntityForm<VistaSystemDefaults
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("Equifax"));
         int row = -1;
         panel.setH1(++row, 0, 1, i18n.tr("Default Fees"));
-        panel.setWidget(++row, 0, inject(proto().equifaxFees(), new EquifaxFeeQuoteForm()));
+        panel.setWidget(++row, 0, inject(proto().equifaxFees(), new EquifaxFeeQuoteForm(true)));
 
         panel.setH1(++row, 0, 1, i18n.tr("Merchant Account"));
         panel.setWidget(++row, 0, inject(proto().vistaMerchantAccount(), new MerchantAccountForm()));
