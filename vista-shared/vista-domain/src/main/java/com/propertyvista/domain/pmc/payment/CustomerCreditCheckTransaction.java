@@ -19,12 +19,15 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 
+@Table(namespace = VistaNamespace.adminNamespace)
 public interface CustomerCreditCheckTransaction extends IEntity {
 
     enum TransactionStatus {
