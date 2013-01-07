@@ -84,6 +84,7 @@
 	vertical-align:top;
 	background: url("images/bg_sidebar.gif") repeat-x #34363C;
 	background-size:100% 100%;
+	float: left;
 }
 .newsBox {
 	padding: 20px 30px;
@@ -112,7 +113,7 @@
 }
 
 .vista-pmsite-main {
-	width: 670px;
+	width: 680px;
 	display:inline-block;
 	vertical-align:top;
 }
@@ -129,6 +130,7 @@
 	padding:20px 10px 0;
 	float:left;
 	overflow:hidden;
+	width: 100%;
 }
 
 .promoBox .infobox_content {
@@ -170,6 +172,7 @@
 .testimBox .infobox_decor {
 	position: relative;
 	display:inline-block;
+	float: left;
 }
 
 .testimBox .callout_line {
