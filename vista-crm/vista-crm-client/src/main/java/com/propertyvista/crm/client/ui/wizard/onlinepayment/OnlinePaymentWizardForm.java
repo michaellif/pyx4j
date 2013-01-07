@@ -42,6 +42,7 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.components.LegalTermsContentViewer;
 import com.propertyvista.crm.client.ui.components.PmcSignatureForm;
+import com.propertyvista.crm.client.ui.components.WidgetDecoratorRightLabel;
 import com.propertyvista.crm.client.ui.wizard.common.BusinessInformationForm;
 import com.propertyvista.crm.client.ui.wizard.common.PersonalInformationForm;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
@@ -61,10 +62,6 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
     private final Command onTermsOfServiceDisplayRequest;
 
     private Label companyNameLabel;
-
-    private Label caledonTermsAgreementLabel;
-
-    private Label paypadTermsAgreementLabel;
 
     private PmcSignatureForm caledonSignatureForm;
 
@@ -100,8 +97,8 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
             caledonSignatureForm.setFullName(companyOwnersFullName);
             paymentPadSignatureForm.setFullName(companyOwnersFullName);
 
-            caledonTermsAgreementLabel.setText(i18n.tr("I, {0} agree to accept Visa Debit in a Card Not Present transactions environment", companyName));
-            paypadTermsAgreementLabel.setText(i18n.tr("I, {0} agree to accept Payment Pad Terms and Conditions", companyName)); // TODO ask Leonard what to write here
+            get(proto().caledonIAgree()).setTitle(i18n.tr("I, {0} agree to accept Visa Debit in a Card Not Present transactions environment", companyName));
+            get(proto().paymentPadIAgree()).setTitle(i18n.tr("I, {0} agree to accept Payment Pad Terms and Conditions", companyName)); // TODO write the correct text            
         }
     }
 
@@ -191,11 +188,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         LegalTermsContentViewer caledonTermsContentViewer = new LegalTermsContentViewer(TERMS_VIEWER_HEIGHT);
         main.setWidget(++row, 0, inject(proto().caledonAgreement(), caledonTermsContentViewer));
 
-        HorizontalPanel caledonTermsAgreementPanel = new HorizontalPanel();
-        caledonTermsAgreementPanel.add(inject(proto().caledonIAgree()));
-        caledonTermsAgreementLabel = new Label();
-        caledonTermsAgreementPanel.add(caledonTermsAgreementLabel);
-        main.setWidget(++row, 0, caledonTermsAgreementPanel);
+        main.setWidget(++row, 0, new WidgetDecoratorRightLabel(inject(proto().caledonIAgree())));
         main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(TOP_I_AGREE_PANEL_PADDING, Unit.PX);
 
@@ -220,11 +213,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         LegalTermsContentViewer paymentPadTermsViewer = new LegalTermsContentViewer(TERMS_VIEWER_HEIGHT);
         main.setWidget(++row, 0, inject(proto().paymentPadAgreement(), paymentPadTermsViewer));
 
-        HorizontalPanel paypadTermsAgreementPanel = new HorizontalPanel();
-        paypadTermsAgreementPanel.add(inject(proto().paymentPadIAgree()));
-        paypadTermsAgreementLabel = new Label();
-        paypadTermsAgreementPanel.add(paypadTermsAgreementLabel);
-        main.setWidget(++row, 0, paypadTermsAgreementPanel);
+        main.setWidget(++row, 0, new WidgetDecoratorRightLabel(inject(proto().paymentPadIAgree())));
         main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(TOP_I_AGREE_PANEL_PADDING, Unit.PX);
 
