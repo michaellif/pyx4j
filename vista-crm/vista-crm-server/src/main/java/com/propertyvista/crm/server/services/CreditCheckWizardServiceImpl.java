@@ -27,6 +27,7 @@ import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.CreditCheckWizardService;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.dto.CreditCheckSetupDTO;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -42,13 +43,20 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
     }
 
     @Override
-    public void finish(AsyncCallback<VoidSerializable> callback, final CreditCheckSetupDTO entity) {
+    public void finish(AsyncCallback<VoidSerializable> callback, final CreditCheckSetupDTO dto) {
         final Pmc pmc = VistaDeployment.getCurrentPmc();
 
         TaskRunner.runInAdminNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                ServerSideFactory.create(PaymentMethodFacade.class).persistPmcPaymentMethod(entity.creditCardInfo(), pmc);
+                PmcPaymentMethod paymentMethod = ServerSideFactory.create(PaymentMethodFacade.class).persistPmcPaymentMethod(dto.creditCardInfo(), pmc);
+                Persistence.service().retrieveMember(pmc.equifaxInfo());
+                pmc.equifaxInfo().paymentMethod().set(paymentMethod);
+
+                pmc.equifaxInfo().equifaxSignUpFee().setValue(dto.equifaxSignUpFee().getValue());
+                pmc.equifaxInfo().equifaxPerApplicantCreditCheckFee().setValue(dto.equifaxPerApplicantCreditCheckFee().getValue());
+
+                Persistence.service().persist(pmc.equifaxInfo());
                 return null;
             }
         });

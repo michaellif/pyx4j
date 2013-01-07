@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -12,6 +12,8 @@
  * @version $Id$
  */
 package com.propertyvista.payment.caledon;
+
+import java.math.BigDecimal;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -73,7 +75,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
     }
 
     @Override
-    public PaymentResponse realTimeAuthorization(Merchant merchant, PaymentRequest request) {
+    public PaymentResponse realTimePreAuthorization(Merchant merchant, PaymentRequest request) {
         CaledonRequest crequest = createRequestInstrument(request.paymentInstrument().<PaymentInstrument> cast());
 
         crequest.terminalID = merchant.terminalID().getValue();
@@ -88,7 +90,22 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
     }
 
     @Override
-    public PaymentResponse realTimeAuthorizationCompletion(Merchant merchant, PaymentRequest request) {
+    public PaymentResponse realTimePreAuthorizationReversal(Merchant merchant, PaymentRequest request) {
+        CaledonRequest crequest = createRequestInstrument(request.paymentInstrument().<PaymentInstrument> cast());
+
+        crequest.terminalID = merchant.terminalID().getValue();
+        crequest.transactionType = CaledonTransactionType.AUTH_REVERSE.getValue();
+        crequest.referenceNumber = request.referenceNumber().getValue();
+
+        crequest.setAmount(BigDecimal.ZERO);
+
+        CaledonResponse cresponse = client.transaction(crequest);
+
+        return createResponse(cresponse);
+    }
+
+    @Override
+    public PaymentResponse realTimePreAuthorizationCompletion(Merchant merchant, PaymentRequest request) {
         CaledonRequest crequest = createRequestInstrument(request.paymentInstrument().<PaymentInstrument> cast());
 
         if (!(crequest instanceof CaledonRequestToken)) {

@@ -161,11 +161,27 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         Persistence.service().retrieve(screening.version().incomes());
         Persistence.service().retrieve(screening.version().assets());
 
-        pcc = EquifaxCreditCheck.runCreditCheck(equifaxInfo, leaseParticipant.leaseParticipant().customer(), pcc, backgroundCheckPolicy.strategyNumber()
-                .getValue());
+        pcc.transactionId().setValue(ScreeningPayments.preAuthorization(equifaxInfo));
 
-        Persistence.service().persist(pcc);
-        Persistence.service().commit();
+        boolean success = false;
+        try {
+            pcc = EquifaxCreditCheck.runCreditCheck(equifaxInfo, leaseParticipant.leaseParticipant().customer(), pcc, backgroundCheckPolicy.strategyNumber()
+                    .getValue());
+
+            // This is the business, we charge only when riskCode is returned
+            success = !pcc.riskCode().isNull();
+
+            Persistence.service().persist(pcc);
+
+            Persistence.service().commit();
+        } finally {
+            if (success) {
+                ScreeningPayments.compleateTransaction(pcc.transactionId().getValue());
+            } else {
+                ScreeningPayments.preAuthorizationReversal(pcc.transactionId().getValue());
+            }
+        }
+
     }
 
     private CustomerScreening retrivePersonScreening(Customer customer) {

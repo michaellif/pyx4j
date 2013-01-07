@@ -19,12 +19,17 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 
 @Table(namespace = VistaNamespace.adminNamespace)
@@ -36,12 +41,20 @@ public interface CustomerCreditCheckTransaction extends IEntity {
 
         Authorized,
 
-        Processing,
-
         Rejected,
+
+        Reversal,
+
+        PaymentRejected,
 
         Cleared,
     }
+
+    @ReadOnly
+    @Indexed
+    @Owner
+    @MemberColumn(notNull = true)
+    Pmc pmc();
 
     @NotNull
     @Format("#,##0.00")

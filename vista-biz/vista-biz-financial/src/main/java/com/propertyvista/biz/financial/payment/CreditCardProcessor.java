@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -235,13 +235,33 @@ class CreditCardProcessor {
 
         IPaymentProcessor proc = new CaledonPaymentProcessor();
 
-        PaymentResponse response = proc.realTimeAuthorization(merchant, request);
+        PaymentResponse response = proc.realTimePreAuthorization(merchant, request);
         if (response.code().getValue().equals("0000")) {
             log.debug("ccTransaction accepted {}", response);
             return response.authorizationNumber().getValue();
         } else {
             log.debug("ccTransaction rejected {}", response);
             throw new UserRuntimeException(i18n.tr("Credit Card Authorization failed {0}", response.message()));
+        }
+    }
+
+    public static void authorizationReversal(String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
+        Merchant merchant = EntityFactory.create(Merchant.class);
+        merchant.terminalID().setValue(merchantTerminalId);
+
+        PaymentRequest request = EntityFactory.create(PaymentRequest.class);
+        request.referenceNumber().setValue(referenceNumber);
+
+        request.paymentInstrument().set(createPaymentInstrument(cc));
+
+        IPaymentProcessor proc = new CaledonPaymentProcessor();
+
+        PaymentResponse response = proc.realTimePreAuthorizationReversal(merchant, request);
+        if (response.code().getValue().equals("0000")) {
+            log.debug("ccTransaction accepted {}", response);
+        } else {
+            log.debug("ccTransaction rejected {}", response);
+            throw new UserRuntimeException(i18n.tr("Credit Card Pre-authorization reversal failed {0}", response.message()));
         }
     }
 
@@ -257,7 +277,7 @@ class CreditCardProcessor {
 
         IPaymentProcessor proc = new CaledonPaymentProcessor();
 
-        PaymentResponse response = proc.realTimeAuthorizationCompletion(merchant, request);
+        PaymentResponse response = proc.realTimePreAuthorizationCompletion(merchant, request);
         if (response.code().getValue().equals("0000")) {
             log.debug("ccTransaction accepted {}", response);
             return response.authorizationNumber().getValue();

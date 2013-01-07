@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,9 +17,11 @@ public interface IPaymentProcessor {
 
     PaymentResponse realTimeSale(Merchant merchant, PaymentRequest request);
 
-    PaymentResponse realTimeAuthorization(Merchant merchant, PaymentRequest request);
+    PaymentResponse realTimePreAuthorization(Merchant merchant, PaymentRequest request);
 
-    PaymentResponse realTimeAuthorizationCompletion(Merchant merchant, PaymentRequest request);
+    PaymentResponse realTimePreAuthorizationReversal(Merchant merchant, PaymentRequest request);
+
+    PaymentResponse realTimePreAuthorizationCompletion(Merchant merchant, PaymentRequest request);
 
     PaymentResponse createToken(Merchant merchant, CCInformation ccinfo, Token token);
 
