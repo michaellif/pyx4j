@@ -65,4 +65,8 @@ public class ShapeImpl extends GraphicsElementImpl implements Shape {
         setAttribute("stroke-width", strokeWidth);
     }
 
+    @Override
+    public void setStrokeDasharray(String dasharray) {
+        setAttribute("stroke-dasharray", dasharray);
+    }
 }

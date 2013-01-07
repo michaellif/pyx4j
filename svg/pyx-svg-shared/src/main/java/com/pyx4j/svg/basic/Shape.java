@@ -28,6 +28,8 @@ public interface Shape extends GraphicsElement {
 
     public void setStrokeWidth(String strokeWidth);
 
+    public void setStrokeDasharray(String dasharray);
+
     public String getId();
 
     public void setTransform(String transform);

@@ -390,6 +390,7 @@ public abstract class GridBasedChart extends ChartBase implements IsSvgElement {
             Path valueGLP = factory.createPath(valueGL);
             valueGLP.setStroke(GRID_COLOR);
             valueGLP.setStrokeWidth("1");
+            valueGLP.setStrokeDasharray("1,1");
             container.add(valueGLP);
         }
 
