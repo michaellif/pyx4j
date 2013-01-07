@@ -50,6 +50,26 @@ public class YardiPropertyService {
     private final static Logger log = LoggerFactory.getLogger(YardiPropertyService.class);
 
     /**
+     * Updates/creates buildings basing on property data from YARDI system
+     * 
+     * @param yp
+     *            the YARDI System connection parameters
+     * @throws YardiServiceException
+     *             if operation fails
+     */
+    public void updateBuildings(YardiParameters yp) throws YardiServiceException {
+        validate(yp);
+
+        YardiClient client = new YardiClient(yp.getServiceURL());
+        try {
+            Properties properties = YardiTransactions.getPropertyConfigurations(client, yp);
+            merge(getBuildings(), properties.getProperties());
+        } catch (Exception e) {
+            throw new YardiServiceException("Fail to update buildings by data from YARDI System", e);
+        }
+    }
+
+    /**
      * Updates/creates building basing on property data from YARDI system
      * 
      * @param propertyCode
@@ -77,65 +97,6 @@ public class YardiPropertyService {
         }
 
         log.info("Did not find a building for property code {}", propertyCode);
-    }
-
-    private Building getBuilding(String propertyCode) {
-        EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
-        buildingCriteria.eq(buildingCriteria.proto().propertyCode(), propertyCode);
-        List<Building> buildings = Persistence.service().query(buildingCriteria);
-
-        return !buildings.isEmpty() ? buildings.get(0) : null;
-    }
-
-    private void merge(Building existing, Property property) {
-        if (existing != null) {
-            merge(Arrays.asList(existing), Arrays.asList(property));
-        }
-    }
-
-    /**
-     * Updates/creates buildings basing on property data from YARDI system
-     * 
-     * @param yp
-     *            the YARDI System connection parameters
-     * @throws YardiServiceException
-     *             if operation fails
-     */
-    public void updateBuildings(YardiParameters yp) throws YardiServiceException {
-        validate(yp);
-
-        YardiClient client = new YardiClient(yp.getServiceURL());
-        try {
-            Properties properties = YardiTransactions.getPropertyConfigurations(client, yp);
-            merge(getBuildings(), properties.getProperties());
-        } catch (Exception e) {
-            throw new YardiServiceException("Fail to update buildings by data from YARDI System", e);
-        }
-    }
-
-    private List<Building> getBuildings() {
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.asc(criteria.proto().propertyCode());
-        return Persistence.service().query(criteria);
-    }
-
-    private void merge(List<Building> existing, List<Property> properties) {
-        GetPropertyConfigurationsMapper mapper = new GetPropertyConfigurationsMapper();
-        List<Building> imported = mapper.map(properties);
-
-        List<Building> merged = new BuildingsMerger().merge(imported, existing);
-        for (Building building : merged) {
-            update(building);
-        }
-    }
-
-    private void update(Building building) {
-        try {
-            Persistence.service().persist(building);
-            log.info("Building with property code {} successfully updated", building.propertyCode().getValue());
-        } catch (Exception e) {
-            log.error(String.format("Errors during updating building %s", building.propertyCode().getValue()), e);
-        }
     }
 
     /**
@@ -198,6 +159,45 @@ public class YardiPropertyService {
         } catch (Exception e) {
             throw new YardiServiceException(String.format("Fail to update unit %s for building with property code %s by data from YARDI System", unitId,
                     propertyCode), e);
+        }
+    }
+
+    private Building getBuilding(String propertyCode) {
+        EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
+        buildingCriteria.eq(buildingCriteria.proto().propertyCode(), propertyCode);
+        List<Building> buildings = Persistence.service().query(buildingCriteria);
+
+        return !buildings.isEmpty() ? buildings.get(0) : null;
+    }
+
+    private void merge(Building existing, Property property) {
+        if (existing != null) {
+            merge(Arrays.asList(existing), Arrays.asList(property));
+        }
+    }
+
+    private List<Building> getBuildings() {
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.asc(criteria.proto().propertyCode());
+        return Persistence.service().query(criteria);
+    }
+
+    private void merge(List<Building> existing, List<Property> properties) {
+        GetPropertyConfigurationsMapper mapper = new GetPropertyConfigurationsMapper();
+        List<Building> imported = mapper.map(properties);
+
+        List<Building> merged = new BuildingsMerger().merge(imported, existing);
+        for (Building building : merged) {
+            update(building);
+        }
+    }
+
+    private void update(Building building) {
+        try {
+            Persistence.service().persist(building);
+            log.info("Building with property code {} successfully updated", building.propertyCode().getValue());
+        } catch (Exception e) {
+            log.error(String.format("Errors during updating building %s", building.propertyCode().getValue()), e);
         }
     }
 
