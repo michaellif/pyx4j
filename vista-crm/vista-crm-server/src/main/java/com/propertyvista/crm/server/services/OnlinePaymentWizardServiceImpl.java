@@ -13,11 +13,14 @@
  */
 package com.propertyvista.crm.server.services;
 
+import java.util.Date;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.OnlinePaymentWizardService;
@@ -49,6 +52,14 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
 
         onlinePaymentSetup.paymentPadAgreement().localizedCaption().setValue("Pre-Authorized Debit Agreement and Interac Online");
         onlinePaymentSetup.paymentPadAgreement().content().setValue(contentBuilder.toString());
+
+        Date date = new Date();
+        String ipAddress = Context.getRequestRemoteAddr();
+
+        onlinePaymentSetup.caledonAgreementSignature().ipAddress().setValue(ipAddress);
+        onlinePaymentSetup.caledonAgreementSignature().timestamp().setValue(date);
+        onlinePaymentSetup.paymentPadAgreementSignature().ipAddress().setValue(ipAddress);
+        onlinePaymentSetup.paymentPadAgreementSignature().timestamp().setValue(date);
 
         callback.onSuccess(onlinePaymentSetup);
     }
