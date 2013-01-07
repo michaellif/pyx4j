@@ -13,8 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.components;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.dom.client.Style.VerticalAlign;
+import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
@@ -51,27 +53,43 @@ public class WidgetDecoratorRightLabel extends Composite implements IDecorator<C
 
     private final Label validationLabel;
 
-    public WidgetDecoratorRightLabel(CComponent<?, ?> component) {
+    private final double componentWidth;
+
+    /**
+     * 
+     * @param component
+     *            the component that will be wrapped
+     * @param componentWidth
+     *            component width in "EM"s
+     * @param labelWidth
+     *            label width in "EM"s
+     */
+    public WidgetDecoratorRightLabel(CComponent<?, ?> component, double componentWidth, double labelWidth) {
+        this.componentWidth = componentWidth;
         panel = new FlowPanel();
+
+        FlowPanel labelAndComponentHolder = new FlowPanel();
+        labelAndComponentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+        componentHolder = new SimplePanel();
+        componentHolder.getElement().getStyle().setFloat(Float.LEFT);
+        labelAndComponentHolder.add(componentHolder);
 
         label = new Label();
         label.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
-        componentHolder = new SimplePanel();
-
-        SimplePanel labelComponentHolder = new SimplePanel();
-        FlowPanel pTop = new FlowPanel();
-        componentHolder.getElement().getStyle().setFloat(Float.LEFT);
-        pTop.add(componentHolder);
         label.getElement().getStyle().setFloat(Float.LEFT);
-        pTop.add(label);
-        labelComponentHolder.setWidget(pTop);
-        labelComponentHolder.getElement().getStyle().setProperty("display", "table-cell");
-        labelComponentHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-        panel.add(labelComponentHolder);
+        label.getElement().getStyle().setWidth(labelWidth, Unit.EM);
+        label.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+        labelAndComponentHolder.add(label);
 
+        panel.add(labelAndComponentHolder);
+
+        SimplePanel validationLabelHolder = new SimplePanel();
         validationLabel = new Label();
         validationLabel.setStyleName(DefaultCComponentsTheme.StyleName.ValidationLabel.name());
-        panel.add(validationLabel);
+        validationLabel.getElement().getStyle().setWidth(labelWidth + componentWidth, Unit.EM);
+        validationLabelHolder.add(validationLabel);
+        panel.add(validationLabelHolder);
 
         initWidget(panel);
         setComponent(component);
@@ -80,6 +98,7 @@ public class WidgetDecoratorRightLabel extends Composite implements IDecorator<C
     @Override
     public void setComponent(CComponent<?, ?> component) {
         this.component = component;
+        this.component.setWidth(componentWidth + "em");
         this.component.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
@@ -110,7 +129,6 @@ public class WidgetDecoratorRightLabel extends Composite implements IDecorator<C
             });
         }
         label.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.Label));
-
     }
 
     @Override

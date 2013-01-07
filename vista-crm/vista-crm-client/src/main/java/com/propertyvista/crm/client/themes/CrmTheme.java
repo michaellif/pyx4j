@@ -43,6 +43,7 @@ import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.crm.client.ui.components.KeywordsBox;
 import com.propertyvista.crm.client.ui.components.LegalTermsContentViewer;
+import com.propertyvista.crm.client.ui.components.PmcSignatureForm;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 
@@ -134,7 +135,7 @@ public class CrmTheme extends VistaTheme {
         initKeywordBoxStyles();
 
         initWizardPanelStyles();
-
+        initPmcSignatureFormStyles();
         initLegalTermsContentViewerStyles();
     }
 
@@ -673,6 +674,20 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style("." + LegalTermsContentViewer.Styles.LegalTermsContentViewerContent);
         style.addProperty("margin", "15px");
+        addStyle(style);
+    }
+
+    private void initPmcSignatureFormStyles() {
+        Style style = new Style("." + PmcSignatureForm.Styles.PmcSignatureFormPmcLegalName);
+        style.addProperty("text-align", "center");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("font-size", "1.2em");
+        addStyle(style);
+
+        style = new Style("." + PmcSignatureForm.Styles.PmcSignatureFormRepName);
+        style.addProperty("text-align", "center");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("font-size", "1.5em");
         addStyle(style);
     }
 

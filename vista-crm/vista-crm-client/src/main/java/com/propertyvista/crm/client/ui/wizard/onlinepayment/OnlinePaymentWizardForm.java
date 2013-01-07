@@ -89,13 +89,16 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         super.onStepChange(event);
         if (event.getSelectedItem().getTabTitle().equals(CONFIRMATION_STEP_TITLE)) {
             companyNameLabel.setText(get(proto().businessInformation()).getValue().companyName().getValue());
+
         } else if (event.getSelectedItem().getTabTitle().equals(SIGNATURE_STEP_TITLE)) {
             String companyName = get(proto().businessInformation()).getValue().companyName().getValue();
-
             String companyOwnersFullName = (get(proto().personalInformation())).getValue().name().firstName().getValue() + " "
                     + (get(proto().personalInformation())).getValue().name().lastName().getValue();
+
             caledonSignatureForm.setFullName(companyOwnersFullName);
+            caledonSignatureForm.setPmcLegalName(companyName);
             paymentPadSignatureForm.setFullName(companyOwnersFullName);
+            paymentPadSignatureForm.setPmcLegalName(companyName);
 
             get(proto().caledonIAgree()).setTitle(i18n.tr("I, {0} agree to accept Visa Debit in a Card Not Present transactions environment", companyName));
             get(proto().paymentPadIAgree()).setTitle(i18n.tr("I, {0} agree to accept Payment Pad Terms and Conditions", companyName)); // TODO write the correct text            
@@ -188,7 +191,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         LegalTermsContentViewer caledonTermsContentViewer = new LegalTermsContentViewer(TERMS_VIEWER_HEIGHT);
         main.setWidget(++row, 0, inject(proto().caledonAgreement(), caledonTermsContentViewer));
 
-        main.setWidget(++row, 0, new WidgetDecoratorRightLabel(inject(proto().caledonIAgree())));
+        main.setWidget(++row, 0, new WidgetDecoratorRightLabel(inject(proto().caledonIAgree()), 2, 40));
         main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(TOP_I_AGREE_PANEL_PADDING, Unit.PX);
 
@@ -213,7 +216,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         LegalTermsContentViewer paymentPadTermsViewer = new LegalTermsContentViewer(TERMS_VIEWER_HEIGHT);
         main.setWidget(++row, 0, inject(proto().paymentPadAgreement(), paymentPadTermsViewer));
 
-        main.setWidget(++row, 0, new WidgetDecoratorRightLabel(inject(proto().paymentPadIAgree())));
+        main.setWidget(++row, 0, new WidgetDecoratorRightLabel(inject(proto().paymentPadIAgree()), 2, 40));
         main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(TOP_I_AGREE_PANEL_PADDING, Unit.PX);
 
