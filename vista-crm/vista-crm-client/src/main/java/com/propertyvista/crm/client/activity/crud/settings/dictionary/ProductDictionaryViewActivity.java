@@ -20,7 +20,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ProductDictionaryView;
@@ -45,26 +45,17 @@ public class ProductDictionaryViewActivity extends AbstractActivity implements P
     public ProductDictionaryViewActivity(Place place) {
         this.view = SettingsViewFactory.instance(ProductDictionaryView.class);
 
-        serviceLister = new ListerActivityBase<ServiceItemType>(place, view.getServiceListerView(),
+        serviceLister = new ListerController<ServiceItemType>(view.getServiceListerView(),
                 GWT.<ServiceItemTypeCrudService> create(ServiceItemTypeCrudService.class), ServiceItemType.class);
-        featureLister = new ListerActivityBase<FeatureItemType>(place, view.getFeatureListerView(),
+        featureLister = new ListerController<FeatureItemType>(view.getFeatureListerView(),
                 GWT.<FeatureItemTypeCrudService> create(FeatureItemTypeCrudService.class), FeatureItemType.class);
-        utilityLister = new ListerActivityBase<Utility>(place, view.getUtilityListerView(), GWT.<UtilityCrudService> create(UtilityCrudService.class),
-                Utility.class);
+        utilityLister = new ListerController<Utility>(view.getUtilityListerView(), GWT.<UtilityCrudService> create(UtilityCrudService.class), Utility.class);
     }
 
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
         container.setWidget(view);
         populate();
-    }
-
-    @Override
-    public void onStop() {
-        ((AbstractActivity) serviceLister).onStop();
-        ((AbstractActivity) featureLister).onStop();
-        ((AbstractActivity) utilityLister).onStop();
-        super.onStop();
     }
 
     @Override

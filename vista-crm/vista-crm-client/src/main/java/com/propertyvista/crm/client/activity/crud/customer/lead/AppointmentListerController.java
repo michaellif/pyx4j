@@ -16,21 +16,19 @@ package com.propertyvista.crm.client.activity.crud.customer.lead;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.ListerController;
 
 import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentListerView;
 import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 
-public class AppointmentListerActivity extends ListerActivityBase<Appointment> {
+public class AppointmentListerController extends ListerController<Appointment> {
 
-    @SuppressWarnings("unchecked")
-    public AppointmentListerActivity(Place place, AppointmentListerView view) {
-        super(place, view, (AbstractCrudService<Appointment>) GWT.create(AppointmentCrudService.class), Appointment.class);
+    public AppointmentListerController(Place place, AppointmentListerView view) {
+        super(view, GWT.<AppointmentCrudService> create(AppointmentCrudService.class), Appointment.class);
     }
 
     @Override

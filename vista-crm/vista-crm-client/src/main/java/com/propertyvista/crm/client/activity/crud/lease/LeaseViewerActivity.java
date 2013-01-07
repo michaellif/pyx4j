@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.activity.crud.lease;
 import java.util.List;
 import java.util.Vector;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -31,13 +30,12 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.activity.crud.billing.bill.BillListerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.bill.BillListerController;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
-import com.propertyvista.crm.client.activity.crud.lease.common.deposit.DepositLifecycleListerActivity;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -47,12 +45,14 @@ import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
+import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -61,7 +61,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     private static final I18n i18n = I18n.get(LeaseViewerActivity.class);
 
-    private final DepositLifecycleListerActivity depositLister;
+    private final IListerView.Presenter<DepositLifecycleDTO> depositLister;
 
     private final IListerView.Presenter<BillDataDTO> billLister;
 
@@ -71,28 +71,19 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     private LeaseDTO currentValue;
 
-    @SuppressWarnings("unchecked")
     public LeaseViewerActivity(CrudAppPlace place) {
         super(place, LeaseViewFactory.instance(LeaseViewerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class));
 
-        depositLister = new DepositLifecycleListerActivity(place, ((LeaseViewerView) getView()).getDepositListerView());
+        depositLister = new ListerController<DepositLifecycleDTO>(((LeaseViewerView) getView()).getDepositListerView(),
+                GWT.<DepositLifecycleCrudService> create(DepositLifecycleCrudService.class), DepositLifecycleDTO.class);
 
-        billLister = new BillListerActivity(place, ((LeaseViewerView) getView()).getBillListerView());
+        billLister = new BillListerController(((LeaseViewerView) getView()).getBillListerView());
 
-        paymentLister = new ListerActivityBase<PaymentRecordDTO>(place, ((LeaseViewerView) getView()).getPaymentListerView(),
+        paymentLister = new ListerController<PaymentRecordDTO>(((LeaseViewerView) getView()).getPaymentListerView(),
                 GWT.<PaymentCrudService> create(PaymentCrudService.class), PaymentRecordDTO.class);
 
-        leaseAdjustmentLister = new ListerActivityBase<LeaseAdjustment>(place, ((LeaseViewerView) getView()).getLeaseAdjustmentListerView(),
+        leaseAdjustmentLister = new ListerController<LeaseAdjustment>(((LeaseViewerView) getView()).getLeaseAdjustmentListerView(),
                 GWT.<LeaseAdjustmentCrudService> create(LeaseAdjustmentCrudService.class), LeaseAdjustment.class);
-    }
-
-    @Override
-    public void onStop() {
-        ((AbstractActivity) depositLister).onStop();
-        ((AbstractActivity) billLister).onStop();
-        ((AbstractActivity) paymentLister).onStop();
-        ((AbstractActivity) leaseAdjustmentLister).onStop();
-        super.onStop();
     }
 
     @Override

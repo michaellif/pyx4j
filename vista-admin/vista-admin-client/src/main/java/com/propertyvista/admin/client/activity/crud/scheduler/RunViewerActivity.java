@@ -13,7 +13,6 @@
  */
 package com.propertyvista.admin.client.activity.crud.scheduler;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -21,7 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -49,7 +48,7 @@ public class RunViewerActivity extends AdminViewerActivity<Run> implements RunVi
     public RunViewerActivity(CrudAppPlace place) {
         super(place, ManagementVeiwFactory.instance(RunViewerView.class), (AbstractCrudService<Run>) GWT.create(RunCrudService.class));
 
-        runDataLister = new ListerActivityBase<RunData>(place, ((RunViewerView) getView()).getRunDataListerView(),
+        runDataLister = new ListerController<RunData>(((RunViewerView) getView()).getRunDataListerView(),
                 (AbstractCrudService<RunData>) GWT.create(RunDataCrudService.class), RunData.class);
 
         runCrudService = GWT.create(RunCrudService.class);
@@ -79,7 +78,6 @@ public class RunViewerActivity extends AdminViewerActivity<Run> implements RunVi
             updateViewTimer.cancel();
             updateViewTimer = null;
         }
-        ((AbstractActivity) runDataLister).onStop();
         super.onStop();
     }
 

@@ -20,7 +20,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.IView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
-import com.propertyvista.crm.client.activity.ListerActivityFactory;
+import com.propertyvista.crm.client.activity.ListerControllerFactory;
 import com.propertyvista.crm.client.visor.IVisorController;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -34,7 +34,7 @@ public class MaintenanceRequestVisorController implements IVisorController {
 
     public MaintenanceRequestVisorController(Key tenantId) {
         view = new MaintenanceRequestVisorView(this);
-        lister = ListerActivityFactory.create(null, view.getLister(), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),
+        lister = ListerControllerFactory.create(view.getLister(), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),
                 MaintenanceRequestDTO.class, VistaCrmBehavior.Maintenance);
         lister.setParent(tenantId);
     }

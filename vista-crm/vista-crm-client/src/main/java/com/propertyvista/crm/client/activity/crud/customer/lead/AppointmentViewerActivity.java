@@ -13,10 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.crud.customer.lead;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -34,11 +32,10 @@ public class AppointmentViewerActivity extends CrmViewerActivity<Appointment> im
 
     private final IListerView.Presenter<ShowingDTO> showingsLister;
 
-    @SuppressWarnings("unchecked")
     public AppointmentViewerActivity(CrudAppPlace place) {
-        super(place, MarketingViewFactory.instance(AppointmentViewerView.class), (AbstractCrudService<Appointment>) GWT.create(AppointmentCrudService.class));
+        super(place, MarketingViewFactory.instance(AppointmentViewerView.class), GWT.<AppointmentCrudService> create(AppointmentCrudService.class));
 
-        showingsLister = new ShowingListerActivity(place, ((AppointmentViewerView) getView()).getShowingsListerView());
+        showingsLister = new ShowingListerController(((AppointmentViewerView) getView()).getShowingsListerView());
     }
 
     @Override
@@ -47,12 +44,6 @@ public class AppointmentViewerActivity extends CrmViewerActivity<Appointment> im
 
         showingsLister.setParent(result.getPrimaryKey());
         showingsLister.populate();
-    }
-
-    @Override
-    public void onStop() {
-        ((AbstractActivity) showingsLister).onStop();
-        super.onStop();
     }
 
     @Override

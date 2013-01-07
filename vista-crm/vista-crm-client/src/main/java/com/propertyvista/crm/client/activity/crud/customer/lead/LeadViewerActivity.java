@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.activity.crud.customer.lead;
 import java.util.List;
 import java.util.Vector;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -43,7 +42,7 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
     public LeadViewerActivity(CrudAppPlace place) {
         super(place, MarketingViewFactory.instance(LeadViewerView.class), GWT.<LeadCrudService> create(LeadCrudService.class));
 
-        appointmentsLister = new AppointmentListerActivity(place, ((LeadViewerView) getView()).getAppointmentsListerView());
+        appointmentsLister = new AppointmentListerController(place, ((LeadViewerView) getView()).getAppointmentsListerView());
     }
 
     @Override
@@ -98,12 +97,6 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
 
         appointmentsLister.setParent(result.getPrimaryKey());
         appointmentsLister.populate();
-    }
-
-    @Override
-    public void onStop() {
-        ((AbstractActivity) appointmentsLister).onStop();
-        super.onStop();
     }
 
     @Override

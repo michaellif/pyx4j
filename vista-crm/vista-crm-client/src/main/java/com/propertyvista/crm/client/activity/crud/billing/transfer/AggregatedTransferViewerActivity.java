@@ -13,14 +13,13 @@
  */
 package com.propertyvista.crm.client.activity.crud.billing.transfer;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -44,23 +43,14 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
         super(place, FinancialViewFactory.instance(AggregatedTransferViewerView.class), GWT
                 .<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class));
 
-        paymentLister = new ListerActivityBase<PaymentRecord>(place, ((AggregatedTransferViewerView) getView()).getPaymentsListerView(),
+        paymentLister = new ListerController<PaymentRecord>(((AggregatedTransferViewerView) getView()).getPaymentsListerView(),
                 GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecord.class);
 
-        returnedPaymentLister = new ListerActivityBase<PaymentRecord>(place, ((AggregatedTransferViewerView) getView()).getReturnedPaymentsListerView(),
+        returnedPaymentLister = new ListerController<PaymentRecord>(((AggregatedTransferViewerView) getView()).getReturnedPaymentsListerView(),
                 GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecord.class);
 
-        rejectedBatchPaymentsLister = new ListerActivityBase<PaymentRecord>(place,
-                ((AggregatedTransferViewerView) getView()).getRejectedBatchPaymentsListerView(),
+        rejectedBatchPaymentsLister = new ListerController<PaymentRecord>(((AggregatedTransferViewerView) getView()).getRejectedBatchPaymentsListerView(),
                 GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecord.class);
-    }
-
-    @Override
-    public void onStop() {
-        ((AbstractActivity) paymentLister).onStop();
-        ((AbstractActivity) returnedPaymentLister).onStop();
-        ((AbstractActivity) rejectedBatchPaymentsLister).onStop();
-        super.onStop();
     }
 
     @Override

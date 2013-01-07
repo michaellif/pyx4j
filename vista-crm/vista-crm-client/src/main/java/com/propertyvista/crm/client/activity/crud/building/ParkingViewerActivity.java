@@ -13,11 +13,9 @@
  */
 package com.propertyvista.crm.client.activity.crud.building;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -31,14 +29,13 @@ import com.propertyvista.dto.ParkingDTO;
 
 public class ParkingViewerActivity extends CrmViewerActivity<ParkingDTO> implements ParkingViewerView.Presenter {
 
-    private final IListerView.Presenter spotLister;
+    private final IListerView.Presenter<ParkingSpot> spotLister;
 
-    @SuppressWarnings("unchecked")
     public ParkingViewerActivity(CrudAppPlace place) {
-        super(place, BuildingViewFactory.instance(ParkingViewerView.class), (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class));
+        super(place, BuildingViewFactory.instance(ParkingViewerView.class), GWT.<ParkingCrudService> create(ParkingCrudService.class));
 
-        spotLister = new ListerActivityBase<ParkingSpot>(place, ((ParkingViewerView) getView()).getSpotView(),
-                (AbstractCrudService<ParkingSpot>) GWT.create(ParkingSpotCrudService.class), ParkingSpot.class);
+        spotLister = new ListerController<ParkingSpot>(((ParkingViewerView) getView()).getSpotView(),
+                GWT.<ParkingSpotCrudService> create(ParkingSpotCrudService.class), ParkingSpot.class);
 
     }
 
@@ -48,11 +45,5 @@ public class ParkingViewerActivity extends CrmViewerActivity<ParkingDTO> impleme
 
         spotLister.setParent(result.getPrimaryKey());
         spotLister.populate();
-    }
-
-    @Override
-    public void onStop() {
-        ((AbstractActivity) spotLister).onStop();
-        super.onStop();
     }
 }

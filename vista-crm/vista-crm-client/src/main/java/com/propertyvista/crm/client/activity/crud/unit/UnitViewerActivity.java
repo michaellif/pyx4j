@@ -13,16 +13,14 @@
  */
 package com.propertyvista.crm.client.activity.crud.unit;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -48,18 +46,16 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
     private final UnitOccupancyManagerService occupancyManagerService;
 
-    @SuppressWarnings("unchecked")
     public UnitViewerActivity(CrudAppPlace place) {
-        super(place, UnitViewFactory.instance(UnitViewerView.class), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class));
+        super(place, UnitViewFactory.instance(UnitViewerView.class), GWT.<UnitCrudService> create(UnitCrudService.class));
 
-        unitItemsLister = new ListerActivityBase<AptUnitItem>(place, ((UnitViewerView) getView()).getUnitItemsListerView(),
-                (AbstractCrudService<AptUnitItem>) GWT.create(UnitItemCrudService.class), AptUnitItem.class);
+        unitItemsLister = new ListerController<AptUnitItem>(((UnitViewerView) getView()).getUnitItemsListerView(),
+                GWT.<UnitItemCrudService> create(UnitItemCrudService.class), AptUnitItem.class);
 
-        occupanciesLister = new ListerActivityBase<AptUnitOccupancySegment>(place, ((UnitViewerView) getView()).getOccupanciesListerView(),
-                (AbstractCrudService<AptUnitOccupancySegment>) GWT.create(UnitOccupancyCrudService.class), AptUnitOccupancySegment.class);
+        occupanciesLister = new ListerController<AptUnitOccupancySegment>(((UnitViewerView) getView()).getOccupanciesListerView(),
+                GWT.<UnitOccupancyCrudService> create(UnitOccupancyCrudService.class), AptUnitOccupancySegment.class);
 
         occupancyManagerService = GWT.create(UnitOccupancyManagerService.class);
-
     }
 
     @Override
@@ -110,13 +106,6 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
     @Override
     public boolean canEdit() {
         return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement);
-    }
-
-    @Override
-    public void onStop() {
-        ((AbstractActivity) unitItemsLister).onStop();
-        ((AbstractActivity) occupanciesLister).onStop();
-        super.onStop();
     }
 
     @Override

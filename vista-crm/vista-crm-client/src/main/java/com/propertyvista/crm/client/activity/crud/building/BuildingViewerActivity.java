@@ -15,18 +15,16 @@ package com.propertyvista.crm.client.activity.crud.building;
 
 import java.util.List;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.activity.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.activity.ListerActivityFactory;
+import com.propertyvista.crm.client.activity.ListerControllerFactory;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
@@ -88,35 +86,32 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     public BuildingViewerActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(BuildingViewerView.class), (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class));
 
-        floorplanLister = ListerActivityFactory.create(place, ((BuildingViewerView) getView()).getFloorplanListerView(),
+        floorplanLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getFloorplanListerView(),
                 (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class), FloorplanDTO.class, VistaCrmBehavior.PropertyManagement);
 
-        unitLister = ListerActivityFactory.create(place, ((BuildingViewerView) getView()).getUnitListerView(),
+        unitLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getUnitListerView(),
                 (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class), AptUnitDTO.class, VistaCrmBehavior.PropertyManagement);
 
-        elevatorLister = ListerActivityFactory.create(place, ((BuildingViewerView) getView()).getElevatorListerView(),
+        elevatorLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getElevatorListerView(),
                 (AbstractCrudService<ElevatorDTO>) GWT.create(ElevatorCrudService.class), ElevatorDTO.class, VistaCrmBehavior.Mechanicals);
-
-        boilerLister = ListerActivityFactory.create(place, ((BuildingViewerView) getView()).getBoilerListerView(),
+        boilerLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getBoilerListerView(),
                 (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class), BoilerDTO.class, VistaCrmBehavior.Mechanicals);
-
-        roofLister = ListerActivityFactory.create(place, ((BuildingViewerView) getView()).getRoofListerView(),
+        roofLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getRoofListerView(),
                 (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class), RoofDTO.class, VistaCrmBehavior.Mechanicals);
 
-        parkingLister = new ListerActivityBase<ParkingDTO>(place, ((BuildingViewerView) getView()).getParkingListerView(),
-                (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class), ParkingDTO.class);
+        parkingLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getParkingListerView(),
+                (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class), ParkingDTO.class, VistaCrmBehavior.PropertyManagement);
+        lockerAreaLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getLockerAreaListerView(),
+                (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class), LockerAreaDTO.class, VistaCrmBehavior.PropertyManagement);
 
-        lockerAreaLister = new ListerActivityBase<LockerAreaDTO>(place, ((BuildingViewerView) getView()).getLockerAreaListerView(),
-                (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class), LockerAreaDTO.class);
-
-        serviceLister = ListerActivityFactory.create(place, ((BuildingViewerView) getView()).getServiceListerView(),
+        serviceLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getServiceListerView(),
                 (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class), Service.class, VistaCrmBehavior.ProductCatalog);
-        featureLister = ListerActivityFactory.create(place, ((BuildingViewerView) getView()).getFeatureListerView(),
+        featureLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getFeatureListerView(),
                 (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class), Feature.class, VistaCrmBehavior.ProductCatalog);
-        concessionLister = ListerActivityFactory.create(place, ((BuildingViewerView) getView()).getConcessionListerView(),
+        concessionLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getConcessionListerView(),
                 (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class, VistaCrmBehavior.ProductCatalog);
 
-        billingCycleLister = ListerActivityFactory.create(place, ((BuildingViewerView) getView()).getBillingCycleListerView(),
+        billingCycleLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getBillingCycleListerView(),
                 (AbstractCrudService<BillingCycleDTO>) GWT.create(BillingCycleCrudService.class), BillingCycleDTO.class, VistaCrmBehavior.PropertyManagement);
     }
 
@@ -170,22 +165,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
         billingCycleLister.clearPreDefinedFilters();
         billingCycleLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillingCycleDTO.class).building(), result));
         billingCycleLister.populate();
-    }
-
-    @Override
-    public void onStop() {
-        ((AbstractActivity) floorplanLister).onStop();
-        ((AbstractActivity) unitLister).onStop();
-        ((AbstractActivity) elevatorLister).onStop();
-        ((AbstractActivity) boilerLister).onStop();
-        ((AbstractActivity) roofLister).onStop();
-        ((AbstractActivity) parkingLister).onStop();
-        ((AbstractActivity) lockerAreaLister).onStop();
-        ((AbstractActivity) serviceLister).onStop();
-        ((AbstractActivity) featureLister).onStop();
-        ((AbstractActivity) concessionLister).onStop();
-        ((AbstractActivity) billingCycleLister).onStop();
-        super.onStop();
     }
 
     @Override

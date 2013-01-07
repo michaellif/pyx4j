@@ -13,11 +13,9 @@
  */
 package com.propertyvista.crm.client.activity.crud.building;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -33,12 +31,11 @@ public class LockerAreaViewerActivity extends CrmViewerActivity<LockerAreaDTO> i
 
     private final IListerView.Presenter<?> lockerLister;
 
-    @SuppressWarnings("unchecked")
     public LockerAreaViewerActivity(CrudAppPlace place) {
-        super(place, BuildingViewFactory.instance(LockerAreaViewerView.class), (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class));
+        super(place, BuildingViewFactory.instance(LockerAreaViewerView.class), GWT.<LockerAreaCrudService> create(LockerAreaCrudService.class));
 
-        lockerLister = new ListerActivityBase<Locker>(place, ((LockerAreaViewerView) getView()).getLockerView(),
-                (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class), Locker.class);
+        lockerLister = new ListerController<Locker>(((LockerAreaViewerView) getView()).getLockerView(),
+                GWT.<LockerCrudService> create(LockerCrudService.class), Locker.class);
 
     }
 
@@ -48,11 +45,5 @@ public class LockerAreaViewerActivity extends CrmViewerActivity<LockerAreaDTO> i
 
         lockerLister.setParent(result.getPrimaryKey());
         lockerLister.populate();
-    }
-
-    @Override
-    public void onStop() {
-        ((AbstractActivity) lockerLister).onStop();
-        super.onStop();
     }
 }

@@ -13,14 +13,12 @@
  */
 package com.propertyvista.admin.client.activity.crud.scheduler;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -38,12 +36,10 @@ public class TriggerViewerActivity extends AdminViewerActivity<TriggerDTO> imple
 
     private final Presenter<Run> runLister;
 
-    @SuppressWarnings("unchecked")
     public TriggerViewerActivity(CrudAppPlace place) {
-        super(place, ManagementVeiwFactory.instance(TriggerViewerView.class), (AbstractCrudService<TriggerDTO>) GWT.create(TriggerCrudService.class));
+        super(place, ManagementVeiwFactory.instance(TriggerViewerView.class), GWT.<TriggerCrudService> create(TriggerCrudService.class));
 
-        runLister = new ListerActivityBase<Run>(place, ((TriggerViewerView) getView()).getRunListerView(),
-                (AbstractCrudService<Run>) GWT.create(RunCrudService.class), Run.class);
+        runLister = new ListerController<Run>(((TriggerViewerView) getView()).getRunListerView(), GWT.<RunCrudService> create(RunCrudService.class), Run.class);
     }
 
     @Override
@@ -52,12 +48,6 @@ public class TriggerViewerActivity extends AdminViewerActivity<TriggerDTO> imple
 
         runLister.setParent(result.getPrimaryKey());
         runLister.populate();
-    }
-
-    @Override
-    public void onStop() {
-        ((AbstractActivity) runLister).onStop();
-        super.onStop();
     }
 
     @Override

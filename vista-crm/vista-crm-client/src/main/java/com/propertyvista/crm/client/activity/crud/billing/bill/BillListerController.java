@@ -17,21 +17,20 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillListerPresenter;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 
-public class BillListerActivity extends ListerActivityBase<BillDataDTO> implements BillListerPresenter {
+public class BillListerController extends ListerController<BillDataDTO> implements BillListerPresenter {
 
-    public BillListerActivity(Place place, IListerView<BillDataDTO> view) {
-        super(place, view, GWT.<BillCrudService> create(BillCrudService.class), BillDataDTO.class);
+    public BillListerController(IListerView<BillDataDTO> view) {
+        super(view, GWT.<BillCrudService> create(BillCrudService.class), BillDataDTO.class);
     }
 
     @Override
