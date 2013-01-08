@@ -164,7 +164,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
         FormFlexPanel equifaxFeeQuotePanel = new FormFlexPanel();
         int rowFeeQuote = -1;
         equifaxFeeQuotePanel.setH1(++rowFeeQuote, 0, 2, i18n.tr("Equifax Fee Quote"));
-        equifaxFeeQuotePanel.setWidget(++rowFeeQuote, 0, inject(proto().equifaxFeeQuote(), new EquifaxFeeQuoteForm(false)));
+        equifaxFeeQuotePanel.setWidget(++rowFeeQuote, 0, inject(proto().equifaxFee(), new EquifaxFeeQuoteForm(false)));
 
         int row = -1;
 

@@ -13,53 +13,24 @@
  */
 package com.propertyvista.admin.rpc;
 
-import java.util.Date;
-
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.pmc.PmcDnsName;
-import com.propertyvista.domain.pmc.PmcEquifaxInfo;
-import com.propertyvista.domain.pmc.Pmc.PmcStatus;
-import com.propertyvista.domain.pmc.fee.PmcEquifaxFee;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.OnboardingUser;
-import com.propertyvista.domain.settings.PmcVistaFeatures;
 
 @Transient
 @Caption(name = "Property Management Company (PMC)")
-public interface PmcDTO extends IEntity {
+@ExtendsDBO(Pmc.class)
+public interface PmcDTO extends Pmc {
 
     OnboardingUser createPmcForExistingOnboardingUserRequest();
-
-    IPrimitive<PmcStatus> status();
-
-    @NotNull
-    @Caption(name = "Company name")
-    IPrimitive<String> name();
-
-    @ReadOnly
-    @Editor(type = Editor.EditorType.label)
-    IPrimitive<String> namespace();
-
-    @NotNull
-    @Caption(name = "DNS name")
-    IPrimitive<String> dnsName();
-
-    IList<PmcDnsName> dnsNameAliases();
-
-    PmcVistaFeatures features();
-
-    @ReadOnly
-    @Editor(type = Editor.EditorType.label)
-    IPrimitive<String> onboardingAccountId();
 
     Person person();
 
@@ -72,22 +43,10 @@ public interface PmcDTO extends IEntity {
     @Transient(logTransient = true)
     IPrimitive<String> password();
 
-    IPrimitive<String> accountStatus_TBD();
-
     IPrimitive<String> vistaCrmUrl();
 
     IPrimitive<String> residentPortalUrl();
 
     IPrimitive<String> prospectPortalUrl();
-
-    @ReadOnly
-    IPrimitive<Date> created();
-
-    @ReadOnly
-    IPrimitive<Date> updated();
-
-    PmcEquifaxInfo equifaxInfo();
-
-    PmcEquifaxFee equifaxFeeQuote();
 
 }

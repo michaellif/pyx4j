@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
@@ -51,17 +52,20 @@ public interface Pmc extends IEntity {
 
     @NotNull
     @ToString
+    @Caption(name = "Company name")
     IPrimitive<String> name();
 
     @NotNull
     @ReadOnly
     @Length(63)
     @Indexed(uniqueConstraint = true, ignoreCase = true)
+    @Editor(type = Editor.EditorType.label)
     IPrimitive<String> namespace();
 
     @NotNull
     @Length(63)
     @Indexed(uniqueConstraint = true, ignoreCase = true)
+    @Caption(name = "DNS name")
     IPrimitive<String> dnsName();
 
     @Owned
@@ -92,6 +96,7 @@ public interface Pmc extends IEntity {
 
     @Indexed(uniqueConstraint = true)
     @Length(63)
+    @Editor(type = Editor.EditorType.label)
     IPrimitive<String> onboardingAccountId();
 
     /**

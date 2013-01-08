@@ -58,26 +58,18 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
     @Override
     protected void bind() {
-        bind(dtoProto.status(), dboProto.status());
-        bind(dtoProto.name(), dboProto.name());
-        bind(dtoProto.dnsName(), dboProto.dnsName());
-        bind(dtoProto.namespace(), dboProto.namespace());
-        bind(dtoProto.onboardingAccountId(), dboProto.onboardingAccountId());
-        bind(dtoProto.dnsNameAliases(), dboProto.dnsNameAliases());
-        bind(dtoProto.features(), dboProto.features());
-        bind(dtoProto.created(), dboProto.created());
-        bind(dtoProto.updated(), dboProto.updated());
+        bindCompleteDBO();
+    }
+
+    @Override
+    protected void retrievedSingle(Pmc entity, RetrieveTraget retrieveTraget) {
+        Persistence.service().retrieveMember(entity.equifaxInfo());
+        Persistence.service().retrieveMember(entity.equifaxFee());
     }
 
     @Override
     protected void enhanceRetrieved(Pmc entity, PmcDTO dto, RetrieveTraget retrieveTraget) {
         super.enhanceRetrieved(entity, dto, retrieveTraget);
-
-        Persistence.service().retrieveMember(entity.equifaxInfo());
-        dto.equifaxInfo().set(entity.equifaxInfo().duplicate());
-
-        Persistence.service().retrieveMember(entity.equifaxFee());
-        dto.equifaxFeeQuote().set(entity.equifaxFee().duplicate());
 
         dto.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.CRM, true));
         dto.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.TenantPortal, false));
@@ -120,9 +112,9 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             Persistence.service().persist(entity.equifaxInfo());
         }
 
-        if (!dto.equifaxFeeQuote().isNull()) {
+        if (!dto.equifaxFee().isNull()) {
             Persistence.service().retrieveMember(entity.equifaxFee());
-            entity.equifaxFee().set(dto.equifaxFeeQuote());
+            entity.equifaxFee().set(dto.equifaxFee());
             Persistence.service().persist(entity.equifaxFee());
         }
 
