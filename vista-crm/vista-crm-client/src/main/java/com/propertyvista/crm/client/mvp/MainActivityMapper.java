@@ -196,6 +196,8 @@ import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsP
 import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsurancePolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsurancePolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsurancePolicyViewerActivity;
+import com.propertyvista.crm.client.activity.profile.PmcPaymentMethodsEditorActivity;
+import com.propertyvista.crm.client.activity.profile.PmcPaymentMethodsViewerActivity;
 import com.propertyvista.crm.client.activity.reports.CrmReportsActivity;
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckActivity;
@@ -1096,6 +1098,19 @@ public class MainActivityMapper implements AppActivityMapper {
 
                     } else if (crudPlace instanceof CrmSiteMap.Administration.Settings.CreditCheck.Status) {
                         activity = new CreditCheckStatusActivity(crudPlace);
+
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Profile.PaymentMethods) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new PmcPaymentMethodsEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new PmcPaymentMethodsViewerActivity(crudPlace);
+                            break;
+                        default:
+                            break;
+                        }
+
                     } // CRUD APP PLACE IF ENDS HERE
 
                     // Dashboard related stuff again

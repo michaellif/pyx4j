@@ -15,6 +15,7 @@ package com.propertyvista.crm.rpc;
 
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
@@ -328,6 +329,14 @@ public class CrmSiteMap implements SiteMap {
     }
 
     public static class Administration extends AppPlace {
+
+        public static class Profile extends AppPlace {
+
+            @PlaceProperties(caption = "Payment Methods")
+            public static class PaymentMethods extends CrudAppPlace {
+            }
+
+        }
 
         public static class Settings extends AppPlace {
 

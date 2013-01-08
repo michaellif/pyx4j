@@ -16,6 +16,10 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.IView;
 
+import com.propertyvista.crm.client.ui.crud.profile.paymentmethods.PmcPaymentMethodsEditorView;
+import com.propertyvista.crm.client.ui.crud.profile.paymentmethods.PmcPaymentMethodsEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.profile.paymentmethods.PmcPaymentMethodsViewerView;
+import com.propertyvista.crm.client.ui.crud.profile.paymentmethods.PmcPaymentMethodsViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.gadgets.HomePageGadgetEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.gadgets.HomePageGadgetEditorImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.gadgets.HomePageGadgetViewer;
@@ -158,6 +162,11 @@ public class SettingsViewFactory extends ViewFactoryBase {
 
             } else if (CreditCheckStatusView.class.equals(type)) {
                 map.put(type, new CreditCheckStatusViewImpl());
+
+            } else if (PmcPaymentMethodsViewerView.class.equals(type)) {
+                map.put(type, new PmcPaymentMethodsViewerViewImpl());
+            } else if (PmcPaymentMethodsEditorView.class.equals(type)) {
+                map.put(type, new PmcPaymentMethodsEditorViewImpl());
             }
         }
         @SuppressWarnings("unchecked")

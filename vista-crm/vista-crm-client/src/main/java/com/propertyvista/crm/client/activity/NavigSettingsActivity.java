@@ -61,6 +61,10 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
 
         NavigFolder folder = null;
 
+        folder = new NavigFolder(i18n.tr("Profile"));
+        folder.addNavigItem(new CrmSiteMap.Administration.Profile.PaymentMethods().formViewerPlace(new Key(-1)));
+        list.add(folder);
+
         folder = new NavigFolder(i18n.tr("Settings"));
         folder.addNavigItem(new Settings.OnlinePaymentSetup());
         folder.addNavigItem(new Settings.CreditCheck());
