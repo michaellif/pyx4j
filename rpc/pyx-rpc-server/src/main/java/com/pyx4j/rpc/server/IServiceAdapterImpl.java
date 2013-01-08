@@ -60,6 +60,9 @@ public class IServiceAdapterImpl implements IServiceAdapter {
     @Override
     public Serializable execute(IServiceRequest request) {
 
+        assert (request.getServiceClassId() != null) : "invalid requests, rebuild or restart server";
+        assert (request.getServiceMethodId() != null) : "invalid requests, rebuild or restart server";
+
         String serviceMethodName;
 
         // decode IService class name and  Method
