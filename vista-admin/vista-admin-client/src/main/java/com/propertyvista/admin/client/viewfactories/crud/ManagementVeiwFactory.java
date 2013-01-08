@@ -22,6 +22,8 @@ import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserList
 import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserListerViewImpl;
 import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserViewerView;
 import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserViewerViewImpl;
+import com.propertyvista.admin.client.ui.crud.pmc.EquifaxApprovalView;
+import com.propertyvista.admin.client.ui.crud.pmc.EquifaxApprovalViewImpl;
 import com.propertyvista.admin.client.ui.crud.pmc.OnboardingMerchantAccountEditorView;
 import com.propertyvista.admin.client.ui.crud.pmc.OnboardingMerchantAccountEditorViewImpl;
 import com.propertyvista.admin.client.ui.crud.pmc.OnboardingMerchantAccountViewerView;
@@ -53,6 +55,9 @@ public class ManagementVeiwFactory extends ViewFactoryBase {
                 map.put(type, new PmcViewerViewImpl());
             } else if (PmcEditorView.class.equals(type)) {
                 map.put(type, new PmcEditorViewImpl());
+
+            } else if (EquifaxApprovalView.class.equals(type)) {
+                map.put(type, new EquifaxApprovalViewImpl());
 
             } else if (OnboardingUserViewerView.class.equals(type)) {
                 map.put(type, new OnboardingUserViewerViewImpl());

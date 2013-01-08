@@ -41,6 +41,7 @@ import com.propertyvista.admin.client.activity.crud.onboardingmerchantaccount.On
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnBoardingUserViewerActivity;
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnboardingUserEditorActivity;
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnboardingUserListerActivity;
+import com.propertyvista.admin.client.activity.crud.pmc.EquifaxApprovalViewActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcEditorActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcListerActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcViewerActivity;
@@ -87,6 +88,16 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case lister:
                             activity = new PmcListerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof AdminSiteMap.Management.EquifaxApproval) {
+                        switch (crudPlace.getType()) {
+                        case viewer:
+                            activity = new EquifaxApprovalViewActivity(crudPlace);
+                            break;
+
+                        default:
                             break;
                         }
 

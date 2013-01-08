@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.wizard.common;
+package com.propertyvista.common.client.ui.components.editors.dto.wizards;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -20,25 +20,26 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
-import com.propertyvista.domain.pmc.info.BusinessInformation;
+import com.propertyvista.common.client.ui.components.editors.NameEditor;
+import com.propertyvista.domain.pmc.info.PersonalInformation;
 
-public class BusinessInformationForm extends CEntityDecoratableForm<BusinessInformation> {
+public class PersonalInformationForm extends CEntityDecoratableForm<PersonalInformation> {
 
-    public BusinessInformationForm() {
-        super(BusinessInformation.class);
+    public PersonalInformationForm() {
+        super(PersonalInformation.class);
     }
 
     @Override
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
-        int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().companyName())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().companyType())).build());
+        int row = 0;
+        main.setWidget(++row, 0, inject(proto().name(), new NameEditor()));
         main.setWidget(++row, 0, new HTML("&nbsp;"));
-        main.setWidget(++row, 0, inject(proto().businessAddress(), new AddressSimpleEditor()));
+        main.setWidget(++row, 0, inject(proto().personalAddress(), new AddressSimpleEditor()));
         main.setWidget(++row, 0, new HTML("&nbsp;"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().businessNumber())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().businessEstablishedDate())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dateOfBirth())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sin())).build());
         return main;
     }
 

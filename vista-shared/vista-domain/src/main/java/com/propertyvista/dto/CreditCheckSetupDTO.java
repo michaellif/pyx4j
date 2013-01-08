@@ -37,7 +37,6 @@ public interface CreditCheckSetupDTO extends IEntity {
     PersonalInformation personalInformation();
 
     // CONFIRMATION SECTION ---------------------------------------------------
-
     CreditCardInfo creditCardInfo();
 
 }

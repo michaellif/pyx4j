@@ -49,8 +49,12 @@ public class AdminSiteMap implements SiteMap {
     }
 
     public static class Management extends AppPlace {
+
         @PlaceProperties(navigLabel = "Property Management Companies (PMCs)")
         public static class PMC extends CrudAppPlace {
+        }
+
+        public static class EquifaxApproval extends CrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Onboarding Users")

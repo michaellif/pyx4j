@@ -40,11 +40,11 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
+import com.propertyvista.common.client.ui.components.editors.dto.wizards.BusinessInformationForm;
+import com.propertyvista.common.client.ui.components.editors.dto.wizards.PersonalInformationForm;
 import com.propertyvista.crm.client.ui.components.LegalTermsContentViewer;
 import com.propertyvista.crm.client.ui.components.PmcSignatureForm;
 import com.propertyvista.crm.client.ui.components.WidgetDecoratorRightLabel;
-import com.propertyvista.crm.client.ui.wizard.common.BusinessInformationForm;
-import com.propertyvista.crm.client.ui.wizard.common.PersonalInformationForm;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 import com.propertyvista.dto.OnlinePaymentSetupDTO;
 import com.propertyvista.dto.OnlinePaymentSetupDTO.PropertyAccountInfo;

@@ -13,20 +13,26 @@
  */
 package com.propertyvista.admin.client.ui.crud.pmc;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.admin.client.ui.components.EquifaxFeeQuoteForm;
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
+import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.OnboardingMerchantAccountDTO;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.domain.pmc.Pmc;
@@ -181,6 +187,14 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
                 .build());
         get(proto().equifaxInfo().equifaxPerApplicantCreditCheckFee()).setViewable(true);
 
+        Anchor approvalLink = new Anchor(i18n.tr("Go to Approval Screen"));
+        approvalLink.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                AppSite.getPlaceController().goTo(new AdminSiteMap.Management.EquifaxApproval().formViewerPlace(new Key(-1)));
+            }
+        });
+        content.setWidget(++row, 0, approvalLink);
         return content;
     }
 }
