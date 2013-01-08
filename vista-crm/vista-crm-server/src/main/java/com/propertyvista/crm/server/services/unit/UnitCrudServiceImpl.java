@@ -115,7 +115,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     protected void save(AptUnit dbo, AptUnitDTO in) {
         super.save(dbo, in);
 
-        ServerSideFactory.create(DefaultProductCatalogFacade.class).updateUnit(dbo.building(), dbo, true);
+        ServerSideFactory.create(DefaultProductCatalogFacade.class).updateUnit(dbo.building(), dbo);
     }
 
     private void retrieveServicePrices(AptUnitDTO dto) {
@@ -131,6 +131,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
                         AptUnitServicePriceDTO serviceDTO = EntityFactory.create(AptUnitServicePriceDTO.class);
                         serviceDTO.id().setValue(service.id().getValue());
                         serviceDTO.type().setValue(service.serviceType().getValue());
+                        serviceDTO.name().setValue(service.version().name().getValue());
                         serviceDTO.price().setValue(item.price().getValue());
                         dto.marketPrices().add(serviceDTO);
                     }

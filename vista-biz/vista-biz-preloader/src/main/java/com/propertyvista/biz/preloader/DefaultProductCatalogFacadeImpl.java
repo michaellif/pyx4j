@@ -124,7 +124,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
     }
 
     @Override
-    public void updateUnit(Building building, AptUnit unit, boolean persist) {
+    public void updateUnit(Building building, AptUnit unit) {
         if (building.isValueDetached()) {
             Persistence.service().retrieve(building);
         }
@@ -142,9 +142,6 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
                 case residentialUnit:
                 case residentialShortTermUnit:
                     updateUnitItem(unit, service);
-                    if (persist) {
-                        Persistence.service().persist(service);
-                    }
                     break;
                 default:
                     break;
@@ -270,6 +267,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
         for (ProductItem item : Persistence.service().query(criteria)) {
             item.price().setValue(unit.financial()._marketRent().isNull() ? BigDecimal.ZERO : unit.financial()._marketRent().getValue());
+            Persistence.service().merge(item);
         }
     }
 }

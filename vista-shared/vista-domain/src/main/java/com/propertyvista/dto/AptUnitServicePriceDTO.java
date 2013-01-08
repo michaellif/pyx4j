@@ -29,6 +29,8 @@ public interface AptUnitServicePriceDTO extends IEntity {
 
     IPrimitive<Service.ServiceType> type();
 
+    IPrimitive<String> name();
+
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> price();

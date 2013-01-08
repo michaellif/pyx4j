@@ -54,8 +54,6 @@ public interface DefaultProductCatalogFacade {
      * 
      * @param building
      * @param unit
-     * @param persist
-     *            - if persist affected services immediately or persistFor(...) will be called later
      */
-    void updateUnit(Building building, AptUnit unit, boolean persist);
+    void updateUnit(Building building, AptUnit unit);
 }
