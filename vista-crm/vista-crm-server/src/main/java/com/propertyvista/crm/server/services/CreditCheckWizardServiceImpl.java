@@ -27,6 +27,7 @@ import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.CreditCheckWizardService;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.PmcEquifaxInfo.EquifaxStatus;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.dto.CreditCheckSetupDTO;
@@ -50,11 +51,17 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
         TaskRunner.runInAdminNamespace(new Callable<Void>() {
             @Override
             public Void call() {
+                Persistence.service().persist(dto.businessInformation());
+                Persistence.service().persist(dto.personalInformation());
+
                 PmcPaymentMethod paymentMethod = ServerSideFactory.create(PaymentMethodFacade.class).persistPmcPaymentMethod(dto.creditCardInfo(), pmc);
                 Persistence.service().retrieveMember(pmc.equifaxInfo());
                 pmc.equifaxInfo().paymentMethod().set(paymentMethod);
-                pmc.equifaxInfo().approved().setValue(false);
+                pmc.equifaxInfo().status().setValue(EquifaxStatus.PendingVistaApproval);
                 pmc.equifaxInfo().reportType().setValue(dto.creditPricingOption().getValue());
+
+                pmc.equifaxInfo().businessInformation().set(dto.businessInformation());
+                pmc.equifaxInfo().personalInformation().set(dto.personalInformation());
 
                 switch (dto.creditPricingOption().getValue()) {
                 case FullCreditReport:

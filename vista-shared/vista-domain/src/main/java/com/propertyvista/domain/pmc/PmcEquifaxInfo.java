@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
@@ -31,6 +32,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.info.BusinessInformation;
+import com.propertyvista.domain.pmc.info.PersonalInformation;
 
 @Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
 @Caption(name = "PMC Equifax Info")
@@ -74,5 +77,13 @@ public interface PmcEquifaxInfo extends IEntity {
 
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> equifaxPerApplicantCreditCheckFee();
+
+    @Owned
+    @Detached
+    BusinessInformation businessInformation();
+
+    @Owned
+    @Detached
+    PersonalInformation personalInformation();
 
 }
