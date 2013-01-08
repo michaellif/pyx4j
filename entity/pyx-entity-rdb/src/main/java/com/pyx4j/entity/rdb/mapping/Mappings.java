@@ -130,7 +130,8 @@ public class Mappings {
     public static Collection<Class<? extends IEntity>> getPersistableAssignableFrom(Class<? extends IEntity> entityClass) {
         List<Class<? extends IEntity>> allAssignableClasses = new ArrayList<Class<? extends IEntity>>();
         for (Class<? extends IEntity> ec : ServerEntityFactory.getAllAssignableFrom(entityClass)) {
-            if ((ec.getAnnotation(Transient.class) == null) && (ec.getAnnotation(AbstractEntity.class) == null)) {
+            if ((ec.getAnnotation(Transient.class) == null) && (ec.getAnnotation(AbstractEntity.class) == null)
+                    && (ec.getAnnotation(EmbeddedEntity.class) == null)) {
                 allAssignableClasses.add(ec);
             }
         }

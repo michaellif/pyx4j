@@ -35,6 +35,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.SQLUtils;
@@ -86,7 +87,7 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
                             + impClasses.get(discriminator.value()));
                 }
                 impClasses.put(discriminator.value(), subclass);
-            } else if (subclass.getAnnotation(AbstractEntity.class) == null) {
+            } else if ((subclass.getAnnotation(AbstractEntity.class) == null) && (subclass.getAnnotation(EmbeddedEntity.class) == null)) {
                 throw new Error("Class " + subclass.getName() + " require @AbstractEntity or @DiscriminatorValue annotation");
             }
         }
