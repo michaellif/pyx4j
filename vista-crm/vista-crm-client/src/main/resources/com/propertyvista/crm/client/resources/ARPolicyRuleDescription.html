@@ -1,14 +1,29 @@
-<b>Oldest Debt First</b>
-Sort Charges to be paid by due date only:
-1. All charges randomly, from oldest to most recent
+<style type="text/css">
+table.tftable {font-size:14px;color:#333333;width:70%;border-width: 1px;border-color: #DCDCDC;border-collapse: collapse;}
+table.tftable th {font-size:14px;background-color:#DCDCDC;border-width: 1px;padding: 8px;border-style: solid;border-color: #DCDCDC;text-align:left;}
+table.tftable tr {background-color:#ffffff;}
+table.tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #DCDCDC;}
+</style>
 
-<b>Rent Debt Last</b>
-Sort Charges to be paid by charge type only:
-1.All non rent charges first, from oldest to most recent
-2.All services (rent) last, from oldest to most recent
-
-<b>Oldest Debt First With Non Rent Priority</b>
-Sort Charges to be paid by due date and charge type:
-1.All charges, from oldest to most recent
-2.Within the same due date, all non rent charges first
-3.Within the same due date, all services (rent) last
+<table class="tftable" border="1">
+<tr><th>Suggested Name</th><th>Rule Description</th></tr>
+<tr><td><strong>Oldest Debt first</strong></td><td>Sort Charges to be paid by due date only:
+		<ol>
+			<li>All charges randomly, from oldest to most recent</li>
+		</ol>
+</td></tr>
+<tr><td><strong>Rent Debt Last</strong></td>
+<td>Sort Charges to be paid by charge type only:
+		<ol>
+			<li>All non rent charges first, from oldest to most recent</li>
+			<li>All services (rent) last, from oldest to most recent</li>
+		</ol>
+ </td></tr>
+<tr><td><strong>Oldest Debt First With Non Rent Priority</strong> </td><td>Sort Charges to be paid by due date and charge type:
+		<ol>
+			<li>All charges, from oldest to most recent</li>
+			<li>Within the same due date, all non rent charges first</li>
+			<li>Within the same due date, all services (rent) last</li>
+		</ol>
+ </td></tr>
+</table>
