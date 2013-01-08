@@ -61,7 +61,8 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
 
         folder = new NavigFolder(i18n.tr("Settings"));
         folder.addNavigItem(new Settings.OnlinePaymentSetup());
-        folder.addNavigItem(new Settings.CreditCheckSetup());
+        folder.addNavigItem(new Settings.CreditCheck.Setup());
+        folder.addNavigItem(new Settings.CreditCheck());
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Security"));

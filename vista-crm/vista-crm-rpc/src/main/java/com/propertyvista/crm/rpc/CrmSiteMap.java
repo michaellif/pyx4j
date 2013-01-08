@@ -335,9 +335,23 @@ public class CrmSiteMap implements SiteMap {
             public static class OnlinePaymentSetup extends AppPlace {
             }
 
-            @PlaceProperties(caption = "Credit Check Setup")
-            public static class CreditCheckSetup extends AppPlace {
+            /**
+             * This place is for dispatching the Credit Check to correct activity
+             */
+            @PlaceProperties(caption = "Credit Check", navigLabel = "Credit Check")
+            public static class CreditCheck extends AppPlace {
+
+                @PlaceProperties(caption = "Credit Check Setup")
+                public static class Setup extends AppPlace {
+                }
+
+                @PlaceProperties(caption = "Credit Check")
+                public static class Status extends AppPlace {
+
+                }
+
             }
+
         }
 
         public static class Security extends AppPlace {

@@ -28,7 +28,7 @@ public class CreditCheckWizardViewImpl extends WizardViewImplBase<CreditCheckSet
     private static final I18n i18n = I18n.get(CreditCheckWizardViewImpl.class);
 
     public CreditCheckWizardViewImpl() {
-        super(CrmSiteMap.Administration.Settings.CreditCheckSetup.class);
+        super(CrmSiteMap.Administration.Settings.CreditCheck.Setup.class);
         setForm(new CreditCheckWizardForm(this, new Command() {
             @Override
             public void execute() {
