@@ -16,10 +16,13 @@ package com.propertyvista.crm.client.ui.crud.policies.ar;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.user.client.ui.HTML;
+
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
+import com.propertyvista.crm.client.resources.CrmResources;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.ARPolicyDTO;
 
@@ -39,7 +42,10 @@ public class ARPolicyForm extends PolicyDTOTabPanelBasedForm<ARPolicyDTO> {
     private FormFlexPanel createARPoliciesTab() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("AR Settings"));
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditDebitRule())).labelWidth(20).componentWidth(20).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditDebitRule()), 25).build());
+
+        content.setH3(++row, 0, 1, i18n.tr("Hints"));
+        content.setWidget(++row, 0, new HTML(CrmResources.INSTANCE.arPolicyRuleDescription().getText()));
 
         return content;
     }

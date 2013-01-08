@@ -23,4 +23,7 @@ public interface CrmResources extends ClientBundleWithLookup {
 
     @Source("BackgroundCheckHelp.html")
     TextResource backgroundCheckHelp();
+
+    @Source("ARPolicyRuleDescription.html")
+    TextResource arPolicyRuleDescription();
 }
