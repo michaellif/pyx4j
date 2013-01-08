@@ -37,6 +37,12 @@ import com.propertyvista.domain.VistaNamespace;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PmcEquifaxInfo extends IEntity {
 
+    public enum EquifaxStatus {
+        PendingVistaApproval, PendingEquifaxApproval, Rejected, Active, Suspended
+    }
+
+    IPrimitive<EquifaxStatus> status();
+
     @ReadOnly
     @Owner
     @MemberColumn(notNull = true)
