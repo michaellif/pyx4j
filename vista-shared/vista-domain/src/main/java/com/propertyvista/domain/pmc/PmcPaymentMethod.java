@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.pmc;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -44,4 +45,8 @@ public interface PmcPaymentMethod extends AbstractPaymentMethod {
     @Override
     @Transient
     AddressStructured billingAddress();
+
+    @Transient
+    @Caption(description = "Use this payment method for Equifax payments")
+    IPrimitive<Boolean> setAsActive();
 }

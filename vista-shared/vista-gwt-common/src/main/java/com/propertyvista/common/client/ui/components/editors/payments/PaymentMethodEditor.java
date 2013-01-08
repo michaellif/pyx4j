@@ -38,6 +38,7 @@ import com.pyx4j.widgets.client.RadioGroup;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CashInfo;
 import com.propertyvista.domain.payment.CheckInfo;
 import com.propertyvista.domain.payment.CreditCardInfo;
@@ -45,8 +46,8 @@ import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.InteracInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentDetails;
-import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.pmc.PmcPaymentMethod;
 
 public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntityDecoratableForm<E> {
 
@@ -95,6 +96,11 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
             main.setBR(++row, 0, 1);
             main.setWidget(++row, 0, new DecoratorBuilder(inject(((LeasePaymentMethod) proto()).isPreauthorized())).build());
             get(((LeasePaymentMethod) proto()).isPreauthorized()).setVisible(false);
+        }
+        if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
+            main.setBR(++row, 0, 1);
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(((PmcPaymentMethod) proto()).setAsActive())).build());
+            get(((PmcPaymentMethod) proto()).setAsActive()).setVisible(false);
         }
 
         // tweak UI:
@@ -273,9 +279,12 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         return get(proto().sameAsCurrent()).isEnabled();
     }
 
+    /** In case of PmcPaymentmethod enables the checkbox for activating the payment method, in LeasePayment method controls the visibility of isPreauthorized() */
     public void setIsPreauthorizedVisible(boolean visible) {
         if (paymentEntityClass.equals(LeasePaymentMethod.class)) {
             get(((LeasePaymentMethod) proto()).isPreauthorized()).setVisible(visible);
+        } else if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
+            get(((PmcPaymentMethod) proto()).setAsActive()).setVisible(visible);
         }
 
     }
@@ -283,6 +292,8 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
     public boolean isIsPreauthorizedVisible() {
         if (paymentEntityClass.equals(LeasePaymentMethod.class)) {
             return get(((LeasePaymentMethod) proto()).isPreauthorized()).isVisible();
+        } else if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
+            return get(((PmcPaymentMethod) proto()).setAsActive()).isVisible();
         } else {
             return false;
         }

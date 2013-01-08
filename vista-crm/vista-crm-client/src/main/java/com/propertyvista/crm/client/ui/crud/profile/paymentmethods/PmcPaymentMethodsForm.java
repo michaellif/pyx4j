@@ -28,6 +28,8 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
     public PmcPaymentMethodsForm(IFormView<PmcPaymentMethodsDTO> view) {
         super(PmcPaymentMethodsDTO.class, view);
         FormFlexPanel content = new FormFlexPanel(i18n.tr("Payment Methods"));
+        int row = -1;
+        content.setWidget(++row, 0, inject(proto().paymentMethods(), new PmcPaymentMethodFolder()));
         selectTab(addTab(content));
     }
 
