@@ -44,7 +44,7 @@ public class ARPolicyForm extends PolicyDTOTabPanelBasedForm<ARPolicyDTO> {
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditDebitRule()), 25).build());
 
-        content.setH3(++row, 0, 1, i18n.tr("Hints"));
+        content.setBR(++row, 0, 1);
         content.setWidget(++row, 0, new HTML(CrmResources.INSTANCE.arPolicyRuleDescription().getText()));
 
         return content;
