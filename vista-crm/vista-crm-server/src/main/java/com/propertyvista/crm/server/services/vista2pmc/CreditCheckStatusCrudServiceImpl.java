@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.admin;
+package com.propertyvista.crm.server.services.vista2pmc;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.crm.rpc.dto.admin.CreditCheckStatusDTO;
-import com.propertyvista.crm.rpc.services.admin.CreditCheckStatusCrudService;
+import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusCrudService;
 
 public class CreditCheckStatusCrudServiceImpl implements CreditCheckStatusCrudService {
 

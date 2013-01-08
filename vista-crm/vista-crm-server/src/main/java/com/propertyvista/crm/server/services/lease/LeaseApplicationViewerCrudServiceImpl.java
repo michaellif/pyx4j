@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -37,6 +37,7 @@ import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudServic
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -159,7 +160,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
         // check that we can send the e-mail before we actually try to send email
         for (LeaseTermParticipant<?> user : users) {
-            // check that all lease participants have an associated user entity (email)            
+            // check that all lease participants have an associated user entity (email)
             if (user.leaseParticipant().customer().user().isNull()) {
                 throw new UserRuntimeException(i18n.tr("Failed to invite users, email of lease participant {0} was not found", user.leaseParticipant()
                         .customer().person().name().getStringView()));
@@ -229,7 +230,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     }
 
     @Override
-    public void isCreditCheckActivated(AsyncCallback<Boolean> callback) {
-        callback.onSuccess(ServerSideFactory.create(ScreeningFacade.class).isCreditCheckActivated());
+    public void getCreditCheckServiceStatus(AsyncCallback<PmcEquifaxStatus> callback) {
+        callback.onSuccess(ServerSideFactory.create(ScreeningFacade.class).getCreditCheckServiceStatus());
     }
 }

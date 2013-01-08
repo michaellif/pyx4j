@@ -24,6 +24,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.Button;
@@ -37,6 +38,8 @@ import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
+import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
@@ -135,10 +138,11 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         checkAction = new MenuItem(i18n.tr("Credit Check"), new Command() {
             @Override
             public void execute() {
-                ((LeaseApplicationViewerView.Presenter) getPresenter()).isCreditCheckActivated(new DefaultAsyncCallback<Boolean>() {
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).getCreditCheckServiceStatus(new DefaultAsyncCallback<PmcEquifaxStatus>() {
                     @Override
-                    public void onSuccess(Boolean result) {
-                        if (result) {
+                    public void onSuccess(PmcEquifaxStatus result) {
+                        switch (result) {
+                        case Active:
                             ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
                                 @Override
                                 public void onSuccess(List<LeaseTermParticipant<?>> result) {
@@ -151,8 +155,16 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                                     }.show();
                                 }
                             });
-                        } else {
-                            new CreditCheckSubscribeDialog().show();
+                            break;
+                        case NotRequested:
+                            if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaAccountOwner)) {
+                                new CreditCheckSubscribeDialog().show();
+                            } else {
+                                reportCreditCheckServiceInactive();
+                            }
+                            break;
+                        default:
+                            reportCreditCheckServiceInactive();
                         }
                     }
                 });
@@ -311,6 +323,10 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     public void reportApplicationApprovalFailure(UserRuntimeException caught) {
         MessageDialog.info(caught.getMessage());
 
+    }
+
+    public void reportCreditCheckServiceInactive() {
+        MessageDialog.info(i18n.tr("No credit check service for this account has been set activated."));
     }
 
     private class CreditCheckSubscribeDialog extends Dialog implements YesNoOption {

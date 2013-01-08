@@ -48,6 +48,10 @@ public enum VistaCrmBehavior implements Behavior {
 
     Organization,
 
+    OrganizationFinancial,
+
+    OrganizationPolicy,
+
     Contacts,
 
     ProductCatalog,

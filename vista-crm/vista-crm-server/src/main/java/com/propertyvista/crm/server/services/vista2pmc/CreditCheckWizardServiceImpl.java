@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.server.services.vista2pmc;
 
 import java.util.concurrent.Callable;
 
@@ -25,9 +25,9 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.crm.rpc.services.CreditCheckWizardService;
+import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckWizardService;
+import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.pmc.PmcEquifaxInfo.EquifaxStatus;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.dto.CreditCheckSetupDTO;
@@ -57,7 +57,7 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
                 PmcPaymentMethod paymentMethod = ServerSideFactory.create(PaymentMethodFacade.class).persistPmcPaymentMethod(dto.creditCardInfo(), pmc);
                 Persistence.service().retrieveMember(pmc.equifaxInfo());
                 pmc.equifaxInfo().paymentMethod().set(paymentMethod);
-                pmc.equifaxInfo().status().setValue(EquifaxStatus.PendingVistaApproval);
+                pmc.equifaxInfo().status().setValue(PmcEquifaxStatus.PendingVistaApproval);
                 pmc.equifaxInfo().reportType().setValue(dto.creditPricingOption().getValue());
 
                 pmc.equifaxInfo().businessInformation().set(dto.businessInformation());

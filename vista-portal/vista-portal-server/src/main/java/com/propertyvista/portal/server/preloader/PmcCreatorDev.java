@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -29,10 +29,11 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
+import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.generator.PreloadData;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.server.preloader.ido.OnboardingMerchantAccountImport;
@@ -64,7 +65,7 @@ public class PmcCreatorDev {
             pmc.features().countryOfOperation().setValue(CountryOfOperation.Canada);
         }
 
-        pmc.equifaxInfo().approved().setValue(true);
+        pmc.equifaxInfo().status().setValue(PmcEquifaxStatus.Active);
         pmc.equifaxInfo().reportType().setValue(CreditCheckReportType.FullCreditReport);
 
         ServerSideFactory.create(PmcFacade.class).create(pmc);
@@ -141,7 +142,7 @@ public class PmcCreatorDev {
                     merchantAccount.bankId().setValue(ordinal + "00");
                     merchantAccount.branchTransitNumber().setValue("0100" + n);
 
-                    // Make one ElectronicPaymentsAllowed FALSE 
+                    // Make one ElectronicPaymentsAllowed FALSE
                     if (n == internalAccounts) {
                         merchantAccount.accountNumber().setValue(PreloadData.ElectronicPaymentsNotAllowedAccountPrefix + "876543");
                     } else {

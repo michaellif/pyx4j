@@ -40,6 +40,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
+import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
@@ -63,8 +64,13 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         return isCreditCheckActivated(getCurrentPmcEquifaxInfo());
     }
 
+    @Override
+    public PmcEquifaxStatus getCreditCheckServiceStatus() {
+        return getCurrentPmcEquifaxInfo().status().getValue();
+    }
+
     private boolean isCreditCheckActivated(PmcEquifaxInfo equifaxInfo) {
-        return equifaxInfo.approved().getValue(Boolean.FALSE) && !equifaxInfo.reportType().isNull();
+        return (equifaxInfo.status().getValue() == PmcEquifaxStatus.Active) && !equifaxInfo.reportType().isNull();
     }
 
     private static PmcEquifaxInfo getCurrentPmcEquifaxInfo() {

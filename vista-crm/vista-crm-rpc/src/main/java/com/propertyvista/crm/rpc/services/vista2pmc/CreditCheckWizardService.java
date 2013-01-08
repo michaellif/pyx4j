@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.crm.rpc.services.vista2pmc;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

@@ -7,24 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-01-08
+ * Created on 2012-12-27
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.admin;
+package com.propertyvista.crm.rpc.services.vista2pmc;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.crm.rpc.dto.admin.CreditCheckStatusDTO;
-import com.propertyvista.crm.rpc.services.admin.CreditCheckStatusService;
+import com.pyx4j.entity.rpc.AbstractWizardService;
 
-public class CreditCheckStatusServiceImpl implements CreditCheckStatusService {
+import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
+import com.propertyvista.dto.OnlinePaymentSetupDTO;
 
-    @Override
-    public void obtainStatus(AsyncCallback<CreditCheckStatusDTO> callback) {
-        if (true) {
-            callback.onSuccess(null);
-        }
-    }
+public interface OnlinePaymentWizardService extends AbstractWizardService<OnlinePaymentSetupDTO> {
 
+    void obtainPaymentFees(AsyncCallback<AbstractPaymentFees> paymentFees);
 }

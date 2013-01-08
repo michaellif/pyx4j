@@ -25,7 +25,15 @@ import com.propertyvista.admin.domain.security.AuditRecord;
 import com.propertyvista.crm.rpc.services.FeedbackService;
 import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
+import com.propertyvista.crm.rpc.services.admin.CrmRoleCrudService;
+import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
+import com.propertyvista.crm.rpc.services.admin.LeaseAdjustmentReasonCrudService;
 import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
+import com.propertyvista.crm.rpc.services.admin.PmcPaymentMethodsCrudService;
+import com.propertyvista.crm.rpc.services.admin.SiteDescriptorCrudService;
+import com.propertyvista.crm.rpc.services.admin.SiteImageResourceCrudService;
+import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
+import com.propertyvista.crm.rpc.services.admin.TaxCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.breadcrumbs.BreadcrumbsService;
@@ -37,7 +45,10 @@ import com.propertyvista.crm.rpc.services.building.ParkingCrudService;
 import com.propertyvista.crm.rpc.services.building.ParkingSpotCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.ConcessionCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.FeatureCrudService;
+import com.propertyvista.crm.rpc.services.building.catalog.FeatureItemTypeCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
+import com.propertyvista.crm.rpc.services.building.catalog.ServiceItemTypeCrudService;
+import com.propertyvista.crm.rpc.services.building.catalog.UtilityCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
@@ -68,12 +79,16 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityStatusListService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilitySummaryGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitTurnoverAnalysisGadgetService;
+import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
+import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
 import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
+import com.propertyvista.crm.rpc.services.organization.VendorCrudService;
 import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
+import com.propertyvista.crm.rpc.services.policies.policy.BackgroundCheckPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.EmailTemplatesPolicyCrudService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
@@ -84,6 +99,10 @@ import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
+import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusCrudService;
+import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusService;
+import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckWizardService;
+import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
 import com.propertyvista.crm.server.security.gadgets.UnitAvailabilityStatusDatasetAccessRule;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.company.Employee;
@@ -123,7 +142,9 @@ import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadServ
 public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
     // TODO Change this if you want to make it work temporary. Build will fail!
-    private static final boolean allowAllDuringDevelopment = true;
+    private static final boolean allowAllDuringDevelopment = false;
+
+    private static final boolean allowAllEntityDuringDevelopment = true;
 
     public VistaCrmAccessControlList() {
 
@@ -132,6 +153,10 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
             grant(VistaBasicBehavior.CRM, new IServiceExecutePermission("*"));
             grant(VistaBasicBehavior.CRM, new ServiceExecutePermission("*"));
             grant(VistaBasicBehavior.CRM, new EntityPermission("*", EntityPermission.ALL));
+            grant(VistaBasicBehavior.CRM, new EntityPermission("*", EntityPermission.READ));
+        }
+
+        if (allowAllEntityDuringDevelopment) {
             grant(VistaBasicBehavior.CRM, new EntityPermission("*", EntityPermission.READ));
         }
 
@@ -239,6 +264,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Lease.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseViewerCrudService.class));
 
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseApplicationViewerCrudService.class));
+
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(NoteAttachmentUploadService.class));
 
@@ -248,6 +275,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Billing, new EntityPermission(Bill.class, EntityPermission.READ));
         grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(BillCrudService.class));
         grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(BillingExecutionService.class));
+
+        grant(VistaCrmBehavior.OrganizationFinancial, new IServiceExecutePermission(AggregatedTransferCrudService.class));
 
 // - Service-related:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Service.class, EntityPermission.ALL));
@@ -282,14 +311,34 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 // - Administration:
         grant(VistaBasicBehavior.CRM, new EntityPermission(EmailTemplatesPolicy.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmailTemplatesPolicyCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(FeatureItemTypeCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(UtilityCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ServiceItemTypeCrudService.class));
+
+        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteDescriptorCrudService.class));
+        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteImageResourceCrudService.class));
+        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteImageResourceUploadService.class));
+
+        grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(CrmRoleCrudService.class));
+        grant(VistaCrmBehavior.OrganizationFinancial, new IServiceExecutePermission(TaxCrudService.class));
+
+        grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(LeaseAdjustmentReasonCrudService.class));
+        grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(GlCodeCategoryCrudService.class));
+        grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(BackgroundCheckPolicyCrudService.class.getPackage().getName() + ".*"));
 
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(MerchantAccountCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CreditCheckStatusService.class));
+        grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(CreditCheckStatusCrudService.class));
+        grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(CreditCheckWizardService.class));
+        grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(OnlinePaymentWizardService.class));
+        grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(PmcPaymentMethodsCrudService.class));
 
         grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(CrmAuditRecordsListerService.class));
         grant(VistaCrmBehavior.Organization, new EntityPermission(AuditRecord.class, EntityPermission.READ));
 
 // - Other:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Company.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(VendorCrudService.class));
 
 // - Old servies:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Country.class.getPackage().getName() + ".*", EntityPermission.READ));

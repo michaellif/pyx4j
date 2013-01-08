@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.server.services.vista2pmc;
 
 import java.util.Date;
 import java.util.concurrent.Callable;
@@ -28,7 +28,7 @@ import com.pyx4j.server.contexts.Context;
 import com.propertyvista.admin.domain.legal.VistaTerms;
 import com.propertyvista.admin.domain.legal.VistaTerms.Target;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.crm.rpc.services.OnlinePaymentWizardService;
+import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;

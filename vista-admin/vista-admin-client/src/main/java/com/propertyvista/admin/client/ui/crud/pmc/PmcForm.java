@@ -173,7 +173,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
 
         content.setH1(++row, 0, 2, i18n.tr("Equifax"));
         int row2 = row; // save this row for other column
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().approved()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().status()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().reportType()), 15).build());
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().customerNumber()), 15).build());

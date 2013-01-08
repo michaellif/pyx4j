@@ -21,7 +21,7 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.CreditCheckStatusView;
 import com.propertyvista.crm.rpc.dto.admin.CreditCheckStatusDTO;
-import com.propertyvista.crm.rpc.services.admin.CreditCheckStatusCrudService;
+import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusCrudService;
 
 public class CreditCheckStatusActivity extends CrmViewerActivity<CreditCheckStatusDTO> implements CreditCheckStatusView.Presenter {
 

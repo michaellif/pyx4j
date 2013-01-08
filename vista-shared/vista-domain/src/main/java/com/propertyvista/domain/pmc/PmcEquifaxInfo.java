@@ -40,11 +40,7 @@ import com.propertyvista.domain.pmc.info.PersonalInformation;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PmcEquifaxInfo extends IEntity {
 
-    public enum EquifaxStatus {
-        PendingVistaApproval, PendingEquifaxApproval, Rejected, Active, Suspended
-    }
-
-    IPrimitive<EquifaxStatus> status();
+    IPrimitive<PmcEquifaxStatus> status();
 
     @ReadOnly
     @Owner
@@ -52,8 +48,6 @@ public interface PmcEquifaxInfo extends IEntity {
     @JoinColumn
     @Indexed(uniqueConstraint = true)
     Pmc pmc();
-
-    IPrimitive<Boolean> approved();
 
     IPrimitive<CreditCheckReportType> reportType();
 
