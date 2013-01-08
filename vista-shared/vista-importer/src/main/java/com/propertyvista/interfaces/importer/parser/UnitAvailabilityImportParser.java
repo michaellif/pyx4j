@@ -176,6 +176,15 @@ public class UnitAvailabilityImportParser implements ImportParser {
         }
     }
 
+    private Integer parseInt(String value, UnitModel unitModel) {
+        try {
+            return Integer.valueOf(value);
+        } catch (NumberFormatException e) {
+            throw new UserRuntimeException(i18n.tr("You have an erroneous Beds or Baths value for unit #{0} in building ''{1}''.", unitModel.unit()
+                    .getStringView(), unitModel.property().getStringView()));
+        }
+    }
+
     private BuildingIO insertUnit(AptUnitIO unit, UnitModel unitModel, BuildingIO building) {
         if (unitModel.unitType().isNull()) { // if there's not floorplan in the file, just add units to building
             building.units().add(unit);
@@ -186,6 +195,19 @@ public class UnitAvailabilityImportParser implements ImportParser {
                 newFloorplan.name().setValue(unitModel.unitType().getValue());
                 newFloorplan._import().row().setValue(unitModel._import().row().getValue());
                 newFloorplan._import().sheet().setValue(unitModel._import().sheet().getValue());
+                if (!unitModel.beds().isNull()) {
+                    newFloorplan.bedrooms().setValue(parseInt(unitModel.beds().getValue(), unitModel));
+                }
+                if (!unitModel.baths().isNull()) {
+                    newFloorplan.bathrooms().setValue(parseInt(unitModel.baths().getValue(), unitModel));
+                }
+                if (!unitModel.description().isNull()) {
+                    newFloorplan.description().setValue(unitModel.description().getValue());
+                }
+                if (!unitModel.marketingName().isNull()) {
+                    newFloorplan.marketingName().setValue(unitModel.marketingName().getValue());
+                }
+
                 newFloorplan.units().add(unit);
                 building.floorplans().add(newFloorplan);
             } else {

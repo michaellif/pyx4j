@@ -175,10 +175,15 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
                         aptUnitIO.number().setValue(AptUnitConverter.trimUnitNumber(aptUnitIO.number().getValue()));
                         {
                             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-                            criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
+                            criteria.add(PropertyCriterion.eq(criteria.proto().building().propertyCode(), buildingIO.propertyCode()));
                             criteria.add(PropertyCriterion.eq(criteria.proto().info().number(), aptUnitIO.number().getValue()));
                             List<AptUnit> units = Persistence.service().query(criteria);
                             if (units.size() == 1) {
+                                AptUnit unit = units.get(0);
+                                Floorplan oldFloorplan = unit.floorplan();
+                                floorplan = mergeMedia(oldFloorplan, floorplan);
+                                unit.floorplan().set(floorplan);
+                                Persistence.service().persist(unit);
                                 continue;
                             }
                         }
@@ -201,6 +206,11 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
         }
 
         return counters;
+    }
+
+    private Floorplan mergeMedia(Floorplan oldFloorplan, Floorplan newFloorplan) {
+        // do merge magic
+        return newFloorplan;
     }
 
 }

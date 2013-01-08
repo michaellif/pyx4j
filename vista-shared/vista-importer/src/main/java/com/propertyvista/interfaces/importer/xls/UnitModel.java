@@ -52,4 +52,12 @@ public interface UnitModel extends IEntity {
 
     IPrimitive<String> date();
 
+    IPrimitive<String> marketingName();
+
+    IPrimitive<String> description();
+
+    IPrimitive<String> beds();
+
+    IPrimitive<String> baths();
+
 }
