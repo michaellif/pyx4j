@@ -76,6 +76,8 @@ import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerView;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerView;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerViewImpl;
+import com.propertyvista.crm.client.ui.wizard.creditcheck.CreditCheckStatusView;
+import com.propertyvista.crm.client.ui.wizard.creditcheck.CreditCheckStatusViewImpl;
 
 public class SettingsViewFactory extends ViewFactoryBase {
 
@@ -153,6 +155,9 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new CustomerCreditCheckListerViewImpl());
             } else if (CustomerCreditCheckViewerView.class.equals(type)) {
                 map.put(type, new CustomerCreditCheckViewerViewImpl());
+
+            } else if (CreditCheckStatusView.class.equals(type)) {
+                map.put(type, new CreditCheckStatusViewImpl());
             }
         }
         @SuppressWarnings("unchecked")

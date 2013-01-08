@@ -341,12 +341,12 @@ public class CrmSiteMap implements SiteMap {
             @PlaceProperties(caption = "Credit Check", navigLabel = "Credit Check")
             public static class CreditCheck extends AppPlace {
 
-                @PlaceProperties(caption = "Credit Check Setup")
+                @PlaceProperties(caption = "Credit Check Setup", navigLabel = "Credit Check Setup")
                 public static class Setup extends AppPlace {
                 }
 
-                @PlaceProperties(caption = "Credit Check")
-                public static class Status extends AppPlace {
+                @PlaceProperties(caption = "Credit Check", navigLabel = "Credit Check Status")
+                public static class Status extends CrmCrudAppPlace {
 
                 }
 

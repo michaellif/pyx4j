@@ -18,6 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
@@ -40,7 +41,7 @@ public class CreditCheckActivity extends AbstractActivity {
                 if (result == null) {
                     AppSite.getPlaceController().goTo(new CrmSiteMap.Administration.Settings.CreditCheck.Setup());
                 } else {
-                    AppSite.getPlaceController().goTo(new CrmSiteMap.Administration.Settings.CreditCheck.Status());
+                    AppSite.getPlaceController().goTo(new CrmSiteMap.Administration.Settings.CreditCheck.Status().formViewerPlace(new Key(-1)));
                 }
             }
 

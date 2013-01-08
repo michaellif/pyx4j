@@ -199,6 +199,7 @@ import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsu
 import com.propertyvista.crm.client.activity.reports.CrmReportsActivity;
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckActivity;
+import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckStatusActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckWizardActivity;
 import com.propertyvista.crm.client.activity.wizard.onlinepayment.OnlinePaymentWizardActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -1093,6 +1094,8 @@ public class MainActivityMapper implements AppActivityMapper {
                     } else if (crudPlace instanceof CrmSiteMap.Administration.Security.AuditRecords) {
                         activity = new CrmAuditRecordsListerActivity(place);
 
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Settings.CreditCheck.Status) {
+                        activity = new CreditCheckStatusActivity(crudPlace);
                     } // CRUD APP PLACE IF ENDS HERE
 
                     // Dashboard related stuff again
