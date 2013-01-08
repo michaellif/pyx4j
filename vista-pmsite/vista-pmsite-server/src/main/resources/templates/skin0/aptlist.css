@@ -10,6 +10,7 @@
 	display: inline-block;
 	width: 211px;
 	vertical-align: top;
+	float: left;
 }
 .vista-pmsite-aptListPage .secondaryNavig {
 	color:#aaa;
@@ -41,6 +42,7 @@
 	text-transform: uppercase;
 	cursor: pointer;
 	margin-top:30px;
+	background-size:100% 64px;
 }
 
 .advancedSearchNarrowWrap:hover input[type=submit] {
@@ -170,7 +172,6 @@
 }
 .vista-pmsite-aptListPage .vista-pmsite-main {
 	display: inline-block;
-	width: 744px;
 	vertical-align: top;
 }
 .vista-pmsite-aptListPage .apartmentListingWrap {

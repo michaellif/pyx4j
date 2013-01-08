@@ -122,6 +122,7 @@
 	width:175px;
 	margin-left:15px;
 	display: inline-block;
+	float: left;
 }
 .advancedSearchWideWrap .searchCommonBox .searchField:first-child {
 	margin-left:0px;
@@ -137,7 +138,6 @@
 }
 .advancedSearchWideWrap .searchCommonBox input[type=text] {
 	width:62px;
-	margin:1px;
 }
 .advancedSearchWideWrap .searchAmenityBox {
 	float:left;

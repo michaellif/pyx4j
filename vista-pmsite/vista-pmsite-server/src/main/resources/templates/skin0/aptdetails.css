@@ -13,6 +13,7 @@
 	width: ${image_building_large_width};
 	vertical-align: top;
 	padding:20px 16px;
+	float: left;
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-main {
 	display: inline-block;
