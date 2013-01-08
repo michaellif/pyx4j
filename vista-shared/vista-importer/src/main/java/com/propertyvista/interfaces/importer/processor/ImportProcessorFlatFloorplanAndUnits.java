@@ -13,23 +13,29 @@
  */
 package com.propertyvista.interfaces.importer.processor;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
+import java.util.zip.CRC32;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
 import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
+import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
@@ -41,8 +47,12 @@ import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
+import com.propertyvista.server.common.blob.BlobService;
+import com.propertyvista.server.common.blob.ThumbnailService;
 import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
+import com.propertyvista.server.domain.FileBlob;
 
 public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
 
@@ -168,6 +178,8 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
 
                 counters.floorplans++;
 
+                FloorplanMediaInfo mediaInfor = new FloorplanMediaInfo(floorplan);
+
                 //Units
                 {
                     List<AptUnit> items = new Vector<AptUnit>();
@@ -181,7 +193,7 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
                             if (units.size() == 1) {
                                 AptUnit unit = units.get(0);
                                 Floorplan oldFloorplan = unit.floorplan();
-                                floorplan = mergeMedia(oldFloorplan, floorplan);
+                                floorplan = mergeMedia(oldFloorplan, floorplan, mediaInfor);
                                 unit.floorplan().set(floorplan);
                                 Persistence.service().persist(unit);
                                 continue;
@@ -208,9 +220,63 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
         return counters;
     }
 
-    private Floorplan mergeMedia(Floorplan oldFloorplan, Floorplan newFloorplan) {
-        // do merge magic
+    private static class FloorplanMediaInfo {
+
+        private final Floorplan floorplan;
+
+        private Map<Long, Media> mediaCrc;
+
+        public FloorplanMediaInfo(Floorplan floorplan) {
+            this.floorplan = floorplan;
+        }
+
+        void loadMediaCrc() {
+            if (mediaCrc != null) {
+                return;
+            }
+            Persistence.ensureRetrieve(floorplan.media(), AttachLevel.Attached);
+            mediaCrc = new HashMap<Long, Media>();
+            for (Media media : floorplan.media()) {
+                if (!media.file().blobKey().isNull()) {
+                    FileBlob blob = Persistence.service().retrieve(FileBlob.class, media.file().blobKey().getValue());
+                    mediaCrc.put(getCrc(blob), media);
+                }
+            }
+        }
+
+        private Long getCrc(FileBlob blob) {
+            CRC32 crc = new CRC32();
+            crc.update(blob.content().getValue(), 0, blob.content().getValue().length);
+            return crc.getValue();
+        }
+    }
+
+    private Floorplan mergeMedia(Floorplan oldFloorplan, Floorplan newFloorplan, FloorplanMediaInfo newMediaInfo) {
+        Persistence.ensureRetrieve(oldFloorplan, AttachLevel.Attached);
+        FloorplanMediaInfo oldMediaInfo = new FloorplanMediaInfo(oldFloorplan);
+        newMediaInfo.loadMediaCrc();
+        oldMediaInfo.loadMediaCrc();
+
+        for (Map.Entry<Long, Media> me : oldMediaInfo.mediaCrc.entrySet()) {
+            if (!newMediaInfo.mediaCrc.containsKey(me.getKey())) {
+                newMediaInfo.mediaCrc.put(me.getKey(), copyMedia(me.getValue(), newFloorplan));
+            }
+        }
+
         return newFloorplan;
+    }
+
+    private Media copyMedia(Media origValue, Floorplan newFloorplan) {
+        Media newValue = EntityGraph.businessDuplicate(origValue);
+
+        FileBlob origBlob = Persistence.service().retrieve(FileBlob.class, origValue.file().blobKey().getValue());
+        newValue.file().blobKey().setValue(BlobService.persist(origBlob.content().getValue(), origBlob.name().getValue(), origBlob.contentType().getValue()));
+
+        ThumbnailService.persist(newValue.file().blobKey().getValue(), origBlob.name().getValue(), origBlob.content().getValue(), ImageTarget.Floorplan);
+
+        newFloorplan.media().add(newValue);
+        Persistence.service().persist(newFloorplan);
+        return newValue;
     }
 
 }
