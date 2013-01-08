@@ -38,7 +38,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building, BuildingDTO> implements BuildingCrudService {
 
@@ -121,10 +120,8 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     protected void create(Building entity, BuildingDTO dto) {
         super.create(entity, dto);
 
-        if (VistaFeatures.instance().defaultProductCatalog()) {
-            ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(entity);
-            ServerSideFactory.create(DefaultProductCatalogFacade.class).persistFor(entity);
-        }
+        ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(entity);
+        ServerSideFactory.create(DefaultProductCatalogFacade.class).persistFor(entity);
     }
 
     @Override

@@ -44,9 +44,18 @@ public interface DefaultProductCatalogFacade {
      * 
      * @param building
      * @param unit
-     * @param marketPrice
      * @param persist
      *            - if persist affected services immediately or persistFor(...) will be called later
      */
     void addUnit(Building building, AptUnit unit, boolean persist);
+
+    /**
+     * Update unit data in the catalog.
+     * 
+     * @param building
+     * @param unit
+     * @param persist
+     *            - if persist affected services immediately or persistFor(...) will be called later
+     */
+    void updateUnit(Building building, AptUnit unit, boolean persist);
 }

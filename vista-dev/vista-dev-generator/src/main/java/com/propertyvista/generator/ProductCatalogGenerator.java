@@ -115,17 +115,18 @@ public class ProductCatalogGenerator {
     }
 
     public void buildEligibilityMatrix(ProductCatalog catalog) {
-        for (Service srv : catalog.services()) {
-            if (Service.ServiceType.unitRelated().contains(srv.serviceType().getValue())) {
-                int count = catalog.features().size();
-                for (int i = 0; i < count; ++i) {
-                    srv.version().features().add(catalog.features().get(i));
+        for (Service service : catalog.services()) {
+            if (Service.ServiceType.unitRelated().contains(service.serviceType().getValue()) && !service.isDefaultCatalogItem().isBooleanTrue()) {
+                for (Feature feature : catalog.features()) {
+                    if (!feature.isDefaultCatalogItem().isBooleanTrue()) {
+                        service.version().features().add(feature);
+                    }
                 }
             }
 
             int count = Math.min(2, catalog.concessions().size());
             for (int i = 0; i < count; ++i) {
-                srv.version().concessions().add(RandomUtil.random(catalog.concessions(), ConcessionId, count));
+                service.version().concessions().add(RandomUtil.random(catalog.concessions(), ConcessionId, count));
             }
         }
     }
@@ -322,7 +323,7 @@ public class ProductCatalogGenerator {
 
     private Service getService(ProductCatalog catalog, Service.ServiceType type) {
         for (Service service : catalog.services()) {
-            if (service.serviceType().getValue().equals(type)) {
+            if (service.serviceType().getValue().equals(type) && !service.isDefaultCatalogItem().isBooleanTrue()) {
                 return service;
             }
         }

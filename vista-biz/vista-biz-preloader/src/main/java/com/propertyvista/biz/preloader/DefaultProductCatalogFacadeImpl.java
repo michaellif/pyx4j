@@ -22,7 +22,6 @@ package com.propertyvista.biz.preloader;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,7 +29,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
@@ -66,9 +64,6 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         }
         building.productCatalog().features().addAll(createDefaultFeatures(building.productCatalog()));
 
-        building.productCatalog().concessions().clear();
-        building.productCatalog().concessions().addAll(createDefaultConcessions(building.productCatalog()));
-
         updateEligibilityMatrixes(building.productCatalog());
     }
 
@@ -86,9 +81,6 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         Persistence.service().merge(building);
 
         // Save Versioned Items, 
-        for (Concession concession : building.productCatalog().concessions()) {
-            Persistence.service().persist(concession);
-        }
         for (Feature feature : building.productCatalog().features()) {
             if (feature.isDefaultCatalogItem().isBooleanTrue()) {
                 Persistence.service().persist(feature);
@@ -114,17 +106,49 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         Persistence.service().retrieveMember(building.productCatalog().services());
 
         for (Service service : building.productCatalog().services()) {
-            switch (service.serviceType().getValue()) {
-            case commercialUnit:
-            case residentialUnit:
-            case residentialShortTermUnit:
-                service.version().items().add(createUnitItem(unit, service));
-                if (persist) {
-                    Persistence.service().persist(service);
+            if (service.isDefaultCatalogItem().isBooleanTrue()) {
+                switch (service.serviceType().getValue()) {
+                case commercialUnit:
+                case residentialUnit:
+                case residentialShortTermUnit:
+                    service.version().items().add(createUnitItem(unit, service));
+                    if (persist) {
+                        Persistence.service().persist(service);
+                    }
+                    break;
+                default:
+                    break;
                 }
-                break;
-            default:
-                break;
+            }
+        }
+    }
+
+    @Override
+    public void updateUnit(Building building, AptUnit unit, boolean persist) {
+        if (building.isValueDetached()) {
+            Persistence.service().retrieve(building);
+        }
+
+        if (building.productCatalog().isValueDetached()) {
+            Persistence.service().retrieve(building.productCatalog());
+        }
+
+        Persistence.service().retrieveMember(building.productCatalog().services());
+
+        for (Service service : building.productCatalog().services()) {
+            if (service.isDefaultCatalogItem().isBooleanTrue()) {
+                switch (service.serviceType().getValue()) {
+                case commercialUnit:
+                case residentialUnit:
+                case residentialShortTermUnit:
+                    updateUnitItem(unit, service);
+                    if (persist) {
+                        Persistence.service().persist(service);
+                    }
+                    break;
+                default:
+                    break;
+                }
             }
         }
     }
@@ -212,17 +236,17 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     // ----------------------------------------------------------------------------------
 
-    private Collection<? extends Concession> createDefaultConcessions(ProductCatalog catalog) {
-        // TODO Auto-generated method stub
-        return new ArrayList<Concession>(0);
-    }
-
-    // ----------------------------------------------------------------------------------
-
     private void updateEligibilityMatrixes(ProductCatalog catalog) {
         for (Service service : catalog.services()) {
-            service.version().features().addAll(catalog.features());
-            service.version().concessions().addAll(catalog.concessions());
+            if (Service.ServiceType.unitRelated().contains(service.serviceType().getValue()) && service.isDefaultCatalogItem().isBooleanTrue()) {
+                for (Feature feature : catalog.features()) {
+                    if (feature.isDefaultCatalogItem().isBooleanTrue()) {
+                        service.version().features().add(feature);
+                    }
+
+                    service.version().concessions().clear();
+                }
+            }
         }
     }
 
@@ -233,9 +257,19 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         criteria.eq(criteria.proto().serviceType(), service.serviceType());
 
         item.type().set(Persistence.service().retrieve(criteria));
-        item.price().setValue(BigDecimal.ZERO);
+        item.price().setValue(unit.financial()._marketRent().isNull() ? BigDecimal.ZERO : unit.financial()._marketRent().getValue());
         item.element().set(unit);
 
         return item;
+    }
+
+    private void updateUnitItem(AptUnit unit, Service service) {
+        EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
+        criteria.eq(criteria.proto().product(), service.version());
+        criteria.eq(criteria.proto().element(), unit);
+
+        for (ProductItem item : Persistence.service().query(criteria)) {
+            item.price().setValue(unit.financial()._marketRent().isNull() ? BigDecimal.ZERO : unit.financial()._marketRent().getValue());
+        }
     }
 }

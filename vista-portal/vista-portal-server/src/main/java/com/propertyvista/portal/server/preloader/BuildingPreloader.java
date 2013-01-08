@@ -69,7 +69,6 @@ import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 import com.propertyvista.server.domain.FileBlob;
 import com.propertyvista.server.domain.FileImageThumbnailBlob;
 import com.propertyvista.server.jobs.TaskRunner;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
@@ -144,11 +143,8 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
             // Service Catalog:
 
-            if (VistaFeatures.instance().defaultProductCatalog()) {
-                ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(building);
-            } else {
-                productCatalogGenerator.generateProductCatalog(building.productCatalog());
-            }
+            ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(building);
+            productCatalogGenerator.generateProductCatalog(building.productCatalog());
 
             if (merchantAccount != null) {
                 BuildingMerchantAccount bma = building.merchantAccounts().$();
@@ -161,14 +157,12 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 MediaGenerator.generatedBuildingMedia(building);
             }
 
-            if (!VistaFeatures.instance().defaultProductCatalog()) {
-                DataGenerator.cleanRandomDuplicates(Utility.class.getName());
+            DataGenerator.cleanRandomDuplicates(Utility.class.getName());
+            building.includedUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
+            if (DataGenerator.randomBoolean()) {
                 building.includedUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
-                if (DataGenerator.randomBoolean()) {
-                    building.includedUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
-                }
-                building.externalUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
             }
+            building.externalUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
 
 // TODO : let's leave dashboard empty - in runtime the first Building dashboard will be used by default!
 //            building.dashboard().set(DataGenerator.random(availableDashboards.buildingDashboards));
@@ -221,11 +215,8 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             List<AptUnit> units = buildingGenerator.createUnits(building, floorplans, config().numFloors, config().numUnitsPerFloor);
             unitCount += units.size();
             for (AptUnit unit : units) {
-                if (VistaFeatures.instance().defaultProductCatalog()) {
-                    ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(building, unit, false);
-                } else {
-                    productCatalogGenerator.createAptUnitServices(building.productCatalog(), unit);
-                }
+                ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(building, unit, false);
+                productCatalogGenerator.createAptUnitServices(building.productCatalog(), unit);
             }
 
             // fill Service Catalog with building elements:

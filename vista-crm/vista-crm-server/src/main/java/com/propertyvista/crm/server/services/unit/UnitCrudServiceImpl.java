@@ -35,7 +35,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.AptUnitServicePriceDTO;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
 
@@ -108,18 +107,15 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     protected void create(AptUnit entity, AptUnitDTO dto) {
         super.create(entity, dto);
 
-        if (VistaFeatures.instance().defaultProductCatalog()) {
-            ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(entity.building(), entity, true);
-        }
+        ServerSideFactory.create(OccupancyFacade.class).setupNewUnit((AptUnit) entity.createIdentityStub());
+        ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(entity.building(), entity, true);
     }
 
     @Override
-    protected void persist(AptUnit dbo, AptUnitDTO in) {
-        boolean isNewUnit = dbo.id().isNull();
-        super.persist(dbo, in);
-        if (isNewUnit) {
-            ServerSideFactory.create(OccupancyFacade.class).setupNewUnit((AptUnit) dbo.createIdentityStub());
-        }
+    protected void save(AptUnit dbo, AptUnitDTO in) {
+        super.save(dbo, in);
+
+        ServerSideFactory.create(DefaultProductCatalogFacade.class).updateUnit(dbo.building(), dbo, true);
     }
 
     private void retrieveServicePrices(AptUnitDTO dto) {
@@ -128,14 +124,16 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         criteria.add(PropertyCriterion.in(criteria.proto().serviceType(), Service.ServiceType.unitRelated()));
 
         for (Service service : Persistence.secureQuery(criteria)) {
-            Persistence.service().retrieve(service.version().items());
-            for (ProductItem item : service.version().items()) {
-                if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(dto.getPrimaryKey())) {
-                    AptUnitServicePriceDTO serviceDTO = EntityFactory.create(AptUnitServicePriceDTO.class);
-                    serviceDTO.id().setValue(service.id().getValue());
-                    serviceDTO.type().setValue(service.serviceType().getValue());
-                    serviceDTO.price().setValue(item.price().getValue());
-                    dto.marketPrices().add(serviceDTO);
+            if (!service.isDefaultCatalogItem().isBooleanTrue()) {
+                Persistence.service().retrieve(service.version().items());
+                for (ProductItem item : service.version().items()) {
+                    if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(dto.getPrimaryKey())) {
+                        AptUnitServicePriceDTO serviceDTO = EntityFactory.create(AptUnitServicePriceDTO.class);
+                        serviceDTO.id().setValue(service.id().getValue());
+                        serviceDTO.type().setValue(service.serviceType().getValue());
+                        serviceDTO.price().setValue(item.price().getValue());
+                        dto.marketPrices().add(serviceDTO);
+                    }
                 }
             }
         }
