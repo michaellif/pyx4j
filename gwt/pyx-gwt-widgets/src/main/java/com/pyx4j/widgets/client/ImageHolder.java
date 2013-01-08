@@ -26,13 +26,12 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
-public class ImageHolder extends DockPanel implements IWidget {
+public class ImageHolder extends FlowPanel implements IWidget {
 
     public enum Type {
         single, multiple
@@ -46,11 +45,9 @@ public class ImageHolder extends DockPanel implements IWidget {
 
     }
 
-    final Image image = new Image();
+    final Slideshow slideshow = new Slideshow(250, 250);
 
     private final Type type;
-
-    private final ViewerControlPanel viewControls = new ViewerControlPanel();
 
     private final EditorControlPanel editControls = new EditorControlPanel();
 
@@ -58,59 +55,46 @@ public class ImageHolder extends DockPanel implements IWidget {
 
     private final ImageDataProvider imageList;
 
-    private int curIdx = -1;
-
     public ImageHolder(Type type, ImageDataProvider imageList) {
         this.type = type;
         this.imageList = imageList;
-        setSize("150px", "150px");
+        getElement().getStyle().setProperty("display", "inline-block");
         getElement().getStyle().setProperty("padding", "5px");
         getElement().getStyle().setProperty("border", "1px solid #999");
         // image
-        add(image, CENTER);
-        setCellVerticalAlignment(image, HorizontalPanel.ALIGN_MIDDLE);
-        setCellHorizontalAlignment(image, HorizontalPanel.ALIGN_CENTER);
-        // view controls (slideshowLeft, slideshowRight)
-        if (type == Type.single) {
-            viewControls.setVisible(false);
+        add(slideshow);
+
+    }
+
+    public void onModelChange() {
+        for (String url : imageList.getImageUrls()) {
+            Image image = new Image(url);
+            //TODO see when to add image on load
+            if (false) {
+                image.addLoadHandler(new LoadHandler() {
+                    @Override
+                    public void onLoad(LoadEvent event) {
+                    }
+                });
+            }
+            scaleToFit(image);
+            HorizontalPanel imageHolder = new HorizontalPanel();
+            imageHolder.add(image);
+            imageHolder.setCellVerticalAlignment(image, HorizontalPanel.ALIGN_MIDDLE);
+            imageHolder.setCellHorizontalAlignment(image, HorizontalPanel.ALIGN_CENTER);
+            slideshow.addItem(imageHolder);
         }
     }
 
     public void reset() {
-        curIdx = -1;
         onModelChange();
     }
 
-    public void onModelChange() {
-        if (curIdx >= 0) {
-            setUrl(imageList.getImageUrls().get(curIdx));
-        } else {
-            setUrl("");
-        }
-        viewControls.syncState();
-    }
-
-    private void setUrl(String url) {
-        image.setUrl(url);
-        if (image.getWidth() > 0 && image.getHeight() > 0) {
-            scaleToFit();
-        } else {
-            image.setVisible(false);
-            image.addLoadHandler(new LoadHandler() {
-                @Override
-                public void onLoad(LoadEvent event) {
-                    scaleToFit();
-                    image.setVisible(true);
-                }
-            });
-        }
-    }
-
-    private void scaleToFit() {
+    private static void scaleToFit(Image image) {
         if (1.0 * image.getWidth() / image.getHeight() > 1) {
-            image.setSize("100%", "auto");
-        } else {
             image.setSize("auto", "100%");
+        } else {
+            image.setSize("100%", "auto");
         }
     }
 
@@ -125,9 +109,12 @@ public class ImageHolder extends DockPanel implements IWidget {
 
     @Override
     public void setEditable(boolean editable) {
-        remove(isEditable() ? viewControls : editControls);
         this.editable = editable;
-        add(isEditable() ? editControls : viewControls, SOUTH);
+        if (isEditable()) {
+            add(editControls);
+        } else {
+            remove(editControls);
+        }
     }
 
     @Override
@@ -152,48 +139,4 @@ public class ImageHolder extends DockPanel implements IWidget {
         }
     }
 
-    class ViewerControlPanel extends HorizontalPanel implements ClickHandler {
-
-        private final HTML label;
-
-        private final Image left;
-
-        private final Image right;
-
-        public ViewerControlPanel() {
-            label = new HTML();
-            label.getElement().getStyle().setProperty("textAlign", "center");
-
-            left = new Image(ImageFactory.getImages().slideshowLeft());
-            left.addClickHandler(this);
-
-            right = new Image(ImageFactory.getImages().slideshowRight());
-            right.addClickHandler(this);
-
-            add(left);
-            add(label);
-            add(right);
-
-            setCellHorizontalAlignment(left, HorizontalPanel.ALIGN_LEFT);
-            setCellHorizontalAlignment(right, HorizontalPanel.ALIGN_RIGHT);
-            setCellHorizontalAlignment(label, HorizontalPanel.ALIGN_CENTER);
-            setCellWidth(label, "100%");
-            setWidth("100%");
-        }
-
-        public void syncState() {
-            label.setHTML((curIdx + 1) + " of " + imageList.getImageUrls().size());
-        }
-
-        @Override
-        public void onClick(ClickEvent event) {
-            if (event.getSource() == right && curIdx < imageList.getImageUrls().size() - 1) {
-                curIdx++;
-                onModelChange();
-            } else if (event.getSource() == left && curIdx > 0) {
-                curIdx--;
-                onModelChange();
-            }
-        }
-    }
 }

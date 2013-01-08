@@ -18,7 +18,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.pyx4j.widgets.client.photoalbum;
+package com.pyx4j.widgets.client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,19 +28,21 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.layout.client.Layout.Alignment;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.gwt.commons.BrowserType;
 
-public class Slideshow extends AbsolutePanel {
+public class Slideshow extends LayoutPanel {
 
     private static final Logger log = LoggerFactory.getLogger(Slideshow.class);
 
@@ -54,7 +56,9 @@ public class Slideshow extends AbsolutePanel {
 
     private int currentIndex = -1;
 
-    private ControlPanel controlPanel;
+    private final LayoutPanel slidesPanel;
+
+    private final ControlPanel controlPanel;
 
     private Timer slideChangeTimer;
 
@@ -77,13 +81,26 @@ public class Slideshow extends AbsolutePanel {
         this.runOnInit = runOnInit;
         items = new ArrayList<Widget>();
         setSize(width + "px", height + "px");
+
+        slidesPanel = new LayoutPanel();
+        slidesPanel.setWidth("100%");
+        slidesPanel.setHeight("100%");
+        add(slidesPanel);
+
+        controlPanel = new ControlPanel();
+        controlPanel.getElement().getStyle().setPadding(5, Unit.PX);
+        add(controlPanel);
+        setWidgetHorizontalPosition(controlPanel, Alignment.END);
+        setWidgetVerticalPosition(controlPanel, Alignment.END);
+
     }
 
     public void addItem(Widget widget) {
-        widget.setSize(width + "px", height + "px");
+        widget.setPixelSize(width, height);
         items.add(widget);
-        add(widget, 0, 0);
+        slidesPanel.add(widget);
         widget.setVisible(false);
+        controlPanel.reset();
     }
 
     public void removeAllItems() {
@@ -91,6 +108,7 @@ public class Slideshow extends AbsolutePanel {
             super.remove(item);
         }
         items.clear();
+        controlPanel.reset();
     }
 
     public Iterable<Widget> items() {
@@ -108,7 +126,9 @@ public class Slideshow extends AbsolutePanel {
         slideChangeTimer = new Timer() {
             @Override
             public void run() {
-                show((currentIndex + 1) % items.size());
+                if (items.size() > 0) {
+                    show((currentIndex + 1) % items.size());
+                }
             }
         };
         slideChangeTimer.run();
@@ -125,12 +145,6 @@ public class Slideshow extends AbsolutePanel {
     }
 
     public void init() {
-        //keep control panel on top and counter updated
-        if (controlPanel != null) {
-            remove(controlPanel);
-        }
-        controlPanel = new ControlPanel();
-        add(controlPanel, 0, 0);
         if (initPosition == -1) {
             show(initPosition);
             if (runOnInit) {
@@ -187,8 +201,6 @@ public class Slideshow extends AbsolutePanel {
                     }
                 };
                 animationTimer.scheduleRepeating(500 / ANIMATION_ITTERATIONS);
-                int x = width - controlPanel.getOffsetWidth() - 50;
-                setWidgetPosition(controlPanel, x, height - 30);
             }
         });
     }
@@ -227,6 +239,8 @@ public class Slideshow extends AbsolutePanel {
 
         private final Action rightAction;
 
+        private final HorizontalPanel itemActionsHolder;
+
         ControlPanel() {
             leftAction = new Action();
             leftAction.addStyleDependentName("left");
@@ -237,25 +251,16 @@ public class Slideshow extends AbsolutePanel {
                     if (currentIndex == 0) {
                         show(items.size() - 1);
                     } else {
-                        show((currentIndex - 1) % items.size());
+                        if (items.size() > 0) {
+                            show((currentIndex - 1) % items.size());
+                        }
                     }
                 }
             });
             add(leftAction);
 
-            for (int i = 0; i < items.size(); i++) {
-                Action itemAction = new Action();
-                itemActionList.add(itemAction);
-                add(itemAction);
-                final int finalI = i;
-                itemAction.addClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        stop();
-                        show(finalI);
-                    }
-                });
-            }
+            itemActionsHolder = new HorizontalPanel();
+            add(itemActionsHolder);
 
             startStopAction = new Action();
             startStopAction.addClickHandler(new ClickHandler() {
@@ -275,13 +280,33 @@ public class Slideshow extends AbsolutePanel {
                 @Override
                 public void onClick(ClickEvent event) {
                     stop();
-                    show((currentIndex + 1) % items.size());
+                    if (items.size() > 0) {
+                        show((currentIndex + 1) % items.size());
+                    }
                 }
             });
             add(rightAction);
 
             setOpacity(this, 0.7);
 
+        }
+
+        void reset() {
+            itemActionList.clear();
+            itemActionsHolder.clear();
+            for (int i = 0; i < items.size(); i++) {
+                Action itemAction = new Action();
+                itemActionList.add(itemAction);
+                itemActionsHolder.add(itemAction);
+                final int finalI = i;
+                itemAction.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        stop();
+                        show(finalI);
+                    }
+                });
+            }
         }
 
         public void play(boolean flag) {
