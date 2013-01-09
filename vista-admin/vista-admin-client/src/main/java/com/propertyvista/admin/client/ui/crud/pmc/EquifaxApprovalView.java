@@ -25,5 +25,10 @@ public interface EquifaxApprovalView extends IViewerView<EquifaxSetupRequestDTO>
 
         void reject();
 
+        void confirmSuccess();
     }
+
+    void setEnableApprovalControls(boolean isApprovalControlsEnabled);
+
+    void reportResult(String result);
 }

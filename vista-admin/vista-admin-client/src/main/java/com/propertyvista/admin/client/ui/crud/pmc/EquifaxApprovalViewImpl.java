@@ -17,7 +17,9 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.Dialog.Type;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.rpc.AdminSiteMap;
@@ -27,11 +29,15 @@ public class EquifaxApprovalViewImpl extends AdminViewerViewImplBase<EquifaxSetu
 
     private static I18n i18n = I18n.get(EquifaxApprovalView.class);
 
+    private final Button approveAndSendToEquifax;
+
+    private final Button reject;
+
     public EquifaxApprovalViewImpl() {
         super(AdminSiteMap.Management.EquifaxApproval.class);
         setForm(new EquifaxApprovalForm(this));
 
-        Button approveAndSendToEquifax = new Button(i18n.tr("Approve and send to Equifax"));
+        approveAndSendToEquifax = new Button(i18n.tr("Approve and send to Equifax"));
         approveAndSendToEquifax.setCommand(new Command() {
             @Override
             public void execute() {
@@ -45,7 +51,7 @@ public class EquifaxApprovalViewImpl extends AdminViewerViewImplBase<EquifaxSetu
         });
         addHeaderToolbarItem(approveAndSendToEquifax);
 
-        Button reject = new Button(i18n.tr(i18n.tr("Reject")));
+        reject = new Button(i18n.tr(i18n.tr("Reject")));
         reject.setCommand(new Command() {
             @Override
             public void execute() {
@@ -58,5 +64,25 @@ public class EquifaxApprovalViewImpl extends AdminViewerViewImplBase<EquifaxSetu
             }
         });
         addHeaderToolbarItem(reject);
+    }
+
+    @Override
+    public void setEnableApprovalControls(boolean isApprovalControlsEnabled) {
+        approveAndSendToEquifax.setEnabled(isApprovalControlsEnabled);
+        reject.setEnabled(isApprovalControlsEnabled);
+    }
+
+    @Override
+    public void reportResult(String result) {
+        MessageDialog.show(i18n.tr(""), result, Type.Info, new OkOption() {
+
+            @Override
+            public boolean onClickOk() {
+                ((EquifaxApprovalView.Presenter) getPresenter()).confirmSuccess();
+                return true;
+            }
+
+        });
+
     }
 }

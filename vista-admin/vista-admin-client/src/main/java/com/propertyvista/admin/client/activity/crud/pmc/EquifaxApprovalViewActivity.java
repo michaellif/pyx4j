@@ -25,6 +25,7 @@ import com.propertyvista.admin.client.ui.crud.pmc.EquifaxApprovalView;
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.admin.rpc.EquifaxSetupRequestDTO;
 import com.propertyvista.admin.rpc.services.EquifaxApprovalCrudService;
+import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 
 public class EquifaxApprovalViewActivity extends AdminViewerActivity<EquifaxSetupRequestDTO> implements EquifaxApprovalView.Presenter {
 
@@ -38,7 +39,7 @@ public class EquifaxApprovalViewActivity extends AdminViewerActivity<EquifaxSetu
         ((EquifaxApprovalCrudService) getService()).applyAndSendToEquifax(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                // TODO Auto-generated method stub
+                ((EquifaxApprovalView) getView()).reportResult("Approved successfully");
             }
         });
     }
@@ -48,10 +49,21 @@ public class EquifaxApprovalViewActivity extends AdminViewerActivity<EquifaxSetu
         ((EquifaxApprovalCrudService) getService()).reject(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                // TODO Auto-generated method stub
+                ((EquifaxApprovalView) getView()).reportResult("Rejected Sucessfully");
             }
         });
 
+    }
+
+    @Override
+    protected void onPopulateSuccess(EquifaxSetupRequestDTO result) {
+        ((EquifaxApprovalView) getView()).setEnableApprovalControls(result.status().getValue() == PmcEquifaxStatus.PendingVistaApproval);
+        super.onPopulateSuccess(result);
+    }
+
+    @Override
+    public void confirmSuccess() {
+        ((EquifaxApprovalView) getView()).setEnableApprovalControls(false);
     }
 
 }
