@@ -15,8 +15,20 @@ package com.propertyvista.domain.pmc;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlType;
+
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
+
+@I18n(context = "Pmc Status")
+@XmlType(name = "PmcEquifaxStatus")
 public enum PmcEquifaxStatus implements Serializable {
 
-    NotRequested, PendingVistaApproval, PendingEquifaxApproval, Rejected, Active, Suspended
+    NotRequested, PendingVistaApproval, PendingEquifaxApproval, Rejected, Active, Suspended;
+
+    @Override
+    public String toString() {
+        return I18nEnum.toString(this);
+    };
 
 }
