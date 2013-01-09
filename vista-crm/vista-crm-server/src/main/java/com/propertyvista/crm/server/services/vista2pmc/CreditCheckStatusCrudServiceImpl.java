@@ -18,6 +18,7 @@ import java.util.concurrent.Callable;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -25,10 +26,12 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.admin.CreditCheckStatusDTO;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusCrudService;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class CreditCheckStatusCrudServiceImpl implements CreditCheckStatusCrudService {
@@ -38,16 +41,28 @@ public class CreditCheckStatusCrudServiceImpl implements CreditCheckStatusCrudSe
 
         final CreditCheckStatusDTO status = EntityFactory.create(CreditCheckStatusDTO.class);
         final Pmc pmc = VistaDeployment.getCurrentPmc();
+        final AbstractEquifaxFee fees = ServerSideFactory.create(Vista2PmcFacade.class).getEquifaxFee();
         TaskRunner.runInAdminNamespace(new Callable<VoidSerializable>() {
 
             @Override
             public VoidSerializable call() throws Exception {
+
                 Persistence.service().retrieveMember(pmc.equifaxInfo());
                 if (!pmc.equifaxInfo().isNull()) {
                     status.status().setValue(pmc.equifaxInfo().status().getValue());
                     status.reportType().setValue(pmc.equifaxInfo().reportType().getValue());
-                    status.setupFee().setValue(pmc.equifaxInfo().equifaxSignUpFee().getValue());
-                    status.perApplicantFee().setValue(pmc.equifaxInfo().equifaxPerApplicantCreditCheckFee().getValue());
+                    switch (status.reportType().getValue()) {
+                    case FullCreditReport:
+                        status.setupFee().setValue(fees.fullCreditReportSetUpFee().getValue());
+                        status.perApplicantFee().setValue(fees.fullCreditReportPerApplicantFee().getValue());
+                        break;
+                    case RecomendationReport:
+                        status.setupFee().setValue(fees.recommendationReportSetUpFee().getValue());
+                        status.perApplicantFee().setValue(fees.recommendationReportPerApplicantFee().getValue());
+                        break;
+                    default:
+                        throw new Error("Unknown Report Type");
+                    }
                 }
 
                 return null;

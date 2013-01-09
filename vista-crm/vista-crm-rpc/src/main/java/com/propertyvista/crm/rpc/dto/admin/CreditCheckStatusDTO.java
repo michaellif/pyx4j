@@ -15,6 +15,8 @@ package com.propertyvista.crm.rpc.dto.admin;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -29,8 +31,10 @@ public interface CreditCheckStatusDTO extends IEntity {
 
     IPrimitive<CreditCheckReportType> reportType();
 
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> setupFee();
 
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> perApplicantFee();
 
 }

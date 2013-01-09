@@ -15,6 +15,8 @@ package com.propertyvista.crm.client.ui.wizard.creditcheck;
 
 import java.math.BigDecimal;
 
+import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
@@ -41,9 +43,17 @@ public class CreditCheckStatusForm extends CrmEntityForm<CreditCheckStatusDTO> {
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         contentPanel.setWidget(++row, 0, new Image(CreditCheckWizardResources.INSTANCE.equifaxLogo()));
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
         contentPanel.setWidget(++row, 0, new HTML("&nbsp;"));
 
         contentPanel.setWidget(++row, 0, inject(proto().status()));
+        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setFontWeight(FontWeight.BOLD);
+        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setFontSize(1.3, Unit.EM);
+        contentPanel.setWidget(++row, 0, new HTML("&nbsp;"));
+
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reportType())).build());
+        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().setupFee())).build());
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
