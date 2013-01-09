@@ -35,6 +35,7 @@ public class EquifaxApprovalViewImpl extends AdminViewerViewImplBase<EquifaxSetu
 
     public EquifaxApprovalViewImpl() {
         super(AdminSiteMap.Management.EquifaxApproval.class);
+        getEditButton().setVisible(false);
         setForm(new EquifaxApprovalForm(this));
 
         approveAndSendToEquifax = new Button(i18n.tr("Approve and send to Equifax"));
