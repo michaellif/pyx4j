@@ -13,6 +13,7 @@
 	width: 318px;
 	vertical-align: top;
 	padding:20px 16px;
+	float: left;
 }
 .vista-pmsite-inquiryFormPage .vista-pmsite-main {
 	display: inline-block;
