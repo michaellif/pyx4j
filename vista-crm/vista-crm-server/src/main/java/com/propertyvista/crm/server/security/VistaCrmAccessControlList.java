@@ -157,6 +157,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         }
 
         if (allowAllEntityDuringDevelopment) {
+            grant(VistaBasicBehavior.CRM, new EntityPermission("*", EntityPermission.ALL));
             grant(VistaBasicBehavior.CRM, new EntityPermission("*", EntityPermission.READ));
         }
 
