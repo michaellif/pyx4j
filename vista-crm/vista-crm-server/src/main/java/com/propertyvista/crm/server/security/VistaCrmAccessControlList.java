@@ -84,6 +84,7 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitTurnoverAnalysis
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
+import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
@@ -98,6 +99,7 @@ import com.propertyvista.crm.rpc.services.security.CrmAuditRecordsListerService;
 import com.propertyvista.crm.rpc.services.security.CrmLoginAttemptsListerService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
+import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
@@ -274,6 +276,9 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(NoteAttachmentUploadService.class));
+
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectBuildingListService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseTermCrudService.class));
 
         grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(TenantPasswordChangeService.class));
 
