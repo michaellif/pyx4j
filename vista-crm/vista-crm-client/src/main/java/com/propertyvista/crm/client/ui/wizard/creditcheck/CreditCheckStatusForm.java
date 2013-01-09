@@ -13,25 +13,51 @@
  */
 package com.propertyvista.crm.client.ui.wizard.creditcheck;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import java.math.BigDecimal;
+
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.site.client.ui.crud.CrudEntityForm;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.widgets.client.Label;
 
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.admin.CreditCheckStatusDTO;
 
-public class CreditCheckStatusForm extends CrudEntityForm<CreditCheckStatusDTO> {
+public class CreditCheckStatusForm extends CrmEntityForm<CreditCheckStatusDTO> {
+
+    private static final I18n i18n = I18n.get(CreditCheckStatusForm.class);
 
     public CreditCheckStatusForm(IFormView<CreditCheckStatusDTO> view) {
         super(CreditCheckStatusDTO.class, view);
+        FormFlexPanel contentPanel = new FormFlexPanel();
+        int row = -1;
+        Label poweredByLabel = new Label();
+        poweredByLabel.setText(i18n.tr("Powered By"));
+        contentPanel.setWidget(++row, 0, poweredByLabel);
+        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        contentPanel.setWidget(++row, 0, new Image(CreditCheckWizardResources.INSTANCE.equifaxLogo()));
+        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        contentPanel.setWidget(++row, 0, new HTML("&nbsp;"));
+
+        contentPanel.setWidget(++row, 0, inject(proto().status()));
+        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().setupFee())).build());
+        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().perApplicantFee())).build());
+        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
+        selectTab(addTab(contentPanel));
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel contentPanel = new FormFlexPanel();
-        int row = -1;
-        return contentPanel;
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        BigDecimal setupFee = getValue().setupFee().getValue();
+        get(proto().setupFee()).setVisible(!(setupFee == null || setupFee.equals(new BigDecimal("0.00")) || setupFee.equals(BigDecimal.ZERO)));
     }
 
 }

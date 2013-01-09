@@ -13,10 +13,24 @@
  */
 package com.propertyvista.crm.rpc.dto.admin;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.pmc.CreditCheckReportType;
+import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 
 @Transient
 public interface CreditCheckStatusDTO extends IEntity {
+
+    IPrimitive<PmcEquifaxStatus> status();
+
+    IPrimitive<CreditCheckReportType> reportType();
+
+    IPrimitive<BigDecimal> setupFee();
+
+    IPrimitive<BigDecimal> perApplicantFee();
 
 }

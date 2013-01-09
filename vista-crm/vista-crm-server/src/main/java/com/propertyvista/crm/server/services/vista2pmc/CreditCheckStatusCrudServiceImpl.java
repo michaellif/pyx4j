@@ -13,22 +13,53 @@
  */
 package com.propertyvista.crm.server.services.vista2pmc;
 
+import java.util.concurrent.Callable;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.ServiceExecution;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.admin.CreditCheckStatusDTO;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusCrudService;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class CreditCheckStatusCrudServiceImpl implements CreditCheckStatusCrudService {
 
     @Override
     public void retrieve(AsyncCallback<CreditCheckStatusDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget retrieveTraget) {
-        callback.onSuccess(EntityFactory.create(CreditCheckStatusDTO.class));
+
+        final CreditCheckStatusDTO status = EntityFactory.create(CreditCheckStatusDTO.class);
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
+        TaskRunner.runInAdminNamespace(new Callable<VoidSerializable>() {
+
+            @Override
+            public VoidSerializable call() throws Exception {
+                Persistence.service().retrieveMember(pmc.equifaxInfo());
+                if (!pmc.equifaxInfo().isNull()) {
+                    status.status().setValue(pmc.equifaxInfo().status().getValue());
+                    status.reportType().setValue(pmc.equifaxInfo().reportType().getValue());
+                    status.setupFee().setValue(pmc.equifaxInfo().equifaxSignUpFee().getValue());
+                    status.perApplicantFee().setValue(pmc.equifaxInfo().equifaxPerApplicantCreditCheckFee().getValue());
+                }
+
+                return null;
+            }
+        });
+
+        if (status.status().getValue() != null) {
+            callback.onSuccess(status);
+        } else {
+            callback.onSuccess(null);
+        }
+
     }
 
     @Override
