@@ -14,6 +14,7 @@
 package com.propertyvista.biz.system;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.entity.server.Persistence;
@@ -69,6 +70,28 @@ public class Vista2PmcFacadeImpl implements Vista2PmcFacade {
         setNonNullMember(fee.fullCreditReportPerApplicantFee(), pmc.equifaxFee(), defaultEfxFeee);
         setNonNullMember(fee.fullCreditReportSetUpFee(), pmc.equifaxFee(), defaultEfxFeee);
         return fee;
+    }
+
+    @Override
+    public BigDecimal getPmcPerApplicantFee() {
+        final Pmc pmc = VistaDeployment.getCurrentPmc().duplicate();
+        TaskRunner.runInAdminNamespace(new Callable<PmcEquifaxFee>() {
+            @Override
+            public PmcEquifaxFee call() {
+                Persistence.service().retrieveMember(pmc.equifaxInfo());
+                return pmc.equifaxFee();
+            }
+        });
+
+        AbstractEquifaxFee fee = getEquifaxFee();
+        switch (pmc.equifaxInfo().reportType().getValue()) {
+        case FullCreditReport:
+            return fee.fullCreditReportPerApplicantFee().getValue();
+        case RecomendationReport:
+            return fee.recommendationReportPerApplicantFee().getValue();
+        default:
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override

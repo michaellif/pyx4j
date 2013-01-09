@@ -13,12 +13,16 @@
  */
 package com.propertyvista.biz.system;
 
+import java.math.BigDecimal;
+
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 
 public interface Vista2PmcFacade {
 
     AbstractEquifaxFee getEquifaxFee();
+
+    BigDecimal getPmcPerApplicantFee();
 
     AbstractPaymentFees getPaymentFees();
 
