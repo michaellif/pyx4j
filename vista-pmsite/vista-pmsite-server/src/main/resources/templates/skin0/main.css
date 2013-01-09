@@ -179,6 +179,10 @@ select {
 	background-image: url("images/top_menu_bg.png");
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
+/*
+ * for EI7, EI8
+ */
+	background-position: top center; 
 }
 
 .navigation .active span {

@@ -125,7 +125,7 @@
 
 .advancedSearchNarrowWrap .searchCommonBox input[type=text] {
 	width: 76px;
-	margin: 1px;
+//	margin: 1px;
 }
 .advancedSearchNarrowWrap .searchCommonBox .searchField .inputJoinBox {
 	display:inline-block;
