@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.ValidationUtils;
@@ -37,6 +38,7 @@ import com.propertyvista.admin.rpc.OnboardingMerchantAccountDTO;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 
 public class PmcForm extends AdminEntityForm<PmcDTO> {
 
@@ -45,6 +47,8 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
     private OnboardingMerchantAccountsLister onboardingMerchantAccountsLister;
 
     private ListerDataSource<OnboardingMerchantAccountDTO> onboardingMerchantAccountsSource;
+
+    private Anchor approvalLink;
 
     public PmcForm(IFormView<PmcDTO> view) {
         super(PmcDTO.class, view);
@@ -76,6 +80,8 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
             onboardingMerchantAccountsLister.setParentPmc(EntityFactory.createIdentityStub(Pmc.class, getValue().getPrimaryKey()));
             onboardingMerchantAccountsLister.obtain(0);
         }
+
+        approvalLink.setVisible(!isEditable() & getValue().equifaxInfo().status().getValue() == PmcEquifaxStatus.PendingVistaApproval);
     }
 
     private FormFlexPanel createGeneralTab() {
@@ -187,7 +193,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
                 .build());
         get(proto().equifaxInfo().equifaxPerApplicantCreditCheckFee()).setViewable(true);
 
-        Anchor approvalLink = new Anchor(i18n.tr("Go to Approval Screen"));
+        approvalLink = new Anchor(i18n.tr("Go to Approval Screen"));
         approvalLink.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -195,6 +201,9 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
             }
         });
         content.setWidget(++row, 0, approvalLink);
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+        content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
         return content;
     }
 }

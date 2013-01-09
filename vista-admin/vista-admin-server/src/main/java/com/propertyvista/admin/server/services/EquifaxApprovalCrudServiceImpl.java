@@ -20,6 +20,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.ServiceExecution;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.admin.rpc.EquifaxSetupRequestDTO;
 import com.propertyvista.admin.rpc.services.EquifaxApprovalCrudService;
@@ -50,6 +51,16 @@ public class EquifaxApprovalCrudServiceImpl implements EquifaxApprovalCrudServic
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         throw new Error("invalid operation!");
+    }
+
+    @Override
+    public void reject(AsyncCallback<VoidSerializable> callback) {
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void applyAndSendToEquifax(AsyncCallback<VoidSerializable> callback) {
+        callback.onSuccess(null);
     }
 
 }

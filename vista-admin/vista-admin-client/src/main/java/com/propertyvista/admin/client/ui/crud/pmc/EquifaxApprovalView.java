@@ -21,5 +21,9 @@ public interface EquifaxApprovalView extends IViewerView<EquifaxSetupRequestDTO>
 
     interface Presenter extends IViewerView.Presenter {
 
+        void approveAndSendToEquifax();
+
+        void reject();
+
     }
 }

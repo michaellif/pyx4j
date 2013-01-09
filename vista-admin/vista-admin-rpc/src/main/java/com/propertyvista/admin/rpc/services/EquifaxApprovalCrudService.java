@@ -13,10 +13,17 @@
  */
 package com.propertyvista.admin.rpc.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.admin.rpc.EquifaxSetupRequestDTO;
 
 public interface EquifaxApprovalCrudService extends AbstractCrudService<EquifaxSetupRequestDTO> {
+
+    void reject(AsyncCallback<VoidSerializable> callback);
+
+    void applyAndSendToEquifax(AsyncCallback<VoidSerializable> callback);
 
 }

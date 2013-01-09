@@ -13,23 +13,22 @@
  */
 package com.propertyvista.admin.rpc;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.pmc.PmcEquifaxInfo;
-import com.propertyvista.domain.pmc.info.BusinessInformation;
-import com.propertyvista.domain.pmc.info.PersonalInformation;
 
 @Transient
 public interface EquifaxSetupRequestDTO extends PmcEquifaxInfo {
 
-    @NotNull
-    IPrimitive<CreditCheckReportType> creditPricingOption();
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> setupFee();
 
-    BusinessInformation businessInformation();
-
-    PersonalInformation personalInformation();
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> perApplicantFeee();
 
 }

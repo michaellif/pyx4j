@@ -28,9 +28,10 @@ public class EquifaxApprovalForm extends AdminEntityForm<EquifaxSetupRequestDTO>
 
         FormFlexPanel panel = new FormFlexPanel();
         int row = -1;
-
         panel.setH1(++row, 0, 1, "Credit Pricing Option");
-        panel.setWidget(+row, 0, inject(proto().creditPricingOption()));
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reportType())).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().setupFee())).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().perApplicantFeee())).build());
 
         panel.setH1(++row, 0, 1, "Business Information");
         panel.setWidget(++row, 0, inject(proto().businessInformation(), new BusinessInformationForm()));

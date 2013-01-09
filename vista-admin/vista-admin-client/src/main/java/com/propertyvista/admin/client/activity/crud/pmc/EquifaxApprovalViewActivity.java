@@ -16,6 +16,8 @@ package com.propertyvista.admin.client.activity.crud.pmc;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.activity.crud.AdminViewerActivity;
@@ -24,11 +26,32 @@ import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.admin.rpc.EquifaxSetupRequestDTO;
 import com.propertyvista.admin.rpc.services.EquifaxApprovalCrudService;
 
-public class EquifaxApprovalViewActivity extends AdminViewerActivity<EquifaxSetupRequestDTO> {
+public class EquifaxApprovalViewActivity extends AdminViewerActivity<EquifaxSetupRequestDTO> implements EquifaxApprovalView.Presenter {
 
     public EquifaxApprovalViewActivity(CrudAppPlace place) {
         super(place, ManagementVeiwFactory.instance(EquifaxApprovalView.class), GWT
                 .<AbstractCrudService<EquifaxSetupRequestDTO>> create(EquifaxApprovalCrudService.class));
+    }
+
+    @Override
+    public void approveAndSendToEquifax() {
+        ((EquifaxApprovalCrudService) getService()).applyAndSendToEquifax(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
+
+    @Override
+    public void reject() {
+        ((EquifaxApprovalCrudService) getService()).reject(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                // TODO Auto-generated method stub
+            }
+        });
+
     }
 
 }
