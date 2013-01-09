@@ -79,14 +79,14 @@ public class PromoGadgetPanel extends Panel {
                 cityOpts.add(prov + " - " + city);
             }
         }
-        // if we have not been given city, select randomly from list
         String promoCity = getPage().getPageParameters().get(ParamNamePromo).toString();
-        if (promoCity == null || cities.indexOf(promoCity) == -1) {
+        // if we have not been given city, select randomly from list
+        if (cities.size() > 0 && (promoCity == null || cities.indexOf(promoCity) == -1)) {
             int cityIdx = Math.round((float) Math.random() * (cities.size() - 1));
             promoCity = cities.get(cityIdx);
         }
-        // if no promos found, reset promoCity and grab random promo list
         List<PromoDataModel> promoList = ((PMSiteWebRequest) getRequest()).getContentManager().getPromotions(promoCity);
+        // if no promos found, reset promoCity and grab random promo list
         if (promoList == null || promoList.size() == 0) {
             promoCity = null;
             promoList = ((PMSiteWebRequest) getRequest()).getContentManager().getPromotions(null);
