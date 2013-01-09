@@ -32,9 +32,16 @@ import com.pyx4j.server.contexts.Visit;
 
 public class SessionBaseSecurityController extends SecurityController {
 
-    private final AclCreator aclCreator;
+    private final boolean debugMode;
+
+    private AclCreator aclCreator;
 
     public SessionBaseSecurityController() {
+        debugMode = ServerSideConfiguration.isStartedUnderJvmDebugMode() && ServerSideConfiguration.isRunningInDeveloperEnviroment();
+        createAclCreator();
+    }
+
+    private final void createAclCreator() {
         AclCreator ac = ServerSideConfiguration.instance().getAclCreator();
         if (ac == null) {
             ac = new AclCreatorAllowAll();
@@ -44,6 +51,9 @@ public class SessionBaseSecurityController extends SecurityController {
 
     @Override
     public Acl authenticate(Set<Behavior> behaviors) {
+        if (debugMode) {
+            createAclCreator();
+        }
         return aclCreator.createAcl(behaviors);
     }
 
