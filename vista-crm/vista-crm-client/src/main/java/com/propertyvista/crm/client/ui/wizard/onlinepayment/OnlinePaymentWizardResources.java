@@ -56,10 +56,24 @@ public interface OnlinePaymentWizardResources extends ClientBundleWithLookup {
     @Source("marketing-text.html")
     TextResource marketingText();
 
+    /** this is used as ID of a element of serviceAgreement() that is to be substituted with anchor to terms of service */
     public static String TERMS_OF_SERVICE_ANCHOR_ID = "OnlinePaymentSetupWizard-TermsOfService";
 
+    /** this is used as ID of an element of serviceagreement() that supposed to hold company name */
     public static String COMPANY_NAME_ID = "OnlinePaymentSetupWizard-CompanyName";
 
     @Source("service-agreement.html")
     TextResource serviceAgreement();
+
+    @Source("collection-of-business-information-explanation.html")
+    TextResource collectionOfBusinessInformationExplanation();
+
+    @Source("collection-of-personal-information-for-online-payments-explanation.html")
+    TextResource collectionOfPersonalInformationForEquifaxExplanation();
+
+    @Source("caledon-signature-text.html")
+    TextResource caledonSignatureText();
+
+    @Source("payment-pad-signature-text.html")
+    TextResource paymentPadSignatureText();
 }

@@ -114,25 +114,30 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
     }
 
     private FormFlexPanel createBusinessInfoStep(String title) {
-        // TODO should we have some text that explains why we collect this information as in Equifax wizard? if yes what is the text?
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Business Information"));
+        Label collectionOfBusinessInformation = new Label();
+        collectionOfBusinessInformation.setHTML(OnlinePaymentWizardResources.INSTANCE.collectionOfBusinessInformationExplanation().getText());
+        main.setWidget(++row, 0, collectionOfBusinessInformation);
         main.setWidget(++row, 0, inject(proto().businessInformation(), new BusinessInformationForm()));
         return main;
     }
 
     private FormFlexPanel createPersonalInfoStep(String title) {
-        // TODO should we have some text that explains why we collect this information as in Equifax wizard? if yes what is the text?
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
+
         main.setH1(++row, 0, 1, i18n.tr("Personal Information"));
+        Label collectionOfPersonalInformation = new Label();
+        collectionOfPersonalInformation.setHTML(OnlinePaymentWizardResources.INSTANCE.collectionOfPersonalInformationForEquifaxExplanation().getText());
+        main.setWidget(++row, 0, collectionOfPersonalInformation);
         main.setWidget(++row, 0, inject(proto().personalInformation(), new PersonalInformationForm()));
         return main;
     }
 
     private FormFlexPanel createPropertyAndBankingStep(String title) {
-        // TODO what is 'refundable deposit'?
+        // TODO add 'refundable deposit'? or not?
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Property and Banking"));
@@ -151,23 +156,17 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
     }
 
     private FormFlexPanel createConfirmationStep(String title) {
-        // TODO why do we need this step if it just repeats the information from the previous step? why not just go from "Property and Banking" straight to "Signature"?
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Confirmation"));
         main.setWidget(++row, 0, makeServiceAgreementLabel());
-
         return main;
     }
 
     private FormFlexPanel createSignatureStep(String title) {
         // TODO need to add actual signature, but pending the following questions:
-        //     - why the text on the spec PDF indicates that there may be more than one person?
-        //     - the full text above the signature is required
         //     - the full text of the agreements is required
-        //     - why payment pad doesn't have "I <company name> agree to accept <bla bla bla...>", but caledon has.
-        //     - if payment pad indeed needs "I <company name> agree to accept <bla bla bla...>" checkbox, what should be in placed instead of <bla bla bla>
-        // TODO since "I agree" checkboxes don't use the default decorator how can they be validated? 
+        //     - if payment pad indeed needs "I <company name> agree to accept <bla bla bla...>" checkbox, what should be in placed instead of <bla bla bla> 
         final int TOP_I_AGREE_PANEL_PADDING = 20;
         final int AGREEMENTS_SEPARATOR_PADDING = 20;
         final String TERMS_VIEWER_HEIGHT = "15em";
@@ -195,6 +194,10 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(TOP_I_AGREE_PANEL_PADDING, Unit.PX);
 
+        Label caledonSignatureText = new Label();
+        caledonSignatureText.setHTML(OnlinePaymentWizardResources.INSTANCE.caledonSignatureText().getText());
+        main.setWidget(++row, 0, caledonSignatureText);
+
         caledonSignatureForm = new PmcSignatureForm();
         main.setWidget(++row, 0, inject(proto().caledonAgreementSignature(), caledonSignatureForm));
         main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
@@ -219,6 +222,10 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         main.setWidget(++row, 0, new WidgetDecoratorRightLabel(inject(proto().paymentPadIAgree()), 2, 40));
         main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(TOP_I_AGREE_PANEL_PADDING, Unit.PX);
+
+        Label paymentPadSignatureText = new Label();
+        paymentPadSignatureText.setHTML(OnlinePaymentWizardResources.INSTANCE.paymentPadSignatureText().getText());
+        main.setWidget(++row, 0, paymentPadSignatureText);
 
         paymentPadSignatureForm = new PmcSignatureForm();
         main.setWidget(++row, 0, inject(proto().paymentPadAgreementSignature(), paymentPadSignatureForm));
