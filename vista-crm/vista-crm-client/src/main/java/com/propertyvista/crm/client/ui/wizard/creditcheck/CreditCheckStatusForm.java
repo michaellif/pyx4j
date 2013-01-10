@@ -28,6 +28,7 @@ import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.admin.CreditCheckStatusDTO;
+import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 
 public class CreditCheckStatusForm extends CrmEntityForm<CreditCheckStatusDTO> {
 
@@ -35,7 +36,7 @@ public class CreditCheckStatusForm extends CrmEntityForm<CreditCheckStatusDTO> {
 
     public CreditCheckStatusForm(IFormView<CreditCheckStatusDTO> view) {
         super(CreditCheckStatusDTO.class, view);
-        FormFlexPanel contentPanel = new FormFlexPanel();
+        FormFlexPanel contentPanel = new FormFlexPanel(i18n.tr("Credit Check Status"));
         int row = -1;
         Label poweredByLabel = new Label();
         poweredByLabel.setText(i18n.tr("Powered By"));
@@ -67,7 +68,10 @@ public class CreditCheckStatusForm extends CrmEntityForm<CreditCheckStatusDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         BigDecimal setupFee = getValue().setupFee().getValue();
-        get(proto().setupFee()).setVisible(!(setupFee == null || setupFee.equals(new BigDecimal("0.00")) || setupFee.equals(BigDecimal.ZERO)));
+        get(proto().setupFee())
+                .setVisible(
+                        ((getValue().status().getValue() == PmcEquifaxStatus.PendingEquifaxApproval) | (getValue().status().getValue() == PmcEquifaxStatus.PendingVistaApproval))
+                                & !(setupFee == null || setupFee.equals(new BigDecimal("0.00")) || setupFee.equals(BigDecimal.ZERO)));
     }
 
 }
