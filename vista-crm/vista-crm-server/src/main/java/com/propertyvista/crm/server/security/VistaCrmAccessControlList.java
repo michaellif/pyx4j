@@ -96,6 +96,7 @@ import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
 import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
 import com.propertyvista.crm.rpc.services.organization.VendorCrudService;
 import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
+import com.propertyvista.crm.rpc.services.policies.emailtemplates.EmailTemplateManagerService;
 import com.propertyvista.crm.rpc.services.policies.policy.BackgroundCheckPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.EmailTemplatesPolicyCrudService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
@@ -354,6 +355,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(LeaseAdjustmentReasonCrudService.class));
         grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(GlCodeCategoryCrudService.class));
         grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(BackgroundCheckPolicyCrudService.class.getPackage().getName() + ".*"));
+        grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(EmailTemplateManagerService.class));
 
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(MerchantAccountCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CreditCheckStatusService.class));
