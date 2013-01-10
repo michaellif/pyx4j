@@ -13,13 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.wizard.creditcheck;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.wizard.WizardViewImplBase;
 
+import com.propertyvista.crm.client.ui.components.LegalTermsDialog;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.dto.CreditCheckSetupDTO;
 
@@ -32,8 +34,7 @@ public class CreditCheckWizardViewImpl extends WizardViewImplBase<CreditCheckSet
         setForm(new CreditCheckWizardForm(this, new Command() {
             @Override
             public void execute() {
-                // TODO implement terms of service display 
-                Window.alert(i18n.tr("Terms of Service Have Not Yet Been Implemented"));
+                new LegalTermsDialog(GWT.<PmcTermsOfServiceService> create(PmcTermsOfServiceService.class), "500px", "400px", i18n.tr("Terms of Service")).show();
             }
         }));
     }
