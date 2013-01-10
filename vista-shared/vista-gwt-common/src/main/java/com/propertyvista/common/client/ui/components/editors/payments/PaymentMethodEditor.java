@@ -99,8 +99,8 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         }
         if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
             main.setBR(++row, 0, 1);
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(((PmcPaymentMethod) proto()).setAsActive())).build());
-            get(((PmcPaymentMethod) proto()).setAsActive()).setVisible(false);
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(((PmcPaymentMethod) proto()).selectForEquifaxPayments())).build());
+            get(((PmcPaymentMethod) proto()).selectForEquifaxPayments()).setVisible(false);
         }
 
         // tweak UI:
@@ -284,7 +284,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         if (paymentEntityClass.equals(LeasePaymentMethod.class)) {
             get(((LeasePaymentMethod) proto()).isPreauthorized()).setVisible(visible);
         } else if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
-            get(((PmcPaymentMethod) proto()).setAsActive()).setVisible(visible);
+            get(((PmcPaymentMethod) proto()).selectForEquifaxPayments()).setVisible(visible);
         }
 
     }
@@ -293,7 +293,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         if (paymentEntityClass.equals(LeasePaymentMethod.class)) {
             return get(((LeasePaymentMethod) proto()).isPreauthorized()).isVisible();
         } else if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
-            return get(((PmcPaymentMethod) proto()).setAsActive()).isVisible();
+            return get(((PmcPaymentMethod) proto()).selectForEquifaxPayments()).isVisible();
         } else {
             return false;
         }

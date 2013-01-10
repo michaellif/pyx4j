@@ -56,7 +56,7 @@ public class PmcPaymentMethodsCrudServiceImpl implements PmcPaymentMethodsCrudSe
                 Vector<PmcPaymentMethod> paymentMethods = retrievePaymentMethods(pmc);
                 for (PmcPaymentMethod paymentMethod : paymentMethods) {
                     if (paymentMethod.equals(pmc.equifaxInfo().paymentMethod())) {
-                        paymentMethod.setAsActive().setValue(true);
+                        paymentMethod.selectForEquifaxPayments().setValue(true);
                         break;
                     }
                 }
@@ -106,7 +106,7 @@ public class PmcPaymentMethodsCrudServiceImpl implements PmcPaymentMethodsCrudSe
 
                 PmcPaymentMethod activeEquifaxPaymentMethod = null;
                 for (PmcPaymentMethod updatedPaymentMethod : updated) {
-                    if (updatedPaymentMethod.setAsActive().isBooleanTrue()) {
+                    if (updatedPaymentMethod.selectForEquifaxPayments().isBooleanTrue()) {
                         activeEquifaxPaymentMethod = updatedPaymentMethod;
                         pmc.equifaxInfo().paymentMethod().set(activeEquifaxPaymentMethod);
                         Persistence.service().persist(pmc.equifaxInfo());

@@ -55,14 +55,14 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
         public void addValidations() {
             super.addValidations();
 
-            get(proto().setAsActive()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            get(proto().selectForEquifaxPayments()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     if (event.getValue().booleanValue()) {
                         for (int i = 0; i < PmcPaymentMethodFolder.this.getItemCount(); ++i) {
                             for (CComponent<?, ?> comp : PmcPaymentMethodFolder.this.getItem(i).getComponents()) {
                                 if (comp instanceof PmcPaymentMethodEditor && !comp.equals(PmcPaymentMethodEditor.this)) {
-                                    ((PmcPaymentMethodEditor) comp).get(proto().setAsActive()).setValue(false, false);
+                                    ((PmcPaymentMethodEditor) comp).get(proto().selectForEquifaxPayments()).setValue(false, false);
                                 }
                             }
                         }

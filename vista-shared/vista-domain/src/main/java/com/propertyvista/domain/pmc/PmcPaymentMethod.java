@@ -48,5 +48,5 @@ public interface PmcPaymentMethod extends AbstractPaymentMethod {
 
     @Transient
     @Caption(description = "Use this payment method for Equifax payments")
-    IPrimitive<Boolean> setAsActive();
+    IPrimitive<Boolean> selectForEquifaxPayments();
 }

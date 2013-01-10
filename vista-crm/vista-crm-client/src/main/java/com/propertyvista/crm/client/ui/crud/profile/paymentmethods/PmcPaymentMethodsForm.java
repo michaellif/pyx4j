@@ -15,7 +15,10 @@ package com.propertyvista.crm.client.ui.crud.profile.paymentmethods;
 
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.widgets.client.Label;
@@ -43,6 +46,28 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
 
         content.setWidget(++row, 0, inject(proto().paymentMethods(), new PmcPaymentMethodFolder()));
         selectTab(addTab(content));
+
+        addValueValidator(new EditableValueValidator<PmcPaymentMethodsDTO>() {
+            @Override
+            public ValidationError isValid(CComponent<PmcPaymentMethodsDTO, ?> component, PmcPaymentMethodsDTO paymentMethodsHolder) {
+                if (paymentMethodsHolder != null) {
+                    boolean hasEquifaxMethod = false;
+                    for (PmcPaymentMethod pmcPaymentMethod : paymentMethodsHolder.paymentMethods()) {
+                        if (pmcPaymentMethod.selectForEquifaxPayments().isBooleanTrue()) {
+                            hasEquifaxMethod = true;
+                            break;
+                        }
+                    }
+                    if (!hasEquifaxMethod) {
+                        return new ValidationError(component, i18n.tr("Please select a payment method for Equifax"));
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
+            }
+        });
     }
 
     @Override
