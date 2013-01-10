@@ -105,6 +105,7 @@ import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
+import com.propertyvista.crm.rpc.services.unit.UnitOccupancyManagerService;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusCrudService;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusService;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckWizardService;
@@ -242,6 +243,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(UnitItemCrudService.class));
         grant(VistaBasicBehavior.CRM, new EntityPermission(AptUnitOccupancySegment.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(UnitOccupancyCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(UnitOccupancyManagerService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectUnitListService.class));
 
