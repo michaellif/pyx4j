@@ -219,7 +219,7 @@ public class ServerSideConfiguration {
         if (jvmDebugMode == null) {
             try {
                 jvmDebugMode = java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().indexOf("-agentlib:jdwp") > 0;
-            } catch (SecurityException e) {
+            } catch (Throwable e) {
                 // AccessControlException: "java.lang.management.ManagementPermission" "monitor"
                 jvmDebugMode = false;
             }
