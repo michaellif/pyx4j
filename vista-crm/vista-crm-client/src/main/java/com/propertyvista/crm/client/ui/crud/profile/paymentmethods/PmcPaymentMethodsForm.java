@@ -13,9 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.profile.paymentmethods;
 
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.admin.PmcPaymentMethodsDTO;
@@ -25,12 +28,27 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
 
     private static final I18n i18n = I18n.get(PmcPaymentMethod.class);
 
+    private final Label noPaymentMethodsMessage;
+
     public PmcPaymentMethodsForm(IFormView<PmcPaymentMethodsDTO> view) {
         super(PmcPaymentMethodsDTO.class, view);
         FormFlexPanel content = new FormFlexPanel(i18n.tr("Payment Methods"));
         int row = -1;
+
+        noPaymentMethodsMessage = new Label();
+        noPaymentMethodsMessage.setText(i18n.tr("There are no payment methods. Click 'Edit' to add a new payment method"));
+        noPaymentMethodsMessage.setVisible(false);
+        content.setWidget(++row, 0, noPaymentMethodsMessage);
+        content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
         content.setWidget(++row, 0, inject(proto().paymentMethods(), new PmcPaymentMethodFolder()));
         selectTab(addTab(content));
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        noPaymentMethodsMessage.setVisible(!isEditable() & getValue().paymentMethods().isEmpty());
     }
 
 }

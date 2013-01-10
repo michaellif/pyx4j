@@ -21,6 +21,7 @@ public class PmcPaymentMethodsViewerViewImpl extends CrmViewerViewImplBase<PmcPa
 
     public PmcPaymentMethodsViewerViewImpl() {
         super(CrmSiteMap.Administration.Profile.PaymentMethods.class);
+        setNotesVisible(false);
         setForm(new PmcPaymentMethodsForm(this));
     }
 
