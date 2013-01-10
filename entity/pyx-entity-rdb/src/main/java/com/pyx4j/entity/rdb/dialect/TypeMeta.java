@@ -71,7 +71,7 @@ public class TypeMeta {
         if (extendedTypes == null) {
             extendedTypes = new TreeMap<Integer, String>();
         }
-        extendedTypes.put(maxLength, sqlType);
+        extendedTypes.put(maxLength, sqlType.toLowerCase(Locale.ENGLISH));
     }
 
     public String getSqlType(int length) {

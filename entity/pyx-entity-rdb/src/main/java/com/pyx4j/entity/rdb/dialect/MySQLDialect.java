@@ -38,6 +38,13 @@ public class MySQLDialect extends Dialect {
         addTypeMeta(Double.class, "double");
         addTypeMeta(Boolean.class, "bit");
 
+        //Replace String
+        TypeMeta stringTypeMeta = new TypeMeta(String.class, (int) Math.pow(2, 14), "VARCHAR");
+        stringTypeMeta.addSqlType((int) Math.pow(2, 16), "TEXT");
+        stringTypeMeta.addSqlType((int) Math.pow(2, 24), "MEDIUMTEXT");
+        stringTypeMeta.addSqlType((int) (Math.pow(2, 32) - 1), "LONGTEXT");
+        addTypeMeta(stringTypeMeta);
+
         // TODO use annotation for scale
         addTypeMeta(BigDecimal.class, "decimal", 18, 2);
 
