@@ -55,8 +55,13 @@ public interface Lease extends IEntity {
         /**
          * Existing/Imported lease which is created but pending approval to become 'Active' and participate in billing.
          */
-        @Translate("Lease")
+        @Translate("Current Lease")
         ExistingLease,
+
+        /**
+         * Regular lease which is created without Application phase. Pending approval to become 'Active' and participate in billing.
+         */
+        NewLease,
 
         /**
          * Typical flow lease start point
@@ -90,7 +95,7 @@ public interface Lease extends IEntity {
         // state sets:
 
         public static EnumSet<Status> draft() {
-            return EnumSet.of(ExistingLease, Application);
+            return EnumSet.of(ExistingLease, NewLease, Application);
         }
 
         public static EnumSet<Status> active() {

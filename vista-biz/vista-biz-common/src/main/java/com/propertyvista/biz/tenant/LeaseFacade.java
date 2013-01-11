@@ -54,13 +54,11 @@ public interface LeaseFacade {
 
     void createMasterOnlineApplication(Lease leaseId);
 
-    void approveApplication(Lease leaseId, Employee decidedBy, String decisionReason);
-
     void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason);
 
     void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason);
 
-    void approveExistingLease(Lease leaseId);
+    void approve(Lease leaseId, Employee decidedBy, String decisionReason);
 
     void activate(Lease leaseId);
 

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.dialogs;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -28,18 +30,25 @@ import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseTermDTO;
 
-public class LeaseApplicationDataDialog extends SelectEnumDialog<Service.ServiceType> implements OkCancelOption {
+public class LeaseDataDialog extends SelectEnumDialog<Service.ServiceType> implements OkCancelOption {
 
-    private final static I18n i18n = I18n.get(LeaseApplicationDataDialog.class);
+    private final static I18n i18n = I18n.get(LeaseDataDialog.class);
+
+    Type type;
 
     private final AptUnit selectedUnitId;
 
-    public LeaseApplicationDataDialog() {
-        this(null);
+    public enum Type {
+        New, Current, Application
     }
 
-    public LeaseApplicationDataDialog(AptUnit selectedUnitId) {
+    public LeaseDataDialog(Type type) {
+        this(type, null);
+    }
+
+    public LeaseDataDialog(Type type, AptUnit selectedUnitId) {
         super(i18n.tr("Select Lease Type"), Service.ServiceType.unitRelated());
+        this.type = type;
         this.selectedUnitId = selectedUnitId;
     }
 
@@ -55,20 +64,45 @@ public class LeaseApplicationDataDialog extends SelectEnumDialog<Service.Service
         termDto.status().setValue(LeaseTerm.Status.Current);
         termDto.lease().set(termDto.newParentLease());
 
-        AppSite.getPlaceController().goTo(
-                new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(termDto).queryArg(LeaseTermEditorActivity.ARG_NAME_RETURN_BH,
-                        LeaseTermEditorActivity.ReturnBehaviour.Application.name()));
+        switch (type) {
+        case New:
+        case Current:
+            AppSite.getPlaceController().goTo(
+                    new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(termDto).queryArg(LeaseTermEditorActivity.ARG_NAME_RETURN_BH,
+                            LeaseTermEditorActivity.ReturnBehaviour.Lease.name()));
+            break;
+
+        case Application:
+            AppSite.getPlaceController().goTo(
+                    new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(termDto).queryArg(LeaseTermEditorActivity.ARG_NAME_RETURN_BH,
+                            LeaseTermEditorActivity.ReturnBehaviour.Application.name()));
+            break;
+        }
         return true;
     }
 
-    private Lease createNewLease(Service.ServiceType leaseType) {
+    protected Lease createNewLease(Service.ServiceType leaseType) {
         Lease newLease = EntityFactory.create(Lease.class);
 
         newLease.type().setValue(leaseType);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        newLease.status().setValue(Lease.Status.Application);
 
         newLease.unit().set(selectedUnitId);
+
+        switch (type) {
+        case New:
+            newLease.status().setValue(Lease.Status.NewLease);
+            break;
+
+        case Current:
+            newLease.status().setValue(Lease.Status.ExistingLease);
+            newLease.billingAccount().carryforwardBalance().setValue(BigDecimal.ZERO);
+            break;
+
+        case Application:
+            newLease.status().setValue(Lease.Status.Application);
+            break;
+        }
 
         return newLease;
     }

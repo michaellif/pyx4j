@@ -274,11 +274,12 @@ class BillProducer {
     private Bill.BillType findBillType() {
 
         switch (lease.status().getValue()) {
-        case ExistingLease: //zeroCycle bill should be issued; preview only
+        case ExistingLease: // zeroCycle bill should be issued; preview only
             if (!preview) {
                 throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));
             }
             return Bill.BillType.ZeroCycle;
+        case NewLease:
         case Application: // preview only
             if (!preview) {
                 throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));

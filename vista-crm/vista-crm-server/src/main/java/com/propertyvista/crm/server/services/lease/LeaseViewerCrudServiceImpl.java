@@ -38,6 +38,7 @@ import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudService
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -150,10 +151,13 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     public void activate(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
 
-        ServerSideFactory.create(LeaseFacade.class).approveExistingLease(leaseId);
+        // memorize entry LeaseStatus:
+        Status leaseStatus = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey()).status().getValue();
+
+        ServerSideFactory.create(LeaseFacade.class).approve(leaseId, null, null);
+
         // activate, actually, existing lease only:  
-        Persistence.service().retrieve(leaseId);
-        if (leaseId.leaseFrom().getValue().before(leaseId.creationDate().getValue())) {
+        if (leaseStatus == Status.ExistingLease) {
             ServerSideFactory.create(LeaseFacade.class).activate(leaseId);
         }
 

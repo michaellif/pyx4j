@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -445,7 +446,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(moveOutAction, status.isOperative() && completion != null && value.actualMoveOut().isNull());
         setActionHighlighted(moveOutAction, status.isOperative() && completion != null && value.actualMoveOut().isNull());
 
-        setActionVisible(activateAction, status == Status.ExistingLease);
+        setActionVisible(activateAction, EnumSet.of(Status.NewLease, Status.ExistingLease).contains(status));
         setActionHighlighted(activateAction, activateAction.isVisible());
 
         setActionVisible(closeAction, status == Status.Completed);
@@ -699,6 +700,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                                 case Closed:
                                 case Completed:
                                 case ExistingLease:
+                                case NewLease:
                                     place = new CrmSiteMap.Tenants.Lease();
                                     break;
                                 default:

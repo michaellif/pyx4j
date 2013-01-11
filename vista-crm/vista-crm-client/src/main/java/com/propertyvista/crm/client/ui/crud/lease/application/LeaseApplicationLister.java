@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.LeaseApplicationDataDialog;
+import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.LeaseDataDialog;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.misc.VistaTODO;
@@ -85,6 +85,6 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
 
     @Override
     protected void onItemNew() {
-        new LeaseApplicationDataDialog().show();
+        new LeaseDataDialog(LeaseDataDialog.Type.Application).show();
     }
 }

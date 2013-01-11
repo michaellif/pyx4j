@@ -291,7 +291,7 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            ServerSideFactory.create(LeaseFacade.class).approveApplication(lease, null, "simulation");
+            ServerSideFactory.create(LeaseFacade.class).approve(lease, null, "simulation");
 
             if (debug) {
                 System.out.println("" + now() + " approved lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "

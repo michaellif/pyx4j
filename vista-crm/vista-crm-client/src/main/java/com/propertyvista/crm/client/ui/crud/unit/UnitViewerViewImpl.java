@@ -26,7 +26,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.ExistingLeaseDataDialog;
+import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.LeaseDataDialog;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.MakePendingDialog;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.ScopeDialog;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -84,11 +84,11 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         canScopeOffMarket = false;
         minRenovationEndDate = null;
 
-        leaseAction = new MenuItem(i18n.tr("Create Lease..."), new Command() {
+        leaseAction = new MenuItem(i18n.tr("Create New Lease..."), new Command() {
             @Override
             public void execute() {
                 if (getForm().getValue().isPresentInCatalog().isBooleanTrue()) {
-                    new ExistingLeaseDataDialog(getForm().getValue()).show();
+                    new LeaseDataDialog(LeaseDataDialog.Type.New, getForm().getValue()).show();
                 } else {
                     MessageDialog.error(i18n.tr("Product Catalog"), i18n.tr("The unit should be added to the building Product Catalog first!"));
                 }

@@ -211,7 +211,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
         switch (actionDTO.action().getValue()) {
         case Approve:
-            ServerSideFactory.create(LeaseFacade.class).approveApplication(actionDTO.leaseId(), CrmAppContext.getCurrentUserEmployee(),
+            ServerSideFactory.create(LeaseFacade.class).approve(actionDTO.leaseId(), CrmAppContext.getCurrentUserEmployee(),
                     actionDTO.decisionReason().getValue());
             break;
         case Decline:

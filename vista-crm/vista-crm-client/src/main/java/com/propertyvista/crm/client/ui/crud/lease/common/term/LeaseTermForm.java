@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -100,9 +101,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                 concessionsHeader.setVisible(!getValue().version().leaseProducts().concessions().isEmpty());
             }
 
-            // hide initial balance for new leases:
-            get(proto().lease().billingAccount().carryforwardBalance()).setVisible(
-                    getValue().lease().leaseFrom().getValue().before(getValue().lease().creationDate().getValue()));
+            // show initial balance for existing leases only:
+            get(proto().lease().billingAccount().carryforwardBalance()).setVisible(getValue().lease().status().getValue() == Lease.Status.ExistingLease);
         }
 
         setUnitNote(getValue().unitMoveOutNote().getValue());
@@ -134,7 +134,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             filters.add(PropertyCriterion.eq(proto().units().$().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
                             filters.add(PropertyCriterion.le(proto().units().$().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
 
-                        } else if (currentValue.lease().status().getValue() == Lease.Status.Application) { // lease application:
+                        } else if (EnumSet.of(Lease.Status.NewLease, Lease.Status.Application).contains(currentValue.lease().status().getValue())) { // lease & application:
 
                             filters.add(PropertyCriterion
                                     .eq(proto().units().$().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
@@ -190,7 +190,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
                             filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
 
-                        } else if (currentValue.lease().status().getValue() == Lease.Status.Application) { // lease application:
+                        } else if (EnumSet.of(Lease.Status.NewLease, Lease.Status.Application).contains(currentValue.lease().status().getValue())) { // lease & application:
 
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));

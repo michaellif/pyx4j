@@ -106,6 +106,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         case Application:
             lease.leaseApplication().status().setValue(LeaseApplication.Status.Created);
             break; // ok, allowed value...
+        case NewLease:
         case ExistingLease:
             lease.leaseApplication().setValue(null);
             break; // ok, allowed value...
@@ -286,7 +287,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public void approveApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
+    public void approve(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
 
         Set<ValidationFailure> validationFailures = new LeaseApprovalValidator().validate(lease);
@@ -299,38 +300,67 @@ public class LeaseFacadeImpl implements LeaseFacade {
             throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to following validation errors:\n{0}", errorsRoster));
         }
 
+        // memorize entry LeaseStatus:
+        Status leaseStatus = lease.status().getValue();
+
         lease.status().setValue(Lease.Status.Approved);
         lease.approvalDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
-        lease.leaseApplication().decidedBy().set(decidedBy);
-        lease.leaseApplication().decisionReason().setValue(decisionReason);
-        lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
 
-        recordApplicationData(lease.currentTerm());
+        if (leaseStatus == Status.Application) {
+            lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
+            lease.leaseApplication().decidedBy().set(decidedBy);
+            lease.leaseApplication().decisionReason().setValue(decisionReason);
+            lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+
+            recordApplicationData(lease.currentTerm());
+        }
 
         finalize(lease);
 
-        Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
+        // Billing-related stuff:
+        BillingFacade billingFacade = ServerSideFactory.create(BillingFacade.class);
+
+        Bill bill = billingFacade.runBilling(lease);
 
         if (bill.billStatus().getValue() == Bill.BillStatus.Failed) {
             throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to failed first time bill"));
         }
 
         if (bill.billStatus().getValue() != Bill.BillStatus.Confirmed) {
-            ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
+            billingFacade.confirmBill(bill);
         }
 
-        if (!lease.leaseApplication().onlineApplication().isNull()) {
-            Persistence.service().retrieve(lease.currentTerm().version().tenants());
-            for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
-                if (!tenant.application().isNull()) { // co-applicants have no
-                                                      // dedicated application
-                    ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(tenant);
+        switch (leaseStatus) {
+        case Application:
+            if (!lease.leaseApplication().onlineApplication().isNull()) {
+                Persistence.service().retrieve(lease.currentTerm().version().tenants());
+                for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
+                    if (!tenant.application().isNull()) { // co-applicants have no
+                                                          // dedicated application
+                        ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(tenant);
+                    }
                 }
             }
-        }
 
-        ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
+            ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
+            break;
+
+        case NewLease:
+            ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
+            break;
+
+        case ExistingLease:
+            // for zero cycle bill also create the next bill if we are past the executionTargetDate of the cycle
+            Date curDate = Persistence.service().getTransactionSystemTime();
+            LogicalDate nextExecDate = billingFacade.getNextCycleExecutionDate(bill.billingCycle());
+            if (BillType.ZeroCycle.equals(bill.billType().getValue()) && !curDate.before(nextExecDate)) {
+                billingFacade.runBilling(lease);
+            }
+
+            ServerSideFactory.create(OccupancyFacade.class).migratedApprove(lease.unit().<AptUnit> createIdentityStub());
+            break;
+
+        }
 
         updateUnitRentPrice(lease);
     }
@@ -403,7 +433,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
     public void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
 
-        // TODO Review the status
         lease.status().setValue(Lease.Status.Cancelled);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Cancelled);
         lease.leaseApplication().decidedBy().set(decidedBy);
@@ -415,52 +444,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
         ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
     }
 
-    @Override
-    public void approveExistingLease(Lease leaseId) {
-        Lease lease = load(leaseId, false);
-
-        Set<ValidationFailure> validationFailures = new LeaseApprovalValidator().validate(lease);
-        if (!validationFailures.isEmpty()) {
-            List<String> errorMessages = new ArrayList<String>();
-            for (ValidationFailure failure : validationFailures) {
-                errorMessages.add(failure.getMessage());
-            }
-            String errorsRoster = StringUtils.join(errorMessages, ",\n");
-            throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to following validation errors:\n{0}", errorsRoster));
-        }
-
-        lease.status().setValue(Lease.Status.Approved);
-        lease.approvalDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-
-        finalize(lease);
-
-        BillingFacade billingFacade = ServerSideFactory.create(BillingFacade.class);
-        Bill bill = billingFacade.runBilling(lease);
-        if (bill.billStatus().getValue() != Bill.BillStatus.Failed) {
-            if (bill.billStatus().getValue() != Bill.BillStatus.Confirmed) {
-                billingFacade.confirmBill(bill);
-            }
-            // for zero cycle bill also create the next bill if we are past the executionTargetDate of the cycle
-            Date curDate = Persistence.service().getTransactionSystemTime();
-            LogicalDate nextExecDate = billingFacade.getNextCycleExecutionDate(bill.billingCycle());
-            if (BillType.ZeroCycle.equals(bill.billType().getValue()) && !curDate.before(nextExecDate)) {
-                billingFacade.runBilling(lease);
-            }
-        } else {
-            throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to failed first time bill"));
-        }
-
-        ServerSideFactory.create(OccupancyFacade.class).migratedApprove(lease.unit().<AptUnit> createIdentityStub());
-
-        updateUnitRentPrice(lease);
-    }
-
     // TODO review code here
     @Override
     public void activate(Lease leaseId) {
         Lease lease = load(leaseId, false);
 
-        if (!EnumSet.of(Lease.Status.ExistingLease, Lease.Status.Approved).contains(lease.status().getValue())) {
+        if (!EnumSet.of(Lease.Status.ExistingLease, Lease.Status.NewLease, Lease.Status.Approved).contains(lease.status().getValue())) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
@@ -716,6 +705,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             ServerSideFactory.create(OccupancyFacade.class).migratedCancel(lease.unit().<AptUnit> createIdentityStub());
             break;
 
+        case NewLease:
         case Approved:
             ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
             break;
@@ -869,6 +859,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         // update reservation if necessary:
         if (doUnreserve) {
             switch (lease.status().getValue()) {
+            case NewLease:
             case Application:
                 ServerSideFactory.create(OccupancyFacade.class).unreserve(previousLeaseEdition.unit().getPrimaryKey());
                 break;
@@ -881,6 +872,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
         if (doReserve) {
             switch (lease.status().getValue()) {
+            case NewLease:
             case Application:
                 ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
                 break;
