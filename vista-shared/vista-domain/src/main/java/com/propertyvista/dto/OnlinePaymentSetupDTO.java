@@ -27,7 +27,6 @@ import com.propertyvista.domain.payment.AccountType;
 import com.propertyvista.domain.pmc.info.BusinessInformation;
 import com.propertyvista.domain.pmc.info.PersonalInformation;
 import com.propertyvista.domain.pmc.info.PmcSignature;
-import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
@@ -78,14 +77,16 @@ public interface OnlinePaymentSetupDTO extends IEntity {
     // Confirmation:
 
     // caledon
-    LegalTermsContent caledonAgreement();
+    @Editor(type = EditorType.richtextarea)
+    IPrimitive<String> caledonAgreement();
 
     IPrimitive<Boolean> caledonIAgree();
 
     PmcSignature caledonAgreementSignature();
 
     // payment pad
-    LegalTermsContent paymentPadAgreement();
+    @Editor(type = EditorType.richtextarea)
+    IPrimitive<String> paymentPadAgreement();
 
     IPrimitive<Boolean> paymentPadIAgree();
 

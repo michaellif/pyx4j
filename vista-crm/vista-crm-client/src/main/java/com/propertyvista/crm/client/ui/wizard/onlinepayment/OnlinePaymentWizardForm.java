@@ -42,7 +42,6 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.editors.dto.wizards.BusinessInformationForm;
 import com.propertyvista.common.client.ui.components.editors.dto.wizards.PersonalInformationForm;
-import com.propertyvista.crm.client.ui.components.LegalTermsContentViewer;
 import com.propertyvista.crm.client.ui.components.PmcSignatureForm;
 import com.propertyvista.crm.client.ui.components.WidgetDecoratorRightLabel;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
@@ -187,8 +186,8 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentWizardResources.INSTANCE.echequeLogo()));
         main.setWidget(++row, 0, caledonPaymentMethodsLogoHeader);
 
-        LegalTermsContentViewer caledonTermsContentViewer = new LegalTermsContentViewer(TERMS_VIEWER_HEIGHT);
-        main.setWidget(++row, 0, inject(proto().caledonAgreement(), caledonTermsContentViewer));
+        main.setWidget(++row, 0, inject(proto().caledonAgreement()));
+        get(proto().caledonAgreement()).setViewable(true);
 
         main.setWidget(++row, 0, new WidgetDecoratorRightLabel(inject(proto().caledonIAgree()), 2, 40));
         main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
@@ -216,8 +215,8 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         paypadPaymentMethodsLogoHader.add(new Image(OnlinePaymentWizardResources.INSTANCE.directBankingLogo()));
         main.setWidget(++row, 0, paypadPaymentMethodsLogoHader);
 
-        LegalTermsContentViewer paymentPadTermsViewer = new LegalTermsContentViewer(TERMS_VIEWER_HEIGHT);
-        main.setWidget(++row, 0, inject(proto().paymentPadAgreement(), paymentPadTermsViewer));
+        main.setWidget(++row, 0, inject(proto().paymentPadAgreement()));
+        get(proto().paymentPadAgreement()).setViewable(true);
 
         main.setWidget(++row, 0, new WidgetDecoratorRightLabel(inject(proto().paymentPadIAgree()), 2, 40));
         main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);

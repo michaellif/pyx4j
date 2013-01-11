@@ -31,7 +31,6 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
-import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.dto.OnlinePaymentSetupDTO;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -49,8 +48,8 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
         onlinePaymentSetup.businessInformation().companyName().setValue(pmc.name().getValue());
 
         // init terms
-        onlinePaymentSetup.caledonAgreement().set(retrieveCaledonTerms());
-        onlinePaymentSetup.paymentPadAgreement().set(retrievePaymentPadTerms());
+        onlinePaymentSetup.caledonAgreement().setValue(retrieveTerms(Target.PmcCaledonTemplate));
+        onlinePaymentSetup.paymentPadAgreement().setValue(retrieveTerms(Target.PmcPaymentPad));
 
         // init signatures
         Date date = new Date();
@@ -75,20 +74,8 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
         callback.onSuccess(EntityFactory.create(AbstractPaymentFees.class));
     }
 
-    private LegalTermsContent retrieveCaledonTerms() {
-        LegalTermsContent content = retrieveTerms(Target.PmcCaledonTemplate);
-        content.localizedCaption().setValue("Merchant Processing Application Agreement & Pre-Authorized Debit Agreement");
-        return content;
-    }
-
-    private LegalTermsContent retrievePaymentPadTerms() {
-        LegalTermsContent content = retrieveTerms(Target.PmcPaymentPad);
-        content.localizedCaption().setValue("Pre-Authorized Debit Agreement and Interac Online");
-        return content;
-    }
-
-    private LegalTermsContent retrieveTerms(final VistaTerms.Target target) {
-        String contentText = TaskRunner.runInAdminNamespace(new Callable<String>() {
+    private String retrieveTerms(final VistaTerms.Target target) {
+        String termsText = TaskRunner.runInAdminNamespace(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 EntityQueryCriteria<VistaTerms> criteria = EntityQueryCriteria.create(VistaTerms.class);
@@ -98,8 +85,6 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
             }
         });
 
-        LegalTermsContent content = EntityFactory.create(LegalTermsContent.class);
-        content.content().setValue(contentText);
-        return content;
+        return termsText;
     }
 }
