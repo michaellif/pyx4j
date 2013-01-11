@@ -21,13 +21,23 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureStatusForm;
@@ -36,6 +46,51 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 public class TenantSureManagementViewImpl extends Composite implements TenantSureManagementView {
 
     private static final I18n i18n = I18n.get(TenantSureManagementViewImpl.class);
+
+    @Transient
+    public static interface EmailHolder extends IEntity {
+
+        @Editor(type = EditorType.email)
+        IPrimitive<String> emailAddress();
+    }
+
+    private abstract static class EmailInputDialog extends OkCancelDialog {
+
+        private CEntityForm<EmailHolder> form;
+
+        public EmailInputDialog(String defaultEmail) {
+            super(i18n.tr("Enter you email:"));
+
+            form = new CEntityDecoratableForm<EmailHolder>(EmailHolder.class) {
+                @Override
+                public IsWidget createContent() {
+                    FlowPanel panel = new FlowPanel();
+                    panel.add(new DecoratorBuilder(inject(proto().emailAddress())).customLabel("").useLabelSemicolon(false).labelWidth(0).componentWidth(15)
+                            .build());
+                    return panel;
+                }
+            };
+            form.initContent();
+
+            EmailHolder emailHolder = EntityFactory.create(EmailHolder.class);
+            emailHolder.emailAddress().setValue(defaultEmail);
+            form.populate(emailHolder);
+
+            setBody(form);
+            setSize("20em", "2.5em");
+        }
+
+        protected final String getEmail() {
+            form.revalidate();
+            if (form.isValid()) {
+                return form.getValue().emailAddress().getValue();
+            } else {
+                return null;
+            }
+
+        }
+
+    }
 
     private Presenter presenter;
 
@@ -46,6 +101,8 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     private Button updateCCButton;
 
     private Button updateCCAndPay;
+
+    private Button sendDocumentationButton;
 
     public TenantSureManagementViewImpl() {
 
@@ -124,6 +181,27 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         actionsPanel.getElement().getStyle().setMarginTop(50, Unit.PX);
         actionsPanel.getElement().getStyle().setMarginBottom(50, Unit.PX);
 
+        sendDocumentationButton = new Button(i18n.tr("Send Policy..."), new Command() {
+
+            @Override
+            public void execute() {
+                new EmailInputDialog("") {
+                    @Override
+                    public boolean onClickOk() {
+                        String email = getEmail();
+                        if (email != null) {
+                            presenter.sendDocumentation(email);
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    };
+                }.show();
+            }
+
+        });
+        setControlButtonLayout(sendDocumentationButton);
+
         updateCCButton = new Button(i18n.tr("Update Credit Card Details"), new Command() {
             @Override
             public void execute() {
@@ -176,7 +254,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         });
         setControlButtonLayout(makeAClaim);
 
-//        actionsPanel.add(viewCertificateButton);
+        actionsPanel.add(sendDocumentationButton);
         actionsPanel.add(makeAClaim);
         actionsPanel.add(updateCCButton);
         actionsPanel.add(updateCCAndPay);
@@ -218,6 +296,11 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
     private static void setControlButtonLayout(Button button) {
         setControlButtonLayout(button, true);
+    }
+
+    @Override
+    public void reportSendDocumentatioinSuccess() {
+        MessageDialog.info(i18n.tr("Documentation has been sent successfully!"));
     }
 
 }

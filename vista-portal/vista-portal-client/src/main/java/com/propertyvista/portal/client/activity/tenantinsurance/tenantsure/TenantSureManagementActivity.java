@@ -80,4 +80,16 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
         });
     }
 
+    @Override
+    public void sendDocumentation(String email) {
+        service.sendDocumentation(new DefaultAsyncCallback<VoidSerializable>() {
+
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                view.reportSendDocumentatioinSuccess();
+            }
+
+        }, email);
+    }
+
 }

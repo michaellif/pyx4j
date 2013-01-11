@@ -55,5 +55,7 @@ public interface TenantSureFacade {
      */
     InsurancePaymentMethod updatePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId);
 
+    void sendDocumentation(Tenant tenantId, String email);
+
     //payOutstandingPayment ?
 }

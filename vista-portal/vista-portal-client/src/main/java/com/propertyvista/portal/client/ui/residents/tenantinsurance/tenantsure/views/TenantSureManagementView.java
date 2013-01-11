@@ -29,6 +29,8 @@ public interface TenantSureManagementView extends IsWidget {
 
         void viewAboutTenantSure();
 
+        void sendDocumentation(String email);
+
     }
 
     void setPresenter(Presenter presenter);
@@ -38,5 +40,7 @@ public interface TenantSureManagementView extends IsWidget {
     void reportUpdateCreditCardUpdate(String errorMessage);
 
     void reportCancelFailure(String errorMessage);
+
+    void reportSendDocumentatioinSuccess();
 
 }

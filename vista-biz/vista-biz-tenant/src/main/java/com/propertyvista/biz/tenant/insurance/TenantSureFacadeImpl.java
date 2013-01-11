@@ -174,7 +174,6 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             Persistence.service().persist(insuranceTenantSure);
             Persistence.service().commit();
 
-            // send documentation to tenant
             List<String> emails = new ArrayList<String>();
             SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
             if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
@@ -363,6 +362,20 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         if (insuranceTenantSure.status().getValue() != Status.Active) {
             throw new Error("It's impossible to cancel a tenant sure insurance which is not " + Status.Active);
         }
+    }
+
+    @Override
+    public void sendDocumentation(Tenant tenantId, String email) {
+        InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
+
+        List<String> emails = new ArrayList<String>();
+        SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
+        if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
+            emails.add(mailConfig.getForwardAllTo());
+        } else {
+            emails.add(email);
+        }
+        cfcApiClient.requestDocument(insuranceTenantSure.quoteId().getValue(), emails);
     }
 
 }

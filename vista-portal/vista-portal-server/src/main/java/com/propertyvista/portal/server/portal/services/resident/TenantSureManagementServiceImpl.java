@@ -53,4 +53,11 @@ public class TenantSureManagementServiceImpl implements TenantSureManagementServ
         faqHtml.onSuccess(ServerSideFactory.create(TenantSureTextFacade.class).getFaq());
     }
 
+    @Override
+    public void sendDocumentation(AsyncCallback<VoidSerializable> callback, String email) {
+        ServerSideFactory.create(TenantSureFacade.class).sendDocumentation(
+                TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub(), email);
+        callback.onSuccess(null);
+    }
+
 }
