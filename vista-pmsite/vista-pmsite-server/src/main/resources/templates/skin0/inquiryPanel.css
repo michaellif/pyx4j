@@ -9,7 +9,6 @@
 }
 .inquiryPanel .inputEntry {
 	padding:10px 30px;
-//	width: 545px;
 }
 .inquiryPanel .inputEntry .inputLabel {
 	display:inline-block;
@@ -18,16 +17,32 @@
 	text-align:right;
 	vertical-align:top;
 	color:#777;
-//	float: left;
+/*
+ if EI7
+*/	
+	*display: inline;
+    zoom: 1;
 }
 .inquiryPanel .inputEntry .inputLabel.altApmnt {
 	display:inline;
 	padding-right:5px;
+/*
+ if EI7
+*/	
+	*display: inline;
+    zoom: 1;
+//  max-width: 96px;
 }
+
 .inquiryPanel .inputBox {
 	display:inline-block;
 	width:370px;
 	vertical-align:top;
+/*
+ if EI7
+*/	
+	*display: inline;
+    zoom: 1;	
 }
 .inquiryPanel .inputEntry input {
 	vertical-align:top;
@@ -38,6 +53,11 @@
 .inquiryPanel .inputEntry .apmntBox {
 	width:120px;
 	display:inline-block;
+/*
+ if EI7
+*/	
+	*display: inline;
+    zoom: 1;	
 }
 .inquiryPanel .inputEntry .captcha {
 	display:inline-block;

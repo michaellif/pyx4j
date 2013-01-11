@@ -228,6 +228,11 @@
 	width:80px;
 	min-height:75px;
 	text-align:center;
+/*
+ if EI7
+*/	
+	*display: inline;
+    zoom: 1;
 } 
 .apartmentListingWrap .listingEntry .pictureBox .picture {
 	width:100%;
@@ -237,6 +242,11 @@
 	vertical-align: top;
 	width:450px;
 	padding:0 20px;
+/*
+ if EI7
+*/	
+	*display: inline;
+    zoom: 1;
 } 
 .apartmentListingWrap .listingEntry .infoBoxEntry {
 	padding:4px 0;
@@ -254,6 +264,11 @@
 	vertical-align: top;
 	width:340px;
 	font-weight:bold;
+/*
+ if EI7
+*/	
+	*display: inline;
+    zoom: 1;
 }
 .apartmentListingWrap .listingEntry .infoBoxEntry .infoBoxText .typeInfo {
 	font-weight:normal;
@@ -282,6 +297,11 @@
 	vertical-align: top;
 	width:80px;
 	padding:0 20px;
+/*
+ if EI7
+*/	
+	*display: inline;
+    zoom: 1;
 } 
 .apartmentListingWrap .listingEntry .controlButton {
 	float:right;

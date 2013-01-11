@@ -27,6 +27,79 @@
 	color:#777;
 	padding-bottom:20px;
 }
+
+.apartmentDetailsWrap .detailBox .detailBoxEntry .picture {
+	display: inline-block;
+	vertical-align: top;
+	width: 80px; 
+	min-height:75px;
+	text-align:center;
+	padding-left:10px;
+/*
+ if EI7
+*/	
+	*display: inline;
+    zoom: 1;
+//	border: 0;
+//  max-width: 80px;
+}
+
+.apartmentDetailsWrap .unitDetails {
+	display: inline-block;
+	vertical-align: top;
+	width:370px;
+	padding:0 10px;
+	color: #222;	
+/*
+ if EI7
+*/	
+	*display: inline;
+    zoom: 1;	
+}
+
+.apartmentDetailsWrap .detailBox .detailBoxEntry .controlBox {
+	display: inline-block;
+	vertical-align: top;
+	width:100px;
+	padding:0;
+/*
+ if EI7
+*/	
+	*display: inline;
+    zoom: 1;	
+}
+
+.apartmentDetailsWrap .controlBox .controlButton {
+	float:right;
+	padding:6px 0;
+}
+
+#btnViewDetails {
+	background-position:0px -30px;
+}
+
+.listingCtlButton {
+	background-image: url("images/aptListIcons.png");
+	background-repeat: no-repeat;
+	display:block;
+	width:70px;
+	height:25px;
+	padding-top:5px;
+	padding-left:30px;
+	font-weight:bold;
+	cursor:pointer;
+	color:#6c6d6f;
+}
+a.listingCtlButton {
+	color:#6c6d6f !important;
+	text-decoration:none;
+}
+
+.apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover .listingCtlButton {
+	background-image: url("images/aptListIcons-hlight.png");
+	color:#339900 !important;
+}
+
 .apartmentDetailsWrap .detailBox .detailBoxTitle {
 	padding: 30px 20px;
 	font-size:14px;
@@ -52,43 +125,16 @@
 	text-align:right;
 	color:#888;
 }
-.apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxText {
-	display:inline-block;
-	vertical-align:top;
-	width:460px;'
+
+.apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover .listingCtlButton {
+	background-image: url("images/aptListIcons-hlight.png");
+	color:#339900 !important;
 }
-.apartmentDetailsWrap .detailBox .detailBoxEntry ul.detailBoxText {
-	padding-left:10px;
-	margin:0;
-}
-.apartmentDetailsWrap .detailBox .detailBoxEntry ul.detailBoxText li {
-	float:left;
-	width:230px;
-}
+
 .apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover {
 	background:#d8e7bc;
 }
-.apartmentDetailsWrap .detailBox .detailBoxEntry .picture {
-	display: inline-block;
-	vertical-align: top;
-	width:80px;
-	min-height:75px;
-	text-align:center;
-	padding-left:10px;
-} 
-.apartmentDetailsWrap .unitDetails {
-	display: inline-block;
-	vertical-align: top;
-	width:370px;
-	padding:0 10px;
-	color: #222;
-}
-.apartmentDetailsWrap .unitDetails .details {
-	display: inline-block;
-	vertical-align: top;
-	width:320px;
-	padding:0 20px;
-} 
+
 .apartmentDetailsWrap .unitDetails .unitEntry {
 	padding:2px 0;
 } 
@@ -106,6 +152,28 @@
 	width:210px;
 	font-weight:bold;
 }
+
+.apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxText {
+	display:inline-block;
+	vertical-align:top;
+	width:460px;'
+}
+.apartmentDetailsWrap .detailBox .detailBoxEntry ul.detailBoxText {
+	padding-left:10px;
+	margin:0;
+}
+.apartmentDetailsWrap .detailBox .detailBoxEntry ul.detailBoxText li {
+	float:left;
+	width:230px;
+}
+
+.apartmentDetailsWrap .unitDetails .details {
+	display: inline-block;
+	vertical-align: top;
+	width:320px;
+	padding:0 20px;
+} 
+
 .apartmentDetailsWrap .unitDetails .infoBox .amenities li {
 	float: left;
 	margin: 0 10px;
@@ -115,39 +183,8 @@
 	list-style: none;
 	margin-left: 0;
 }
-.apartmentDetailsWrap .detailBox .detailBoxEntry .controlBox {
-	display: inline-block;
-	vertical-align: top;
-	width:100px;
-	padding:0;
-} 
-.apartmentDetailsWrap .controlBox .controlButton {
-	float:right;
-	padding:6px 0;
-}
-.listingCtlButton {
-	background-image: url("images/aptListIcons.png");
-	background-repeat: no-repeat;
-	display:block;
-	width:70px;
-	height:25px;
-	padding-top:5px;
-	padding-left:30px;
-	font-weight:bold;
-	cursor:pointer;
-	color:#6c6d6f;
-}
-a.listingCtlButton {
-	color:#6c6d6f !important;
-	text-decoration:none;
-}
-.apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover .listingCtlButton {
-	background-image: url("images/aptListIcons-hlight.png");
-	color:#339900 !important;
-}
-#btnViewDetails {
-	background-position:0px -30px;
-}
+
+ 
 .apartmentDetailsWrap .requestBtn {
     background: url("images/btn.png") no-repeat;
     background-size: 100% 64px;
