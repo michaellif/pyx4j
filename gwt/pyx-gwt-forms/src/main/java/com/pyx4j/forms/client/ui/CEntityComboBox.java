@@ -149,6 +149,11 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
         }
     }
 
+    @Override
+    protected void onReset() {
+        resetOptions();
+    }
+
     public void resetOptions() {
         if (optionsLoaded) {
             optionsLoaded = false;
