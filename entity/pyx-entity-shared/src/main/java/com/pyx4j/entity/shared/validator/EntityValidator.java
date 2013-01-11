@@ -20,8 +20,11 @@
  */
 package com.pyx4j.entity.shared.validator;
 
+import java.util.Iterator;
+
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.EntityMeta;
@@ -47,6 +50,41 @@ public class EntityValidator {
                 }
             }
 
+        }
+    }
+
+    public static void validateRecursively(IEntity entity) {
+        EntityValidator.validate(entity);
+        EntityMeta em = entity.getEntityMeta();
+
+        for (String memberName : em.getMemberNames()) {
+            IObject<?> member = entity.getMember(memberName);
+            switch (member.getMeta().getObjectClassType()) {
+            case Entity:
+                if ((member.getMeta().isValidatorAnnotationPresent(NotNull.class))) {
+                    try {
+                        EntityValidator.validateRecursively((IEntity) member);
+                    } catch (RuntimeException e) {
+                        throw new RuntimeException(member.getPath() + " " + e.getMessage());
+                    }
+                }
+                break;
+            case EntityList:
+            case EntitySet:
+                @SuppressWarnings("unchecked")
+                Iterator<IEntity> lit = ((ICollection<IEntity, ?>) member).iterator();
+                while (lit.hasNext()) {
+                    IEntity ent = lit.next();
+                    try {
+                        EntityValidator.validateRecursively(ent);
+                    } catch (RuntimeException e) {
+                        throw new RuntimeException(ent.getPath() + " " + e.getMessage());
+                    }
+                }
+                break;
+            default:
+                break;
+            }
         }
     }
 }
