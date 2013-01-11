@@ -58,6 +58,8 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
         setTabEnabled(tab, !isEditable());
 
         selectTab(addTab(createEquifaxlTab()));
+
+        selectTab(addTab(createYardiTab()));
     }
 
     public void setOnboardingMerchantAccountsSource(ListerDataSource<OnboardingMerchantAccountDTO> onboardingMerchantAccountsSource) {
@@ -204,6 +206,23 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
         content.setWidget(++row, 0, approvalLink);
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
         content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
+        return content;
+    }
+
+    private FormFlexPanel createYardiTab() {
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("Yardi"));
+
+        int row = -1;
+
+        content.setH1(++row, 0, 2, i18n.tr("Yardi Credentials"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().serviceURL()), 25).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().username()), 15).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().credential()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().serverName()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().database()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().platform()), 15).build());
 
         return content;
     }
