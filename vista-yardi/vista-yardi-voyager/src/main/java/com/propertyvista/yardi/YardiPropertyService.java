@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -204,7 +204,11 @@ public class YardiPropertyService {
     private List<AptUnit> getUnits(String propertyCode) {
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().building().propertyCode(), propertyCode));
-        return Persistence.service().query(criteria);
+        List<AptUnit> units = Persistence.service().query(criteria);
+        for (AptUnit unit : units) {
+            Persistence.service().retrieve(unit.building());
+        }
+        return units;
     }
 
     private AptUnit getUnit(String unitId, String propertyCode) {
@@ -212,8 +216,11 @@ public class YardiPropertyService {
         criteria.add(PropertyCriterion.eq(criteria.proto().building().propertyCode(), propertyCode));
         criteria.eq(criteria.proto().info().number(), unitId);
         List<AptUnit> units = Persistence.service().query(criteria);
-
-        return !units.isEmpty() ? units.get(0) : null;
+        AptUnit unit = !units.isEmpty() ? units.get(0) : null;
+        if (unit != null) {
+            Persistence.service().retrieve(unit.building());
+        }
+        return unit;
     }
 
     private List<RTUnit> getYardiUnits(ResidentTransactions residentTransactions) {
