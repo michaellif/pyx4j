@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -14,7 +14,6 @@
 package com.propertyvista.payment.sshd;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,28 +46,31 @@ public class PaymentSSHDServer {
             return;
         }
 
-        SshServer sshd = SshServer.setUpDefaultServer();
-        sshd.setPort(port);
-        sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(new File(config.getConfigDirectory(), "sshd-key.ser").getAbsolutePath()));
-
-        sshd.setPasswordAuthenticator(new SSHDPasswordAuthenticator());
-
-        sshd.setFileSystemFactory(new SimpleFileSystemFactory(getRootDir()));
-
-        sshd.setCommandFactory(new ScpCommandFactory());
-
-        List<NamedFactory<Command>> namedFactoryList = new ArrayList<NamedFactory<Command>>();
-        namedFactoryList.add(new SftpSubsystem.Factory());
-        sshd.setSubsystemFactories(namedFactoryList);
-
         try {
+            SshServer sshd = SshServer.setUpDefaultServer();
+            sshd.setPort(port);
+            sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(new File(config.getConfigDirectory(), "sshd-key.ser").getAbsolutePath()));
+
+            sshd.setPasswordAuthenticator(new SSHDPasswordAuthenticator());
+
+            sshd.setFileSystemFactory(new SimpleFileSystemFactory(getRootDir()));
+
+            sshd.setCommandFactory(new ScpCommandFactory());
+
+            List<NamedFactory<Command>> namedFactoryList = new ArrayList<NamedFactory<Command>>();
+            namedFactoryList.add(new SftpSubsystem.Factory());
+            sshd.setSubsystemFactories(namedFactoryList);
+
             sshd.start();
-        } catch (IOException e) {
+
+            PaymentSSHDServer.sshd = sshd;
+
+            log.info("SSHD listening on port {}", port);
+
+        } catch (Throwable e) {
             log.error("SFTP Start error", e);
             throw new Error(e);
         }
-        PaymentSSHDServer.sshd = sshd;
-        log.info("SSHD listening on port {}", port);
     }
 
     public static synchronized void shutdown() {
