@@ -27,6 +27,7 @@ import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.pmc.PmcDnsName.DnsNameTarget;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.server.config.VistaFeatures;
 import com.propertyvista.shared.VistaSystemIdentification;
 import com.propertyvista.shared.config.VistaDemo;
@@ -149,5 +150,18 @@ public class VistaDeployment {
             }
         }
         return VistaSettings.googleAPIKey;
+    }
+
+    public static PmcYardiCredential getPmcYardiCredential() {
+        final String namespace = NamespaceManager.getNamespace();
+        assert (!namespace.equals(VistaNamespace.adminNamespace)) : "PMC not available when running in admin namespace";
+        try {
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().pmc().namespace(), namespace));
+            return Persistence.service().retrieve(criteria);
+        } finally {
+            NamespaceManager.setNamespace(namespace);
+        }
     }
 }

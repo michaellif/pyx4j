@@ -37,6 +37,7 @@ import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.generator.PreloadData;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.server.preloader.ido.OnboardingMerchantAccountImport;
+import com.propertyvista.server.config.DevYardiCredentials;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class PmcCreatorDev {
@@ -68,6 +69,7 @@ public class PmcCreatorDev {
 
         pmc.equifaxInfo().status().setValue(PmcEquifaxStatus.Active);
         pmc.equifaxInfo().reportType().setValue(CreditCheckReportType.FullCreditReport);
+        pmc.yardiCredential().set(DevYardiCredentials.getTestPmcYardiCredential());
 
         ServerSideFactory.create(PmcFacade.class).create(pmc);
 

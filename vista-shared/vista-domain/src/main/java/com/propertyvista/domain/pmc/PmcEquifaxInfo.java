@@ -47,6 +47,7 @@ public interface PmcEquifaxInfo extends IEntity {
     @MemberColumn(notNull = true)
     @JoinColumn
     @Indexed(uniqueConstraint = true)
+    @Detached
     Pmc pmc();
 
     IPrimitive<CreditCheckReportType> reportType();

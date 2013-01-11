@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.pmc.fee;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -31,6 +32,7 @@ public interface PmcEquifaxFee extends AbstractEquifaxFee {
     @MemberColumn(notNull = true)
     @JoinColumn
     @Indexed(uniqueConstraint = true)
+    @Detached
     Pmc pmc();
 
 }

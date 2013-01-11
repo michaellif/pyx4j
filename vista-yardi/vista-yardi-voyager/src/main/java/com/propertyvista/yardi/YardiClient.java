@@ -32,6 +32,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 
 import com.propertyvista.config.SystemConfig;
+import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiConstants.Action;
 
 public class YardiClient {
@@ -49,10 +50,14 @@ public class YardiClient {
 
     public Long transactionId = 0l;
 
+    @Deprecated
     public YardiClient() {
         //default service URL
-        //serviceURL = "https://www.iyardiasp.com/8223thirddev/webservices/itfresidenttransactions20.asmx";
-        serviceURL = "http://yardi.birchwoodsoftwaregroup.com/voyager60/webservices/itfresidenttransactions20.asmx";
+        serviceURL = "https://www.iyardiasp.com/8223thirddev/webservices/itfresidenttransactions20.asmx";
+    }
+
+    public YardiClient(PmcYardiCredential credential) {
+        serviceURL = credential.serviceURL().getValue();
     }
 
     public YardiClient(String serviceURL) {

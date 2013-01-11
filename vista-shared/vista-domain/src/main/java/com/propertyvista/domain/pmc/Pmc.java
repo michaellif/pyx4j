@@ -37,6 +37,7 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.fee.PmcEquifaxFee;
 import com.propertyvista.domain.pmc.payment.CustomerCreditCheckTransaction;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.domain.settings.PmcYardiCredential;
 
 @Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
 @Caption(name = "PMC")
@@ -93,6 +94,10 @@ public interface Pmc extends IEntity {
     @Owned
     @Detached(level = AttachLevel.Detached)
     PmcPaymentTypeInfo paymentTypeInfo();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    PmcYardiCredential yardiCredential();
 
     @Indexed(uniqueConstraint = true)
     @Length(63)

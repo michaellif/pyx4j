@@ -14,14 +14,31 @@
 package com.propertyvista.domain.settings;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
-//TODO implement this, remove Transient 
-@Transient
-public interface YardiConnection extends IEntity {
+import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.Pmc;
+
+@Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public interface PmcYardiCredential extends IEntity {
+
+    @ReadOnly
+    @Owner
+    @MemberColumn(notNull = true)
+    @JoinColumn
+    @Indexed(uniqueConstraint = true)
+    @Detached
+    Pmc pmc();
 
     public enum Platform {
         SQL, Oracle

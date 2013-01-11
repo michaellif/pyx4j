@@ -65,6 +65,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     protected void retrievedSingle(Pmc entity, RetrieveTraget retrieveTraget) {
         Persistence.service().retrieveMember(entity.equifaxInfo());
         Persistence.service().retrieveMember(entity.equifaxFee());
+        Persistence.service().retrieveMember(entity.yardiCredential());
     }
 
     @Override

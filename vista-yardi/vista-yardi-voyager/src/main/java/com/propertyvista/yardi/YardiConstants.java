@@ -23,17 +23,26 @@ public class YardiConstants {
 
     public static final String NAMESPACE = "http://yardi.com/ResidentTransactions20";
 
-    public static final String USERNAME = "sa";
+    /**
+     * In tests use DevYardiCredentials.getTestPmcYardiConnection()
+     * in Application use VistaDeployment.getPmcYardiConnection();
+     */
+    @Deprecated
+    public static final String USERNAME = "propertyvistaws";
 
-    public static final String PASSWORD = "akan1212";
+    @Deprecated
+    public static final String PASSWORD = "52673";
 
-    public static final String SERVER_NAME = "WIN-CO5DPAKNUA4\\YARDI";
+    @Deprecated
+    public static final String SERVER_NAME = "aspdb04";
 
-    public static final String DATABASE = "demo1";
+    @Deprecated
+    public static final String DATABASE = "afqoml_live";
 
+    @Deprecated
     public static final String PLATFORM = "SQL";
 
-    public static final String INTERFACE_ENTITY = "RentPayment";
+    public static final String INTERFACE_ENTITY = "Property Vista";
 
-    public static final String YARDI_PROPERTY_ID = "0001norg";
+    public static final String YARDI_PROPERTY_ID = "prvista1";
 }
