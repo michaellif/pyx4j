@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -52,7 +52,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         case production:
             return "https://" + pmcDnsName + ".propertyvista.com/";
         case staging:
-            return "https://" + pmcDnsName + "-crm-staging02.propertyvista.com/";
+            return "https://" + pmcDnsName + "-crm-staging03.propertyvista.com/";
         default:
             throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
         }
@@ -70,7 +70,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         case production:
             return protocol + pmcDnsName + ".residentportalsite.com/";
         case staging:
-            return protocol + pmcDnsName + "-portal-staging02.propertyvista.com/";
+            return protocol + pmcDnsName + "-portal-staging03.propertyvista.com/";
         default:
             throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
         }
@@ -82,7 +82,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         case production:
             return "https://" + pmcDnsName + ".prospectportalsite.com/";
         case staging:
-            return "https://" + pmcDnsName + "-ptapp-staging02.propertyvista.com/";
+            return "https://" + pmcDnsName + "-ptapp-staging03.propertyvista.com/";
         default:
             throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
         }
@@ -92,9 +92,9 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     public String getDefaultBaseURLvistaAdmin() {
         switch (VistaDeployment.getSystemIdentification()) {
         case production:
-            return "https://admin-prod02.propertyvista.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.ADMIN_URL;
+            return "https://admin-prod03.propertyvista.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.ADMIN_URL;
         case staging:
-            return "https://admin-staging02.propertyvista.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.ADMIN_URL;
+            return "https://admin-staging03.propertyvista.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.ADMIN_URL;
         default:
             throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
         }
@@ -121,9 +121,9 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     public String getApplicationURLNamespace() {
         switch (VistaDeployment.getSystemIdentification()) {
         case production:
-            return "-prod02.propertyvista.com/";
+            return "-prod03.propertyvista.com/";
         case staging:
-            return "-staging02.propertyvista.com/";
+            return "-staging03.propertyvista.com/";
         default:
             throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
         }

@@ -25,7 +25,7 @@ public class SystemConfig extends HostConfig {
 
     private final static Logger log = LoggerFactory.getLogger(SystemConfig.class);
 
-    private static List<String> noCaledonProxyHost = Arrays.asList("dev", "dev.birchwoodsoftwaregroup.com", "prod02a", "prod02b", "qa",
+    private static List<String> noCaledonProxyHost = Arrays.asList("dev", "dev.birchwoodsoftwaregroup.com", "prod03a", "prod03b", "qa",
             "qa.birchwoodsoftwaregroup.com");
 
     protected ProxyConfig caledonProxy;
