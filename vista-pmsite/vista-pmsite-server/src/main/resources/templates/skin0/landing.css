@@ -149,10 +149,17 @@
 	background:grey;
 }
 .promoBox a .picture {
-	border:1px solid #34363C;
+	border:3px solid #34363C;
 }
 .promoBox a:hover .picture {
-	border:1px solid #B5E329;
+	border-color:#B5E329;
+}
+.promoBox a .address {
+	color:white;
+}
+.promoBox a:hover .address {
+	color: #B5E329;
+	text-decoration:underline;
 }
 .promoBox .read_more {
 	color:#B5E329;

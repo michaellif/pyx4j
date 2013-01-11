@@ -133,9 +133,8 @@ public class PromoGadgetPanel extends Panel {
                 params.add(PMSiteApplication.ParamNameBuilding, promo.getPropCode());
                 BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("propLink", AptDetailsPage.class, params);
                 link.add(new SimpleImage("picture", promo.getImg()));
+                link.add(new Label("address", promo.getAddress()));
                 item.add(link);
-
-                item.add(new Label("address", promo.getAddress()));
             }
         });
     }
