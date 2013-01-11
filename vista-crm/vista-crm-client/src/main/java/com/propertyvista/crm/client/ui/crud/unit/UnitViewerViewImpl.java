@@ -44,7 +44,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     private final IListerView<AptUnitOccupancySegment> occupanciesLister;
 
-    private final MenuItem leaseAction;
+    private final MenuItem existingLeaseAction;
 
     private final MenuItem scopeAction;
 
@@ -84,17 +84,17 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         canScopeOffMarket = false;
         minRenovationEndDate = null;
 
-        leaseAction = new MenuItem(i18n.tr("Create New Lease..."), new Command() {
+        existingLeaseAction = new MenuItem(i18n.tr("Create Current Lease..."), new Command() {
             @Override
             public void execute() {
                 if (getForm().getValue().isPresentInCatalog().isBooleanTrue()) {
-                    new LeaseDataDialog(LeaseDataDialog.Type.New, getForm().getValue()).show();
+                    new LeaseDataDialog(LeaseDataDialog.Type.Current, getForm().getValue()).show();
                 } else {
                     MessageDialog.error(i18n.tr("Product Catalog"), i18n.tr("The unit should be added to the building Product Catalog first!"));
                 }
             }
         });
-        addAction(leaseAction);
+        addAction(existingLeaseAction);
 
         scopeAction = new MenuItem(i18n.tr("Scope..."), new Command() {
             @Override
@@ -130,7 +130,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     @Override
     public void reset() {
-        setActionVisible(leaseAction, false);
+        setActionVisible(existingLeaseAction, false);
         setActionVisible(scopeAction, false);
         setActionVisible(makePendingAction, false);
         super.reset();
@@ -140,7 +140,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
     public void populate(AptUnitDTO value) {
         super.populate(value);
 
-        setActionVisible(leaseAction, value.isAvailableForExistingLease().isBooleanTrue());
+        setActionVisible(existingLeaseAction, value.isAvailableForExistingLease().isBooleanTrue());
     }
 
     @Override

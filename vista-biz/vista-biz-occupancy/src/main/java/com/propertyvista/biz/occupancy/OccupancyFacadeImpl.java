@@ -867,8 +867,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public boolean isAvailableForExistingLease(Key unitId) {
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
         AptUnitOccupancySegment segment = retrieveOccupancySegment(unitId, now);
-        return segment != null && (segment.status().getValue() == Status.pending || segment.status().getValue() == Status.available)
-                && segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE);
+        return segment != null && segment.status().getValue() == Status.pending && segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE);
     }
 
     private void setUnitAvailableFrom(Key unitPk, LogicalDate newAvaialbleFrom) {

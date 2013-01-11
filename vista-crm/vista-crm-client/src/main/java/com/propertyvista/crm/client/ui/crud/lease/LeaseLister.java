@@ -65,12 +65,13 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
             new Builder(proto().creationDate(), false).build()
         );//@formatter:on
 
-        addActionItem(new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("Application"), new Command() {
-            @Override
-            public void execute() {
-                new LeaseDataDialog(LeaseDataDialog.Type.Application).show();
-            }
-        }));
+// TODO currently disabled till new drop-down quick filters selector implemented:
+//        addActionItem(new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("Application"), new Command() {
+//            @Override
+//            public void execute() {
+//                new LeaseDataDialog(LeaseDataDialog.Type.Application).show();
+//            }
+//        }));
 
         addActionItem(new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("New Lease"), new Command() {
             @Override
