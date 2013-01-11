@@ -64,9 +64,15 @@ public class VistaFeatures {
         }
 
         @Override
+        public boolean yardiIntegration() {
+            return threadLocale.get().yardiIntegration().getValue(Boolean.FALSE);
+        }
+
+        @Override
         public CountryOfOperation countryOfOperation() {
             return threadLocale.get().countryOfOperation().getValue();
         }
+
     }
 
     public static void removeThreadLocale() {

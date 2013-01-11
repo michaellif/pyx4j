@@ -51,7 +51,8 @@ public class YardiClient {
 
     public YardiClient() {
         //default service URL
-        serviceURL = "https://www.iyardiasp.com/8223thirddev/webservices/itfresidenttransactions20.asmx";
+        //serviceURL = "https://www.iyardiasp.com/8223thirddev/webservices/itfresidenttransactions20.asmx";
+        serviceURL = "http://yardi.birchwoodsoftwaregroup.com/voyager60/webservices/itfresidenttransactions20.asmx";
     }
 
     public YardiClient(String serviceURL) {

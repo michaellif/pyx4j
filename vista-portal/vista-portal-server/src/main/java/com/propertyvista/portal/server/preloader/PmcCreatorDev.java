@@ -29,10 +29,10 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
-import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.generator.PreloadData;
 import com.propertyvista.misc.VistaTODO;
@@ -56,6 +56,7 @@ public class PmcCreatorDev {
         pmc.features().onlineApplication().setValue(Boolean.TRUE);
         pmc.features().xmlSiteExport().setValue(Boolean.TRUE);
         pmc.features().defaultProductCatalog().setValue(VistaTODO.VISTA_2256_Default_Product_Catalog);
+        pmc.features().yardiIntegration().setValue(Boolean.TRUE);
 
         if (pmcName.equals(DemoPmc.rockville.name())) {
             pmc.features().countryOfOperation().setValue(CountryOfOperation.UK);

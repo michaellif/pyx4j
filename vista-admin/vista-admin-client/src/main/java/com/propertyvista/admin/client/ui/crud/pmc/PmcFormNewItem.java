@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -46,6 +46,7 @@ public class PmcFormNewItem extends AdminEntityForm<PmcDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().onlineApplication()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().xmlSiteExport()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().defaultProductCatalog()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().yardiIntegration()), 5).build());
 
         selectTab(addTab(content));
 
