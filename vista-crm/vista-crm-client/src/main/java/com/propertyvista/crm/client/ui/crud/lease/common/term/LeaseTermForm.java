@@ -238,38 +238,42 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         detailsRow = -1; // second column:
 
-        detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease(), new CEntityCrudHyperlink<Lease>(null) {
-            @Override
-            public void setCommand(Command command) {
-                super.setCommand(new Command() {
-                    @Override
-                    public void execute() {
-                        if (getValue().getPrimaryKey() != null) {
-                            if (getValue().status().getValue() == Lease.Status.Application) {
-                                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(getValue().getPrimaryKey()));
-                            } else {
-                                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease().formViewerPlace(getValue().getPrimaryKey()));
+        if (isEditable()) {
+            detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease().leaseId()), 15).build());
+        } else {
+            detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease(), new CEntityCrudHyperlink<Lease>(null) {
+                @Override
+                public void setCommand(Command command) {
+                    super.setCommand(new Command() {
+                        @Override
+                        public void execute() {
+                            if (getValue().getPrimaryKey() != null) {
+                                if (getValue().status().getValue() == Lease.Status.Application) {
+                                    AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(getValue().getPrimaryKey()));
+                                } else {
+                                    AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease().formViewerPlace(getValue().getPrimaryKey()));
+                                }
                             }
                         }
-                    }
-                });
-            }
+                    });
+                }
 
-            @Override
-            public void setFormat(IFormat<Lease> format) {
-                super.setFormat(new IFormat<Lease>() {
-                    @Override
-                    public String format(Lease value) {
-                        return ((value != null) ? value.leaseId().getStringView() : null);
-                    }
+                @Override
+                public void setFormat(IFormat<Lease> format) {
+                    super.setFormat(new IFormat<Lease>() {
+                        @Override
+                        public String format(Lease value) {
+                            return ((value != null) ? value.leaseId().getStringView() : null);
+                        }
 
-                    @Override
-                    public Lease parse(String string) {
-                        return null;
-                    }
-                });
-            }
-        }), 15).build());
+                        @Override
+                        public Lease parse(String string) {
+                            return null;
+                        }
+                    });
+                }
+            }), 15).build());
+        }
         detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease().type(), new CEnumLabel())).customLabel(i18n.tr("Lease Type"))
                 .build());
         detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease().status(), new CEnumLabel())).customLabel(i18n.tr("Lease Status"))
