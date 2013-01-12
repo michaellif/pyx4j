@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -46,7 +47,7 @@ public class UnitsMerger {
         Map<String, AptUnit> existingUnitsByNumber = unitsByNumber(existingList);
 
         for (AptUnit imported : importedList) {
-            AptUnit existing = existingUnitsByNumber.get(imported.info().number());
+            AptUnit existing = existingUnitsByNumber.get(imported.info().number().getValue());
             merged.add(existing != null ? merge(imported, existing) : imported);
         }
 
@@ -144,6 +145,7 @@ public class UnitsMerger {
         existing.floorplan().set(imported.floorplan());
 
         // marketing
+        Persistence.service().retrieve(existing.marketing());
         existing.marketing().name().setValue(imported.marketing().name().getValue());
 
         // financial

@@ -205,9 +205,6 @@ public class YardiPropertyService {
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().building().propertyCode(), propertyCode));
         List<AptUnit> units = Persistence.service().query(criteria);
-        for (AptUnit unit : units) {
-            Persistence.service().retrieve(unit.building());
-        }
         return units;
     }
 
@@ -217,9 +214,6 @@ public class YardiPropertyService {
         criteria.eq(criteria.proto().info().number(), unitId);
         List<AptUnit> units = Persistence.service().query(criteria);
         AptUnit unit = !units.isEmpty() ? units.get(0) : null;
-        if (unit != null) {
-            Persistence.service().retrieve(unit.building());
-        }
         return unit;
     }
 
@@ -269,6 +263,7 @@ public class YardiPropertyService {
 
     private void update(AptUnit unit) {
         try {
+            Persistence.service().retrieve(unit.building());
             Persistence.service().persist(unit);
             log.info("Unit {} for building {} successfully updated", unit.info().number().getValue(), unit.building().propertyCode().getValue());
         } catch (Exception e) {

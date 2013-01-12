@@ -46,13 +46,13 @@ public class UnitsMapper {
      * 
      * @param building
      *            the building where units from
-     * @param toMap
-     *            the units to map
+     * @param fromMap
+     *            the units which map from
      * @return the mapped units
      */
-    public List<AptUnit> map(Building building, List<RTUnit> toMap) {
+    public List<AptUnit> map(Building building, List<RTUnit> fromMap) {
         List<AptUnit> mapped = new ArrayList<AptUnit>();
-        for (RTUnit rtUnit : toMap) {
+        for (RTUnit rtUnit : fromMap) {
             AptUnit unit = map(building, rtUnit);
             mapped.add(unit);
         }
