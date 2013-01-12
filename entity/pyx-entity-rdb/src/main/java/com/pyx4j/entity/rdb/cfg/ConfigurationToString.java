@@ -30,6 +30,7 @@ public class ConfigurationToString {
         b.append("dbName                           : ").append(conf.dbName()).append("\n");
         b.append("userName                         : ").append(conf.userName()).append("\n");
         b.append("Multitenant                      : ").append(conf.getMultitenancyType()).append("\n");
+        b.append("Ddl                              : ").append(conf.ddl()).append("\n");
         b.append("initialPoolSize                  : ").append(conf.initialPoolSize()).append("\n");
         b.append("minPoolSize                      : ").append(conf.minPoolSize()).append("\n");
         b.append("maxPoolSize                      : ").append(conf.maxPoolSize()).append("\n");
