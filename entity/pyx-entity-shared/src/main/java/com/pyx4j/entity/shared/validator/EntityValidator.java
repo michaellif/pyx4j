@@ -20,7 +20,9 @@
  */
 package com.pyx4j.entity.shared.validator;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -54,6 +56,14 @@ public class EntityValidator {
     }
 
     public static void validateRecursively(IEntity entity) {
+        validateRecursively(entity, new HashSet<IEntity>());
+    }
+
+    private static void validateRecursively(IEntity entity, Set<IEntity> dejaVu) {
+        if (dejaVu.contains(entity)) {
+            return;
+        }
+        dejaVu.add(entity);
         EntityValidator.validate(entity);
         EntityMeta em = entity.getEntityMeta();
 
@@ -61,12 +71,12 @@ public class EntityValidator {
             IObject<?> member = entity.getMember(memberName);
             switch (member.getMeta().getObjectClassType()) {
             case Entity:
-                if ((member.getMeta().isValidatorAnnotationPresent(NotNull.class))) {
-                    try {
-                        EntityValidator.validateRecursively((IEntity) member);
-                    } catch (RuntimeException e) {
-                        throw new RuntimeException(member.getPath() + " " + e.getMessage());
+                if (member.isNull()) {
+                    if ((member.getMeta().isValidatorAnnotationPresent(NotNull.class))) {
+                        throw new RuntimeException(i18n.tr("{0} is required", member.getMeta().getCaption()));
                     }
+                } else {
+                    EntityValidator.validateRecursively(((IEntity) member).cast(), dejaVu);
                 }
                 break;
             case EntityList:
@@ -75,11 +85,7 @@ public class EntityValidator {
                 Iterator<IEntity> lit = ((ICollection<IEntity, ?>) member).iterator();
                 while (lit.hasNext()) {
                     IEntity ent = lit.next();
-                    try {
-                        EntityValidator.validateRecursively(ent);
-                    } catch (RuntimeException e) {
-                        throw new RuntimeException(ent.getPath() + " " + e.getMessage());
-                    }
+                    EntityValidator.validateRecursively(ent.cast(), dejaVu);
                 }
                 break;
             default:
