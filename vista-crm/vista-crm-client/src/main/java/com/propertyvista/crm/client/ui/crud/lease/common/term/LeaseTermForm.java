@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
@@ -28,6 +29,7 @@ import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -36,8 +38,10 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
@@ -49,6 +53,7 @@ import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -233,7 +238,38 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         detailsRow = -1; // second column:
 
-        detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease().leaseId()), 15).customLabel(i18n.tr("Lease Id")).build());
+        detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease(), new CEntityCrudHyperlink<Lease>(null) {
+            @Override
+            public void setCommand(Command command) {
+                super.setCommand(new Command() {
+                    @Override
+                    public void execute() {
+                        if (getValue().getPrimaryKey() != null) {
+                            if (getValue().status().getValue() == Lease.Status.Application) {
+                                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(getValue().getPrimaryKey()));
+                            } else {
+                                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease().formViewerPlace(getValue().getPrimaryKey()));
+                            }
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void setFormat(IFormat<Lease> format) {
+                super.setFormat(new IFormat<Lease>() {
+                    @Override
+                    public String format(Lease value) {
+                        return ((value != null) ? value.leaseId().getStringView() : null);
+                    }
+
+                    @Override
+                    public Lease parse(String string) {
+                        return null;
+                    }
+                });
+            }
+        }), 15).build());
         detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease().type(), new CEnumLabel())).customLabel(i18n.tr("Lease Type"))
                 .build());
         detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease().status(), new CEnumLabel())).customLabel(i18n.tr("Lease Status"))
