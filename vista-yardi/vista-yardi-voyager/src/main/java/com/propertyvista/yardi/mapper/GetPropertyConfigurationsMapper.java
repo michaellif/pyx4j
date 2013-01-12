@@ -16,6 +16,9 @@ package com.propertyvista.yardi.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
@@ -23,6 +26,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.yardi.bean.Property;
 
 public class GetPropertyConfigurationsMapper {
+
+    private final static Logger log = LoggerFactory.getLogger(GetPropertyConfigurationsMapper.class);
 
     /**
      * Maps properties from YARDI System to building
@@ -34,8 +39,12 @@ public class GetPropertyConfigurationsMapper {
     public List<Building> map(List<Property> properties) {
         List<Building> buildings = new ArrayList<Building>();
         for (Property property : properties) {
-            Building building = map(property);
-            buildings.add(building);
+            try {
+                Building building = map(property);
+                buildings.add(building);
+            } catch (Exception e) {
+                log.error(String.format("Error during imported building %s mapping", property.getCode()), e);
+            }
         }
 
         return buildings;

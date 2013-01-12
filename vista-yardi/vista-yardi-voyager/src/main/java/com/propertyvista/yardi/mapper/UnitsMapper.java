@@ -53,8 +53,12 @@ public class UnitsMapper {
     public List<AptUnit> map(Building building, List<RTUnit> fromMap) {
         List<AptUnit> mapped = new ArrayList<AptUnit>();
         for (RTUnit rtUnit : fromMap) {
-            AptUnit unit = map(building, rtUnit);
-            mapped.add(unit);
+            try {
+                AptUnit unit = map(building, rtUnit);
+                mapped.add(unit);
+            } catch (Exception e) {
+                log.error(String.format("Error during imported unit %s mapping", rtUnit.getUnitId()), e);
+            }
         }
         return mapped;
     }
@@ -63,13 +67,18 @@ public class UnitsMapper {
         AptUnit unitTo = EntityFactory.create(AptUnit.class);
         Information info = unitFrom.getUnit().getInformation();
 
+        if (StringUtils.isEmpty(info.getUnitId())) {
+            throw new IllegalStateException(String.format("UnitId for imported unit in building %s can not be empty or null", building.propertyCode()
+                    .getValue()));
+        }
+
         //building
         unitTo.building().set(building);
 
         //floorplan
         if (StringUtils.isEmpty(info.getFloorplanName())) {
-            throw new IllegalStateException(String.format("FloorplanName for unit %s in building %s can not be empty or null", info.getUnitId(), building
-                    .propertyCode().getValue()));
+            throw new IllegalStateException(String.format("FloorplanName for imported unit %s in building %s can not be empty or null", info.getUnitId(),
+                    building.propertyCode().getValue()));
         }
         for (Floorplan floorplan : building.floorplans()) {
             if (StringUtils.equals(floorplan.name().getValue(), info.getFloorplanName())) {

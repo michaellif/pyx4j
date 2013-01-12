@@ -47,8 +47,12 @@ public class UnitsMerger {
         Map<String, AptUnit> existingUnitsByNumber = unitsByNumber(existingList);
 
         for (AptUnit imported : importedList) {
-            AptUnit existing = existingUnitsByNumber.get(imported.info().number().getValue());
-            merged.add(existing != null ? merge(imported, existing) : imported);
+            try {
+                AptUnit existing = existingUnitsByNumber.get(imported.info().number().getValue());
+                merged.add(existing != null ? merge(imported, existing) : imported);
+            } catch (Exception e) {
+                log.error(String.format("Error during imported unit %s merging", imported.info().number().getValue()), e);
+            }
         }
 
         return new ArrayList<AptUnit>(merged);

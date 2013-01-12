@@ -13,12 +13,16 @@
  */
 package com.propertyvista.yardi;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.JAXBException;
+
+import org.apache.axis2.AxisFault;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,13 +64,24 @@ public class YardiPropertyService {
     public void updateBuildings(YardiParameters yp) throws YardiServiceException {
         validate(yp);
 
+        //update buildings
         YardiClient client = new YardiClient(yp.getServiceURL());
         try {
             Properties properties = YardiTransactions.getPropertyConfigurations(client, yp);
             merge(getBuildings(), properties.getProperties());
         } catch (Exception e) {
-            throw new YardiServiceException("Fail to update buildings by data from YARDI System", e);
+            throw new YardiServiceException("Fail to update buildings", e);
         }
+
+        //update units
+        for (Building building : getBuildings()) {
+            try {
+                updateUnits(building, yp);
+            } catch (Exception e) {
+                log.error(String.format("Fail to update units for building with property code %s", building.propertyCode().getValue()), e);
+            }
+        }
+
     }
 
     /**
@@ -88,12 +103,18 @@ public class YardiPropertyService {
             Properties properties = YardiTransactions.getPropertyConfigurations(client, yp);
             for (Property property : properties.getProperties()) {
                 if (propertyCode.equals(property.getCode())) {
-                    merge(getBuilding(propertyCode), property);
+
+                    Building building = getBuilding(propertyCode);
+                    if (building != null) {
+                        merge(building, property);
+                        updateUnits(building, yp);
+                    }
+
                     return;
                 }
             }
         } catch (Exception e) {
-            throw new YardiServiceException(String.format("Fail to update building with property code %s by data from YARDI System", propertyCode), e);
+            throw new YardiServiceException(String.format("Fail to update building with property code %s", propertyCode), e);
         }
 
         log.info("Did not find a building for property code {}", propertyCode);
@@ -113,19 +134,26 @@ public class YardiPropertyService {
         Validate.notEmpty(propertyCode, "propertyCode parameter can not be empty or null");
         validate(yp);
 
-        YardiClient client = new YardiClient(yp.getServiceURL());
         Building building = getBuilding(propertyCode);
         if (building == null) {
             throw new YardiServiceException(String.format("Unable to update units for non persisted building with property code %s", propertyCode));
         }
-        Persistence.service().retrieve(building.floorplans());
 
         try {
-            ResidentTransactions residentTransactions = YardiTransactions.getResidentTransactions(client, yp, propertyCode);
-            mergeUnits(building, getUnits(propertyCode), getYardiUnits(residentTransactions));
+            updateUnits(building, yp);
         } catch (Exception e) {
-            throw new YardiServiceException(String.format("Fail to update units for building with property code %s by data from YARDI System", propertyCode), e);
+            throw new YardiServiceException(String.format("Fail to update units for building with property code %s", propertyCode), e);
         }
+    }
+
+    private void updateUnits(Building building, YardiParameters yp) throws YardiServiceException, AxisFault, RemoteException, JAXBException {
+        String propertyCode = building.propertyCode().getValue();
+        Persistence.service().retrieve(building.floorplans());
+
+        YardiClient client = new YardiClient(yp.getServiceURL());
+
+        ResidentTransactions residentTransactions = YardiTransactions.getResidentTransactions(client, yp, propertyCode);
+        mergeUnits(building, getUnits(propertyCode), getYardiUnits(residentTransactions));
     }
 
     /**
@@ -157,8 +185,7 @@ public class YardiPropertyService {
             mergeUnit(building, getUnit(unitId, propertyCode), getYardiUnit(unitId, residentTransactions));
 
         } catch (Exception e) {
-            throw new YardiServiceException(String.format("Fail to update unit %s for building with property code %s by data from YARDI System", unitId,
-                    propertyCode), e);
+            throw new YardiServiceException(String.format("Fail to update unit %s for building with property code %s", unitId, propertyCode), e);
         }
     }
 
@@ -171,9 +198,7 @@ public class YardiPropertyService {
     }
 
     private void merge(Building existing, Property property) {
-        if (existing != null) {
-            merge(Arrays.asList(existing), Arrays.asList(property));
-        }
+        merge(Arrays.asList(existing), Arrays.asList(property));
     }
 
     private List<Building> getBuildings() {

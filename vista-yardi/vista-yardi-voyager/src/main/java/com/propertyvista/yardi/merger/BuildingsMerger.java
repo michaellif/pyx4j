@@ -44,22 +44,28 @@ public class BuildingsMerger {
     public List<Building> merge(List<Building> importedList, List<Building> existingList) {
         List<Building> merged = new ArrayList<Building>();
         for (Building imported : importedList) {
-            // try finding the same building in existing list
-            Building existing = null;
-            for (Building building : existingList) {
-                if (building.propertyCode().getValue().equals(imported.propertyCode().getValue())) {
-                    existing = building;
-                    break;
+
+            try {
+                // try finding the same building in existing list
+                Building existing = null;
+                for (Building building : existingList) {
+                    if (building.propertyCode().getValue().equals(imported.propertyCode().getValue())) {
+                        existing = building;
+                        break;
+                    }
                 }
+
+                if (existing == null) {
+                    log.debug("Did not find a bulding for property code {}", imported.propertyCode().getValue());
+                    merged.add(imported);
+                } else {
+                    merge(imported, existing);
+                    merged.add(existing);
+                }
+            } catch (Exception e) {
+                log.error(String.format("Error during imported building %s merging", imported.propertyCode().getValue()), e);
             }
 
-            if (existing == null) {
-                log.debug("Did not find a bulding for property code {}", imported.propertyCode().getValue());
-                merged.add(imported);
-            } else {
-                merge(imported, existing);
-                merged.add(existing);
-            }
         }
         return merged;
     }
