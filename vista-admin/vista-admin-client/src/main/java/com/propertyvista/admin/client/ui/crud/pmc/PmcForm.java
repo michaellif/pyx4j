@@ -19,7 +19,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CHyperlink;
@@ -200,7 +199,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
         approvalLink.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                AppSite.getPlaceController().goTo(new AdminSiteMap.Management.EquifaxApproval().formViewerPlace(new Key(-1)));
+                AppSite.getPlaceController().goTo(new AdminSiteMap.Management.EquifaxApproval().formViewerPlace(getValue().getPrimaryKey()));
             }
         });
         content.setWidget(++row, 0, approvalLink);
