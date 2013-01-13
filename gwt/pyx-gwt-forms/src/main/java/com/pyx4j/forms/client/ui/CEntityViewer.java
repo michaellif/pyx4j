@@ -59,7 +59,7 @@ public abstract class CEntityViewer<E extends IObject<?>> extends CEntityContain
 
     @Override
     public ValidationResults getValidationResults() {
-        return null;
+        return new ValidationResults();
     }
 
     @Override
