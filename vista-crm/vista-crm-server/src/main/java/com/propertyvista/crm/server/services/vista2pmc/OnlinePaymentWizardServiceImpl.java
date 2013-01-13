@@ -31,7 +31,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
-import com.propertyvista.dto.OnlinePaymentSetupDTO;
+import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardService {

@@ -21,7 +21,7 @@ import com.propertyvista.crm.client.activity.crud.CrmWizardActivity;
 import com.propertyvista.crm.client.ui.crud.viewfactories.WizardViewFactory;
 import com.propertyvista.crm.client.ui.wizard.onlinepayment.OnlinePaymentWizardView;
 import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
-import com.propertyvista.dto.OnlinePaymentSetupDTO;
+import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
 
 public class OnlinePaymentWizardActivity extends CrmWizardActivity<OnlinePaymentSetupDTO> implements OnlinePaymentWizardView.Persenter {
 

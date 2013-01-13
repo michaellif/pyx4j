@@ -20,12 +20,12 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
-import com.propertyvista.domain.pmc.info.BusinessInformation;
+import com.propertyvista.dto.vista2pmc.BusinessInformationDTO;
 
-public class BusinessInformationForm extends CEntityDecoratableForm<BusinessInformation> {
+public class BusinessInformationForm extends CEntityDecoratableForm<BusinessInformationDTO> {
 
     public BusinessInformationForm() {
-        super(BusinessInformation.class);
+        super(BusinessInformationDTO.class);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class BusinessInformationForm extends CEntityDecoratableForm<BusinessInfo
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().companyName())).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().companyType())).build());
         main.setWidget(++row, 0, new HTML("&nbsp;"));
-        main.setWidget(++row, 0, inject(proto().businessAddress(), new AddressSimpleEditor()));
+        main.setWidget(++row, 0, inject(proto().dto_businessAddress(), new AddressSimpleEditor()));
         main.setWidget(++row, 0, new HTML("&nbsp;"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().businessNumber())).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().businessEstablishedDate())).build());

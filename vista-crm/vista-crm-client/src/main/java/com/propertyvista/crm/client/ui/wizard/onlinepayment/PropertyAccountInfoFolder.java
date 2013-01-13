@@ -17,8 +17,8 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.dto.OnlinePaymentSetupDTO;
-import com.propertyvista.dto.OnlinePaymentSetupDTO.PropertyAccountInfo;
+import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
+import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO.PropertyAccountInfo;
 
 public class PropertyAccountInfoFolder extends VistaBoxFolder<OnlinePaymentSetupDTO.PropertyAccountInfo> {
 

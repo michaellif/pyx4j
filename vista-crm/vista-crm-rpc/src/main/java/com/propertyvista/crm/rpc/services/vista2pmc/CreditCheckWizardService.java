@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractWizardService;
 
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
-import com.propertyvista.dto.CreditCheckSetupDTO;
+import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
 
 public interface CreditCheckWizardService extends AbstractWizardService<CreditCheckSetupDTO> {
 

@@ -23,7 +23,7 @@ import com.propertyvista.crm.client.ui.components.LegalTermsDialog;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
-import com.propertyvista.dto.CreditCheckSetupDTO;
+import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
 
 public class CreditCheckWizardViewImpl extends WizardViewImplBase<CreditCheckSetupDTO> implements CreditCheckWizardView {
 

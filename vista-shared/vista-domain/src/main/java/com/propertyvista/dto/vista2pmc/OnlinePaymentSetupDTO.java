@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.dto.vista2pmc;
 
 import java.math.BigDecimal;
 

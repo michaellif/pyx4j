@@ -23,7 +23,7 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.WizardViewFactory;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.CreditCheckWizardView;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckWizardService;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
-import com.propertyvista.dto.CreditCheckSetupDTO;
+import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
 
 public class CreditCheckWizardActivity extends CrmWizardActivity<CreditCheckSetupDTO> implements CreditCheckWizardView.Presenter {
 

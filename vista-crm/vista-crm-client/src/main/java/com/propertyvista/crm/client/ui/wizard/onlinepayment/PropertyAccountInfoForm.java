@@ -21,8 +21,8 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.dto.OnlinePaymentSetupDTO;
-import com.propertyvista.dto.OnlinePaymentSetupDTO.PropertyAccountInfo;
+import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
+import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO.PropertyAccountInfo;
 
 public class PropertyAccountInfoForm extends CEntityDecoratableForm<OnlinePaymentSetupDTO.PropertyAccountInfo> {
 

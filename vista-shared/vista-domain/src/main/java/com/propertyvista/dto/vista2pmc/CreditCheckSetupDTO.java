@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.dto.vista2pmc;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -20,8 +20,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
-import com.propertyvista.domain.pmc.info.BusinessInformation;
-import com.propertyvista.domain.pmc.info.PersonalInformation;
 
 @Transient
 public interface CreditCheckSetupDTO extends IEntity {
@@ -31,10 +29,10 @@ public interface CreditCheckSetupDTO extends IEntity {
 
     // BUSINESS INFORMATION SECTION--------------------------------------------
 
-    BusinessInformation businessInformation();
+    BusinessInformationDTO businessInformation();
 
     // PERSONAL INFORMATION SECTION -------------------------------------------
-    PersonalInformation personalInformation();
+    PersonalInformationDTO personalInformation();
 
     // CONFIRMATION SECTION ---------------------------------------------------
     CreditCardInfo creditCardInfo();

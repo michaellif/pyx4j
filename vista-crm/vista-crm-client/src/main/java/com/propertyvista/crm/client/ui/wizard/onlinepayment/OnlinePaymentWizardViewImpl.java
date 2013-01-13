@@ -20,7 +20,7 @@ import com.pyx4j.site.client.ui.wizard.WizardViewImplBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
-import com.propertyvista.dto.OnlinePaymentSetupDTO;
+import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
 
 public class OnlinePaymentWizardViewImpl extends WizardViewImplBase<OnlinePaymentSetupDTO> implements OnlinePaymentWizardView {
 

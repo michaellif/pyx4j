@@ -38,7 +38,7 @@ import com.propertyvista.crm.client.ui.components.WidgetDecoratorRightLabel;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CCreditCheckReportTypeSelector;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
-import com.propertyvista.dto.CreditCheckSetupDTO;
+import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
 
 public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
 

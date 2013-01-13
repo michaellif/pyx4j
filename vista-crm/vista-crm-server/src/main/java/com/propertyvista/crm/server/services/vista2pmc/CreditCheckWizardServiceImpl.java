@@ -26,11 +26,14 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckWizardService;
-import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
-import com.propertyvista.dto.CreditCheckSetupDTO;
+import com.propertyvista.domain.pmc.info.BusinessInformation;
+import com.propertyvista.domain.pmc.info.PersonalInformation;
+import com.propertyvista.domain.pmc.info.PmcAddressSimple;
+import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
@@ -51,8 +54,15 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
         TaskRunner.runInAdminNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                Persistence.service().persist(dto.businessInformation());
-                Persistence.service().persist(dto.personalInformation());
+                BusinessInformation businessInformation = EntityFactory.create(BusinessInformation.class);
+                PersonalInformation personalInformation = EntityFactory.create(PersonalInformation.class);
+
+                //solution to CRM country namespace editing in CRM and saving in admin
+                businessInformation.businessAddress().set(dto.businessInformation().dto_businessAddress().duplicate(PmcAddressSimple.class));
+                personalInformation.personalAddress().set(dto.personalInformation().dto_personalAddress().duplicate(PmcAddressSimple.class));
+
+                Persistence.service().persist(businessInformation);
+                Persistence.service().persist(personalInformation);
 
                 PmcPaymentMethod paymentMethod = ServerSideFactory.create(PaymentMethodFacade.class).persistPmcPaymentMethod(dto.creditCardInfo(), pmc);
                 Persistence.service().retrieveMember(pmc.equifaxInfo());
@@ -60,8 +70,8 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
                 pmc.equifaxInfo().status().setValue(PmcEquifaxStatus.PendingVistaApproval);
                 pmc.equifaxInfo().reportType().setValue(dto.creditPricingOption().getValue());
 
-                pmc.equifaxInfo().businessInformation().set(dto.businessInformation());
-                pmc.equifaxInfo().personalInformation().set(dto.personalInformation());
+                pmc.equifaxInfo().businessInformation().set(businessInformation);
+                pmc.equifaxInfo().personalInformation().set(personalInformation);
 
                 switch (dto.creditPricingOption().getValue()) {
                 case FullCreditReport:

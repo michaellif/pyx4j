@@ -7,20 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-12-27
- * @author ArtyomB
+ * Created on 2013-01-13
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.vista2pmc;
+package com.propertyvista.dto.vista2pmc;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.entity.annotations.Transient;
 
-import com.pyx4j.entity.rpc.AbstractWizardService;
+import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.pmc.info.BusinessInformation;
 
-import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
-import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
+//solution to CRM country namespace editing in CRM and saving in admin
+@Transient
+public interface BusinessInformationDTO extends BusinessInformation {
 
-public interface OnlinePaymentWizardService extends AbstractWizardService<OnlinePaymentSetupDTO> {
+    AddressSimple dto_businessAddress();
 
-    void obtainPaymentFees(AsyncCallback<AbstractPaymentFees> paymentFees);
 }

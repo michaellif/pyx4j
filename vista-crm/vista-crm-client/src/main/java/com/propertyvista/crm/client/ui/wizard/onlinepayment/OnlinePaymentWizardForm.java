@@ -45,8 +45,8 @@ import com.propertyvista.common.client.ui.components.editors.dto.wizards.Persona
 import com.propertyvista.crm.client.ui.components.PmcSignatureForm;
 import com.propertyvista.crm.client.ui.components.WidgetDecoratorRightLabel;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
-import com.propertyvista.dto.OnlinePaymentSetupDTO;
-import com.propertyvista.dto.OnlinePaymentSetupDTO.PropertyAccountInfo;
+import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
+import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO.PropertyAccountInfo;
 
 public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
 
