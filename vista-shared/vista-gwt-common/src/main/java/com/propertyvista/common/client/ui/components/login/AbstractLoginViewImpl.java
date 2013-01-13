@@ -17,13 +17,16 @@ import java.util.List;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.SystemWallMessage;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.DemoData;
 
 public abstract class AbstractLoginViewImpl extends FormFlexPanel implements LoginView {
+
+    private static final I18n i18n = I18n.get(AbstractLoginViewImpl.class);
 
     private LoginView.Presenter presenter;
 
@@ -87,9 +90,10 @@ public abstract class AbstractLoginViewImpl extends FormFlexPanel implements Log
     private void submit() {
         if (!form.isValid()) {
             form.setUnconditionalValidationErrorRendering(true);
-            throw new UserRuntimeException(form.getValidationResults().getValidationMessage(true, false));
+            showValidationDialog();
+        } else {
+            presenter.login(form.getValue());
         }
-        presenter.login(form.getValue());
     }
 
     private void resetPassword() {
@@ -106,5 +110,9 @@ public abstract class AbstractLoginViewImpl extends FormFlexPanel implements Log
             this.user = user;
             this.shortcut = shortcut;
         }
+    }
+
+    protected void showValidationDialog() {
+        MessageDialog.error(i18n.tr("Error"), form.getValidationResults().getValidationMessage(true, true));
     }
 }
