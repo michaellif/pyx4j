@@ -144,7 +144,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E>
     @Override
     protected void onWidgetCreated() {
         super.onWidgetCreated();
-        if (criteria != null) {
+        if ((criteria != null) && (!isViewable())) {
             retriveOptions(null);
         }
     }

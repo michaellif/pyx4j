@@ -231,6 +231,9 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
 
     @Override
     public void retriveOptions(final AsyncOptionsReadyCallback<E> callback) {
+        if (isViewable()) {
+            return;
+        }
         if (optionsLoaded) {
             super.retriveOptions(callback);
         } else {
