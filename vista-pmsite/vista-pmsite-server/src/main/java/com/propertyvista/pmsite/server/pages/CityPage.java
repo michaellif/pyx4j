@@ -39,6 +39,7 @@ import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.CityIntroPage;
 import com.propertyvista.domain.site.HtmlContent;
+import com.propertyvista.domain.site.PageMetaTags;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
@@ -96,10 +97,16 @@ public class CityPage extends BasePage {
             return;
         }
 
+        AvailableLocale curLocale = ((PMSiteWebRequest) getRequest()).getSiteLocale();
+        // meta tags
+        PageMetaTags meta = ((PMSiteWebRequest) getRequest()).getContentManager().getCityPageMetaTags(curLocale, city);
+        add(new Label(META_TITLE, meta.title().getValue()));
+        add(new Label(META_DESCRIPTION).add(AttributeModifier.replace("content", meta.description().getValue())));
+        add(new Label(META_KEYWORDS).add(AttributeModifier.replace("content", meta.keywords().getValue())));
+
         add(new Label("caption2", getLocalizedPageTitle()));
 
         // if page content found, show it
-        AvailableLocale curLocale = ((PMSiteWebRequest) getRequest()).getSiteLocale();
         String html = "";
         EntityQueryCriteria<CityIntroPage> contentCrit = EntityQueryCriteria.create(CityIntroPage.class);
         contentCrit.add(PropertyCriterion.eq(contentCrit.proto().cityName(), preprocess(city.name().getValue())));

@@ -43,6 +43,7 @@ import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageMetaTags;
 import com.propertyvista.domain.site.PortalImageResource;
 import com.propertyvista.domain.site.PortalImageSet;
 import com.propertyvista.domain.site.SiteDescriptor;
@@ -152,6 +153,14 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
                 titles.residentPortalPromotions().setValue(li.i18n.tr("Featured Apartments"));
 
                 site.siteTitles().add(titles);
+
+                // meta tags
+                String title = li.i18n.tr("Apartments for Rent Across Canada - {0}", pmcName());
+                String description = li.i18n.tr("{0} is a leading Canadian Property Management Company. "
+                        + "Our commitment to providing the best customer experience and highest standards "
+                        + "for our properties is what sets us apart on the Canadian market.", pmcName());
+                String keywords = li.i18n.tr("apartments for rent, rental apartments");
+                site.metaTags().add(createMeta(li.aLocale, title, description, keywords));
             }
         }
 
@@ -480,6 +489,15 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         news.date().setValue(date);
 
         return news;
+    }
+
+    protected PageMetaTags createMeta(AvailableLocale locale, String title, String description, String keywords) {
+        PageMetaTags meta = EntityFactory.create(PageMetaTags.class);
+        meta.locale().set(locale);
+        meta.title().setValue(title);
+        meta.description().setValue(description);
+        meta.keywords().setValue(keywords);
+        return meta;
     }
 
     private void createCrmLogo(SiteDescriptor site) {

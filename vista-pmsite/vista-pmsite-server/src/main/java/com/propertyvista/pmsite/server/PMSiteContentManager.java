@@ -45,6 +45,7 @@ import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageMetaTags;
 import com.propertyvista.domain.site.PortalImageResource;
 import com.propertyvista.domain.site.PortalImageSet;
 import com.propertyvista.domain.site.SiteDescriptor;
@@ -299,6 +300,18 @@ public class PMSiteContentManager implements Serializable {
         throw new Error("Locale " + locale.lang().getStringView() + " not available");
     }
 
+    public PageMetaTags getMetaTags(AvailableLocale locale) {
+        if (locale == null) {
+            throw new NullPointerException("locale is null");
+        }
+        for (PageMetaTags t : siteDescriptor.metaTags()) {
+            if (t.locale().equals(locale)) {
+                return t;
+            }
+        }
+        throw new Error("Locale " + locale.lang().getStringView() + " not available");
+    }
+
     public String getCopyrightInfo(AvailableLocale locale) {
         return getSiteTitles(locale).copyright().getValue();
     }
@@ -441,6 +454,17 @@ public class PMSiteContentManager implements Serializable {
         }
 
         return promo;
+    }
+
+    public PageMetaTags getCityPageMetaTags(AvailableLocale curLocale, City city) {
+        PageMetaTags meta = EntityFactory.create(PageMetaTags.class);
+        meta.title().setValue(i18n.tr("Rent Apartments in {0}, {1}", city.name().getValue(), city.province().name().getValue()));
+        meta.description().setValue(
+                i18n.tr("{0} apartments for rent by {1}, find your next rental apartment in {0} fast and easy using our apartment search.", city.name()
+                        .getValue(), getSiteTitles(curLocale).residentPortalTitle().getValue()));
+        meta.keywords().setValue(
+                i18n.tr("rent {0} apartments, apartments {0}, apartments in {0}, {0} rental appartments, {0} apartments for rent", city.name().getValue()));
+        return meta;
     }
 
     public Map<SocialSite, String> getSocialLinks() {

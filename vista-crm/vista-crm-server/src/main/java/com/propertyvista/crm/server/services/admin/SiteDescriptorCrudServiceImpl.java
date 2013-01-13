@@ -36,6 +36,7 @@ import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageMetaTags;
 import com.propertyvista.domain.site.PortalImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteTitles;
@@ -153,6 +154,13 @@ public class SiteDescriptorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Si
             HtmlContent item = itSlog.next();
             if (item.locale().isEmpty() || item.locale().businessEquals(locale)) {
                 itSlog.remove();
+            }
+        }
+        Iterator<PageMetaTags> itMeta = site.metaTags().iterator();
+        while (itMeta.hasNext()) {
+            PageMetaTags item = itMeta.next();
+            if (item.locale().isEmpty() || item.locale().businessEquals(locale)) {
+                itMeta.remove();
             }
         }
 

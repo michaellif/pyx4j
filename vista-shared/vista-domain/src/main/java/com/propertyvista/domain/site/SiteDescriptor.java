@@ -99,6 +99,9 @@ public interface SiteDescriptor extends Descriptor {
     IList<SiteTitles> siteTitles();
 
     @Owned
+    IList<PageMetaTags> metaTags();
+
+    @Owned
     IList<PortalImageResource> logo();
 
     @Owned

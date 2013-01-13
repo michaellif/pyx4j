@@ -153,6 +153,10 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         imageLinkContainer.getWidget(0).setWidth("400px");
         imageLinkContainer.setCellWidth(thumb, "200px");
         addTab(content);
+
+        content = new FormFlexPanel(proto().metaTags().getMeta().getCaption());
+        content.setWidget(0, 0, inject(proto().metaTags(), new MetaTagsFolder(isEditable())));
+        addTab(content);
     }
 
     @Override

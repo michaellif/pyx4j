@@ -16,12 +16,14 @@ package com.propertyvista.pmsite.server.pages;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
 import templates.TemplateResources;
 
 import com.propertyvista.domain.site.AvailableLocale;
+import com.propertyvista.domain.site.PageMetaTags;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.site.gadgets.GadgetContent;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
@@ -48,16 +50,25 @@ public class LandingPage extends BasePage {
         // set aptlist view mode preference to Map
         PMSiteClientPreferences.setClientPref("aptListMode", AptListPage.ViewMode.map.name());
 
-        WebMarkupContainer bannerImg = new WebMarkupContainer("bannerImg");
-        bannerImg.add(new QuickSearchCriteriaPanel());
-        // see if banner image is available
         PMSiteContentManager cm = ((PMSiteWebRequest) getRequest()).getContentManager();
         AvailableLocale locale = ((PMSiteWebRequest) getRequest()).getSiteLocale();
+
+        // meta tags
+        PageMetaTags meta = cm.getMetaTags(locale);
+        add(new Label(META_TITLE, meta.title().getValue()));
+        add(new Label(META_DESCRIPTION).add(AttributeModifier.replace("content", meta.description().getValue())));
+        add(new Label(META_KEYWORDS).add(AttributeModifier.replace("content", meta.keywords().getValue())));
+
+        // see if banner image is available
+        WebMarkupContainer bannerImg = new WebMarkupContainer("bannerImg");
+        bannerImg.add(new QuickSearchCriteriaPanel());
         SiteImageResource banner = cm.getSiteBanner(locale);
         if (banner != null) {
             bannerImg.add(AttributeModifier.replace("style", "background-image:url(" + PMSiteContentManager.getSiteImageResourceUrl(banner) + ")"));
         }
         add(bannerImg);
+
+        // gadgets
         ListView<HomePageGadget> narrowPanel = new ListView<HomePageGadget>("narrowBox", cm.getNarrowAreaGadgets()) {
             private static final long serialVersionUID = 1L;
 

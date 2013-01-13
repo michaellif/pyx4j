@@ -49,6 +49,12 @@ public abstract class BasePage extends WebPage {
 
     private static final I18n i18n = I18n.get(BasePage.class);
 
+    public static final String META_TITLE = "pageTitle";
+
+    public static final String META_DESCRIPTION = "pageDescription";
+
+    public static final String META_KEYWORDS = "pageKeywords";
+
     public static class LocalizedHtmlTag extends TransparentWebMarkupContainer {
         private static final long serialVersionUID = 1L;
 
@@ -65,6 +71,7 @@ public abstract class BasePage extends WebPage {
 
     public BasePage(PageParameters parameters) {
         super(parameters);
+
         add(new LocalizedHtmlTag("localizedHtml"));
         add(new HeaderPanel());
         add(new FooterPanel());
@@ -101,8 +108,7 @@ public abstract class BasePage extends WebPage {
         super.onBeforeRender();
 
         // add page title if not already done
-        final String pageTitleId = "pageTitle";
-        if (get(pageTitleId) == null) {
+        if (get(META_TITLE) == null) {
             String title = getLocalizedPageTitle();
             if (title != null && title.trim().length() > 0) {
                 title = " - " + title;
@@ -110,7 +116,13 @@ public abstract class BasePage extends WebPage {
                 title = "";
             }
             PMSiteWebRequest req = (PMSiteWebRequest) getRequest();
-            add(new Label(pageTitleId, req.getContentManager().getSiteTitles(req.getSiteLocale()).residentPortalTitle().getStringView() + title));
+            add(new Label(META_TITLE, req.getContentManager().getSiteTitles(req.getSiteLocale()).residentPortalTitle().getStringView() + title));
+        }
+        if (get(META_DESCRIPTION) == null) {
+            add(new Label(META_DESCRIPTION));
+        }
+        if (get(META_KEYWORDS) == null) {
+            add(new Label(META_KEYWORDS));
         }
 
         if (ApplicationMode.isDevelopment()) {
