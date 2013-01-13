@@ -231,8 +231,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }), 20).build());
 
         detailsLeft.setBR(++detailsRow, 0, 1);
-        detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel())).customLabel(i18n.tr("Term Type")).build());
-        detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel())).customLabel(i18n.tr("Term Status")).build());
+        detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).customLabel(i18n.tr("Term Type")).build());
+        detailsLeft
+                .setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).customLabel(i18n.tr("Term Status")).build());
 
         FormFlexPanel detailsRight = new FormFlexPanel();
 
@@ -274,12 +275,12 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                 }
             }), 15).build());
         }
-        detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease().type(), new CEnumLabel())).customLabel(i18n.tr("Lease Type"))
-                .build());
-        detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease().status(), new CEnumLabel())).customLabel(i18n.tr("Lease Status"))
+        detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease().type(), new CEnumLabel()), 15).customLabel(i18n.tr("Lease Type"))
                 .build());
         detailsRight.setWidget(++detailsRow, 0,
-                new DecoratorBuilder(inject(proto().lease().completion(), new CEnumLabel())).customLabel(i18n.tr("Lease Completion")).build());
+                new DecoratorBuilder(inject(proto().lease().status(), new CEnumLabel()), 15).customLabel(i18n.tr("Lease Status")).build());
+        detailsRight.setWidget(++detailsRow, 0,
+                new DecoratorBuilder(inject(proto().lease().completion(), new CEnumLabel()), 15).customLabel(i18n.tr("Lease Completion")).build());
 
         detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease().billingAccount().carryforwardBalance()), 10).build());
 
