@@ -90,6 +90,7 @@ import com.propertyvista.test.preloader.LeaseAdjustmentPolicyDataModel;
 import com.propertyvista.test.preloader.LeaseAdjustmentReasonDataModel;
 import com.propertyvista.test.preloader.LeaseBillingPolicyDataModel;
 import com.propertyvista.test.preloader.LocationsDataModel;
+import com.propertyvista.test.preloader.PmcDataModel;
 import com.propertyvista.test.preloader.PreloadConfig;
 import com.propertyvista.test.preloader.ProductItemTypesDataModel;
 import com.propertyvista.test.preloader.ProductTaxPolicyDataModel;
@@ -105,6 +106,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     private long startTime;
+
+    protected PmcDataModel pmcDataModel;
 
     protected BuildingDataModel buildingDataModel;
 
@@ -187,6 +190,9 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         this.config = config;
 
         setDate("01-Jan-2010");
+
+        pmcDataModel = new PmcDataModel();
+        pmcDataModel.generate();
 
         LocationsDataModel locationsDataModel = new LocationsDataModel(config);
         locationsDataModel.generate();

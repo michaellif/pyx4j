@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -30,30 +30,25 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.test.preloader.MerchantAccountDataModel;
-import com.propertyvista.test.preloader.PmcDataModel;
 import com.propertyvista.test.preloader.PreloadConfig;
 
 public class PaymentTestBase extends FinancialTestBase {
-
-    protected PmcDataModel pmcDataModel;
 
     protected MerchantAccountDataModel merchantAccountDataModel;
 
     @Override
     protected void preloadData(PreloadConfig config) {
-        pmcDataModel = new PmcDataModel();
-        pmcDataModel.generate();
 
         super.preloadData(config);
 
