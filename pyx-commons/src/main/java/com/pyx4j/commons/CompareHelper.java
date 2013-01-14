@@ -22,7 +22,7 @@ package com.pyx4j.commons;
 public class CompareHelper {
 
     /**
-     * Compare null Strings without exceptions
+     * Compare null Strings without exceptions, Null in Front
      */
     public static int compareTo(String s1, String s2) {
         // this is also null == null
@@ -35,6 +35,24 @@ public class CompareHelper {
         }
         if (s1 == null) {
             return -1;
+        }
+        return s1.compareTo(s2);
+    }
+
+    /**
+     * Compare null Strings without exceptions, Nulls Last
+     */
+    public static int compareToNullLast(String s1, String s2) {
+        // this is also null == null
+        if (s1 == s2) {
+            return 0;
+        }
+        // Null in Front
+        if (s2 == null) {
+            return -1;
+        }
+        if (s1 == null) {
+            return 1;
         }
         return s1.compareTo(s2);
     }
