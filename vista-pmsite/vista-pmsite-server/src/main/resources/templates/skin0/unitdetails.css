@@ -13,6 +13,7 @@
 	width: 318px;
 	vertical-align: top;
 	padding:20px 16px;
+	float: left;
 }
 .vista-pmsite-unitDetailsPage .vista-pmsite-main {
 	display: inline-block;
@@ -52,7 +53,7 @@
 .apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxText {
 	display:inline-block;
 	vertical-align:top;
-	width:460px;'
+	width:460px;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry ul.detailBoxText {
 	padding-left:10px;
