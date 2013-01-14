@@ -84,6 +84,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.shared.NotesParentId;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseFacadeImpl implements LeaseFacade {
 
@@ -1037,6 +1038,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), unit.building().productCatalog()));
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().serviceType(), leaseType));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());
+
+        // use default product catalog items for specific cases:
+        if (VistaFeatures.instance().defaultProductCatalog() || leaseTerm.lease().status().getValue() == Lease.Status.ExistingLease) {
+            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().isDefaultCatalogItem(), Boolean.TRUE));
+        }
 
         for (Service service : Persistence.service().query(serviceCriteria)) {
             EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);

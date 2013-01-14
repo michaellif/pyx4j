@@ -46,6 +46,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<LeaseTerm, LeaseTermDTO> implements LeaseTermCrudService {
 
@@ -248,18 +249,23 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         Persistence.ensureRetrieve(currentValue.lease().unit().building(), AttachLevel.Attached);
 
-        EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), currentValue.lease().unit().building().productCatalog()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().serviceType(), currentValue.lease().type()));
-        criteria.isCurrent(criteria.proto().version());
+        EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
+        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), currentValue.lease().unit().building().productCatalog()));
+        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().serviceType(), currentValue.lease().type()));
+        serviceCriteria.isCurrent(serviceCriteria.proto().version());
 
-        for (Service service : Persistence.service().query(criteria)) {
-            EntityQueryCriteria<ProductItem> serviceCriteria = EntityQueryCriteria.create(ProductItem.class);
-            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ServiceItemType.class));
-            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().product(), service.version()));
-            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), currentValue.lease().unit()));
+        // use default product catalog items for specific cases:
+        if (VistaFeatures.instance().defaultProductCatalog() || currentValue.lease().status().getValue() == Lease.Status.ExistingLease) {
+            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().isDefaultCatalogItem(), Boolean.TRUE));
+        }
 
-            currentValue.selectedServiceItems().addAll(Persistence.service().query(serviceCriteria));
+        for (Service service : Persistence.service().query(serviceCriteria)) {
+            EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);
+            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().type(), ServiceItemType.class));
+            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().product(), service.version()));
+            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().element(), currentValue.lease().unit()));
+
+            currentValue.selectedServiceItems().addAll(Persistence.service().query(productCriteria));
         }
 
         // load products for UI presentation:
