@@ -19,11 +19,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -124,6 +126,9 @@ public class BuildingDataModel {
     }
 
     private void generateCatalog() {
+
+        ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(building);
+        ServerSideFactory.create(DefaultProductCatalogFacade.class).persistFor(building);
 
         generateResidentialUnitService();
 
