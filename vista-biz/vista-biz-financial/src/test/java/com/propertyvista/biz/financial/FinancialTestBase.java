@@ -489,6 +489,30 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     private BillableItem addBillableItem(Feature.Type featureType, LogicalDate effectiveDate, LogicalDate expirationDate) {
         Lease lease = retrieveLeaseForEdit();
 
+        // correct agreed price for existing leases:
+        BigDecimal agreedPrice = null;
+        if (lease.status().getValue() == Lease.Status.ExistingLease) {
+            switch (featureType) {
+            case parking:
+                agreedPrice = new BigDecimal("80.00");
+                break;
+            case locker:
+                agreedPrice = new BigDecimal("60.00");
+                break;
+            case addOn:
+                agreedPrice = new BigDecimal("40.00");
+                break;
+            case pet:
+                agreedPrice = new BigDecimal("20.00");
+                break;
+            case booking:
+                agreedPrice = new BigDecimal("100.00");
+                break;
+            default:
+                break;
+            }
+        }
+
         ProductItem serviceItem = lease.currentTerm().version().leaseProducts().serviceItem().item();
         Persistence.service().retrieve(serviceItem.product());
         Service.ServiceV service = serviceItem.product().cast();
@@ -502,6 +526,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                 billableItem.expirationDate().setValue(expirationDate);
 
                 lease.currentTerm().version().leaseProducts().featureItems().add(billableItem);
+
+                if (agreedPrice != null) {
+                    billableItem.agreedPrice().setValue(agreedPrice);
+                }
 
                 leaseFacade.persist(lease.currentTerm());
                 return billableItem;
