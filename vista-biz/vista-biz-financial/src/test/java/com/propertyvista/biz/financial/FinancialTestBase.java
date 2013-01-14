@@ -73,6 +73,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.TransactionHistoryDTO;
+import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.server.jobs.BillingProcess;
 import com.propertyvista.server.jobs.DepositInterestAdjustmentProcess;
 import com.propertyvista.server.jobs.DepositRefundProcess;
@@ -319,8 +320,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         if (agreedPrice != null) {
             lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(agreedPrice);
-        } else {
+        } else if (serviceItem.price().getValue().compareTo(BigDecimal.ZERO) != 0) {
             lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(serviceItem.price().getValue());
+        } else {
+            lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
         }
 
         LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
@@ -493,7 +496,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         for (Feature feature : service.features()) {
             if (featureType.equals(feature.featureType().getValue()) && feature.version().items().size() != 0) {
                 LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-                BillableItem billableItem = leaseFacade.createBillableItem(feature.version().items().get(0), lease.unit().building());
+                BillableItem billableItem = leaseFacade.createBillableItem(lease, feature.version().items().get(0), lease.unit().building());
 
                 billableItem.effectiveDate().setValue(effectiveDate);
                 billableItem.expirationDate().setValue(expirationDate);

@@ -88,7 +88,7 @@ public interface LeaseFacade {
 
     Lease load(Lease leaseId, boolean forEdit);
 
-    BillableItem createBillableItem(ProductItem itemId, PolicyNode node);
+    BillableItem createBillableItem(Lease lease, ProductItem itemId, PolicyNode node);
 
     void updateLeaseDates(Lease lease);
 

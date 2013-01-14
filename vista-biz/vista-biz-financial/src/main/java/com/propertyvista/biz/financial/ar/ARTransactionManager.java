@@ -43,7 +43,6 @@ import com.propertyvista.domain.policy.policies.ARPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.rpc.shared.ARException;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class ARTransactionManager {
 
@@ -58,11 +57,7 @@ public class ARTransactionManager {
         }
 
         if (invoiceLineItem.amount().getValue().compareTo(BigDecimal.ZERO) == 0) {
-            if (VistaFeatures.instance().defaultProductCatalog()) {
-                // TODO : avoid exception in this case till now... Ask Michael what to do 
-            } else {
-                throw new ARException("The LineItem has 0 value");
-            }
+            throw new ARException("The LineItem has 0 value");
         }
 
         invoiceLineItem.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));

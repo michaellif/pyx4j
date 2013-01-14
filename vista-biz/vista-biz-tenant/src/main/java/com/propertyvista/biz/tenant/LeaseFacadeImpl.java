@@ -249,7 +249,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public BillableItem createBillableItem(ProductItem itemId, PolicyNode node) {
+    public BillableItem createBillableItem(Lease lease, ProductItem itemId, PolicyNode node) {
+        if (lease.isValueDetached()) {
+            Persistence.service().retrieve(lease);
+        }
+
         ProductItem item = Persistence.secureRetrieve(ProductItem.class, itemId.getPrimaryKey());
         assert item != null;
 
@@ -257,10 +261,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
         newItem.item().set(item);
         newItem.agreedPrice().setValue(item.price().getValue());
 
-        // set policed deposits:
-        List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(newItem, node);
-        if (deposits != null) {
-            newItem.deposits().addAll(deposits);
+        // avoid policed deposits for existing Leases:
+        if (lease.status().getValue() != Lease.Status.ExistingLease) {
+            // set policed deposits:
+            List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(newItem, node);
+            if (deposits != null) {
+                newItem.deposits().addAll(deposits);
+            }
         }
 
         return newItem;
@@ -779,7 +786,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         PolicyNode node = lease.unit().building();
 
         // set selected service:
-        BillableItem billableItem = createBillableItem(serviceItem, node);
+        BillableItem billableItem = createBillableItem(lease, serviceItem, node);
         leaseTerm.version().leaseProducts().serviceItem().set(billableItem);
 
         if (leaseTerm.equals(lease.currentTerm())) {
@@ -809,7 +816,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 Persistence.service().retrieve(feature.version().items());
                 for (ProductItem item : feature.version().items()) {
                     if (item.isDefault().isBooleanTrue()) {
-                        leaseTerm.version().leaseProducts().featureItems().add(createBillableItem(item, node));
+                        leaseTerm.version().leaseProducts().featureItems().add(createBillableItem(lease, item, node));
                         break;
                     }
                 }
