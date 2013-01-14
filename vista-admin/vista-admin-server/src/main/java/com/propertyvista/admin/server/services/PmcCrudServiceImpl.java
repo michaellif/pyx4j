@@ -107,18 +107,6 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             }
         }
 
-        if (!dto.equifaxInfo().isNull()) {
-            Persistence.service().retrieveMember(entity.equifaxInfo());
-            entity.equifaxInfo().set(dto.equifaxInfo());
-            Persistence.service().persist(entity.equifaxInfo());
-        }
-
-        if (!dto.equifaxFee().isNull()) {
-            Persistence.service().retrieveMember(entity.equifaxFee());
-            entity.equifaxFee().set(dto.equifaxFee());
-            Persistence.service().persist(entity.equifaxFee());
-        }
-
         CacheService.reset();
     }
 
