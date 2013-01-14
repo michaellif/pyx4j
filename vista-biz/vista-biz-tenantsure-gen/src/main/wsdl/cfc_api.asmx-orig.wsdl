@@ -70,6 +70,7 @@
           <s:element minOccurs="1" maxOccurs="1" name="gross_premium" type="s:decimal" />
           <s:element minOccurs="1" maxOccurs="1" name="fee" type="s:decimal" />
           <s:element minOccurs="1" maxOccurs="1" name="tax" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="discount" type="s:decimal" />
           <s:element minOccurs="1" maxOccurs="1" name="quote_date" type="s:dateTime" />
           <s:element minOccurs="1" maxOccurs="1" name="is_bound" type="s:boolean" />
           <s:element minOccurs="1" maxOccurs="1" name="bind_date" type="s:dateTime" />
@@ -652,6 +653,7 @@
           <s:element minOccurs="1" maxOccurs="1" name="fee" type="s:decimal" />
           <s:element minOccurs="1" maxOccurs="1" name="tax" type="s:decimal" />
           <s:element minOccurs="1" maxOccurs="1" name="commission" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="discount" type="s:decimal" />
           <s:element minOccurs="1" maxOccurs="1" name="quote_date" type="s:dateTime" />
           <s:element minOccurs="1" maxOccurs="1" name="is_bound" type="s:boolean" />
           <s:element minOccurs="1" maxOccurs="1" name="bind_date" type="s:dateTime" />
@@ -739,6 +741,7 @@
           <s:element minOccurs="1" maxOccurs="1" name="gross_premium" type="s:decimal" />
           <s:element minOccurs="1" maxOccurs="1" name="fee" type="s:decimal" />
           <s:element minOccurs="1" maxOccurs="1" name="tax" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="discount" type="s:decimal" />
         </s:sequence>
       </s:complexType>
       <s:simpleType name="LimitDescription">
@@ -897,6 +900,44 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="GetDocumentResult" type="tns:DocumentData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MTACancelPolicy">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="sessionID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="policyID" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="effectiveDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="type" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="toAddress" type="tns:ArrayOfString" />
+            <s:element minOccurs="0" maxOccurs="1" name="bccAddress" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MTACancelPolicyResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="MTACancelPolicyResult" type="tns:result" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MTAReinstatePolicy">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="sessionID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="policyID" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="effectiveDate" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="type" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="toAddress" type="tns:ArrayOfString" />
+            <s:element minOccurs="0" maxOccurs="1" name="bccAddress" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MTAReinstatePolicyResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="MTAReinstatePolicyResult" type="tns:result" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -1075,6 +1116,18 @@
   <wsdl:message name="GetDocumentSoapOut">
     <wsdl:part name="parameters" element="tns:GetDocumentResponse" />
   </wsdl:message>
+  <wsdl:message name="MTACancelPolicySoapIn">
+    <wsdl:part name="parameters" element="tns:MTACancelPolicy" />
+  </wsdl:message>
+  <wsdl:message name="MTACancelPolicySoapOut">
+    <wsdl:part name="parameters" element="tns:MTACancelPolicyResponse" />
+  </wsdl:message>
+  <wsdl:message name="MTAReinstatePolicySoapIn">
+    <wsdl:part name="parameters" element="tns:MTAReinstatePolicy" />
+  </wsdl:message>
+  <wsdl:message name="MTAReinstatePolicySoapOut">
+    <wsdl:part name="parameters" element="tns:MTAReinstatePolicyResponse" />
+  </wsdl:message>
   <wsdl:portType name="CFC_APISoap">
     <wsdl:operation name="runClientUpdate">
       <wsdl:input name="ComplexClientUpdate" message="tns:ComplexClientUpdateSoapIn" />
@@ -1187,6 +1240,14 @@
     <wsdl:operation name="GetDocument">
       <wsdl:input message="tns:GetDocumentSoapIn" />
       <wsdl:output message="tns:GetDocumentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MTACancelPolicy">
+      <wsdl:input message="tns:MTACancelPolicySoapIn" />
+      <wsdl:output message="tns:MTACancelPolicySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MTAReinstatePolicy">
+      <wsdl:input message="tns:MTAReinstatePolicySoapIn" />
+      <wsdl:output message="tns:MTAReinstatePolicySoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="CFC_APISoap" type="tns:CFC_APISoap">
@@ -1436,6 +1497,24 @@
     </wsdl:operation>
     <wsdl:operation name="GetDocument">
       <soap:operation soapAction="http://api.cfcprograms.com/GetDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MTACancelPolicy">
+      <soap:operation soapAction="http://api.cfcprograms.com/MTACancelPolicy" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MTAReinstatePolicy">
+      <soap:operation soapAction="http://api.cfcprograms.com/MTAReinstatePolicy" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1698,13 +1777,31 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="MTACancelPolicy">
+      <soap12:operation soapAction="http://api.cfcprograms.com/MTACancelPolicy" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MTAReinstatePolicy">
+      <soap12:operation soapAction="http://api.cfcprograms.com/MTAReinstatePolicy" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="CFC_API">
     <wsdl:port name="CFC_APISoap" binding="tns:CFC_APISoap">
-      <soap:address location="https://api.cfcprograms.com/cfc_api.asmx" />
+      <soap:address location="http://testapi.cfcprograms.com/cfc_api.asmx" />
     </wsdl:port>
     <wsdl:port name="CFC_APISoap12" binding="tns:CFC_APISoap12">
-      <soap12:address location="https://api.cfcprograms.com/cfc_api.asmx" />
+      <soap12:address location="http://testapi.cfcprograms.com/cfc_api.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
