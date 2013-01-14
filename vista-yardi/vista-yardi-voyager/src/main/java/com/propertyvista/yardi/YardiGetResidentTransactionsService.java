@@ -70,6 +70,11 @@ public class YardiGetResidentTransactionsService {
         List<ResidentTransactions> allTransactions = getAllResidentTransactions(client, yp, propertyCodes);
 
         updateBuildingsAndUnits(allTransactions);
+
+        updateLeases(allTransactions);
+
+        updateCharges(allTransactions);
+
     }
 
     private void updateBuildingsAndUnits(List<ResidentTransactions> allTransactions) {
@@ -82,6 +87,16 @@ public class YardiGetResidentTransactionsService {
 
         log.info("Update units...");
         updateUnitsForBuildings(importedUnits, getBuildings());
+    }
+
+    private void updateLeases(List<ResidentTransactions> allTransactions) {
+        // TODO Auto-generated method stub
+
+    }
+
+    private void updateCharges(List<ResidentTransactions> allTransactions) {
+        // TODO Auto-generated method stub
+
     }
 
     private void merge(List<Building> imported, List<Building> existing) {
