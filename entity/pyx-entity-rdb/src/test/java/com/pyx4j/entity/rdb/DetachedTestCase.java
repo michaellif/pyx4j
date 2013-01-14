@@ -237,5 +237,21 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
 
         Assert.assertEquals("child data set by persist", AttachLevel.Detached, o.child().getAttachLevel());
         Assert.assertEquals("children data set by persist", AttachLevel.Detached, o.children().getAttachLevel());
+
+        // child data not created
+        srv.retrieveMember(o.child());
+        Assert.assertTrue("child data not created", o.child().isNull());
+
+        // Create child
+        o.child().testId().setValue(testId);
+        o.child().name().setValue("c" + uniqueString());
+        // Save child and owner
+        srvSave(o, testCaseMethod);
+
+        // Update child
+        o.child().testId().setValue(testId);
+        o.child().name().setValue("u" + uniqueString());
+        // Save child and owner
+        srvSave(o, testCaseMethod);
     }
 }

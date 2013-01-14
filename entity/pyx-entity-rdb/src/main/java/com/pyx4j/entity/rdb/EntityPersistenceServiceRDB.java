@@ -855,8 +855,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     continue;
                 }
                 value = memberEntity.getPrimaryKey();
+                // merge incomplete data
+                if (memberMeta.isCascadePersist() && (AttachLevel.Detached == memberMeta.getAttachLevel())) {
+                    tm.retrieveMember(getPersistenceContext(), baseEntity, (IEntity) member.getMember(baseEntity));
+                }
                 lastValue = ((IEntity) member.getMember(baseEntity)).getPrimaryKey();
-                // TODO // merge incomplete data
 
                 // ignore version data in non versioned key
                 if (memberMeta.getAnnotation(Versioned.class) == null) {
