@@ -41,7 +41,6 @@ import com.propertyvista.yardi.bean.resident.ResidentTransactions;
 import com.propertyvista.yardi.mapper.GetPropertyConfigurationsMapper;
 import com.propertyvista.yardi.mapper.UnitsMapper;
 import com.propertyvista.yardi.merger.BuildingsMerger;
-import com.propertyvista.yardi.merger.UnitsMerger;
 
 /**
  * Represents property service functionality based on YARDI System api
@@ -49,6 +48,7 @@ import com.propertyvista.yardi.merger.UnitsMerger;
  * @author Mykola
  * 
  */
+@Deprecated
 public class YardiPropertyService {
 
     private final static Logger log = LoggerFactory.getLogger(YardiPropertyService.class);
@@ -272,17 +272,17 @@ public class YardiPropertyService {
 
     private void mergeUnits(Building building, List<AptUnit> existing, List<RTUnit> yardiUnits) {
         UnitsMapper mapper = new UnitsMapper();
-        List<AptUnit> imported = mapper.map(building, yardiUnits);
-
-        List<AptUnit> merged = new UnitsMerger().merge(imported, existing);
-        for (AptUnit unit : merged) {
-            update(unit);
-        }
+//        List<AptUnit> imported = mapper.map(building, yardiUnits);
+//
+//        List<AptUnit> merged = new UnitsMerger().merge(imported, existing);
+//        for (AptUnit unit : merged) {
+//            update(unit);
+//        }
     }
 
     private void mergeUnit(Building building, AptUnit existing, RTUnit yardiUnit) {
         if (existing != null && yardiUnit != null) {
-            mergeUnits(building, Arrays.asList(existing), Arrays.asList(yardiUnit));
+//            mergeUnits(building, Arrays.asList(existing), Arrays.asList(yardiUnit));
         }
     }
 

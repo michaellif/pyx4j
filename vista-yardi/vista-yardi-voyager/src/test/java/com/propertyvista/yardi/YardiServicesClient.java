@@ -21,6 +21,8 @@ public class YardiServicesClient {
 
     private static YardiPropertyService propertyService = new YardiPropertyService();
 
+    private static YardiGetResidentTransactionsService getResidentTransactions = new YardiGetResidentTransactionsService();
+
     /**
      * @param args
      * @throws YardiServiceException
@@ -40,9 +42,11 @@ public class YardiServicesClient {
         VistaTestDBSetup.init();
 
         //test services
-        propertyService.updateBuildings(yp);
-        propertyService.updateBuilding("anya_4", yp);
-        propertyService.updateUnits("anya_4", yp);
-        propertyService.updateUnit("anya_4", "555", yp);
+//        propertyService.updateBuildings(yp);
+//        propertyService.updateBuilding("anya_4", yp);
+//        propertyService.updateUnits("anya_4", yp);
+//        propertyService.updateUnit("anya_4", "555", yp);
+
+        getResidentTransactions.updateAll(yp);
     }
 }

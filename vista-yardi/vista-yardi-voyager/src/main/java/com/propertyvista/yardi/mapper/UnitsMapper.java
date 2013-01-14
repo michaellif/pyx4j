@@ -20,12 +20,10 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
 import com.propertyvista.yardi.bean.mits.Information;
@@ -46,15 +44,15 @@ public class UnitsMapper {
      * 
      * @param building
      *            the building where units from
-     * @param fromMap
+     * @param unitsFrom
      *            the units which map from
      * @return the mapped units
      */
-    public List<AptUnit> map(Building building, List<RTUnit> fromMap) {
+    public List<AptUnit> map(List<RTUnit> unitsFrom) {
         List<AptUnit> mapped = new ArrayList<AptUnit>();
-        for (RTUnit rtUnit : fromMap) {
+        for (RTUnit rtUnit : unitsFrom) {
             try {
-                AptUnit unit = map(building, rtUnit);
+                AptUnit unit = map(rtUnit);
                 mapped.add(unit);
             } catch (Exception e) {
                 log.error(String.format("Error during imported unit %s mapping", rtUnit.getUnitId()), e);
@@ -63,41 +61,26 @@ public class UnitsMapper {
         return mapped;
     }
 
-    private AptUnit map(Building building, RTUnit unitFrom) {
+    private AptUnit map(RTUnit unitFrom) {
         AptUnit unitTo = EntityFactory.create(AptUnit.class);
         Information info = unitFrom.getUnit().getInformation();
 
         if (StringUtils.isEmpty(info.getUnitId())) {
-            throw new IllegalStateException(String.format("UnitId for imported unit in building %s can not be empty or null", building.propertyCode()
-                    .getValue()));
+            throw new IllegalStateException("Illegal UnitId. Can not be empty or null");
         }
-
-        //building
-        unitTo.building().set(building);
 
         //floorplan
         if (StringUtils.isEmpty(info.getFloorplanName())) {
-            throw new IllegalStateException(String.format("FloorplanName for imported unit %s in building %s can not be empty or null", info.getUnitId(),
-                    building.propertyCode().getValue()));
+            throw new IllegalStateException(String.format("Illegal FloorplanName. FloorplanName for imported unit %s can not be empty or null",
+                    info.getUnitId()));
         }
-        for (Floorplan floorplan : building.floorplans()) {
-            if (StringUtils.equals(floorplan.name().getValue(), info.getFloorplanName())) {
-                unitTo.floorplan().set(floorplan);
-            }
-        }
-        if (unitTo.floorplan().isNull()) {
-            Floorplan floorplan = EntityFactory.create(Floorplan.class);
-            floorplan.name().setValue(info.getFloorplanName());
-            floorplan.bedrooms().setValue(info.getUnitBedrooms() != null ? info.getUnitBedrooms().intValue() : null);
-            floorplan.bathrooms().setValue(info.getUnitBathrooms() != null ? info.getUnitBathrooms().intValue() : null);
-            floorplan.building().set(building);
-            Persistence.service().persist(floorplan);
 
-            building.floorplans().add(floorplan);
-            Persistence.service().persist(building);
+        Floorplan floorplan = EntityFactory.create(Floorplan.class);
+        floorplan.name().setValue(info.getFloorplanName());
+        floorplan.bedrooms().setValue(info.getUnitBedrooms() != null ? info.getUnitBedrooms().intValue() : null);
+        floorplan.bathrooms().setValue(info.getUnitBathrooms() != null ? info.getUnitBathrooms().intValue() : null);
 
-            unitTo.floorplan().set(floorplan);
-        }
+        unitTo.floorplan().set(floorplan);
 
         // info
         unitTo.info().number().setValue(info.getUnitId());

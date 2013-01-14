@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
@@ -40,7 +41,7 @@ public class UnitsMerger {
     // loaded from the database, look up by building.id
     private final Map<Key, Building> buildingsById = new HashMap<Key, Building>();
 
-    public List<AptUnit> merge(List<AptUnit> importedList, List<AptUnit> existingList) {
+    public List<AptUnit> merge(Building building, List<AptUnit> importedList, List<AptUnit> existingList) {
         Set<AptUnit> merged = new HashSet<AptUnit>();
         merged.addAll(existingList);
 
@@ -49,6 +50,16 @@ public class UnitsMerger {
         for (AptUnit imported : importedList) {
             try {
                 AptUnit existing = existingUnitsByNumber.get(imported.info().number().getValue());
+                if (existing == null || existing.floorplan().isNull()) {
+
+                    imported.floorplan().building().set(building);
+                    Persistence.service().persist(imported.floorplan());
+
+                    building.floorplans().add(imported.floorplan());
+                    Persistence.service().persist(building);
+
+                    imported.building().set(building);
+                }
                 merged.add(existing != null ? merge(imported, existing) : imported);
             } catch (Exception e) {
                 log.error(String.format("Error during imported unit %s merging", imported.info().number().getValue()), e);
@@ -142,11 +153,20 @@ public class UnitsMerger {
 
     private AptUnit merge(AptUnit imported, AptUnit existing) {
 
+        //building
+
         //info
         merge(imported.info(), existing.info());
 
         //floorplan
-        existing.floorplan().set(imported.floorplan());
+        if (existing.floorplan().isNull()) {
+//            building.floorplans().add(floorplan);
+//            Persistence.service().persist(building);
+
+            existing.floorplan().set(imported.floorplan());
+        } else {
+            merge(imported.floorplan(), existing.floorplan());
+        }
 
         // marketing
         Persistence.service().retrieve(existing.marketing());
@@ -157,6 +177,12 @@ public class UnitsMerger {
         existing.financial()._marketRent().setValue(imported.financial()._marketRent().getValue());
 
         return existing;
+    }
+
+    private void merge(Floorplan imported, Floorplan existing) {
+        existing.name().setValue(imported.name().getValue());
+        existing.bedrooms().setValue(imported.bedrooms().getValue());
+        existing.bathrooms().setValue(imported.bathrooms().getValue());
     }
 
     private void merge(AptUnitInfo imported, AptUnitInfo existing) {
