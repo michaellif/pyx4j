@@ -29,6 +29,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.shared.utils.EntityComparatorFactory;
 import com.pyx4j.forms.client.ui.CBigDecimalField;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
@@ -51,8 +52,10 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
         CComponent<?, ?> comp;
         if (mm.isEntity()) {
             comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
+            ((CEntityComboBox) comp).setOptionsComparator(EntityComparatorFactory.createStringViewComparator());
         } else if ((mm.getObjectClassType() == ObjectClassType.EntityList) || (mm.getObjectClassType() == ObjectClassType.EntitySet)) {
             comp = new CEntityComboBox(mm.getCaption(), mm.getValueClass());
+            ((CEntityComboBox) comp).setOptionsComparator(EntityComparatorFactory.createStringViewComparator());
         } else if (mm.getValueClass().isEnum()) {
             comp = new CComboBox();
             ((CComboBox) comp).setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
