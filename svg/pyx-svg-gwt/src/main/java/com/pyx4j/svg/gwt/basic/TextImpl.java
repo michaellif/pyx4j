@@ -20,8 +20,6 @@
  */
 package com.pyx4j.svg.gwt.basic;
 
-import com.pyx4j.svg.basic.SvgElement;
-
 import com.pyx4j.svg.basic.Text;
 import com.pyx4j.svg.gwt.SvgDOM;
 
@@ -37,14 +35,18 @@ public class TextImpl extends ShapeImpl implements Text {
         getElement().setAttribute("y", String.valueOf(y));
         getElement().setAttribute("stroke-width", "0");
         getElement().setAttribute("font-size", String.valueOf(DEFAULT_FONT_SIZE));
+        //Stroke black make fonts looks bold in FF 18
         getElement().setAttribute("fill", "black");
+        setStroke("none");
         getElement().setAttribute("font-family", "Arial");
     }
 
+    @Override
     public void setFont(String font) {
         getElement().setAttribute("font", font);
     }
 
+    @Override
     public void setFontSize(String fontSize) {
         getElement().setAttribute("font-size", fontSize);
     }
@@ -58,11 +60,11 @@ public class TextImpl extends ShapeImpl implements Text {
     public String getTextValue() {
         return text;
     }
-    
+
+    @Override
     public void setTextValue(String text) {
-    	getElement().setInnerText(text);
+        getElement().setInnerText(text);
         this.text = text;
     }
-
 
 }
