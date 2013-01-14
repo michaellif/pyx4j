@@ -23,4 +23,10 @@ public class VistaTermsEditorViewImpl extends AdminEditorViewImplBase<VistaTerms
         super(AdminSiteMap.Legal.PortalTerms.class);
         setForm(new VistaTermsForm(this));
     }
+
+    @Override
+    public void populate(VistaTerms value) {
+        super.populate(value);
+        setCaption("Terms for " + value.target().getValue());
+    }
 }

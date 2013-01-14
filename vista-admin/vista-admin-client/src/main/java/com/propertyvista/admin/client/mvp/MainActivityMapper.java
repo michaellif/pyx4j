@@ -243,6 +243,42 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new VistaTermsViewerActivity(crudPlace);
                             break;
                         }
+                    } else if (place instanceof AdminSiteMap.Legal.PmcCaledonTermsTemplate) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new VistaTermsDefaultActivity(crudPlace, Target.PmcCaledonTemplate);
+                            break;
+                        case editor:
+                            activity = new VistaTermsEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new VistaTermsViewerActivity(crudPlace);
+                            break;
+                        }
+                    } else if (place instanceof AdminSiteMap.Legal.PmcCaldedonSolePropetorshipSectionTerms) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new VistaTermsDefaultActivity(crudPlace, Target.PmcCaldedonSolePropetorshipSection);
+                            break;
+                        case editor:
+                            activity = new VistaTermsEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new VistaTermsViewerActivity(crudPlace);
+                            break;
+                        }
+                    } else if (place instanceof AdminSiteMap.Legal.PmcPaymentPad) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new VistaTermsDefaultActivity(crudPlace, Target.PmcPaymentPad);
+                            break;
+                        case editor:
+                            activity = new VistaTermsEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new VistaTermsViewerActivity(crudPlace);
+                            break;
+                        }
                     } else if (place instanceof AdminSiteMap.Management.OnboardingMerchantAccounts) {
                         switch (crudPlace.getType()) {
                         case editor:

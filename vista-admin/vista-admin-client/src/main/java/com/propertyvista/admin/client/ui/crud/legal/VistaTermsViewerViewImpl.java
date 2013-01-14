@@ -27,4 +27,10 @@ public class VistaTermsViewerViewImpl extends AdminViewerViewImplBase<VistaTerms
         enableVersioning(VistaTerms.VistaTermsV.class, GWT.<VistaTermsVersionService> create(VistaTermsVersionService.class));
         setForm(new VistaTermsForm(this));
     }
+
+    @Override
+    public void populate(VistaTerms value) {
+        super.populate(value);
+        setCaption("Terms for " + value.target().getValue());
+    }
 }

@@ -98,6 +98,15 @@ public class AdminSiteMap implements SiteMap {
         @PlaceProperties(navigLabel = "PMC Terms and Conditions", caption = "PMC Terms and Conditions")
         public static class PmcTerms extends CrudAppPlace {
         }
+
+        public static class PmcCaledonTermsTemplate extends CrudAppPlace {
+        }
+
+        public static class PmcCaldedonSolePropetorshipSectionTerms extends CrudAppPlace {
+        }
+
+        public static class PmcPaymentPad extends CrudAppPlace {
+        }
     }
 
     public static class Administration extends AppPlace {
