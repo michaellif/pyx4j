@@ -269,7 +269,8 @@ public abstract class PhotoAlbum extends DockPanel {
         if (photoList.size() == 0) {
             MessageDialog.warn("Photoalbom is empty", "Photoalbom is empty. Add photo first.");
         } else {
-            Slideshow slideshow = new Slideshow(640, 510, startFrom, run);
+            Slideshow slideshow = new Slideshow(startFrom, run);
+            slideshow.setPixelSize(640, 510);
             for (Photo photo : photoList) {
                 HorizontalPanel holder = new HorizontalPanel();
                 PhotoImage photoImage = slidesCache.get(photo);

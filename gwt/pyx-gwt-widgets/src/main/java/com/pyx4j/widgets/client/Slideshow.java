@@ -50,10 +50,6 @@ public class Slideshow extends LayoutPanel {
 
     private final List<Widget> items;
 
-    private final int width;
-
-    private final int height;
-
     private int currentIndex = -1;
 
     private final LayoutPanel slidesPanel;
@@ -70,17 +66,14 @@ public class Slideshow extends LayoutPanel {
 
     private int slideChangeSpeed = 6000;
 
-    public Slideshow(int width, int height) {
-        this(width, height, 0, true);
+    public Slideshow() {
+        this(0, true);
     }
 
-    public Slideshow(int width, int height, int initPosition, boolean runOnInit) {
-        this.width = width;
-        this.height = height;
+    public Slideshow(int initPosition, boolean runOnInit) {
         this.initPosition = initPosition;
         this.runOnInit = runOnInit;
         items = new ArrayList<Widget>();
-        setSize(width + "px", height + "px");
 
         slidesPanel = new LayoutPanel();
         slidesPanel.setWidth("100%");
@@ -96,7 +89,7 @@ public class Slideshow extends LayoutPanel {
     }
 
     public void addItem(Widget widget) {
-        widget.setPixelSize(width, height);
+        widget.setPixelSize(getOffsetWidth(), getOffsetHeight());
         items.add(widget);
         slidesPanel.add(widget);
         widget.setVisible(false);

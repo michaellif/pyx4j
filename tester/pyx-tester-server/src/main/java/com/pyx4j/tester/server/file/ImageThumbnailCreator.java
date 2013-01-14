@@ -33,7 +33,7 @@ import javax.imageio.ImageIO;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.gwt.server.IOUtils;
-import com.pyx4j.site.shared.Dimension;
+import com.pyx4j.gwt.shared.Dimension;
 
 public class ImageThumbnailCreator {
 

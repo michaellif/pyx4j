@@ -26,6 +26,7 @@ import java.util.List;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
 import com.pyx4j.gwt.client.upload.FileUploadReciver;
+import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageHolder;
 
@@ -95,7 +96,7 @@ public class NImage<T extends IFile> extends NComponent<List<T>, ImageHolder, CI
 
     private ImageHolder createWidget() {
         if (widget == null) {
-            widget = new ImageHolder(ImageHolder.Type.multiple, this);
+            widget = new ImageHolder(new Dimension(250, 250), ImageHolder.Type.multiple, this);
         }
         return widget;
     }

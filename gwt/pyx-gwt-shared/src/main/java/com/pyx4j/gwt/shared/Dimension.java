@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.site.shared;
+package com.pyx4j.gwt.shared;
 
 import java.io.Serializable;
 

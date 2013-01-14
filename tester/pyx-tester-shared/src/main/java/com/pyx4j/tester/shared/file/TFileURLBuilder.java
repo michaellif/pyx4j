@@ -20,8 +20,8 @@
  */
 package com.pyx4j.tester.shared.file;
 
+import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.gwt.shared.FileURLBuilder;
-import com.pyx4j.site.shared.Dimension;
 import com.pyx4j.tester.domain.TFile;
 
 public abstract class TFileURLBuilder implements FileURLBuilder<TFile> {
