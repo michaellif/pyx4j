@@ -85,9 +85,7 @@ public class YardiGetResidentTransactionsService {
     }
 
     private void merge(List<Building> imported, List<Building> existing) {
-        BuildingsMerger merger = new BuildingsMerger();
-        List<Building> merged = merger.merge(imported, existing);
-
+        List<Building> merged = new BuildingsMerger().merge(imported, existing);
         for (Building building : merged) {
             update(building);
         }
