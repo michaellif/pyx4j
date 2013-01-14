@@ -81,7 +81,7 @@ public class YardiGetResidentTransactionsService {
         merge(importedBuildings, getBuildings());
 
         log.info("Update units...");
-        merge(importedUnits, getBuildings());
+        updateUnitsForBuildings(importedUnits, getBuildings());
     }
 
     private void merge(List<Building> imported, List<Building> existing) {
@@ -93,7 +93,7 @@ public class YardiGetResidentTransactionsService {
         }
     }
 
-    private void merge(Map<String, List<AptUnit>> importedUnits, List<Building> buildings) {
+    private void updateUnitsForBuildings(Map<String, List<AptUnit>> importedUnits, List<Building> buildings) {
         for (Building building : buildings) {
             String propertyCode = building.propertyCode().getValue();
             if (importedUnits.containsKey(propertyCode)) {
@@ -106,9 +106,6 @@ public class YardiGetResidentTransactionsService {
     private void mergeUnits(Building building, List<AptUnit> imported, List<AptUnit> existing) {
         List<AptUnit> merged = new UnitsMerger().merge(building, imported, existing);
         for (AptUnit unit : merged) {
-//            if (unit.building().isNull()) {
-//                unit.building().set(building);
-//            }
             update(unit);
         }
     }
