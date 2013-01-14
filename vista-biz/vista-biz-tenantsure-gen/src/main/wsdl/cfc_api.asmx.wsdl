@@ -668,7 +668,7 @@
           <s:element minOccurs="1" maxOccurs="1" name="language" type="tns:Languages" />
           <s:element minOccurs="1" maxOccurs="1" name="wording_version" type="s:decimal" />
           <s:element minOccurs="0" maxOccurs="1" name="state_of_filing" type="s:string" />
-          <s:element minOccurs="1" maxOccurs="1" name="policy_period_unit" type="s1:unsignedShort" />
+          <s:element minOccurs="1" maxOccurs="1" name="policy_period_unit" type="s:unsignedShort" />
           <s:element minOccurs="0" maxOccurs="1" name="currency" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="terrorismLocationDetails" type="tns:ArrayOfTerrorismLocationDetails" />
           <s:element minOccurs="1" maxOccurs="1" name="finance_charge" type="s:decimal" />
