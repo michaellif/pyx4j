@@ -24,9 +24,6 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.payment.AccountType;
-import com.propertyvista.domain.pmc.info.BusinessInformation;
-import com.propertyvista.domain.pmc.info.PersonalInformation;
-import com.propertyvista.domain.pmc.info.PmcSignature;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
@@ -40,10 +37,10 @@ public interface OnlinePaymentSetupDTO extends IEntity {
     IPrimitive<String> legal();
 
     // Business Info:
-    BusinessInformation businessInformation();
+    BusinessInformationDTO businessInformation();
 
     // Personal Info:
-    PersonalInformation personalInformation();
+    PersonalInformationDTO personalInformation();
 
     // Banking Info:
     interface PropertyAccountInfo extends IEntity {
@@ -75,21 +72,10 @@ public interface OnlinePaymentSetupDTO extends IEntity {
     IList<PropertyAccountInfo> propertyAccounts();
 
     // Confirmation:
+    AgreementDTO caledonAgreement();
 
-    // caledon
-    @Editor(type = EditorType.richtextarea)
-    IPrimitive<String> caledonAgreement();
+    AgreementDTO caledonSoleProprietorshipAgreement();
 
-    IPrimitive<Boolean> caledonIAgree();
-
-    PmcSignature caledonAgreementSignature();
-
-    // payment pad
-    @Editor(type = EditorType.richtextarea)
-    IPrimitive<String> paymentPadAgreement();
-
-    IPrimitive<Boolean> paymentPadIAgree();
-
-    PmcSignature paymentPadAgreementSignature();
+    AgreementDTO paymentPadAgreement();
 
 }

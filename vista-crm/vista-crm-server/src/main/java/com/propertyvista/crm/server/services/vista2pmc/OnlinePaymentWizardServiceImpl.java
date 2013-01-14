@@ -29,8 +29,8 @@ import com.propertyvista.admin.domain.legal.VistaTerms;
 import com.propertyvista.admin.domain.legal.VistaTerms.Target;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
-import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
+import com.propertyvista.dto.vista2pmc.AgreementDTO;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -43,22 +43,12 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
         // init property accounts
         onlinePaymentSetup.propertyAccounts().add(onlinePaymentSetup.propertyAccounts().$());
 
-        // init default company legal name
-        Pmc pmc = VistaDeployment.getCurrentPmc();
-        onlinePaymentSetup.businessInformation().companyName().setValue(pmc.name().getValue());
+        // init default company legal name        
+        onlinePaymentSetup.businessInformation().companyName().setValue(VistaDeployment.getCurrentPmc().name().getValue());
 
-        // init terms
-        onlinePaymentSetup.caledonAgreement().setValue(retrieveTerms(Target.PmcCaledonTemplate));
-        onlinePaymentSetup.paymentPadAgreement().setValue(retrieveTerms(Target.PmcPaymentPad));
-
-        // init signatures
-        Date date = new Date();
-        String ipAddress = Context.getRequestRemoteAddr();
-
-        onlinePaymentSetup.caledonAgreementSignature().ipAddress().setValue(ipAddress);
-        onlinePaymentSetup.caledonAgreementSignature().timestamp().setValue(date);
-        onlinePaymentSetup.paymentPadAgreementSignature().ipAddress().setValue(ipAddress);
-        onlinePaymentSetup.paymentPadAgreementSignature().timestamp().setValue(date);
+        initTerms(onlinePaymentSetup.caledonAgreement(), retrieveTerms(Target.PmcCaledonTemplate));
+        initTerms(onlinePaymentSetup.caledonSoleProprietorshipAgreement(), retrieveTerms(Target.PmcCaldedonSolePropetorshipSection));
+        initTerms(onlinePaymentSetup.paymentPadAgreement(), retrieveTerms(Target.PmcPaymentPad));
 
         callback.onSuccess(onlinePaymentSetup);
     }
@@ -86,5 +76,11 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
         });
 
         return termsText;
+    }
+
+    private void initTerms(AgreementDTO agreement, String termsContent) {
+        agreement.terms().setValue(termsContent);
+        agreement.agreementSignature().timestamp().setValue(new Date());
+        agreement.agreementSignature().ipAddress().setValue(Context.getRequestRemoteAddr());
     }
 }
