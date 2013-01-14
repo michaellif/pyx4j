@@ -72,6 +72,11 @@ public class BuildingDataModel {
         segment.status().setValue(AptUnitOccupancySegment.Status.pending);
         unit.unitOccupancySegments().add(segment);
         Persistence.service().persist(unit);
+
+// TODO: check if it necessary here:         
+//        ServerSideFactory.create(OccupancyFacade.class).setupNewUnit((AptUnit) unit.createIdentityStub());
+        ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(building, unit, true);
+
         return unit;
     }
 
