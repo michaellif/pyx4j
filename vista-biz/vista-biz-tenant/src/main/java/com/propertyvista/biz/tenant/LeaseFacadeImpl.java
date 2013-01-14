@@ -1034,15 +1034,14 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         boolean succeeded = false;
 
+        // use default product catalog items for specific cases:
+        boolean useDefaultCatalog = (VistaFeatures.instance().defaultProductCatalog() || leaseTerm.lease().status().getValue() == Lease.Status.ExistingLease);
+
         EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), unit.building().productCatalog()));
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().serviceType(), leaseType));
+        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().isDefaultCatalogItem(), useDefaultCatalog));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());
-
-        // use default product catalog items for specific cases:
-        if (VistaFeatures.instance().defaultProductCatalog() || leaseTerm.lease().status().getValue() == Lease.Status.ExistingLease) {
-            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().isDefaultCatalogItem(), Boolean.TRUE));
-        }
 
         for (Service service : Persistence.service().query(serviceCriteria)) {
             EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);

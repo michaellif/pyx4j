@@ -249,15 +249,14 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         Persistence.ensureRetrieve(currentValue.lease().unit().building(), AttachLevel.Attached);
 
+        // use default product catalog items for specific cases:
+        boolean useDefaultCatalog = (VistaFeatures.instance().defaultProductCatalog() || currentValue.lease().status().getValue() == Lease.Status.ExistingLease);
+
         EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), currentValue.lease().unit().building().productCatalog()));
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().serviceType(), currentValue.lease().type()));
+        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().isDefaultCatalogItem(), useDefaultCatalog));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());
-
-        // use default product catalog items for specific cases:
-        if (VistaFeatures.instance().defaultProductCatalog() || currentValue.lease().status().getValue() == Lease.Status.ExistingLease) {
-            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().isDefaultCatalogItem(), Boolean.TRUE));
-        }
 
         for (Service service : Persistence.service().query(serviceCriteria)) {
             EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);
