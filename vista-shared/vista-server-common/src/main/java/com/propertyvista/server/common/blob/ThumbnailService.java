@@ -38,8 +38,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.shared.Dimension;
 
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.portal.rpc.portal.ImageConsts;

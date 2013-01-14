@@ -15,7 +15,7 @@ package com.propertyvista.portal.rpc.portal;
 
 import java.io.Serializable;
 
-import com.pyx4j.site.shared.Dimension;
+import com.pyx4j.gwt.shared.Dimension;
 
 //Note: In future we may decide to move this to configurations of  each property management company....
 public interface ImageConsts {

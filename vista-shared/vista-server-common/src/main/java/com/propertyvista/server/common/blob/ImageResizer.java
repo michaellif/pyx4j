@@ -35,9 +35,9 @@ import com.mortennobel.imagescaling.ThumpnailRescaleOp;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.shared.Dimension;
 
 import com.propertyvista.crm.rpc.services.MediaUploadService;
 
