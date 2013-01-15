@@ -210,7 +210,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         item.catalog().set(catalog);
         item.featureType().setValue(type);
         item.version().name().setValue(type.toString());
-        item.version().recurring().setValue(true);
+        item.version().recurring().setValue(type.isRecurrent());
         item.version().mandatory().setValue(false);
 
         for (FeatureItemType itemType : itemTypes) {
