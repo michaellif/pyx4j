@@ -86,6 +86,10 @@ public class PortalSiteMap implements SiteMap {
             }
         }
 
+        @PlaceProperties(navigLabel = "Comm Center", caption = "Communication Center")
+        public static class CommunicationCenter extends AppPlace {
+        }
+
         public static class TenantInsurance extends AppPlace {
 
             /** this place is displayed to people who don't have tenant insurance */

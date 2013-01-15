@@ -55,6 +55,8 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
         items.add(new Residents.BillSummary());
         items.add(new Residents.BillingHistory());
         items.add(new Residents.Maintenance());
+        items.add(new Residents.CommunicationCenter());
+
         if (SecurityController.checkBehavior(VistaCustomerBehavior.ElectronicPaymentsAllowed)) {
             items.add(new Residents.PaymentMethods());
         }

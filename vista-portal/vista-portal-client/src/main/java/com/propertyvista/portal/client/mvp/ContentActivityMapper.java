@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.client.mvp;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
@@ -32,6 +35,7 @@ import com.propertyvista.portal.client.activity.residents.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.residents.billing.BillSummaryActivity;
 import com.propertyvista.portal.client.activity.residents.billing.BillingHistoryActivity;
 import com.propertyvista.portal.client.activity.residents.billing.ViewBillActivity;
+import com.propertyvista.portal.client.activity.residents.communicationcenter.CommunicationCenterActivity;
 import com.propertyvista.portal.client.activity.residents.maintenance.EditMaintenanceRequestActivity;
 import com.propertyvista.portal.client.activity.residents.maintenance.MaintenanceAcitvity;
 import com.propertyvista.portal.client.activity.residents.maintenance.NewMaintenanceRequestActivity;
@@ -51,6 +55,8 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 
 public class ContentActivityMapper implements AppActivityMapper {
+
+    private static Logger log = LoggerFactory.getLogger(ContentActivityMapper.class);
 
     public ContentActivityMapper() {
     }
@@ -125,6 +131,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new PasswordResetActivity(place);
                 } else if (place instanceof PortalSiteMap.PasswordChange) {
                     // TODO portal password change activity
+                } else if (place instanceof PortalSiteMap.Residents.CommunicationCenter) {
+                    activity = new CommunicationCenterActivity(place);
+                } else {
+                    log.debug("Couldn't find the place class, which is :{} please add to mapping!", place.getClass().getName());
                 }
                 callback.onSuccess(activity);
             }
