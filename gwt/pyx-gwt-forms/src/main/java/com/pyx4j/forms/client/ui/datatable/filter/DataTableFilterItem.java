@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -110,8 +111,8 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         laterThan(Restriction.GREATER_THAN, true),
 
         laterOrEqualThan(Restriction.GREATER_THAN_OR_EQUAL, true);
-//        
-// TODO ? These criterias aren't supported by DB search engine currently, so postpone implementation ?          
+//
+// TODO ? These criterias aren't supported by DB search engine currently, so postpone implementation ?
 //        contains,
 //        doesNotContain,
 //        beginsWith,
@@ -287,7 +288,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
             options = EnumSet.of(Operator.is, Operator.isNot);
         } else if (isDate(valueClass)) {
             options = EnumSet.of(Operator.is, Operator.isNot, Operator.earlierThan, Operator.laterThan, Operator.earlierOrEqualThan, Operator.laterOrEqualThan);
-        } else if (valueClass.equals(BigDecimal.class) || member.getMeta().isNumberValueClass()) {
+        } else if (valueClass.equals(BigDecimal.class) || valueClass.equals(Key.class) || member.getMeta().isNumberValueClass()) {
             options = EnumSet.of(Operator.is, Operator.greaterThan, Operator.greaterOrEqualThan, Operator.lessThan, Operator.lessOrEqualThan);
         } else {
             options = EnumSet.allOf(Operator.class);
