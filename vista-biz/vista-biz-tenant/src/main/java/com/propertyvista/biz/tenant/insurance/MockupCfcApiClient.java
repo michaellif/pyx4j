@@ -19,6 +19,7 @@ import java.util.Random;
 
 import org.apache.commons.lang.RandomStringUtils;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
@@ -85,6 +86,16 @@ public class MockupCfcApiClient implements ICfcApiClient {
     @Override
     public void requestDocument(String quoteId, List<String> emails) {
 
+    }
+
+    @Override
+    public LogicalDate cancel(String policyId, CancellationType cancellationType, String toAddress) {
+        return new LogicalDate();
+    }
+
+    @Override
+    public void reinstate(String policyId, ReinstatementType reinstatementType, String toAddress) {
+        // TODO Auto-generated method stub
     }
 
 }

@@ -15,12 +15,26 @@ package com.propertyvista.biz.tenant.insurance;
 
 import java.util.List;
 
+import com.pyx4j.commons.LogicalDate;
+
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
 public interface ICfcApiClient {
+
+    public enum CancellationType {
+
+        RETROACTIVE, PROACTIVE
+
+    }
+
+    public enum ReinstatementType {
+
+        REINSTATEMENT_PROACTIVE, REINSTATEMENT_RETROACTIVE
+
+    }
 
     /**
      * Registers a client in CFC system.
@@ -40,5 +54,9 @@ public interface ICfcApiClient {
 
     /** Send policy related documentation to the list of e-mail addresses */
     public void requestDocument(String quoteId, List<String> emails);
+
+    LogicalDate cancel(String policyId, CancellationType cancellationType, String toAddress);
+
+    void reinstate(String policyId, ReinstatementType reinstatementType, String toAddress);
 
 }

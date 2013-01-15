@@ -42,6 +42,13 @@ public interface TenantSureFacade {
      */
     void buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId);
 
+    /**
+     * Sends a cancellation request
+     * 
+     * @param policyId
+     * @param cancellationType
+     * @param toAddress
+     */
     void cancelByTenant(Tenant tenantId);
 
     void cancelByTenantSure(Tenant tenantId, String cancellationReason, LogicalDate expiryDate);

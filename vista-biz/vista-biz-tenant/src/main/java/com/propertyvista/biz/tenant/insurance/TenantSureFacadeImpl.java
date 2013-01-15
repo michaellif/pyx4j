@@ -52,7 +52,7 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 
 public class TenantSureFacadeImpl implements TenantSureFacade {
 
-    private static final boolean USE_CFC_API_MOCKUP_CLIENT = true;
+    private static final boolean USE_CFC_API_MOCKUP_CLIENT = false;
 
     private static final I18n i18n = I18n.get(TenantSureFacadeImpl.class);
 
@@ -275,10 +275,24 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         validateIsCancellable(insuranceTenantSure);
 
+        Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
+        String tenantsEmail;
+
+        SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
+        if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
+            tenantsEmail = mailConfig.getForwardAllTo();
+        } else {
+            tenantsEmail = tenant.customer().user().email().getValue();
+        }
+
+        cfcApiClient.cancel(insuranceTenantSure.insuranceCertificate().insuranceCertificateNumber().getValue(),
+                com.propertyvista.biz.tenant.insurance.ICfcApiClient.CancellationType.PROACTIVE, tenantsEmail);
+
         insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         insuranceTenantSure.status().setValue(Status.PendingCancellation);
         insuranceTenantSure.cancellation().setValue(CancellationType.CancelledByTenant);
 
+        // TODO this doesn't work like that anymore...
         GregorianCalendar cal = new GregorianCalendar();
         cal.add(Calendar.MONTH, 1);
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
@@ -296,10 +310,24 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         validateIsCancellable(insuranceTenantSure);
 
+        Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
+        String tenantsEmail;
+
+        SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
+        if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
+            tenantsEmail = mailConfig.getForwardAllTo();
+        } else {
+            tenantsEmail = tenant.customer().user().email().getValue();
+        }
+
+        cfcApiClient.cancel(insuranceTenantSure.insuranceCertificate().insuranceCertificateNumber().getValue(),
+                com.propertyvista.biz.tenant.insurance.ICfcApiClient.CancellationType.RETROACTIVE, tenantsEmail);
+
         insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         insuranceTenantSure.status().setValue(Status.PendingCancellation);
         insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
 
+        // TODO this doesn't work like that anymore
         GregorianCalendar cal = new GregorianCalendar();
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         insuranceTenantSure.expiryDate().setValue(new LogicalDate(cal.getTime()));
@@ -313,6 +341,9 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
     @Override
     public void cancelByTenantSure(Tenant tenantId, String cancellationReason, LogicalDate expiryDate) {
+        if (true) {
+            throw new Error("this is not implemented!!!");
+        }
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         validateIsCancellable(insuranceTenantSure);
 

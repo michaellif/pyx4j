@@ -41,6 +41,7 @@ import com.cfcprograms.api.Result;
 import com.cfcprograms.api.SimpleClient;
 import com.cfcprograms.api.SimpleClientResponse;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -191,6 +192,38 @@ public class CfcApiClient implements ICfcApiClient {
         ArrayOfString toEmailArray = new ObjectFactory().createArrayOfString();
         toEmailArray.getString().addAll(emails);
         cfcApiSoap.requestDocument(quoteId, sessionId, toEmailArray, new ObjectFactory().createArrayOfString());
+    }
+
+    @Override
+    public LogicalDate cancel(String policyId, CancellationType cancellationType, String toAddress) {
+        CFCAPISoap cfcApiSoap = getApi().getCFCAPISoap();
+
+        String sessionId = makeNewCfcSession(cfcApiSoap);
+
+        ArrayOfString toEmailArray = new ObjectFactory().createArrayOfString();
+        toEmailArray.getString().add(toAddress);
+
+        ArrayOfString bccEmailArray = new ObjectFactory().createArrayOfString();
+
+        Result result = cfcApiSoap.mtaCancelPolicy(sessionId, policyId, null, cancellationType.name(), toEmailArray, bccEmailArray);
+        assertSuccessfulResponse(result);
+
+        return new LogicalDate(result.getQuoteData().getExpiryDate().toGregorianCalendar().getTime());
+    }
+
+    @Override
+    public void reinstate(String policyId, ReinstatementType reinstatementType, String toAddress) {
+        CFCAPISoap cfcApiSoap = getApi().getCFCAPISoap();
+
+        String sessionId = makeNewCfcSession(cfcApiSoap);
+
+        ArrayOfString toEmailArray = new ObjectFactory().createArrayOfString();
+        toEmailArray.getString().add(toAddress);
+
+        ArrayOfString bccEmailArray = new ObjectFactory().createArrayOfString();
+
+        Result result = cfcApiSoap.mtaReinstatePolicy(sessionId, policyId, null, reinstatementType.name(), toEmailArray, bccEmailArray);
+        assertSuccessfulResponse(result);
     }
 
     private void assertSuccessfulResponse(Result response) {
