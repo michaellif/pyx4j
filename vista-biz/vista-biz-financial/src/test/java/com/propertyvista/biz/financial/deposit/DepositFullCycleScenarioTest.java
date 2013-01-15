@@ -77,7 +77,7 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
 
         advanceDate("18-Mar-2012");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -102,7 +102,7 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
 
         advanceDate("18-Apr-2012");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -128,7 +128,7 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
 
 //-->        completeLease();
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).

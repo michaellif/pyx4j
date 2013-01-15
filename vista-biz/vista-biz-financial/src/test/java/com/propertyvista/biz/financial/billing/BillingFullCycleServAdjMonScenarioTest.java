@@ -84,7 +84,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("01-Feb-2012");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         new BillTester(bill).
 
@@ -110,7 +110,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("01-Mar-2012");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
@@ -138,7 +138,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("01-Apr-2012");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
@@ -167,7 +167,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("01-May-2012");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
@@ -196,7 +196,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("01-Jun-2012");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
@@ -223,7 +223,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("01-Jul-2012");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         new BillTester(bill).
 
@@ -249,7 +249,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("01-Aug-2012");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off 
         new BillTester(bill).
@@ -273,7 +273,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("01-Sep-2012");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         
@@ -299,7 +299,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
         receiveAndPostPayment("15-Sep-2012", "806.75");
         SysDateManager.setSysDate("01-Oct-2012");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
  
@@ -325,7 +325,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
         receiveAndPostPayment("15-Oct-2012", "1141.94");
         SysDateManager.setSysDate("01-Nov-2012");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         
@@ -351,7 +351,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
         receiveAndPostPayment("11-Nov-2012", "1041.94");
         SysDateManager.setSysDate("01-Dec-2012");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         
@@ -377,7 +377,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
         receiveAndPostPayment("14-Dec-2012", "1041.94");
         SysDateManager.setSysDate("01-Jan-2013");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         
@@ -403,7 +403,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
         receiveAndPostPayment("07-Jan-2013", "1041.94");
         SysDateManager.setSysDate("01-Feb-2013");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         

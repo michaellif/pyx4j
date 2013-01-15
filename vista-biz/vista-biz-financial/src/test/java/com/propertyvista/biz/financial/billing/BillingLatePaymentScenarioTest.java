@@ -72,7 +72,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("17-Apr-2011");
         activateLease();
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -104,7 +104,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("17-May-2011");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
@@ -132,7 +132,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("17-Jun-2011");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -158,7 +158,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
 
         // run bill
         SysDateManager.setSysDate("17-Jul-2011");
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -179,7 +179,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
 
         // run bill
         SysDateManager.setSysDate("17-Aug-2011");
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).

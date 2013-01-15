@@ -73,7 +73,7 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
 
         //==================== CYCLE 1 ======================//
 
-        confirmBill(true, true);
+        confirmBill(true);
 
         // @formatter:off
         new BillTester(getLatestBill()).
@@ -98,7 +98,7 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
         //==================== CYCLE 2 ======================//
 
         advanceDate("18-Jun-2011");
-        confirmBill(true, true);
+        confirmBill(true);
 
         // @formatter:off
         new BillTester(getLatestBill()).

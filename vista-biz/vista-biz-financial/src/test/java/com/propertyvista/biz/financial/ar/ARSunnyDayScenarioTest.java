@@ -78,7 +78,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("18-Mar-2011");
         activateLease();
 
-        runBilling(true, false);
+        runBilling(true);
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 
@@ -93,7 +93,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         addBooking("05-May-2011");
         finalizeLeaseAdendum();
 
-        runBilling(true, false);
+        runBilling(true);
 
         receiveAndPostPayment("19-Apr-2011", "1448.50");
 
@@ -107,7 +107,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         addGoodWillCredit("120.00", false);
         addGoodWillCredit("130.00");
 
-        runBilling(true, false);
+        runBilling(true);
 
         receiveAndPostPayment("19-May-2011", "1086.50");
 
@@ -118,7 +118,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         addGoodWillCredit("30.00", false);
         addGoodWillCredit("40.00");
 
-        runBilling(true, false);
+        runBilling(true);
 
         receiveAndPostPayment("19-Jun-2011", "1154.50");
 
@@ -126,7 +126,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("18-Jul-2011");
 
-        runBilling(true, false);
+        runBilling(true);
 
         receiveAndPostPayment("19-Jul-2011", "118.49");
 
@@ -136,7 +136,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         completeLease();
 
-        runBilling(true, false);
+        runBilling(true);
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 

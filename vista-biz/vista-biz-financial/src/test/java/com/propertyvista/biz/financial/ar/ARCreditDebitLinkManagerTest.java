@@ -97,7 +97,7 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         activateLease();
 
         SysDateManager.setSysDate("18-Mar-2011");
-        runBilling(true, false);
+        runBilling(true);
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 
@@ -123,7 +123,7 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("18-Apr-2011");
 
-        runBilling(true, false);
+        runBilling(true);
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 
@@ -136,7 +136,7 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("18-May-2011");
 
-        runBilling(true, false);
+        runBilling(true);
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 

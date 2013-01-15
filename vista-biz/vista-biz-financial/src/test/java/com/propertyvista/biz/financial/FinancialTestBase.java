@@ -249,12 +249,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected Bill runBilling(boolean confirm) {
-        return runBilling(confirm, false);
-    }
-
-    protected Bill runBilling(boolean confirm, boolean printBill) {
         runBilling();
-        return confirmBill(confirm, printBill);
+        return confirmBill(confirm);
     }
 
     protected Bill runBillingPreview() {
@@ -269,7 +265,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return bill;
     }
 
-    protected Bill confirmBill(boolean confirm, boolean printBill) {
+    protected Bill confirmBill(boolean confirm) {
         Bill bill = getLatestBill();
         if (confirm) {
             bill = ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
@@ -278,10 +274,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         }
 
         Persistence.service().commit();
-
-        if (printBill) {
-            printBill(bill);
-        }
         return bill;
     }
 

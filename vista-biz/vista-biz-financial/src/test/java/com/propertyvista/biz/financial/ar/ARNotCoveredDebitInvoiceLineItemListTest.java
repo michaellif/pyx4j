@@ -63,17 +63,17 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase 
         activateLease();
 
         SysDateManager.setSysDate("18-Mar-2011");
-        runBilling(true, false);
+        runBilling(true);
 
         //==================== RUN 3 ======================//
 
         SysDateManager.setSysDate("18-Apr-2011");
-        runBilling(true, false);
+        runBilling(true);
 
         //==================== RUN 4 ======================//
 
         SysDateManager.setSysDate("18-May-2011");
-        runBilling(true, false);
+        runBilling(true);
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 

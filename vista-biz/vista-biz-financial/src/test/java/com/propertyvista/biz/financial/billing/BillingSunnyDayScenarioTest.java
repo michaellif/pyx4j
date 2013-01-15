@@ -126,7 +126,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
 //-->        activateLease();
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -155,7 +155,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         addBooking("5-May-2011");
         finalizeLeaseAdendum();
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -188,7 +188,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         addGoodWillCredit("120.00", false);
         addGoodWillCredit("130.00");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -215,7 +215,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         addGoodWillCredit("30.00", false);
         addGoodWillCredit("40.00");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -239,7 +239,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         advanceDate("18-Jul-2011");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -266,7 +266,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         addAccountCharge("140.00");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).

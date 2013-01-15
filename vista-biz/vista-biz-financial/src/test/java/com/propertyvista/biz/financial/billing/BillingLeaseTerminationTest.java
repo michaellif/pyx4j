@@ -77,7 +77,7 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
 
         receiveAndPostPayment("18-Mar-2011", "1418.33");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -103,7 +103,7 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         advanceDate("18-Apr-2011");
         terminateLease(CompletionType.Termination, "10-May-2011");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // Make sure we only charge for the appropriate period
         // @formatter:off
@@ -124,7 +124,7 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         //==================== RUN 4 ======================//
         advanceDate("18-May-2011");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // Make sure we get back the deposits
         // @formatter:off
@@ -185,7 +185,7 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
 
         receiveAndPostPayment("18-Mar-2011", "1418.33");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -211,7 +211,7 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         advanceDate("18-Apr-2011");
         terminateLease(CompletionType.Termination);
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // Make sure we get back deposits and reminder of charges
         // @formatter:off

@@ -80,7 +80,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("18-Mar-2011");
         activateLease();
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -102,7 +102,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
         changeBillableItem(parking1.uid().getValue(), null, "20-May-2011");
         finalizeLeaseAdendum();
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -124,7 +124,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
         changeBillableItem(parking1.uid().getValue(), null, "10-May-2011");
         finalizeLeaseAdendum();
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -143,7 +143,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("18-Jun-2011");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -162,7 +162,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("18-Jul-2011");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -184,7 +184,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         completeLease();
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).

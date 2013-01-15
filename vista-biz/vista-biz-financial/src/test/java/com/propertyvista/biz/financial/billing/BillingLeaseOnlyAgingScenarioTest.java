@@ -63,7 +63,7 @@ public class BillingLeaseOnlyAgingScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("18-Mar-2011");
         activateLease();
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).totalDueAmount("3064.18");
@@ -75,7 +75,7 @@ public class BillingLeaseOnlyAgingScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("18-Apr-2011");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).totalDueAmount("4156.12");

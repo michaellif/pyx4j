@@ -78,7 +78,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
 
         receiveAndPostPayment("18-Mar-2011", "1338.82");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -108,7 +108,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
 
         finalizeLeaseAdendum();
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -136,7 +136,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
 
         advanceDate("18-May-2011");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -161,7 +161,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
 
         advanceDate("18-Jun-2011");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -185,7 +185,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
 
         advanceDate("18-Jul-2011");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -208,7 +208,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
 
         advanceDate("05-Aug-2011");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).

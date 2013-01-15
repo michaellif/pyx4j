@@ -83,7 +83,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
 
         advanceDate("18-Mar-2011");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -103,7 +103,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
 
         advanceDate("18-Apr-2011");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -125,7 +125,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
 
         advanceDate("18-May-2011");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -145,7 +145,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
 
         advanceDate("18-Jun-2011");
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -166,7 +166,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
 
         completeLease();
 
-        bill = runBilling(true, true);
+        bill = runBilling(true);
 
         // @formatter:off
         new BillTester(bill).
