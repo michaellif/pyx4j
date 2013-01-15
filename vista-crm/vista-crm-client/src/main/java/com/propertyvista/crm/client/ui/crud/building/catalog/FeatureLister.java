@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -40,15 +41,19 @@ public class FeatureLister extends ListerBase<Feature> {
             new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().mandatory(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().recurring(), true).build(),
-            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
-            new MemberColumnDescriptor.Builder(proto().isDefaultCatalogItem()).build()
+            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build()
         );//@formatter:on
     }
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().isDefaultCatalogItem().getPath().toString(), false), new Sort(proto().featureType().getPath().toString(), false),
-                new Sort(proto().version().name().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().featureType().getPath().toString(), false), new Sort(proto().version().name().getPath().toString(), false));
+    }
+
+    @Override
+    protected EntityListCriteria<Feature> updateCriteria(EntityListCriteria<Feature> criteria) {
+        criteria.eq(criteria.proto().isDefaultCatalogItem(), Boolean.FALSE);
+        return super.updateCriteria(criteria);
     }
 
     @Override

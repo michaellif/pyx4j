@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -36,15 +37,19 @@ public class ServiceLister extends ListerBase<Service> {
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().serviceType()).build(),
             new MemberColumnDescriptor.Builder(proto().version().name()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
-            new MemberColumnDescriptor.Builder(proto().isDefaultCatalogItem()).build()
+            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build()
         );//@formatter:on
     }
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().isDefaultCatalogItem().getPath().toString(), false), new Sort(proto().serviceType().getPath().toString(), false),
-                new Sort(proto().version().name().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().serviceType().getPath().toString(), false), new Sort(proto().version().name().getPath().toString(), false));
+    }
+
+    @Override
+    protected EntityListCriteria<Service> updateCriteria(EntityListCriteria<Service> criteria) {
+        criteria.eq(criteria.proto().isDefaultCatalogItem(), Boolean.FALSE);
+        return super.updateCriteria(criteria);
     }
 
     @Override
