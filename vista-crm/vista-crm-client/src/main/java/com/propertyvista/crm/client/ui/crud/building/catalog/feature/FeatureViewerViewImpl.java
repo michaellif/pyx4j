@@ -19,11 +19,12 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.selections.version.FeatureVersionService;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class FeatureViewerViewImpl extends CrmViewerViewImplBase<Feature> implements FeatureViewerView {
 
     public FeatureViewerViewImpl() {
-        super(CrmSiteMap.Properties.Feature.class);
+        super(CrmSiteMap.Properties.Feature.class, VistaFeatures.instance().defaultProductCatalog());
         setForm(new FeatureForm(this));
         enableLooseVersioning(Feature.FeatureV.class, GWT.<FeatureVersionService> create(FeatureVersionService.class));
     }

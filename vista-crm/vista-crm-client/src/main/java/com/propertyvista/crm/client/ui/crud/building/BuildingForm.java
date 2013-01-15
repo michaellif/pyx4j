@@ -58,6 +58,7 @@ import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
@@ -116,8 +117,10 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
         }
 
-        tab = addTab(combinedtab, i18n.tr("Product Catalog"));
-        setTabEnabled(tab, !isEditable());
+        if (!VistaFeatures.instance().defaultProductCatalog()) {
+            tab = addTab(combinedtab, i18n.tr("Product Catalog"));
+            setTabEnabled(tab, !isEditable());
+        }
 
         addTab(createContactTab(i18n.tr("Contacts")));
 

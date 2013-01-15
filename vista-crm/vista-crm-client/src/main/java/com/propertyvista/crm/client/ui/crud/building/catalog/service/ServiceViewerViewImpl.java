@@ -19,11 +19,12 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.selections.version.ServiceVersionService;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class ServiceViewerViewImpl extends CrmViewerViewImplBase<Service> implements ServiceViewerView {
 
     public ServiceViewerViewImpl() {
-        super(CrmSiteMap.Properties.Service.class);
+        super(CrmSiteMap.Properties.Service.class, VistaFeatures.instance().defaultProductCatalog());
         setForm(new ServiceForm(this));
         enableLooseVersioning(Service.ServiceV.class, GWT.<ServiceVersionService> create(ServiceVersionService.class));
     }
