@@ -109,6 +109,8 @@ import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCustomerListService;
 import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
+import com.propertyvista.crm.rpc.services.selections.version.FeatureVersionService;
+import com.propertyvista.crm.rpc.services.selections.version.ServiceVersionService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
@@ -290,7 +292,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(SelectCustomerListService.class));
         grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(SelectBuildingListService.class));
-// TODO VladS: review the permissions!!!
+
         grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(LeaseTermCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseAdjustmentCrudService.class));
@@ -298,7 +300,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PaymentCrudService.class));
 
         grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(MaintenanceCrudService.class));
-
         grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(TenantPasswordChangeService.class));
 
 // - Billing
@@ -312,9 +313,11 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 // - Service-related:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Service.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ServiceCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ServiceVersionService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Feature.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(FeatureCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(FeatureVersionService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Concession.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ConcessionCrudService.class));
