@@ -28,6 +28,14 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 public interface LeaseFacade {
 
+    /*
+     * Some conventions:
+     * 
+     * Input parameter like: Lease lease - means in-memory object (already loaded by caller).
+     * 
+     * Input parameter like: Lease leaseId - means DB-object (should be loaded from DB by callee).
+     */
+
     // in-memory Lease state interface:
 
     Lease create(Status status);
@@ -41,6 +49,8 @@ public interface LeaseFacade {
     Lease persist(Lease lease);
 
     Lease finalize(Lease lease);
+
+    Lease load(Lease leaseId, boolean forEdit);
 
     // in-memory Lease Term interface:
 
@@ -87,8 +97,6 @@ public interface LeaseFacade {
     void moveOut(Lease leaseId);
 
     // Utils/internals:
-
-    Lease load(Lease leaseId, boolean forEdit);
 
     BillableItem createBillableItem(Lease lease, ProductItem itemId, PolicyNode node);
 

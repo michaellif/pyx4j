@@ -183,7 +183,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         return lease;
     }
 
-    // Lease term operations:
+    // Lease term operations: -----------------------------------------------------------------------------------------
 
     @Override
     public LeaseTerm setUnit(LeaseTerm leaseTerm, AptUnit unitId) {
@@ -248,32 +248,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         return leaseTerm;
     }
 
-    @Override
-    public BillableItem createBillableItem(Lease lease, ProductItem itemId, PolicyNode node) {
-        if (lease.isValueDetached()) {
-            Persistence.service().retrieve(lease);
-        }
-
-        ProductItem item = Persistence.secureRetrieve(ProductItem.class, itemId.getPrimaryKey());
-        assert item != null;
-
-        BillableItem newItem = EntityFactory.create(BillableItem.class);
-        newItem.item().set(item);
-        newItem.agreedPrice().setValue(item.price().getValue());
-
-        // avoid policed deposits for existing Leases:
-        if (lease.status().getValue() != Lease.Status.ExistingLease) {
-            // set policed deposits:
-            List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(newItem, node);
-            if (deposits != null) {
-                newItem.deposits().addAll(deposits);
-            }
-        }
-
-        return newItem;
-    }
-
-    // Operations:
+    // Operations: ----------------------------------------------------------------------------------------------------
 
     @Override
     public void createMasterOnlineApplication(Lease leaseId) {
@@ -564,14 +539,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         return term;
     }
 
-    private <P extends LeaseTermParticipant<?>> P businessDuplicate(P leaseParticipant) {
-        // There are no own entities for now, 
-        Persistence.retrieveOwned(leaseParticipant);
-        P copy = EntityGraph.businessDuplicate(leaseParticipant);
-        copy.screening().set(null);
-        return copy;
-    }
-
     @Override
     public void acceptOffer(Lease leaseId, LeaseTerm leaseTermId) {
         Lease lease = load(leaseId, false);
@@ -667,8 +634,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
     }
 
-    // internals:
-
     @Override
     public void moveOut(Lease leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
@@ -725,7 +690,123 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Persistence.secureSave(creteLeaseNote(leaseId, "Cancel Lease", decisionReason, decidedBy.user()));
     }
 
-    // internals:
+    // Utils : --------------------------------------------------------------------------------------------------------
+
+    @Override
+    public BillableItem createBillableItem(Lease lease, ProductItem itemId, PolicyNode node) {
+        if (lease.isValueDetached()) {
+            Persistence.service().retrieve(lease);
+        }
+
+        ProductItem item = Persistence.secureRetrieve(ProductItem.class, itemId.getPrimaryKey());
+        assert item != null;
+
+        BillableItem newItem = EntityFactory.create(BillableItem.class);
+        newItem.item().set(item);
+        newItem.agreedPrice().setValue(item.price().getValue());
+
+        // avoid policed deposits for existing Leases:
+        if (lease.status().getValue() != Lease.Status.ExistingLease) {
+            // set policed deposits:
+            List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(newItem, node);
+            if (deposits != null) {
+                newItem.deposits().addAll(deposits);
+            }
+        }
+
+        return newItem;
+    }
+
+    @Override
+    public void updateLeaseDates(Lease lease) {
+        if (lease.status().getValue().isDraft()) {
+            assert (!lease.currentTerm().isEmpty());
+
+            lease.leaseFrom().set(lease.currentTerm().termFrom());
+            lease.leaseTo().set(lease.currentTerm().termTo());
+        } else {
+            EntityQueryCriteria<LeaseTerm> criteria = new EntityQueryCriteria<LeaseTerm>(LeaseTerm.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
+            criteria.add(PropertyCriterion.ne(criteria.proto().status(), LeaseTerm.Status.Offer));
+            // set sorting by 'from date':
+            criteria.setSorts(new Vector<Sort>(Arrays.asList(new Sort(criteria.proto().termFrom().getPath().toString(), false))));
+
+            List<LeaseTerm> terms = Persistence.service().query(criteria);
+            assert (!terms.isEmpty());
+
+            lease.leaseFrom().set(terms.get(0).termFrom());
+            lease.leaseTo().set(terms.get(terms.size() - 1).termTo());
+        }
+
+        // some common checks/corrections: 
+        if (lease.expectedMoveIn().isNull()) {
+            lease.expectedMoveIn().setValue(lease.leaseFrom().getValue());
+        }
+        if (lease.completion().isNull()) {
+            lease.expectedMoveOut().setValue(null);
+        }
+
+        // current term type-related corrections:
+        switch (lease.currentTerm().type().getValue()) {
+        case Fixed:
+        case FixedEx:
+            if (lease.completion().isNull()) {
+                lease.expectedMoveOut().setValue(lease.currentTerm().termTo().getValue());
+            }
+            break;
+        case Periodic:
+            break;
+        default:
+            break;
+        }
+
+        // next term type-related corrections:
+        if (lease.completion().isNull() && !lease.nextTerm().isNull()) {
+            switch (lease.nextTerm().type().getValue()) {
+            case Fixed:
+            case FixedEx:
+                lease.expectedMoveOut().setValue(lease.nextTerm().termTo().getValue());
+                break;
+            case Periodic:
+                break;
+            default:
+                break;
+            }
+        }
+
+        // if lease to be terminated:
+        if (!lease.terminationLeaseTo().isNull()) {
+            lease.leaseTo().setValue(lease.terminationLeaseTo().getValue());
+        }
+    }
+
+    @Override
+    public void setLeaseAgreedPrice(Lease lease, BigDecimal price) {
+        if (lease.isValueDetached()) {
+            Persistence.service().retrieve(lease);
+        }
+
+        lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(price);
+    }
+
+    /**
+     * This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)
+     */
+    @Override
+    public void simpleLeaseRenew(Lease leaseId, LogicalDate leaseEndDate) {
+        Lease lease = load(leaseId, true);
+
+        // Verify the status
+        if (lease.status().getValue() != Lease.Status.Active) {
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+        }
+
+        lease.currentTerm().termTo().setValue(leaseEndDate);
+
+        finalize(lease);
+    }
+
+    // Internals: -----------------------------------------------------------------------------------------------------
 
     private Lease setUnit(Lease lease, LeaseTerm leaseTerm, AptUnit unitId) {
         if (lease.isValueDetached()) {
@@ -965,78 +1046,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
     }
 
-    @Override
-    public void updateLeaseDates(Lease lease) {
-        if (lease.status().getValue().isDraft()) {
-            assert (!lease.currentTerm().isEmpty());
-
-            lease.leaseFrom().set(lease.currentTerm().termFrom());
-            lease.leaseTo().set(lease.currentTerm().termTo());
-        } else {
-            EntityQueryCriteria<LeaseTerm> criteria = new EntityQueryCriteria<LeaseTerm>(LeaseTerm.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
-            criteria.add(PropertyCriterion.ne(criteria.proto().status(), LeaseTerm.Status.Offer));
-            // set sorting by 'from date':
-            criteria.setSorts(new Vector<Sort>(Arrays.asList(new Sort(criteria.proto().termFrom().getPath().toString(), false))));
-
-            List<LeaseTerm> terms = Persistence.service().query(criteria);
-            assert (!terms.isEmpty());
-
-            lease.leaseFrom().set(terms.get(0).termFrom());
-            lease.leaseTo().set(terms.get(terms.size() - 1).termTo());
-        }
-
-        // some common checks/corrections: 
-        if (lease.expectedMoveIn().isNull()) {
-            lease.expectedMoveIn().setValue(lease.leaseFrom().getValue());
-        }
-        if (lease.completion().isNull()) {
-            lease.expectedMoveOut().setValue(null);
-        }
-
-        // current term type-related corrections:
-        switch (lease.currentTerm().type().getValue()) {
-        case Fixed:
-        case FixedEx:
-            if (lease.completion().isNull()) {
-                lease.expectedMoveOut().setValue(lease.currentTerm().termTo().getValue());
-            }
-            break;
-        case Periodic:
-            break;
-        default:
-            break;
-        }
-
-        // next term type-related corrections:
-        if (lease.completion().isNull() && !lease.nextTerm().isNull()) {
-            switch (lease.nextTerm().type().getValue()) {
-            case Fixed:
-            case FixedEx:
-                lease.expectedMoveOut().setValue(lease.nextTerm().termTo().getValue());
-                break;
-            case Periodic:
-                break;
-            default:
-                break;
-            }
-        }
-
-        // if lease to be terminated:
-        if (!lease.terminationLeaseTo().isNull()) {
-            lease.leaseTo().setValue(lease.terminationLeaseTo().getValue());
-        }
-    }
-
-    @Override
-    public void setLeaseAgreedPrice(Lease lease, BigDecimal price) {
-        if (lease.isValueDetached()) {
-            Persistence.service().retrieve(lease);
-        }
-
-        lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(price);
-    }
-
     private LeaseTerm updateTermUnitRelatedData(LeaseTerm leaseTerm, AptUnit unit, ServiceType leaseType) {
         if (unit.isValueDetached()) {
             Persistence.service().retrieve(unit);
@@ -1112,21 +1121,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
         return naa;
     }
 
-    /**
-     * This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)
-     */
-    @Override
-    public void simpleLeaseRenew(Lease leaseId, LogicalDate leaseEndDate) {
-        Lease lease = load(leaseId, true);
-
-        // Verify the status
-        if (lease.status().getValue() != Lease.Status.Active) {
-            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
-        }
-
-        lease.currentTerm().termTo().setValue(leaseEndDate);
-
-        finalize(lease);
+    private <P extends LeaseTermParticipant<?>> P businessDuplicate(P leaseParticipant) {
+        // There are no own entities for now, 
+        Persistence.retrieveOwned(leaseParticipant);
+        P copy = EntityGraph.businessDuplicate(leaseParticipant);
+        copy.screening().set(null);
+        return copy;
     }
 
     /**
