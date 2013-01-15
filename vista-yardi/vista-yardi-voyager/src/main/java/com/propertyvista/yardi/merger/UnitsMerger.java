@@ -153,16 +153,11 @@ public class UnitsMerger {
 
     private AptUnit merge(AptUnit imported, AptUnit existing) {
 
-        //building
-
         //info
         merge(imported.info(), existing.info());
 
         //floorplan
         if (existing.floorplan().isNull()) {
-//            building.floorplans().add(floorplan);
-//            Persistence.service().persist(building);
-
             existing.floorplan().set(imported.floorplan());
         } else {
             merge(imported.floorplan(), existing.floorplan());

@@ -23,10 +23,12 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.yardi.bean.Properties;
@@ -110,13 +112,14 @@ public class YardiGetResidentTransactionsService {
         for (Building building : buildings) {
             String propertyCode = building.propertyCode().getValue();
             if (importedUnits.containsKey(propertyCode)) {
-                Persistence.service().retrieve(building.floorplans());
                 mergeUnits(building, importedUnits.get(propertyCode), getUnits(propertyCode));
             }
         }
     }
 
     private void mergeUnits(Building building, List<AptUnit> imported, List<AptUnit> existing) {
+        Persistence.service().retrieve(building.floorplans());
+
         List<AptUnit> merged = new UnitsMerger().merge(building, imported, existing);
         for (AptUnit unit : merged) {
             update(unit);
@@ -125,7 +128,16 @@ public class YardiGetResidentTransactionsService {
 
     private void update(Building building) {
         try {
+            boolean isNewBuilding = building.updated().isNull();
+
             Persistence.service().persist(building);
+
+            if (isNewBuilding) {
+                ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(building);
+            } else {
+                ServerSideFactory.create(DefaultProductCatalogFacade.class).updateFor(building);
+            }
+
             log.info("Building with property code {} successfully updated", building.propertyCode().getValue());
         } catch (Exception e) {
             log.error(String.format("Errors during updating building %s", building.propertyCode().getValue()), e);
@@ -134,8 +146,17 @@ public class YardiGetResidentTransactionsService {
 
     private void update(AptUnit unit) {
         try {
+            boolean isNewUnit = unit.updated().isNull();
+
             Persistence.service().retrieve(unit.building());
             Persistence.service().persist(unit);
+
+            if (isNewUnit) {
+                ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(unit.building(), unit, true);
+            } else {
+                ServerSideFactory.create(DefaultProductCatalogFacade.class).updateUnit(unit.building(), unit);
+            }
+
             log.info("Unit {} for building {} successfully updated", unit.info().number().getValue(), unit.building().propertyCode().getValue());
         } catch (Exception e) {
             log.error(
