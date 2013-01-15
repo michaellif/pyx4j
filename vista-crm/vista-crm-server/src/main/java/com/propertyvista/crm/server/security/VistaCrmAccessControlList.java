@@ -70,6 +70,7 @@ import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.crm.rpc.services.customer.lead.ShowingCrudService;
 import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningCrudService;
+import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningVersionService;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.GadgetMetadataService;
@@ -109,6 +110,7 @@ import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCustomerListService;
 import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
+import com.propertyvista.crm.rpc.services.selections.version.ConcessionVersionService;
 import com.propertyvista.crm.rpc.services.selections.version.FeatureVersionService;
 import com.propertyvista.crm.rpc.services.selections.version.ServiceVersionService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
@@ -268,9 +270,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Showing.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ShowingCrudService.class));
 
-        grant(VistaBasicBehavior.CRM, new EntityPermission(Customer.class, EntityPermission.ALL));
-
-        grant(VistaBasicBehavior.CRM, new EntityPermission(LeaseTermTenant.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(TenantCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ActiveTenantCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PastTenantCrudService.class));
@@ -279,10 +278,14 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ActiveGuarantorCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PastGuarantorCrudService.class));
 
+        grant(VistaBasicBehavior.CRM, new EntityPermission(Customer.class, EntityPermission.ALL));
+
         grant(VistaBasicBehavior.CRM, new EntityPermission(CustomerScreening.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CustomerScreeningCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CustomerScreeningVersionService.class));
 
-        grant(VistaBasicBehavior.CRM, new EntityPermission(Lease.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(LeaseTermTenant.class, EntityPermission.ALL));
+
         grant(VistaBasicBehavior.CRM, new EntityPermission(Lease.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseViewerCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseApplicationViewerCrudService.class));
@@ -321,6 +324,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Concession.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ConcessionCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ConcessionVersionService.class));
 
 // - Organization:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Employee.class, EntityPermission.READ));
