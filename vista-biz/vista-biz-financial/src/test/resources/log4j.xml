@@ -59,10 +59,14 @@
 		<level value="info" />
 	</logger>
 
+    <logger name="com.pyx4j.server.contexts">
+        <level value="error" />
+    </logger>
+
     <logger name="com.propertyvista.server.jobs">
         <level value="error" />
     </logger>
-    
+
     <logger name="com.mchange">
         <level value="error" />
     </logger>

@@ -35,6 +35,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.admin.domain.scheduler.RunStats;
@@ -46,7 +47,6 @@ import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
@@ -158,8 +158,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         SysDateManager.setSysDate("01-Jan-2000");
         startTime = System.currentTimeMillis();
 
+        NamespaceManager.setNamespace("t" + System.currentTimeMillis());
+
         TestLifecycle.testSession(null, VistaBasicBehavior.CRM);
-        TestLifecycle.testNamespace(VistaTestsNamespaceResolver.demoNamespace);
+        TestLifecycle.testNamespace(NamespaceManager.getNamespace());
         TestLifecycle.beginRequest();
     }
 
