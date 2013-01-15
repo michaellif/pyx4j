@@ -60,6 +60,8 @@ public enum PmcProcessType implements Serializable {
 
     equifaxRetention,
 
+    yardiImportProcess,
+
     // Used for scheduler testing
     test;
 

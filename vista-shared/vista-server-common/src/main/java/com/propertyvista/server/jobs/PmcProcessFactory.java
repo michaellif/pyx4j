@@ -50,9 +50,13 @@ public class PmcProcessFactory {
             return new LeaseCompletionProcess();
         case leaseRenewal:
             return new LeaseRenewalProcess();
+
 // Global:
         case equifaxRetention:
             return new EquifaxRetentionProcess();
+
+        case yardiImportProcess:
+            return new YardiImportProcess();
 
 // Misc:
         case cleanup:
@@ -61,6 +65,7 @@ public class PmcProcessFactory {
             return new UpdateArrearsProcess();
         case updatePaymentsSummary:
             // TODO: not sure if it should happen: return new PaymentsSummarySnapshotProcess();
+
         default:
             throw new IllegalArgumentException("Not implemented");
         }
