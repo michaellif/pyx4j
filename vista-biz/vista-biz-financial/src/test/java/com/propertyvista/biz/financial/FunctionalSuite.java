@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial;
 
+import org.junit.Ignore;
 import org.junit.experimental.categories.Categories;
 import org.junit.experimental.categories.Categories.IncludeCategory;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ import org.junit.runners.Suite;
 
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 
+@Ignore
 @RunWith(Categories.class)
 @IncludeCategory(FunctionalTests.class)
 @Suite.SuiteClasses({ ARSuite.class, BillingSuite.class, PaymentSuite.class })
