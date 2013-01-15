@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,16 +24,27 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
+import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.domain.financial.offering.Service.ServiceType;
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.mits.Identification;
+import com.propertyvista.yardi.bean.mits.YardiCustomer;
 import com.propertyvista.yardi.bean.resident.Property;
 import com.propertyvista.yardi.bean.resident.RTCustomer;
 import com.propertyvista.yardi.bean.resident.RTUnit;
@@ -93,7 +105,62 @@ public class YardiGetResidentTransactionsService {
 
     private void updateLeases(List<ResidentTransactions> allTransactions) {
         // TODO Auto-generated method stub
+        for (ResidentTransactions transaction : allTransactions) {
+            Property property = transaction.getProperties().get(0);
+            RTCustomer customer = transaction.getProperties().get(0).getCustomers().get(0);
 
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.eq(criteria.proto().building().propertyCode(), getPropertyId(property));
+            criteria.eq(criteria.proto().info().number(), getUnitId(customer));
+
+            AptUnit unit = Persistence.service().query(criteria).get(0);
+            updateLease(customer, unit);
+        }
+    }
+
+    private void updateLease(RTCustomer rtCustomer, AptUnit unit) {
+        List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomers();
+        com.propertyvista.yardi.bean.mits.Lease yardiLease = yardiCustomers.get(0).getLease();
+
+        LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
+        Lease lease = leaseFacade.create(Lease.Status.ExistingLease);
+
+        lease.type().setValue(ServiceType.residentialUnit);
+
+        lease.currentTerm().termFrom().setValue(new LogicalDate(yardiLease.getLeaseFromDate()));
+        lease.currentTerm().termTo().setValue(new LogicalDate(yardiLease.getLeaseToDate()));
+
+        lease.expectedMoveIn().setValue(new LogicalDate(yardiLease.getExpectedMoveInDate()));
+        lease.actualMoveIn().setValue(new LogicalDate(yardiLease.getActualMoveIn()));
+// add price
+
+        boolean asApplicant = true;
+        for (YardiCustomer yardiCustomer : yardiCustomers) {
+            Customer customer = EntityFactory.create(Customer.class);
+            Person person = EntityFactory.create(Person.class);
+            person.name().firstName().setValue(yardiCustomer.getName().getFirstName());
+            person.name().lastName().setValue(yardiCustomer.getName().getLastName());
+            person.name().middleName().setValue(yardiCustomer.getName().getMiddleName());
+            customer.person().set(person);
+            LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
+            if (rtCustomer.getCustomerId().equals(yardiCustomer.getCustomerId())) {
+                tenantInLease.leaseParticipant().customer().set(customer);
+                tenantInLease.role().setValue(asApplicant ? LeaseTermParticipant.Role.Applicant : LeaseTermParticipant.Role.CoApplicant);
+                lease.currentTerm().version().tenants().add(tenantInLease);
+                asApplicant = false;
+            } else {
+                tenantInLease.role().setValue(!yardiCustomer.getLease().getResponsibleForLease() ? LeaseTermParticipant.Role.Dependent : null);
+            }
+        }
+
+        lease = leaseFacade.init(lease);
+        if (unit.getPrimaryKey() != null) {
+            leaseFacade.setUnit(lease, unit);
+            // TODO double into BigDecimal...might need to be handled differently
+            leaseFacade.setLeaseAgreedPrice(lease, new BigDecimal(yardiLease.getCurrentRent()));
+        }
+        lease.id().setValue(new Key(rtCustomer.getCustomerId()));
+        lease = leaseFacade.persist(lease);
     }
 
     private void updateCharges(List<ResidentTransactions> allTransactions) {
