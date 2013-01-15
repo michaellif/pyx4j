@@ -141,6 +141,8 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
         approveExistingLease(true);
 
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
+
         // @formatter:off
         new BillTester(getBill(1)).
         billSequenceNumber(1).

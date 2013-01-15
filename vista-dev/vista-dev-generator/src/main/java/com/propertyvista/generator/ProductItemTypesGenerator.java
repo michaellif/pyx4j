@@ -54,8 +54,8 @@ public class ProductItemTypesGenerator {
         createChargeItemType("Fitness", Feature.Type.addOn, 5110);
         createChargeItemType("Pool", Feature.Type.addOn, 5110);
         createChargeItemType("Furnished", Feature.Type.addOn, 5110);
-        createChargeItemType("Key", Feature.Type.addOn, 6240);
-        createChargeItemType("Access Card", Feature.Type.addOn, 6240);
+        createChargeItemType("Key", Feature.Type.oneTimeCharge, 6240);
+        createChargeItemType("Access Card", Feature.Type.oneTimeCharge, 6240);
         createChargeItemType("Cable", Feature.Type.addOn, 5110);
         createChargeItemType("Water", Feature.Type.utility, 5999);
         createChargeItemType("Gas", Feature.Type.utility, 5997);

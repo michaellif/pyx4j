@@ -40,27 +40,36 @@ public interface Feature extends Product<FeatureV> {
     @XmlType(name = "FeatureType")
     public enum Type {
 
-        parking(true),
+        parking(true, true),
 
-        locker(true),
+        locker(true, true),
 
-        pet(true),
+        pet(true, true),
 
         @Translate("Add-On")
-        addOn(true),
+        addOn(true, true),
 
-        utility(true),
+        utility(true, true),
 
-        booking(false);
+        oneTimeCharge(true, false),
+
+        booking(false, false);
+
+        private final boolean recurrent;
 
         private final boolean inAgreement;
 
-        Type(boolean inAgreement) {
+        Type(boolean inAgreement, boolean recurrent) {
             this.inAgreement = inAgreement;
+            this.recurrent = recurrent;
         }
 
         public boolean isInAgreement() {
             return inAgreement;
+        };
+
+        public boolean isRecurrent() {
+            return recurrent;
         };
 
         @Override
