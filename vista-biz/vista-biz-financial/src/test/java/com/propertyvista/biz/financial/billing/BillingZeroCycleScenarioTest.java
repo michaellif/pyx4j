@@ -124,6 +124,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         totalDueAmount("1008.00");
         // @formatter:on
 
+        closeLease();
     }
 
     public void testCarryForwardOwedScenario() {
@@ -177,6 +178,8 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         taxes("108.00").
         totalDueAmount("908.00");
         // @formatter:on
+
+        closeLease();
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
