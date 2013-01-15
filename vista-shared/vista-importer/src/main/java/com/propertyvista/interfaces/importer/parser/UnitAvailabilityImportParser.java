@@ -220,6 +220,18 @@ public class UnitAvailabilityImportParser implements ImportParser {
                     if (i == floorplansSize - 1) {
                         FloorplanIO newFloorplan = EntityFactory.create(FloorplanIO.class);
                         newFloorplan.name().setValue(unitModel.unitType().getValue());
+                        if (!unitModel.beds().isNull()) {
+                            newFloorplan.bedrooms().setValue(parseInt(unitModel.beds().getValue(), unitModel));
+                        }
+                        if (!unitModel.baths().isNull()) {
+                            newFloorplan.bathrooms().setValue(parseInt(unitModel.baths().getValue(), unitModel));
+                        }
+                        if (!unitModel.description().isNull()) {
+                            newFloorplan.description().setValue(unitModel.description().getValue());
+                        }
+                        if (!unitModel.marketingName().isNull()) {
+                            newFloorplan.marketingName().setValue(unitModel.marketingName().getValue());
+                        }
                         newFloorplan.units().add(unit);
                         building.floorplans().add(newFloorplan);
                     }
