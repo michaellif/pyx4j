@@ -213,6 +213,12 @@ public class BuildingDataModel {
                 generateAddOnFeatureItem(feature, productItemType);
             }
             break;
+        case oneTimeCharge:
+            feature.version().recurring().setValue(true);
+            for (ProductItemType productItemType : featureMeta.get(Feature.Type.oneTimeCharge)) {
+                generateOneTimeChargeFeatureItem(feature, productItemType);
+            }
+            break;
         case booking:
             feature.version().recurring().setValue(false);
             for (ProductItemType productItemType : featureMeta.get(Feature.Type.booking)) {
@@ -255,6 +261,14 @@ public class BuildingDataModel {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.type().set(type);
         productItem.price().setValue(new BigDecimal("40.00"));
+        productItem.description().setValue(type.name().getValue());
+        feature.version().items().add(productItem);
+    }
+
+    private void generateOneTimeChargeFeatureItem(Feature feature, ProductItemType type) {
+        ProductItem productItem = EntityFactory.create(ProductItem.class);
+        productItem.type().set(type);
+        productItem.price().setValue(new BigDecimal("30.00"));
         productItem.description().setValue(type.name().getValue());
         feature.version().items().add(productItem);
     }

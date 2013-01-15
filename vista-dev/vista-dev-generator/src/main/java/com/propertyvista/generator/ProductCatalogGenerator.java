@@ -238,6 +238,9 @@ public class ProductCatalogGenerator {
                 case addOn:
                     item.price().setValue(new BigDecimal(30 + RandomUtil.randomInt(50)));
                     break;
+                case oneTimeCharge:
+                    item.price().setValue(new BigDecimal(20 + RandomUtil.randomInt(20)));
+                    break;
                 case utility:
                     item.price().setValue(new BigDecimal(80 + RandomUtil.randomInt(50)));
                     break;

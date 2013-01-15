@@ -221,6 +221,9 @@ public class LeaseGenerator extends DataGenerator {
                 case addOn:
                     newItem.agreedPrice().setValue(new BigDecimal(30 + RandomUtil.randomInt(50)));
                     break;
+                case oneTimeCharge:
+                    newItem.agreedPrice().setValue(new BigDecimal(20 + RandomUtil.randomInt(20)));
+                    break;
                 case utility:
                     newItem.agreedPrice().setValue(new BigDecimal(80 + RandomUtil.randomInt(50)));
                     break;
