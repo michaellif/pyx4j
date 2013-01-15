@@ -57,14 +57,15 @@ public class PmcCreatorDev {
         pmc.features().onlineApplication().setValue(Boolean.TRUE);
         pmc.features().xmlSiteExport().setValue(Boolean.TRUE);
         pmc.features().defaultProductCatalog().setValue(VistaTODO.VISTA_2256_Default_Product_Catalog);
-        pmc.features().yardiIntegration().setValue(Boolean.TRUE);
+        pmc.features().yardiIntegration().setValue(Boolean.FALSE);
 
-        if (pmcName.equals(DemoPmc.rockville.name())) {
+        if (pmcName.equals(DemoPmc.gondor.name())) {
             pmc.features().countryOfOperation().setValue(CountryOfOperation.UK);
-        } else if (pmcName.equals(DemoPmc.redridge.name())) {
-            pmc.features().countryOfOperation().setValue(CountryOfOperation.US);
         } else {
             pmc.features().countryOfOperation().setValue(CountryOfOperation.Canada);
+        }
+        if (pmcName.equals(DemoPmc.star.name())) {
+            pmc.features().yardiIntegration().setValue(Boolean.TRUE);
         }
 
         pmc.equifaxInfo().status().setValue(PmcEquifaxStatus.Active);

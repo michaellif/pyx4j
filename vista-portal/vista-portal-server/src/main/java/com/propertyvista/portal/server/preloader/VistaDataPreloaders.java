@@ -20,6 +20,7 @@ import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.server.preloader.site.demo.DemoSitePreloader;
+import com.propertyvista.portal.server.preloader.site.gondor.GondorSitePreloader;
 import com.propertyvista.portal.server.preloader.site.prod.ProdSitePreloader;
 import com.propertyvista.portal.server.preloader.site.redridge.RedridgeSitePreloader;
 import com.propertyvista.portal.server.preloader.site.rockville.RockvilleSitePreloader;
@@ -68,6 +69,8 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             case rockville:
                 add(new RockvilleSitePreloader());
                 break;
+            case gondor:
+                add(new GondorSitePreloader());
             case demo:
                 add(new DemoSitePreloader());
             default:
@@ -76,7 +79,7 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         }
 
         if (production) {
-            //DEMO add(new ProdSitePreloader());            
+            //DEMO add(new ProdSitePreloader());
         } else {
 
             add(new UserPreloader());
