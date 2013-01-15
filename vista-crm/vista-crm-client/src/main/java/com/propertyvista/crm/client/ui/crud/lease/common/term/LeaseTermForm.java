@@ -282,8 +282,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         detailsRight.setWidget(++detailsRow, 0,
                 new DecoratorBuilder(inject(proto().lease().completion(), new CEnumLabel()), 15).customLabel(i18n.tr("Lease Completion")).build());
 
-        detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease().billingAccount().carryforwardBalance()), 10).build());
-
         // form full details:
         FormFlexPanel detailsPanel = new FormFlexPanel();
 
@@ -315,6 +313,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         main.setWidget(++row, 0, detailsPanel);
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, datesPanel);
+        main.setBR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().billingAccount().carryforwardBalance()), 9).build());
 
         LeaseTermEditorView leaseTermEditorView = (isEditable() ? (LeaseTermEditorView) getParentView() : null);
 
