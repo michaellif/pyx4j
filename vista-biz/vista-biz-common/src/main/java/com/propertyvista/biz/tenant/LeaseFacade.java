@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.tenant;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.company.Employee;
@@ -26,7 +28,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 public interface LeaseFacade {
 
-    // in-memory Lease state interfaces:
+    // in-memory Lease state interface:
 
     Lease create(Status status);
 
@@ -40,7 +42,7 @@ public interface LeaseFacade {
 
     Lease finalize(Lease lease);
 
-    // in-memory Lease Term operations:
+    // in-memory Lease Term interface:
 
     LeaseTerm setUnit(LeaseTerm leaseTerm, AptUnit unitId);
 
@@ -91,6 +93,8 @@ public interface LeaseFacade {
     BillableItem createBillableItem(Lease lease, ProductItem itemId, PolicyNode node);
 
     void updateLeaseDates(Lease lease);
+
+    void setLeaseAgreedPrice(Lease lease, BigDecimal price);
 
     /**
      * This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)

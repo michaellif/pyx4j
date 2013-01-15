@@ -1028,6 +1028,15 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
     }
 
+    @Override
+    public void setLeaseAgreedPrice(Lease lease, BigDecimal price) {
+        if (lease.isValueDetached()) {
+            Persistence.service().retrieve(lease);
+        }
+
+        lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(price);
+    }
+
     private LeaseTerm updateTermUnitRelatedData(LeaseTerm leaseTerm, AptUnit unit, ServiceType leaseType) {
         if (unit.isValueDetached()) {
             Persistence.service().retrieve(unit);

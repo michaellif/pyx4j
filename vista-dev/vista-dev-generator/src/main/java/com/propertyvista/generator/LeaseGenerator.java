@@ -201,7 +201,7 @@ public class LeaseGenerator extends DataGenerator {
         BillableItem newItem = EntityFactory.create(BillableItem.class);
         newItem.item().set(serviceItem);
 
-        if (newItem.item().price().isNull()) {
+        if (newItem.item().price().getValue().compareTo(BigDecimal.ZERO) == 0) {
             if (serviceItem.type().isInstanceOf(ServiceItemType.class)) {
                 newItem.agreedPrice().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
             } else if (serviceItem.type().isInstanceOf(FeatureItemType.class)) {
