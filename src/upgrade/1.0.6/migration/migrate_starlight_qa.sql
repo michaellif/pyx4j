@@ -34,6 +34,18 @@ BEGIN TRANSACTION;
         UPDATE  building 
         SET     property_code_s = _dba_.convert_id_to_string(property_code);
         
+        ALTER TABLE building DROP CONSTRAINT building_info_building_type_e_ck;
+        
+        UPDATE  building 
+        SET     info_building_type = 'mixedResidential'
+        WHERE   info_building_type = 'mixed_residential';
+        
+        ALTER TABLE building ADD CONSTRAINT building_info_building_type_e_ck
+        CHECK (info_building_type IN ('agricultural','association','commercial','condo','industrial','military','mixedResidential','other','parkingStorage','residential',
+        'seniorHousing','socialHousing'));
+
+        
+        
         -- business_id_blob
         
         CREATE TABLE business_id_blob 
@@ -47,7 +59,7 @@ BEGIN TRANSACTION;
         
         
         -- business_information
-        
+        /*
         CREATE TABLE business_information
         (
                 id                              BIGINT                  NOT NULL,
@@ -70,6 +82,7 @@ BEGIN TRANSACTION;
         );
         
         ALTER TABLE business_information OWNER TO vista77;
+        */
         
         -- caledon_co_signer
         
@@ -123,7 +136,7 @@ BEGIN TRANSACTION;
         ALTER TABLE contract DROP COLUMN document;
         
         -- credit_check_pricing
-        
+        /*
         CREATE TABLE credit_check_pricing
         (
                 id                              BIGINT                  NOT NULL,
@@ -133,9 +146,12 @@ BEGIN TRANSACTION;
                                 CHECK (credit_pricing_option IN ('FullCreditReport', 'RecomendationReport'))
         );
         
+        
         ALTER TABLE credit_check_pricing OWNER TO vista77;
+        */
+        -- customer_credit_check
         
-        
+        ALTER TABLE customer_credit_check ADD COLUMN transaction_id BIGINT;
         
         -- elevator
         
@@ -334,6 +350,20 @@ BEGIN TRANSACTION;
         
          ALTER TABLE note_attachment_blob OWNER TO vista77;
         
+        -- page_meta_tags
+        
+        CREATE TABLE page_meta_tags
+        (
+                id                              BIGINT                  NOT NULL,
+                locale                          BIGINT,
+                title                           VARCHAR(500),
+                description                     VARCHAR(500),
+                keywords                        VARCHAR(500),
+                        CONSTRAINT      page_meta_tags_pk PRIMARY KEY(id),
+                        CONSTRAINT      page_meta_tags_locale_fk FOREIGN KEY(locale)
+                                REFERENCES available_locale(id)
+        );
+        
         -- payment_method
         
         ALTER TABLE payment_method ADD COLUMN id_discriminator VARCHAR(64),
@@ -376,7 +406,7 @@ BEGIN TRANSACTION;
        
                                         
         -- personal_information
-        
+        /*
         CREATE TABLE personal_information
         (
                 id                              BIGINT                  NOT NULL,
@@ -405,7 +435,7 @@ BEGIN TRANSACTION;
         );
         
         ALTER TABLE personal_information OWNER TO vista77;
-        
+        */
         
         -- personal_information_id_blob
         
@@ -419,6 +449,19 @@ BEGIN TRANSACTION;
         );
         
          ALTER TABLE personal_information_id_blob OWNER TO vista77;
+        
+        -- pmc_signature
+        
+        CREATE TABLE pmc_signature
+        (
+                id                              BIGINT                          NOT NULL,
+                signature_timestamp             TIMESTAMP WITHOUT TIME ZONE,
+                ip_address                      VARCHAR(500),
+                full_name                       VARCHAR(500),
+                      CONSTRAINT        pmc_signature_pk PRIMARY KEY(id)
+        );  
+        
+        ALTER TABLE pmc_signature OWNER TO vista77;
         
         -- portal_image_set
         
@@ -456,6 +499,8 @@ BEGIN TRANSACTION;
         -- product
         
         ALTER TABLE product ADD COLUMN is_default_catalog_item BOOLEAN;
+        
+        UPDATE product SET is_default_catalog_item = FALSE;
         
         -- product_v
         
@@ -513,6 +558,26 @@ BEGIN TRANSACTION;
         CREATE INDEX site_descriptor$city_intro_pages_owner_idx ON site_descriptor$city_intro_pages USING btree(owner);
         
         ALTER TABLE site_descriptor$city_intro_pages OWNER TO vista77;
+        
+        
+        -- site_descriptor$meta_tags
+        
+        CREATE TABLE site_descriptor$meta_tags
+        (
+                id                              BIGINT                          NOT NULL,
+                owner                           BIGINT,
+                value                           BIGINT,
+                seq                             INT,
+                        CONSTRAINT      site_descriptor$meta_tags_pk PRIMARY KEY(id),
+                        CONSTRAINT      site_descriptor$meta_tags_owner_fk FOREIGN KEY(owner)
+                                REFERENCES site_descriptor(id),
+                        CONSTRAINT      site_descriptor$meta_tags_value_fk FOREIGN KEY(value)
+                                REFERENCES page_meta_tags(id)
+        );
+        
+        CREATE INDEX site_descriptor$meta_tags_owner_idx ON site_descriptor$meta_tags USING btree (owner);
+        
+        ALTER TABLE site_descriptor$meta_tags OWNER TO vista77;
         
         -- site_image_resource
         
@@ -577,5 +642,7 @@ BEGIN TRANSACTION;
         
 
         -- SELECT * FROM _dba_.compare_schema_tables('starlight','test_star') ORDER BY 1,2,5;   
-         
+               
 COMMIT;
+
+SELECT * FROM _dba_.reset_schema_sequences('starlight');
