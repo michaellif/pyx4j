@@ -1,0 +1,50 @@
+<jxb:bindings xmlns:jxb="http://java.sun.com/xml/ns/jaxb" version="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" >
+    <jxb:globalBindings localScoping="toplevel">
+		<jxb:javaType name="java.util.Calendar" xmlType="xs:dateTime" parseMethod="javax.xml.bind.DatatypeConverter.parseDateTime" printMethod="javax.xml.bind.DatatypeConverter.printDateTime"/>
+		<jxb:javaType name="java.util.Calendar" xmlType="xs:time" parseMethod="javax.xml.bind.DatatypeConverter.parseTime" printMethod="javax.xml.bind.DatatypeConverter.printTime"/>
+		<jxb:javaType name="java.util.Calendar" xmlType="xs:date" parseMethod="javax.xml.bind.DatatypeConverter.parseDate" printMethod="javax.xml.bind.DatatypeConverter.printDate"/>
+	</jxb:globalBindings>
+	<jxb:bindings namespace="http://my-company.com/namespace" schemaLocation="Itf_MITS_CoreData2.0.xsd" >
+        <jxb:schemaBindings>
+            <jxb:package name="com.yardi.entity.mits"/>
+        </jxb:schemaBindings>
+		<jxb:bindings node="//xsd:complexType[@name='CustomersType']">
+            <jxb:class name="YardiCustomers"/>
+        </jxb:bindings>
+		<jxb:bindings node="//xsd:complexType[@name='CustomersType']/xsd:sequence/xsd:element[@name='Customer']/xsd:complexType">
+            <jxb:class name="YardiCustomer"/>
+        </jxb:bindings>
+		<jxb:bindings node="//xsd:element[@name='Customer']/xsd:complexType/xsd:sequence/xsd:element[@name='Lease']/xsd:complexType">
+            <jxb:class name="YardiLease"/>
+        </jxb:bindings>
+		<jxb:bindings node="//xsd:complexType[@name='UnitType']">
+            <jxb:class name="Unit"/>
+        </jxb:bindings>
+		<jxb:bindings node="//xsd:complexType[@name='AddressType']">
+            <jxb:class name="Address"/>
+        </jxb:bindings>
+		<jxb:bindings node="//xsd:complexType[@name='PhoneType']">
+            <jxb:class name="Phone"/>
+        </jxb:bindings>
+		<jxb:bindings node="//xsd:complexType[@name='PropertyContactsType']">
+            <jxb:class name="PropertyContacts"/>
+        </jxb:bindings>
+    </jxb:bindings>
+	<jxb:bindings namespace="http://yardi.com/ResidentTransactions20" schemaLocation="Itf_MITS_ResidentTransactions2.0.xsd" >
+        <jxb:schemaBindings>
+            <jxb:package name="com.yardi.entity.resident"/>
+        </jxb:schemaBindings>
+		<jxb:bindings node="//xsd:element[@name='Detail']/xsd:complexType/xsd:sequence/xsd:element[@name='Reversal']/xsd:complexType">
+            <jxb:class name="PaymentDetailReversal"/>
+        </jxb:bindings>
+		<jxb:bindings node="//xsd:element[@name='Detail']/xsd:complexType/xsd:sequence/xsd:element[@name='Charge']/xsd:complexType">
+            <jxb:class name="PaymentDetailCharge"/>
+        </jxb:bindings>
+		<jxb:bindings node="//xsd:complexType[@name='ServiceDetail']/xsd:sequence/xsd:element[@name='Service']/xsd:complexType">
+            <jxb:class name="ServiceDetailInnerService"/>
+        </jxb:bindings>
+		<jxb:bindings node="//xsd:complexType[@name='ChargeDetail']/xsd:sequence/xsd:element[@name='Service']/xsd:complexType">
+            <jxb:class name="ChargeDetailInnerService"/>
+        </jxb:bindings>
+    </jxb:bindings>
+</jxb:bindings>
