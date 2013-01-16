@@ -62,17 +62,32 @@
                             <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfResidentTransactions20</uri>
                             <packageName>com.yardi.ws.operations</packageName>
                         </namespaceURI>
+                        <namespaceURI>
+                            <uri>http://tempuri.org/YSI.Interfaces.WebServices/ResidentTransactions20_SysBatch</uri>
+                            <packageName>com.yardi.ws.operations</packageName>
+                        </namespaceURI>
                     </namespaceURIs>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>wsdl2code-client-yardi</id>
+                        <id>wsdl2code-client-yardi-rt</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>wsdl2code</goal>
                         </goals>
                         <configuration>
                             <wsdlFile>${basedir}/src/main/resources/ItfResidentTransactions20.wsdl</wsdlFile>
+                            <packageName>com.yardi.ws</packageName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsdl2code-client-yardi-rtb</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsdl2code</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFile>${basedir}/src/main/resources/ItfResidentTransactions20_SysBatch.wsdl</wsdlFile>
                             <packageName>com.yardi.ws</packageName>
                         </configuration>
                     </execution>
