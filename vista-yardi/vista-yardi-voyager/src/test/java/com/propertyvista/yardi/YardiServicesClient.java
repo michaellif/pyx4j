@@ -51,7 +51,7 @@ public class YardiServicesClient {
             VistaTestDBSetup.init();
         } else {
             ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.PostgreSQL));
-            NamespaceManager.setNamespace(DemoPmc.star.name());
+            NamespaceManager.setNamespace(DemoPmc.vista.name());
             Persistence.service().startBackgroundProcessTransaction();
             Lifecycle.startElevatedUserContext();
         }
@@ -63,5 +63,6 @@ public class YardiServicesClient {
 //        propertyService.updateUnit("anya_4", "555", yp);
 
         getResidentTransactions.updateAll(yp);
+        Persistence.service().commit();
     }
 }

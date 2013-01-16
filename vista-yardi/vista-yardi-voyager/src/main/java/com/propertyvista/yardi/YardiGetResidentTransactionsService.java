@@ -129,9 +129,12 @@ public class YardiGetResidentTransactionsService {
 
         lease.currentTerm().termFrom().setValue(new LogicalDate(yardiLease.getLeaseFromDate()));
         lease.currentTerm().termTo().setValue(new LogicalDate(yardiLease.getLeaseToDate()));
-
-        lease.expectedMoveIn().setValue(new LogicalDate(yardiLease.getExpectedMoveInDate()));
-        lease.actualMoveIn().setValue(new LogicalDate(yardiLease.getActualMoveIn()));
+        if (yardiLease.getExpectedMoveInDate() != null) {
+            lease.expectedMoveIn().setValue(new LogicalDate(yardiLease.getExpectedMoveInDate()));
+        }
+        if (yardiLease.getActualMoveIn() != null) {
+            lease.actualMoveIn().setValue(new LogicalDate(yardiLease.getActualMoveIn()));
+        }
 // add price
 
         boolean asApplicant = true;
