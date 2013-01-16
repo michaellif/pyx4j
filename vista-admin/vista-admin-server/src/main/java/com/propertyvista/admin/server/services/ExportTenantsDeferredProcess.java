@@ -13,13 +13,22 @@
  */
 package com.propertyvista.admin.server.services;
 
+import java.util.List;
+import java.util.concurrent.Callable;
+
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.server.download.Downloadable;
+import com.pyx4j.essentials.server.report.ReportTableCSVFormater;
+import com.pyx4j.essentials.server.report.ReportTableFormater;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
-import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.admin.rpc.PmcExportTenantsParamsDTO;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class ExportTenantsDeferredProcess extends AbstractDeferredProcess {
 
@@ -32,17 +41,47 @@ public class ExportTenantsDeferredProcess extends AbstractDeferredProcess {
 
     private volatile int maximum;
 
-    private final String fileName;
+    private String fileName;
+
+    private final PmcExportTenantsParamsDTO params;
 
     public ExportTenantsDeferredProcess(PmcExportTenantsParamsDTO pmcExportTenantsParamsDTO) {
         completed = false;
-        fileName = "pmc-tenants.csv";
+        params = pmcExportTenantsParamsDTO;
     }
 
     @Override
     public void execute() {
         completed = false;
-        Downloadable d = new Downloadable("tenant,download,plumbing".getBytes(), Downloadable.getContentType(DownloadFormat.XML));
+        ReportTableFormater formatter = new ReportTableCSVFormater();
+
+        Persistence.service().startTransaction();
+        Pmc pmc = TaskRunner.runInAdminNamespace(new Callable<Pmc>() {
+            @Override
+            public Pmc call() throws Exception {
+                return Persistence.service().retrieve(Pmc.class, params.pmcKey().getValue());
+            }
+        });
+        final EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+        List<Customer> customers = TaskRunner.runInTargetNamespace(pmc.namespace().getValue(), new Callable<List<Customer>>() {
+            @Override
+            public List<Customer> call() throws Exception {
+                return Persistence.service().query(criteria);
+            }
+        });
+        Persistence.service().endTransaction();
+
+        formatter.header("FirstName");
+        formatter.header("LastName");
+        formatter.newRow();
+
+        for (Customer customer : customers) {
+            formatter.cell(customer.person().name().firstName().getValue());
+            formatter.cell(customer.person().name().lastName().getValue());
+            formatter.newRow();
+        }
+        Downloadable d = new Downloadable(formatter.getBinaryData(), formatter.getContentType());
+        fileName = pmc.name().getValue() + "-tenants-without-portal.xls";
         d.save(fileName);
         completed = true;
 
