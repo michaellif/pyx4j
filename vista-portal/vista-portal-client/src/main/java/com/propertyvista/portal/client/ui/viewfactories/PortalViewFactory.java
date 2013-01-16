@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -31,6 +31,8 @@ import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.NavigViewImpl;
 import com.propertyvista.portal.client.ui.PotentialTenantView;
 import com.propertyvista.portal.client.ui.PotentialTenantViewImpl;
+import com.propertyvista.portal.client.ui.registration.TenantRegistrationView;
+import com.propertyvista.portal.client.ui.registration.TenantRegistrationViewImpl;
 import com.propertyvista.portal.client.ui.residents.billing.BillSummaryView;
 import com.propertyvista.portal.client.ui.residents.billing.BillSummaryViewImpl;
 import com.propertyvista.portal.client.ui.residents.billing.BillingHistoryView;
@@ -74,7 +76,9 @@ public class PortalViewFactory extends ViewFactoryBase {
 
     public static <T extends IsWidget> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
-            if (DashboardView.class.equals(type)) {
+            if (TenantRegistrationView.class.equals(type)) {
+                map.put(type, new TenantRegistrationViewImpl());
+            } else if (DashboardView.class.equals(type)) {
                 map.put(type, new DashboardViewImpl());
             } else if (PersonalInfoView.class.equals(type)) {
                 map.put(type, new PersonalInfoViewImpl());

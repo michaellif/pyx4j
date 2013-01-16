@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -75,6 +75,7 @@ import com.propertyvista.pmsite.server.pages.InternalErrorPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
 import com.propertyvista.pmsite.server.pages.PwdChangePage;
 import com.propertyvista.pmsite.server.pages.PwdResetPage;
+import com.propertyvista.pmsite.server.pages.RegistrationPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.SignInPage;
 import com.propertyvista.pmsite.server.pages.SignInWithTermsPage;
@@ -115,6 +116,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         MountMap.put("unitinfo", UnitDetailsPage.class);
         MountMap.put("residents", ResidentsPage.class);
         MountMap.put("pwdreset", PwdResetPage.class);
+        MountMap.put("residents/#registration", RegistrationPage.class);
         MountMap.put("pwdchange", PwdChangePage.class);
         MountMap.put("termsaccept", TermsAcceptancePage.class);
         MountMap.put("termsdecline", TermsDeclinedPage.class);

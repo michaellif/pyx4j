@@ -24,10 +24,15 @@ public class PortalSiteMap implements SiteMap {
 
     public static String ARG_ENTITY_ID = "entity-id";
 
-    public static class Login extends AppPlace {
+    public static class Login extends AppPlace implements PublicPlace {
     }
 
-    public static class LoginWithToken extends AppPlace {
+    public static class LoginWithToken extends AppPlace implements PublicPlace {
+    }
+
+    @PlaceProperties(caption = "Residents registration")
+    public static class Registration extends AppPlace implements PublicPlace {
+
     }
 
     @PlaceProperties(navigLabel = "Select Lease", caption = "Select Lease")

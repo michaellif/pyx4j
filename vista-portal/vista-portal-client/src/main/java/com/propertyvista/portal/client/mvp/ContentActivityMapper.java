@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -25,6 +25,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
+import com.propertyvista.portal.client.activity.TenantRegistrationActivity;
 import com.propertyvista.portal.client.activity.login.LeaseContextSelectionActivity;
 import com.propertyvista.portal.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.client.activity.login.PasswordResetRequestActivity;
@@ -74,6 +75,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new PersonalInfoActivity(place);
                 } else if (place instanceof PortalSiteMap.PotentialTenants) {
                     activity = new PotentialTenantActivity(place);
+                } else if (place instanceof PortalSiteMap.Registration) {
+                    activity = new TenantRegistrationActivity(place);
 
                 } else if (place instanceof Residents.PaymentMethods) {
                     activity = new PaymentMethodsActivity(place);
@@ -118,7 +121,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                 } else if (place instanceof PortalSiteMap.Residents.TenantInsurance.Other.UploadCertificate) {
                     activity = new TenantInsuranceByOtherProvdierUpdateActivity(place);
 
-                    // TODO not sure if these activities belong here 
+                    // TODO not sure if these activities belong here
                 } else if (place instanceof PortalSiteMap.Login) {
                     activity = new RedirectToLoginPageActivity(place);
                 } else if (place instanceof PortalSiteMap.LoginWithToken) {

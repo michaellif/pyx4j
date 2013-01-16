@@ -61,6 +61,7 @@ import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.model.WicketUtils.JSActionLink;
 import com.propertyvista.pmsite.server.model.WicketUtils.PageLink;
 import com.propertyvista.pmsite.server.pages.PwdResetPage;
+import com.propertyvista.pmsite.server.pages.RegistrationPage;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.shared.config.VistaDemo;
 
@@ -208,7 +209,9 @@ public class SignInPanel extends Panel {
             add(captcha.setVisible(false));
 
             add(new CheckBox("rememberMe"));
-            add(new PageLink("pwdreset", PwdResetPage.class).setText("Forgot Password"));
+            add(new PageLink("pwdreset", PwdResetPage.class).setText(i18n.tr("Forgot Password")));
+            add(new PageLink("registration", RegistrationPage.class).setText(i18n.tr("Registration")));
+
             add(new Button("signIn").add(AttributeModifier.replace("value", i18n.tr("Sign In"))));
 
             if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
