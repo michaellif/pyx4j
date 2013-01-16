@@ -83,6 +83,16 @@ public class AppPlaceInfo {
         return new StringDebugId(getPlaceId(clazz));
     }
 
+    public static String absoluteUrl(String appUrl, AppPlace place) {
+        StringBuilder b = new StringBuilder();
+        if (appUrl != null) {
+            b.append(appUrl);
+        }
+        b.append("#");
+        b.append(place.getToken());
+        return b.toString();
+    }
+
     public static String absoluteUrl(String appUrl, Class<? extends Place> placeClass, String... encodedComponentsNameValue) {
         StringBuilder b = new StringBuilder();
         if (appUrl != null) {

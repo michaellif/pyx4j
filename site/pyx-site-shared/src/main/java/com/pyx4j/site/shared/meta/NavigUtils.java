@@ -20,9 +20,6 @@
  */
 package com.pyx4j.site.shared.meta;
 
-import static com.pyx4j.site.shared.meta.NavigNode.ARGS_GROUP_SEPARATOR;
-import static com.pyx4j.site.shared.meta.NavigNode.ARGS_SEPARATOR;
-import static com.pyx4j.site.shared.meta.NavigNode.NAME_VALUE_SEPARATOR;
 import static com.pyx4j.site.shared.meta.NavigNode.PAGE_SEPARATOR;
 
 import java.util.ArrayList;
@@ -31,10 +28,6 @@ import java.util.List;
 import com.pyx4j.commons.ClassName;
 
 public class NavigUtils {
-
-    public static final String ENTITY_ID = "id";
-
-    public static final String PARENT_ID = "pid";
 
     public static String getPageUri(Class<? extends NavigNode> node) {
         String[] parts = ClassName.getClassName(node).split("\\$");
@@ -62,37 +55,6 @@ public class NavigUtils {
         return parts[1].toLowerCase();
     }
 
-    /**
-     * Warning: it does not encode Component!
-     */
-    public static String absoluteUrl(String appUrl, Class<? extends NavigNode> node, String... encodedComponentsNameValue) {
-        StringBuilder b = new StringBuilder();
-        b.append(appUrl);
-
-        if (node != null) {
-            b.append("#");
-            b.append(NavigUtils.getPageUri(node));
-        }
-
-        if (encodedComponentsNameValue != null) {
-            boolean first = true;
-            boolean name = true;
-            for (String encodedComponent : encodedComponentsNameValue) {
-                if (first) {
-                    b.append(ARGS_GROUP_SEPARATOR);
-                    first = false;
-                } else if (name) {
-                    b.append(ARGS_SEPARATOR);
-                } else {
-                    b.append(NAME_VALUE_SEPARATOR);
-                }
-                name = !name;
-                b.append(encodedComponent);
-            }
-        }
-        return b.toString();
-    }
-
     public static List<String> parseResourceUri(String uri) {
         List<String> path = new ArrayList<String>();
         String[] parts = uri.split("\\" + PAGE_SEPARATOR);
@@ -107,17 +69,6 @@ public class NavigUtils {
             return false;
         }
         return child.equals(parent) || child.startsWith(parent + PAGE_SEPARATOR);
-    }
-
-    @Deprecated
-    /**
-     * @Deprecated use EqualsHelper
-     */
-    public static boolean areEqual(String uri1, String uri2) {
-        if (uri1 == null || uri2 == null) {
-            return false;
-        }
-        return uri1 != null && uri1.equals(uri2);
     }
 
     public static boolean isRoot(String uri) {
