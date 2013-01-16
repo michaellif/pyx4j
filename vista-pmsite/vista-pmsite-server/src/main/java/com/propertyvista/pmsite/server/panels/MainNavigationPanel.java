@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,6 +27,7 @@ import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.pmsite.server.pages.FindAptPage;
 import com.propertyvista.pmsite.server.pages.InquiryPage;
+import com.propertyvista.pmsite.server.pages.RegistrationPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.SignInPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
@@ -82,6 +83,8 @@ public class MainNavigationPanel extends Panel {
                 } else if (ResidentsPage.class.equals(navItem.getDestination())
 
                 && ((MainNavigationPanel.this.getPage() instanceof ResidentsPage)
+
+                || (MainNavigationPanel.this.getPage() instanceof RegistrationPage)
 
                 || (MainNavigationPanel.this.getPage() instanceof SignInPage))) {
 

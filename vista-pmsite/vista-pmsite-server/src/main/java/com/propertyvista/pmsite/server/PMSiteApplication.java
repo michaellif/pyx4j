@@ -116,7 +116,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         MountMap.put("unitinfo", UnitDetailsPage.class);
         MountMap.put("residents", ResidentsPage.class);
         MountMap.put("pwdreset", PwdResetPage.class);
-        MountMap.put("residents/#registration", RegistrationPage.class);
+        MountMap.put("residents/registration", RegistrationPage.class);
         MountMap.put("pwdchange", PwdChangePage.class);
         MountMap.put("termsaccept", TermsAcceptancePage.class);
         MountMap.put("termsdecline", TermsDeclinedPage.class);
