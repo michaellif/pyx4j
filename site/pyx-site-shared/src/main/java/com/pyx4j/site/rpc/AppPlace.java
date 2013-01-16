@@ -40,6 +40,7 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
+import com.pyx4j.site.shared.meta.URLEncoder;
 
 @I18n(strategy = I18nStrategy.DerivedOnly)
 public class AppPlace extends Place {
@@ -177,7 +178,7 @@ public class AppPlace extends Place {
             for (int i = 0; i < values.size(); i++) {
                 queryString.append(me.getKey());
                 queryString.append(NAME_VALUE_SEPARATOR);
-                queryString.append(URL.encodeQueryString(values.get(i)));
+                queryString.append(URLEncoder.encodeQueryString(values.get(i)));
                 if (i < values.size() - 1) {
                     queryString.append(ARGS_SEPARATOR);
                 }
