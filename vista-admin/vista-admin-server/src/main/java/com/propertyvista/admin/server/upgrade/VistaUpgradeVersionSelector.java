@@ -16,6 +16,7 @@ package com.propertyvista.admin.server.upgrade;
 import com.pyx4j.config.server.ApplicationVersion;
 
 import com.propertyvista.admin.server.upgrade.u_1_0_5.UpgradeProcedure105;
+import com.propertyvista.admin.server.upgrade.u_1_0_6.UpgradeProcedure106;
 
 class VistaUpgradeVersionSelector {
 
@@ -23,9 +24,10 @@ class VistaUpgradeVersionSelector {
         String majorVersion = ApplicationVersion.extractVersionMajor(schemaVersion);
         if ("1.0.5".equals(majorVersion)) {
             return new UpgradeProcedure105();
+        } else if ("1.0.6".equals(majorVersion)) {
+            return new UpgradeProcedure106();
         } else {
             return null;
         }
     }
-
 }
