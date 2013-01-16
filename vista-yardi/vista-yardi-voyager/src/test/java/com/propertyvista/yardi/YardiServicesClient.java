@@ -27,8 +27,6 @@ public class YardiServicesClient {
 
     private static final String serviceURL = "https://www.iyardiasp.com/8223thirddev/webservices/itfresidenttransactions20.asmx";
 
-    private static YardiPropertyService propertyService = new YardiPropertyService();
-
     private static YardiGetResidentTransactionsService getResidentTransactions = new YardiGetResidentTransactionsService();
 
     /**
@@ -57,11 +55,6 @@ public class YardiServicesClient {
         }
 
         //test services
-//        propertyService.updateBuildings(yp);
-//        propertyService.updateBuilding("anya_4", yp);
-//        propertyService.updateUnits("anya_4", yp);
-//        propertyService.updateUnit("anya_4", "555", yp);
-
         getResidentTransactions.updateAll(yp);
         Persistence.service().commit();
     }

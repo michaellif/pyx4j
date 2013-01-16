@@ -14,7 +14,9 @@
 package com.propertyvista.yardi;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
@@ -25,43 +27,24 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.resident.ResidentTransactions;
+
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
 import com.propertyvista.domain.marketing.Marketing;
-import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitFinancial;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
-import com.propertyvista.yardi.bean.mits.Identification;
-import com.propertyvista.yardi.bean.mits.PropertyId;
-import com.propertyvista.yardi.bean.mits.YardiCustomer;
-import com.propertyvista.yardi.bean.mits.YardiCustomers;
-import com.propertyvista.yardi.bean.resident.PhysicalProperty;
-import com.propertyvista.yardi.bean.resident.RTCustomer;
-import com.propertyvista.yardi.bean.resident.ResidentTransactions;
-import com.propertyvista.yardi.mapper.GetPropertyConfigurationsMapper;
-import com.propertyvista.yardi.mapper.GetResidentTransactionsMapper;
-import com.propertyvista.yardi.mapper.YardiXmlUtil;
 
 public class XmlBeanTest {
 
     private final static Logger log = LoggerFactory.getLogger(XmlBeanTest.class);
-
-    @Test
-    public void testImportResidentTransactions() throws IOException, JAXBException {
-//        String xml = IOUtils.getTextResource(IOUtils.resourceFileName("Charge.xml", getClass()));
-//        Charge charge = MarshallUtil.unmarshall(Charge.class, xml);
-//        log.info("Loaded charge: {}", charge);
-//        String xml2 = MarshallUtil.marshalls(charge);
-//        log.info("Produced xml: {}", xml2);
-    }
 
     @Test
     public void testGetPropertyConfigurations() throws IOException, JAXBException {
@@ -86,68 +69,6 @@ public class XmlBeanTest {
             Assert.assertNotNull(property.getMarketingName());
         }
 
-        // convert them into vista buildings
-        GetPropertyConfigurationsMapper mapper = new GetPropertyConfigurationsMapper();
-        List<Building> buildings = mapper.map(properties.getProperties());
-
-        Assert.assertEquals("Converted size", properties.getProperties().size(), buildings.size());
-        for (Building building : buildings) {
-            log.debug("Building {}", building);
-            Assert.assertNotNull(building.propertyCode());
-        }
-    }
-
-    @Test
-    public void testGetUnitInformation() throws IOException, JAXBException {
-        String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetUnitInformation.xml", getClass()));
-        xml = YardiXmlUtil.stripGetUnitInformation(xml);
-        PhysicalProperty property = MarshallUtil.unmarshal(PhysicalProperty.class, xml);
-
-        log.info("Loaded properties {}", property);
-    }
-
-    @Test
-    public void testGenerateGetResidentTransactions() throws IOException, JAXBException {
-        ResidentTransactions transactions = new ResidentTransactions();
-        com.propertyvista.yardi.bean.resident.Property property = new com.propertyvista.yardi.bean.resident.Property();
-        transactions.getProperties().add(property);
-
-        // property
-        PropertyId propertyId = new PropertyId();
-        property.setPropertyId(propertyId);
-
-        Identification identification = new Identification();
-        identification.setType("other");
-        identification.setMarketingName("Vasya");
-        identification.setPrimaryId("anya");
-        propertyId.setIdentification(identification);
-
-        // rt customer
-        RTCustomer rtCustomer = new RTCustomer();
-        property.getCustomers().add(rtCustomer);
-
-        YardiCustomers customers = new YardiCustomers();
-        rtCustomer.setCustomers(customers);
-
-        YardiCustomer customer = new YardiCustomer();
-        customer.setDescription("277");
-        customer.setCustomerId("0007");
-        customer.setType("future_resident");
-        customers.getCustomers().add(customer);
-
-//        JAXBContext context = JAXBContext.newInstance(data.getClass());
-//        Marshaller m = context.createMarshaller();
-//        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-//        NamespaceP
-//        NamespacePrefixMapper prefixMapper = new MyPrefixMapperImpl();
-//        m.setProperty("com.sun.xml.bind.namespacePrefixMapper", prefixMapper);
-//
-//        StringWriter sw = new StringWriter();
-//        m.marshal(transactions, sw);
-//        String xml = sw.toString();
-
-        String xml = MarshallUtil.marshall(transactions);
-        log.info(xml);
     }
 
     @Test
@@ -155,46 +76,54 @@ public class XmlBeanTest {
         String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetResidentTransactions.xml", getClass()));
 
         ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
+        YardiGetResidentTransactionsService residentTransactionsService = new YardiGetResidentTransactionsService();
 
         log.info("Loaded transactions:\n{}", transactions);
 
-        GetResidentTransactionsMapper mapper = new GetResidentTransactionsMapper();
-        mapper.map(transactions);
+        List<Building> buildings = residentTransactionsService.getBuildings(Arrays.asList(transactions));
+        Assert.assertTrue("Has buildings", !buildings.isEmpty());
 
-        Assert.assertTrue("Has units", !mapper.getModel().getAptUnits().isEmpty());
-        for (AptUnit unit : mapper.getModel().getAptUnits()) {
-            log.debug("Unit {}", unit);
+        for (Building building : buildings) {
+            Assert.assertFalse(building.propertyCode().isNull());
+            Assert.assertFalse(building.marketing().isNull());
+            Assert.assertFalse(building.marketing().name().isNull());
 
-            // info
-            AptUnitInfo info = unit.info();
-            Assert.assertFalse(info.number().isNull());
-            //Dima TODO
-            //Assert.assertFalse(unit.floorplan().isNull());
-            Assert.assertFalse(info._bedrooms().isNull());
-            Assert.assertFalse(info._bathrooms().isNull());
-
-            Assert.assertFalse(info.area().isNull());
-            Assert.assertFalse(info.areaUnits().isNull());
-            Assert.assertFalse(info.economicStatus().isNull());
-
-            // marketing
-            Marketing marketing = unit.marketing();
-            Assert.assertFalse(marketing.name().isNull());
-
-            // financial
-            AptUnitFinancial financial = unit.financial();
-            Assert.assertFalse(financial._unitRent().isNull());
-            Assert.assertFalse(financial._marketRent().isNull());
+            Assert.assertFalse(building.info().address().isNull());
+            Assert.assertFalse(building.info().address().streetName().isNull());
+            Assert.assertFalse(building.info().address().streetNumber().isNull());
+            Assert.assertFalse(building.info().address().city().isNull());
+            Assert.assertFalse(building.info().address().postalCode().isNull());
         }
 
-        Assert.assertTrue("Has tenants", !mapper.getModel().getTenants().isEmpty());
-        for (Customer tenant : mapper.getModel().getTenants()) {
-            log.info("Tenant {}", tenant);
+        Map<String, List<AptUnit>> units = residentTransactionsService.getUnits(Arrays.asList(transactions));
+        for (Map.Entry<String, List<AptUnit>> entry : units.entrySet()) {
+            List<AptUnit> entryUnits = entry.getValue();
+            Assert.assertTrue("Has units", !entryUnits.isEmpty());
 
-            // name
-            Name name = tenant.person().name();
-            Assert.assertFalse(name.firstName().isNull());
-            Assert.assertFalse(name.lastName().isNull());
+            for (AptUnit aptUnit : entryUnits) {
+                log.debug("Unit {}", aptUnit);
+
+                // info
+                AptUnitInfo info = aptUnit.info();
+                Assert.assertFalse(info.number().isNull());
+
+                Assert.assertFalse(aptUnit.floorplan().isNull());
+                Assert.assertFalse(info._bedrooms().isNull());
+                Assert.assertFalse(info._bathrooms().isNull());
+
+                Assert.assertFalse(info.area().isNull());
+                Assert.assertFalse(info.areaUnits().isNull());
+                Assert.assertFalse(info.economicStatus().isNull());
+
+                // marketing
+                Marketing marketing = aptUnit.marketing();
+                Assert.assertFalse(marketing.name().isNull());
+
+                // financial
+                AptUnitFinancial financial = aptUnit.financial();
+                Assert.assertFalse(financial._unitRent().isNull());
+                Assert.assertFalse(financial._marketRent().isNull());
+            }
         }
     }
 

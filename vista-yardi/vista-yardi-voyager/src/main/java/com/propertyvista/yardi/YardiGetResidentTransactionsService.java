@@ -243,12 +243,12 @@ public class YardiGetResidentTransactionsService {
         return Persistence.service().query(criteria);
     }
 
-    private List<Building> getBuildings(List<ResidentTransactions> allTransactions) {
+    List<Building> getBuildings(List<ResidentTransactions> allTransactions) {
         BuildingsMapper mapper = new BuildingsMapper();
         return mapper.map(getProperties(allTransactions));
     }
 
-    private Map<String, List<AptUnit>> getUnits(List<ResidentTransactions> allTransactions) {
+    Map<String, List<AptUnit>> getUnits(List<ResidentTransactions> allTransactions) {
         UnitsMapper mapper = new UnitsMapper();
         Map<String, List<AptUnit>> units = new HashMap<String, List<AptUnit>>();
         Map<String, List<RTUnit>> imported = getYardiUnits(allTransactions);
