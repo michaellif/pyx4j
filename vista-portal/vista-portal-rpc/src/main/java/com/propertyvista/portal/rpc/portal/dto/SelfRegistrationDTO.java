@@ -13,8 +13,10 @@
  */
 package com.propertyvista.portal.rpc.portal.dto;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
+@Transient
 public interface SelfRegistrationDTO extends AuthenticationRequest {
 
     //building  ComboBox
