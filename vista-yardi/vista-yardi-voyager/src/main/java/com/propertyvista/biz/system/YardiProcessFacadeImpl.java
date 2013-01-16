@@ -16,15 +16,7 @@ package com.propertyvista.biz.system;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.server.contexts.Lifecycle;
-import com.pyx4j.server.contexts.NamespaceManager;
-
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
-import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.server.jobs.YardiImportProcess;
@@ -51,12 +43,6 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
         yp.setPlatform(yardiCredential.platform().toString());
         yp.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
         yp.setYardiPropertyId(YardiConstants.YARDI_PROPERTY_ID);
-
-        //db setup
-        ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.PostgreSQL));
-        NamespaceManager.setNamespace(DemoPmc.vista.name());
-        Persistence.service().startBackgroundProcessTransaction();
-        Lifecycle.startElevatedUserContext();
 
         try {
             getResidentTransactions.updateAll(yp);

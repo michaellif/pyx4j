@@ -85,7 +85,7 @@ public class YardiGetResidentTransactionsService {
         log.info("Get all resident transactions...");
         List<ResidentTransactions> allTransactions = getAllResidentTransactions(client, yp, propertyCodes);
 
-//        updateBuildingsAndUnits(allTransactions);
+        updateBuildingsAndUnits(allTransactions);
 
         updateLeases(allTransactions);
 
@@ -98,31 +98,46 @@ public class YardiGetResidentTransactionsService {
         List<Building> importedBuildings = getBuildings(allTransactions);
         Map<String, List<AptUnit>> importedUnits = getUnits(allTransactions);
 
-        log.info("Update buildings...");
+        log.info("Updating buildings...");
         merge(importedBuildings, getBuildings());
 
-        log.info("Update units...");
+        log.info("Updating units...");
         updateUnitsForBuildings(importedUnits, getBuildings());
     }
 
     private void updateLeases(List<ResidentTransactions> allTransactions) {
-        // TODO Auto-generated method stub
+        log.info("Updating leases...");
         for (ResidentTransactions transaction : allTransactions) {
             Property property = transaction.getProperty().get(0);
-            for (RTCustomer customer : property.getRTCustomer()) {
+            boolean isNew = true;
+            for (RTCustomer rtCustomer : property.getRTCustomer()) {
+                {
+                    EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+                    criteria.eq(criteria.proto().leaseId(), rtCustomer.getCustomerID());
+                    if (!Persistence.service().query(criteria).isEmpty()) {
+                        Lease lease = Persistence.service().query(criteria).get(0);
+                        updateLease(rtCustomer, lease);
+                    }
+                }
+
                 String propertyCode = getPropertyId(property.getPropertyID().get(0));
                 EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
                 criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
-                criteria.eq(criteria.proto().info().number(), getUnitId(customer));
-
+                criteria.eq(criteria.proto().info().number(), getUnitId(rtCustomer));
                 AptUnit unit = Persistence.service().query(criteria).get(0);
-                updateLease(customer, unit, propertyCode);
+
+                createLease(rtCustomer, unit, propertyCode);
             }
         }
         log.info("All leases updated.");
     }
 
-    private void updateLease(RTCustomer rtCustomer, AptUnit unit, String propertyCode) {
+    private void updateLease(RTCustomer rtCustomer, Lease lease) {
+        // TODO if lease already exists - do something
+
+    }
+
+    private void createLease(RTCustomer rtCustomer, AptUnit unit, String propertyCode) {
         List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomer();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
 
