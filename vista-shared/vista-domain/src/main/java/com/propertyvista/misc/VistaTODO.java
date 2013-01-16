@@ -64,4 +64,6 @@ public interface VistaTODO {
     public static boolean VISTA_2245_Simple_Lease_Renewal = true;
 
     public static boolean VISTA_2256_Default_Product_Catalog = false;
+
+    public static boolean VISTA_2256_Default_Product_Catalog_Show = true;
 }

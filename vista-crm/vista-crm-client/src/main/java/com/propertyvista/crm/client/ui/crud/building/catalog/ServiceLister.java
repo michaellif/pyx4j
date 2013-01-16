@@ -25,6 +25,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.misc.VistaTODO;
 
 public class ServiceLister extends ListerBase<Service> {
 
@@ -48,7 +49,9 @@ public class ServiceLister extends ListerBase<Service> {
 
     @Override
     protected EntityListCriteria<Service> updateCriteria(EntityListCriteria<Service> criteria) {
-        criteria.eq(criteria.proto().isDefaultCatalogItem(), Boolean.FALSE);
+        if (!VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
+            criteria.eq(criteria.proto().isDefaultCatalogItem(), Boolean.FALSE);
+        }
         return super.updateCriteria(criteria);
     }
 
