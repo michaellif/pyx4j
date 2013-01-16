@@ -92,6 +92,14 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-biz-financial</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
 
 </project>
