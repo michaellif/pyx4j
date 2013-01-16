@@ -34,6 +34,7 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerAcceptedTerms;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -174,5 +175,11 @@ public class CustomerFacadeImpl implements CustomerFacade {
     public VistaCustomerBehavior getLeaseBehavior(CustomerUser customerUser, Lease lease) {
         // TODO implement TenantSecondary and Guarantor
         return VistaCustomerBehavior.TenantPrimary;
+    }
+
+    @Override
+    public void selfRegistration(SelfRegistrationDTO selfRegistration) {
+        // TODO Auto-generated method stub
+
     }
 }

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -36,6 +37,7 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.server.security.VistaCustomerContext;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
@@ -68,6 +70,14 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
     @Override
     protected boolean isSessionValid() {
         return SecurityController.checkAnyBehavior(getApplicationBehavior(), getPasswordChangeRequiredBehavior(), VistaCustomerBehavior.LeaseSelectionRequired);
+    }
+
+    @Override
+    protected String beginSession(AuthenticationRequest request) {
+        if (request instanceof SelfRegistrationDTO) {
+            ServerSideFactory.create(CustomerFacade.class).selfRegistration((SelfRegistrationDTO) request);
+        }
+        return super.beginSession(request);
     }
 
     @Override
