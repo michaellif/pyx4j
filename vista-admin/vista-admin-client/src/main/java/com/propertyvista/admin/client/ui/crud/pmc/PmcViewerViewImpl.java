@@ -23,12 +23,15 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.client.ReportDialog;
 import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.PmcExportDownloadDTO;
+import com.propertyvista.admin.rpc.PmcExportTenantsParamsDTO;
 import com.propertyvista.admin.rpc.services.ExportDownloadService;
+import com.propertyvista.admin.rpc.services.ExportTenantsService;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
@@ -54,7 +57,9 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
         });
         addHeaderToolbarItem(upload.asWidget());
 
-        Button downloadFull = new Button("Download export.xml", new Command() {
+        Button download = new Button("Download");
+        ButtonMenuBar downloadMenu = download.createMenu();
+        downloadMenu.addItem("export.xml (full)", new Command() {
             @Override
             public void execute() {
                 PmcExportDownloadDTO request = EntityFactory.create(PmcExportDownloadDTO.class);
@@ -68,9 +73,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
                 d.start(GWT.<ReportService<?>> create(ExportDownloadService.class), null, params);
             }
         });
-        addHeaderToolbarItem(downloadFull.asWidget());
-
-        Button downloadNoImages = new Button("Download export.xml (no images)", new Command() {
+        downloadMenu.addItem("export.xml (no images)", new Command() {
             @Override
             public void execute() {
                 PmcExportDownloadDTO request = EntityFactory.create(PmcExportDownloadDTO.class);
@@ -84,7 +87,24 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
                 d.start(GWT.<ReportService<?>> create(ExportDownloadService.class), null, params);
             }
         });
-        addHeaderToolbarItem(downloadNoImages.asWidget());
+        downloadMenu.addItem("yardi tenants", new Command() {
+
+            @Override
+            public void execute() {
+                PmcExportTenantsParamsDTO params = EntityFactory.create(PmcExportTenantsParamsDTO.class);
+                params.pmcKey().setValue(getForm().getValue().getPrimaryKey());
+
+                HashMap<String, Serializable> paramsHolder = new HashMap<String, Serializable>();
+                paramsHolder.put(ExportTenantsService.PARAMS_KEY, params);
+
+                ReportDialog d = new ReportDialog("Exporting Yardi Tenants", "Exporting Tenants...");
+                d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
+                d.start(GWT.<ReportService<?>> create(ExportTenantsService.class), null, paramsHolder);
+            }
+
+        });
+        download.setMenu(downloadMenu);
+        addHeaderToolbarItem(download);
 
         Button resetCache = new Button("Reset Cache", new Command() {
 
@@ -122,7 +142,6 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
 
             }
         });
-
         addHeaderToolbarItem(activateBtn);
 
     }

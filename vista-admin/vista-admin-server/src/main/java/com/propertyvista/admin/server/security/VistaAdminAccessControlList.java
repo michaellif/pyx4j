@@ -38,6 +38,7 @@ import com.propertyvista.admin.rpc.services.AuditRecordListerService;
 import com.propertyvista.admin.rpc.services.DBIntegrityCheckService;
 import com.propertyvista.admin.rpc.services.EquifaxApprovalCrudService;
 import com.propertyvista.admin.rpc.services.ExportDownloadService;
+import com.propertyvista.admin.rpc.services.ExportTenantsService;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
 import com.propertyvista.admin.rpc.services.MaintenanceCrudService;
 import com.propertyvista.admin.rpc.services.OnboardingMerchantAccountCrudService;
@@ -78,6 +79,7 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(PmcDataReportService.class));
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(DBIntegrityCheckService.class));
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(ExportDownloadService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(ExportTenantsService.class));
 
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(AdminPasswordChangeUserService.class));
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(AdminPasswordChangeManagedService.class));
