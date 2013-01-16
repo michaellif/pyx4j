@@ -32,7 +32,6 @@ import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.RTUnit;
 import com.yardi.entity.resident.ResidentTransactions;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -40,6 +39,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.offering.Service.ServiceType;
@@ -85,7 +85,7 @@ public class YardiGetResidentTransactionsService {
         log.info("Get all resident transactions...");
         List<ResidentTransactions> allTransactions = getAllResidentTransactions(client, yp, propertyCodes);
 
-        updateBuildingsAndUnits(allTransactions);
+//        updateBuildingsAndUnits(allTransactions);
 
         updateLeases(allTransactions);
 
@@ -109,18 +109,20 @@ public class YardiGetResidentTransactionsService {
         // TODO Auto-generated method stub
         for (ResidentTransactions transaction : allTransactions) {
             Property property = transaction.getProperty().get(0);
-            RTCustomer customer = transaction.getProperty().get(0).getRTCustomer().get(0);
+            for (RTCustomer customer : property.getRTCustomer()) {
+                String propertyCode = getPropertyId(property.getPropertyID().get(0));
+                EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+                criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
+                criteria.eq(criteria.proto().info().number(), getUnitId(customer));
 
-            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.eq(criteria.proto().building().propertyCode(), getPropertyId(property.getPropertyID().get(0)));
-            criteria.eq(criteria.proto().info().number(), getUnitId(customer));
-
-            AptUnit unit = Persistence.service().query(criteria).get(0);
-            updateLease(customer, unit);
+                AptUnit unit = Persistence.service().query(criteria).get(0);
+                updateLease(customer, unit, propertyCode);
+            }
         }
+        log.info("All leases updated.");
     }
 
-    private void updateLease(RTCustomer rtCustomer, AptUnit unit) {
+    private void updateLease(RTCustomer rtCustomer, AptUnit unit, String propertyCode) {
         List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomer();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
 
@@ -139,7 +141,6 @@ public class YardiGetResidentTransactionsService {
         }
 // add price
 
-        boolean asApplicant = true;
         for (YardiCustomer yardiCustomer : yardiCustomers) {
             Customer customer = EntityFactory.create(Customer.class);
             Person person = EntityFactory.create(Person.class);
@@ -148,14 +149,14 @@ public class YardiGetResidentTransactionsService {
             person.name().middleName().setValue(yardiCustomer.getName().getMiddleName());
             customer.person().set(person);
             LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
-            if (rtCustomer.getCustomerID().equals(yardiCustomer.getCustomerID())) {
-                tenantInLease.leaseParticipant().customer().set(customer);
-                tenantInLease.role().setValue(asApplicant ? LeaseTermParticipant.Role.Applicant : LeaseTermParticipant.Role.CoApplicant);
-                lease.currentTerm().version().tenants().add(tenantInLease);
-                asApplicant = false;
+            tenantInLease.leaseParticipant().customer().set(customer);
+            if (rtCustomer.getCustomerID().equals(yardiCustomer.getCustomerID()) && yardiCustomer.getLease().isResponsibleForLease()) {
+                tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
             } else {
-                tenantInLease.role().setValue(!yardiCustomer.getLease().isResponsibleForLease() ? LeaseTermParticipant.Role.Dependent : null);
+                tenantInLease.role().setValue(
+                        yardiCustomer.getLease().isResponsibleForLease() ? LeaseTermParticipant.Role.CoApplicant : LeaseTermParticipant.Role.Dependent);
             }
+            lease.currentTerm().version().tenants().add(tenantInLease);
         }
 
         lease = leaseFacade.init(lease);
@@ -164,8 +165,10 @@ public class YardiGetResidentTransactionsService {
             // TODO double into BigDecimal...might need to be handled differently
             leaseFacade.setLeaseAgreedPrice(lease, yardiLease.getCurrentRent());
         }
-        lease.id().setValue(new Key(rtCustomer.getCustomerID()));
+        lease.leaseId().setValue(rtCustomer.getCustomerID());
         lease = leaseFacade.persist(lease);
+        leaseFacade.activate(lease);
+        log.info("Lease {} in building {} successfully updated", rtCustomer.getCustomerID(), propertyCode);
     }
 
     private void updateCharges(List<ResidentTransactions> allTransactions) {
@@ -206,6 +209,7 @@ public class YardiGetResidentTransactionsService {
 
             if (isNewBuilding) {
                 ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(building);
+                ServerSideFactory.create(DefaultProductCatalogFacade.class).persistFor(building);
             } else {
                 ServerSideFactory.create(DefaultProductCatalogFacade.class).updateFor(building);
             }
@@ -224,6 +228,7 @@ public class YardiGetResidentTransactionsService {
             Persistence.service().persist(unit);
 
             if (isNewUnit) {
+                ServerSideFactory.create(OccupancyFacade.class).setupNewUnit((AptUnit) unit.createIdentityStub());
                 ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(unit.building(), unit, true);
             } else {
                 ServerSideFactory.create(DefaultProductCatalogFacade.class).updateUnit(unit.building(), unit);
