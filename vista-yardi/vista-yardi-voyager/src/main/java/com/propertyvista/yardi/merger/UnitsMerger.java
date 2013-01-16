@@ -16,10 +16,12 @@ package com.propertyvista.yardi.merger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,16 +52,24 @@ public class UnitsMerger {
         for (AptUnit imported : importedList) {
             try {
                 AptUnit existing = existingUnitsByNumber.get(imported.info().number().getValue());
-                if (existing == null || existing.floorplan().isNull()) {
+                if (existing == null) {
+                    imported.building().set(building);
+                }
 
+                Floorplan floorplan = getExistingFloorplan(building, imported.floorplan());
+                if (floorplan == null) {
                     imported.floorplan().building().set(building);
                     Persistence.service().persist(imported.floorplan());
 
                     building.floorplans().add(imported.floorplan());
                     Persistence.service().persist(building);
-
-                    imported.building().set(building);
                 }
+
+                //set existing floorplan for new unit
+                if (existing == null && floorplan != null) {
+                    imported.floorplan().set(floorplan);
+                }
+
                 merged.add(existing != null ? merge(imported, existing) : imported);
             } catch (Exception e) {
                 log.error(String.format("Error during imported unit %s merging", imported.info().number().getValue()), e);
@@ -67,6 +77,17 @@ public class UnitsMerger {
         }
 
         return new ArrayList<AptUnit>(merged);
+    }
+
+    private Floorplan getExistingFloorplan(Building building, Floorplan imported) {
+        Iterator<Floorplan> floorplanIterator = building.floorplans().iterator();
+        while (floorplanIterator.hasNext()) {
+            Floorplan existing = floorplanIterator.next();
+            if (StringUtils.equals(existing.name().getValue(), imported.name().getValue())) {
+                return existing;
+            }
+        }
+        return null;
     }
 
     private Map<String, AptUnit> unitsByNumber(List<AptUnit> existingList) {
@@ -157,11 +178,7 @@ public class UnitsMerger {
         merge(imported.info(), existing.info());
 
         //floorplan
-        if (existing.floorplan().isNull()) {
-            existing.floorplan().set(imported.floorplan());
-        } else {
-            merge(imported.floorplan(), existing.floorplan());
-        }
+        //merge(imported.floorplan(), existing.floorplan());
 
         // marketing
         Persistence.service().retrieve(existing.marketing());
