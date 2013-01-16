@@ -19,13 +19,15 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.mits.Address;
+import com.yardi.entity.mits.Identification;
+import com.yardi.entity.resident.Property;
+import com.yardi.entity.resident.PropertyID;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.yardi.bean.mits.Address;
-import com.propertyvista.yardi.bean.mits.Identification;
-import com.propertyvista.yardi.bean.resident.Property;
 
 /**
  * Maps buildings information from YARDI System to domain entities.
@@ -47,39 +49,30 @@ public class BuildingsMapper {
     public List<Building> map(List<Property> properties) {
         List<Building> buildings = new ArrayList<Building>();
         for (Property property : properties) {
+            PropertyID currentPropertyID = null;
             try {
-                Building building = map(property);
-                buildings.add(building);
+                for (PropertyID propertyID : property.getPropertyID()) {
+                    currentPropertyID = propertyID;
+                    Building building = map(propertyID);
+                    buildings.add(building);
+                }
             } catch (Exception e) {
-                log.error(String.format("Error during imported building %s mapping", getPropertyId(property)), e);
+                log.error(String.format("Error during imported building %s mapping", getPropertyId(currentPropertyID)), e);
             }
         }
 
         return buildings;
     }
 
-    /**
-     * Fields that get mapped are:
-     * 
-     * building.info:
-     * propertyCode
-     * address
-     * 
-     * building.marketing:
-     * name
-     * 
-     * @param property
-     * @return
-     */
-    public Building map(Property property) {
+    private Building map(PropertyID propertyID) {
         Building building = EntityFactory.create(Building.class);
 
-        Identification identification = property.getPropertyId().getIdentification();
-        building.propertyCode().setValue(identification.getPrimaryId());
+        Identification identification = propertyID.getIdentification();
+        building.propertyCode().setValue(identification.getPrimaryID());
         building.marketing().name().setValue(identification.getMarketingName());
 
         // address
-        Address addressImported = property.getPropertyId().getAddress();
+        Address addressImported = propertyID.getAddress().get(0);
         String street = addressImported.getAddress1();
         String streetNumber = street.substring(0, street.indexOf(' '));
         String streetName = street.substring(streetNumber.length() + 1);
@@ -100,11 +93,8 @@ public class BuildingsMapper {
         return building;
     }
 
-    private String getPropertyId(Property property) {
-        return property.getPropertyId() != null ? getPropertyId(property.getPropertyId().getIdentification()) : null;
+    private String getPropertyId(PropertyID propertyID) {
+        return propertyID.getIdentification().getPrimaryID();
     }
 
-    private String getPropertyId(Identification identification) {
-        return identification != null ? (identification.getPrimaryId()) : null;
-    }
 }

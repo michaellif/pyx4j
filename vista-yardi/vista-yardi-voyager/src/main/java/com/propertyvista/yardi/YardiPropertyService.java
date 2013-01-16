@@ -152,8 +152,8 @@ public class YardiPropertyService {
 
         YardiClient client = new YardiClient(yp.getServiceURL());
 
-        ResidentTransactions residentTransactions = YardiTransactions.getResidentTransactions(client, yp, propertyCode);
-        mergeUnits(building, getUnits(propertyCode), getYardiUnits(residentTransactions));
+//        ResidentTransactions residentTransactions = YardiTransactions.getResidentTransactions(client, yp, propertyCode);
+//        mergeUnits(building, getUnits(propertyCode), getYardiUnits(residentTransactions));
     }
 
     /**
@@ -180,13 +180,13 @@ public class YardiPropertyService {
         }
         Persistence.service().retrieve(building.floorplans());
 
-        try {
-            ResidentTransactions residentTransactions = YardiTransactions.getResidentTransactions(client, yp, propertyCode);
-            mergeUnit(building, getUnit(unitId, propertyCode), getYardiUnit(unitId, residentTransactions));
-
-        } catch (Exception e) {
-            throw new YardiServiceException(String.format("Fail to update unit %s for building with property code %s", unitId, propertyCode), e);
-        }
+//        try {
+//            ResidentTransactions residentTransactions = YardiTransactions.getResidentTransactions(client, yp, propertyCode);
+//            mergeUnit(building, getUnit(unitId, propertyCode), getYardiUnit(unitId, residentTransactions));
+//
+//        } catch (Exception e) {
+//            throw new YardiServiceException(String.format("Fail to update unit %s for building with property code %s", unitId, propertyCode), e);
+//        }
     }
 
     private Building getBuilding(String propertyCode) {

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.yardi;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +22,15 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.yardi.entity.mits.Identification;
+import com.yardi.entity.mits.YardiCustomer;
+import com.yardi.entity.mits.YardiLease;
+import com.yardi.entity.resident.Property;
+import com.yardi.entity.resident.PropertyID;
+import com.yardi.entity.resident.RTCustomer;
+import com.yardi.entity.resident.RTUnit;
+import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -43,12 +51,6 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.yardi.bean.Properties;
-import com.propertyvista.yardi.bean.mits.Identification;
-import com.propertyvista.yardi.bean.mits.YardiCustomer;
-import com.propertyvista.yardi.bean.resident.Property;
-import com.propertyvista.yardi.bean.resident.RTCustomer;
-import com.propertyvista.yardi.bean.resident.RTUnit;
-import com.propertyvista.yardi.bean.resident.ResidentTransactions;
 import com.propertyvista.yardi.mapper.BuildingsMapper;
 import com.propertyvista.yardi.mapper.UnitsMapper;
 import com.propertyvista.yardi.merger.BuildingsMerger;
@@ -106,11 +108,11 @@ public class YardiGetResidentTransactionsService {
     private void updateLeases(List<ResidentTransactions> allTransactions) {
         // TODO Auto-generated method stub
         for (ResidentTransactions transaction : allTransactions) {
-            Property property = transaction.getProperties().get(0);
-            RTCustomer customer = transaction.getProperties().get(0).getCustomers().get(0);
+            Property property = transaction.getProperty().get(0);
+            RTCustomer customer = transaction.getProperty().get(0).getRTCustomer().get(0);
 
             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.eq(criteria.proto().building().propertyCode(), getPropertyId(property));
+            criteria.eq(criteria.proto().building().propertyCode(), getPropertyId(property.getPropertyID().get(0)));
             criteria.eq(criteria.proto().info().number(), getUnitId(customer));
 
             AptUnit unit = Persistence.service().query(criteria).get(0);
@@ -119,21 +121,21 @@ public class YardiGetResidentTransactionsService {
     }
 
     private void updateLease(RTCustomer rtCustomer, AptUnit unit) {
-        List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomers();
-        com.propertyvista.yardi.bean.mits.Lease yardiLease = yardiCustomers.get(0).getLease();
+        List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomer();
+        YardiLease yardiLease = yardiCustomers.get(0).getLease();
 
         LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
         Lease lease = leaseFacade.create(Lease.Status.ExistingLease);
 
         lease.type().setValue(ServiceType.residentialUnit);
 
-        lease.currentTerm().termFrom().setValue(new LogicalDate(yardiLease.getLeaseFromDate()));
-        lease.currentTerm().termTo().setValue(new LogicalDate(yardiLease.getLeaseToDate()));
+        lease.currentTerm().termFrom().setValue(new LogicalDate(yardiLease.getLeaseFromDate().getTimeInMillis()));
+        lease.currentTerm().termTo().setValue(new LogicalDate(yardiLease.getLeaseToDate().getTimeInMillis()));
         if (yardiLease.getExpectedMoveInDate() != null) {
-            lease.expectedMoveIn().setValue(new LogicalDate(yardiLease.getExpectedMoveInDate()));
+            lease.expectedMoveIn().setValue(new LogicalDate(yardiLease.getExpectedMoveInDate().getTimeInMillis()));
         }
         if (yardiLease.getActualMoveIn() != null) {
-            lease.actualMoveIn().setValue(new LogicalDate(yardiLease.getActualMoveIn()));
+            lease.actualMoveIn().setValue(new LogicalDate(yardiLease.getActualMoveIn().getTimeInMillis()));
         }
 // add price
 
@@ -146,13 +148,13 @@ public class YardiGetResidentTransactionsService {
             person.name().middleName().setValue(yardiCustomer.getName().getMiddleName());
             customer.person().set(person);
             LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
-            if (rtCustomer.getCustomerId().equals(yardiCustomer.getCustomerId())) {
+            if (rtCustomer.getCustomerID().equals(yardiCustomer.getCustomerID())) {
                 tenantInLease.leaseParticipant().customer().set(customer);
                 tenantInLease.role().setValue(asApplicant ? LeaseTermParticipant.Role.Applicant : LeaseTermParticipant.Role.CoApplicant);
                 lease.currentTerm().version().tenants().add(tenantInLease);
                 asApplicant = false;
             } else {
-                tenantInLease.role().setValue(!yardiCustomer.getLease().getResponsibleForLease() ? LeaseTermParticipant.Role.Dependent : null);
+                tenantInLease.role().setValue(!yardiCustomer.getLease().isResponsibleForLease() ? LeaseTermParticipant.Role.Dependent : null);
             }
         }
 
@@ -160,9 +162,9 @@ public class YardiGetResidentTransactionsService {
         if (unit.getPrimaryKey() != null) {
             leaseFacade.setUnit(lease, unit);
             // TODO double into BigDecimal...might need to be handled differently
-            leaseFacade.setLeaseAgreedPrice(lease, new BigDecimal(yardiLease.getCurrentRent()));
+            leaseFacade.setLeaseAgreedPrice(lease, yardiLease.getCurrentRent());
         }
-        lease.id().setValue(new Key(rtCustomer.getCustomerId()));
+        lease.id().setValue(new Key(rtCustomer.getCustomerID()));
         lease = leaseFacade.persist(lease);
     }
 
@@ -262,11 +264,14 @@ public class YardiGetResidentTransactionsService {
     private List<Property> getProperties(List<ResidentTransactions> allTransactions) {
         Map<String, Property> properties = new HashMap<String, Property>();
         for (ResidentTransactions transaction : allTransactions) {
-            for (Property property : transaction.getProperties()) {
 
-                String propertyId = getPropertyId(property);
-                if (StringUtils.isNotEmpty(propertyId) && !properties.containsKey(propertyId)) {
-                    properties.put(propertyId, property);
+            for (Property property : transaction.getProperty()) {
+
+                for (PropertyID propertyID : property.getPropertyID()) {
+                    String propertyId = getPropertyId(propertyID);
+                    if (StringUtils.isNotEmpty(propertyId) && !properties.containsKey(propertyId)) {
+                        properties.put(propertyId, property);
+                    }
                 }
             }
         }
@@ -277,38 +282,42 @@ public class YardiGetResidentTransactionsService {
     private Map<String, List<RTUnit>> getYardiUnits(List<ResidentTransactions> allTransactions) {
         Map<String, List<RTUnit>> unitsMap = new HashMap<String, List<RTUnit>>();
         for (ResidentTransactions transaction : allTransactions) {
-            for (Property property : transaction.getProperties()) {
 
-                String propertyId = getPropertyId(property);
-                if (unitsMap.containsKey(propertyId)) {
-                    continue;
-                }
+            for (Property property : transaction.getProperty()) {
 
-                Map<String, RTUnit> map = new HashMap<String, RTUnit>();
-                for (RTCustomer customer : property.getCustomers()) {
-                    String unitId = getUnitId(customer);
-                    if (StringUtils.isNotEmpty(unitId) && !map.containsKey(unitId)) {
-                        map.put(unitId, customer.getRtunit());
+                for (PropertyID propertyID : property.getPropertyID()) {
+
+                    String propertyId = getPropertyId(propertyID);
+                    if (unitsMap.containsKey(propertyId)) {
+                        continue;
                     }
-                }
 
-                unitsMap.put(propertyId, new ArrayList<RTUnit>(map.values()));
+                    Map<String, RTUnit> map = new HashMap<String, RTUnit>();
+                    for (RTCustomer customer : property.getRTCustomer()) {
+                        String unitId = getUnitId(customer);
+                        if (StringUtils.isNotEmpty(unitId) && !map.containsKey(unitId)) {
+                            map.put(unitId, customer.getRTUnit());
+                        }
+                    }
+
+                    unitsMap.put(propertyId, new ArrayList<RTUnit>(map.values()));
+                }
             }
         }
 
         return unitsMap;
     }
 
-    private String getPropertyId(Property property) {
-        return property.getPropertyId() != null ? getPropertyId(property.getPropertyId().getIdentification()) : null;
+    private String getPropertyId(PropertyID propertyID) {
+        return propertyID.getIdentification() != null ? getPropertyId(propertyID.getIdentification()) : null;
     }
 
     private String getPropertyId(Identification identification) {
-        return identification != null ? (identification.getPrimaryId()) : null;
+        return identification != null ? (identification.getPrimaryID()) : null;
     }
 
     private String getUnitId(RTCustomer customer) {
-        return customer.getRtunit() != null ? customer.getRtunit().getUnitId() : null;
+        return customer.getRTUnit() != null ? customer.getRTUnit().getUnitID() : null;
     }
 
     private void validate(YardiParameters yp) {

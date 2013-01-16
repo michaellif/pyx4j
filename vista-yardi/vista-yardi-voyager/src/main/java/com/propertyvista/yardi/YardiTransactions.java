@@ -26,6 +26,7 @@ import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.ws.operations.ExportChartOfAccounts;
 import com.yardi.ws.operations.ExportChartOfAccountsResponse;
 import com.yardi.ws.operations.GetPropertyConfigurations;
@@ -59,7 +60,6 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.resident.PhysicalProperty;
-import com.propertyvista.yardi.bean.resident.ResidentTransactions;
 import com.propertyvista.yardi.mapper.YardiXmlUtil;
 
 public class YardiTransactions {
@@ -186,6 +186,35 @@ public class YardiTransactions {
         log.info("GetResidentTransactions: {}", xml);
 
         ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
+        return transactions;
+    }
+
+    /**
+     * Allows export of resident/transactional data for a given property/property list.
+     * 
+     * @throws JAXBException
+     */
+    public static com.propertyvista.yardi.bean.resident.ResidentTransactions getResidentTransactions(YardiClient c, YardiParameters yp) throws AxisFault,
+            RemoteException, JAXBException {
+        c.transactionId++;
+        c.setCurrentAction(Action.GetResidentTransactions);
+
+        GetResidentTransactions_Login l = new GetResidentTransactions_Login();
+        l.setUserName(yp.getUsername());
+        l.setPassword(yp.getPassword());
+        l.setServerName(yp.getServerName());
+        l.setDatabase(yp.getDatabase());
+        l.setPlatform(yp.getPlatform());
+        l.setInterfaceEntity(yp.getInterfaceEntity());
+        l.setYardiPropertyId(yp.getYardiPropertyId());
+
+        GetResidentTransactions_LoginResponse response = c.getResidentTransactionsService().getResidentTransactions_Login(l);
+        String xml = response.getGetResidentTransactions_LoginResult().getExtraElement().toString();
+
+        log.info("GetResidentTransactions: {}", xml);
+
+        com.propertyvista.yardi.bean.resident.ResidentTransactions transactions = MarshallUtil.unmarshal(
+                com.propertyvista.yardi.bean.resident.ResidentTransactions.class, xml);
         return transactions;
     }
 
