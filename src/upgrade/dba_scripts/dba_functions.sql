@@ -1,3 +1,15 @@
+/**
+***     ==================================================================================================================
+***
+***             @version $Revision$ ($Author$) $Date$  
+***           
+***             SQL and PL/pgSQL function that might or might not be useful in db administration
+***                
+***     
+***     ==================================================================================================================
+**/
+
+
 CREATE OR REPLACE FUNCTION _dba_.pg_schema_size(text) RETURNS bigint AS $$
 SELECT 	sum(pg_relation_size(schemaname||'.'||tablename))::bigint
 FROM 	pg_tables
@@ -371,7 +383,7 @@ LANGUAGE plpgsql VOLATILE;
 ***     ===============================================================================================
 **/
 
-CREATE OR REPLACE FUNCTION _dba_.recreate_dev_sequences(v_seq_schema_name TEXT) RETURNS VOID AS
+CREATE OR REPLACE FUNCTION _dba_.recreate_dev_sequences(v_seq_schema_name TEXT,v_seq_owner TEXT DEFAULT 'vista') RETURNS VOID AS
 $$
 DECLARE
         v_seq_name              VARCHAR(64);
@@ -387,7 +399,8 @@ BEGIN
                EXECUTE 'SELECT nextval('''||v_seq_schema_name||'.'||v_seq_name||''')' INTO v_max_value;
                EXECUTE 'DROP SEQUENCE '||v_seq_schema_name||'.'||v_seq_name;
                EXECUTE 'CREATE SEQUENCE '||v_seq_schema_name||'.'||v_seq_name||' START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1';   
-               EXECUTE 'ALTER SEQUENCE '||v_seq_schema_name||'.'||v_seq_name||' RESTART WITH '||v_max_value;                                          
+               EXECUTE 'ALTER SEQUENCE '||v_seq_schema_name||'.'||v_seq_name||' RESTART WITH '||v_max_value;  
+               EXECUTE 'ALTER SEQUENCE '||v_seq_schema_name||'.'||v_seq_name||' OWNER TO '||v_seq_owner;                                        
         END LOOP;
 END;
 $$
