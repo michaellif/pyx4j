@@ -190,7 +190,7 @@
     <properties>
         <deployableName>vista</deployableName>
         <deployContext>vista</deployContext>
-        <warSourceExcludes>**/*.symbolMap,gwt-unitCache/*.*</warSourceExcludes>
+        <warSourceExcludes>**/*.symbolMap,gwt-unitCache/**</warSourceExcludes>
 
         <tomcatDeployServerId>tomcat-dev.birchwoodsoftwaregroup.com</tomcatDeployServerId>
         <vista-tomcat-url>http://dev.birchwoodsoftwaregroup.com</vista-tomcat-url>
@@ -360,7 +360,7 @@
         <profile>
             <id>full</id>
             <properties>
-                <warSourceExcludes>gwt-unitCache/*.*</warSourceExcludes>
+                <warSourceExcludes>/gwt-unitCache/*.*</warSourceExcludes>
             </properties>
             <build>
                 <plugins>
