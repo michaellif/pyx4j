@@ -25,9 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.yardi.bean.out.Charge;
-import com.propertyvista.yardi.bean.out.Detail;
-
 public class YardiExample {
 
     private final static Logger log = LoggerFactory.getLogger(YardiExample.class);
@@ -64,22 +61,22 @@ public class YardiExample {
     }
 
     private static void send(YardiClient c, YardiParameters yp) throws JAXBException, XMLStreamException, IOException {
-        Charge charge = new Charge();
-        Detail detail = new Detail();
-        charge.setDetail(detail);
-
-        // TODO - the code below does not do anything yet, just use the Charge.xml file
-        detail.setBatchId("05/2010 Vista Charges");
-        detail.setDescription("Application Fee");
-        detail.setTransactionDate("2011-06-05");
-        detail.setChargeCode("appfee");
-        detail.setGlAccountNumber("58200000");
-        detail.setCustomerId("t0000188");
-        detail.setUnitId("104");
-        detail.setAmountPaid("0");
-        detail.setAmount("20.00");
-        detail.setComment("Application Fee");
-        detail.setPropertyPrimaryId(yp.getYardiPropertyId());
+//        Charge charge = new Charge();
+//        Detail detail = new Detail();
+//        charge.setDetail(detail);
+//
+//        // TODO - the code below does not do anything yet, just use the Charge.xml file
+//        detail.setBatchId("05/2010 Vista Charges");
+//        detail.setDescription("Application Fee");
+//        detail.setTransactionDate("2011-06-05");
+//        detail.setChargeCode("appfee");
+//        detail.setGlAccountNumber("58200000");
+//        detail.setCustomerId("t0000188");
+//        detail.setUnitId("104");
+//        detail.setAmountPaid("0");
+//        detail.setAmount("20.00");
+//        detail.setComment("Application Fee");
+//        detail.setPropertyPrimaryId(yp.getYardiPropertyId());
 
 //        String xml = MarshallUtil.marshalls(charge);
 
