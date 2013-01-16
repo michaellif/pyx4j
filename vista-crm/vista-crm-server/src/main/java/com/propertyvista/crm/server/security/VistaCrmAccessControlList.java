@@ -45,6 +45,7 @@ import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.crm.rpc.services.breadcrumbs.BreadcrumbsService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
+import com.propertyvista.crm.rpc.services.building.ComplexCrudService;
 import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
 import com.propertyvista.crm.rpc.services.building.LockerAreaCrudService;
 import com.propertyvista.crm.rpc.services.building.LockerCrudService;
@@ -133,6 +134,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.property.asset.Boiler;
+import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Elevator;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Locker;
@@ -221,6 +223,9 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PaymentReportService.class));
 
 // - Building-related:
+        grant(VistaBasicBehavior.CRM, new EntityPermission(Complex.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ComplexCrudService.class));
+
         grant(VistaBasicBehavior.CRM, new EntityPermission(Building.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(BuildingCrudService.class));
 
