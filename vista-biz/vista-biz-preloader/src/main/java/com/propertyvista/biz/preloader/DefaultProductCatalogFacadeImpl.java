@@ -46,6 +46,10 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
             Persistence.service().retrieve(building);
         }
 
+        if (building.productCatalog().isValueDetached()) {
+            Persistence.service().retrieve(building.productCatalog());
+        }
+
         Iterator<Service> serviceIterator = building.productCatalog().services().iterator();
         while (serviceIterator.hasNext()) {
             Service service = serviceIterator.next();
@@ -71,6 +75,10 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
     public void updateFor(Building building) {
         if (building.isValueDetached()) {
             Persistence.service().retrieve(building);
+        }
+
+        if (building.productCatalog().isValueDetached()) {
+            Persistence.service().retrieve(building.productCatalog());
         }
 
         // TODO Auto-generated method stub
