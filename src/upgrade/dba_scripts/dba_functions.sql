@@ -646,7 +646,10 @@ $$
 		                c.relname AS ref_table_name,
 		                d.colname AS column_name,
         		        e.ref_colname AS ref_column_name,
-        		        a.consrc AS constraint_text,
+                        CASE WHEN      a.contype::char = 'c' THEN
+                                regexp_replace(regexp_replace(regexp_replace(a.consrc,'((::[a-z\s]+)|((ARRAY)?\[)|\])','','g'),
+                                '(\()?(''([a-zA-Z0-9_]+)'')(\))?','\2','g'),'= ANY',' IN','g')  
+                        ELSE a.consrc END AS constraint_text,
         		        f.nspname AS schema_name
 	                FROM            pg_constraint a
                         JOIN 	        pg_class b ON (a.conrelid = b.oid)

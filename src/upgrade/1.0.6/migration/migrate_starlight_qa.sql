@@ -57,6 +57,7 @@ BEGIN TRANSACTION;
                         CONSTRAINT      business_id_blob_pk PRIMARY KEY(id)
         );
         
+        ALTER TABLE business_id_blob OWNER TO vista77;
         
         -- business_information
         /*
@@ -348,7 +349,7 @@ BEGIN TRANSACTION;
                         CONSTRAINT      note_attachment_blob_pk PRIMARY KEY(id)
         );
         
-         ALTER TABLE note_attachment_blob OWNER TO vista77;
+        ALTER TABLE note_attachment_blob OWNER TO vista77;
         
         -- page_meta_tags
         
@@ -363,6 +364,12 @@ BEGIN TRANSACTION;
                         CONSTRAINT      page_meta_tags_locale_fk FOREIGN KEY(locale)
                                 REFERENCES available_locale(id)
         );
+        
+        ALTER TABLE page_meta_tags OWNER TO vista77;
+        
+        INSERT INTO page_meta_tags (id,locale)
+        (SELECT nextval('public.page_meta_tags_seq'),id AS locale
+        FROM    available_locale);
         
         -- payment_method
         
@@ -397,7 +404,7 @@ BEGIN TRANSACTION;
                                 REFERENCES payment_record(id)
         );
         
-         ALTER TABLE payment_record_external OWNER TO vista77;
+        ALTER TABLE payment_record_external OWNER TO vista77;
         
         -- payments_summary
         
@@ -448,7 +455,7 @@ BEGIN TRANSACTION;
                         CONSTRAINT      personal_information_id_blob_pk PRIMARY KEY(id)
         );
         
-         ALTER TABLE personal_information_id_blob OWNER TO vista77;
+        ALTER TABLE personal_information_id_blob OWNER TO vista77;
         
         -- pmc_signature
         
@@ -578,6 +585,11 @@ BEGIN TRANSACTION;
         CREATE INDEX site_descriptor$meta_tags_owner_idx ON site_descriptor$meta_tags USING btree (owner);
         
         ALTER TABLE site_descriptor$meta_tags OWNER TO vista77;
+        
+        INSERT INTO site_descriptor$meta_tags (id,owner,value)
+        (SELECT         nextval('public.site_descriptor$meta_tags_seq') AS id,
+                        a.id AS owner, b.id AS value
+        FROM            site_descriptor a,page_meta_tags b);
         
         -- site_image_resource
         
