@@ -15,6 +15,7 @@ package com.propertyvista.portal.client.ui;
 
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.web.bindery.event.shared.EventBus;
 
@@ -26,6 +27,7 @@ import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.propertyvista.portal.client.mvp.CaptionActivityMapper;
 import com.propertyvista.portal.client.mvp.ContentActivityMapper;
 import com.propertyvista.portal.client.mvp.NavigActivityMapper;
+import com.propertyvista.portal.client.mvp.UtilityActivityMapper;
 
 public class PortalScreen extends SimplePanel {
 
@@ -34,6 +36,12 @@ public class PortalScreen extends SimplePanel {
     public static enum StyleSuffix implements IStyleName {
         Display, StaticContent
     }
+
+    DisplayPanel navigDisplayPanel;
+
+    UtilityDisplayPanel utilityDisplay;
+
+    DisplayPanel contentDisplayPanel;
 
     public PortalScreen() {
 
@@ -59,21 +67,24 @@ public class PortalScreen extends SimplePanel {
         main.setStyleName("vista-pmsite-main");
         sidebarWrap.add(main);
 
-        DisplayPanel navigDisplayPanel = new DisplayPanel();
+        navigDisplayPanel = new DisplayPanel();
         navigDisplayPanel.setStyleName("secondaryNavig");
         sidebar.setWidget(navigDisplayPanel);
-
-        //TODO this should be dynamic
-        // navigDisplayPanel.setVisible(SecurityController.checkBehavior(VistaBasicBehavior.TenantPortal));
 
         DisplayPanel captionDisplayPanel = new DisplayPanel();
         captionDisplayPanel.setStyleName("caption");
         main.add(captionDisplayPanel);
 
-        DisplayPanel contentDisplayPanel = new DisplayPanel();
+        contentDisplayPanel = new DisplayPanel();
         contentDisplayPanel.setStyleName("content");
         main.add(contentDisplayPanel);
 
+        //============= Container for login and retrieve password views ===========
+        utilityDisplay = new UtilityDisplayPanel();
+        utilityDisplay.setStyleName("content");
+        main.add(utilityDisplay);
+
+        bind(new UtilityActivityMapper(), utilityDisplay, eventBus);
         bind(new NavigActivityMapper(), navigDisplayPanel, eventBus);
         bind(new CaptionActivityMapper(), captionDisplayPanel, eventBus);
         bind(new ContentActivityMapper(), contentDisplayPanel, eventBus);
@@ -86,11 +97,35 @@ public class PortalScreen extends SimplePanel {
     }
 
     class DisplayPanel extends SimplePanel {
+
         DisplayPanel() {
             String prefix = DEFAULT_STYLE_PREFIX;
             setStyleName(prefix + StyleSuffix.Display);
-
         }
+
     }
 
+    class UtilityDisplayPanel extends SimplePanel {
+
+        UtilityDisplayPanel() {
+            String prefix = DEFAULT_STYLE_PREFIX;
+            setStyleName(prefix + StyleSuffix.Display);
+        }
+
+        @Override
+        public void setWidget(IsWidget w) {
+            super.setWidget(w);
+            System.out.println("UtilityDisplayPanel set " + w);
+            if (w != null) {
+                navigDisplayPanel.setVisible(false);
+                contentDisplayPanel.setVisible(false);
+                utilityDisplay.setVisible(true);
+            } else {
+                navigDisplayPanel.setVisible(true);
+                contentDisplayPanel.setVisible(true);
+                utilityDisplay.setVisible(false);
+            }
+        }
+
+    }
 }
