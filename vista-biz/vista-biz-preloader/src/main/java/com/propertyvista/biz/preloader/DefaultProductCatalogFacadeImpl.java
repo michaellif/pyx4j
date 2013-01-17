@@ -56,6 +56,9 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     @Override
     public void updateFor(Building buildingId) {
+        if (true)
+            return; // TODO not implemented currently!..
+
         Building building = Persistence.secureRetrieve(Building.class, buildingId.getPrimaryKey());
         if (building == null) {
             throw new IllegalArgumentException("Building " + buildingId.getPrimaryKey() + " was not found");
