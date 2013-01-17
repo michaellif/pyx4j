@@ -38,23 +38,21 @@ import com.propertyvista.yardi.YardiServiceException;
 
 public class YardiSystemBatchesService extends YardiAbstarctService {
 
-    private final static Logger log = LoggerFactory.getLogger(YardiGetResidentTransactionsService.class);
+    private final static Logger log = LoggerFactory.getLogger(YardiResidentTransactionsService.class);
 
-    private static class SingletonHolder {
-        public static final YardiSystemBatchesService INSTANCE = new YardiSystemBatchesService();
-    }
-
-    private YardiSystemBatchesService() {
-    }
-
-    public static YardiSystemBatchesService getInstance() {
-        return SingletonHolder.INSTANCE;
-    }
-
-    public void postAllPayments(YardiParameters yp) throws YardiServiceException {
+    /**
+     * Updates/creates entities basing on data from YARDI System.
+     * 
+     * @param yp
+     *            the YARDI System connection parameters
+     * @throws YardiServiceException
+     *             if operation fails
+     */
+    public void updateAll(YardiParameters yp) throws YardiServiceException {
         validate(yp);
 
         YardiClient client = new YardiClient(yp.getServiceURL());
+
     }
 
     public static void openReceiptBatch(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {

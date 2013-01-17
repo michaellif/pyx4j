@@ -22,7 +22,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
-import com.propertyvista.yardi.services.YardiGetResidentTransactionsService;
+import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 public class YardiServicesClient {
 
@@ -54,7 +54,7 @@ public class YardiServicesClient {
         }
 
         //test services
-        YardiGetResidentTransactionsService.getInstance().updateAll(yp);
+        YardiResidentTransactionsService.getInstance().updateAll(yp);
 
         Persistence.service().commit();
     }

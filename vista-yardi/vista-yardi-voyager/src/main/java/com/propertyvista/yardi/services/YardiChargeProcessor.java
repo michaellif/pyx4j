@@ -40,7 +40,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class YardiChargeProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiChargeProcessor.class);
 
-    public static void updateCharges(List<ResidentTransactions> allTransactions) {
+    public void updateCharges(List<ResidentTransactions> allTransactions) {
         log.info("updateCharges: started...");
         // check available leases
         EntityQueryCriteria<Lease> availLeases = EntityQueryCriteria.create(Lease.class);
@@ -76,7 +76,7 @@ public class YardiChargeProcessor {
         }
     }
 
-    private static YardiAccount getYardiAccount(RTCustomer customer) {
+    private YardiAccount getYardiAccount(RTCustomer customer) {
         EntityQueryCriteria<Lease> leaseCrit = EntityQueryCriteria.create(Lease.class);
         leaseCrit.add(PropertyCriterion.eq(leaseCrit.proto().leaseId(), customer.getRTUnit().getUnitID()));
         Lease lease = Persistence.service().retrieve(leaseCrit);
@@ -97,7 +97,7 @@ public class YardiChargeProcessor {
         return account;
     }
 
-    private static YardiChargeDetail createCharge(YardiAccount account, ChargeDetail detail) {
+    private YardiChargeDetail createCharge(YardiAccount account, ChargeDetail detail) {
         YardiChargeDetail charge = EntityFactory.create(YardiChargeDetail.class);
         charge.account().set(account);
         try {
@@ -112,7 +112,7 @@ public class YardiChargeProcessor {
         return charge;
     }
 
-    private static void setTransactionDetail(YardiTransactionDetail yt, ChargeDetail detail) {
+    private void setTransactionDetail(YardiTransactionDetail yt, ChargeDetail detail) {
         yt.description().setValue(detail.getDescription());
         yt.transactionDate().setValue(new LogicalDate(detail.getTransactionDate().getTime()));
         yt.transactionId().setValue(detail.getTransactionID());

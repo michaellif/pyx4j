@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.yardi.services.YardiTransactionUtils;
+
 public class YardiExample {
 
     private final static Logger log = LoggerFactory.getLogger(YardiExample.class);
@@ -47,7 +49,7 @@ public class YardiExample {
         try {
             // the order of this call should match the document order
             //YardiAbstarctService.ping(c);
-            YardiTransactions.getResidentTransactions(c, yp, yp.getYardiPropertyId());
+            YardiTransactionUtils.getResidentTransactions(c, yp, yp.getYardiPropertyId());
 
             // ANYA, use the first line if you want to send stuff, second to retrieve
             //send(c, yp);
@@ -85,20 +87,20 @@ public class YardiExample {
         log.info("Sending\n{}\n", xml);
         yp.setTransactionXml(xml);
 
-        YardiTransactions.importResidentTransactions(c, yp);
+        YardiTransactionUtils.importResidentTransactions(c, yp);
 
     }
 
     private static void retrieve(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
         //       YardiTransactions.getResidentTransactions(c, yp);
 //    YardiTransactions.getResidentTransaction(c, yp);
-        YardiTransactions.getResidentTransactionsByChargeDate(c, yp);
-        YardiTransactions.getResidentTransactionsByApplicationDate(c, yp);
-        YardiTransactions.getResidentsLeaseCharges(c, yp);
+        YardiTransactionUtils.getResidentTransactionsByChargeDate(c, yp);
+        YardiTransactionUtils.getResidentTransactionsByApplicationDate(c, yp);
+        YardiTransactionUtils.getResidentsLeaseCharges(c, yp);
 //    YardiTransactions.getResidentLeaseCharges(c, yp);
         //       YardiTransactions.getUnitInformationLogin(c, yp);
-        YardiTransactions.getVendors(c, yp);
-        YardiTransactions.getExportChartOfAccounts(c, yp);
-        YardiTransactions.getPropertyConfigurations(c, yp);
+        YardiTransactionUtils.getVendors(c, yp);
+        YardiTransactionUtils.getExportChartOfAccounts(c, yp);
+        YardiTransactionUtils.getPropertyConfigurations(c, yp);
     }
 }

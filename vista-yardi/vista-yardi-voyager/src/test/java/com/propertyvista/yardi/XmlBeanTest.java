@@ -41,7 +41,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitFinancial;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
-import com.propertyvista.yardi.services.YardiGetResidentTransactionsService;
+import com.propertyvista.yardi.services.YardiBuildingProcessor;
 
 public class XmlBeanTest {
 
@@ -77,11 +77,11 @@ public class XmlBeanTest {
         String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetResidentTransactions.xml", getClass()));
 
         ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
-        YardiGetResidentTransactionsService residentTransactionsService = YardiGetResidentTransactionsService.getInstance();
 
         log.info("Loaded transactions:\n{}", transactions);
 
-        List<Building> buildings = residentTransactionsService.getBuildings(Arrays.asList(transactions));
+        YardiBuildingProcessor buildingProcessor = new YardiBuildingProcessor();
+        List<Building> buildings = buildingProcessor.getBuildings(Arrays.asList(transactions));
         Assert.assertTrue("Has buildings", !buildings.isEmpty());
 
         for (Building building : buildings) {
@@ -96,7 +96,7 @@ public class XmlBeanTest {
             Assert.assertFalse(building.info().address().postalCode().isNull());
         }
 
-        Map<String, List<AptUnit>> units = residentTransactionsService.getUnits(Arrays.asList(transactions));
+        Map<String, List<AptUnit>> units = buildingProcessor.getUnits(Arrays.asList(transactions));
         for (Map.Entry<String, List<AptUnit>> entry : units.entrySet()) {
             List<AptUnit> entryUnits = entry.getValue();
             Assert.assertTrue("Has units", !entryUnits.isEmpty());

@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.yardi;
+package com.propertyvista.yardi.services;
 
 import java.rmi.RemoteException;
 import java.util.Calendar;
@@ -53,12 +53,14 @@ import com.yardi.ws.operations.TransactionXml_type1;
 
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
+import com.propertyvista.yardi.YardiClient;
+import com.propertyvista.yardi.YardiParameters;
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.bean.Properties;
 
-public class YardiTransactions {
+public class YardiTransactionUtils {
 
-    private final static Logger log = LoggerFactory.getLogger(YardiTransactions.class);
+    private final static Logger log = LoggerFactory.getLogger(YardiTransactionUtils.class);
 
     /**
      * Allows export of the Property Configuration with the

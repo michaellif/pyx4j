@@ -26,7 +26,7 @@ import com.propertyvista.server.jobs.YardiImportProcess;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiParameters;
 import com.propertyvista.yardi.YardiServiceException;
-import com.propertyvista.yardi.services.YardiGetResidentTransactionsService;
+import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 public class YardiProcessFacadeImpl implements YardiProcessFacade {
 
@@ -47,7 +47,7 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
         yp.setYardiPropertyId(YardiConstants.YARDI_PROPERTY_ID);
 
         try {
-            YardiGetResidentTransactionsService.getInstance().updateAll(yp);
+            YardiResidentTransactionsService.getInstance().updateAll(yp);
         } catch (YardiServiceException e) {
             log.error("Error", e);
         }
