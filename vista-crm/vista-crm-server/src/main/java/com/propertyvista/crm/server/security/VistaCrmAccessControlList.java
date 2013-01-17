@@ -24,6 +24,7 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 import com.propertyvista.admin.domain.security.AuditRecord;
 import com.propertyvista.crm.rpc.services.FeedbackService;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
+import com.propertyvista.crm.rpc.services.MediaUploadService;
 import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
@@ -112,6 +113,7 @@ import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCustomerListService;
+import com.propertyvista.crm.rpc.services.selections.SelectServiceItemTypeListService;
 import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
 import com.propertyvista.crm.rpc.services.selections.version.ConcessionVersionService;
 import com.propertyvista.crm.rpc.services.selections.version.FeatureVersionService;
@@ -358,6 +360,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 // - Marketing-related:
 
         grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(PageDescriptorCrudService.class));
+        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(MediaUploadService.class));
 
 // - Administration:
         grant(VistaBasicBehavior.CRM, new EntityPermission(EmailTemplatesPolicy.class, EntityPermission.ALL));
@@ -377,6 +380,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(GlCodeCategoryCrudService.class));
         grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(BackgroundCheckPolicyCrudService.class.getPackage().getName() + ".*"));
         grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(EmailTemplateManagerService.class));
+        grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(SelectServiceItemTypeListService.class));
 
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(MerchantAccountCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CreditCheckStatusService.class));

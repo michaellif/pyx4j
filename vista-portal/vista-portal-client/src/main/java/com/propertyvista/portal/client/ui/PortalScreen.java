@@ -19,12 +19,10 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.client.mvp.CaptionActivityMapper;
 import com.propertyvista.portal.client.mvp.ContentActivityMapper;
 import com.propertyvista.portal.client.mvp.NavigActivityMapper;
@@ -66,7 +64,7 @@ public class PortalScreen extends SimplePanel {
         sidebar.setWidget(navigDisplayPanel);
 
         //TODO this should be dynamic
-        navigDisplayPanel.setVisible(SecurityController.checkBehavior(VistaBasicBehavior.TenantPortal));
+        // navigDisplayPanel.setVisible(SecurityController.checkBehavior(VistaBasicBehavior.TenantPortal));
 
         DisplayPanel captionDisplayPanel = new DisplayPanel();
         captionDisplayPanel.setStyleName("caption");
