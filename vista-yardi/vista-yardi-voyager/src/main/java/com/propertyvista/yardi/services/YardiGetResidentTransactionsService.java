@@ -90,10 +90,12 @@ public class YardiGetResidentTransactionsService extends YardiAbstarctService {
 
         updateBuildings(allTransactions);
 
-        updateLeases(allTransactions);
+        // TODO enable when country/province information import works properly
+        if (false) {
+            updateLeases(allTransactions);
 
-        updateCharges(allTransactions);
-
+            updateCharges(allTransactions);
+        }
     }
 
     private void updateBuildings(List<ResidentTransactions> allTransactions) {
