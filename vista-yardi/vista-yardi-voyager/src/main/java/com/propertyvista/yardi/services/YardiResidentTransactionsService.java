@@ -171,7 +171,8 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
      * 
      * @throws JAXBException
      */
-    ResidentTransactions getResidentTransactions(YardiClient c, PmcYardiCredential yc, String propertyId) throws AxisFault, RemoteException, JAXBException {
+    private ResidentTransactions getResidentTransactions(YardiClient c, PmcYardiCredential yc, String propertyId) throws AxisFault, RemoteException,
+            JAXBException {
         c.transactionId++;
         c.setCurrentAction(Action.GetResidentTransactions);
 

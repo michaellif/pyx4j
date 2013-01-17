@@ -41,18 +41,12 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
 
     private final static Logger log = LoggerFactory.getLogger(YardiResidentTransactionsService.class);
 
-    /**
-     * Updates/creates entities basing on data from YARDI System.
-     * 
-     * @param yp
-     *            the YARDI System connection parameters
-     * @throws YardiServiceException
-     *             if operation fails
-     */
-    public void updateAll(YardiClient c, PmcYardiCredential yc) throws YardiServiceException {
-
+    public void postAllPayments(YardiClient c, PmcYardiCredential yc) throws YardiServiceException {
         YardiClient client = new YardiClient(yc.serviceURL().getValue());
 
+        //openReceiptBatch
+        //addReceiptsToBatch
+        //postReceiptBatch
     }
 
     private void openReceiptBatch(YardiClient c, PmcYardiCredential yc, String propertyId) throws AxisFault, RemoteException {

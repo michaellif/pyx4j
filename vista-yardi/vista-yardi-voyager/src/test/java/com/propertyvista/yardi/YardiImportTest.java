@@ -25,7 +25,6 @@ public class YardiImportTest extends YardiTestBase {
     public void testImport() throws Exception {
         preloadData();
         PmcYardiCredential yardiCredential = VistaDeployment.getPmcYardiCredential();
-
         YardiResidentTransactionsService.getInstance().updateAll(yardiCredential);
     }
 }

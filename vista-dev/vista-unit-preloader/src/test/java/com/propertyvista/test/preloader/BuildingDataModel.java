@@ -91,6 +91,7 @@ public class BuildingDataModel {
 
         building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(propertyCode);
+
         building.info().address().province().set(locationsDataModel.getProvinceByCode("ON"));
 
         generateParking();
